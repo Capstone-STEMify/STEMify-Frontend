@@ -24,7 +24,7 @@
       "@/ui/*": ["components/shadcn/*"],
       "@/features/*": ["features/*"],
       "@/utils/*": ["utils/*"],
-      "@/lib/*": ["libs/*"],
+      "@/libs/*": ["libs/*"],
       "@/types/*": ["types/*"]
     }
   },

@@ -14,7 +14,7 @@
     "components": "components",
     "ui": "components/shadcn",
     "features": "features",
-    "lib": "lib",
+    "libs": "lib",
     "types": "types",
     "utils": "utils"
   },
