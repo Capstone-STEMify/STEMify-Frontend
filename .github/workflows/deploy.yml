@@ -29,7 +29,12 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y gettext
           envsubst < wrangler.template.toml > wrangler.toml
-          cat wrangler.toml  # optional: để debug nội dung tạo ra
+
+      - name: Check wrangler.toml content
+        run: cat wrangler.toml
+
+      - name: List root directory files
+        run: ls -al
 
       - name: Build project using OpenNext for Cloudflare Workers
         run: npx opennextjs-cloudflare build
