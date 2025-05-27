@@ -26,11 +26,12 @@ jobs:
       - name: Build project using OpenNext for Cloudflare Workers
         run: npx opennextjs-cloudflare build
 
-      - name: Check API Token Length
+      - name: Generate wrangler.toml from template
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
-          echo "Token length: ${#CLOUDFLARE_API_TOKEN}"
+          sudo apt-get update && sudo apt-get install -y gettext
+          envsubst < wrangler.template.toml > wrangler.toml
 
       - name: Deploy to Cloudflare Workers
         run: npx wrangler deploy
