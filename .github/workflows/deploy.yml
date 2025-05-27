@@ -26,6 +26,9 @@ jobs:
       - name: Build project using OpenNext
         run: npx open-next build
 
+      - name: Build project using OpenNext
+        run: npx open-next build
+
       - name: Deploy to Cloudflare Workers
         run: npx wrangler deploy
         env:
