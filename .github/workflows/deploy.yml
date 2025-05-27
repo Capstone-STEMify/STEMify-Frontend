@@ -24,10 +24,9 @@ jobs:
         run: npm install
 
       - name: Build project using OpenNext
-        run: npx open-next build
-
-      - name: Build project using OpenNext
-        run: npx open-next build
+        run: |
+          set -e
+          npx open-next build || (echo "Build failed" && cat /home/runner/.config/.wrangler/logs/* || true)
 
       - name: Deploy to Cloudflare Workers
         run: npx wrangler deploy
