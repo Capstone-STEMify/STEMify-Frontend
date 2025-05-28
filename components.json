@@ -16,7 +16,8 @@
     "features": "features",
     "libs": "lib",
     "types": "types",
-    "utils": "utils"
+    "utils": "utils",
+    "providers": "providers"
   },
   "iconLibrary": "lucide"
 }

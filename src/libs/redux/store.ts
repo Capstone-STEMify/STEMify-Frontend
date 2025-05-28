@@ -7,7 +7,7 @@ export const makeStore = () => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {}
-      }).concat(),
+      }).concat()
   })
 }
 
