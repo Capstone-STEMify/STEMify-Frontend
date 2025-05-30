@@ -26,9 +26,17 @@
       "@/utils/*": ["utils/*"],
       "@/libs/*": ["libs/*"],
       "@/types/*": ["types/*"],
-      "@/providers/*": ["providers/*"]
+      "@/providers/*": ["providers/*"],
+      "@/shadcn/*": ["utils/shadcn/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/providers/ExcalidrawWrapper.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/providers/ExcalidrawWrapper.tsx",
+    "src/components/shared/CustomMenubar"
+  ],
   "exclude": ["node_modules"]
 }
