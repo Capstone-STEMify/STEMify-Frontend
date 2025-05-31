@@ -27,7 +27,7 @@ export default function Header() {
           size='lg'
           variant='ghost'
           onClick={handleClick}
-          className='hover:text-amber-custom-400 font-medium transition-all duration-200'
+          className='hover:text-amber-custom-400 transition-colors duration-200'
         >
           <UserPlus className='mr-2 h-4 w-4' />
           Sign Up
@@ -35,7 +35,7 @@ export default function Header() {
         <Button
           size='lg'
           onClick={handleClick}
-          className='transform items-center bg-amber-500 shadow-lg transition-all'
+          className='transform items-center bg-amber-500 shadow-lg transition-colors'
         >
           <ArrowRightToLine size={16} />
           Login

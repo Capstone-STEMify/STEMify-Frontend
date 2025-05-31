@@ -5,10 +5,8 @@ import logo from '../../../public/logo.png' //  logo
 
 export default function StemifyLogo() {
   return (
-    <div>
-      <Link href={'/'}>
-        <Image src={logo} alt={'Stemify Logo'} width={200} height={200} loading={'lazy'} />
-      </Link>
-    </div>
+    <Link href={'/'}>
+      <Image src={logo} alt={'Stemify Logo'} width={200} height={200} loading={'lazy'} />
+    </Link>
   )
 }

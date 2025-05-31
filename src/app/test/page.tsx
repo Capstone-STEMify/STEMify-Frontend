@@ -1,5 +1,5 @@
-import HeaderNavigation from '@/components/layout/header/HeaderNavigation'
+import LinkButton from '@/components/shared/LinkButton'
 
 export default function AlertDialogDemo() {
-  return <div></div>
+  return <LinkButton href='/'>ssss</LinkButton>
 }

@@ -6,11 +6,12 @@ export interface LinkButtonProps {
   href: string
   children: ReactNode
   className?: string
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
 }
 
-export default function LinkButton({ children, className, href }: LinkButtonProps) {
+export default function LinkButton({ children, className, href, variant }: LinkButtonProps) {
   return (
-    <Button asChild className={className}>
+    <Button asChild variant={variant} className={className}>
       <Link href={href}>{children}</Link>
     </Button>
   )

@@ -1,4 +1,5 @@
 import { Button } from '@/components/shadcn/button'
+import LinkButton from '@/components/shared/LinkButton'
 
 export default function HeaderNavigation() {
   return (
@@ -6,13 +7,13 @@ export default function HeaderNavigation() {
       <ul className='justify- flex items-center gap-1'>
         {/* Resource */}
         <li>
-          <Button
+          <LinkButton
+            href='/student/profile'
             variant='ghost'
-            size='sm'
-            className='hover:bg-amber-custom-100 relative h-10 w-fit p-3 transition-all duration-200 hover:text-amber-600'
+            className='hover:bg-amber-custom-100 relative h-10 w-fit p-3 transition-colors duration-200 hover:text-amber-600'
           >
             Resource
-          </Button>
+          </LinkButton>
         </li>
 
         {/* Classroom */}
@@ -20,7 +21,7 @@ export default function HeaderNavigation() {
           <Button
             variant='ghost'
             size='sm'
-            className='hover:bg-amber-custom-100 relative h-10 w-fit p-3 transition-all duration-200 hover:text-amber-600'
+            className='hover:bg-amber-custom-100 relative h-10 w-fit p-3 transition-colors duration-200 hover:text-amber-600'
           >
             Classroom
           </Button>
@@ -31,7 +32,7 @@ export default function HeaderNavigation() {
           <Button
             variant='ghost'
             size='sm'
-            className='hover:bg-amber-custom-100 relative h-10 w-fit p-3 transition-all duration-200 hover:text-amber-600'
+            className='hover:bg-amber-custom-100 relative h-10 w-fit p-3 transition-colors duration-200 hover:text-amber-600'
           >
             STEM
           </Button>
@@ -42,7 +43,7 @@ export default function HeaderNavigation() {
           <Button
             variant='ghost'
             size='sm'
-            className='hover:bg-amber-custom-100 h-10 w-fit p-3 transition-all duration-200 hover:text-amber-600'
+            className='hover:bg-amber-custom-100 h-10 w-fit p-3 transition-colors duration-200 hover:text-amber-600'
           >
             Project
           </Button>

@@ -1,20 +1,17 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Nunito } from 'next/font/google'
 import './globals.css'
 import StoreProvider from 'providers/StoreProvider'
 import Header from '@/components/layout/header/Header'
 import { Toaster } from 'sonner'
-import SubHeader from '@/components/layout/header/SubHeader'
 import { UserRole } from '@/types/userRole'
+import LoadingWrapper from '@/components/shared/loading/LoadingWrapper'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin']
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin']
+const geistNunito = Nunito({
+  variable: '--font-geist-nunito',
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap'
 })
 
 export const metadata: Metadata = {
@@ -30,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-bg-light antialiased`}>
+    <html lang='en' className={`${geistNunito.variable}`}>
+      <body className={`bg-bg-light antialiased`}>
         <StoreProvider>
           {/* Header */}
           <header className='sticky top-0 z-50 shadow-sm backdrop-blur-md'>
@@ -41,8 +38,9 @@ export default function RootLayout({
           </header>
 
           {/* Main Content */}
-          <main className='mx-auto max-w-6xl px-4 py-4 sm:px-6 lg:px-8'>{children}</main>
-
+          <main className='mx-auto max-w-6xl flex-1 px-4 py-4 sm:px-6 lg:px-8'>
+            <LoadingWrapper>{children}</LoadingWrapper>
+          </main>
           {/* Footer */}
           <footer></footer>
         </StoreProvider>
