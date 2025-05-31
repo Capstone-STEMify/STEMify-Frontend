@@ -19,6 +19,8 @@ skye-gradient: right, #7dd3fc, #eff6ff
 
   --color-slay-custom-100: #f1f5f9;
   --color-slay-custom-200: #e2e8f0;
+
+  --color-light: #f8fbff;
 }
 
 @theme inline {
@@ -58,7 +60,7 @@ skye-gradient: right, #7dd3fc, #eff6ff
 
 :root {
   --radius: 0.625rem;
-  --background: #f8fbff;
+  --background: #ffffff;
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);

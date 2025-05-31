@@ -23,8 +23,10 @@ interface Props {
 
 export default function CustomMenubar({ menus }: Props) {
   const renderItem = (item: MenubarConfig, key: number) => {
+    // separator line
     if (item.type === 'separator') return <MenubarSeparator key={key} />
 
+    // checkbox items
     if (item.type === 'checkbox') {
       return (
         <MenubarCheckboxItem key={key} checked={(item as any).checked} disabled={item.disabled}>
@@ -33,6 +35,7 @@ export default function CustomMenubar({ menus }: Props) {
       )
     }
 
+    // radio items
     if (item.type === 'radio') {
       const radio = item as any
       return (
@@ -46,6 +49,7 @@ export default function CustomMenubar({ menus }: Props) {
       )
     }
 
+    // submenus
     if (item.type === 'sub') {
       const sub = item as any
       return (
@@ -56,6 +60,7 @@ export default function CustomMenubar({ menus }: Props) {
       )
     }
 
+    // regular items
     return (
       <MenubarItem key={key} onClick={item.onClick} disabled={item.disabled} inset={item.inset}>
         {item.label}

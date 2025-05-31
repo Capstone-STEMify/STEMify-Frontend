@@ -1,5 +1,5 @@
-import MenuExample from '@/components/shared/CustomMenubar/MenuExample'
+import HeaderNavigation from '@/components/layout/header/HeaderNavigation'
 
 export default function AlertDialogDemo() {
-  return <MenuExample />
+  return <div></div>
 }
