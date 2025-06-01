@@ -12,12 +12,8 @@ export default function Header() {
   return (
     <div className='flex flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0'>
       {/* logo and navigation */}
-      <div className='flex items-center gap-6'>
+      <div className='flex items-center'>
         <StemifyLogo />
-        <Separator
-          orientation='vertical'
-          className='via-slay-custom-200 hidden h-8 w-px bg-gradient-to-b from-transparent to-transparent sm:block'
-        />
         <HeaderNavigation />
       </div>
 

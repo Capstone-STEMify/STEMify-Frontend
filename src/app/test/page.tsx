@@ -1,5 +1,16 @@
-import LinkButton from '@/components/shared/LinkButton'
+'use client'
+import SearchBasic, { FilterParams } from '@/components/shared/search/SearchBasic'
 
 export default function AlertDialogDemo() {
-  return <LinkButton href='/'>ssss</LinkButton>
+  const onSearchSubmit = (params: string) => {
+    console.log('Search submitted with:', params)
+  }
+
+  const onFilterChange = (value: string) => {
+    console.log('Filter changed to:', value)
+  }
+
+  const filter: FilterParams = FilterParams.ALL
+
+  return <SearchBasic filter={filter} onFilterChange={onFilterChange} onSearchSubmit={onSearchSubmit} />
 }

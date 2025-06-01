@@ -4,7 +4,7 @@ import LinkButton from '@/components/shared/LinkButton'
 export default function HeaderNavigation() {
   return (
     <nav>
-      <ul className='justify- flex items-center gap-1'>
+      <ul className='flex items-center justify-center gap-1'>
         {/* Resource */}
         <li>
           <LinkButton
