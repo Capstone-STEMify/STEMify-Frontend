@@ -4,7 +4,8 @@ import HeaderNavigation from '@/components/layout/header/HeaderNavigation'
 import { Button } from '@/components/shadcn/button'
 import { Separator } from '@/components/shadcn/separator'
 import StemifyLogo from '@/components/shared/StemifyLogo'
-import { ArrowRightToLine, UserPlus } from 'lucide-react'
+import SToolTip from '@/components/shared/SToolTip'
+import { ArrowRightToLine, Bell, Gift, UserPlus } from 'lucide-react'
 
 export default function Header() {
   const handleClick = () => alert('Clicked!')
@@ -17,14 +18,38 @@ export default function Header() {
         <HeaderNavigation />
       </div>
 
-      {/* button */}
       <div className='flex h-6 items-center justify-center gap-3'>
-        <div>news</div>
-        <div>news</div>
-        <div>news</div>
+        {/* icons */}
+        <div className='flex items-center justify-center'>
+          <SToolTip
+            content='Notification'
+            children={
+              <Button
+                size={'icon'}
+                variant='ghost'
+                className='hover:text-amber-custom-400 text-gray-400 transition-colors duration-200'
+              >
+                <Bell />
+              </Button>
+            }
+          />
 
+          <SToolTip
+            content='Notification'
+            children={
+              <Button
+                size={'icon'}
+                variant='ghost'
+                className='hover:text-amber-custom-400 text-gray-400 transition-colors duration-200'
+              >
+                <Gift />
+              </Button>
+            }
+          />
+        </div>
         <Separator orientation='vertical' className='w-px bg-gray-300' />
 
+        {/* Sign up - Log in */}
         <Button
           size='sm'
           variant='ghost'
@@ -37,10 +62,10 @@ export default function Header() {
         <Button
           size='lg'
           onClick={handleClick}
-          className='transform items-center rounded-full bg-amber-500 shadow-lg transition-colors'
+          className='bg-amber-custom-400 transform items-center rounded-full shadow-lg transition-colors'
         >
           <ArrowRightToLine size={16} />
-          Login
+          Log In
         </Button>
       </div>
     </div>

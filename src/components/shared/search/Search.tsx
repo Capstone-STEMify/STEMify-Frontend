@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/shadcn/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shared/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { Book, Film, Layers, List, Search, X } from 'lucide-react'
 import { ChangeEvent, KeyboardEvent, useState } from 'react'
 

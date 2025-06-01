@@ -22,7 +22,7 @@ export interface AlertBtnProp {
   classname?: string
 }
 
-export default function AlertDialogWrapper({
+export default function SAlertButton({
   title,
   description,
   triggerLabel,
