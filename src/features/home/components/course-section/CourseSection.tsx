@@ -82,7 +82,7 @@ export default function ExploreResourcesSection() {
         </div>
 
         <div className='mt-12 text-center'>
-          <button className='relative transform rounded-full bg-amber-300 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-400 hover:shadow-xl'>
+          <button className='relative transform rounded-full bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
             Explore →
             <div className='absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full bg-pink-400 opacity-60'></div>
           </button>

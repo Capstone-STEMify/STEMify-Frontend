@@ -36,15 +36,15 @@ export default function HeroSection() {
 
         <h1 className='mb-12 text-6xl leading-tight font-bold text-white md:text-7xl drop-shadow-2xl'>
           The students light bulbs is coming on
-          <span className='animate-pulse bg-gradient-to-r from-orange-400 via-orange-300 to-orange-200 bg-clip-text text-transparent drop-shadow-lg'>
+          <p className='animate-pulse bg-gradient-to-r from-orange-400 via-orange-300 to-orange-200 bg-clip-text text-transparent drop-shadow-lg'>
             STEMify
-          </span>
+          </p>
         </h1>
 
         <div className='mx-auto max-w-3xl rounded-2xl bg-white/95 p-2 shadow-2xl backdrop-blur-sm border border-white/20'>
           <div className='flex items-center'>
             <div className='flex items-center space-x-2 border-r border-gray-200 px-4 py-3'>
-              <Sparkles className='h-5 w-5 text-blue-600' />
+              <Sparkles className='h-5 w-5 text-amber-400' />
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
@@ -64,7 +64,7 @@ export default function HeroSection() {
               className='flex-1 border-none bg-transparent px-6 py-3 text-lg text-gray-700 placeholder-gray-500 outline-none'
             />
 
-            <button className='flex transform items-center space-x-2 rounded-xl bg-blue-600 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-blue-700 hover:shadow-xl'>
+            <button className='flex transform items-center space-x-2 rounded-xl bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
               <Search className='h-5 w-5' />
               <span>Explore</span>
             </button>
