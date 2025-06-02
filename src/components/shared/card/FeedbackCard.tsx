@@ -44,10 +44,10 @@ export default function FeedbackCard({ name, src, date, title, role, rating, des
 
         <div className='text-xs'>
           <div className='flex flex-row'>
-            <Star className='h-4 w-4 text-yellow-400' />
-            <Star className='h-4 w-4 text-yellow-400' />
-            <Star className='h-4 w-4 text-yellow-400' />
-            <Star className='h-4 w-4 text-yellow-400' />
+            <Star className='h-4 w-4 fill-yellow-400 stroke-yellow-400 text-yellow-400' />
+            <Star className='h-4 w-4 fill-yellow-400 stroke-yellow-400 text-yellow-400' />
+            <Star className='h-4 w-4 fill-yellow-400 stroke-yellow-400 text-yellow-400' />
+            <Star className='h-4 w-4 fill-yellow-400 stroke-yellow-400 text-yellow-400' />
             <Star className='h-4 w-4 text-yellow-400' />
           </div>
         </div>

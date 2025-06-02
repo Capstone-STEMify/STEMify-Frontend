@@ -1,4 +1,5 @@
 'use client'
+import MacCard from '@/components/shared/card/MacCard'
 import React, { useState } from 'react'
 
 export default function ToolsSection() {
@@ -28,20 +29,14 @@ export default function ToolsSection() {
         </p>
       </div>
 
-      <div className='relative mx-auto max-w-4xl'>
+      <div className='relative mx-auto max-w-5xl'>
         <div className='relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-200 via-blue-200 to-pink-200 p-8 shadow-xl'>
           <div className='animate-slow-spin absolute top-0 -left-16 h-full w-32 rounded-full bg-gradient-to-b from-yellow-400 to-orange-400 opacity-80'></div>
           <div className='animate-slow-spin-reverse absolute top-0 -right-16 h-full w-32 rounded-full bg-gradient-to-b from-blue-400 to-cyan-400 opacity-80'></div>
 
           <div className='relative z-20 mb-8 flex justify-center'>
-            <div className='relative w-[600px]'>
-              <img
-                src='/HomeFiles/window.png'
-                alt='Tools Window'
-                className='h-[22rem] w-[40rem] rounded-lg object-cover shadow-lg'
-              />
-              <div className='absolute -top-2 -left-2 -z-10 h-full w-full rounded-lg bg-gradient-to-br from-yellow-300 to-orange-300 opacity-30'></div>
-            </div>
+            <MacCard />
+            <div className='absolute -top-2 -left-2 -z-10 h-full w-full rounded-lg bg-gradient-to-br from-yellow-300 to-orange-300 opacity-30'></div>
           </div>
 
           <div className='relative z-10 grid grid-cols-4 justify-items-center gap-4 md:grid-cols-8'>
