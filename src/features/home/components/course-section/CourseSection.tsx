@@ -45,30 +45,30 @@ export default function ExploreResourcesSection() {
           {resources.map((resource, index) => (
             <div
               key={index}
-              className='group relative overflow-hidden rounded-2xl transition-all duration-300 shadow-xl hover:scale-105 hover:transform hover:shadow-2xl'
+              className='group relative overflow-hidden rounded-2xl shadow-xl transition-all duration-300 hover:scale-105 hover:transform hover:shadow-2xl'
             >
               <div
                 className={`absolute -top-2 -right-2 h-6 w-6 bg-${resource.color}-400 rounded-full opacity-60 group-hover:animate-ping`}
               ></div>
-              
+
               <div className='relative h-64 overflow-hidden'>
-                <img 
-                  src={resource.image} 
-                  alt={resource.title} 
-                  className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-110' 
+                <img
+                  src={resource.image}
+                  alt={resource.title}
+                  className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-110'
                 />
-                
+
                 <div className='absolute bottom-4 left-4'>
-                  <span className='inline-block rounded-full bg-gray-300 bg-opacity-80 px-4 py-2 text-sm font-medium backdrop-blur-sm'>
+                  <span className='bg-opacity-80 inline-block rounded-full bg-gray-300 px-4 py-2 text-sm font-medium backdrop-blur-sm'>
                     {resource.buttonText}
                   </span>
                 </div>
               </div>
-              
+
               <div className='p-6'>
                 <h3 className='mb-3 text-xl font-semibold'>{resource.title}</h3>
                 <p className='leading-relaxed'>{resource.description}</p>
-                
+
                 <div className='mt-4 flex justify-end'>
                   <div className='rounded-full bg-gray-400 p-2 transition-colors duration-300 group-hover:bg-gray-300'>
                     <svg className='h-5 w-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>

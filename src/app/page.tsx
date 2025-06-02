@@ -15,7 +15,7 @@ export default function Home() {
       </div>
       <SkeletonCard />
       <SkeletonAvatar /> */}
-      <HomePage/>
+      <HomePage />
     </>
   )
 }

@@ -3,8 +3,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Search, Sparkles } from 'lucide-react'
 
 interface HeroSectionProps {
-  onAnimationComplete: (complete: boolean) => void;
-  animationProgress: number;
+  onAnimationComplete: (complete: boolean) => void
+  animationProgress: number
 }
 
 export default function HeroSection({ onAnimationComplete, animationProgress }: HeroSectionProps) {
@@ -15,7 +15,7 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
   const searchRef = useRef(null)
   const blob1Ref = useRef(null)
   const blob2Ref = useRef(null)
-  
+
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedType, setSelectedType] = useState('Course')
 
@@ -32,13 +32,18 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
     const loadGSAP = async () => {
       try {
         const { gsap } = await import('gsap')
-        
-        if (!animatedElements.subtitle && !animatedElements.title && !animatedElements.brand && !animatedElements.search) {
+
+        if (
+          !animatedElements.subtitle &&
+          !animatedElements.title &&
+          !animatedElements.brand &&
+          !animatedElements.search
+        ) {
           gsap.set([subtitleRef.current, titleRef.current, brandRef.current, searchRef.current], {
             opacity: 0,
             y: 50
           })
-          
+
           gsap.set([blob1Ref.current, blob2Ref.current], {
             opacity: 0,
             scale: 0
@@ -52,49 +57,49 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
             opacity: 1,
             y: 0,
             duration: 0.6,
-            ease: "power2.out"
+            ease: 'power2.out'
           })
-          setAnimatedElements(prev => ({ ...prev, subtitle: true }))
+          setAnimatedElements((prev) => ({ ...prev, subtitle: true }))
         }
-        
+
         if (progress >= 0.5 && !animatedElements.title) {
           gsap.to(titleRef.current, {
             opacity: 1,
             y: 0,
             duration: 0.6,
             delay: 0.2,
-            ease: "power2.out"
+            ease: 'power2.out'
           })
-          setAnimatedElements(prev => ({ ...prev, title: true }))
+          setAnimatedElements((prev) => ({ ...prev, title: true }))
         }
-        
+
         if (progress >= 0.75 && !animatedElements.brand) {
           gsap.to(brandRef.current, {
             opacity: 1,
             y: 0,
             duration: 0.6,
             delay: 0.4,
-            ease: "power2.out"
+            ease: 'power2.out'
           })
-          setAnimatedElements(prev => ({ ...prev, brand: true }))
+          setAnimatedElements((prev) => ({ ...prev, brand: true }))
         }
-        
+
         if (progress >= 1 && !animatedElements.search) {
           gsap.to(searchRef.current, {
             opacity: 1,
             y: 0,
             duration: 0.6,
             delay: 0.6,
-            ease: "power2.out"
+            ease: 'power2.out'
           })
-          setAnimatedElements(prev => ({ ...prev, search: true }))
+          setAnimatedElements((prev) => ({ ...prev, search: true }))
         }
-        
+
         gsap.to([blob1Ref.current, blob2Ref.current], {
           opacity: Math.min(progress * 1.5, 1),
           scale: Math.min(progress * 1.2, 1),
           duration: 0.3,
-          ease: "power2.out"
+          ease: 'power2.out'
         })
 
         if (progress >= 1) {
@@ -102,7 +107,6 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
         } else {
           onAnimationComplete(false)
         }
-
       } catch (error) {
         console.log('GSAP not available')
         onAnimationComplete(true)
@@ -115,46 +119,37 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
   return (
     <section className='relative flex h-screen items-center justify-center overflow-hidden'>
       <div className='absolute inset-0 h-full w-full'>
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className='h-full w-full object-cover'
-        >
-          <source src="/HomeFiles/section_background.mp4" type="video/mp4" />
+        <video autoPlay loop muted playsInline className='h-full w-full object-cover'>
+          <source src='/HomeFiles/section_background.mp4' type='video/mp4' />
           <div className='absolute inset-0 animate-pulse bg-gradient-to-br from-blue-400 via-purple-500 to-pink-400'></div>
         </video>
-        
+
         <div className='absolute inset-0 z-10'></div>
-        <div className='absolute bottom-0 left-0 right-0 h-80 z-20 bg-gradient-to-t from-white via-white/70 to-transparent'></div>
-        <div className='absolute bottom-0 left-0 right-0 h-60 z-25 bg-gradient-to-t from-white via-white/50 to-transparent'></div>
-        <div className='absolute bottom-0 left-0 right-0 h-40 z-30 bg-gradient-to-t from-white via-white/30 to-transparent'></div>
+        <div className='absolute right-0 bottom-0 left-0 z-20 h-80 bg-gradient-to-t from-white via-white/70 to-transparent'></div>
+        <div className='absolute right-0 bottom-0 left-0 z-25 h-60 bg-gradient-to-t from-white via-white/50 to-transparent'></div>
+        <div className='absolute right-0 bottom-0 left-0 z-30 h-40 bg-gradient-to-t from-white via-white/30 to-transparent'></div>
       </div>
 
       <div ref={containerRef} className='relative z-40 mx-auto max-w-4xl px-6 text-center'>
-        <p 
-          ref={subtitleRef}
-          className='mb-4 text-lg font-medium text-white/90 drop-shadow-lg'
-        >
+        <p ref={subtitleRef} className='mb-4 text-lg font-medium text-white/90 drop-shadow-lg'>
           Turn STEM into a game - Inspire passion, creativity
         </p>
 
         <div ref={titleRef} className='mb-4'>
-          <h1 className='text-6xl leading-tight font-bold text-white md:text-7xl drop-shadow-2xl'>
+          <h1 className='text-6xl leading-tight font-bold text-white drop-shadow-2xl md:text-7xl'>
             The students light bulbs is coming on
           </h1>
         </div>
 
         <div ref={brandRef} className='mb-12'>
-          <p className='animate-pulse bg-gradient-to-r from-orange-400 via-orange-300 to-orange-200 bg-clip-text text-6xl md:text-7xl font-bold text-transparent drop-shadow-lg'>
+          <p className='animate-pulse bg-gradient-to-r from-orange-400 via-orange-300 to-orange-200 bg-clip-text text-6xl font-bold text-transparent drop-shadow-lg md:text-7xl'>
             STEMify
           </p>
         </div>
 
-        <div 
+        <div
           ref={searchRef}
-          className='mx-auto max-w-3xl rounded-2xl bg-white/95 p-2 shadow-2xl backdrop-blur-sm border border-white/20'
+          className='mx-auto max-w-3xl rounded-2xl border border-white/20 bg-white/95 p-2 shadow-2xl backdrop-blur-sm'
         >
           <div className='flex items-center'>
             <div className='flex items-center space-x-2 border-r border-gray-200 px-4 py-3'>
@@ -185,19 +180,20 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
           </div>
         </div>
 
-        <div 
+        <div
           ref={blob1Ref}
-          className='absolute -top-20 -left-20 h-40 w-40 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-3xl animate-float'
+          className='animate-float absolute -top-20 -left-20 h-40 w-40 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-3xl'
         ></div>
-        <div 
+        <div
           ref={blob2Ref}
-          className='absolute -bottom-10 -right-20 h-32 w-32 rounded-full bg-gradient-to-r from-pink-400/20 to-yellow-400/20 blur-3xl animate-float-delayed'
+          className='animate-float-delayed absolute -right-20 -bottom-10 h-32 w-32 rounded-full bg-gradient-to-r from-pink-400/20 to-yellow-400/20 blur-3xl'
         ></div>
       </div>
 
       <style jsx>{`
         @keyframes float {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0px) rotate(0deg);
           }
           50% {
@@ -205,7 +201,8 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
           }
         }
         @keyframes float-delayed {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0px) rotate(0deg);
           }
           50% {
