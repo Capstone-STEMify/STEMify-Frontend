@@ -1,4 +1,6 @@
 'use client'
+import ResourceCard from '@/components/shared/card/CourseCard'
+import { ClockFading } from 'lucide-react'
 import React from 'react'
 
 export default function ExploreResourcesSection() {
@@ -7,25 +9,25 @@ export default function ExploreResourcesSection() {
       title: 'Text to image',
       description: 'Generate high-quality images using text with latest Image 4 Model.',
       image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop&auto=format',
-      color: 'cyan',
-      buttonText: 'Text to image',
-      size: 'large'
+      category: 'Animals',
+      age: '8-14+',
+      duration: '6:00:00'
     },
     {
       title: 'Text to video',
       description: 'Generate video clips from a detailed description and high-quality images.',
       image: 'https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?w=400&h=300&fit=crop&auto=format',
-      color: 'red',
-      buttonText: 'New',
-      size: 'large'
+      category: 'Biology',
+      age: '8-14+',
+      duration: '6:00:00'
     },
     {
       title: 'Boards (beta)',
       description: 'Generate images or upload your own and start remixing on a board.',
       image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop&auto=format',
-      color: 'gray',
-      buttonText: 'New',
-      size: 'large'
+      category: 'Coding',
+      age: '8-14+',
+      duration: '6:00:00'
     }
   ]
 
@@ -43,41 +45,7 @@ export default function ExploreResourcesSection() {
 
         <div className='mx-auto grid max-w-7xl gap-6 md:grid-cols-3'>
           {resources.map((resource, index) => (
-            <div
-              key={index}
-              className='group relative overflow-hidden rounded-2xl shadow-xl transition-all duration-300 hover:scale-105 hover:transform hover:shadow-2xl'
-            >
-              <div
-                className={`absolute -top-2 -right-2 h-6 w-6 bg-${resource.color}-400 rounded-full opacity-60 group-hover:animate-ping`}
-              ></div>
-
-              <div className='relative h-64 overflow-hidden'>
-                <img
-                  src={resource.image}
-                  alt={resource.title}
-                  className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-110'
-                />
-
-                <div className='absolute bottom-4 left-4'>
-                  <span className='bg-opacity-80 inline-block rounded-full bg-gray-300 px-4 py-2 text-sm font-medium backdrop-blur-sm'>
-                    {resource.buttonText}
-                  </span>
-                </div>
-              </div>
-
-              <div className='p-6'>
-                <h3 className='mb-3 text-xl font-semibold'>{resource.title}</h3>
-                <p className='leading-relaxed'>{resource.description}</p>
-
-                <div className='mt-4 flex justify-end'>
-                  <div className='rounded-full bg-gray-400 p-2 transition-colors duration-300 group-hover:bg-gray-300'>
-                    <svg className='h-5 w-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ResourceCard key={index} resource={resource} />
           ))}
         </div>
 

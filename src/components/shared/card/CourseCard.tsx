@@ -1,62 +1,57 @@
-import Image, { StaticImageData } from 'next/image'
+import { ClockFading } from 'lucide-react'
 import React from 'react'
-import logo from '../../../../public/images/pink.png'
-import Link from 'next/link'
 
-export enum CourseStatus {
-  // status for course cart
-  LATEST = 'Latest',
-  POPULAR = 'Popular',
-
-  // status for course class
-  COMPLETED = 'Completed',
-  ONGOING = 'Ongoing',
-
-  // error
-  ERROR = 'Error'
-}
-export interface CourseCardProps {
-  status: CourseStatus
+type Resource = {
   title: string
-  date: string
-  duration: string
-  category: string
-  image: string | StaticImageData
   description: string
-  link: string
+  image: string
+  category: string
+  age: string
+  duration: string
 }
 
-export default function CourseCard({ status, title, date, duration, image, description, link }: CourseCardProps) {
-  // Default values for the props
-  if (!image || !title || !date || !duration || !description) {
-    status = CourseStatus.ERROR
-    link = '#'
-    title = 'No title available for this course.'
-    image = logo
-    description = 'No description available for this course.'
-    date = 'Unknown date'
-    duration = '0'
-  }
-  return (
-    <div className='shadow-6 w-[300px] rounded-2xl p-5 transition-transform duration-300 hover:scale-105'>
-      <Link href={link} className='group mt-32'>
-        <figure className='relative mb-1 overflow-hidden rounded-lg'>
-          <Image src={image} alt='sos' className='object-cover' />
-          <span className='absolute top-2 left-2 rounded-full bg-white/65 px-3 py-1 text-xs text-black backdrop-blur-sm'>
-            {status}
-          </span>
-        </figure>
-        <div className='text-xs text-black'>
-          {date}
-          <span className='mx-1'>⦁</span>
-          {duration} min
-        </div>
+type Props = {
+  resource: Resource
+}
 
-        <p className='mt-2 text-lg text-black'>{title}</p>
-        <p className='mt-1 line-clamp-2 text-sm text-black opacity-50 transition-opacity duration-300 group-hover:opacity-90'>
-          {description}
-        </p>
-      </Link>
+export default function ResourceCard({ resource }: Props) {
+  return (
+    <div className='group relative overflow-hidden rounded-2xl shadow-xl transition-all duration-300 hover:scale-105 hover:transform hover:shadow-2xl'>
+      <div className='absolute -top-2 -right-2 h-6 w-6 rounded-full opacity-60 group-hover:animate-ping'></div>
+
+      <div className='relative h-64 overflow-hidden'>
+        <img
+          src={resource.image}
+          alt={resource.title}
+          className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-110'
+        />
+
+        <div className='absolute bottom-4 left-4 flex gap-2'>
+          <span className='bg-opacity-80 inline-block rounded-full bg-gray-200 opacity-75 px-4 py-2 text-sm font-medium backdrop-blur-sm'>
+            {resource.category}
+          </span>
+          <span className='bg-opacity-80 inline-block rounded-full bg-gray-200 opacity-75 px-4 py-2 text-sm font-medium backdrop-blur-sm'>
+            Ages {resource.age}
+          </span>
+        </div>
+      </div>
+
+      <div className='p-6'>
+        <h3 className='mb-3 text-xl font-semibold'>{resource.title}</h3>
+        <p className='leading-relaxed'>{resource.description}</p>
+
+        <div className='mt-4 flex justify-between items-center'>
+          <div className='flex items-center justify-between gap-2 bg-opacity-80 rounded-full bg-gray-300 px-4 py-2 text-sm font-medium backdrop-blur-sm'>
+            <ClockFading size={16} />
+            <span>{resource.duration}</span>
+          </div>
+          <div className='rounded-full bg-gray-400 p-2 transition-colors duration-300 group-hover:bg-gray-300'>
+            <svg className='h-5 w-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
