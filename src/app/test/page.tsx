@@ -1,3 +1,9 @@
+import CourseCard from '@/components/shared/card/CourseCard'
+
 export default function SonnerDemo() {
-  return <></>
+  return (
+    <div>
+      <CourseCard />
+    </div>
+  )
 }
