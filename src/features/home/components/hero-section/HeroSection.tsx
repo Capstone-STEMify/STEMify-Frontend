@@ -1,10 +1,116 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Search, Sparkles } from 'lucide-react'
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  onAnimationComplete: (complete: boolean) => void;
+  animationProgress: number;
+}
+
+export default function HeroSection({ onAnimationComplete, animationProgress }: HeroSectionProps) {
+  const containerRef = useRef(null)
+  const subtitleRef = useRef(null)
+  const titleRef = useRef(null)
+  const brandRef = useRef(null)
+  const searchRef = useRef(null)
+  const blob1Ref = useRef(null)
+  const blob2Ref = useRef(null)
+  
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedType, setSelectedType] = useState('Image')
+  const [selectedType, setSelectedType] = useState('Course')
+
+  const [animatedElements, setAnimatedElements] = useState({
+    subtitle: false,
+    title: false,
+    brand: false,
+    search: false
+  })
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const loadGSAP = async () => {
+      try {
+        const { gsap } = await import('gsap')
+        
+        if (!animatedElements.subtitle && !animatedElements.title && !animatedElements.brand && !animatedElements.search) {
+          gsap.set([subtitleRef.current, titleRef.current, brandRef.current, searchRef.current], {
+            opacity: 0,
+            y: 50
+          })
+          
+          gsap.set([blob1Ref.current, blob2Ref.current], {
+            opacity: 0,
+            scale: 0
+          })
+        }
+
+        const progress = animationProgress
+
+        if (progress >= 0.25 && !animatedElements.subtitle) {
+          gsap.to(subtitleRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power2.out"
+          })
+          setAnimatedElements(prev => ({ ...prev, subtitle: true }))
+        }
+        
+        if (progress >= 0.5 && !animatedElements.title) {
+          gsap.to(titleRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            delay: 0.2,
+            ease: "power2.out"
+          })
+          setAnimatedElements(prev => ({ ...prev, title: true }))
+        }
+        
+        if (progress >= 0.75 && !animatedElements.brand) {
+          gsap.to(brandRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            delay: 0.4,
+            ease: "power2.out"
+          })
+          setAnimatedElements(prev => ({ ...prev, brand: true }))
+        }
+        
+        if (progress >= 1 && !animatedElements.search) {
+          gsap.to(searchRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            delay: 0.6,
+            ease: "power2.out"
+          })
+          setAnimatedElements(prev => ({ ...prev, search: true }))
+        }
+        
+        gsap.to([blob1Ref.current, blob2Ref.current], {
+          opacity: Math.min(progress * 1.5, 1),
+          scale: Math.min(progress * 1.2, 1),
+          duration: 0.3,
+          ease: "power2.out"
+        })
+
+        if (progress >= 1) {
+          onAnimationComplete(true)
+        } else {
+          onAnimationComplete(false)
+        }
+
+      } catch (error) {
+        console.log('GSAP not available')
+        onAnimationComplete(true)
+      }
+    }
+
+    loadGSAP()
+  }, [animationProgress, onAnimationComplete, animatedElements])
 
   return (
     <section className='relative flex h-screen items-center justify-center overflow-hidden'>
@@ -17,31 +123,39 @@ export default function HeroSection() {
           className='h-full w-full object-cover'
         >
           <source src="/HomeFiles/section_background.mp4" type="video/mp4" />
-          {/* Fallback gradient if video fails to load */}
           <div className='absolute inset-0 animate-pulse bg-gradient-to-br from-blue-400 via-purple-500 to-pink-400'></div>
         </video>
         
         <div className='absolute inset-0 z-10'></div>
-
         <div className='absolute bottom-0 left-0 right-0 h-80 z-20 bg-gradient-to-t from-white via-white/70 to-transparent'></div>
         <div className='absolute bottom-0 left-0 right-0 h-60 z-25 bg-gradient-to-t from-white via-white/50 to-transparent'></div>
         <div className='absolute bottom-0 left-0 right-0 h-40 z-30 bg-gradient-to-t from-white via-white/30 to-transparent'></div>
       </div>
 
-      {/* Content */}
-      <div className='relative z-40 mx-auto max-w-4xl px-6 text-center'>
-        <p className='mb-4 text-lg font-medium text-white/90 drop-shadow-lg'>
+      <div ref={containerRef} className='relative z-40 mx-auto max-w-4xl px-6 text-center'>
+        <p 
+          ref={subtitleRef}
+          className='mb-4 text-lg font-medium text-white/90 drop-shadow-lg'
+        >
           Turn STEM into a game - Inspire passion, creativity
         </p>
 
-        <h1 className='mb-12 text-6xl leading-tight font-bold text-white md:text-7xl drop-shadow-2xl'>
-          The students light bulbs is coming on
-          <p className='animate-pulse bg-gradient-to-r from-orange-400 via-orange-300 to-orange-200 bg-clip-text text-transparent drop-shadow-lg'>
+        <div ref={titleRef} className='mb-4'>
+          <h1 className='text-6xl leading-tight font-bold text-white md:text-7xl drop-shadow-2xl'>
+            The students light bulbs is coming on
+          </h1>
+        </div>
+
+        <div ref={brandRef} className='mb-12'>
+          <p className='animate-pulse bg-gradient-to-r from-orange-400 via-orange-300 to-orange-200 bg-clip-text text-6xl md:text-7xl font-bold text-transparent drop-shadow-lg'>
             STEMify
           </p>
-        </h1>
+        </div>
 
-        <div className='mx-auto max-w-3xl rounded-2xl bg-white/95 p-2 shadow-2xl backdrop-blur-sm border border-white/20'>
+        <div 
+          ref={searchRef}
+          className='mx-auto max-w-3xl rounded-2xl bg-white/95 p-2 shadow-2xl backdrop-blur-sm border border-white/20'
+        >
           <div className='flex items-center'>
             <div className='flex items-center space-x-2 border-r border-gray-200 px-4 py-3'>
               <Sparkles className='h-5 w-5 text-amber-400' />
@@ -50,9 +164,9 @@ export default function HeroSection() {
                 onChange={(e) => setSelectedType(e.target.value)}
                 className='cursor-pointer border-none bg-transparent font-medium text-gray-700 outline-none'
               >
-                <option value='Image'>Course</option>
-                <option value='Video'>Lesson</option>
-                <option value='Audio'>Activity</option>
+                <option value='Course'>Course</option>
+                <option value='Lesson'>Lesson</option>
+                <option value='Activity'>Activity</option>
               </select>
             </div>
 
@@ -60,7 +174,7 @@ export default function HeroSection() {
               type='text'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder='Describe the image you want to generate'
+              placeholder='What would you like to explore today?'
               className='flex-1 border-none bg-transparent px-6 py-3 text-lg text-gray-700 placeholder-gray-500 outline-none'
             />
 
@@ -71,11 +185,16 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className='absolute -top-20 -left-20 h-40 w-40 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-3xl animate-float'></div>
-        <div className='absolute -bottom-10 -right-20 h-32 w-32 rounded-full bg-gradient-to-r from-pink-400/20 to-yellow-400/20 blur-3xl animate-float-delayed'></div>
+        <div 
+          ref={blob1Ref}
+          className='absolute -top-20 -left-20 h-40 w-40 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-3xl animate-float'
+        ></div>
+        <div 
+          ref={blob2Ref}
+          className='absolute -bottom-10 -right-20 h-32 w-32 rounded-full bg-gradient-to-r from-pink-400/20 to-yellow-400/20 blur-3xl animate-float-delayed'
+        ></div>
       </div>
 
-      {/* Custom animations */}
       <style jsx>{`
         @keyframes float {
           0%, 100% {
