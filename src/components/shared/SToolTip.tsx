@@ -12,7 +12,7 @@ export default function SToolTip({ content, className, children }: SToolTipProps
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent>{content}</TooltipContent>
+      <TooltipContent className={className}>{content}</TooltipContent>
     </Tooltip>
   )
 }
