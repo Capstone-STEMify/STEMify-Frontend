@@ -18,7 +18,7 @@ const Footer = () => {
         />
       </div>
 
-      <div className="absolute top-8 right-70 z-10">
+      <div className="absolute top-8 right-80 z-10">
         <img 
           src="/images/dino.png" 
           alt="Dinosaur" 
