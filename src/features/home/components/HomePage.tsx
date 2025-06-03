@@ -72,10 +72,11 @@ const useScrollAnimation = () => {
     }
   }, [])
 
-  const getSectionClasses: GetSectionClasses = (sectionId, variant = 'fadeUp', duration = 3000, delay = 1000) => {
+  const getSectionClasses: GetSectionClasses = (sectionId, variant, duration, delay) => {
     const isVisible = visibleSections.has(sectionId)
     const baseClass = `transition-all duration-${duration} ease-out`
-    const delayClass = delay > 0 ? `delay-${delay}` : ''
+    const delayValue = delay ?? 0
+    const delayClass = delayValue > 0 ? `delay-${delayValue}` : ''
 
     const hiddenClass = ANIMATION_VARIANTS[variant as keyof typeof ANIMATION_VARIANTS] || ANIMATION_VARIANTS.fadeUp
     const visibleClass =
@@ -103,7 +104,7 @@ export default function HomePage() {
   const testimonialsRef = useRef<HTMLDivElement | null>(null)
   const faqRef = useRef<HTMLDivElement | null>(null)
 
-  // Register sections for scroll animation (move useEffect here)
+  // Register sections for scroll animation
   useEffect(() => {
     const refs = [
       { ref: exploreRef, id: 'explore' },
@@ -132,16 +133,15 @@ export default function HomePage() {
     if (typeof window === 'undefined') return
 
     const handleScroll = (e: WheelEvent | TouchEvent) => {
-      e.preventDefault()
-
       if (!heroAnimationComplete) {
+        e.preventDefault()
         let delta: number = 0
         if ('deltaY' in e && typeof e.deltaY === 'number') {
           delta = e.deltaY
         } else if ('detail' in e && typeof (e as any).detail === 'number') {
-          delta = (e as any).detail
+          delta = (e as any).detail * 40
         } else if ('wheelDelta' in e && typeof (e as any).wheelDelta === 'number') {
-          delta = (e as any).wheelDelta
+          delta = -(e as any).wheelDelta / 2
         } else if ('touches' in e && (e as TouchEvent).touches.length > 0) {
           delta = 0
         }
@@ -180,37 +180,27 @@ export default function HomePage() {
       }
     }
 
-    if (!isScrollingEnabled) {
-      // Disable normal scrolling until hero animation is complete
-      document.body.style.overflow = 'hidden'
-      window.addEventListener('wheel', handleScroll, { passive: false })
-      window.addEventListener('keydown', handleKeyScroll)
-      window.addEventListener('touchmove', handleScroll, { passive: false })
-    } else {
-      // Enable normal scrolling
-      document.body.style.overflow = 'auto'
-      window.removeEventListener('wheel', handleScroll)
-      window.removeEventListener('keydown', handleKeyScroll)
-      window.removeEventListener('touchmove', handleScroll)
-    }
+    window.addEventListener('wheel', handleScroll, { passive: false })
+    window.addEventListener('keydown', handleKeyScroll, { passive: false })
+    window.addEventListener('touchmove', handleScroll, { passive: false })
 
     return () => {
       window.removeEventListener('wheel', handleScroll)
       window.removeEventListener('keydown', handleKeyScroll)
       window.removeEventListener('touchmove', handleScroll)
-      document.body.style.overflow = 'auto'
     }
-  }, [heroAnimationComplete, isScrollingEnabled])
+  }, [heroAnimationComplete])
 
   const handleAnimationComplete: HandleAnimationCompleteProps = (isComplete) => {
     setHeroAnimationComplete(isComplete)
     if (isComplete) {
       setTimeout(() => {
         setIsScrollingEnabled(true)
-      }, 500)
+      }, 100)
+    } else {
+      setIsScrollingEnabled(false)
     }
   }
-
   return (
     <div ref={containerRef} className='min-h-screen'>
       {/* Hero Section */}
@@ -219,27 +209,27 @@ export default function HomePage() {
       </div>
 
       {/* Animated Sections with different variants */}
-      <div ref={exploreRef} className={getSectionClasses('explore', 'fadeUp', 800, 100)}>
+      <div ref={exploreRef} className={getSectionClasses('explore', 'fadeUp', 9000, 1200)}>
         <ExploreResourcesSection />
       </div>
 
-      <div ref={toolsRef} className={getSectionClasses('tools', 'fadeLeft', 800, 150)}>
+      <div ref={toolsRef} className={getSectionClasses('tools', 'fadeLeft', 9000, 1400)}>
         <ToolsSection />
       </div>
 
-      <div ref={benefitsRef} className={getSectionClasses('benefits', 'scaleUp', 800, 200)}>
+      <div ref={benefitsRef} className={getSectionClasses('benefits', 'scaleUp', 9000, 1600)}>
         <BenefitsSection />
       </div>
 
-      <div ref={statsRef} className={getSectionClasses('stats', 'slideDown', 800, 100)}>
+      <div ref={statsRef} className={getSectionClasses('stats', 'slideDown', 9000, 1800)}>
         <StatsSection />
       </div>
 
-      <div ref={testimonialsRef} className={getSectionClasses('testimonials', 'fadeRight', 800, 150)}>
+      <div ref={testimonialsRef} className={getSectionClasses('testimonials', 'fadeRight', 9000, 2000)}>
         <TestimonialsSection />
       </div>
 
-      <div ref={faqRef} className={getSectionClasses('faq', 'fadeUp', 800, 200)}>
+      <div ref={faqRef} className={getSectionClasses('faq', 'fadeUp', 9000, 2200)}>
         <FAQSection />
       </div>
 
