@@ -10,8 +10,8 @@ export default function HeaderNavigation() {
     { label: 'Home', href: '/' },
     { label: 'Resource', href: '/resource' },
     { label: 'Classroom', href: '/classroom' },
-    { label: 'STEM', href: '/stem' },
-    { label: 'Project', href: '/project' }
+    { label: 'Course', href: '/course' },
+    { label: 'STEM', href: '/stem' }
   ]
 
   return (
