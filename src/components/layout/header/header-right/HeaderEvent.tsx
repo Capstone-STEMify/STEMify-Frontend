@@ -1,5 +1,4 @@
 import { Button } from '@/components/shadcn/button'
-import LinkButton from '@/components/shared/LinkButton'
 import SToolTip from '@/components/shared/SToolTip'
 import { Bell, Gift } from 'lucide-react'
 import Link from 'next/link'

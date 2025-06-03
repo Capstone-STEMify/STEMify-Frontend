@@ -1,8 +1,7 @@
 import HeaderEvent from '@/components/layout/header/header-right/HeaderEvent'
 import { Button } from '@/components/shadcn/button'
 import { Separator } from '@/components/shadcn/separator'
-import SToolTip from '@/components/shared/SToolTip'
-import { ArrowRightToLine, Bell, Gift, UserPlus } from 'lucide-react'
+import { ArrowRightToLine, UserPlus } from 'lucide-react'
 import React from 'react'
 
 export default function HeaderRightSection() {

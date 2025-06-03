@@ -32,22 +32,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' className={`${geistNunito.variable}`}>
-      <body className={`bg-bg-light antialiased`}>
+      <body className={`bg-light antialiased`}>
         <StoreProvider>
-          {/* Header */}
-          <header className='bg-light/10 sticky top-0 z-50 shadow-md backdrop-blur-md'>
-            <div className='px-5 py-2 sm:px-2 lg:px-5'>
-              <Header />
-            </div>
-          </header>
-
-          {/* Main Content */}
-          {/* <main className='mx-auto max-w-6xl flex-1 px-4 py-4 sm:px-6 lg:px-8'> */}
-          <main className='flex-grow'>
+          <main>
             <LoadingWrapper>{children}</LoadingWrapper>
           </main>
-          {/* Footer */}
-          <Footer />
         </StoreProvider>
         <Toaster />
       </body>
