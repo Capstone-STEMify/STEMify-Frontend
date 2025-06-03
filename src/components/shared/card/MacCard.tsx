@@ -2,7 +2,7 @@ import { Search, ChevronLeft, ChevronRight, RotateCcw, Home } from 'lucide-react
 
 export default function MacCard({ children }: { children?: React.ReactNode }) {
   return (
-    <div className='h-[450px] w-full overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-b from-gray-50 to-white shadow-2xl'>
+    <div className='h-auto w-full overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-b from-gray-50 to-white shadow-2xl'>
       {/* Header - All elements in one row */}
       <div className='items-center gap-2 border-b border-gray-200 bg-gray-100 px-4 py-3 sm:gap-4'>
         {/* Traffic lights */}
@@ -47,7 +47,7 @@ export default function MacCard({ children }: { children?: React.ReactNode }) {
         </nav>
       </div>
       {/* Card content */}
-      <div className='h-full bg-gradient-to-br from-blue-50 via-white to-blue-50 p-6'>{children}</div>
+      <div className='h-fit bg-gradient-to-br from-blue-50 via-white to-blue-50'>{children}</div>
     </div>
   )
 }

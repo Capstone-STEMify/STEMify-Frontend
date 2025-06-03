@@ -9,7 +9,7 @@ export default function HeaderNavigation() {
   const navItems = [
     { label: 'Home', href: '/' },
     { label: 'Resource', href: '/resource' },
-    { label: 'Classroom', href: '/classroom' },
+    { label: 'Classroom', href: '/student/classroom' },
     { label: 'Course', href: '/course' },
     { label: 'STEM', href: '/stem' }
   ]
