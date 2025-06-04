@@ -2,7 +2,7 @@ import { Button } from '@/components/shadcn/button'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
-export interface LinkButtonProps {
+type LinkButtonProps = {
   href: string
   children: ReactNode
   className?: string

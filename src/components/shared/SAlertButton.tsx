@@ -11,7 +11,7 @@ import {
 } from '@/components/shadcn/alert-dialog'
 import { Button } from '@/components/shadcn/button'
 
-export interface AlertBtnProp {
+export type AlertBtnProp = {
   title: string
   description: string
   triggerLabel: string

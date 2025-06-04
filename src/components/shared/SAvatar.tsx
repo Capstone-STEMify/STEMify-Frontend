@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 
-export interface SAvatarProps {
+type SAvatarProps = {
   src: string
   className?: string
 }

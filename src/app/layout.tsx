@@ -2,11 +2,9 @@ import type { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
 import './globals.css'
 import StoreProvider from 'providers/StoreProvider'
-import Header from '@/components/layout/header/Header'
 import { Toaster } from 'sonner'
 import { UserRole } from '@/types/userRole'
 import LoadingWrapper from '@/components/shared/loading/LoadingWrapper'
-import Footer from '@/components/layout/Footer'
 
 const geistNunito = Nunito({
   variable: '--font-geist-nunito',
@@ -32,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' className={`${geistNunito.variable}`}>
-      <body className={`bg-light antialiased`}>
+      <body className={`antialiased`}>
         <StoreProvider>
           <main>
             <LoadingWrapper>{children}</LoadingWrapper>

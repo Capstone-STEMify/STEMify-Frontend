@@ -2,7 +2,7 @@
 import React from 'react'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 
-export interface LoadingProps {
+type LoadingProps = {
   size?: number
 }
 

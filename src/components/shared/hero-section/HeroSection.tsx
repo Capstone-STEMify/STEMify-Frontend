@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 
-interface HeroSectionProps {
+type HeroSectionProps = {
   backgroundImage?: string;
   heading?: string;
   subheading?: string;

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Star, Image, Video, Volume2, BookCheck } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 
-interface TabItem {
+type TabItem = {
   id: string
   name: string
   icon: React.ReactNode
@@ -37,7 +37,7 @@ const tabs: TabItem[] = [
   }
 ]
 
-interface NavigationTabsProps {
+type NavigationTabsProps = {
   defaultActiveTab?: string
   onTabChange?: (tabId: string) => void
   className?: string
