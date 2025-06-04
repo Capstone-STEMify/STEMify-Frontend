@@ -1,7 +1,6 @@
 export type MenubarItemType = 'item' | 'checkbox' | 'radio' | 'sub' | 'separator'
 
 export interface MenubarBaseItem {
-  type: MenubarItemType
   label?: string
   shortcut?: string
   disabled?: boolean

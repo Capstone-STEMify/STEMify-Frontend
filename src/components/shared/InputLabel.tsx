@@ -1,7 +1,7 @@
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 
-export interface InputWithLabelProps {
+type InputWithLabelProps = {
   label: string
   type?: string
   placeholder?: string

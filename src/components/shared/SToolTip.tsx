@@ -1,7 +1,7 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
 import React from 'react'
 
-export interface SToolTipProps {
+type SToolTipProps = {
   content: string
   children: React.ReactNode
 }

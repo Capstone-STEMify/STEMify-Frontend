@@ -1,10 +1,9 @@
-import { Avatar } from '@/components/shadcn/avatar'
 import SAvatar from '@/components/shared/SAvatar'
 import { UserRole } from '@/types/userRole'
 import { Star } from 'lucide-react'
 import React from 'react'
 
-export interface FeedbackCardProps {
+type FeedbackCardProps = {
   src?: string
   name?: string
   date?: string
