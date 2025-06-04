@@ -1,3 +1,5 @@
+'use client'
+
 export default function CoursePage() {
-  return <div>CoursePage</div>
+  return <div></div>
 }
