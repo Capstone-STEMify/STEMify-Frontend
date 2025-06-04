@@ -35,7 +35,9 @@ export default function ToolsSection() {
           <div className='animate-slow-spin-reverse absolute top-0 -right-16 h-full w-32 rounded-full bg-gradient-to-b from-blue-400 to-cyan-400 opacity-80'></div>
 
           <div className='relative z-20 mb-8 flex justify-center'>
-            <MacCard />
+            <MacCard>
+              <img src="/HomeFiles/window.png" alt="STEMify Tools" className="w-full h-auto" />
+            </MacCard>
             <div className='absolute -top-2 -left-2 -z-10 h-full w-full rounded-lg bg-gradient-to-br from-yellow-300 to-orange-300 opacity-30'></div>
           </div>
 
