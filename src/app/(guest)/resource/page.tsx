@@ -1,5 +1,10 @@
+import HomePage from '@/features/home/components/HomePage'
 import React from 'react'
 
 export default function ResourcePage() {
-  return <div>ResourcePage</div>
+  return (
+    <div>
+      <HomePage />
+    </div>
+  )
 }

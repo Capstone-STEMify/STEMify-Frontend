@@ -15,7 +15,7 @@ export default function HomeLayout({
           <Header />
         </div>
       </header>
-      <main>{children}</main>
+      <main className='container'>{children}</main>
       <footer>
         <Footer />
       </footer>

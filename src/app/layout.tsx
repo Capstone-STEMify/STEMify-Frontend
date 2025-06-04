@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' className={`${geistNunito.variable}`}>
-      <body className={`bg-light antialiased`}>
+      <body className={`antialiased`}>
         <StoreProvider>
           <main>
             <LoadingWrapper>{children}</LoadingWrapper>

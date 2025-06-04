@@ -19,10 +19,10 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
     { name: 'Assignments', path: '/teacher/assignments' },
     { name: 'Profile', path: '/teacher/profile' }
   ],
-  [UserRole.GUEST]: [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
-    { name: 'Help', path: '/help' }
+  [UserRole.STAFF]: [
+    { name: 'Dashboard', path: '/staff/dashboard' },
+    { name: 'Resources', path: '/staff/resources' },
+    { name: 'Reports', path: '/staff/reports' },
+    { name: 'Profile', path: '/staff/profile' }
   ]
 }
