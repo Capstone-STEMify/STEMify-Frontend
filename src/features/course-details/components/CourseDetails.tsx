@@ -18,12 +18,12 @@ export default function CourseDetails () {
       const sections = ['about', 'skill', 'courses', 'reviews', 'suggestions'];
       const scrollPosition = window.scrollY + 100;
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
+      for (const sectionId of sections) {
+        const element = document.getElementById(sectionId);
         if (element) {
           const { offsetTop, offsetHeight } = element;
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
+            setActiveSection(sectionId);
             break;
           }
         }
@@ -36,8 +36,10 @@ export default function CourseDetails () {
 
   return (
     <div className="min-h-screen bg-white">
+      <div className='relative mb-36'>
       <HeroSection />
-      <StatsSection />
+      <StatsSection/>
+      </div>
       <NavigationBar activeSection={activeSection} setActiveSection={setActiveSection} />
       <AboutSection />
       <SkillSection />

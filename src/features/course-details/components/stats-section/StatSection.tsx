@@ -7,44 +7,83 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2
+      staggerChildren: 0.15 
     }
   }
 };
 
 const staggerItem = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  hidden: { opacity: 0, y: 20 }, 
+  visible: { opacity: 1, y: 0, transition: { duration: 2 } } 
 };
 
-export default function StatsSection() {
-  const stats = [
-    { icon: BookOpen, label: "Comprehensive curriculum", value: "1" },
-    { icon: Star, label: "Rating (8 reviews)", value: "0" },
-    { icon: Award, label: "Difficulty", value: "Intermediate", subtitle: "Suitable for all levels" },
-    { icon: Clock, label: "Hours", value: "1", subtitle: "Self-paced learning" },
-    { icon: Users, label: "Enrolled", value: "0", subtitle: "Join the community" }
-  ];
+const statsData = [
+  { 
+    icon: BookOpen, 
+    value: "1", 
+    title: "Course sections", 
+    subtitle: "Comprehensive curriculum", 
+    iconColor: "text-blue-600", 
+    bgColor: "bg-blue-100" 
+  },
+  { 
+    icon: Star, 
+    value: "0 ★",
+    title: "Rating", 
+    subtitle: "(0 reviews)", 
+    iconColor: "text-yellow-500", 
+    bgColor: "bg-yellow-100" 
+  },
+  { 
+    icon: Award, 
+    value: "Intermediate", 
+    title: "Difficulty", 
+    subtitle: "Suitable for all levels", 
+    iconColor: "text-green-600", 
+    bgColor: "bg-green-100" 
+  },
+  { 
+    icon: Clock, 
+    value: "1", 
+    title: "Hours", 
+    subtitle: "Self-paced learning", 
+    iconColor: "text-purple-600", 
+    bgColor: "bg-purple-100" 
+  },
+  { 
+    icon: Users, 
+    value: "0", 
+    title: "Students", 
+    subtitle: "Join the community", 
+    iconColor: "text-red-500", 
+    bgColor: "bg-red-100" 
+  }
+];
 
+export default function StatsSection() {
   return (
     <motion.section 
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true }}
+      viewport={{ once: true, amount: 0.3 }} 
       variants={staggerContainer}
-      className="py-12 bg-white border-b"
+      className="absolute -bottom-24 inset-x-0 z-10 px-4 sm:px-6 lg:px-8" 
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
-          {stats.map((stat, index) => (
-            <motion.div key={index} variants={staggerItem} className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-3">
-                <stat.icon className="w-6 h-6 text-blue-600" />
+      <div className="bg-white max-w-7xl mx-auto p-6 sm:px-6 lg:px-8 rounded-lg shadow-lg"> 
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-6"> 
+          {statsData.map((stat, index) => (
+            <motion.div 
+              key={index} 
+              variants={staggerItem} 
+              className="text-center py-2" 
+            >
+              <div className={`inline-flex items-center justify-center w-10 h-10 ${stat.bgColor} rounded-full mb-2`}>
+                <stat.icon className={`w-5 h-5 ${stat.iconColor}`} />
               </div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-              <div className="text-sm font-medium text-gray-900 mb-1">{stat.label}</div>
+              <div className="text-xl font-bold text-gray-800">{stat.value}</div>
+              <div className="text-xs font-semibold text-gray-700 mt-1">{stat.title}</div>
               {stat.subtitle && (
-                <div className="text-xs text-gray-500">{stat.subtitle}</div>
+                <div className="text-xs text-gray-500 mt-0.5">{stat.subtitle}</div>
               )}
             </motion.div>
           ))}

@@ -8,7 +8,7 @@ interface NavigationBarProps {
 const NavigationBar: React.FC<NavigationBarProps> = ({ activeSection, setActiveSection }) => {
   const navItems = [
     { id: 'about', label: 'About' },
-    { id: 'skill', label: 'skill' },
+    { id: 'skill', label: 'Skill' },
     { id: 'courses', label: 'Courses' },
     { id: 'reviews', label: 'Reviews' },
     { id: 'suggestions', label: 'Suggestions' }
@@ -23,8 +23,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ activeSection, setActiveS
   };
 
   return (
-    <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="top-0 z-50">
+      <div className="max-w-7xl mx-auto border-b">
         <nav className="flex space-x-8 overflow-x-auto">
           {navItems.map((item) => (
             <button
