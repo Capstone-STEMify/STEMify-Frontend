@@ -1,81 +1,73 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Award, User, BookOpen, ShoppingCart, Heart, Play } from 'lucide-react';
+import React from 'react'
+import { motion } from 'framer-motion'
+import { CalendarFold, BookOpen, Heart } from 'lucide-react'
+import { TbDoorExit } from 'react-icons/tb'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-};
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
+}
 
 export default function HeroSection() {
   return (
-    <motion.section 
-      initial="hidden"
-      animate="visible"
+    <motion.section
+      initial='hidden'
+      animate='visible'
       variants={fadeInUp}
-      className="bg-gradient-to-br from-blue-50 to-indigo-100 py-16"
+      className='bg-gradient-to-br from-sky-200 to-blue-100 py-26'
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-medium">
-              <Award className="w-4 h-4 mr-2" />
-              Age Range
+      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <div className='grid items-center gap-12 lg:grid-cols-2'>
+          <div className='space-y-6'>
+            <div className='inline-flex items-center rounded-full bg-amber-400 px-3 py-1 text-sm font-medium text-white'>
+              <CalendarFold className='mr-2 h-4 w-4' />
+              Age Ranges: 8-14+
             </div>
-            
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+
+            <h1 className='text-4xl leading-tight font-bold text-gray-900 lg:text-5xl'>
               Database Design and Querying with SQL Server
             </h1>
-            
-            <p className="text-lg text-gray-600 leading-relaxed">
-              This course will help you understand relational databases and how to use SQL to design and query data. You will learn how to create tables, query data, optimize queries, and manage databases.
-            </p>
-            
-            <div className="pace-x-6 text-sm text-gray-600">
-              <div className='flex items-center gap-2 mb-4'>
 
-                <p className='font-bold text-lg'>Category: </p>
-              <div className="flex items-center bg-white text-sky-300 rounded-full px-3 py-1 w-fit">
-                <BookOpen className="w-4 h-4 mr-2" />
-                IT & Software
+            <p className='text-lg leading-relaxed text-gray-600'>
+              This course will help you understand relational databases and how to use SQL to design and query data. You
+              will learn how to create tables, query data, optimize queries, and manage databases.
+            </p>
+
+            <div className='pace-x-6 text-sm text-gray-600'>
+              <div className='mb-4 flex items-center gap-2'>
+                <p className='text-lg font-bold'>Category: </p>
+                <div className='flex w-fit items-center rounded-full bg-white px-3 py-1 text-sky-400'>
+                  <BookOpen className='mr-2 h-4 w-4' />
+                  IT & Software
+                </div>
               </div>
-              </div>
-              <div className="flex items-center">
-                <User className="w-4 h-4 mr-2" />
+              <div className='flex items-center'>
+                <img src={'/images/Rosie.jpg'} className='mr-4 h-10 w-10 flex-shrink-0 rounded-full' />
                 by awesomeorg@gmail.com
               </div>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                Add to cart
+
+            <div className='flex flex-col gap-4 sm:flex-row'>
+              <button className='flex items-center justify-center rounded-lg bg-sky-400 px-8 py-3 font-medium text-white transition-colors duration-200 hover:bg-sky-500'>
+                <TbDoorExit className='mr-2 h-5 w-5' />
+                Assign to Student
               </button>
-              <button className="border border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
-                <Heart className="w-5 h-5 mr-2" />
+              <button className='flex items-center justify-center rounded-lg border bg-white px-8 py-3 font-medium text-sky-400 transition-colors duration-200 hover:border-sky-400'>
+                <Heart className='mr-2 h-5 w-5' />
                 Wishlist
               </button>
             </div>
           </div>
-          
-          <div className="relative">
-            <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-8 text-white relative overflow-hidden">
-              <div className="absolute inset-0 bg-black/20"></div>
-              <div className="relative z-10">
-                <div className="flex items-center justify-center mb-6">
-                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                    <Play className="w-8 h-8 text-white" />
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold text-center mb-4">SQL</h3>
-                <p className="text-center text-white/90">Master Database Design</p>
-              </div>
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-white/5 rounded-full"></div>
-            </div>
+
+          <div className='hidden w-fit items-center justify-center lg:flex lg:justify-end'>
+            <img
+              src={'/HomeFiles/hcm.jpg'}
+              alt='Database Design and Querying with SQL Server Course Preview'
+              className='h-auto w-full max-w-lg rounded-2xl border-4 border-white object-cover shadow-xl shadow-amber-400'
+            />
           </div>
         </div>
       </div>
     </motion.section>
-  );
-};
+  )
+}
