@@ -15,8 +15,9 @@ export default function HeaderNavigation() {
   ]
 
   return (
-    <nav className='flex h-full items-center'>
-      <ul className='flex h-full items-center justify-center gap-1'>
+    <nav className='flex h-fit w-full items-center'>
+      {/* Desktop Navigation - Horizontal */}
+      <ul className='hidden h-full items-center justify-center gap-1 lg:flex'>
         {navItems.map((item, index) => {
           const isActive = item.href === '/' ? pathname === '/' : pathname === item.href
           return (
@@ -34,6 +35,27 @@ export default function HeaderNavigation() {
                     isActive ? 'w-full' : 'w-0 group-hover:w-full'
                   }`}
                 ></span>
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+
+      {/* Mobile Navigation - Vertical Stack */}
+      <ul className='flex w-full flex-col space-y-1 lg:hidden'>
+        {navItems.map((item, index) => {
+          const isActive = item.href === '/' ? pathname === '/' : pathname === item.href
+          return (
+            <li key={index} className='w-full'>
+              <Link
+                href={item.href}
+                className={`block w-full rounded-lg px-4 py-2.5 text-base font-medium transition-colors duration-200 ${
+                  isActive
+                    ? 'bg-amber-custom-50 text-amber-custom-600 border-amber-custom-400 border-l-4'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                }`}
+              >
+                {item.label}
               </Link>
             </li>
           )
