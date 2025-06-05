@@ -27,7 +27,7 @@ export default function HeaderEvent() {
             <Button
               variant='ghost'
               size='sm'
-              className='group relative h-10 w-10 rounded-xl transition-all duration-300 hover:bg-amber-50 hover:text-amber-500 dark:hover:bg-amber-950/20'
+              className='group relative h-10 w-10 rounded-xl transition-all duration-300 hover:bg-sky-50 hover:text-blue-500 dark:hover:bg-blue-950/20'
             >
               <div className='relative'>
                 {item.icon}
@@ -38,7 +38,7 @@ export default function HeaderEvent() {
               </div>
 
               {/* Hover effect */}
-              <div className='absolute inset-0 rounded-xl bg-gradient-to-br from-amber-400/0 to-orange-400/0 transition-all duration-300 group-hover:from-amber-400/10 group-hover:to-orange-400/10' />
+              <div className='absolute inset-0 rounded-xl bg-gradient-to-br from-amber-400/0 to-orange-400/0 transition-all duration-300 group-hover:from-sky-400/10 group-hover:to-blue-400/10' />
             </Button>
           </Link>
         </SToolTip>
