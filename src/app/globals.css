@@ -139,3 +139,14 @@ skye-gradient: right, #7dd3fc, #eff6ff
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   }
 }
+/*
+---break---
+*/
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
