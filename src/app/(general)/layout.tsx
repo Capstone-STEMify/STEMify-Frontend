@@ -10,15 +10,9 @@ export default function HomeLayout({
 }>) {
   return (
     <div>
-      <header className='bg-light/10 sticky top-0 z-50 shadow-md backdrop-blur-md'>
-        <div className='px-5 py-2 sm:px-2 lg:px-5'>
-          <Header />
-        </div>
-      </header>
+      <Header />
       <main>{children}</main>
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   )
 }
