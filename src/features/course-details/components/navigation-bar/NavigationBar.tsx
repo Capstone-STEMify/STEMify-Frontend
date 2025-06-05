@@ -9,7 +9,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ activeSection, setActiveS
   const navItems = [
     { id: 'about', label: 'About' },
     { id: 'skill', label: 'Skill' },
-    { id: 'courses', label: 'Courses' },
+    { id: 'courses', label: 'Content' },
     { id: 'reviews', label: 'Reviews' },
     { id: 'suggestions', label: 'Suggestions' }
   ];
