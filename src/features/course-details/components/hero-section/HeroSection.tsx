@@ -19,7 +19,7 @@ export default function HeroSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-medium">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-amber-400 text-white text-sm font-medium">
               <CalendarFold className="w-4 h-4 mr-2" />
               Age Ranges: 8-14+
             </div>
@@ -36,7 +36,7 @@ export default function HeroSection() {
               <div className='flex items-center gap-2 mb-4'>
 
                 <p className='font-bold text-lg'>Category: </p>
-              <div className="flex items-center bg-white text-sky-500 rounded-full px-3 py-1 w-fit">
+              <div className="flex items-center bg-white text-sky-400 rounded-full px-3 py-1 w-fit">
                 <BookOpen className="w-4 h-4 mr-2" />
                 IT & Software
               </div>
@@ -48,22 +48,22 @@ export default function HeroSection() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-amber-400 hover:bg-amber-500 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+              <button className="bg-sky-400 hover:bg-sky-500 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
                 <TbDoorExit className="w-5 h-5 mr-2" />
-                Enroll
+                Assign to Student
               </button>
-              <button className="bg-white border hover:border-gray-400 text-gray-700 px-8 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+              <button className="bg-white border hover:border-sky-400 text-sky-400 px-8 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
                 <Heart className="w-5 h-5 mr-2" />
                 Wishlist
               </button>
             </div>
           </div>
           
-          <div className="flex items-center justify-center w-fit lg:justify-end">
+          <div className="lg:flex items-center justify-center w-fit lg:justify-end hidden">
             <img
               src={'/HomeFiles/hcm.jpg'} 
               alt="Database Design and Querying with SQL Server Course Preview" 
-              className="rounded-2xl shadow-xl w-full max-w-lg h-auto object-cover border-4 border-white shadow-amber-300"
+              className="rounded-2xl shadow-xl w-full max-w-lg h-auto object-cover border-4 border-white shadow-amber-400"
             />
           </div>
         </div>

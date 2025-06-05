@@ -85,7 +85,7 @@ export default function RecommendationSection () {
         </div>
         
         <div className="text-center">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+          <button className="bg-sky-400 hover:bg-sky-500 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
             Show more courses
           </button>
         </div>

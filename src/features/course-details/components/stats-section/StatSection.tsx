@@ -21,7 +21,7 @@ const statsData = [
   { 
     icon: BookOpen, 
     value: "1", 
-    title: "Course sections", 
+    title: "Course lessons", 
     subtitle: "Comprehensive curriculum", 
     iconColor: "text-blue-600", 
     bgColor: "bg-blue-100" 
@@ -30,7 +30,7 @@ const statsData = [
     icon: Star, 
     value: "0 ★",
     title: "Rating", 
-    subtitle: "(0 reviews)", 
+    subtitle: "0 reviews", 
     iconColor: "text-yellow-500", 
     bgColor: "bg-yellow-100" 
   },
@@ -45,7 +45,7 @@ const statsData = [
   { 
     icon: Clock, 
     value: "1", 
-    title: "Hours", 
+    title: "Hour(s)", 
     subtitle: "Self-paced learning", 
     iconColor: "text-purple-600", 
     bgColor: "bg-purple-100" 

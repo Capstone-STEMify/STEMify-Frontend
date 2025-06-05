@@ -12,7 +12,7 @@ const sampleReviews = [
   {
     id: 1,
     name: "Alice Wonderland",
-    avatarPlaceholder: "AW", // Placeholder for initials or an actual image
+    avatarPlaceholder: "AW",
     rating: 5,
     date: "March 15, 2024",
     text: "This course was absolutely fantastic! The content was thorough, easy to understand, and directly applicable. The instructor's explanations were clear and engaging. Highly recommended!",
@@ -60,18 +60,16 @@ export default function ReviewSection() {
       className="py-16 bg-gray-50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 text-center lg:text-left"> {/* Moved title outside the grid for better flow */}
+        <div className="mb-10 text-center lg:text-left"> 
             <h2 className="text-3xl font-bold text-gray-900">Student Feedback</h2>
         </div>
-        <div className="grid lg:grid-cols-3 gap-8 items-start"> {/* Changed to 3 columns for more review space */}
-          
-          {/* Column 1: Review Summary */}
-          <div className="lg:col-span-1 bg-white rounded-lg p-6 shadow-lg"> {/* Enhanced shadow */}
+        <div className="grid lg:grid-cols-3 gap-8 items-start"> 
+          <div className="lg:col-span-1 bg-white rounded-lg p-6 shadow-lg"> 
             <h3 className="text-xl font-semibold text-gray-800 mb-6">Course Rating</h3>
             <div className="flex items-center mb-6">
-              <div className="text-5xl font-bold text-gray-900 mr-4">0.0</div> {/* Assuming 0.0 is placeholder */}
+              <div className="text-5xl font-bold text-gray-900 mr-4">0.0</div> 
               <div>
-                {renderStars(0)} {/* Assuming 0 rating for now */}
+                {renderStars(0)}
                 <div className="text-sm text-gray-600 mt-1">Based on 0 Reviews</div>
               </div>
             </div>
@@ -83,26 +81,25 @@ export default function ReviewSection() {
                   <div className="flex-1 mx-2 bg-gray-200 rounded-full h-2.5">
                     <div 
                         className="bg-yellow-400 h-2.5 rounded-full" 
-                        style={{ width: '0%' }} // This would be dynamic
+                        style={{ width: '0%' }} 
                     ></div>
                   </div>
-                  <span className="text-xs text-gray-500 w-8 text-right">0%</span> {/* This would be dynamic */}
+                  <span className="text-xs text-gray-500 w-8 text-right">0%</span>
                 </div>
               ))}
             </div>
             
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2.5 px-4 rounded-lg transition-colors">
+              <button className="w-full bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium py-2.5 px-4 rounded-lg transition-colors">
                 + Add Your Review
               </button>
             </div>
           </div>
 
-          {/* Column 2 & 3: Actual Reviews List */}
           <div className="lg:col-span-2 space-y-6">
             {sampleReviews.length > 0 ? (
               sampleReviews.map((review) => (
-                <div key={review.id} className="bg-white rounded-lg p-6 shadow-lg"> {/* Enhanced shadow */}
+                <div key={review.id} className="bg-white rounded-lg p-6 shadow-lg"> 
                   <div className="flex items-start mb-3">
                     <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-semibold mr-4 flex-shrink-0">
                       {review.avatarPlaceholder}
