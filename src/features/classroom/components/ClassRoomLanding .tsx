@@ -1,18 +1,17 @@
 'use client'
 import React from 'react'
-import HeroSection from './hero-section/HeroSection';
-import TeachingSection from './teaching-section/TeachingSection';
-import LearningSection from './learning-section/LearningSection';
-import ToolSection from './tool-section/ToolSection';
-import HeroSectionClass from './hero-section/HeroSection';
+import HeroSection from '@/components/shared/hero-section/HeroSection'
+import TeachingSection from './landing/TeachingSection'
+import LearningSection from './landing/LearningSection'
+import ToolSection from './landing/ToolSection'
 
 export default function ClassRoomLanding() {
   return (
-    <div className="min-h-screen bg-white">
-      <HeroSectionClass />
+    <div className='min-h-screen bg-white'>
+      <HeroSection />
       <TeachingSection />
       <LearningSection />
       <ToolSection />
     </div>
-  );
+  )
 }

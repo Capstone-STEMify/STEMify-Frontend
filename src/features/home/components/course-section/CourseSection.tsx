@@ -1,5 +1,5 @@
 'use client'
-import ResourceCard from '@/components/shared/card/CourseCard'
+import ResourceCard from '@/components/shared/card/ResourceCard'
 import { ClockFading } from 'lucide-react'
 import React from 'react'
 

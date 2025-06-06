@@ -1,4 +1,4 @@
-import ResourceCard from '@/components/shared/card/CourseCard'
+import ResourceCard from '@/components/shared/card/ResourceCard'
 
 interface GalleryGridProps {
   resources: any[]

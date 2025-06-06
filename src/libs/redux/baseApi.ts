@@ -1,4 +1,4 @@
-import { BaseEntity, PaginatedResponse, SearchPaginatedRequestParams, SearchPaginatedResponse } from '@/types/baseModel'
+import { ApiSuccessResponse, BaseEntity, PaginatedResult, SearchPaginatedRequestParams } from '@/types/baseModel'
 import { BaseQueryApi, BaseQueryFn, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { notFound } from 'next/navigation'
 
@@ -43,7 +43,7 @@ export type CrudApiOptions = {
   searchUrl?: string // Optional endpoint for paginated search
   baseQuery?: BaseQueryFn // Optional: your custom fetch logic, override the existing custom api
 }
-export function createCRUDApi<T extends BaseEntity, P extends SearchPaginatedRequestParams>({
+export function createCRUDApi<T, P extends SearchPaginatedRequestParams>({
   reducerPath,
   tagType,
   baseUrl,
@@ -62,21 +62,16 @@ export function createCRUDApi<T extends BaseEntity, P extends SearchPaginatedReq
       }),
 
       //GET: lessons
-      getAll: builder.query<PaginatedResponse<T>, P>({
+      getAll: builder.query<ApiSuccessResponse<PaginatedResult<T>>, void>({
         query: (params) => ({
-          url: baseUrl,
-          params: {
-            ...params,
-            pageNumber: params.pageNumber ?? 1,
-            pageSize: params.pageSize ?? 10
-          }
+          url: baseUrl
         }),
         providesTags: [tagType]
       }),
 
-      // GET: search/lessons?sort=nameAsc&pageNumber=1&pageSize=10&search=title
+      // GET: lessons?sort=nameAsc&pageNumber=1&pageSize=10&search=title
       search: searchUrl
-        ? builder.query<SearchPaginatedResponse<T>, P>({
+        ? builder.query<ApiSuccessResponse<PaginatedResult<T>>, P>({
             query: (params) => ({
               url: searchUrl,
               method: 'GET',
@@ -89,7 +84,7 @@ export function createCRUDApi<T extends BaseEntity, P extends SearchPaginatedReq
             providesTags: [tagType]
           })
         : // If no searchUrl is provided, return an empty query
-          builder.query<SearchPaginatedResponse<T>, P>({
+          builder.query<ApiSuccessResponse<PaginatedResult<T>>, P>({
             query: (params) => ({
               url: '',
               method: 'GET',
