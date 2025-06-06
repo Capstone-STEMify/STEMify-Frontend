@@ -1,6 +1,6 @@
-import ClassRoomLanding from '@/features/classroom/components/landing/ClassRoomLanding '
+import ClassRoomLanding from '@/features/classroom/components/ClassRoomLanding '
 import React from 'react'
 
-export default function page() {
+export default function ClassRoomPage() {
   return <ClassRoomLanding />
 }
