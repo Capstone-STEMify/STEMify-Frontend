@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react'
 
-export default function EmptyState() {
+export default function EmptySearch() {
   return (
     <div className='py-16 text-center'>
       <div className='mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-r from-blue-100 to-purple-100'>

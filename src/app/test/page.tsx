@@ -1,4 +1,4 @@
-import SearchList from '@/features/general/search-list/SearchList'
+import SearchList from '@/features/course/components/CourseList'
 
 export default function page() {
   return (

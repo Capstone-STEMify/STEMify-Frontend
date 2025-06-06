@@ -1,9 +1,5 @@
-import SearchList from '@/features/general/search-list/SearchList'
+import CourseList from '@/features/course/components/CourseList'
 
-export default function page() {
-  return (
-    <div>
-      <SearchList />
-    </div>
-  )
+export default function CourseListPage() {
+  return <CourseList />
 }
