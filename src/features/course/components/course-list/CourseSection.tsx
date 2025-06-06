@@ -1,13 +1,12 @@
-import CourseCard from '@/features/landing-page/resource/course/CourseCard'
+import ResourceCard from '@/components/shared/card/ResourceCard'
 import { dummyCardData } from '@/utils/mockData'
-import React from 'react'
 
-export default function ActivitySection() {
+export default function CourseSection() {
   return (
-    <main className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+    <section className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
       {dummyCardData.map((course, index) => {
         return (
-          <CourseCard
+          <ResourceCard
             key={index}
             resource={{
               title: course.title,
@@ -20,6 +19,6 @@ export default function ActivitySection() {
           />
         )
       })}
-    </main>
+    </section>
   )
 }
