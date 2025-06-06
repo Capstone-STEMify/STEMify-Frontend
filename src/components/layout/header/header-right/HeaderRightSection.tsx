@@ -22,20 +22,14 @@ export default function HeaderRightSection() {
             title='Search'
             description='Search for courses, activities, or lessons'
             trigger={
-              <div className='relative overflow-hidden rounded-xl border border-gray-200/50 bg-white/80 shadow-sm backdrop-blur-sm transition-all duration-300 hover:shadow-md dark:border-gray-700/50 dark:bg-gray-800/80'>
+              <div>
                 <SearchBar />
-                <div className='absolute inset-0 bg-gradient-to-r from-amber-400/10 to-orange-400/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
               </div>
             }
             content={<SearchExperiencePanel />}
             footer={
               <DialogClose asChild>
-                <Button
-                  variant='secondary'
-                  className='transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700'
-                >
-                  Close
-                </Button>
+                <Button variant='secondary'>Close</Button>
               </DialogClose>
             }
           />
@@ -56,9 +50,8 @@ export default function HeaderRightSection() {
             size='sm'
             variant='ghost'
             onClick={handleClick}
-            className='group relative overflow-hidden rounded-lg px-4 py-2 transition-all duration-300 hover:bg-amber-50 hover:text-amber-500 dark:hover:bg-amber-950/20'
+            className='group relative overflow-hidden rounded-lg px-4 py-2 transition-all duration-300 hover:text-sky-500 dark:hover:bg-amber-950/20'
           >
-            <div className='absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-amber-400/0 via-amber-400/5 to-amber-400/0 transition-transform duration-700 group-hover:translate-x-[100%]' />
             <UserPlus className='mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110' />
             <span className='relative font-medium'>Sign Up</span>
           </Button>
@@ -67,7 +60,7 @@ export default function HeaderRightSection() {
           <Button
             size='lg'
             onClick={handleClick}
-            className='group relative overflow-hidden rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 px-6 py-2.5 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:scale-95'
+            className='group relative overflow-hidden rounded-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-500 px-6 py-2.5 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:scale-95'
           >
             <div className='absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-white/20 to-white/0 transition-transform duration-500 group-hover:translate-x-[100%]' />
             <div className='flex items-center gap-2'>
