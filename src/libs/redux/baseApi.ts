@@ -1,6 +1,13 @@
-import { ApiSuccessResponse, BaseEntity, PaginatedResult, SearchPaginatedRequestParams } from '@/types/baseModel'
+import {
+  ApiErrorResponse,
+  ApiSuccessResponse,
+  BaseEntity,
+  PaginatedResult,
+  SearchPaginatedRequestParams
+} from '@/types/baseModel'
 import { BaseQueryApi, BaseQueryFn, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { notFound } from 'next/navigation'
+import { toast } from 'sonner'
 
 // =============================
 // === Custom Base Query
@@ -20,13 +27,33 @@ export const customFetchBaseQueryWithErrorHandling = async (
   const result = await customFetchBaseQuery(args, api, extraOptions)
 
   if (result.error) {
-    console.error(result.error)
-    const status = result.error.status
-    if (status === 404) {
-      notFound()
-    }
-    if (status === 502) {
-      throw new Error('Bad Gateway: Backend service is unavailable')
+    const status =
+      result.error.status === 'PARSING_ERROR' && result.error.originalStatus
+        ? result.error.originalStatus
+        : result.error.status
+    const data = result.error.data as ApiErrorResponse
+
+    switch (status) {
+      case 400:
+        toast.error(data?.message || 'Bad Request')
+        break
+      case 401:
+        toast.error(data?.message || 'Unauthorized')
+        break
+      case 403:
+        toast.error(data?.message || 'Forbidden')
+        break
+      case 500:
+        toast.error(data?.message || 'Server Error')
+        break
+      case 404:
+        toast.error(data?.message || 'Not Found')
+        break
+      case 'FETCH_ERROR':
+        toast.error('fetch Error')
+        break
+      default:
+        toast.error('Unexpected error')
     }
   }
   return result
