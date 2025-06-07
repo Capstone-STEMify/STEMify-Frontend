@@ -3,37 +3,55 @@ import HeaderEvent from '@/components/layout/header/header-right/HeaderEvent'
 import { Button } from '@/components/shadcn/button'
 import { DialogClose } from '@/components/shadcn/dialog'
 import { Separator } from '@/components/shadcn/separator'
+import SDrawer from '@/components/shared/SDrawer'
 import { SDialog } from '@/components/shared/search/SDialog'
 import SearchBar from '@/components/shared/search/SearchBar'
 import SearchExperiencePanel from '@/components/shared/search/SearchExperiencePanel'
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { ArrowRightToLine, UserPlus, Sparkles } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 
 export default function HeaderRightSection() {
   const handleClick = () => alert('Clicked!')
+  const [open, setOpen] = useState(false)
+  const isDesktop = useMediaQuery('(min-width: 768px)')
+
+  const searchComponent = isDesktop ? (
+    <SDialog
+      open={open}
+      setOpen={setOpen}
+      title='Search'
+      description='Search for courses, activities, or lessons'
+      trigger={
+        <div>
+          <SearchBar />
+        </div>
+      }
+      content={<SearchExperiencePanel />}
+      footer={<Button variant='secondary'>Close</Button>}
+    />
+  ) : (
+    <SDrawer
+      open={open}
+      setOpen={setOpen}
+      title='Search'
+      description='Search for courses, activities, or lessons'
+      trigger={
+        <div>
+          <SearchBar />
+        </div>
+      }
+      content={<SearchExperiencePanel />}
+      close={<Button variant='secondary'>Close</Button>}
+    />
+  )
 
   return (
     <>
       {/* Desktop Layout */}
       <div className='hidden h-8 items-center justify-center gap-4 lg:flex'>
         {/* Search with enhanced styling */}
-        <div className='group relative'>
-          <SDialog
-            title='Search'
-            description='Search for courses, activities, or lessons'
-            trigger={
-              <div>
-                <SearchBar />
-              </div>
-            }
-            content={<SearchExperiencePanel />}
-            footer={
-              <DialogClose asChild>
-                <Button variant='secondary'>Close</Button>
-              </DialogClose>
-            }
-          />
-        </div>
+        <div className='group relative'>{searchComponent}</div>
 
         {/* Enhanced Separator with gradient */}
         <div className='relative h-8 w-px'>
@@ -73,8 +91,12 @@ export default function HeaderRightSection() {
       </div>
 
       {/* Mobile Layout - Enhanced Vertical Stack */}
+      {/* Mobile Layout - Enhanced Vertical Stack */}
       <div className='flex w-full flex-col space-y-4 lg:hidden'>
         <div className='flex w-full flex-col space-y-3 pt-2'>
+          {/* 🔍 Search trigger for mobile */}
+          <div className='px-4'>{searchComponent}</div>
+
           <HeaderEvent />
 
           {/* Mobile Sign Up Button */}

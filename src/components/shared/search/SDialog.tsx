@@ -11,6 +11,8 @@ import {
 import { ReactNode } from 'react'
 
 type SDialogProps = {
+  open?: boolean
+  setOpen?: (open: boolean) => void
   title: string
   trigger: ReactNode
   content: ReactNode
@@ -19,9 +21,9 @@ type SDialogProps = {
   className?: string
 }
 
-export function SDialog({ trigger, title, description, content, footer, className = '' }: SDialogProps) {
+export function SDialog({ open, setOpen, trigger, title, description, content, footer, className = '' }: SDialogProps) {
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className='w-auto max-w-fit p-6'>
         <DialogHeader>
@@ -29,7 +31,11 @@ export function SDialog({ trigger, title, description, content, footer, classNam
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         {content}
-        {footer && <DialogFooter>{footer}</DialogFooter>}
+        {footer && (
+          <DialogFooter>
+            <DialogClose asChild>{footer}</DialogClose>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   )

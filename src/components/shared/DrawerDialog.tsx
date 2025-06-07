@@ -24,7 +24,7 @@ import {
 import SearchBar from '@/components/shared/search/SearchBar'
 import SearchExperiencePanel from '@/components/shared/search/SearchExperiencePanel'
 
-export default function DrawerDialogDemo() {
+export function DrawerDialogDemo() {
   const [open, setOpen] = React.useState(false)
   const isDesktop = useMediaQuery('(min-width: 768px)')
 

@@ -20,7 +20,7 @@ const services = [
 
 export default function SearchExperiencePanel() {
   return (
-    <div>
+    <div className='px-4'>
       {/* Search input */}
       <div className='mb-4'>
         <SearchBar className='md:py-3' />
