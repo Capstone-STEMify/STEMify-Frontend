@@ -23,7 +23,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ activeSection, setActiveS
   }
 
   return (
-    <div className='top-0 z-50'>
+    <div className='sticky top-20 bg-white z-50'>
       <div className='mx-auto max-w-7xl border-b'>
         <nav className='flex space-x-8 overflow-x-auto'>
           {navItems.map((item) => (

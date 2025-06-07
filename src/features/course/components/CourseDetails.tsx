@@ -1,6 +1,4 @@
 'use client'
-import HeroSection from '@/components/shared/hero-section/HeroSection'
-import StatsSection from '@/features/home/components/stats-section/StatsSection'
 import React, { useState, useEffect } from 'react'
 import NavigationBar from './details/NavigationBar'
 import AboutSection from './details/AboutSection'
@@ -8,6 +6,8 @@ import SkillSection from './details/SkillSection'
 import ContentSection from './details/ContentSection'
 import ReviewSection from './details/ReviewSection'
 import RecommendationSection from './details/RecommendationSection'
+import HeroSection from './details/HeroSection'
+import StatsSection from './details/StatSection'
 
 export default function CourseDetails() {
   const [activeSection, setActiveSection] = useState('about')
