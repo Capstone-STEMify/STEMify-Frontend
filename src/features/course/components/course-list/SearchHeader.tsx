@@ -22,7 +22,9 @@ export default function SearchHeader({
   return (
     <div>
       <div className='mb-6'>
-        <h2 className='text-2xl font-bold break-words'>Search result "{filterItems.searchQuery || 'All resources'}"</h2>
+        <h2 className='text-2xl font-bold break-words'>
+          Search result &quot;{filterItems.searchQuery || 'All resources'}&quot;
+        </h2>{' '}
         <p className='mt-1 text-sm text-gray-600 sm:text-base'>
           Found {filteredAndSortedData.length} learning materials matching your criteria
         </p>
