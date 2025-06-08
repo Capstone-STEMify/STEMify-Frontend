@@ -1,9 +1,6 @@
-import SearchList from '@/features/course/components/CourseList'
+import * as React from 'react'
+import SBreadcrumb from '@/components/shared/SBreadcrumb'
 
-export default function page() {
-  return (
-    <div>
-      <SearchList />
-    </div>
-  )
+export default function BreadcrumbResponsive() {
+  return <SBreadcrumb title='Intro: Wetlands Biome' />
 }

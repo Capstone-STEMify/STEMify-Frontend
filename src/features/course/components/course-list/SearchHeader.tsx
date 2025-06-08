@@ -1,5 +1,5 @@
 import SSelect from '@/components/shared/SSelect'
-import STabs from '@/components/shared/STabs'
+import SearchTabs from '@/features/course/components/course-list/SearchTabs'
 
 interface SearchHeaderProps {
   filterItems: {
@@ -28,7 +28,7 @@ export default function SearchHeader({
         </p>
       </div>
       <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-        <STabs
+        <SearchTabs
           categories={categories}
           selectedCategory={filterItems.category}
           setSelectedCategory={(val) => updateFilter('category', val)}

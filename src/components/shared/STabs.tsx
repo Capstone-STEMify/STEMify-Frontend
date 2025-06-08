@@ -1,25 +1,38 @@
-import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/shadcn/tabs'
+import { ReactNode } from 'react'
 
-type STabsProps = {
-  selectedCategory: string
-  setSelectedCategory: (value: string) => void
-  categories: string[]
+type TabsItem = {
+  value: string
+  label: string
+  content: ReactNode
 }
 
-export default function STabs({ selectedCategory, setSelectedCategory, categories }: STabsProps) {
+type STabsProps = {
+  defaultValue: string
+  items: TabsItem[]
+  className?: string
+  customStyle?: {
+    list?: string
+    trigger?: string
+  }
+}
+
+export default function STabs({ defaultValue, items, className, customStyle }: STabsProps) {
   return (
-    <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className='w-full sm:w-auto'>
-      <TabsList className='gap-2 bg-white/80 p-1 backdrop-blur-md sm:grid-cols-4'>
-        {categories.map((cat) => (
-          <TabsTrigger
-            key={cat}
-            value={cat}
-            className='data-[state=active]:bg-amber-custom-400 px-2 py-1 text-sm transition-all duration-200 data-[state=active]:text-white sm:px-3 sm:py-2'
-          >
-            {cat}
+    <Tabs defaultValue={defaultValue} className={`${className} p-4`}>
+      <TabsList className={`bg-light mb-4 grid w-full grid-cols-2 ${customStyle?.list}`}>
+        {items.map((item) => (
+          <TabsTrigger key={item.value} value={item.value} className={`${customStyle?.trigger}`}>
+            {item.label}
           </TabsTrigger>
         ))}
       </TabsList>
+
+      {items.map((item) => (
+        <TabsContent key={item.value} value={item.value}>
+          {item.content}
+        </TabsContent>
+      ))}
     </Tabs>
   )
 }
