@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/shadcn/resizable'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
-import BackButton from '@/components/shared/BackButton'
+import BackButton from '@/components/shared/button/BackButton'
 import STabs from '@/components/shared/STabs'
 import LessonDescription from '@/features/lesson/components/lesson-detail/LessonDescription'
 import LessonOutline from '@/features/lesson/components/lesson-detail/LessonOutline'
@@ -28,12 +28,12 @@ export default function LessonDetail() {
     'https://images.unsplash.com/photo-1528732262645-b06fa3a79c9e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
 
   return (
-    <div className='bg-light'>
+    <div className='bg-light pb-20'>
       <div className='container mx-auto py-6'>
         <div className='mx-8'>
           <div className='flex items-center gap-5'>
             <BackButton />
-            <SBreadcrumb title='Intro: Wetlands Biome' size={'md'} />
+            <SBreadcrumb title='Intro: Wetlands Biome' size={'md'} color={'yellow'} weight={'semibold'} />
           </div>
 
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>
