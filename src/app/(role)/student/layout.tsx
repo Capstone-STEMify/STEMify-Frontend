@@ -1,3 +1,4 @@
+import Footer from '@/components/layout/Footer'
 import { metadata } from 'app/layout'
 
 metadata.title = 'Student'
@@ -6,5 +7,10 @@ export default function StudentLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return <div>{children}</div>
+  return (
+    <>
+      <div className='flex flex-col justify-center'>{children}</div>
+      <Footer />
+    </>
+  )
 }

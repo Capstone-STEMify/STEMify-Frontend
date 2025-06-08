@@ -1,46 +1,22 @@
-'use client'
-
-import HeaderNavigation from '@/components/layout/header/HeaderNavigation'
-import { Button } from '@/components/shadcn/button'
-import { Separator } from '@/components/shadcn/separator'
-import StemifyLogo from '@/components/shared/StemifyLogo'
-import { ArrowRightToLine, UserPlus } from 'lucide-react'
+import HeaderLeftSection from '@/components/layout/header/header-left/HeaderLeftSection'
+import HeaderRightSection from '@/components/layout/header/header-right/HeaderRightSection'
+import MobileMenu from '@/components/layout/header/MobileMenu'
 
 export default function Header() {
-  const handleClick = () => alert('Clicked!')
-
   return (
-    <div className='flex flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0'>
-      {/* logo and navigation */}
-      <div className='flex items-center gap-6'>
-        <StemifyLogo />
-        <Separator
-          orientation='vertical'
-          className='via-slay-custom-200 hidden h-8 w-px bg-gradient-to-b from-transparent to-transparent sm:block'
-        />
-        <HeaderNavigation />
-      </div>
+    <header className='sticky top-0 z-50 w-full bg-white/90 shadow-md backdrop-blur-md'>
+      <div className='flex items-center justify-between px-4 py-3 sm:px-6 lg:px-8'>
+        {/* Hiển thị trên mobile */}
+        <div className='flex w-full items-center justify-between lg:hidden'>
+          <MobileMenu />
+        </div>
 
-      {/* button */}
-      <div className='flex items-center'>
-        <Button
-          size='lg'
-          variant='ghost'
-          onClick={handleClick}
-          className='hover:text-amber-custom-400 transition-colors duration-200'
-        >
-          <UserPlus className='mr-2 h-4 w-4' />
-          Sign Up
-        </Button>
-        <Button
-          size='lg'
-          onClick={handleClick}
-          className='transform items-center bg-amber-500 shadow-lg transition-colors'
-        >
-          <ArrowRightToLine size={16} />
-          Login
-        </Button>
+        {/* Hiển thị trên desktop */}
+        <div className='hidden w-full items-center justify-between lg:flex'>
+          <HeaderLeftSection />
+          <HeaderRightSection />
+        </div>
       </div>
-    </div>
+    </header>
   )
 }

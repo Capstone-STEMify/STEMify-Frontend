@@ -10,7 +10,7 @@ export default function LoadingWrapper({ children }: { children: ReactNode }) {
   // loading based on pathname change
   useEffect(() => {
     setLoading(true)
-    const timeout = setTimeout(() => setLoading(false), 2000)
+    const timeout = setTimeout(() => setLoading(false), 800)
     return () => clearTimeout(timeout)
   }, [pathname])
   return (

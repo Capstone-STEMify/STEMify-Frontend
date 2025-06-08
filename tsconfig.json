@@ -27,7 +27,8 @@
       "@/libs/*": ["libs/*"],
       "@/types/*": ["types/*"],
       "@/providers/*": ["providers/*"],
-      "@/shadcn/*": ["utils/shadcn/*"]
+      "@/shadcn/*": ["utils/shadcn/*"],
+      "@/hooks/*": ["hooks/*"]
     }
   },
   "include": [
