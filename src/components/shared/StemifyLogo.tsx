@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import logo from '../../../public/images/logo.png' //  logo
+// import logo from '../../../public/images/logo.png'
+import logo from '../../../public/images/logo/logo.png'
 
 export default function StemifyLogo({ className = 'h-full w-auto object-contain' }: { className?: string }) {
   return (
