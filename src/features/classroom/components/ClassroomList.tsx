@@ -2,8 +2,8 @@
 import { Button } from '@/components/shadcn/button'
 import SearchBar from '@/components/shared/search/SearchBar'
 import SSelect from '@/components/shared/SSelect'
-import ClassroomCard from '@/features/classroom/components/classroom-detail/ClassroomCard'
-import ClassroomHero from '@/features/classroom/components/classroom-detail/ClassroomHero'
+import ClassroomCard from '@/features/classroom/components/classroom-list/ClassroomCard'
+import ClassroomHero from '@/features/classroom/components/classroom-list/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
 import React, { useState } from 'react'
 
@@ -58,10 +58,8 @@ const classroomData = [
   }
 ]
 
-export default function ClassroomDetail() {
+export default function ClassroomList() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedFilter, setSelectedFilter] = useState('all')
-  const [likedCards, setLikedCards] = useState(new Set())
 
   const filteredData = classroomData.filter((classroom) => {
     const matchesSearch = classroom.name.toLowerCase().includes(searchQuery.toLowerCase())
