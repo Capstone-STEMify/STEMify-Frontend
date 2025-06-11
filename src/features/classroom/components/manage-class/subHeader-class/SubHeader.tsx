@@ -1,4 +1,5 @@
 import { motion, useInView } from 'framer-motion';
+import Link from 'next/link';
 import React, { useRef } from 'react'
 
 const fadeInUp = {
@@ -27,9 +28,11 @@ export default function SubHeader() {
         <div className="text-gray-600">
           Jump Into Classroom Creation
         </div>
+        <Link href={'/teacher/classrooms/create-steps'}>
         <button className="bg-amber-400 hover:bg-amber-500 text-white px-6 py-2 rounded-lg font-medium transition-colors">
           Create Your Classroom
         </button>
+        </Link>
       </div>
     </motion.header>
   );

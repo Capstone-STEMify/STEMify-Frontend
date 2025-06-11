@@ -1,4 +1,4 @@
-import ClassRoomManagement from '@/features/classroom/components/ClassRoomManagement'
+import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
 import React from 'react'
 
 export default function TeacherClassroomPage() {
