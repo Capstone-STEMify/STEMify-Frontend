@@ -9,8 +9,6 @@ export default function TeacherClassroomListPage() {
       <main className='bg-light min-h-screen'>
         <ClassroomList />
       </main>
-
-      <Footer />
     </div>
   )
 }

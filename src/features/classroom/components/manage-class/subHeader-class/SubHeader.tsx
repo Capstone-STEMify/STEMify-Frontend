@@ -17,7 +17,7 @@ export default function SubHeader() {
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
-    <motion.header 
+    <motion.section 
       ref={ref}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
@@ -34,6 +34,6 @@ export default function SubHeader() {
         </button>
         </Link>
       </div>
-    </motion.header>
+    </motion.section>
   );
 }

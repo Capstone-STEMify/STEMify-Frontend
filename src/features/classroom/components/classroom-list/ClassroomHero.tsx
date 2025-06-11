@@ -4,7 +4,7 @@ import React from 'react'
 export default function ClassroomHero() {
   return (
     <div className='h-fit overflow-hidden'>
-      <div className='relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-sky-600 to-yellow-600 px-8 py-10 text-white'>
+      <div className='relative overflow-hidden bg-gradient-to-br from-blue-600 via-sky-600 to-yellow-600 px-8 py-10 text-white'>
         {/* Animated Background Elements */}
         <div className='absolute inset-0 overflow-hidden'>
           <div className='absolute -top-10 -right-10 h-40 w-40 animate-pulse rounded-full bg-white/10 blur-3xl' />

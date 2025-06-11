@@ -16,8 +16,7 @@ export default function ClassRoomManagement() {
       <FeatureCardSec />
       <TipSec/>
       <ResourceSec />
-      <CurrentClassSec />
-      <CTASec />
+      {/* <CTASec /> */}
     </div>
   )
 }

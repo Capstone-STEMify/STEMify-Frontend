@@ -5,7 +5,18 @@ import SSelect from '@/components/shared/SSelect'
 import ClassroomCard from '@/features/classroom/components/classroom-list/ClassroomCard'
 import ClassroomHero from '@/features/classroom/components/classroom-list/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import ClassRoomManagement from './manage-class/ClassRoomManagement'
+import { motion, useInView } from 'framer-motion'
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 60 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
 
 const classroomData = [
   {
@@ -60,6 +71,8 @@ const classroomData = [
 
 export default function ClassroomList() {
   const [searchQuery, setSearchQuery] = useState('')
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   const filteredData = classroomData.filter((classroom) => {
     const matchesSearch = classroom.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -70,11 +83,18 @@ export default function ClassroomList() {
 
   const handleSearch = () => {}
   return (
-    <div className='mx-auto max-w-6xl pb-30 sm:px-4'>
+    <div className=' pb-30 min-h-screen'>
       <ClassroomHero />
 
+      <ClassRoomManagement/>
+
       {/* Classroom list */}
-      <main className='mx-auto mt-8'>
+      <motion.section
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={fadeInUp}
+      className='max-w-7xl mx-auto mt-8'>
         <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
           <SearchBar />
           <div className='flex items-center justify-between gap-4 sm:justify-start'>
@@ -119,7 +139,7 @@ export default function ClassroomList() {
             <p className='text-gray-500'>Try adjusting your search or filter criteria</p>
           </div>
         )}
-      </main>
+      </motion.section>
     </div>
   )
 }
