@@ -5,7 +5,6 @@ import { Book, Film, Layers, List, Search, X } from 'lucide-react'
 import { ChangeEvent, KeyboardEvent, useState } from 'react'
 
 export enum FilterParams {
-  ALL = 'all',
   COURSES = 'courses',
   ACTIVITIES = 'activities',
   LESSONS = 'lessons'
@@ -16,13 +15,12 @@ export const FilterOptions: {
   value: FilterParams
   icon: React.ReactNode
 }[] = [
-  { label: 'All', value: FilterParams.ALL, icon: <List className='mr-2 h-4 w-4' /> },
   { label: 'Courses', value: FilterParams.COURSES, icon: <Book className='mr-2 h-4 w-4' /> },
   { label: 'Activities', value: FilterParams.ACTIVITIES, icon: <Film className='mr-2 h-4 w-4' /> },
   { label: 'Lessons', value: FilterParams.LESSONS, icon: <Layers className='mr-2 h-4 w-4' /> }
 ]
 
-export interface SearchBasicProps {
+export interface SearchWithFilterProps {
   filter?: FilterParams
   placeholder?: string
   isLoading?: boolean
@@ -30,16 +28,15 @@ export interface SearchBasicProps {
   onSearchSubmit: (params: string) => void
 }
 
-export default function SearchBasic({
+export default function SearchWithFilter({
   filter,
   placeholder = 'Search files, resources, or projects...',
   isLoading = false,
   onSearchSubmit,
   onFilterChange
-}: SearchBasicProps) {
+}: SearchWithFilterProps) {
   const [keyword, setKeyword] = useState<string>('')
-  const [selectedFilter, setSelectedFilter] = useState<FilterParams>(filter || FilterParams.ALL)
-  const [filterDropdownOpen, setFilterDropdownOpen] = useState<boolean>(true)
+  const [selectedFilter, setSelectedFilter] = useState<FilterParams>(filter || FilterParams.COURSES)
 
   const handleFilterChange = (value: FilterParams) => {
     setSelectedFilter(value)
