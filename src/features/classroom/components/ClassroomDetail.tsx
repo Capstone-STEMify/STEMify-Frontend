@@ -1,127 +1,30 @@
-'use client'
-import { Button } from '@/components/shadcn/button'
-import SearchBar from '@/components/shared/search/SearchBar'
-import SSelect from '@/components/shared/SSelect'
-import ClassroomCard from '@/features/classroom/components/classroom-detail/ClassroomCard'
-import ClassroomHero from '@/features/classroom/components/classroom-detail/ClassroomHero'
-import { BookOpen, Plus } from 'lucide-react'
-import React, { useState } from 'react'
+import { AppSidebar } from '@/components/layout/classroom/app-sidebar'
+import { SiteHeader } from '@/components/layout/classroom/site-header'
+import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
+import ResourceCard from '@/components/shared/card/ResourceCard'
+import HeroSection from '@/components/shared/hero-section/HeroSection'
 
-const classroomData = [
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  }
-]
-
+export const iframeHeight = '800px'
+export const description = 'A sidebar with a header and a search form.'
 export default function ClassroomDetail() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedFilter, setSelectedFilter] = useState('all')
-  const [likedCards, setLikedCards] = useState(new Set())
-
-  const filteredData = classroomData.filter((classroom) => {
-    const matchesSearch = classroom.name.toLowerCase().includes(searchQuery.toLowerCase())
-    // const matchesFilter = selectedFilter === 'all' || classroom.subject.toLowerCase() === selectedFilter.toLowerCase()
-    // return matchesSearch && matchesFilter
-    return matchesSearch
-  })
-
-  const handleSearch = () => {}
   return (
-    <div className='mx-auto max-w-6xl pb-30 sm:px-4'>
-      <ClassroomHero />
-
-      {/* Classroom list */}
-      <main className='mx-auto mt-8'>
-        <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-          <SearchBar />
-          <div className='flex items-center justify-between gap-4 sm:justify-start'>
-            <SSelect
-              items={[
-                { value: 'all', content: 'All' },
-                { value: 'recently', content: 'Recently' }
-              ]}
-              placeholder='Filter by subject'
-              value='all'
-              onChange={(value) => console.log(value)}
-            />
-            <Button size={'icon'} className='bg-amber-custom-400 rounded-full font-bold'>
-              <Plus />
-            </Button>
-          </div>
-        </div>
-        <div className='grid grid-cols-1 justify-items-center space-y-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
-          {/* Replace with filter later */}
-          {/* {filteredData.map((classroom, index) => ( */}
-          {classroomData.map((classroom, index) => (
-            <ClassroomCard
-              key={index}
-              classroom={{
-                name: classroom.name,
-                image: classroom.image,
-                member: classroom.member,
-                avatar: classroom.avatar
-              }}
-              size='lg'
-            />
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {filteredData.length === 0 && (
-          <div className='py-12 text-center'>
-            <div className='mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gray-200'>
-              <BookOpen className='h-8 w-8 text-gray-400' />
+    <div className='[--header-height:calc(--spacing(14))]'>
+      <SidebarProvider className='flex flex-col'>
+        <SiteHeader />
+        <div className='flex flex-1'>
+          <AppSidebar />
+          <SidebarInset>
+            <div className='flex flex-1 flex-col gap-4 overflow-y-auto p-4'>
+              <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
+                <div className='bg-muted/50 aspect-video rounded-xl' />
+                <div className='bg-muted/50 aspect-video rounded-xl' />
+                <div className='bg-muted/50 aspect-video rounded-xl' />
+              </div>
+              <div className='bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min' />
             </div>
-            <h3 className='mb-2 text-lg font-semibold text-gray-900'>No classrooms found</h3>
-            <p className='text-gray-500'>Try adjusting your search or filter criteria</p>
-          </div>
-        )}
-      </main>
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
     </div>
   )
 }
