@@ -89,7 +89,6 @@ export default function HeaderRightSection() {
       </div>
 
       {/* Mobile Layout - Enhanced Vertical Stack */}
-      {/* Mobile Layout - Enhanced Vertical Stack */}
       <div className='flex w-full flex-col space-y-4 lg:hidden'>
         <div className='flex w-full flex-col space-y-3 pt-2'>
           {/* 🔍 Search trigger for mobile */}

@@ -4,12 +4,7 @@ import SearchBar from '@/components/shared/search/SearchBar'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 
 const previousSearches = ['stemify', 'stemify courses', 'stemify activities', 'stemify lessons', 'stemify resources']
-const quickActions = [
-  { label: 'Learn STEM online' },
-  { label: 'Access resource library' },
-  { label: 'Need help' },
-  { label: 'Try canvas' }
-]
+
 const templates = ['Mathematics', 'Science', 'Technology', 'Engineering', 'Physics', 'Chemistry', 'Biology']
 const services = [
   { name: 'STEM', desc: 'Create video and social content...', action: 'Go to description' },
@@ -56,23 +51,6 @@ export default function SearchExperiencePanel() {
                 className='w-fit cursor-pointer rounded-md bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200'
               >
                 {t}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className='mt-6'>
-          <div className='mb-2 flex items-center justify-between'>
-            <h4 className='text-sm font-medium text-gray-500'>STEM quick actions</h4>
-            <Button variant='link' size='sm'>
-              View more
-            </Button>
-          </div>
-          <div className='grid grid-cols-2 gap-2 md:grid-cols-4'>
-            {quickActions.map((q) => (
-              <Button key={q.label} variant='outline' className='justify-start'>
-                {q.label}
               </Button>
             ))}
           </div>
