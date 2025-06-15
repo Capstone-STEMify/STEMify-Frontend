@@ -35,6 +35,8 @@ export default function SBreadcrumb({ title, size = 'md', color, weight }: SBrea
 
   const allItems = [{ label: 'Home', href: '/' }, ...items]
 
+  
+
   return (
     <Breadcrumb>
       <BreadcrumbList>

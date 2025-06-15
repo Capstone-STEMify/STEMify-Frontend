@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { NavProjects } from './nav-project'
+import { NavProjects } from './nav/nav-project'
 import {
   Sidebar,
   SidebarContent,
@@ -11,10 +11,10 @@ import {
   SidebarMenu,
   SidebarMenuItem
 } from '@/components/shadcn/sidebar'
-import { ClassroomSwitcher } from '@/features/classroom/components/classroom-detail/sidebar/team-switcher'
-import { NavMain } from '@/features/classroom/components/classroom-detail/sidebar/nav-main'
-import { NavSecondary } from '@/features/classroom/components/classroom-detail/sidebar/nav-secondary'
-import { NavUser } from '@/features/classroom/components/classroom-detail/sidebar/nav-user'
+import { ClassroomSwitcher } from '@/features/classroom/components/classroom-detail/sidebar/nav/team-switcher'
+import { NavMain } from '@/features/classroom/components/classroom-detail/sidebar/nav/nav-main'
+import { NavSecondary } from '@/features/classroom/components/classroom-detail/sidebar/nav/nav-secondary'
+import { NavUser } from '@/features/classroom/components/classroom-detail/sidebar/nav/nav-user'
 import { UserRole } from '@/types/userRole'
 import { getSidebarData } from '@/features/classroom/types/sidebar-data'
 

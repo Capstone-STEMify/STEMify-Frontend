@@ -2,6 +2,7 @@ import { AppSidebar } from '@/features/classroom/components/classroom-detail/sid
 import { SiteHeader } from '@/features/classroom/components/classroom-detail/header/site-header'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import { UserRole } from '@/types/userRole'
+import TeacherClassroomContent from '@/features/classroom/components/classroom-detail/content/TeacherClassroomContent'
 
 export const iframeHeight = '800px'
 export const description = 'A sidebar with a header and a search form.'
@@ -13,14 +14,7 @@ export default function TeacherClassroomDetail() {
         <div className='flex flex-1'>
           <AppSidebar role={UserRole.TEACHER} />
           <SidebarInset>
-            <div className='flex flex-1 flex-col gap-4 overflow-y-auto p-4'>
-              <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
-                <div className='bg-muted/50 aspect-video rounded-xl' />
-                <div className='bg-muted/50 aspect-video rounded-xl' />
-                <div className='bg-muted/50 aspect-video rounded-xl' />
-              </div>
-              <div className='bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min' />
-            </div>
+            <TeacherClassroomContent />
           </SidebarInset>
         </div>
       </SidebarProvider>

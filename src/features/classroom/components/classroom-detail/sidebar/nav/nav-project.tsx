@@ -34,9 +34,9 @@ export function NavProjects({
     <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild>
+        {projects.map((item, index) => (
+          <SidebarMenuItem key={index}>
+            <SidebarMenuButton asChild tooltip={item.title}>
               <a href={item.url}>
                 <item.icon />
                 <span>{item.title}</span>

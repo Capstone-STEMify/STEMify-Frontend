@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 
 type SAvatarProps = {
   src: string
-  fallback: string
+  fallback?: string
   className?: string
 }
 export default function SAvatar({ src, className, fallback = 'STEM' }: SAvatarProps) {
