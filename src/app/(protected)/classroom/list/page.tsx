@@ -1,4 +1,4 @@
-import RoleBasedClassroomListPage from '@/features/classroom/page/classroom-list'
+import RoleBasedClassroomListPage from '@/features/classroom/page/list'
 import { authOptions } from '@/libs/auth/authOptions'
 import { getServerSession } from 'next-auth'
 

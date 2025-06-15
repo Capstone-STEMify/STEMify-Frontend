@@ -10,9 +10,9 @@ export default function RoleBasedClassroomDetailPage({ session }: { session: Ses
   role = UserRole.STUDENT
 
   switch (role) {
-    case UserRole.TEACHER:
-      return <StudentClassroomDetail />
     case UserRole.STUDENT:
+      return <StudentClassroomDetail />
+    case UserRole.TEACHER:
       return <TeacherClassroomDetail />
     default:
       return <div>Access Denied</div>

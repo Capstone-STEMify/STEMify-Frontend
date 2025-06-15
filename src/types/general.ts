@@ -1,4 +1,4 @@
-export type Size = 'sm' | 'md' | 'lg'
+export type Size = 'sm' | 'md' | 'lg' | 'xl'
 
 export type AvatarProps = {
   image: string

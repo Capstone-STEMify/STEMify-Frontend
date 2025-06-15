@@ -1,78 +1,27 @@
-'use client'
 import { Button } from '@/components/shadcn/button'
 import SearchBar from '@/components/shared/search/SearchBar'
 import SSelect from '@/components/shared/SSelect'
-import ClassroomCard from '@/features/classroom/components/classroom-list/ClassroomCard'
+import ClassroomCard from '@/features/classroom/components/shared/ClassroomCard'
 import ClassroomHero from '@/features/classroom/components/classroom-list/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
 import React, { useRef, useState } from 'react'
-import ClassRoomManagement from './manage-class/ClassRoomManagement'
 import { motion, useInView } from 'framer-motion'
+import { classroomData } from '@/utils/mockData'
+import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" }
+    transition: { duration: 0.6, ease: 'easeOut' }
   }
-};
+}
 
-const classroomData = [
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  },
-  {
-    name: 'STEM Robotics Class',
-    image: '/images/stemclass.jpg',
-    member: 24,
-    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
-  }
-]
-
-export default function ClassroomList() {
+export default function StudentClassroomList() {
   const [searchQuery, setSearchQuery] = useState('')
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.3 })
 
   const filteredData = classroomData.filter((classroom) => {
     const matchesSearch = classroom.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -83,18 +32,19 @@ export default function ClassroomList() {
 
   const handleSearch = () => {}
   return (
-    <div className=' pb-30 min-h-screen'>
+    <div className='min-h-screen pb-30'>
       <ClassroomHero />
 
-      <ClassRoomManagement/>
+      <ClassRoomManagement />
 
       {/* Classroom list */}
       <motion.section
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={fadeInUp}
-      className='max-w-7xl mx-auto mt-8'>
+        ref={ref}
+        initial='hidden'
+        animate={isInView ? 'visible' : 'hidden'}
+        variants={fadeInUp}
+        className='mx-auto mt-8 max-w-7xl'
+      >
         <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
           <SearchBar />
           <div className='flex items-center justify-between gap-4 sm:justify-start'>
