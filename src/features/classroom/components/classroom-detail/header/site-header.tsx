@@ -1,6 +1,6 @@
 'use client'
 
-import { SidebarIcon } from 'lucide-react'
+import { Bell, SidebarIcon } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { Separator } from '@/components/shadcn/separator'
 import { useSidebar } from '@/components/shadcn/sidebar'
@@ -17,8 +17,12 @@ export function SiteHeader() {
           <SidebarIcon />
         </Button>
         <Separator orientation='vertical' className='mr-2 h-4' />
-        <SBreadcrumb title='STEM' size={'sm'} />
-        <SearchBar className='w-full sm:ml-auto sm:w-auto' />
+        <div className='hidden sm:block'>
+          <SBreadcrumb title='STEM' size={'sm'} />
+        </div>
+        <div className='ml-auto flex items-center gap-2'>
+          <Bell size={18} />
+        </div>
       </div>
     </header>
   )

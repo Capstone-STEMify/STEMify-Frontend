@@ -5,13 +5,13 @@ import React from 'react'
 
 const sizeClasses: Record<Size, { height: string; width: string; titleSize: string }> = {
   sm: {
-    height: 'h-42',
-    width: 'w-[300px]',
+    height: 'h-44',
+    width: 'w-[360px]',
     titleSize: 'text-sm'
   },
   md: {
     height: 'h-48',
-    width: 'w-[340px]',
+    width: 'w-[370px]',
     titleSize: 'text-base'
   },
   lg: {
@@ -62,9 +62,11 @@ export default function ResourceCard({ resource, size = 'xl' }: Props) {
         </div>
       </div>
 
-      <div className='p-6'>
-        <h3 className={`mb-3 font-semibold ${titleSize}`}>{resource.title}</h3>
-        <p className='text-sm leading-relaxed'>{resource.description}</p>
+      <div className='p-4'>
+        <div className='h-20'>
+          <h3 className={`mb-3 font-semibold ${titleSize}`}>{resource.title}</h3>
+          <p className='line-clamp-2 text-sm leading-relaxed'>{resource.description}</p>
+        </div>
 
         <div className='mt-4 flex items-center justify-between'>
           <Badge className='bg-opacity-80 flex gap-2 rounded-full bg-gray-400 px-4 py-2'>

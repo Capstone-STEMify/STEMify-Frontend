@@ -67,7 +67,6 @@ export const resources = [
   }
 ]
 
-
 export const classroomData = [
   {
     name: 'STEM Robotics Class',
