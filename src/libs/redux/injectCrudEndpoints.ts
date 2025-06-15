@@ -26,10 +26,10 @@ export function injectCrudEndpoints<T, P extends SearchPaginatedRequestParams>({
         query: () => ({ url: baseUrl }),
         providesTags: [tagType]
       }),
-      search: searchUrl
+      search: baseUrl
         ? builder.query<ApiSuccessResponse<PaginatedResult<T>>, P>({
             query: (params) => ({
-              url: searchUrl,
+              url: baseUrl,
               method: 'GET',
               params: {
                 pageNumber: params.pageNumber ?? 1,

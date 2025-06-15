@@ -1,3 +1,4 @@
+'use client'
 import StudentClassroomList from '@/features/classroom/page/list/StudentClassroomList'
 import TeacherClassroomList from '@/features/classroom/page/list/TeacherClassroomList'
 import { UserRole } from '@/types/userRole'

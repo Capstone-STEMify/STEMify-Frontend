@@ -8,16 +8,17 @@ export type Entity<T> = {
 } & BaseEntity
 
 // Response
-export type MetaData = {
-  totalItems: number
-  currentPage: number
-  totalPages: number
-  pageSize: number
-}
-
 export type PaginatedResult<T> = {
-  data: T[]
-  metaData: MetaData
+  items: T[]
+  pageNumber: number
+  pageSize: number
+  totalCount: number
+  currentPageSize: number
+  currentStartIndex: number
+  currentEndIndex: number
+  totalPages: number
+  hasPrevious: boolean
+  hasNext: boolean
 }
 
 export type ApiResponse = {
@@ -36,5 +37,6 @@ export type ApiErrorResponse = {
 export type SearchPaginatedRequestParams = {
   pageNumber?: number
   pageSize?: number
-  searchTerm?: string
+  search?: string
+  orderBy?: string
 }

@@ -1,3 +1,4 @@
+'use client'
 import { Button } from '@/components/shadcn/button'
 import SearchBar from '@/components/shared/search/SearchBar'
 import SSelect from '@/components/shared/SSelect'
@@ -6,8 +7,9 @@ import ClassroomHero from '@/features/classroom/components/classroom-list/Classr
 import { BookOpen, Plus } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { classroomData } from '@/utils/mockData'
+// import { classroomData } from '@/utils/mockData'
 import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
+import { useSearchClassroomQuery } from '@/features/classroom/api/classroomApi'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
@@ -19,16 +21,22 @@ const fadeInUp = {
 }
 
 export default function StudentClassroomList() {
+  const { data: classroomData, error } = useSearchClassroomQuery({ teacherId: 'c12f4a8e-3e78-4a4d-bc41-fb3c4ef8d4de' })
+  console.log('classroomData', classroomData)
   const [searchQuery, setSearchQuery] = useState('')
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.3 })
 
-  const filteredData = classroomData.filter((classroom) => {
-    const matchesSearch = classroom.name.toLowerCase().includes(searchQuery.toLowerCase())
-    // const matchesFilter = selectedFilter === 'all' || classroom.subject.toLowerCase() === selectedFilter.toLowerCase()
-    // return matchesSearch && matchesFilter
-    return matchesSearch
-  })
+  if (!classroomData) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p className='text-gray-500'>Loading classrooms...</p>
+      </div>
+    )
+  }
+
+  const filteredData = classroomData.data.items
+  console.log('filteredData', filteredData)
 
   const handleSearch = () => {}
   return (
@@ -40,7 +48,7 @@ export default function StudentClassroomList() {
       {/* Classroom list */}
       <motion.section
         ref={ref}
-        initial='hidden'
+        // initial='hidden'
         animate={isInView ? 'visible' : 'hidden'}
         variants={fadeInUp}
         className='mx-auto mt-8 max-w-7xl'
@@ -65,14 +73,14 @@ export default function StudentClassroomList() {
         <div className='grid grid-cols-1 justify-items-center space-y-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
           {/* Replace with filter later */}
           {/* {filteredData.map((classroom, index) => ( */}
-          {classroomData.map((classroom, index) => (
+          {filteredData.map((classroom, index) => (
             <ClassroomCard
               key={index}
               classroom={{
                 name: classroom.name,
-                image: classroom.image,
-                member: classroom.member,
-                avatar: classroom.avatar
+                image: classroom.coverImageUrl,
+                member: classroom.numberOfStudents
+                // avatar: classroom.
               }}
               size='lg'
             />

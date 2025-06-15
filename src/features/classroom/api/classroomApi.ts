@@ -1,0 +1,17 @@
+import { Classroom } from '@/features/classroom/types/classroom'
+import { injectCrudEndpoints } from '@/libs/redux/injectCrudEndpoints'
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
+import { ClassroomStatus } from '@/types/enum'
+
+export type ClassroomSearchParams = {
+  teacherId?: string
+  status?: ClassroomStatus
+} & SearchPaginatedRequestParams
+
+export const classroomApi = injectCrudEndpoints<Classroom, ClassroomSearchParams>({
+  tagType: 'Classroom',
+  baseUrl: '/classrooms'
+  // searchUrl: '/classrooms'
+})
+
+export const { useSearchQuery: useSearchClassroomQuery } = classroomApi

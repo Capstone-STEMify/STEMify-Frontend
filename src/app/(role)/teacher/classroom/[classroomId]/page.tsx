@@ -1,5 +1,5 @@
-import ClassroomDetail from '@/features/classroom/components/ClassroomDetail'
+import ClassroomDetailPage from 'app/(protected)/classroom/[classroomId]/page'
 
 export default function TeacherClassroomDetailPage() {
-  return <ClassroomDetail />
+  return <ClassroomDetailPage />
 }
