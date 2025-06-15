@@ -7,12 +7,12 @@ import { Session } from 'next-auth'
 
 export default function RoleBasedClassroomDetailPage({ session }: { session: Session }) {
   let role = session?.user.role
-  role = UserRole.TEACHER
+  role = UserRole.STUDENT
 
   switch (role) {
-    case UserRole.TEACHER:
-      return <StudentClassroomDetail />
     case UserRole.STUDENT:
+      return <StudentClassroomDetail />
+    case UserRole.TEACHER:
       return <TeacherClassroomDetail />
     default:
       return <div>Access Denied</div>

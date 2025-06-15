@@ -36,6 +36,13 @@ const sizeConfig = {
     memberSize: 'text-base',
     padding: 'p-6',
     cardWidth: 'w-80'
+  },
+  xl: {
+    imageHeight: 'h-56',
+    nameSize: 'text-2xl',
+    memberSize: 'text-base',
+    padding: 'p-7',
+    cardWidth: 'w-96'
   }
 }
 

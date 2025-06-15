@@ -23,7 +23,7 @@ export function NavProjects({
   projects
 }: {
   projects: {
-    name: string
+    title: string
     url: string
     icon: LucideIcon
   }[]
@@ -35,11 +35,11 @@ export function NavProjects({
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
+          <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild>
               <a href={item.url}>
                 <item.icon />
-                <span>{item.name}</span>
+                <span>{item.title}</span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>
