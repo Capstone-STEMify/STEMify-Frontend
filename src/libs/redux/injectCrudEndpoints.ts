@@ -14,7 +14,7 @@ type CrudApiOptions = {
 export function injectCrudEndpoints<T, P extends SearchPaginatedRequestParams>({
   tagType,
   baseUrl,
-  searchUrl
+  searchUrl = baseUrl + '/search'
 }: CrudApiOptions) {
   return baseApi.injectEndpoints({
     endpoints: (builder) => ({

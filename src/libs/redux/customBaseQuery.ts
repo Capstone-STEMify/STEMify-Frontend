@@ -1,14 +1,19 @@
-import { ApiErrorResponse, ApiSuccessResponse, PaginatedResult, SearchPaginatedRequestParams } from '@/types/baseModel'
-import { BaseQueryApi, BaseQueryFn, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query'
+import { ApiErrorResponse } from '@/types/baseModel'
+import { BaseQueryApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { notFound } from 'next/navigation'
 import { toast } from 'sonner'
+import { getSession } from 'next-auth/react'
 
 // =============================
 // === Custom Base Query
 // =============================
 
-const customFetchBaseQuery = fetchBaseQuery({
-  // baseUrl: process.env.NEXT_PUBLIC_BASE_API_URL,
+const rawBaseQuery = fetchBaseQuery({
+  // baseUrl:
+  //   process.env.NEXT_PUBLIC_BASE_API_URL ??
+  //   (() => {
+  //     throw new Error('Missing BASE_API_URL')
+  //   })(),
   baseUrl: '',
   credentials: 'include'
 })
@@ -18,33 +23,44 @@ export const customFetchBaseQueryWithErrorHandling = async (
   api: BaseQueryApi,
   extraOptions: object
 ) => {
-  const result = await customFetchBaseQuery(args, api, extraOptions)
+  const session = await getSession()
+  const authHeaders = session?.user ? { Authorization: `Bearer ${session.accessToken}` } : {}
+  // const result = await rawBaseQuery(args, api, extraOptions)
+
+  const result = await rawBaseQuery(
+    {
+      ...(typeof args === 'string' ? { url: args } : args),
+      headers: {
+        ...(typeof args === 'object' ? args.headers : {}),
+        ...authHeaders
+      }
+    },
+    api,
+    extraOptions
+  )
 
   if (result.error) {
-    const status =
-      result.error.status === 'PARSING_ERROR' && result.error.originalStatus
-        ? result.error.originalStatus
-        : result.error.status
-    const data = result.error.data as ApiErrorResponse
+    const { status, data } = result.error
+    const message = (data as any)?.message
 
     switch (status) {
       case 400:
-        toast.error(data?.message || 'Bad Request')
+        toast.error(message || 'Bad Request')
         break
       case 401:
-        toast.error(data?.message || 'Unauthorized')
+        toast.error(message || 'Unauthorized')
         break
       case 403:
-        toast.error(data?.message || 'Forbidden')
-        break
-      case 500:
-        toast.error(data?.message || 'Server Error')
+        toast.error(message || 'Forbidden')
         break
       case 404:
-        toast.error(data?.message || 'Not Found')
+        toast.error(message || 'Not Found')
+        break
+      case 500:
+        toast.error(message || 'Server Error')
         break
       case 'FETCH_ERROR':
-        toast.error('fetch Error')
+        toast.error('Network error')
         break
       default:
         toast.error('Unexpected error')
