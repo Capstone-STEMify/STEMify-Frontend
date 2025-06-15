@@ -38,18 +38,18 @@ export default function SBreadcrumb({ title, size = 'md', color, weight }: SBrea
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {allItems.map((item, index) => (
-          <Fragment key={index}>
+        {allItems.map((item) => (
+          <Fragment key={item.href}>
             <BreadcrumbItem className={textVariants({ size })}>
-              {index === allItems.length - 1 ? (
-                <BreadcrumbPage className={textVariants({color, weight})}>{title || item.label}</BreadcrumbPage>
+              {item.href === pathname ? (
+                <BreadcrumbPage className={textVariants({ color, weight })}>{title || item.label}</BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
                   <Link href={item.href}>{item.label}</Link>
                 </BreadcrumbLink>
               )}
             </BreadcrumbItem>
-            {index < allItems.length - 1 && <BreadcrumbSeparator />}
+            {item.href !== pathname && <BreadcrumbSeparator />}
           </Fragment>
         ))}
       </BreadcrumbList>

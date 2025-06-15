@@ -1,5 +1,5 @@
-import { AppSidebar } from '@/components/layout/classroom/app-sidebar'
-import { SiteHeader } from '@/components/layout/classroom/site-header'
+import { AppSidebar } from '@/features/classroom/components/classroom-detail/sidebar/app-sidebar'
+import { SiteHeader } from '@/features/classroom/components/classroom-detail/header/site-header'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import ResourceCard from '@/components/shared/card/ResourceCard'
 import HeroSection from '@/components/shared/hero-section/HeroSection'

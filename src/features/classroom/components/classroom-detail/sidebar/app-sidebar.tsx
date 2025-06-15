@@ -18,8 +18,6 @@ import {
 } from 'lucide-react'
 
 import { NavProjects } from './nav-project'
-import { NavSecondary } from './nav-secondary'
-import { NavUser } from './nav-user'
 import {
   Sidebar,
   SidebarContent,
@@ -28,8 +26,10 @@ import {
   SidebarMenu,
   SidebarMenuItem
 } from '@/components/shadcn/sidebar'
-import { ClassroomSwitcher } from '@/components/layout/classroom/team-switcher'
-import { NavMain } from '@/components/layout/classroom/nav-main'
+import { ClassroomSwitcher } from '@/features/classroom/components/classroom-detail/sidebar/team-switcher'
+import { NavMain } from '@/features/classroom/components/classroom-detail/sidebar/nav-main'
+import { NavSecondary } from '@/features/classroom/components/classroom-detail/sidebar/nav-secondary'
+import { NavUser } from '@/features/classroom/components/classroom-detail/sidebar/nav-user'
 
 const data = {
   teams: [
