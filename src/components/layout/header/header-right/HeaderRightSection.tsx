@@ -8,6 +8,7 @@ import SearchExperiencePanel from '@/components/layout/header/header-right/Searc
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { ArrowRightToLine, UserPlus, Sparkles } from 'lucide-react'
 import React, { useState } from 'react'
+import { signIn } from 'next-auth/react'
 
 export default function HeaderRightSection() {
   const handleClick = () => alert('Clicked!')
@@ -75,7 +76,7 @@ export default function HeaderRightSection() {
           {/* Premium Log In Button */}
           <Button
             size='lg'
-            onClick={handleClick}
+            onClick={() => signIn('oidc')}
             className='group relative overflow-hidden rounded-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-500 px-6 py-2.5 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:scale-95'
           >
             <div className='absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-white/20 to-white/0 transition-transform duration-500 group-hover:translate-x-[100%]' />

@@ -1,4 +1,5 @@
 'use client'
+import ClassRoomLanding from '@/features/classroom/components/ClassRoomLanding '
 import StudentClassroomList from '@/features/classroom/page/list/StudentClassroomList'
 import TeacherClassroomList from '@/features/classroom/page/list/TeacherClassroomList'
 import { UserRole } from '@/types/userRole'
@@ -13,7 +14,8 @@ export default function RoleBasedClassroomListPage({ session }: { session: Sessi
       return <TeacherClassroomList />
     case UserRole.STUDENT:
       return <StudentClassroomList />
+    case UserRole.GUEST:
     default:
-      return <div>Access Denied</div>
+      return <ClassRoomLanding />
   }
 }
