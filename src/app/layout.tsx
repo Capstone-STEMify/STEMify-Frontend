@@ -30,9 +30,7 @@ export default function RootLayout({
     <html lang='en' className={`${geistNunito.variable}`}>
       <body className={`antialiased`}>
         <StoreProvider>
-          <main>
-            <LoadingWrapper>{children}</LoadingWrapper>
-          </main>
+          <main>{children}</main>
         </StoreProvider>
         <Toaster />
       </body>

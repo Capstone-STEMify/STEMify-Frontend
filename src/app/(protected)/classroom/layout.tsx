@@ -1,7 +1,4 @@
-import { authOptions } from '@/libs/auth/authOptions'
 import { metadata } from 'app/layout'
-import { getServerSession } from 'next-auth'
-import { redirect } from 'next/navigation'
 
 metadata.title = 'Classroom'
 export default async function ProtecedClassroomLayout({
@@ -9,7 +6,7 @@ export default async function ProtecedClassroomLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerSession(authOptions)
+  // const session = await getServerSession(authOptions)
   // if (!session) redirect('/login')
   return (
     <div>

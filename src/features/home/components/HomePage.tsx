@@ -7,6 +7,8 @@ import BenefitsSection from './benefit-section/BenefitSection'
 import StatsSection from './stats-section/StatsSection'
 import TestimonialsSection from './testimonials-section/TestimonialsSection'
 import FAQSection from './faq-section/FAQSection'
+import { useSearchParams } from 'next/navigation'
+import { toast } from 'sonner'
 
 interface RegisterSectionRef {
   current: HTMLElement | null
@@ -95,6 +97,15 @@ export default function HomePage() {
   const containerRef = useRef(null)
   const heroScrollProgress = useRef(0)
   const { observerRef, getSectionClasses } = useScrollAnimation()
+
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const message = searchParams.get('toast')
+    if (message) {
+      toast.error(message)
+    }
+  }, [searchParams])
 
   // Section refs
   const exploreRef = useRef<HTMLDivElement | null>(null)

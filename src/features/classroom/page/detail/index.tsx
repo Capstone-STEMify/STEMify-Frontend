@@ -4,10 +4,10 @@ import StudentClassroomDetail from '@/features/classroom/page/detail/StudentClas
 import TeacherClassroomDetail from '@/features/classroom/page/detail/TeacherClassroomDetail'
 import { UserRole } from '@/types/userRole'
 import { Session } from 'next-auth'
+import { redirect } from 'next/navigation'
 
 export default function RoleBasedClassroomDetailPage({ session }: { session: Session }) {
-  let role = session?.user.role
-  role = UserRole.STUDENT
+  let role = session.user.role
 
   switch (role) {
     case UserRole.STUDENT:
@@ -15,6 +15,6 @@ export default function RoleBasedClassroomDetailPage({ session }: { session: Ses
     case UserRole.TEACHER:
       return <TeacherClassroomDetail />
     default:
-      return <div>Access Denied</div>
+      redirect('/unauthorized')
   }
 }

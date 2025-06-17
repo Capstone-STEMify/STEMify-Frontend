@@ -1,3 +1,5 @@
+import { jwtDecode } from 'jwt-decode'
+
 import type { NextAuthOptions } from 'next-auth'
 import type { OAuthConfig } from 'next-auth/providers/oauth'
 import { type Profile } from 'next-auth'
@@ -8,8 +10,7 @@ interface OIDCProfile extends Profile {
   email?: string
   username?: string
   userId?: string
-  role?: string
-  roles?: string[]
+  'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'?: string
 }
 
 const oidcProvider: OAuthConfig<OIDCProfile> = {
@@ -46,9 +47,9 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
       id: profile.sub ?? 'unknown-id',
       name: profile.name ?? 'Unnamed',
       email: profile.email ?? 'no-email@example.com',
-      role: (profile as any).role || (profile as any).roles?.[0] || 'guest',
-      username: (profile as any).username ?? 'unknown',
-      userId: (profile as any).userId ?? 'unknown'
+      role: profile['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'guest',
+      username: profile.username ?? 'unknown',
+      userId: profile.userId ?? 'unknown'
     }
   }
 }
@@ -61,24 +62,30 @@ export const authOptions: NextAuthOptions = {
   providers: [oidcProvider],
   secret: process.env.AUTH_SECRET,
   callbacks: {
-    async jwt({ token, account, profile }) {
-      if (account) {
-        console.log('Account token:', account.access_token)
+    async jwt({ token, account }) {
+      if (account?.access_token) {
         token.accessToken = account.access_token
         token.idToken = account.id_token
+
+        try {
+          const decoded: any = jwtDecode(account.access_token)
+          token.role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'Guest'
+          token.username = decoded['preferred_username'] ?? 'unknown'
+          token.userId = decoded['sub'] ?? 'unknown'
+          console.log('Decoded JWT token:', token.role)
+        } catch (error) {
+          console.error('Failed to decode access token:', error)
+        }
       }
-      if (profile) {
-        token.role = (profile as any).role || (profile as any).roles?.[0] || 'guest'
-        token.username = (profile as any).username
-        token.userId = (profile as any).userId
-      }
+
       return token
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken as string
-      session.user.role = token.role as string
-      session.user.username = token.username as string
-      session.user.userId = token.userId as string
+      // console.log('JWT token in session:', token)
+      session.accessToken = token.accessToken!
+      session.user.role = token.role!
+      session.user.username = token.username!
+      session.user.userId = token.userId!
       return session
     }
   }
