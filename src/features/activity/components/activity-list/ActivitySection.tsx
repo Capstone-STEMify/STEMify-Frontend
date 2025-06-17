@@ -8,6 +8,7 @@ export default function ActivitySection() {
       {dummyCardData.map((course, index) => {
         return (
           <ResourceCard
+            size='md'
             key={index}
             resource={{
               title: course.title,

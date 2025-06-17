@@ -15,7 +15,7 @@ export default function CourseDetails() {
   // Handle scroll to update active section
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['about', 'skill', 'courses', 'reviews', 'suggestions']
+      const sections = ['about', 'skill', 'courses', 'suggestions']
       const scrollPosition = window.scrollY + 100
 
       for (const sectionId of sections) {
@@ -44,7 +44,7 @@ export default function CourseDetails() {
       <AboutSection />
       <SkillSection />
       <ContentSection />
-      <ReviewSection />
+      {/* <ReviewSection /> */}
       <RecommendationSection />
     </div>
   )

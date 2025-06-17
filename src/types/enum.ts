@@ -2,7 +2,7 @@ export enum ClassroomStatus {
   ACTIVE = 'Active',
   INACTIVE = 'Inactive',
   ARCHIVED = 'Archived',
-  Deleted = 'Deleted' //soft delete
+  DELETED = 'Deleted' //soft delete
 }
 
 export enum EnrollmentStatus {

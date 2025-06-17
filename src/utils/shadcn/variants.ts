@@ -19,7 +19,8 @@ export const textVariants = cva('', {
       default: 'text-foreground',
       muted: 'text-muted-foreground',
       destructive: 'text-destructive',
-      primary: 'text-primary'
+      primary: 'text-primary',
+      yellow: 'text-amber-500'
     }
   },
   defaultVariants: {

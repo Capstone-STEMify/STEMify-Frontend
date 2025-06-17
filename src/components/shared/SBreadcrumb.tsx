@@ -17,7 +17,7 @@ type SBreadcrumbProps = {
   title: string
 } & VariantProps<typeof textVariants>
 
-export default function SBreadcrumb({ title, size = 'md' }: SBreadcrumbProps) {
+export default function SBreadcrumb({ title, size = 'md', color, weight }: SBreadcrumbProps) {
   const pathname = usePathname()
   const segments = pathname.split('/').filter(Boolean)
 
@@ -35,21 +35,23 @@ export default function SBreadcrumb({ title, size = 'md' }: SBreadcrumbProps) {
 
   const allItems = [{ label: 'Home', href: '/' }, ...items]
 
+  
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {allItems.map((item, index) => (
-          <Fragment key={index}>
+        {allItems.map((item) => (
+          <Fragment key={item.href}>
             <BreadcrumbItem className={textVariants({ size })}>
-              {index === allItems.length - 1 ? (
-                <BreadcrumbPage>{title || item.label}</BreadcrumbPage>
+              {item.href === pathname ? (
+                <BreadcrumbPage className={textVariants({ color, weight })}>{title || item.label}</BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
                   <Link href={item.href}>{item.label}</Link>
                 </BreadcrumbLink>
               )}
             </BreadcrumbItem>
-            {index < allItems.length - 1 && <BreadcrumbSeparator />}
+            {item.href !== pathname && <BreadcrumbSeparator />}
           </Fragment>
         ))}
       </BreadcrumbList>

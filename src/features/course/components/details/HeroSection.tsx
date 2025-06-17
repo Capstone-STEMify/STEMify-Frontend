@@ -41,10 +41,14 @@ export default function HeroSection() {
                   IT & Software
                 </div>
               </div>
-              <div className='flex items-center'>
-                <img src={'/images/Rosie.jpg'} className='mr-4 h-10 w-10 flex-shrink-0 rounded-full' />
-                by awesomeorg@gmail.com
-              </div>
+              <div className='space-y-2'>
+                 <p className='text-lg font-bold'>Grades</p>
+                 <div className='space-y-1 text-sm text-gray-600'>
+                   <div><span className='font-medium'>United States:</span> K, 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, UK</div>
+                   <div><span className='font-medium'>England:</span> Early Years, Year 1, Year 2, Year 3, Year 4, Year 5, Year 6, Year 7, Year 8</div>
+                   <div><span className='font-medium'>UK - Scotland:</span> Early Learning and Childcare, S1, P1</div>
+                 </div>
+               </div>
             </div>
 
             <div className='flex flex-col gap-4 sm:flex-row'>

@@ -21,8 +21,6 @@ export const metadata: Metadata = {
   }
 }
 
-const role: UserRole = UserRole.STUDENT
-
 export default function RootLayout({
   children
 }: Readonly<{

@@ -5,7 +5,7 @@ import SearchHeader from './course-list/SearchHeader'
 import SearchGrid from './course-list/SearchGrid'
 import { Button } from '@/components/shadcn/button'
 import { Filter } from 'lucide-react'
-import EmptySearch from '../../../components/shared/EmptySearch'
+import EmptySearch from '../../../components/shared/search/EmptySearch'
 import { resources } from '@/utils/mockData'
 import SSheet from '@/components/shared/SSheet'
 

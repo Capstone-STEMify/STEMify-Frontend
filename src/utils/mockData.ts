@@ -66,3 +66,54 @@ export const resources = [
     duration: '3:45:00'
   }
 ]
+
+export const classroomData = [
+  {
+    name: 'STEM Robotics Class',
+    image: '/images/stemclass.jpg',
+    member: 24,
+    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
+  },
+  {
+    name: 'STEM Robotics Class',
+    image: '/images/stemclass.jpg',
+    member: 24,
+    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
+  },
+  {
+    name: 'STEM Robotics Class',
+    image: '/images/stemclass.jpg',
+    member: 24,
+    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
+  },
+  {
+    name: 'STEM Robotics Class',
+    image: '/images/stemclass.jpg',
+    member: 24,
+    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
+  },
+  {
+    name: 'STEM Robotics Class',
+    image: '/images/stemclass.jpg',
+    member: 24,
+    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
+  },
+  {
+    name: 'STEM Robotics Class',
+    image: '/images/stemclass.jpg',
+    member: 24,
+    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
+  },
+  {
+    name: 'STEM Robotics Class',
+    image: '/images/stemclass.jpg',
+    member: 24,
+    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
+  },
+  {
+    name: 'STEM Robotics Class',
+    image: '/images/stemclass.jpg',
+    member: 24,
+    avatar: ['https://github.com/shadcn.png', 'https://github.com/leerob.png', 'https://github.com/evilrabbit.png']
+  }
+]

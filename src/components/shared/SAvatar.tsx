@@ -2,13 +2,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 
 type SAvatarProps = {
   src: string
+  fallback?: string
   className?: string
 }
-export default function SAvatar({ src, className }: SAvatarProps) {
+export default function SAvatar({ src, className, fallback = 'STEM' }: SAvatarProps) {
   return (
     <Avatar className={className}>
       <AvatarImage src={src} />
-      <AvatarFallback>CN</AvatarFallback>
+      <AvatarFallback className='text-xs'>{fallback}</AvatarFallback>
     </Avatar>
   )
 }
