@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@opennextjs/cloudflare": "^1.0.4",
+    "@opennextjs/cloudflare": "1.0.4",
     "@opennextjs/aws": "3.5.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
