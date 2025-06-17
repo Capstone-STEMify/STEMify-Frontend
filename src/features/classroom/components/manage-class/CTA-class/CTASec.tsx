@@ -1,31 +1,31 @@
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion'
 import React, { useRef } from 'react'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" }
+    transition: { duration: 0.6, ease: 'easeOut' as const }
   }
-};
+}
 
 export default function CTASec() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.3 })
 
   return (
-    <motion.section 
+    <motion.section
       ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      initial='hidden'
+      animate={isInView ? 'visible' : 'hidden'}
       variants={fadeInUp}
-      className="max-w-7xl mx-auto px-6 py-12 text-center"
+      className='mx-auto max-w-7xl px-6 py-12 text-center'
     >
-      <h2 className="text-2xl font-bold text-gray-900 mb-8">Are You Ready to Begin?</h2>
-      <button className="bg-amber-400 hover:bg-amber-500 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all transform hover:scale-105">
+      <h2 className='mb-8 text-2xl font-bold text-gray-900'>Are You Ready to Begin?</h2>
+      <button className='transform rounded-lg bg-amber-400 px-8 py-4 text-lg font-medium text-white transition-all hover:scale-105 hover:bg-amber-500'>
         Create Your Classroom
       </button>
     </motion.section>
-  );
+  )
 }
