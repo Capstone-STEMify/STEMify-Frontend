@@ -1,11 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle } from 'lucide-react' // Ensure this is the correct icon if you prefer the one in the image
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
-}
+import { fadeInUp } from '@/utils/motion'
 
 // Sample learning points based on the image
 const learningPoints = [

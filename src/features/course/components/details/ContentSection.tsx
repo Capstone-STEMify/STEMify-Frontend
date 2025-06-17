@@ -2,11 +2,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, ChevronDown, Play, Users } from 'lucide-react'
 import ResourceCard from '@/components/shared/card/ResourceCard'
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
-}
+import { fadeInUp } from '@/utils/motion'
 
 export default function ContentSection() {
 

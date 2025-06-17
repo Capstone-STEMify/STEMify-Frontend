@@ -7,18 +7,9 @@ import ClassroomHero from '@/features/classroom/components/classroom-list/Classr
 import { BookOpen, Plus } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-// import { classroomData } from '@/utils/mockData'
 import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
 import { useSearchClassroomQuery } from '@/features/classroom/api/classroomApi'
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' }
-  }
-}
+import { fadeInUp } from '@/utils/motion'
 
 export default function StudentClassroomList() {
   const { data: classroomData, error } = useSearchClassroomQuery({ teacherId: 'c12f4a8e-3e78-4a4d-bc41-fb3c4ef8d4de' })
