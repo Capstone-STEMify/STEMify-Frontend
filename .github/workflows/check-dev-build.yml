@@ -1,17 +1,13 @@
-name: Deploy to Cloudflare Workers
+name: Check Dev Build (CI Only)
 
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+      - dev
 
 jobs:
-  deploy:
-    name: Deploy to Cloudflare Workers
+  check-dev:
+    name: Lint and Build Check (Dev)
     runs-on: ubuntu-latest
 
     steps:
@@ -34,19 +30,8 @@ jobs:
           sudo apt-get update && sudo apt-get install -y gettext
           envsubst < wrangler.template.toml > wrangler.toml
 
-      - name: Check wrangler.toml content
-        run: cat wrangler.toml
-
-      - name: List root directory files
-        run: ls -al
-
       - name: Run ESLint
-      run: npm run lint
+        run: npm run lint
 
-      - name: Build project using OpenNext for Cloudflare Workers
+      - name: Build with OpenNext
         run: npx opennextjs-cloudflare build
-
-      - name: Deploy to Cloudflare Workers
-        run: npx wrangler deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
