@@ -3,12 +3,12 @@ import { injectCrudEndpoints } from '@/libs/redux/injectCrudEndpoints'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 import { ClassroomStatus } from '@/types/enum'
 
-export type ClassroomSearchParams = {
+export type ClassroomParams = {
   teacherId?: string
   status?: ClassroomStatus
 } & SearchPaginatedRequestParams
 
-export const classroomApi = injectCrudEndpoints<Classroom, ClassroomSearchParams>({
+export const classroomApi = injectCrudEndpoints<Classroom, ClassroomParams>({
   tagType: 'Classroom',
   baseUrl: '/classrooms'
   // searchUrl: '/classrooms'

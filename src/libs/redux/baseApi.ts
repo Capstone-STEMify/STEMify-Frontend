@@ -4,10 +4,10 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: customFetchBaseQueryWithErrorHandling,
-  tagTypes: ['Lesson', 'User', 'Course', 'Classroom'],
+  tagTypes: ['Lesson', 'User', 'Course', 'Classroom', 'Enrollment'],
   endpoints: () => ({})
 })
 
 // Define all tag types used in the application
 // It should match the tagTypes defined in the baseApi
-export type AllTagTypes = 'Lesson' | 'User' | 'Course' | 'Classroom'
+export type AllTagTypes = 'Lesson' | 'User' | 'Course' | 'Classroom' | 'Enrollment'

@@ -15,4 +15,12 @@ export type Classroom = {
   status: ClassroomStatus
   numberOfStudents: number
   resourceIds: string[]
+  students: StudentClassroom[]
+}
+
+export type StudentClassroom = {
+  id: string
+  studentName: string
+  studentEmail: string
+  studentImageUrl: string
 }

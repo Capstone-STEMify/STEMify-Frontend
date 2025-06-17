@@ -10,7 +10,7 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { Download, Folder, ListCollapse, Plus } from 'lucide-react'
 import React from 'react'
 
-export default function ClassroomAction() {
+export default function ClassroomDetailAction() {
   const isXL = useMediaQuery('(min-width: 1280px)')
   return (
     <div className='mt-5 xl:mx-8'>

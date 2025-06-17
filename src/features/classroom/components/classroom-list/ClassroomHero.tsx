@@ -1,5 +1,4 @@
 import { BookOpen } from 'lucide-react'
-import React from 'react'
 
 export default function ClassroomHero() {
   return (
@@ -12,7 +11,7 @@ export default function ClassroomHero() {
           <div className='absolute top-1/2 left-1/2 h-24 w-24 animate-pulse rounded-full bg-white/5 blur-xl' />
         </div>
 
-        <div className='relative z-10'>
+        <div className='relative z-10 mx-auto max-w-7xl'>
           <div className='mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur-sm'>
             <BookOpen className='h-4 w-4' />
             <span className='text-sm font-medium'>STEMmify Education</span>

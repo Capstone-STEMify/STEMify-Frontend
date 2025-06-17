@@ -54,7 +54,7 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
 }
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
+  // debug: true,
   session: {
     strategy: 'jwt'
   },

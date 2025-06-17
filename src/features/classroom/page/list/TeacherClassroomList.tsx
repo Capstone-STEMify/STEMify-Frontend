@@ -6,21 +6,26 @@ import ClassroomHero from '@/features/classroom/components/classroom-list/Classr
 import { BookOpen, Plus } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { classroomData } from '@/utils/mockData'
 import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
 import { fadeInUp } from '@/utils/motion'
+import { useSearchClassroomQuery } from '@/features/classroom/api/classroomApi'
 
 export default function TeacherClassroomList() {
+  const { data: classroomData, error } = useSearchClassroomQuery({ teacherId: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d' })
   const [searchQuery, setSearchQuery] = useState('')
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.3 })
 
-  const filteredData = classroomData.filter((classroom) => {
-    const matchesSearch = classroom.name.toLowerCase().includes(searchQuery.toLowerCase())
-    // const matchesFilter = selectedFilter === 'all' || classroom.subject.toLowerCase() === selectedFilter.toLowerCase()
-    // return matchesSearch && matchesFilter
-    return matchesSearch
-  })
+  if (!classroomData) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p className='text-gray-500'>Loading classrooms...</p>
+      </div>
+    )
+  }
+
+  const filteredData = classroomData.data.items
+  console.log('filteredData', filteredData)
 
   const handleSearch = () => {}
   return (
@@ -31,10 +36,10 @@ export default function TeacherClassroomList() {
 
       {/* Classroom list */}
       <motion.section
-        ref={ref}
-        initial='hidden'
-        animate={isInView ? 'visible' : 'hidden'}
-        variants={fadeInUp}
+        // ref={ref}
+        // initial='hidden'
+        // animate={isInView ? 'visible' : 'hidden'}
+        // variants={fadeInUp}
         className='mx-auto mt-8 max-w-7xl'
       >
         <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
@@ -57,14 +62,17 @@ export default function TeacherClassroomList() {
         <div className='grid grid-cols-1 justify-items-center space-y-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
           {/* Replace with filter later */}
           {/* {filteredData.map((classroom, index) => ( */}
-          {classroomData.map((classroom, index) => (
+          {filteredData.map((classroom, index) => (
             <ClassroomCard
               key={index}
               classroom={{
                 name: classroom.name,
-                image: classroom.image,
-                member: classroom.member,
-                avatar: classroom.avatar
+                image: classroom.coverImageUrl,
+                member: classroom.numberOfStudents,
+                avatar: classroom.students
+                  .filter((s) => !!s.studentImageUrl)
+                  .slice(0, 3)
+                  .map((s) => s.studentImageUrl)
               }}
               size='lg'
             />
