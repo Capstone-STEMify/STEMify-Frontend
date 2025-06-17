@@ -58,7 +58,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@opennextjs/cloudflare": "1.0.4",
-    "@opennextjs/aws": "3.5.1",
+    "@opennextjs/aws": "3.6.5",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -72,7 +72,5 @@
     "typescript": "^5.8.3",
     "wrangler": "^4.16.1"
   },
-  "overrides": {
-    "@opennextjs/aws": "3.5.1"
-  }
+  "overrides": {}
 }
