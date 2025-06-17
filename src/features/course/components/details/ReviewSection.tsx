@@ -1,11 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Star, Users } from 'lucide-react' // Users icon might not be used here, but kept from original
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
-}
+import { fadeInUp } from '@/utils/motion'
 
 // Sample review data
 const sampleReviews = [

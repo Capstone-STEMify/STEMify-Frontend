@@ -1,14 +1,6 @@
+import { fadeInUp } from '@/utils/motion'
 import { motion, useInView } from 'framer-motion'
 import React, { useRef } from 'react'
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' as const }
-  }
-}
 
 export default function CTASec() {
   const ref = useRef(null)

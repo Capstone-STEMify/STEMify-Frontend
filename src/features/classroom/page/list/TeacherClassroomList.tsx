@@ -8,15 +8,7 @@ import React, { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { classroomData } from '@/utils/mockData'
 import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' }
-  }
-}
+import { fadeInUp } from '@/utils/motion'
 
 export default function TeacherClassroomList() {
   const [searchQuery, setSearchQuery] = useState('')

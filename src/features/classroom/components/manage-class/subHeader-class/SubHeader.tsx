@@ -1,39 +1,28 @@
-import { motion, useInView } from 'framer-motion';
-import Link from 'next/link';
+import { fadeInUp } from '@/utils/motion'
+import { motion, useInView } from 'framer-motion'
+import Link from 'next/link'
 import React, { useRef } from 'react'
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: { duration: 0.6, ease: "easeOut" }
-  }
-};
-
-
 export default function SubHeader() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.3 })
 
   return (
-    <motion.section 
+    <motion.section
       ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      initial='hidden'
+      animate={isInView ? 'visible' : 'hidden'}
       variants={fadeInUp}
-      className="bg-white border-b border-gray-200 px-6 py-4"
+      className='border-b border-gray-200 bg-white px-6 py-4'
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <div className="text-gray-600">
-          Jump Into Classroom Creation
-        </div>
+      <div className='mx-auto flex max-w-7xl items-center justify-between'>
+        <div className='text-gray-600'>Jump Into Classroom Creation</div>
         <Link href={'/teacher/classrooms/create-steps'}>
-        <button className="bg-amber-400 hover:bg-amber-500 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-          Create Your Classroom
-        </button>
+          <button className='rounded-lg bg-amber-400 px-6 py-2 font-medium text-white transition-colors hover:bg-amber-500'>
+            Create Your Classroom
+          </button>
         </Link>
       </div>
     </motion.section>
-  );
+  )
 }

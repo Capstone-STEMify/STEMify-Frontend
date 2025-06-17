@@ -1,21 +1,8 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, Star, Award, Clock, Users } from 'lucide-react'
+import { staggerContainer, staggerItem } from '@/utils/motion'
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15
-    }
-  }
-}
-
-const staggerItem = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 2 } }
-}
 
 const statsData = [
   {

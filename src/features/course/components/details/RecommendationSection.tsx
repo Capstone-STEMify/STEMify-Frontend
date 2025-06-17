@@ -1,21 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Star } from 'lucide-react'
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
-}
-
-const staggerItem = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-}
+import { staggerContainer, staggerItem } from '@/utils/motion'
 
 export default function RecommendationSection() {
   const courses = [
