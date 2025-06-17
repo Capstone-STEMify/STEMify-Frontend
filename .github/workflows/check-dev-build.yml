@@ -23,6 +23,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install dependencies
+        run: npm install --ignore-scripts=false --legacy-peer-deps
+
+      - name: Rebuild native modules (if needed)
+        run: npx --yes node-gyp rebuild || true
+
       - name: Generate wrangler.toml from template
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
