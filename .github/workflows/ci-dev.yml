@@ -20,14 +20,8 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install dependencies
-        run: npm install --ignore-scripts=false --legacy-peer-deps
-
-      - name: Rebuild native modules (if needed)
-        run: npx --yes node-gyp rebuild || true
+      - name: Install dependencies using override
+        run: npm ci --legacy-peer-deps
 
       - name: Generate wrangler.toml from template
         env:
