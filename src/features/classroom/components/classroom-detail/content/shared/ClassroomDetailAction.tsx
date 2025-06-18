@@ -13,7 +13,7 @@ import React from 'react'
 export default function ClassroomDetailAction() {
   const isXL = useMediaQuery('(min-width: 1280px)')
   return (
-    <div className='mt-5 xl:mx-8'>
+    <div className='mt-5'>
       <div className='flex flex-col justify-between gap-y-3 sm:flex-row sm:items-center'>
         {isXL ? (
           <div className='flex space-x-3'>

@@ -6,8 +6,6 @@ export default async function ProtecedClassroomLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // const session = await getServerSession(authOptions)
-  // if (!session) redirect('/login')
   return (
     <div>
       <main>{children}</main>

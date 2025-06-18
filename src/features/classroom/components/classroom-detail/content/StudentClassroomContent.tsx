@@ -1,3 +1,4 @@
+import { LessonCard } from '@/components/shared/card/LessonCard'
 import ResourceCard from '@/components/shared/card/ResourceCard'
 import ClassroomDetailAction from '@/features/classroom/components/classroom-detail/content/shared/ClassroomDetailAction'
 import { dummyCardData } from '@/utils/mockData'
@@ -7,20 +8,17 @@ export default function StudentClassroomContent() {
     <div className='container mx-auto max-w-7xl space-y-8 p-4'>
       <ClassroomDetailAction />
 
-      <div className='grid grid-cols-1 justify-items-center gap-y-5 lg:grid-cols-2 xl:grid-cols-3'>
+      <div className='grid grid-cols-1 gap-x-14 gap-y-8 lg:grid-cols-2 xl:grid-cols-4'>
         {dummyCardData.map((course, index) => {
           return (
-            <ResourceCard
-              size='sm'
+            <LessonCard
+              title={course.title}
+              description={course.description}
+              imageSrc={course.image}
               key={index}
-              resource={{
-                title: course.title,
-                description: course.description,
-                image: course.image,
-                category: 'Math',
-                age: '8-9',
-                duration: '2 hours'
-              }}
+              featured={true}
+              size='md'
+              onEdit={() => console.log('Edit clicked')}
             />
           )
         })}

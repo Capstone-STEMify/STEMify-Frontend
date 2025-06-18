@@ -31,14 +31,14 @@ export function NavProjects({
   const { isMobile } = useSidebar()
 
   return (
-    <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
+    <SidebarGroup>
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item, index) => (
           <SidebarMenuItem key={index}>
             <SidebarMenuButton asChild tooltip={item.title}>
               <a href={item.url}>
-                <item.icon />
+                {item.icon && <item.icon />}
                 <span>{item.title}</span>
               </a>
             </SidebarMenuButton>

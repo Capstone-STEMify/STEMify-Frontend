@@ -1,7 +1,5 @@
 'use client'
 
-import * as React from 'react'
-
 import { NavProjects } from './nav/nav-project'
 import {
   Sidebar,
@@ -16,7 +14,8 @@ import { NavMain } from '@/features/classroom/components/classroom-detail/sideba
 import { NavSecondary } from '@/features/classroom/components/classroom-detail/sidebar/nav/nav-secondary'
 import { NavUser } from '@/features/classroom/components/classroom-detail/sidebar/nav/nav-user'
 import { UserRole } from '@/types/userRole'
-import { getSidebarData } from '@/features/classroom/types/sidebar-data'
+import { getSidebarData } from '@/utils/sidebar-data'
+import { NavGeneral } from '@/features/classroom/components/classroom-detail/sidebar/nav/nav-general'
 
 export function AppSidebar({
   role = UserRole.STUDENT,
@@ -33,6 +32,7 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <NavGeneral items={data.navGenral} />
         <NavMain items={data.navMain} />
         <NavProjects projects={data.navProject} />
         <NavSecondary items={data.navSecondary} className='mt-auto' />
