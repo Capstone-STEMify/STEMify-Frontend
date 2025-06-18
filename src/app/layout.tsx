@@ -5,6 +5,7 @@ import StoreProvider from 'providers/StoreProvider'
 import { Toaster } from 'sonner'
 import { UserRole } from '@/types/userRole'
 import LoadingWrapper from '@/components/shared/loading/LoadingWrapper'
+import { ModalProvider } from '@/components/shared/modals/ModalProvider'
 
 const geistNunito = Nunito({
   variable: '--font-geist-nunito',
@@ -30,7 +31,9 @@ export default function RootLayout({
     <html lang='en' className={`${geistNunito.variable}`}>
       <body className={`antialiased`}>
         <StoreProvider>
-          <main>{children}</main>
+          <ModalProvider>
+            <main>{children}</main>
+          </ModalProvider>
         </StoreProvider>
         <Toaster />
       </body>

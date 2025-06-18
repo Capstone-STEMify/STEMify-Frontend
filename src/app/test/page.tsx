@@ -1,6 +1,24 @@
-import * as React from 'react'
-import SBreadcrumb from '@/components/shared/SBreadcrumb'
+'use client'
+
+import { useModal } from '@/components/shared/modals/ModalProvider'
 
 export default function BreadcrumbResponsive() {
-  return <SBreadcrumb title='Intro: Wetlands Biome' />
+  const { openModal } = useModal()
+
+  return (
+    <div>
+      <button onClick={() => openModal('form', { defaultValues: 'form value test' })}>📝 Edit</button>
+      <button
+        onClick={() =>
+          openModal('confirm', {
+            message: 'Delete this item?',
+            onConfirm: () => console.log('Deleted')
+          })
+        }
+      >
+        ❌ Delete
+      </button>
+      <button onClick={() => openModal('preview', { data: 'sss' })}>👁️ View</button>
+    </div>
+  )
 }

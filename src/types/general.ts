@@ -5,3 +5,13 @@ export type AvatarProps = {
   fallback: string
   className?: string
 }
+
+// Modal
+export type ModalType = 'form' | 'confirm' | 'preview' | null
+
+export interface ModalContextType {
+  openModal: (type: ModalType, props?: any) => void
+  closeModal: () => void
+  modalType: ModalType
+  modalProps: any
+}
