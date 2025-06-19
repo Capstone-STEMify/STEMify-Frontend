@@ -1,7 +1,7 @@
 'use client'
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/shadcn/dialog'
-import { useModal } from '../ModalProvider'
+import { useModal } from '../../../providers/ModalProvider'
 
 interface PreviewModalProps {
   data: Record<string, any>

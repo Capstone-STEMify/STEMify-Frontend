@@ -3,9 +3,9 @@
 import React, { createContext, useContext, useState } from 'react'
 import { ModalType, ModalContextType } from '@/types/general'
 
-import GenericFormModal from '@/components/shared/modals/reuseable/GenericFormModal'
-import ConfirmModal from '@/components/shared/modals/reuseable/ConfirmModal'
-import PreviewModal from '@/components/shared/modals/reuseable/PreviewModal'
+import GenericFormModal from '@/components/shared/modals/GenericFormModal'
+import ConfirmModal from '@/components/shared/modals/ConfirmModal'
+import PreviewModal from '@/components/shared/modals/PreviewModal'
 
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},

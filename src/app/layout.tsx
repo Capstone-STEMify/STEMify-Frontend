@@ -3,7 +3,7 @@ import { Nunito } from 'next/font/google'
 import './globals.css'
 import StoreProvider from 'providers/StoreProvider'
 import { Toaster } from 'sonner'
-import { ModalProvider } from '@/components/shared/modals/ModalProvider'
+import { ModalProvider } from '@/providers/ModalProvider'
 
 const geistNunito = Nunito({
   variable: '--font-geist-nunito',

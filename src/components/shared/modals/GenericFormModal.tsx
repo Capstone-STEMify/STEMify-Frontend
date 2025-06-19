@@ -1,5 +1,5 @@
 import { Dialog, DialogContent } from '@/components/shadcn/dialog'
-import { useModal } from '../ModalProvider'
+import { useModal } from '../../../providers/ModalProvider'
 
 export default function GenericFormModal({ defaultValues }: { defaultValues?: any }) {
   const { closeModal } = useModal()

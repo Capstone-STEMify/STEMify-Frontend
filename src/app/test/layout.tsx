@@ -1,7 +1,6 @@
 import Header from '@/components/layout/header/Header'
-import { ModalProvider } from '@/components/shared/modals/ModalProvider'
+import { ModalProvider } from '@/providers/ModalProvider'
 import { metadata } from 'app/layout'
-import { cookies } from 'next/headers'
 
 metadata.title = 'Test Layout'
 export default async function TestLayout({
@@ -9,8 +8,6 @@ export default async function TestLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const cookieStore = await cookies()
-  const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true'
   return (
     <>
       <Header />

@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/shadcn/dialog'
 import { Button } from '@/components/shadcn/button'
-import { useModal } from '../ModalProvider'
+import { useModal } from '../../../providers/ModalProvider'
 
 interface ConfirmModalProps {
   message: string
