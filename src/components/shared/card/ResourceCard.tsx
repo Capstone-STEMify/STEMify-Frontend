@@ -1,6 +1,6 @@
 import { Badge } from '@/components/shadcn/badge'
 import { Size } from '@/types/general'
-import { ArrowRight, ChevronRightIcon, ClockFading } from 'lucide-react'
+import { ChevronRightIcon, ClockFading } from 'lucide-react'
 import React from 'react'
 
 const sizeClasses: Record<Size, { height: string; width: string; titleSize: string }> = {

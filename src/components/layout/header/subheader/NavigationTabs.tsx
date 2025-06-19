@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react'
 import { Star, Image, Video, Volume2, BookCheck } from 'lucide-react'
-import { Button } from '@/components/shadcn/button'
 
 type TabItem = {
   id: string

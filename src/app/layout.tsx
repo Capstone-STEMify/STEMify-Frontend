@@ -3,8 +3,6 @@ import { Nunito } from 'next/font/google'
 import './globals.css'
 import StoreProvider from 'providers/StoreProvider'
 import { Toaster } from 'sonner'
-import { UserRole } from '@/types/userRole'
-import LoadingWrapper from '@/components/shared/loading/LoadingWrapper'
 import { ModalProvider } from '@/components/shared/modals/ModalProvider'
 
 const geistNunito = Nunito({

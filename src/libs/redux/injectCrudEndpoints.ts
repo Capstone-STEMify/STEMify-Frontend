@@ -14,11 +14,10 @@ type CrudApiOptions = {
 export function injectCrudEndpoints<T, P extends SearchPaginatedRequestParams>({
   tagType,
   baseUrl,
-  searchUrl = baseUrl + '/search'
 }: CrudApiOptions) {
   return baseApi.injectEndpoints({
     endpoints: (builder) => ({
-      getById: builder.query<T, string | number>({
+      getById: builder.query<ApiSuccessResponse<T>, string | number>({
         query: (id) => `${baseUrl}/${id}`,
         providesTags: (result, error, id) => [{ type: tagType, id }]
       }),

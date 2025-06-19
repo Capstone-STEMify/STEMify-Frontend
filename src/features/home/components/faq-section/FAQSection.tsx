@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function FAQSection() {
   return (
     <section className='relative overflow-hidden bg-white px-6 py-16'>

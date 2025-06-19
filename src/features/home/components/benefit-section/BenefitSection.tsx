@@ -1,6 +1,5 @@
 'use client'
 import { Star } from 'lucide-react'
-import React, { useState } from 'react'
 
 export default function BenefitsSection() {
   const benefits = [

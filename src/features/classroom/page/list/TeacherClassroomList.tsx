@@ -4,17 +4,11 @@ import SSelect from '@/components/shared/SSelect'
 import ClassroomCard from '@/components/shared/card/ClassroomCard'
 import ClassroomHero from '@/features/classroom/components/classroom-list/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
-import React, { useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
 import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
-import { fadeInUp } from '@/utils/motion'
 import { useSearchClassroomQuery } from '@/features/classroom/api/classroomApi'
 
 export default function TeacherClassroomList() {
   const { data: classroomData, error } = useSearchClassroomQuery({ teacherId: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d' })
-  const [searchQuery, setSearchQuery] = useState('')
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
 
   if (!classroomData) {
     return (
@@ -27,7 +21,6 @@ export default function TeacherClassroomList() {
   const filteredData = classroomData.data.items
   console.log('filteredData', filteredData)
 
-  const handleSearch = () => {}
   return (
     <div className='min-h-screen pb-30'>
       <ClassroomHero />
@@ -35,13 +28,7 @@ export default function TeacherClassroomList() {
       <ClassRoomManagement />
 
       {/* Classroom list */}
-      <motion.section
-        // ref={ref}
-        // initial='hidden'
-        // animate={isInView ? 'visible' : 'hidden'}
-        // variants={fadeInUp}
-        className='mx-auto mt-8 max-w-7xl'
-      >
+      <div className='mx-auto mt-8 max-w-7xl'>
         <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
           <SearchBar />
           <div className='flex items-center justify-between gap-4 sm:justify-start'>
@@ -89,7 +76,7 @@ export default function TeacherClassroomList() {
             <p className='text-gray-500'>Try adjusting your search or filter criteria</p>
           </div>
         )}
-      </motion.section>
+      </div>
     </div>
   )
 }

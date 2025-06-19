@@ -5,13 +5,12 @@ import SSelect from '@/components/shared/SSelect'
 import ClassroomCard from '@/components/shared/card/ClassroomCard'
 import ClassroomHero from '@/features/classroom/components/classroom-list/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
-import React, { useState } from 'react'
 import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
 import Link from 'next/link'
 import { useSearchEnrollmentQuery } from '@/features/classroom/api/enrollmentApi'
 
 export default function StudentClassroomList() {
-  const { data: classroomData, error } = useSearchEnrollmentQuery({ studentId: 'f21b8c67-3d49-4c4f-84e7-2b76f017ecb2' })
+  const { data: classroomData } = useSearchEnrollmentQuery({ studentId: 'f21b8c67-3d49-4c4f-84e7-2b76f017ecb2' })
 
   return (
     <div className='min-h-screen pb-30'>

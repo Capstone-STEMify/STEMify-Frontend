@@ -108,7 +108,7 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
           onAnimationComplete(false)
         }
       } catch (error) {
-        console.log('GSAP not available')
+        console.log('GSAP not available', error)
         onAnimationComplete(true)
       }
     }

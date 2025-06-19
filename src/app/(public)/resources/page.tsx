@@ -1,4 +1,3 @@
-import { Button } from '@/components/shadcn/button'
 import HeroSection from '@/components/shared/hero-section/HeroSection'
 import LinkButton from '@/components/shared/button/LinkButton'
 import ActivitySection from '@/features/activity/components/activity-list/ActivitySection'

@@ -1,11 +1,8 @@
-import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { BookOpen, ChevronDown, Play, Users } from 'lucide-react'
 import ResourceCard from '@/components/shared/card/ResourceCard'
 import { fadeInUp } from '@/utils/motion'
 
 export default function ContentSection() {
-
   // Sample lesson cards data
   const lessons = [
     {
@@ -18,7 +15,8 @@ export default function ContentSection() {
     },
     {
       title: 'Health and Safety',
-      description: 'Practice safety skills when it comes to the road and take care of your growing body to become independent.',
+      description:
+        'Practice safety skills when it comes to the road and take care of your growing body to become independent.',
       image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop',
       category: 'ACTIVITY',
       age: '4-14+',
@@ -78,8 +76,8 @@ export default function ContentSection() {
 
         {/* Lesson Cards Section */}
         <div className='w-full'>
-          <div className='overflow-y-auto max-h-[800px] p-5'>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pr-2'>
+          <div className='max-h-[800px] overflow-y-auto p-5'>
+            <div className='grid grid-cols-1 gap-6 pr-2 md:grid-cols-2 lg:grid-cols-3'>
               {lessons.map((lesson, index) => (
                 <ResourceCard key={index} resource={lesson} />
               ))}

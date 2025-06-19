@@ -1,6 +1,4 @@
 import Header from '@/components/layout/header/Header'
-import { AppSidebar } from '@/components/shadcn/app-sidebar'
-import { SidebarProvider, SidebarTrigger } from '@/components/shadcn/sidebar'
 import { ModalProvider } from '@/components/shared/modals/ModalProvider'
 import { metadata } from 'app/layout'
 import { cookies } from 'next/headers'

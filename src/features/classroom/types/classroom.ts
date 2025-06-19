@@ -11,7 +11,7 @@ export type Classroom = {
   endDate: string
   teacherId: string
   classCode: string
-  coverImageUrl: string | null
+  coverImageUrl: string
   status: ClassroomStatus
   numberOfStudents: number
   resourceIds: string[]

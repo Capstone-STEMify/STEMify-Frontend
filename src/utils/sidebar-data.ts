@@ -7,6 +7,7 @@ import {
   Command,
   Frame,
   GalleryVerticalEnd,
+  Home,
   LifeBuoy,
   Map,
   Megaphone,
@@ -18,7 +19,7 @@ import {
 
 export function getSidebarData(role: UserRole) {
   const classroomId = '1'
-  const baseURL = `/classroom/${classroomId}`
+  const classroomURL = `/classroom/${classroomId}`
   const base = {
     teams: [
       { name: 'Acme Inc', logo: GalleryVerticalEnd, plan: 'Enterprise' },
@@ -32,13 +33,18 @@ export function getSidebarData(role: UserRole) {
     },
     navGenral: [
       {
+        title: 'Home',
+        url: `${classroomURL}`,
+        icon: Home
+      },
+      {
         title: 'Members',
-        url: `${baseURL}/members`,
+        url: `${classroomURL}/members`,
         icon: Users
       },
       {
         title: 'Announcements',
-        url: `${baseURL}/announcements`,
+        url: `${classroomURL}/announcements`,
         icon: Megaphone
       }
     ],
@@ -51,16 +57,16 @@ export function getSidebarData(role: UserRole) {
 
   const navMain: Record<UserRole, (typeof base)['navSecondary']> = {
     [UserRole.STUDENT]: [
-      { title: 'Course', url: `${baseURL}/course`, icon: SquareTerminal },
-      { title: 'Lesson', url: `${baseURL}/lesson`, icon: Bot },
-      { title: 'Activity', url: `${baseURL}/activity`, icon: Activity },
-      { title: 'Quiz', url: `${baseURL}/quiz`, icon: BookOpen }
+      { title: 'Course', url: `${classroomURL}/course`, icon: SquareTerminal },
+      { title: 'Lesson', url: `${classroomURL}/lesson`, icon: Bot },
+      { title: 'Activity', url: `${classroomURL}/activity`, icon: Activity },
+      { title: 'Quiz', url: `${classroomURL}/quiz`, icon: BookOpen }
     ],
     [UserRole.TEACHER]: [
-      { title: 'Course', url: `${baseURL}/course`, icon: SquareTerminal },
-      { title: 'Lesson', url: `${baseURL}/lesson`, icon: Bot },
-      { title: 'Activity', url: `${baseURL}/activity`, icon: Activity },
-      { title: 'Quiz', url: `${baseURL}/quiz`, icon: BookOpen }
+      { title: 'Course', url: `${classroomURL}/course`, icon: SquareTerminal },
+      { title: 'Lesson', url: `${classroomURL}/lesson`, icon: Bot },
+      { title: 'Activity', url: `${classroomURL}/activity`, icon: Activity },
+      { title: 'Quiz', url: `${classroomURL}/quiz`, icon: BookOpen }
     ],
     [UserRole.ADMIN]: [],
     [UserRole.STAFF]: [],
@@ -69,12 +75,12 @@ export function getSidebarData(role: UserRole) {
 
   const navProject: Record<UserRole, (typeof base)['navSecondary']> = {
     [UserRole.STUDENT]: [
-      { title: 'STEM Program', url: `${baseURL}/project/stem`, icon: Frame },
-      { title: 'Science Fair', url: `${baseURL}/project/science`, icon: Map }
+      { title: 'STEM Program', url: `${classroomURL}/project/stem`, icon: Frame },
+      { title: 'Science Fair', url: `${classroomURL}/project/science`, icon: Map }
     ],
     [UserRole.TEACHER]: [
-      { title: 'STEM Program', url: `${baseURL}/project/stem`, icon: Frame },
-      { title: 'Science Fair', url: `${baseURL}/project/science`, icon: Map }
+      { title: 'STEM Program', url: `${classroomURL}/project/stem`, icon: Frame },
+      { title: 'Science Fair', url: `${classroomURL}/project/science`, icon: Map }
     ],
     [UserRole.ADMIN]: [],
     [UserRole.STAFF]: [],

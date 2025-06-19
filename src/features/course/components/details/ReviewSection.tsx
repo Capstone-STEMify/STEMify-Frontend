@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Star, Users } from 'lucide-react' // Users icon might not be used here, but kept from original
+import { Star } from 'lucide-react' // Users icon might not be used here, but kept from original
 import { fadeInUp } from '@/utils/motion'
 
 // Sample review data

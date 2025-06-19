@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Users } from 'lucide-react'
 import { fadeInUp, staggerContainer } from '@/utils/motion'

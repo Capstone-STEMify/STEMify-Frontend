@@ -1,4 +1,3 @@
-import Footer from '@/components/layout/Footer'
 import { metadata } from 'app/layout'
 
 metadata.title = 'Teacher'
@@ -8,8 +7,8 @@ export default function TeacherLayout({
   children: React.ReactNode
 }>) {
   return (
-  <>
-  <div>{children}</div>
-  </>
+    <>
+      <div>{children}</div>
+    </>
   )
 }

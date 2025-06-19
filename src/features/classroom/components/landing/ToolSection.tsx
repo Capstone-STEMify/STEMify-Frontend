@@ -1,11 +1,10 @@
 import MacCard from '@/components/shared/card/MacCard'
-import { ChevronLeft, ChevronRight, Play } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import MacCardVideo from '../landing/MacCardVideo'
 
 export default function ToolSection() {
   const [isVisible, setIsVisible] = useState(false)
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentSlide] = useState(0)
 
   useEffect(() => {
     const observer = new IntersectionObserver(

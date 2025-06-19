@@ -44,7 +44,6 @@ export default function CourseDetails() {
       <AboutSection />
       <SkillSection />
       <ContentSection />
-      {/* <ReviewSection /> */}
       <RecommendationSection />
     </div>
   )
