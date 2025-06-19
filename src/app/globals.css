@@ -149,10 +149,29 @@ skye-gradient: right, #7dd3fc, #eff6ff
   body {
     @apply bg-background text-foreground;
   }
+  h1 {
+    @apply text-2xl font-bold;
+  }
+
+  h2 {
+    @apply text-xl font-bold;
+  }
+
+  h3 {
+    @apply text-lg font-bold;
+  }
 }
 
 @layer utilities {
   .shadow-6 {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+
+  blockquote {
+    position: relative;
+    padding-left: 1.25rem;
+    border-left: 3px solid #94a3b8; /* slate-400 */
+    background-color: #f1f5f9; /* slate-100 */
+    margin: 1rem 0;
   }
 }
