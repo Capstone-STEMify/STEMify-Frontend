@@ -5,6 +5,7 @@ import { ModalType, ModalContextType } from '@/types/general'
 
 import ConfirmModal from '@/components/shared/modals/ConfirmModal'
 import UserFormModal from '@/components/shared/modals/UserFormModal'
+import PhotoUploadModal from '@/components/shared/modals/UploadImageModal'
 
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
@@ -37,6 +38,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'profile' && <UserFormModal {...modalProps} />}
       {modalType === 'userForm' && <UserFormModal {...modalProps} />}
       {modalType === 'confirm' && <ConfirmModal {...modalProps} />}
+      {modalType === 'image' && <PhotoUploadModal {...modalProps} />}
     </ModalContext.Provider>
   )
 }
