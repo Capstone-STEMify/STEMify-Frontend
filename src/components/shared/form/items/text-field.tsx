@@ -1,7 +1,7 @@
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
-import { useFieldContext } from '@/components/shared/form'
-import { FieldErrors } from '@/components/shared/form/field-errors'
+import { useFieldContext } from '@/components/shared/form/items'
+import { FieldErrors } from '@/components/shared/form/items/field-errors'
 
 type TextFieldProps = {
   label?: string

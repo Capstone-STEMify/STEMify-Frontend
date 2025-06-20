@@ -1,7 +1,7 @@
-import { useFieldContext } from '@/components/shared/form'
+import { useFieldContext } from '@/components/shared/form/items'
 import { Label } from '@/components/shadcn/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
-import { FieldErrors } from './field-errors'
+import { FieldErrors } from '@/components/shared/form/items/field-errors'
 
 type SelectOption = {
   value: string
