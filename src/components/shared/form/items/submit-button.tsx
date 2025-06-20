@@ -1,6 +1,6 @@
 import { useStore } from '@tanstack/react-form'
 import { Button } from '@/components/shadcn/button'
-import { useFormContext } from '@/components/shared/form'
+import { useFormContext } from '@/components/shared/form/items'
 
 type SubmitButtonProps = {
   children: React.ReactNode

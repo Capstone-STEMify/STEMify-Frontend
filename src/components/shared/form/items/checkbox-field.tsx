@@ -1,7 +1,7 @@
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { FieldErrors } from './field-errors'
 import { Label } from '@/components/shadcn/label'
-import { useFieldContext } from '@/components/shared/form'
+import { useFieldContext } from '@/components/shared/form/items'
 
 type CheckboxFieldProps = {
   label: string

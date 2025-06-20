@@ -51,7 +51,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     editorProps: {
       attributes: {
         class:
-          'min-h-[300px] border rounded-md bg-slate-50 py-2 px-3 ring-0 focus:outline-none focus:ring-2 focus:ring-blue-200 mt-3'
+          'min-h-[300px] border border-blue-200 rounded-md bg-slate-50 py-2 px-3 ring-0 focus:outline-none focus:ring-0  mt-3'
       },
       handleDOMEvents: {
         dragover: (view, event) => {
@@ -84,6 +84,9 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
         }
       }
     },
+    injectCSS: false,
+    immediatelyRender: false,
+
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML())
     }
@@ -104,7 +107,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
             }
           }}
         />
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} className='' />
       </div>
     </div>
   )

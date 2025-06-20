@@ -14,4 +14,16 @@ export const classroomApi = injectCrudEndpoints<Classroom, ClassroomParams>({
   // searchUrl: '/classrooms'
 })
 
-export const { useSearchQuery: useSearchClassroomQuery, useGetByIdQuery: useGetClassroomByIdQuery } = classroomApi
+export const {
+  useSearchQuery: useSearchClassroomQuery,
+  useGetByIdQuery: useGetClassroomByIdQuery,
+  useGetAllQuery: useGetAllClassroomQuery,
+  useCreateMutation: useCreateClassroomMutation,
+  useUpdateMutation: useUpdateClassroomMutation,
+  useDeleteMutation: useDeleteClassroomMutation,
+
+  // lazy
+  useLazySearchQuery: useLazySearchClassroomQuery,
+  useLazyGetAllQuery: useLazyGetAllClassroomQuery,
+  useLazyGetByIdQuery: useLazyGetClassroomByIdQuery
+} = classroomApi

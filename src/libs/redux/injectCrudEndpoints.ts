@@ -11,10 +11,7 @@ type CrudApiOptions = {
   searchUrl?: string
 }
 
-export function injectCrudEndpoints<T, P extends SearchPaginatedRequestParams>({
-  tagType,
-  baseUrl,
-}: CrudApiOptions) {
+export function injectCrudEndpoints<T, P extends SearchPaginatedRequestParams>({ tagType, baseUrl }: CrudApiOptions) {
   return baseApi.injectEndpoints({
     endpoints: (builder) => ({
       getById: builder.query<ApiSuccessResponse<T>, string | number>({
@@ -25,31 +22,18 @@ export function injectCrudEndpoints<T, P extends SearchPaginatedRequestParams>({
         query: () => ({ url: baseUrl }),
         providesTags: [tagType]
       }),
-      search: baseUrl
-        ? builder.query<ApiSuccessResponse<PaginatedResult<T>>, P>({
-            query: (params) => ({
-              url: baseUrl,
-              method: 'GET',
-              params: {
-                pageNumber: params.pageNumber ?? 1,
-                pageSize: params.pageSize ?? 10,
-                ...params
-              }
-            }),
-            providesTags: [tagType]
-          })
-        : builder.query<ApiSuccessResponse<PaginatedResult<T>>, P>({
-            query: (params) => ({
-              url: '',
-              method: 'GET',
-              params: {
-                pageNumber: params.pageNumber ?? 1,
-                pageSize: params.pageSize ?? 10,
-                ...params
-              }
-            }),
-            providesTags: [tagType]
-          }),
+      search: builder.query<ApiSuccessResponse<PaginatedResult<T>>, P>({
+        query: (params) => ({
+          url: baseUrl,
+          method: 'GET',
+          params: {
+            pageNumber: params.pageNumber ?? 1,
+            pageSize: params.pageSize ?? 10,
+            ...params
+          }
+        }),
+        providesTags: [tagType]
+      }),
       create: builder.mutation<T, Partial<T>>({
         query: (body) => ({
           url: baseUrl,

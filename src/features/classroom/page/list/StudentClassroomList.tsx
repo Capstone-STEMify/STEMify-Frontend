@@ -11,6 +11,7 @@ import { useSearchEnrollmentQuery } from '@/features/classroom/api/enrollmentApi
 
 export default function StudentClassroomList() {
   const { data: classroomData } = useSearchEnrollmentQuery({ studentId: 'f21b8c67-3d49-4c4f-84e7-2b76f017ecb2' })
+  
 
   return (
     <div className='min-h-screen pb-30'>

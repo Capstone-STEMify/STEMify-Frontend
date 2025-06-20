@@ -1,6 +1,6 @@
 'use client'
 
-import { useAppForm } from '@/components/shared/form'
+import { useAppForm } from '@/components/shared/form/items'
 import { z } from 'zod'
 
 const ContactMethod = z.union([z.literal('email'), z.literal('phone'), z.literal('whatsapp'), z.literal('sms')])
@@ -32,8 +32,8 @@ const UserSchema = z.object({
 type User = z.infer<typeof UserSchema>
 
 const defaultUser = {
-  name: '',
-  surname: '',
+  name: 'sssssssss',
+  surname: 'sads',
   isAcceptingTerms: false,
   contact: {
     email: '',
@@ -67,9 +67,9 @@ export default function UserForm() {
         children={(field) => <field.CheckboxField label='I accept the terms and conditions' />}
       />
 
-      <div className='my-2'>
+      <div className='my-2 space-y-2'>
         <h3 className='text-lg font-medium'>Contacts</h3>
-        <div className='flex-col gap-4'>
+        <div className='space-y-2'>
           <form.AppField name='contact.email' children={(field) => <field.TextField label='Email' type='email' />} />
           <form.AppField name='contact.phone' children={(field) => <field.TextField label='Phone' />} />
           <form.AppField

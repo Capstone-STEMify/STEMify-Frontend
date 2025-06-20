@@ -3,9 +3,8 @@
 import React, { createContext, useContext, useState } from 'react'
 import { ModalType, ModalContextType } from '@/types/general'
 
-import GenericFormModal from '@/components/shared/modals/GenericFormModal'
 import ConfirmModal from '@/components/shared/modals/ConfirmModal'
-import PreviewModal from '@/components/shared/modals/PreviewModal'
+import UserFormModal from '@/components/shared/modals/UserFormModal'
 
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
@@ -35,15 +34,14 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
 
       {/* Example modal */}
-      {modalType === 'form' && <GenericFormModal {...modalProps} />}
+      {modalType === 'profile' && <UserFormModal {...modalProps} />}
+      {modalType === 'userForm' && <UserFormModal {...modalProps} />}
       {modalType === 'confirm' && <ConfirmModal {...modalProps} />}
-      {modalType === 'preview' && <PreviewModal {...modalProps} />}
     </ModalContext.Provider>
   )
 }
 // use everywhere in your app to open modals
 // example
 // const { openModal } = useModal()
-// openModal('form', { defaultValues: { title: 'New Form' } })
 // openModal('confirm', { message: 'Are you sure?' })
-// openModal('preview', { data: { title: 'Preview Title', content: 'Preview Content' } })
+// openModal('userForm')

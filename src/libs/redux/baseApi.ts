@@ -10,4 +10,4 @@ export const baseApi = createApi({
 
 // Define all tag types used in the application
 // It should match the tagTypes defined in the baseApi
-export type AllTagTypes = 'Lesson' | 'User' | 'Course' | 'Classroom' | 'Enrollment'
+export type AllTagTypes = 'Lesson' | 'User' | 'Course' | 'Classroom' | 'Enrollment' 
