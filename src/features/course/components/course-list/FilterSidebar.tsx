@@ -46,7 +46,7 @@ export default function FilterSidebar({ filterItems, updateFilter, resetFilters 
           <div className='px-6'>
             <Slider
               value={filterItems.duration}
-              max={600}
+              max={1200}
               step={60}
               onValueChange={(val) => updateFilter('duration', val)}
               trackClass='bg-gray-200'

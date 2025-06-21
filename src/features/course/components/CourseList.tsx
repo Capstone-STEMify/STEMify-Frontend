@@ -20,7 +20,7 @@ const formatDuration = (minutes: number) => {
 
 const initialFilterItems = {
   sortBy: 'relevant',
-  duration: [9999],
+  duration: [1200],
   age: '',
   category: 'All',
   searchQuery: ''
