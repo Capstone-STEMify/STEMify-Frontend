@@ -11,7 +11,6 @@ export type ClassroomParams = {
 export const classroomApi = injectCrudEndpoints<Classroom, ClassroomParams>({
   tagType: 'Classroom',
   baseUrl: '/classrooms'
-  // searchUrl: '/classrooms'
 })
 
 export const {

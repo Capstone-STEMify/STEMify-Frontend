@@ -32,8 +32,8 @@ const UserSchema = z.object({
 type User = z.infer<typeof UserSchema>
 
 const defaultUser = {
-  name: 'sssssssss',
-  surname: 'sads',
+  name: '',
+  surname: '',
   isAcceptingTerms: false,
   contact: {
     email: '',

@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation'
 
 export default function RoleBasedClassroomDetailPage({ session }: { session: Session }) {
   let role = session.user.role
-  role = UserRole.STUDENT
+  role = UserRole.STUDENT // For testing purposes
 
   switch (role) {
     case UserRole.STUDENT:
