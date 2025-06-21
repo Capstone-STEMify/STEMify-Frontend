@@ -1,21 +1,22 @@
+'use client'
 import ResourceCard from '@/components/shared/card/ResourceCard'
-import { dummyCardData } from '@/utils/mockData'
+import { useGetAllCourseQuery } from '../../api/courseApi';
 
 export default function CourseSection() {
+  const { data: CourseData, error, isLoading } = useGetAllCourseQuery();
   return (
     <section className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
-      {dummyCardData.map((course, index) => {
+      {CourseData?.data.items.map((course, index) => {
         return (
           <ResourceCard
             size='md'
             key={index}
             resource={{
-              title: course.title,
-              description: course.description,
-              image: course.image,
-              category: 'Math',
-              age: '8-9',
-              duration: '2 hours'
+              ...course,
+              categoryNames: course.categoryNames || ['Math'],
+              ageRangeLabel: course.ageRangeLabel || '8-10',
+              duration: course.duration || 120,
+              // You can override or provide defaults for other fields here if needed
             }}
           />
         )

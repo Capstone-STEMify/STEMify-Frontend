@@ -66,8 +66,8 @@ export default function FilterSidebar({ filterItems, updateFilter, resetFilters 
             <SSelect
               placeholder='Select age range...'
               items={[
-                { value: '8-14+', content: '8-14 years old' },
-                { value: '10-16+', content: '10-16 years old' }
+                { value: '4-7', content: '4-7 years old' },
+                { value: '8-10', content: '8-10 years old' }
               ]}
               value={filterItems.age}
               onChange={(val) => updateFilter('age', val)}

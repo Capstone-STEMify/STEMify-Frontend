@@ -14,7 +14,7 @@ const rawBaseQuery = fetchBaseQuery({
   //   (() => {
   //     throw new Error('Missing BASE_API_URL')
   //   })(),
-  baseUrl: 'http://localhost:6001/api',
+  baseUrl: 'https://localhost:6002/api',
   credentials: 'include'
 })
 

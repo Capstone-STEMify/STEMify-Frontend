@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import FilterSidebar from './course-list/FilterSidebar'
 import SearchHeader from './course-list/SearchHeader'
 import SearchGrid from './course-list/SearchGrid'
@@ -8,19 +8,21 @@ import { Filter } from 'lucide-react'
 import EmptySearch from '../../../components/shared/search/EmptySearch'
 import { resources } from '@/utils/mockData'
 import SSheet from '@/components/shared/SSheet'
+import { useGetAllCourseQuery } from '../api/courseApi'
+import ModernPagination from '@/components/shared/paging/PagingComponent'
+import Link from 'next/link'
 
 const categories = ['All', 'Course', 'Lesson', 'Activity']
 
-const durationToMinutes = (duration: any) => {
-  const parts = duration.split(':')
-  const hours = parseInt(parts[0]) || 0
-  const minutes = parseInt(parts[1]) || 0
-  return hours * 60 + minutes
-}
+const formatDuration = (minutes: number) => {
+  const h = Math.floor(minutes / 60).toString().padStart(2, '0');
+  const m = (minutes % 60).toString().padStart(2, '0');
+  return `${h}:${m}:00`;
+};
 
 const initialFilterItems = {
   sortBy: 'relevant',
-  duration: [480],
+  duration: [9999],
   age: '',
   category: 'All',
   searchQuery: ''
@@ -29,6 +31,10 @@ const initialFilterItems = {
 export default function CourseList() {
   const [filterItems, setFilterItems] = useState(initialFilterItems)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [page, setPage] = useState(1);
+  const pageSize = 6;
+  const { data: CourseData, error, isLoading } = useGetAllCourseQuery();
+  console.log('CourseData', CourseData, 'error', error, 'isLoading', isLoading);
 
   const updateFilters = (key: keyof typeof filterItems, value: any) => {
     setFilterItems((prev) => ({
@@ -41,15 +47,19 @@ export default function CourseList() {
     setFilterItems(initialFilterItems)
   }
 
+  useEffect(() => {
+    setPage(1);
+  }, [filterItems]);
+
   const filteredAndSortedData = useMemo(() => {
-    let filtered = resources
+    let filtered = CourseData?.data?.items || []
 
     if (filterItems.category && filterItems.category !== 'All') {
-      filtered = filtered.filter((item) => item.category === filterItems.category)
+      filtered = filtered.filter((item) => item.categoryNames.includes(filterItems.category))
     }
 
     if (filterItems.age) {
-      filtered = filtered.filter((item) => item.age === filterItems.age)
+      filtered = filtered.filter((item) => item.ageRangeLabel === filterItems.age)
     }
 
     if (filterItems.searchQuery) {
@@ -58,13 +68,20 @@ export default function CourseList() {
         (item) =>
           item.title.toLowerCase().includes(q) ||
           item.description.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q)
+          item.categoryNames.join(' ').toLowerCase().includes(q)
       )
     }
 
-    filtered = filtered.filter((item) => durationToMinutes(item.duration) <= filterItems.duration[0])
+    filtered = filtered.filter((item) => item.duration <= filterItems.duration[0])
     return filtered
-  }, [filterItems])
+  }, [CourseData, filterItems])
+
+  const pagedData = useMemo(() => {
+    const start = (page - 1) * pageSize;
+    return filteredAndSortedData.slice(start, start + pageSize);
+  }, [filteredAndSortedData, page]);
+
+  const totalPages = Math.ceil(filteredAndSortedData.length / pageSize);
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'>
@@ -99,7 +116,19 @@ export default function CourseList() {
               filteredAndSortedData={filteredAndSortedData}
             />
 
-            {filteredAndSortedData.length > 0 ? <SearchGrid resources={filteredAndSortedData} /> : <EmptySearch />}
+            {pagedData.length > 0 ? (
+              <>
+                <SearchGrid resources={pagedData.map(item => ({ ...item, duration: formatDuration(item.duration) }))} />
+                
+                {/* Modern Pagination */}
+                <ModernPagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  onPageChange={setPage}
+                  className="mt-8"
+                />
+              </>
+            ) : <EmptySearch />}
           </div>
         </main>
       </div>
