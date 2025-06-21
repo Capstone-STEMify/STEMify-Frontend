@@ -3,8 +3,13 @@ import { motion } from 'framer-motion'
 import { CalendarFold, BookOpen, Heart } from 'lucide-react'
 import { TbDoorExit } from 'react-icons/tb'
 import { fadeInUp } from '@/utils/motion'
+import { Course } from '../../types/course'
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  course: Course
+}
+
+export default function HeroSection({ course }: HeroSectionProps) {
   return (
     <motion.section
       initial='hidden'
@@ -17,16 +22,15 @@ export default function HeroSection() {
           <div className='space-y-6'>
             <div className='inline-flex items-center rounded-full bg-amber-400 px-3 py-1 text-sm font-medium text-white'>
               <CalendarFold className='mr-2 h-4 w-4' />
-              Age Ranges: 8-14+
+              Age Ranges: {course.ageRangeLabel}
             </div>
 
             <h1 className='text-4xl leading-tight font-bold text-gray-900 lg:text-5xl'>
-              Database Design and Querying with SQL Server
+              {course.title}
             </h1>
 
             <p className='text-lg leading-relaxed text-gray-600'>
-              This course will help you understand relational databases and how to use SQL to design and query data. You
-              will learn how to create tables, query data, optimize queries, and manage databases.
+              {course.description}
             </p>
 
             <div className='pace-x-6 text-sm text-gray-600'>
@@ -34,7 +38,7 @@ export default function HeroSection() {
                 <p className='text-lg font-bold'>Category: </p>
                 <div className='flex w-fit items-center rounded-full bg-white px-3 py-1 text-sky-400'>
                   <BookOpen className='mr-2 h-4 w-4' />
-                  IT & Software
+                  {course.categoryNames[0]}
                 </div>
               </div>
               <div className='space-y-2'>

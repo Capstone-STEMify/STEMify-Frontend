@@ -2,35 +2,41 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, Clock, Users } from 'lucide-react'
 import { staggerContainer, staggerItem } from '@/utils/motion'
+import { Course } from '@/features/course/types/course'
+import { formatDuration } from '@/utils/index'
 
-const statsData = [
-  {
-    icon: BookOpen,
-    value: '1',
-    title: 'Course lessons',
-    subtitle: 'Comprehensive curriculum',
-    iconColor: 'text-blue-600',
-    bgColor: 'bg-blue-100'
-  },
-  {
-    icon: Clock,
-    value: '1',
-    title: 'Hour(s)',
-    subtitle: 'Self-paced learning',
-    iconColor: 'text-purple-600',
-    bgColor: 'bg-purple-100'
-  },
-  {
-    icon: Users,
-    value: '0',
-    title: 'Students',
-    subtitle: 'Join the community',
-    iconColor: 'text-red-500',
-    bgColor: 'bg-red-100'
-  }
-]
+interface StatsSectionProps {
+  course: Course
+}
 
-export default function StatsSection() {
+export default function StatsSection({ course }: StatsSectionProps) {
+  const statsData = [
+    {
+      icon: BookOpen,
+      value: course.numberOfSection?.toString() ?? '0',
+      title: 'Course section(s)',
+      subtitle: 'Comprehensive curriculum',
+      iconColor: 'text-blue-600',
+      bgColor: 'bg-blue-100'
+    },
+    {
+      icon: Clock,
+      value: formatDuration(course.duration),
+      title: 'Duration',
+      subtitle: 'Self-paced learning',
+      iconColor: 'text-purple-600',
+      bgColor: 'bg-purple-100'
+    },
+    {
+      icon: Users,
+      value: course.downloadCount?.toString() ?? '0',
+      title: 'Downloads',
+      subtitle: 'Join the community',
+      iconColor: 'text-red-500',
+      bgColor: 'bg-red-100'
+    }
+  ]
+
   return (
     <motion.section
       initial='hidden'
