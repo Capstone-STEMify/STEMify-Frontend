@@ -33,8 +33,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     <ModalContext.Provider value={{ openModal, closeModal, modalType, modalProps }}>
       {children}
 
-      {/* Example modal */}
-      {modalType === 'profile' && <UserFormModal {...modalProps} />}
+      {/* Add modal here */}
       {modalType === 'userForm' && <UserFormModal {...modalProps} />}
       {modalType === 'confirm' && <ConfirmModal {...modalProps} />}
     </ModalContext.Provider>

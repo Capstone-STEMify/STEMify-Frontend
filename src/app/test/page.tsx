@@ -64,9 +64,7 @@ export default function Test() {
       <Button className='bg-blue-300 py-2' onClick={() => openModal('userForm')}>
         open user form
       </Button>
-      <Button className='bg-blue-300 py-2' onClick={() => openModal('profile')}>
-        profile
-      </Button>
+
       <UserForm />
       <RichTextEditor content={post} onChange={onChange} />
     </div>
