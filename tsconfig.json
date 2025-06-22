@@ -38,6 +38,6 @@
     ".next/types/**/*.ts",
     "src/providers/ExcalidrawWrapper.tsx",
     "src/components/shared/CustomMenubar"
-  ],
+, "src/features/blockly-phaser/blockly/BlocklyEditor.js"  ],
   "exclude": ["node_modules"]
 }

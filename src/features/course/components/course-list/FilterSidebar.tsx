@@ -46,7 +46,7 @@ export default function FilterSidebar({ filterItems, updateFilter, resetFilters 
           <div className='px-6'>
             <Slider
               value={filterItems.duration}
-              max={600}
+              max={1200}
               step={60}
               onValueChange={(val) => updateFilter('duration', val)}
               trackClass='bg-gray-200'
@@ -66,8 +66,8 @@ export default function FilterSidebar({ filterItems, updateFilter, resetFilters 
             <SSelect
               placeholder='Select age range...'
               items={[
-                { value: '8-14+', content: '8-14 years old' },
-                { value: '10-16+', content: '10-16 years old' }
+                { value: '4-7', content: '4-7 years old' },
+                { value: '8-10', content: '8-10 years old' }
               ]}
               value={filterItems.age}
               onChange={(val) => updateFilter('age', val)}

@@ -1,5 +1,7 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
+import { useGetCourseByIdQuery } from '@/features/course/api/courseApi'
 import NavigationBar from './details/NavigationBar'
 import AboutSection from './details/AboutSection'
 import SkillSection from './details/SkillSection'
@@ -10,6 +12,9 @@ import HeroSection from './details/HeroSection'
 import StatsSection from './details/StatSection'
 
 export default function CourseDetails() {
+  const params = useParams()
+  const courseId = typeof params?.courseId === 'string' ? params.courseId : undefined
+  const { data: courseDetailsData, error, isLoading } = useGetCourseByIdQuery(courseId ?? '', { skip: !courseId })
   const [activeSection, setActiveSection] = useState('about')
 
   // Handle scroll to update active section
@@ -34,11 +39,17 @@ export default function CourseDetails() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  if (isLoading) return <div className='p-8'>Loading...</div>
+  if (error) return <div className='p-8 text-red-500'>Error loading course details.</div>
+  if (!courseDetailsData?.data) return <div className='p-8'>No course found.</div>
+
+  // Bạn có thể truyền data.data xuống các section bên dưới nếu cần
+
   return (
     <div className='min-h-screen bg-white'>
       <div className='relative mb-36'>
-        <HeroSection />
-        <StatsSection />
+        <HeroSection course={courseDetailsData.data} />
+        <StatsSection course={courseDetailsData.data} />
       </div>
       <NavigationBar activeSection={activeSection} setActiveSection={setActiveSection} />
       <AboutSection />

@@ -1,5 +1,7 @@
 import { Badge } from '@/components/shadcn/badge'
+import { Course } from '@/features/course/types/course'
 import { Size } from '@/types/general'
+import { formatDuration } from '@/utils/index'
 import { ChevronRightIcon, ClockFading } from 'lucide-react'
 import React from 'react'
 
@@ -36,7 +38,7 @@ type Resource = {
 }
 
 type Props = {
-  resource: Resource
+  resource: Course
   size?: Size
 }
 
@@ -50,14 +52,14 @@ export default function ResourceCard({ resource, size = 'xl' }: Props) {
       <div className='absolute -top-2 -right-2 h-6 w-6 rounded-full opacity-60 group-hover:animate-ping'></div>
 
       <div className={`relative ${height} overflow-hidden`}>
-        <img src={resource.image} alt={resource.title} className='h-full w-full object-cover' />
+        <img src={resource.imageUrl == "" ? '/HomeFiles/hcm.jpg' : resource.imageUrl} alt={resource.title} className='h-full w-full object-cover' />
 
         <div className='absolute bottom-4 left-4 flex gap-2'>
           <Badge className='bg-opacity-80 rounded-2xl bg-gray-200 px-4 py-2 text-black opacity-75 backdrop-blur-sm'>
-            {resource.category}
+            {resource.categoryNames}
           </Badge>
           <Badge className='bg-opacity-80 rounded-2xl bg-gray-200 px-4 text-black opacity-75 backdrop-blur-sm'>
-            {resource.age}
+            {resource.ageRangeLabel}
           </Badge>
         </div>
       </div>
