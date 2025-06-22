@@ -10,9 +10,9 @@ export default function HomeLayout({
 }>) {
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <main>{children}</main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   )
 }
