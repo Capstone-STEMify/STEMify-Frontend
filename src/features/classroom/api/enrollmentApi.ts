@@ -1,6 +1,5 @@
-import { Classroom } from '@/features/classroom/types/classroom'
 import { Enrollment } from '@/features/classroom/types/enrollment'
-import { injectCrudEndpoints } from '@/libs/redux/injectCrudEndpoints'
+import { createCrudApi } from '@/libs/redux/baseApi'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 import { EnrollmentStatus } from '@/types/enum'
 
@@ -10,9 +9,10 @@ export type EnrollmentParams = {
   classroomId?: string
 } & SearchPaginatedRequestParams
 
-export const classroomApi = injectCrudEndpoints<Enrollment, EnrollmentParams>({
+export const enrollmentApi = createCrudApi<Enrollment, EnrollmentParams>({
+  reducerPath: 'enrollmentApi',
   tagType: 'Enrollment',
   baseUrl: '/enrollments'
 })
 
-export const { useSearchQuery: useSearchEnrollmentQuery } = classroomApi
+export const { useSearchQuery: useSearchEnrollmentQuery } = enrollmentApi

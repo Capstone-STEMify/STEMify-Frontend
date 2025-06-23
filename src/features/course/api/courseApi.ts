@@ -1,9 +1,11 @@
-import { injectCrudEndpoints } from '@/libs/redux/injectCrudEndpoints'
+import { createCrudApi } from '@/libs/redux/baseApi'
 import { Course, CourseParams } from '../types/course'
 
-export const courseApi = injectCrudEndpoints<Course, CourseParams>({
+export const courseApi = createCrudApi<Course, CourseParams>({
+  reducerPath: 'courseApi',
   tagType: 'Course',
   baseUrl: '/courses'
+  
   // searchUrl: '/courses/search'
 })
 

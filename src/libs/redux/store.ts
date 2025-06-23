@@ -1,17 +1,14 @@
-import { baseApi } from '@/libs/redux/baseApi'
+import { apiMiddlewares } from '@/libs/redux/apiMiddleware'
+import { rootReducer } from '@/libs/redux/rootReducer'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const makeStore = () => {
   return configureStore({
-    reducer: {
-      [baseApi.reducerPath]: baseApi.reducer
-    },
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {}
-      })
-        // Middleware can be added
-        .concat(baseApi.middleware)
+      }).concat(apiMiddlewares)
   })
 }
 

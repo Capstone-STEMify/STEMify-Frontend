@@ -1,5 +1,5 @@
 import { Classroom } from '@/features/classroom/types/classroom'
-import { injectCrudEndpoints } from '@/libs/redux/injectCrudEndpoints'
+import { createCrudApi } from '@/libs/redux/baseApi'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 import { ClassroomStatus } from '@/types/enum'
 
@@ -8,7 +8,8 @@ export type ClassroomParams = {
   status?: ClassroomStatus
 } & SearchPaginatedRequestParams
 
-export const classroomApi = injectCrudEndpoints<Classroom, ClassroomParams>({
+export const classroomApi = createCrudApi<Classroom, ClassroomParams>({
+  reducerPath: 'classroomApi',
   tagType: 'Classroom',
   baseUrl: '/classrooms'
 })

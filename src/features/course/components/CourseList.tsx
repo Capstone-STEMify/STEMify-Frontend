@@ -5,10 +5,11 @@ import SearchHeader from './course-list/SearchHeader'
 import SearchGrid from './course-list/SearchGrid'
 import { Button } from '@/components/shadcn/button'
 import { Filter } from 'lucide-react'
-import EmptySearch from '../../../components/shared/search/EmptySearch'
+
 import SSheet from '@/components/shared/SSheet'
-import { useGetAllCourseQuery } from '../api/courseApi'
 import ModernPagination from '@/components/shared/paging/PagingComponent'
+import SEmpty from '@/components/shared/empty/SEmpty'
+import { useGetAllCourseQuery } from '@/features/course/api/courseApi'
 
 const categories = ['All', 'Course', 'Lesson', 'Activity']
 
@@ -126,7 +127,7 @@ export default function CourseList() {
                 <ModernPagination currentPage={page} totalPages={totalPages} onPageChange={setPage} className='mt-8' />
               </>
             ) : (
-              <EmptySearch />
+              <SEmpty title='No learning materials found' description='Try adjusting your search terms or filters' />
             )}
           </div>
         </main>
