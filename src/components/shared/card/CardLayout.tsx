@@ -41,7 +41,11 @@ export default function CardLayout({
     >
       {/* Image */}
       <div className={clsx('relative w-full', imageHeight)}>
-        <Image src={imageSrc} alt={alt} fill className='object-cover' />
+        {imageSrc === '' ? (
+          <Image src={'/HomeFiles/hcm.jpg'} alt={alt} fill className='object-cover' />
+        ) : (
+          <Image src={imageSrc} alt={alt} fill className='object-cover' />
+        )}
         {badge && <div className='absolute top-2 left-2'>{badge}</div>}
         {infor && <div className='absolute bottom-2 left-2'>{infor}</div>}
       </div>
