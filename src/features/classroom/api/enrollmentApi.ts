@@ -1,12 +1,13 @@
 import { Enrollment } from '@/features/classroom/types/enrollment'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
-import { EnrollmentStatus } from '@/types/enum'
+import { EnrollmentOrderBy, EnrollmentStatus } from '@/types/enum'
 
 export type EnrollmentParams = {
   studentId?: string
   status?: EnrollmentStatus
   classroomId?: string
+  orderBy?: EnrollmentOrderBy
 } & SearchPaginatedRequestParams
 
 export const enrollmentApi = createCrudApi<Enrollment, EnrollmentParams>({
@@ -15,4 +16,8 @@ export const enrollmentApi = createCrudApi<Enrollment, EnrollmentParams>({
   baseUrl: '/enrollments'
 })
 
-export const { useSearchQuery: useSearchEnrollmentQuery } = enrollmentApi
+export const {
+  useSearchQuery: useSearchEnrollmentQuery,
+  useGetAllQuery: useGetAllEnrollmentQuery,
+  useCreateMutation: useCreateEnrollmentMutaion
+} = enrollmentApi

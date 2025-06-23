@@ -6,21 +6,18 @@ import ClassroomHero from '@/features/classroom/components/classroom-list/Classr
 import { BookOpen, Plus } from 'lucide-react'
 import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
 import { useSearchClassroomQuery } from '@/features/classroom/api/classroomApi'
+import CardLayout from '@/components/shared/card/CardLayout'
+import SAvatar from '@/components/shared/SAvatar'
+import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
+import SEmpty from '@/components/shared/empty/SEmpty'
 
 export default function TeacherClassroomList() {
-  const { data: classroomData } = useSearchClassroomQuery({ teacherId: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d' })
+  const { data: classroomData, isLoading } = useSearchClassroomQuery({
+    teacherId: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d'
+  })
 
-  if (!classroomData) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <p className='text-gray-500'>Loading classrooms...</p>
-      </div>
-    )
-  }
-
-  const filteredData = classroomData.data.items
-  console.log('filteredData', filteredData)
-
+  const classrooms = classroomData?.data?.items ?? []
+  const isEmpty = !isLoading && classrooms.length === 0
   return (
     <div className='min-h-screen pb-30'>
       <ClassroomHero />
@@ -46,36 +43,50 @@ export default function TeacherClassroomList() {
             </Button>
           </div>
         </div>
-        <div className='grid grid-cols-1 justify-items-center space-y-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
-          {/* Replace with filter later */}
-          {/* {filteredData.map((classroom, index) => ( */}
-          {filteredData.map((classroom, index) => (
-            <ClassroomCard
-              key={index}
-              classroom={{
-                name: classroom.name,
-                image: classroom.coverImageUrl,
-                member: classroom.numberOfStudents,
-                avatar: classroom.students
-                  .filter((s) => !!s.studentImageUrl)
-                  .slice(0, 3)
-                  .map((s) => s.studentImageUrl)
-              }}
-              size='lg'
-            />
-          ))}
-        </div>
 
-        {/* Empty State */}
-        {filteredData.length === 0 && (
-          <div className='py-12 text-center'>
-            <div className='mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gray-200'>
-              <BookOpen className='h-8 w-8 text-gray-400' />
-            </div>
-            <h3 className='mb-2 text-lg font-semibold text-gray-900'>No classrooms found</h3>
-            <p className='text-gray-500'>Try adjusting your search or filter criteria</p>
-          </div>
+        {isEmpty && (
+          <SEmpty
+            title='No classrooms found'
+            description='You have not created any classrooms yet.'
+            icon={<BookOpen className='h-10 w-10 text-gray-400' />}
+          />
         )}
+
+        {/* Grid list */}
+        <div className='grid grid-cols-1 justify-items-center-safe space-y-10 lg:grid-cols-3 xl:grid-cols-4'>
+          {isLoading && Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />)}
+
+          {!isLoading &&
+            classrooms.length > 0 &&
+            classrooms.map((classroom, index) => (
+              <CardLayout key={index} imageSrc={classroom.coverImageUrl}>
+                <div className='w-full'>
+                  <h3 className='text-lg font-semibold text-gray-900'>{classroom.name}</h3>
+                  <p className='text-sm text-gray-500'>{classroom.description}</p>
+                </div>
+                <div className='mt-auto flex items-center justify-between'>
+                  {/* member avatar */}
+                  <div className='*:data-[slot=avatar]:ring-background mt-1 flex -space-x-2 *:data-[slot=avatar]:ring-2'>
+                    {classroom.students.map((ava, index) => (
+                      <SAvatar className='h-7 w-7' src={ava.studentImageUrl ?? ''} fallback='STEM' key={index} />
+                    ))}
+
+                    {classroom.numberOfStudents > 3 && (
+                      <div
+                        key='more'
+                        className='z-10 flex h-7 w-7 items-center justify-center rounded-full bg-gray-300 text-xs font-medium text-gray-700'
+                        data-slot='avatar'
+                      >
+                        {classroom.numberOfStudents - 3}
+                      </div>
+                    )}
+                  </div>
+
+                  <span className='text-sm text-gray-500'>Members: {classroom.numberOfStudents}</span>
+                </div>
+              </CardLayout>
+            ))}
+        </div>
       </div>
     </div>
   )

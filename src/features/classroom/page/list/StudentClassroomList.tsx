@@ -1,67 +1,99 @@
 'use client'
 
-import { Button } from '@/components/shadcn/button'
-import SearchBar from '@/components/shared/search/SearchBar'
+import Link from 'next/link'
 import SSelect from '@/components/shared/SSelect'
+import SEmpty from '@/components/shared/empty/SEmpty'
+import CardLayout from '@/components/shared/card/CardLayout'
+import SearchBar from '@/components/shared/search/SearchBar'
 import ClassroomHero from '@/features/classroom/components/classroom-list/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
-import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
-import Link from 'next/link'
-import { useSearchEnrollmentQuery } from '@/features/classroom/api/enrollmentApi'
-import CardLayout from '@/components/shared/card/CardLayout'
+import { Button } from '@/components/shadcn/button'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
-import SEmpty from '@/components/shared/empty/SEmpty'
+import { useSearchEnrollmentQuery } from '@/features/classroom/api/enrollmentApi'
+import { useState } from 'react'
+import { EnrollmentOrderBy, EnrollmentStatus } from '@/types/enum'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function StudentClassroomList() {
+  const { openModal } = useModal()
+
+  const [searchQuery, setSearchQuery] = useState('')
+  const [sortOrder, setSortOrder] = useState<EnrollmentOrderBy>(EnrollmentOrderBy.ENROLLDATE_DESC)
+  const [status, setStatus] = useState<EnrollmentStatus | undefined>(undefined)
+
   const { data: classroomData, isLoading } = useSearchEnrollmentQuery({
-    studentId: 'f21b8c67-3d49-4c4f-84e7-2b76f017ecb2'
+    studentId: 'f21b8c67-3d49-4c4f-84e7-2b76f017ecb2',
+    search: searchQuery,
+    orderBy: sortOrder,
+    status: status
   })
 
   const classrooms = classroomData?.data?.items ?? []
   const isEmpty = !isLoading && classrooms.length === 0
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+  }
+
   return (
     <div className='min-h-screen pb-30'>
       <ClassroomHero />
-
-      <ClassRoomManagement />
-
-      <div className='mx-auto max-w-7xl'>
+      <div className='mx-auto mt-20 max-w-7xl'>
         <div className='text-center text-3xl font-semibold'>Your classroom list</div>
         <p className='mb-6 text-center text-gray-500'>
-          Manage your classrooms, invite students, and track their progress.
+          Here you can find all the classrooms you are enrolled in. You can search, filter, and manage your classrooms
+          easily.
         </p>
 
         {/* Header controls */}
         <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-          <SearchBar />
-          <div className='flex items-center justify-between gap-4 sm:justify-start'>
+          <SearchBar onSearch={handleSearch} />
+
+          <div className='flex flex-wrap gap-4'>
             <SSelect
               items={[
-                { value: 'all', content: 'All' },
-                { value: 'recently', content: 'Recently' }
+                { value: EnrollmentStatus.ALL, content: 'All status' },
+                { value: EnrollmentStatus.ACTIVE, content: 'Active' },
+                { value: EnrollmentStatus.PENDING, content: 'Pending' },
+                { value: EnrollmentStatus.WITHDRAWN, content: 'Withdrawn' }
               ]}
-              placeholder='Filter by subject'
-              value='all'
-              onChange={(value) => console.log(value)}
+              value={status ?? EnrollmentStatus.ALL}
+              onChange={(value) => {
+                setStatus(value === EnrollmentStatus.ALL ? undefined : (value as EnrollmentStatus))
+              }}
+              placeholder='Filter by status'
             />
-            <Button size='icon' className='bg-amber-custom-400 rounded-full font-bold'>
-              <Plus />
+
+            <SSelect
+              items={[
+                { value: EnrollmentOrderBy.ENROLLDATE_DESC, content: 'Newest first' },
+                { value: EnrollmentOrderBy.ENROLLDATE_ASC, content: 'Oldest first' },
+                { value: EnrollmentOrderBy.CLASSROOM_NAME_ASC, content: 'Name A-Z' },
+                { value: EnrollmentOrderBy.CLASSROOM_NAME_DESC, content: 'Name Z-A' }
+              ]}
+              value={sortOrder}
+              onChange={(value) => setSortOrder(value as EnrollmentOrderBy)}
+              placeholder='Sort by'
+            />
+
+            <Button variant='outline' className='flex items-center gap-2' onClick={() => openModal('enroll')}>
+              <Plus className='h-4 w-4' />
+              Enroll in a classroom
             </Button>
           </div>
         </div>
 
-        {/* Grid list */}
-        <div className='grid grid-cols-1 space-y-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
-          {isLoading && Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />)}
+        {isEmpty && (
+          <SEmpty
+            title='No classrooms found'
+            description='You have not enrolled in any classrooms yet.'
+            icon={<BookOpen className='h-10 w-10 text-gray-400' />}
+          />
+        )}
 
-          {isEmpty && (
-            <SEmpty
-              title='No classrooms found'
-              description='You have not enrolled in any classrooms yet.'
-              icon={<BookOpen className='h-10 w-10 text-gray-400' />}
-            />
-          )}
+        {/* Grid list */}
+        <div className='grid grid-cols-1 justify-items-center-safe space-y-10 lg:grid-cols-3 xl:grid-cols-4'>
+          {isLoading && Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />)}
 
           {!isLoading &&
             classrooms.length > 0 &&
