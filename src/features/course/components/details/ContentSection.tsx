@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
-import ResourceCard from '@/components/shared/card/ResourceCard'
 import { fadeInUp } from '@/utils/motion'
+import CardLayout from '@/components/shared/card/CardLayout'
+import { Badge } from '@/components/shadcn/badge'
+import { formatDuration } from '@/utils/index'
 
 export default function ContentSection() {
   // Sample lesson cards data
@@ -11,7 +13,7 @@ export default function ContentSection() {
       image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop',
       category: 'ACTIVITY',
       age: '4-14+',
-      duration: '30:00'
+      duration: 30
     },
     {
       title: 'Health and Safety',
@@ -20,7 +22,7 @@ export default function ContentSection() {
       image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop',
       category: 'ACTIVITY',
       age: '4-14+',
-      duration: '30:00'
+      duration: 30
     },
     {
       title: 'Using Tools',
@@ -28,7 +30,7 @@ export default function ContentSection() {
       image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop',
       category: 'ACTIVITY',
       age: '4-14+',
-      duration: '30:00'
+      duration: 30
     },
     {
       title: 'Transportation',
@@ -36,7 +38,7 @@ export default function ContentSection() {
       image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&h=300&fit=crop',
       category: 'ACTIVITY',
       age: '4-14+',
-      duration: '30:00'
+      duration: 30
     },
     {
       title: 'My Culture',
@@ -44,7 +46,7 @@ export default function ContentSection() {
       image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop',
       category: 'ACTIVITY',
       age: '4-14+',
-      duration: '30:00'
+      duration: 30
     },
     {
       title: 'Our World',
@@ -52,13 +54,13 @@ export default function ContentSection() {
       image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
       category: 'ACTIVITY',
       age: '4-14+',
-      duration: '30:00'
+      duration: 30
     }
   ]
 
   return (
     <motion.section
-      id='courses'
+      id='lessons'
       initial='hidden'
       whileInView='visible'
       viewport={{ once: true }}
@@ -66,7 +68,7 @@ export default function ContentSection() {
       className='bg-white py-12 md:py-16'
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <h2 className='mb-8 text-center text-2xl font-bold text-gray-900 sm:text-3xl md:text-left'>Course Content</h2>
+        <h2 className='mb-8 text-center text-2xl font-bold text-gray-900 sm:text-3xl md:text-left'>Lelesson Content</h2>
 
         <div className='mb-8 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-gray-600 md:justify-start'>
           <span>📚 6 activities</span>
@@ -79,7 +81,17 @@ export default function ContentSection() {
           <div className='max-h-[800px] overflow-y-auto p-5'>
             <div className='grid grid-cols-1 gap-6 pr-2 md:grid-cols-2 lg:grid-cols-3'>
               {lessons.map((lesson, index) => (
-                <ResourceCard key={index} resource={lesson} />
+                <CardLayout size='lg' key={index} imageSrc={lesson.image} infor={<Badge>{lesson.category}</Badge>}>
+                  <div className='flex min-h-0 flex-1 flex-col'>
+                    <h3 className='text-lg font-semibold'>{lesson.title}</h3>
+                    <p className='text-sm text-gray-600'>{lesson.description}</p>
+                    {/* footer */}
+                    <div className='mt-auto flex items-center gap-2'>
+                      <Badge className='bg-blue-100 text-blue-800'>{lesson.age}</Badge>
+                      <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
+                    </div>
+                  </div>
+                </CardLayout>
               ))}
             </div>
           </div>

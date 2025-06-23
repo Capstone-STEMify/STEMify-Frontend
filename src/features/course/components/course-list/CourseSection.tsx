@@ -2,6 +2,7 @@
 import { Badge } from '@/components/shadcn/badge'
 import { useSearchCourseQuery } from '../../api/courseApi'
 import CardLayout from '@/components/shared/card/CardLayout'
+import { formatDuration } from '@/utils/index'
 
 export default function CourseSection() {
   const { data: CourseData, error, isLoading } = useSearchCourseQuery({ pageSize: 6 })
@@ -16,9 +17,7 @@ export default function CourseSection() {
               {/* footer */}
               <div className='mt-auto flex items-center gap-2'>
                 <Badge className='bg-blue-100 text-blue-800'>{course.ageRangeLabel}</Badge>
-                <Badge className='bg-green-100 text-green-800'>
-                  {course.duration ? `${Math.floor(course.duration / 60)} min` : 'N/A'}
-                </Badge>
+                <Badge className='bg-green-100 text-green-800'>{formatDuration(course.duration)}</Badge>
               </div>
             </div>
           </CardLayout>

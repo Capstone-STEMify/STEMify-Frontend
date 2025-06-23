@@ -1,5 +1,7 @@
 'use client'
-import ResourceCard from '@/components/shared/card/ResourceCard'
+import { Badge } from '@/components/shadcn/badge'
+import CardLayout from '@/components/shared/card/CardLayout'
+import { formatDuration } from '@/utils/index'
 import React from 'react'
 
 export default function ExploreResourcesSection() {
@@ -10,7 +12,7 @@ export default function ExploreResourcesSection() {
       image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop&auto=format',
       category: 'Animals',
       age: '8-14+',
-      duration: '6:00:00'
+      duration: 360
     },
     {
       title: 'Text to video',
@@ -18,7 +20,7 @@ export default function ExploreResourcesSection() {
       image: 'https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?w=400&h=300&fit=crop&auto=format',
       category: 'Biology',
       age: '8-14+',
-      duration: '6:00:00'
+      duration: 360
     },
     {
       title: 'Boards (beta)',
@@ -26,7 +28,7 @@ export default function ExploreResourcesSection() {
       image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop&auto=format',
       category: 'Coding',
       age: '8-14+',
-      duration: '6:00:00'
+      duration: 360
     }
   ]
 
@@ -44,7 +46,17 @@ export default function ExploreResourcesSection() {
 
         <div className='mx-auto grid max-w-7xl gap-6 md:grid-cols-3'>
           {resources.map((resource, index) => (
-            <ResourceCard key={index} resource={resource} />
+            <CardLayout size='lg' key={index} imageSrc={resource.image} infor={<Badge>{resource.category}</Badge>}>
+              <div className='flex min-h-0 flex-1 flex-col'>
+                <h3 className='text-lg font-semibold'>{resource.title}</h3>
+                <p className='text-sm text-gray-600'>{resource.description}</p>
+                {/* footer */}
+                <div className='mt-auto flex items-center gap-2'>
+                  <Badge className='bg-blue-100 text-blue-800'>{resource.age}</Badge>
+                  <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
+                </div>
+              </div>
+            </CardLayout>
           ))}
         </div>
 

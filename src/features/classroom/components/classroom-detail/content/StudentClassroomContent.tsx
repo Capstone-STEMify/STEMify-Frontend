@@ -1,5 +1,4 @@
 import { LessonCard } from '@/components/shared/card/LessonCard'
-import ResourceCard from '@/components/shared/card/ResourceCard'
 import ClassroomDetailAction from '@/features/classroom/components/classroom-detail/content/shared/ClassroomDetailAction'
 import { dummyCardData } from '@/utils/mockData'
 
