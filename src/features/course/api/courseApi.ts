@@ -1,10 +1,10 @@
-import { injectCrudEndpoints } from "@/libs/redux/injectCrudEndpoints";
-import { Course, CourseParams } from "../types/course";
+import { injectCrudEndpoints } from '@/libs/redux/injectCrudEndpoints'
+import { Course, CourseParams } from '../types/course'
 
 export const courseApi = injectCrudEndpoints<Course, CourseParams>({
-    tagType: 'Course',
-    baseUrl: '/courses',
-    // searchUrl: '/courses/search'
+  tagType: 'Course',
+  baseUrl: '/courses'
+  // searchUrl: '/courses/search'
 })
 
 export const {
@@ -19,5 +19,4 @@ export const {
   useLazySearchQuery: useLazySearchCourseQuery,
   useLazyGetAllQuery: useLazyGetAllCourseQuery,
   useLazyGetByIdQuery: useLazyGetCourseByIdQuery
-
 } = courseApi

@@ -40,13 +40,14 @@ export default function CourseDetails() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  if (isLoading) return <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
-            <LoadingComponent size={150} />
-          </div>
+  if (isLoading)
+    return (
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
   if (error) return <div className='p-8 text-red-500'>Error loading course details.</div>
   if (!courseDetailsData?.data) return <div className='p-8'>No course found.</div>
-
-  // Bạn có thể truyền data.data xuống các section bên dưới nếu cần
 
   return (
     <div className='min-h-screen bg-white'>

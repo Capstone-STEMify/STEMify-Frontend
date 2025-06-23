@@ -13,10 +13,12 @@ import ModernPagination from '@/components/shared/paging/PagingComponent'
 const categories = ['All', 'Course', 'Lesson', 'Activity']
 
 const formatDuration = (minutes: number) => {
-  const h = Math.floor(minutes / 60).toString().padStart(2, '0');
-  const m = (minutes % 60).toString().padStart(2, '0');
-  return `${h}:${m}:00`;
-};
+  const h = Math.floor(minutes / 60)
+    .toString()
+    .padStart(2, '0')
+  const m = (minutes % 60).toString().padStart(2, '0')
+  return `${h}:${m}:00`
+}
 
 const initialFilterItems = {
   sortBy: 'relevant',
@@ -29,10 +31,10 @@ const initialFilterItems = {
 export default function CourseList() {
   const [filterItems, setFilterItems] = useState(initialFilterItems)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [page, setPage] = useState(1);
-  const pageSize = 6;
-  const { data: CourseData, error, isLoading } = useGetAllCourseQuery();
-  console.log('CourseData', CourseData, 'error', error, 'isLoading', isLoading);
+  const [page, setPage] = useState(1)
+  const pageSize = 6
+  const { data: CourseData, error, isLoading } = useGetAllCourseQuery()
+  console.log('CourseData', CourseData, 'error', error, 'isLoading', isLoading)
 
   const updateFilters = (key: keyof typeof filterItems, value: any) => {
     setFilterItems((prev) => ({
@@ -46,8 +48,8 @@ export default function CourseList() {
   }
 
   useEffect(() => {
-    setPage(1);
-  }, [filterItems]);
+    setPage(1)
+  }, [filterItems])
 
   const filteredAndSortedData = useMemo(() => {
     let filtered = CourseData?.data?.items || []
@@ -75,11 +77,11 @@ export default function CourseList() {
   }, [CourseData, filterItems])
 
   const pagedData = useMemo(() => {
-    const start = (page - 1) * pageSize;
-    return filteredAndSortedData.slice(start, start + pageSize);
-  }, [filteredAndSortedData, page]);
+    const start = (page - 1) * pageSize
+    return filteredAndSortedData.slice(start, start + pageSize)
+  }, [filteredAndSortedData, page])
 
-  const totalPages = Math.ceil(filteredAndSortedData.length / pageSize);
+  const totalPages = Math.ceil(filteredAndSortedData.length / pageSize)
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'>
@@ -116,17 +118,16 @@ export default function CourseList() {
 
             {pagedData.length > 0 ? (
               <>
-                <SearchGrid resources={pagedData.map(item => ({ ...item, duration: formatDuration(item.duration) }))} />
-                
-                {/* Modern Pagination */}
-                <ModernPagination
-                  currentPage={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                  className="mt-8"
+                <SearchGrid
+                  resources={pagedData.map((item) => ({ ...item, duration: formatDuration(item.duration) }))}
                 />
+
+                {/* Modern Pagination */}
+                <ModernPagination currentPage={page} totalPages={totalPages} onPageChange={setPage} className='mt-8' />
               </>
-            ) : <EmptySearch />}
+            ) : (
+              <EmptySearch />
+            )}
           </div>
         </main>
       </div>
