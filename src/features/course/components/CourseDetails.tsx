@@ -10,6 +10,7 @@ import ReviewSection from './details/ReviewSection'
 import RecommendationSection from './details/RecommendationSection'
 import HeroSection from './details/HeroSection'
 import StatsSection from './details/StatSection'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 export default function CourseDetails() {
   const params = useParams()
@@ -39,7 +40,9 @@ export default function CourseDetails() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  if (isLoading) return <div className='p-8'>Loading...</div>
+  if (isLoading) return <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+            <LoadingComponent size={150} />
+          </div>
   if (error) return <div className='p-8 text-red-500'>Error loading course details.</div>
   if (!courseDetailsData?.data) return <div className='p-8'>No course found.</div>
 
@@ -53,7 +56,7 @@ export default function CourseDetails() {
       </div>
       <NavigationBar activeSection={activeSection} setActiveSection={setActiveSection} />
       <AboutSection />
-      <SkillSection />
+      <SkillSection course={courseDetailsData.data} />
       <ContentSection />
       <RecommendationSection />
     </div>

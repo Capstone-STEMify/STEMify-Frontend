@@ -36,12 +36,14 @@ export default function HeroSection({ course }: HeroSectionProps) {
             <div className='pace-x-6 text-sm text-gray-600'>
               <div className='mb-4 flex items-center gap-2'>
                 <p className='text-lg font-bold'>Category: </p>
-                <div className='flex w-fit items-center rounded-full bg-white px-3 py-1 text-sky-400'>
+                {course.categoryNames.map((category, index) => (
+                  <div key={index} className='flex w-fit items-center rounded-full bg-white px-3 py-1 text-sky-400'>
                   <BookOpen className='mr-2 h-4 w-4' />
-                  {course.categoryNames[0]}
+                  {category}
                 </div>
+                ))}
               </div>
-              <div className='space-y-2'>
+              {/* <div className='space-y-2'>
                 <p className='text-lg font-bold'>Grades</p>
                 <div className='space-y-1 text-sm text-gray-600'>
                   <div>
@@ -55,7 +57,7 @@ export default function HeroSection({ course }: HeroSectionProps) {
                     <span className='font-medium'>UK - Scotland:</span> Early Learning and Childcare, S1, P1
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className='flex flex-col gap-4 sm:flex-row'>
