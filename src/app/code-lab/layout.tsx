@@ -2,8 +2,8 @@ import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/header/Header'
 import { metadata } from 'app/layout'
 
-metadata.title = 'Stemify Education'
-export default function HomeLayout({
+metadata.title = 'Code Lab'
+export default async function CodeLabLayout({
   children
 }: Readonly<{
   children: React.ReactNode
