@@ -24,7 +24,6 @@ export default function HeaderNavigation() {
                 }`}
               >
                 {item.name}
-                {/* Underline effect */}
                 <span
                   className={`bg-amber-custom-400 absolute bottom-0 left-0 h-0.5 transition-all duration-300 ${
                     isActive ? 'w-full' : 'w-0 group-hover:w-full'

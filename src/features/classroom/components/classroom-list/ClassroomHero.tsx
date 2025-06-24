@@ -2,7 +2,7 @@ import { BookOpen } from 'lucide-react'
 
 export default function ClassroomHero() {
   return (
-    <div className='h-fit overflow-hidden'>
+    <div className='mt-24 h-fit overflow-hidden'>
       <div className='relative overflow-hidden bg-gradient-to-br from-blue-600 via-sky-600 to-yellow-600 px-8 py-10 text-white'>
         {/* Animated Background Elements */}
         <div className='absolute inset-0 overflow-hidden'>

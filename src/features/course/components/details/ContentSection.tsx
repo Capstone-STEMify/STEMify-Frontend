@@ -4,6 +4,8 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { formatDuration } from '@/utils/index'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
+import { BookOpen, Clock, Target } from 'lucide-react'
+import { SPagination } from '@/components/shared/SPagination'
 
 export default function ContentSection() {
   const lessons = [
@@ -68,36 +70,51 @@ export default function ContentSection() {
       className='scroll-mt-24 bg-white py-12'
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <h2 className='mb-8 text-center text-2xl font-bold text-gray-900 sm:text-3xl md:text-left'>Lesson Content</h2>
+        <div className='mb-12 text-center'>
+          <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>Lesson Content</h2>
+          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>
+            Engaging activities designed to inspire learning and growth
+          </p>
 
-        <div className='mb-8 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-gray-600 md:justify-start'>
-          <span>📚 6 activities</span>
-          <span>🎯 Interactive lessons</span>
-          <span>⏱️ 3 hours total</span>
+          {/* Stats */}
+          <div className='flex flex-wrap justify-center gap-6 text-sm'>
+            <div className='flex items-center gap-2 text-gray-700'>
+              <BookOpen className='h-4 w-4 text-blue-600' />
+              <span className='font-medium'>6 activities</span>
+            </div>
+            <div className='flex items-center gap-2 text-gray-700'>
+              <Target className='h-4 w-4 text-green-600' />
+              <span className='font-medium'>Interactive lessons</span>
+            </div>
+            <div className='flex items-center gap-2 text-gray-700'>
+              <Clock className='h-4 w-4 text-purple-600' />
+              <span className='font-medium'>3 hours total</span>
+            </div>
+          </div>
         </div>
 
         {/* Lesson Cards Section */}
-        <ScrollArea className='h-[750px] overflow-y-auto'>
-          <div className='grid grid-cols-1 gap-6 pr-2 md:grid-cols-2 lg:grid-cols-4'>
-            {lessons.map((lesson, index) => (
-              <CardLayout
-                key={index}
-                imageSrc={lesson.image}
-                infor={<Badge className='bg-skye-custom-600 p-1'>{lesson.category}</Badge>}
-              >
-                <div className='flex min-h-0 flex-1 flex-col'>
-                  <h3 className='text-lg font-semibold'>{lesson.title}</h3>
-                  <p className='text-sm text-gray-600'>{lesson.description}</p>
-                  {/* footer */}
-                  <div className='mt-auto flex items-center gap-2'>
-                    <Badge className='bg-blue-100 text-blue-800'>{lesson.age}</Badge>
-                    <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
-                  </div>
+        {/* use pagination */}
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
+          {lessons.map((lesson, index) => (
+            <CardLayout
+              key={index}
+              imageSrc={lesson.image}
+              infor={<Badge className='bg-skye-custom-600 p-1'>{lesson.category}</Badge>}
+            >
+              <div className='flex min-h-0 flex-1 flex-col'>
+                <h3 className='text-lg font-semibold'>{lesson.title}</h3>
+                <p className='text-sm text-gray-600'>{lesson.description}</p>
+                {/* footer */}
+                <div className='mt-auto flex items-center gap-2'>
+                  <Badge className='bg-blue-100 text-blue-800'>{lesson.age}</Badge>
+                  <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
                 </div>
-              </CardLayout>
-            ))}
-          </div>
-        </ScrollArea>
+              </div>
+            </CardLayout>
+          ))}
+        </div>
+        <SPagination pageNumber={1} totalPages={5} onPageChanged={() => {}} className='mt-10' />
       </div>
     </motion.section>
   )
