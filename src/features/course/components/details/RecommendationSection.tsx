@@ -38,7 +38,7 @@ export default function RecommendationSection() {
       whileInView='visible'
       viewport={{ once: true }}
       variants={staggerContainer}
-      className='bg-white py-16'
+      className='scroll-mt-24 bg-white py-16'
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <motion.h2 variants={staggerItem} className='mb-8 text-3xl font-bold text-gray-900'>

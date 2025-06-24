@@ -15,7 +15,7 @@ export default function HeroSection({ course }: HeroSectionProps) {
       initial='hidden'
       animate='visible'
       variants={fadeInUp}
-      className='bg-gradient-to-br from-sky-200 to-blue-100 py-26'
+      className='mt-12 bg-gradient-to-br from-sky-200 to-blue-100 py-26'
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='grid items-center gap-12 lg:grid-cols-2'>
@@ -25,22 +25,18 @@ export default function HeroSection({ course }: HeroSectionProps) {
               Age Ranges: {course.ageRangeLabel}
             </div>
 
-            <h1 className='text-4xl leading-tight font-bold text-gray-900 lg:text-5xl'>
-              {course.title}
-            </h1>
+            <h1 className='text-4xl leading-tight font-bold text-gray-900 lg:text-5xl'>{course.title}</h1>
 
-            <p className='text-lg leading-relaxed text-gray-600'>
-              {course.description}
-            </p>
+            <p className='text-lg leading-relaxed text-gray-600'>{course.description}</p>
 
             <div className='pace-x-6 text-sm text-gray-600'>
               <div className='mb-4 flex items-center gap-2'>
                 <p className='text-lg font-bold'>Category: </p>
                 {course.categoryNames.map((category, index) => (
                   <div key={index} className='flex w-fit items-center rounded-full bg-white px-3 py-1 text-sky-400'>
-                  <BookOpen className='mr-2 h-4 w-4' />
-                  {category}
-                </div>
+                    <BookOpen className='mr-2 h-4 w-4' />
+                    {category}
+                  </div>
                 ))}
               </div>
               {/* <div className='space-y-2'>

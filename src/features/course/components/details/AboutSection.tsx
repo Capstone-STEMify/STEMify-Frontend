@@ -1,15 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { CheckCircle } from 'lucide-react' // Ensure this is the correct icon if you prefer the one in the image
 import { fadeInUp } from '@/utils/motion'
-
-// Sample learning points based on the image
-const learningPoints = [
-  'Design and query databases with SQL',
-  'Understand relational database concepts',
-  'Learn to normalize data effectively',
-  'Write complex SQL queries for data analysis'
-]
 
 export default function AboutSection() {
   return (
@@ -19,7 +10,7 @@ export default function AboutSection() {
       whileInView='visible'
       viewport={{ once: true }}
       variants={fadeInUp}
-      className='bg-white py-16'
+      className='scroll-mt-40 bg-white py-16'
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='grid items-start gap-x-12 gap-y-10 lg:grid-cols-2'>

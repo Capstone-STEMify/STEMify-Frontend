@@ -3,15 +3,15 @@ import { fadeInUp } from '@/utils/motion'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { formatDuration } from '@/utils/index'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
 
 export default function ContentSection() {
-  // Sample lesson cards data
   const lessons = [
     {
       title: 'Plants and Animals',
       description: 'Connect with the natural world and learn about the plants and animals that live within.',
       image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop',
-      category: 'ACTIVITY',
+      category: 'Activity',
       age: '4-14+',
       duration: 30
     },
@@ -20,7 +20,7 @@ export default function ContentSection() {
       description:
         'Practice safety skills when it comes to the road and take care of your growing body to become independent.',
       image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop',
-      category: 'ACTIVITY',
+      category: 'Activity',
       age: '4-14+',
       duration: 30
     },
@@ -28,7 +28,7 @@ export default function ContentSection() {
       title: 'Using Tools',
       description: "Let's look at home for the tools we use in our everyday lives.",
       image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop',
-      category: 'ACTIVITY',
+      category: 'Activity',
       age: '4-14+',
       duration: 30
     },
@@ -36,7 +36,7 @@ export default function ContentSection() {
       title: 'Transportation',
       description: 'Explore and compare the different types of transportation methods.',
       image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&h=300&fit=crop',
-      category: 'ACTIVITY',
+      category: 'Activity',
       age: '4-14+',
       duration: 30
     },
@@ -44,7 +44,7 @@ export default function ContentSection() {
       title: 'My Culture',
       description: 'Create symbolic cultural works of art.',
       image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop',
-      category: 'ACTIVITY',
+      category: 'Activity',
       age: '4-14+',
       duration: 30
     },
@@ -52,7 +52,7 @@ export default function ContentSection() {
       title: 'Our World',
       description: 'About the world, the people, and cultures that make it diverse.',
       image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-      category: 'ACTIVITY',
+      category: 'Activity',
       age: '4-14+',
       duration: 30
     }
@@ -65,10 +65,10 @@ export default function ContentSection() {
       whileInView='visible'
       viewport={{ once: true }}
       variants={fadeInUp}
-      className='bg-white py-12 md:py-16'
+      className='scroll-mt-24 bg-white py-12'
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <h2 className='mb-8 text-center text-2xl font-bold text-gray-900 sm:text-3xl md:text-left'>Lelesson Content</h2>
+        <h2 className='mb-8 text-center text-2xl font-bold text-gray-900 sm:text-3xl md:text-left'>Lesson Content</h2>
 
         <div className='mb-8 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-gray-600 md:justify-start'>
           <span>📚 6 activities</span>
@@ -77,25 +77,27 @@ export default function ContentSection() {
         </div>
 
         {/* Lesson Cards Section */}
-        <div className='w-full'>
-          <div className='max-h-[800px] overflow-y-auto p-5'>
-            <div className='grid grid-cols-1 gap-6 pr-2 md:grid-cols-2 lg:grid-cols-3'>
-              {lessons.map((lesson, index) => (
-                <CardLayout size='lg' key={index} imageSrc={lesson.image} infor={<Badge>{lesson.category}</Badge>}>
-                  <div className='flex min-h-0 flex-1 flex-col'>
-                    <h3 className='text-lg font-semibold'>{lesson.title}</h3>
-                    <p className='text-sm text-gray-600'>{lesson.description}</p>
-                    {/* footer */}
-                    <div className='mt-auto flex items-center gap-2'>
-                      <Badge className='bg-blue-100 text-blue-800'>{lesson.age}</Badge>
-                      <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
-                    </div>
+        <ScrollArea className='h-[750px] overflow-y-auto'>
+          <div className='grid grid-cols-1 gap-6 pr-2 md:grid-cols-2 lg:grid-cols-4'>
+            {lessons.map((lesson, index) => (
+              <CardLayout
+                key={index}
+                imageSrc={lesson.image}
+                infor={<Badge className='bg-skye-custom-600 p-1'>{lesson.category}</Badge>}
+              >
+                <div className='flex min-h-0 flex-1 flex-col'>
+                  <h3 className='text-lg font-semibold'>{lesson.title}</h3>
+                  <p className='text-sm text-gray-600'>{lesson.description}</p>
+                  {/* footer */}
+                  <div className='mt-auto flex items-center gap-2'>
+                    <Badge className='bg-blue-100 text-blue-800'>{lesson.age}</Badge>
+                    <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
                   </div>
-                </CardLayout>
-              ))}
-            </div>
+                </div>
+              </CardLayout>
+            ))}
           </div>
-        </div>
+        </ScrollArea>
       </div>
     </motion.section>
   )

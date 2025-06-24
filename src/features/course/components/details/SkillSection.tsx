@@ -9,33 +9,6 @@ interface HeroSectionProps {
 }
 
 export default function SkillSection({ course }: HeroSectionProps) {
-  const outcomes = [
-    {
-      title: 'Ways to create and describe a game concept',
-      items: [
-        'Ways to create and describe a game concept',
-        'Ways to create and describe a game concept',
-        'Ways to create and describe a game concept'
-      ]
-    },
-    {
-      title: 'Concepts and approaches involved in creating successful character designs',
-      items: [
-        'Concepts and approaches involved in creating successful character designs',
-        'Concepts and approaches involved in creating successful character designs',
-        'Concepts and approaches involved in creating successful character designs'
-      ]
-    },
-    {
-      title: 'Evaluation and interpretation of different story styles',
-      items: [
-        'Evaluation and interpretation of different story styles',
-        'Evaluation and interpretation of different story styles',
-        'Evaluation and interpretation of different story styles'
-      ]
-    }
-  ]
-
   return (
     <motion.section
       id='skill'
@@ -43,7 +16,7 @@ export default function SkillSection({ course }: HeroSectionProps) {
       whileInView='visible'
       viewport={{ once: true }}
       variants={staggerContainer}
-      className='bg-gray-50 py-16'
+      className='scroll-mt-32 bg-gray-50 py-16'
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <motion.h2 variants={staggerItem} className='mb-12 text-center text-3xl font-bold text-gray-900'>
@@ -53,10 +26,10 @@ export default function SkillSection({ course }: HeroSectionProps) {
         <div className='grid gap-8 md:grid-cols-3'>
           {course.skillNames.map((skillName, index) => (
             <motion.div key={index} variants={staggerItem} className='space-y-4'>
-                <div key={index} className='flex items-start rounded-lg bg-white p-4 shadow-sm'>
-                  <CheckCircle className='mt-1 mr-3 h-5 w-5 flex-shrink-0 text-green-500' />
-                  <span className='text-sm text-gray-700'>{skillName}</span>
-                </div>
+              <div key={index} className='flex items-start rounded-lg bg-white p-4 shadow-sm'>
+                <CheckCircle className='mt-1 mr-3 h-5 w-5 flex-shrink-0 text-green-500' />
+                <span className='text-sm text-gray-700'>{skillName}</span>
+              </div>
             </motion.div>
           ))}
         </div>
