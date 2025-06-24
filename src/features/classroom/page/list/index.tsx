@@ -1,9 +1,13 @@
 'use client'
-import ClassRoomLanding from '@/features/classroom/components/ClassRoomLanding '
-import StudentClassroomList from '@/features/classroom/page/list/StudentClassroomList'
-import TeacherClassroomList from '@/features/classroom/page/list/TeacherClassroomList'
+
+import dynamic from 'next/dynamic'
 import { UserRole } from '@/types/userRole'
 import { Session } from 'next-auth'
+
+// Lazy import
+const ClassroomLanding = dynamic(() => import('@/features/classroom/components/ClassroomLanding'))
+const StudentClassroomList = dynamic(() => import('@/features/classroom/page/list/StudentClassroomList'))
+const TeacherClassroomList = dynamic(() => import('@/features/classroom/page/list/TeacherClassroomList'))
 
 export default function RoleBasedClassroomListPage({ session }: { session: Session }) {
   let role = session?.user.role
@@ -16,6 +20,6 @@ export default function RoleBasedClassroomListPage({ session }: { session: Sessi
       return <StudentClassroomList />
     case UserRole.GUEST:
     default:
-      return <ClassRoomLanding />
+      return <ClassroomLanding />
   }
 }

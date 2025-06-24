@@ -1,4 +1,4 @@
-import ClassRoomLanding from '@/features/classroom/components/ClassRoomLanding '
+import ClassRoomLanding from '@/features/classroom/components/ClassroomLanding'
 
 export default function ClassroomPage() {
   return <ClassRoomLanding />
