@@ -4,12 +4,6 @@ interface ActiveTools {
   [key: string]: boolean
 }
 
-interface ToolbarButton {
-  name: string
-  label: string
-  style: string
-}
-
 interface InsertTexts {
   [key: string]: string
 }
