@@ -1,5 +1,5 @@
 import SSelect from '@/components/shared/SSelect'
-import SearchTabs from '@/features/resource/course/components/course-list/SearchTabs'
+import SearchTabs from '@/features/resource/course/components/list/SearchTabs'
 
 interface SearchHeaderProps {
   filterItems: {

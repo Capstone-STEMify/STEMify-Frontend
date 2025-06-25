@@ -1,4 +1,4 @@
-import CreateLesson from '@/features/resource/lesson/components/create-lesson/CreateLesson'
+import CreateLesson from '@/features/resource/lesson/components/CreateLesson'
 import React from 'react'
 
 export default function CreateLessonPage() {

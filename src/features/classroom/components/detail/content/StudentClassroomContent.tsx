@@ -1,5 +1,5 @@
 import { LessonCard } from '@/components/shared/card/LessonCard'
-import ClassroomDetailAction from '@/features/classroom/components/classroom-detail/content/shared/ClassroomDetailAction'
+import ClassroomDetailAction from '@/features/classroom/components/detail/content/shared/ClassroomDetailAction'
 import { dummyCardData } from '@/utils/mockData'
 
 export default function StudentClassroomContent() {

@@ -5,9 +5,9 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import BackButton from '@/components/shared/button/BackButton'
 import STabs from '@/components/shared/STabs'
-import LessonDescription from '@/features/resource/lesson/components/lesson-detail/LessonDescription'
-import LessonOutline from '@/features/resource/lesson/components/lesson-detail/LessonOutline'
-import LessonContent from '@/features/resource/lesson/components/lesson-detail/LessonContent'
+import LessonDescription from '@/features/resource/lesson/components/detail/LessonDescription'
+import LessonOutline from '@/features/resource/lesson/components/detail/LessonOutline'
+import LessonContent from '@/features/resource/lesson/components/detail/LessonContent'
 
 export default function LessonDetail() {
   const [selected, setSelected] = React.useState(1)

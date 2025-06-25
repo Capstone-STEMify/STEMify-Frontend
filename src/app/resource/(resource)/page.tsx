@@ -1,8 +1,8 @@
 import HeroSection from '@/components/shared/hero-section/HeroSection'
 import LinkButton from '@/components/shared/button/LinkButton'
-import CourseSection from '@/features/resource/course/components/course-list/CourseSection'
-import LessonSection from '@/features/resource/lesson/components/lesson-list/LessonSection'
-import ActivitySection from '@/features/resource/activity/components/activity-list/ActivitySection'
+import LessonSection from '@/features/resource/lesson/components/list/LessonSection'
+import ActivitySection from '@/features/resource/activity/components/list/ActivitySection'
+import CourseSection from '@/features/resource/course/components/list/CourseSection'
 
 export default function ResourcePage() {
   return (

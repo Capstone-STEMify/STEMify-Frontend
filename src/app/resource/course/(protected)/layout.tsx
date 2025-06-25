@@ -1,7 +1,7 @@
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
+import { ClassroomDetailHeader } from '@/features/classroom/components/detail/sidebar/ClassroomDetailHeader'
+import { ClassroomSidebar } from '@/features/classroom/components/detail/sidebar/ClassroomSidebar'
 import { UserRole } from '@/types/userRole'
-import { ClassroomSidebar } from '@/features/classroom/components/classroom-detail/sidebar/ClassroomSidebar'
-import { ClassroomDetailHeader } from '@/features/classroom/components/classroom-detail/sidebar/ClassroomDetailHeader'
 
 export default async function CourseStaffLayout({
   children

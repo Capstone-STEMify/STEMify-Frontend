@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { Badge } from '@/components/shadcn/badge'
-import LessonAction from '@/features/resource/lesson/components/lesson-detail/LessonAction'
+import LessonAction from '@/features/resource/lesson/components/detail/LessonAction'
 
 type LessonDescriptionProps = {
   lessonId: number

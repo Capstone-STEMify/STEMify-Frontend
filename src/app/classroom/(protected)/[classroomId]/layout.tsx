@@ -1,8 +1,8 @@
 import { metadata } from 'app/layout'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import { UserRole } from '@/types/userRole'
-import { ClassroomSidebar } from '@/features/classroom/components/classroom-detail/sidebar/ClassroomSidebar'
-import { ClassroomDetailHeader } from '@/features/classroom/components/classroom-detail/sidebar/ClassroomDetailHeader'
+import { ClassroomDetailHeader } from '@/features/classroom/components/detail/sidebar/ClassroomDetailHeader'
+import { ClassroomSidebar } from '@/features/classroom/components/detail/sidebar/ClassroomSidebar'
 
 metadata.title = 'Classroom'
 export default async function ClassroomDetailLayout({

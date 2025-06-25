@@ -1,52 +1,52 @@
 'use client'
-import React, { useState } from 'react'
 import { Plus, BookOpen, FileText } from 'lucide-react'
-import QuizComponent from './section/quiz/CreateQuiz'
-import ContentComponent from './section/content/CreateContent'
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
+import QuizComponent from '@/features/resource/lesson/components/create/quiz/CreateQuiz'
+import ContentComponent from '@/features/resource/lesson/components/create/content/CreateContent'
 
 export default function CreateLesson() {
   return (
     <div className='min-h-screen bg-gray-50'>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-6">
-        <div className="max-w-6xl mx-auto">
+      <div className='border-b border-gray-200 bg-white px-4 py-6'>
+        <div className='mx-auto max-w-6xl'>
           {/* Progress Steps */}
-          <div className="flex items-center justify-center mb-8">
-            <div className="flex items-center">
+          <div className='mb-8 flex items-center justify-center'>
+            <div className='flex items-center'>
               {/* Step 1 */}
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium mb-2">
+              <div className='flex flex-col items-center'>
+                <div className='mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-medium text-white'>
                   1
                 </div>
-                <span className="text-sm font-medium text-gray-900">Course Details</span>
+                <span className='text-sm font-medium text-gray-900'>Course Details</span>
               </div>
-              
+
               {/* Connector */}
-              <div className="w-24 h-px bg-gray-300 border-t-2 border-dashed mx-8 mt-[-20px]"></div>
-              
+              <div className='mx-8 mt-[-20px] h-px w-24 border-t-2 border-dashed bg-gray-300'></div>
+
               {/* Step 2 */}
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium mb-2">
+              <div className='flex flex-col items-center'>
+                <div className='mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-medium text-white'>
                   2
                 </div>
-                <span className="text-sm font-medium text-gray-900">Lesson Details</span>
+                <span className='text-sm font-medium text-gray-900'>Lesson Details</span>
               </div>
-              
+
               {/* Connector */}
-              <div className="w-24 h-px bg-gray-300 border-t-2 border-dashed mx-8 mt-[-20px]"></div>
-              
+              <div className='mx-8 mt-[-20px] h-px w-24 border-t-2 border-dashed bg-gray-300'></div>
+
               {/* Step 3 */}
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium mb-2">
+              <div className='flex flex-col items-center'>
+                <div className='mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 text-sm font-medium text-gray-600'>
                   3
                 </div>
-                <span className="text-sm font-medium text-gray-500">FAQ</span>
+                <span className='text-sm font-medium text-gray-500'>FAQ</span>
               </div>
             </div>
           </div>
-          
-          <h1 className="text-2xl font-bold text-gray-900">Create New Course</h1>
+
+          <h1 className='text-2xl font-bold text-gray-900'>Create New Course</h1>
         </div>
       </div>
 

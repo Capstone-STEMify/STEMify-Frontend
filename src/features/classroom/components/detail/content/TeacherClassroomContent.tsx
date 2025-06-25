@@ -1,6 +1,6 @@
 import { Badge } from '@/components/shadcn/badge'
 import CardLayout from '@/components/shared/card/CardLayout'
-import ClassroomDetailAction from '@/features/classroom/components/classroom-detail/content/shared/ClassroomDetailAction'
+import ClassroomDetailAction from '@/features/classroom/components/detail/content/shared/ClassroomDetailAction'
 import { useGetAllCourseQuery } from '@/features/resource/course/api/courseApi'
 import { formatDuration } from '@/utils/index'
 

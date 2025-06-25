@@ -1,8 +1,6 @@
 'use client'
 import { useState, useMemo, useEffect } from 'react'
-import FilterSidebar from './course-list/FilterSidebar'
-import SearchHeader from './course-list/SearchHeader'
-import SearchGrid from './course-list/SearchGrid'
+
 import { Button } from '@/components/shadcn/button'
 import { Filter } from 'lucide-react'
 
@@ -10,6 +8,9 @@ import SSheet from '@/components/shared/SSheet'
 import ModernPagination from '@/components/shared/paging/PagingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useGetAllCourseQuery } from '@/features/resource/course/api/courseApi'
+import FilterSidebar from '@/features/resource/course/components/list/FilterSidebar'
+import SearchHeader from '@/features/resource/course/components/list/SearchHeader'
+import SearchGrid from '@/features/resource/course/components/list/SearchGrid'
 
 const categories = ['All', 'Course', 'Lesson', 'Activity']
 
