@@ -8,3 +8,16 @@ export const formatDuration = (minutes: number) => {
     .padStart(2, '0')
   return `${h}:${m}:00`
 }
+
+export function getDaysRemaining(endDateStr: string): number {
+  const endDate = new Date(endDateStr)
+  const today = new Date()
+
+  today.setHours(0, 0, 0, 0)
+  endDate.setHours(0, 0, 0, 0)
+
+  const diffInMilliseconds = endDate.getTime() - today.getTime()
+  const diffInDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24))
+
+  return diffInDays
+}

@@ -6,6 +6,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Users, Calendar, Hash, GraduationCap, User, Mail } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
+import { getDaysRemaining } from '@/utils/index'
 
 export default function ClassroomMember() {
   const { data, error } = useGetClassroomByIdQuery(2)
@@ -194,17 +195,4 @@ export default function ClassroomMember() {
       </Card>
     </div>
   )
-}
-
-function getDaysRemaining(endDateStr: string): number {
-  const endDate = new Date(endDateStr)
-  const today = new Date()
-
-  today.setHours(0, 0, 0, 0)
-  endDate.setHours(0, 0, 0, 0)
-
-  const diffInMilliseconds = endDate.getTime() - today.getTime()
-  const diffInDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24))
-
-  return diffInDays
 }
