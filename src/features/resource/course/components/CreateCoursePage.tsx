@@ -12,11 +12,11 @@ export interface CourseFormData {
 import { SCard } from '@/components/shared/card/SCard'
 import React, { useState } from 'react'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
-import { CourseBasicInfo } from '@/features/resource/course/components/staff/create-course/CourseBasicInfo'
+import { CourseBasicInfo } from '@/features/resource/course/components/create/CourseBasicInfo'
 import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown'
-import { CoverImageUpload } from '@/features/resource/course/components/staff/create-course/CoverImageUpload'
-import { SkillsLearned } from '@/features/resource/course/components/staff/create-course/SkillsLearned'
-import { CourseActionButtons } from '@/features/resource/course/components/staff/create-course/CourseActionButtons'
+import { CoverImageUpload } from '@/features/resource/course/components/create/CoverImageUpload'
+import { SkillsLearned } from '@/features/resource/course/components/create/SkillsLearned'
+import { CourseActionButtons } from '@/features/resource/course/components/create/CourseActionButtons'
 
 export default function CreateCourse() {
   const [formData, setFormData] = useState<CourseFormData>({
