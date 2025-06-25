@@ -1,8 +1,8 @@
 import { metadata } from 'app/layout'
-import { AppSidebar } from '@/features/classroom/components/classroom-detail/sidebar/app-sidebar'
-import { SiteHeader } from '@/features/classroom/components/classroom-detail/header/site-header'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import { UserRole } from '@/types/userRole'
+import { ClassroomSidebar } from '@/features/classroom/components/classroom-detail/sidebar/ClassroomSidebar'
+import { ClassroomDetailHeader } from '@/features/classroom/components/classroom-detail/sidebar/ClassroomDetailHeader'
 
 metadata.title = 'Classroom'
 export default async function ClassroomDetailLayout({
@@ -15,9 +15,9 @@ export default async function ClassroomDetailLayout({
   return (
     <div className='[--header-height:calc(--spacing(14))]'>
       <SidebarProvider className='flex flex-col'>
-        <SiteHeader />
+        <ClassroomDetailHeader />
         <div className='flex flex-1'>
-          <AppSidebar role={role} />
+          <ClassroomSidebar role={role} />
           <SidebarInset>{children}</SidebarInset>
         </div>
       </SidebarProvider>

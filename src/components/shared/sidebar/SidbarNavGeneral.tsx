@@ -8,7 +8,7 @@ import {
 } from '@/components/shadcn/sidebar'
 import Link from 'next/link'
 
-export function NavMain({
+export function SidbarNavGeneral({
   items
 }: {
   items: {
@@ -20,7 +20,7 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Resources</SidebarGroupLabel>
+      <SidebarGroupLabel>General</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item, index) => (
           <SidebarMenuItem key={index}>

@@ -3,7 +3,6 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import ClassroomDetailAction from '@/features/classroom/components/classroom-detail/content/shared/ClassroomDetailAction'
 import { useGetAllCourseQuery } from '@/features/course/api/courseApi'
 import { formatDuration } from '@/utils/index'
-import { dummyCardData } from '@/utils/mockData'
 
 export default function TeacherClassroomContent() {
   const { data: CourseData, error, isLoading } = useGetAllCourseQuery()

@@ -10,7 +10,7 @@ import {
 } from '@/components/shadcn/sidebar'
 import Link from 'next/link'
 
-export function NavSecondary({
+export function SidebarNavSecondary({
   items,
   ...props
 }: {

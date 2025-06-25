@@ -5,9 +5,8 @@ import { Button } from '@/components/shadcn/button'
 import { Separator } from '@/components/shadcn/separator'
 import { useSidebar } from '@/components/shadcn/sidebar'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
-import SearchBar from '@/components/shared/search/SearchBar'
 
-export function SiteHeader() {
+export function ClassroomDetailHeader() {
   const { toggleSidebar } = useSidebar()
 
   return (
