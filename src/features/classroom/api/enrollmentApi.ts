@@ -1,4 +1,4 @@
-import { Enrollment } from '@/features/classroom/types/enrollment'
+import { Enrollment } from '@/features/classroom/types/enrollment.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 import { EnrollmentOrderBy, EnrollmentStatus } from '@/types/enum'

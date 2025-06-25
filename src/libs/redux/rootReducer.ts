@@ -1,6 +1,6 @@
 import { classroomApi } from '@/features/classroom/api/classroomApi'
 import { enrollmentApi } from '@/features/classroom/api/enrollmentApi'
-import { courseApi } from '@/features/course/api/courseApi'
+import { courseApi } from '@/features/resource/course/api/courseApi'
 import { combineReducers } from '@reduxjs/toolkit'
 
 export const rootReducer = combineReducers({

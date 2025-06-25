@@ -17,7 +17,7 @@ export function ClassroomDetailHeader() {
         </Button>
         <Separator orientation='vertical' className='mr-2 h-4' />
         <div className='hidden sm:block'>
-          <SBreadcrumb title='STEM' size={'sm'} />
+          <SBreadcrumb size={'sm'} />
         </div>
         <div className='ml-auto flex items-center gap-2'>
           <Bell size={18} />

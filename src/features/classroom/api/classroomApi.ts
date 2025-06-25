@@ -1,4 +1,4 @@
-import { Classroom } from '@/features/classroom/types/classroom'
+import { Classroom } from '@/features/classroom/types/classroom.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 import { ClassroomStatus } from '@/types/enum'
