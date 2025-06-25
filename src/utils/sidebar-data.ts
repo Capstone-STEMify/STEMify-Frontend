@@ -31,7 +31,15 @@ export function getSidebarData(role: UserRole) {
       email: 'm@example.com',
       avatar: 'https://github.com/shadcn.png'
     },
-    navGenral: [
+    navSecondary: [
+      { title: 'Support', url: '#', icon: LifeBuoy },
+      { title: 'Feedback', url: '#', icon: Send },
+      { title: 'Settings', url: '#', icon: Settings2 }
+    ]
+  }
+
+  const navGenral: Record<UserRole, (typeof base)['navSecondary']> = {
+    [UserRole.STUDENT]: [
       {
         title: 'Home',
         url: `${classroomURL}`,
@@ -48,11 +56,37 @@ export function getSidebarData(role: UserRole) {
         icon: Megaphone
       }
     ],
-    navSecondary: [
-      { title: 'Support', url: '#', icon: LifeBuoy },
-      { title: 'Feedback', url: '#', icon: Send },
-      { title: 'Settings', url: '#', icon: Settings2 }
-    ]
+    [UserRole.TEACHER]: [
+      {
+        title: 'Home',
+        url: `${classroomURL}`,
+        icon: Home
+      },
+      {
+        title: 'Members',
+        url: `${classroomURL}/members`,
+        icon: Users
+      },
+      {
+        title: 'Announcements',
+        url: `${classroomURL}/announcements`,
+        icon: Megaphone
+      }
+    ],
+    [UserRole.ADMIN]: [],
+    [UserRole.STAFF]: [
+      {
+        title: 'Home',
+        url: `${classroomURL}`,
+        icon: Home
+      },
+      {
+        title: 'Announcements',
+        url: `${classroomURL}/announcements`,
+        icon: Megaphone
+      }
+    ],
+    [UserRole.GUEST]: []
   }
 
   const navMain: Record<UserRole, (typeof base)['navSecondary']> = {
@@ -69,7 +103,12 @@ export function getSidebarData(role: UserRole) {
       { title: 'Quiz', url: `${classroomURL}/quiz`, icon: BookOpen }
     ],
     [UserRole.ADMIN]: [],
-    [UserRole.STAFF]: [],
+    [UserRole.STAFF]: [
+      { title: 'Course', url: `resource/course/create`, icon: SquareTerminal },
+      { title: 'Lesson', url: `resource/lesson/create`, icon: Bot },
+      { title: 'Activity', url: `resource/activity/create`, icon: Activity },
+      { title: 'Quiz', url: `resource/quiz/create`, icon: BookOpen }
+    ],
     [UserRole.GUEST]: []
   }
 
@@ -83,12 +122,16 @@ export function getSidebarData(role: UserRole) {
       { title: 'Science Fair', url: `${classroomURL}/project/science`, icon: Map }
     ],
     [UserRole.ADMIN]: [],
-    [UserRole.STAFF]: [],
+    [UserRole.STAFF]: [
+      { title: 'STEM Program', url: `${classroomURL}/project/stem`, icon: Frame },
+      { title: 'Science Fair', url: `${classroomURL}/project/science`, icon: Map }
+    ],
     [UserRole.GUEST]: []
   }
 
   return {
     ...base,
+    navGenral: navGenral[role],
     navMain: navMain[role],
     navProject: navProject[role]
   }
