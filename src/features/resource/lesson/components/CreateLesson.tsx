@@ -2,8 +2,8 @@
 import { Plus, BookOpen, FileText } from 'lucide-react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
-import QuizComponent from '@/features/resource/lesson/components/create/quiz/CreateQuiz'
-import ContentComponent from '@/features/resource/lesson/components/create/content/CreateContent'
+import QuizComponent from '@/features/resource/lesson/components/manage/create/quiz/CreateQuiz'
+import ContentComponent from '@/features/resource/lesson/components/manage/create/content/CreateContent'
 
 export default function CreateLesson() {
   return (

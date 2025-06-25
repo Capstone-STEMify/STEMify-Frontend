@@ -1,9 +1,9 @@
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
-import { ClassroomDetailHeader } from '@/features/classroom/components/detail/sidebar/ClassroomDetailHeader'
-import { ClassroomSidebar } from '@/features/classroom/components/detail/sidebar/ClassroomSidebar'
+import { ResourceManageHeader } from '@/features/resource/layout/ResourceManageHeader'
+import { ResourceManageSidebar } from '@/features/resource/layout/ResourceManageSidebar'
 import { UserRole } from '@/types/userRole'
 
-export default async function CourseStaffLayout({
+export default async function LessonStaffLayout({
   children
 }: Readonly<{
   children: React.ReactNode
@@ -13,9 +13,9 @@ export default async function CourseStaffLayout({
   return (
     <div className='[--header-height:calc(--spacing(14))]'>
       <SidebarProvider className='flex flex-col'>
-        <ClassroomDetailHeader />
+        <ResourceManageHeader />
         <div className='flex flex-1'>
-          <ClassroomSidebar role={role} />
+          <ResourceManageSidebar role={role} />
           <SidebarInset>{children}</SidebarInset>
         </div>
       </SidebarProvider>

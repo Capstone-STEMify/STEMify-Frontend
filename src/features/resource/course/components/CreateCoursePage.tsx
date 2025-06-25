@@ -12,11 +12,11 @@ export interface CourseFormData {
 import { SCard } from '@/components/shared/card/SCard'
 import React, { useState } from 'react'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
-import { CourseBasicInfo } from '@/features/resource/course/components/create/CourseBasicInfo'
+import { CourseBasicInfo } from '@/features/resource/course/components/manage/create/CourseBasicInfo'
 import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown'
-import { CoverImageUpload } from '@/features/resource/course/components/create/CoverImageUpload'
-import { SkillsLearned } from '@/features/resource/course/components/create/SkillsLearned'
-import { CourseActionButtons } from '@/features/resource/course/components/create/CourseActionButtons'
+import { CoverImageUpload } from '@/features/resource/course/components/manage/create/CoverImageUpload'
+import { SkillsLearned } from '@/features/resource/course/components/manage/create/SkillsLearned'
+import { CourseActionButtons } from '@/features/resource/course/components/manage/create/CourseActionButtons'
 
 export default function CreateCourse() {
   const [formData, setFormData] = useState<CourseFormData>({
@@ -109,10 +109,6 @@ export default function CreateCourse() {
     <div className='min-h-screen bg-gray-50 p-4 md:p-6'>
       <div className='mx-auto max-w-6xl'>
         <div className='mb-6'>
-          <nav className='mb-4 text-sm text-gray-600'>
-            <SBreadcrumb />
-          </nav>
-
           <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
             <div className='flex space-x-6'>
               <button className='border-b-2 border-amber-500 pb-2 font-medium text-amber-400'>Basic Info</button>
