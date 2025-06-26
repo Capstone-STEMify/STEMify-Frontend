@@ -5,9 +5,11 @@ import { getServerSession } from 'next-auth'
 import React from 'react'
 
 export default async function ClassroomDetailPage() {
-  return withAuth(async (session) => {
-    return <RoleBasedClassroomDetailPage session={session} />
-  })
+  const session = await getServerSession(authOptions)
+  return <RoleBasedClassroomDetailPage session={session!} />
+
+  // return withAuth(async (session) => {
+  //   return <RoleBasedClassroomDetailPage session={session} />
+  // })
   // const session = await getServerSession(authOptions)
-  // return <RoleBasedClassroomDetailPage session={session!} />
 }
