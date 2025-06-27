@@ -10,7 +10,7 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import SAvatar from '@/components/shared/SAvatar'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { useQueryParamsHandler } from '@/hooks/useFetchList'
+import { useQueryParamsHandler } from '@/hooks/useQueryParamsHandler'
 import { ClassroomOrderBy, ClassroomStatus } from '@/types/enum'
 
 export default function TeacherClassroomList() {
