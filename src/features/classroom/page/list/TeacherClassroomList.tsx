@@ -1,7 +1,6 @@
 import { Button } from '@/components/shadcn/button'
 import SearchBar from '@/components/shared/search/SearchBar'
 import SSelect from '@/components/shared/SSelect'
-import ClassroomCard from '@/components/shared/card/ClassroomCard'
 import ClassroomHero from '@/components/shared/hero-section/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
 import ClassRoomManagement from '@/features/classroom/components/ClassRoomManagement'

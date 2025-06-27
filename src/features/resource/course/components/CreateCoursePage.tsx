@@ -11,7 +11,6 @@ export interface CourseFormData {
 
 import { SCard } from '@/components/shared/card/SCard'
 import React, { useState } from 'react'
-import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import { CourseBasicInfo } from '@/features/resource/course/components/manage/create/CourseBasicInfo'
 import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown'
 import { CoverImageUpload } from '@/features/resource/course/components/manage/create/CoverImageUpload'
