@@ -6,7 +6,7 @@ import CourseSection from '@/features/resource/course/components/list/CourseSect
 
 export default function ResourcePage() {
   return (
-    <main className='bg-light min-h-screen'>
+    <main className='bg-light mt-24 min-h-screen'>
       <HeroSection />
 
       {/* Main content layout */}
@@ -59,7 +59,7 @@ function SectionWrapper({
       </div>
       {children}
       <div className='mx-auto w-fit'>
-        <LinkButton className='bg-amber-custom-400 rounded-2xl p-6 text-lg' href='/resources/courses'>
+        <LinkButton className='bg-skye-custom-300 rounded-2xl p-6 text-lg' href='/search'>
           Explore More
         </LinkButton>
       </div>
