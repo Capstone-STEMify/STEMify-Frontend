@@ -5,16 +5,27 @@ import ClassroomCard from '@/components/shared/card/ClassroomCard'
 import ClassroomHero from '@/components/shared/hero-section/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
 import ClassRoomManagement from '@/features/classroom/components/ClassRoomManagement'
-import { useSearchClassroomQuery } from '@/features/classroom/api/classroomApi'
+import { ClassroomParams, useSearchClassroomQuery } from '@/features/classroom/api/classroomApi'
 import CardLayout from '@/components/shared/card/CardLayout'
 import SAvatar from '@/components/shared/SAvatar'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import { useQueryParamsHandler } from '@/hooks/useFetchList'
+import { ClassroomOrderBy, ClassroomStatus } from '@/types/enum'
 
 export default function TeacherClassroomList() {
-  const { data: classroomData, isLoading } = useSearchClassroomQuery({
-    teacherId: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d'
+  const { params, setRawParams, updateParams, goToPage, resetParams } = useQueryParamsHandler<ClassroomParams>({
+    defaultParams: {
+      teacherId: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
+      status: ClassroomStatus.ACTIVE,
+      pageNumber: 1,
+      pageSize: 10,
+      orderBy: ClassroomOrderBy.CREATED_DATE
+    },
+    debounceSearch: true
   })
+
+  const { data: classroomData, isLoading } = useSearchClassroomQuery(params)
 
   const classrooms = classroomData?.data?.items ?? []
   const isEmpty = !isLoading && classrooms.length === 0
@@ -27,17 +38,41 @@ export default function TeacherClassroomList() {
       {/* Classroom list */}
       <div className='mx-auto mt-8 max-w-7xl'>
         <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-          <SearchBar />
+          <SearchBar
+            defaultValue={params.search || ''}
+            onDebouncedSearch={(val) =>
+              setRawParams((prev) => ({
+                ...prev,
+                search: val,
+                pageNumber: 1
+              }))
+            }
+          />
           <div className='flex items-center justify-between gap-4 sm:justify-start'>
             <SSelect
               items={[
-                { value: 'all', content: 'All' },
-                { value: 'recently', content: 'Recently' }
+                { value: 'ALL', content: 'All' },
+                { value: ClassroomStatus.ACTIVE, content: 'Active' },
+                { value: ClassroomStatus.INACTIVE, content: 'Inactive' },
+                { value: ClassroomStatus.ARCHIVED, content: 'Archived' },
+                { value: ClassroomStatus.DELETED, content: 'Deleted' }
               ]}
-              placeholder='Filter by subject'
-              value='all'
-              onChange={(value) => console.log(value)}
+              placeholder='Filter by status'
+              value={params.status ?? 'ALL'}
+              onChange={(value) => updateParams({ status: value === 'ALL' ? undefined : (value as ClassroomStatus) })}
             />
+
+            <SSelect
+              items={[
+                { value: ClassroomOrderBy.NAME, content: 'Name' },
+                { value: ClassroomOrderBy.CREATED_DATE, content: 'Created Date' }
+              ]}
+              placeholder='Sort by'
+              value={params.orderBy ?? ''}
+              onChange={(val) => updateParams({ orderBy: val })}
+              // className='ml-4'
+            />
+
             <Button size={'icon'} className='bg-amber-custom-400 rounded-full font-bold'>
               <Plus />
             </Button>
@@ -86,6 +121,13 @@ export default function TeacherClassroomList() {
                 </div>
               </CardLayout>
             ))}
+        </div>
+        <div className='mt-6 flex justify-center gap-2'>
+          <Button disabled={params.pageNumber === 1} onClick={() => goToPage(params.pageNumber! - 1)}>
+            Previous
+          </Button>
+          <span>Page {params.pageNumber}</span>
+          <Button onClick={() => goToPage(params.pageNumber! + 1)}>Next</Button>
         </div>
       </div>
     </div>

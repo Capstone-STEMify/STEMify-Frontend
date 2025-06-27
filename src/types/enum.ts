@@ -5,6 +5,11 @@ export enum ClassroomStatus {
   DELETED = 'Deleted' //soft delete
 }
 
+export enum ClassroomOrderBy {
+  NAME = 'name',
+  CREATED_DATE = 'createdDate'
+}
+
 export enum EnrollmentStatus {
   ALL = 'ALL',
   ACTIVE = 'Active', // Currently enrolled
