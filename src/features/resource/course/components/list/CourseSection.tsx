@@ -3,9 +3,19 @@ import { Badge } from '@/components/shadcn/badge'
 import { useSearchCourseQuery } from '../../api/courseApi'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { formatDuration } from '@/utils/index'
+import { useQueryParamsHandler } from '@/hooks/useQueryParamsHandler'
+import { CourseParams, CourseStatus } from '@/features/resource/course/types/course.type'
 
 export default function CourseSection() {
-  const { data: CourseData, error, isLoading } = useSearchCourseQuery({ pageSize: 6 })
+  const { params } = useQueryParamsHandler<CourseParams>({
+    defaultParams: {
+      pageNumber: 1,
+      pageSize: 3,
+      status: CourseStatus.PUBLISHED
+    }
+  })
+
+  const { data: CourseData } = useSearchCourseQuery(params)
   return (
     <section className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
       {CourseData?.data.items.map((course, index) => {

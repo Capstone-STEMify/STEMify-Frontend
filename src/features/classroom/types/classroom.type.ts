@@ -1,4 +1,14 @@
-import { ClassroomStatus } from '@/types/enum'
+export enum ClassroomStatus {
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive',
+  ARCHIVED = 'Archived',
+  DELETED = 'Deleted' //soft delete
+}
+
+export enum ClassroomOrderBy {
+  NAME = 'name',
+  CREATED_DATE = 'createdDate'
+}
 
 export type Classroom = {
   id: number

@@ -11,8 +11,8 @@ import { Button } from '@/components/shadcn/button'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { useSearchEnrollmentQuery } from '@/features/classroom/api/enrollmentApi'
 import { useState } from 'react'
-import { EnrollmentOrderBy, EnrollmentStatus } from '@/types/enum'
 import { useModal } from '@/providers/ModalProvider'
+import { EnrollmentOrderBy, EnrollmentStatus } from '@/features/classroom/types/enrollment.type'
 
 export default function StudentClassroomList() {
   const { openModal } = useModal()

@@ -22,7 +22,7 @@ const SearchBar = memo(function SearchBar({
 
   useEffect(() => {
     if (onDebouncedSearch) onDebouncedSearch(debounced)
-  }, [debounced])
+  }, [debounced, onDebouncedSearch])
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

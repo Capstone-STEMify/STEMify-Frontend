@@ -11,7 +11,7 @@ import SAvatar from '@/components/shared/SAvatar'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useQueryParamsHandler } from '@/hooks/useQueryParamsHandler'
-import { ClassroomOrderBy, ClassroomStatus } from '@/types/enum'
+import { ClassroomOrderBy, ClassroomStatus } from '@/features/classroom/types/classroom.type'
 
 export default function TeacherClassroomList() {
   const { params, setRawParams, updateParams, goToPage, resetParams } = useQueryParamsHandler<ClassroomParams>({
