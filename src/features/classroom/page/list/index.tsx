@@ -11,7 +11,7 @@ const TeacherClassroomList = dynamic(() => import('@/features/classroom/page/lis
 
 export default function RoleBasedClassroomListPage({ session }: { session: Session }) {
   let role = session?.user.role
-  role = UserRole.STUDENT
+  role = UserRole.TEACHER
 
   switch (role) {
     case UserRole.TEACHER:

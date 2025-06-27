@@ -1,11 +1,9 @@
 import { Classroom } from '@/features/classroom/types/classroom.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
-import { ClassroomStatus } from '@/types/enum'
 
 export type ClassroomParams = {
   teacherId?: string
-  status?: ClassroomStatus
 } & SearchPaginatedRequestParams
 
 export const classroomApi = createCrudApi<Classroom, ClassroomParams>({

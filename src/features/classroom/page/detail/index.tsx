@@ -10,7 +10,7 @@ const StudentClassroomDetail = dynamic(() => import('@/features/classroom/page/d
 const TeacherClassroomDetail = dynamic(() => import('@/features/classroom/page/detail/TeacherClassroomDetail'))
 
 export default function RoleBasedClassroomDetailPage({ session }: { session: Session }) {
-  let role = session.user.role
+  let role = session?.user.role
   role = UserRole.STUDENT // For testing purposes
 
   switch (role) {
