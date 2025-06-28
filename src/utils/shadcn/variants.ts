@@ -20,7 +20,10 @@ export const textVariants = cva('', {
       muted: 'text-muted-foreground',
       destructive: 'text-destructive',
       primary: 'text-primary',
-      yellow: 'text-amber-500'
+      yellow: 'text-amber-500',
+      green: 'text-green-500',
+      red: 'text-red-500',
+      blue: 'text-blue-500'
     }
   },
   defaultVariants: {
