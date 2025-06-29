@@ -1,6 +1,5 @@
+'use client'
 import { Input } from '@/components/shadcn/input'
-import { ScrollArea } from '@/components/shadcn/scroll-area'
-import { SDropDown } from '@/components/shared/SDropDown'
 import { ChevronDown, Search, X } from 'lucide-react'
 import { useState } from 'react'
 

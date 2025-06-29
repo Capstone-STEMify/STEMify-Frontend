@@ -1,7 +1,7 @@
 import useDebounce from '@/hooks/useDebounce'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-export type DefaultQueryParams = {
+export type DefaultQueryParams1 = {
   search?: string
   orderby?: string
   pageNumber?: number
@@ -10,13 +10,13 @@ export type DefaultQueryParams = {
   [key: string]: any
 }
 
-type UseQueryParamsHandlerProps<T extends DefaultQueryParams> = {
+type UseQueryParamsHandlerProps<T extends DefaultQueryParams1> = {
   defaultParams?: Partial<T>
   debounceSearch?: boolean
   debounceDelay?: number
 }
 
-export function useQueryParamsHandler<T extends DefaultQueryParams>({
+export function useQueryParamsHandler<T extends DefaultQueryParams1>({
   defaultParams,
   debounceSearch = true,
   debounceDelay = 500
@@ -31,7 +31,7 @@ export function useQueryParamsHandler<T extends DefaultQueryParams>({
   // debounce search if enabled
   const debouncedSearch = useDebounce(rawParams.search || '', debounceDelay)
 
-  // Kết hợp lại param debounced nếu cần
+  // update rawParams when debouncedSearch changes
   const finalParams: T = {
     ...rawParams,
     ...(debounceSearch ? { search: debouncedSearch } : {})
@@ -41,11 +41,10 @@ export function useQueryParamsHandler<T extends DefaultQueryParams>({
     setRawParams((prev) => ({
       ...prev,
       ...updates,
-      pageNumber: 1 // reset trang khi filter/sort thay đổi
+      pageNumber: 1 // reset to first page on any update
     }))
 
-  const goToPage = (pageNumber: number) =>
-    setRawParams((prev) => ({ ...prev, pageNumber }))
+  const goToPage = (pageNumber: number) => setRawParams((prev) => ({ ...prev, pageNumber }))
 
   const resetParams = () =>
     setRawParams({

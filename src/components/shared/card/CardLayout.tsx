@@ -44,7 +44,7 @@ export default function CardLayout({
       {/* Image */}
       <div className={clsx('relative w-full', imageHeight)}>
         {imageSrc === '' ? (
-          <Image src={'/HomeFiles/hcm.jpg'} alt={alt} fill className='object-cover' />
+          <Image src={'/images/'} alt={alt} fill className='object-cover' />
         ) : (
           <Image src={imageSrc} alt={alt} fill className='object-cover' />
         )}

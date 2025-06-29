@@ -1,5 +1,3 @@
-'use client'
-
 import BreadcrumbPageLayout from '@/components/shared/layout/BreadcrumbPageLayout'
 import SListTitle from '@/components/SListTitle'
 import LessonListAction from '@/features/resource/lesson/components/list/LessonListAction'

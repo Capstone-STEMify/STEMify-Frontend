@@ -27,14 +27,14 @@ function getVisiblePageNumbers(pageNumber: number, totalPages: number): (number 
   return pages
 }
 
-type UPaginationProps = {
+type SPaginationProps = {
   pageNumber: number
   totalPages: number
   onPageChanged: (page: number) => void
   className?: string
 }
 
-export function SPagination({ pageNumber, totalPages, onPageChanged, className }: UPaginationProps) {
+export function SPagination({ pageNumber, totalPages, onPageChanged, className }: SPaginationProps) {
   const pageNumbers = getVisiblePageNumbers(pageNumber, totalPages)
 
   return (
