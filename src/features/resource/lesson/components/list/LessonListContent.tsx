@@ -75,15 +75,21 @@ export default function LessonListContent() {
               </CardLayout>
             </Link>
 
-            <div className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
+            <div key={lesson.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
               <SDropDown
                 trigger={
                   <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
                 }
                 items={[
-                  <p className='text-sm'>View</p>,
-                  <p className='text-sm'>Add to Course</p>,
-                  <p className='text-sm'>Share</p>
+                  <p key='view' className='text-sm'>
+                    View
+                  </p>,
+                  <p key='add-to-course' className='text-sm'>
+                    Add to Course
+                  </p>,
+                  <p key='share' className='text-sm'>
+                    Share
+                  </p>
                 ]}
               />
             </div>

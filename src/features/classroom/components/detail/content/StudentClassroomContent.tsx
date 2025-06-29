@@ -6,11 +6,7 @@ export default function StudentClassroomContent() {
     <div className='container mx-auto max-w-7xl space-y-8 p-4'>
       <ClassroomDetailAction />
 
-      <div className='grid grid-cols-1 gap-x-14 gap-y-8 lg:grid-cols-2 xl:grid-cols-4'>
-        {dummyCardData.map((course, index) => {
-          return <div>hhhh</div>
-        })}
-      </div>
+      <div className='grid grid-cols-1 gap-x-14 gap-y-8 lg:grid-cols-2 xl:grid-cols-4'></div>
     </div>
   )
 }

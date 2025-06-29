@@ -9,13 +9,13 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   [UserRole.STUDENT]: [
     { name: 'Home', path: '/' },
     { name: 'Resource', path: '/resource' },
-    { name: 'Classroom', path: '/classroom' },
+    { name: 'My Learning', path: '/my-learning' },
     { name: 'Code Lab', path: '/code-lab' }
   ],
   [UserRole.TEACHER]: [
     { name: 'Home', path: '/' },
     { name: 'Resource', path: '/resource' },
-    { name: 'Classroom', path: '/classroom' },
+    { name: 'My Learning', path: '/my-learning' },
     { name: 'Code Lab', path: '/code-lab' }
   ],
   [UserRole.STAFF]: [
@@ -25,7 +25,7 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   [UserRole.GUEST]: [
     { name: 'Home', path: '/' },
     { name: 'Resource', path: '/resource' },
-    { name: 'Classroom', path: '/classroom' },
+    { name: 'My Learning', path: '/my-learning' },
     { name: 'Code Lab', path: '/code-lab' }
   ]
 }
