@@ -65,9 +65,9 @@ export default function FilterSidebar({ filterItems, updateFilter, resetFilters 
           <div className='px-6'>
             <SSelect
               placeholder='Select age range...'
-              items={[
-                { value: '4-7', content: '4-7 years old' },
-                { value: '8-10', content: '8-10 years old' }
+              options={[
+                { value: '4-7', label: '4-7 years old' },
+                { value: '8-10', label: '8-10 years old' }
               ]}
               value={filterItems.age}
               onChange={(val) => updateFilter('age', val)}

@@ -51,11 +51,11 @@ export default function StudentClassroomList() {
 
           <div className='flex flex-wrap gap-4'>
             <SSelect
-              items={[
-                { value: EnrollmentStatus.ALL, content: 'All status' },
-                { value: EnrollmentStatus.ACTIVE, content: 'Active' },
-                { value: EnrollmentStatus.PENDING, content: 'Pending' },
-                { value: EnrollmentStatus.WITHDRAWN, content: 'Withdrawn' }
+              options={[
+                { value: EnrollmentStatus.ALL, label: 'All status' },
+                { value: EnrollmentStatus.ACTIVE, label: 'Active' },
+                { value: EnrollmentStatus.PENDING, label: 'Pending' },
+                { value: EnrollmentStatus.WITHDRAWN, label: 'Withdrawn' }
               ]}
               value={status ?? EnrollmentStatus.ALL}
               onChange={(value) => {
@@ -65,11 +65,11 @@ export default function StudentClassroomList() {
             />
 
             <SSelect
-              items={[
-                { value: EnrollmentOrderBy.ENROLLDATE_DESC, content: 'Newest first' },
-                { value: EnrollmentOrderBy.ENROLLDATE_ASC, content: 'Oldest first' },
-                { value: EnrollmentOrderBy.CLASSROOM_NAME_ASC, content: 'Name A-Z' },
-                { value: EnrollmentOrderBy.CLASSROOM_NAME_DESC, content: 'Name Z-A' }
+              options={[
+                { value: EnrollmentOrderBy.ENROLLDATE_DESC, label: 'Newest first' },
+                { value: EnrollmentOrderBy.ENROLLDATE_ASC, label: 'Oldest first' },
+                { value: EnrollmentOrderBy.CLASSROOM_NAME_ASC, label: 'Name A-Z' },
+                { value: EnrollmentOrderBy.CLASSROOM_NAME_DESC, label: 'Name Z-A' }
               ]}
               value={sortOrder}
               onChange={(value) => setSortOrder(value as EnrollmentOrderBy)}

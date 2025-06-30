@@ -2,7 +2,7 @@ import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Skill = {
-  id: string
+  id: number
   skillName: string
   iconUrl: string
   description: number

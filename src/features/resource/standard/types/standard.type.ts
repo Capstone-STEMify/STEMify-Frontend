@@ -2,7 +2,7 @@ import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Standard = {
-  id: string
+  id: number
   standardName: string
 }
 

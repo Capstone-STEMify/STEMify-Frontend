@@ -49,12 +49,12 @@ export default function TeacherClassroomList() {
           />
           <div className='flex items-center justify-between gap-4 sm:justify-start'>
             <SSelect
-              items={[
-                { value: 'ALL', content: 'All' },
-                { value: ClassroomStatus.ACTIVE, content: 'Active' },
-                { value: ClassroomStatus.INACTIVE, content: 'Inactive' },
-                { value: ClassroomStatus.ARCHIVED, content: 'Archived' },
-                { value: ClassroomStatus.DELETED, content: 'Deleted' }
+              options={[
+                { value: 'ALL', label: 'All' },
+                { value: ClassroomStatus.ACTIVE, label: 'Active' },
+                { value: ClassroomStatus.INACTIVE, label: 'Inactive' },
+                { value: ClassroomStatus.ARCHIVED, label: 'Archived' },
+                { value: ClassroomStatus.DELETED, label: 'Deleted' }
               ]}
               placeholder='Filter by status'
               value={params.status ?? 'ALL'}
@@ -62,9 +62,9 @@ export default function TeacherClassroomList() {
             />
 
             <SSelect
-              items={[
-                { value: ClassroomOrderBy.NAME, content: 'Name' },
-                { value: ClassroomOrderBy.CREATED_DATE, content: 'Created Date' }
+              options={[
+                { value: ClassroomOrderBy.NAME, label: 'Name' },
+                { value: ClassroomOrderBy.CREATED_DATE, label: 'Created Date' }
               ]}
               placeholder='Sort by'
               value={params.orderBy ?? ''}

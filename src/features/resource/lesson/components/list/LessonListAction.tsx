@@ -1,90 +1,55 @@
 'use client'
+
 import { Input } from '@/components/shadcn/input'
-import { ChevronDown, Search, X } from 'lucide-react'
-import { useState } from 'react'
+import { useLazyGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
+import { useLazyGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
+import { useLazyGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
+import { useLazyGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
+import { Search, X } from 'lucide-react'
+import SSelect from '@/components/shared/SSelect'
+import { Button } from '@/components/shadcn/button'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { resetParams, setPageSize, setParam, setSearchTerm } from '@/features/resource/lesson/slice/lessonSlice'
+import { getLabel, getOptions } from '@/utils/index'
 
 export default function LessonListAction() {
-  const [searchValue, setSearchValue] = useState('')
-  const [categoryValue, setCategoryValue] = useState('')
-  const [ageRangeValue, setAgeRangeValue] = useState('')
-  const [gradesValue, setGradesValue] = useState('')
-  const [categoryOpen, setCategoryOpen] = useState(false)
-  const [ageRangeOpen, setAgeRangeOpen] = useState(false)
-  const [gradesOpen, setGradesOpen] = useState(false)
+  // Redux hooks
+  const dispatch = useAppDispatch()
+  const filters = useAppSelector((state) => state.lesson)
 
-  const categories = ['Mathematics', 'Science', 'Language Arts', 'Social Studies', 'Art', 'Music', 'Physical Education']
-  const ageRanges = ['3-5 years', '6-8 years', '9-11 years', '12-14 years', '15-17 years', '18+ years']
-  const grades = [
-    'Pre-K',
-    'K',
-    '1st Grade',
-    '2nd Grade',
-    '3rd Grade',
-    '4th Grade',
-    '5th Grade',
-    '6th Grade',
-    '7th Grade',
-    '8th Grade',
-    '9th Grade',
-    '10th Grade',
-    '11th Grade',
-    '12th Grade'
-  ]
+  // Lazy queries
+  const [getCategory, { data: categories }] = useLazyGetAllCategoryQuery()
+  const [getSkill, { data: skills }] = useLazyGetAllSkillQuery()
+  const [getAgeRange, { data: ageRanges }] = useLazyGetAllAgeRangeQuery()
+  const [getStandard, { data: standards }] = useLazyGetAllStandardQuery()
 
+  // Clear all filters and reset page size
   const clearAll = () => {
-    setSearchValue('')
-    setCategoryValue('')
-    setAgeRangeValue('')
-    setGradesValue('')
-    setCategoryOpen(false)
-    setAgeRangeOpen(false)
-    setGradesOpen(false)
+    dispatch(resetParams())
+    dispatch(setPageSize(12))
   }
 
-  const hasFilters = searchValue || categoryValue || ageRangeValue || gradesValue
-
-  type SelectDropdownProps = {
-    value: string
-    setValue: (value: string) => void
-    open: boolean
-    setOpen: (open: boolean) => void
-    options: string[]
-    placeholder: string
-  }
-
-  const SelectDropdown = ({ value, setValue, open, setOpen, options, placeholder }: SelectDropdownProps) => (
-    <div className='relative w-full'>
-      <Input
-        type='text'
-        value={value}
-        placeholder={placeholder}
-        onChange={(e) => setValue(e.target.value)}
-        className='cursor-pointer border-gray-300 bg-white pr-10 transition-all duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
-        onClick={() => setOpen(!open)}
-        readOnly
-      />
-      <ChevronDown
-        className={`pointer-events-none absolute top-3 right-3 h-4 w-4 text-gray-500 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
-      />
-
-      {open && (
-        <div className='absolute z-10 mt-1 max-h-50 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg'>
-          {options.map((option, index) => (
-            <div
-              key={index}
-              className='cursor-pointer px-4 py-2 text-sm transition-colors duration-150 last:border-b-0 hover:bg-blue-50'
-              onClick={() => {
-                setValue(option)
-                setOpen(false)
-              }}
-            >
-              {option}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+  const hasFilters = Boolean(
+    filters.search || filters.categoryId || filters.ageRangeId || filters.skillId || filters.standardId
   )
+
+  const renderFilterTag = (
+    key: keyof typeof filters,
+    label: string,
+    color: string,
+    options?: { value: string; label: string }[]
+  ) =>
+    filters[key] && (
+      <span className={`inline-flex items-center gap-1 rounded-full ${color} px-3 py-1 text-sm`}>
+        {label}: {getLabel(filters[key], options ?? [])}
+        <X className='h-3 w-3 cursor-pointer' onClick={() => dispatch(setParam({ key, value: '' }))} />
+      </span>
+    )
+
+  const categoryOptions = getOptions(categories?.data.items, 'categoryName')
+  const skillOptions = getOptions(skills?.data.items, 'skillName')
+  const ageRangeOptions = getOptions(ageRanges?.data.items, 'ageRangeLabel')
+  const standardOptions = getOptions(standards?.data.items, 'standardName')
 
   return (
     <div className='border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50'>
@@ -92,88 +57,91 @@ export default function LessonListAction() {
         <div className='mb-4 flex items-center justify-between'>
           <h2 className='text-lg font-semibold text-gray-800'>Filter Lessons</h2>
           {hasFilters && (
-            <button
-              onClick={clearAll}
-              className='flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition-colors duration-200 hover:bg-red-100'
-            >
-              <X className='h-4 w-4' />
-              Clear All
-            </button>
+            <div className='flex items-center gap-8'>
+              {/* Search Button */}
+              <Button
+                onClick={() => console.log('Search clicked')}
+                className='border border-blue-200 bg-blue-50 px-4 text-blue-600 hover:bg-blue-100'
+              >
+                <Search className='h-4 w-4' />
+                Search
+              </Button>
+              {/* Clear All Button */}
+              <Button onClick={clearAll} className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'>
+                <X className='h-4 w-4' />
+                Clear All
+              </Button>
+            </div>
           )}
         </div>
 
-        <div className='grid w-full grid-cols-1 items-center gap-4 md:grid-cols-2 lg:grid-cols-4'>
+        <div className='grid w-full grid-cols-1 items-center gap-4 md:grid-cols-2 xl:grid-cols-3'>
           {/* Search Input */}
           <div className='relative w-full'>
             <Input
               type='text'
               placeholder='Search lessons...'
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              className='border-gray-300 bg-white pl-10 transition-all duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
+              value={filters.search}
+              onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+              className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
             />
             <Search className='absolute top-3 left-3 h-4 w-4 text-gray-400' />
           </div>
 
-          {/* Category Dropdown */}
-          <SelectDropdown
-            value={categoryValue}
-            setValue={setCategoryValue}
-            open={categoryOpen}
-            setOpen={setCategoryOpen}
-            options={categories}
+          {/* Category */}
+          <SSelect
             placeholder='Category (Select one option)'
+            value={filters.categoryId?.toString() ?? ''}
+            onChange={(val) => dispatch(setParam({ key: 'categoryId', value: Number(val) }))}
+            options={categoryOptions}
+            onOpen={(open) => {
+              if (open && !categories) getCategory()
+            }}
           />
 
-          {/* Age Range Dropdown */}
-          <SelectDropdown
-            value={ageRangeValue}
-            setValue={setAgeRangeValue}
-            open={ageRangeOpen}
-            setOpen={setAgeRangeOpen}
-            options={ageRanges}
+          {/* Skill */}
+          <SSelect
+            placeholder='Skill (Select one option)'
+            value={filters.skillId?.toString() ?? ''}
+            onChange={(val) => dispatch(setParam({ key: 'skillId', value: Number(val) }))}
+            options={skillOptions}
+            onOpen={(open) => {
+              if (open && !skills) getSkill()
+            }}
+          />
+
+          {/* Age Range */}
+          <SSelect
             placeholder='Age Range (Select one option)'
+            value={filters.ageRangeId?.toString() ?? ''}
+            onChange={(val) => dispatch(setParam({ key: 'ageRangeId', value: Number(val) }))}
+            options={ageRangeOptions}
+            onOpen={(open) => {
+              if (open && !ageRanges) getAgeRange()
+            }}
           />
 
-          {/* Grades Dropdown */}
-          <SelectDropdown
-            value={gradesValue}
-            setValue={setGradesValue}
-            open={gradesOpen}
-            setOpen={setGradesOpen}
-            options={grades}
-            placeholder='Grades (Select one option)'
+          {/* Standard */}
+          <SSelect
+            placeholder='Standard (Select one option)'
+            value={filters.standardId?.toString() ?? ''}
+            onChange={(val) => dispatch(setParam({ key: 'standardId', value: Number(val) }))}
+            options={standardOptions}
+            onOpen={(open) => {
+              if (open && !standards) getStandard()
+            }}
           />
         </div>
 
-        {/* Active Filters Display */}
+        {/* Active Filters */}
         {hasFilters && (
           <div className='mt-4 flex flex-wrap gap-2'>
             <span className='text-sm font-medium text-gray-600'>Active filters:</span>
-            {searchValue && (
-              <span className='inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800'>
-                Search: "{searchValue}"
-                <X className='h-3 w-3 cursor-pointer hover:text-blue-600' onClick={() => setSearchValue('')} />
-              </span>
-            )}
-            {categoryValue && (
-              <span className='inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-sm text-green-800'>
-                Category: {categoryValue}
-                <X className='h-3 w-3 cursor-pointer hover:text-green-600' onClick={() => setCategoryValue('')} />
-              </span>
-            )}
-            {ageRangeValue && (
-              <span className='inline-flex items-center gap-1 rounded-full bg-purple-100 px-3 py-1 text-sm text-purple-800'>
-                Age: {ageRangeValue}
-                <X className='h-3 w-3 cursor-pointer hover:text-purple-600' onClick={() => setAgeRangeValue('')} />
-              </span>
-            )}
-            {gradesValue && (
-              <span className='inline-flex items-center gap-1 rounded-full bg-orange-100 px-3 py-1 text-sm text-orange-800'>
-                Grade: {gradesValue}
-                <X className='h-3 w-3 cursor-pointer hover:text-orange-600' onClick={() => setGradesValue('')} />
-              </span>
-            )}
+            {renderFilterTag('search', 'Search', 'bg-blue-100 text-blue-800')}
+            {renderFilterTag('categoryId', 'Category', 'bg-green-100 text-green-800', categoryOptions)}
+            {renderFilterTag('ageRangeId', 'Age', 'bg-purple-100 text-purple-800', ageRangeOptions)}
+            {renderFilterTag('skillId', 'Skill', 'bg-yellow-100 text-yellow-800', skillOptions)}
+            {renderFilterTag('standardId', 'Standard', 'bg-red-100 text-red-800', standardOptions)}
           </div>
         )}
       </div>

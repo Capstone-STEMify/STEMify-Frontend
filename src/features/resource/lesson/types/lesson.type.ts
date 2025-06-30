@@ -14,6 +14,11 @@ export type Lesson = {
   courseId: number
   createdDate: string
   lastModifiedDate: string
+  ageRangeLabel: string
+  categoryNames: string[]
+  skillNames: string[]
+  standardNames: string[]
+  sectionIds: number[]
 }
 
 export enum LessonStatus {
@@ -29,10 +34,18 @@ export enum LessonStatus {
 export type LessonQueryParams = {
   courseId?: number
   createdByUserId?: string
+  ageRangeId?: number
+  categoryId?: number
+  skillId?: number
+  standardId?: number
 } & SearchPaginatedRequestParams
 
 //slice
 export type LessonSliceParams = {
   courseId?: number
   createdByUserId?: string
+  ageRangeId?: number
+  categoryId?: number
+  skillId?: number
+  standardId?: number
 } & SliceQueryParams

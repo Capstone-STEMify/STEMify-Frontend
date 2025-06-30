@@ -8,10 +8,11 @@ import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
 import { useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
+import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { EllipsisVertical } from 'lucide-react'
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 export default function LessonListContent() {
   const dispatch = useAppDispatch()
@@ -21,7 +22,19 @@ export default function LessonListContent() {
     dispatch(setPageSize(12))
   }, [dispatch])
 
-  const { data: lessonData, isLoading } = useSearchLessonQuery(lessonParams)
+  const queryParams: LessonQueryParams = {
+    courseId: lessonParams.courseId,
+    createdByUserId: lessonParams.createdByUserId,
+    ageRangeId: lessonParams.ageRangeId,
+    categoryId: lessonParams.categoryId,
+    skillId: lessonParams.skillId,
+    standardId: lessonParams.standardId,
+    pageNumber: lessonParams.pageNumber,
+    pageSize: lessonParams.pageSize,
+    search: lessonParams.search
+  }
+
+  const { data: lessonData, isLoading } = useSearchLessonQuery(queryParams)
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))

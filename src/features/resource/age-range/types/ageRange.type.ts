@@ -3,7 +3,7 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 // models
 export type AgeRange = {
-  id: string
+  id: number
   ageRangeLabel: string
   minAge: number
   maxAge: number

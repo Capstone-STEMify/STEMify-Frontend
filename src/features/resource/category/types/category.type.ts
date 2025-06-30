@@ -2,10 +2,9 @@ import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Category = {
-  id: string
-  ageRangeLabel: string
-  minAge: number
-  maxAge: number
+  id: number
+  categoryName: string
+  slug: string
 }
 
 export type CategoryQueryParams = {
