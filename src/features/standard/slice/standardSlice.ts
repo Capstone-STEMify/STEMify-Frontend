@@ -1,7 +1,7 @@
-import { LessonSliceParams } from '@/features/resource/lesson/types/lesson.type'
+import { StandardSliceParams } from '@/features/standard/types/standard.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
-const initialState: LessonSliceParams = {
+const initialState: StandardSliceParams = {
   pageNumber: 1,
   pageSize: 5,
   search: '',
@@ -9,10 +9,10 @@ const initialState: LessonSliceParams = {
   status: ''
 }
 
-export const lessonSlice = createQuerySlice('lessonSlice', initialState)
+export const standardSlice = createQuerySlice('standardSlice', initialState)
 
 export const { setPageIndex, setPageSize, setSearchTerm, setParam, setMultipleParams, resetParams } =
-  lessonSlice.actions
+  standardSlice.actions
 
 // guide for using filter query slice actions
 // dispatch(setParam({ key: 'courseId', value: 1 }))

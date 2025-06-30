@@ -1,3 +1,5 @@
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
+
 export enum EnrollmentStatus {
   ALL = 'ALL',
   ACTIVE = 'Active', // Currently enrolled
@@ -20,3 +22,11 @@ export type Enrollment = {
   coverImageUrl: string | null
   enrolledAt: string
 }
+
+// Query parameters for searching enrollments
+export type EnrollmentQueryParams = {
+  studentId?: string
+  status?: EnrollmentStatus
+  classroomId?: string
+  orderBy?: EnrollmentOrderBy
+} & SearchPaginatedRequestParams

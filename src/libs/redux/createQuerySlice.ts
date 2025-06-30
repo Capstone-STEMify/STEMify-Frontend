@@ -1,6 +1,6 @@
-import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-export interface BaseQueryParams {
+export interface SliceQueryParams {
   pageNumber: number
   pageSize: number
   search: string
@@ -9,7 +9,7 @@ export interface BaseQueryParams {
   [key: string]: any
 }
 
-export function createQuerySlice<T extends BaseQueryParams>(name: string, initialState: T) {
+export function createQuerySlice<T extends SliceQueryParams>(name: string, initialState: T) {
   return createSlice({
     name,
     initialState,

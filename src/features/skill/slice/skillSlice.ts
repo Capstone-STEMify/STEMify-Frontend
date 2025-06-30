@@ -1,7 +1,7 @@
-import { LessonSliceParams } from '@/features/resource/lesson/types/lesson.type'
+import { SkillSliceParams } from '@/features/skill/types/skill.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
-const initialState: LessonSliceParams = {
+const initialState: SkillSliceParams = {
   pageNumber: 1,
   pageSize: 5,
   search: '',
@@ -9,10 +9,9 @@ const initialState: LessonSliceParams = {
   status: ''
 }
 
-export const lessonSlice = createQuerySlice('lessonSlice', initialState)
+export const skillSlice = createQuerySlice('skillSlice', initialState)
 
-export const { setPageIndex, setPageSize, setSearchTerm, setParam, setMultipleParams, resetParams } =
-  lessonSlice.actions
+export const { setPageIndex, setPageSize, setSearchTerm, setParam, setMultipleParams, resetParams } = skillSlice.actions
 
 // guide for using filter query slice actions
 // dispatch(setParam({ key: 'courseId', value: 1 }))
