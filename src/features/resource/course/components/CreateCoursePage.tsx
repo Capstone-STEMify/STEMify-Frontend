@@ -16,8 +16,12 @@ import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown'
 import { CoverImageUpload } from '@/features/resource/course/components/manage/create/CoverImageUpload'
 import { SkillsLearned } from '@/features/resource/course/components/manage/create/SkillsLearned'
 import { CourseActionButtons } from '@/features/resource/course/components/manage/create/CourseActionButtons'
+import { CourseContent } from './manage/content/CourseContent' 
+
+type TabType = 'basic-info' | 'course-content' | 'fee'
 
 export default function CreateCourse() {
+  const [activeTab, setActiveTab] = useState<TabType>('basic-info')
   const [formData, setFormData] = useState<CourseFormData>({
     selectedCategories: [],
     courseTitle: '',
@@ -104,84 +108,170 @@ export default function CreateCourse() {
     setFormData((prev) => ({ ...prev, takeAways }))
   }
 
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'basic-info':
+        return (
+          <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
+            {/* Main Content */}
+            <div className='space-y-6 lg:col-span-2'>
+              <CourseBasicInfo
+                courseTitle={formData.courseTitle}
+                courseDescription={formData.courseDescription}
+                onTitleChange={handleTitleChange}
+                onDescriptionChange={handleDescriptionChange}
+              />
+
+              <SCard
+                title='Course Category'
+                description='Select multiple course categories for this class'
+                content={
+                  <>
+                    {categories.length > 0 && (
+                      <div className='mb-4 flex flex-wrap gap-2'>
+                        {categories.map((value) => (
+                          <span
+                            key={value}
+                            className={`inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-sm text-sky-500`}
+                          >
+                            {value}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                }
+              />
+
+              <SCard
+                title='Age Ranges'
+                description='Which age ranges is this course intended for?'
+                content={
+                  <>
+                    {ageRanges.length > 0 && (
+                      <div className='mb-4 flex flex-wrap gap-2'>
+                        {ageRanges.map((value) => (
+                          <span
+                            key={value}
+                            className={`inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-sm text-sky-500`}
+                          >
+                            {value}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                }
+              />
+
+              <SCard
+                title='Standards'
+                description='Select the education standards this course aligns with'
+                content={
+                  <>
+                    {standards.length > 0 && (
+                      <div className='mb-4 flex flex-wrap gap-2'>
+                        {standards.map((value) => (
+                          <span
+                            key={value}
+                            className={`inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-sm text-sky-500`}
+                          >
+                            {value}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                }
+              />
+
+              <SCard
+                title='Grades'
+                description='Select the education grades this course aligns with'
+                content={
+                  <div className='space-y-2'>
+                    <div className='space-y-1 text-sm text-gray-600'>
+                      <div>
+                        <span className='font-medium'>United States:</span> K, 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, UK
+                      </div>
+                      <div>
+                        <span className='font-medium'>England:</span> Early Years, Year 1, Year 2, Year 3, Year 4, Year 5,
+                        Year 6, Year 7, Year 8
+                      </div>
+                      <div>
+                        <span className='font-medium'>UK - Scotland:</span> Early Learning and Childcare, S1, P1
+                      </div>
+                    </div>
+                  </div>
+                }
+              />
+            </div>
+
+            {/* Sidebar */}
+            <div className='space-y-6'>
+              <CoverImageUpload />
+              <SkillsLearned takeAways={formData.takeAways} onUpdateTakeAways={handleUpdateTakeAways} />
+              <CourseActionButtons />
+            </div>
+          </div>
+        )
+      
+      case 'course-content':
+        return <CourseContent />
+      
+      case 'fee':
+        return (
+          <div className="flex items-center justify-center h-64">
+            <p className="text-gray-500 text-lg">Fee content will be implemented here</p>
+          </div>
+        )
+      
+      default:
+        return null
+    }
+  }
+
   return (
     <div className='min-h-screen bg-gray-50 p-4 md:p-6'>
       <div className='mx-auto max-w-6xl'>
         <div className='mb-6'>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
             <div className='flex space-x-6'>
-              <button className='border-b-2 border-amber-500 pb-2 font-medium text-amber-400'>Basic Info</button>
-              <button className='pb-2 text-gray-500'>Course content</button>
-              <button className='pb-2 text-gray-500'>Fee</button>
+              <button 
+                onClick={() => setActiveTab('basic-info')}
+                className={`pb-2 font-medium transition-colors ${
+                  activeTab === 'basic-info' 
+                    ? 'border-b-2 border-amber-500 text-amber-400' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Basic Info
+              </button>
+              <button 
+                onClick={() => setActiveTab('course-content')}
+                className={`pb-2 font-medium transition-colors ${
+                  activeTab === 'course-content' 
+                    ? 'border-b-2 border-amber-500 text-amber-400' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Course content
+              </button>
+              <button 
+                onClick={() => setActiveTab('fee')}
+                className={`pb-2 font-medium transition-colors ${
+                  activeTab === 'fee' 
+                    ? 'border-b-2 border-amber-500 text-amber-400' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Fee
+              </button>
             </div>
           </div>
         </div>
 
-        <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
-          {/* Main Content */}
-          <div className='space-y-6 lg:col-span-2'>
-            <CourseBasicInfo
-              courseTitle={formData.courseTitle}
-              courseDescription={formData.courseDescription}
-              onTitleChange={handleTitleChange}
-              onDescriptionChange={handleDescriptionChange}
-            />
-
-            <SCard
-              title='Course Category'
-              description='Select multiple course categories for this class'
-              content={
-                <MultiSelectDropdown
-                  placeholder='Select categories (multiple selection allowed)'
-                  options={categories}
-                  selectedValues={formData.selectedCategories}
-                  onToggle={handleCategoryToggle}
-                  onRemove={handleRemoveCategory}
-                  tagColor='sky'
-                />
-              }
-            />
-
-            <SCard
-              title='Age Ranges'
-              description='Which age ranges is this course intended for?'
-              content={
-                <MultiSelectDropdown
-                  placeholder='Select age ranges'
-                  options={ageRanges}
-                  selectedValues={formData.selectedAgeRanges}
-                  onToggle={handleAgeRangeToggle}
-                  onRemove={handleRemoveAgeRange}
-                  tagColor='green'
-                />
-              }
-            />
-
-            <SCard
-              title='Standards'
-              description='Select the education standards this course aligns with'
-              content={
-                <MultiSelectDropdown
-                  placeholder='Select standards'
-                  options={standards}
-                  selectedValues={formData.selectedStandards}
-                  onToggle={handleStandardToggle}
-                  onRemove={handleRemoveStandard}
-                  tagColor='blue'
-                />
-              }
-            />
-          </div>
-
-          {/* Sidebar */}
-          <div className='space-y-6'>
-            <CoverImageUpload />
-
-            <SkillsLearned takeAways={formData.takeAways} onUpdateTakeAways={handleUpdateTakeAways} />
-
-            <CourseActionButtons />
-          </div>
-        </div>
+        {renderTabContent()}
       </div>
     </div>
   )
