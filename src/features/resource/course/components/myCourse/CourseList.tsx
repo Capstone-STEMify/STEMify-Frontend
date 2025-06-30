@@ -123,7 +123,7 @@ interface CourseContentProps {
   courses?: typeof sampleCourses
 }
 
-export function CourseContent({ courses = sampleCourses }: CourseContentProps) {
+export function CourseList({ courses = sampleCourses }: CourseContentProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const coursesPerPage = 6
   
@@ -148,8 +148,8 @@ export function CourseContent({ courses = sampleCourses }: CourseContentProps) {
   return (
     <div className="space-y-6">
       <SCard
-        title="Course Content"
-        description={`Showing ${startIndex + 1}-${Math.min(endIndex, courses.length)} of ${courses.length} courses`}
+        title="Your Courses"
+        description="Continue your learning journey with these courses"
         content={
           <div className="space-y-6">
             {/* Course Grid */}
