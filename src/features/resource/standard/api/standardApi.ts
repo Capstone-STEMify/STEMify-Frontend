@@ -1,4 +1,4 @@
-import { Standard, StandardQueryParams } from '@/features/standard/types/standard.type'
+import { Standard, StandardQueryParams } from '@/features/resource/standard/types/standard.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const standardApi = createCrudApi<Standard, StandardQueryParams>({

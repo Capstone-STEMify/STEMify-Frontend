@@ -1,4 +1,4 @@
-import { SkillSliceParams } from '@/features/skill/types/skill.type'
+import { SkillSliceParams } from '@/features/resource/skill/types/skill.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: SkillSliceParams = {

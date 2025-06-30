@@ -1,4 +1,4 @@
-import { CategorySliceParams } from '@/features/category/types/category.type'
+import { CategorySliceParams } from '@/features/resource/category/types/category.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: CategorySliceParams = {

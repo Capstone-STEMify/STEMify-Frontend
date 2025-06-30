@@ -1,4 +1,4 @@
-import { AgeRangeSliceParams } from '@/features/age-range/types/ageRange.type'
+import { AgeRangeSliceParams } from '@/features/resource/age-range/types/ageRange.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: AgeRangeSliceParams = {

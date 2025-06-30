@@ -1,4 +1,4 @@
-import { Skill, SkillQueryParams } from '@/features/skill/types/skill.type'
+import { Skill, SkillQueryParams } from '@/features/resource/skill/types/skill.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const skillApi = createCrudApi<Skill, SkillQueryParams>({

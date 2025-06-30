@@ -1,4 +1,4 @@
-import { AgeRange, AgeRangeQueryParams } from '@/features/age-range/types/ageRange.type'
+import { AgeRange, AgeRangeQueryParams } from '@/features/resource/age-range/types/ageRange.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const ageRangeApi = createCrudApi<AgeRange, AgeRangeQueryParams>({

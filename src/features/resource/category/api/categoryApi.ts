@@ -1,4 +1,4 @@
-import { Category, CategoryQueryParams } from '@/features/category/types/category.type'
+import { Category, CategoryQueryParams } from '@/features/resource/category/types/category.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const categoryApi = createCrudApi<Category, CategoryQueryParams>({

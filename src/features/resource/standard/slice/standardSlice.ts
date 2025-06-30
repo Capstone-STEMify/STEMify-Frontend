@@ -1,4 +1,4 @@
-import { StandardSliceParams } from '@/features/standard/types/standard.type'
+import { StandardSliceParams } from '@/features/resource/standard/types/standard.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: StandardSliceParams = {
