@@ -33,6 +33,7 @@ export default function LessonListAction() {
     filters.search || filters.categoryId || filters.ageRangeId || filters.skillId || filters.standardId
   )
 
+  // Function to render filter tags
   const renderFilterTag = (
     key: keyof typeof filters,
     label: string,
@@ -46,6 +47,7 @@ export default function LessonListAction() {
       </span>
     )
 
+  // Options for selects
   const categoryOptions = getOptions(categories?.data.items, 'categoryName')
   const skillOptions = getOptions(skills?.data.items, 'skillName')
   const ageRangeOptions = getOptions(ageRanges?.data.items, 'ageRangeLabel')
