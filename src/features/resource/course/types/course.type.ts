@@ -1,4 +1,10 @@
-import { SearchPaginatedRequestParams, PaginatedResult } from '@/types/baseModel'
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
+export enum CourseStatus {
+  DRAFT = 'Draft',
+  PUBLISHED = 'Published',
+  ARCHIVED = 'Archived',
+  DELETED = 'Deleted'
+}
 
 export type Course = {
   id: number
@@ -8,7 +14,7 @@ export type Course = {
   description: string
   numberOfSection: number
   duration: number
-  status: string
+  status: CourseStatus
   downloadCount: number
   isPublic: boolean
   createdByUserId: string

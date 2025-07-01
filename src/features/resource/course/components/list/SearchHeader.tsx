@@ -37,11 +37,11 @@ export default function SearchHeader({
         />
 
         <SSelect
-          items={[
-            { value: 'relevant', content: 'Most Relevant' },
-            { value: 'newest', content: 'Newest First' },
-            { value: 'shortest', content: 'Shortest Duration' },
-            { value: 'longest', content: 'Longest Duration' }
+          options={[
+            { value: 'relevant', label: 'Most Relevant' },
+            { value: 'newest', label: 'Newest First' },
+            { value: 'shortest', label: 'Shortest Duration' },
+            { value: 'longest', label: 'Longest Duration' }
           ]}
           placeholder='Sort by...'
           value={filterItems.sortBy}

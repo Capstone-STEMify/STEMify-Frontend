@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import clsx from 'clsx'
 import { Size } from '@/types/general'
-import { Badge } from '@/components/shadcn/badge'
+import Link from 'next/link'
 
 interface CardLayoutProps {
   imageSrc: string
@@ -11,6 +11,7 @@ interface CardLayoutProps {
   infor?: React.ReactNode
   children?: React.ReactNode
   action?: React.ReactNode
+  href?: string
 }
 
 const sizeClasses: Record<Size, { width: string; height: string; imageHeight: string }> = {
@@ -27,11 +28,12 @@ export default function CardLayout({
   badge,
   infor,
   children,
-  action
+  action,
+  href
 }: CardLayoutProps) {
   const { width, height, imageHeight } = sizeClasses[size]
 
-  return (
+  const cardContent = (
     <div
       className={clsx(
         'hover:shadow-6 relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md transition-all duration-300 hover:scale-[1.02]',
@@ -42,7 +44,7 @@ export default function CardLayout({
       {/* Image */}
       <div className={clsx('relative w-full', imageHeight)}>
         {imageSrc === '' ? (
-          <Image src={'/HomeFiles/hcm.jpg'} alt={alt} fill className='object-cover' />
+          <Image src={'/images/fallback.png'} alt={alt} fill className='object-cover' />
         ) : (
           <Image src={imageSrc} alt={alt} fill className='object-cover' />
         )}
@@ -55,5 +57,13 @@ export default function CardLayout({
       {/* Action (edit button, etc.) */}
       {action && <div className='absolute top-2 right-2'>{action}</div>}
     </div>
+  )
+
+  return href ? (
+    <Link href={href} className='block'>
+      {cardContent}
+    </Link>
+  ) : (
+    cardContent
   )
 }

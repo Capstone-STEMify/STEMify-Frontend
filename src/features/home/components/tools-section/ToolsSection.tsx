@@ -1,17 +1,18 @@
 'use client'
 import MacCard from '@/components/shared/card/MacCard'
+import Image from 'next/image'
 import React, { useState } from 'react'
 
 export default function ToolsSection() {
   const tools = [
-    { icon: '/HomeFiles/classroom.jpg' },
-    { icon: '/HomeFiles/drive.png' },
-    { icon: '/HomeFiles/camera.jpg' },
-    { icon: '/HomeFiles/facebook.png' },
-    { icon: '/HomeFiles/zalo.png' },
-    { icon: '/HomeFiles/calendar.png' },
-    { icon: '/HomeFiles/paint.png' },
-    { icon: '/HomeFiles/note.jpg' }
+    { icon: '/HomeFiles/tools/classroom.jpg' },
+    { icon: '/HomeFiles/tools/drive.png' },
+    { icon: '/HomeFiles/tools/camera.jpg' },
+    { icon: '/HomeFiles/tools/facebook.png' },
+    { icon: '/HomeFiles/tools/zalo.png' },
+    { icon: '/HomeFiles/tools/calendar.png' },
+    { icon: '/HomeFiles/tools/paint.png' },
+    { icon: '/HomeFiles/tools/note.jpg' }
   ]
 
   return (
@@ -36,7 +37,7 @@ export default function ToolsSection() {
 
           <div className='relative z-20 mb-8 flex justify-center'>
             <MacCard>
-              <img src="/HomeFiles/window.png" alt="STEMify Tools" className="w-full h-auto" />
+              <img src='/HomeFiles/window.png' alt='STEMify Tools' className='h-auto w-full' />
             </MacCard>
             <div className='absolute -top-2 -left-2 -z-10 h-full w-full rounded-lg bg-gradient-to-br from-yellow-300 to-orange-300 opacity-30'></div>
           </div>
@@ -49,7 +50,7 @@ export default function ToolsSection() {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <span className='font-bold text-white'>
-                  <img className='w-full max-w-10' src={tool.icon}></img>
+                  <Image width={30} height={30} alt='' src={tool.icon} />
                 </span>
               </div>
             ))}

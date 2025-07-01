@@ -1,7 +1,6 @@
 import { Button } from '@/components/shadcn/button'
 import SearchBar from '@/components/shared/search/SearchBar'
 import SSelect from '@/components/shared/SSelect'
-import ClassroomCard from '@/components/shared/card/ClassroomCard'
 import ClassroomHero from '@/components/shared/hero-section/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
 import ClassRoomManagement from '@/features/classroom/components/ClassRoomManagement'
@@ -11,7 +10,7 @@ import SAvatar from '@/components/shared/SAvatar'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useQueryParamsHandler } from '@/hooks/useQueryParamsHandler'
-import { ClassroomOrderBy, ClassroomStatus } from '@/types/enum'
+import { ClassroomOrderBy, ClassroomStatus } from '@/features/classroom/types/classroom.type'
 
 export default function TeacherClassroomList() {
   const { params, setRawParams, updateParams, goToPage, resetParams } = useQueryParamsHandler<ClassroomParams>({
@@ -50,12 +49,12 @@ export default function TeacherClassroomList() {
           />
           <div className='flex items-center justify-between gap-4 sm:justify-start'>
             <SSelect
-              items={[
-                { value: 'ALL', content: 'All' },
-                { value: ClassroomStatus.ACTIVE, content: 'Active' },
-                { value: ClassroomStatus.INACTIVE, content: 'Inactive' },
-                { value: ClassroomStatus.ARCHIVED, content: 'Archived' },
-                { value: ClassroomStatus.DELETED, content: 'Deleted' }
+              options={[
+                { value: 'ALL', label: 'All' },
+                { value: ClassroomStatus.ACTIVE, label: 'Active' },
+                { value: ClassroomStatus.INACTIVE, label: 'Inactive' },
+                { value: ClassroomStatus.ARCHIVED, label: 'Archived' },
+                { value: ClassroomStatus.DELETED, label: 'Deleted' }
               ]}
               placeholder='Filter by status'
               value={params.status ?? 'ALL'}
@@ -63,9 +62,9 @@ export default function TeacherClassroomList() {
             />
 
             <SSelect
-              items={[
-                { value: ClassroomOrderBy.NAME, content: 'Name' },
-                { value: ClassroomOrderBy.CREATED_DATE, content: 'Created Date' }
+              options={[
+                { value: ClassroomOrderBy.NAME, label: 'Name' },
+                { value: ClassroomOrderBy.CREATED_DATE, label: 'Created Date' }
               ]}
               placeholder='Sort by'
               value={params.orderBy ?? ''}

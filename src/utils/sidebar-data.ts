@@ -46,11 +46,6 @@ export function getSidebarData(role: UserRole) {
         icon: Home
       },
       {
-        title: 'Members',
-        url: `${classroomURL}/members`,
-        icon: Users
-      },
-      {
         title: 'Announcements',
         url: `${classroomURL}/announcements`,
         icon: Megaphone
@@ -93,21 +88,18 @@ export function getSidebarData(role: UserRole) {
     [UserRole.STUDENT]: [
       { title: 'Course', url: `${classroomURL}/course`, icon: SquareTerminal },
       { title: 'Lesson', url: `${classroomURL}/lesson`, icon: Bot },
-      { title: 'Activity', url: `${classroomURL}/activity`, icon: Activity },
-      { title: 'Quiz', url: `${classroomURL}/quiz`, icon: BookOpen }
+      { title: 'Activity', url: `${classroomURL}/activity`, icon: Activity }
     ],
     [UserRole.TEACHER]: [
       { title: 'Course', url: `${classroomURL}/course`, icon: SquareTerminal },
       { title: 'Lesson', url: `${classroomURL}/lesson`, icon: Bot },
-      { title: 'Activity', url: `${classroomURL}/activity`, icon: Activity },
-      { title: 'Quiz', url: `${classroomURL}/quiz`, icon: BookOpen }
+      { title: 'Activity', url: `${classroomURL}/activity`, icon: Activity }
     ],
     [UserRole.ADMIN]: [],
     [UserRole.STAFF]: [
       { title: 'Course', url: `resource/course/create`, icon: SquareTerminal },
       { title: 'Lesson', url: `resource/lesson/create`, icon: Bot },
-      { title: 'Activity', url: `resource/activity/create`, icon: Activity },
-      { title: 'Quiz', url: `resource/quiz/create`, icon: BookOpen }
+      { title: 'Activity', url: `resource/activity/create`, icon: Activity }
     ],
     [UserRole.GUEST]: []
   }

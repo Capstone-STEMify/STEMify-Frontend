@@ -1,7 +1,7 @@
-import { Lesson, LessonParams } from '@/features/resource/lesson/types/lesson.type'
+import { Lesson, LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
-export const lessonApi = createCrudApi<Lesson, LessonParams>({
+export const lessonApi = createCrudApi<Lesson, LessonQueryParams>({
   reducerPath: 'lessonApi',
   tagType: 'Lesson',
   baseUrl: '/lessons'

@@ -21,3 +21,35 @@ export function getDaysRemaining(endDateStr: string): number {
 
   return diffInDays
 }
+
+/**
+ *
+ * Get label from options based on id
+ * @param id
+ * @param options
+ * @description This function retrieves the label corresponding to a given id from an array of options.
+ * @returns
+ * @example getLabel(1, [{ value: '1', label: 'Son tung MTP' }, { value: '2', label: 'Mono' }])  ==> 'Son tung MTP'
+ */
+export const getLabel = (id: number | undefined, options: { value: string; label: string }[]) => {
+  return options.find((o) => o.value === id?.toString())?.label || ''
+}
+
+/**
+ *
+ * @param data
+ * @param labelKey
+ * @returns
+ * @example
+ * getOptions([{ id: 1, categoryName: 'Math' }, { id: 2, categoryName: 'Science' }], 'categoryName')
+ * ==> [{ value: '1', label: 'Math' }, { value: '2', label: 'Science' }]
+ * @description Converts an array of objects into an array of options with value and label properties.
+ */
+export const getOptions = (data: any[] | undefined, labelKey: string): { value: string; label: string }[] =>
+  data?.map((item) => ({
+    value: item.id.toString(),
+    label: item[labelKey]
+  })) || []
+
+
+

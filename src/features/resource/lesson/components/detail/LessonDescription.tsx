@@ -28,7 +28,7 @@ export default function LessonDescription({
         <section className='flex flex-col items-center'>
           {/* Thumbnail image */}
           <div className='mb-4 overflow-hidden rounded-xl shadow'>
-            <Image src={imageUrl} alt='Wetlands Biome' width={200} height={200} className='object-fit' />
+            <Image src={imageUrl} alt='Wetlands Biome' width={250} height={250} className='object-fit' />
           </div>
 
           {/* Title & description */}
