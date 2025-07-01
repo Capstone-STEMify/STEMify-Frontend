@@ -53,7 +53,7 @@ export default function LessonDescription({
               <h3 className='mb-2 text-sm font-medium'>Categories</h3>
               <div className='flex flex-wrap items-center gap-2'>
                 {categories.map((category) => (
-                  <Badge key={category} variant='outline' className='bg-skye-custom-100 select-none hover:scale-105'>
+                  <Badge key={category} variant='outline' className='bg-sky-custom-100 select-none hover:scale-105'>
                     {category}
                   </Badge>
                 ))}

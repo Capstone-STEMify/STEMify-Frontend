@@ -15,7 +15,7 @@ export default function SubHeader({ role }: SubHeaderProps) {
 
   return (
     <nav className='mt-4'>
-      <ul className='from-skye-custom-300 flex items-center justify-center gap-8 rounded-xl border border-white/20 bg-gradient-to-r to-blue-300 px-6 py-3 shadow-md backdrop-blur-sm'>
+      <ul className='from-sky-custom-300 flex items-center justify-center gap-8 rounded-xl border border-white/20 bg-gradient-to-r to-blue-300 px-6 py-3 shadow-md backdrop-blur-sm'>
         {routes.map((item, index) => {
           const isActivePath = item.path === '/' ? pathName === '/' : pathName.startsWith(item.path)
 
@@ -25,8 +25,8 @@ export default function SubHeader({ role }: SubHeaderProps) {
                 href={item.path}
                 className={`group relative rounded-lg px-4 py-2 text-sm font-medium transition-all duration-300 ${
                   isActivePath
-                    ? 'bg-skye-custom-600 font-semibold text-white shadow-lg'
-                    : 'text-skye-custom-600 hover:bg-skye-custom-600/80 hover:text-white'
+                    ? 'bg-sky-custom-600 font-semibold text-white shadow-lg'
+                    : 'text-sky-custom-600 hover:bg-sky-custom-600/80 hover:text-white'
                 } `}
               >
                 {item.name}

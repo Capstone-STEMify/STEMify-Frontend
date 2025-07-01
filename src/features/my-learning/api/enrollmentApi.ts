@@ -1,4 +1,4 @@
-import { Enrollment, EnrollmentQueryParams } from '@/features/my-learning/types/enrollment.type'
+import { Enrollment, EnrollmentQueryParams } from '@/features/resource/course/types/enrollment.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const enrollmentApi = createCrudApi<Enrollment, EnrollmentQueryParams>({
@@ -8,7 +8,15 @@ export const enrollmentApi = createCrudApi<Enrollment, EnrollmentQueryParams>({
 })
 
 export const {
+  useGetByIdQuery: useGetEnrollmentByIdQuery,
   useSearchQuery: useSearchEnrollmentQuery,
   useGetAllQuery: useGetAllEnrollmentQuery,
-  useCreateMutation: useCreateEnrollmentMutaion
+  useCreateMutation: useCreateEnrollmentMutaion,
+  useUpdateMutation: useUpdateEnrollmentMutation,
+  useDeleteMutation: useDeleteEnrollmentMutation,
+
+  // lazy
+  useLazyGetByIdQuery: useLazyGetEnrollmentByIdQuery,
+  useLazySearchQuery: useLazySearchEnrollmentQuery,
+  useLazyGetAllQuery: useLazyGetAllEnrollmentQuery
 } = enrollmentApi

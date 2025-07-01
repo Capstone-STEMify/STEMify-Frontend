@@ -75,11 +75,16 @@ export default function CourseDetails() {
       </div>
       {/* <NavigationBar activeSection={activeSection} setActiveSection={setActiveSection} /> */}
 
-      <AboutSection />
+      {/* <AboutSection /> */}
 
       <ContentSection />
 
-      <RecommendationSection />
+      {/* <RecommendationSection /> */}
+      <h1 className='text-center'>Feedback</h1>
+      <h1 className='text-center'>Feedback</h1>
+      <h1 className='text-center'>Feedback</h1>
+      <h1 className='text-center'>Feedback</h1>
+      <h1 className='text-center'>Feedback</h1>
     </div>
   )
 }

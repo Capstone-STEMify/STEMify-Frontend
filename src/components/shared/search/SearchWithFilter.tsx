@@ -85,7 +85,7 @@ export default function SearchWithFilter({
             </SelectContent>
           </Select>
         ) : (
-          <Search className='text-skye-custom-300 h-5 w-5' />
+          <Search className='text-sky-custom-300 h-5 w-5' />
         )}
         <input
           value={keyword}
@@ -110,7 +110,7 @@ export default function SearchWithFilter({
           </Button>
         )}
       </div>
-      <Button onClick={handleSubmission} className='bg-skye-custom-300 text-light w rounded-full' disabled={isLoading}>
+      <Button onClick={handleSubmission} className='bg-sky-custom-300 text-light w rounded-full' disabled={isLoading}>
         {isLoading ? (
           <div className='h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent' />
         ) : (

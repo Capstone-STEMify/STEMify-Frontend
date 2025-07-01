@@ -5,17 +5,18 @@
 
 /*
 amber-gradient:  right, #fbbf24, #fde68a
-skye-gradient: right, #7dd3fc, #eff6ff
+sky-gradient: right, #7dd3fc, #eff6ff
 */
 @theme {
+  --color-yellow-custom-50: #fefce8;
   --color-amber-custom-100: #fef3c7;
   --color-amber-custom-400: #ffba03;
   --color-orange-custom-500: #ff7008;
 
   --color-blue-custom-50: #eff6ff;
-  --color-skye-custom-100: #d7f1ff;
-  --color-skye-custom-300: #7dd3fc;
-  --color-skye-custom-600: #2454b6;
+  --color-sky-custom-100: #d7f1ff;
+  --color-sky-custom-300: #7dd3fc;
+  --color-sky-custom-600: #2454b6;
 
   --color-slay-custom-100: #f1f5f9;
   --color-slay-custom-200: #e2e8f0;

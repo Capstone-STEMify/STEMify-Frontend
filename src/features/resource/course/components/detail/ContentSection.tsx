@@ -80,7 +80,7 @@ export default function ContentSection() {
             <CardLayout
               key={index}
               imageSrc={lesson.imageUrl || '/images/fallback.png'}
-              infor={<Badge className='bg-skye-custom-600 p-1'>{lesson.categoryNames}</Badge>}
+              infor={<Badge className='bg-sky-custom-600 p-1'>{lesson.categoryNames}</Badge>}
             >
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{lesson.title}</h3>

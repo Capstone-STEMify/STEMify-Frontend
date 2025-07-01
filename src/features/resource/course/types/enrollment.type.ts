@@ -1,5 +1,7 @@
+import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
+// models
 export enum EnrollmentStatus {
   ALL = 'ALL',
   ACTIVE = 'Active', // Currently enrolled
@@ -15,18 +17,24 @@ export enum EnrollmentOrderBy {
 }
 
 export type Enrollment = {
-  id: string
-  classroomName: string
-  classroomId: string
+  id: number
   studentId: string
-  coverImageUrl: string | null
+  courseId: number
+  courseTitle: string
+  coverImageUrl: string
+  description: string
+  duration: number
+  ageRangeLabel: string
   enrolledAt: string
+  completedAt: any
+  status: string
 }
 
-// Query parameters for searching enrollments
+// Query
 export type EnrollmentQueryParams = {
   studentId?: string
-  status?: EnrollmentStatus
-  classroomId?: string
-  orderBy?: EnrollmentOrderBy
 } & SearchPaginatedRequestParams
+
+export type EnrollmentSliceParams = {
+  studentId?: string
+} & SliceQueryParams

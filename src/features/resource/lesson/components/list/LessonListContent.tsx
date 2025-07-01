@@ -82,7 +82,7 @@ export default function LessonListContent() {
                 </div>
 
                 <div className='mt-auto flex flex-wrap items-center gap-2'>
-                  <Badge className='bg-skye-custom-300'>Age 10–12</Badge>
+                  <Badge className='bg-sky-custom-300'>Age 10–12</Badge>
                   <Badge className='bg-red-300'>45:00</Badge>
                 </div>
               </CardLayout>
