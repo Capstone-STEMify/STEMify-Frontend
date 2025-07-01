@@ -3,62 +3,42 @@ import { fadeInUp } from '@/utils/motion'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { formatDuration } from '@/utils/index'
-import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { BookOpen, Clock, Target } from 'lucide-react'
 import { SPagination } from '@/components/shared/SPagination'
+import { useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
+import { useParams } from 'next/navigation'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
+import { useEffect } from 'react'
 
 export default function ContentSection() {
-  const lessons = [
-    {
-      title: 'Plants and Animals',
-      description: 'Connect with the natural world and learn about the plants and animals that live within.',
-      image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop',
-      category: 'Activity',
-      age: '4-14+',
-      duration: 30
-    },
-    {
-      title: 'Health and Safety',
-      description:
-        'Practice safety skills when it comes to the road and take care of your growing body to become independent.',
-      image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop',
-      category: 'Activity',
-      age: '4-14+',
-      duration: 30
-    },
-    {
-      title: 'Using Tools',
-      description: "Let's look at home for the tools we use in our everyday lives.",
-      image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop',
-      category: 'Activity',
-      age: '4-14+',
-      duration: 30
-    },
-    {
-      title: 'Transportation',
-      description: 'Explore and compare the different types of transportation methods.',
-      image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&h=300&fit=crop',
-      category: 'Activity',
-      age: '4-14+',
-      duration: 30
-    },
-    {
-      title: 'My Culture',
-      description: 'Create symbolic cultural works of art.',
-      image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop',
-      category: 'Activity',
-      age: '4-14+',
-      duration: 30
-    },
-    {
-      title: 'Our World',
-      description: 'About the world, the people, and cultures that make it diverse.',
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-      category: 'Activity',
-      age: '4-14+',
-      duration: 30
-    }
-  ]
+  const dispatch = useAppDispatch()
+  const lessonsQuery = useAppSelector((state) => state.lesson)
+  useEffect(() => {
+    dispatch(setPageSize(8))
+  }, [dispatch])
+
+  const params = useParams()
+  const courseId = params.courseId
+
+  const { data: lessons } = useSearchLessonQuery({ ...lessonsQuery, courseId: Number(courseId) })
+
+  const handlePageChange = (newPage: number) => {
+    dispatch(setPageIndex(newPage))
+  }
+
+  if (!lessons?.data || lessons.data.items.length === 0) {
+    return (
+      <div className='bg-white py-12'>
+        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+          <div className='text-center'>
+            <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>No Lessons Found</h2>
+            <p className='text-lg text-gray-600'>There are currently no lessons available for this course.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <motion.section
@@ -96,25 +76,31 @@ export default function ContentSection() {
         {/* Lesson Cards Section */}
         {/* use pagination */}
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-          {lessons.map((lesson, index) => (
+          {lessons?.data.items.map((lesson, index) => (
             <CardLayout
               key={index}
-              imageSrc={lesson.image}
-              infor={<Badge className='bg-skye-custom-600 p-1'>{lesson.category}</Badge>}
+              imageSrc={lesson.imageUrl || '/images/fallback.png'}
+              infor={<Badge className='bg-skye-custom-600 p-1'>{lesson.categoryNames}</Badge>}
             >
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{lesson.title}</h3>
                 <p className='text-sm text-gray-600'>{lesson.description}</p>
-                {/* footer */}
                 <div className='mt-auto flex items-center gap-2'>
-                  <Badge className='bg-blue-100 text-blue-800'>{lesson.age}</Badge>
+                  <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
                   <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
                 </div>
               </div>
             </CardLayout>
           ))}
         </div>
-        <SPagination pageNumber={1} totalPages={5} onPageChanged={() => {}} className='mt-10' />
+        {lessons.data.totalPages > 1 && (
+          <SPagination
+            pageNumber={lessons.data.pageNumber}
+            totalPages={lessons.data.totalPages}
+            onPageChanged={handlePageChange}
+            className='mt-10'
+          />
+        )}
       </div>
     </motion.section>
   )

@@ -1,11 +1,6 @@
+import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
-export enum CourseStatus {
-  DRAFT = 'Draft',
-  PUBLISHED = 'Published',
-  ARCHIVED = 'Archived',
-  DELETED = 'Deleted'
-}
-
+// models
 export type Course = {
   id: number
   title: string
@@ -25,8 +20,34 @@ export type Course = {
   categoryNames: string[]
   skillNames: string[]
   standardNames: string[]
+  lessonIds: number[]
 }
 
+export enum CourseStatus {
+  DRAFT = 'Draft',
+  PUBLISHED = 'Published',
+  ARCHIVED = 'Archived',
+  DELETED = 'Deleted'
+}
+
+// Query
 export type CourseParams = {
   courseId?: number
+  createdByUserId?: string
+  SkillId?: number
+  ageRangeId?: number
+  categoryId?: number
+  standardId?: number
+  isPublic?: boolean
 } & SearchPaginatedRequestParams
+
+// Slice
+export type CourseSliceParams = {
+  courseId?: number
+  createdByUserId?: string
+  SkillId?: number
+  ageRangeId?: number
+  categoryId?: number
+  standardId?: number
+  isPublic?: boolean
+} & SliceQueryParams

@@ -13,7 +13,7 @@ export default function StatsSection({ course }: StatsSectionProps) {
   const statsData = [
     {
       icon: BookOpen,
-      value: course.numberOfSection?.toString() ?? '0',
+      value: course.lessonIds.length,
       title: 'Course section(s)',
       subtitle: 'Comprehensive curriculum',
       iconColor: 'text-blue-600',

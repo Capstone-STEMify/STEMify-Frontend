@@ -15,8 +15,17 @@ import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 
 export default function CourseDetails() {
   const params = useParams()
-  const courseId = typeof params?.courseId === 'string' ? params.courseId : undefined
-  const { data: courseDetailsData, error, isLoading } = useGetCourseByIdQuery(courseId ?? '', { skip: !courseId })
+  const courseId = params.courseId
+  const {
+    data: course,
+    error,
+    isLoading
+  } = useGetCourseByIdQuery(Number(courseId), {
+    skip: !courseId,
+    refetchOnMountOrArgChange: true, // Refetch when component mounts or courseId changes
+    refetchOnFocus: true,
+    refetchOnReconnect: true
+  })
 
   // const [activeSection, setActiveSection] = useState('about')
   // Handle scroll to update active section
@@ -47,7 +56,7 @@ export default function CourseDetails() {
       </div>
     )
   if (error) return <div className='p-8 text-red-500'>Error loading course details.</div>
-  if (!courseDetailsData?.data)
+  if (!course?.data)
     return (
       <div className='flex h-screen items-center justify-center bg-white'>
         <SEmpty
@@ -61,14 +70,12 @@ export default function CourseDetails() {
   return (
     <div className='min-h-screen bg-white'>
       <div className='relative mb-36'>
-        <HeroSection course={courseDetailsData.data} />
-        <StatsSection course={courseDetailsData.data} />
+        <HeroSection course={course.data} />
+        <StatsSection course={course.data} />
       </div>
       {/* <NavigationBar activeSection={activeSection} setActiveSection={setActiveSection} /> */}
 
       <AboutSection />
-
-      <SkillSection course={courseDetailsData.data} />
 
       <ContentSection />
 

@@ -5,6 +5,7 @@ import { ageRangeSlice } from '@/features/resource/age-range/slice/ageRangeSlice
 import { categoryApi } from '@/features/resource/category/api/categoryApi'
 import { categorySlice } from '@/features/resource/category/slice/categorySlice'
 import { courseApi } from '@/features/resource/course/api/courseApi'
+import { courseSlice } from '@/features/resource/course/slice/courseSlice'
 import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
 import { lessonSlice } from '@/features/resource/lesson/slice/lessonSlice'
 import { skillApi } from '@/features/resource/skill/api/skillApi'
@@ -15,6 +16,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
+  course: courseSlice.reducer,
   lesson: lessonSlice.reducer,
   ageRange: ageRangeSlice.reducer,
   category: categorySlice.reducer,
