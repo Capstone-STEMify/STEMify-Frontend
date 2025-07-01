@@ -1,12 +1,5 @@
-import { Enrollment, EnrollmentOrderBy, EnrollmentStatus } from '@/features/classroom/types/enrollment.type'
+import { Enrollment, EnrollmentParams } from '@/features/classroom/types/enrollment.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
-import { SearchPaginatedRequestParams } from '@/types/baseModel'
-export type EnrollmentParams = {
-  studentId?: string
-  status?: EnrollmentStatus
-  classroomId?: string
-  orderBy?: EnrollmentOrderBy
-} & SearchPaginatedRequestParams
 
 export const enrollmentApi = createCrudApi<Enrollment, EnrollmentParams>({
   reducerPath: 'enrollmentApi',
@@ -15,7 +8,15 @@ export const enrollmentApi = createCrudApi<Enrollment, EnrollmentParams>({
 })
 
 export const {
+  useGetByIdQuery: useGetEnrollmentByIdQuery,
   useSearchQuery: useSearchEnrollmentQuery,
   useGetAllQuery: useGetAllEnrollmentQuery,
-  useCreateMutation: useCreateEnrollmentMutaion
+  useCreateMutation: useCreateEnrollmentMutaion,
+  useUpdateMutation: useUpdateEnrollmentMutation,
+  useDeleteMutation: useDeleteEnrollmentMutation,
+
+  // lazy
+  useLazyGetByIdQuery: useLazyGetEnrollmentByIdQuery,
+  useLazySearchQuery: useLazySearchEnrollmentQuery,
+  useLazyGetAllQuery: useLazyGetAllEnrollmentQuery
 } = enrollmentApi

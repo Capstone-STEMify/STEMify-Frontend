@@ -4,7 +4,6 @@ import Link from 'next/link'
 import SSelect from '@/components/shared/SSelect'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import CardLayout from '@/components/shared/card/CardLayout'
-import SearchBar from '@/components/shared/search/SearchBar'
 import ClassroomHero from '@/components/shared/hero-section/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
@@ -101,7 +100,7 @@ export default function StudentClassroomList() {
               <Link href={`/classroom/${classroom.id}`} key={index} className='w-full'>
                 <CardLayout imageSrc={classroom.coverImageUrl || '/HomeFiles/hcm.jpg'}>
                   <div>
-                    <h3 className='text-lg font-semibold text-gray-900'>{classroom.classroomName}</h3>
+                    <h3 className='text-lg font-semibold text-gray-900'>{classroom.courseId}</h3>
                   </div>
                 </CardLayout>
               </Link>

@@ -7,6 +7,8 @@ import { Course } from '../../types/course.type'
 import { Button } from '@/components/shadcn/button'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
+import { useCreateEnrollmentMutaion } from '@/features/classroom/api/enrollmentApi'
+import { toast } from 'sonner'
 
 interface HeroSectionProps {
   course: Course
@@ -30,6 +32,24 @@ const TagGroup = ({ label, items, className }: TagGroupProps) => (
 )
 
 export default function HeroSection({ course }: HeroSectionProps) {
+  const [createEnroll, { data: enroll }] = useCreateEnrollmentMutaion()
+
+  const handleEnroll = () => {
+    if (course.id) {
+      createEnroll({ courseId: course.id, studentId: '4839b5f4-a299-447b-af76-d95595452764' })
+    }
+    toast.success('Enrollment request submitted successfully!', {
+      description: `You have enroll to ${enroll?.data.courseTitle} at  ${enroll?.data.enrolledAt} `,
+      action: {
+        label: 'View Enrollment',
+        onClick: () => {
+          // Navigate to enrollment details or dashboard
+          console.log('Navigate to enrollment details:', enroll)
+        }
+      }
+    })
+  }
+
   return (
     <motion.section
       initial='hidden'
@@ -59,11 +79,11 @@ export default function HeroSection({ course }: HeroSectionProps) {
             </div>
 
             <div className='flex flex-col gap-4 sm:flex-row'>
-              <Button className='flex items-center justify-center rounded-lg bg-sky-400 px-8 py-3 font-medium text-white transition-colors duration-200 hover:bg-sky-500'>
+              <Button onClick={handleEnroll} className='bg-sky-400 text-white'>
                 <TbDoorExit className='mr-2 h-5 w-5' />
                 Assign to Student
               </Button>
-              <Button className='flex items-center justify-center rounded-lg border bg-white px-8 py-3 font-medium text-sky-400 transition-colors duration-200 hover:border-sky-400'>
+              <Button className='bg-white text-sky-400'>
                 <Heart className='mr-2 h-5 w-5' />
                 Wishlist
               </Button>

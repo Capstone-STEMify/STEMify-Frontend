@@ -1,3 +1,6 @@
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
+
+// models
 export enum EnrollmentStatus {
   ALL = 'ALL',
   ACTIVE = 'Active', // Currently enrolled
@@ -13,10 +16,22 @@ export enum EnrollmentOrderBy {
 }
 
 export type Enrollment = {
-  id: string
-  classroomName: string
-  classroomId: string
+  id: number
   studentId: string
-  coverImageUrl: string | null
+  courseId: number
+  courseTitle: string
+  coverImageUrl: string
+  description: string
+  duration: number
+  ageRangeLabel: string
   enrolledAt: string
+  completedAt: any
+  status: string
 }
+
+// Query
+export type EnrollmentParams = {
+  studentId?: string
+  status?: EnrollmentStatus
+  orderBy?: EnrollmentOrderBy
+} & SearchPaginatedRequestParams
