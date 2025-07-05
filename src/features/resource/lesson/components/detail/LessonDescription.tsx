@@ -4,31 +4,37 @@ import Image from 'next/image'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { Badge } from '@/components/shadcn/badge'
 import LessonAction from '@/features/resource/lesson/components/detail/LessonAction'
+import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
-type LessonDescriptionProps = {
-  lessonId: number
-  imageUrl: string
-  title: string
-  author: string
-  description: string
-  categories?: string[]
-}
 
-export default function LessonDescription({
-  lessonId,
-  imageUrl,
-  title,
-  author,
-  description,
-  categories = []
-}: LessonDescriptionProps) {
+export default function LessonDescription() {
+  const { data: lessonData, isLoading: lessonLoading, isFetching: lessonFetching } = useGetLessonByIdQuery(1)
+
+  if (lessonLoading || lessonFetching)
+    return (
+      <div className='bg-blue-custom-50/60 flex min-h-screen items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
+
+  if (!lessonData) return <div>No Lesson Data</div>
   return (
     <div>
       <ScrollArea className='h-[480px] px-4 pt-4'>
         <section className='flex flex-col items-center'>
           {/* Thumbnail image */}
           <div className='mb-4 overflow-hidden rounded-xl shadow'>
-            <Image src={imageUrl} alt='Wetlands Biome' width={250} height={250} className='object-fit' />
+            <Image
+              src={
+                lessonData.data.imageUrl ||
+                'https://images.unsplash.com/photo-1620428268482-cf1851a36764?q=80&w=1109&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+              }
+              alt='Wetlands Biome'
+              width={250}
+              height={250}
+              className='object-fit'
+            />
           </div>
 
           {/* Title & description */}
@@ -39,22 +45,22 @@ export default function LessonDescription({
 
             {/* Title */}
             <div>
-              <h2 className='text-xl font-bold'>{title}</h2>
+              <h2 className='text-xl font-bold'>{lessonData.data.title}</h2>
               <h3 className='text-muted-foreground mb-2 text-sm font-medium'>
-                By <span className='font-semibold text-black'>{author}</span>
+                By <span className='font-semibold text-black'>{lessonData.data.createdByUserId}</span>
               </h3>
             </div>
 
             {/* Description */}
-            <p className='text-muted-foreground space-y-1 text-sm'>{description}</p>
+            <p className='text-muted-foreground space-y-1 text-sm'>{lessonData.data.description}</p>
 
             {/* Categories */}
             <div>
               <h3 className='mb-2 text-sm font-medium'>Categories</h3>
               <div className='flex flex-wrap items-center gap-2'>
-                {categories.map((category) => (
-                  <Badge key={category} variant='outline' className='bg-sky-custom-100 select-none hover:scale-105'>
-                    {category}
+                {lessonData.data.categoryNames.map((cat) => (
+                  <Badge key={cat} variant='outline' className='bg-sky-custom-100 select-none hover:scale-105'>
+                    {cat}
                   </Badge>
                 ))}
               </div>
@@ -62,7 +68,6 @@ export default function LessonDescription({
           </div>
         </section>
       </ScrollArea>
-      {/* Actions */}
       <LessonAction />
     </div>
   )

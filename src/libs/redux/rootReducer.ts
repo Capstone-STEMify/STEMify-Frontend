@@ -9,6 +9,8 @@ import { courseSlice } from '@/features/resource/course/slice/courseSlice'
 import { enrollmentSlice } from '@/features/resource/course/slice/enrollmentSlice'
 import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
 import { lessonSlice } from '@/features/resource/lesson/slice/lessonSlice'
+import { sectionApi } from '@/features/resource/section/api/sectionApi'
+import { sectionSlice } from '@/features/resource/section/slice/sectionSlice'
 import { skillApi } from '@/features/resource/skill/api/skillApi'
 import { skillSlice } from '@/features/resource/skill/slice/skillSlice'
 import { standardApi } from '@/features/resource/standard/api/standardApi'
@@ -19,6 +21,7 @@ export const rootReducer = combineReducers({
   // Add your reducers here
   course: courseSlice.reducer,
   lesson: lessonSlice.reducer,
+  section: sectionSlice.reducer,
   ageRange: ageRangeSlice.reducer,
   category: categorySlice.reducer,
   skill: skillSlice.reducer,
@@ -27,9 +30,10 @@ export const rootReducer = combineReducers({
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
+  [lessonApi.reducerPath]: lessonApi.reducer,
+  [sectionApi.reducerPath]: sectionApi.reducer,
   [enrollmentApi.reducerPath]: enrollmentApi.reducer,
   [classroomApi.reducerPath]: classroomApi.reducer,
-  [lessonApi.reducerPath]: lessonApi.reducer,
   [ageRangeApi.reducerPath]: ageRangeApi.reducer,
   [skillApi.reducerPath]: skillApi.reducer,
   [standardApi.reducerPath]: standardApi.reducer,
