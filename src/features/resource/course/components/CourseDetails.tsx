@@ -1,13 +1,9 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useParams } from 'next/navigation'
-import NavigationBar from './detail/NavigationBar'
-import AboutSection from './detail/AboutSection'
-import SkillSection from './detail/SkillSection'
-import ContentSection from './detail/ContentSection'
-import RecommendationSection from './detail/RecommendationSection'
-import HeroSection from './detail/HeroSection'
-import StatsSection from './detail/StatSection'
+import ContentSection from './detail/enrolled/ContentSection'
+import HeroSection from './detail/enrolled/HeroSection'
+import StatsSection from './detail/enrolled/StatSection'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { BookOpen } from 'lucide-react'
@@ -22,32 +18,10 @@ export default function CourseDetails() {
     isLoading
   } = useGetCourseByIdQuery(Number(courseId), {
     skip: !courseId,
-    refetchOnMountOrArgChange: true, // Refetch when component mounts or courseId changes
+    refetchOnMountOrArgChange: true,
     refetchOnFocus: true,
     refetchOnReconnect: true
   })
-
-  // const [activeSection, setActiveSection] = useState('about')
-  // Handle scroll to update active section
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const sections = ['about', 'skill', 'lessons', 'suggestions']
-  //     const scrollPosition = window.scrollY + 100
-
-  //     for (const sectionId of sections) {
-  //       const element = document.getElementById(sectionId)
-  //       if (element) {
-  //         const { offsetTop, offsetHeight } = element
-  //         if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-  //           setActiveSection(sectionId)
-  //           break
-  //         }
-  //       }
-  //     }
-  //   }
-  //   window.addEventListener('scroll', handleScroll)
-  //   return () => window.removeEventListener('scroll', handleScroll)
-  // }, [])
 
   if (isLoading)
     return (

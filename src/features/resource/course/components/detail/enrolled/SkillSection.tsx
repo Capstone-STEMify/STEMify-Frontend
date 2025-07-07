@@ -2,7 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle } from 'lucide-react'
 import { staggerContainer, staggerItem } from '@/utils/motion'
-import { Course } from '../../types/course.type'
+import { Course } from '../../../types/course.type'
 
 interface HeroSectionProps {
   course: Course
