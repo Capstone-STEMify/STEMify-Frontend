@@ -13,7 +13,7 @@ export default function LessonDetail() {
 
   return (
     <div className='bg-light pb-20'>
-      <div className='container mx-auto py-6'>
+      <div className='container mx-auto max-w-7xl py-6'>
         <div className='mx-8'>
           <div className='flex items-center gap-5'>
             <BackButton />
@@ -24,9 +24,9 @@ export default function LessonDetail() {
             <ResizablePanel defaultSize={30} minSize={20} className='min-h-[500px]'>
               <STabs
                 customStyle={{
-                  list: 'bg-light py-7 flex items-center justify-between ',
+                  list: 'py-7 px-2 flex items-center justify-between',
                   trigger:
-                    'py-5 data-[state=active]:bg-white data-[state=active]:shadow-6 text-blue-700 data-[state=active]:font-bold'
+                    'py-5 data-[state=active]:bg-white data-[state=active]:shadow-6 text-blue-700 data-[state=active]:font-bold '
                 }}
                 defaultValue='description'
                 items={[

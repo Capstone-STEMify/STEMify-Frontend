@@ -3,11 +3,13 @@ import { Bookmark, Plus, Share2 } from 'lucide-react'
 
 export default function LessonAction() {
   return (
-    <section className='border-muted-foreground mt-6 flex flex-col items-center border-t'>
+    <section className='mt-3 flex flex-col items-center'>
+      <div className='h-[0.1px] w-52 bg-gray-300'></div>
+
       {/* CTA Button */}
-      <div className='mt-6'>
-        <Button size='lg' className='bg-yellow-400 font-semibold text-black shadow-md hover:bg-yellow-500'>
-          ASSIGN TO CLASS
+      <div className='mt-4'>
+        <Button size='default' className='bg-yellow-400 font-semibold text-black shadow-md hover:bg-yellow-500'>
+          <div className='text-xs'>ASSIGN TO CLASS</div>
         </Button>
       </div>
 

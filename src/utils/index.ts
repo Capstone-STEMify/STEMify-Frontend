@@ -23,6 +23,21 @@ export function getDaysRemaining(endDateStr: string): number {
 }
 
 /**
+ * Format date string
+ * @param dateString
+ * @returns string
+ * @description This function formats a date string into a more readable format, e.g., "Jan 1, 2023".
+ * @example formatDate('2023-01-01') ==> 'Jan 1, 2023'
+ */
+export const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  })
+}
+
+/**
  *
  * Get label from options based on id
  * @param id
@@ -50,6 +65,3 @@ export const getOptions = (data: any[] | undefined, labelKey: string): { value: 
     value: item.id.toString(),
     label: item[labelKey]
   })) || []
-
-
-
