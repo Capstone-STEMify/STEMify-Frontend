@@ -43,13 +43,7 @@ export default function CourseDetailContent() {
 
   if (isLoading) {
     return (
-      <div className='my-5 grid h-screen grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
-        <SkeletonCard size='sm' />
-        <SkeletonCard size='sm' />
-        <SkeletonCard size='sm' />
-        <SkeletonCard size='sm' />
-        <SkeletonCard size='sm' />
-        <SkeletonCard size='sm' />
+      <div className='grid h-[650px] grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
         <SkeletonCard size='sm' />
         <SkeletonCard size='sm' />
         <SkeletonCard size='sm' />
@@ -70,7 +64,7 @@ export default function CourseDetailContent() {
   }
 
   return (
-    <ScrollArea className='h-[650px] px-5 pt-3 select-none'>
+    <ScrollArea className='h-[650px] px-5 select-none'>
       <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
         {lessonData.data.items.map((lesson) => (
           <div key={lesson.id} className='relative flex gap-1'>
