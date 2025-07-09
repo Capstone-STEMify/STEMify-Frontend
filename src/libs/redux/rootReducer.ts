@@ -16,9 +16,11 @@ import { skillSlice } from '@/features/resource/skill/slice/skillSlice'
 import { standardApi } from '@/features/resource/standard/api/standardApi'
 import { standardSlice } from '@/features/resource/standard/slice/standardSlice'
 import { combineReducers } from '@reduxjs/toolkit'
+import { authSlice } from '@/features/auth/authSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
+  auth: authSlice.reducer,
   course: courseSlice.reducer,
   lesson: lessonSlice.reducer,
   section: sectionSlice.reducer,

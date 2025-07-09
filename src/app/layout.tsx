@@ -4,6 +4,9 @@ import './globals.css'
 import StoreProvider from 'providers/StoreProvider'
 import { Toaster } from 'sonner'
 import { ModalProvider } from '@/providers/ModalProvider'
+import { SessionProvider } from 'next-auth/react'
+import AuthSessionSync from '@/providers/AuthSessionSync'
+import Providers from '@/providers/Providers'
 
 const geistNunito = Nunito({
   variable: '--font-geist-nunito',
@@ -28,12 +31,9 @@ export default function RootLayout({
   return (
     <html lang='en' className={`${geistNunito.variable}`}>
       <body className={`antialiased`}>
-        <StoreProvider>
-          <ModalProvider>
-            <main>{children}</main>
-          </ModalProvider>
-        </StoreProvider>
-        <Toaster />
+        <Providers>
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   )

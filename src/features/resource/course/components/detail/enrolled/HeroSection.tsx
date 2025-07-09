@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
 import { useCreateEnrollmentMutaion } from '@/features/enrollment/api/enrollmentApi'
 import { toast } from 'sonner'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 interface HeroSectionProps {
   course: Course
@@ -32,11 +33,12 @@ const TagGroup = ({ label, items, className }: TagGroupProps) => (
 )
 
 export default function HeroSection({ course }: HeroSectionProps) {
+  const auth = useAppSelector((state) => state.auth)
   const [createEnroll, { data: enroll }] = useCreateEnrollmentMutaion()
 
   const handleEnroll = () => {
     if (course.id) {
-      createEnroll({ courseId: course.id, studentId: '4839b5f4-a299-447b-af76-d95595452764' })
+      createEnroll({ courseId: course.id, studentId: auth.user?.userId })
     }
     toast.success('Enrollment request submitted successfully!', {
       description: `You have enroll to ${enroll?.data.courseTitle} at  ${enroll?.data.enrolledAt} `,

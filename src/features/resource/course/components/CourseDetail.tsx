@@ -4,16 +4,18 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import CourseDetailEnrolled from '@/features/resource/course/components/detail/CourseDetailEnrolled'
 import CourseDetailNotEnrolled from '@/features/resource/course/components/detail/CourseDetailNotEnrolled'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { useParams } from 'next/navigation'
 
 export default function CourseDetail() {
   const param = useParams()
   const courseIdParam = param?.courseId
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
+  const auth = useAppSelector((state) => state.auth)
 
   const { data, isLoading, error } = useSearchEnrollmentQuery({
     courseId,
-    studentId: '8e91a454-4753-4929-b672-a466ca2c4903'
+    studentId: auth.user?.userId
   })
   const enrollmentItems = data?.data?.items ?? []
   console.log('CourseDetail enrollment count:', enrollmentItems.length)
