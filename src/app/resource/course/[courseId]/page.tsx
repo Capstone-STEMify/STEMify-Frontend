@@ -1,8 +1,7 @@
-import CourseDetails from '@/features/resource/course/components/CourseDetails'
-import CourseDetailEnrolled from '@/features/resource/course/components/detail/CourseDetailEnrolled'
+import CourseDetail from '@/features/resource/course/components/CourseDetail'
 import React from 'react'
 
-export default function CourseDetailsPage() {
+export default function CourseDetailPage() {
   // return <CourseDetails />
-  return <CourseDetailEnrolled />
+  return <CourseDetail />
 }

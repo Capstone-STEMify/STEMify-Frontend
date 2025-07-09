@@ -1,15 +1,15 @@
 'use client'
 import React from 'react'
 import { useParams } from 'next/navigation'
-import ContentSection from './detail/enrolled/ContentSection'
-import HeroSection from './detail/enrolled/HeroSection'
-import StatsSection from './detail/enrolled/StatSection'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { BookOpen } from 'lucide-react'
 import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
+import ContentSection from '@/features/resource/course/components/detail/enrolled/ContentSection'
+import StatsSection from '@/features/resource/course/components/detail/enrolled/StatSection'
+import HeroSection from '@/features/resource/course/components/detail/enrolled/HeroSection'
 
-export default function CourseDetails() {
+export default function CourseDetailNotEnrolled() {
   const params = useParams()
   const courseId = params.courseId
   const {
@@ -47,12 +47,7 @@ export default function CourseDetails() {
         <HeroSection course={course.data} />
         <StatsSection course={course.data} />
       </div>
-      {/* <NavigationBar activeSection={activeSection} setActiveSection={setActiveSection} /> */}
-
-      {/* <AboutSection /> */}
-
       <ContentSection />
-
       {/* <RecommendationSection /> */}
       <h1 className='text-center'>Feedback</h1>
       <h1 className='text-center'>Feedback</h1>

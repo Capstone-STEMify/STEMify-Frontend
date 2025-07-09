@@ -1,5 +1,5 @@
 import BreadcrumbPageLayout from '@/components/shared/layout/BreadcrumbPageLayout'
-import SListTitle from '@/components/SListTitle'
+import SListTitle from '@/components/shared/SListTitle'
 import LessonListAction from '@/features/resource/lesson/components/list/LessonListAction'
 import LessonListContent from '@/features/resource/lesson/components/list/LessonListContent'
 
