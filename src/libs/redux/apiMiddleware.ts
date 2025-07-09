@@ -1,5 +1,5 @@
 import { classroomApi } from '@/features/classroom/api/classroomApi'
-import { enrollmentApi } from '@/features/my-learning/api/enrollmentApi'
+import { enrollmentApi } from '@/features/enrollment/api/enrollmentApi'
 import { ageRangeApi } from '@/features/resource/age-range/api/ageRangeApi'
 import { categoryApi } from '@/features/resource/category/api/categoryApi'
 import { courseApi } from '@/features/resource/course/api/courseApi'

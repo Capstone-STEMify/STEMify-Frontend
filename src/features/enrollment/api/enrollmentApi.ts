@@ -1,4 +1,4 @@
-import { Enrollment, EnrollmentQueryParams } from '@/features/resource/course/types/enrollment.type'
+import { Enrollment, EnrollmentQueryParams } from '@/features/enrollment/types/enrollment.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const enrollmentApi = createCrudApi<Enrollment, EnrollmentQueryParams>({

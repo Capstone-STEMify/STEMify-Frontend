@@ -7,7 +7,7 @@ import { Course } from '../../../types/course.type'
 import { Button } from '@/components/shadcn/button'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
-import { useCreateEnrollmentMutaion } from '@/features/my-learning/api/enrollmentApi'
+import { useCreateEnrollmentMutaion } from '@/features/enrollment/api/enrollmentApi'
 import { toast } from 'sonner'
 
 interface HeroSectionProps {

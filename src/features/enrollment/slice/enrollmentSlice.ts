@@ -1,4 +1,4 @@
-import { EnrollmentSliceParams } from '@/features/resource/course/types/enrollment.type'
+import { EnrollmentSliceParams } from '@/features/enrollment/types/enrollment.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: EnrollmentSliceParams = {

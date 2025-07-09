@@ -9,9 +9,9 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { SPagination } from '@/components/shared/SPagination'
 import { formatDuration } from '@/utils/index'
-import { useSearchEnrollmentQuery } from '@/features/my-learning/api/enrollmentApi'
+import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setPageIndex, setPageSize } from '@/features/resource/course/slice/enrollmentSlice'
+import { setPageIndex, setPageSize } from '@/features/enrollment/slice/enrollmentSlice'
 
 export function CourseList() {
   const dispatch = useAppDispatch()

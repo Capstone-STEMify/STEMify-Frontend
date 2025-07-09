@@ -1,6 +1,6 @@
 import { Button } from '@/components/shadcn/button'
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
-import { useCreateEnrollmentMutaion } from '@/features/my-learning/api/enrollmentApi'
+import { useCreateEnrollmentMutaion } from '@/features/enrollment/api/enrollmentApi'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'

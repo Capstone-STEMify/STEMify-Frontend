@@ -4,7 +4,11 @@ import BackButton from '@/components/shared/button/BackButton'
 import CourseDescription from './not-enrolled/CourseDescription'
 import CourseDetailContent from './not-enrolled/CourseDetailContent'
 
-export default function CourseDetailEnrolled() {
+type CourseDetailEnrolledProps = {
+  data: any
+}
+
+export default function CourseDetailEnrolled({ data }: CourseDetailEnrolledProps) {
   return (
     <div className='bg-light mt-28 pb-20'>
       <div className='container mx-auto max-w-7xl py-6'>

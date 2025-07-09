@@ -33,8 +33,11 @@ export type Enrollment = {
 // Query
 export type EnrollmentQueryParams = {
   studentId?: string
+  courseId?: number
 } & SearchPaginatedRequestParams
 
+// Slice
 export type EnrollmentSliceParams = {
   studentId?: string
+  courseId?: number
 } & SliceQueryParams
