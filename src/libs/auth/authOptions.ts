@@ -22,7 +22,7 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
   clientId: `${process.env.NEXT_PUBLIC_CLIENT_ID}`,
   idToken: true,
   issuer: process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL,
-  wellKnown: 'https://localhost:7131/.well-known/openid-configuration',
+  wellKnown: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/.well-known/openid-configuration`,
   authorization: {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/authorize`,
     params: {
@@ -55,7 +55,7 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
 }
 
 export const authOptions: NextAuthOptions = {
-  // debug: true,
+  debug: true,
   session: {
     strategy: 'jwt'
   },
