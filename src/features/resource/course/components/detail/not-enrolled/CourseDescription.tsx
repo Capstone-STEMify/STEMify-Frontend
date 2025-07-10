@@ -32,6 +32,8 @@ export default function CourseDescription() {
               }
               alt='Lesson Cover'
               fill
+              priority
+              sizes='160px'
               className='object-cover'
             />
           </div>

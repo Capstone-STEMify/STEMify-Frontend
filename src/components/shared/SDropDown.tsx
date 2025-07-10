@@ -7,10 +7,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu'
 
-type DropdownOption = {
-  label: string
-  value: string
-}
 type DropdownMenuProps = {
   trigger?: React.ReactNode
   label?: string

@@ -21,6 +21,14 @@ const sizeClasses: Record<Size, { width: string; height: string; imageHeight: st
   xl: { width: 'w-[400px]', height: 'h-[500px]', imageHeight: 'h-[260px]' }
 }
 
+// Map sizes to pixel values for image rendering
+const sizeToSizes: Record<Size, string> = {
+  sm: '200px',
+  md: '264px',
+  lg: '320px',
+  xl: '400px'
+}
+
 export default function CardLayout({
   imageSrc,
   alt = 'card image',
@@ -32,6 +40,7 @@ export default function CardLayout({
   href
 }: CardLayoutProps) {
   const { width, height, imageHeight } = sizeClasses[size]
+  const sizes = sizeToSizes[size]
 
   const cardContent = (
     <div
@@ -44,9 +53,9 @@ export default function CardLayout({
       {/* Image */}
       <div className={clsx('relative w-full', imageHeight)}>
         {imageSrc === '' ? (
-          <Image src={'/images/fallback.png'} alt={alt} fill className='object-cover' />
+          <Image src={'/images/fallback.png'} alt={alt} fill className='object-cover' priority sizes={sizes} />
         ) : (
-          <Image src={imageSrc} alt={alt} fill className='object-cover' />
+          <Image src={imageSrc} alt={alt} fill className='object-cover' sizes={sizes} />
         )}
         {badge && <div className='absolute top-2 left-2'>{badge}</div>}
         {infor && <div className='absolute bottom-2 left-2'>{infor}</div>}

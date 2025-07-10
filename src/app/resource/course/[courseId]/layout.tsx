@@ -10,7 +10,6 @@ export default function CourseDetailLayout({
     <div>
       <Header />
       <main>{children}</main>
-      <Footer />
     </div>
   )
 }
