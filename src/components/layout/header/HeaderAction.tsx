@@ -1,20 +1,17 @@
 'use client'
-import HeaderEvent from '@/components/layout/header/header-right/HeaderEvent'
+import HeaderEvent from '@/components/layout/header/header-action/HeaderEvent'
 import { Button } from '@/components/shadcn/button'
 import { ArrowRightToLine, UserPlus, Sparkles } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { signIn } from 'next-auth/react'
-import AuthStatusMenu from '@/components/layout/header/header-right/AuthStatusMenu'
+import AuthStatusMenu from '@/components/layout/header/header-action/AuthStatusMenu'
 
-export default function HeaderRightSection() {
+export default function HeaderAction() {
   useEffect(() => {}, [])
   return (
     <>
       {/* Desktop Layout */}
       <div className='hidden h-8 items-center justify-center gap-4 lg:flex'>
-        {/* Search with enhanced styling */}
-        {/* Enhanced Separator with gradient */}
-
         <HeaderEvent />
         <div className='relative h-8 w-px'>
           <div className='absolute inset-0 bg-gradient-to-b from-transparent via-gray-300 to-transparent dark:via-gray-600' />
