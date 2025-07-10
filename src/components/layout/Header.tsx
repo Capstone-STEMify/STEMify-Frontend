@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import HeaderLeftSection from '@/components/layout/header/header-left/HeaderLeftSection'
-import HeaderRightSection from '@/components/layout/header/header-right/HeaderRightSection'
+import HeaderAction from '@/components/layout/header/HeaderAction'
 import MobileMenu from '@/components/layout/header/MobileMenu'
+import HeaderNavigation from '@/components/layout/header/HeaderNavigation'
 
 export default function Header() {
   const [isVisible, setIsVisible] = useState(true)
@@ -40,8 +40,8 @@ export default function Header() {
 
         {/* desktop */}
         <div className='hidden w-full items-center justify-between lg:flex'>
-          <HeaderLeftSection />
-          <HeaderRightSection />
+          <HeaderNavigation />
+          <HeaderAction />
         </div>
       </div>
     </header>
