@@ -1,5 +1,5 @@
 import Footer from '@/components/layout/Footer'
-import Header from '@/components/layout/Header'
+import Header from '@/components/layout/header/Header'
 import RoleBasedClassroomListPage from '@/features/classroom/page/list'
 import { authOptions } from '@/libs/auth/authOptions'
 import { getServerSession } from 'next-auth'

@@ -1,4 +1,4 @@
-import Header from '@/components/layout/Header'
+import Header from '@/components/layout/header/Header'
 import { ModalProvider } from '@/providers/ModalProvider'
 import { metadata } from 'app/layout'
 

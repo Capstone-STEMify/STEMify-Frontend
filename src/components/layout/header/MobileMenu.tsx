@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '@/components/shadcn/sheet'
 import StemifyLogo from '@/components/shared/StemifyLogo'
-import HeaderNavigation from '@/components/layout/header/HeaderNavigation'
-import HeaderRightSection from '@/components/layout/header/HeaderAction'
+import HeaderNavigation from '@/components/layout/header/header-left/HeaderNavigation'
+import HeaderRightSection from '@/components/layout/header/header-right/HeaderRightSection'
 import { Button } from '@/components/shadcn/button'
 import { Menu } from 'lucide-react'
 
