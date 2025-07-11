@@ -43,6 +43,8 @@ jobs:
         run: npm run lint
 
       - name: Build project using OpenNext for Cloudflare Workers
+        env:
+          NEXT_PUBLIC_DOCKER_BE_URL: ${{ vars.NEXT_PUBLIC_DOCKER_BE_URL }}
         run: npx opennextjs-cloudflare build
 
       - name: Deploy to Cloudflare Workers
