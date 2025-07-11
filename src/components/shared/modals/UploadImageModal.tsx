@@ -29,7 +29,7 @@ export default function PhotoUploadModal() {
             </div>
             <h4 className="text-lg font-medium text-gray-900 mb-2">Your Photo</h4>
             <p className="text-gray-600 mb-6">This will be displayed on your profile</p>
-            
+
             {/* Upload Area */}
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 mb-6 hover:border-gray-400 transition-colors">
               <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />

@@ -7,7 +7,7 @@ import { categorySlice } from '@/features/resource/category/slice/categorySlice'
 import { courseApi } from '@/features/resource/course/api/courseApi'
 import { courseSlice } from '@/features/resource/course/slice/courseSlice'
 import { enrollmentSlice } from '@/features/enrollment/slice/enrollmentSlice'
-import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
+import { lessonApi, lessonApiExtended } from '@/features/resource/lesson/api/lessonApi'
 import { lessonSlice } from '@/features/resource/lesson/slice/lessonSlice'
 import { sectionApi } from '@/features/resource/section/api/sectionApi'
 import { sectionSlice } from '@/features/resource/section/slice/sectionSlice'
@@ -43,5 +43,6 @@ export const rootReducer = combineReducers({
   [skillApi.reducerPath]: skillApi.reducer,
   [standardApi.reducerPath]: standardApi.reducer,
   [categoryApi.reducerPath]: categoryApi.reducer,
-  [notificationApi.reducerPath]: notificationApi.reducer
+  [notificationApi.reducerPath]: notificationApi.reducer,
+  [lessonApiExtended.reducerPath]: lessonApiExtended.reducer
 })

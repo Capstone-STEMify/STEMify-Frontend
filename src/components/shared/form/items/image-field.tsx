@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef, useState, useEffect } from 'react'
 import { Upload } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
@@ -7,12 +9,21 @@ export default function ImageField() {
   const field = useFieldContext<File | null>()
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const lastObjectUrl = useRef<string | null>(null)
 
   useEffect(() => {
     if (field.state.value) {
       const objectUrl = URL.createObjectURL(field.state.value)
       setPreviewUrl(objectUrl)
-      return () => URL.revokeObjectURL(objectUrl)
+      if (lastObjectUrl.current) URL.revokeObjectURL(lastObjectUrl.current)
+      lastObjectUrl.current = objectUrl
+
+      return () => {
+        if (lastObjectUrl.current) {
+          URL.revokeObjectURL(lastObjectUrl.current)
+          lastObjectUrl.current = null
+        }
+      }
     } else {
       setPreviewUrl(null)
     }
@@ -30,7 +41,7 @@ export default function ImageField() {
       <h3 className='mb-3 text-xl font-semibold text-gray-800'>Cover Image</h3>
       <div className='relative rounded-2xl border-2 border-dashed border-gray-300 p-8 text-center'>
         {previewUrl ? (
-          <img src={previewUrl} alt='Preview' className='mx-auto mb-3 max-h-64 rounded-xl object-cover' />
+          <img src={previewUrl} alt='Preview' className='mx-auto mb-3 max-h-64 rounded-xl object-cover transition' />
         ) : (
           <Upload className='mx-auto mb-3 h-12 w-12 text-gray-400' />
         )}

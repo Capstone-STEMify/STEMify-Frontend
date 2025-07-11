@@ -61,6 +61,7 @@
     "phaser": "^3.90.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-easy-crop": "^5.4.2",
     "react-hook-form": "^7.56.4",
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",

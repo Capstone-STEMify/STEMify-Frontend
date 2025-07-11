@@ -1,15 +1,17 @@
 'use client'
 import { SCard } from '@/components/shared/card/SCard'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
 import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
 import { useGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
 import { useGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
 import { Upload } from 'lucide-react'
-import { useCreateLessonMutation } from '@/features/resource/lesson/api/lessonApi'
+import { useCreateLessonMutation, useCreateLessonWithFormDataMutation } from '@/features/resource/lesson/api/lessonApi'
 import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { Button } from '@/components/shadcn/button'
+import { useModal } from '@/providers/ModalProvider'
+import { toast } from 'sonner'
 
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
@@ -18,7 +20,10 @@ const lessonSchema = z.object({
   skills: z.array(z.string()).min(1, 'At least one skill is required'),
   categories: z.array(z.string()).min(1, 'At least one category is required'),
   standards: z.array(z.string()).min(1, 'At least one standard is required'),
-  imageUrl: z.instanceof(File).refine((file) => file.size < 5 * 1024 * 1024, 'Max 5MB allowed')
+  imageUrl: z
+    .instanceof(File)
+    .refine((file) => file.size > 0, 'Cover image is required')
+    .refine((file) => file.size < 5 * 1024 * 1024, 'Max 5MB allowed')
 })
 
 type LessonFormData = z.infer<typeof lessonSchema>
@@ -30,25 +35,70 @@ const defaultLessonData: LessonFormData = {
   skills: [],
   categories: [],
   standards: [],
-  imageUrl: new File([], '', { type: 'image/png' })
+  imageUrl: null as any
+}
+
+function buildLessonFormData(data: LessonFormData) {
+  const formData = new FormData()
+  formData.append('title', data.title)
+  formData.append('description', data.description)
+  formData.append('ageRange', data.ageRange)
+  formData.append('createdByUserId', 'b7e2c7e2-8c1a-4e2e-9b2a-2e7c8e2a1b3c')
+  formData.append('courseId', '1')
+
+  data.skills.forEach((skill) => formData.append('skills', skill))
+  data.categories.forEach((category) => formData.append('categories', category))
+  data.standards.forEach((standard) => formData.append('standards', standard))
+
+  if (data.imageUrl) {
+    formData.append('Image', data.imageUrl)
+  }
+
+  return formData
 }
 
 export default function CreateLesson() {
+  const { openModal } = useModal()
+  const imageFieldRef = useRef<any>(null)
+
   const { data: ageRanges } = useGetAllAgeRangeQuery()
   const { data: skills } = useGetAllSkillQuery()
   const { data: categories } = useGetAllCategoryQuery()
   const { data: standards } = useGetAllStandardQuery()
-  const [createLesson, { data: lessonCreateItem, error }] = useCreateLessonMutation()
+  const [createLesson, { data: lessonCreateItem, error }] = useCreateLessonWithFormDataMutation()
 
   const form = useAppForm({
     defaultValues: defaultLessonData,
     validators: {
       onChange: lessonSchema
     },
-    onSubmit: ({ value }) => {
-      console.log('Form submitted:', value)
+    onSubmit: async ({ value }) => {
+      try {
+        const formData = buildLessonFormData(value)
+        await createLesson(formData).unwrap()
+        toast.success('Lesson created successfully')
+        form.reset()
+      } catch (err) {
+        toast.error('Failed to create lesson')
+        console.error(err)
+      }
     }
   })
+
+  const handleEditImage = () => {
+    const currentImage = form.state.values.imageUrl
+    if (!currentImage) return
+
+    const imageUrl = URL.createObjectURL(currentImage)
+
+    openModal('editImage', {
+      imageSrc: imageUrl,
+      onConfirm: (croppedFile: File) => {
+        imageFieldRef.current?.handleChange(croppedFile)
+        URL.revokeObjectURL(imageUrl)
+      }
+    })
+  }
 
   if (!ageRanges || !skills || !categories || !standards) {
     return (
@@ -182,10 +232,18 @@ export default function CreateLesson() {
         </div>
 
         <div className='space-y-6'>
-          <form.AppField name='imageUrl' children={(field) => <field.ImageField />} />
+          <form.AppField
+            name='imageUrl'
+            children={(field) => {
+              imageFieldRef.current = field
+              return <field.ImageField />
+            }}
+          />
 
           <div className='flex flex-col gap-3 sm:flex-row'>
-            <Button className='flex-1 rounded-full py-5'>Edit Image</Button>
+            <Button type='button' onClick={handleEditImage} className='flex-1 rounded-full py-5'>
+              Edit Image
+            </Button>
           </div>
         </div>
       </div>

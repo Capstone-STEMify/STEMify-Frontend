@@ -7,6 +7,19 @@ export const lessonApi = createCrudApi<Lesson, LessonQueryParams>({
   baseUrl: '/lessons'
 })
 
+export const lessonApiExtended = lessonApi.injectEndpoints({
+  endpoints: (builder) => ({
+    createLessonWithFormData: builder.mutation<Lesson, FormData>({
+      query: (formData) => ({
+        url: '/lessons',
+        method: 'POST',
+        body: formData
+      }),
+      invalidatesTags: ['Lesson']
+    })
+  })
+})
+
 export const {
   useSearchQuery: useSearchLessonQuery,
   useGetByIdQuery: useGetLessonByIdQuery,
@@ -20,3 +33,5 @@ export const {
   useLazyGetAllQuery: useLazyGetAllLessonQuery,
   useLazyGetByIdQuery: useLazyGetLessonByIdQuery
 } = lessonApi
+
+export const { useCreateLessonWithFormDataMutation } = lessonApiExtended
