@@ -1,28 +1,27 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react'
-import {
-  ApiResponse,
-  ApiSuccessResponse,
-  BaseEntity,
-  PaginatedResult,
-  SearchPaginatedRequestParams
-} from '@/types/baseModel'
-import { ApiErrorResponse } from '@/types/baseModel'
+import { ApiResponse, ApiSuccessResponse, PaginatedResult, SearchPaginatedRequestParams } from '@/types/baseModel'
 import { BaseQueryApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { notFound } from 'next/navigation'
 import { toast } from 'sonner'
-import { getSession } from 'next-auth/react'
+import { RootState } from '@/libs/redux/store'
 
-// =============================
-// === Custom Base Query
-// =============================
-
-const rawBaseQuery = fetchBaseQuery({
+const customFetchBaseQuery = fetchBaseQuery({
   baseUrl:
     process.env.NEXT_PUBLIC_DOCKER_BE_URL ??
     (() => {
       throw new Error('Missing BASE_API_URL')
     })(),
-  credentials: 'include'
+  credentials: 'include',
+  prepareHeaders: (headers, api) => {
+    // Append token from the auth state tree Redux store
+    const token = (api.getState() as RootState).auth.token
+
+    if (token) {
+      headers.set('Authorization', 'Bearer ' + token)
+    }
+
+    return headers
+  }
 })
 
 export const customFetchBaseQueryWithErrorHandling = async (
@@ -30,21 +29,7 @@ export const customFetchBaseQueryWithErrorHandling = async (
   api: BaseQueryApi,
   extraOptions: object
 ) => {
-  const session = await getSession()
-  const authHeaders = session?.user ? { Authorization: `Bearer ${session.accessToken}` } : {}
-  // const result = await rawBaseQuery(args, api, extraOptions)
-
-  const result = await rawBaseQuery(
-    {
-      ...(typeof args === 'string' ? { url: args } : args),
-      headers: {
-        ...(typeof args === 'object' ? args.headers : {}),
-        ...authHeaders
-      }
-    },
-    api,
-    extraOptions
-  )
+  const result = await customFetchBaseQuery(args, api, extraOptions)
 
   if (result.error) {
     const { status, data } = result.error
@@ -62,7 +47,7 @@ export const customFetchBaseQueryWithErrorHandling = async (
         break
       case 404:
         toast.error(message || 'Not Found')
-        break
+        notFound() // Redirect to 404 page
       case 500:
         toast.error(message || 'Server Error')
         break
@@ -84,7 +69,7 @@ type CrudApiOptions = {
   reducerPath: string
   tagType: string
   baseUrl: string
-  baseQuery?: BaseQueryFn // Optional: your custom fetch logic, override the existing custom api
+  baseQuery?: BaseQueryFn
 }
 
 export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
