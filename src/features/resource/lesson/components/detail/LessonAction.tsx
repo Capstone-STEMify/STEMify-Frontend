@@ -3,7 +3,7 @@ import { Bookmark, Plus, Share2 } from 'lucide-react'
 
 export default function LessonAction() {
   return (
-    <section className='mt-3 flex flex-col items-center'>
+    <section className='mt-3 mb-5 flex flex-col items-center'>
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
 
       {/* CTA Button */}

@@ -8,7 +8,6 @@ import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { formatDate } from '@/utils/index'
 import { Calendar, Clock, User } from 'lucide-react'
-import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 
 export default function LessonDescription() {
   const { data: lessonData, isLoading: lessonLoading, isFetching: lessonFetching } = useGetLessonByIdQuery(1)

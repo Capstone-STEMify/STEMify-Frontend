@@ -1,9 +1,10 @@
 'use client'
 import { cn } from '@/utils/shadcn/utils'
 import { Check } from 'lucide-react'
-import { useLazySearchSectionQuery } from '@/features/resource/section/api/sectionApi'
+import { useLazySearchSectionQuery, useSearchSectionQuery } from '@/features/resource/section/api/sectionApi'
 import { useEffect } from 'react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useParams } from 'next/navigation'
 
 type LessonOutlineProps = {
   selectedId: number
@@ -11,11 +12,11 @@ type LessonOutlineProps = {
 }
 
 export default function LessonOutline({ onSelect, selectedId }: LessonOutlineProps) {
-  const [getSections, { data: sections, isLoading: sectionLoading }] = useLazySearchSectionQuery()
+  const param = useParams()
+  const lessonIdParam = param?.lessonId
+  const lessonId = lessonIdParam ? Number(lessonIdParam) : undefined
 
-  useEffect(() => {
-    getSections({ lessonId: 1 })
-  }, [])
+  const { data: sections, isLoading: sectionLoading } = useSearchSectionQuery({ lessonId }, { skip: !lessonId })
 
   if (sections && sections.data.items.length === 0) {
     return <div className='px-4 py-4'>No sections available</div>
@@ -30,7 +31,7 @@ export default function LessonOutline({ onSelect, selectedId }: LessonOutlinePro
   }
 
   return (
-    <div className='px-4 py-4'>
+    <div className='px-4'>
       <h1 className='text-lg font-semibold'>Sections</h1>
 
       <div className='mt-5 flex flex-col space-y-2'>

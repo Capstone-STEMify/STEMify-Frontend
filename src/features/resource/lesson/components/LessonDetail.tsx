@@ -4,9 +4,19 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import BackButton from '@/components/shared/button/BackButton'
 import STabs from '@/components/shared/STabs'
-import LessonDescription from '@/features/resource/lesson/components/detail/LessonDescription'
-import LessonOutline from '@/features/resource/lesson/components/detail/LessonOutline'
-import LessonContent from '@/features/resource/lesson/components/detail/LessonContent'
+import dynamic from 'next/dynamic'
+
+const LessonDescription = dynamic(() => import('@/features/resource/lesson/components/detail/LessonDescription'), {
+  ssr: false
+})
+
+const LessonContent = dynamic(() => import('@/features/resource/lesson/components/detail/LessonContent'), {
+  ssr: false
+})
+
+const LessonOutline = dynamic(() => import('@/features/resource/lesson/components/detail/LessonOutline'), {
+  ssr: false
+})
 
 export default function LessonDetail() {
   const [selected, setSelected] = useState(1)
@@ -23,11 +33,10 @@ export default function LessonDetail() {
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>
             <ResizablePanel defaultSize={30} minSize={20} className='min-h-[500px]'>
               <STabs
-                className='pt-4'
                 customStyle={{
-                  list: 'py-7 px-2 flex items-center justify-between bg-light mb-4 grid  grid-cols-2 p-4',
+                  list: 'px-4 py-8 rounded-none bg-[#f8fbff] shadow-6 gap-3 mb-3',
                   trigger:
-                    'py-5 data-[state=active]:bg-white data-[state=active]:shadow-6 text-blue-700 data-[state=active]:font-bold '
+                    'py-5 bg-white text-sky-700 rounded-lg border border-gray-200 hover:bg-sky-50 hover:text-sky-700 transition duration-200 data-[state=active]:bg-sky-300 data-[state=active]:text-white'
                 }}
                 defaultValue='description'
                 items={[
