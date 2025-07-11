@@ -15,7 +15,7 @@ export default function LessonDescription() {
   if (lessonLoading || lessonFetching)
     return (
       <div className='flex h-[500px] items-center justify-center'>
-        <LoadingComponent size={150} />
+        <LoadingComponent size={50} />
       </div>
     )
 
