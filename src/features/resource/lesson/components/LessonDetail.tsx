@@ -23,8 +23,9 @@ export default function LessonDetail() {
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>
             <ResizablePanel defaultSize={30} minSize={20} className='min-h-[500px]'>
               <STabs
+                className='pt-4'
                 customStyle={{
-                  list: 'py-7 px-2 flex items-center justify-between',
+                  list: 'py-7 px-2 flex items-center justify-between bg-light mb-4 grid  grid-cols-2 p-4',
                   trigger:
                     'py-5 data-[state=active]:bg-white data-[state=active]:shadow-6 text-blue-700 data-[state=active]:font-bold '
                 }}

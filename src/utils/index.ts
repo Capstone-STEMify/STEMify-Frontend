@@ -9,6 +9,15 @@ export const formatDuration = (minutes: number) => {
   return `${h}:${m}:00`
 }
 
+/**
+ *
+ * @param endDateStr - The end date in string format (e.g., '2023-12-31')
+ * @description This function calculates the number of days remaining from today to the given end date.
+ * It sets the time to midnight for both today and the end date to ensure accurate day calculation.
+ * @example getDaysRemaining('2023-12-31') ==> 30 (if
+ * @returns {number} - The number of days remaining until the end date.
+ * If the end date is in the past, it returns a negative number.
+ */
 export function getDaysRemaining(endDateStr: string): number {
   const endDate = new Date(endDateStr)
   const today = new Date()
@@ -30,10 +39,15 @@ export function getDaysRemaining(endDateStr: string): number {
  * @example formatDate('2023-01-01') ==> 'Jan 1, 2023'
  */
 export const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleString('en-US', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZoneName: 'short'
   })
 }
 

@@ -1,5 +1,6 @@
 import { classroomApi } from '@/features/classroom/api/classroomApi'
 import { enrollmentApi } from '@/features/enrollment/api/enrollmentApi'
+import { notificationApi } from '@/features/notification/api/notificationApi'
 import { ageRangeApi } from '@/features/resource/age-range/api/ageRangeApi'
 import { categoryApi } from '@/features/resource/category/api/categoryApi'
 import { courseApi } from '@/features/resource/course/api/courseApi'
@@ -18,7 +19,8 @@ export const apiMiddlewares: Middleware[] = [
   ageRangeApi.middleware,
   skillApi.middleware,
   categoryApi.middleware,
-  standardApi.middleware
+  standardApi.middleware,
+  notificationApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]

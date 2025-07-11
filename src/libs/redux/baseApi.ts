@@ -17,12 +17,11 @@ import { getSession } from 'next-auth/react'
 // =============================
 
 const rawBaseQuery = fetchBaseQuery({
-  // baseUrl:
-  //   process.env.NEXT_PUBLIC_BASE_API_URL ??
-  //   (() => {
-  //     throw new Error('Missing BASE_API_URL')
-  //   })(),
-  baseUrl: 'https://localhost:6002/api',
+  baseUrl:
+    process.env.NEXT_PUBLIC_DOCKER_BE_URL ??
+    (() => {
+      throw new Error('Missing BASE_API_URL')
+    })(),
   credentials: 'include'
 })
 

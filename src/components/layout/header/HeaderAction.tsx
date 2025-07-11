@@ -1,7 +1,7 @@
 'use client'
 import HeaderEvent from '@/components/layout/header/header-action/HeaderEvent'
 import { Button } from '@/components/shadcn/button'
-import { ArrowRightToLine, UserPlus, Sparkles } from 'lucide-react'
+import { ArrowRightToLine, Sparkles } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { signIn } from 'next-auth/react'
 import AuthStatusMenu from '@/components/layout/header/header-action/AuthStatusMenu'
@@ -26,7 +26,6 @@ export default function HeaderAction() {
       <div className='flex w-full flex-col space-y-4 lg:hidden'>
         <div className='flex w-full flex-col space-y-3 pt-2'>
           <HeaderEvent />
-
           {/* Mobile Sign Up Button */}
           <Button
             size='lg'

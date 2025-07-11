@@ -17,6 +17,8 @@ import { standardApi } from '@/features/resource/standard/api/standardApi'
 import { standardSlice } from '@/features/resource/standard/slice/standardSlice'
 import { combineReducers } from '@reduxjs/toolkit'
 import { authSlice } from '@/features/auth/authSlice'
+import { notificationSlice } from '@/features/notification/slice/notificationSlice'
+import { notificationApi } from '@/features/notification/api/notificationApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -29,6 +31,7 @@ export const rootReducer = combineReducers({
   skill: skillSlice.reducer,
   standard: standardSlice.reducer,
   enrollment: enrollmentSlice.reducer,
+  notification: notificationSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -39,5 +42,6 @@ export const rootReducer = combineReducers({
   [ageRangeApi.reducerPath]: ageRangeApi.reducer,
   [skillApi.reducerPath]: skillApi.reducer,
   [standardApi.reducerPath]: standardApi.reducer,
-  [categoryApi.reducerPath]: categoryApi.reducer
+  [categoryApi.reducerPath]: categoryApi.reducer,
+  [notificationApi.reducerPath]: notificationApi.reducer
 })

@@ -11,7 +11,6 @@ import React from 'react'
 export default function AuthStatusMenu() {
   const { data: session, status } = useSession()
   const isAuth = status === 'authenticated'
-  const role = useAppSelector((state) => state.auth.user?.role)
 
   return (
     <div>
@@ -19,7 +18,7 @@ export default function AuthStatusMenu() {
         <SPopover
           trigger={
             <div>
-              <SAvatar src={session.user.image || 'https://github.com/shadcn.png'} />{' '}
+              <SAvatar src={session.user.image || 'https://github.com/shadcn.png'} />
             </div>
           }
           children={
