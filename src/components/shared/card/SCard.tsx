@@ -21,10 +21,10 @@ type SCardProps = {
 export function SCard({ className, footerClassName, title, description, action, content, footer }: SCardProps) {
   return (
     <Card className={className}>
-      {title && description && (
+      {title && (
         <CardHeader>
           <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
+          {description && <CardDescription>{description}</CardDescription>}
           <CardAction>{action}</CardAction>
         </CardHeader>
       )}

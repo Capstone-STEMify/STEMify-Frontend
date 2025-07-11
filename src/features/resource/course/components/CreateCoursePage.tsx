@@ -12,11 +12,10 @@ export interface CourseFormData {
 import { SCard } from '@/components/shared/card/SCard'
 import React, { useState } from 'react'
 import { CourseBasicInfo } from '@/features/resource/course/components/manage/create/CourseBasicInfo'
-import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown'
 import { CoverImageUpload } from '@/features/resource/course/components/manage/create/CoverImageUpload'
 import { SkillsLearned } from '@/features/resource/course/components/manage/create/SkillsLearned'
 import { CourseActionButtons } from '@/features/resource/course/components/manage/create/CourseActionButtons'
-import { CourseContent } from './manage/content/CourseContent' 
+import { CourseContent } from './manage/content/CourseContent'
 
 type TabType = 'basic-info' | 'course-content' | 'fee'
 
@@ -123,6 +122,7 @@ export default function CreateCourse() {
               />
 
               <SCard
+                className='gap-2'
                 title='Course Category'
                 description='Select multiple course categories for this class'
                 content={
@@ -192,11 +192,12 @@ export default function CreateCourse() {
                   <div className='space-y-2'>
                     <div className='space-y-1 text-sm text-gray-600'>
                       <div>
-                        <span className='font-medium'>United States:</span> K, 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, UK
+                        <span className='font-medium'>United States:</span> K, 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th,
+                        UK
                       </div>
                       <div>
-                        <span className='font-medium'>England:</span> Early Years, Year 1, Year 2, Year 3, Year 4, Year 5,
-                        Year 6, Year 7, Year 8
+                        <span className='font-medium'>England:</span> Early Years, Year 1, Year 2, Year 3, Year 4, Year
+                        5, Year 6, Year 7, Year 8
                       </div>
                       <div>
                         <span className='font-medium'>UK - Scotland:</span> Early Learning and Childcare, S1, P1
@@ -215,17 +216,17 @@ export default function CreateCourse() {
             </div>
           </div>
         )
-      
+
       case 'course-content':
         return <CourseContent />
-      
+
       case 'fee':
         return (
-          <div className="flex items-center justify-center h-64">
-            <p className="text-gray-500 text-lg">Fee content will be implemented here</p>
+          <div className='flex h-64 items-center justify-center'>
+            <p className='text-lg text-gray-500'>Fee content will be implemented here</p>
           </div>
         )
-      
+
       default:
         return null
     }
@@ -237,31 +238,31 @@ export default function CreateCourse() {
         <div className='mb-6'>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
             <div className='flex space-x-6'>
-              <button 
+              <button
                 onClick={() => setActiveTab('basic-info')}
                 className={`pb-2 font-medium transition-colors ${
-                  activeTab === 'basic-info' 
-                    ? 'border-b-2 border-amber-500 text-amber-400' 
+                  activeTab === 'basic-info'
+                    ? 'border-b-2 border-amber-500 text-amber-400'
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 Basic Info
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab('course-content')}
                 className={`pb-2 font-medium transition-colors ${
-                  activeTab === 'course-content' 
-                    ? 'border-b-2 border-amber-500 text-amber-400' 
+                  activeTab === 'course-content'
+                    ? 'border-b-2 border-amber-500 text-amber-400'
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 Course content
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab('fee')}
                 className={`pb-2 font-medium transition-colors ${
-                  activeTab === 'fee' 
-                    ? 'border-b-2 border-amber-500 text-amber-400' 
+                  activeTab === 'fee'
+                    ? 'border-b-2 border-amber-500 text-amber-400'
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
