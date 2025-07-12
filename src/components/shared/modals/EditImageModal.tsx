@@ -41,7 +41,7 @@ export default function EditImageModal({ imageSrc, onConfirm }: EditImageModalPr
             image={imageSrc}
             crop={crop}
             zoom={zoom}
-            aspect={4 / 3}
+            aspect={1 / 1}
             onCropChange={setCrop}
             onZoomChange={setZoom}
             onCropComplete={onCropComplete}

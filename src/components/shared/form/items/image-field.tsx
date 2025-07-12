@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react'
 import { Upload } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useFieldContext } from '@/components/shared/form/items'
+import { SCard } from '@/components/shared/card/SCard'
 
 export default function ImageField() {
   const field = useFieldContext<File | null>()
@@ -37,21 +38,29 @@ export default function ImageField() {
   }
 
   return (
-    <div className='rounded-2xl bg-white p-6 shadow-md'>
-      <h3 className='mb-3 text-xl font-semibold text-gray-800'>Cover Image</h3>
-      <div className='relative rounded-2xl border-2 border-dashed border-gray-300 p-8 text-center'>
-        {previewUrl ? (
-          <img src={previewUrl} alt='Preview' className='mx-auto mb-3 max-h-64 rounded-xl object-cover transition' />
-        ) : (
-          <Upload className='mx-auto mb-3 h-12 w-12 text-gray-400' />
-        )}
-        <p className='mb-1 text-gray-600'>Upload cover image</p>
-        <p className='mb-4 text-sm text-gray-400'>Make the Lesson more engaging</p>
-        <Button type='button' className='rounded-full px-4 py-2' onClick={() => fileInputRef.current?.click()}>
-          Choose File
-        </Button>
-        <input type='file' accept='image/*' ref={fileInputRef} onChange={handleFileChange} className='hidden' />
-      </div>
-    </div>
+    <SCard
+      content={
+        <>
+          <h3 className='mb-3 text-xl font-semibold text-gray-800'>Cover Image</h3>
+          <div className='relative rounded-2xl border-2 border-dashed border-gray-300 p-8 text-center'>
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt='Preview'
+                className='mx-auto mb-3 max-h-64 rounded-xl object-cover transition'
+              />
+            ) : (
+              <Upload className='mx-auto mb-3 h-12 w-12 text-gray-400' />
+            )}
+            <p className='mb-1 text-gray-600'>Upload cover image</p>
+            <p className='mb-4 text-sm text-gray-400'>Make the Lesson more engaging</p>
+            <Button type='button' className='rounded-full px-4 py-2' onClick={() => fileInputRef.current?.click()}>
+              Choose File
+            </Button>
+            <input type='file' accept='image/*' ref={fileInputRef} onChange={handleFileChange} className='hidden' />
+          </div>
+        </>
+      }
+    />
   )
 }
