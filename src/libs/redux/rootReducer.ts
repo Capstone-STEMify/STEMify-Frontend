@@ -19,6 +19,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 import { authSlice } from '@/features/auth/authSlice'
 import { notificationSlice } from '@/features/notification/slice/notificationSlice'
 import { notificationApi } from '@/features/notification/api/notificationApi'
+import { contentApi } from '@/features/content/api/contentApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -44,5 +45,6 @@ export const rootReducer = combineReducers({
   [standardApi.reducerPath]: standardApi.reducer,
   [categoryApi.reducerPath]: categoryApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
-  [lessonApiExtended.reducerPath]: lessonApiExtended.reducer
+  [lessonApiExtended.reducerPath]: lessonApiExtended.reducer,
+  [contentApi.reducerPath]: contentApi.reducer
 })
