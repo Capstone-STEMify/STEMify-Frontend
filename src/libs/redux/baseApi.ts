@@ -121,8 +121,28 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
         invalidatesTags: [tagType]
       }),
 
+      // POST: classrooms/2
+      createFormData: builder.mutation<ApiSuccessResponse<T>, FormData>({
+        query: (body) => ({
+          url: baseUrl,
+          method: 'POST',
+          body
+        }),
+        invalidatesTags: [tagType]
+      }), 
+      
       // PUT: classrooms/2
       update: builder.mutation<ApiSuccessResponse<T>, { id: string | number; body: Partial<T> }>({
+        query: ({ id, body }) => ({
+          url: `${baseUrl}/${id}`,
+          method: 'PATCH',
+          body
+        }),
+        invalidatesTags: (result, error, { id }) => [{ type: tagType, id }, tagType]
+      }),
+
+      // PUT: classrooms/2
+      updateFormData: builder.mutation<ApiSuccessResponse<T>, { id: string | number; body: FormData }>({
         query: ({ id, body }) => ({
           url: `${baseUrl}/${id}`,
           method: 'PATCH',
