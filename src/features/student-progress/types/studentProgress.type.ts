@@ -1,24 +1,31 @@
-export type LessonProgress = {
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
+
+export enum ProgressStatus {
+  NOT_STARTED = 'NotStarted',
+  IN_PROGRESS = 'InProgress',
+  COMPLETED = 'Completed'
+}
+
+export type ProgressType = 'lesson' | 'section'
+
+export type BaseProgress = {
   id: number
-  lessonId: number
-  status: LessonProgressStatus
+  status: ProgressStatus
   completedAt: string
 }
 
-export enum LessonProgressStatus {
-  NOT_STARTED = 'NotStarted',
-  IN_PROGRESS = 'InProgress',
-  COMPLETED = 'Completed'
-}
-export enum SectionPregressStatus {
-  NOT_STARTED = 'NotStarted',
-  IN_PROGRESS = 'InProgress',
-  COMPLETED = 'Completed'
-}
+export type LessonProgress = {
+  lessonId: number
+} & BaseProgress
 
 export type SectionProgress = {
-  id: number
   sectionId: number
-  status: LessonProgressStatus
-  completedAt: string
-}
+} & BaseProgress
+
+export type StudentProgress = LessonProgress | SectionProgress
+
+export type StudentProgressQuery = {
+  enrollmentId: number
+  lessonId?: number
+  sectionId?: number
+} & SearchPaginatedRequestParams

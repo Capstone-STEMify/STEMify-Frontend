@@ -129,8 +129,8 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
           body
         }),
         invalidatesTags: [tagType]
-      }), 
-      
+      }),
+
       // PUT: classrooms/2
       update: builder.mutation<ApiSuccessResponse<T>, { id: string | number; body: Partial<T> }>({
         query: ({ id, body }) => ({

@@ -9,6 +9,7 @@ import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
 import { sectionApi } from '@/features/resource/section/api/sectionApi'
 import { skillApi } from '@/features/resource/skill/api/skillApi'
 import { standardApi } from '@/features/resource/standard/api/standardApi'
+import { studentProgresssApi } from '@/features/student-progress/api/studentProgressApi'
 import { Middleware } from '@reduxjs/toolkit'
 
 export const apiMiddlewares: Middleware[] = [
@@ -22,7 +23,8 @@ export const apiMiddlewares: Middleware[] = [
   categoryApi.middleware,
   standardApi.middleware,
   notificationApi.middleware,
-  contentApi.middleware
+  contentApi.middleware,
+  studentProgresssApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]
