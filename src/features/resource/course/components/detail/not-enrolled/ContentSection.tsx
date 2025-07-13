@@ -25,7 +25,10 @@ export default function ContentSection({ token }: ContentSectionProps) {
   const params = useParams()
   const courseId = params.courseId
 
-  const { data: lessons } = useSearchLessonQuery({ ...lessonsQuery, courseId: Number(courseId) })
+  const { data: lessons } = useSearchLessonQuery(
+    { ...lessonsQuery, courseId: Number(courseId) },
+    { skip: !token || !courseId }
+  )
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))

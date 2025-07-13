@@ -40,7 +40,7 @@ export const customFetchBaseQueryWithErrorHandling = async (
         toast.error(message || 'Bad Request')
         break
       case 401:
-        toast.error(message || 'Unauthorized')
+        toast.error(message || 'Unauthorized! Please log for access')
         break
       case 403:
         toast.error(message || 'Forbidden')

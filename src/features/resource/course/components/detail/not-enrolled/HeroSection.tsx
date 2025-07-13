@@ -13,6 +13,7 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 
 interface HeroSectionProps {
   course: Course
+  token?: string
 }
 
 type TagGroupProps = {
@@ -32,18 +33,11 @@ const TagGroup = ({ label, items, className }: TagGroupProps) => (
   </div>
 )
 
-export default function HeroSection({ course }: HeroSectionProps) {
+export default function HeroSection({ course, token }: HeroSectionProps) {
   const auth = useAppSelector((state) => state.auth)
   const [createEnroll, { data: enroll }] = useCreateEnrollmentMutaion()
 
   const handleEnroll = () => {
-    const token = auth.token
-    const userId = auth.user?.userId
-
-    if (!token) {
-      console.warn('Bạn cần đăng nhập trước khi ghi danh.')
-      return
-    }
     if (course.id) {
       createEnroll({ courseId: course.id, studentId: auth.user?.userId })
     }

@@ -1,6 +1,5 @@
 'use client'
 import React from 'react'
-import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { BookOpen } from 'lucide-react'
@@ -8,18 +7,19 @@ import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 import ContentSection from '@/features/resource/course/components/detail/not-enrolled/ContentSection'
 import StatsSection from '@/features/resource/course/components/detail/not-enrolled/StatSection'
 import HeroSection from '@/features/resource/course/components/detail/not-enrolled/HeroSection'
-import { useAppSelector } from '@/hooks/redux-hooks'
 
-export default function CourseDetailNotEnrolled() {
-  const params = useParams()
-  const token = useAppSelector((state) => state.auth.token)
-  const courseId = params.courseId
+type CourseDetailNotEnrolledProps = {
+  courseId?: number
+  token?: string
+}
+
+export default function CourseDetailNotEnrolled({ courseId, token }: CourseDetailNotEnrolledProps) {
   const {
     data: course,
     error,
     isLoading
   } = useGetCourseByIdQuery(Number(courseId), {
-    skip: !token && !courseId
+    skip: !token || !courseId
   })
 
   if (isLoading)
