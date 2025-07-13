@@ -11,7 +11,11 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { useEffect } from 'react'
 
-export default function ContentSection() {
+type ContentSectionProps = {
+  token?: string
+}
+
+export default function ContentSection({ token }: ContentSectionProps) {
   const dispatch = useAppDispatch()
   const lessonsQuery = useAppSelector((state) => state.lesson)
   useEffect(() => {
@@ -47,7 +51,7 @@ export default function ContentSection() {
       whileInView='visible'
       viewport={{ once: true }}
       variants={fadeInUp}
-      className='scroll-mt-24 bg-white py-12'
+      className='bg-white py-30'
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='mb-12 text-center'>

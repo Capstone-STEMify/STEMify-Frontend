@@ -7,7 +7,6 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-// Sample course data - replace with your actual data
 const sampleCourses = [
   {
     id: '1',
@@ -126,41 +125,37 @@ interface CourseContentProps {
 export function CourseContent({ courses = sampleCourses }: CourseContentProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const coursesPerPage = 6
-  
+
   // Calculate pagination
   const totalPages = Math.ceil(courses.length / coursesPerPage)
   const startIndex = (currentPage - 1) * coursesPerPage
   const endIndex = startIndex + coursesPerPage
   const currentCourses = courses.slice(startIndex, endIndex)
-  
+
   const handlePreviousPage = () => {
-    setCurrentPage(prev => Math.max(prev - 1, 1))
+    setCurrentPage((prev) => Math.max(prev - 1, 1))
   }
-  
+
   const handleNextPage = () => {
-    setCurrentPage(prev => Math.min(prev + 1, totalPages))
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
   }
-  
+
   const handlePageClick = (page: number) => {
     setCurrentPage(page)
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <SCard
-        title="Course Content"
+        title='Course Content'
         description={`Showing ${startIndex + 1}-${Math.min(endIndex, courses.length)} of ${courses.length} courses`}
         content={
-          <div className="space-y-6">
+          <div className='space-y-6'>
             {/* Course Grid */}
-            <div className='grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3 place-items-center'>
+            <div className='grid grid-cols-1 place-items-center gap-8 sm:grid-cols-2 xl:grid-cols-3'>
               {currentCourses.map((resource) => (
                 <Link href={`/resources/courses/${resource.id}`} key={resource.id}>
-                  <CardLayout
-                    size='lg'
-                    imageSrc={resource.imageUrl}
-                    infor={<Badge>{resource.categoryNames}</Badge>}
-                  >
+                  <CardLayout size='lg' imageSrc={resource.imageUrl} infor={<Badge>{resource.categoryNames}</Badge>}>
                     <div className='flex min-h-0 flex-1 flex-col'>
                       <h3 className='text-lg font-semibold'>{resource.title}</h3>
                       <p className='text-sm text-gray-600'>{resource.description}</p>
@@ -174,42 +169,42 @@ export function CourseContent({ courses = sampleCourses }: CourseContentProps) {
                 </Link>
               ))}
             </div>
-            
+
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center space-x-2">
+              <div className='flex items-center justify-center space-x-2'>
                 <button
                   onClick={handlePreviousPage}
                   disabled={currentPage === 1}
-                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className='flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50'
                 >
-                  <ChevronLeft className="w-5 h-5 mr-2" />
+                  <ChevronLeft className='mr-2 h-5 w-5' />
                   Previous
                 </button>
-                
-                <div className="flex space-x-1">
+
+                <div className='flex space-x-1'>
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <button
                       key={page}
                       onClick={() => handlePageClick(page)}
-                      className={`px-3 py-2 text-sm font-medium rounded-lg ${
+                      className={`rounded-lg px-3 py-2 text-sm font-medium ${
                         currentPage === page
-                          ? 'text-blue-600 bg-blue-50 border border-blue-300'
-                          : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'
+                          ? 'border border-blue-300 bg-blue-50 text-blue-600'
+                          : 'border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                       }`}
                     >
                       {page}
                     </button>
                   ))}
                 </div>
-                
+
                 <button
                   onClick={handleNextPage}
                   disabled={currentPage === totalPages}
-                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className='flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50'
                 >
                   Next
-                  <ChevronRight className="w-5 h-5 ml-2" />
+                  <ChevronRight className='ml-2 h-5 w-5' />
                 </button>
               </div>
             )}

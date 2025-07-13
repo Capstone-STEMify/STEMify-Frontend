@@ -29,7 +29,7 @@ export default function StatsSection({ course }: StatsSectionProps) {
     },
     {
       icon: Users,
-      value: course.downloadCount?.toString() ?? '0',
+      value: course.downloadCount ?? 0,
       title: 'Downloads',
       subtitle: 'Join the community',
       iconColor: 'text-red-500',

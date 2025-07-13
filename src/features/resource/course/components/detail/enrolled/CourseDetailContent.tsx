@@ -13,9 +13,15 @@ import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { EllipsisVertical } from 'lucide-react'
 import Link from 'next/link'
+import { skip } from 'node:test'
 import { useEffect } from 'react'
 
-export default function CourseDetailContent() {
+type CourseDetailContentProps = {
+  courseId: number
+  token?: string
+}
+
+export default function CourseDetailContent({ courseId, token }: CourseDetailContentProps) {
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
 
@@ -23,19 +29,7 @@ export default function CourseDetailContent() {
     dispatch(setPageSize(12))
   }, [dispatch])
 
-  const queryParams: LessonQueryParams = {
-    courseId: lessonParams.courseId,
-    createdByUserId: lessonParams.createdByUserId,
-    ageRangeId: lessonParams.ageRangeId,
-    categoryId: lessonParams.categoryId,
-    skillId: lessonParams.skillId,
-    standardId: lessonParams.standardId,
-    pageNumber: lessonParams.pageNumber,
-    pageSize: lessonParams.pageSize,
-    search: lessonParams.search
-  }
-
-  const { data: lessonData, isLoading } = useSearchLessonQuery(queryParams)
+  const { data: lessonData, isLoading } = useSearchLessonQuery({ courseId, ...lessonParams }, { skip: !token })
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))

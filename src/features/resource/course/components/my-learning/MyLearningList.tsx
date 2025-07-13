@@ -13,10 +13,14 @@ import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentAp
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/enrollment/slice/enrollmentSlice'
 
-export function CourseList() {
+type MyLearningListProps = {
+  studentId?: string
+}
+
+export function MyLearningList({ studentId }: MyLearningListProps) {
   const dispatch = useAppDispatch()
   const enrollParams = useAppSelector((state) => state.enrollment)
-  const { data: enroll, isLoading } = useSearchEnrollmentQuery(enrollParams)
+  const { data: enroll, isLoading } = useSearchEnrollmentQuery({ studentId, ...enrollParams }, { skip: !studentId })
 
   useEffect(() => {
     dispatch(setPageSize(6))

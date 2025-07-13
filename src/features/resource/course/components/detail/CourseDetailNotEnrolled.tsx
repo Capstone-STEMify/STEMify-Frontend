@@ -5,22 +5,21 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { BookOpen } from 'lucide-react'
 import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
-import ContentSection from '@/features/resource/course/components/detail/enrolled/ContentSection'
-import StatsSection from '@/features/resource/course/components/detail/enrolled/StatSection'
-import HeroSection from '@/features/resource/course/components/detail/enrolled/HeroSection'
+import ContentSection from '@/features/resource/course/components/detail/not-enrolled/ContentSection'
+import StatsSection from '@/features/resource/course/components/detail/not-enrolled/StatSection'
+import HeroSection from '@/features/resource/course/components/detail/not-enrolled/HeroSection'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 export default function CourseDetailNotEnrolled() {
   const params = useParams()
+  const token = useAppSelector((state) => state.auth.token)
   const courseId = params.courseId
   const {
     data: course,
     error,
     isLoading
   } = useGetCourseByIdQuery(Number(courseId), {
-    skip: !courseId,
-    refetchOnMountOrArgChange: true,
-    refetchOnFocus: true,
-    refetchOnReconnect: true
+    skip: !token && !courseId
   })
 
   if (isLoading)
@@ -43,11 +42,11 @@ export default function CourseDetailNotEnrolled() {
 
   return (
     <div className='min-h-screen bg-white'>
-      <div className='relative mb-36'>
+      <div className='relative'>
         <HeroSection course={course.data} />
         <StatsSection course={course.data} />
       </div>
-      <ContentSection />
+      <ContentSection token={token ?? undefined} />
       {/* <RecommendationSection /> */}
       <h1 className='text-center'>Feedback</h1>
       <h1 className='text-center'>Feedback</h1>

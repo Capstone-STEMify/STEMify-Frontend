@@ -12,13 +12,17 @@ export default function CourseDetail() {
   const courseIdParam = param?.courseId
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
   const auth = useAppSelector((state) => state.auth)
+  const token = auth.token
+  const studentId = auth.user?.userId
 
-  const { data, isLoading, error } = useSearchEnrollmentQuery({
-    courseId,
-    studentId: auth.user?.userId
-  })
+  const { data, isLoading, error } = useSearchEnrollmentQuery(
+    {
+      courseId,
+      studentId
+    },
+    { skip: !studentId && !courseId }
+  )
   const enrollmentItems = data?.data?.items ?? []
-  console.log('CourseDetail enrollment count:', enrollmentItems.length)
 
   if (isLoading)
     return (
@@ -29,7 +33,7 @@ export default function CourseDetail() {
   if (error) return <p>Error: {(error as any).message ?? 'Unknown error'}</p>
 
   if (enrollmentItems.length > 0) {
-    return <CourseDetailEnrolled data={data} />
+    return <CourseDetailEnrolled courseId={Number(courseId)} token={token ?? undefined} />
   }
 
   return <CourseDetailNotEnrolled />

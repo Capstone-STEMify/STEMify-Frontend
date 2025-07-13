@@ -37,6 +37,13 @@ export default function HeroSection({ course }: HeroSectionProps) {
   const [createEnroll, { data: enroll }] = useCreateEnrollmentMutaion()
 
   const handleEnroll = () => {
+    const token = auth.token
+    const userId = auth.user?.userId
+
+    if (!token) {
+      console.warn('Bạn cần đăng nhập trước khi ghi danh.')
+      return
+    }
     if (course.id) {
       createEnroll({ courseId: course.id, studentId: auth.user?.userId })
     }
@@ -45,7 +52,6 @@ export default function HeroSection({ course }: HeroSectionProps) {
       action: {
         label: 'View Enrollment',
         onClick: () => {
-          // Navigate to enrollment details or dashboard
           console.log('Navigate to enrollment details:', enroll)
         }
       }

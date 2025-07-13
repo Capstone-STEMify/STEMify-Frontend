@@ -108,7 +108,6 @@ export default function UpsertCourse() {
   const { data: courseData, isLoading } = useGetCourseByIdQuery(courseId ? Number(courseId) : 0, {
     skip: !courseId
   })
-  console.log('Course data:', courseData)
 
   const [createCourse, { data: courseCreatedItem }] = useCreateCourseWithFormDataMutation()
   const [updateCourse, { data: courseUpdatedItem }] = useUpdateCourseWithFormDataMutation()

@@ -7,9 +7,9 @@ export default function CourseDetailLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div>
+    <div className='bg-light min-h-screen'>
       <Header />
-      <main>{children}</main>
+      <main className='mt-20'>{children}</main>
     </div>
   )
 }
