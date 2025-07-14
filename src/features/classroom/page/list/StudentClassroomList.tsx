@@ -1,94 +1,112 @@
 'use client'
-import { Button } from '@/components/shadcn/button'
-import SearchBar from '@/components/shared/search/SearchBar'
+
+import Link from 'next/link'
 import SSelect from '@/components/shared/SSelect'
-import ClassroomCard from '@/components/shared/card/ClassroomCard'
-import ClassroomHero from '@/features/classroom/components/classroom-list/ClassroomHero'
+import SEmpty from '@/components/shared/empty/SEmpty'
+import CardLayout from '@/components/shared/card/CardLayout'
+import ClassroomHero from '@/components/shared/hero-section/ClassroomHero'
 import { BookOpen, Plus } from 'lucide-react'
-import React, { useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
-import ClassRoomManagement from '@/features/classroom/components/manage-class/ClassRoomManagement'
-import { useSearchClassroomQuery } from '@/features/classroom/api/classroomApi'
-import { fadeInUp } from '@/utils/motion'
+import { Button } from '@/components/shadcn/button'
+import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
+import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
+import { useState } from 'react'
+import { useModal } from '@/providers/ModalProvider'
+import { EnrollmentOrderBy, EnrollmentStatus } from '@/features/classroom/types/enrollment.type'
 
 export default function StudentClassroomList() {
-  const { data: classroomData, error } = useSearchClassroomQuery({ teacherId: 'c12f4a8e-3e78-4a4d-bc41-fb3c4ef8d4de' })
-  console.log('classroomData', classroomData)
-  const [searchQuery, setSearchQuery] = useState('')
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
+  const { openModal } = useModal()
 
-  if (!classroomData) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <p className='text-gray-500'>Loading classrooms...</p>
-      </div>
-    )
+  const [searchQuery, setSearchQuery] = useState('')
+  const [sortOrder, setSortOrder] = useState<EnrollmentOrderBy>(EnrollmentOrderBy.ENROLLDATE_DESC)
+  const [status, setStatus] = useState<EnrollmentStatus | undefined>(undefined)
+
+  const { data: classroomData, isLoading } = useSearchEnrollmentQuery({
+    studentId: 'f21b8c67-3d49-4c4f-84e7-2b76f017ecb2',
+    search: searchQuery,
+    orderBy: sortOrder,
+    status: status
+  })
+
+  const classrooms = classroomData?.data?.items ?? []
+  const isEmpty = !isLoading && classrooms.length === 0
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
   }
 
-  const filteredData = classroomData.data.items
-  console.log('filteredData', filteredData)
-
-  const handleSearch = () => {}
   return (
     <div className='min-h-screen pb-30'>
       <ClassroomHero />
+      <div className='mx-auto mt-20 max-w-7xl'>
+        <div className='text-center text-3xl font-semibold'>Your classroom list</div>
+        <p className='mb-6 text-center text-gray-500'>
+          Here you can find all the classrooms you are enrolled in. You can search, filter, and manage your classrooms
+          easily.
+        </p>
 
-      <ClassRoomManagement />
-
-      {/* Classroom list */}
-      <motion.section
-        ref={ref}
-        // initial='hidden'
-        animate={isInView ? 'visible' : 'hidden'}
-        variants={fadeInUp}
-        className='mx-auto mt-8 max-w-7xl'
-      >
+        {/* Header controls */}
         <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-          <SearchBar />
-          <div className='flex items-center justify-between gap-4 sm:justify-start'>
+          {/* <SearchBar onSearch={handleSearch} /> */}
+
+          <div className='flex flex-wrap gap-4'>
             <SSelect
-              items={[
-                { value: 'all', content: 'All' },
-                { value: 'recently', content: 'Recently' }
+              options={[
+                { value: EnrollmentStatus.ALL, label: 'All status' },
+                { value: EnrollmentStatus.ACTIVE, label: 'Active' },
+                { value: EnrollmentStatus.PENDING, label: 'Pending' },
+                { value: EnrollmentStatus.WITHDRAWN, label: 'Withdrawn' }
               ]}
-              placeholder='Filter by subject'
-              value='all'
-              onChange={(value) => console.log(value)}
+              value={status ?? EnrollmentStatus.ALL}
+              onChange={(value) => {
+                setStatus(value === EnrollmentStatus.ALL ? undefined : (value as EnrollmentStatus))
+              }}
+              placeholder='Filter by status'
             />
-            <Button size={'icon'} className='bg-amber-custom-400 rounded-full font-bold'>
-              <Plus />
+
+            <SSelect
+              options={[
+                { value: EnrollmentOrderBy.ENROLLDATE_DESC, label: 'Newest first' },
+                { value: EnrollmentOrderBy.ENROLLDATE_ASC, label: 'Oldest first' },
+                { value: EnrollmentOrderBy.CLASSROOM_NAME_ASC, label: 'Name A-Z' },
+                { value: EnrollmentOrderBy.CLASSROOM_NAME_DESC, label: 'Name Z-A' }
+              ]}
+              value={sortOrder}
+              onChange={(value) => setSortOrder(value as EnrollmentOrderBy)}
+              placeholder='Sort by'
+            />
+
+            <Button variant='outline' className='flex items-center gap-2' onClick={() => openModal('enroll')}>
+              <Plus className='h-4 w-4' />
+              Enroll in a classroom
             </Button>
           </div>
         </div>
-        <div className='grid grid-cols-1 justify-items-center space-y-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
-          {/* Replace with filter later */}
-          {/* {filteredData.map((classroom, index) => ( */}
-          {filteredData.map((classroom, index) => (
-            <ClassroomCard
-              key={index}
-              classroom={{
-                name: classroom.name,
-                image: classroom.coverImageUrl,
-                member: classroom.numberOfStudents
-                // avatar: classroom.
-              }}
-              size='lg'
-            />
-          ))}
-        </div>
 
-        {/* Empty State */}
-        {filteredData.length === 0 && (
-          <div className='py-12 text-center'>
-            <div className='mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gray-200'>
-              <BookOpen className='h-8 w-8 text-gray-400' />
-            </div>
-            <h3 className='mb-2 text-lg font-semibold text-gray-900'>No classrooms found</h3>
-            <p className='text-gray-500'>Try adjusting your search or filter criteria</p>
-          </div>
+        {isEmpty && (
+          <SEmpty
+            title='No classrooms found'
+            description='You have not enrolled in any classrooms yet.'
+            icon={<BookOpen className='h-10 w-10 text-gray-400' />}
+          />
         )}
-      </motion.section>
+
+        {/* Grid list */}
+        <div className='grid grid-cols-1 justify-items-center-safe space-y-10 lg:grid-cols-3 xl:grid-cols-4'>
+          {isLoading && Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />)}
+
+          {!isLoading &&
+            classrooms.length > 0 &&
+            classrooms.map((classroom, index) => (
+              <Link href={`/classroom/${classroom.id}`} key={index} className='w-full'>
+                <CardLayout imageSrc={classroom.coverImageUrl || '/HomeFiles/hcm.jpg'}>
+                  <div>
+                    <h3 className='text-lg font-semibold text-gray-900'>{classroom.courseId}</h3>
+                  </div>
+                </CardLayout>
+              </Link>
+            ))}
+        </div>
+      </div>
     </div>
   )
 }

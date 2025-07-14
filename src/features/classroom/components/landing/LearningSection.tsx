@@ -33,7 +33,7 @@ export default function LearningSection() {
 
             <div className='absolute -right-8 -bottom-16 z-30 w-72 overflow-hidden rounded-xl bg-white shadow-xl'>
               <div className='relative h-40 overflow-hidden bg-gradient-to-br from-blue-900 to-blue-600'>
-                <img src='/HomeFiles/hcm.jpg' alt='City skyline at night' className='h-full w-full object-cover' />
+                <img src='/HomeFiles/learning.png' alt='City skyline at night' className='h-full w-full object-cover' />
               </div>
 
               <div className='bg-white p-4'>

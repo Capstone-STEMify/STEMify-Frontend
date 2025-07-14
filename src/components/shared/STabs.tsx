@@ -19,8 +19,8 @@ type STabsProps = {
 
 export default function STabs({ defaultValue, items, className, customStyle }: STabsProps) {
   return (
-    <Tabs defaultValue={defaultValue} className={`${className} p-4`}>
-      <TabsList className={`bg-light mb-4 grid w-full grid-cols-2 ${customStyle?.list}`}>
+    <Tabs defaultValue={defaultValue} className={`${className}`}>
+      <TabsList className={`w-full ${customStyle?.list}`}>
         {items.map((item) => (
           <TabsTrigger key={item.value} value={item.value} className={`${customStyle?.trigger}`}>
             {item.label}

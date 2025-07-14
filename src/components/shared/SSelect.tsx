@@ -2,27 +2,28 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 
 type SelectItemProps = {
   value: string
-  content: string
+  label: string
 }
 
 type SSelectProps = {
-  items: SelectItemProps[]
   placeholder: string
   value: string
+  options: SelectItemProps[]
   onChange: (value: string) => void
+  onOpen?: (open: boolean) => void
 }
 
-export default function SSelect({ items, placeholder, value, onChange }: SSelectProps) {
+export default function SSelect({ options, placeholder, value, onChange, onOpen }: SSelectProps) {
   return (
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className='w-full bg-white/80 !ring-0 !ring-offset-0 backdrop-blur-md focus:!ring-0 focus:!outline-none sm:w-[200px]'>
+    <Select value={value} onValueChange={onChange} onOpenChange={onOpen}>
+      <SelectTrigger className='w-full bg-white/80 !ring-0 !ring-offset-0 backdrop-blur-md focus:!ring-0 focus:!outline-none'>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className='bg-white/90 backdrop-blur-md'>
         <SelectGroup>
-          {items.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.content}
+          {options.map((o) => (
+            <SelectItem key={o.value} value={o.value}>
+              {o.label}
             </SelectItem>
           ))}
         </SelectGroup>

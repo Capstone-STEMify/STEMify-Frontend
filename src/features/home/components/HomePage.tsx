@@ -7,6 +7,7 @@ import BenefitsSection from './benefit-section/BenefitSection'
 import StatsSection from './stats-section/StatsSection'
 import TestimonialsSection from './testimonials-section/TestimonialsSection'
 import FAQSection from './faq-section/FAQSection'
+import { usePathname } from 'next/navigation'
 
 interface RegisterSectionRef {
   current: HTMLElement | null

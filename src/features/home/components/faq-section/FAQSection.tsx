@@ -1,4 +1,4 @@
-import React from 'react'
+import Image from 'next/image'
 
 export default function FAQSection() {
   return (
@@ -31,19 +31,6 @@ export default function FAQSection() {
             Subscribe
             <div className='absolute -top-1 -right-1 h-3 w-3 animate-pulse rounded-full bg-orange-400 opacity-60'></div>
           </button>
-        </div>
-
-        <div className='relative flex justify-center space-x-4'>
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className='group relative'>
-              <img
-                src='/HomeFiles/hcm.jpg'
-                alt={`Avatar ${i}`}
-                className='h-12 w-12 rounded-full border-2 border-white object-cover shadow-sm transition-transform duration-300 group-hover:scale-110'
-              />
-              <div className='absolute -top-1 -right-1 h-4 w-4 rounded-full bg-green-400 opacity-0 transition-opacity duration-300 group-hover:animate-ping group-hover:opacity-80'></div>
-            </div>
-          ))}
         </div>
       </div>
     </section>

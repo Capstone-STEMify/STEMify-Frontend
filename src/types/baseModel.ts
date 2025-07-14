@@ -39,4 +39,5 @@ export type SearchPaginatedRequestParams = {
   pageSize?: number
   search?: string
   orderBy?: string
+  status?: string
 }

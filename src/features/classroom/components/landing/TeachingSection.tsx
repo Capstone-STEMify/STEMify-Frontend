@@ -34,13 +34,13 @@ export default function TeachingSection() {
           </p>
           <div className='flex flex-col justify-center gap-4 sm:flex-row'>
             <LinkButton
-              href='/teacher/classrooms'
+              href='/classroom/list'
               className='rounded-lg bg-blue-600 px-8 py-5 text-white transition-colors hover:bg-blue-700'
             >
               Go To Your Classroom →
             </LinkButton>
             <LinkButton
-              href='/teacher/classrooms'
+              href='/classroom/list'
               className='rounded-lg border border-blue-600 bg-white px-8 py-5 text-blue-600 transition-colors hover:bg-blue-50'
             >
               Join A Class

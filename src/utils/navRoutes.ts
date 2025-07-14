@@ -8,24 +8,24 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   ],
   [UserRole.STUDENT]: [
     { name: 'Home', path: '/' },
-    { name: 'Resources', path: '/resources' },
-    { name: 'Classroom', path: '/classroom' },
-    { name: 'STEM', path: '/stem' }
+    { name: 'Resource', path: '/resource' },
+    { name: 'My Learning', path: '/my-learning' },
+    { name: 'Code Lab', path: '/code-lab' }
   ],
   [UserRole.TEACHER]: [
     { name: 'Home', path: '/' },
-    { name: 'Resources', path: '/resources' },
-    { name: 'Classroom', path: '/classroom' },
-    { name: 'STEM', path: '/stem' }
+    { name: 'Resource', path: '/resource' },
+    { name: 'My Learning', path: '/my-learning' },
+    { name: 'Code Lab', path: '/code-lab' }
   ],
   [UserRole.STAFF]: [
     { name: 'Home', path: '/' },
-    { name: 'Resources', path: '/resources' }
+    { name: 'Resource', path: '/resource' }
   ],
   [UserRole.GUEST]: [
     { name: 'Home', path: '/' },
-    { name: 'Resources', path: '/resources' },
-    { name: 'Classroom', path: '/classroom' },
-    { name: 'STEM', path: '/stem' }
+    { name: 'Resource', path: '/resource' },
+    { name: 'My Learning', path: '/my-learning' },
+    { name: 'Code Lab', path: '/code-lab' }
   ]
 }

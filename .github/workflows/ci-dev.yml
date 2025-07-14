@@ -39,4 +39,6 @@ jobs:
         run: npm run lint || true
 
       - name: Build with OpenNext
+        env:
+          NEXT_PUBLIC_DOCKER_BE_URL: ${{ vars.NEXT_PUBLIC_DOCKER_BE_URL }}
         run: npx opennextjs-cloudflare build

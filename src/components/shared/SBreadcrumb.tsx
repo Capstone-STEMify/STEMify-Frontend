@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation'
 import { Fragment } from 'react'
 
 type SBreadcrumbProps = {
-  title: string
+  title?: string
 } & VariantProps<typeof textVariants>
 
 export default function SBreadcrumb({ title, size = 'md', color, weight }: SBreadcrumbProps) {
@@ -34,8 +34,6 @@ export default function SBreadcrumb({ title, size = 'md', color, weight }: SBrea
   })
 
   const allItems = [{ label: 'Home', href: '/' }, ...items]
-
-  
 
   return (
     <Breadcrumb>

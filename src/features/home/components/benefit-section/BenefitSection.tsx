@@ -1,6 +1,6 @@
 'use client'
 import { Star } from 'lucide-react'
-import React, { useState } from 'react'
+import Image from 'next/image'
 
 export default function BenefitsSection() {
   const benefits = [
@@ -19,8 +19,10 @@ export default function BenefitsSection() {
       <div className='relative z-10 mx-auto flex max-w-6xl items-center justify-between'>
         <div className='relative flex-1'>
           <div className='group relative'>
-            <img
-              src='/HomeFiles/hcm.jpg'
+            <Image
+              width={600}
+              height={300}
+              src='/HomeFiles/learning.png'
               alt='Students collaborating'
               className='transform rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105'
             />

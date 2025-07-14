@@ -1,15 +1,17 @@
 import type { Metadata } from 'next'
-import { Nunito } from 'next/font/google'
+import { Nunito, Reem_Kufi } from 'next/font/google'
 import './globals.css'
-import StoreProvider from 'providers/StoreProvider'
-import { Toaster } from 'sonner'
-import { UserRole } from '@/types/userRole'
-import LoadingWrapper from '@/components/shared/loading/LoadingWrapper'
+import Providers from '@/providers/Providers'
 
 const geistNunito = Nunito({
   variable: '--font-geist-nunito',
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
+  display: 'swap'
+})
+
+const fontReemKufi = Reem_Kufi({
+  subsets: ['latin'],
   display: 'swap'
 })
 
@@ -27,14 +29,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en' className={`${geistNunito.variable}`}>
+    <html lang='en' className={`${fontReemKufi.className}`}>
       <body className={`antialiased`}>
-        <StoreProvider>
-          <main>
-            <LoadingWrapper>{children}</LoadingWrapper>
-          </main>
-        </StoreProvider>
-        <Toaster />
+        <Providers>
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   )

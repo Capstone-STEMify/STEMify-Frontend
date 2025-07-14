@@ -18,10 +18,9 @@ type SDialogProps = {
   content: ReactNode
   description?: string
   footer?: ReactNode
-  className?: string
 }
 
-export function SDialog({ open, setOpen, trigger, title, description, content, footer, className = '' }: SDialogProps) {
+export function SDialog({ open, setOpen, trigger, title, description, content, footer }: SDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
