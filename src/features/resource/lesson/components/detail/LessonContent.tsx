@@ -1,5 +1,7 @@
 'use client'
-
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 import { Button } from '@/components/shadcn/button'
 import { useGetContentByIdQuery } from '@/features/content/api/contentApi'
 import React from 'react'
@@ -13,11 +15,13 @@ export default function LessonContent({ selectedId }: LessonContentProps) {
 
   return (
     <div className='h-[700px] p-6'>
-      <div className='text-end'>
-        <Button>Mark as Compelte</Button>
+      <div className='text-end align-text-bottom'>
+        <Button>Mark as Complete</Button>
       </div>
-      <div className='flex items-center justify-center text-center'>
-        <div>{data?.data.contentName}</div>
+      <div>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+          {data?.data.contentName}
+        </ReactMarkdown>
       </div>
     </div>
   )

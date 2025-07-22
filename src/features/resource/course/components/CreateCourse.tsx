@@ -56,9 +56,9 @@ function buildCourseFormData(data: CourseFormData) {
   formData.append('courseId', '1')
   formData.append('slug', data.slug)
 
-  data.skills.forEach((skill) => formData.append('skillId', skill))
-  data.categories.forEach((category) => formData.append('categoryId', category))
-  data.standards.forEach((standard) => formData.append('standardId', standard))
+  data.skills.forEach((skill) => formData.append('SkillIds', skill))
+  data.categories.forEach((category) => formData.append('CategoryIds', category))
+  data.standards.forEach((standard) => formData.append('StandardIds', standard))
 
   if (data.imageUrl) {
     formData.append('Image', data.imageUrl)

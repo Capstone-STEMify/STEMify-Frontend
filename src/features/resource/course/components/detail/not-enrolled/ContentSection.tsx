@@ -91,7 +91,7 @@ export default function ContentSection({ token }: ContentSectionProps) {
             >
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{lesson.title}</h3>
-                <p className='text-sm text-gray-600'>{lesson.description}</p>
+                <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
                 <div className='mt-auto flex items-center gap-2'>
                   <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
                   <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
