@@ -2,25 +2,15 @@
 import HeaderEvent from '@/components/layout/header/header-action/HeaderEvent'
 import { Button } from '@/components/shadcn/button'
 import { ArrowRightToLine, Sparkles } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { signIn } from 'next-auth/react'
 import AuthStatusMenu from '@/components/layout/header/header-action/AuthStatusMenu'
 
 export default function HeaderAction() {
-  useEffect(() => {}, [])
   return (
     <>
       {/* Desktop Layout */}
-      <div className='hidden h-8 items-center justify-center gap-4 lg:flex'>
-        <HeaderEvent />
-        <div className='relative h-8 w-px'>
-          <div className='absolute inset-0 bg-gradient-to-b from-transparent via-gray-300 to-transparent dark:via-gray-600' />
-          <div className='absolute inset-0 bg-gradient-to-b from-transparent via-amber-300/20 to-transparent opacity-0 transition-opacity duration-300 hover:opacity-100' />
-        </div>
-        <div className='flex items-center gap-3'>
-          <AuthStatusMenu />
-        </div>
-      </div>
+      <AuthStatusMenu />
 
       {/* Mobile Layout - Enhanced Vertical Stack */}
       <div className='flex w-full flex-col space-y-4 lg:hidden'>

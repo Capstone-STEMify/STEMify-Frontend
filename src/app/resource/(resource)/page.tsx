@@ -21,7 +21,7 @@ export default function LibraryPage() {
         <div className='grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {/* Courses */}
 
-          <CardLayout imageSrc='/images/resources/courses.png' size='lg' href='/resource/course'>
+          <CardLayout imageSrc='/images/resources/courses.png' size='lg' href='/resource/courses'>
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -45,7 +45,7 @@ export default function LibraryPage() {
             </div>
           </CardLayout>
 
-          <CardLayout imageSrc='/images/resources/lessons.png' size='lg' href='/resource/lesson'>
+          <CardLayout imageSrc='/images/resources/lessons.png' size='lg' href='/resource/lessons'>
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -70,7 +70,7 @@ export default function LibraryPage() {
             </div>
           </CardLayout>
 
-          <CardLayout imageSrc='/images/resources/activities.png' size='lg' href='/resource/activity'>
+          <CardLayout imageSrc='/images/resources/activities.png' size='lg' href='/resource/activities'>
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
