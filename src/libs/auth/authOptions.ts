@@ -26,7 +26,8 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
   authorization: {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/authorize`,
     params: {
-      scope: 'stemify_api openid profile email roles'
+      scope: 'stemify_api openid profile email roles',
+      prompt: 'login'
     }
   },
   token: {
@@ -62,10 +63,16 @@ export const authOptions: NextAuthOptions = {
   providers: [oidcProvider],
   secret: process.env.AUTH_SECRET,
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, profile }) {
       if (account?.access_token) {
         token.accessToken = account.access_token
         token.idToken = account.id_token
+
+        if (profile) {
+          token.username = profile.username
+          token.userId = profile.userId
+          token.role = profile.role
+        }
 
         try {
           const decoded: any = jwtDecode(account.access_token)
@@ -81,11 +88,12 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      // console.log('JWT token in session:', token)
-      session.accessToken = token.accessToken!
-      session.user.role = token.role!
-      session.user.username = token.username!
-      session.user.userId = token.userId!
+      if (token) {
+        session.accessToken = token.accessToken!
+        session.user.role = token.role!
+        session.user.username = token.username!
+        session.user.userId = token.userId!
+      }
       return session
     }
   }

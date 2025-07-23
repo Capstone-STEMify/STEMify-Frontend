@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 import { UserRole } from '@/types/userRole'
+import { authOptions } from '@/libs/auth/authOptions'
 
 const routeRoleMap: Record<string, UserRole[]> = {
   // resource routes
@@ -40,7 +41,11 @@ export async function middleware(req: NextRequest) {
     console.log('[Middleware] Token:', token)
 
     if (!token) {
-      return NextResponse.redirect(new URL('/', req.url))
+      // return NextResponse.redirect(new URL('/', req.url))
+      const loginUrl = new URL('/api/auth/signin/oidc', req.url)
+      loginUrl.searchParams.set('callbackUrl', '/')
+      loginUrl.searchParams.set('prompt', 'login')
+      return NextResponse.redirect(loginUrl)
     }
 
     const role = token.role as UserRole
