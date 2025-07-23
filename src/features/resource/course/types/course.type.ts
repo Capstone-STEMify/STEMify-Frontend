@@ -31,10 +31,10 @@ export enum CourseStatus {
 }
 
 // Query
-export type CourseParams = {
+export type CourseQueryParams = {
   courseId?: number
   createdByUserId?: string
-  SkillId?: number
+  skillId?: number
   ageRangeId?: number
   categoryId?: number
   standardId?: number
