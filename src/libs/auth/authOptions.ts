@@ -56,7 +56,7 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
 }
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
+  // debug: true,
   session: {
     strategy: 'jwt'
   },
@@ -79,7 +79,6 @@ export const authOptions: NextAuthOptions = {
           token.role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'Guest'
           token.username = decoded['preferred_username'] ?? 'unknown'
           token.userId = decoded['sub'] ?? 'unknown'
-          console.log('Decoded JWT token:', token.role)
         } catch (error) {
           console.error('Failed to decode access token:', error)
         }

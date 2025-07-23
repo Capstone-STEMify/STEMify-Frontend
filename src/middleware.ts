@@ -2,62 +2,78 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 import { UserRole } from '@/types/userRole'
-import { authOptions } from '@/libs/auth/authOptions'
 
 const routeRoleMap: Record<string, UserRole[]> = {
-  // resource routes
-  '/resource/create-course': [UserRole.STAFF],
-  '/resource/create-lesson': [UserRole.STAFF],
-
-  // classroom routes
-  '/classroom/*': [UserRole.TEACHER, UserRole.STUDENT],
-
-  // profile routes
+  '/my-learning': [UserRole.STUDENT],
+  '/resource/': [UserRole.STUDENT, UserRole.TEACHER, UserRole.STAFF],
   '/profile': [UserRole.ADMIN, UserRole.STUDENT, UserRole.TEACHER, UserRole.STAFF]
 }
 
-function getMatchedRoute(pathname: string): string | null {
+function normalizePath(path: string) {
+  return path.replace(/\/+$/, '')
+}
+
+function getMatchedBaseRoute(pathname: string): string | null {
+  const normalizedPath = normalizePath(pathname)
   return (
-    Object.keys(routeRoleMap).find((route) => {
-      if (route.endsWith('/*')) {
-        const base = route.slice(0, -2)
-        return pathname.startsWith(base + '/')
-      }
-      return pathname === route
+    Object.keys(routeRoleMap).find((base) => {
+      const normalizedBase = normalizePath(base)
+      console.log('normalizedBase', normalizedBase, 'normalizedPath', normalizedPath)
+      return normalizedPath === normalizedBase || normalizedPath.startsWith(`${normalizedBase}/`)
     }) ?? null
   )
 }
 
 export async function middleware(req: NextRequest) {
   if (process.env.DISABLE_MIDDLEWARE === 'true') {
-    console.log('[Middleware is disabled by env]')
+    console.log('[Middleware Disabled]')
     return NextResponse.next()
   }
+
   const { pathname } = req.nextUrl
-  const matchedRoute = getMatchedRoute(pathname)
+  console.log(`[Middleware] Checking token for route: ${pathname}`)
 
-  if (matchedRoute) {
-    const token = await getToken({ req, secret: process.env.AUTH_SECRET })
-    console.log('[Middleware] Token:', token)
+  const matchedBase = getMatchedBaseRoute(pathname)
 
-    if (!token) {
-      // return NextResponse.redirect(new URL('/', req.url))
-      const loginUrl = new URL('/api/auth/signin/oidc', req.url)
-      loginUrl.searchParams.set('callbackUrl', '/')
-      loginUrl.searchParams.set('prompt', 'login')
-      return NextResponse.redirect(loginUrl)
-    }
-
-    const role = token.role as UserRole
-    const allowedRoles = routeRoleMap[matchedRoute]
-
-    if (!allowedRoles.includes(role)) {
-      return NextResponse.redirect(new URL('/unauthorized', req.url))
-    }
+  if (!matchedBase) {
+    return NextResponse.next()
   }
+
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET })
+
+  if (!token) {
+    const loginUrl = new URL('/api/auth/signin', req.url)
+    loginUrl.searchParams.set('callbackUrl', req.nextUrl.pathname)
+    loginUrl.searchParams.set('prompt', 'login')
+    return NextResponse.redirect(loginUrl)
+  } else {
+    console.log('[Middleware] ✅ Token:', token)
+  }
+
+  const role = token.role as UserRole
+  const allowedRoles = routeRoleMap[matchedBase]
+
+  if (!allowedRoles.includes(role)) {
+    return NextResponse.redirect(new URL('/unauthorized', req.url))
+  }
+
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/classroom/:path*', '/profile', '/resource/create-lesson', '/resource/create-course']
+  matcher: [
+    // classroom routes
+    '/classroom/:path*',
+
+    // profile routes
+    '/profile',
+
+    // resource routes
+    '/resource/course/create',
+    '/resource/lesson/create',
+    '/resource/lesson/list',
+
+    // my learning routes
+    '/my-learning'
+  ]
 }
