@@ -37,7 +37,7 @@ export default function CourseDetailContent({ courseId, token }: CourseDetailCon
 
   if (isLoading) {
     return (
-      <div className='grid h-[650px] grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
+      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
         <SkeletonCard size='sm' />
         <SkeletonCard size='sm' />
         <SkeletonCard size='sm' />
@@ -58,12 +58,16 @@ export default function CourseDetailContent({ courseId, token }: CourseDetailCon
   }
 
   return (
-    <ScrollArea className='h-[650px] px-5 select-none'>
+    <ScrollArea className='h-fit px-5 select-none'>
       <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
         {lessonData.data.items.map((lesson) => (
           <div key={lesson.id} className='relative flex gap-1'>
             <Link href={`/resource/lesson/${lesson.id}`} className='flex w-fit flex-col justify-between'>
-              <CardLayout imageSrc={lesson.imageUrl} size='sm'>
+              <CardLayout
+                imageSrc={lesson.imageUrl}
+                size='sm'
+                badge={<Badge className='bg-gray-50/80 text-gray-800 backdrop-blur-md'>{lesson.status}</Badge>}
+              >
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>Lesson</p>
                   <h3 className='text-sm font-semibold text-gray-900'>{lesson.title}</h3>

@@ -17,6 +17,14 @@ type SBreadcrumbProps = {
   title?: string
 } & VariantProps<typeof textVariants>
 
+function resolveHref(href: string): string {
+  const map: Record<string, string> = {
+    '/resource/course': '/resource/courses',
+    '/resource/lessons': '/resource/lessons'
+  }
+  return map[href] || href
+}
+
 export default function SBreadcrumb({ title, size = 'md', color, weight }: SBreadcrumbProps) {
   const pathname = usePathname()
   const segments = pathname.split('/').filter(Boolean)
@@ -45,7 +53,7 @@ export default function SBreadcrumb({ title, size = 'md', color, weight }: SBrea
                 <BreadcrumbPage className={textVariants({ color, weight })}>{title || item.label}</BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
-                  <Link href={item.href}>{item.label}</Link>
+                  <Link href={resolveHref(item.href)}>{item.label}</Link>
                 </BreadcrumbLink>
               )}
             </BreadcrumbItem>
