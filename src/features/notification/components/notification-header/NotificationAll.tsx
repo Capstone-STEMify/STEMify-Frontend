@@ -1,12 +1,13 @@
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import { useSearchNotificationQuery } from '@/features/notification/api/notificationApi'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { formatDate } from '@/utils/index'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 export default function NotificationAll() {
-  const { data, isLoading, isFetching } = useSearchNotificationQuery({ userId: 'b7e2c7e2-8c1a-4e2e-9b2a-2e7c8e2a1b3c' })
-
+  const userId = useAppSelector((state) => state.auth.user?.userId)
+  const { data, isLoading, isFetching } = useSearchNotificationQuery({ userId })
   if (isLoading || isFetching) {
     return (
       <div className='space-y-3 p-4'>
