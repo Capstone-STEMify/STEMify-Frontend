@@ -6,7 +6,7 @@ import { Button } from '@/components/shadcn/button'
 import { useFieldContext } from '@/components/shared/form/items'
 import { SCard } from '@/components/shared/card/SCard'
 
-export default function ImageField() {
+export default function ImageField({ previewUrlFromServer }: { previewUrlFromServer?: string }) {
   const field = useFieldContext<File | null>()
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -26,9 +26,9 @@ export default function ImageField() {
         }
       }
     } else {
-      setPreviewUrl(null)
+      setPreviewUrl(previewUrlFromServer ?? null)
     }
-  }, [field.state.value])
+  }, [field.state.value, previewUrlFromServer])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]

@@ -5,7 +5,7 @@ import { UserRole } from '@/types/userRole'
 
 const routeRoleMap: Record<string, UserRole[]> = {
   '/my-learning': [UserRole.STUDENT],
-  '/resource/': [UserRole.STUDENT, UserRole.TEACHER, UserRole.STAFF],
+  '/resource/': [UserRole.ADMIN, UserRole.STUDENT, UserRole.TEACHER, UserRole.STAFF],
   '/profile': [UserRole.ADMIN, UserRole.STUDENT, UserRole.TEACHER, UserRole.STAFF]
 }
 
@@ -70,7 +70,9 @@ export const config = {
 
     // resource routes
     '/resource/course/create',
+    '/resource/course/update/:path*',
     '/resource/lesson/create',
+    '/resource/lesson/update/:path*',
     '/resource/lesson/list',
 
     // my learning routes

@@ -15,22 +15,28 @@ type CheckboxFieldProps = {
   className?: string
 }
 
-export const MultipleCheckboxField = ({ label, options, description, className }: CheckboxFieldProps) => {
+export const MultipleCheckboxField = ({
+  label,
+  options,
+  description,
+  className
+}: CheckboxFieldProps) => {
   const field = useFieldContext<string[]>()
 
-  const handleToggle = (optionValue: string) => {
+  const handleToggle = (optionValue: string, checked: boolean) => {
     const currentValues = field.state.value || []
-    if (currentValues.includes(optionValue)) {
-      field.handleChange(currentValues.filter((val) => val !== optionValue))
-    } else {
-      field.handleChange([...currentValues, optionValue])
-    }
+
+    const newValue = checked
+      ? [...currentValues, optionValue]
+      : currentValues.filter((val) => val !== optionValue)
+
+    field.handleChange(newValue)
   }
 
   return (
     <div className='space-y-2'>
       <div className='space-y-1'>
-        <Label>{label}</Label>
+        {label && <Label>{label}</Label>}
         {description && <p className='text-muted-foreground text-sm'>{description}</p>}
       </div>
 
@@ -39,8 +45,8 @@ export const MultipleCheckboxField = ({ label, options, description, className }
           <div key={option.value} className='flex items-center space-x-2'>
             <Checkbox
               id={`${field.name}-${option.value}`}
-              checked={field.state.value?.includes(option.value)}
-              onCheckedChange={() => handleToggle(option.value)}
+              checked={!!field.state.value?.includes(option.value)}
+              onCheckedChange={(checked) => handleToggle(option.value, checked === true)}
               onBlur={field.handleBlur}
             />
             <Label htmlFor={`${field.name}-${option.value}`} className='cursor-pointer'>
