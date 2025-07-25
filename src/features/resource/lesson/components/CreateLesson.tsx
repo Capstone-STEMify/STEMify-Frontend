@@ -1,11 +1,11 @@
 'use client'
 import { SCard } from '@/components/shared/card/SCard'
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
 import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
 import { useGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
 import { useGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
-import { useCreateLessonWithFormDataMutation } from '@/features/resource/lesson/api/lessonApi'
+import { useCreateLessonWithFormDataMutation, useGetLessonByIdQuery, useUpdateLessonWithFormDataMutation } from '@/features/resource/lesson/api/lessonApi'
 import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { Button } from '@/components/shadcn/button'
@@ -15,11 +15,12 @@ import { toast } from 'sonner'
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
   description: z.string().min(50, 'Description must be at least 50 characters long'),
-  courseId: z.int().positive({ message: 'Course ID must be a positive number' }),
+  courseId: z.number().positive({ message: 'Course ID must be a positive number' }),
   imageUrl: z
-    .instanceof(File)
-    .refine((file) => file.size > 0, 'Cover image is required')
-    .refine((file) => file.size < 5 * 1024 * 1024, 'Max 5MB allowed')
+    .union([z.instanceof(File), z.null()])
+    .refine((file) => file === null || file.size > 0, 'Cover image is required')
+    .refine((file) => file === null || file.size < 5 * 1024 * 1024, 'Max 5MB allowed'),
+  imagePreviewUrl: z.string().optional()
 })
 
 type LessonFormData = z.infer<typeof lessonSchema>
@@ -28,50 +29,87 @@ const defaultLessonData: LessonFormData = {
   title: '',
   description: '',
   courseId: 0,
-  imageUrl: null as any
+  imageUrl: null as any,
+  imagePreviewUrl: ''
 }
 
 function buildLessonFormData(data: LessonFormData) {
   const formData = new FormData()
-  formData.append('title', data.title)
-  formData.append('description', data.description)
+  formData.append('Title', data.title || '')
+  formData.append('Description', data.description || '')
   formData.append('createdByUserId', 'b7e2c7e2-8c1a-4e2e-9b2a-2e7c8e2a1b3c')
   formData.append('courseId', '1')
-
   if (data.imageUrl) {
     formData.append('Image', data.imageUrl)
   }
-
   return formData
 }
+
+
+import { useParams } from 'next/navigation'
 
 export default function CreateLesson() {
   const { openModal } = useModal()
   const imageFieldRef = useRef<any>(null)
+
+  // Get lessonId from URL
+  const params = useParams()
+  const lessonIdRaw = params?.lessonId
+  const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
+
+  const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(lessonId as number, { skip: !lessonId })
 
   const { data: ageRanges } = useGetAllAgeRangeQuery()
   const { data: skills } = useGetAllSkillQuery()
   const { data: categories } = useGetAllCategoryQuery()
   const { data: standards } = useGetAllStandardQuery()
   const [createLesson, { data: lessonCreateItem, error }] = useCreateLessonWithFormDataMutation()
+  const [updateLesson] = useUpdateLessonWithFormDataMutation()
 
+  // Initialize form with lesson data if it exists
   const form = useAppForm({
-    defaultValues: defaultLessonData,
-    validators: {
-      onChange: lessonSchema
-    },
+    defaultValues: lessonData?.data
+      ? {
+          title: lessonData.data.title || '',
+          description: lessonData.data.description || '',
+          courseId: lessonData.data.courseId || 0,
+          imageUrl: null
+        }
+      : defaultLessonData,
+    // validators: {
+    //   onChange: lessonSchema
+    // },
     onSubmit: async ({ value }) => {
-      try {
-        const formData = buildLessonFormData(value)
-        await createLesson(formData).unwrap()
-        toast.success('Lesson created successfully')
-        form.reset()
-      } catch (err) {
-        toast.error('Failed to create lesson')
-        console.error(err)
-      }
+  try {
+    const formData = buildLessonFormData(value)
+
+    if (lessonId) {
+      await updateLesson({ id: lessonId, formData }).unwrap()
+      toast.success('Lesson updated successfully')
+    } else {
+      await createLesson(formData).unwrap()
+      toast.success('Lesson created successfully')
+      form.reset()
     }
+  } catch (err) {
+    toast.error('Failed to submit lesson')
+    console.error(err)
+  }
+}
   })
+
+  // if has lesson data, update form value when lessonData changed
+  useEffect(() => {
+    if (lessonData?.data) {
+      form.reset({
+        title: lessonData.data.title || '',
+        description: lessonData.data.description || '',
+        courseId: lessonData.data.courseId || 0,
+        imageUrl: null,
+        imagePreviewUrl: lessonData.data.imageUrl || ''
+      })
+    }
+  }, [lessonData])
 
   const handleEditImage = () => {
     const currentImage = form.state.values.imageUrl
@@ -88,7 +126,7 @@ export default function CreateLesson() {
     })
   }
 
-  if (!ageRanges || !skills || !categories || !standards) {
+  if (!ageRanges || !skills || !categories || !standards || isLessonLoading) {
     return (
       <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>Loading...</div>
     )
@@ -160,7 +198,7 @@ export default function CreateLesson() {
             name='imageUrl'
             children={(field) => {
               imageFieldRef.current = field
-              return <field.ImageField />
+              return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl}/>
             }}
           />
 

@@ -31,7 +31,8 @@ const courseSchema = z.object({
   imageUrl: z
     .instanceof(File)
     .refine((file) => file.size > 0, 'Cover image is required')
-    .refine((file) => file.size < 5 * 1024 * 1024, 'Max 5MB allowed')
+    .refine((file) => file.size < 5 * 1024 * 1024, 'Max 5MB allowed'),
+  imagePreviewUrl: z.string().optional()
 })
 
 type CourseFormData = z.infer<typeof courseSchema>
@@ -91,7 +92,8 @@ function mapCourseToFormData(
     skills: skillIds,
     categories: categoryIds,
     standards: standardIds,
-    imageUrl: null as any
+    imageUrl: null as any,
+    imagePreviewUrl: course.data.imageUrl ?? null
   }
 }
 
@@ -114,9 +116,9 @@ export default function UpsertCourse() {
 
   const form = useAppForm({
     defaultValues: defaultCourseData,
-    validators: {
-      onChange: courseSchema
-    },
+    // validators: {
+    //   onChange: courseSchema
+    // },
     onSubmit: async ({ value }) => {
       try {
         const formData = buildCourseFormData(value)
@@ -323,7 +325,7 @@ export default function UpsertCourse() {
             name='imageUrl'
             children={(field) => {
               imageFieldRef.current = field
-              return <field.ImageField />
+              return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl}/>
             }}
           />
 

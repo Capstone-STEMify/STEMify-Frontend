@@ -14,7 +14,6 @@ export default function CourseDetail() {
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
   const token = auth.token
   const studentId = auth.user?.userId
-  console.log('CourseDetail', { auth, token })
 
   const { data, isLoading, error } = useSearchEnrollmentQuery(
     {

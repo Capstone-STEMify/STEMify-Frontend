@@ -10,11 +10,11 @@ export default function AuthSessionSync() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (data?.accessToken) {
-      dispatch(setUser(data.user))
-      dispatch(setToken(data.accessToken))
-    }
-  }, [data, dispatch])
+    if (!data) return
+
+    dispatch(setUser(data.user))
+    dispatch(setToken(data.accessToken))
+  }, [data?.user, data?.accessToken, dispatch])
 
   return null
 }

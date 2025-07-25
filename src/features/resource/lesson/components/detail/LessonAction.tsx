@@ -9,7 +9,7 @@ export default function LessonAction() {
       {/* CTA Button */}
       <div className='mt-4'>
         <Button size='default' className='bg-yellow-400 font-semibold text-black shadow-md hover:bg-yellow-500'>
-          <div className='text-xs'>ASSIGN TO CLASS</div>
+          <div className='text-xs uppercase'>start learning</div>
         </Button>
       </div>
 

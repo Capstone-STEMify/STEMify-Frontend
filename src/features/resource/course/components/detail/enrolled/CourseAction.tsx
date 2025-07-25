@@ -6,15 +6,14 @@ export default function CourseAction() {
     <section className='mt-3 flex flex-col items-center'>
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
 
-      {/* CTA Button */}
-      <div className='mt-4'>
+      {/* <div className='mt-4'>
         <Button size='default' className='bg-yellow-400 font-semibold text-black shadow-md hover:bg-yellow-500'>
           <div className='text-xs'>ASSIGN TO CLASS</div>
         </Button>
-      </div>
+      </div> */}
 
       {/* Secondary actions */}
-      <div className='text-muted-foreground mt-6 grid w-full max-w-md grid-cols-3 gap-6 text-center text-xs'>
+      <div className='text-muted-foreground mt-4 grid w-full max-w-md grid-cols-3 gap-6 text-center text-xs'>
         <div className='flex flex-col items-center gap-1'>
           <Plus className='h-5 w-5' />
           <span>Add to course</span>

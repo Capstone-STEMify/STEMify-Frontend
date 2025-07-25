@@ -5,7 +5,7 @@ import LessonListContent from '@/features/resource/lesson/components/list/Lesson
 
 export default function LessonList() {
   return (
-    <BreadcrumbPageLayout color={'yellow'} size='md' weight='semibold' title='List'>
+    <BreadcrumbPageLayout color={'yellow'} size='md' weight='semibold' title='Lessons'>
       <div className='shadow-6 mt-6 rounded-lg bg-white'>
         <SListTitle
           title='Lessons'

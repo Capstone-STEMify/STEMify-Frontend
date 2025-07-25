@@ -4,7 +4,7 @@ import { Button } from '@/components/shadcn/button'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { ArrowRightIcon, BookOpenIcon } from 'lucide-react'
 
-const LibraryPage = () => {
+export default function LibraryPage() {
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
       <div className='mx-auto max-w-7xl'>
@@ -21,7 +21,7 @@ const LibraryPage = () => {
         <div className='grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {/* Courses */}
 
-          <CardLayout imageSrc='/images/resources/courses.png' size='lg' href='/resource/course/list'>
+          <CardLayout imageSrc='/images/resources/courses.png' size='lg' href='/resource/courses'>
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -45,7 +45,7 @@ const LibraryPage = () => {
             </div>
           </CardLayout>
 
-          <CardLayout imageSrc='/images/resources/lessons.png' size='lg' href='/resource/lesson/list'>
+          <CardLayout imageSrc='/images/resources/lessons.png' size='lg' href='/resource/lessons'>
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -70,7 +70,7 @@ const LibraryPage = () => {
             </div>
           </CardLayout>
 
-          <CardLayout imageSrc='/images/resources/activities.png' size='lg' href='/resource/activity/list'>
+          <CardLayout imageSrc='/images/resources/activities.png' size='lg' href='/resource/activities'>
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -149,5 +149,3 @@ const LibraryPage = () => {
     </div>
   )
 }
-
-export default LibraryPage

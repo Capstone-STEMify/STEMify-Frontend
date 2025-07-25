@@ -24,7 +24,7 @@ export default function CourseDetailDescription({ courseId, token }: CourseDetai
 
   if (courseLoading || courseFetching)
     return (
-      <div className='flex h-[500px] items-center justify-center'>
+      <div className='flex h-fit items-center justify-center'>
         <LoadingComponent size={150} />
       </div>
     )
@@ -112,7 +112,7 @@ export default function CourseDetailDescription({ courseId, token }: CourseDetai
 
               {/* Standards */}
               {courseData.data.standardNames.length > 0 && (
-                <div>
+                <div className='mb-2'>
                   <h3 className='mb-2 text-xs font-semibold text-gray-900'>Standards</h3>
                   <div className='flex flex-wrap gap-2'>
                     {courseData.data.standardNames.map((standard) => (

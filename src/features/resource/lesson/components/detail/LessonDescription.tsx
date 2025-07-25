@@ -8,9 +8,16 @@ import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { formatDate } from '@/utils/index'
 import { Calendar, Clock, User } from 'lucide-react'
+import { useParams } from 'next/navigation'
 
 export default function LessonDescription() {
-  const { data: lessonData, isLoading: lessonLoading, isFetching: lessonFetching } = useGetLessonByIdQuery(1)
+  const params = useParams()
+  const lessonId = params.lessonId || 1
+  const {
+    data: lessonData,
+    isLoading: lessonLoading,
+    isFetching: lessonFetching
+  } = useGetLessonByIdQuery(Number(lessonId))
 
   if (lessonLoading || lessonFetching)
     return (

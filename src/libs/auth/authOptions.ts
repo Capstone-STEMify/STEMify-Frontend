@@ -26,7 +26,8 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
   authorization: {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/authorize`,
     params: {
-      scope: 'stemify_api openid profile email roles'
+      scope: 'stemify_api openid profile email roles',
+      prompt: 'login'
     }
   },
   token: {
@@ -55,24 +56,29 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
 }
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
+  // debug: true,
   session: {
     strategy: 'jwt'
   },
   providers: [oidcProvider],
   secret: process.env.AUTH_SECRET,
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, profile }) {
       if (account?.access_token) {
         token.accessToken = account.access_token
         token.idToken = account.id_token
+
+        if (profile) {
+          token.username = profile.username
+          token.userId = profile.userId
+          token.role = profile.role
+        }
 
         try {
           const decoded: any = jwtDecode(account.access_token)
           token.role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'Guest'
           token.username = decoded['preferred_username'] ?? 'unknown'
           token.userId = decoded['sub'] ?? 'unknown'
-          console.log('Decoded JWT token:', token.role)
         } catch (error) {
           console.error('Failed to decode access token:', error)
         }
@@ -81,11 +87,12 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      // console.log('JWT token in session:', token)
-      session.accessToken = token.accessToken!
-      session.user.role = token.role!
-      session.user.username = token.username!
-      session.user.userId = token.userId!
+      if (token) {
+        session.accessToken = token.accessToken!
+        session.user.role = token.role!
+        session.user.username = token.username!
+        session.user.userId = token.userId!
+      }
       return session
     }
   }
