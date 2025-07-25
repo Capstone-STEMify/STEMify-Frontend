@@ -126,7 +126,7 @@ export default function LessonDescription() {
           </div>
         </section>
       </ScrollArea>
-      <LessonAction />
+      <LessonAction lessonId={lessonData.data.id} />
     </div>
   )
 }

@@ -21,6 +21,7 @@ import { notificationSlice } from '@/features/notification/slice/notificationSli
 import { notificationApi } from '@/features/notification/api/notificationApi'
 import { contentApi } from '@/features/content/api/contentApi'
 import { studentProgresssApi } from '@/features/student-progress/api/studentProgressApi'
+import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -34,6 +35,7 @@ export const rootReducer = combineReducers({
   standard: standardSlice.reducer,
   enrollment: enrollmentSlice.reducer,
   notification: notificationSlice.reducer,
+  studentProgress: studentProgressSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,

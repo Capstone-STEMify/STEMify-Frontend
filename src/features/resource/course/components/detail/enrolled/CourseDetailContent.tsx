@@ -13,6 +13,8 @@ import {
   useGetStudentProgressByIdQuery,
   useSearchStudentProgressQuery
 } from '@/features/student-progress/api/studentProgressApi'
+import { setSelectedEnrollmentId, setSelectedStatus } from '@/features/student-progress/slice/studentProgressSlice'
+import { ProgressStatus, StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { EllipsisVertical } from 'lucide-react'
@@ -25,7 +27,6 @@ type CourseDetailContentProps = {
 }
 
 export default function CourseDetailContent({ courseId, enrollmentId }: CourseDetailContentProps) {
-  console.log(enrollmentId)
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
 
@@ -42,11 +43,18 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
       }
       return acc
     },
-    {} as Record<number, string>
+    {} as Record<number, ProgressStatus>
   )
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
+  }
+  const handleSelectLesson = (lessonId: number) => {
+    const status = progressMap?.[lessonId]
+    if (status) {
+      dispatch(setSelectedStatus(status))
+      dispatch(setSelectedEnrollmentId(enrollmentId))
+    }
   }
 
   if (isLoading || isFetching) {
@@ -76,7 +84,11 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
       <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
         {lessonData.data.items.map((lesson) => (
           <div key={lesson.id} className='relative flex gap-1'>
-            <Link href={`/resource/lesson/${lesson.id}`} className='flex w-fit flex-col justify-between'>
+            <Link
+              href={`/resource/lesson/${lesson.id}`}
+              onClick={() => handleSelectLesson(lesson.id)}
+              className='flex w-fit flex-col justify-between'
+            >
               <CardLayout
                 imageSrc={lesson.imageUrl}
                 size='sm'

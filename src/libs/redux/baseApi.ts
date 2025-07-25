@@ -16,7 +16,7 @@ const customFetchBaseQuery = fetchBaseQuery({
   prepareHeaders: async (headers, api) => {
     // Append token from the auth state tree Redux store
     const token = (api.getState() as RootState).auth.token
-    
+
     if (token) {
       headers.set('Authorization', 'Bearer ' + token)
     }
