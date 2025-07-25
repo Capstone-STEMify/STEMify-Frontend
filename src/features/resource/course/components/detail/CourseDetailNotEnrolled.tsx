@@ -10,17 +10,10 @@ import HeroSection from '@/features/resource/course/components/detail/not-enroll
 
 type CourseDetailNotEnrolledProps = {
   courseId?: number
-  token?: string
 }
 
-export default function CourseDetailNotEnrolled({ courseId, token }: CourseDetailNotEnrolledProps) {
-  const {
-    data: course,
-    error,
-    isLoading
-  } = useGetCourseByIdQuery(Number(courseId), {
-    skip: !token || !courseId
-  })
+export default function CourseDetailNotEnrolled({ courseId }: CourseDetailNotEnrolledProps) {
+  const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
 
   if (isLoading)
     return (
@@ -46,7 +39,7 @@ export default function CourseDetailNotEnrolled({ courseId, token }: CourseDetai
         <HeroSection course={course.data} />
         <StatsSection course={course.data} />
       </div>
-      <ContentSection token={token ?? undefined} />
+      <ContentSection />
       {/* <RecommendationSection /> */}
       <h1 className='text-center'>Feedback</h1>
       <h1 className='text-center'>Feedback</h1>

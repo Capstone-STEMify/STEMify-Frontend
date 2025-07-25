@@ -12,15 +12,10 @@ import { skip } from 'node:test'
 
 type CourseDetailDescriptionProps = {
   courseId: number
-  token?: string
 }
 
-export default function CourseDetailDescription({ courseId, token }: CourseDetailDescriptionProps) {
-  const {
-    data: courseData,
-    isLoading: courseLoading,
-    isFetching: courseFetching
-  } = useGetCourseByIdQuery(courseId, { skip: !token })
+export default function CourseDetailDescription({ courseId }: CourseDetailDescriptionProps) {
+  const { data: courseData, isLoading: courseLoading, isFetching: courseFetching } = useGetCourseByIdQuery(courseId)
 
   if (courseLoading || courseFetching)
     return (

@@ -8,20 +8,16 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import { useParams } from 'next/navigation'
 
 export default function CourseDetail() {
-  const auth = useAppSelector((state) => state.auth)
   const param = useParams()
   const courseIdParam = param?.courseId
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
-  const token = auth.token
+  const auth = useAppSelector((state) => state.auth)
   const studentId = auth.user?.userId
 
-  const { data, isLoading, error } = useSearchEnrollmentQuery(
-    {
-      courseId,
-      studentId
-    },
-    { skip: !token || !courseId }
-  )
+  const { data, isLoading, error } = useSearchEnrollmentQuery({
+    courseId,
+    studentId
+  })
   const enrollmentItems = data?.data?.items ?? []
 
   if (isLoading)
@@ -33,8 +29,8 @@ export default function CourseDetail() {
   if (error) return <p>Error: {(error as any).message ?? 'Unknown error'}</p>
 
   if (enrollmentItems.length > 0) {
-    return <CourseDetailEnrolled courseId={Number(courseId)} token={token ?? undefined} />
+    return <CourseDetailEnrolled courseId={Number(courseId)} enrollmentId={enrollmentItems[0].id} />
   }
 
-  return <CourseDetailNotEnrolled courseId={Number(courseId)} token={token ?? undefined} />
+  return <CourseDetailNotEnrolled courseId={Number(courseId)} />
 }

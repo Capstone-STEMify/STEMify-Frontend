@@ -6,10 +6,10 @@ import CourseDetailContent from './enrolled/CourseDetailContent'
 
 type CourseDetailEnrolledProps = {
   courseId: number
-  token?: string
+  enrollmentId: number
 }
 
-export default function CourseDetailEnrolled({ courseId, token }: CourseDetailEnrolledProps) {
+export default function CourseDetailEnrolled({ courseId, enrollmentId }: CourseDetailEnrolledProps) {
   return (
     <div className='bg-light pb-20'>
       <div className='container mx-auto max-w-7xl py-6'>
@@ -21,13 +21,13 @@ export default function CourseDetailEnrolled({ courseId, token }: CourseDetailEn
 
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>
             <ResizablePanel defaultSize={30} minSize={20} className='h-fit'>
-              <CourseDescription courseId={Number(courseId)} token={token} />
+              <CourseDescription courseId={Number(courseId)} />
             </ResizablePanel>
             <ResizableHandle />
 
             {/* Content */}
             <ResizablePanel defaultSize={70} minSize={40} className='h-fit'>
-              <CourseDetailContent courseId={courseId} token={token} />
+              <CourseDetailContent courseId={courseId} enrollmentId={enrollmentId} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>

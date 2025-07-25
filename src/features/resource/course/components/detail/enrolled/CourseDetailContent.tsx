@@ -9,19 +9,23 @@ import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
 import { useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
-import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
+import {
+  useGetStudentProgressByIdQuery,
+  useSearchStudentProgressQuery
+} from '@/features/student-progress/api/studentProgressApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { EllipsisVertical } from 'lucide-react'
 import Link from 'next/link'
-import { skip } from 'node:test'
 import { useEffect } from 'react'
 
 type CourseDetailContentProps = {
   courseId: number
-  token?: string
+  enrollmentId?: number // Optional if not always provided
 }
 
-export default function CourseDetailContent({ courseId, token }: CourseDetailContentProps) {
+export default function CourseDetailContent({ courseId, enrollmentId }: CourseDetailContentProps) {
+  console.log(enrollmentId)
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
 
@@ -29,13 +33,23 @@ export default function CourseDetailContent({ courseId, token }: CourseDetailCon
     dispatch(setPageSize(12))
   }, [dispatch])
 
-  const { data: lessonData, isLoading } = useSearchLessonQuery({ courseId, ...lessonParams }, { skip: !token })
+  const { data: lessonData, isLoading, isFetching } = useSearchLessonQuery({ courseId, ...lessonParams })
+  const { data: lessonProgressData } = useSearchStudentProgressQuery(enrollmentId ? { enrollmentId } : skipToken)
+  const progressMap = lessonProgressData?.data?.items?.reduce(
+    (acc, progress) => {
+      if ('lessonId' in progress) {
+        acc[progress.lessonId] = progress.status
+      }
+      return acc
+    },
+    {} as Record<number, string>
+  )
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
         <SkeletonCard size='sm' />
@@ -66,7 +80,11 @@ export default function CourseDetailContent({ courseId, token }: CourseDetailCon
               <CardLayout
                 imageSrc={lesson.imageUrl}
                 size='sm'
-                badge={<Badge className='bg-gray-50/80 text-gray-800 backdrop-blur-md'>{lesson.status}</Badge>}
+                badge={
+                  progressMap?.[lesson.id] && (
+                    <Badge className='bg-gray-50/80 text-gray-800 backdrop-blur-md'>{progressMap[lesson.id]}</Badge>
+                  )
+                }
               >
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>Lesson</p>

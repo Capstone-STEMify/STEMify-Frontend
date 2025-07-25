@@ -10,6 +10,7 @@ export const studentProgresssApi = createCrudApi<StudentProgress, StudentProgres
 export const {
   useGetByIdQuery: useGetStudentProgressByIdQuery,
   useLazyGetByIdQuery: useLazyGetStudentProgressByIdQuery,
+  useSearchQuery: useSearchStudentProgressQuery,
 
   useUpdateMutation: useUpdateStudentProgressMutation
 } = studentProgresssApi

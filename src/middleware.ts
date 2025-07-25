@@ -68,12 +68,17 @@ export const config = {
     // profile routes
     '/profile',
 
-    // resource routes
+    // ----------------resource routes----------------
+    // course routes
+    '/resource/course/:path*',
     '/resource/course/create',
     '/resource/course/update/:path*',
+
+    // lesson routes
+    '/resource/lesson/:path*',
     '/resource/lesson/create',
     '/resource/lesson/update/:path*',
-    '/resource/lesson/list',
+    // ----------------resource routes----------------
 
     // my learning routes
     '/my-learning'
