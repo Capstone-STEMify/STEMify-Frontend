@@ -13,7 +13,10 @@ import {
   useGetStudentProgressByIdQuery,
   useSearchStudentProgressQuery
 } from '@/features/student-progress/api/studentProgressApi'
-import { setSelectedEnrollmentId, setSelectedStatus } from '@/features/student-progress/slice/studentProgressSlice'
+import {
+  setSelectedEnrollmentId,
+  setSelectedLessonStatus
+} from '@/features/student-progress/slice/studentProgressSlice'
 import { ProgressStatus, StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -52,7 +55,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   const handleSelectLesson = (lessonId: number) => {
     const status = progressMap?.[lessonId]
     if (status) {
-      dispatch(setSelectedStatus(status))
+      dispatch(setSelectedLessonStatus(status))
       dispatch(setSelectedEnrollmentId(enrollmentId))
     }
   }

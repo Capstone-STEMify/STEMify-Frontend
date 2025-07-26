@@ -4,13 +4,15 @@ import { ProgressStatus } from '../types/studentProgress.type'
 type studentProgressState = {
   selectedEnrollmentId?: number
   selectedLessonId?: number
-  selectedStatus?: ProgressStatus
+  selectedLessonStatus?: ProgressStatus
+  selectedSectionStatus?: ProgressStatus
 }
 
 const initialState: studentProgressState = {
   selectedEnrollmentId: undefined,
   selectedLessonId: undefined,
-  selectedStatus: undefined
+  selectedLessonStatus: undefined,
+  selectedSectionStatus: undefined
 }
 
 export const studentProgressSlice = createSlice({
@@ -23,11 +25,15 @@ export const studentProgressSlice = createSlice({
     setSelectedLessonId: (state, action: PayloadAction<number | undefined>) => {
       state.selectedLessonId = action.payload
     },
-    setSelectedStatus: (state, action: PayloadAction<ProgressStatus | undefined>) => {
-      state.selectedStatus = action.payload
+    setSelectedLessonStatus: (state, action: PayloadAction<ProgressStatus | undefined>) => {
+      state.selectedLessonStatus = action.payload
+    },
+    setSelectedSectionStatus: (state, action: PayloadAction<ProgressStatus | undefined>) => {
+      state.selectedSectionStatus = action.payload
     }
   }
 })
 
-export const { setSelectedEnrollmentId, setSelectedLessonId, setSelectedStatus } = studentProgressSlice.actions
+export const { setSelectedEnrollmentId, setSelectedLessonId, setSelectedLessonStatus, setSelectedSectionStatus } =
+  studentProgressSlice.actions
 export const studentProgressReducer = studentProgressSlice.reducer

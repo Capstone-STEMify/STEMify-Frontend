@@ -30,6 +30,10 @@ export default function LessonOutline({ onSelect, selectedId }: LessonOutlinePro
     )
   }
 
+  const handleClickSectionId = (id: number) => {
+    onSelect(id)
+  }
+
   return (
     <div className='px-4'>
       <h1 className='text-lg font-semibold'>Sections</h1>
@@ -44,7 +48,7 @@ export default function LessonOutline({ onSelect, selectedId }: LessonOutlinePro
                 'flex items-center gap-2 rounded-md px-3 py-2 pl-8 text-left text-sm font-medium transition-colors',
                 isSelected ? 'bg-muted border-l-4 border-blue-500 font-semibold text-blue-700' : 'hover:bg-muted/60'
               )}
-              onClick={() => onSelect(sec.id)}
+              onClick={() => handleClickSectionId(sec.id)}
             >
               {isSelected && <Check size={16} className='text-blue-500' />}
               {sec.description}

@@ -9,7 +9,7 @@ import { studentProgressSlice } from '@/features/student-progress/slice/studentP
 
 export default function LessonAction({ lessonId }: { lessonId: number }) {
   const dispatch = useAppDispatch()
-  const status = useAppSelector((state) => state.studentProgress.selectedStatus)
+  const lessonStatus = useAppSelector((state) => state.studentProgress.selectedLessonStatus)
   const enrollmentId = useAppSelector((state) => state.studentProgress.selectedEnrollmentId)
 
   const [startLesson, { isLoading }] = useUpdateStudentProgressMutation()
@@ -18,7 +18,7 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
     try {
       if (enrollmentId) {
         await startLesson({ id: enrollmentId, body: { lessonId } }).unwrap()
-        dispatch(studentProgressSlice.actions.setSelectedStatus(ProgressStatus.IN_PROGRESS))
+        dispatch(studentProgressSlice.actions.setSelectedLessonStatus(ProgressStatus.IN_PROGRESS))
         toast.success('Lesson started!')
       }
     } catch (err: any) {

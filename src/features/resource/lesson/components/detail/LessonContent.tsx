@@ -5,24 +5,56 @@ import rehypeRaw from 'rehype-raw'
 import { Button } from '@/components/shadcn/button'
 import { useGetContentByIdQuery } from '@/features/content/api/contentApi'
 import React from 'react'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { ProgressStatus } from '@/features/student-progress/types/studentProgress.type'
+import {
+  useSearchStudentProgressQuery,
+  useUpdateStudentProgressMutation
+} from '@/features/student-progress/api/studentProgressApi'
+import { toast } from 'sonner'
+import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 
 type LessonContentProps = {
   selectedId?: number
 }
 
 export default function LessonContent({ selectedId }: LessonContentProps) {
+  const dispatch = useAppDispatch()
   const { data } = useGetContentByIdQuery(selectedId ?? 0, { skip: !selectedId })
+  const lessonStatus = useAppSelector((state) => state.studentProgress.selectedLessonStatus)
+  // const sectionStatus = useAppSelector((state) => state.studentProgress.selectedSectionStatus)
+  const enrollmentId = useAppSelector((state) => state.studentProgress.selectedEnrollmentId)
+  //if( !enrollmentId || selectedId)
+
+  //const {}= useSearchStudentProgressQuery({enrollmentId, lessonId})
+
+  const [completeSection, { isLoading }] = useUpdateStudentProgressMutation()
+  const handleCompleteSection = async () => {
+    try {
+      if (enrollmentId) {
+        await completeSection({ id: enrollmentId, body: { sectionId: selectedId } }).unwrap()
+        // dispatch(studentProgressSlice.actions.setSelectedSectionStatus(ProgressStatus.COMPLETED))
+        toast.success('Section completed!')
+      }
+    } catch (err: any) {
+      toast.error(err?.data?.message || 'Failed to complete section')
+    }
+  }
 
   return (
-    <div className='h-[700px] p-6'>
-      <div className='text-end align-text-bottom'>
-        <Button>Mark as Complete</Button>
-      </div>
-      <div>
+    <div className='flex h-[700px] flex-col p-6'>
+      <div className='flex-1 overflow-auto'>
         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
           {data?.data.contentName}
         </ReactMarkdown>
+      </div>{' '}
+      {/* {lessonStatus === ProgressStatus.IN_PROGRESS && sectionStatus === ProgressStatus.IN_PROGRESS && ( */}
+      <div className='mt-auto self-end'>
+        <Button className='bg-amber-custom-400' onClick={handleCompleteSection} disabled={isLoading}>
+          {isLoading ? 'Completing...' : 'Mark as Complete'}
+        </Button>
       </div>
+      {/* )} */}
     </div>
   )
 }
