@@ -64,8 +64,8 @@ export default function LessonContent({ sectionId, token, courseId, lessonId }: 
   }
 
   return (
-    <div className='flex flex-col gap-6 p-6'>
-      <div key={content?.data.id} className='prose'>
+    <div className='flex min-h-[650px] flex-col gap-6 p-6'>
+      <div key={content?.data.id} className='prose flex-1'>
         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
           {content?.data.contentName}
         </ReactMarkdown>
