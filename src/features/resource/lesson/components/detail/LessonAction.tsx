@@ -4,7 +4,6 @@ import { ProgressStatus } from '@/features/student-progress/types/studentProgres
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { Bookmark, Plus, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { useGetLessonByIdQuery } from '../../api/lessonApi'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 
 export default function LessonAction({ lessonId }: { lessonId: number }) {
@@ -29,7 +28,6 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
     <section className='mt-3 mb-5 flex flex-col items-center'>
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
 
-      {/* CTA Button */}
       {lessonStatus === ProgressStatus.NOT_STARTED && (
         <div className='mt-4'>
           <Button

@@ -8,7 +8,6 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { formatDate } from '@/utils/index'
 import { Calendar, Clock } from 'lucide-react'
 import CourseAction from '@/features/resource/course/components/detail/enrolled/CourseAction'
-import { skip } from 'node:test'
 
 type CourseDetailDescriptionProps = {
   courseId: number

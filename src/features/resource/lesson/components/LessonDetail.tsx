@@ -1,10 +1,14 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/shadcn/resizable'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import BackButton from '@/components/shared/button/BackButton'
 import STabs from '@/components/shared/STabs'
 import dynamic from 'next/dynamic'
+import { useParams } from 'next/navigation'
+import { useSearchSectionQuery } from '@/features/resource/section/api/sectionApi'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
 
 const LessonDescription = dynamic(() => import('@/features/resource/lesson/components/detail/LessonDescription'), {
   ssr: false
@@ -19,6 +23,20 @@ const LessonOutline = dynamic(() => import('@/features/resource/lesson/component
 })
 
 export default function LessonDetail() {
+  const { lessonId } = useParams()
+  const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null)
+  const token = useAppSelector((state) => state.auth.token)
+  const { data: lessonData, isLoading: lessonLoading } = useGetLessonByIdQuery(Number(lessonId))
+  const { data: sections } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !lessonId || !token })
+  const sectionData = sections?.data.items || []
+
+  useEffect(() => {
+    if (sectionData.length > 0) {
+      const firstSection = [...sectionData].sort((a, b) => a.orderIndex - b.orderIndex)[0]
+      setSelectedSectionId(firstSection.id)
+    }
+  }, [sectionData])
+
   return (
     <div className='bg-light pb-20'>
       <div className='container mx-auto max-w-7xl py-6'>
@@ -41,12 +59,18 @@ export default function LessonDetail() {
                   {
                     value: 'description',
                     label: 'Description',
-                    content: <LessonDescription />
+                    content: <LessonDescription lessonData={lessonData} lessonLoading={lessonLoading} />
                   },
                   {
                     value: 'sections',
                     label: 'Sections',
-                    content: <LessonOutline />
+                    content: (
+                      <LessonOutline
+                        sectionData={sectionData}
+                        selectedSectionId={selectedSectionId}
+                        onSelectSection={setSelectedSectionId}
+                      />
+                    )
                   }
                 ]}
               />
@@ -55,7 +79,14 @@ export default function LessonDetail() {
 
             {/* Content */}
             <ResizablePanel defaultSize={70} minSize={40}>
-              <LessonContent />
+              {selectedSectionId && (
+                <LessonContent
+                  sectionId={selectedSectionId}
+                  token={token}
+                  courseId={lessonData?.data.courseId}
+                  lessonId={Number(lessonId)}
+                />
+              )}
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>

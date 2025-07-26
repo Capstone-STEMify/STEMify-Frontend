@@ -38,8 +38,7 @@ export async function middleware(req: NextRequest) {
   if (!matchedBase) {
     return NextResponse.next()
   }
-
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET })
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET, secureCookie: true })
 
   if (!token) {
     const loginUrl = new URL('/api/auth/signin', req.url)
