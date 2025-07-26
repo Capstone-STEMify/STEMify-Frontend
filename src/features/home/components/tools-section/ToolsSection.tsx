@@ -37,7 +37,9 @@ export default function ToolsSection() {
 
           <div className='relative z-20 mb-8 flex justify-center'>
             <MacCard>
-              <img src='/HomeFiles/window.png' alt='STEMify Tools' className='h-auto w-full' />
+              <video autoPlay loop muted playsInline className='h-full w-full object-cover'>
+                <source src='/HomeFiles/intro.mp4' type='video/mp4' />
+              </video>
             </MacCard>
             <div className='absolute -top-2 -left-2 -z-10 h-full w-full rounded-lg bg-gradient-to-br from-yellow-300 to-orange-300 opacity-30'></div>
           </div>
