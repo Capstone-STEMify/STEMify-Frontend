@@ -54,14 +54,18 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
       {/*  title='Your Courses'
         description='Continue your learning journey with these courses' */}
       <div className='mb-10 space-y-2 text-center'>
-        <h1 className='text-4xl'> Your Courses</h1>
+        <h1 className='text-4xl'>My Learning</h1>
         <p className='text-2xl text-gray-600'>Continue your learning journey with these courses</p>
       </div>
       <div className='space-y-6'>
         {/* Course Grid */}
         <div className='grid grid-cols-1 place-items-center sm:grid-cols-2 xl:grid-cols-3'>
           {enroll.data.items.map((e) => (
-            <Link href={`/resource/course/${e.courseId}`} key={e.id} onClick={() => dispatch(setSelectedEnrollmentId(e.id))}>
+            <Link
+              href={`/resource/course/${e.courseId}`}
+              key={e.id}
+              onClick={() => dispatch(setSelectedEnrollmentId(e.id))}
+            >
               <CardLayout
                 size='lg'
                 imageSrc={e.coverImageUrl}

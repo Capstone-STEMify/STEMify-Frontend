@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
 import {
   Activity,
@@ -18,8 +19,8 @@ import {
 } from 'lucide-react'
 
 export function getSidebarData(role: UserRole) {
-  const classroomId = '1'
-  const classroomURL = `/classroom/${classroomId}`
+  const auth = useAppSelector((state) => state.auth)
+  const baseURL = `/resource/course/create`
   const base = {
     teams: [
       { name: 'Acme Inc', logo: GalleryVerticalEnd, plan: 'Enterprise' },
@@ -27,9 +28,9 @@ export function getSidebarData(role: UserRole) {
       { name: 'Evil Corp.', logo: Command, plan: 'Free' }
     ],
     user: {
-      name: 'shadcn',
-      email: 'm@example.com',
-      avatar: 'https://github.com/shadcn.png'
+      name: auth.user?.name,
+      email: auth.user?.email,
+      avatar: auth.user?.image || 'https://ui-avatars.com/api/?name=User&background=random'
     },
     navSecondary: [
       { title: 'Support', url: '#', icon: LifeBuoy },
@@ -42,29 +43,29 @@ export function getSidebarData(role: UserRole) {
     [UserRole.STUDENT]: [
       {
         title: 'Home',
-        url: `${classroomURL}`,
+        url: `${baseURL}`,
         icon: Home
       },
       {
         title: 'Announcements',
-        url: `${classroomURL}/announcements`,
+        url: `${baseURL}/announcements`,
         icon: Megaphone
       }
     ],
     [UserRole.TEACHER]: [
       {
         title: 'Home',
-        url: `${classroomURL}`,
+        url: `${baseURL}`,
         icon: Home
       },
       {
         title: 'Members',
-        url: `${classroomURL}/members`,
+        url: `${baseURL}/members`,
         icon: Users
       },
       {
         title: 'Announcements',
-        url: `${classroomURL}/announcements`,
+        url: `${baseURL}/announcements`,
         icon: Megaphone
       }
     ],
@@ -72,51 +73,91 @@ export function getSidebarData(role: UserRole) {
     [UserRole.STAFF]: [
       {
         title: 'Home',
-        url: `${classroomURL}`,
+        url: `${baseURL}`,
         icon: Home
       },
       {
         title: 'Announcements',
-        url: `${classroomURL}/announcements`,
+        url: `${baseURL}/announcements`,
         icon: Megaphone
       }
+    ],
+    [UserRole.GUEST]: []
+  }
+
+  const navCourse: Record<UserRole, (typeof base)['navSecondary']> = {
+    [UserRole.STUDENT]: [
+      { title: 'Create', url: `/resource/course/create`, icon: SquareTerminal },
+      { title: 'List', url: `/resource/course/list`, icon: Bot },
+      { title: 'Update', url: `/resource/course/update/1`, icon: Bot }
+    ],
+    [UserRole.TEACHER]: [
+      { title: 'Create', url: `/resource/course/create`, icon: SquareTerminal },
+      { title: 'List', url: `/resource/course/list`, icon: Bot },
+      { title: 'Update', url: `/resource/course/update/1`, icon: Bot }
+    ],
+    [UserRole.ADMIN]: [],
+    [UserRole.STAFF]: [
+      { title: 'Create', url: `/resource/course/create`, icon: SquareTerminal },
+      { title: 'List', url: `/resource/course/list`, icon: Bot },
+      { title: 'Update', url: `/resource/course/update/1`, icon: Bot }
+    ],
+    [UserRole.GUEST]: []
+  }
+
+  const navLesson: Record<UserRole, (typeof base)['navSecondary']> = {
+    [UserRole.STUDENT]: [
+      { title: 'Create', url: `/resource/lesson/create`, icon: SquareTerminal },
+      { title: 'List', url: `/resource/lesson/list`, icon: Bot },
+      { title: 'Update', url: `/resource/lesson/update/1`, icon: Bot }
+    ],
+    [UserRole.TEACHER]: [
+      { title: 'Create', url: `/resource/lesson/create`, icon: SquareTerminal },
+      { title: 'List', url: `/resource/lesson/list`, icon: Bot },
+      { title: 'Update', url: `/resource/lesson/update/1`, icon: Bot }
+    ],
+    [UserRole.ADMIN]: [],
+    [UserRole.STAFF]: [
+      { title: 'Create', url: `/resource/lesson/create`, icon: SquareTerminal },
+      { title: 'List', url: `/resource/lesson/list`, icon: Bot },
+      { title: 'Update', url: `/resource/lesson/update/1`, icon: Bot }
     ],
     [UserRole.GUEST]: []
   }
 
   const navMain: Record<UserRole, (typeof base)['navSecondary']> = {
     [UserRole.STUDENT]: [
-      { title: 'Course', url: `${classroomURL}/course`, icon: SquareTerminal },
-      { title: 'Lesson', url: `${classroomURL}/lesson`, icon: Bot },
-      { title: 'Activity', url: `${classroomURL}/activity`, icon: Activity }
+      { title: 'Course', url: `/resource/course/create`, icon: SquareTerminal },
+      { title: 'Lesson', url: `/resource/lesson/create`, icon: Bot },
+      { title: 'Activity', url: `/resource/activity/create`, icon: Activity }
     ],
     [UserRole.TEACHER]: [
-      { title: 'Course', url: `${classroomURL}/course`, icon: SquareTerminal },
-      { title: 'Lesson', url: `${classroomURL}/lesson`, icon: Bot },
-      { title: 'Activity', url: `${classroomURL}/activity`, icon: Activity }
+      { title: 'Course', url: `/resource/course/create`, icon: SquareTerminal },
+      { title: 'Lesson', url: `/resource/lesson/create`, icon: Bot },
+      { title: 'Activity', url: `/resource/activity/create`, icon: Activity }
     ],
     [UserRole.ADMIN]: [],
     [UserRole.STAFF]: [
-      { title: 'Course', url: `resource/course/create`, icon: SquareTerminal },
-      { title: 'Lesson', url: `resource/lesson/create`, icon: Bot },
-      { title: 'Activity', url: `resource/activity/create`, icon: Activity }
+      { title: 'Course', url: `/resource/course/create`, icon: SquareTerminal },
+      { title: 'Lesson', url: `/resource/lesson/create`, icon: Bot },
+      { title: 'Activity', url: `/resource/activity/create`, icon: Activity }
     ],
     [UserRole.GUEST]: []
   }
 
   const navProject: Record<UserRole, (typeof base)['navSecondary']> = {
     [UserRole.STUDENT]: [
-      { title: 'STEM Program', url: `${classroomURL}/project/stem`, icon: Frame },
-      { title: 'Science Fair', url: `${classroomURL}/project/science`, icon: Map }
+      { title: 'STEM Program', url: `${baseURL}/project/stem`, icon: Frame },
+      { title: 'Science Fair', url: `${baseURL}/project/science`, icon: Map }
     ],
     [UserRole.TEACHER]: [
-      { title: 'STEM Program', url: `${classroomURL}/project/stem`, icon: Frame },
-      { title: 'Science Fair', url: `${classroomURL}/project/science`, icon: Map }
+      { title: 'STEM Program', url: `${baseURL}/project/stem`, icon: Frame },
+      { title: 'Science Fair', url: `${baseURL}/project/science`, icon: Map }
     ],
     [UserRole.ADMIN]: [],
     [UserRole.STAFF]: [
-      { title: 'STEM Program', url: `${classroomURL}/project/stem`, icon: Frame },
-      { title: 'Science Fair', url: `${classroomURL}/project/science`, icon: Map }
+      { title: 'STEM Program', url: `${baseURL}/project/stem`, icon: Frame },
+      { title: 'Science Fair', url: `${baseURL}/project/science`, icon: Map }
     ],
     [UserRole.GUEST]: []
   }
@@ -125,6 +166,8 @@ export function getSidebarData(role: UserRole) {
     ...base,
     navGenral: navGenral[role],
     navMain: navMain[role],
-    navProject: navProject[role]
+    navProject: navProject[role],
+    navCourse: navCourse[role],
+    navLesson: navLesson[role]
   }
 }

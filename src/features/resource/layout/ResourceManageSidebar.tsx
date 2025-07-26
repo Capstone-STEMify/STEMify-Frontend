@@ -33,13 +33,19 @@ export function ResourceManageSidebar({
       </SidebarHeader>
       <SidebarContent>
         <SidbarNavGeneral items={data.navGenral} />
-        <SidebarNavGroup label='Manage' items={data.navMain} />
-        <SidebarNavWithActions label='Action' items={data.navProject} />
+        <SidebarNavGroup label='Course' items={data.navCourse} />
+        <SidebarNavGroup label='Lesson' items={data.navLesson} />
+
+        <SidebarNavWithActions label='Straw Lab' items={data.navProject} />
         <SidebarNavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
         <SidebarUserDropdown
-          user={data.user}
+          user={{
+            name: data.user.name ?? '',
+            email: data.user.email ?? '',
+            avatar: data.user.avatar ?? ''
+          }}
           onLogout={() => {
             console.log('User logged out')
           }}

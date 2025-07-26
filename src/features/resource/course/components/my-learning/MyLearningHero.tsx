@@ -40,8 +40,15 @@ export function MyLearningHero({ course }: MyLearningHeroProps) {
   ]
 
   return (
-    <section className='bg-sky-custom-600 relative overflow-hidden p-6 text-white sm:p-10'>
-      <div className='mx-auto max-w-6xl'>
+    <section
+      className='relative overflow-hidden bg-cover bg-center bg-no-repeat p-20 text-white'
+      style={{
+        backgroundImage: "url('https://classroom.strawbees.com/media/home_sechow.jpg')"
+      }}
+    >
+      {/* Overlay đen mờ */}
+      <div className='absolute inset-0 z-0 bg-black/60'></div>
+      <div className='relative z-10 mx-auto max-w-6xl'>
         <div className='flex flex-col justify-between gap-16 md:flex-row md:items-center'>
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -53,7 +60,7 @@ export function MyLearningHero({ course }: MyLearningHeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className='mb-2 text-3xl font-bold md:text-4xl'
+              className='mb-2 text-3xl font-bold md:text-6xl'
             >
               Your Learning Journey
             </motion.h1>
@@ -62,7 +69,7 @@ export function MyLearningHero({ course }: MyLearningHeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className='mb-4 max-w-xl text-blue-100'
+              className='mb-4 max-w-2xl text-2xl text-blue-100'
             >
               Continue learning and developing your skills with your enrolled courses.
               {totalCourses > 0 && ` You're currently taking ${totalCourses} courses.`}
@@ -85,7 +92,7 @@ export function MyLearningHero({ course }: MyLearningHeroProps) {
                     backgroundColor: 'rgba(255, 255, 255, 0.2)',
                     transition: { duration: 0.2 }
                   }}
-                  className='cursor-pointer rounded-lg bg-white/10 p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-lg'
+                  className='cursor-pointer rounded-lg bg-white/30 p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-lg'
                 >
                   <motion.h3
                     initial={{ scale: 0 }}
@@ -105,7 +112,7 @@ export function MyLearningHero({ course }: MyLearningHeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.2 }}
-              className='mt-8 rounded-lg bg-white/10 p-4 backdrop-blur-sm'
+              className='mt-8 rounded-lg bg-white/30 p-4 backdrop-blur-sm'
             >
               <div className='mb-3 flex items-center justify-between'>
                 <h3 className='text-lg font-semibold text-white'>Overall Progress</h3>
