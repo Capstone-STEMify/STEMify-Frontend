@@ -12,7 +12,8 @@ export default function CourseDetail() {
   const courseIdParam = param?.courseId
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
   const auth = useAppSelector((state) => state.auth)
-  const studentId = auth.user?.userId
+  const studentId = auth?.user?.userId
+  if (!studentId) return <CourseDetailNotEnrolled courseId={Number(courseId)} />
 
   const { data, isLoading, error } = useSearchEnrollmentQuery({
     courseId,

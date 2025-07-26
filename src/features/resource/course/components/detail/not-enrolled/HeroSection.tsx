@@ -13,6 +13,7 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import BackButton from '@/components/shared/button/BackButton'
 import { UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 interface HeroSectionProps {
   course: Course
@@ -43,6 +44,10 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
   const [createEnroll, { data: enroll }] = useCreateEnrollmentMutaion()
 
   const handleEnroll = () => {
+    if (!auth.user?.userId) {
+      signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
+      return
+    }
     if (course.id) {
       createEnroll({ courseId: course.id, studentId: auth.user?.userId })
     }
@@ -91,11 +96,14 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
 
             {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? (
               <div className='flex flex-col gap-4 sm:flex-row'>
-                <Button onClick={handleEnroll} className='bg-sky-custom-600 w-45 rounded-4xl py-6 text-lg text-white'>
+                <Button
+                  onClick={handleEnroll}
+                  className='bg-sky-custom-600 w-45 cursor-pointer rounded-4xl py-6 text-lg text-white'
+                >
                   <TbDoorExit className='h-5 w-5' />
                   Enroll now
                 </Button>
-                <Button className='text-sky-custom-600 border-sky-custom-600 w-45 rounded-4xl border bg-white py-6 text-lg'>
+                <Button className='text-sky-custom-600 border-sky-custom-600 w-45 cursor-pointer rounded-4xl border bg-white py-6 text-lg'>
                   <Heart className='h-5 w-5' />
                   Wishlist
                 </Button>
@@ -103,7 +111,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
             ) : (
               <Button
                 onClick={handleUpdate}
-                className='text-sky-custom-600 border-sky-custom-600 w-45 rounded-4xl border bg-white py-6 text-lg'
+                className='text-sky-custom-600 border-sky-custom-600 w-45 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
               >
                 <Edit className='h-5 w-5' />
                 Update
