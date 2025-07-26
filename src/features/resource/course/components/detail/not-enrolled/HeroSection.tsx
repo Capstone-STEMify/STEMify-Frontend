@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { CalendarFold, Heart } from 'lucide-react'
+import { CalendarFold, Edit, Heart } from 'lucide-react'
 import { TbDoorExit } from 'react-icons/tb'
 import { fadeInUp } from '@/utils/motion'
 import { Course } from '../../../types/course.type'
@@ -11,6 +11,9 @@ import { useCreateEnrollmentMutaion } from '@/features/enrollment/api/enrollment
 import { toast } from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import BackButton from '@/components/shared/button/BackButton'
+import { UserRole } from '@/types/userRole'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 interface HeroSectionProps {
   course: Course
@@ -35,10 +38,16 @@ const TagGroup = ({ label, items, className }: TagGroupProps) => (
 )
 
 export default function HeroSection({ course, token }: HeroSectionProps) {
+  const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
+  const userRole = auth.user?.role || UserRole.GUEST
   const [createEnroll, { data: enroll }] = useCreateEnrollmentMutaion()
 
   const handleEnroll = () => {
+    if (!auth.user?.userId) {
+      signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
+      return
+    }
     if (course.id) {
       createEnroll({ courseId: course.id, studentId: auth.user?.userId })
     }
@@ -51,6 +60,10 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
         }
       }
     })
+  }
+
+  const handleUpdate = () => {
+    router.push(`/resource/course/update/${course.id}`)
   }
 
   return (
@@ -81,16 +94,29 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
               />
             </div>
 
-            <div className='flex flex-col gap-4 sm:flex-row'>
-              <Button onClick={handleEnroll} className='bg-sky-custom-600 w-45 rounded-4xl py-6 text-lg text-white'>
-                <TbDoorExit className='h-5 w-5' />
-                Enroll now
+            {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? (
+              <div className='flex flex-col gap-4 sm:flex-row'>
+                <Button
+                  onClick={handleEnroll}
+                  className='bg-sky-custom-600 w-45 cursor-pointer rounded-4xl py-6 text-lg text-white'
+                >
+                  <TbDoorExit className='h-5 w-5' />
+                  Enroll now
+                </Button>
+                <Button className='text-sky-custom-600 border-sky-custom-600 w-45 cursor-pointer rounded-4xl border bg-white py-6 text-lg'>
+                  <Heart className='h-5 w-5' />
+                  Wishlist
+                </Button>
+              </div>
+            ) : (
+              <Button
+                onClick={handleUpdate}
+                className='text-sky-custom-600 border-sky-custom-600 w-45 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
+              >
+                <Edit className='h-5 w-5' />
+                Update
               </Button>
-              <Button className='text-sky-custom-600 border-sky-custom-600 w-45 rounded-4xl border bg-white py-6 text-lg'>
-                <Heart className='h-5 w-5' />
-                Wishlist
-              </Button>
-            </div>
+            )}
           </div>
 
           <div className='mb-5 w-full'>

@@ -69,7 +69,6 @@ export const config = {
 
     // ----------------resource routes----------------
     // course routes
-    // '/resource/course/:path*',
     '/resource/course/create',
     '/resource/course/update/:path*',
 
