@@ -7,25 +7,31 @@ import LessonAction from '@/features/resource/lesson/components/detail/LessonAct
 import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { formatDate } from '@/utils/index'
-import { Calendar, Clock, User } from 'lucide-react'
+import { Calendar, Clock } from 'lucide-react'
 import { useParams } from 'next/navigation'
+import { ApiSuccessResponse } from '@/types/baseModel'
+import { Lesson } from '@/features/resource/lesson/types/lesson.type'
 
-export default function LessonDescription() {
-  const params = useParams()
-  const lessonId = params.lessonId || 1
-  const {
-    data: lessonData,
-    isLoading: lessonLoading,
-    isFetching: lessonFetching
-  } = useGetLessonByIdQuery(Number(lessonId))
+type LessonDescriptionProps = {
+  lessonData?: ApiSuccessResponse<Lesson>
+  lessonLoading: boolean
+}
 
-  if (lessonLoading || lessonFetching)
+export default function LessonDescription({ lessonData, lessonLoading }: LessonDescriptionProps) {
+  if (lessonLoading)
     return (
       <div className='flex h-[500px] items-center justify-center'>
         <LoadingComponent size={50} />
       </div>
     )
 
+  if (!lessonData || !lessonData.data) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p className='text-gray-500'>No lesson data available</p>
+      </div>
+    )
+  }
   if (!lessonData) return <div>No Lesson Data</div>
   return (
     <div>

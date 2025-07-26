@@ -1,5 +1,6 @@
 import { StudentProgress, StudentProgressQuery } from '@/features/student-progress/types/studentProgress.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
+import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
 export const studentProgresssApi = createCrudApi<StudentProgress, StudentProgressQuery>({
   reducerPath: 'studentProgressApi',
