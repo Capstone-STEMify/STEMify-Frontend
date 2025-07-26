@@ -5,33 +5,72 @@ import { useLazySearchSectionQuery, useSearchSectionQuery } from '@/features/res
 import { useEffect } from 'react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useParams } from 'next/navigation'
+import { useSearchStudentProgressQuery } from '@/features/student-progress/api/studentProgressApi'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { ProgressStatus } from '@/features/student-progress/types/studentProgress.type'
+import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 
-type LessonOutlineProps = {
-  selectedId: number
-  onSelect: (id: number) => void
-}
-
-export default function LessonOutline({ onSelect, selectedId }: LessonOutlineProps) {
+export default function LessonOutline() {
   const param = useParams()
-  const lessonIdParam = param?.lessonId
-  const lessonId = lessonIdParam ? Number(lessonIdParam) : undefined
+  const dispatch = useAppDispatch()
+  console.log('Lesson Outline Params:', param)
+  const lessonId = param?.lessonId ? Number(param.lessonId) : undefined
+  const enrollmentId = useAppSelector((state) => state.studentProgress.selectedEnrollmentId)
+  const selectedSectionId = useAppSelector((state) => state.studentProgress.selectedSectionId)
+  // Fetch sections and their progress
+  const { data: sections, isLoading: loadingSections } = useSearchSectionQuery({ lessonId }, { skip: !lessonId })
+  const { data: sectionsProgress, isLoading: loadingProgress } = useSearchStudentProgressQuery(
+    { enrollmentId: enrollmentId ?? 0, lessonId: lessonId ?? 0 },
+    { skip: !enrollmentId || !lessonId }
+  )
 
-  const { data: sections, isLoading: sectionLoading } = useSearchSectionQuery({ lessonId }, { skip: !lessonId })
+  // Create a progress map for quick access
+  // This maps sectionId to its progress status
+  const progressMap =
+    sectionsProgress?.data?.items?.reduce(
+      (acc, progress) => {
+        if ('sectionId' in progress) {
+          acc[progress.sectionId] = progress.status
+        }
+        return acc
+      },
+      {} as Record<number, ProgressStatus>
+    ) ?? {}
 
-  if (sections && sections.data.items.length === 0) {
-    return <div className='px-4 py-4'>No sections available</div>
+  // Get the section with the smallest orderIndex
+  const initialSectionId =
+    sections?.data?.items?.reduce((minSection, currentSection) => {
+      return currentSection.orderIndex < minSection.orderIndex ? currentSection : minSection
+    })?.id ?? 0
+
+  const updateSelectedSection = (sectionId: number) => {
+    const status = progressMap[sectionId] || ProgressStatus.NOT_STARTED
+    dispatch(studentProgressSlice.actions.setSelectedSectionId(sectionId))
+    dispatch(studentProgressSlice.actions.setSelectedSectionStatus(status))
+  }
+  // Auto-select the initial section after data is loaded
+  useEffect(() => {
+    if (!loadingSections && !loadingProgress && sections && sections.data.items.length > 0 && sectionsProgress) {
+      updateSelectedSection(initialSectionId)
+    }
+  }, [loadingSections, loadingProgress, sections, sectionsProgress, initialSectionId, updateSelectedSection])
+
+  // Handle section selection
+  const handleClickSectionId = (id: number) => {
+    updateSelectedSection(id)
   }
 
-  if (sectionLoading || !sections) {
+  // If loading sections or progress, show a loading indicator
+  if (loadingSections || loadingProgress || !sections || !sectionsProgress) {
     return (
       <div className='flex h-40 items-center justify-center'>
         <LoadingComponent size={80} />
       </div>
     )
   }
-
-  const handleClickSectionId = (id: number) => {
-    onSelect(id)
+  // If no sections are available, show a message
+  if (sections && sections.data.items.length === 0) {
+    return <div className='px-4 py-4'>No sections available</div>
   }
 
   return (
@@ -40,7 +79,7 @@ export default function LessonOutline({ onSelect, selectedId }: LessonOutlinePro
 
       <div className='mt-5 flex flex-col space-y-2'>
         {sections.data.items.map((sec) => {
-          const isSelected = sec.id === selectedId
+          const isSelected = sec.id === selectedSectionId
           return (
             <button
               key={sec.id}

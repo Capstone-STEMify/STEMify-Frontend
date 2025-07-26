@@ -19,8 +19,6 @@ const LessonOutline = dynamic(() => import('@/features/resource/lesson/component
 })
 
 export default function LessonDetail() {
-  const [selected, setSelected] = useState(1)
-
   return (
     <div className='bg-light pb-20'>
       <div className='container mx-auto max-w-7xl py-6'>
@@ -48,7 +46,7 @@ export default function LessonDetail() {
                   {
                     value: 'sections',
                     label: 'Sections',
-                    content: <LessonOutline selectedId={selected} onSelect={(id) => setSelected(id)} />
+                    content: <LessonOutline />
                   }
                 ]}
               />
@@ -57,7 +55,7 @@ export default function LessonDetail() {
 
             {/* Content */}
             <ResizablePanel defaultSize={70} minSize={40}>
-              <LessonContent selectedId={selected} />
+              <LessonContent />
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>

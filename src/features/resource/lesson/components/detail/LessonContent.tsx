@@ -14,26 +14,21 @@ import {
 import { toast } from 'sonner'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 
-type LessonContentProps = {
-  selectedId?: number
-}
-
-export default function LessonContent({ selectedId }: LessonContentProps) {
+export default function LessonContent() {
   const dispatch = useAppDispatch()
-  const { data } = useGetContentByIdQuery(selectedId ?? 0, { skip: !selectedId })
+  const selectedSectionId = useAppSelector((state) => state.studentProgress.selectedSectionId)
+  const { data } = useGetContentByIdQuery(selectedSectionId ?? 0, { skip: !selectedSectionId })
   const lessonStatus = useAppSelector((state) => state.studentProgress.selectedLessonStatus)
-  // const sectionStatus = useAppSelector((state) => state.studentProgress.selectedSectionStatus)
+  const sectionStatus = useAppSelector((state) => state.studentProgress.selectedSectionStatus)
   const enrollmentId = useAppSelector((state) => state.studentProgress.selectedEnrollmentId)
-  //if( !enrollmentId || selectedId)
-
-  //const {}= useSearchStudentProgressQuery({enrollmentId, lessonId})
+  const lessonId = useAppSelector((state) => state.studentProgress.selectedLessonId)
 
   const [completeSection, { isLoading }] = useUpdateStudentProgressMutation()
   const handleCompleteSection = async () => {
     try {
       if (enrollmentId) {
-        await completeSection({ id: enrollmentId, body: { sectionId: selectedId } }).unwrap()
-        // dispatch(studentProgressSlice.actions.setSelectedSectionStatus(ProgressStatus.COMPLETED))
+        await completeSection({ id: enrollmentId, body: { lessonId: lessonId, sectionId: selectedSectionId } }).unwrap()
+        dispatch(studentProgressSlice.actions.setSelectedSectionStatus(ProgressStatus.COMPLETED))
         toast.success('Section completed!')
       }
     } catch (err: any) {
@@ -48,13 +43,13 @@ export default function LessonContent({ selectedId }: LessonContentProps) {
           {data?.data.contentName}
         </ReactMarkdown>
       </div>{' '}
-      {/* {lessonStatus === ProgressStatus.IN_PROGRESS && sectionStatus === ProgressStatus.IN_PROGRESS && ( */}
-      <div className='mt-auto self-end'>
-        <Button className='bg-amber-custom-400' onClick={handleCompleteSection} disabled={isLoading}>
-          {isLoading ? 'Completing...' : 'Mark as Complete'}
-        </Button>
-      </div>
-      {/* )} */}
+      {lessonStatus === ProgressStatus.IN_PROGRESS && sectionStatus === ProgressStatus.IN_PROGRESS && (
+        <div className='mt-auto self-end'>
+          <Button className='bg-amber-custom-400' onClick={handleCompleteSection} disabled={isLoading}>
+            {isLoading ? 'Completing...' : 'Mark as Complete'}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
