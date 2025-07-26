@@ -21,7 +21,7 @@ export default function BackButton({ url }: Props) {
   }
 
   return (
-    <Button onClick={goBack} variant='secondary'>
+    <Button onClick={goBack} variant='secondary' className='cursor-pointer'>
       <ChevronLeft className='link text-gray-600 hover:text-black' />
     </Button>
   )
