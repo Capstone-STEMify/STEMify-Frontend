@@ -5,16 +5,17 @@ import { useFormContext } from '@/components/shared/form/items'
 type SubmitButtonProps = {
   children: React.ReactNode
   className?: string
+  loading?: boolean
 }
 
-export const SubmitButton = ({ children, className }: SubmitButtonProps) => {
+export const SubmitButton = ({ children, className, loading = false }: SubmitButtonProps) => {
   const form = useFormContext()
 
   const [isSubmitting, canSubmit] = useStore(form.store, (state) => [state.isSubmitting, state.canSubmit])
 
   return (
-    <Button type='submit' disabled={isSubmitting || !canSubmit} className={className}>
-      {children}
+    <Button type='submit' disabled={isSubmitting || !canSubmit || loading} className={className}>
+      {loading ? 'Submitting...' : children}
     </Button>
   )
 }
