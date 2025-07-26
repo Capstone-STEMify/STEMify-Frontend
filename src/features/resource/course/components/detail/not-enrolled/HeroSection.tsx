@@ -10,6 +10,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { useCreateEnrollmentMutaion } from '@/features/enrollment/api/enrollmentApi'
 import { toast } from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import BackButton from '@/components/shared/button/BackButton'
 
 interface HeroSectionProps {
   course: Course
@@ -53,11 +54,12 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
   }
 
   return (
-    <motion.section initial='hidden' animate='visible' variants={fadeInUp} className='mt-12 bg-sky-50 py-26'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <div className='grid items-center gap-12 lg:grid-cols-2'>
-          <div className='space-y-6'>
-            <div className='inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-800'>
+    <motion.section initial='hidden' animate='visible' variants={fadeInUp} className='mt-8 bg-sky-50 pt-14 pb-26'>
+      <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>
+        <div className='grid items-center gap-8 lg:grid-cols-2'>
+          <div className='space-y-4'>
+            <BackButton />
+            <div className='mx-3 inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-800'>
               <CalendarFold className='mr-2 h-4 w-4' />
               Age Ranges: {course.ageRangeLabel}
             </div>

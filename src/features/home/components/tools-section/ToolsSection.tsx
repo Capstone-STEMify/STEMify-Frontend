@@ -23,10 +23,12 @@ export default function ToolsSection() {
       <div className='absolute top-1/3 right-1/4 h-12 w-12 animate-pulse rounded-full bg-yellow-300 opacity-25'></div>
 
       <div className='relative z-10 mb-12 text-center'>
-        <h2 className='mb-4 text-3xl font-bold text-gray-900'>All the tools that you need</h2>
+        <h1 className='mb-4 text-5xl font-bold text-gray-900'>What is STEMify?</h1>
         <p className='mx-auto max-w-2xl text-gray-600'>
-          So kids forget logos and longer design inspiration, but we connected out 5 years history, physics, via
-          respected rerum volvere amed, aut et id sagpendisse.
+          In this video, discover how STEMify addresses the gap in 21st-century skills education with hands-on STEAM and
+          STEM solutions. We support teachers to build the innovators of tomorrow by fostering creativity, coding, and
+          rapid prototyping. With accessible tools and free digital and offline resources, students of all abilities can
+          explore and develop essential skills for the future.
         </p>
       </div>
 
@@ -37,7 +39,9 @@ export default function ToolsSection() {
 
           <div className='relative z-20 mb-8 flex justify-center'>
             <MacCard>
-              <img src='/HomeFiles/window.png' alt='STEMify Tools' className='h-auto w-full' />
+              <video autoPlay loop muted playsInline className='h-full w-full object-cover'>
+                <source src='/HomeFiles/intro.mp4' type='video/mp4' />
+              </video>
             </MacCard>
             <div className='absolute -top-2 -left-2 -z-10 h-full w-full rounded-lg bg-gradient-to-br from-yellow-300 to-orange-300 opacity-30'></div>
           </div>
