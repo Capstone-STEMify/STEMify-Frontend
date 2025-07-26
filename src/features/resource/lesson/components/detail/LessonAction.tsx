@@ -30,7 +30,7 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
 
       {/* CTA Button */}
-      {status === ProgressStatus.NOT_STARTED && (
+      {lessonStatus === ProgressStatus.NOT_STARTED && (
         <div className='mt-4'>
           <Button
             size='default'

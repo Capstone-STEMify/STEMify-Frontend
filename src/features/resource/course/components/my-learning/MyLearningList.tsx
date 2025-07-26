@@ -12,6 +12,7 @@ import { formatDuration } from '@/utils/index'
 import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/enrollment/slice/enrollmentSlice'
+import { setSelectedEnrollmentId } from '@/features/student-progress/slice/studentProgressSlice'
 
 type MyLearningListProps = {
   studentId?: string
@@ -60,7 +61,7 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
         {/* Course Grid */}
         <div className='grid grid-cols-1 place-items-center sm:grid-cols-2 xl:grid-cols-3'>
           {enroll.data.items.map((e) => (
-            <Link href={`/resource/course/${e.courseId}`} key={e.id}>
+            <Link href={`/resource/course/${e.courseId}`} key={e.id} onClick={() => dispatch(setSelectedEnrollmentId(e.id))}>
               <CardLayout
                 size='lg'
                 imageSrc={e.coverImageUrl}
