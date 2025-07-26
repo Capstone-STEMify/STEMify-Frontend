@@ -1,36 +1,18 @@
 'use client'
 import { Badge } from '@/components/shadcn/badge'
 import CardLayout from '@/components/shared/card/CardLayout'
+import { useGetAllCourseQuery } from '@/features/resource/course/api/courseApi'
 import { formatDuration } from '@/utils/index'
+import Link from 'next/link'
 import React from 'react'
 
 export default function ExploreResourcesSection() {
-  const resources = [
-    {
-      title: 'Text to image',
-      description: 'Generate high-quality images using text with latest Image 4 Model.',
-      image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop&auto=format',
-      category: 'Animals',
-      age: '8-14+',
-      duration: 360
-    },
-    {
-      title: 'Text to video',
-      description: 'Generate video clips from a detailed description and high-quality images.',
-      image: 'https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?w=400&h=300&fit=crop&auto=format',
-      category: 'Biology',
-      age: '8-14+',
-      duration: 360
-    },
-    {
-      title: 'Boards (beta)',
-      description: 'Generate images or upload your own and start remixing on a board.',
-      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop&auto=format',
-      category: 'Coding',
-      age: '8-14+',
-      duration: 360
-    }
-  ]
+  const { data: CourseData, error, isLoading } = useGetAllCourseQuery()
+
+  const truncateText = (text: string, maxLength = 80) => {
+    if (text.length <= maxLength) return text
+    return text.substring(0, maxLength).trim() + '...'
+  }
 
   return (
     <section className='relative overflow-hidden px-6 py-16'>
@@ -44,15 +26,15 @@ export default function ExploreResourcesSection() {
           <div className='absolute -bottom-2 left-1/2 h-1 w-20 -translate-x-1/2 transform rounded-full bg-gradient-to-r from-blue-400 to-purple-400'></div>
         </h2>
 
-        <div className='mx-auto grid max-w-7xl gap-6 md:grid-cols-3'>
-          {resources.map((resource, index) => (
-            <CardLayout size='lg' key={index} imageSrc={resource.image} infor={<Badge>{resource.category}</Badge>}>
+        <div className='mx-auto max-w-7xl flex justify-around gap-6'>
+          {CourseData?.data.items.slice(1,4).map((resource, index) => (
+            <CardLayout size='lg' key={index} imageSrc={resource.imageUrl} infor={<Badge>{resource.categoryNames}</Badge>}>
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{resource.title}</h3>
-                <p className='text-sm text-gray-600'>{resource.description}</p>
+                <p className='text-sm text-gray-600'>{truncateText(resource.description)}</p>
                 {/* footer */}
                 <div className='mt-auto flex items-center gap-2'>
-                  <Badge className='bg-blue-100 text-blue-800'>{resource.age}</Badge>
+                  <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
                   <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
                 </div>
               </div>
@@ -61,10 +43,12 @@ export default function ExploreResourcesSection() {
         </div>
 
         <div className='mt-12 text-center'>
+          <Link href='/resource'>
           <button className='relative transform rounded-full bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
             Explore →
             <div className='absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full bg-pink-400 opacity-60'></div>
           </button>
+          </Link>
         </div>
       </div>
 
