@@ -40,12 +40,6 @@ export default function CourseDetailNotEnrolled({ courseId }: CourseDetailNotEnr
         <StatsSection course={course.data} />
       </div>
       <ContentSection />
-      {/* <RecommendationSection /> */}
-      <h1 className='text-center'>Feedback</h1>
-      <h1 className='text-center'>Feedback</h1>
-      <h1 className='text-center'>Feedback</h1>
-      <h1 className='text-center'>Feedback</h1>
-      <h1 className='text-center'>Feedback</h1>
     </div>
   )
 }
