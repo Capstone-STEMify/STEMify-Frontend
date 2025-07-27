@@ -20,7 +20,7 @@ type SBreadcrumbProps = {
 function resolveHref(href: string): string {
   const map: Record<string, string> = {
     '/resource/course': '/resource/courses',
-    '/resource/lessons': '/resource/lessons'
+    '/resource/lesson': '/resource/lessons'
   }
   return map[href] || href
 }

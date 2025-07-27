@@ -21,14 +21,19 @@ export default function ExploreResourcesSection() {
       <div className='absolute top-1/2 left-1/4 h-8 w-8 animate-bounce rounded-full bg-yellow-400 opacity-40'></div>
 
       <div className='relative z-10'>
-        <h2 className='relative mb-12 text-center text-3xl font-bold text-white'>
+        <h2 className='mb-12 text-center text-5xl font-bold text-black'>
           Explore resources
-          <div className='absolute -bottom-2 left-1/2 h-1 w-20 -translate-x-1/2 transform rounded-full bg-gradient-to-r from-blue-400 to-purple-400'></div>
+          <div className='mx-auto mt-5 h-1 w-50 rounded-full bg-gradient-to-r from-blue-400 to-purple-400' />
         </h2>
 
-        <div className='mx-auto max-w-7xl flex justify-around gap-6'>
-          {CourseData?.data.items.slice(1,4).map((resource, index) => (
-            <CardLayout size='lg' key={index} imageSrc={resource.imageUrl} infor={<Badge>{resource.categoryNames}</Badge>}>
+        <div className='mx-auto flex max-w-7xl justify-around gap-6'>
+          {CourseData?.data.items.slice(1, 4).map((resource, index) => (
+            <CardLayout
+              size='lg'
+              key={index}
+              imageSrc={resource.imageUrl}
+              infor={<Badge>{resource.categoryNames}</Badge>}
+            >
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{resource.title}</h3>
                 <p className='text-sm text-gray-600'>{truncateText(resource.description)}</p>
@@ -44,10 +49,10 @@ export default function ExploreResourcesSection() {
 
         <div className='mt-12 text-center'>
           <Link href='/resource'>
-          <button className='relative transform rounded-full bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
-            Explore →
-            <div className='absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full bg-pink-400 opacity-60'></div>
-          </button>
+            <button className='relative transform rounded-full bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
+              Explore →
+              <div className='absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full bg-pink-400 opacity-60'></div>
+            </button>
           </Link>
         </div>
       </div>
