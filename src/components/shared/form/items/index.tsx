@@ -7,6 +7,7 @@ import { SubmitButton } from '@/components/shared/form/items/submit-button'
 import { TextAreaField } from '@/components/shared/form/items/text-area'
 import { TextField } from '@/components/shared/form/items/text-field'
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
+import FileField from './file-field'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts()
 
@@ -18,7 +19,8 @@ export const { useAppForm } = createFormHook({
     CheckboxField,
     MultipleCheckboxField,
     RadioField,
-    ImageField
+    ImageField,
+    FileField
   },
   formComponents: {
     SubmitButton
