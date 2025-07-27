@@ -11,27 +11,31 @@ export default function CourseDetail() {
   const param = useParams()
   const courseIdParam = param?.courseId
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
+
   const auth = useAppSelector((state) => state.auth)
   const studentId = auth?.user?.userId
-  if (!studentId) return <CourseDetailNotEnrolled courseId={Number(courseId)} />
 
-  const { data, isLoading, error } = useSearchEnrollmentQuery({
-    courseId,
-    studentId
-  })
-  const enrollmentItems = data?.data?.items ?? []
+  const { data, isLoading, error } = useSearchEnrollmentQuery({ courseId, studentId }, { skip: !studentId })
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />
       </div>
     )
-  if (error) return <p>Error: {(error as any).message ?? 'Unknown error'}</p>
-
-  if (enrollmentItems.length > 0) {
-    return <CourseDetailEnrolled courseId={Number(courseId)} enrollmentId={enrollmentItems[0].id} />
   }
 
-  return <CourseDetailNotEnrolled courseId={Number(courseId)} />
+  if (error) {
+    return <p>Error: {(error as any)?.message ?? 'Unknown error'}</p>
+  }
+
+  const enrollmentItems = data?.data?.items ?? []
+
+  const hasEnrollment = studentId && enrollmentItems.length > 0
+
+  return hasEnrollment ? (
+    <CourseDetailEnrolled courseId={Number(courseId)} enrollmentId={enrollmentItems[0].id} />
+  ) : (
+    <CourseDetailNotEnrolled courseId={Number(courseId)} />
+  )
 }
