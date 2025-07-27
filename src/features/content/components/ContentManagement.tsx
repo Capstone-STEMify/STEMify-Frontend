@@ -160,8 +160,8 @@ export default function ContentManagement() {
 									name="contentName"
 									children={(field) => (
 										<field.TextField
-											label="Content Name"
-											placeholder="Enter content name"
+											label="Content"
+											placeholder="Enter content"
 										/>
 									)}
 								/>
