@@ -58,7 +58,7 @@
 
 //   return NextResponse.next()
 // }
-export { auth as middleware } from '@/libs/auth/authOptions'
+// export { auth as middleware } from '@/libs/auth/authOptions'
 export const config = {
   matcher: [
     // classroom routes

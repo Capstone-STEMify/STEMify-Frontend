@@ -14,7 +14,6 @@ export default function AuthSessionSync() {
 
     dispatch(setUser(data.user))
     dispatch(setToken(data.accessToken))
-  }, [data?.user, data?.accessToken, dispatch])
-
+  }, [data, dispatch])
   return null
 }

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { User } from 'next-auth'
 
-interface AuthState {
+export interface AuthState {
   token: string | null
   user: User | null
 }
