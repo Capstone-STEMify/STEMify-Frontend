@@ -5,13 +5,13 @@ import {
   useGetSectionByIdQuery, 
   useCreateSectionMutation, 
   useUpdateSectionMutation,
-  useGetAllSectionQuery,
   useSearchSectionQuery
 } from '@/features/resource/section/api/sectionApi'
 import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { toast } from 'sonner'
 import { useParams } from 'next/navigation'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 // Zod schema for section data validation
 const sectionSchema = z.object({
@@ -32,6 +32,7 @@ const defaultSectionData: Omit<SectionFormData, 'lessonId'> = {
 
 export default function CreateSection() {
   const params = useParams()
+  const token = useAppSelector((state) => state.auth.token)
 
   // Get lessonId and sectionId from URL and parse them to numbers
   const lessonIdRaw = params?.lessonId
@@ -41,13 +42,14 @@ export default function CreateSection() {
   const sectionId = sectionIdRaw ? Number(Array.isArray(sectionIdRaw) ? sectionIdRaw[0] : sectionIdRaw) : undefined
 
   // Fetch section data if sectionId exists (for editing)
-  const { data: sectionData, isLoading: isSectionLoading } = useGetSectionByIdQuery(sectionId as number, { skip: !sectionId })
+  const { data: sectionData, isLoading: isSectionLoading } = useGetSectionByIdQuery(sectionId as number, { skip: !sectionId || !token })
 
   // Fetch all sections for the current lessonId to determine the next orderIndex
   // Only fetch when creating a new section (no sectionId)
+
   const { data: allSectionsData, isLoading: areAllSectionsLoading } = useSearchSectionQuery(
     { lessonId }, 
-    { skip: !lessonId || !!sectionId }
+    { skip: !lessonId || !!sectionId || !token }
   );
 
   // API mutations for creating and updating a section
@@ -138,31 +140,35 @@ export default function CreateSection() {
 
   return (
     <form
-      className='mx-auto min-h-screen max-w-4xl space-y-8 p-4 md:p-8'
+      className='mx-auto min-h-screen max-w-7xl space-y-8 p-4 md:p-8'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
       }}
     >
-      <div className='space-y-6'>
-        <SCard
-          className='gap-3'
-          title='Section Description'
-          description='Provide a detailed description for this section'
-          content={
-            <form.AppField
-              name='description'
-              children={(field) => (
-                <field.TextAreaField
-                  placeholder='Enter section description'
-                  className='h-32 rounded-lg border-gray-300'
-                />
-              )}
-            />
-          }
-        />
+      <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
+        {/* Left Column: Description */}
+        <div className='lg:col-span-2'>
+          <SCard
+            className='gap-3'
+            title='Section Description'
+            description='Provide a detailed description for this section'
+            content={
+              <form.AppField
+                name='description'
+                children={(field) => (
+                  <field.TextAreaField
+                    placeholder='Enter section description'
+                    className='h-32 rounded-lg border-gray-300'
+                  />
+                )}
+              />
+            }
+          />
+        </div>
         
-        <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+        {/* Right Column: Inputs */}
+        <div className='space-y-6'>
            <SCard
               className='w-full gap-3'
               title='Duration (minutes)'
@@ -181,8 +187,7 @@ export default function CreateSection() {
               }
             />
             
-            {/* Only show Order Index when editing (sectionId exists) and disable it */}
-            {sectionId && (
+            {/* {sectionId && (
               <SCard
                 className='w-full gap-3'
                 title='Order Index'
@@ -194,22 +199,22 @@ export default function CreateSection() {
                       <field.TextField<number>
                         type='number'
                         className='rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed'
-                        disabled={true} // Disable this field
+                        disabled={true}
                       />
                     )}
                   />
                 }
               />
-            )}
+            )} */}
         </div>
+      </div>
 
-        <div>
-          <form.AppForm>
-            <form.SubmitButton className='w-full rounded-full py-3 text-lg'>
-              {sectionId ? 'Update Section' : 'Create Section'}
-            </form.SubmitButton>
-          </form.AppForm>
-        </div>
+      <div>
+        <form.AppForm>
+          <form.SubmitButton className='w-full rounded-full py-3 text-lg'>
+            {sectionId ? 'Update Section' : 'Create Section'}
+          </form.SubmitButton>
+        </form.AppForm>
       </div>
     </form>
   )
