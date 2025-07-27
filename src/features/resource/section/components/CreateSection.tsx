@@ -1,9 +1,9 @@
 'use client'
 import { SCard } from '@/components/shared/card/SCard'
 import React, { useEffect } from 'react'
-import { 
-  useGetSectionByIdQuery, 
-  useCreateSectionMutation, 
+import {
+  useGetSectionByIdQuery,
+  useCreateSectionMutation,
   useUpdateSectionMutation,
   useSearchSectionQuery
 } from '@/features/resource/section/api/sectionApi'
@@ -37,20 +37,22 @@ export default function CreateSection() {
   // Get lessonId and sectionId from URL and parse them to numbers
   const lessonIdRaw = params?.lessonId
   const sectionIdRaw = params?.sectionId
-  
+
   const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
   const sectionId = sectionIdRaw ? Number(Array.isArray(sectionIdRaw) ? sectionIdRaw[0] : sectionIdRaw) : undefined
 
   // Fetch section data if sectionId exists (for editing)
-  const { data: sectionData, isLoading: isSectionLoading } = useGetSectionByIdQuery(sectionId as number, { skip: !sectionId || !token })
+  const { data: sectionData, isLoading: isSectionLoading } = useGetSectionByIdQuery(sectionId as number, {
+    skip: !sectionId || !token
+  })
 
   // Fetch all sections for the current lessonId to determine the next orderIndex
   // Only fetch when creating a new section (no sectionId)
 
   const { data: allSectionsData, isLoading: areAllSectionsLoading } = useSearchSectionQuery(
-    { lessonId }, 
+    { lessonId },
     { skip: !lessonId || !!sectionId || !token }
-  );
+  )
 
   // API mutations for creating and updating a section
   const [createSection] = useCreateSectionMutation()
@@ -66,7 +68,7 @@ export default function CreateSection() {
           lessonId: sectionData.data.lessonId || lessonId || 0
         }
       : { ...defaultSectionData, lessonId: lessonId || 0 },
-    
+
     onSubmit: async ({ value }) => {
       try {
         if (!lessonId) {
@@ -87,14 +89,12 @@ export default function CreateSection() {
         } else {
           // CREATE (POST) a new section
           if (!allSectionsData || !allSectionsData.data) {
-              toast.error("Could not determine the section order. Please try again.");
-              return;
+            toast.error('Could not determine the section order. Please try again.')
+            return
           }
 
-          const sections = allSectionsData.data.items || [];
-          const nextOrderIndex = sections.length > 0
-              ? Math.max(...sections.map(s => s.orderIndex)) + 1
-              : 1;
+          const sections = allSectionsData.data.items || []
+          const nextOrderIndex = sections.length > 0 ? Math.max(...sections.map((s) => s.orderIndex)) + 1 : 1
 
           const createPayload = {
             description: value.description,
@@ -131,16 +131,18 @@ export default function CreateSection() {
       <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>Loading...</div>
     )
   }
-  
+
   if (!lessonId && !isSectionLoading) {
-     return (
-      <div className='flex h-screen items-center justify-center text-lg font-semibold text-red-600'>Invalid Lesson ID. Cannot create or edit a section.</div>
+    return (
+      <div className='flex h-screen items-center justify-center text-lg font-semibold text-red-600'>
+        Invalid Lesson ID. Cannot create or edit a section.
+      </div>
     )
   }
 
   return (
     <form
-      className='mx-auto min-h-screen max-w-7xl space-y-8 p-4 md:p-8'
+      className='mx-auto w-[750px] space-y-8 p-4 md:p-8'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
@@ -166,46 +168,26 @@ export default function CreateSection() {
             }
           />
         </div>
-        
+
         {/* Right Column: Inputs */}
         <div className='space-y-6'>
-           <SCard
-              className='w-full gap-3'
-              title='Duration (minutes)'
-              description='Enter the estimated duration of the section'
-              content={
-                <form.AppField
-                  name='duration'
-                  children={(field) => (
-                    <field.TextField<number>
-                      type='number'
-                      placeholder='e.g., 15'
-                      className='rounded-lg border-gray-300'
-                    />
-                  )}
-                />
-              }
-            />
-            
-            {/* {sectionId && (
-              <SCard
-                className='w-full gap-3'
-                title='Order Index'
-                description='The order is automatically managed and cannot be changed.'
-                content={
-                  <form.AppField
-                    name='orderIndex'
-                    children={(field) => (
-                      <field.TextField<number>
-                        type='number'
-                        className='rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed'
-                        disabled={true}
-                      />
-                    )}
+          <SCard
+            className='w-full gap-3'
+            title='Duration (minutes)'
+            description='Enter the estimated duration of the section'
+            content={
+              <form.AppField
+                name='duration'
+                children={(field) => (
+                  <field.TextField<number>
+                    type='number'
+                    placeholder='e.g., 15'
+                    className='rounded-lg border-gray-300'
                   />
-                }
+                )}
               />
-            )} */}
+            }
+          />
         </div>
       </div>
 

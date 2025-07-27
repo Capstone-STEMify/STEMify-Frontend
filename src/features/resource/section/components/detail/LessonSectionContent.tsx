@@ -22,7 +22,7 @@ type LessonContentProps = {
   courseId?: number
   lessonId: number
 }
-export default function LessonContent({ sectionId, token, courseId, lessonId }: LessonContentProps) {
+export default function LessonSectionContent({ sectionId, token, courseId, lessonId }: LessonContentProps) {
   const dispatch = useAppDispatch()
   const userId = useAppSelector((state) => state.auth.user?.userId)
 

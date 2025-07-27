@@ -1,8 +1,6 @@
-import CreateSection from '@/features/resource/section/components/CreateSection'
+import UpdateSection from '@/features/resource/section/components/UpdateSection'
 import React from 'react'
 
 export default function CreateSectionPage() {
-  return (
-    <CreateSection/>
-  )
+  return <UpdateSection />
 }

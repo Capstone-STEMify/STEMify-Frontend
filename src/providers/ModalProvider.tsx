@@ -8,6 +8,7 @@ import UserFormModal from '@/components/shared/modals/UserFormModal'
 import PhotoUploadModal from '@/components/shared/modals/UploadImageModal'
 import EnrollModal from '@/components/shared/modals/EnrollModal'
 import EditImageModal from '@/components/shared/modals/EditImageModal'
+import AddSectionModal from '@/components/shared/modals/AddSectionModal'
 
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
@@ -42,6 +43,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'image' && <PhotoUploadModal {...modalProps} />}
       {modalType === 'enroll' && <EnrollModal {...modalProps} />}
       {modalType === 'editImage' && <EditImageModal {...modalProps} />}
+      {modalType === 'addSection' && <AddSectionModal {...modalProps} />}
     </ModalContext.Provider>
   )
 }
