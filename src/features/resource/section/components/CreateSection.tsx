@@ -1,5 +1,216 @@
-import React from 'react'
+'use client'
+import { SCard } from '@/components/shared/card/SCard'
+import React, { useEffect } from 'react'
+import { 
+  useGetSectionByIdQuery, 
+  useCreateSectionMutation, 
+  useUpdateSectionMutation,
+  useGetAllSectionQuery,
+  useSearchSectionQuery
+} from '@/features/resource/section/api/sectionApi'
+import { z } from 'zod'
+import { useAppForm } from '@/components/shared/form/items'
+import { toast } from 'sonner'
+import { useParams } from 'next/navigation'
+
+// Zod schema for section data validation
+const sectionSchema = z.object({
+  description: z.string().min(1, 'Description is required'),
+  duration: z.number().min(0, 'Duration must be a non-negative number'),
+  orderIndex: z.number().min(0, 'Order index must be a non-negative number'),
+  lessonId: z.number().positive('Lesson ID must be a positive number')
+})
+
+type SectionFormData = z.infer<typeof sectionSchema>
+
+// Default values for a new section
+const defaultSectionData: Omit<SectionFormData, 'lessonId'> = {
+  description: '',
+  duration: 0,
+  orderIndex: 0 // Will be recalculated on submit
+}
 
 export default function CreateSection() {
-  return <div>CreateSection</div>
+  const params = useParams()
+
+  // Get lessonId and sectionId from URL and parse them to numbers
+  const lessonIdRaw = params?.lessonId
+  const sectionIdRaw = params?.sectionId
+  
+  const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
+  const sectionId = sectionIdRaw ? Number(Array.isArray(sectionIdRaw) ? sectionIdRaw[0] : sectionIdRaw) : undefined
+
+  // Fetch section data if sectionId exists (for editing)
+  const { data: sectionData, isLoading: isSectionLoading } = useGetSectionByIdQuery(sectionId as number, { skip: !sectionId })
+
+  // Fetch all sections for the current lessonId to determine the next orderIndex
+  // Only fetch when creating a new section (no sectionId)
+  const { data: allSectionsData, isLoading: areAllSectionsLoading } = useSearchSectionQuery(
+    { lessonId }, 
+    { skip: !lessonId || !!sectionId }
+  );
+
+  // API mutations for creating and updating a section
+  const [createSection] = useCreateSectionMutation()
+  const [updateSection] = useUpdateSectionMutation()
+
+  // Initialize the form
+  const form = useAppForm({
+    defaultValues: sectionData?.data
+      ? {
+          description: sectionData.data.description || '',
+          duration: sectionData.data.duration || 0,
+          orderIndex: sectionData.data.orderIndex || 0,
+          lessonId: sectionData.data.lessonId || lessonId || 0
+        }
+      : { ...defaultSectionData, lessonId: lessonId || 0 },
+    
+    onSubmit: async ({ value }) => {
+      try {
+        if (!lessonId) {
+          toast.error('Lesson ID is missing.')
+          return
+        }
+
+        if (sectionId) {
+          // UPDATE (PATCH) an existing section
+          const updatePayload = {
+            description: value.description,
+            duration: value.duration,
+            status: 'Published'
+          }
+          // The payload must be wrapped in a 'body' property
+          await updateSection({ id: sectionId, body: updatePayload }).unwrap()
+          toast.success('Section updated successfully')
+        } else {
+          // CREATE (POST) a new section
+          if (!allSectionsData || !allSectionsData.data) {
+              toast.error("Could not determine the section order. Please try again.");
+              return;
+          }
+
+          const sections = allSectionsData.data.items || [];
+          const nextOrderIndex = sections.length > 0
+              ? Math.max(...sections.map(s => s.orderIndex)) + 1
+              : 1;
+
+          const createPayload = {
+            description: value.description,
+            duration: value.duration,
+            orderIndex: nextOrderIndex, // Use the calculated orderIndex
+            lessonId: lessonId
+          }
+          await createSection(createPayload).unwrap()
+          toast.success('Section created successfully with Order Index: ' + nextOrderIndex)
+          form.reset()
+        }
+      } catch (err) {
+        toast.error('Failed to submit section')
+        console.error(err)
+      }
+    }
+  })
+
+  // Effect to reset form values when fetched section data changes (for editing)
+  useEffect(() => {
+    if (sectionData?.data) {
+      form.reset({
+        description: sectionData.data.description || '',
+        duration: sectionData.data.duration || 0,
+        orderIndex: sectionData.data.orderIndex || 0,
+        lessonId: sectionData.data.lessonId || lessonId || 0
+      })
+    }
+  }, [sectionData, lessonId, form])
+
+  // Show loading state while fetching data for the edit form or the sections list for creation
+  if (isSectionLoading || (!sectionId && areAllSectionsLoading)) {
+    return (
+      <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>Loading...</div>
+    )
+  }
+  
+  if (!lessonId && !isSectionLoading) {
+     return (
+      <div className='flex h-screen items-center justify-center text-lg font-semibold text-red-600'>Invalid Lesson ID. Cannot create or edit a section.</div>
+    )
+  }
+
+  return (
+    <form
+      className='mx-auto min-h-screen max-w-4xl space-y-8 p-4 md:p-8'
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+    >
+      <div className='space-y-6'>
+        <SCard
+          className='gap-3'
+          title='Section Description'
+          description='Provide a detailed description for this section'
+          content={
+            <form.AppField
+              name='description'
+              children={(field) => (
+                <field.TextAreaField
+                  placeholder='Enter section description'
+                  className='h-32 rounded-lg border-gray-300'
+                />
+              )}
+            />
+          }
+        />
+        
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+           <SCard
+              className='w-full gap-3'
+              title='Duration (minutes)'
+              description='Enter the estimated duration of the section'
+              content={
+                <form.AppField
+                  name='duration'
+                  children={(field) => (
+                    <field.TextField<number>
+                      type='number'
+                      placeholder='e.g., 15'
+                      className='rounded-lg border-gray-300'
+                    />
+                  )}
+                />
+              }
+            />
+            
+            {/* Only show Order Index when editing (sectionId exists) and disable it */}
+            {sectionId && (
+              <SCard
+                className='w-full gap-3'
+                title='Order Index'
+                description='The order is automatically managed and cannot be changed.'
+                content={
+                  <form.AppField
+                    name='orderIndex'
+                    children={(field) => (
+                      <field.TextField<number>
+                        type='number'
+                        className='rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed'
+                        disabled={true} // Disable this field
+                      />
+                    )}
+                  />
+                }
+              />
+            )}
+        </div>
+
+        <div>
+          <form.AppForm>
+            <form.SubmitButton className='w-full rounded-full py-3 text-lg'>
+              {sectionId ? 'Update Section' : 'Create Section'}
+            </form.SubmitButton>
+          </form.AppForm>
+        </div>
+      </div>
+    </form>
+  )
 }

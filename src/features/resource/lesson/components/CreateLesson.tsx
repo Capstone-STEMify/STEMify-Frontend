@@ -1,10 +1,6 @@
 'use client'
 import { SCard } from '@/components/shared/card/SCard'
 import React, { useRef, useEffect } from 'react'
-import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
-import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
-import { useGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
-import { useGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
 import {
   useCreateLessonWithFormDataMutation,
   useGetLessonByIdQuery,
@@ -68,10 +64,6 @@ export default function CreateLesson() {
     skip: !lessonId
   })
 
-  const { data: ageRanges } = useGetAllAgeRangeQuery()
-  const { data: skills } = useGetAllSkillQuery()
-  const { data: categories } = useGetAllCategoryQuery()
-  const { data: standards } = useGetAllStandardQuery()
   const [createLesson, { data: lessonCreateItem, error }] = useCreateLessonWithFormDataMutation()
   const [updateLesson] = useUpdateLessonWithFormDataMutation()
 
@@ -138,7 +130,7 @@ export default function CreateLesson() {
     })
   }
 
-  if (!ageRanges || !skills || !categories || !standards || isLessonLoading) {
+  if (isLessonLoading) {
     return (
       <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>Loading...</div>
     )
