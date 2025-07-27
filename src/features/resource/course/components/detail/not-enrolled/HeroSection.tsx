@@ -49,7 +49,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
       return
     }
     if (course.id) {
-      createEnroll({ courseId: course.id, studentId: auth.user?.userId })
+      createEnroll({ courseId: course.id, studentId: auth?.user?.userId })
     }
     toast.success('Enrollment request submitted successfully!', {
       description: `You have enroll to ${enroll?.data.courseTitle} at  ${enroll?.data.enrolledAt} `,

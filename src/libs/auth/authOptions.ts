@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode'
 
 import type { NextAuthOptions } from 'next-auth'
 import type { OAuthConfig } from 'next-auth/providers/oauth'
-import { type Profile } from 'next-auth'
+import NextAuth, { type Profile } from 'next-auth'
 
 interface OIDCProfile extends Profile {
   sub: string
@@ -97,3 +97,6 @@ export const authOptions: NextAuthOptions = {
     }
   }
 }
+
+const { auth, signIn } = NextAuth(authOptions)
+export { auth, signIn }

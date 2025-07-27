@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { RootState } from '@/libs/redux/store'
 import { getToken } from 'next-auth/jwt'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import { signIn } from 'next-auth/react'
 
 const customFetchBaseQuery = fetchBaseQuery({
   baseUrl:
@@ -42,9 +43,11 @@ export const customFetchBaseQueryWithErrorHandling = async (
         break
       case 401:
         toast.error(message || 'Unauthorized! Please sign in for access')
+        signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
         break
       case 403:
         toast.error(message || 'Forbidden')
+        signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
         break
       case 404:
         toast.error(message || 'Not Found')
