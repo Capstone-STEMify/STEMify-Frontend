@@ -5,10 +5,11 @@ import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import BackButton from '@/components/shared/button/BackButton'
 import STabs from '@/components/shared/STabs'
 import dynamic from 'next/dynamic'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useSearchSectionQuery } from '@/features/resource/section/api/sectionApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
+import { Button } from '@/components/shadcn/button'
 
 const LessonDescription = dynamic(() => import('@/features/resource/lesson/components/detail/LessonDescription'), {
   ssr: false
@@ -24,6 +25,7 @@ const LessonOutline = dynamic(() => import('@/features/resource/lesson/component
 
 export default function LessonDetail() {
   const { lessonId } = useParams()
+  const router = useRouter()
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null)
   const token = useAppSelector((state) => state.auth.token)
   const { data: lessonData, isLoading: lessonLoading } = useGetLessonByIdQuery(Number(lessonId))
@@ -37,13 +39,31 @@ export default function LessonDetail() {
     }
   }, [sectionData])
 
+  const handleUpdate = () => {
+    router.push(`/resource/lesson/update/${lessonData?.data.id}`)
+  }
+
+  const handleCreate = () => {
+    router.push(`/resource/lesson/create`)
+  }
+
   return (
     <div className='bg-light pb-20'>
       <div className='container mx-auto max-w-7xl py-6'>
         <div className='mx-8'>
-          <div className='flex items-center gap-5'>
-            <BackButton />
-            <SBreadcrumb title='Intro: Wetlands Biome' size={'md'} color={'yellow'} weight={'semibold'} />
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center gap-5'>
+              <BackButton />
+              <SBreadcrumb title='Intro: Wetlands Biome' size={'md'} color={'yellow'} weight={'semibold'} />
+            </div>
+            <div className='flex items-center gap-5'>
+              <Button onClick={handleUpdate} className='bg-amber-custom-400'>
+                Update Lesson
+              </Button>
+              <Button onClick={handleCreate} className='bg-sky-custom-300'>
+                Create Lesson
+              </Button>
+            </div>
           </div>
 
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>
