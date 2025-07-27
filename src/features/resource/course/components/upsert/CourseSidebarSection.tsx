@@ -54,11 +54,11 @@ export const CourseSidebarSection = ({
         }}
       />
 
-      <div className='flex flex-col gap-3 sm:flex-row'>
+      {/* <div className='flex flex-col gap-3 sm:flex-row'>
         <Button type='button' onClick={handleEditImage} className='flex-1 rounded-full py-5'>
           Edit Image
         </Button>
-      </div>
+      </div> */}
 
       <form.AppForm>
         <form.SubmitButton loading={isSubmitting} className='w-full rounded-full'>

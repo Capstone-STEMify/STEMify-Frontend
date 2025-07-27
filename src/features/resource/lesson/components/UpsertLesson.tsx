@@ -11,6 +11,7 @@ import { useAppForm } from '@/components/shared/form/items'
 import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
+import { useParams, useSearchParams } from 'next/navigation'
 
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
@@ -45,9 +46,7 @@ function buildLessonFormData(data: LessonFormData) {
   return formData
 }
 
-import { useParams, useSearchParams } from 'next/navigation'
-
-export default function CreateLesson() {
+export default function UpsertLesson() {
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
   const courseIdFromQuery = courseId ? Number(courseId) : 0
@@ -160,24 +159,6 @@ export default function CreateLesson() {
                 />
               }
             />
-
-            <SCard
-              className='w-full gap-3'
-              title='Course Id'
-              description='Select the course this lesson belongs to'
-              content={
-                <form.AppField
-                  name='courseId'
-                  children={(field) => (
-                    <field.TextField<number>
-                      type='number'
-                      placeholder='Course ID'
-                      className='rounded-lg border-gray-300'
-                    />
-                  )}
-                />
-              }
-            />
           </div>
           <SCard
             className='gap-3'
@@ -206,11 +187,11 @@ export default function CreateLesson() {
             }}
           />
 
-          <div className='flex flex-col gap-3 sm:flex-row'>
+          {/* <div className='flex flex-col gap-3 sm:flex-row'>
             <Button type='button' onClick={handleEditImage} className='flex-1 rounded-full py-5'>
               Edit Image
             </Button>
-          </div>
+          </div> */}
           <form.AppForm>
             <form.SubmitButton className='w-full rounded-full'>Submit</form.SubmitButton>
           </form.AppForm>
