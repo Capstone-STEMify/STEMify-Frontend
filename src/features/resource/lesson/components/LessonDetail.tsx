@@ -102,13 +102,15 @@ export default function LessonDetail() {
 
             {/* Content */}
             <ResizablePanel defaultSize={70} minSize={40}>
-              {selectedSectionId && (
+              {selectedSectionId ? (
                 <LessonContent
                   sectionId={selectedSectionId}
                   token={token}
                   courseId={lessonData?.data.courseId}
                   lessonId={Number(lessonId)}
                 />
+              ) : (
+                <div className=''>No Content Available For This Section</div>
               )}
             </ResizablePanel>
           </ResizablePanelGroup>

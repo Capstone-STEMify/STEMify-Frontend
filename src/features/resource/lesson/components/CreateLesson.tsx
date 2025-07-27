@@ -1,7 +1,11 @@
 'use client'
 import { SCard } from '@/components/shared/card/SCard'
 import React, { useRef, useEffect } from 'react'
-import { useCreateLessonWithFormDataMutation, useGetLessonByIdQuery, useUpdateLessonWithFormDataMutation } from '@/features/resource/lesson/api/lessonApi'
+import {
+  useCreateLessonWithFormDataMutation,
+  useGetLessonByIdQuery,
+  useUpdateLessonWithFormDataMutation
+} from '@/features/resource/lesson/api/lessonApi'
 import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { Button } from '@/components/shadcn/button'
@@ -34,17 +38,20 @@ function buildLessonFormData(data: LessonFormData) {
   formData.append('Title', data.title || '')
   formData.append('Description', data.description || '')
   formData.append('createdByUserId', 'b7e2c7e2-8c1a-4e2e-9b2a-2e7c8e2a1b3c')
-  formData.append('courseId', '1')
+  formData.append('courseId', data.courseId.toString())
   if (data.imageUrl) {
     formData.append('Image', data.imageUrl)
   }
   return formData
 }
 
-
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 
 export default function CreateLesson() {
+  const searchParams = useSearchParams()
+  const courseId = searchParams.get('courseId')
+  const courseIdFromQuery = courseId ? Number(courseId) : 0
+
   const { openModal } = useModal()
   const imageFieldRef = useRef<any>(null)
 
@@ -53,7 +60,9 @@ export default function CreateLesson() {
   const lessonIdRaw = params?.lessonId
   const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
 
-  const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(lessonId as number, { skip: !lessonId })
+  const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(lessonId as number, {
+    skip: !lessonId
+  })
 
   const [createLesson, { data: lessonCreateItem, error }] = useCreateLessonWithFormDataMutation()
   const [updateLesson] = useUpdateLessonWithFormDataMutation()
@@ -67,27 +76,30 @@ export default function CreateLesson() {
           courseId: lessonData.data.courseId || 0,
           imageUrl: null
         }
-      : defaultLessonData,
+      : {
+          ...defaultLessonData,
+          courseId: courseIdFromQuery
+        },
     // validators: {
     //   onChange: lessonSchema
     // },
     onSubmit: async ({ value }) => {
-  try {
-    const formData = buildLessonFormData(value)
+      try {
+        const formData = buildLessonFormData(value)
 
-    if (lessonId) {
-      await updateLesson({ id: lessonId, formData }).unwrap()
-      toast.success('Lesson updated successfully')
-    } else {
-      await createLesson(formData).unwrap()
-      toast.success('Lesson created successfully')
-      form.reset()
+        if (lessonId) {
+          await updateLesson({ id: lessonId, formData }).unwrap()
+          toast.success('Lesson updated successfully')
+        } else {
+          await createLesson(formData).unwrap()
+          toast.success('Lesson created successfully')
+          form.reset()
+        }
+      } catch (err) {
+        toast.error('Failed to submit lesson')
+        console.error(err)
+      }
     }
-  } catch (err) {
-    toast.error('Failed to submit lesson')
-    console.error(err)
-  }
-}
   })
 
   // if has lesson data, update form value when lessonData changed
@@ -190,7 +202,7 @@ export default function CreateLesson() {
             name='imageUrl'
             children={(field) => {
               imageFieldRef.current = field
-              return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl}/>
+              return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
             }}
           />
 
