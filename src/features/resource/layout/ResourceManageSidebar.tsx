@@ -16,12 +16,14 @@ import { SidebarNavWithActions } from '@/components/shared/sidebar/SidebarNavWit
 import { SidebarNavGroup } from '@/components/shared/sidebar/SidebarNavGroup'
 import { SidebarUserDropdown } from '@/components/shared/sidebar/SidebarUserDropdown'
 import { SidebarNavSecondary } from '@/components/shared/sidebar/SidebarNavSecondary'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 export function ResourceManageSidebar({
   role = UserRole.STAFF,
   ...props
 }: { role: UserRole } & React.ComponentProps<typeof Sidebar>) {
-  const data = getSidebarData(role)
+  const auth = useAppSelector((state) => state.auth)
+  const data = getSidebarData(role, auth)
   return (
     <Sidebar className='top-(--header-height) h-[calc(100svh-var(--header-height))]!' collapsible='icon' {...props}>
       <SidebarHeader>

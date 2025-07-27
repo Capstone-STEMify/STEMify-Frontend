@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/shadcn/resizable'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import BackButton from '@/components/shared/button/BackButton'
@@ -30,7 +30,10 @@ export default function LessonDetail() {
   const token = useAppSelector((state) => state.auth.token)
   const { data: lessonData, isLoading: lessonLoading } = useGetLessonByIdQuery(Number(lessonId))
   const { data: sections } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !lessonId || !token })
-  const sectionData = sections?.data.items || []
+
+  const sectionData = useMemo(() => {
+    return sections?.data?.items ?? []
+  }, [sections?.data?.items])
 
   useEffect(() => {
     if (sectionData.length > 0) {

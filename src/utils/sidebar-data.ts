@@ -1,3 +1,4 @@
+import { AuthState } from '@/features/auth/authSlice'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
 import {
@@ -18,8 +19,7 @@ import {
   Users
 } from 'lucide-react'
 
-export function getSidebarData(role: UserRole) {
-  const auth = useAppSelector((state) => state.auth)
+export function getSidebarData(role: UserRole, auth: AuthState) {
   const baseURL = `/resource/course/create`
   const base = {
     teams: [
