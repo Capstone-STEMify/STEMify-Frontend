@@ -159,24 +159,6 @@ export default function UpsertLesson() {
                 />
               }
             />
-
-            <SCard
-              className='w-full gap-3'
-              title='Course Id'
-              description='Select the course this lesson belongs to'
-              content={
-                <form.AppField
-                  name='courseId'
-                  children={(field) => (
-                    <field.TextField<number>
-                      type='number'
-                      placeholder='Course ID'
-                      className='rounded-lg border-gray-300'
-                    />
-                  )}
-                />
-              }
-            />
           </div>
           <SCard
             className='gap-3'
@@ -205,11 +187,11 @@ export default function UpsertLesson() {
             }}
           />
 
-          <div className='flex flex-col gap-3 sm:flex-row'>
+          {/* <div className='flex flex-col gap-3 sm:flex-row'>
             <Button type='button' onClick={handleEditImage} className='flex-1 rounded-full py-5'>
               Edit Image
             </Button>
-          </div>
+          </div> */}
           <form.AppForm>
             <form.SubmitButton className='w-full rounded-full'>Submit</form.SubmitButton>
           </form.AppForm>

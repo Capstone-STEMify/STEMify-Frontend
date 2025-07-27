@@ -111,10 +111,10 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
             ) : (
               <Button
                 onClick={handleUpdate}
-                className='text-sky-custom-600 border-sky-custom-600 w-45 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
+                className='text-sky-custom-600 border-sky-custom-600 w-50 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
               >
                 <Edit className='h-5 w-5' />
-                Update
+                Update Course
               </Button>
             )}
           </div>
