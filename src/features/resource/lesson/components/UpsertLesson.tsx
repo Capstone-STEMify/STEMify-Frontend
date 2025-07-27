@@ -11,6 +11,7 @@ import { useAppForm } from '@/components/shared/form/items'
 import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
+import { useParams, useSearchParams } from 'next/navigation'
 
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
@@ -45,9 +46,7 @@ function buildLessonFormData(data: LessonFormData) {
   return formData
 }
 
-import { useParams, useSearchParams } from 'next/navigation'
-
-export default function CreateLesson() {
+export default function UpsertLesson() {
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
   const courseIdFromQuery = courseId ? Number(courseId) : 0

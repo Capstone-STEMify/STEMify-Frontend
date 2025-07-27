@@ -1,6 +1,10 @@
-import CreateLesson from '@/features/resource/lesson/components/CreateLesson'
-import React from 'react'
+import UpsertLesson from '@/features/resource/lesson/components/UpsertLesson'
+import React, { Suspense } from 'react'
 
 export default function LessonUpdatePage() {
-  return <CreateLesson />
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <UpsertLesson />
+    </Suspense>
+  )
 }
