@@ -10,13 +10,18 @@ import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { CourseQueryParams } from '@/features/resource/course/types/course.type'
 import { setPageIndex, setPageSize } from '@/features/resource/course/slice/courseSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { EllipsisVertical } from 'lucide-react'
+import { EllipsisVertical, PlusCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect } from 'react'
+import { UserRole } from '@/types/userRole'
+import { useRouter } from 'next/navigation'
 
 export default function CourseListContent() {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const courseParams = useAppSelector((state) => state.course)
+  const auth = useAppSelector((state) => state.auth)
+  const userRole = auth.user?.role || UserRole.GUEST
 
   useEffect(() => {
     dispatch(setPageSize(12))
@@ -57,6 +62,10 @@ export default function CourseListContent() {
         <SkeletonCard size='sm' />
       </div>
     )
+  }
+
+  const handleNavigateCreateCourse = () => {
+    router.push('/resource/course/create')
   }
 
   if (!courseData || courseData.data.items.length === 0) {
@@ -108,6 +117,15 @@ export default function CourseListContent() {
             </div>
           </div>
         ))}
+        {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? null : (
+          <div
+            className='shadow-6 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-9.5 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
+            onClick={handleNavigateCreateCourse}
+          >
+            <PlusCircle size={70} className='text-gray-500' />
+            <p className='mt-4 text-sm font-medium text-gray-500'>Create New Course</p>
+          </div>
+        )}
       </div>
 
       {courseData.data.totalPages > 1 && (

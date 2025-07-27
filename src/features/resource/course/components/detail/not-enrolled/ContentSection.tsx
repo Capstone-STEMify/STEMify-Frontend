@@ -11,10 +11,14 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { useEffect } from 'react'
 import { SDropDown } from '@/components/shared/SDropDown'
+import { UserRole } from '@/types/userRole'
 
 export default function ContentSection() {
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const auth = useAppSelector((state) => state.auth)
+  const userRole = auth.user?.role || UserRole.GUEST
+
   const lessonsQuery = useAppSelector((state) => state.lesson)
   useEffect(() => {
     dispatch(setPageSize(8))
@@ -89,24 +93,26 @@ export default function ContentSection() {
           {lessons?.data.items.map((lesson, index) => (
             <CardLayout key={index} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
               <div className='flex min-h-0 flex-1 flex-col'>
-                <div className='absolute top-2 right-2 text-white'>
-                  <SDropDown
-                    trigger={
-                      <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
-                    }
-                    items={[
-                      <p onClick={() => handleNavigateUpsertLesson(lesson.id)} key='update' className='text-sm'>
-                        Update Lesson
-                      </p>,
-                      <p key='add-to-course' className='text-sm'>
-                        Add to Course
-                      </p>,
-                      <p key='share' className='text-sm'>
-                        Share
-                      </p>
-                    ]}
-                  />
-                </div>
+                {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? null : (
+                  <div className='absolute top-2 right-2 text-white'>
+                    <SDropDown
+                      trigger={
+                        <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
+                      }
+                      items={[
+                        <p onClick={() => handleNavigateUpsertLesson(lesson.id)} key='update' className='text-sm'>
+                          Update Lesson
+                        </p>,
+                        <p key='add-to-course' className='text-sm'>
+                          Add to Course
+                        </p>,
+                        <p key='share' className='text-sm'>
+                          Share
+                        </p>
+                      ]}
+                    />
+                  </div>
+                )}
                 <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
                 <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
                 <div className='mt-auto flex items-center gap-2'>
@@ -116,13 +122,15 @@ export default function ContentSection() {
               </div>
             </CardLayout>
           ))}
-          <div
-            className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-            onClick={() => handleNavigateUpsertLesson()}
-          >
-            <PlusCircle size={70} className='text-gray-500' />
-            <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>
-          </div>
+          {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? null : (
+            <div
+              className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
+              onClick={() => handleNavigateUpsertLesson()}
+            >
+              <PlusCircle size={70} className='text-gray-500' />
+              <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>
+            </div>
+          )}
         </div>
         {lessons.data.totalPages > 1 && (
           <SPagination

@@ -54,19 +54,9 @@ export default function LessonDetail() {
     <div className='bg-light pb-20'>
       <div className='container mx-auto max-w-7xl py-6'>
         <div className='mx-8'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-5'>
-              <BackButton />
-              <SBreadcrumb title='Intro: Wetlands Biome' size={'md'} color={'yellow'} weight={'semibold'} />
-            </div>
-            <div className='flex items-center gap-5'>
-              <Button onClick={handleUpdate} className='bg-amber-custom-400'>
-                Update Lesson
-              </Button>
-              <Button onClick={handleCreate} className='bg-sky-custom-300'>
-                Create Lesson
-              </Button>
-            </div>
+          <div className='flex items-center gap-5'>
+            <BackButton />
+            <SBreadcrumb title='Intro: Wetlands Biome' size={'md'} color={'yellow'} weight={'semibold'} />
           </div>
 
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>

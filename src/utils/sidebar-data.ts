@@ -45,12 +45,12 @@ export function getSidebarData(role: UserRole, auth: AuthState) {
         title: 'Home',
         url: `${baseURL}`,
         icon: Home
-      },
-      {
-        title: 'Announcements',
-        url: `${baseURL}/announcements`,
-        icon: Megaphone
       }
+      // {
+      //   title: 'Announcements',
+      //   url: `${baseURL}/announcements`,
+      //   icon: Megaphone
+      // }
     ],
     [UserRole.TEACHER]: [
       {
@@ -75,12 +75,12 @@ export function getSidebarData(role: UserRole, auth: AuthState) {
         title: 'Home',
         url: `${baseURL}`,
         icon: Home
-      },
-      {
-        title: 'Announcements',
-        url: `${baseURL}/announcements`,
-        icon: Megaphone
       }
+      // {
+      //   title: 'Announcements',
+      //   url: `${baseURL}/announcements`,
+      //   icon: Megaphone
+      // }
     ],
     [UserRole.GUEST]: []
   }
@@ -99,7 +99,7 @@ export function getSidebarData(role: UserRole, auth: AuthState) {
     [UserRole.ADMIN]: [],
     [UserRole.STAFF]: [
       { title: 'Create', url: `/resource/course/create`, icon: SquareTerminal },
-      { title: 'List', url: `/resource/course/list`, icon: Bot },
+      { title: 'List', url: `/resource/courses`, icon: Bot },
       { title: 'Update', url: `/resource/course/update/1`, icon: Bot }
     ],
     [UserRole.GUEST]: []
@@ -156,8 +156,8 @@ export function getSidebarData(role: UserRole, auth: AuthState) {
     ],
     [UserRole.ADMIN]: [],
     [UserRole.STAFF]: [
-      { title: 'STEM Program', url: `${baseURL}/project/stem`, icon: Frame },
-      { title: 'Science Fair', url: `${baseURL}/project/science`, icon: Map }
+      { title: 'STEM Program', url: `${baseURL}/project/stem`, icon: Frame }
+      // { title: 'Science Fair', url: `${baseURL}/project/science`, icon: Map }
     ],
     [UserRole.GUEST]: []
   }

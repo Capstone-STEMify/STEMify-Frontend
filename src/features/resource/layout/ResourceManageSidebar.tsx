@@ -26,13 +26,13 @@ export function ResourceManageSidebar({
   const data = getSidebarData(role, auth)
   return (
     <Sidebar className='top-(--header-height) h-[calc(100svh-var(--header-height))]!' collapsible='icon' {...props}>
-      <SidebarHeader>
+      {/* <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarSwitcher label='Resource' items={data.teams} />
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarHeader>
+      </SidebarHeader> */}
       <SidebarContent>
         <SidbarNavGeneral items={data.navGenral} />
         <SidebarNavGroup label='Course' items={data.navCourse} />
