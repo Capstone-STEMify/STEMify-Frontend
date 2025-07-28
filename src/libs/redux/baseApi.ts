@@ -43,7 +43,7 @@ export const customFetchBaseQueryWithErrorHandling = async (
         break
       case 401:
         toast.error(message || 'Unauthorized! Please sign in for access')
-        signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
+        // signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
         break
       case 403:
         toast.error(message || 'Forbidden')

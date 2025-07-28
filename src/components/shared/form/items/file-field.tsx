@@ -54,8 +54,8 @@ export default function FileField({ previewUrlFromServer, accept = '*', label = 
   }, [field.state.value, previewUrlFromServer])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    field.handleChange(file || null)
+    const file = e.target.files?.[0] ?? null
+    field.handleChange(file)
   }
 
   const renderPreview = () => {
@@ -82,9 +82,7 @@ export default function FileField({ previewUrlFromServer, accept = '*', label = 
           <h3 className='mb-3 text-xl font-semibold text-gray-800'>{label}</h3>
           <div className='relative rounded-2xl border-2 border-dashed border-gray-300 p-8 text-center'>
             {renderPreview()}
-            <p className='my-2 text-gray-600'>
-              Drag & drop or click to upload
-            </p>
+            <p className='my-2 text-gray-600'>Drag & drop or click to upload</p>
             <Button type='button' className='rounded-full px-4 py-2' onClick={() => fileInputRef.current?.click()}>
               Choose File
             </Button>

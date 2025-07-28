@@ -20,7 +20,9 @@ export const SelectField = ({ label, options, placeholder }: SelectFieldProps) =
   return (
     <div className='space-y-2'>
       <div className='space-y-1'>
-        <Label htmlFor={field.name}>{label}</Label>
+        <Label htmlFor={field.name} className='text-lg font-bold'>
+          {label}
+        </Label>
         <Select value={field.state.value} onValueChange={(value) => field.handleChange(value)}>
           <SelectTrigger id={field.name} onBlur={field.handleBlur} className='w-full'>
             <SelectValue placeholder={placeholder} />
