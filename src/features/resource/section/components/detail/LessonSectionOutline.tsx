@@ -1,6 +1,4 @@
-import { Button } from '@/components/shadcn/button'
 import { Section } from '@/features/resource/section/types/section.type'
-import { useModal } from '@/providers/ModalProvider'
 import { cn } from '@/utils/shadcn/utils'
 import { Check } from 'lucide-react'
 
@@ -15,15 +13,10 @@ export default function LessonSectionOutline({
   selectedSectionId,
   onSelectSection
 }: LessonSectionOutlineProps) {
-  const { openModal } = useModal()
-
   if (!sectionData || sectionData.length === 0) {
     return <div className='flex h-screen items-center justify-center'>No Sections Available</div>
   }
 
-  const handleAddSection = (lessonId: number) => {
-    openModal('addSection')
-  }
   return (
     <div className='px-4'>
       <h1 className='text-lg font-semibold'>Sections</h1>
@@ -47,12 +40,6 @@ export default function LessonSectionOutline({
               </button>
             )
           })}
-        <Button
-          className='mt-4 bg-sky-300'
-          onClick={() => openModal('addSection', { lessonId: sectionData[0].lessonId })}
-        >
-          Add New Section
-        </Button>
       </div>
     </div>
   )
