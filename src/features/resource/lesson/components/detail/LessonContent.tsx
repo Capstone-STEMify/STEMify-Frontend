@@ -4,7 +4,7 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import { useGetContentByIdQuery, useSearchContentQuery } from '@/features/content/api/contentApi'
+import { useSearchContentQuery } from '@/features/content/api/contentApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import {
   useSearchStudentProgressQuery,
@@ -15,6 +15,8 @@ import { ProgressStatus } from '@/features/student-progress/types/studentProgres
 import { toast } from 'sonner'
 import { Button } from '@/components/shadcn/button'
 import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
+import MDEditor from '@uiw/react-md-editor'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
 
 type LessonContentProps = {
   sectionId: number
@@ -66,9 +68,18 @@ export default function LessonContent({ sectionId, token, courseId, lessonId }: 
       <div className='flex min-h-[650px] flex-col gap-6 p-6'>
         {content.data.items.map((c) => (
           <div key={c.id} className='prose flex-1'>
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-              {normalizeMarkdown(c.contentName)}
-            </ReactMarkdown>
+            <ScrollArea className='h-[650px]'>
+              <MDEditor.Markdown
+                source={normalizeMarkdown(c.contentName)}
+                style={{
+                  backgroundColor: 'white',
+                  color: 'black',
+                  padding: '1rem',
+                  borderRadius: '8px'
+                }}
+                data-color-mode='light' // ép chế độ light
+              />
+            </ScrollArea>
           </div>
         ))}
 

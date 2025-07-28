@@ -1,21 +1,213 @@
 'use client'
-import { useSearchSectionQuery } from '@/features/resource/section/api/sectionApi'
-import LessonSections from './SectionsInLesson'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { SCard } from '@/components/shared/card/SCard'
+import React, { useEffect } from 'react'
+import {
+  useGetSectionByIdQuery,
+  useCreateSectionMutation,
+  useUpdateSectionMutation,
+  useSearchSectionQuery
+} from '@/features/resource/section/api/sectionApi'
+import { z } from 'zod'
+import { useAppForm } from '@/components/shared/form/items'
+import { toast } from 'sonner'
 import { useParams } from 'next/navigation'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
-export default function Page() {
-  const { lessonId } = useParams()
+// Zod schema for section data validation
+const sectionSchema = z.object({
+  description: z.string().min(1, 'Description is required'),
+  duration: z.number().min(0, 'Duration must be a non-negative number'),
+  orderIndex: z.number().min(0, 'Order index must be a non-negative number'),
+  lessonId: z.number().positive('Lesson ID must be a positive number')
+})
+
+type SectionFormData = z.infer<typeof sectionSchema>
+
+// Default values for a new section
+const defaultSectionData: Omit<SectionFormData, 'lessonId'> = {
+  description: '',
+  duration: 0,
+  orderIndex: 0 // Will be recalculated on submit
+}
+
+interface UpsertSectionProps {
+  lessonId?: number
+  sectionId?: number
+  onSuccess?: () => void
+}
+
+export default function UpsertSection({
+  lessonId: propLessonId,
+  sectionId: propSectionId,
+  onSuccess
+}: UpsertSectionProps) {
+  const params = useParams()
   const token = useAppSelector((state) => state.auth.token)
-  const { data, isLoading } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !token })
-  console.log('Sections data:', data)
-  if (isLoading) {
-    return <div>Loading...</div>
+
+  // Get lessonId and sectionId from URL and parse them to numbers
+  const lessonIdRaw = propLessonId ?? params?.lessonId
+  const sectionIdRaw = propSectionId ?? params?.sectionId
+
+  const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
+  const sectionId = sectionIdRaw ? Number(Array.isArray(sectionIdRaw) ? sectionIdRaw[0] : sectionIdRaw) : undefined
+
+  // Fetch section data if sectionId exists (for editing)
+  const { data: sectionData, isLoading: isSectionLoading } = useGetSectionByIdQuery(sectionId as number, {
+    skip: !sectionId || !token
+  })
+
+  // Fetch all sections for the current lessonId to determine the next orderIndex
+  // Only fetch when creating a new section (no sectionId)
+
+  const { data: allSectionsData, isLoading: areAllSectionsLoading } = useSearchSectionQuery(
+    { lessonId },
+    { skip: !lessonId || !!sectionId || !token }
+  )
+
+  // API mutations for creating and updating a section
+  const [createSection] = useCreateSectionMutation()
+  const [updateSection] = useUpdateSectionMutation()
+
+  // Initialize the form
+  const form = useAppForm({
+    defaultValues: sectionData?.data
+      ? {
+          description: sectionData.data.description || '',
+          duration: sectionData.data.duration || 0,
+          orderIndex: sectionData.data.orderIndex || 0,
+          lessonId: sectionData.data.lessonId || lessonId || 0
+        }
+      : { ...defaultSectionData, lessonId: lessonId || 0 },
+
+    onSubmit: async ({ value }) => {
+      try {
+        if (!lessonId) {
+          toast.error('Lesson ID is missing.')
+          return
+        }
+
+        if (sectionId) {
+          // UPDATE (PATCH) an existing section
+          const updatePayload = {
+            description: value.description,
+            duration: value.duration,
+            status: 'Published'
+          }
+          // The payload must be wrapped in a 'body' property
+          await updateSection({ id: sectionId, body: updatePayload }).unwrap()
+          toast.success('Section updated successfully')
+        } else {
+          // CREATE (POST) a new section
+          if (!allSectionsData || !allSectionsData.data) {
+            toast.error('Could not determine the section order. Please try again.')
+            return
+          }
+
+          const sections = allSectionsData.data.items || []
+          const nextOrderIndex = sections.length > 0 ? Math.max(...sections.map((s) => s.orderIndex)) + 1 : 1
+
+          const createPayload = {
+            description: value.description,
+            duration: value.duration,
+            orderIndex: nextOrderIndex, // Use the calculated orderIndex
+            lessonId
+          }
+          await createSection(createPayload).unwrap()
+          toast.success('Section created successfully with Order Index: ' + nextOrderIndex)
+          form.reset()
+        }
+      } catch (err) {
+        toast.error('Failed to submit section')
+        console.error(err)
+      }
+    }
+  })
+
+  // Effect to reset form values when fetched section data changes (for editing)
+  useEffect(() => {
+    if (sectionData?.data) {
+      form.reset({
+        description: sectionData.data.description || '',
+        duration: sectionData.data.duration || 0,
+        orderIndex: sectionData.data.orderIndex || 0,
+        lessonId: sectionData.data.lessonId || lessonId || 0
+      })
+    }
+  }, [sectionData, lessonId, form])
+
+  // Show loading state while fetching data for the edit form or the sections list for creation
+  if (isSectionLoading || (!sectionId && areAllSectionsLoading)) {
+    return (
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
   }
+
+  if (!lessonId && !isSectionLoading) {
+    return (
+      <div className='flex h-screen items-center justify-center text-lg font-semibold text-red-600'>
+        Invalid Lesson ID. Cannot create or edit a section.
+      </div>
+    )
+  }
+
   return (
-    <div>
-      <h2 className='mb-6 text-center text-5xl font-bold'>Lesson Sections</h2>
-      <LessonSections sections={data?.data.items || []} />
-    </div>
+    <form
+      className='space-y-8 p-4 md:p-8'
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+    >
+      <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
+        {/* Left Column: Description */}
+        <div className='lg:col-span-2'>
+          <SCard
+            className='gap-3'
+            title='Section Description'
+            description='Provide a detailed description for this section'
+            content={
+              <form.AppField
+                name='description'
+                children={(field) => (
+                  <field.TextAreaField
+                    placeholder='Enter section description'
+                    className='h-32 rounded-lg border-gray-300'
+                  />
+                )}
+              />
+            }
+          />
+        </div>
+
+        {/* Right Column: Inputs */}
+        <div className='space-y-6'>
+          <SCard
+            className='w-full gap-3'
+            title='Duration (minutes)'
+            description='Enter the estimated duration of the section'
+            content={
+              <form.AppField
+                name='duration'
+                children={(field) => (
+                  <field.TextField<number>
+                    type='number'
+                    placeholder='e.g., 15'
+                    className='rounded-lg border-gray-300'
+                  />
+                )}
+              />
+            }
+          />
+          <form.AppForm>
+            <form.SubmitButton className='w-full rounded-full py-3 text-lg'>
+              {sectionId ? 'Update Section' : 'Create Section'}
+            </form.SubmitButton>
+          </form.AppForm>
+        </div>
+      </div>
+    </form>
   )
 }

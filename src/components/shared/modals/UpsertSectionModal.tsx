@@ -1,19 +1,16 @@
 'use client'
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/shadcn/dialog'
-import { Button } from '@/components/shadcn/button'
 import { useModal } from '../../../providers/ModalProvider'
-import { useCreateSectionMutation } from '@/features/resource/section/api/sectionApi'
-import CreateSection from '@/features/resource/section/components/CreateSection'
+import CreateSection from '@/features/resource/section/components/UpsertSection'
 interface ConfirmModalProps {
   lessonId: number
-  message: string
+  sectionId: number
   onConfirm: () => void
 }
-export default function AddSectionModal({ lessonId, message, onConfirm }: ConfirmModalProps) {
+export default function AddSectionModal({ lessonId, sectionId, onConfirm }: ConfirmModalProps) {
   const { closeModal } = useModal()
-
-  const handleConfirm = () => {
+  const handleSuccess = () => {
     onConfirm()
     closeModal()
   }
@@ -24,7 +21,7 @@ export default function AddSectionModal({ lessonId, message, onConfirm }: Confir
         <DialogHeader>
           <DialogTitle>Create new section</DialogTitle>
         </DialogHeader>
-        <CreateSection />
+        <CreateSection lessonId={lessonId} sectionId={sectionId} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>
   )

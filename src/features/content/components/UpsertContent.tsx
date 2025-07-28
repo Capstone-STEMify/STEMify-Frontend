@@ -13,6 +13,7 @@ import {
 } from '@/features/content/api/contentApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import removeMd from 'remove-markdown'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 const contentSchema = z.object({
   contentName: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
@@ -137,7 +138,9 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
 
   if (isContentLoading) {
     return (
-      <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>Loading...</div>
+      <div>
+        <LoadingComponent size={50} />
+      </div>
     )
   }
 

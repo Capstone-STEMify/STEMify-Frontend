@@ -12,6 +12,7 @@ import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { useParams, useSearchParams } from 'next/navigation'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
@@ -131,7 +132,9 @@ export default function UpsertLesson() {
 
   if (isLessonLoading) {
     return (
-      <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>Loading...</div>
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
     )
   }
 

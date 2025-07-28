@@ -10,7 +10,7 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
   const dispatch = useAppDispatch()
   const lessonStatus = useAppSelector((state) => state.studentProgress.selectedLessonStatus)
   const enrollmentId = useAppSelector((state) => state.studentProgress.selectedEnrollmentId)
-
+  console.log('lessonStatus', lessonStatus)
   const [startLesson, { isLoading }] = useUpdateStudentProgressMutation()
 
   const handleStartLearningLesson = async () => {

@@ -1,8 +1,11 @@
 import ContentManagement from '@/features/content/components/UpsertContent'
+import { useDeleteSectionMutation, useUpdateSectionMutation } from '@/features/resource/section/api/sectionApi'
 import { Section } from '@/features/resource/section/types/section.type'
+import { useModal } from '@/providers/ModalProvider'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Edit, Trash2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function SectionItems({
   section,
@@ -13,6 +16,8 @@ export default function SectionItems({
   isExpanded: (id: number) => boolean
   toggleSection: (id: number) => void
 }) {
+  const { openModal } = useModal()
+  const [deleteSection] = useDeleteSectionMutation()
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: section.id })
 
   const style = {
@@ -28,20 +33,31 @@ export default function SectionItems({
             ⠿
           </span>
           <h3 className='text-lg font-semibold'>{section.description}</h3>
-          <Trash2
-            size={15}
-            className='text-red-500'
-            onClick={(e) => {
-              e.stopPropagation()
-              console.log('Delete section:', section.id)
-            }}
-          />
+
           <Edit
             size={15}
             className='text-sky-600'
             onClick={(e) => {
               e.stopPropagation()
-              console.log('Edit section:', section.id)
+              openModal('upsertSection', { sectionId: section.id })
+            }}
+          />
+          <Trash2
+            size={15}
+            className='text-red-500'
+            onClick={(e) => {
+              e.stopPropagation()
+              openModal('confirm', {
+                message: 'Are you sure you want to delete this section?',
+                onConfirm: async () => {
+                  try {
+                    await deleteSection(section.id).unwrap()
+                    toast.success('Section deleted.')
+                  } catch (err) {
+                    toast.error('Failed to delete section.')
+                  }
+                }
+              })
             }}
           />
         </div>{' '}

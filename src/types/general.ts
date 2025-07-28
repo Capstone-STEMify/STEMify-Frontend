@@ -7,7 +7,7 @@ export type AvatarProps = {
 }
 
 // Modal
-export type ModalType = null | 'userForm' | 'confirm' | 'profile' | 'image' | 'enroll' | 'editImage' | 'addSection'
+export type ModalType = null | 'userForm' | 'confirm' | 'profile' | 'image' | 'enroll' | 'editImage' | 'upsertSection'
 
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
