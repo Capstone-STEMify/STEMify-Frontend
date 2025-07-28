@@ -125,6 +125,25 @@ export function getSidebarData(role: UserRole, auth: AuthState) {
     [UserRole.GUEST]: []
   }
 
+  const navSectionContent: Record<UserRole, (typeof base)['navSecondary']> = {
+    [UserRole.STUDENT]: [
+      { title: 'Create', url: `/resource/lesson/create`, icon: SquareTerminal },
+      { title: 'List', url: `/resource/lesson/list`, icon: Bot },
+      { title: 'Update', url: `/resource/lesson/update/1`, icon: Bot }
+    ],
+    [UserRole.TEACHER]: [
+      { title: 'Create', url: `/resource/lesson/create`, icon: SquareTerminal },
+      { title: 'List', url: `/resource/lesson/list`, icon: Bot },
+      { title: 'Update', url: `/resource/lesson/update/1`, icon: Bot }
+    ],
+    [UserRole.ADMIN]: [],
+    [UserRole.STAFF]: [
+      { title: 'List', url: `/resource/section/list`, icon: Bot },
+      { title: 'Create', url: `/resource/section/create`, icon: SquareTerminal }
+    ],
+    [UserRole.GUEST]: []
+  }
+
   const navMain: Record<UserRole, (typeof base)['navSecondary']> = {
     [UserRole.STUDENT]: [
       { title: 'Course', url: `/resource/course/create`, icon: SquareTerminal },
@@ -168,6 +187,7 @@ export function getSidebarData(role: UserRole, auth: AuthState) {
     navMain: navMain[role],
     navProject: navProject[role],
     navCourse: navCourse[role],
-    navLesson: navLesson[role]
+    navLesson: navLesson[role],
+    navSectionContent: navSectionContent[role]
   }
 }

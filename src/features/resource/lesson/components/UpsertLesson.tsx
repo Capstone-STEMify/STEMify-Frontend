@@ -137,12 +137,15 @@ export default function UpsertLesson() {
 
   return (
     <form
-      className='mx-auto min-h-screen max-w-7xl space-y-8 p-4 md:p-8'
+      className='space-y-4'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
       }}
     >
+      <h1 className='mb-5 text-center text-5xl font-bold text-gray-800'>
+        {lessonId ? 'Update Lesson' : 'Create New Lesson'}
+      </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
           <div className='flex justify-between gap-2'>
@@ -170,7 +173,7 @@ export default function UpsertLesson() {
                 children={(field) => (
                   <field.TextAreaField
                     placeholder='Enter lesson description'
-                    className='h-30 rounded-lg border-gray-300'
+                    className='h-50 rounded-lg border-gray-300'
                   />
                 )}
               />

@@ -142,7 +142,7 @@ export default function CreateSection() {
 
   return (
     <form
-      className='mx-auto w-[750px] space-y-8 p-4 md:p-8'
+      className='space-y-8 p-4 md:p-8'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
@@ -188,15 +188,12 @@ export default function CreateSection() {
               />
             }
           />
+          <form.AppForm>
+            <form.SubmitButton className='w-full rounded-full py-3 text-lg'>
+              {sectionId ? 'Update Section' : 'Create Section'}
+            </form.SubmitButton>
+          </form.AppForm>
         </div>
-      </div>
-
-      <div>
-        <form.AppForm>
-          <form.SubmitButton className='w-full rounded-full py-3 text-lg'>
-            {sectionId ? 'Update Section' : 'Create Section'}
-          </form.SubmitButton>
-        </form.AppForm>
       </div>
     </form>
   )

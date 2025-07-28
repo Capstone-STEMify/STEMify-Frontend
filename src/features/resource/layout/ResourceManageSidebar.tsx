@@ -37,7 +37,7 @@ export function ResourceManageSidebar({
         <SidbarNavGeneral items={data.navGenral} />
         <SidebarNavGroup label='Course' items={data.navCourse} />
         <SidebarNavGroup label='Lesson' items={data.navLesson} />
-
+        <SidebarNavGroup label='Section & Content' items={data.navSectionContent} />
         <SidebarNavWithActions label='Straw Lab' items={data.navProject} />
         <SidebarNavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>

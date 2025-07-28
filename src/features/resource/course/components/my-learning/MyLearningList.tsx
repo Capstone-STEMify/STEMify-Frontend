@@ -22,7 +22,6 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
   const dispatch = useAppDispatch()
   const enrollParams = useAppSelector((state) => state.enrollment)
   const { data: enroll, isLoading } = useSearchEnrollmentQuery({ studentId, ...enrollParams }, { skip: !studentId })
-
   useEffect(() => {
     dispatch(setPageSize(6))
   }, [dispatch])
