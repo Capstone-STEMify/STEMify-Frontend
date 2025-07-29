@@ -77,7 +77,7 @@ export default function ContentSection() {
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
               <div
                 className='shadow-6 mx-auto mb-30 flex h-[350px] w-[264px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 px-4 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-                onClick={() => handleNavigateUpsertLesson()}
+                onClick={() => openModal('upsertLesson', { courseIdModal: Number(courseId) })}
               >
                 <PlusCircle size={70} className='text-gray-500' />
                 <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>

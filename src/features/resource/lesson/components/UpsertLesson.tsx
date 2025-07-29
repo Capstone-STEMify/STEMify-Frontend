@@ -183,7 +183,7 @@ export default function UpsertLesson({ courseIdModal }: UpsertLessonProps) {
       </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
-          {course?.data && (
+          {/* {course?.data && (
             <SCard
               content={
                 <>
@@ -192,7 +192,7 @@ export default function UpsertLesson({ courseIdModal }: UpsertLessonProps) {
                 </>
               }
             ></SCard>
-          )}
+          )} */}
           <div className='flex justify-between gap-2'>
             <SCard
               className='w-full gap-3'
