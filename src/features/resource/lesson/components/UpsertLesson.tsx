@@ -51,13 +51,17 @@ function buildLessonFormData(data: LessonFormData, userId: string) {
   return formData
 }
 
-export default function UpsertLesson() {
+interface UpsertLessonProps {
+  courseIdModal?: number
+}
+
+export default function UpsertLesson({ courseIdModal }: UpsertLessonProps) {
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
   const courseIdFromQuery = courseId ? Number(courseId) : 0
+  const finalCourseId = courseIdModal || courseIdFromQuery
 
   const userId = useAppSelector((state) => state.auth.user?.userId)
-  console.log('userId', userId)
 
   const { openModal } = useModal()
   const imageFieldRef = useRef<any>(null)
@@ -70,12 +74,12 @@ export default function UpsertLesson() {
   const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(lessonId as number, {
     skip: !lessonId
   })
-  const { data: course, isLoading } = useGetCourseByIdQuery(courseIdFromQuery, {
-    skip: !courseIdFromQuery || courseIdFromQuery <= 0
+  const { data: course, isLoading } = useGetCourseByIdQuery(finalCourseId, {
+    skip: !finalCourseId || finalCourseId <= 0
   })
+
   const isCreating = !lessonId
-  const showCourseMissingError =
-    isCreating && !isLoading && (!courseIdFromQuery || courseIdFromQuery <= 0 || !course?.data)
+  const showCourseMissingError = isCreating && !isLoading && (!finalCourseId || !course?.data)
 
   const [createLesson] = useCreateLessonWithFormDataMutation()
   const [updateLesson] = useUpdateLessonWithFormDataMutation()
@@ -91,7 +95,7 @@ export default function UpsertLesson() {
         }
       : {
           ...defaultLessonData,
-          courseId: courseIdFromQuery
+          courseId: finalCourseId
         },
     // validators: {
     //   onChange: lessonSchema
@@ -237,7 +241,7 @@ export default function UpsertLesson() {
             </Button>
           </div> */}
           <form.AppForm>
-            <form.SubmitButton className='w-full rounded-full'>Submit</form.SubmitButton>
+            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>Submit</form.SubmitButton>
           </form.AppForm>
         </div>
       </div>

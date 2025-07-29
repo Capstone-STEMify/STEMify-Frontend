@@ -165,7 +165,7 @@ export default function UpsertSection({
         {sectionId ? 'Update Section' : 'Create New Section'}
       </h1>
 
-      <div className='w-5xl space-y-10'>
+      <div className='w-xl space-y-10'>
         {/* Left Column: Description */}
         <div className='lg:col-span-2'>
           <SCard
@@ -176,7 +176,7 @@ export default function UpsertSection({
               <form.AppField
                 name='description'
                 children={(field) => (
-                  <field.TextAreaField placeholder='Enter section title' className='h-32 rounded-lg border-gray-300' />
+                  <field.TextField placeholder='Enter section title' className='h-8 rounded-lg border-gray-300' />
                 )}
               />
             }
@@ -203,7 +203,7 @@ export default function UpsertSection({
             }
           />
           <form.AppForm>
-            <form.SubmitButton className='w-full rounded-full py-3 text-lg'>
+            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full py-3 text-lg'>
               {sectionId ? 'Update Section' : 'Create Section'}
             </form.SubmitButton>
           </form.AppForm>
