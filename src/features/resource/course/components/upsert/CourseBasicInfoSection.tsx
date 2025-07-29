@@ -21,7 +21,7 @@ export default function CourseBasicInfoSection({ form }: CourseBasicInfoSectionP
           />
         }
       />
-      <SCard
+      {/* <SCard
         className='gap-3'
         title='Course Slug'
         description='Enter a descriptive slug for the course'
@@ -33,7 +33,7 @@ export default function CourseBasicInfoSection({ form }: CourseBasicInfoSectionP
             )}
           />
         }
-      />
+      /> */}
       <SCard
         className='gap-3'
         title='Course Description'

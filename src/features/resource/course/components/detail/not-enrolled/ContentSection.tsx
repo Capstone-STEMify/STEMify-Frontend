@@ -12,6 +12,7 @@ import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/less
 import { useEffect } from 'react'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { UserRole } from '@/types/userRole'
+import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 
 export default function ContentSection() {
   const router = useRouter()
@@ -46,12 +47,22 @@ export default function ContentSection() {
             </div>
           </div>
         ) : (
-          <div
-            className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-            onClick={() => handleNavigateUpsertLesson()}
-          >
-            <PlusCircle size={70} className='text-gray-500' />
-            <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>
+          <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+            <div className='mt-30 mb-12 text-center'>
+              <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>Lesson Content</h2>
+              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>
+                Engaging activities designed to inspire learning and growth
+              </p>
+            </div>
+            <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
+              <div
+                className='shadow-6 mx-auto mb-30 flex h-[350px] w-[264px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 px-4 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
+                onClick={() => handleNavigateUpsertLesson()}
+              >
+                <PlusCircle size={70} className='text-gray-500' />
+                <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>
+              </div>
+            </div>
           </div>
         )}
       </>
@@ -81,22 +92,6 @@ export default function ContentSection() {
           <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>
             Engaging activities designed to inspire learning and growth
           </p>
-
-          {/* Stats */}
-          <div className='flex flex-wrap justify-center gap-6 text-sm'>
-            <div className='flex items-center gap-2 text-gray-700'>
-              <BookOpen className='h-4 w-4 text-blue-600' />
-              <span className='font-medium'>6 activities</span>
-            </div>
-            <div className='flex items-center gap-2 text-gray-700'>
-              <Target className='h-4 w-4 text-green-600' />
-              <span className='font-medium'>Interactive lessons</span>
-            </div>
-            <div className='flex items-center gap-2 text-gray-700'>
-              <Clock className='h-4 w-4 text-purple-600' />
-              <span className='font-medium'>3 hours total</span>
-            </div>
-          </div>
         </div>
 
         {/* Lesson Cards Section */}

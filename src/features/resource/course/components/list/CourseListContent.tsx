@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { useEffect } from 'react'
 import { UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
+import { formatDuration } from '@/utils/index'
 
 export default function CourseListContent() {
   const router = useRouter()
@@ -91,8 +92,8 @@ export default function CourseListContent() {
                 </div>
 
                 <div className='mt-auto flex flex-wrap items-center gap-2'>
-                  <Badge className='bg-sky-custom-300'>Age 10–12</Badge>
-                  <Badge className='bg-red-300'>45:00</Badge>
+                  <Badge className='bg-sky-custom-300'>{course.ageRangeLabel}</Badge>
+                  <Badge className='bg-red-300'>{formatDuration(course.duration)}</Badge>
                 </div>
               </CardLayout>
             </Link>

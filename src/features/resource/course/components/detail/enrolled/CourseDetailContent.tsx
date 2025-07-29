@@ -19,6 +19,7 @@ import {
 } from '@/features/student-progress/slice/studentProgressSlice'
 import { ProgressStatus, StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { formatDuration } from '@/utils/index'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { EllipsisVertical } from 'lucide-react'
 import Link from 'next/link'
@@ -108,8 +109,8 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
                 </div>
 
                 <div className='mt-auto flex flex-wrap items-center gap-2'>
-                  <Badge className='bg-sky-custom-300'>Age 10–12</Badge>
-                  <Badge className='bg-red-300'>45:00</Badge>
+                  <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
+                  <Badge className='bg-red-300'>{formatDuration(lesson.duration)}</Badge>
                 </div>
               </CardLayout>
             </Link>

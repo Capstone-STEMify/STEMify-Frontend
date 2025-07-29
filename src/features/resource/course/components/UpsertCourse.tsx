@@ -174,12 +174,19 @@ export default function UpsertCourse() {
         if (courseId) {
           const patchFormData = PatchCourseFormData(initialCourseDataRef.current!, value)
           const res = await updateCourse({ id: Number(courseId), body: patchFormData }).unwrap()
-          toast.success(`Course updated successfully (${res.data.title})`)
+          toast.success(`Course updated successfully (${res.data.title})`, {
+            action: {
+              label: 'View Course',
+              onClick: () => {
+                router.push(`/resource/course/${res.data.id}`)
+              }
+            }
+          })
         } else {
           const formData = CreateCourseFormData(value)
           const res = await createCourse(formData).unwrap()
           toast.success(`Course created successfully (${res.data.title})`)
-          router.push(`resource/course/${res.data.id}`)
+          router.push(`/resource/course/${res.data.id}`)
         }
       } catch (err) {
         toast.error('Failed to submit course')
