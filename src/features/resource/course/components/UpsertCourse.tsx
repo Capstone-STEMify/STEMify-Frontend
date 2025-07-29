@@ -146,7 +146,7 @@ function mapCourseToFormData(
 }
 
 export default function UpsertCourse() {
-  const auth = useAppSelector((state) => state.auth)
+  const userId = useAppSelector((state) => state.auth.user?.userId)
   const { openModal } = useModal()
   const router = useRouter()
   const imageFieldRef = useRef<any>(null)
@@ -185,7 +185,7 @@ export default function UpsertCourse() {
             }
           })
         } else {
-          const formData = CreateCourseFormData(value, auth.user?.userId!)
+          const formData = CreateCourseFormData(value, userId!)
           const res = await createCourse(formData).unwrap()
           toast.success(`Course created successfully (${res.data.title})`)
           router.push(`/resource/course/${res.data.id}`)
@@ -214,11 +214,10 @@ export default function UpsertCourse() {
       standardItems.length > 0
     ) {
       const mapped = mapCourseToFormData(courseData, skillItems, categoryItems, standardItems)
-      console.log('MAPPED skills:', mapped.skills) // 👀 kiểm tra kỹ
 
       form.reset(mapped)
       initialCourseDataRef.current = mapped
-      didResetOnce.current = true // ✅ Không reset lại nữa
+      didResetOnce.current = true
     }
   }, [courseData, skills, categories, standards])
 
