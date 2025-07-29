@@ -53,9 +53,10 @@ function buildLessonFormData(data: LessonFormData, userId: string) {
 
 interface UpsertLessonProps {
   courseIdModal?: number
+  onSuccess?: () => void
 }
 
-export default function UpsertLesson({ courseIdModal }: UpsertLessonProps) {
+export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonProps) {
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
   const courseIdFromQuery = courseId ? Number(courseId) : 0
@@ -112,6 +113,7 @@ export default function UpsertLesson({ courseIdModal }: UpsertLessonProps) {
           toast.success('Lesson created successfully')
           form.reset()
         }
+        onSuccess?.()
       } catch (err) {
         toast.error('Failed to submit lesson')
         console.error(err)

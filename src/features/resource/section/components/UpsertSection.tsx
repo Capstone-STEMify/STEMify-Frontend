@@ -14,21 +14,17 @@ import { useParams } from 'next/navigation'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
-// Zod schema for section data validation
 const sectionSchema = z.object({
   description: z.string().min(1, 'Description is required'),
   duration: z.number().min(0, 'Duration must be a non-negative number'),
-  orderIndex: z.number().min(0, 'Order index must be a non-negative number'),
   lessonId: z.number().positive('Lesson ID must be a positive number')
 })
 
 type SectionFormData = z.infer<typeof sectionSchema>
 
-// Default values for a new section
 const defaultSectionData: Omit<SectionFormData, 'lessonId'> = {
   description: '',
-  duration: 0,
-  orderIndex: 0 // Will be recalculated on submit
+  duration: 0
 }
 
 interface UpsertSectionProps {
@@ -57,14 +53,6 @@ export default function UpsertSection({
     skip: !sectionId || !token
   })
 
-  // Fetch all sections for the current lessonId to determine the next orderIndex
-  // Only fetch when creating a new section (no sectionId)
-
-  const { data: allSectionsData, isLoading: areAllSectionsLoading } = useSearchSectionQuery(
-    { lessonId },
-    { skip: !lessonId || !!sectionId || !token }
-  )
-
   // API mutations for creating and updating a section
   const [createSection] = useCreateSectionMutation()
   const [updateSection] = useUpdateSectionMutation()
@@ -75,7 +63,6 @@ export default function UpsertSection({
       ? {
           description: sectionData.data.description || '',
           duration: sectionData.data.duration || 0,
-          orderIndex: sectionData.data.orderIndex || 0,
           lessonId: sectionData.data.lessonId || lessonId || 0
         }
       : { ...defaultSectionData, lessonId: lessonId || 0 },
@@ -88,35 +75,24 @@ export default function UpsertSection({
         }
 
         if (sectionId) {
-          // UPDATE (PATCH) an existing section
           const updatePayload = {
             description: value.description,
             duration: value.duration,
             status: 'Published'
           }
-          // The payload must be wrapped in a 'body' property
           await updateSection({ id: sectionId, body: updatePayload }).unwrap()
           toast.success('Section updated successfully')
         } else {
-          // CREATE (POST) a new section
-          if (!allSectionsData || !allSectionsData.data) {
-            toast.error('Could not determine the section order. Please try again.')
-            return
-          }
-
-          const sections = allSectionsData.data.items || []
-          const nextOrderIndex = sections.length > 0 ? Math.max(...sections.map((s) => s.orderIndex)) + 1 : 1
-
           const createPayload = {
             description: value.description,
             duration: value.duration,
-            orderIndex: nextOrderIndex, // Use the calculated orderIndex
             lessonId
           }
-          await createSection(createPayload).unwrap()
-          toast.success('Section created successfully with Order Index: ' + nextOrderIndex)
+          const res = await createSection(createPayload).unwrap()
+          toast.success('Section created successfully: ' + res.data.description)
           form.reset()
         }
+        onSuccess?.()
       } catch (err) {
         toast.error('Failed to submit section')
         console.error(err)
@@ -130,14 +106,13 @@ export default function UpsertSection({
       form.reset({
         description: sectionData.data.description || '',
         duration: sectionData.data.duration || 0,
-        orderIndex: sectionData.data.orderIndex || 0,
         lessonId: sectionData.data.lessonId || lessonId || 0
       })
     }
   }, [sectionData, lessonId, form])
 
   // Show loading state while fetching data for the edit form or the sections list for creation
-  if (isSectionLoading || (!sectionId && areAllSectionsLoading)) {
+  if (isSectionLoading) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />
