@@ -42,7 +42,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   const { data: lessonProgressData } = useSearchStudentProgressQuery(enrollmentId ? { enrollmentId } : skipToken)
   const progressMap = lessonProgressData?.data?.items?.reduce(
     (acc, progress) => {
-      if ('lessonId' in progress) {
+      if ('lessonId' in progress && progress.lessonId !== undefined) {
         acc[progress.lessonId] = progress.status
       }
       return acc
@@ -84,7 +84,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   }
 
   return (
-    <ScrollArea className='h-fit px-5 select-none'>
+    <ScrollArea className='h-[600px] px-5 select-none'>
       <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
         {lessonData.data.items.map((lesson) => (
           <div key={lesson.id} className='relative flex gap-1'>

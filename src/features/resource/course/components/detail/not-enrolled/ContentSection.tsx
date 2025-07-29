@@ -67,7 +67,7 @@ export default function ContentSection() {
             </div>
           </div>
         ) : (
-          <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+          <div className='mx-auto mt-24 max-w-7xl px-4 sm:px-6 lg:px-8'>
             <div className='mt-30 mb-12 text-center'>
               <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>Lesson Content</h2>
               <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>

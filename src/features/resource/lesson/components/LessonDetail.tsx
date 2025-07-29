@@ -1,39 +1,49 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/shadcn/resizable'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import BackButton from '@/components/shared/button/BackButton'
 import STabs from '@/components/shared/STabs'
-import dynamic from 'next/dynamic'
 import { useParams, useRouter } from 'next/navigation'
 import { useSearchSectionQuery } from '@/features/resource/section/api/sectionApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
-import { Button } from '@/components/shadcn/button'
-
-const LessonDescription = dynamic(() => import('@/features/resource/lesson/components/detail/LessonDescription'), {
-  ssr: false
-})
-
-const LessonContent = dynamic(() => import('@/features/resource/lesson/components/detail/LessonContent'), {
-  ssr: false
-})
-
-const LessonOutline = dynamic(() => import('@/features/resource/lesson/components/detail/LessonOutline'), {
-  ssr: false
-})
+import LessonDescription from '@/features/resource/lesson/components/detail/LessonDescription'
+import LessonOutline from '@/features/resource/lesson/components/detail/LessonOutline'
+import LessonContent from '@/features/resource/lesson/components/detail/LessonContent'
+import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
+import { useSearchStudentProgressQuery } from '@/features/student-progress/api/studentProgressApi'
 
 export default function LessonDetail() {
+  const userId = useAppSelector((state) => state.auth.user?.userId)
   const { lessonId } = useParams()
-  const router = useRouter()
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null)
   const token = useAppSelector((state) => state.auth.token)
   const { data: lessonData, isLoading: lessonLoading } = useGetLessonByIdQuery(Number(lessonId))
   const { data: sections } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !lessonId || !token })
 
-  const sectionData = useMemo(() => {
-    return sections?.data?.items ?? []
-  }, [sections?.data?.items])
+  const courseId = lessonData?.data.courseId
+
+  const sectionData = sections?.data?.items ?? []
+
+  const { data: enrollment } = useSearchEnrollmentQuery(
+    { studentId: userId, courseId },
+    {
+      skip: !userId || !courseId
+    }
+  )
+
+  const enrollmentId = enrollment?.data.items?.[0]?.id || 0
+
+  const { data: sectionStatus } = useSearchStudentProgressQuery(
+    {
+      enrollmentId: enrollmentId,
+      lessonId: Number(lessonId)
+    },
+    {
+      skip: !enrollmentId
+    }
+  )
 
   useEffect(() => {
     if (sectionData.length > 0) {
@@ -41,14 +51,6 @@ export default function LessonDetail() {
       setSelectedSectionId(firstSection.id)
     }
   }, [sectionData])
-
-  const handleUpdate = () => {
-    router.push(`/resource/lesson/update/${lessonData?.data.id}`)
-  }
-
-  const handleCreate = () => {
-    router.push(`/resource/lesson/create`)
-  }
 
   return (
     <div className='bg-light pb-20'>
@@ -82,6 +84,7 @@ export default function LessonDetail() {
                         sectionData={sectionData}
                         selectedSectionId={selectedSectionId}
                         onSelectSection={setSelectedSectionId}
+                        sectionStatus={sectionStatus}
                       />
                     )
                   }
@@ -96,8 +99,9 @@ export default function LessonDetail() {
                 <LessonContent
                   sectionId={selectedSectionId}
                   token={token}
-                  courseId={lessonData?.data.courseId}
                   lessonId={Number(lessonId)}
+                  sectionStatus={sectionStatus}
+                  enrollmentId={enrollmentId}
                 />
               ) : (
                 <div className=''>No Content Available For This Section</div>

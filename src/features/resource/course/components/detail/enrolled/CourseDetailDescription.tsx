@@ -125,7 +125,7 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
           </div>
         </section>
       </ScrollArea>
-      <CourseAction />
+      <CourseAction courseId={courseData.data.id} />
     </div>
   )
 }

@@ -66,6 +66,10 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
     router.push(`/resource/course/update/${course.id}`)
   }
 
+  const handleSubmitToReview = () => {
+    toast.info('Your course is submitted for review. Please wait for approval.')
+  }
+
   return (
     <motion.section initial='hidden' animate='visible' variants={fadeInUp} className='mt-8 bg-sky-50 pt-14 pb-26'>
       <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>
@@ -109,13 +113,22 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
                 </Button>
               </div>
             ) : (
-              <Button
-                onClick={handleUpdate}
-                className='text-sky-custom-600 border-sky-custom-600 w-50 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
-              >
-                <Edit className='h-5 w-5' />
-                Update Course
-              </Button>
+              <div className='flex gap-5'>
+                <Button
+                  onClick={handleUpdate}
+                  className='text-sky-custom-600 border-sky-custom-600 w-50 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
+                >
+                  <Edit className='h-5 w-5' />
+                  Update Course
+                </Button>
+                <Button
+                  onClick={handleSubmitToReview}
+                  className='text-sky-custom-600 border-sky-custom-600 w-60 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
+                >
+                  <Edit className='h-5 w-5' />
+                  Submit to Review
+                </Button>
+              </div>
             )}
           </div>
 
