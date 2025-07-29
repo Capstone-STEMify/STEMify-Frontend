@@ -9,6 +9,7 @@ import PhotoUploadModal from '@/components/shared/modals/UploadImageModal'
 import EnrollModal from '@/components/shared/modals/EnrollModal'
 import EditImageModal from '@/components/shared/modals/EditImageModal'
 import UpsertSectionModal from '@/components/shared/modals/UpsertSectionModal'
+import UpsertLessonModal from '@/components/shared/modals/UpsertLessonModal'
 
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
@@ -43,6 +44,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'image' && <PhotoUploadModal {...modalProps} />}
       {modalType === 'enroll' && <EnrollModal {...modalProps} />}
       {modalType === 'editImage' && <EditImageModal {...modalProps} />}
+      {modalType === 'upsertLesson' && <UpsertLessonModal {...modalProps} />}
       {modalType === 'upsertSection' && <UpsertSectionModal {...modalProps} />}
     </ModalContext.Provider>
   )

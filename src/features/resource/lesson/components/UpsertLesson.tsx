@@ -51,13 +51,18 @@ function buildLessonFormData(data: LessonFormData, userId: string) {
   return formData
 }
 
-export default function UpsertLesson() {
+interface UpsertLessonProps {
+  courseIdModal?: number
+  onSuccess?: () => void
+}
+
+export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonProps) {
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
   const courseIdFromQuery = courseId ? Number(courseId) : 0
+  const finalCourseId = courseIdModal || courseIdFromQuery
 
   const userId = useAppSelector((state) => state.auth.user?.userId)
-  console.log('userId', userId)
 
   const { openModal } = useModal()
   const imageFieldRef = useRef<any>(null)
@@ -70,12 +75,12 @@ export default function UpsertLesson() {
   const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(lessonId as number, {
     skip: !lessonId
   })
-  const { data: course, isLoading } = useGetCourseByIdQuery(courseIdFromQuery, {
-    skip: !courseIdFromQuery || courseIdFromQuery <= 0
+  const { data: course, isLoading } = useGetCourseByIdQuery(finalCourseId, {
+    skip: !finalCourseId || finalCourseId <= 0
   })
+
   const isCreating = !lessonId
-  const showCourseMissingError =
-    isCreating && !isLoading && (!courseIdFromQuery || courseIdFromQuery <= 0 || !course?.data)
+  const showCourseMissingError = isCreating && !isLoading && (!finalCourseId || !course?.data)
 
   const [createLesson] = useCreateLessonWithFormDataMutation()
   const [updateLesson] = useUpdateLessonWithFormDataMutation()
@@ -91,7 +96,7 @@ export default function UpsertLesson() {
         }
       : {
           ...defaultLessonData,
-          courseId: courseIdFromQuery
+          courseId: finalCourseId
         },
     // validators: {
     //   onChange: lessonSchema
@@ -108,6 +113,7 @@ export default function UpsertLesson() {
           toast.success('Lesson created successfully')
           form.reset()
         }
+        onSuccess?.()
       } catch (err) {
         toast.error('Failed to submit lesson')
         console.error(err)
@@ -179,7 +185,7 @@ export default function UpsertLesson() {
       </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
-          {course?.data && (
+          {/* {course?.data && (
             <SCard
               content={
                 <>
@@ -188,7 +194,7 @@ export default function UpsertLesson() {
                 </>
               }
             ></SCard>
-          )}
+          )} */}
           <div className='flex justify-between gap-2'>
             <SCard
               className='w-full gap-3'
@@ -237,7 +243,7 @@ export default function UpsertLesson() {
             </Button>
           </div> */}
           <form.AppForm>
-            <form.SubmitButton className='w-full rounded-full'>Submit</form.SubmitButton>
+            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>Submit</form.SubmitButton>
           </form.AppForm>
         </div>
       </div>

@@ -5,16 +5,19 @@ import { Badge } from '@/components/shadcn/badge'
 import { formatDuration } from '@/utils/index'
 import { BookOpen, Clock, EllipsisVertical, PlusCircle, Target } from 'lucide-react'
 import { SPagination } from '@/components/shared/SPagination'
-import { useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
+import { useDeleteLessonMutation, useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { useEffect } from 'react'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { UserRole } from '@/types/userRole'
+import { useModal } from '@/providers/ModalProvider'
+import { toast } from 'sonner'
 
 export default function ContentSection() {
   const router = useRouter()
+  const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const auth = useAppSelector((state) => state.auth)
   const userRole = auth.user?.role || UserRole.GUEST
@@ -28,6 +31,7 @@ export default function ContentSection() {
   const courseId = params.courseId
 
   const { data: lessons } = useSearchLessonQuery({ ...lessonsQuery, courseId: Number(courseId) })
+  const [deleteLesson] = useDeleteLessonMutation()
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
@@ -39,6 +43,17 @@ export default function ContentSection() {
       router.push(`/resource/lesson/create?courseId=${courseId}`)
     }
   }
+
+  const handleDeleteLesson = async (lessonId: number) => {
+    try {
+      await deleteLesson(lessonId).unwrap()
+      toast.success('Lesson deleted successfully')
+    } catch (error) {
+      toast.error('Failed to delete lesson')
+      console.error('Delete lesson error:', error)
+    }
+  }
+
   if (!lessons?.data || lessons.data.items.length === 0) {
     return (
       <>
@@ -62,7 +77,7 @@ export default function ContentSection() {
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
               <div
                 className='shadow-6 mx-auto mb-30 flex h-[350px] w-[264px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 px-4 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-                onClick={() => handleNavigateUpsertLesson()}
+                onClick={() => openModal('upsertLesson', { courseIdModal: Number(courseId) })}
               >
                 <PlusCircle size={70} className='text-gray-500' />
                 <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>
@@ -104,14 +119,27 @@ export default function ContentSection() {
                         <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
                       }
                       items={[
+                        <p
+                          key='view-detail'
+                          className='text-sm'
+                          onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
+                        >
+                          View Detail
+                        </p>,
                         <p onClick={() => handleNavigateUpsertLesson(lesson.id)} key='update' className='text-sm'>
                           Update Lesson
                         </p>,
-                        <p key='add-to-course' className='text-sm'>
-                          Add to Course
-                        </p>,
-                        <p key='share' className='text-sm'>
-                          Share
+                        <p
+                          key='delete-lesson'
+                          className='text-sm'
+                          onClick={() =>
+                            openModal('confirm', {
+                              message: 'Are you sure you want to delete this lesson?',
+                              onConfirm: () => handleDeleteLesson(lesson.id)
+                            })
+                          }
+                        >
+                          Delete Lesson
                         </p>
                       ]}
                     />
@@ -129,7 +157,7 @@ export default function ContentSection() {
           {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? null : (
             <div
               className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-              onClick={() => handleNavigateUpsertLesson()}
+              onClick={() => openModal('upsertLesson', { courseIdModal: Number(courseId) })}
             >
               <PlusCircle size={70} className='text-gray-500' />
               <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>

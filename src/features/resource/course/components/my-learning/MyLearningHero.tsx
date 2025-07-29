@@ -4,39 +4,34 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { PaginatedResult } from '@/types/baseModel'
 import { Enrollment } from '@/features/enrollment/types/enrollment.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 
-const mockMyCourses = {
-  courses: [
-    { progress: { progressPercentage: 100 } },
-    { progress: { progressPercentage: 87 } },
-    { progress: { progressPercentage: 65 } },
-    { progress: { progressPercentage: 100 } },
-    { progress: { progressPercentage: 43 } },
-    { progress: { progressPercentage: 92 } },
-    { progress: { progressPercentage: 100 } },
-    { progress: { progressPercentage: 78 } },
-    { progress: { progressPercentage: 56 } },
-    { progress: { progressPercentage: 34 } },
-    { progress: { progressPercentage: 89 } },
-    { progress: { progressPercentage: 100 } }
-  ]
-}
 type MyLearningHeroProps = {
   course?: PaginatedResult<Enrollment>
+  studentId?: string
 }
 
-export function MyLearningHero({ course }: MyLearningHeroProps) {
+export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
+  const auth = useAppSelector((state) => state.auth)
+  const { data } = useSearchEnrollmentQuery({ studentId: studentId }, { skip: !auth.token })
+  
+  const items = data?.data?.items || [];
+  
   const totalCourses = course?.items.length || 0
-  const averageProgress = 0
-  const completedCourses = 0
-  const inProgressCourses = 0
-  const notStartedCourses = 0
+  const inProgressCourses = items.filter(course => course.status === "InProgress").length;
+  const completedCourses = items.filter(course => course.status === "Completed").length;
+  const cancelledCourses = items.filter(course => course.status === "Dropped").length;
+
+  const averageProgress = totalCourses > 0 
+    ? Math.round((completedCourses / totalCourses) * 100) 
+    : 0;
 
   const stats = [
     { label: 'Total Courses', value: totalCourses },
     { label: 'Completed', value: completedCourses },
-    { label: 'In Progress', value: `${totalCourses - completedCourses - notStartedCourses}` },
-    { label: 'Not Start', value: notStartedCourses }
+    { label: 'In Progress', value: inProgressCourses },
+    { label: 'Cancelled', value: cancelledCourses }
   ]
 
   return (
