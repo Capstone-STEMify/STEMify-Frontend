@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Nunito, Reem_Kufi } from 'next/font/google'
 import './globals.css'
 import Providers from '@/providers/Providers'
+import SignalRProvider from '@/providers/SignalRProvider'
+import { auth } from '@/libs/auth/authOptions'
 
 const geistNunito = Nunito({
   variable: '--font-geist-nunito',
@@ -23,7 +25,7 @@ export const metadata: Metadata = {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode
@@ -32,7 +34,9 @@ export default function RootLayout({
     <html lang='en' className={`${fontReemKufi.className}`}>
       <body className={`antialiased`}>
         <Providers>
-          <main>{children}</main>
+          <main>
+            <SignalRProvider>{children}</SignalRProvider>
+          </main>
         </Providers>
       </body>
     </html>
