@@ -12,7 +12,7 @@ export default function LessonUpdatePage() {
         </div>
       }
     >
-      <div className='mx-auto min-h-screen max-w-7xl space-y-10 p-4 md:p-8'>
+      <div className='mb-20 space-y-15'>
         <UpsertLesson />
         <UpsertSection />
       </div>

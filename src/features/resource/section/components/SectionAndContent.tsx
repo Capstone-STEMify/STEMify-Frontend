@@ -71,7 +71,7 @@ export default function SectionAndContent() {
 
   return (
     <div>
-      <h2 className='mb-6 text-center text-4xl font-bold'>Section & Content</h2>
+      <h2 className='mb-6 text-center text-4xl font-bold'>Manage Sections</h2>
 
       <div className='transition-all'>
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>

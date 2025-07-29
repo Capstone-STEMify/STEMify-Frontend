@@ -18,9 +18,7 @@ export default function AddSectionModal({ lessonId, sectionId, onConfirm }: Conf
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create new section</DialogTitle>
-        </DialogHeader>
+        <DialogHeader></DialogHeader>
         <CreateSection lessonId={lessonId} sectionId={sectionId} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>

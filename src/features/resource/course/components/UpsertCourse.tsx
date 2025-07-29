@@ -245,7 +245,7 @@ export default function UpsertCourse() {
 
   return (
     <form
-      className='mx-auto min-h-screen max-w-7xl space-y-8 p-4 md:p-8'
+      className='mb-20'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()

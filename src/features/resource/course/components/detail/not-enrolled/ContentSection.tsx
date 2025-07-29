@@ -12,7 +12,6 @@ import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/less
 import { useEffect } from 'react'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { UserRole } from '@/types/userRole'
-import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 
 export default function ContentSection() {
   const router = useRouter()
@@ -33,7 +32,13 @@ export default function ContentSection() {
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
-
+  const handleNavigateUpsertLesson = (lessonId?: number) => {
+    if (lessonId) {
+      router.push(`/resource/lesson/update/${lessonId}`)
+    } else {
+      router.push(`/resource/lesson/create?courseId=${courseId}`)
+    }
+  }
   if (!lessons?.data || lessons.data.items.length === 0) {
     return (
       <>
@@ -67,14 +72,6 @@ export default function ContentSection() {
         )}
       </>
     )
-  }
-
-  const handleNavigateUpsertLesson = (lessonId?: number) => {
-    if (lessonId) {
-      router.push(`/resource/lesson/update/${lessonId}`)
-    } else {
-      router.push(`/resource/lesson/create?courseId=${courseId}`)
-    }
   }
 
   return (

@@ -11,7 +11,7 @@ export default function CreateLessonPage() {
         </div>
       }
     >
-      <div className='mx-auto min-h-screen max-w-[1300px] space-y-10 p-4 md:p-8'>
+      <div className='mb-20'>
         <UpsertLesson />
       </div>
     </Suspense>
