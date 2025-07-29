@@ -27,7 +27,9 @@ export enum CourseStatus {
   DRAFT = 'Draft',
   PUBLISHED = 'Published',
   ARCHIVED = 'Archived',
-  DELETED = 'Deleted'
+  DELETED = 'Deleted',
+  INREVIEW = 'InReview',
+  REJECTED = 'Rejected'
 }
 
 // Query

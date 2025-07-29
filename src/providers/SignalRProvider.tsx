@@ -1,21 +1,25 @@
 'use client'
-import { User } from 'next-auth'
-import React, { ReactNode, useCallback, useEffect, useRef } from 'react'
+import { ReactNode, useCallback, useEffect, useRef } from 'react'
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
-import { Enrollment } from '@/features/enrollment/types/enrollment.type'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { addNotification } from '@/features/notification/slice/notificationRealtimeSlice'
+import { Notification } from '@/features/notification/types/notification.type'
+import { notificationApi } from '@/features/notification/api/notificationApi'
 
 type Props = {
   children: ReactNode
 }
 export default function SignalRProvider({ children }: Props) {
+  const dispatch = useAppDispatch()
   const connection = useRef<HubConnection | null>(null)
 
-  const handleReceiveNotification = useCallback((notification: Notification) => {
-    // Handle the enrollment created event
-    // Update the bell notification count or show a toast
-    console.log('Received notification:', notification)
-  }, [])
+  const handleReceiveNotification = useCallback(
+    (notification: Notification) => {
+      dispatch(notificationApi.util.invalidateTags(['Notification']))
+      console.log('handleReceiveNotification')
+    },
+    [dispatch]
+  )
 
   const accessToken = useAppSelector((state) => state.auth.token)
   useEffect(() => {
@@ -24,6 +28,7 @@ export default function SignalRProvider({ children }: Props) {
         .withUrl('http://localhost:7004/api/notifications', {
           accessTokenFactory: () => accessToken || ''
         })
+        // .configureLogging('none')
         .withAutomaticReconnect()
         .build()
 

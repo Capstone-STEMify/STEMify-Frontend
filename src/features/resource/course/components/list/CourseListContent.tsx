@@ -7,7 +7,7 @@ import { SDropDown } from '@/components/shared/SDropDown'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
 import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
-import { CourseQueryParams } from '@/features/resource/course/types/course.type'
+import { CourseQueryParams, CourseStatus } from '@/features/resource/course/types/course.type'
 import { setPageIndex, setPageSize } from '@/features/resource/course/slice/courseSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { EllipsisVertical, PlusCircle } from 'lucide-react'
@@ -37,7 +37,8 @@ export default function CourseListContent() {
     standardId: courseParams.standardId,
     pageNumber: courseParams.pageNumber,
     pageSize: courseParams.pageSize,
-    search: courseParams.search
+    search: courseParams.search,
+    status: [UserRole.STUDENT, UserRole.GUEST].includes(userRole as UserRole) ? CourseStatus.PUBLISHED : undefined
   }
 
   const { data: courseData, isLoading } = useSearchCourseQuery(queryParams)

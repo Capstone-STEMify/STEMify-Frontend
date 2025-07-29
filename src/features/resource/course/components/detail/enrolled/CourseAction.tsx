@@ -1,26 +1,51 @@
 import { Button } from '@/components/shadcn/button'
+import { useUpdateCourseMutation, useUpdateCourseWithFormDataMutation } from '@/features/resource/course/api/courseApi'
+import { Course, CourseStatus } from '@/features/resource/course/types/course.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { UserRole } from '@/types/userRole'
 import { Bookmark, Plus, Share2 } from 'lucide-react'
 
 type CourseActionProps = {
-  courseId: number
+  course: Course
 }
 
-export default function CourseAction({ courseId }: CourseActionProps) {
-  const handleProcessCourse = (courseId: number) => {
-    // Process the course with the given courseId
+export default function CourseAction({ course }: CourseActionProps) {
+  const userRole = useAppSelector((state) => state.auth.user?.role)
+  const [updateCourseStatus] = useUpdateCourseWithFormDataMutation()
+  const handleUpdateCourseStatus = async (status: CourseStatus) => {
+    try {
+      const formData = new FormData()
+      formData.append('status', status)
+      await updateCourseStatus({
+        id: course.id,
+        body: formData
+      }).unwrap()
+    } catch (error) {
+      console.error('Failed to update course status:', error)
+    }
   }
   return (
     <section className='mt-3 flex flex-col items-center'>
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
 
-      <div className='mt-4 space-x-8'>
-        <Button size='default' className='shadow-6 bg-red-500 font-semibold text-white' onClick={() => handleProcessCourse(courseId)}>
-          <div className='text-xs uppercase'>Reject</div>
-        </Button>
-        <Button size='default' className='shadow-6 bg-green-500 font-semibold text-white' onClick={() => handleProcessCourse(courseId)}>
-          <div className='text-xs uppercase'>Approve</div>
-        </Button>
-      </div>
+      {userRole === UserRole.ADMIN && course.status != CourseStatus.PUBLISHED && (
+        <div className='mt-4 space-x-8'>
+          <Button
+            size='default'
+            className='shadow-6 bg-red-500 font-semibold text-white'
+            onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
+          >
+            <div className='text-xs uppercase'>Reject</div>
+          </Button>
+          <Button
+            size='default'
+            className='shadow-6 bg-green-500 font-semibold text-white'
+            onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
+          >
+            <div className='text-xs uppercase'>Approve</div>
+          </Button>
+        </div>
+      )}
 
       {/* Secondary actions */}
       <div className='text-muted-foreground mt-4 grid w-full max-w-md grid-cols-3 gap-6 text-center text-xs'>

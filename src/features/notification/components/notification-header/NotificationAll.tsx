@@ -1,13 +1,16 @@
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { Skeleton } from '@/components/shadcn/skeleton'
-import { useSearchNotificationQuery } from '@/features/notification/api/notificationApi'
+import { useSearchNotificationQuery, useUpdateNotificationMutation } from '@/features/notification/api/notificationApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { formatDate } from '@/utils/index'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function NotificationAll() {
+  const router = useRouter()
   const userId = useAppSelector((state) => state.auth.user?.userId)
-  const { data, isLoading, isFetching } = useSearchNotificationQuery({ userId })
+  const { data, isLoading, isFetching } = useSearchNotificationQuery({ userId }, { skip: !userId })
+  const [makeAsRead] = useUpdateNotificationMutation()
   if (isLoading || isFetching) {
     return (
       <div className='space-y-3 p-4'>
@@ -24,6 +27,18 @@ export default function NotificationAll() {
       </div>
     )
   }
+
+  const handleNotificationClick = async (clickUrl: string, isRead: boolean, id: number) => {
+    if (!isRead) {
+      try {
+        await makeAsRead({ id, body: { isRead: true } })
+      } catch (error) {
+        console.error('Error marking notification as read:', error)
+      }
+    }
+    router.push(clickUrl)
+  }
+
   return (
     <ScrollArea className='-mx-1 h-[320px]'>
       {data && data.data.items.length > 0 ? (
@@ -35,7 +50,7 @@ export default function NotificationAll() {
             >
               {!noti.isRead && <div className='absolute top-3 right-3 h-2 w-2 rounded-full bg-blue-500'></div>}
 
-              <div className='pr-4'>
+              <div className='pr-4' onClick={() => handleNotificationClick(noti.clickUrl, noti.isRead, noti.id)}>
                 <h5 className='mb-1 line-clamp-1 text-sm font-medium text-gray-900 dark:text-gray-100'>{noti.title}</h5>
                 <p className='mb-2 line-clamp-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400'>
                   {noti.message}

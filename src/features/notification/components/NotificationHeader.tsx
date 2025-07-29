@@ -1,24 +1,7 @@
 'use client'
-import { Skeleton } from '@/components/shadcn/skeleton'
 import STabs from '@/components/shared/STabs'
-import { useLazySearchNotificationQuery } from '@/features/notification/api/notificationApi'
-import { NotificationOrderBy } from '@/features/notification/types/notification.type'
-import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
-
-const NotificationAll = dynamic(
-  () => import('@/features/notification/components/notification-header/NotificationAll'),
-  {
-    ssr: false
-  }
-)
-
-const NotificationUnread = dynamic(
-  () => import('@/features/notification/components/notification-header/NotificationUnread'),
-  {
-    ssr: false
-  }
-)
+import NotificationAll from '@/features/notification/components/notification-header/NotificationAll'
+import NotificationUnread from '@/features/notification/components/notification-header/NotificationUnread'
 
 export default function NotificationHeader() {
   return (

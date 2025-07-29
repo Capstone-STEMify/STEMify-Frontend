@@ -24,6 +24,7 @@ import {
   createCourseSchema,
   updateCourseSchema
 } from '@/features/resource/course/forms/courseForm.schema'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 const defaultCourseData: CourseFormData = {
   title: '',
@@ -41,12 +42,12 @@ const defaultCourseData: CourseFormData = {
  * @param data The course form data to be submitted.
  * @returns The FormData object containing the course form data.
  */
-function CreateCourseFormData(data: CourseFormData) {
+function CreateCourseFormData(data: CourseFormData, userId: string) {
   const formData = new FormData()
   formData.append('title', data.title)
   formData.append('description', data.description)
   formData.append('ageRangeId', data.ageRangeId.toString())
-  formData.append('createdByUserId', 'b7e2c7e2-8c1a-4e2e-9b2a-2e7c8e2a1b3c')
+  formData.append('createdByUserId', userId)
   formData.append('courseId', '1')
   formData.append('slug', data.slug ?? '')
 
@@ -145,6 +146,7 @@ function mapCourseToFormData(
 }
 
 export default function UpsertCourse() {
+  const auth = useAppSelector((state) => state.auth)
   const { openModal } = useModal()
   const router = useRouter()
   const imageFieldRef = useRef<any>(null)
@@ -183,7 +185,7 @@ export default function UpsertCourse() {
             }
           })
         } else {
-          const formData = CreateCourseFormData(value)
+          const formData = CreateCourseFormData(value, auth.user?.userId!)
           const res = await createCourse(formData).unwrap()
           toast.success(`Course created successfully (${res.data.title})`)
           router.push(`/resource/course/${res.data.id}`)

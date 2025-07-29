@@ -2,9 +2,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/pop
 import { Bell, BellRing, Gift } from 'lucide-react'
 import SToolTip from '@/components/shared/SToolTip'
 import NotificationHeader from '@/features/notification/components/NotificationHeader'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { useSearchNotificationQuery } from '@/features/notification/api/notificationApi'
 
 export default function HeaderEvent() {
-  const notificationCount = 1
+  const { token, user } = useAppSelector((state) => state.auth)
+  const { data } = useSearchNotificationQuery({ userId: user?.userId }, { skip: !token })
+
+  const unreadCount = data?.data?.items?.filter((item) => !item.isRead).length || 0
 
   return (
     <>
@@ -13,10 +18,14 @@ export default function HeaderEvent() {
           <div
             className={`group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 ease-in-out hover:bg-blue-200 hover:shadow-md`}
           >
-            {notificationCount > 0 ? (
+            {unreadCount > 0 ? (
               <>
                 <BellRing className='h-6 w-6 text-blue-500 transition-transform duration-200 group-hover:rotate-12' />
-                <span className='absolute -top-0 -right-0 mt-1 mr-0.5 h-1.25 w-1.25 rounded-full bg-red-500' />
+                {unreadCount > 0 && (
+                  <span className='absolute -top-1 -right-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-xs font-semibold text-white'>
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
               </>
             ) : (
               <Bell className='h-6 w-6 text-blue-500 transition-transform duration-200 group-hover:rotate-12' />
