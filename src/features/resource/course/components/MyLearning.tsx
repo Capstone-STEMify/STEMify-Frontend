@@ -15,7 +15,7 @@ export function MyLearning() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }} className='bg-gray-50'>
-      <MyLearningHero course={course} />
+      <MyLearningHero course={course} studentId={studentId}/>
 
       {/* Course Content Section */}
       <section className='bg-sky-50 py-12'>

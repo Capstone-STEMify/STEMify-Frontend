@@ -58,7 +58,7 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
       </div>
       <div className='space-y-6'>
         {/* Course Grid */}
-        <div className='grid grid-cols-1 place-items-center sm:grid-cols-2 xl:grid-cols-3'>
+        <div className='grid grid-cols-1 place-items-center sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6'>
           {enroll.data.items.map((e) => (
             <Link
               href={`/resource/course/${e.courseId}`}
