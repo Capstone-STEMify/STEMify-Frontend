@@ -3,7 +3,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import CourseBasicInfoSection from '@/features/resource/course/components/upsert/CourseBasicInfoSection'
 import CourseAttributesSection from '@/features/resource/course/components/upsert/CourseAttributesSection'
 import { toast } from 'sonner'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Course } from '../types/course.type'
 import { useModal } from '@/providers/ModalProvider'
 import { ApiSuccessResponse } from '@/types/baseModel'
@@ -48,7 +48,7 @@ function CreateCourseFormData(data: CourseFormData) {
   formData.append('ageRangeId', data.ageRangeId.toString())
   formData.append('createdByUserId', 'b7e2c7e2-8c1a-4e2e-9b2a-2e7c8e2a1b3c')
   formData.append('courseId', '1')
-  formData.append('slug', data.slug)
+  formData.append('slug', data.slug ?? '')
 
   data.skills.forEach((skill) => formData.append('SkillIds', skill))
   data.categories.forEach((category) => formData.append('CategoryIds', category))
@@ -71,7 +71,7 @@ function PatchCourseFormData(oldData: CourseFormData, newData: CourseFormData): 
   const formData = new FormData()
 
   if (oldData.title !== newData.title) formData.append('title', newData.title)
-  if (oldData.slug !== newData.slug) formData.append('slug', newData.slug)
+  if (oldData.slug !== newData.slug) formData.append('slug', newData.slug ?? '')
   if (oldData.description !== newData.description) formData.append('description', newData.description)
   if (oldData.ageRangeId !== newData.ageRangeId) formData.append('ageRangeId', newData.ageRangeId)
 
@@ -94,6 +94,18 @@ function PatchCourseFormData(oldData: CourseFormData, newData: CourseFormData): 
   return formData
 }
 
+function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .normalize('NFD') // loại bỏ dấu tiếng Việt
+    .replace(/[\u0300-\u036f]/g, '') // tiếp tục loại dấu
+    .replace(/[^\w\s-]/g, '') // loại ký tự đặc biệt
+    .replace(/\s+/g, '-') // thay khoảng trắng bằng '-'
+    .replace(/-+/g, '-') // gộp nhiều '-' thành một
+    .replace(/^-+|-+$/g, '') // xóa '-' ở đầu và cuối
+}
+
 function mapCourseToFormData(
   course: ApiSuccessResponse<Course>,
   allSkills: any[],
@@ -103,10 +115,21 @@ function mapCourseToFormData(
   const skillNames = course.data.skillNames ?? []
   const categoryNames = course.data.categoryNames ?? []
   const standardNames = course.data.standardNames ?? []
+  console.log('>> skillNames from API:', course.data.skillNames)
+  console.log(
+    '>> allSkills from API:',
+    allSkills.map((s) => s.skillName)
+  )
 
-  const skillIds = allSkills.filter((s) => skillNames.includes(s.skillName)).map((s) => s.id.toString())
-  const categoryIds = allCategories.filter((c) => categoryNames.includes(c.categoryName)).map((c) => c.id.toString())
-  const standardIds = allStandards.filter((s) => standardNames.includes(s.standardName)).map((s) => s.id.toString())
+  const skillIds = allSkills
+    .filter((s) => skillNames.some((n) => n.trim().toLowerCase() === s.skillName.trim().toLowerCase()))
+    .map((s) => s.id.toString())
+  const categoryIds = allCategories
+    .filter((c) => categoryNames.some((n) => n.trim().toLowerCase() === c.categoryName.trim().toLowerCase()))
+    .map((c) => c.id.toString())
+  const standardIds = allStandards
+    .filter((s) => standardNames.some((n) => n.trim().toLowerCase() === s.standardName.trim().toLowerCase()))
+    .map((s) => s.id.toString())
 
   return {
     title: course.data.title ?? '',
@@ -123,6 +146,7 @@ function mapCourseToFormData(
 
 export default function UpsertCourse() {
   const { openModal } = useModal()
+  const router = useRouter()
   const imageFieldRef = useRef<any>(null)
   const params = useParams()
   const courseId = params.courseId
@@ -146,6 +170,7 @@ export default function UpsertCourse() {
     },
     onSubmit: async ({ value }) => {
       try {
+        value.slug = generateSlug(value.title)
         if (courseId) {
           const patchFormData = PatchCourseFormData(initialCourseDataRef.current!, value)
           const res = await updateCourse({ id: Number(courseId), body: patchFormData }).unwrap()
@@ -154,6 +179,7 @@ export default function UpsertCourse() {
           const formData = CreateCourseFormData(value)
           const res = await createCourse(formData).unwrap()
           toast.success(`Course created successfully (${res.data.title})`)
+          router.push(`resource/course/${res.data.id}`)
         }
       } catch (err) {
         toast.error('Failed to submit course')
@@ -164,18 +190,26 @@ export default function UpsertCourse() {
 
   const initialCourseDataRef = useRef<CourseFormData | null>(null)
 
-  useEffect(() => {
-    if (courseData?.data && skills && categories && standards) {
-      const mapped = mapCourseToFormData(
-        courseData,
-        skills?.data?.items ?? [],
-        categories?.data?.items ?? [],
-        standards?.data?.items ?? []
-      )
+  const didResetOnce = useRef(false)
 
-      // console.log('mapped:', mapped)
+  useEffect(() => {
+    const skillItems = skills?.data?.items ?? []
+    const categoryItems = categories?.data?.items ?? []
+    const standardItems = standards?.data?.items ?? []
+
+    if (
+      !didResetOnce.current &&
+      courseData?.data &&
+      skillItems.length > 0 &&
+      categoryItems.length > 0 &&
+      standardItems.length > 0
+    ) {
+      const mapped = mapCourseToFormData(courseData, skillItems, categoryItems, standardItems)
+      console.log('MAPPED skills:', mapped.skills) // 👀 kiểm tra kỹ
+
       form.reset(mapped)
       initialCourseDataRef.current = mapped
+      didResetOnce.current = true // ✅ Không reset lại nữa
     }
   }, [courseData, skills, categories, standards])
 

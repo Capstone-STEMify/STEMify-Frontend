@@ -5,7 +5,7 @@ import { z } from 'zod'
  */
 export const baseCourseSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
-  slug: z.string().min(5, 'Slug must be at least 5 characters long'),
+  slug: z.string().optional(),
   description: z.string().min(50, 'Description must be at least 50 characters long'),
   ageRangeId: z.string().min(1, 'Age range is required'),
   skills: z.array(z.string()).min(1, 'At least one skill is required'),

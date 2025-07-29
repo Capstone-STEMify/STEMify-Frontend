@@ -99,7 +99,6 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
         } else {
           await createContent(formData).unwrap()
           toast.success('Content created successfully')
-          form.reset()
         }
       } catch (err) {
         toast.error('Failed to submit content')

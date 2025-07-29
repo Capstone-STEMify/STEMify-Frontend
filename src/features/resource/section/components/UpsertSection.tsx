@@ -155,12 +155,16 @@ export default function UpsertSection({
 
   return (
     <form
-      className='space-y-8 p-4 md:p-8'
+      className='space-y-8 md:p-4'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
       }}
     >
+      <h1 className='text-center text-3xl font-bold text-gray-800'>
+        {sectionId ? 'Update Section' : 'Create New Section'}
+      </h1>
+
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         {/* Left Column: Description */}
         <div className='lg:col-span-2'>

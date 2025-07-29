@@ -13,6 +13,9 @@ import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { useParams, useSearchParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
+import Link from 'next/link'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
@@ -35,12 +38,13 @@ const defaultLessonData: LessonFormData = {
   imagePreviewUrl: ''
 }
 
-function buildLessonFormData(data: LessonFormData) {
+function buildLessonFormData(data: LessonFormData, userId: string) {
   const formData = new FormData()
   formData.append('Title', data.title || '')
   formData.append('Description', data.description || '')
-  formData.append('createdByUserId', 'b7e2c7e2-8c1a-4e2e-9b2a-2e7c8e2a1b3c')
+  formData.append('createdByUserId', userId)
   formData.append('courseId', data.courseId.toString())
+  formData.append('Status', 'Published')
   if (data.imageUrl) {
     formData.append('Image', data.imageUrl)
   }
@@ -51,6 +55,9 @@ export default function UpsertLesson() {
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
   const courseIdFromQuery = courseId ? Number(courseId) : 0
+
+  const userId = useAppSelector((state) => state.auth.user?.userId)
+  console.log('userId', userId)
 
   const { openModal } = useModal()
   const imageFieldRef = useRef<any>(null)
@@ -63,8 +70,14 @@ export default function UpsertLesson() {
   const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(lessonId as number, {
     skip: !lessonId
   })
+  const { data: course, isLoading } = useGetCourseByIdQuery(courseIdFromQuery, {
+    skip: !courseIdFromQuery || courseIdFromQuery <= 0
+  })
+  const isCreating = !lessonId
+  const showCourseMissingError =
+    isCreating && !isLoading && (!courseIdFromQuery || courseIdFromQuery <= 0 || !course?.data)
 
-  const [createLesson, { data: lessonCreateItem, error }] = useCreateLessonWithFormDataMutation()
+  const [createLesson] = useCreateLessonWithFormDataMutation()
   const [updateLesson] = useUpdateLessonWithFormDataMutation()
 
   // Initialize form with lesson data if it exists
@@ -85,7 +98,7 @@ export default function UpsertLesson() {
     // },
     onSubmit: async ({ value }) => {
       try {
-        const formData = buildLessonFormData(value)
+        const formData = buildLessonFormData(value, userId!)
 
         if (lessonId) {
           await updateLesson({ id: lessonId, formData }).unwrap()
@@ -130,6 +143,21 @@ export default function UpsertLesson() {
     })
   }
 
+  if (showCourseMissingError) {
+    return (
+      <div className='flex h-screen flex-col items-center justify-center gap-4 text-center'>
+        <h2 className='text-2xl font-semibold text-red-600'>Course not found</h2>
+        <p className='text-gray-600'>You need to select a course before creating a lesson.</p>
+        <Link
+          href='/resource/courses'
+          className='mt-4 rounded-lg bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700'
+        >
+          Go to Course List
+        </Link>
+      </div>
+    )
+  }
+
   if (isLessonLoading) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
@@ -151,6 +179,16 @@ export default function UpsertLesson() {
       </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
+          {course?.data && (
+            <SCard
+              content={
+                <>
+                  <h2 className='mb-1 text-lg font-semibold'>Course: {course.data.title}</h2>
+                  <p>{course.data.description}</p>
+                </>
+              }
+            ></SCard>
+          )}
           <div className='flex justify-between gap-2'>
             <SCard
               className='w-full gap-3'

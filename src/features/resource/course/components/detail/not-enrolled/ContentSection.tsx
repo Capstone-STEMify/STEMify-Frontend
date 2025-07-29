@@ -35,14 +35,26 @@ export default function ContentSection() {
 
   if (!lessons?.data || lessons.data.items.length === 0) {
     return (
-      <div className='bg-white py-12'>
-        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-          <div className='text-center'>
-            <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>No Lessons Found</h2>
-            <p className='text-lg text-gray-600'>There are currently no lessons available for this course.</p>
+      <>
+        {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? (
+          <div className='bg-white py-12'>
+            <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+              <div className='text-center'>
+                <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>No Lessons Found</h2>
+                <p className='text-lg text-gray-600'>There are currently no lessons available for this course.</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        ) : (
+          <div
+            className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
+            onClick={() => handleNavigateUpsertLesson()}
+          >
+            <PlusCircle size={70} className='text-gray-500' />
+            <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>
+          </div>
+        )}
+      </>
     )
   }
 
@@ -50,7 +62,7 @@ export default function ContentSection() {
     if (lessonId) {
       router.push(`/resource/lesson/update/${lessonId}`)
     } else {
-      router.push(`/resource/lesson/create`)
+      router.push(`/resource/lesson/create?courseId=${courseId}`)
     }
   }
 
