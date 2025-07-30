@@ -1,6 +1,7 @@
 'use client'
 
 import StemifyLogo from '@/components/shared/StemifyLogo'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
 import { navRoutes } from '@/utils/navRoutes'
 import Link from 'next/link'
@@ -8,7 +9,9 @@ import { usePathname } from 'next/navigation'
 
 export default function HeaderNavigation() {
   const pathname = usePathname()
-  const navItems = navRoutes[UserRole.GUEST]
+  // const navItems = navRoutes[UserRole.GUEST]
+  const userRole = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
+  const navItems = navRoutes[userRole as UserRole]
 
   return (
     <div className='flex h-20 items-center gap-10'>

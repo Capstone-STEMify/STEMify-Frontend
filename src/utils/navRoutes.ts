@@ -2,9 +2,9 @@ import { UserRole } from '@/types/userRole'
 
 export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   [UserRole.ADMIN]: [
-    { name: 'Dashboard', path: '/admin/dashboard' },
-    { name: 'Users', path: '/admin/users' },
-    { name: 'Settings', path: '/admin/settings' }
+    { name: 'Home', path: '/' },
+    { name: 'Resource', path: '/resource' },
+    { name: 'Dashboard', path: '/dashboard' }
   ],
   [UserRole.STUDENT]: [
     { name: 'Home', path: '/' },
@@ -20,7 +20,8 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   ],
   [UserRole.STAFF]: [
     { name: 'Home', path: '/' },
-    { name: 'Resource', path: '/resource' }
+    { name: 'Resource', path: '/resource' },
+    { name: 'Code Lab', path: '/code-lab' }
   ],
   [UserRole.GUEST]: [
     { name: 'Home', path: '/' },
