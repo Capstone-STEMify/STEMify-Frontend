@@ -128,18 +128,20 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
               <div className='flex gap-5'>
                 <Button
                   onClick={handleUpdate}
-                  className='text-sky-custom-600 border-sky-custom-600 w-50 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
+                  className='bg-sky-custom-600 w-45 cursor-pointer rounded-4xl py-6 text-lg text-white'
                 >
                   <Edit className='h-5 w-5' />
                   Update Course
                 </Button>
-                <Button
-                  onClick={handleSubmitToReview}
-                  className='text-sky-custom-600 border-sky-custom-600 w-60 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
-                >
-                  <Edit className='h-5 w-5' />
-                  Submit to Review
-                </Button>
+                {course.status === CourseStatus.DRAFT && (
+                  <Button
+                    onClick={handleSubmitToReview}
+                    className='text-sky-custom-600 border-sky-custom-600 w-60 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
+                  >
+                    <Edit className='h-5 w-5' />
+                    Submit to Review
+                  </Button>
+                )}
               </div>
             )}
           </div>
