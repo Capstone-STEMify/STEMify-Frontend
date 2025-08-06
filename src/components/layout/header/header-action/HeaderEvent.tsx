@@ -1,18 +1,24 @@
+// highlight-next-line
+import { useTranslations } from 'next-intl'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { Bell, BellRing, Gift } from 'lucide-react'
 import SToolTip from '@/components/shared/SToolTip'
 import NotificationHeader from '@/features/notification/components/NotificationHeader'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useSearchNotificationQuery } from '@/features/notification/api/notificationApi'
+import LanguageSwitcher from '../LanguageSwitcher'
 
 export default function HeaderEvent() {
   const { token, user } = useAppSelector((state) => state.auth)
   const { data } = useSearchNotificationQuery({ userId: user?.userId }, { skip: !token })
+  // highlight-next-line
+  const t = useTranslations('Header')
 
   const unreadCount = data?.data?.items?.filter((item) => !item.isRead).length || 0
 
   return (
     <>
+      <LanguageSwitcher />
       <Popover>
         <PopoverTrigger asChild>
           <div
@@ -38,7 +44,9 @@ export default function HeaderEvent() {
         </PopoverContent>
       </Popover>
 
-      <SToolTip content={'Gift'}>
+
+      {/* highlight-next-line */}
+      <SToolTip content={t('gift')}>
         <div
           className={`group relative flex h-10 w-10 items-center justify-center rounded-full text-blue-500 transition-all duration-200 ease-in-out hover:bg-blue-200 hover:shadow-md`}
         >

@@ -1,4 +1,4 @@
-import { metadata } from 'app/layout'
+import { metadata } from 'app/[locale]/layout' 
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import { UserRole } from '@/types/userRole'
 import { ClassroomDetailHeader } from '@/features/classroom/components/detail/sidebar/ClassroomDetailHeader'

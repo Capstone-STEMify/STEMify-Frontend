@@ -1,0 +1,12 @@
+{
+  "Header": {
+    "home": "Home",
+    "resources": "Resources",
+    "myLearning": "My Learning",
+    "codelab": "Code Lab",
+    "gift": "Gift",
+    "signIn": "Sign In",
+    "english": "English",
+    "vietnamese": "Vietnamese"
+  }
+}

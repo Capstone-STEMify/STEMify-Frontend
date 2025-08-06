@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header'
 import { ModalProvider } from '@/providers/ModalProvider'
-import { metadata } from 'app/layout'
+import { metadata } from '../layout'
 
 metadata.title = 'Test Layout'
 export default async function TestLayout({

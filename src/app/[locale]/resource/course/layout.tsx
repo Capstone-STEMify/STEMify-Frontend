@@ -1,4 +1,4 @@
-import { metadata } from 'app/layout'
+import { metadata } from "app/[locale]/layout" 
 
 metadata.title = 'Course'
 export default async function PublicCourseLayout({

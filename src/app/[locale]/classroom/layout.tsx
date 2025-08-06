@@ -1,5 +1,4 @@
-import { metadata } from 'app/layout'
-
+import { metadata } from "../layout"
 metadata.title = 'Classroom'
 export default async function ClassroomLayout({
   children
