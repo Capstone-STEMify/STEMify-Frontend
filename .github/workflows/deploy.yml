@@ -45,6 +45,14 @@ jobs:
       - name: Build project using OpenNext for Cloudflare Workers
         env:
           NEXT_PUBLIC_DOCKER_BE_URL: ${{ vars.NEXT_PUBLIC_DOCKER_BE_URL }}
+          NEXT_PUBLIC_IDENTITY_SERVER_URL: ${{ vars.NEXT_PUBLIC_IDENTITY_SERVER_URL }}
+          NEXT_PUBLIC_CLIENT_ID: ${{ vars.NEXT_PUBLIC_CLIENT_ID }}
+          NEXT_PUBLIC_REDIRECT_URI: ${{ vars.NEXT_PUBLIC_REDIRECT_URI }}
+          NEXT_PUBLIC_API_URL: https://stemify.hopto.org/api
+          NEXT_CLIENT_SECRET: ${{ secrets.NEXT_CLIENT_SECRET }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+
+          NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
         run: npx opennextjs-cloudflare build
 
       - name: Deploy to Cloudflare Workers

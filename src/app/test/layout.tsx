@@ -12,7 +12,7 @@ export default async function TestLayout({
     <>
       <Header />
       <ModalProvider>
-        <div className='bg-light mt-30'>{children}</div>
+        <div className='bg-light mt-20'>{children}</div>
       </ModalProvider>
     </>
   )
