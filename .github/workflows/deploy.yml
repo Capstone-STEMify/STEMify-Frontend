@@ -44,6 +44,7 @@ jobs:
 
       - name: Build project using OpenNext for Cloudflare Workers
         env:
+          NEXT_DISABLE_INSTRUMENTATION: '1'
           NEXT_PUBLIC_DOCKER_BE_URL: ${{ vars.NEXT_PUBLIC_DOCKER_BE_URL }}
           NEXT_PUBLIC_IDENTITY_SERVER_URL: ${{ vars.NEXT_PUBLIC_IDENTITY_SERVER_URL }}
           NEXT_PUBLIC_CLIENT_ID: ${{ vars.NEXT_PUBLIC_CLIENT_ID }}
