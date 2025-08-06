@@ -120,7 +120,7 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
     <section className='relative flex h-screen items-center justify-center overflow-hidden'>
       <div className='absolute inset-0 h-full w-full'>
         <video autoPlay loop muted playsInline className='h-full w-full object-cover'>
-          <source src='/HomeFiles/section_background.mp4' type='video/mp4' />
+          <source src='https://res.cloudinary.com/dtjgueyp2/video/upload/vd-63.mp4' type='video/mp4' />
           <div className='absolute inset-0 animate-pulse bg-gradient-to-br from-blue-400 via-purple-500 to-pink-400'></div>
         </video>
 
