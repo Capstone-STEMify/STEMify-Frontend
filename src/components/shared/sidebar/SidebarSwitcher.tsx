@@ -16,7 +16,7 @@ import { ElementType, useState } from 'react'
 
 export interface SwitcherItem {
   name: string
-  logo: ElementType
+  logo: ElementType<{ className?: string }>
   plan: string
 }
 
