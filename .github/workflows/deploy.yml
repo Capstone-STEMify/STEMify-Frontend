@@ -48,7 +48,7 @@ jobs:
           NEXT_PUBLIC_IDENTITY_SERVER_URL: ${{ vars.NEXT_PUBLIC_IDENTITY_SERVER_URL }}
           NEXT_PUBLIC_CLIENT_ID: ${{ vars.NEXT_PUBLIC_CLIENT_ID }}
           NEXT_PUBLIC_REDIRECT_URI: ${{ vars.NEXT_PUBLIC_REDIRECT_URI }}
-          NEXT_PUBLIC_API_URL: https://stemify.hopto.org/api
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           NEXT_CLIENT_SECRET: ${{ secrets.NEXT_CLIENT_SECRET }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
 
