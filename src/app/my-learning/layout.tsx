@@ -1,4 +1,4 @@
-import { metadata } from '../layout' 
+import { metadata } from 'app/layout'
 import { UserRole } from '@/types/userRole'
 import Header from '@/components/layout/Header'
 

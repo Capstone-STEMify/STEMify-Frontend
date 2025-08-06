@@ -1,18 +1,17 @@
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
-import { metadata } from '../layout' 
+import { metadata } from 'app/layout'
 
-metadata.title = 'Profile'
-export default async function ProfileLayout({
+metadata.title = 'Course'
+export default async function PublicCourseLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <div>
+    <>
       <Header />
       <main className='mt-24'>{children}</main>
-      <Footer />
-    </div>
+    </>
   )
 }

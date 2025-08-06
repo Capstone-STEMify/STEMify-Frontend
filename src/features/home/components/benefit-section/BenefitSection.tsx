@@ -1,15 +1,12 @@
 'use client'
 import { Star } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 export default function BenefitsSection() {
-  const t = useTranslations('BenefitSection')
-  
   const benefits = [
-    t('benefit1'),
-    t('benefit2'),
-    t('benefit3')
+    'Master fundamental knowledge at school',
+    'The ability to criticize knowledge increases',
+    'Respond confidently when encountering difficult situations'
   ]
 
   return (
@@ -41,16 +38,16 @@ export default function BenefitsSection() {
                 <Star className='h-5 w-5 fill-current text-yellow-400' />
                 <div className='absolute -top-1 -right-1 h-2 w-2 animate-ping rounded-full bg-orange-400'></div>
               </div>
-              <span className='text-sm text-gray-600'>{t('status')}</span>
+              <span className='text-sm text-gray-600'>Growing and online</span>
             </div>
 
             <h2 className='relative mb-6 text-3xl font-bold text-gray-900'>
-              {t.rich('title', {
-                orange: (chunks) => <span className='relative text-orange-500'>
-                  {chunks}
-                  <div className='absolute -bottom-1 left-0 h-1 w-full rounded-full bg-gradient-to-r from-orange-400 to-yellow-400 opacity-60'></div>
-                </span>
-              })}
+              What will your child get after studying at{' '}
+              <span className='relative text-orange-500'>
+                STEMify
+                <div className='absolute -bottom-1 left-0 h-1 w-full rounded-full bg-gradient-to-r from-orange-400 to-yellow-400 opacity-60'></div>
+              </span>
+              ?
             </h2>
 
             <ul className='space-y-4'>

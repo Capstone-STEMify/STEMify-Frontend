@@ -1,11 +1,9 @@
 'use client'
 import MacCard from '@/components/shared/card/MacCard'
-import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React, { useState } from 'react'
 
 export default function ToolsSection() {
-  const t = useTranslations('ToolsSection')
   const tools = [
     { icon: '/HomeFiles/tools/classroom.jpg' },
     { icon: '/HomeFiles/tools/drive.png' },
@@ -25,9 +23,12 @@ export default function ToolsSection() {
       <div className='absolute top-1/3 right-1/4 h-12 w-12 animate-pulse rounded-full bg-yellow-300 opacity-25'></div>
 
       <div className='relative z-10 mb-12 text-center'>
-        <h1 className='mb-4 text-5xl font-bold text-gray-900'>{t('title')}</h1>
+        <h1 className='mb-4 text-5xl font-bold text-gray-900'>What is STEMify?</h1>
         <p className='mx-auto max-w-2xl text-gray-600'>
-          {t('description')}
+          In this video, discover how STEMify addresses the gap in 21st-century skills education with hands-on STEAM and
+          STEM solutions. We support teachers to build the innovators of tomorrow by fostering creativity, coding, and
+          rapid prototyping. With accessible tools and free digital and offline resources, students of all abilities can
+          explore and develop essential skills for the future.
         </p>
       </div>
 

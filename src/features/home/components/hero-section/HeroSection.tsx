@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
 import { Search, Sparkles } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 
 interface HeroSectionProps {
   onAnimationComplete: (complete: boolean) => void
@@ -9,7 +8,6 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ onAnimationComplete, animationProgress }: HeroSectionProps) {
-  const t = useTranslations('HeroSection')
   const containerRef = useRef(null)
   const subtitleRef = useRef(null)
   const titleRef = useRef(null)
@@ -134,12 +132,12 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
 
       <div ref={containerRef} className='relative z-40 mx-auto max-w-4xl px-6 text-center'>
         <p ref={subtitleRef} className='mb-4 text-lg font-medium text-white/90 drop-shadow-lg'>
-          {t('subtitle')}
+          Turn STEM into a game - Inspire passion, creativity
         </p>
 
         <div ref={titleRef} className='mb-4'>
           <h1 className='text-6xl leading-tight font-bold text-white drop-shadow-2xl md:text-7xl'>
-            {t('title')}
+            The students light bulbs is coming on
           </h1>
         </div>
 
@@ -161,9 +159,9 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
                 onChange={(e) => setSelectedType(e.target.value)}
                 className='cursor-pointer border-none bg-transparent font-medium text-gray-700 outline-none'
               >
-                <option value='Course'>{t('course')}</option>
-                <option value='Lesson'>{t('lesson')}</option>
-                <option value='Activity'>{t('activity')}</option>
+                <option value='Course'>Course</option>
+                <option value='Lesson'>Lesson</option>
+                <option value='Activity'>Activity</option>
               </select>
             </div>
 
@@ -171,13 +169,13 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
               type='text'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t('searchPlaceholder')}
+              placeholder='What would you like to explore today?'
               className='flex-1 border-none bg-transparent px-6 py-3 text-lg text-gray-700 placeholder-gray-500 outline-none'
             />
 
             <button className='flex transform items-center space-x-2 rounded-xl bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
               <Search className='h-5 w-5' />
-              <span>{t('exploreButton')}</span>
+              <span>Explore</span>
             </button>
           </div>
         </div>

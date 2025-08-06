@@ -3,13 +3,10 @@ import { Badge } from '@/components/shadcn/badge'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { useGetAllCourseQuery } from '@/features/resource/course/api/courseApi'
 import { formatDuration } from '@/utils/index'
-import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import React from 'react'
 
 export default function ExploreResourcesSection() {
-  const t = useTranslations('ExploreResourcesSection')
-
   const { data: CourseData, error, isLoading } = useGetAllCourseQuery()
 
   const truncateText = (text: string, maxLength = 80) => {
@@ -25,7 +22,7 @@ export default function ExploreResourcesSection() {
 
       <div className='relative z-10'>
         <h2 className='mb-12 text-center text-5xl font-bold text-black'>
-          {t('title')}
+          Explore resources
           <div className='mx-auto mt-5 h-1 w-50 rounded-full bg-gradient-to-r from-blue-400 to-purple-400' />
         </h2>
 
@@ -53,7 +50,7 @@ export default function ExploreResourcesSection() {
         <div className='mt-12 text-center'>
           <Link href='/resource'>
             <button className='relative transform rounded-full bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
-              {t('exploreButton')}
+              Explore →
               <div className='absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full bg-pink-400 opacity-60'></div>
             </button>
           </Link>

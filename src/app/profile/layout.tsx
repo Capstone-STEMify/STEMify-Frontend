@@ -1,9 +1,9 @@
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
-import { metadata } from 'app/[locale]/layout' 
+import { metadata } from 'app/layout'
 
-metadata.title = 'Resource'
-export default async function ResourceLayout({
+metadata.title = 'Profile'
+export default async function ProfileLayout({
   children
 }: Readonly<{
   children: React.ReactNode

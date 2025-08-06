@@ -5,25 +5,18 @@ import { ArrowRightToLine, Sparkles } from 'lucide-react'
 import React from 'react'
 import { signIn } from 'next-auth/react'
 import AuthStatusMenu from '@/components/layout/header/header-action/AuthStatusMenu'
-// highlight-next-line
-import { useTranslations } from 'next-intl'
 
 export default function HeaderAction() {
-  // highlight-next-line
-  const t = useTranslations('Header')
-
   return (
     <>
       {/* Desktop Layout */}
-      <div className='hidden items-center gap-2 lg:flex'>
-        <HeaderEvent />
-        <AuthStatusMenu />
-      </div>
+      <AuthStatusMenu />
 
-      {/* Mobile Layout */}
+      {/* Mobile Layout - Enhanced Vertical Stack */}
       <div className='flex w-full flex-col space-y-4 lg:hidden'>
         <div className='flex w-full flex-col space-y-3 pt-2'>
-          {/* Mobile Sign In Button */}
+          <HeaderEvent />
+          {/* Mobile Sign Up Button */}
           <Button
             size='lg'
             onClick={() =>
@@ -37,8 +30,7 @@ export default function HeaderAction() {
             <div className='absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-white/20 to-white/0 transition-transform duration-500 group-hover:translate-x-[100%]' />
             <div className='flex items-center gap-2'>
               <ArrowRightToLine size={16} className='transition-transform duration-200 group-hover:translate-x-1' />
-              {/* highlight-next-line */}
-              <span className='font-semibold'>{t('signIn')}</span>
+              <span className='font-semibold'>Sign In</span>
               <Sparkles size={14} className='opacity-70 transition-opacity duration-200 group-hover:opacity-100' />
             </div>
           </Button>
