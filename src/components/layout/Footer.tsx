@@ -13,14 +13,18 @@ const Footer = () => {
     > 
       <div className="absolute top-4 left-8 z-10">
         <Image 
+          width={64}
+          height={80}
           src="/images/balloon.png" 
           alt="Hot Air Balloon" 
-          className="w-16 h-20 object-contain"
+          className="object-contain"
         />
       </div>
 
       <div className="absolute top-8 right-80 z-10">
         <Image 
+          width={120}
+          height={120}
           src="/images/dino.png" 
           alt="Dinosaur" 
           className="w-30 h-30 object-contain"

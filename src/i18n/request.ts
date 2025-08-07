@@ -1,23 +1,15 @@
-import {getRequestConfig} from 'next-intl/server';
-import {hasLocale} from 'next-intl';
-import {routing} from './routing';
- 
-export default getRequestConfig(async ({requestLocale}) => {
-  // Typically corresponds to the `[locale]` segment
+import { getRequestConfig } from 'next-intl/server';
+import { hasLocale } from 'next-intl';
+import { routing } from './routing';
+import { loadMessages } from './loadMessages';
+
+export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale;
-  const locale = hasLocale(routing.locales, requested)
-    ? requested
-    : routing.defaultLocale;
- 
-  // Import and merge messages from the specific files for the locale.
-  const headerMessages = (await import(`../../messages/${locale}/${locale}_header.json`)).default;
-  const homeMessages = (await import(`../../messages/${locale}/${locale}_home.json`)).default;
- 
+  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
+  const messages = await loadMessages(locale);
+
   return {
     locale,
-    messages: {
-      ...headerMessages,
-      ...homeMessages
-    }
+    messages,
   };
 });

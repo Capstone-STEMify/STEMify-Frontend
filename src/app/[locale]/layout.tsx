@@ -1,16 +1,12 @@
-import type { Metadata } from 'next'
+import Providers from '@/providers/Providers';
+import SignalRProvider from '@/providers/SignalRProvider';
+import { loadMessages } from 'i18n/loadMessages';
+import { routing } from 'i18n/routing';
+import { Metadata } from 'next';
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { notFound } from 'next/navigation';
 import { Nunito, Reem_Kufi } from 'next/font/google'
 import './globals.css'
-import Providers from '@/providers/Providers'
-import SignalRProvider from '@/providers/SignalRProvider'
-import { auth } from '@/libs/auth/authOptions'
-import { hasLocale } from 'next-intl'
-import { notFound } from 'next/navigation'
-import { routing } from 'i18n/routing'
-// highlight-start
-// Bước 1: Import NextIntlClientProvider
-import { NextIntlClientProvider } from 'next-intl'
-// highlight-end
 
 const geistNunito = Nunito({
   variable: '--font-geist-nunito',
@@ -32,36 +28,23 @@ export const metadata: Metadata = {
   }
 }
 
-export default async function RootLayout({
-  children,
-  params
-}: Readonly<{
-  children: React.ReactNode;
-  params: { locale: string }; // params không phải là một Promise ở đây
-}>) {
-  const { locale } = params; //
-  if (!hasLocale(routing.locales, locale)) { //
-    notFound(); //
+export default async function RootLayout({ children, params }: Readonly<{ children: React.ReactNode; params: { locale: string }; }>) {
+  const { locale } = await params;
+
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
   }
 
-  // highlight-start
-  // Bước 2: Tải các tệp ngôn ngữ tương ứng
   let messages;
   try {
-    // Giả định cấu trúc thư mục messages của bạn giống như các trao đổi trước
-    const headerMessages = (await import(`../../../messages/${locale}/${locale}_header.json`)).default;
-    const homeMessages = (await import(`../../../messages/${locale}/${locale}_home.json`)).default;
-    messages = { ...headerMessages, ...homeMessages };
+    messages = await loadMessages(locale);
   } catch (error) {
     notFound();
   }
-  // highlight-end
 
   return (
-    <html lang={locale} className={`${fontReemKufi.className}`}>
-      <body className={`antialiased`}>
-        {/* highlight-start */}
-        {/* Bước 3: Bọc children bằng Provider và truyền props */}
+    <html lang={locale}>
+      <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
             <main>
@@ -69,8 +52,7 @@ export default async function RootLayout({
             </main>
           </Providers>
         </NextIntlClientProvider>
-        {/* highlight-end */}
       </body>
     </html>
-  )
+  );
 }

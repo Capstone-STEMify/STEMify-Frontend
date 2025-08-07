@@ -1,19 +1,18 @@
-'use client'
-
 import { Button } from '@/components/shadcn/button'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { ArrowRightIcon, BookOpenIcon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export default function LibraryPage() {
+  const t = useTranslations('Resource')
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
       <div className='mx-auto max-w-7xl'>
         {/* Header */}
         <div className='mb-8'>
-          <h1 className='mb-4 text-4xl font-bold text-gray-900'>Library</h1>
+          <h1 className='mb-4 text-4xl font-bold text-gray-900'>{t('title')}</h1>
           <p className='max-w-2xl text-lg text-gray-600'>
-            Curated courses, curriculum-aligned lessons, engaging activities, and support materials made by expert
-            teachers.
+            {t('description')}
           </p>
         </div>
 
@@ -29,17 +28,17 @@ export default function LibraryPage() {
                   <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
                     <BookOpenIcon className='h-4 w-4 text-blue-600' />
                   </div>
-                  <h2 className='text-xl font-bold text-gray-900'>Courses</h2>
+                  <h2 className='text-xl font-bold text-gray-900'>{t('courses.title')}</h2>
                 </div>
 
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>
-                  Comprehensive courses designed to enhance STEM learning and accelerate your career growth.
+                  {t('courses.description')}
                 </p>
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>Explore Courses</span>
+                <span>{t('courses.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
@@ -53,18 +52,17 @@ export default function LibraryPage() {
                   <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
                     <BookOpenIcon className='h-4 w-4 text-blue-600' />
                   </div>
-                  <h2 className='text-xl font-bold text-gray-900'>Lessons</h2>
+                  <h2 className='text-xl font-bold text-gray-900'>{t('lessons.title')}</h2>
                 </div>
 
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>
-                  Engaging lessons aligned with curriculum standards to foster critical thinking and problem-solving
-                  skills.
+                  {t('lessons.description')}
                 </p>
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>Explore Lessons</span>
+                <span>{t('lessons.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
@@ -78,18 +76,17 @@ export default function LibraryPage() {
                   <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
                     <BookOpenIcon className='h-4 w-4 text-blue-600' />
                   </div>
-                  <h2 className='text-xl font-bold text-gray-900'>Activities</h2>
+                  <h2 className='text-xl font-bold text-gray-900'>{t('activities.title')}</h2>
                 </div>
 
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>
-                  Interactive activities designed to make learning fun and engaging, enhancing student participation and
-                  understanding.
+                  {t('activities.description')}
                 </p>
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>Explore Activities</span>
+                <span>{t('activities.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
@@ -103,18 +100,17 @@ export default function LibraryPage() {
                   <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
                     <BookOpenIcon className='h-4 w-4 text-blue-600' />
                   </div>
-                  <h2 className='text-xl font-bold text-gray-900'>Teacher Support</h2>
+                  <h2 className='text-xl font-bold text-gray-900'>{t('support.title')}</h2>
                 </div>
 
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>
-                  Resources and support materials for teachers to enhance their teaching effectiveness and student
-                  outcomes.
+                  {t('support.description')}
                 </p>
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>Get Help</span>
+                <span>{t('support.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
@@ -128,18 +124,17 @@ export default function LibraryPage() {
                   <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
                     <BookOpenIcon className='h-4 w-4 text-blue-600' />
                   </div>
-                  <h2 className='text-xl font-bold text-gray-900'>News and blogs</h2>
+                  <h2 className='text-xl font-bold text-gray-900'>{t('news.title')}</h2>
                 </div>
 
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>
-                  Stay updated with the latest news, trends, and insights in STEM education through our blogs and
-                  articles.
+                  {t('news.description')}
                 </p>
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>Read Blogs</span>
+                <span>{t('news.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
