@@ -1,6 +1,7 @@
 import MacCard from '@/components/shared/card/MacCard'
 import React, { useEffect, useState } from 'react'
 import MacCardVideo from '../landing/MacCardVideo'
+import Image from 'next/image'
 
 export default function ToolSection() {
   const [isVisible, setIsVisible] = useState(false)
@@ -72,7 +73,7 @@ export default function ToolSection() {
               className={`relative transition-all delay-400 duration-1000 ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
             >
               <div className='absolute -top-15 -left-35 -z-10 h-80 w-80 rotate-12 transform'>
-                <img src='/images/effectbg.png' alt='effect' />
+                <Image src='/images/effectbg.png' alt='effect' />
               </div>
 
               <div className='relative z-10'>

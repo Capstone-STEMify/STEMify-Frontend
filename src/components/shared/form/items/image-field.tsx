@@ -5,6 +5,7 @@ import { Upload } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useFieldContext } from '@/components/shared/form/items'
 import { SCard } from '@/components/shared/card/SCard'
+import Image from 'next/image'
 
 export default function ImageField({ previewUrlFromServer }: { previewUrlFromServer?: string }) {
   const field = useFieldContext<File | null>()
@@ -44,7 +45,7 @@ export default function ImageField({ previewUrlFromServer }: { previewUrlFromSer
           <h3 className='mb-3 text-xl font-semibold text-gray-800'>Cover Image</h3>
           <div className='relative rounded-2xl border-2 border-dashed border-gray-300 p-8 text-center'>
             {previewUrl ? (
-              <img
+              <Image
                 src={previewUrl}
                 alt='Preview'
                 className='mx-auto mb-3 max-h-64 rounded-xl object-cover transition'

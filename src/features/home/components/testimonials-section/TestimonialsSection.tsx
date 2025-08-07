@@ -1,8 +1,10 @@
 'use client'
 import FeedbackCard from '@/components/shared/card/FeedbackCard'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 export default function TestimonialsSection() {
+  const t = useTranslations('TestimonialsSection')
   return (
     <section className='relative overflow-hidden bg-yellow-50 px-6 py-10'>
       {/* <div className="absolute top-0 right-0 w-28 h-28 bg-gradient-to-bl from-orange-300 to-yellow-300 rounded-full opacity-20 animate-float"></div>
@@ -12,7 +14,7 @@ export default function TestimonialsSection() {
 
       <div className='relative z-10'>
         <h2 className='relative text-center text-3xl font-bold'>
-          What do students say about{' '}
+          {t('title')}
           <span className='relative text-yellow-500'>
             STEMify
             <div className='absolute -bottom-1 left-0 h-1 w-full rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 opacity-60'></div>

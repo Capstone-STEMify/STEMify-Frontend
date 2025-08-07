@@ -9,7 +9,11 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import { signIn } from 'next-auth/react'
 
 const customFetchBaseQuery = fetchBaseQuery({
-  baseUrl: 'https://stemify.hopto.org/api',
+  baseUrl:
+    process.env.NEXT_PUBLIC_DOCKER_BE_URL ??
+    (() => {
+      throw new Error('Missing BASE_API_URL')
+    })(),
   credentials: 'include',
   prepareHeaders: async (headers, api) => {
     // Append token from the auth state tree Redux store
@@ -27,7 +31,6 @@ export const customFetchBaseQueryWithErrorHandling = async (
   api: BaseQueryApi,
   extraOptions: object
 ) => {
-  console.log('🔍 customFetchBaseQueryWithErrorHandling', process.env.NEXT_PUBLIC_API_URL)
   const result = await customFetchBaseQuery(args, api, extraOptions)
 
   if (result.error) {

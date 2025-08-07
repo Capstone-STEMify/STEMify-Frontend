@@ -30,7 +30,7 @@ export interface SidebarAction {
 export interface SidebarNavItemWithActions {
   title: string
   url: string
-  icon?: React.ElementType<{ className?: string }>
+  icon?: React.ElementType
   actions?: SidebarAction[]
 }
 

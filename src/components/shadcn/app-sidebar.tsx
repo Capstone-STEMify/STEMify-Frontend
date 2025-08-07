@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from '@/components/shadcn/sidebar'
+import Link from 'next/link'
 
 export function AppSidebar() {
   return (
@@ -21,34 +22,34 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href='/generation'>
+                  <Link href='/generation'>
                     <LayoutDashboard className='h-4 w-4' />
                     <span>All</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href='/courses'>
+                  <Link href='/courses'>
                     <Layers className='h-4 w-4' />
                     <span>Courses</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href='/lessons'>
+                  <Link href='/lessons'>
                     <ListChecks className='h-4 w-4' />
                     <span>Lessons</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href='/activities'>
+                  <Link href='/activities'>
                     <Activity className='h-4 w-4' />
                     <span>Activities</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -61,26 +62,26 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href='/search'>
+                  <Link href='/search'>
                     <Search className='h-4 w-4' />
                     <span>Search</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href='/inbox'>
+                  <Link href='/inbox'>
                     <Mail className='h-4 w-4' />
                     <span>Inbox</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href='/settings'>
+                  <Link href='/settings'>
                     <Settings className='h-4 w-4' />
                     <span>Settings</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

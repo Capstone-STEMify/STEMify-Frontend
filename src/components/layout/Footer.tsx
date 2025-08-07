@@ -1,5 +1,6 @@
 import React from 'react';
 import { Facebook, Instagram } from 'lucide-react';
+import Image from 'next/image';
 
 const Footer = () => {
   return (
@@ -11,7 +12,7 @@ const Footer = () => {
       }}
     > 
       <div className="absolute top-4 left-8 z-10">
-        <img 
+        <Image 
           src="/images/balloon.png" 
           alt="Hot Air Balloon" 
           className="w-16 h-20 object-contain"
@@ -19,7 +20,7 @@ const Footer = () => {
       </div>
 
       <div className="absolute top-8 right-80 z-10">
-        <img 
+        <Image 
           src="/images/dino.png" 
           alt="Dinosaur" 
           className="w-30 h-30 object-contain"

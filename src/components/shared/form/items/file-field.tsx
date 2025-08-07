@@ -5,6 +5,7 @@ import { Upload, FileText, Video } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useFieldContext } from '@/components/shared/form/items'
 import { SCard } from '@/components/shared/card/SCard'
+import Image from 'next/image'
 
 type FileFieldProps = {
   previewUrlFromServer?: string
@@ -60,7 +61,7 @@ export default function FileField({ previewUrlFromServer, accept = '*', label = 
 
   const renderPreview = () => {
     if (preview.isImage && preview.url) {
-      return <img src={preview.url} alt='Preview' className='mx-auto mb-3 max-h-64 rounded-xl object-cover' />
+      return <Image src={preview.url} alt='Preview' className='mx-auto mb-3 max-h-64 rounded-xl object-cover' />
     }
     if (preview.name) {
       const isVideo = accept.startsWith('video/')
