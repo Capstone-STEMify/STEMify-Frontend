@@ -11,10 +11,12 @@ import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/less
 import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { EllipsisVertical } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect } from 'react'
 
 export default function LessonListContent() {
+  const t = useTranslations('LessonList')
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
 
@@ -62,8 +64,8 @@ export default function LessonListContent() {
   if (!lessonData || lessonData.data.items.length === 0) {
     return (
       <SEmpty
-        title='No Lessons Found'
-        description='Try changing the search term or filters to find relevant lessons.'
+        title={t('noLesson')}
+        description={t('noLessonFound')}
       />
     )
   }
