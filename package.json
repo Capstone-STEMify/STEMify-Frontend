@@ -10,9 +10,6 @@
     "dev:prod": "cross-env NODE_ENV=production next dev --turbopack --experimental-https",
     "build": "next build",
     "start": "next start",
-    "preview": "opennextjs-cloudflare build && wrangler dev",
-    "deploy": "opennextjs-cloudflare build && wrangler deploy",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "lint": "next lint",
     "format": "prettier --write ."
   },
@@ -81,8 +78,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@opennextjs/aws": "3.6.5",
-    "@opennextjs/cloudflare": "1.3.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -95,8 +90,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.0",
-    "typescript": "^5.8.3",
-    "wrangler": "^4.16.1"
+    "typescript": "^5.8.3"
   },
   "overrides": {}
 }
