@@ -27,7 +27,7 @@ export default function LanguageSwitcher() {
 
   return (
     <Select onValueChange={onSelectChange} defaultValue={locale}>
-      <SelectTrigger className='w-fit border-none bg-transparent shadow-none focus:ring-0'>
+      <SelectTrigger className='w-fit border-none bg-transparent shadow-none focus-visible:ring-0'>
         <div className='flex items-center gap-2'>
           <Languages size={20} className='text-gray-600' />
           <SelectValue />

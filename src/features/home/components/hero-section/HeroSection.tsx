@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Search, Sparkles } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 
 interface HeroSectionProps {
   onAnimationComplete: (complete: boolean) => void
@@ -118,6 +119,10 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
     loadGSAP()
   }, [animationProgress, onAnimationComplete, animatedElements])
 
+  const handleChangeType = (value: string) => {
+    setSelectedType(value);
+};
+
   return (
     <section className='relative flex h-screen items-center justify-center overflow-hidden'>
       <div className='absolute inset-0 h-full w-full'>
@@ -156,15 +161,16 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
           <div className='flex items-center'>
             <div className='flex items-center space-x-2 border-r border-gray-200 px-4 py-3'>
               <Sparkles className='h-5 w-5 text-amber-400' />
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className='cursor-pointer border-none bg-transparent font-medium text-gray-700 outline-none'
-              >
-                <option value='Course'>{t('course')}</option>
-                <option value='Lesson'>{t('lesson')}</option>
-                <option value='Activity'>{t('activity')}</option>
-              </select>
+              <Select onValueChange={handleChangeType} defaultValue={'Course'}>
+                <SelectTrigger className="w-[120px] border-none shadow-none bg-transparent focus-visible:ring-0">
+                  <SelectValue placeholder={selectedType} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Course">{t('course')}</SelectItem>
+                  <SelectItem value="Lesson">{t('lesson')}</SelectItem>
+                  <SelectItem value="Activity">{t('activity')}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <input
