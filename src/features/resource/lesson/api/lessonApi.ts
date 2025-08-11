@@ -16,14 +16,6 @@ export const lessonApiExtended = lessonApi.injectEndpoints({
         body: formData
       }),
       invalidatesTags: ['Lesson']
-    }),
-    updateLessonWithFormData: builder.mutation<Lesson, { id: string | number; formData: FormData }>({
-      query: ({ id, formData }) => ({
-        url: `/lessons/${id}`,
-        method: 'PATCH',
-        body: formData
-      }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Lesson', id }, 'Lesson']
     })
   })
 })
@@ -39,7 +31,10 @@ export const {
   // lazy
   useLazySearchQuery: useLazySearchLessonQuery,
   useLazyGetAllQuery: useLazyGetAllLessonQuery,
-  useLazyGetByIdQuery: useLazyGetLessonByIdQuery
+  useLazyGetByIdQuery: useLazyGetLessonByIdQuery,
+
+  // form data mutations
+  useCreateFormDataMutation: useCreateLessonWithFormDataMutation,
+  useUpdateFormDataMutation: useUpdateLessonWithFormDataMutation
 } = lessonApi
 
-export const { useCreateLessonWithFormDataMutation, useUpdateLessonWithFormDataMutation } = lessonApiExtended

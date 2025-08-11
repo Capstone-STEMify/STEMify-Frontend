@@ -6,13 +6,14 @@ import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from 
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
-import { useSearchSectionQuery, useUpdateSectionMutation } from '@/features/resource/section/api/sectionApi'
+import { useSearchSectionQuery } from '@/features/resource/section/api/sectionApi'
 import { Section } from '@/features/resource/section/types/section.type'
 import SectionItems from '@/features/resource/section/components/list/SectionItems'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { Button } from '@/components/shadcn/button'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
+import { useUpdateLessonWithFormDataMutation } from '../../lesson/api/lessonApi'
 
 export default function SectionAndContent() {
   const { lessonId } = useParams()
@@ -20,22 +21,20 @@ export default function SectionAndContent() {
   const { openModal } = useModal()
 
   const { data, isLoading } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !token })
-  const [updateSection] = useUpdateSectionMutation()
+  const [updateSectionLesson] = useUpdateLessonWithFormDataMutation()
   const [isOrderChanged, setIsOrderChanged] = useState(false)
+  const sections = data?.data.items ?? []
 
-  const sortedSections = useMemo(
-    () => [...(data?.data.items ?? [])].sort((a, b) => a.orderIndex - b.orderIndex),
-    [data]
-  )
   const [expandedSections, setExpandedSections] = useState<number[]>([])
-  const [items, setItems] = useState<Section[]>(sortedSections)
+  const [items, setItems] = useState<Section[]>(sections)
+  console.log('items', items)
   const toggleSection = (id: number) => {
     setExpandedSections((prev) => (prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]))
   }
 
   useEffect(() => {
-    setItems(sortedSections)
-  }, [sortedSections])
+    setItems(sections)
+  }, [sections])
 
   const isExpanded = (id: number) => expandedSections.includes(id)
 
@@ -98,22 +97,12 @@ export default function SectionAndContent() {
                 className='mt-4 w-full py-6 text-base'
                 onClick={async () => {
                   try {
-                    const updates = items.filter((item, idx) => {
-                      const original = sortedSections.find((s) => s.id === item.id)
-                      return original && original.orderIndex !== item.orderIndex
-                    })
+                    const sectionIds = items.map((s) => s.id)
 
-                    if (updates.length === 0) {
-                      toast.info('Nothing changed.')
-                      setIsOrderChanged(false)
-                      return
-                    }
-
-                    await Promise.all(
-                      updates.map((item) =>
-                        updateSection({ id: item.id, body: { orderIndex: item.orderIndex } }).unwrap()
-                      )
-                    )
+                    const formData = new FormData()
+                    sectionIds.forEach((id) => formData.append('OrderedSectionIds', String(id)))
+                    const response = await updateSectionLesson({ id: Number(lessonId), body: formData }).unwrap()
+                    console.log('response', response)
 
                     toast.success('Order saved successfully.')
                     setIsOrderChanged(false)

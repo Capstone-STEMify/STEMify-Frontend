@@ -106,7 +106,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
         const formData = buildLessonFormData(value, userId!)
 
         if (lessonId) {
-          await updateLesson({ id: lessonId, formData }).unwrap()
+          await updateLesson({ id: lessonId, body: formData }).unwrap()
           toast.success('Lesson updated successfully')
         } else {
           await createLesson(formData).unwrap()
