@@ -16,8 +16,10 @@ import { useEffect } from 'react'
 import { UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
 import { formatDuration } from '@/utils/index'
+import { useTranslations } from 'next-intl'
 
 export default function CourseListContent() {
+  const t = useTranslations('CourseList')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const courseParams = useAppSelector((state) => state.course)
@@ -73,8 +75,8 @@ export default function CourseListContent() {
   if (!courseData || courseData.data.items.length === 0) {
     return (
       <SEmpty
-        title='No Courses Found'
-        description='Try changing the search term or filters to find relevant courses.'
+        title={t('noCourse')}
+        description={t('noCourseFound')}
       />
     )
   }
