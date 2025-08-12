@@ -1,93 +1,184 @@
-import { Layers, ListChecks, Activity, LayoutDashboard, Mail, Search, Settings } from 'lucide-react'
+'use client'
 
+import * as React from 'react'
+import {
+  IconCamera,
+  IconChartBar,
+  IconDashboard,
+  IconDatabase,
+  IconFileAi,
+  IconFileDescription,
+  IconFileWord,
+  IconFolder,
+  IconHelp,
+  IconInnerShadowTop,
+  IconListDetails,
+  IconReport,
+  IconSearch,
+  IconSettings,
+  IconUsers
+} from '@tabler/icons-react'
+
+import { NavDocuments } from 'components/shadcn/nav-documents'
+import { NavMain } from 'components/shadcn/nav-main'
+import { NavSecondary } from 'components/shadcn/nav-secondary'
+import { NavUser } from 'components/shadcn/nav-user'
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarFooter,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem
-} from '@/components/shadcn/sidebar'
+} from 'components/shadcn/sidebar'
 import Link from 'next/link'
 
-export function AppSidebar() {
-  return (
-    <Sidebar className='relative mt-20'>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Content</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/generation'>
-                    <LayoutDashboard className='h-4 w-4' />
-                    <span>All</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/courses'>
-                    <Layers className='h-4 w-4' />
-                    <span>Courses</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/lessons'>
-                    <ListChecks className='h-4 w-4' />
-                    <span>Lessons</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/activities'>
-                    <Activity className='h-4 w-4' />
-                    <span>Activities</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+const data = {
+  user: {
+    name: 'shadcn',
+    email: 'm@example.com',
+    avatar: '/avatars/shadcn.jpg'
+  },
+  navMain: [
+    {
+      title: 'Dashboard',
+      url: 'dashboard',
+      icon: IconDashboard
+    },
+    {
+      title: 'Course',
+      url: 'course',
+      icon: IconListDetails
+    },
+    {
+      title: 'Lesson',
+      url: 'lesson',
+      icon: IconChartBar
+    },
+    {
+      title: 'Section',
+      url: 'section',
+      icon: IconFolder
+    },
+    {
+      title: 'Content',
+      url: 'content',
+      icon: IconUsers
+    }
+  ],
+  navClouds: [
+    {
+      title: 'Capture',
+      icon: IconCamera,
+      isActive: true,
+      url: '#',
+      items: [
+        {
+          title: 'Active Proposals',
+          url: '#'
+        },
+        {
+          title: 'Archived',
+          url: '#'
+        }
+      ]
+    },
+    {
+      title: 'Proposal',
+      icon: IconFileDescription,
+      url: '#',
+      items: [
+        {
+          title: 'Active Proposals',
+          url: '#'
+        },
+        {
+          title: 'Archived',
+          url: '#'
+        }
+      ]
+    },
+    {
+      title: 'Prompts',
+      icon: IconFileAi,
+      url: '#',
+      items: [
+        {
+          title: 'Active Proposals',
+          url: '#'
+        },
+        {
+          title: 'Archived',
+          url: '#'
+        }
+      ]
+    }
+  ],
+  navSecondary: [
+    {
+      title: 'Settings',
+      url: '#',
+      icon: IconSettings
+    },
+    {
+      title: 'Get Help',
+      url: '#',
+      icon: IconHelp
+    },
+    {
+      title: 'Search',
+      url: '#',
+      icon: IconSearch
+    }
+  ],
+  documents: [
+    {
+      name: 'Category',
+      url: 'category',
+      icon: IconDatabase
+    },
+    {
+      name: 'Skill',
+      url: 'skill',
+      icon: IconReport
+    },
+    {
+      name: 'Age range',
+      url: 'age-range',
+      icon: IconReport
+    },
+    {
+      name: 'Standard',
+      url: 'standard',
+      icon: IconFileWord
+    }
+  ]
+}
 
-        <SidebarGroup>
-          <SidebarGroupLabel>System</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/search'>
-                    <Search className='h-4 w-4' />
-                    <span>Search</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/inbox'>
-                    <Mail className='h-4 w-4' />
-                    <span>Inbox</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/settings'>
-                    <Settings className='h-4 w-4' />
-                    <span>Settings</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  return (
+    <Sidebar collapsible='offcanvas' {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
+              <Link href='#'>
+                <IconInnerShadowTop className='!size-5' />
+                <span className='text-base font-semibold'>STEMify</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarContent>
+        <NavMain items={data.navMain} />
+        <NavDocuments items={data.documents} />
+        <NavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser user={data.user} />
+      </SidebarFooter>
     </Sidebar>
   )
 }

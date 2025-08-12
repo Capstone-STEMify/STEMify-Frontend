@@ -1,89 +1,62 @@
-import createMiddleware from 'next-intl/middleware';
-import {routing} from './i18n/routing';
- 
-export default createMiddleware(routing);
+// middleware.ts
+import {NextResponse} from 'next/server'
+import {withAuth} from 'next-auth/middleware'
+import createMiddleware from 'next-intl/middleware'
+import {routing} from './i18n/routing'
+import {UserRole} from '@/types/userRole'
 
-// import { NextResponse } from 'next/server'
-// import type { NextRequest } from 'next/server'
-// import { getToken } from 'next-auth/jwt'
-// import { UserRole } from '@/types/userRole'
+// Khởi tạo i18n middleware 1 lần
+const intlMiddleware = createMiddleware(routing)
 
-// const routeRoleMap: Record<string, UserRole[]> = {
-//   '/my-learning': [UserRole.STUDENT],
-//   '/resource/': [UserRole.ADMIN, UserRole.STUDENT, UserRole.TEACHER, UserRole.STAFF],
-//   '/profile': [UserRole.ADMIN, UserRole.STUDENT, UserRole.TEACHER, UserRole.STAFF]
-// }
+export default withAuth(
+  (req) => {
+    // Chạy i18n trước (thêm/chuẩn hoá locale, redirect khi thiếu locale, v.v.)
+    const res = intlMiddleware(req)
 
-// function normalizePath(path: string) {
-//   return path.replace(/\/+$/, '')
-// }
+    const {pathname} = req.nextUrl
+    const userRole = req.nextauth.token?.role as string | undefined
 
-// function getMatchedBaseRoute(pathname: string): string | null {
-//   const normalizedPath = normalizePath(pathname)
-//   return (
-//     Object.keys(routeRoleMap).find((base) => {
-//       const normalizedBase = normalizePath(base)
-//       console.log('normalizedBase', normalizedBase, 'normalizedPath', normalizedPath)
-//       return normalizedPath === normalizedBase || normalizedPath.startsWith(`${normalizedBase}/`)
-//     }) ?? null
-//   )
-// }
+    // Chặn /admin nếu không phải ADMIN
+    if (pathname.startsWith('/admin') && userRole !== UserRole.ADMIN) {
+      return NextResponse.redirect(new URL('/unauthorized', req.url))
+    }
 
-// export async function middleware(req: NextRequest) {
-//   if (process.env.DISABLE_MIDDLEWARE === 'true') {
-//     console.log('[Middleware Disabled]')
-//     return NextResponse.next()
-//   }
+    // Bạn có thể thêm các rule khác, ví dụ cho /resource/lesson ở đây nếu cần
 
-//   const { pathname } = req.nextUrl
-//   console.log(`[Middleware] Checking token for route: ${pathname}`)
+    // Nếu không có chặn gì thêm, trả về response từ i18n để giữ nguyên hành vi locale
+    return res
+  },
+  {
+    // Chỉ bắt đăng nhập cho các route "nhạy cảm"
+    callbacks: {
+      authorized: ({req, token}) => {
+        const {pathname} = req.nextUrl
 
-//   const matchedBase = getMatchedBaseRoute(pathname)
+        // Public routes (không yêu cầu đăng nhập)
+        const PUBLIC_PATHS = ['/unauthorized', '/api/auth/signin']
 
-//   if (!matchedBase) {
-//     return NextResponse.next()
-//   }
-//   const token = await getToken({ req, secret: process.env.AUTH_SECRET, secureCookie: true })
+        const isPublic =
+          PUBLIC_PATHS.includes(pathname) ||
+          (!pathname.startsWith('/admin') &&
+           !pathname.startsWith('/resource/lesson'))
 
-//   if (!token) {
-//     const loginUrl = new URL('/api/auth/signin', req.url)
-//     loginUrl.searchParams.set('callbackUrl', req.nextUrl.pathname)
-//     loginUrl.searchParams.set('prompt', 'login')
-//     return NextResponse.redirect(loginUrl)
-//   } else {
-//     console.log('[Middleware] ✅ Token:', token)
-//   }
+        // Public thì cho qua, còn lại phải có token
+        return isPublic ? true : !!token
+      }
+    },
+    // Nếu chưa đăng nhập, điều hướng tới trang sign-in (mặc định của NextAuth)
+    pages: {
+      signIn: '/api/auth/signin'
+      // Nếu bạn có trang tuỳ biến: signIn: '/auth/signin'
+    }
+  }
+)
 
-//   const role = token.role as UserRole
-//   const allowedRoles = routeRoleMap[matchedBase]
-
-//   if (!allowedRoles.includes(role)) {
-//     return NextResponse.redirect(new URL('/unauthorized', req.url))
-//   }
-
-//   return NextResponse.next()
-// }
-// export { auth as middleware } from '@/libs/auth/authOptions'
+// Chạy middleware cho mọi page (trừ file tĩnh, nội bộ Next, API, v.v.)
 export const config = {
   matcher: [
-    '/((?!api|trpc|_next|_vercel|.*\\..*).*)'
-    // classroom routes
-    // '/classroom/:path*',
-    // // profile routes
-    // '/profile',
-    // // ----------------resource routes----------------
-    // // course routes
-    // '/resource/course/create',
-    // '/resource/course/update/:path*',
-    // // lesson routes
-    // '/resource/lesson/:path*',
-    // '/resource/lesson/create',
-    // '/resource/lesson/update/:path*',
-    // // ----------------resource routes----------------
-    // // my learning routes
-    // '/my-learning'
-  ],
-  pages: {
-    signIn: '/api/auth/signin'
-  }
+    '/((?!_next|.*\\..*|api|trpc|_vercel).*)'
+    // '/admin/:path*', '/resource/lesson/:path*' đã bao phủ bởi pattern trên;
+    // giữ lại nếu bạn muốn rõ ràng hơn cũng được.
+  ]
 }

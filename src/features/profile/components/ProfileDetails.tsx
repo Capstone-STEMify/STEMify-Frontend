@@ -3,8 +3,14 @@ import React, { useState } from 'react'
 import { Camera, Edit, Save } from 'lucide-react'
 import { Input } from '@/components/shadcn/input'
 import { useModal } from '@/providers/ModalProvider'
+import { useSession } from 'next-auth/react'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import Image from 'next/image'
+import { Button } from '@/components/shadcn/button'
 
 export default function ProfileDetails() {
+  const { data: session, status } = useSession()
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -28,8 +34,16 @@ export default function ProfileDetails() {
     // Handle save logic here
   }
 
+  if (status === 'loading') {
+    return (
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+        <LoadingComponent size={18} textShow={false} />
+      </div>
+    )
+  }
+
   return (
-    <div className='flex-1'>
+    <div className='mb-50 flex-1'>
       {/* Cover Photo Section */}
       <div className='overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm'>
         {/* Cover Photo */}
@@ -49,8 +63,10 @@ export default function ProfileDetails() {
         <div className='relative px-6 pb-6'>
           {/* Avatar */}
           <div className='relative -mt-16 mb-4 sm:-mt-20'>
-            <img
-              src='/images/Rosie.jpg'
+            <Image
+              width={160}
+              height={160}
+              src={session?.user?.image || 'https://github.com/shadcn.png'}
               alt='Profile'
               className='h-32 w-32 rounded-full border-4 border-white bg-white object-cover shadow-lg sm:h-40 sm:w-40'
             />
@@ -65,17 +81,9 @@ export default function ProfileDetails() {
           {/* Profile Header */}
           <div className='mb-6 flex flex-col items-start justify-between sm:flex-row sm:items-center'>
             <div className='mb-4 sm:mb-0'>
-              <h1 className='text-2xl font-bold text-gray-900 sm:text-3xl'>Profile Settings</h1>
+              <h1 className='text-2xl font-bold text-gray-900 sm:text-3xl'>{session?.user?.name}</h1>
               <p className='text-sm text-gray-600 sm:text-base'>Update your photo and personal details</p>
             </div>
-
-            <button
-              onClick={handleSave}
-              className='flex w-full items-center justify-center space-x-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 sm:w-auto'
-            >
-              <Save className='h-4 w-4' />
-              <span>Save Changes</span>
-            </button>
           </div>
 
           {/* Form */}
@@ -91,30 +99,11 @@ export default function ProfileDetails() {
                   type='text'
                   id='username'
                   name='username'
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  placeholder='Enter your username'
+                  value={session?.user?.username || ''}
+                  placeholder='Your username'
+                  readOnly
                 />
               </div>
-
-              {/* Email */}
-              <div>
-                <label htmlFor='email' className='mb-2 block text-sm font-medium text-gray-700'>
-                  Email
-                </label>
-                <Input
-                  type='email'
-                  id='email'
-                  name='email'
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder='Enter your email'
-                />
-              </div>
-            </div>
-
-            {/* Right Column */}
-            <div className='space-y-6'>
               {/* First Name */}
               <div>
                 <label htmlFor='firstName' className='mb-2 block text-sm font-medium text-gray-700'>
@@ -129,7 +118,24 @@ export default function ProfileDetails() {
                   placeholder='Enter your first name'
                 />
               </div>
+            </div>
 
+            {/* Right Column */}
+            <div className='space-y-6'>
+              {/* Email */}
+              <div>
+                <label htmlFor='email' className='mb-2 block text-sm font-medium text-gray-700'>
+                  Email
+                </label>
+                <Input
+                  type='email'
+                  id='email'
+                  name='email'
+                  value={session?.user?.email || ''}
+                  placeholder='Your email'
+                  readOnly
+                />
+              </div>
               {/* Last Name */}
               <div>
                 <label htmlFor='lastName' className='mb-2 block text-sm font-medium text-gray-700'>
@@ -159,9 +165,23 @@ export default function ProfileDetails() {
               onChange={handleInputChange}
               placeholder='Write a short introduction about yourself...'
               rows={4}
-              className='flex min-h-[80px] w-full resize-none rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50'
+              className='flex min-h-[80px] w-full resize-none rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50'
             />
-            <p className='mt-1 text-xs text-gray-500'>Write a short introduction about yourself</p>
+          </div>
+          <div className='my-5 flex gap-3'>
+            <Button
+              onClick={handleSave}
+              className='bg-sky-custom-600 flex w-full items-center justify-center space-x-2 rounded-lg p-4 text-white transition-colors sm:w-auto'
+            >
+              <Save className='h-4 w-4' />
+              <span>Save Changes</span>
+            </Button>
+            <Button
+              onClick={handleSave}
+              className='text-sky-custom-600 flex w-full items-center justify-center space-x-2 rounded-lg bg-gray-200 p-4 transition-colors sm:w-auto'
+            >
+              <span>Cancel</span>
+            </Button>
           </div>
         </div>
       </div>

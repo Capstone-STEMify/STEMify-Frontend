@@ -10,7 +10,7 @@ import { signIn } from 'next-auth/react'
 
 const customFetchBaseQuery = fetchBaseQuery({
   baseUrl:
-    process.env.NEXT_PUBLIC_DOCKER_BE_URL ??
+    process.env.NEXT_PUBLIC_API_URL ??
     (() => {
       throw new Error('Missing BASE_API_URL')
     })(),

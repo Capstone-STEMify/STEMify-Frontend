@@ -1,61 +1,62 @@
-name: Deploy to Cloudflare Workers
+name: CI/CD Workflow
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
+    branches: [main]
+  push:
+    branches: [main]
 
 jobs:
-  deploy:
-    name: Deploy to Cloudflare Workers
+  lint:
+    name: ESLint & Prettier
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
 
-      - name: Setup Node.js
+  type-check:
+    name: TypeScript Check
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+  build_and_deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    needs: type-check
+    if: success()
+    env:
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      NEXT_CLIENT_SECRET: ${{ secrets.NEXT_CLIENT_SECRET }}
+      NEXT_PUBLIC_CLIENT_ID: ${{ vars.NEXT_PUBLIC_CLIENT_ID }}
+      ID_URL: ${{ vars.ID_URL }}
+      SCOPE: ${{ vars.SCOPE }}
+      NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js & dependencies
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Generate wrangler.toml from template
-        env:
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-        run: |
-          sudo apt-get update && sudo apt-get install -y gettext
-          envsubst < wrangler.template.toml > wrangler.toml
-
-      - name: Check wrangler.toml content
-        run: cat wrangler.toml
-
-      - name: List root directory files
-        run: ls -al
-
-      - name: Run ESLint
-        run: npm run lint
-
-      - name: Build project using OpenNext for Cloudflare Workers
-        env:
-          NEXT_PUBLIC_DOCKER_BE_URL: ${{ vars.NEXT_PUBLIC_DOCKER_BE_URL }}
-          NEXT_PUBLIC_IDENTITY_SERVER_URL: ${{ vars.NEXT_PUBLIC_IDENTITY_SERVER_URL }}
-          NEXT_PUBLIC_CLIENT_ID: ${{ vars.NEXT_PUBLIC_CLIENT_ID }}
-          NEXT_PUBLIC_REDIRECT_URI: ${{ vars.NEXT_PUBLIC_REDIRECT_URI }}
-          NEXT_PUBLIC_API_URL: https://stemify.hopto.org/api
-          NEXT_CLIENT_SECRET: ${{ secrets.NEXT_CLIENT_SECRET }}
-          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-
-          NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
-        run: npx opennextjs-cloudflare build
-
-      - name: Deploy to Cloudflare Workers
-        run: npx wrangler deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
