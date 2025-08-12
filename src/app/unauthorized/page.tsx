@@ -1,15 +1,10 @@
 'use client'
 import React from 'react'
-import { Lock, Home, LogIn, Shield } from 'lucide-react'
+import { Lock, Home, Shield } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
-import { signIn } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 
 export default function UnauthorizedPage() {
-  const handleLogin = () => {
-    signIn('oidc', { callbackUrl: '/' }, { prompt: 'login' })
-  }
-
   const goToHome = () => {
     redirect('/')
   }
@@ -40,16 +35,10 @@ export default function UnauthorizedPage() {
             </p>
 
             {/* Action buttons */}
-            <div className='flex items-center justify-center gap-6'>
-              <Button onClick={goToHome} size={'lg'} className='p-4 text-base'>
-                <Home className='h-5 w-5' />
-                Go back to home
-              </Button>
-              <Button onClick={handleLogin} className='bg-blue-600 p-4 text-base text-white' size={'lg'}>
-                <LogIn className='h-5 w-5' />
-                Login
-              </Button>
-            </div>
+            <Button onClick={goToHome} size={'lg'} className='p-4 text-base'>
+              <Home className='h-5 w-5' />
+              Go back to home
+            </Button>
 
             {/* Help section */}
             <div className='mt-10 border-t border-gray-200 pt-8'>
