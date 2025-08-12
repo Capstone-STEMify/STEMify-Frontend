@@ -6,6 +6,7 @@ import { PaginatedResult } from '@/types/baseModel'
 import { Enrollment } from '@/features/enrollment/types/enrollment.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
+import { useTranslations } from 'next-intl'
 
 type MyLearningHeroProps = {
   course?: PaginatedResult<Enrollment>
@@ -13,6 +14,9 @@ type MyLearningHeroProps = {
 }
 
 export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
+
+  const t = useTranslations('MyLearning')
+
   const auth = useAppSelector((state) => state.auth)
   const { data } = useSearchEnrollmentQuery({ studentId: studentId }, { skip: !auth.token })
   
@@ -28,10 +32,10 @@ export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
     : 0;
 
   const stats = [
-    { label: 'Total Courses', value: totalCourses },
-    { label: 'Completed', value: completedCourses },
-    { label: 'In Progress', value: inProgressCourses },
-    { label: 'Cancelled', value: cancelledCourses }
+    { label: `${t('total')}`, value: totalCourses },
+    { label: `${t('completed')}`, value: completedCourses },
+    { label: `${t('inProgress')}`, value: inProgressCourses },
+    { label: `${t('cancelled')}`, value: cancelledCourses }
   ]
 
   return (
@@ -57,7 +61,7 @@ export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
               transition={{ duration: 0.6, delay: 0.2 }}
               className='mb-2 text-3xl font-bold md:text-6xl'
             >
-              Your Learning Journey
+              {t('title')}
             </motion.h1>
 
             <motion.p
@@ -66,7 +70,7 @@ export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
               transition={{ duration: 0.6, delay: 0.4 }}
               className='mb-4 max-w-2xl text-2xl text-blue-100'
             >
-              Continue learning and developing your skills with your enrolled courses.
+              {t('description')}
               {totalCourses > 0 && ` You're currently taking ${totalCourses} courses.`}
             </motion.p>
 
@@ -110,7 +114,7 @@ export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
               className='mt-8 rounded-lg bg-white/30 p-4 backdrop-blur-sm'
             >
               <div className='mb-3 flex items-center justify-between'>
-                <h3 className='text-lg font-semibold text-white'>Overall Progress</h3>
+                <h3 className='text-lg font-semibold text-white'>{t('overallProgress')}</h3>
                 <span className='text-2xl font-bold text-white'>{averageProgress}%</span>
               </div>
               <div className='h-3 w-full rounded-full bg-white/20'>

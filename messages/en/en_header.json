@@ -1,0 +1,18 @@
+{
+  "Header": {
+    "home": "Home",
+    "resources": "Resources",
+    "myLearning": "My Learning",
+    "codelab": "Code Lab",
+    "dashboard": "Dashboard",
+    "gift": "Gift",
+    "signIn": "Sign In",
+    "english": "English",
+    "vietnamese": "Vietnamese",
+    "notifications": {
+      "title": "Notifications",
+      "all": "All",
+      "unread": "Unread"
+    }
+  }
+}

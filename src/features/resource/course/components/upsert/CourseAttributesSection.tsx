@@ -3,6 +3,7 @@ import { Category } from '@/features/resource/category/types/category.type'
 import { Skill } from '@/features/resource/skill/types/skill.type'
 import { Standard } from '@/features/resource/standard/types/standard.type'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 type CourseAttributesSectionProps = {
@@ -13,12 +14,13 @@ type CourseAttributesSectionProps = {
 }
 
 export default function CourseAttributesSection({ form, skills, categories, standards }: CourseAttributesSectionProps) {
+  const t = useTranslations('courseManagement')
   return (
     <>
       <SCard
         className='gap-2'
-        title='Skills'
-        description='Select the skills this course will help develop'
+        title={t('skill.label')}
+        description={t('skill.note')}
         content={
           <form.AppField
             name='skills'
@@ -37,8 +39,8 @@ export default function CourseAttributesSection({ form, skills, categories, stan
 
       <SCard
         className='gap-2'
-        title='Categories'
-        description='Select the categories this course belongs to'
+        title={t('category.label')}
+        description={t('category.note')}
         content={
           <form.AppField
             name='categories'
@@ -57,8 +59,8 @@ export default function CourseAttributesSection({ form, skills, categories, stan
 
       <SCard
         className='gap-3'
-        title='Standards'
-        description='Select the education standards this course aligns with'
+        title={t('standard.label')}
+        description={t('standard.note')}
         content={
           <form.AppField
             name='standards'

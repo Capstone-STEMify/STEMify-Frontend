@@ -1,6 +1,8 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
 import { Search, Sparkles } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 
 interface HeroSectionProps {
   onAnimationComplete: (complete: boolean) => void
@@ -8,6 +10,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ onAnimationComplete, animationProgress }: HeroSectionProps) {
+  const t = useTranslations('HeroSection')
   const containerRef = useRef(null)
   const subtitleRef = useRef(null)
   const titleRef = useRef(null)
@@ -116,6 +119,10 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
     loadGSAP()
   }, [animationProgress, onAnimationComplete, animatedElements])
 
+  const handleChangeType = (value: string) => {
+    setSelectedType(value);
+};
+
   return (
     <section className='relative flex h-screen items-center justify-center overflow-hidden'>
       <div className='absolute inset-0 h-full w-full'>
@@ -132,12 +139,12 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
 
       <div ref={containerRef} className='relative z-40 mx-auto max-w-4xl px-6 text-center'>
         <p ref={subtitleRef} className='mb-4 text-lg font-medium text-white/90 drop-shadow-lg'>
-          Turn STEM into a game - Inspire passion, creativity
+          {t('subtitle')}
         </p>
 
         <div ref={titleRef} className='mb-4'>
           <h1 className='text-6xl leading-tight font-bold text-white drop-shadow-2xl md:text-7xl'>
-            The students light bulbs is coming on
+            {t('title')}
           </h1>
         </div>
 
@@ -154,28 +161,29 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
           <div className='flex items-center'>
             <div className='flex items-center space-x-2 border-r border-gray-200 px-4 py-3'>
               <Sparkles className='h-5 w-5 text-amber-400' />
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className='cursor-pointer border-none bg-transparent font-medium text-gray-700 outline-none'
-              >
-                <option value='Course'>Course</option>
-                <option value='Lesson'>Lesson</option>
-                <option value='Activity'>Activity</option>
-              </select>
+              <Select onValueChange={handleChangeType} defaultValue={'Course'}>
+                <SelectTrigger className="w-[120px] border-none shadow-none bg-transparent focus-visible:ring-0">
+                  <SelectValue placeholder={selectedType} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Course">{t('course')}</SelectItem>
+                  <SelectItem value="Lesson">{t('lesson')}</SelectItem>
+                  <SelectItem value="Activity">{t('activity')}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <input
               type='text'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder='What would you like to explore today?'
+              placeholder={t('searchPlaceholder')}
               className='flex-1 border-none bg-transparent px-6 py-3 text-lg text-gray-700 placeholder-gray-500 outline-none'
             />
 
             <button className='flex transform items-center space-x-2 rounded-xl bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
               <Search className='h-5 w-5' />
-              <span>Explore</span>
+              <span>{t('exploreButton')}</span>
             </button>
           </div>
         </div>

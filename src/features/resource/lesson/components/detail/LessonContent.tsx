@@ -1,23 +1,19 @@
 'use client'
 
 import React from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import rehypeRaw from 'rehype-raw'
 import { useSearchContentQuery } from '@/features/content/api/contentApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import {
-  useSearchStudentProgressQuery,
   useUpdateStudentProgressMutation
 } from '@/features/student-progress/api/studentProgressApi'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 import { ProgressStatus, StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { toast } from 'sonner'
 import { Button } from '@/components/shadcn/button'
-import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import MDEditor from '@uiw/react-md-editor'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
+import { useTranslations } from 'next-intl'
 
 type LessonContentProps = {
   sectionId: number
@@ -28,6 +24,8 @@ type LessonContentProps = {
 }
 export default function LessonContent({ sectionId, token, lessonId, sectionStatus, enrollmentId }: LessonContentProps) {
   const dispatch = useAppDispatch()
+
+  const t = useTranslations('LessonDetails')
 
   const { data: content } = useSearchContentQuery(
     { sectionId },
@@ -87,5 +85,5 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
     )
   }
 
-  return <div>No Content Available For This Section</div>
+  return <div>{t('notFound.no_section')}</div>
 }

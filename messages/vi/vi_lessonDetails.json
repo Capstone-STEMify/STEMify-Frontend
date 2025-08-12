@@ -1,0 +1,29 @@
+{
+    "LessonDetails": {
+        "description": "Mô Tả",
+        "sections": "Chuyên mục",
+        "lesson": {
+            "title": "Bài Học",
+            "about": "Giới thiệu về bài học này",
+            "dur_unit": "phút",
+            "age_unit": "tuổi",
+            "nodata": "Không có dữ liệu bài học",
+            "category": "Danh Mục",
+            "skill": "Kỹ Năng",
+            "standard": "Tiêu Chuẩn"
+        },
+        "notFound": {
+            "title": "Không có dữ liệu bài học",
+            "description": "Hiện tại không có bài học nào cho khóa học này.",
+            "no_section": "Không có nội dung cho phần này",
+            "no_section_v2": "Không có Phần nào"
+        },
+        "action": {
+            "add": "Thêm vào khóa học",
+            "favor": "Thêm vào yêu thích",
+            "share": "Chia sẻ",
+            "learning": "Bắt Đầu Học",
+            "start_loading": "Đang bắt đầu..."
+        }
+    }
+}

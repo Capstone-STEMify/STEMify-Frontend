@@ -16,6 +16,7 @@ import {
   Sparkles
 } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -50,6 +51,7 @@ function MenuItem({
 }
 
 export default function AuthStatusMenu() {
+  const t = useTranslations('Header')
   const { data: session, status } = useSession()
 
   if (status === 'loading') {
@@ -141,7 +143,7 @@ export default function AuthStatusMenu() {
           className='group relative gap-4 rounded-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-500 px-6'
         >
           <ArrowRightToLine size={16} className='transition-transform duration-200 group-hover:translate-x-1' />
-          <span className='font-semibold'>Sign In</span>
+          <span className='font-semibold'>{t('signIn')}</span>
           <Sparkles size={14} />
         </Button>
       )}

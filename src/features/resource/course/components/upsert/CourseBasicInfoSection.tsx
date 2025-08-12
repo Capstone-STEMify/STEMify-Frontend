@@ -1,4 +1,5 @@
 import { SCard } from '@/components/shared/card/SCard'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 type CourseBasicInfoSectionProps = {
@@ -6,17 +7,18 @@ type CourseBasicInfoSectionProps = {
 }
 
 export default function CourseBasicInfoSection({ form }: CourseBasicInfoSectionProps) {
+  const t = useTranslations('courseManagement')
   return (
     <>
       <SCard
         className='gap-3'
-        title='Course Title'
-        description='Enter a descriptive title for the course'
+        title={t('title.label')}
+        description={t('title.note')}
         content={
           <form.AppField
             name='title'
             children={(field: any) => (
-              <field.TextAreaField placeholder='Enter course title' className='rounded-lg border-gray-300' />
+              <field.TextAreaField placeholder={t('title.placeholder')} className='rounded-lg border-gray-300' />
             )}
           />
         }
@@ -36,13 +38,13 @@ export default function CourseBasicInfoSection({ form }: CourseBasicInfoSectionP
       /> */}
       <SCard
         className='gap-3'
-        title='Course Description'
-        description='Provide a brief description of the course'
+        title={t('description.label')}
+        description={t('description.note')}
         content={
           <form.AppField
             name='description'
             children={(field: any) => (
-              <field.TextAreaField placeholder='Enter course description' className='h-30 rounded-lg border-gray-300' />
+              <field.TextAreaField placeholder={t('description.placeholder')} className='h-30 rounded-lg border-gray-300' />
             )}
           />
         }

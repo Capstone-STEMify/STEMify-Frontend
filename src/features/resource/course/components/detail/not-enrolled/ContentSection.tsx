@@ -14,6 +14,7 @@ import { SDropDown } from '@/components/shared/SDropDown'
 import { UserRole } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 
 // --- dnd-kit imports ---
 import { DndContext, PointerSensor, useSensor, useSensors, DragEndEvent, closestCenter } from '@dnd-kit/core'
@@ -63,6 +64,7 @@ function SortableLessonCard({
 }
 
 export default function ContentSection() {
+  const t = useTranslations('CourseDetails')
   const router = useRouter()
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
@@ -147,17 +149,17 @@ export default function ContentSection() {
           <div className='bg-white py-12'>
             <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
               <div className='text-center'>
-                <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>No Lessons Found</h2>
-                <p className='text-lg text-gray-600'>There are currently no lessons available for this course.</p>
+                <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>{t('notEnrolled.notFound.title')}</h2>
+                <p className='text-lg text-gray-600'>{t('notEnrolled.notFound.description')}</p>
               </div>
             </div>
           </div>
         ) : (
           <div className='mx-auto mt-24 max-w-7xl px-4 sm:px-6 lg:px-8'>
             <div className='mt-30 mb-12 text-center'>
-              <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>Lesson Content</h2>
+              <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>{t('notEnrolled.lesson.title')}</h2>
               <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>
-                Engaging activities designed to inspire learning and growth
+                {t('notEnrolled.lesson.description')}
               </p>
             </div>
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
@@ -166,7 +168,7 @@ export default function ContentSection() {
                 onClick={() => openModal('upsertLesson', { courseIdModal: Number(courseId) })}
               >
                 <PlusCircle size={70} className='text-gray-500' />
-                <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>
+                <p className='mt-4 text-sm font-medium text-gray-500'>{t('notEnrolled.button.create')}</p>
               </div>
             </div>
           </div>
@@ -186,9 +188,9 @@ export default function ContentSection() {
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='mb-12 text-center'>
-          <h2 className='my-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>Lesson Content</h2>
+          <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>{t('notEnrolled.lesson.title')}</h2>
           <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>
-            Engaging activities designed to inspire learning and growth
+            {t('notEnrolled.lesson.description')}
           </p>
         </div>
         {!isReadOnly && (
@@ -237,22 +239,22 @@ export default function ContentSection() {
                                 className='text-sm'
                                 onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
                               >
-                                View Detail
+                                {t('notEnrolled.lesson.button.view')}
                               </p>,
                               <p onClick={() => handleNavigateUpsertLesson(lesson.id)} key='update' className='text-sm'>
-                                Update Lesson
+                                {t('notEnrolled.lesson.button.update')}
                               </p>,
                               <p
                                 key='delete-lesson'
                                 className='text-sm'
                                 onClick={() =>
                                   openModal('confirm', {
-                                    message: 'Are you sure you want to delete this lesson?',
+                                    message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
                                     onConfirm: () => handleDeleteLesson(lesson.id)
                                   })
                                 }
                               >
-                                Delete Lesson
+                              {t('notEnrolled.lesson.button.delete')}
                               </p>
                             ]}
                           />
@@ -274,7 +276,7 @@ export default function ContentSection() {
                   onClick={() => openModal('upsertLesson', { courseIdModal: Number(courseId) })}
                 >
                   <PlusCircle size={70} className='text-gray-500' />
-                  <p className='mt-4 text-sm font-medium text-gray-500'>Create New Lesson</p>
+                  <p className='mt-4 text-sm font-medium text-gray-500'>{t('notEnrolled.lesson.button.create')}</p>
                 </div>
               </div>
             </SortableContext>

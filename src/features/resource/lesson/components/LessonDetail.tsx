@@ -13,8 +13,10 @@ import LessonOutline from '@/features/resource/lesson/components/detail/LessonOu
 import LessonContent from '@/features/resource/lesson/components/detail/LessonContent'
 import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useSearchStudentProgressQuery } from '@/features/student-progress/api/studentProgressApi'
+import { useTranslations } from 'next-intl'
 
 export default function LessonDetail() {
+  const t = useTranslations('LessonDetails')
   const userId = useAppSelector((state) => state.auth.user?.userId)
   const { lessonId } = useParams()
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null)
@@ -73,12 +75,12 @@ export default function LessonDetail() {
                 items={[
                   {
                     value: 'description',
-                    label: 'Description',
+                    label: `${t('description')}`,
                     content: <LessonDescription lessonData={lessonData} lessonLoading={lessonLoading} />
                   },
                   {
                     value: 'sections',
-                    label: 'Sections',
+                    label: `${t('sections')}`,
                     content: (
                       <LessonOutline
                         sectionData={sectionData}
@@ -104,7 +106,7 @@ export default function LessonDetail() {
                   enrollmentId={enrollmentId}
                 />
               ) : (
-                <div className=''>No Content Available For This Section</div>
+                <div className=''>{t('notFound.no_section')}</div>
               )}
             </ResizablePanel>
           </ResizablePanelGroup>

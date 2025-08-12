@@ -1,0 +1,28 @@
+{
+    "lessonManagement": {
+        "createTitle": "Create New Lesson",
+        "updateTitle": "Update Lesson",
+        "title": {
+            "label": "Lesson Title",
+            "note": "Enter a descriptive title for the lesson",
+            "placeholder": "e.g., Lesson 1"
+        },
+        "description": {
+            "label": "Lesson Description",
+            "note": "Provide a brief description of the lesson",
+            "placeholder": "e.g., This lesson covers the basics of programming using Python."
+        },
+        "image": {
+            "label": "Cover Image",
+            "note": "Upload cover image",
+            "placeholder": "Make the document more engaging",
+            "btn": "Choose File"
+        },
+        "btn": "Submit",
+        "courseNotFound": {
+            "title": "Course not found",
+            "description": "You need to select a course before creating a lesson.",
+            "btn": "Go to Course List"
+        }
+    }
+}

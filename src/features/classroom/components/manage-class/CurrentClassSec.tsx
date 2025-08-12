@@ -2,6 +2,7 @@ import { motion, useInView } from 'framer-motion'
 import React, { useRef } from 'react'
 import { Users2 } from 'lucide-react'
 import { fadeInUp } from '@/utils/motion'
+import Image from 'next/image'
 
 export default function CurrentClassSec() {
   const ref = useRef(null)
@@ -34,7 +35,7 @@ export default function CurrentClassSec() {
           >
             <div className='flex items-center gap-4'>
               <div className='h-full w-full rounded'>
-                <img className='h-20 w-30 rounded' src='/HomeFiles/hcm.jpg' alt='class_img' />
+                <Image className='h-20 w-30 rounded' src='/HomeFiles/hcm.jpg' alt='class_img' />
               </div>
               <div className='w-full'>
                 <h4 className='font-semibold text-gray-900'>{classroom.name}</h4>
