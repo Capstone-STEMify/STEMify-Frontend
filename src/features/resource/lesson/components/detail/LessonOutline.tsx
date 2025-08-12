@@ -3,6 +3,7 @@ import { ProgressStatus, StudentProgress } from '@/features/student-progress/typ
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 import { cn } from '@/utils/shadcn/utils'
 import { Check } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 type LessonOutlineProps = {
   sectionData?: Section[]
@@ -17,8 +18,10 @@ export default function LessonOutline({
   onSelectSection,
   sectionStatus
 }: LessonOutlineProps) {
+  const t = useTranslations('LessonDetails')
+
   if (!sectionData || sectionData.length === 0) {
-    return <div className='flex h-screen items-center justify-center'>No Sections Available</div>
+    return <div className='flex h-screen items-center justify-center'>{t('notFound.no_section_v2')}</div>
   }
 
   const completedSectionIds = new Set(
@@ -27,7 +30,7 @@ export default function LessonOutline({
 
   return (
     <div className='px-4'>
-      <h1 className='text-lg font-semibold'>Sections</h1>
+      <h1 className='text-lg font-semibold'>{t('sections')}</h1>
       <div className='mt-5 flex flex-col space-y-2'>
         {sectionData
           .slice()
