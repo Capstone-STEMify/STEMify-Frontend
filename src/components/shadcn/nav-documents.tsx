@@ -1,20 +1,14 @@
-"use client"
+'use client'
 
-import {
-  IconDots,
-  IconFolder,
-  IconShare3,
-  IconTrash,
-  type Icon,
-} from "@tabler/icons-react"
+import { IconDots, IconFolder, IconShare3, IconTrash, type Icon } from '@tabler/icons-react'
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "components/shadcn/dropdown-menu"
+  DropdownMenuTrigger
+} from 'components/shadcn/dropdown-menu'
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -22,11 +16,11 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
-} from "components/shadcn/sidebar"
+  useSidebar
+} from 'components/shadcn/sidebar'
 
 export function NavDocuments({
-  items,
+  items
 }: {
   items: {
     name: string
@@ -37,7 +31,7 @@ export function NavDocuments({
   const { isMobile } = useSidebar()
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
       <SidebarGroupLabel>Documents</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
@@ -50,18 +44,15 @@ export function NavDocuments({
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuAction
-                  showOnHover
-                  className="data-[state=open]:bg-accent rounded-sm"
-                >
+                <SidebarMenuAction showOnHover className='data-[state=open]:bg-accent rounded-sm'>
                   <IconDots />
-                  <span className="sr-only">More</span>
+                  <span className='sr-only'>More</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-24 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
+                className='w-24 rounded-lg'
+                side={isMobile ? 'bottom' : 'right'}
+                align={isMobile ? 'end' : 'start'}
               >
                 <DropdownMenuItem>
                   <IconFolder />
@@ -72,7 +63,7 @@ export function NavDocuments({
                   <span>Share</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
+                <DropdownMenuItem variant='destructive'>
                   <IconTrash />
                   <span>Delete</span>
                 </DropdownMenuItem>
@@ -80,12 +71,12 @@ export function NavDocuments({
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
+        {/* <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
             <IconDots className="text-sidebar-foreground/70" />
             <span>More</span>
           </SidebarMenuButton>
-        </SidebarMenuItem>
+        </SidebarMenuItem> */}
       </SidebarMenu>
     </SidebarGroup>
   )
