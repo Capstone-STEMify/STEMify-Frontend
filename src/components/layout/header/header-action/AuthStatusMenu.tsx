@@ -1,48 +1,121 @@
 'use client'
+
 import HeaderEvent from '@/components/layout/header/header-action/HeaderEvent'
 import { Button } from '@/components/shadcn/button'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SAvatar from '@/components/shared/SAvatar'
 import { SPopover } from '@/components/shared/SPopover'
-import { ArrowRightToLine, Sparkles } from 'lucide-react'
+import {
+  ArrowRightToLine,
+  ChevronRight,
+  LogOut,
+  Palette,
+  Repeat,
+  Settings,
+  User as UserIcon,
+  Sparkles
+} from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import React from 'react'
+import clsx from 'clsx'
+import Link from 'next/link'
+
+function MenuItem({
+  children,
+  icon,
+  href,
+  className
+}: {
+  children: React.ReactNode
+  icon?: React.ReactNode
+  className?: string
+  href?: string
+}) {
+  return (
+    <Link
+      href={href ?? '#'}
+      className={clsx(
+        'flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors',
+        'hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none',
+        'dark:hover:bg-zinc-800',
+        className
+      )}
+    >
+      <span className='flex items-center gap-3'>
+        {icon}
+        <span>{children}</span>
+      </span>
+    </Link>
+  )
+}
 
 export default function AuthStatusMenu() {
   const { data: session, status } = useSession()
+
   if (status === 'loading') {
     return (
       <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
-        <LoadingComponent size={50} textShow={false} />
+        <LoadingComponent size={18} textShow={false} />
       </div>
     )
   }
+
   const isAuth = status === 'authenticated'
 
   return (
-    <div className='hiden items-center justify-center gap-3 lg:flex'>
+    <div className='hidden items-center justify-center gap-3 lg:flex'>
       {isAuth ? (
         <div className='flex items-center gap-3'>
           <HeaderEvent />
+
+          {/* Divider */}
           <div className='relative h-8 w-px'>
             <div className='absolute inset-0 bg-gradient-to-b from-transparent via-gray-300 to-transparent dark:via-gray-600' />
             <div className='absolute inset-0 bg-gradient-to-b from-transparent via-amber-300/20 to-transparent opacity-0 transition-opacity duration-300 hover:opacity-100' />
           </div>
+
+          {/* Profile popover */}
           <SPopover
+            className='w-65 rounded-xl border bg-white p-4 shadow-lg outline-none dark:border-zinc-800 dark:bg-zinc-900'
             trigger={
               <div>
-                <SAvatar src={session.user.image || 'https://github.com/shadcn.png'} />
+                <SAvatar src={session?.user?.image || 'https://github.com/shadcn.png'} />
               </div>
             }
             children={
               <div>
-                <div>{session.user.name}</div>
-                <div>{session.user.email}</div>
-                <div>{session.user.role}</div>
-                <div>Profile</div>
-                <Button className='mt-3' onClick={() => signOut({ callbackUrl: '/' })}>
-                  Sign Out
-                </Button>
+                {/* Header: avatar + name + email */}
+                <div className='flex items-center gap-3'>
+                  <SAvatar src={session?.user?.image || 'https://github.com/shadcn.png'} />
+                  <div className='min-w-0'>
+                    <div className='truncate text-base font-semibold'>{session?.user?.name}</div>
+                    <div className='text-muted-foreground truncate text-sm'>{session?.user?.email}</div>
+                  </div>
+                </div>
+
+                <div className='my-3 h-px w-full bg-gray-200 dark:bg-zinc-800' />
+
+                {/* Menu items */}
+                <div className='grid gap-1'>
+                  <MenuItem icon={<UserIcon size={16} />} href='/profile'>
+                    Profile
+                  </MenuItem>
+
+                  <MenuItem icon={<Settings size={16} />}>Account settings</MenuItem>
+
+                  {/* Theme with chevron like screenshot */}
+                  <MenuItem icon={<Palette size={16} />}>Theme</MenuItem>
+
+                  <div className='my-1 h-px w-full bg-gray-200 dark:bg-zinc-800' />
+
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                    className='flex items-center gap-2 px-3 py-2 text-red-600 hover:rounded-2xl hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40'
+                  >
+                    <LogOut size={16} />
+                    Log out
+                  </button>
+                </div>
               </div>
             }
           />

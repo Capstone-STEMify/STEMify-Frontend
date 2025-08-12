@@ -3,13 +3,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/pop
 type SPopoverProps = {
   trigger: React.ReactNode
   children: React.ReactNode
+  className?: string
 }
 
-export function SPopover({ trigger, children }: SPopoverProps) {
+export function SPopover({ trigger, children, className }: SPopoverProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
-      <PopoverContent className='w-fit px-10'>{children}</PopoverContent>
+      <PopoverContent className={`w-fit px-10 ${className}`}>{children}</PopoverContent>
     </Popover>
   )
 }
