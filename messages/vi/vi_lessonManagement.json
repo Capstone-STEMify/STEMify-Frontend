@@ -1,0 +1,26 @@
+{
+    "lessonManagement": {
+        "title": {
+            "label": "Tên Bài Học",
+            "note": "Nhập tiêu đề mô tả cho bài học",
+            "placeholder": "Ví dụ: Bài học 1"
+        },
+        "description": {
+            "label": "Mô Tả Bài Học",
+            "note": "Cung cấp một mô tả ngắn gọn về bài học",
+            "placeholder": "Ví dụ: Bài học này bao gồm các kiến thức cơ bản về lập trình bằng Python."
+        },
+        "image": {
+            "label": "Ảnh Bìa",
+            "note": "Tải lên ảnh bìa",
+            "placeholder": "Làm cho tài liệu trở nên hấp dẫn hơn",
+            "btn": "Chọn Tệp"
+        },
+        "btn": "Gửi",
+        "courseNotFound": {
+            "title": "Không thấy Khóa học",
+            "description": "Bạn cần chọn khóa học trước khi tạo bài học.",
+            "btn": "Đi đến danh sách Khóa học"
+        }
+    }
+}
