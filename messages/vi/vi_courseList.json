@@ -1,6 +1,7 @@
 {
     "CourseList": {
         "title": "Các Khóa Học",
+        "subtitle": "Khóa Học",
         "description": "Các hướng dẫn theo chủ đề, được căn chỉnh theo chương trình giảng dạy với phương pháp sư phạm giáo dục. Các khóa học có góc nhìn của giáo viên và học sinh.",
         "filterTitle": "Lọc Khóa Học",
         "noCourse": "Không Tìm Thấy Khóa Học Nào.",
@@ -22,7 +23,11 @@
         },
         "actions": {
             "searchBtn": "Tìm kiếm",
-            "clearBtn": "Xóa Tất Cả"
+            "clearBtn": "Xóa Tất Cả",
+            "add": "Thêm vào khóa học",
+            "share": "Chia sẻ",
+            "view": "Xem",
+            "create": "Tạo Khóa Học Mới"
         }
     }
 }

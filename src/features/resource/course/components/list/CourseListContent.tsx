@@ -89,7 +89,7 @@ export default function CourseListContent() {
             <Link href={`/resource/course/${course.id}`} className='flex w-fit flex-col justify-between'>
               <CardLayout imageSrc={course.imageUrl} size='sm'>
                 <div>
-                  <p className='text-muted-foreground text-xs font-medium'>Course</p>
+                  <p className='text-muted-foreground text-xs font-medium'>{t('subtitle')}</p>
                   <h3 className='text-sm font-semibold text-gray-900'>{course.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{course.description}</p>
                 </div>
@@ -108,13 +108,13 @@ export default function CourseListContent() {
                 }
                 items={[
                   <p key='view' className='text-sm'>
-                    View
+                    {t('actions.view')}
                   </p>,
                   <p key='add-to-course' className='text-sm'>
-                    Add to Course
+                    {t('actions.add')}
                   </p>,
                   <p key='share' className='text-sm'>
-                    Share
+                    {t('actions.share')}
                   </p>
                 ]}
               />
@@ -127,7 +127,7 @@ export default function CourseListContent() {
             onClick={handleNavigateCreateCourse}
           >
             <PlusCircle size={70} className='text-gray-500' />
-            <p className='mt-4 text-sm font-medium text-gray-500'>Create New Course</p>
+            <p className='mt-4 text-sm font-medium text-gray-500'>{t('actions.create')}</p>
           </div>
         )}
       </div>

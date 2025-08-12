@@ -2,26 +2,26 @@ import { UserRole } from '@/types/userRole'
 
 export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   [UserRole.ADMIN]: [
-    { name: 'Home', path: '/' },
-    { name: 'Resource', path: '/resource' },
-    { name: 'Dashboard', path: '/dashboard' }
+    { name: 'home', path: '/' },
+    { name: 'resources', path: '/resource' },
+    { name: 'dashboard', path: '/dashboard' }
   ],
   [UserRole.STUDENT]: [
-    { name: 'Home', path: '/' },
-    { name: 'Resource', path: '/resource' },
-    { name: 'My Learning', path: '/my-learning' },
-    { name: 'Code Lab', path: '/code-lab' }
+    { name: 'home', path: '/' },
+    { name: 'resources', path: '/resource' },
+    { name: 'myLearning', path: '/my-learning' },
+    { name: 'codelab', path: '/code-lab' }
   ],
   [UserRole.TEACHER]: [
-    { name: 'Home', path: '/' },
-    { name: 'Resource', path: '/resource' },
-    { name: 'My Learning', path: '/my-learning' },
-    { name: 'Code Lab', path: '/code-lab' }
+    { name: 'home', path: '/' },
+    { name: 'resources', path: '/resource' },
+    { name: 'myLearning', path: '/my-learning' },
+    { name: 'codelab', path: '/code-lab' }
   ],
   [UserRole.STAFF]: [
-    { name: 'Home', path: '/' },
-    { name: 'Resource', path: '/resource' },
-    { name: 'Code Lab', path: '/code-lab' }
+    { name: 'home', path: '/' },
+    { name: 'resources', path: '/resource' },
+    { name: 'codelab', path: '/code-lab' }
   ],
   [UserRole.GUEST]: [
     { name: 'home', path: '/' },

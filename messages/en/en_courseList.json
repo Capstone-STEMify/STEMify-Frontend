@@ -1,6 +1,7 @@
 {
     "CourseList": {
         "title": "Courses",
+        "subtitle": "Course",
         "description": "Curriculum-aligned, thematic guides with following educational pedagogical approach. Courses have teacher and student perspectives.",
         "filterTitle": "Filter Courses",
         "noCourse": "No Courses Found.",
@@ -23,7 +24,11 @@
         },
         "actions": {
             "searchBtn": "Search",
-            "clearBtn": "Clear All"
+            "clearBtn": "Clear All",
+            "add": "Add to course",
+            "share": "Share",
+            "view": "View",
+            "create": "Create New Course"
         }
     }
 }

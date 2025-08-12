@@ -16,7 +16,6 @@ export default function HeaderAction() {
     <>
       {/* Desktop Layout */}
       <div className='hidden items-center gap-2 lg:flex'>
-        <HeaderEvent />
         <AuthStatusMenu />
       </div>
 
