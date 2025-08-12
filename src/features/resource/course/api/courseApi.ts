@@ -22,5 +22,3 @@ export const {
   useLazyGetAllQuery: useLazyGetAllCourseQuery,
   useLazyGetByIdQuery: useLazyGetCourseByIdQuery
 } = courseApi
-
-// export const { useCreateCourseWithFormDataMutation } = courseApiExtended

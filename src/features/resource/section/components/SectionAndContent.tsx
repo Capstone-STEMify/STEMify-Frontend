@@ -23,11 +23,10 @@ export default function SectionAndContent() {
   const { data, isLoading } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !token })
   const [updateSectionLesson] = useUpdateLessonWithFormDataMutation()
   const [isOrderChanged, setIsOrderChanged] = useState(false)
-  const sections = data?.data.items ?? []
+  const sections = useMemo(() => data?.data.items ?? [], [data])
 
   const [expandedSections, setExpandedSections] = useState<number[]>([])
   const [items, setItems] = useState<Section[]>(sections)
-  console.log('items', items)
   const toggleSection = (id: number) => {
     setExpandedSections((prev) => (prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]))
   }
@@ -94,7 +93,7 @@ export default function SectionAndContent() {
             </div>
             {isOrderChanged && (
               <Button
-                className='mt-4 w-full py-6 text-base'
+                className='bg-amber-custom-400 mt-4 w-full py-6 text-base'
                 onClick={async () => {
                   try {
                     const sectionIds = items.map((s) => s.id)
