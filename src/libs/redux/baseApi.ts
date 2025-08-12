@@ -31,7 +31,6 @@ export const customFetchBaseQueryWithErrorHandling = async (
   api: BaseQueryApi,
   extraOptions: object
 ) => {
-  console.log('🔍 customFetchBaseQueryWithErrorHandling', process.env.NEXT_PUBLIC_API_URL)
   const result = await customFetchBaseQuery(args, api, extraOptions)
 
   if (result.error) {
