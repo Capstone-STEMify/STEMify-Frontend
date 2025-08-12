@@ -123,7 +123,7 @@ export default function AuthStatusMenu() {
                   <div className='my-1 h-px w-full bg-gray-200 dark:bg-zinc-800' />
 
                   <button
-                    onClick={() => signOut({ callbackUrl: '/' })}
+                    onClick={handleSignOut}
                     className='flex items-center gap-2 px-3 py-2 text-red-600 hover:rounded-2xl hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40'
                   >
                     <LogOut size={16} />
