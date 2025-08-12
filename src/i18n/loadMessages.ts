@@ -7,6 +7,7 @@ export async function loadMessages(locale: string) {
   const lessonListMessages = (await import(`../../messages/${locale}/${locale}_lessonList.json`)).default;
   const courseDetailMessages = (await import(`../../messages/${locale}/${locale}_courseDetails.json`)).default;
   const lessonDetailsMessages = (await import(`../../messages/${locale}/${locale}_lessonDetails.json`)).default;
+  const courseManagementMessages = (await import(`../../messages/${locale}/${locale}_courseManagement.json`)).default;
 
   return {
     ...headerMessages,
@@ -17,5 +18,6 @@ export async function loadMessages(locale: string) {
     ...lessonListMessages,
     ...courseDetailMessages,
     ...lessonDetailsMessages,
+    ...courseManagementMessages
   };
 }
