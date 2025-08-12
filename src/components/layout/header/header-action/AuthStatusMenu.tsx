@@ -18,7 +18,21 @@ export default function AuthStatusMenu() {
     )
   }
   const isAuth = status === 'authenticated'
+  const handleSignOut = async () => {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/account/logout`, {
+        method: 'GET',
+        credentials: 'include'
+      })
 
+      localStorage.clear()
+      sessionStorage.clear()
+
+      await signOut({ callbackUrl: '/' })
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
+  }
   return (
     <div className='hiden items-center justify-center gap-3 lg:flex'>
       {isAuth ? (
@@ -40,7 +54,7 @@ export default function AuthStatusMenu() {
                 <div>{session.user.email}</div>
                 <div>{session.user.role}</div>
                 <div>Profile</div>
-                <Button className='mt-3' onClick={() => signOut({ callbackUrl: '/' })}>
+                <Button className='mt-3' onClick={handleSignOut}>
                   Sign Out
                 </Button>
               </div>
