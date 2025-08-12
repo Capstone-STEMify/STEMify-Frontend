@@ -13,8 +13,11 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { Button } from '@/components/shadcn/button'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 
 export default function SectionAndContent() {
+  const t = useTranslations('sectionManagement')
+
   const { lessonId } = useParams()
   const token = useAppSelector((state) => state.auth.token)
   const { openModal } = useModal()
@@ -71,7 +74,7 @@ export default function SectionAndContent() {
 
   return (
     <div>
-      <h2 className='mb-6 text-center text-4xl font-bold'>Manage Sections</h2>
+      <h2 className='mb-6 text-center text-4xl font-bold'>{t('section.title')}</h2>
 
       <div className='transition-all'>
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -90,7 +93,7 @@ export default function SectionAndContent() {
                 variant='outline'
                 onClick={() => openModal('upsertSection', { lessonId: Number(lessonId) })}
               >
-                <Plus className='mr-2 h-5 w-5' /> Add new section
+                <Plus className='mr-2 h-5 w-5' /> {t('section.add_btn')}
               </Button>
             </div>
             {isOrderChanged && (
@@ -122,7 +125,7 @@ export default function SectionAndContent() {
                   }
                 }}
               >
-                Save Order
+                {t('section.order_btn')}
               </Button>
             )}
           </SortableContext>

@@ -14,6 +14,7 @@ import {
 import { useAppSelector } from '@/hooks/redux-hooks'
 import removeMd from 'remove-markdown'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useTranslations } from 'next-intl'
 
 const contentSchema = z.object({
   contentName: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
@@ -59,6 +60,7 @@ type UpsertContentProps = {
 }
 
 export default function UpsertContent({ sectionId }: UpsertContentProps) {
+  const t = useTranslations('sectionManagement')
   const token = useAppSelector((state) => state.auth.token)
 
   const { data: contentData, isLoading: isContentLoading } = useSearchContentQuery(
@@ -163,12 +165,12 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
                   name='contentType'
                   children={(field) => (
                     <field.SelectField
-                      label='Content Type'
+                      label={t('section.contentType.label')}
                       placeholder='Select a type'
                       options={[
-                        { value: 'Text', label: 'Text (DOC, PDF)' },
-                        { value: 'Video', label: 'Video' },
-                        { value: 'Document', label: 'Document (DOC, PDF)' }
+                        { value: 'Text', label: `${t('section.contentType.text')}` },
+                        { value: 'Video', label: `${t('section.contentType.video')}` },
+                        { value: 'Document', label: `${t('section.contentType.document')}` }
                       ]}
                     />
                   )}
@@ -200,7 +202,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
 
         <form.AppForm>
           <div className='flex w-full justify-end'>
-            <form.SubmitButton className='rounded-full px-10 py-6 text-xl'>Save </form.SubmitButton>
+            <form.SubmitButton className='rounded-full px-10 py-6 text-xl'>{t('save_btn')} </form.SubmitButton>
           </div>
         </form.AppForm>
       </div>

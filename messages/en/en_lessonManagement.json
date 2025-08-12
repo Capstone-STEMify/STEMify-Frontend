@@ -1,5 +1,7 @@
 {
     "lessonManagement": {
+        "createTitle": "Create New Lesson",
+        "updateTitle": "Update Lesson",
         "title": {
             "label": "Lesson Title",
             "note": "Enter a descriptive title for the lesson",

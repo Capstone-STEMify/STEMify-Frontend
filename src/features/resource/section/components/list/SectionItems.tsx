@@ -5,6 +5,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Edit, Trash2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 
 export default function SectionItems({
@@ -19,6 +20,8 @@ export default function SectionItems({
   const { openModal } = useModal()
   const [deleteSection] = useDeleteSectionMutation()
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: section.id })
+
+  const t = useTranslations('sectionManagement')
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -48,7 +51,7 @@ export default function SectionItems({
             onClick={(e) => {
               e.stopPropagation()
               openModal('confirm', {
-                message: 'Are you sure you want to delete this section?',
+                message: `${t('section.del_message')}`,
                 onConfirm: async () => {
                   try {
                     await deleteSection(section.id).unwrap()
@@ -68,10 +71,10 @@ export default function SectionItems({
         <div className='mt-3 text-sm text-gray-700'>
           <div className='flex gap-10 px-5'>
             <p>
-              <strong className='mr-2'>Duration:</strong> {section.duration} mins
+              <strong className='mr-2'>{t('section.dur')}:</strong> {section.duration} mins
             </p>
             <p>
-              <strong className='mr-2'>Status:</strong> {section.status}
+              <strong className='mr-2'>{t('section.status')}:</strong> {section.status}
             </p>
           </div>
           <ContentManagement sectionId={section.id} />

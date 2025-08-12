@@ -1,5 +1,7 @@
 {
     "lessonManagement": {
+        "createTitle": "Tạo bài học mới",
+        "updateTitle": "Cập nhật bài học",
         "title": {
             "label": "Tên Bài Học",
             "note": "Nhập tiêu đề mô tả cho bài học",

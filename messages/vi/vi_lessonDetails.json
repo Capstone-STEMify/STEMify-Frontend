@@ -1,7 +1,7 @@
 {
     "LessonDetails": {
         "description": "Mô Tả",
-        "sections": "Các Phần",
+        "sections": "Chuyên mục",
         "lesson": {
             "title": "Bài Học",
             "about": "Giới thiệu về bài học này",

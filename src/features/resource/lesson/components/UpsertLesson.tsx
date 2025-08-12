@@ -184,7 +184,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
       }}
     >
       <h1 className='mb-5 text-center text-5xl font-bold text-gray-800'>
-        {lessonId ? 'Update Lesson' : 'Create New Lesson'}
+        {lessonId ? `${t('updateTitle')}` : `${t('createTitle')}`}
       </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
