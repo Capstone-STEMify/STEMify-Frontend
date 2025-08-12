@@ -8,6 +8,11 @@
     "gift": "Quà Tặng",
     "signIn": "Đăng Nhập",
     "english": "Tiếng Anh",
-    "vietnamese": "Tiếng Việt"
+    "vietnamese": "Tiếng Việt",
+    "notifications": {
+      "title": "Thông Báo",
+      "all": "Tất Cả",
+      "unread": "Chưa Đọc"
+    }
   }
 }

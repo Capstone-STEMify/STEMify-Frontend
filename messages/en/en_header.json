@@ -8,6 +8,11 @@
     "gift": "Gift",
     "signIn": "Sign In",
     "english": "English",
-    "vietnamese": "Vietnamese"
+    "vietnamese": "Vietnamese",
+    "notifications": {
+      "title": "Notifications",
+      "all": "All",
+      "unread": "Unread"
+    }
   }
 }
