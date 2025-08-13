@@ -21,7 +21,7 @@ export default function UpsertStandardModal({ id, onConfirm }: UpsertStandardMod
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='sm:max-w-md'>
+      <DialogContent className='sm:max-w-[425px] w-full'>
         <UpsertStandard id={id} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>

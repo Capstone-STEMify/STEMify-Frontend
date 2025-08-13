@@ -1,14 +1,13 @@
 'use client'
 import { Button } from '@/components/shadcn/button'
+import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
-import { useSearchCategoryQuery } from '@/features/resource/category/api/categoryApi'
-import { useGetCategoryAction } from '@/features/resource/category/components/table/CategoryAction'
+import { useSearchSkillQuery } from '@/features/resource/skill/api/skillApi'
+import { useGetSkillAction } from '@/features/resource/skill/components/table/SkillAction'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
-import { Input } from '@/components/shadcn/input'
 
-// Debounce hook to delay API calls
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value)
   useEffect(() => {
@@ -22,31 +21,28 @@ function useDebounce(value: string, delay: number) {
   return debouncedValue
 }
 
-export default function CategoryTable() {
+export default function SkillTable() {
   const { openModal } = useModal()
-  const columns = useGetCategoryAction()
-
+  const columns = useGetSkillAction()
 
   const [searchQuery, setSearchQuery] = useState('')
-  // Debounce the search query to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
-
-  const { data } = useSearchCategoryQuery({
+  const { data, isLoading } = useSearchSkillQuery({
     search: debouncedSearchQuery
   })
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
   const handleCreate = () => {
-    openModal('upsertCategory')
+    openModal('upsertSkill')
   }
 
   return (
     <div>
       <div className='flex justify-between items-center py-4'>
         <Input
-          placeholder='Search by category name...'
+          placeholder='Search by skill name...'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className='max-w-sm'
@@ -55,11 +51,7 @@ export default function CategoryTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable
-        data={rows}
-        columns={columns}
-        enableRowSelection
-      />
+      <DataTable data={rows} columns={columns} enableRowSelection />
     </div>
   )
 }
