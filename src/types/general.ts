@@ -17,6 +17,7 @@ export type ModalType =
   | 'editImage'
   | 'upsertSection'
   | 'upsertLesson'
+  | 'upsertCategory'
 
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void

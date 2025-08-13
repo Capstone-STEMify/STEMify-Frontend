@@ -17,7 +17,8 @@ export default function Providers({
       <StoreProvider>
         <AuthSessionSync />
         <ModalProvider>
-          {children} <ChatAgent />
+          {children}
+          {/* <ChatAgent /> */}
         </ModalProvider>
         <Toaster />
       </StoreProvider>
