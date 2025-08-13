@@ -1,33 +1,29 @@
-import { Button } from '@/components/shadcn/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/shadcn/dialog'
+import { Dialog, DialogContent } from '@/components/shadcn/dialog'
+import UpsertCategory from '@/features/resource/category/components/management/UpsertCategory' 
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 
-interface ConfirmModalProps {
+interface UpsertCategoryModalProps {
   id?: number
-  onConfirm: () => void
+  onConfirm?: () => void
 }
 
-export default function UpsertCategoryModal({ id, onConfirm }: ConfirmModalProps) {
+export default function UpsertCategoryModal({ id, onConfirm }: UpsertCategoryModalProps) {
   const { closeModal } = useModal()
-  const handleConfirm = () => {
-    onConfirm()
+
+  const handleSuccess = () => {
+    if (typeof onConfirm === 'function') {
+      onConfirm()
+    }
     closeModal()
   }
+
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogTitle>Category</DialogTitle>
       <DialogContent>
-        <DialogHeader>{id ? 'Edit' : 'Create'} Category</DialogHeader>
+        {/* Render the form component and pass props */}
+        <UpsertCategory id={id} onSuccess={handleSuccess} />
       </DialogContent>
-      <DialogFooter className='flex justify-end gap-2 pt-4'>
-        <Button variant='outline' onClick={closeModal}>
-          Cancel
-        </Button>
-        <Button variant='destructive' onClick={handleConfirm}>
-          Confirm
-        </Button>
-      </DialogFooter>
     </Dialog>
   )
 }
