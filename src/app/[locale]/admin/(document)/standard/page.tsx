@@ -1,3 +1,5 @@
+import StandardTable from "@/features/resource/standard/components/table/StandardTable";
+
 export default function AdminStandard() {
-  return <div>AdminStandard</div>
+  return <StandardTable/>
 }

@@ -1,0 +1,58 @@
+'use client'
+import { Button } from '@/components/shadcn/button'
+import { Input } from '@/components/shadcn/input'
+import { DataTable } from '@/components/shared/data-table/data-table'
+import { useSearchStandardQuery } from '@/features/resource/standard/api/standardApi'
+import { useGetStandardAction } from '@/features/resource/standard/components/table/StandardAction'
+import { useModal } from '@/providers/ModalProvider'
+import { Plus } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+
+// Debounce hook để trì hoãn việc gọi API
+function useDebounce(value: string, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [value, delay])
+  return debouncedValue
+}
+
+export default function StandardTable() {
+  const { openModal } = useModal()
+  const columns = useGetStandardAction()
+
+  const [searchQuery, setSearchQuery] = useState('')
+  const debouncedSearchQuery = useDebounce(searchQuery, 500)
+
+  const { data, isLoading } = useSearchStandardQuery({
+    search: debouncedSearchQuery
+  })
+
+  const rows = React.useMemo(() => data?.data.items ?? [], [data])
+
+  const handleCreate = () => {
+    openModal('upsertStandard')
+  }
+
+  return (
+    <div>
+      <div className='flex justify-between items-center py-4'>
+        <Input
+          placeholder='Search by standard name...'
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className='max-w-sm'
+        />
+        <Button size={'icon'} className='bg-amber-custom-400 rounded-full' onClick={handleCreate}>
+          <Plus />
+        </Button>
+      </div>
+      <DataTable data={rows} columns={columns} enableRowSelection />
+    </div>
+  )
+}
