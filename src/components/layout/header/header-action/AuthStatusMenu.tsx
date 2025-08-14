@@ -115,13 +115,13 @@ export default function AuthStatusMenu() {
                 {/* Menu items */}
                 <div className='grid gap-1'>
                   <MenuItem icon={<UserIcon size={16} />} href='/profile'>
-                    Profile
+                    {t('profile')}
                   </MenuItem>
 
-                  <MenuItem icon={<Settings size={16} />}>Account settings</MenuItem>
+                  <MenuItem icon={<Settings size={16} />}>{t('accountSettings')}</MenuItem>
 
                   {/* Theme with chevron like screenshot */}
-                  <MenuItem icon={<Palette size={16} />}>Theme</MenuItem>
+                  <MenuItem icon={<Palette size={16} />}>{t('theme')}</MenuItem>
 
                   <div className='my-1 h-px w-full bg-gray-200 dark:bg-zinc-800' />
 
@@ -130,7 +130,7 @@ export default function AuthStatusMenu() {
                     className='flex items-center gap-2 px-3 py-2 text-red-600 hover:rounded-2xl hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40'
                   >
                     <LogOut size={16} />
-                    Log out
+                    {t('signOut')}
                   </button>
                 </div>
               </div>

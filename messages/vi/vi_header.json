@@ -13,6 +13,10 @@
       "title": "Thông Báo",
       "all": "Tất Cả",
       "unread": "Chưa Đọc"
-    }
+    },
+    "profile": "Hồ sơ",
+    "accountSettings": "Cài đặt tài khoản",
+    "theme": "Chủ đề",
+    "signOut": "Đăng xuất"
   }
 }

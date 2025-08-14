@@ -13,6 +13,10 @@
       "title": "Notifications",
       "all": "All",
       "unread": "Unread"
-    }
+    },
+    "profile": "Profile",
+    "accountSettings": "Account Settings",
+    "theme": "Theme",
+    "signOut": "Sign Out"
   }
 }
