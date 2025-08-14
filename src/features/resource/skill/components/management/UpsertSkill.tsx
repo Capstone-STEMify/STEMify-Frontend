@@ -1,0 +1,103 @@
+'use client'
+import React from 'react'
+import { z } from 'zod'
+import { useAppForm } from '@/components/shared/form/items'
+import { toast } from 'sonner'
+import {
+  useCreateSkillMutation,
+  useGetSkillByIdQuery,
+  useUpdateSkillMutation
+} from '@/features/resource/skill/api/skillApi'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { SCard } from '@/components/shared/card/SCard'
+
+// Schema validation cho form
+const skillSchema = z.object({
+  skillName: z.string().min(3, 'Skill name must be at least 3 characters long')
+})
+
+type SkillFormData = z.infer<typeof skillSchema>
+
+const defaultSkillData: SkillFormData = {
+  skillName: ''
+}
+
+interface UpsertSkillProps {
+  id?: number
+  onSuccess?: () => void
+}
+
+export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
+  const isEditing = !!id
+
+  const { data: existingData, isLoading: isDataLoading } = useGetSkillByIdQuery(id as number, {
+    skip: !isEditing
+  })
+
+  const [createSkill, { isLoading: isCreating }] = useCreateSkillMutation()
+  const [updateSkill, { isLoading: isUpdating }] = useUpdateSkillMutation()
+
+  const form = useAppForm({
+    defaultValues: defaultSkillData,
+    validators: {
+      onChange: skillSchema
+    },
+    onSubmit: async ({ value }) => {
+      try {
+        if (isEditing) {
+          await updateSkill({ id: id!, body: value }).unwrap()
+          toast.success('Skill updated successfully!')
+        } else {
+          await createSkill(value).unwrap()
+          toast.success('Skill created successfully!')
+        }
+        onSuccess?.()
+      } catch (err: any) {
+        toast.error('Failed to submit skill.')
+        console.error(err)
+      }
+    }
+  })
+
+  // Điền dữ liệu vào form khi ở chế độ edit
+  React.useEffect(() => {
+    if (isEditing && existingData?.data) {
+      form.reset({
+        skillName: existingData.data.skillName
+      })
+    }
+  }, [existingData, isEditing, form])
+
+  if (isDataLoading) {
+    return <LoadingComponent />
+  }
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+      className='space-y-4'
+    >
+      <h2 className='text-xl font-bold'>{isEditing ? 'Edit' : 'Create'} Skill</h2>
+      <SCard
+        title='Skill Name'
+        description='Enter the name of the skill.'
+        content={
+          <form.AppField
+            name='skillName'
+            children={(field) => <field.TextAreaField placeholder='e.g., Critical Thinking' />}
+          />
+        }
+      />
+      <div className='flex justify-end gap-2 pt-4'>
+        <form.AppForm>
+          <form.SubmitButton loading={isCreating || isUpdating}>
+            {isEditing ? 'Update' : 'Create'}
+          </form.SubmitButton>
+        </form.AppForm>
+      </div>
+    </form>
+  )
+}

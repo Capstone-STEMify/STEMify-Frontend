@@ -18,6 +18,9 @@ export type ModalType =
   | 'upsertSection'
   | 'upsertLesson'
   | 'upsertCategory'
+  | 'upsertAgeRange'
+  | 'upsertStandard'
+  | 'upsertSkill'
 
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void

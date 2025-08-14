@@ -4,7 +4,7 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   [UserRole.ADMIN]: [
     { name: 'home', path: '/' },
     { name: 'resources', path: '/resource' },
-    { name: 'dashboard', path: '/dashboard' }
+    { name: 'dashboard', path: '/admin/dashboard' }
   ],
   [UserRole.STUDENT]: [
     { name: 'home', path: '/' },

@@ -1,3 +1,5 @@
+import SkillTable from "@/features/resource/skill/components/table/SkillTable";
+
 export default function AdminSkill() {
-  return <div>AdminSkill</div>
+  return <SkillTable/>
 }

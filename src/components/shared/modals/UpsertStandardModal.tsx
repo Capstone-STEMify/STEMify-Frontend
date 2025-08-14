@@ -1,14 +1,15 @@
+'use client'
 import { Dialog, DialogContent } from '@/components/shadcn/dialog'
-import UpsertCategory from '@/features/resource/category/components/management/UpsertCategory' 
+import UpsertStandard from '@/features/resource/standard/components/management/UpsertStandard'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 
-interface UpsertCategoryModalProps {
+interface UpsertStandardModalProps {
   id?: number
   onConfirm?: () => void
 }
 
-export default function UpsertCategoryModal({ id, onConfirm }: UpsertCategoryModalProps) {
+export default function UpsertStandardModal({ id, onConfirm }: UpsertStandardModalProps) {
   const { closeModal } = useModal()
 
   const handleSuccess = () => {
@@ -21,8 +22,7 @@ export default function UpsertCategoryModal({ id, onConfirm }: UpsertCategoryMod
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className='sm:max-w-[425px] w-full'>
-        {/* Render the form component and pass props */}
-        <UpsertCategory id={id} onSuccess={handleSuccess} />
+        <UpsertStandard id={id} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>
   )
