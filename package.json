@@ -51,6 +51,7 @@
     "blockly": "^12.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "country-flag-icons": "^1.5.19",
     "framer-motion": "^12.16.0",
     "gsap": "^3.13.0",
     "jwt-decode": "^4.0.0",
