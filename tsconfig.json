@@ -38,6 +38,6 @@
     ".next/types/**/*.ts",
     "src/providers/ExcalidrawWrapper.tsx",
     "src/components/shared/CustomMenubar"
-, "src/features/blockly-phaser/blockly/BlocklyEditor.js"  ],
+, "src/features/blockly-phaser/blockly/BlocklyEditor.js", "src/app/[locale]/test/JointHelper.jsx", "src/app/[locale]/test/Connector.jsx", "src/app/[locale]/test/Straw.jsx", "src/app/[locale]/test/page.jsx", "src/app/[locale]/test-2/Connector.tsx", "src/app/[locale]/test-2/Straw.jsx"  ],
   "exclude": ["node_modules"]
 }

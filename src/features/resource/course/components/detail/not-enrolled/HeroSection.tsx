@@ -15,6 +15,7 @@ import { UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useUpdateCourseWithFormDataMutation } from '@/features/resource/course/api/courseApi'
+import { useTranslations } from 'next-intl'
 
 interface HeroSectionProps {
   course: Course
@@ -39,6 +40,8 @@ const TagGroup = ({ label, items, className }: TagGroupProps) => (
 )
 
 export default function HeroSection({ course, token }: HeroSectionProps) {
+  const t = useTranslations('CourseDetails')
+
   const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
   const userRole = auth.user?.role || UserRole.GUEST
@@ -90,7 +93,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
             <BackButton />
             <div className='mx-3 inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-800'>
               <CalendarFold className='mr-2 h-4 w-4' />
-              Age Ranges: {course.ageRangeLabel}
+              {t('notEnrolled.ageRange')}: {course.ageRangeLabel}
             </div>
 
             <h1 className='text-2xl leading-tight font-bold text-blue-800 lg:text-4xl'>{course.title}</h1>
@@ -99,12 +102,12 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
 
             <div className='space-x-6 text-sm'>
               {/* Category */}
-              <TagGroup label='Category' items={course.categoryNames} className='bg-red-100 text-red-800' />
+              <TagGroup label={t('notEnrolled.category')} items={course.categoryNames} className='bg-red-100 text-red-800' />
               {/* Skill */}
-              <TagGroup label='Skill' items={course.skillNames} className='bg-emerald-100 text-emerald-700' />
+              <TagGroup label={t('notEnrolled.skill')} items={course.skillNames} className='bg-emerald-100 text-emerald-700' />
               {/* Standard */}
               <TagGroup
-                label='Standard'
+                label={t('notEnrolled.standard')}
                 items={course.standardNames}
                 className='text-orange-custom-500 bg-yellow-custom-50'
               />
@@ -114,32 +117,32 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
               <div className='flex flex-col gap-4 sm:flex-row'>
                 <Button
                   onClick={handleEnroll}
-                  className='bg-sky-custom-600 w-45 cursor-pointer rounded-4xl py-6 text-lg text-white'
+                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
                 >
                   <TbDoorExit className='h-5 w-5' />
-                  Enroll now
+                  {t('notEnrolled.button.enroll')}
                 </Button>
-                <Button className='text-sky-custom-600 border-sky-custom-600 w-45 cursor-pointer rounded-4xl border bg-white py-6 text-lg'>
+                <Button className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-4xl border bg-white py-6 text-lg'>
                   <Heart className='h-5 w-5' />
-                  Wishlist
+                  {t('notEnrolled.button.wishlist')}
                 </Button>
               </div>
             ) : (
               <div className='flex gap-5'>
                 <Button
                   onClick={handleUpdate}
-                  className='bg-sky-custom-600 w-45 cursor-pointer rounded-4xl py-6 text-lg text-white'
+                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
                 >
                   <Edit className='h-5 w-5' />
-                  Update Course
+                  {t('notEnrolled.button.update')}
                 </Button>
                 {course.status === CourseStatus.DRAFT && (
                   <Button
                     onClick={handleSubmitToReview}
-                    className='text-sky-custom-600 border-sky-custom-600 w-60 cursor-pointer rounded-4xl border bg-white py-6 text-lg'
+                    className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-4xl border bg-white py-6 text-lg'
                   >
                     <Edit className='h-5 w-5' />
-                    Submit to Review
+                    {t('notEnrolled.button.review')}
                   </Button>
                 )}
               </div>

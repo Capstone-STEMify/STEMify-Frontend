@@ -13,12 +13,15 @@ import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentAp
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/enrollment/slice/enrollmentSlice'
 import { setSelectedEnrollmentId } from '@/features/student-progress/slice/studentProgressSlice'
+import { useTranslations } from 'next-intl'
 
 type MyLearningListProps = {
   studentId?: string
 }
 
 export function MyLearningList({ studentId }: MyLearningListProps) {
+  const t = useTranslations('MyLearning')
+
   const dispatch = useAppDispatch()
   const enrollParams = useAppSelector((state) => state.enrollment)
   const { data: enroll, isLoading } = useSearchEnrollmentQuery({ studentId, ...enrollParams }, { skip: !studentId })
@@ -41,8 +44,8 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
   if (!enroll) {
     return (
       <SEmpty
-        title='No Courses Enrolled'
-        description='You have not enrolled in any courses yet. Explore our catalog to find courses that interest you.'
+        title={t('noEnrollments')}
+        description= {t('noCourses')}
         icon={<BookOpen className='h-12 w-12 text-gray-400' />}
       />
     )
@@ -53,8 +56,8 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
       {/*  title='Your Courses'
         description='Continue your learning journey with these courses' */}
       <div className='mb-10 space-y-2 text-center'>
-        <h1 className='text-4xl'>My Learning</h1>
-        <p className='text-2xl text-gray-600'>Continue your learning journey with these courses</p>
+        <h1 className='text-4xl'>{t('title')}</h1>
+        <p className='text-2xl text-gray-600'>{t('subtitle')}</p>
       </div>
       <div className='space-y-6'>
         {/* Course Grid */}

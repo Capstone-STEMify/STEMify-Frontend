@@ -1,0 +1,39 @@
+{
+    "courseManagement": {
+        "title": {
+            "label": "Tên Khóa Học",
+            "note": "Nhập tiêu đề mô tả cho khóa học",
+            "placeholder": "Ví dụ: Giới thiệu về lập trình"
+        },
+        "description": {
+            "label": "Mô Tả Khóa Học",
+            "note": "Cung cấp một mô tả ngắn gọn về khóa học",
+            "placeholder": "Ví dụ: Khóa học này bao gồm các kiến thức cơ bản về lập trình sử dụng Python."
+        },
+        "category": {
+            "label": "Danh Mục",
+            "note": "Chọn các danh mục mà khóa học này thuộc về"
+        },
+        "skill": {
+            "label": "Kỹ Năng",
+            "note": "Chọn các kỹ năng mà khóa học này sẽ giúp phát triển"
+        },
+        "standard": {
+            "label": "Tiêu Chuẩn",
+            "note": "Chọn các tiêu chuẩn giáo dục mà khóa học này tuân thủ"
+        },
+        "ageRange": {
+            "label": "Độ Tuổi",
+            "note": "Chọn độ tuổi phù hợp cho khóa học này"
+        },
+        "image": {
+            "label": "Ảnh Bìa",
+            "note": "Tải lên ảnh bìa",
+            "placeholder": "Làm cho tài liệu trở nên hấp dẫn hơn",
+            "btn": "Chọn Tệp"
+        },
+        "btn": "Gửi", 
+        "successMessage": "Khóa học đã được tạo thành công!",
+        "errorMessage": "Đã xảy ra lỗi khi tạo khóa học. Vui lòng thử lại."
+    }
+}

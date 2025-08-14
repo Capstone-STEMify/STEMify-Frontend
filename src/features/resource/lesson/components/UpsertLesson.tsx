@@ -16,6 +16,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 import Link from 'next/link'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import { useTranslations } from 'next-intl'
 
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
@@ -57,6 +58,8 @@ interface UpsertLessonProps {
 }
 
 export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonProps) {
+  const t = useTranslations('lessonManagement')
+
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
   const courseIdFromQuery = courseId ? Number(courseId) : 0
@@ -152,13 +155,13 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   if (showCourseMissingError) {
     return (
       <div className='flex h-screen flex-col items-center justify-center gap-4 text-center'>
-        <h2 className='text-2xl font-semibold text-red-600'>Course not found</h2>
-        <p className='text-gray-600'>You need to select a course before creating a lesson.</p>
+        <h2 className='text-2xl font-semibold text-red-600'>{t('courseNotFound.title')}</h2>
+        <p className='text-gray-600'>{t('courseNotFound.description')}</p>
         <Link
           href='/resource/courses'
           className='mt-4 rounded-lg bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700'
         >
-          Go to Course List
+          {t('courseNotFound.btn')}
         </Link>
       </div>
     )
@@ -181,7 +184,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
       }}
     >
       <h1 className='mb-5 text-center text-5xl font-bold text-gray-800'>
-        {lessonId ? 'Update Lesson' : 'Create New Lesson'}
+        {lessonId ? `${t('updateTitle')}` : `${t('createTitle')}`}
       </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
@@ -198,13 +201,13 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
           <div className='flex justify-between gap-2'>
             <SCard
               className='w-full gap-3'
-              title='Lesson Title'
-              description='Enter a descriptive title for the lesson'
+              title={t('title.label')}
+              description={t('title.note')}
               content={
                 <form.AppField
                   name='title'
                   children={(field) => (
-                    <field.TextAreaField placeholder='Enter lesson title' className='rounded-lg border-gray-300' />
+                    <field.TextAreaField placeholder={t('title.placeholder')} className='rounded-lg border-gray-300' />
                   )}
                 />
               }
@@ -212,14 +215,14 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
           </div>
           <SCard
             className='gap-3'
-            title='Lesson Description'
-            description='Provide a brief description of the lesson'
+            title={t('description.label')}
+            description={t('description.note')}
             content={
               <form.AppField
                 name='description'
                 children={(field) => (
                   <field.TextAreaField
-                    placeholder='Enter lesson description'
+                    placeholder={t('description.placeholder')}
                     className='h-50 rounded-lg border-gray-300'
                   />
                 )}
@@ -243,7 +246,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
             </Button>
           </div> */}
           <form.AppForm>
-            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>Submit</form.SubmitButton>
+            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>{t('btn')}</form.SubmitButton>
           </form.AppForm>
         </div>
       </div>

@@ -1,0 +1,22 @@
+{
+  "Header": {
+    "home": "Trang Chủ",
+    "resources": "Tài Nguyên",
+    "myLearning": "Tiến độ Học Tập",
+    "codelab": "Code Lab",
+    "dashboard": "Bảng Điều Khiển",
+    "gift": "Quà Tặng",
+    "signIn": "Đăng Nhập",
+    "english": "Tiếng Anh",
+    "vietnamese": "Tiếng Việt",
+    "notifications": {
+      "title": "Thông Báo",
+      "all": "Tất Cả",
+      "unread": "Chưa Đọc"
+    },
+    "profile": "Hồ sơ",
+    "accountSettings": "Cài đặt tài khoản",
+    "theme": "Chủ đề",
+    "signOut": "Đăng xuất"
+  }
+}

@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { formatDuration } from '@/utils/index'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { EllipsisVertical } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect } from 'react'
 
@@ -31,6 +32,7 @@ type CourseDetailContentProps = {
 }
 
 export default function CourseDetailContent({ courseId, enrollmentId }: CourseDetailContentProps) {
+  const t = useTranslations('CourseDetails')
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
 
@@ -77,8 +79,8 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   if (!lessonData || lessonData.data.items.length === 0) {
     return (
       <SEmpty
-        title='No Lessons Found'
-        description='Try changing the search term or filters to find relevant lessons.'
+        title={t('enrolled.notFound.title')}
+        description={t('enrolled.notFound.description')}
       />
     )
   }
@@ -103,7 +105,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
                 }
               >
                 <div>
-                  <p className='text-muted-foreground text-xs font-medium'>Lesson</p>
+                  <p className='text-muted-foreground text-xs font-medium'>{t('enrolled.content.lesson')}</p>
                   <h3 className='text-sm font-semibold text-gray-900'>{lesson.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
                 </div>
@@ -122,13 +124,13 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
                 }
                 items={[
                   <p key='view' className='text-sm'>
-                    View
+                    {t('enrolled.action.view')}
                   </p>,
                   <p key='add-to-course' className='text-sm'>
-                    Add to Course
+                    {t('enrolled.action.add')}
                   </p>,
                   <p key='share' className='text-sm'>
-                    Share
+                    {t('enrolled.action.share')}
                   </p>
                 ]}
               />

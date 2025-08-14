@@ -5,6 +5,7 @@ import { SCard } from '@/components/shared/card/SCard'
 import { Button } from '@/components/shadcn/button'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 import { AgeRange } from '@/features/resource/age-range/types/ageRange.type'
+import { useTranslations } from 'next-intl'
 
 interface CourseSidebarSectionProps {
   form: any
@@ -21,12 +22,13 @@ export const CourseSidebarSection = ({
   handleEditImage,
   isSubmitting
 }: CourseSidebarSectionProps) => {
+  const t = useTranslations('courseManagement')
   return (
     <>
       <SCard
         className='gap-2'
-        title='Age Range'
-        description='Select the age range this course is suitable for'
+        title={t('ageRange.label')}
+        description={t('ageRange.note')}
         content={
           <form.AppField
             name='ageRangeId'
@@ -62,7 +64,7 @@ export const CourseSidebarSection = ({
 
       <form.AppForm>
         <form.SubmitButton loading={isSubmitting} className='w-full rounded-full'>
-          Submit
+          {t('btn')}
         </form.SubmitButton>
       </form.AppForm>
     </>

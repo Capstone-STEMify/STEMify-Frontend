@@ -43,7 +43,7 @@ export default function ProfileDetails() {
   }
 
   return (
-    <div className='flex-1'>
+    <div className='mb-50 flex-1'>
       {/* Cover Photo Section */}
       <div className='overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm'>
         {/* Cover Photo */}
@@ -99,7 +99,7 @@ export default function ProfileDetails() {
                   type='text'
                   id='username'
                   name='username'
-                  value={session?.user?.name || ''}
+                  value={session?.user?.username || ''}
                   placeholder='Your username'
                   readOnly
                 />
@@ -165,7 +165,7 @@ export default function ProfileDetails() {
               onChange={handleInputChange}
               placeholder='Write a short introduction about yourself...'
               rows={4}
-              className='flex min-h-[80px] w-full resize-none rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50'
+              className='flex min-h-[80px] w-full resize-none rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50'
             />
           </div>
           <div className='my-5 flex gap-3'>

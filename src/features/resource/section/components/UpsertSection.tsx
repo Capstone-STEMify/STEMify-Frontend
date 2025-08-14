@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import { useParams } from 'next/navigation'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useTranslations } from 'next-intl'
 
 const sectionSchema = z.object({
   description: z.string().min(1, 'Description is required'),
@@ -40,6 +41,8 @@ export default function UpsertSection({
 }: UpsertSectionProps) {
   const params = useParams()
   const token = useAppSelector((state) => state.auth.token)
+
+  const t = useTranslations('sectionManagement')
 
   // Get lessonId and sectionId from URL and parse them to numbers
   const lessonIdRaw = propLessonId ?? params?.lessonId
@@ -123,7 +126,7 @@ export default function UpsertSection({
   if (!lessonId && !isSectionLoading) {
     return (
       <div className='flex h-screen items-center justify-center text-lg font-semibold text-red-600'>
-        Invalid Lesson ID. Cannot create or edit a section.
+        `${t('lessonNotFound.description')}`
       </div>
     )
   }
@@ -137,7 +140,7 @@ export default function UpsertSection({
       }}
     >
       <h1 className='text-center text-3xl font-bold text-gray-800'>
-        {sectionId ? 'Update Section' : 'Create New Section'}
+        {sectionId ? `${t('updateTitle')}` : `${t('createTitle')}`}
       </h1>
 
       <div className='w-xl space-y-10'>
@@ -145,13 +148,13 @@ export default function UpsertSection({
         <div className='lg:col-span-2'>
           <SCard
             className='gap-3'
-            title='Section Title'
-            description='Provide a title for this section'
+            title={t('title.label')}
+            description={t('title.note')}
             content={
               <form.AppField
                 name='description'
                 children={(field) => (
-                  <field.TextField placeholder='Enter section title' className='h-8 rounded-lg border-gray-300' />
+                  <field.TextField placeholder={t('title.placeholder')} className='h-8 rounded-lg border-gray-300' />
                 )}
               />
             }
@@ -162,15 +165,15 @@ export default function UpsertSection({
         <div className='space-y-6'>
           <SCard
             className='w-full gap-3'
-            title='Duration (minutes)'
-            description='Enter the estimated duration of the section'
+            title={t('duration.label')}
+            description={t('duration.note')}
             content={
               <form.AppField
                 name='duration'
                 children={(field) => (
                   <field.TextField<number>
                     type='number'
-                    placeholder='e.g., 15'
+                    placeholder={t('duration.placeholder')}
                     className='rounded-lg border-gray-300'
                   />
                 )}
@@ -179,7 +182,7 @@ export default function UpsertSection({
           />
           <form.AppForm>
             <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full py-3 text-lg'>
-              {sectionId ? 'Update Section' : 'Create Section'}
+              {sectionId ? `${t('update_btn')}` : `${t('create_btn')}`}
             </form.SubmitButton>
           </form.AppForm>
         </div>

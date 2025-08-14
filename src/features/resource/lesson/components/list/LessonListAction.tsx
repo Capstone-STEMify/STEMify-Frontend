@@ -11,8 +11,10 @@ import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setPageSize, setParam, setSearchTerm } from '@/features/resource/lesson/slice/lessonSlice'
 import { getLabel, getOptions } from '@/utils/index'
+import { useTranslations } from 'next-intl'
 
 export default function LessonListAction() {
+  const t = useTranslations('LessonList')
   // Redux hooks
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.lesson)
@@ -57,7 +59,7 @@ export default function LessonListAction() {
     <div className='border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50'>
       <div className='px-8 py-6'>
         <div className='mb-4 flex items-center justify-between'>
-          <h2 className='text-lg font-semibold text-gray-800'>Filter Lessons</h2>
+          <h2 className='text-lg font-semibold text-gray-800'>{t('filterTitle')}</h2>
           {hasFilters && (
             <div className='flex items-center gap-8'>
               {/* Search Button */}
@@ -66,12 +68,12 @@ export default function LessonListAction() {
                 className='border border-blue-200 bg-blue-50 px-4 text-blue-600 hover:bg-blue-100'
               >
                 <Search className='h-4 w-4' />
-                Search
+                {t('actions.searchBtn')}
               </Button>
               {/* Clear All Button */}
               <Button onClick={clearAll} className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'>
                 <X className='h-4 w-4' />
-                Clear All
+                {t('actions.clearBtn')}
               </Button>
             </div>
           )}
@@ -82,7 +84,7 @@ export default function LessonListAction() {
           <div className='relative w-full'>
             <Input
               type='text'
-              placeholder='Search lessons...'
+              placeholder={t('placeHolder.search')}
               value={filters.search}
               onChange={(e) => dispatch(setSearchTerm(e.target.value))}
               className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
@@ -92,7 +94,7 @@ export default function LessonListAction() {
 
           {/* Category */}
           <SSelect
-            placeholder='Category (Select one option)'
+            placeholder={t('placeHolder.category')}
             value={filters.categoryId?.toString() ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'categoryId', value: Number(val) }))}
             options={categoryOptions}
@@ -103,7 +105,7 @@ export default function LessonListAction() {
 
           {/* Skill */}
           <SSelect
-            placeholder='Skill (Select one option)'
+            placeholder={t('placeHolder.skill')}
             value={filters.skillId?.toString() ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'skillId', value: Number(val) }))}
             options={skillOptions}
@@ -114,7 +116,7 @@ export default function LessonListAction() {
 
           {/* Age Range */}
           <SSelect
-            placeholder='Age Range (Select one option)'
+            placeholder={t('placeHolder.ageRange')}
             value={filters.ageRangeId?.toString() ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'ageRangeId', value: Number(val) }))}
             options={ageRangeOptions}
@@ -125,7 +127,7 @@ export default function LessonListAction() {
 
           {/* Standard */}
           <SSelect
-            placeholder='Standard (Select one option)'
+            placeholder={t('placeHolder.standard')}
             value={filters.standardId?.toString() ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'standardId', value: Number(val) }))}
             options={standardOptions}
@@ -139,11 +141,11 @@ export default function LessonListAction() {
         {hasFilters && (
           <div className='mt-4 flex flex-wrap gap-2'>
             <span className='text-sm font-medium text-gray-600'>Active filters:</span>
-            {renderFilterTag('search', 'Search', 'bg-blue-100 text-blue-800')}
-            {renderFilterTag('categoryId', 'Category', 'bg-green-100 text-green-800', categoryOptions)}
-            {renderFilterTag('ageRangeId', 'Age', 'bg-purple-100 text-purple-800', ageRangeOptions)}
-            {renderFilterTag('skillId', 'Skill', 'bg-yellow-100 text-yellow-800', skillOptions)}
-            {renderFilterTag('standardId', 'Standard', 'bg-red-100 text-red-800', standardOptions)}
+            {renderFilterTag('search', `${t('tags.search')}`, 'bg-blue-100 text-blue-800')}
+            {renderFilterTag('categoryId', `${t('tags.category')}`, 'bg-green-100 text-green-800', categoryOptions)}
+            {renderFilterTag('ageRangeId', `${t('tags.ageRange')}`, 'bg-purple-100 text-purple-800', ageRangeOptions)}
+            {renderFilterTag('skillId', `${t('tags.skill')}`, 'bg-yellow-100 text-yellow-800', skillOptions)}
+            {renderFilterTag('standardId', `${t('tags.standard')}`, 'bg-red-100 text-red-800', standardOptions)}
           </div>
         )}
       </div>

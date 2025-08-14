@@ -16,9 +16,11 @@ import {
   Sparkles
 } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
+import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
 
 function MenuItem({
   children,
@@ -50,6 +52,7 @@ function MenuItem({
 }
 
 export default function AuthStatusMenu() {
+  const t = useTranslations('Header')
   const { data: session, status } = useSession()
 
   if (status === 'loading') {
@@ -112,13 +115,13 @@ export default function AuthStatusMenu() {
                 {/* Menu items */}
                 <div className='grid gap-1'>
                   <MenuItem icon={<UserIcon size={16} />} href='/profile'>
-                    Profile
+                    {t('profile')}
                   </MenuItem>
 
-                  <MenuItem icon={<Settings size={16} />}>Account settings</MenuItem>
+                  <MenuItem icon={<Settings size={16} />}>{t('accountSettings')}</MenuItem>
 
                   {/* Theme with chevron like screenshot */}
-                  <MenuItem icon={<Palette size={16} />}>Theme</MenuItem>
+                  <MenuItem icon={<Palette size={16} />}>{t('theme')}</MenuItem>
 
                   <div className='my-1 h-px w-full bg-gray-200 dark:bg-zinc-800' />
 
@@ -127,7 +130,7 @@ export default function AuthStatusMenu() {
                     className='flex items-center gap-2 px-3 py-2 text-red-600 hover:rounded-2xl hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40'
                   >
                     <LogOut size={16} />
-                    Log out
+                    {t('signOut')}
                   </button>
                 </div>
               </div>
@@ -135,15 +138,19 @@ export default function AuthStatusMenu() {
           />
         </div>
       ) : (
-        <Button
-          size='lg'
-          onClick={() => signIn('oidc', { callbackUrl: '/', prompt: 'login' })}
-          className='group relative gap-4 rounded-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-500 px-6'
-        >
-          <ArrowRightToLine size={16} className='transition-transform duration-200 group-hover:translate-x-1' />
-          <span className='font-semibold'>Sign In</span>
-          <Sparkles size={14} />
-        </Button>
+        <div className='flex gap-2'>
+          <LanguageSwitcher />
+
+          <Button
+            size='lg'
+            onClick={() => signIn('oidc', { callbackUrl: '/', prompt: 'login' })}
+            className='group relative gap-4 rounded-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-500 px-6'
+          >
+            <ArrowRightToLine size={16} className='transition-transform duration-200 group-hover:translate-x-1' />
+            <span className='font-semibold'>{t('signIn')}</span>
+            <Sparkles size={14} />
+          </Button>
+        </div>
       )}
     </div>
   )

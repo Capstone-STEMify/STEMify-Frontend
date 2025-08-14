@@ -1,0 +1,34 @@
+{
+    "CourseList": {
+        "title": "Courses",
+        "subtitle": "Course",
+        "description": "Curriculum-aligned, thematic guides with following educational pedagogical approach. Courses have teacher and student perspectives.",
+        "filterTitle": "Filter Courses",
+        "noCourse": "No Courses Found.",
+        "noCourseFound": "Try changing the search term or filters to find relevant courses.",
+        "filterBy": "Search",
+        "placeHolder": {
+            "search": "Search courses...",
+            "category": "Category (Select one option)",
+            "skill": "Skill (Select one option)",
+            "ageRange": "Age Range (Select one option)",
+            "standard": "Standard (Select one option)"
+            
+        },
+        "tags": {
+            "search": "Search",
+            "category": "Category",
+            "skill": "Skill",
+            "ageRange": "Age Range",
+            "standard": "Standard"
+        },
+        "actions": {
+            "searchBtn": "Search",
+            "clearBtn": "Clear All",
+            "add": "Add to course",
+            "share": "Share",
+            "view": "View",
+            "create": "Create New Course"
+        }
+    }
+}

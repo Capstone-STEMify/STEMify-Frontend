@@ -5,8 +5,10 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { Bookmark, Plus, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
+import { useTranslations } from 'next-intl'
 
 export default function LessonAction({ lessonId }: { lessonId: number }) {
+  const t = useTranslations('LessonDetails')
   const dispatch = useAppDispatch()
   const lessonStatus = useAppSelector((state) => state.studentProgress.selectedLessonStatus)
   const enrollmentId = useAppSelector((state) => state.studentProgress.selectedEnrollmentId)
@@ -35,7 +37,7 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
             onClick={handleStartLearningLesson}
             disabled={isLoading}
           >
-            <div className='text-xs uppercase'>{isLoading ? 'Starting...' : 'Start Learning'}</div>
+            <div className='text-xs uppercase'>{isLoading ? `${t('action.start_loading')}` : `${t('action.learning')}`}</div>
           </Button>
         </div>
       )}
@@ -44,15 +46,15 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
       <div className='text-muted-foreground mt-6 grid w-full max-w-md grid-cols-3 gap-6 text-center text-xs'>
         <div className='flex flex-col items-center gap-1'>
           <Plus className='h-5 w-5' />
-          <span>Add to course</span>
+          <span>{t('action.add')}</span>
         </div>
         <div className='flex flex-col items-center gap-1'>
           <Bookmark className='h-5 w-5' />
-          <span>Add to favorites</span>
+          <span>{t('action.favor')}</span>
         </div>
         <div className='flex flex-col items-center gap-1'>
           <Share2 className='h-5 w-5' />
-          <span>Share</span>
+          <span>{t('action.share')}</span>
         </div>
       </div>
     </section>

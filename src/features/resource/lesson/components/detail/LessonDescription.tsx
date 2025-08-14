@@ -4,13 +4,12 @@ import Image from 'next/image'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { Badge } from '@/components/shadcn/badge'
 import LessonAction from '@/features/resource/lesson/components/detail/LessonAction'
-import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { formatDate } from '@/utils/index'
 import { Calendar, Clock } from 'lucide-react'
-import { useParams } from 'next/navigation'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Lesson } from '@/features/resource/lesson/types/lesson.type'
+import { useTranslations } from 'next-intl'
 
 type LessonDescriptionProps = {
   lessonData?: ApiSuccessResponse<Lesson>
@@ -18,6 +17,7 @@ type LessonDescriptionProps = {
 }
 
 export default function LessonDescription({ lessonData, lessonLoading }: LessonDescriptionProps) {
+  const t = useTranslations('LessonDetails')
   if (lessonLoading)
     return (
       <div className='flex h-[500px] items-center justify-center'>
@@ -28,11 +28,10 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
   if (!lessonData || !lessonData.data) {
     return (
       <div className='flex h-screen items-center justify-center'>
-        <p className='text-gray-500'>No lesson data available</p>
+        <p className='text-gray-500'>{t('notFound.title')}</p>
       </div>
     )
   }
-  if (!lessonData) return <div>No Lesson Data</div>
   return (
     <div>
       <ScrollArea className='h-[480px]'>
@@ -50,7 +49,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
           </div>
 
           <div>
-            <p className='my-1 text-xs font-semibold uppercase'>Lesson</p>
+            <p className='my-1 text-xs font-semibold uppercase'>{t('lesson.title')}</p>
             <div className='bg-muted-foreground mb-2 h-[0.1px] w-full'></div>
 
             <h1 className='mb-2 text-lg leading-tight font-bold text-gray-900 lg:text-lg'>{lessonData.data.title}</h1>
@@ -59,20 +58,20 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
             <div className='mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-600'>
               <div className='flex items-center gap-1'>
                 <Clock className='h-4 w-4' />
-                <span>{lessonData.data.duration} minutes</span>
+                <span>{lessonData.data.duration} {t('lesson.dur_unit')}</span>
               </div>
               <div className='flex items-center gap-1'>
                 <Calendar className='h-4 w-4' />
                 <span>{formatDate(lessonData.data.createdDate)}</span>
               </div>
               {/* Age Range */}
-              {lessonData.data.ageRangeLabel} ages
+              {lessonData.data.ageRangeLabel} {t('lesson.age_unit')}
             </div>
           </div>
 
           <div className='w-full space-y-3 text-left'>
             <div className='text-xs'>
-              <h2 className='text-base font-semibold text-gray-900'>About this lesson</h2>
+              <h2 className='text-base font-semibold text-gray-900'>{t('lesson.about')}</h2>
               <p className='leading-relaxed text-gray-700'>{lessonData.data.description}</p>
             </div>
             {/* Tags Section */}
@@ -80,7 +79,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
               {/* Categories */}
               {lessonData.data.categoryNames.length > 0 && (
                 <div className='flex items-center gap-x-2'>
-                  <h3 className='text-xs font-semibold text-gray-900'>Categories</h3>
+                  <h3 className='text-xs font-semibold text-gray-900'>{t('lesson.category')}</h3>
                   <div className='flex gap-2'>
                     {lessonData.data.categoryNames.map((category) => (
                       <Badge
@@ -97,7 +96,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
               {/* Skills */}
               {lessonData.data.skillNames.length > 0 && (
                 <div className='flex items-center gap-x-2'>
-                  <h3 className='text-xs font-semibold text-gray-900'>Skills</h3>
+                  <h3 className='text-xs font-semibold text-gray-900'>{t('lesson.skill')}</h3>
                   <div className='flex gap-2'>
                     {lessonData.data.skillNames.map((skill) => (
                       <Badge
@@ -114,7 +113,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
               {/* Standards */}
               {lessonData.data.standardNames.length > 0 && (
                 <div>
-                  <h3 className='mb-2 text-xs font-semibold text-gray-900'>Standards</h3>
+                  <h3 className='mb-2 text-xs font-semibold text-gray-900'>{t('lesson.standard')}</h3>
                   <div className='flex flex-wrap gap-2'>
                     {lessonData.data.standardNames.map((standard) => (
                       <Badge

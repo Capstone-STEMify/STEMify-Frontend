@@ -1,11 +1,13 @@
 'use client'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 export default function StatsSection() {
+  const t = useTranslations('StatsSection')
   const stats = [
-    { number: '195+', label: 'Free Resources', color: 'yellow' },
-    { number: '1000+', label: 'Engaged Students', color: 'blue' },
-    { number: '90%', label: 'Positive Impact on STEM', color: 'green' }
+    { number: '195+', label: `${t('freeResources')}`, color: 'yellow' },
+    { number: '1000+', label: `${t('engagedStudents')}`, color: 'blue' },
+    { number: '90%', label: `${t('positiveImpact')}`, color: 'green' }
   ]
 
   return (

@@ -1,4 +1,5 @@
 import MacCard from '@/components/shared/card/MacCard'
+import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 
 export default function LearningSection() {
@@ -28,18 +29,18 @@ export default function LearningSection() {
             className={`transition-all delay-200 duration-1000 ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'} rounded-2xl border-4 border-violet-900`}
           >
             <MacCard>
-              <img src='/images/macbg.png' alt='STEMify Learning' className='h-auto w-full' />
+              <Image src='/images/macbg.png' alt='STEMify Learning' className='h-auto w-full' />
             </MacCard>
 
             <div className='absolute -right-8 -bottom-16 z-30 w-72 overflow-hidden rounded-xl bg-white shadow-xl'>
               <div className='relative h-40 overflow-hidden bg-gradient-to-br from-blue-900 to-blue-600'>
-                <img src='/HomeFiles/learning.png' alt='City skyline at night' className='h-full w-full object-cover' />
+                <Image src='/HomeFiles/learning.png' alt='City skyline at night' className='h-full w-full object-cover' />
               </div>
 
               <div className='bg-white p-4'>
                 <div className='flex items-center space-x-3'>
                   <div className='h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-lg'>
-                    <img src='/images/Rosie.jpg' alt='Wanda Gordon' className='h-full w-full object-cover' />
+                    <Image src='/images/Rosie.jpg' alt='Wanda Gordon' className='h-full w-full object-cover' />
                   </div>
                   <div className='flex-1'>
                     <h4 className='text-lg font-semibold text-gray-900'>Rosie BlackPink</h4>

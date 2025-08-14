@@ -4,34 +4,36 @@ import { BookOpen, Clock, Users } from 'lucide-react'
 import { staggerContainer, staggerItem } from '@/utils/motion'
 import { formatDuration } from '@/utils/index'
 import { Course } from '@/features/resource/course/types/course.type'
+import { useTranslations } from 'next-intl'
 
 interface StatsSectionProps {
   course: Course
 }
 
 export default function StatsSection({ course }: StatsSectionProps) {
+  const t = useTranslations('CourseDetails')
   const statsData = [
     {
       icon: BookOpen,
       value: course.lessonIds.length,
-      title: 'Course section(s)',
-      subtitle: 'Comprehensive curriculum',
+      title: `${t('notEnrolled.stats.section')}`,
+      subtitle: `${t('notEnrolled.stats.sec_description')}`,
       iconColor: 'text-blue-600',
       bgColor: 'bg-blue-100'
     },
     {
       icon: Clock,
       value: formatDuration(course.duration),
-      title: 'Duration',
-      subtitle: 'Self-paced learning',
+      title: `${t('notEnrolled.stats.duration')}`,
+      subtitle: `${t('notEnrolled.stats.dur_description')}`,
       iconColor: 'text-purple-600',
       bgColor: 'bg-purple-100'
     },
     {
       icon: Users,
       value: course.downloadCount ?? 0,
-      title: 'Downloads',
-      subtitle: 'Join the community',
+      title: `${t('notEnrolled.stats.downloads')}`,
+      subtitle: `${t('notEnrolled.stats.down_description')}`,
       iconColor: 'text-red-500',
       bgColor: 'bg-red-100'
     }
