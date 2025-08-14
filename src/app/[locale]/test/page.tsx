@@ -1,37 +1,34 @@
-// LessonPreview.tsx
-import React from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import rehypeRaw from 'rehype-raw'
+'use client'
 
-const dataFake = `
-# Làm Cầu Nâng
+import Sidebar from 'app/[locale]/test/Sidebar'
+import Workspace3D from 'app/[locale]/test/Workspace3D'
+import { useState } from 'react'
 
-## Mục tiêu
-- Hiểu nguyên lý đòn bẩy
-- Thiết kế một cây cầu có thể nâng
+export default function Page() {
+  const [components, setComponents] = useState<any[]>([])
+  console.log('Page components:', components)
 
-## Nguyên liệu
-- 10 thanh Strawbees
-- 6 connector
-- 1 miếng bìa
+  const handleAdd = (comp: any) => {
+    setComponents((prev) => [...prev, comp])
+  }
 
-![Bridge Example](https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fcou_stem-curriculum-for-teks_cover.jpg&w=1920&q=75)
+  const handleExport = () => {
+    const json = JSON.stringify(components, null, 2)
+    const blob = new Blob([json], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'workspace.json'
+    a.click()
+  }
 
-## Các bước
-1. Gắn các thanh lại thành hình khung
-2. Gắn trục nâng
-3. Thử nghiệm nâng bằng tay
-`
-
-const LessonPreview = () => {
   return (
-    <div className='prose mx-auto max-w-3xl p-4'>
-      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-        {dataFake}
-      </ReactMarkdown>
+    <div>
+      <button onClick={handleExport}>Export JSON</button>
+      <div className='flex h-screen'>
+        <Sidebar onAdd={handleAdd} />
+        <div className='flex-1'>{/* <Workspace3D components={components} /> */}</div>
+      </div>
     </div>
   )
 }
-
-export default LessonPreview
