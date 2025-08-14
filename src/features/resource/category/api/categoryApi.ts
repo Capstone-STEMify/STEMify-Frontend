@@ -14,7 +14,7 @@ export const {
   useGetByIdQuery: useGetCategoryByIdQuery,
 
   // mutations
-  useCreateMutation: useCreateCategoryMutaion,
+  useCreateMutation: useCreateCategoryMutation,
   useUpdateMutation: useUpdateCategoryMutation,
   useDeleteMutation: useDeleteCategoryMutation,
 

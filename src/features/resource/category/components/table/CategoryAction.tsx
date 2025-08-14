@@ -1,13 +1,13 @@
-import { Badge } from '@/components/shadcn/badge'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import { useDeleteCategoryMutation } from '@/features/resource/category/api/categoryApi' // Import delete mutation
 import { Category } from '@/features/resource/category/types/category.type'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import z from 'zod'
 
-export const categoryTableschema = z.object({
+export const categoryTableSchema = z.object({
   id: z.number(),
   categoryName: z.string(),
   slug: z.string()
@@ -16,6 +16,16 @@ export const categoryTableschema = z.object({
 export function useGetCategoryAction(): ColumnDef<Category>[] {
   const router = useRouter()
   const { openModal } = useModal()
+  const [deleteCategory] = useDeleteCategoryMutation() // Hook for deletion
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteCategory(id).unwrap()
+      toast.success(`Successfully deleted category ${id}.`)
+    } catch (error) {
+      toast.error('Failed to delete category.')
+    }
+  }
 
   return [
     createSelectColumn<Category>(),
@@ -28,7 +38,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
       accessorKey: 'categoryName',
       header: () => <div className='text-center'>Name</div>,
       cell: ({ row }) => (
-        <div className='cursor-pointer text-center font-bold underline' onClick={() => openModal('upsertCategory')}>
+        <div className='cursor-pointer text-center font-bold underline'>
           {row.getValue('categoryName')}
         </div>
       )
@@ -38,6 +48,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
         label: 'Copy Id',
         onClick: ({ original }) => {
           navigator.clipboard.writeText(original.id.toString())
+          toast.info('Category ID copied to clipboard!')
         }
       },
       {
@@ -47,13 +58,20 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
       },
       {
         label: 'Edit',
-        onClick: ({ original }) => router.push(`/admin/category/${original.id}/edit`)
+        onClick: ({ original }) => {
+          // Open the upsert modal in "edit" mode
+          openModal('upsertCategory', { id: original.id })
+        }
       },
       {
         label: 'Delete',
         danger: true,
         onClick: async ({ original }) => {
-          if (!confirm(`Delete category ${original.id}?`)) return
+          // Open the confirmation modal for deletion
+          openModal('confirm', {
+            message: `Are you sure you want to delete category "${original.categoryName}"?`,
+            onConfirm: () => handleDelete(original.id)
+          })
         }
       }
     ])

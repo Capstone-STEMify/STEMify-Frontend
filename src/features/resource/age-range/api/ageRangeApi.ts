@@ -14,7 +14,7 @@ export const {
   useGetByIdQuery: useGetAgeRangeByIdQuery,
 
   // mutations
-  useCreateMutation: useCreateAgeRangeMutaion,
+  useCreateMutation: useCreateAgeRangeMutation,
   useUpdateMutation: useUpdateAgeRangeMutation,
   useDeleteMutation: useDeleteAgeRangeMutation,
 

@@ -1,12 +1,10 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
-// highlight-start
-// Sử dụng các import tiêu chuẩn của Next.js
 import { usePathname, useRouter } from 'next/navigation'
-// highlight-end
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
-import { Languages } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/shadcn/select'
+
+import { US, VN } from 'country-flag-icons/react/3x2'
 
 export default function LanguageSwitcher() {
   const t = useTranslations('Header')
@@ -14,28 +12,45 @@ export default function LanguageSwitcher() {
   const router = useRouter()
   const pathname = usePathname()
 
+  // map locale -> component cờ
+  const flagByLocale = {
+    en: US,
+    vi: VN,
+  } as const
+
+  const CurrentFlag = flagByLocale[(locale as 'en' | 'vi')] ?? US
+
   const onSelectChange = (newLocale: string) => {
-    // Tách pathname thành các phần
     const segments = pathname.split('/')
-    
-    // Thay đổi phần ngôn ngữ (luôn ở vị trí thứ 2, ví dụ: ['', 'en', 'about'])
     segments[1] = newLocale
-    
-    // Nối các phần lại và điều hướng đến URL mới
     router.replace(segments.join('/'))
   }
 
   return (
     <Select onValueChange={onSelectChange} defaultValue={locale}>
-      <SelectTrigger className='w-fit border-none bg-transparent shadow-none focus-visible:ring-0'>
-        <div className='flex items-center gap-2'>
-          <Languages size={20} className='text-gray-600' />
-          <SelectValue />
+      <SelectTrigger className="w-fit border-none bg-transparent shadow-none focus-visible:ring-0">
+        <div className="flex items-center gap-2">
+          <CurrentFlag className="h-5 w-5 overflow-hidden" title={locale === 'vi' ? 'Việt Nam' : 'English'} />
+          <span className="text-gray-700">
+            {locale === 'vi' ? t('vietnamese') : t('english')}
+          </span>
         </div>
       </SelectTrigger>
-      <SelectContent align='end'>
-        <SelectItem value='en'>{t('english')}</SelectItem>
-        <SelectItem value='vi'>{t('vietnamese')}</SelectItem>
+
+      <SelectContent align="end">
+        <SelectItem value="en">
+          <div className="flex items-center gap-2">
+            <US className="h-5 w-5 overflow-hidden" title="English" />
+            <span>{t('english')}</span>
+          </div>
+        </SelectItem>
+
+        <SelectItem value="vi">
+          <div className="flex items-center gap-2">
+            <VN className="h-5 w-5 overflow-hidden" title="Việt Nam" />
+            <span>{t('vietnamese')}</span>
+          </div>
+        </SelectItem>
       </SelectContent>
     </Select>
   )

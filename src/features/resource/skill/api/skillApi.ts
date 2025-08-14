@@ -14,7 +14,7 @@ export const {
   useGetByIdQuery: useGetSkillByIdQuery,
 
   // mutations
-  useCreateMutation: useCreateSkillMutaion,
+  useCreateMutation: useCreateSkillMutation,
   useUpdateMutation: useUpdateSkillMutation,
   useDeleteMutation: useDeleteSkillMutation,
 

@@ -1,3 +1,5 @@
+import AgeRangeTable from "@/features/resource/age-range/components/table/AgeRangeTable";
+
 export default function AdminAgeRange() {
-  return <div>AdminAgeRange</div>
+  return <AgeRangeTable/>
 }

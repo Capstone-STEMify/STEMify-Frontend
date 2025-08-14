@@ -1,14 +1,15 @@
+'use client'
 import { Dialog, DialogContent } from '@/components/shadcn/dialog'
-import UpsertCategory from '@/features/resource/category/components/management/UpsertCategory' 
+import UpsertAgeRange from '@/features/resource/age-range/components/management/UpsertAgeRange'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 
-interface UpsertCategoryModalProps {
+interface UpsertAgeRangeModalProps {
   id?: number
   onConfirm?: () => void
 }
 
-export default function UpsertCategoryModal({ id, onConfirm }: UpsertCategoryModalProps) {
+export default function UpsertAgeRangeModal({ id, onConfirm }: UpsertAgeRangeModalProps) {
   const { closeModal } = useModal()
 
   const handleSuccess = () => {
@@ -20,9 +21,8 @@ export default function UpsertCategoryModal({ id, onConfirm }: UpsertCategoryMod
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='sm:max-w-[425px] w-full'>
-        {/* Render the form component and pass props */}
-        <UpsertCategory id={id} onSuccess={handleSuccess} />
+      <DialogContent className='sm:max-w-lg w-full'>
+        <UpsertAgeRange id={id} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>
   )

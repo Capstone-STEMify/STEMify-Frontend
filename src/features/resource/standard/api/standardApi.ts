@@ -14,7 +14,7 @@ export const {
   useGetByIdQuery: useGetStandardByIdQuery,
 
   // mutations
-  useCreateMutation: useCreateStandardMutaion,
+  useCreateMutation: useCreateStandardMutation,
   useUpdateMutation: useUpdateStandardMutation,
   useDeleteMutation: useDeleteStandardMutation,
 
