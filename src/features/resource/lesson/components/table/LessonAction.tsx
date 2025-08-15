@@ -64,7 +64,17 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     {
       accessorKey: 'title',
       header: () => <div>Title</div>,
-      cell: ({ row }) => <div className='cursor-pointer font-bold'>{row.getValue('title')}</div>
+      cell: ({ row }) => {
+        const lessonId = row.original.id
+        return (
+          <div
+            onClick={() => router.push(`/admin/lesson/${lessonId}`)}
+            className='cursor-pointer font-bold transition hover:opacity-80'
+          >
+            {row.getValue('title')}
+          </div>
+        )
+      }
     },
     {
       accessorKey: 'status',
@@ -101,8 +111,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
       {
         label: 'Edit',
         onClick: ({ original }) => {
-          // Open the upsert modal in "edit" mode
-          //   openModal('upsertCourse', { id: original.id })
+          router.push(`/admin/lesson/update/${original.id}`)
         }
       },
       {
