@@ -15,8 +15,9 @@ import { useGetAllStandardQuery } from '@/features/resource/standard/api/standar
 import { useAppForm } from '@/components/shared/form/items'
 import { CourseSidebarSection } from '@/features/resource/course/components/upsert/CourseSidebarSection'
 import {
-  useCreateCourseWithFormDataMutation,
+  useCreateCourseMutation,
   useGetCourseByIdQuery,
+  useUpdateCourseMutation,
   useUpdateCourseWithFormDataMutation
 } from '@/features/resource/course/api/courseApi'
 import {
@@ -25,15 +26,17 @@ import {
   updateCourseSchema
 } from '@/features/resource/course/forms/courseForm.schema'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import { fileToBase64 } from '@/utils/index'
 
 const defaultCourseData: CourseFormData = {
+  code: '',
   title: '',
   slug: '',
   description: '',
   ageRangeId: '1',
-  skills: [],
-  categories: [],
-  standards: [],
+  prerequisites: '',
+  studentTasks: '',
+  level: '',
   imageUrl: null as any
 }
 
@@ -42,24 +45,23 @@ const defaultCourseData: CourseFormData = {
  * @param data The course form data to be submitted.
  * @returns The FormData object containing the course form data.
  */
-function CreateCourseFormData(data: CourseFormData, userId: string) {
-  const formData = new FormData()
-  formData.append('title', data.title)
-  formData.append('description', data.description)
-  formData.append('ageRangeId', data.ageRangeId.toString())
-  formData.append('createdByUserId', userId)
-  formData.append('courseId', '1')
-  formData.append('slug', data.slug ?? '')
+async function CreateCourseJsonPayload(data: CourseFormData, userId: string) {
+  let imageBase64: string | null = null
 
-  data.skills.forEach((skill) => formData.append('SkillIds', skill))
-  data.categories.forEach((category) => formData.append('CategoryIds', category))
-  data.standards.forEach((standard) => formData.append('StandardIds', standard))
-
-  if (data.imageUrl) {
-    formData.append('Image', data.imageUrl)
+  if (data.imageUrl && typeof data.imageUrl !== 'string') {
+    imageBase64 = await fileToBase64(data.imageUrl)
   }
 
-  return formData
+  return {
+    code: data.code,
+    title: data.title,
+    slug: data.slug,
+    description: data.description,
+    ageRangeId: parseInt(data.ageRangeId),
+    createdByUserId: userId,
+    studentTasks: data.studentTasks,
+    image: imageBase64
+  }
 }
 
 /**
@@ -68,80 +70,50 @@ function CreateCourseFormData(data: CourseFormData, userId: string) {
  * @param newData The updated course form data.
  * @returns The FormData object containing the updated course form data.
  */
-function PatchCourseFormData(oldData: CourseFormData, newData: CourseFormData): FormData {
-  const formData = new FormData()
-
-  if (oldData.title !== newData.title) formData.append('title', newData.title)
-  if (oldData.slug !== newData.slug) formData.append('slug', newData.slug ?? '')
-  if (oldData.description !== newData.description) formData.append('description', newData.description)
-  if (oldData.ageRangeId !== newData.ageRangeId) formData.append('ageRangeId', newData.ageRangeId)
-
-  if (JSON.stringify(oldData.skills) !== JSON.stringify(newData.skills)) {
-    newData.skills.forEach((s) => formData.append('SkillIds', s))
+async function PatchCourseJsonPayload(oldData: CourseFormData, newData: CourseFormData, userId: string): Promise<any> {
+  const patchData: Record<string, any> = {
+    createdByUserId: userId
   }
 
-  if (JSON.stringify(oldData.categories) !== JSON.stringify(newData.categories)) {
-    newData.categories.forEach((c) => formData.append('CategoryIds', c))
-  }
-
-  if (JSON.stringify(oldData.standards) !== JSON.stringify(newData.standards)) {
-    newData.standards.forEach((s) => formData.append('StandardIds', s))
-  }
+  if (oldData.title !== newData.title) patchData.title = newData.title
+  if (oldData.slug !== newData.slug) patchData.slug = newData.slug
+  if (oldData.description !== newData.description) patchData.description = newData.description
+  if (oldData.ageRangeId !== newData.ageRangeId) patchData.ageRangeId = parseInt(newData.ageRangeId)
+  if (oldData.studentTasks !== newData.studentTasks) patchData.studentTasks = newData.studentTasks
+  if (oldData.code !== newData.code) patchData.code = newData.code
 
   if (newData.imageUrl && typeof newData.imageUrl !== 'string') {
-    formData.append('Image', newData.imageUrl)
+    const base64 = await fileToBase64(newData.imageUrl)
+    patchData.image = base64
   }
 
-  return formData
+  return patchData
 }
 
 function generateSlug(text: string): string {
   return text
     .toLowerCase()
     .trim()
-    .normalize('NFD') // loại bỏ dấu tiếng Việt
-    .replace(/[\u0300-\u036f]/g, '') // tiếp tục loại dấu
-    .replace(/[^\w\s-]/g, '') // loại ký tự đặc biệt
-    .replace(/\s+/g, '-') // thay khoảng trắng bằng '-'
-    .replace(/-+/g, '-') // gộp nhiều '-' thành một
-    .replace(/^-+|-+$/g, '') // xóa '-' ở đầu và cuối
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '')
 }
 
-function mapCourseToFormData(
-  course: ApiSuccessResponse<Course>,
-  allSkills: any[],
-  allCategories: any[],
-  allStandards: any[]
-): CourseFormData {
-  const skillNames = course.data.skillNames ?? []
-  const categoryNames = course.data.categoryNames ?? []
-  const standardNames = course.data.standardNames ?? []
-  console.log('>> skillNames from API:', course.data.skillNames)
-  console.log(
-    '>> allSkills from API:',
-    allSkills.map((s) => s.skillName)
-  )
-
-  const skillIds = allSkills
-    .filter((s) => skillNames.some((n) => n.trim().toLowerCase() === s.skillName.trim().toLowerCase()))
-    .map((s) => s.id.toString())
-  const categoryIds = allCategories
-    .filter((c) => categoryNames.some((n) => n.trim().toLowerCase() === c.categoryName.trim().toLowerCase()))
-    .map((c) => c.id.toString())
-  const standardIds = allStandards
-    .filter((s) => standardNames.some((n) => n.trim().toLowerCase() === s.standardName.trim().toLowerCase()))
-    .map((s) => s.id.toString())
-
+function mapCourseToFormData(course: ApiSuccessResponse<Course>): CourseFormData {
   return {
+    code: course.data.code ?? '',
     title: course.data.title ?? '',
     slug: course.data.slug ?? '',
     description: course.data.description ?? '',
+    level: course.data.level ?? '',
+    studentTasks: course.data.studentTasks ?? '',
+    prerequisites: course.data.prerequisites ?? '',
     ageRangeId: course.data.ageRangeId?.toString() ?? '',
-    skills: skillIds,
-    categories: categoryIds,
-    standards: standardIds,
     imageUrl: null as any,
-    imagePreviewUrl: course.data.imageUrl ?? null
+    imagePreviewUrl: course.data.imageUrl ?? undefined
   }
 }
 
@@ -161,21 +133,21 @@ export default function UpsertCourse() {
     skip: !courseId
   })
 
-  const [createCourse, { isLoading: isCreating }] = useCreateCourseWithFormDataMutation()
-  const [updateCourse, { isLoading: isUpdating }] = useUpdateCourseWithFormDataMutation()
+  const [createCourse, { isLoading: isCreating }] = useCreateCourseMutation()
+  const [updateCourse, { isLoading: isUpdating }] = useUpdateCourseMutation()
   const isSubmitting = isCreating || isUpdating
 
   const form = useAppForm({
     defaultValues: defaultCourseData,
-    validators: {
-      onChange: (courseId ? updateCourseSchema : createCourseSchema) as any
-    },
+    // validators: {
+    //   onChange: (courseId ? updateCourseSchema : createCourseSchema) as any
+    // },
     onSubmit: async ({ value }) => {
       try {
         value.slug = generateSlug(value.title)
         if (courseId) {
-          const patchFormData = PatchCourseFormData(initialCourseDataRef.current!, value)
-          const res = await updateCourse({ id: Number(courseId), body: patchFormData }).unwrap()
+          const patchJson = await PatchCourseJsonPayload(initialCourseDataRef.current!, value, userId!)
+          const res = await updateCourse({ id: Number(courseId), body: patchJson }).unwrap()
           toast.success(`Course updated successfully (${res.data.title})`, {
             action: {
               label: 'View Course',
@@ -185,8 +157,8 @@ export default function UpsertCourse() {
             }
           })
         } else {
-          const formData = CreateCourseFormData(value, userId!)
-          const res = await createCourse(formData).unwrap()
+          const jsonPayload = await CreateCourseJsonPayload(value, userId!)
+          const res = await createCourse(jsonPayload).unwrap()
           toast.success(`Course created successfully (${res.data.title})`)
           router.push(`/resource/course/${res.data.id}`)
         }
@@ -213,7 +185,7 @@ export default function UpsertCourse() {
       categoryItems.length > 0 &&
       standardItems.length > 0
     ) {
-      const mapped = mapCourseToFormData(courseData, skillItems, categoryItems, standardItems)
+      const mapped = mapCourseToFormData(courseData)
 
       form.reset(mapped)
       initialCourseDataRef.current = mapped
@@ -255,7 +227,6 @@ export default function UpsertCourse() {
       <div className='grid grid-cols-3 gap-8'>
         <div className='space-y-6 lg:col-span-2'>
           <CourseBasicInfoSection form={form} />
-          <CourseAttributesSection form={form} skills={skills} categories={categories} standards={standards} />
         </div>
 
         <div className='space-y-6'>

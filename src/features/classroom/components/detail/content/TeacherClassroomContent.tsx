@@ -13,7 +13,7 @@ export default function TeacherClassroomContent() {
       <div className='grid grid-cols-1 justify-items-center gap-y-5 lg:grid-cols-2 xl:grid-cols-3'>
         {CourseData?.data.items.map((course, index) => {
           return (
-            <CardLayout size='lg' key={index} imageSrc={course.imageUrl} infor={<Badge>{course.categoryNames}</Badge>}>
+            <CardLayout size='lg' key={index} imageSrc={course.imageUrl || ''} infor={<Badge>{course.topicNames}</Badge>}>
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{course.title}</h3>
                 <p className='text-sm text-gray-600'>{course.description}</p>

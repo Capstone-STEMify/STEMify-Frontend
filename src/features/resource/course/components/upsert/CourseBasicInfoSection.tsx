@@ -12,6 +12,19 @@ export default function CourseBasicInfoSection({ form }: CourseBasicInfoSectionP
     <>
       <SCard
         className='gap-3'
+        title={t('code.label')}
+        description={t('code.note')}
+        content={
+          <form.AppField
+            name='code'
+            children={(field: any) => (
+              <field.TextAreaField placeholder={t('code.placeholder')} className='rounded-lg border-gray-300' />
+            )}
+          />
+        }
+      />
+      <SCard
+        className='gap-3'
         title={t('title.label')}
         description={t('title.note')}
         content={
@@ -44,7 +57,27 @@ export default function CourseBasicInfoSection({ form }: CourseBasicInfoSectionP
           <form.AppField
             name='description'
             children={(field: any) => (
-              <field.TextAreaField placeholder={t('description.placeholder')} className='h-30 rounded-lg border-gray-300' />
+              <field.TextAreaField
+                placeholder={t('description.placeholder')}
+                className='h-30 rounded-lg border-gray-300'
+              />
+            )}
+          />
+        }
+      />
+
+      <SCard
+        className='gap-3'
+        title={t('studentTasks.label')}
+        description={t('studentTasks.note')}
+        content={
+          <form.AppField
+            name='studentTasks'
+            children={(field: any) => (
+              <field.TextAreaField
+                placeholder={t('studentTasks.placeholder')}
+                className='h-30 rounded-lg border-gray-300'
+              />
             )}
           />
         }

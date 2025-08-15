@@ -4,7 +4,7 @@ import { Size } from '@/types/general'
 import Link from 'next/link'
 
 interface CardLayoutProps {
-  imageSrc: string
+  imageSrc?: string
   alt?: string
   size?: Size
   badge?: React.ReactNode
@@ -55,7 +55,7 @@ export default function CardLayout({
         {imageSrc === '' ? (
           <Image src={'/images/fallback.png'} alt={alt} fill className='object-cover' priority sizes={sizes} />
         ) : (
-          <Image src={imageSrc} alt={alt} fill className='object-cover' sizes={sizes} />
+          <Image src={imageSrc || 'No image'} alt={alt} fill className='object-cover' sizes={sizes} />
         )}
         {badge && <div className='absolute top-2 left-2'>{badge}</div>}
         {infor && <div className='absolute bottom-2 left-2'>{infor}</div>}

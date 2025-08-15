@@ -37,4 +37,3 @@ export const {
   useCreateFormDataMutation: useCreateLessonWithFormDataMutation,
   useUpdateFormDataMutation: useUpdateLessonWithFormDataMutation
 } = lessonApi
-

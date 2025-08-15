@@ -34,7 +34,7 @@ export default function CourseListContent() {
     courseId: courseParams.courseId,
     createdByUserId: courseParams.createdByUserId,
     ageRangeId: courseParams.ageRangeId,
-    categoryId: courseParams.categoryId,
+    topicId: courseParams.topicId,
     skillId: courseParams.skillId,
     standardId: courseParams.standardId,
     pageNumber: courseParams.pageNumber,
@@ -73,12 +73,7 @@ export default function CourseListContent() {
   }
 
   if (!courseData || courseData.data.items.length === 0) {
-    return (
-      <SEmpty
-        title={t('noCourse')}
-        description={t('noCourseFound')}
-      />
-    )
+    return <SEmpty title={t('noCourse')} description={t('noCourseFound')} />
   }
 
   return (
@@ -87,7 +82,7 @@ export default function CourseListContent() {
         {courseData.data.items.map((course) => (
           <div key={course.id} className='relative flex gap-1'>
             <Link href={`/resource/course/${course.id}`} className='flex w-fit flex-col justify-between'>
-              <CardLayout imageSrc={course.imageUrl} size='sm'>
+              <CardLayout imageSrc={course.imageUrl || '/images/fallback.png'} size='sm'>
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>{t('subtitle')}</p>
                   <h3 className='text-sm font-semibold text-gray-900'>{course.title}</h3>

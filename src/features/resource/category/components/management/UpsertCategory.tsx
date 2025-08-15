@@ -10,29 +10,16 @@ import {
   useUpdateCategoryMutation
 } from '@/features/resource/category/api/categoryApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-
-function generateSlug(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .normalize('NFD') 
-    .replace(/[\u0300-\u036f]/g, '') 
-    .replace(/[^\w\s-]/g, '') 
-    .replace(/\s+/g, '-') 
-    .replace(/-+/g, '-') 
-    .replace(/^-+|-+$/g, '') 
-}
+import { code } from '@uiw/react-md-editor'
 
 const categorySchema = z.object({
-  categoryName: z.string().min(3, 'Category name must be at least 3 characters long'),
-  slug: z.string().optional()
+  name: z.string().min(1, 'Category name is required')
 })
 
 type CategoryFormData = z.infer<typeof categorySchema>
 
 const defaultCategoryData: CategoryFormData = {
-  categoryName: '',
-  slug: ''
+  name: ''
 }
 
 interface UpsertCategoryProps {
@@ -57,10 +44,8 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
     },
     onSubmit: async ({ value }) => {
       try {
-        value.slug = generateSlug(value.categoryName)
-
         if (isEditing) {
-          const body = { categoryName: value.categoryName, slug: value.slug }
+          const body = { name: value.name }
           await updateCategory({ id: id!, body }).unwrap()
           toast.success('Category updated successfully!')
         } else {
@@ -78,8 +63,7 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
   React.useEffect(() => {
     if (isEditing && categoryData?.data) {
       form.reset({
-        categoryName: categoryData.data.categoryName,
-        slug: categoryData.data.slug
+        name: categoryData.data.name
       })
     }
   }, [categoryData, isEditing, form])
@@ -96,22 +80,17 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
       }}
       className='space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? 'Edit' : 'Create'} Category</h2>
+      <h2 className='text-xl font-bold'>{isEditing ? 'Edit' : 'Create'} Topic</h2>
       <SCard
-        title='Category Name'
-        description='Enter the name of the category.'
+        title='Topic Name'
+        description='Enter the name of the topic.'
         content={
-          <form.AppField
-            name='categoryName'
-            children={(field) => <field.TextAreaField placeholder='e.g., Urban Planning' />}
-          />
+          <form.AppField name='name' children={(field) => <field.TextAreaField placeholder='e.g., Urban Planning' />} />
         }
       />
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>
-          <form.SubmitButton loading={isCreating || isUpdating}>
-            {isEditing ? 'Update' : 'Create'}
-          </form.SubmitButton>
+          <form.SubmitButton loading={isCreating || isUpdating}>{isEditing ? 'Update' : 'Create'}</form.SubmitButton>
         </form.AppForm>
       </div>
     </form>

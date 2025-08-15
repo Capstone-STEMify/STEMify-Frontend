@@ -31,7 +31,7 @@ export default function StatsSection({ course }: StatsSectionProps) {
     },
     {
       icon: Users,
-      value: course.downloadCount ?? 0,
+      value: 0,
       title: `${t('notEnrolled.stats.downloads')}`,
       subtitle: `${t('notEnrolled.stats.down_description')}`,
       iconColor: 'text-red-500',

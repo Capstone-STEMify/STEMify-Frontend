@@ -1,39 +1,49 @@
 {
-    "courseManagement": {
-        "title": {
-            "label": "Course Title",
-            "note": "Enter a descriptive title for the course",
-            "placeholder": "e.g., Introduction to Programming"
-        },
-        "description": {
-            "label": "Course Description",
-            "note": "Provide a brief description of the course",
-            "placeholder": "e.g., This course covers the basics of programming using Python."
-        },
-        "category": {
-            "label": "Categories",
-            "note": "Select the categories this course belongs to"
-        },
-        "skill": {
-            "label": "Skills",
-            "note": "Select the skills this course will help develop"
-        },
-        "standard": {
-            "label": "Standards",
-            "note": "Select the education standards this course aligns with"
-        },
-        "ageRange": {
-            "label": "Age Range",
-            "note": "Select the age range this course is suitable for"
-        },
-        "image": {
-            "label": "Cover Image",
-            "note": "Upload cover image",
-            "placeholder": "Make the document more engaging",
-            "btn": "Choose File"
-        },
-        "btn": "Submit",
-        "successMessage": "Course created successfully!",
-        "errorMessage": "Error creating course. Please try again."
-        }
+  "courseManagement": {
+    "code": {
+      "label": "Course Code",
+      "note": "Unique identifier for the course",
+      "placeholder": "e.g., C001"
+    },
+    "title": {
+      "label": "Course Title",
+      "note": "Enter a descriptive title for the course",
+      "placeholder": "e.g., Introduction to Programming"
+    },
+    "description": {
+      "label": "Course Description",
+      "note": "Provide a brief description of the course",
+      "placeholder": "e.g., This course covers the basics of programming using Python."
+    },
+    "studentTasks": {
+      "label": "Student Tasks",
+      "note": "Enter the tasks students need to complete",
+      "placeholder": "e.g., Complete the programming assignment"
+    },
+    "category": {
+      "label": "Categories",
+      "note": "Select the categories this course belongs to"
+    },
+    "skill": {
+      "label": "Skills",
+      "note": "Select the skills this course will help develop"
+    },
+    "standard": {
+      "label": "Standards",
+      "note": "Select the education standards this course aligns with"
+    },
+    "ageRange": {
+      "label": "Age Range",
+      "note": "Select the age range this course is suitable for"
+    },
+    "image": {
+      "label": "Cover Image",
+      "note": "Upload cover image",
+      "placeholder": "Make the document more engaging",
+      "btn": "Choose File"
+    },
+    "btn": "Submit",
+    "successMessage": "Course created successfully!",
+    "errorMessage": "Error creating course. Please try again."
+  }
 }

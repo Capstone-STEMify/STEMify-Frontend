@@ -34,8 +34,8 @@ export default function ExploreResourcesSection() {
             <CardLayout
               size='lg'
               key={index}
-              imageSrc={resource.imageUrl}
-              infor={<Badge>{resource.categoryNames}</Badge>}
+              imageSrc={resource.imageUrl || ''}
+              infor={<Badge>{resource.topicNames}</Badge>}
             >
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{resource.title}</h3>

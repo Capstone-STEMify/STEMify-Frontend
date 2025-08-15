@@ -1,12 +1,12 @@
 'use client'
-import { Button } from '@/components/shadcn/button'
-import { DataTable } from '@/components/shared/data-table/data-table'
-import { useSearchCategoryQuery } from '@/features/resource/category/api/categoryApi'
-import { useGetCategoryAction } from '@/features/resource/category/components/table/CategoryAction'
 import { useModal } from '@/providers/ModalProvider'
-import { Plus } from 'lucide-react'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from '@/components/shadcn/input'
+import { Button } from '@/components/shadcn/button'
+import { Plus } from 'lucide-react'
+import { DataTable } from '@/components/shared/data-table/data-table'
+import { useGetLessonAction } from './LessonAction'
+import { useSearchLessonQuery } from '../../api/lessonApi'
 
 // Debounce hook to delay API calls
 function useDebounce(value: string, delay: number) {
@@ -22,29 +22,27 @@ function useDebounce(value: string, delay: number) {
   return debouncedValue
 }
 
-export default function CategoryTable() {
+export default function LessonTable() {
   const { openModal } = useModal()
-  const columns = useGetCategoryAction()
+  const columns = useGetLessonAction()
 
   const [searchQuery, setSearchQuery] = useState('')
   // Debounce the search query to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
-  const { data } = useSearchCategoryQuery({
+  const { data } = useSearchLessonQuery({
     search: debouncedSearchQuery
   })
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
-  const handleCreate = () => {
-    openModal('upsertCategory')
-  }
+  const handleCreate = () => {}
 
   return (
     <div>
       <div className='flex items-center justify-between py-4'>
         <Input
-          placeholder='Search by topic name...'
+          placeholder='Search lessons...'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className='max-w-sm'

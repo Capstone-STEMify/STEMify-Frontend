@@ -63,7 +63,7 @@ export const CourseSidebarSection = ({
       </div> */}
 
       <form.AppForm>
-        <form.SubmitButton loading={isSubmitting} className='w-full rounded-full'>
+        <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 w-full rounded-full'>
           {t('btn')}
         </form.SubmitButton>
       </form.AppForm>

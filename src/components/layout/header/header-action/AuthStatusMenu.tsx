@@ -17,10 +17,13 @@ import {
 } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
-import React from 'react'
+import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { UserRole } from '@/types/userRole'
+import { useRouter } from 'next/navigation'
 
 function MenuItem({
   children,
@@ -54,6 +57,14 @@ function MenuItem({
 export default function AuthStatusMenu() {
   const t = useTranslations('Header')
   const { data: session, status } = useSession()
+  const role = useAppSelector((state) => state.auth.user?.role)
+  const router = useRouter()
+
+  useEffect(() => {
+    if (status === 'authenticated' && role === UserRole.ADMIN) {
+      router.replace('/admin/course')
+    }
+  }, [status, role])
 
   if (status === 'loading') {
     return (

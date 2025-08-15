@@ -80,15 +80,14 @@ export default function UpsertSection({
         if (sectionId) {
           const updatePayload = {
             description: value.description,
-            duration: value.duration,
-            status: 'Published'
+            duration: Number(value.duration)
           }
           await updateSection({ id: sectionId, body: updatePayload }).unwrap()
           toast.success('Section updated successfully')
         } else {
           const createPayload = {
             description: value.description,
-            duration: value.duration,
+            duration: Number(value.duration),
             lessonId
           }
           const res = await createSection(createPayload).unwrap()
