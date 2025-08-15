@@ -13,17 +13,13 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { code } from '@uiw/react-md-editor'
 
 const categorySchema = z.object({
-  name: z.string().min(1, 'Category name is required'),
-  code: z.string().min(1, 'Category code is required'),
-  description: z.string().optional()
+  name: z.string().min(1, 'Category name is required')
 })
 
 type CategoryFormData = z.infer<typeof categorySchema>
 
 const defaultCategoryData: CategoryFormData = {
-  name: '',
-  code: '',
-  description: ''
+  name: ''
 }
 
 interface UpsertCategoryProps {
@@ -49,7 +45,7 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
     onSubmit: async ({ value }) => {
       try {
         if (isEditing) {
-          const body = { name: value.name, code: value.code, description: value.description }
+          const body = { name: value.name }
           await updateCategory({ id: id!, body }).unwrap()
           toast.success('Category updated successfully!')
         } else {
@@ -67,9 +63,7 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
   React.useEffect(() => {
     if (isEditing && categoryData?.data) {
       form.reset({
-        name: categoryData.data.name,
-        code: categoryData.data.code,
-        description: categoryData.data.description || ''
+        name: categoryData.data.name
       })
     }
   }, [categoryData, isEditing, form])
@@ -86,27 +80,12 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
       }}
       className='space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? 'Edit' : 'Create'} Category</h2>
+      <h2 className='text-xl font-bold'>{isEditing ? 'Edit' : 'Create'} Topic</h2>
       <SCard
-        title='Category Name'
-        description='Enter the name of the category.'
+        title='Topic Name'
+        description='Enter the name of the topic.'
         content={
           <form.AppField name='name' children={(field) => <field.TextAreaField placeholder='e.g., Urban Planning' />} />
-        }
-      />
-      <SCard
-        title='Category Code'
-        description='Enter the code of the category.'
-        content={<form.AppField name='code' children={(field) => <field.TextAreaField placeholder='e.g., Cat001' />} />}
-      />
-      <SCard
-        title='Category Description'
-        description='Enter the description of the category.'
-        content={
-          <form.AppField
-            name='description'
-            children={(field) => <field.TextAreaField placeholder='e.g., This category is about urban planning.' />}
-          />
         }
       />
       <div className='flex justify-end gap-2 pt-4'>

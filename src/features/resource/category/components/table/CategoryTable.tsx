@@ -26,11 +26,9 @@ export default function CategoryTable() {
   const { openModal } = useModal()
   const columns = useGetCategoryAction()
 
-
   const [searchQuery, setSearchQuery] = useState('')
   // Debounce the search query to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
-
 
   const { data } = useSearchCategoryQuery({
     search: debouncedSearchQuery
@@ -44,9 +42,9 @@ export default function CategoryTable() {
 
   return (
     <div>
-      <div className='flex justify-between items-center py-4'>
+      <div className='flex items-center justify-between py-4'>
         <Input
-          placeholder='Search by category name...'
+          placeholder='Search by topic name...'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className='max-w-sm'
@@ -55,11 +53,7 @@ export default function CategoryTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable
-        data={rows}
-        columns={columns}
-        enableRowSelection
-      />
+      <DataTable data={rows} columns={columns} enableRowSelection />
     </div>
   )
 }

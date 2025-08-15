@@ -55,16 +55,6 @@ const data = {
       title: 'Lesson',
       url: 'lesson',
       icon: IconChartBar
-    },
-    {
-      title: 'Section',
-      url: 'section',
-      icon: IconFolder
-    },
-    {
-      title: 'Content',
-      url: 'content',
-      icon: IconUsers
     }
   ],
   navClouds: [
@@ -134,8 +124,8 @@ const data = {
   ],
   documents: [
     {
-      name: 'Category',
-      url: 'category',
+      name: 'Topic',
+      url: 'topic',
       icon: IconDatabase
     },
     {

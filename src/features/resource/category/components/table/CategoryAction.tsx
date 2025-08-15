@@ -21,9 +21,9 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
   const handleDelete = async (id: number) => {
     try {
       await deleteCategory(id).unwrap()
-      toast.success(`Successfully deleted category ${id}.`)
+      toast.success(`Successfully deleted topic ${id}.`)
     } catch (error) {
-      toast.error('Failed to delete category.')
+      toast.error('Failed to delete topic.')
     }
   }
 
@@ -35,13 +35,9 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
       cell: ({ row }) => row.getValue('id')
     },
     {
-      accessorKey: 'categoryName',
+      accessorKey: 'name',
       header: () => <div className='text-center'>Name</div>,
-      cell: ({ row }) => (
-        <div className='cursor-pointer text-center font-bold underline'>
-          {row.getValue('categoryName')}
-        </div>
-      )
+      cell: ({ row }) => <div className='cursor-pointer text-center font-bold underline'>{row.getValue('name')}</div>
     },
     createActionsColumnFromItems<Category>([
       {
@@ -69,7 +65,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
-            message: `Are you sure you want to delete category "${original.id}"?`,
+            message: `Are you sure you want to delete topic "${original.name}"?`,
             onConfirm: () => handleDelete(original.id)
           })
         }
