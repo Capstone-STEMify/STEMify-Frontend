@@ -14,8 +14,8 @@ import BackButton from '@/components/shared/button/BackButton'
 import { UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { useUpdateCourseWithFormDataMutation } from '@/features/resource/course/api/courseApi'
 import { useTranslations } from 'next-intl'
+import { useUpdateCourseMutation } from '@/features/resource/course/api/courseApi'
 
 interface HeroSectionProps {
   course: Course
@@ -46,7 +46,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
   const auth = useAppSelector((state) => state.auth)
   const userRole = auth.user?.role || UserRole.GUEST
   const [createEnroll, { data: enroll }] = useCreateEnrollmentMutaion()
-  const [updateCourseStatus] = useUpdateCourseWithFormDataMutation()
+  const [updateCourseStatus] = useUpdateCourseMutation()
 
   const handleEnroll = () => {
     if (!auth.user?.userId) {
@@ -74,11 +74,9 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
   const handleSubmitToReview = async () => {
     try {
       toast.info('Your course is submitted for review. Please wait for approval.')
-      const formData = new FormData()
-      formData.append('status', CourseStatus.PENDING)
       await updateCourseStatus({
         id: course.id,
-        body: formData
+        body: { status: CourseStatus.PENDING }
       }).unwrap()
     } catch (error) {
       console.error('Failed to update course status:', error)

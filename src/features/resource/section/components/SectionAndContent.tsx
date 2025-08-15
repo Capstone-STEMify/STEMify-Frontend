@@ -14,7 +14,7 @@ import { Button } from '@/components/shadcn/button'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTranslations } from 'next-intl'
-import { useUpdateLessonWithFormDataMutation } from '../../lesson/api/lessonApi'
+import { useUpdateLessonMutation, useUpdateLessonSectionOrderMutation } from '@/features/resource/lesson/api/lessonApi'
 
 export default function SectionAndContent() {
   const t = useTranslations('sectionManagement')
@@ -24,7 +24,7 @@ export default function SectionAndContent() {
   const { openModal } = useModal()
 
   const { data, isLoading } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !token })
-  const [updateSectionLesson] = useUpdateLessonWithFormDataMutation()
+  const [updateSectionOrder] = useUpdateLessonSectionOrderMutation()
   const [isOrderChanged, setIsOrderChanged] = useState(false)
   const sections = useMemo(() => data?.data.items ?? [], [data])
 
@@ -101,9 +101,10 @@ export default function SectionAndContent() {
                   try {
                     const sectionIds = items.map((s) => s.id)
 
-                    const formData = new FormData()
-                    sectionIds.forEach((id) => formData.append('OrderedSectionIds', String(id)))
-                    const response = await updateSectionLesson({ id: Number(lessonId), body: formData }).unwrap()
+                    const jsonPayload = {
+                      orderedSectionIds: sectionIds
+                    }
+                    const response = await updateSectionOrder({ id: Number(lessonId), body: jsonPayload }).unwrap()
                     console.log('response', response)
 
                     toast.success('Order saved successfully.')
