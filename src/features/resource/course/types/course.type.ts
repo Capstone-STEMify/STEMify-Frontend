@@ -3,9 +3,9 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 // models
 export type Course = {
   id: number
-  code: string
   title: string
-  imageUrl: string
+  code: string
+  imageUrl?: string
   slug: string
   description: string
   studentTasks: string
@@ -14,14 +14,16 @@ export type Course = {
   status: CourseStatus
   level: CourseLevel
   createdByUserId: string
+  reviewedByUserId?: string
   ageRangeId: number
-  createdDate: string
-  lastModifiedDate: string
+  createdDate: string // DateTimeOffset → string (ISO format)
+  lastModifiedDate?: string // DateTimeOffset? → string | undefined
+  reviewedAt?: string // DateTime? → string | undefined
   ageRangeLabel: string
+  lessonIds: number[]
   topicNames: string[]
   skillNames: string[]
   standardNames: string[]
-  lessonIds: number[]
 }
 
 export enum CourseStatus {

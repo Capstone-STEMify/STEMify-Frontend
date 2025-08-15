@@ -5,20 +5,22 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 export type Lesson = {
   id: number
   title: string
-  imageUrl: string
+  imageUrl?: string
   description: string
+  learningOutcome: string
+  requirement?: string
   duration: number
   orderIndex: number
   status: LessonStatus
   createdByUserId: string
   courseId: number
   createdDate: string
-  lastModifiedDate: string
+  lastModifiedDate?: string
   ageRangeLabel: string
-  categoryNames: string[]
+  sectionIds: number[]
+  topicNames: string[]
   skillNames: string[]
   standardNames: string[]
-  sectionIds: number[]
 }
 
 export enum LessonStatus {
