@@ -16,8 +16,8 @@ import { useAppForm } from '@/components/shared/form/items'
 import { CourseSidebarSection } from '@/features/resource/course/components/upsert/CourseSidebarSection'
 import {
   useCreateCourseMutation,
-  useCreateCourseWithFormDataMutation,
   useGetCourseByIdQuery,
+  useUpdateCourseMutation,
   useUpdateCourseWithFormDataMutation
 } from '@/features/resource/course/api/courseApi'
 import {
@@ -70,31 +70,36 @@ async function CreateCourseJsonPayload(data: CourseFormData, userId: string) {
  * @param newData The updated course form data.
  * @returns The FormData object containing the updated course form data.
  */
-function PatchCourseFormData(oldData: CourseFormData, newData: CourseFormData): FormData {
-  const formData = new FormData()
-
-  if (oldData.title !== newData.title) formData.append('title', newData.title)
-  if (oldData.slug !== newData.slug) formData.append('slug', newData.slug ?? '')
-  if (oldData.description !== newData.description) formData.append('description', newData.description)
-  if (oldData.ageRangeId !== newData.ageRangeId) formData.append('ageRangeId', newData.ageRangeId)
-
-  if (newData.imageUrl && typeof newData.imageUrl !== 'string') {
-    formData.append('Image', newData.imageUrl)
+async function PatchCourseJsonPayload(oldData: CourseFormData, newData: CourseFormData, userId: string): Promise<any> {
+  const patchData: Record<string, any> = {
+    createdByUserId: userId
   }
 
-  return formData
+  if (oldData.title !== newData.title) patchData.title = newData.title
+  if (oldData.slug !== newData.slug) patchData.slug = newData.slug
+  if (oldData.description !== newData.description) patchData.description = newData.description
+  if (oldData.ageRangeId !== newData.ageRangeId) patchData.ageRangeId = parseInt(newData.ageRangeId)
+  if (oldData.studentTasks !== newData.studentTasks) patchData.studentTasks = newData.studentTasks
+  if (oldData.code !== newData.code) patchData.code = newData.code
+
+  if (newData.imageUrl && typeof newData.imageUrl !== 'string') {
+    const base64 = await fileToBase64(newData.imageUrl)
+    patchData.image = base64
+  }
+
+  return patchData
 }
 
 function generateSlug(text: string): string {
   return text
     .toLowerCase()
     .trim()
-    .normalize('NFD') // loại bỏ dấu tiếng Việt
-    .replace(/[\u0300-\u036f]/g, '') // tiếp tục loại dấu
-    .replace(/[^\w\s-]/g, '') // loại ký tự đặc biệt
-    .replace(/\s+/g, '-') // thay khoảng trắng bằng '-'
-    .replace(/-+/g, '-') // gộp nhiều '-' thành một
-    .replace(/^-+|-+$/g, '') // xóa '-' ở đầu và cuối
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '')
 }
 
 function mapCourseToFormData(course: ApiSuccessResponse<Course>): CourseFormData {
@@ -128,9 +133,8 @@ export default function UpsertCourse() {
     skip: !courseId
   })
 
-  // const [createCourse, { isLoading: isCreating }] = useCreateCourseWithFormDataMutation()
   const [createCourse, { isLoading: isCreating }] = useCreateCourseMutation()
-  const [updateCourse, { isLoading: isUpdating }] = useUpdateCourseWithFormDataMutation()
+  const [updateCourse, { isLoading: isUpdating }] = useUpdateCourseMutation()
   const isSubmitting = isCreating || isUpdating
 
   const form = useAppForm({
@@ -142,8 +146,8 @@ export default function UpsertCourse() {
       try {
         value.slug = generateSlug(value.title)
         if (courseId) {
-          const patchFormData = PatchCourseFormData(initialCourseDataRef.current!, value)
-          const res = await updateCourse({ id: Number(courseId), body: patchFormData }).unwrap()
+          const patchJson = await PatchCourseJsonPayload(initialCourseDataRef.current!, value, userId!)
+          const res = await updateCourse({ id: Number(courseId), body: patchJson }).unwrap()
           toast.success(`Course updated successfully (${res.data.title})`, {
             action: {
               label: 'View Course',

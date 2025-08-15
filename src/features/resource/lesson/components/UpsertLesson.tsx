@@ -3,14 +3,11 @@ import { SCard } from '@/components/shared/card/SCard'
 import React, { useRef, useEffect } from 'react'
 import {
   useCreateLessonMutation,
-  useCreateLessonWithFormDataMutation,
   useGetLessonByIdQuery,
-  useUpdateLessonWithFormDataMutation
+  useUpdateLessonMutation
 } from '@/features/resource/lesson/api/lessonApi'
 import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
-import { Button } from '@/components/shadcn/button'
-import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { useParams, useSearchParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
@@ -46,7 +43,7 @@ type LessonFormData = z.infer<typeof lessonSchema>
 const defaultLessonData: LessonFormData = {
   title: '',
   description: '',
-  courseId: 1,
+  courseId: 0,
   learningOutcome: '',
   topics: [],
   skills: [],
@@ -66,24 +63,41 @@ function mapLessonData(
   const standardNames = lesson.data.standardNames ?? []
 
   const skillIds = allSkills
-    .filter((s) => skillNames.some((n) => n.trim().toLowerCase() === s.skillName.trim().toLowerCase()))
-    .map((s) => s.id.toString())
+    .filter(
+      (s) =>
+        typeof s.skillName === 'string' &&
+        skillNames.some((n) => typeof n === 'string' && n.trim().toLowerCase() === s.skillName.trim().toLowerCase())
+    )
+    .map((s) => s.id)
+
   const topicIds = allCategories
-    .filter((c) => topicNames.some((n) => n.trim().toLowerCase() === c.categoryName.trim().toLowerCase()))
-    .map((c) => c.id.toString())
+    .filter(
+      (c) =>
+        typeof c.categoryName === 'string' &&
+        topicNames.some((n) => typeof n === 'string' && n.trim().toLowerCase() === c.categoryName.trim().toLowerCase())
+    )
+    .map((c) => c.id)
+
   const standardIds = allStandards
-    .filter((s) => standardNames.some((n) => n.trim().toLowerCase() === s.standardName.trim().toLowerCase()))
-    .map((s) => s.id.toString())
+    .filter(
+      (s) =>
+        typeof s.standardName === 'string' &&
+        standardNames.some(
+          (n) => typeof n === 'string' && n.trim().toLowerCase() === s.standardName.trim().toLowerCase()
+        )
+    )
+    .map((s) => s.id)
 
   return {
     title: lesson.data.title ?? '',
     description: lesson.data.description ?? '',
     learningOutcome: lesson.data.learningOutcome ?? '',
-    courseId: lesson.data.courseId ?? 1,
+    courseId: lesson.data.courseId ?? 0,
     topics: topicIds ?? [],
     skills: skillIds,
     standards: standardIds,
-    imageUrl: null as any
+    imageUrl: null as any,
+    imagePreviewUrl: lesson.data.imageUrl ?? ''
   }
 }
 
@@ -107,6 +121,27 @@ async function CreateLessonJsonPayload(data: LessonFormData, userId: string, cou
   }
 }
 
+async function PatchLessonJsonPayload(oldData: LessonFormData, newData: LessonFormData, userId: string): Promise<any> {
+  const patchData: Record<string, any> = {
+    createdByUserId: userId
+  }
+
+  if (oldData.title !== newData.title) patchData.title = newData.title
+  if (oldData.description !== newData.description) patchData.description = newData.description
+  if (oldData.learningOutcome !== newData.learningOutcome) patchData.learningOutcome = newData.learningOutcome
+  if (oldData.courseId !== newData.courseId) patchData.courseId = newData.courseId
+  if (oldData.topics !== newData.topics) patchData.topicIds = newData.topics
+  if (oldData.skills !== newData.skills) patchData.skillIds = newData.skills
+  if (oldData.standards !== newData.standards) patchData.standardIds = newData.standards
+
+  if (newData.imageUrl && typeof newData.imageUrl !== 'string') {
+    const base64 = await fileToBase64(newData.imageUrl)
+    patchData.image = base64
+  }
+
+  return patchData
+}
+
 interface UpsertLessonProps {
   courseIdModal?: number
   onSuccess?: () => void
@@ -122,7 +157,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
 
   const userId = useAppSelector((state) => state.auth.user?.userId)
 
-  const { openModal } = useModal()
   const imageFieldRef = useRef<any>(null)
 
   // Get lessonId from URL
@@ -146,6 +180,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
 
   // const [createLesson] = useCreateLessonWithFormDataMutation()
   const [createLesson] = useCreateLessonMutation()
+  const [updateLesson] = useUpdateLessonMutation()
 
   // Initialize form with lesson data if it exists
   const form = useAppForm({
@@ -156,7 +191,8 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     onSubmit: async ({ value }) => {
       try {
         if (lessonId) {
-          console.log('Updating lesson with ID:', lessonId)
+          const jsonPayload = await PatchLessonJsonPayload(initialCourseDataRef.current!, value, userId!)
+          const res = await updateLesson({ id: lessonId, body: jsonPayload }).unwrap()
         } else {
           const jsonPayload = await CreateLessonJsonPayload(value, userId!, finalCourseId)
           const res = await createLesson(jsonPayload).unwrap()
@@ -195,21 +231,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     }
   }, [lessonData, skills, categories, standards])
 
-  const handleEditImage = () => {
-    const currentImage = form.state.values.imageUrl
-    if (!currentImage) return
-
-    const imageUrl = URL.createObjectURL(currentImage)
-
-    openModal('editImage', {
-      imageSrc: imageUrl,
-      onConfirm: (croppedFile: File) => {
-        imageFieldRef.current?.handleChange(croppedFile)
-        URL.revokeObjectURL(imageUrl)
-      }
-    })
-  }
-
   if (showCourseMissingError) {
     return (
       <div className='flex h-screen flex-col items-center justify-center gap-4 text-center'>
@@ -246,16 +267,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
       </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
-          {/* {course?.data && (
-            <SCard
-              content={
-                <>
-                  <h2 className='mb-1 text-lg font-semibold'>Course: {course.data.title}</h2>
-                  <p>{course.data.description}</p>
-                </>
-              }
-            ></SCard>
-          )} */}
           <div className='flex justify-between gap-2'>
             <SCard
               className='w-full gap-3'
