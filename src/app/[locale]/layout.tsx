@@ -1,10 +1,10 @@
-import Providers from '@/providers/Providers';
-import SignalRProvider from '@/providers/SignalRProvider';
-import { loadMessages } from 'i18n/loadMessages';
-import { routing } from 'i18n/routing';
-import { Metadata } from 'next';
-import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { notFound } from 'next/navigation';
+import Providers from '@/providers/Providers'
+import SignalRProvider from '@/providers/SignalRProvider'
+import { loadMessages } from 'i18n/loadMessages'
+import { routing } from 'i18n/routing'
+import { Metadata } from 'next'
+import { hasLocale, NextIntlClientProvider } from 'next-intl'
+import { notFound } from 'next/navigation'
 import { Nunito, Reem_Kufi } from 'next/font/google'
 import './globals.css'
 
@@ -28,18 +28,21 @@ export const metadata: Metadata = {
   }
 }
 
-export default async function RootLayout({ children, params }: Readonly<{ children: React.ReactNode; params: { locale: string }; }>) {
-  const { locale } = await params;
+export default async function RootLayout({
+  children,
+  params
+}: Readonly<{ children: React.ReactNode; params: { locale: string } }>) {
+  const { locale } = await params
 
   if (!hasLocale(routing.locales, locale)) {
-    notFound();
+    notFound()
   }
 
-  let messages;
+  let messages
   try {
-    messages = await loadMessages(locale);
+    messages = await loadMessages(locale)
   } catch (error) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -48,11 +51,12 @@ export default async function RootLayout({ children, params }: Readonly<{ childr
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
             <main>
-              <SignalRProvider>{children}</SignalRProvider>
+              {/* <SignalRProvider></SignalRProvider> */}
+              {children}
             </main>
           </Providers>
         </NextIntlClientProvider>
       </body>
     </html>
-  );
+  )
 }

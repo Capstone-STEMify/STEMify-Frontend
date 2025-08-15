@@ -10,16 +10,16 @@ import LanguageSwitcher from '../LanguageSwitcher'
 
 export default function HeaderEvent() {
   const { token, user } = useAppSelector((state) => state.auth)
-  const { data } = useSearchNotificationQuery({ userId: user?.userId }, { skip: !token })
+  // const { data } = useSearchNotificationQuery({ userId: user?.userId }, { skip: !token })
   // highlight-next-line
   const t = useTranslations('Header')
 
-  const unreadCount = data?.data?.items?.filter((item) => !item.isRead).length || 0
+  // const unreadCount = data?.data?.items?.filter((item) => !item.isRead).length || 0
 
   return (
     <>
       <LanguageSwitcher />
-      <Popover>
+      {/* <Popover>
         <PopoverTrigger asChild>
           <div
             className={`group relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 ease-in-out hover:bg-blue-200 hover:shadow-md`}
@@ -42,8 +42,7 @@ export default function HeaderEvent() {
         <PopoverContent side='bottom' align='end' className='shadow-6 w-80 rounded-xl'>
           <NotificationHeader />
         </PopoverContent>
-      </Popover>
-
+      </Popover> */}
 
       {/* highlight-next-line */}
       <SToolTip content={t('gift')}>
