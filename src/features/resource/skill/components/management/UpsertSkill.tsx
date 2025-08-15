@@ -93,7 +93,7 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
       />
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>
-          <form.SubmitButton loading={isCreating || isUpdating}>
+          <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
             {isEditing ? 'Update' : 'Create'}
           </form.SubmitButton>
         </form.AppForm>
