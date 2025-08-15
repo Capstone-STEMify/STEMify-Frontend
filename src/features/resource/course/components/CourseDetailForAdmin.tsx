@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
 import { Course } from '../types/course.type'
+import { SCard } from '@/components/shared/card/SCard'
 const course = {
   id: 1,
   title: 'City Building',
@@ -38,87 +39,85 @@ export default function CourseDetailPage() {
     <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
       {/* Left Column */}
       <div className='space-y-4 md:col-span-2'>
-        <Card>
-          <CardHeader>
-            <CardTitle className='text-3xl font-semibold'>{course.title}</CardTitle>
+        <SCard
+          title={course.title}
+          titleClassName='text-3xl font-semibold'
+          content={
             <div className='text-muted-foreground mt-2 flex flex-wrap gap-3 text-sm'>
               <span>Code: {course.code}</span>
               <span>Status: {course.status}</span>
               <span>Level: {course.level}</span>
               <span>Age Range: {course.ageRangeLabel}</span>
             </div>
-          </CardHeader>
-        </Card>
+          }
+        />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Description</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className='leading-relaxed'>{course.description}</p>
-          </CardContent>
-        </Card>
+        <SCard
+          title='Description'
+          titleClassName='text-2xl font-semibold'
+          content={<div className='text-sm leading-relaxed whitespace-pre-wrap'>{course.description}</div>}
+        />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Student Tasks</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <pre className='text-sm leading-relaxed whitespace-pre-wrap'>{course.studentTasks}</pre>
-          </CardContent>
-        </Card>
+        <SCard
+          title='Student Tasks'
+          content={<div className='text-sm leading-relaxed whitespace-pre-wrap'>{course.studentTasks}</div>}
+        />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Topics</CardTitle>
-          </CardHeader>
-          <CardContent className='flex flex-wrap gap-2'>
-            {course.topicNames.map((topic) => (
-              <Badge key={topic} variant='secondary' className='text-sm'>
-                {topic}
-              </Badge>
-            ))}
-          </CardContent>
-        </Card>
+        <SCard
+          title='Topics'
+          content={
+            <div className='mt-2 flex gap-2'>
+              {course.topicNames.map((topic) => (
+                <Badge key={topic} variant='secondary' className='text-sm'>
+                  {topic}
+                </Badge>
+              ))}
+            </div>
+          }
+        />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Skills</CardTitle>
-          </CardHeader>
-          <CardContent className='flex flex-wrap gap-2'>
-            {course.skillNames.map((skill) => (
-              <Badge key={skill} variant='outline' className='text-sm'>
-                {skill}
-              </Badge>
-            ))}
-          </CardContent>
-        </Card>
+        <SCard
+          title='Skills'
+          content={
+            <div className='mt-2 flex gap-2'>
+              {course.skillNames.map((skill) => (
+                <Badge key={skill} variant='outline' className='text-sm'>
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+          }
+        />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Standards</CardTitle>
-          </CardHeader>
-          <CardContent className='flex flex-wrap gap-2'>
-            {course.standardNames.map((std) => (
-              <Badge key={std} className='text-sm'>
-                {std}
-              </Badge>
-            ))}
-          </CardContent>
-        </Card>
+        <SCard
+          title='Standards'
+          content={
+            <div className='mt-2 flex gap-2'>
+              {course.standardNames.map((standard) => (
+                <Badge key={standard} variant='outline' className='text-sm'>
+                  {standard}
+                </Badge>
+              ))}
+            </div>
+          }
+        />
       </div>
 
       {/* Right Column */}
       <div className='space-y-4'>
-        <Card className='overflow-hidden'>
-          <Image src={course.imageUrl} alt={course.title} width={500} height={300} className='w-full object-cover' />
-        </Card>
+        <div className='relative aspect-[4/3] w-full overflow-hidden rounded-4xl shadow-lg'>
+          <Image
+            src={course.imageUrl}
+            alt={course.title}
+            fill
+            className='object-cover'
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+          />
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Metadata</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <SCard
+          title='Metadata'
+          content={
             <div className='space-y-1 text-sm'>
               <div>
                 <strong>Created at:</strong> {createdAt}
@@ -130,8 +129,8 @@ export default function CourseDetailPage() {
                 <strong>Created By:</strong> {createdBy}
               </div>
             </div>
-          </CardContent>
-        </Card>
+          }
+        />
       </div>
     </div>
   )
