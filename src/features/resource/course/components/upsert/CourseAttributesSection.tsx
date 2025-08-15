@@ -48,7 +48,7 @@ export default function CourseAttributesSection({ form, skills, categories, stan
               <field.MultipleCheckboxField
                 options={categories?.data.items.map((c) => ({
                   value: c.id.toString(),
-                  label: c.categoryName
+                  label: c.name
                 }))}
                 className='flex flex-wrap gap-x-8 gap-y-4'
               />

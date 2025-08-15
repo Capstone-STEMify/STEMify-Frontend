@@ -114,7 +114,7 @@ function mapCourseToFormData(
   allStandards: any[]
 ): CourseFormData {
   const skillNames = course.data.skillNames ?? []
-  const categoryNames = course.data.categoryNames ?? []
+  const topicNames = course.data.topicNames ?? []
   const standardNames = course.data.standardNames ?? []
   console.log('>> skillNames from API:', course.data.skillNames)
   console.log(
@@ -126,7 +126,7 @@ function mapCourseToFormData(
     .filter((s) => skillNames.some((n) => n.trim().toLowerCase() === s.skillName.trim().toLowerCase()))
     .map((s) => s.id.toString())
   const categoryIds = allCategories
-    .filter((c) => categoryNames.some((n) => n.trim().toLowerCase() === c.categoryName.trim().toLowerCase()))
+    .filter((c) => topicNames.some((n) => n.trim().toLowerCase() === c.categoryName.trim().toLowerCase()))
     .map((c) => c.id.toString())
   const standardIds = allStandards
     .filter((s) => standardNames.some((n) => n.trim().toLowerCase() === s.standardName.trim().toLowerCase()))
@@ -141,7 +141,7 @@ function mapCourseToFormData(
     categories: categoryIds,
     standards: standardIds,
     imageUrl: null as any,
-    imagePreviewUrl: course.data.imageUrl ?? null
+    imagePreviewUrl: course.data.imageUrl ?? undefined
   }
 }
 

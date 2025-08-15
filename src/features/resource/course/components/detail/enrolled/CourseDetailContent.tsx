@@ -96,7 +96,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
               className='flex w-fit flex-col justify-between'
             >
               <CardLayout
-                imageSrc={lesson.imageUrl}
+                imageSrc={lesson.imageUrl || '/images/fallback.png'}
                 size='sm'
                 badge={
                   progressMap?.[lesson.id] && (
