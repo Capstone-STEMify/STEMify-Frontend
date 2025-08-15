@@ -46,7 +46,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={fontReemKufi.className}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>

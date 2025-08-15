@@ -5,7 +5,6 @@ import {
   useGetSectionByIdQuery,
   useCreateSectionMutation,
   useUpdateSectionMutation,
-  useSearchSectionQuery
 } from '@/features/resource/section/api/sectionApi'
 import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
