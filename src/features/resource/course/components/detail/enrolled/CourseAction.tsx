@@ -1,5 +1,5 @@
 import { Button } from '@/components/shadcn/button'
-import { useUpdateCourseMutation, useUpdateCourseWithFormDataMutation } from '@/features/resource/course/api/courseApi'
+import { useUpdateCourseMutation } from '@/features/resource/course/api/courseApi'
 import { Course, CourseStatus } from '@/features/resource/course/types/course.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
@@ -13,14 +13,14 @@ type CourseActionProps = {
 export default function CourseAction({ course }: CourseActionProps) {
   const t = useTranslations('CourseDetails')
   const userRole = useAppSelector((state) => state.auth.user?.role)
-  const [updateCourseStatus] = useUpdateCourseWithFormDataMutation()
+  const [updateCourseStatus] = useUpdateCourseMutation()
   const handleUpdateCourseStatus = async (status: CourseStatus) => {
     try {
-      const formData = new FormData()
-      formData.append('status', status)
       await updateCourseStatus({
         id: course.id,
-        body: formData
+        body: {
+          status
+        }
       }).unwrap()
     } catch (error) {
       console.error('Failed to update course status:', error)

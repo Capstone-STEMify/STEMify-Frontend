@@ -18,7 +18,6 @@ import {
   useCreateCourseMutation,
   useGetCourseByIdQuery,
   useUpdateCourseMutation,
-  useUpdateCourseWithFormDataMutation
 } from '@/features/resource/course/api/courseApi'
 import {
   CourseFormData,

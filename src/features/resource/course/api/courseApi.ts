@@ -5,6 +5,16 @@ export const courseApi = createCrudApi<Course, CourseQueryParams>({
   reducerPath: 'courseApi',
   tagType: 'Course',
   baseUrl: '/courses'
+}).injectEndpoints({
+  endpoints: (builder) => ({
+    updateLessonOrder: builder.mutation<void, { id: number; orderedLessonIds: number[] }>({
+      query: ({ id, orderedLessonIds }) => ({
+        url: `/courses/${id}/lessons-reorder`,
+        method: 'PATCH',
+        body: { orderedLessonIds }
+      })
+    })
+  })
 })
 
 export const {
@@ -12,10 +22,9 @@ export const {
   useGetByIdQuery: useGetCourseByIdQuery,
   useGetAllQuery: useGetAllCourseQuery,
   useCreateMutation: useCreateCourseMutation,
-  useCreateFormDataMutation: useCreateCourseWithFormDataMutation,
   useUpdateMutation: useUpdateCourseMutation,
-  useUpdateFormDataMutation: useUpdateCourseWithFormDataMutation,
   useDeleteMutation: useDeleteCourseMutation,
+  useUpdateLessonOrderMutation: useUpdateLessonOrderMutation,
 
   // lazy
   useLazySearchQuery: useLazySearchCourseQuery,
