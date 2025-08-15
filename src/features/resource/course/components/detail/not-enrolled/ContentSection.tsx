@@ -149,7 +149,9 @@ export default function ContentSection() {
           <div className='bg-white py-12'>
             <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
               <div className='text-center'>
-                <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>{t('notEnrolled.notFound.title')}</h2>
+                <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+                  {t('notEnrolled.notFound.title')}
+                </h2>
                 <p className='text-lg text-gray-600'>{t('notEnrolled.notFound.description')}</p>
               </div>
             </div>
@@ -157,15 +159,15 @@ export default function ContentSection() {
         ) : (
           <div className='mx-auto mt-24 max-w-7xl px-4 sm:px-6 lg:px-8'>
             <div className='mt-30 mb-12 text-center'>
-              <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>{t('notEnrolled.lesson.title')}</h2>
-              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>
-                {t('notEnrolled.lesson.description')}
-              </p>
+              <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+                {t('notEnrolled.lesson.title')}
+              </h2>
+              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('notEnrolled.lesson.description')}</p>
             </div>
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
               <div
                 className='shadow-6 mx-auto mb-30 flex h-[350px] w-[264px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 px-4 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-                onClick={() => openModal('upsertLesson', { courseIdModal: Number(courseId) })}
+                onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
               >
                 <PlusCircle size={70} className='text-gray-500' />
                 <p className='mt-4 text-sm font-medium text-gray-500'>{t('notEnrolled.button.create')}</p>
@@ -188,10 +190,10 @@ export default function ContentSection() {
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='mb-12 text-center'>
-          <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>{t('notEnrolled.lesson.title')}</h2>
-          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>
-            {t('notEnrolled.lesson.description')}
-          </p>
+          <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+            {t('notEnrolled.lesson.title')}
+          </h2>
+          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('notEnrolled.lesson.description')}</p>
         </div>
         {!isReadOnly && (
           <div className='mb-4 flex justify-end gap-2 px-4 lg:px-8'>
@@ -254,7 +256,7 @@ export default function ContentSection() {
                                   })
                                 }
                               >
-                              {t('notEnrolled.lesson.button.delete')}
+                                {t('notEnrolled.lesson.button.delete')}
                               </p>
                             ]}
                           />
@@ -273,7 +275,7 @@ export default function ContentSection() {
                 {/* Create card */}
                 <div
                   className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-                  onClick={() => openModal('upsertLesson', { courseIdModal: Number(courseId) })}
+                  onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
                 >
                   <PlusCircle size={70} className='text-gray-500' />
                   <p className='mt-4 text-sm font-medium text-gray-500'>{t('notEnrolled.lesson.button.create')}</p>
