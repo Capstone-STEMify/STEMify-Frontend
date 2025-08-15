@@ -22,7 +22,7 @@ import { SortableContext, rectSortingStrategy, useSortable, arrayMove } from '@d
 import { CSS } from '@dnd-kit/utilities'
 import { Lesson } from '@/features/resource/lesson/types/lesson.type'
 import { Button } from '@/components/shadcn/button'
-import { useUpdateCourseWithFormDataMutation } from '@/features/resource/course/api/courseApi'
+import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
 
 function SortableLessonCard({
   lesson,
@@ -81,7 +81,7 @@ export default function ContentSection() {
 
   const { data: lessons } = useSearchLessonQuery({ ...lessonsQuery, courseId: Number(courseId) })
   const [deleteLesson] = useDeleteLessonMutation()
-  const [updateCourseLessonOrder] = useUpdateCourseWithFormDataMutation()
+  const [updateCourseLessonOrder] = useUpdateLessonOrderMutation()
 
   const [items, setItems] = useState<Lesson[]>([])
   useEffect(() => {
@@ -129,12 +129,10 @@ export default function ContentSection() {
 
   const handleSaveOrder = async () => {
     try {
-      const lessonIds = items.map((item) => item.id)
-      const formData = new FormData()
-      lessonIds.forEach((id) => formData.append('orderedLessonIds', String(id)))
+      const orderedLessonIds = items.map((item) => item.id)
       await updateCourseLessonOrder({
         id: Number(courseId),
-        body: formData
+        orderedLessonIds
       }).unwrap()
       toast.success('Lesson order saved successfully')
     } catch (e) {

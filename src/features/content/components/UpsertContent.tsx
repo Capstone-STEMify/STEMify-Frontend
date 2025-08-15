@@ -7,20 +7,22 @@ import { toast } from 'sonner'
 import { SCard } from '@/components/shared/card/SCard'
 import { useAppForm } from '@/components/shared/form/items'
 import {
-  useCreateContentWithFormDataMutation,
-  useUpdateContentWithFormDataMutation,
-  useSearchContentQuery
+  useSearchContentQuery,
+  useCreateContentMutation,
+  useUpdateContentMutation
 } from '@/features/content/api/contentApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import removeMd from 'remove-markdown'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
+import { fileToBase64 } from '@/utils/index'
+import { ContentType } from '@/features/content/types/content.type'
 
 const contentSchema = z.object({
-  contentName: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
+  contentBody: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
     message: 'Content must have at least 50 characters of actual text (excluding Markdown and whitespace)'
   }),
-  contentType: z.enum(['Text', 'Video', 'Document']),
+  contentType: z.nativeEnum(ContentType),
   sectionId: z.number().positive({ message: 'Section ID must be a positive number' }),
   file: z.union([z.instanceof(File), z.null()]).optional(),
   filePreviewUrl: z.string().optional()
@@ -29,30 +31,33 @@ const contentSchema = z.object({
 type ContentFormData = z.infer<typeof contentSchema>
 
 const defaultContentData: Omit<ContentFormData, 'sectionId'> = {
-  contentName: '',
-  contentType: 'Text',
+  contentBody: '',
+  contentType: ContentType.TEXT,
   file: null,
   filePreviewUrl: ''
 }
 
-function buildContentFormData(data: ContentFormData, isUpdate = false) {
-  const formData = new FormData()
+async function CreateContentJsonPayload(data: ContentFormData) {
+  let fileBase64: string | null = null
 
-  formData.append('ContentName', data.contentName || '')
-  formData.append('ContentType', data.contentType)
-
-  if (isUpdate) {
-    formData.append('Status', 'published')
-    formData.append('FileName', '')
-  } else {
-    formData.append('sectionId', data.sectionId.toString())
+  if (data.file && typeof data.file !== 'string') {
+    fileBase64 = await fileToBase64(data.file)
   }
 
-  if (data.file) {
-    formData.append('File', data.file)
+  return {
+    contentBody: data.contentBody,
+    ContentType: data.contentType,
+    sectionId: data.sectionId,
+    file: fileBase64
   }
+}
 
-  return formData
+async function PatchContentJsonPayload(oldData: ContentFormData, newData: ContentFormData) {
+  const patchData: Record<string, any> = {}
+  if (oldData.contentBody !== newData.contentBody) patchData.contentBody = newData.contentBody
+  if (oldData.contentType !== newData.contentType) patchData.contentType = newData.contentType
+
+  return patchData
 }
 
 type UpsertContentProps = {
@@ -70,36 +75,30 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
     }
   )
 
-  const [createContent] = useCreateContentWithFormDataMutation()
-  const [updateContent] = useUpdateContentWithFormDataMutation()
+  const [createContent] = useCreateContentMutation()
+  const [updateContent] = useUpdateContentMutation()
 
   const contentItem = contentData?.data.items?.[0] ?? null
-
+  console.log('contentItem', contentItem)
   const form = useAppForm({
     // validators: {
     //   onChange: ({ value }) => contentSchema.safeParse(value)
     // },
-    defaultValues: contentItem
-      ? {
-          contentName: contentItem?.contentName || '',
-          contentType: contentItem?.contentType || 'Text',
-          sectionId: contentItem?.sectionId || sectionId,
-          file: null,
-          filePreviewUrl: contentItem?.fileUrl || ''
-        }
-      : {
-          ...defaultContentData,
-          sectionId
-        },
+    defaultValues: defaultContentData,
     onSubmit: async ({ value }) => {
-      const isUpdating = !!contentItem?.id
-      const formData = buildContentFormData(value, isUpdating)
       try {
+        const isUpdating = !!contentItem?.id
         if (isUpdating) {
-          await updateContent({ id: contentItem.id, formData }).unwrap()
-          toast.success('Content updated successfully')
+          const patchJson = await PatchContentJsonPayload(contentItem, { ...value, sectionId })
+          const res = await updateContent({ id: contentItem.id, body: patchJson }).unwrap()
+          console.log('Update response:', res)
         } else {
-          await createContent(formData).unwrap()
+          const jsonPayload = await CreateContentJsonPayload({
+            ...value,
+            sectionId
+          })
+
+          await createContent(jsonPayload).unwrap()
           toast.success('Content created successfully')
         }
       } catch (err) {
@@ -112,30 +111,29 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
   useEffect(() => {
     if (contentData?.data) {
       form.reset({
-        contentName: contentItem?.contentName || '',
-        contentType: contentItem?.contentType || 'Text',
-        sectionId: contentItem?.sectionId || sectionId,
+        contentBody: contentItem?.contentName || '',
+        contentType: contentItem?.contentType || ContentType.TEXT,
         file: null,
         filePreviewUrl: contentItem?.fileUrl || ''
       })
     }
   }, [contentData, form])
 
-  const currentContentType = form.state.values.contentType
+  // const currentContentType = form.state.values.contentType
 
   // NOTE: The cSpell warnings for the MIME types below can be ignored
   // or added to your cspell dictionary. They are correct technical terms.
-  const fileAcceptType = useMemo(() => {
-    switch (currentContentType) {
-      case 'Video':
-        return 'video/*'
-      case 'Text':
-      case 'Document':
-        return '.doc, .docx, .pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      default:
-        return ''
-    }
-  }, [currentContentType])
+  // const fileAcceptType = useMemo(() => {
+  //   switch (currentContentType) {
+  //     case 'Video':
+  //       return 'video/*'
+  //     case 'Text':
+  //     case 'Document':
+  //       return '.doc, .docx, .pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  //     default:
+  //       return ''
+  //   }
+  // }, [currentContentType])
 
   if (isContentLoading) {
     return (
@@ -168,20 +166,15 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
                       label={t('section.contentType.label')}
                       placeholder='Select a type'
                       options={[
-                        { value: 'Text', label: `${t('section.contentType.text')}` },
-                        { value: 'Video', label: `${t('section.contentType.video')}` },
-                        { value: 'Document', label: `${t('section.contentType.document')}` }
+                        { value: ContentType.TEXT, label: `${t('section.contentType.text')}` },
+                        { value: ContentType.VIDEO, label: `${t('section.contentType.video')}` },
+                        { value: ContentType.DOCUMENT, label: `${t('section.contentType.document')}` }
                       ]}
                     />
                   )}
                 />
-                {/* <form.AppField
-                  name='contentName'
-                  children={(field) => (
-                    <field.TextAreaField className='h-50' label='Content Name' placeholder='Enter content name' />
-                  )}
-                /> */}
-                <form.AppField name='contentName' children={(field) => <field.MarkdownEditorField />} />
+
+                <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
 
                 {/* <form.AppField
                   name='file'

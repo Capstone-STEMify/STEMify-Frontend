@@ -7,11 +7,22 @@ import { createActionsColumnFromItems, createSelectColumn } from '@/components/s
 import z from 'zod'
 import { Badge } from '@/components/shadcn/badge'
 import { useDeleteLessonMutation } from '../../api/lessonApi'
-import { Lesson } from '../../types/lesson.type'
+import { Lesson, LessonStatus } from '../../types/lesson.type'
+import Image from 'next/image'
 
-export const lessonTableSchema = z.object({
-  id: z.number()
-})
+const getLessonStatusBadgeClass = (status?: LessonStatus): string => {
+  const map: Record<LessonStatus, string> = {
+    [LessonStatus.DRAFT]: 'bg-gray-200 text-gray-800',
+    [LessonStatus.PUBLISHED]: 'bg-blue-100 text-blue-800',
+    [LessonStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800',
+    [LessonStatus.DELETED]: 'bg-red-100 text-red-800',
+    [LessonStatus.PENDING]: 'bg-amber-100 text-amber-800',
+    [LessonStatus.REJECTED]: 'bg-red-200 text-red-900',
+    [LessonStatus.APPROVED]: 'bg-green-100 text-green-800'
+  }
+
+  return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
+}
 
 export function useGetLessonAction(): ColumnDef<Lesson>[] {
   const router = useRouter()
@@ -35,14 +46,48 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
       cell: ({ row }) => row.getValue('id')
     },
     {
+      accessorKey: 'imageUrl',
+      header: () => <div>Image</div>,
+      cell: ({ row }) => {
+        const src = row.getValue<string>('imageUrl')
+        return (
+          <div className='h-14 w-14 overflow-hidden rounded border'>
+            {src ? (
+              <Image src={src} alt='preview' className='h-full w-full object-cover' width={56} height={56} />
+            ) : (
+              <div className='text-muted flex h-full w-full items-center justify-center text-xs'>No Image</div>
+            )}
+          </div>
+        )
+      }
+    },
+    {
       accessorKey: 'title',
       header: () => <div>Title</div>,
-      cell: ({ row }) => <div className='cursor-pointer font-bold underline'>{row.getValue('title')}</div>
+      cell: ({ row }) => {
+        const lessonId = row.original.id
+        return (
+          <div
+            onClick={() => router.push(`/admin/lesson/${lessonId}`)}
+            className='cursor-pointer font-bold transition hover:opacity-80'
+          >
+            {row.getValue('title')}
+          </div>
+        )
+      }
     },
     {
       accessorKey: 'status',
       header: () => <div>Status</div>,
-      cell: ({ row }) => <Badge variant={'outline'}>{row.getValue('status')}</Badge>
+      cell: ({ row }) => {
+        const value = row.getValue<LessonStatus>('status')
+
+        return (
+          <Badge className={`cursor-pointer ${getLessonStatusBadgeClass(value)}`} variant='outline'>
+            {value}
+          </Badge>
+        )
+      }
     },
     {
       accessorKey: 'createdByUserName',
@@ -64,22 +109,9 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     },
     createActionsColumnFromItems<Lesson>([
       {
-        label: 'Copy Id',
-        onClick: ({ original }) => {
-          navigator.clipboard.writeText(original.id.toString())
-          toast.info('Lesson ID copied to clipboard!')
-        }
-      },
-      {
-        label: 'View details',
-        separatorBefore: true,
-        onClick: ({ original }) => router.push(`/admin/lesson/${original.id}`)
-      },
-      {
         label: 'Edit',
         onClick: ({ original }) => {
-          // Open the upsert modal in "edit" mode
-          //   openModal('upsertCourse', { id: original.id })
+          router.push(`/admin/lesson/update/${original.id}`)
         }
       },
       {

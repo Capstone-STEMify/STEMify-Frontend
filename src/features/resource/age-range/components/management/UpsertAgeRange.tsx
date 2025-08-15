@@ -10,6 +10,7 @@ import {
 } from '@/features/resource/age-range/api/ageRangeApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
+import { Button } from '@/components/shadcn/button'
 
 type NiceSelectProps = {
   label: string
@@ -20,14 +21,7 @@ type NiceSelectProps = {
   className?: string
 }
 
-function NiceSelect({
-  label,
-  value,
-  onChange,
-  options,
-  placeholder = 'Select…',
-  className
-}: NiceSelectProps) {
+function NiceSelect({ label, value, onChange, options, placeholder = 'Select…', className }: NiceSelectProps) {
   const [open, setOpen] = React.useState(false)
   const [highlight, setHighlight] = React.useState<number>(-1)
   const containerRef = React.useRef<HTMLDivElement | null>(null)
@@ -75,7 +69,7 @@ function NiceSelect({
 
   return (
     <div className={className} ref={containerRef}>
-      <label className='block text-lg font-bold mb-2'>{label}</label>
+      <label className='mb-2 block text-lg font-bold'>{label}</label>
 
       <button
         type='button'
@@ -83,12 +77,9 @@ function NiceSelect({
         onKeyDown={onKeyDown}
         aria-haspopup='listbox'
         aria-expanded={open}
-        className='w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-left shadow-sm outline-none transition
-                   focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 flex items-center justify-between'
+        className='flex w-full items-center justify-between rounded-xl border border-gray-300 bg-white px-3 py-2 text-left shadow-sm transition outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2'
       >
-        <span className={value == null ? 'text-gray-400' : ''}>
-          {value == null ? placeholder : value}
-        </span>
+        <span className={value == null ? 'text-gray-400' : ''}>{value == null ? placeholder : value}</span>
         <svg
           className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
           viewBox='0 0 20 20'
@@ -104,15 +95,8 @@ function NiceSelect({
 
       {/* Dropdown */}
       {open && (
-        <div
-          role='listbox'
-          tabIndex={-1}
-          className='relative z-50 mt-2'
-        >
-          <div
-            className='absolute left-0 right-0 max-h-60 overflow-auto rounded-xl border border-gray-200 bg-white
-                       shadow-xl ring-1 ring-black/5'
-          >
+        <div role='listbox' tabIndex={-1} className='relative z-50 mt-2'>
+          <div className='absolute right-0 left-0 max-h-60 overflow-auto rounded-xl border border-gray-200 bg-white shadow-xl ring-1 ring-black/5'>
             {options.map((n, idx) => {
               const selected = value === n
               const active = idx === highlight
@@ -123,9 +107,7 @@ function NiceSelect({
                   aria-selected={selected}
                   onMouseEnter={() => setHighlight(idx)}
                   onClick={() => commit(idx)}
-                  className={`flex cursor-pointer items-center justify-between px-3 py-2
-                             ${active ? 'bg-gray-100' : ''}
-                             ${selected ? 'font-semibold' : 'font-normal'}`}
+                  className={`flex cursor-pointer items-center justify-between px-3 py-2 ${active ? 'bg-gray-100' : ''} ${selected ? 'font-semibold' : 'font-normal'}`}
                 >
                   <span>{n}</span>
                   {selected && (
@@ -185,14 +167,8 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
     }
   }, [isEditing, existingData])
 
-  const minOptions = React.useMemo(
-    () => AGES.filter((n) => (typeof maxAge === 'number' ? n < maxAge : true)),
-    [maxAge]
-  )
-  const maxOptions = React.useMemo(
-    () => AGES.filter((n) => (typeof minAge === 'number' ? n > minAge : true)),
-    [minAge]
-  )
+  const minOptions = React.useMemo(() => AGES.filter((n) => (typeof maxAge === 'number' ? n < maxAge : true)), [maxAge])
+  const maxOptions = React.useMemo(() => AGES.filter((n) => (typeof minAge === 'number' ? n > minAge : true)), [minAge])
 
   const errors: FormErr = React.useMemo(() => {
     const err: FormErr = {}
@@ -208,10 +184,7 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
     return err
   }, [minAge, maxAge])
 
-  const isValid =
-    typeof minAge === 'number' &&
-    typeof maxAge === 'number' &&
-    Object.keys(errors).length === 0
+  const isValid = typeof minAge === 'number' && typeof maxAge === 'number' && Object.keys(errors).length === 0
 
   if (isDataLoading || (isEditing && !isReady)) return <LoadingComponent />
 
@@ -238,7 +211,7 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
     <form onSubmit={handleSubmit} className='space-y-6'>
       <h2 className='text-2xl font-bold'>{isEditing ? 'Edit' : 'Create'} Age Range</h2>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+      <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
         <NiceSelect
           label='Minimum Age'
           value={minAge}
@@ -267,8 +240,7 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
           content={
             <>
               <p className='text-lg font-semibold'>
-                Preview Label:{' '}
-                <span className='text-blue-600 font-mono'>{`${minAge}-${maxAge}`}</span>
+                Preview Label: <span className='font-mono text-blue-600'>{`${minAge}-${maxAge}`}</span>
               </p>
               <p className='text-sm text-gray-500'>This label will be saved to the database.</p>
             </>
@@ -277,13 +249,9 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
       ) : null}
 
       <div className='flex justify-end gap-2 pt-4'>
-        <button
-          type='submit'
-          className='px-4 py-2 rounded-xl bg-gray-900 text-white shadow hover:shadow-md transition disabled:opacity-50'
-          disabled={!isValid || isCreating || isUpdating}
-        >
+        <Button type='submit' className='bg-amber-custom-400' disabled={!isValid || isCreating || isUpdating}>
           {isEditing ? 'Update' : 'Create'}
-        </button>
+        </Button>
       </div>
     </form>
   )

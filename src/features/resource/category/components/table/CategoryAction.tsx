@@ -36,22 +36,10 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
     },
     {
       accessorKey: 'name',
-      header: () => <div className='text-center'>Name</div>,
-      cell: ({ row }) => <div className='cursor-pointer text-center font-bold underline'>{row.getValue('name')}</div>
+      header: () => <div>Name</div>,
+      cell: ({ row }) => <div className='cursor-pointer'>{row.getValue('name')}</div>
     },
     createActionsColumnFromItems<Category>([
-      {
-        label: 'Copy Id',
-        onClick: ({ original }) => {
-          navigator.clipboard.writeText(original.id.toString())
-          toast.info('Category ID copied to clipboard!')
-        }
-      },
-      {
-        label: 'View details',
-        separatorBefore: true,
-        onClick: ({ original }) => router.push(`/admin/category/${original.id}`)
-      },
       {
         label: 'Edit',
         onClick: ({ original }) => {

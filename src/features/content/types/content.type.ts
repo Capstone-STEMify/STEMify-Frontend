@@ -4,6 +4,7 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 export type Content = {
   id: number
   contentType: ContentType
+  contentBody: string
   contentName: string
   fileName: string
   fileUrl: string
@@ -18,9 +19,9 @@ export enum ContetnStatus {
   DELETED = 'Deleted'
 }
 export enum ContentType {
-  TEXT = 'Text',
-  VIDEO = 'Video',
-  DOCUMENT = 'Document'
+  TEXT = 'TEXT',
+  VIDEO = 'VIDEO',
+  DOCUMENT = 'DOCUMENT'
 }
 
 export type ContentQueryParams = {

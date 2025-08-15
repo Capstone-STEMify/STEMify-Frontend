@@ -68,15 +68,15 @@ function mapLessonData(
         typeof s.skillName === 'string' &&
         skillNames.some((n) => typeof n === 'string' && n.trim().toLowerCase() === s.skillName.trim().toLowerCase())
     )
-    .map((s) => s.id)
+    .map((s) => s.id.toString())
 
   const topicIds = allCategories
     .filter(
       (c) =>
-        typeof c.categoryName === 'string' &&
-        topicNames.some((n) => typeof n === 'string' && n.trim().toLowerCase() === c.categoryName.trim().toLowerCase())
+        typeof c.name === 'string' &&
+        topicNames.some((n) => typeof n === 'string' && n.trim().toLowerCase() === c.name.trim().toLowerCase())
     )
-    .map((c) => c.id)
+    .map((c) => c.id.toString())
 
   const standardIds = allStandards
     .filter(
@@ -86,14 +86,14 @@ function mapLessonData(
           (n) => typeof n === 'string' && n.trim().toLowerCase() === s.standardName.trim().toLowerCase()
         )
     )
-    .map((s) => s.id)
+    .map((s) => s.id.toString())
 
   return {
     title: lesson.data.title ?? '',
     description: lesson.data.description ?? '',
     learningOutcome: lesson.data.learningOutcome ?? '',
     courseId: lesson.data.courseId ?? 0,
-    topics: topicIds ?? [],
+    topics: topicIds,
     skills: skillIds,
     standards: standardIds,
     imageUrl: null as any,
@@ -130,9 +130,9 @@ async function PatchLessonJsonPayload(oldData: LessonFormData, newData: LessonFo
   if (oldData.description !== newData.description) patchData.description = newData.description
   if (oldData.learningOutcome !== newData.learningOutcome) patchData.learningOutcome = newData.learningOutcome
   if (oldData.courseId !== newData.courseId) patchData.courseId = newData.courseId
-  if (oldData.topics !== newData.topics) patchData.topicIds = newData.topics
-  if (oldData.skills !== newData.skills) patchData.skillIds = newData.skills
-  if (oldData.standards !== newData.standards) patchData.standardIds = newData.standards
+  if (oldData.topics !== newData.topics) patchData.topicIds = newData.topics.map(Number)
+  if (oldData.skills !== newData.skills) patchData.skillIds = newData.skills.map(Number)
+  if (oldData.standards !== newData.standards) patchData.standardIds = newData.standards.map(Number)
 
   if (newData.imageUrl && typeof newData.imageUrl !== 'string') {
     const base64 = await fileToBase64(newData.imageUrl)
@@ -224,6 +224,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
       standardItems.length > 0
     ) {
       const mapped = mapLessonData(lessonData, skillItems, categoryItems, standardItems)
+      console.log('Initial lesson data:', mapped)
 
       form.reset(mapped)
       initialCourseDataRef.current = mapped
@@ -323,7 +324,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
             content={
               <form.AppField
                 name='skills'
-                children={(field: any) => (
+                children={(field) => (
                   <field.MultipleCheckboxField
                     options={skills?.data.items.map((s) => ({
                       value: s.id.toString(),

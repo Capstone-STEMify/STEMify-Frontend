@@ -90,7 +90,9 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
       />
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>
-          <form.SubmitButton loading={isCreating || isUpdating}>{isEditing ? 'Update' : 'Create'}</form.SubmitButton>
+          <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
+            {isEditing ? 'Update' : 'Create'}
+          </form.SubmitButton>
         </form.AppForm>
       </div>
     </form>

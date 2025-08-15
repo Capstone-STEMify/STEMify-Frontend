@@ -1,22 +1,48 @@
+'use client'
 import React from 'react'
-import { Course } from '../../types/course.type'
+import { Course, CourseLevel, CourseStatus } from '../../types/course.type'
 import { ColumnDef } from '@tanstack/react-table'
 import { useRouter } from 'next/navigation'
 import { useModal } from '@/providers/ModalProvider'
-import { useDeleteCourseMutation } from '../../api/courseApi'
+import { useDeleteCourseMutation, useUpdateCourseMutation } from '../../api/courseApi'
 import { toast } from 'sonner'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
 import z from 'zod'
 import { Badge } from '@/components/shadcn/badge'
+import Image from 'next/image'
 
 export const courseTableSchema = z.object({
   id: z.number()
 })
 
+const levelBadgeClass = (level?: string): string => {
+  const map: Record<string, string> = {
+    [CourseLevel.BEGINNER]: 'bg-green-100 text-green-800',
+    [CourseLevel.INTERMEDIATE]: 'bg-yellow-100 text-yellow-800',
+    [CourseLevel.ADVANCED]: 'bg-red-100 text-red-800'
+  }
+  return map[level ?? ''] ?? 'bg-muted text-muted-foreground'
+}
+
+const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
+  const map: Record<CourseStatus, string> = {
+    [CourseStatus.DRAFT]: 'bg-gray-200 text-gray-800',
+    [CourseStatus.PUBLISHED]: 'bg-blue-100 text-blue-800',
+    [CourseStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800',
+    [CourseStatus.DELETED]: 'bg-red-100 text-red-800',
+    [CourseStatus.PENDING]: 'bg-amber-100 text-amber-800',
+    [CourseStatus.REJECTED]: 'bg-red-200 text-red-900',
+    [CourseStatus.APPROVED]: 'bg-green-100 text-green-800'
+  }
+
+  return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
+}
+
 export function useGetCourseAction(): ColumnDef<Course>[] {
   const router = useRouter()
   const { openModal } = useModal()
   const [deleteCourse] = useDeleteCourseMutation() // Hook for deletion
+  const [updateCourseStatus] = useUpdateCourseMutation()
 
   const handleDelete = async (id: number) => {
     try {
@@ -27,6 +53,21 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     }
   }
 
+  const handleStatusUpdate = async (id: number, title: string, status: CourseStatus) => {
+    const action = status === CourseStatus.PUBLISHED ? 'publish' : 'reject'
+    openModal('confirm', {
+      message: `Are you sure you want to ${action} course "${title}"?`,
+      onConfirm: async () => {
+        try {
+          await updateCourseStatus({ id, body: { status } }).unwrap()
+          toast.success(`${action.charAt(0).toUpperCase() + action.slice(1)}d course "${title}"`)
+        } catch {
+          toast.error(`Failed to ${action} course.`)
+        }
+      }
+    })
+  }
+
   return [
     createSelectColumn<Course>(),
     {
@@ -35,27 +76,60 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
       cell: ({ row }) => row.getValue('code')
     },
     {
+      accessorKey: 'imageUrl',
+      header: () => <div>Image</div>,
+      cell: ({ row }) => {
+        const src = row.getValue<string>('imageUrl')
+        return (
+          <div className='h-14 w-14 overflow-hidden rounded border'>
+            {src ? (
+              <Image src={src} alt='preview' className='h-full w-full object-cover' width={56} height={56} />
+            ) : (
+              <div className='text-muted flex h-full w-full items-center justify-center text-xs'>No Image</div>
+            )}
+          </div>
+        )
+      }
+    },
+    {
       accessorKey: 'title',
       header: () => <div>Title</div>,
-      cell: ({ row }) => <div className='cursor-pointer font-bold underline'>{row.getValue('title')}</div>
+      cell: ({ row }) => {
+        const courseId = row.original.id
+        return (
+          <div
+            onClick={() => router.push(`/admin/course/${courseId}`)}
+            className='cursor-pointer font-bold transition hover:opacity-80'
+          >
+            {row.getValue('title')}
+          </div>
+        )
+      }
     },
     {
       accessorKey: 'level',
       header: () => <div>Level</div>,
-      cell: ({ row }) => (
-        <Badge className='cursor-pointer' variant={'outline'}>
-          {row.getValue('level')}
-        </Badge>
-      )
+      cell: ({ row }) => {
+        const value = row.getValue<string>('level')
+        return (
+          <Badge className={`cursor-pointer ${levelBadgeClass(value)}`} variant='outline'>
+            {value}
+          </Badge>
+        )
+      }
     },
     {
       accessorKey: 'status',
       header: () => <div>Status</div>,
-      cell: ({ row }) => (
-        <Badge className='cursor-pointer' variant={'outline'}>
-          {row.getValue('status')}
-        </Badge>
-      )
+      cell: ({ row }) => {
+        const value = row.getValue<CourseStatus>('status')
+
+        return (
+          <Badge className={`cursor-pointer ${getCourseStatusBadgeClass(value)}`} variant='outline'>
+            {value}
+          </Badge>
+        )
+      }
     },
     {
       accessorKey: 'createdByUserName',
@@ -77,22 +151,9 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     },
     createActionsColumnFromItems<Course>([
       {
-        label: 'Copy Id',
-        onClick: ({ original }) => {
-          navigator.clipboard.writeText(original.id.toString())
-          toast.info('Course ID copied to clipboard!')
-        }
-      },
-      {
-        label: 'View details',
-        separatorBefore: true,
-        onClick: ({ original }) => router.push(`/admin/course/${original.id}`)
-      },
-      {
         label: 'Edit',
         onClick: ({ original }) => {
-          // Open the upsert modal in "edit" mode
-          //   openModal('upsertCourse', { id: original.id })
+          router.push(`/admin/course/update/${original.id}`)
         }
       },
       {
@@ -105,6 +166,18 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
             onConfirm: () => handleDelete(original.id)
           })
         }
+      },
+      {
+        separatorBefore: true,
+        label: 'Approve',
+        hidden: ({ original }) => original.status !== CourseStatus.PENDING,
+        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.PUBLISHED)
+      },
+      {
+        label: 'Reject',
+        danger: true,
+        hidden: ({ original }) => original.status !== CourseStatus.PENDING,
+        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.REJECTED)
       }
     ])
   ]
