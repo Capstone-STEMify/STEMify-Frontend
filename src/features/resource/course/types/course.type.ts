@@ -3,21 +3,22 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 // models
 export type Course = {
   id: number
+  code: string
   title: string
   imageUrl: string
   slug: string
   description: string
-  numberOfSection: number
+  studentTasks: string
+  prerequisites?: string
   duration: number
   status: CourseStatus
-  downloadCount: number
-  isPublic: boolean
+  level: CourseLevel
   createdByUserId: string
   ageRangeId: number
   createdDate: string
   lastModifiedDate: string
   ageRangeLabel: string
-  categoryNames: string[]
+  topicNames: string[]
   skillNames: string[]
   standardNames: string[]
   lessonIds: number[]
@@ -28,8 +29,15 @@ export enum CourseStatus {
   PUBLISHED = 'Published',
   ARCHIVED = 'Archived',
   DELETED = 'Deleted',
-  INREVIEW = 'InReview',
-  REJECTED = 'Rejected'
+  PENDING = 'Pending',
+  REJECTED = 'Rejected',
+  APPROVED = 'Approved'
+}
+
+export enum CourseLevel {
+  BEGINNER = 'Beginner',
+  INTERMEDIATE = 'Intermediate',
+  ADVANCED = 'Advanced'
 }
 
 // Query
@@ -38,7 +46,7 @@ export type CourseQueryParams = {
   createdByUserId?: string
   skillId?: number
   ageRangeId?: number
-  categoryId?: number
+  topicId?: number
   standardId?: number
   isPublic?: boolean
 } & SearchPaginatedRequestParams
@@ -49,7 +57,7 @@ export type CourseSliceParams = {
   createdByUserId?: string
   SkillId?: number
   ageRangeId?: number
-  categoryId?: number
+  topicId?: number
   standardId?: number
   isPublic?: boolean
 } & SliceQueryParams

@@ -31,12 +31,7 @@ export default function ExploreResourcesSection() {
 
         <div className='mx-auto flex max-w-7xl justify-around gap-6'>
           {CourseData?.data.items.slice(1, 4).map((resource, index) => (
-            <CardLayout
-              size='lg'
-              key={index}
-              imageSrc={resource.imageUrl}
-              infor={<Badge>{resource.categoryNames}</Badge>}
-            >
+            <CardLayout size='lg' key={index} imageSrc={resource.imageUrl} infor={<Badge>{resource.topicNames}</Badge>}>
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{resource.title}</h3>
                 <p className='text-sm text-gray-600'>{truncateText(resource.description)}</p>

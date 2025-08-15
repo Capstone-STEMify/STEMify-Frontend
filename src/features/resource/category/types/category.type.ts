@@ -3,8 +3,9 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Category = {
   id: number
-  categoryName: string
-  slug: string
+  Name: string
+  code: string
+  description?: string
 }
 
 export type CategoryQueryParams = {

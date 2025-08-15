@@ -26,8 +26,9 @@ export enum LessonStatus {
   PUBLISHED = 'Published',
   ARCHIVED = 'Archived',
   DELETED = 'Deleted',
-  IN_REVIEW = 'InReview',
-  REJECTED = 'Rejected'
+  PENDING = 'Pending',
+  REJECTED = 'Rejected',
+  APPROVED = 'Approved'
 }
 
 // query params

@@ -75,7 +75,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
     try {
       toast.info('Your course is submitted for review. Please wait for approval.')
       const formData = new FormData()
-      formData.append('status', CourseStatus.INREVIEW)
+      formData.append('status', CourseStatus.PENDING)
       await updateCourseStatus({
         id: course.id,
         body: formData
@@ -102,9 +102,17 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
 
             <div className='space-x-6 text-sm'>
               {/* Category */}
-              <TagGroup label={t('notEnrolled.category')} items={course.categoryNames} className='bg-red-100 text-red-800' />
+              <TagGroup
+                label={t('notEnrolled.category')}
+                items={course.topicNames}
+                className='bg-red-100 text-red-800'
+              />
               {/* Skill */}
-              <TagGroup label={t('notEnrolled.skill')} items={course.skillNames} className='bg-emerald-100 text-emerald-700' />
+              <TagGroup
+                label={t('notEnrolled.skill')}
+                items={course.skillNames}
+                className='bg-emerald-100 text-emerald-700'
+              />
               {/* Standard */}
               <TagGroup
                 label={t('notEnrolled.standard')}
