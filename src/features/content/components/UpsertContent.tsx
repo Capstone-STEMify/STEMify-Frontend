@@ -52,7 +52,7 @@ async function CreateContentJsonPayload(data: ContentFormData) {
   }
 }
 
-async function PatchContentJsonPayload(oldData: ContentFormData, newData: ContentFormData, contentId: number) {
+async function PatchContentJsonPayload(oldData: ContentFormData, newData: ContentFormData) {
   const patchData: Record<string, any> = {}
   if (oldData.contentBody !== newData.contentBody) patchData.contentBody = newData.contentBody
   if (oldData.contentType !== newData.contentType) patchData.contentType = newData.contentType
@@ -89,7 +89,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
       try {
         const isUpdating = !!contentItem?.id
         if (isUpdating) {
-          const patchJson = await PatchContentJsonPayload(contentItem, { ...value, sectionId }, contentItem.id)
+          const patchJson = await PatchContentJsonPayload(contentItem, { ...value, sectionId })
           const res = await updateContent({ id: contentItem.id, body: patchJson }).unwrap()
           console.log('Update response:', res)
         } else {
@@ -173,12 +173,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
                     />
                   )}
                 />
-                {/* <form.AppField
-                  name='contentName'
-                  children={(field) => (
-                    <field.TextAreaField className='h-50' label='Content Name' placeholder='Enter content name' />
-                  )}
-                /> */}
+
                 <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
 
                 {/* <form.AppField

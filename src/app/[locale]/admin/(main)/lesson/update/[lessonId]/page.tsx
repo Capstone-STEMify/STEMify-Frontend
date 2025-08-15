@@ -1,6 +1,7 @@
 import BackButton from '@/components/shared/button/BackButton'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import UpsertLesson from '@/features/resource/lesson/components/UpsertLesson'
+import SectionAndContent from '@/features/resource/section/components/SectionAndContent'
 import UpsertSection from '@/features/resource/section/components/UpsertSection'
 import React, { Suspense } from 'react'
 
@@ -17,7 +18,7 @@ export default function LessonUpdatePage() {
         <BackButton />
         <div className='space-y-15'>
           <UpsertLesson />
-          <UpsertSection />
+          <SectionAndContent />
         </div>
       </div>
     </Suspense>

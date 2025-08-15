@@ -11,6 +11,7 @@ import {
 type SCardProps = {
   className?: string
   title?: string
+  titleClassName?: string
   description?: string
   action?: React.ReactNode
   content?: React.ReactNode
@@ -18,12 +19,21 @@ type SCardProps = {
   footerClassName?: string
 }
 
-export function SCard({ className, footerClassName, title, description, action, content, footer }: SCardProps) {
+export function SCard({
+  className,
+  footerClassName,
+  title,
+  titleClassName,
+  description,
+  action,
+  content,
+  footer
+}: SCardProps) {
   return (
     <Card className={className}>
       {title && (
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
+          <CardTitle className={titleClassName}>{title}</CardTitle>
           {description && <CardDescription>{description}</CardDescription>}
           <CardAction>{action}</CardAction>
         </CardHeader>
