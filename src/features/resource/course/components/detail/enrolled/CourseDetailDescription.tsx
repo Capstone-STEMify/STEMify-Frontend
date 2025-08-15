@@ -54,7 +54,9 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
             <div className='mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-600'>
               <div className='flex items-center gap-1'>
                 <Clock className='h-4 w-4' />
-                <span>{courseData.data.duration} {t('enrolled.content.course.dur_unit')}</span>
+                <span>
+                  {courseData.data.duration} {t('enrolled.content.course.dur_unit')}
+                </span>
               </div>
               <div className='flex items-center gap-1'>
                 <Calendar className='h-4 w-4' />
@@ -72,17 +74,17 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
             </div>
             {/* Tags Section */}
             <div className='space-y-2'>
-              {/* Categories */}
-              {courseData.data.categoryNames.length > 0 && (
+              {/* Topics */}
+              {courseData.data.topicNames.length > 0 && (
                 <div className='flex items-center gap-x-2'>
-                  <h3 className='text-xs font-semibold text-gray-900'>{t('enrolled.content.course.category')}</h3>
+                  <h3 className='text-xs font-semibold text-gray-900'>{t('enrolled.content.course.topic')}</h3>
                   <div className='flex gap-2'>
-                    {courseData.data.categoryNames.map((category) => (
+                    {courseData.data.topicNames.map((topic) => (
                       <Badge
-                        key={category}
+                        key={topic}
                         className='border-blue-200 bg-blue-50 text-blue-700 transition-colors select-none hover:bg-blue-100'
                       >
-                        {category}
+                        {topic}
                       </Badge>
                     ))}
                   </div>
