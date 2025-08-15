@@ -13,6 +13,7 @@ export type Lesson = {
   orderIndex: number
   status: LessonStatus
   createdByUserId: string
+  createdByUserName: string
   courseId: number
   createdDate: string
   lastModifiedDate?: string

@@ -15,6 +15,7 @@ export type Course = {
   level: CourseLevel
   createdByUserId: string
   reviewedByUserId?: string
+  createdByUserName: string
   ageRangeId: number
   createdDate: string
   lastModifiedDate?: string
