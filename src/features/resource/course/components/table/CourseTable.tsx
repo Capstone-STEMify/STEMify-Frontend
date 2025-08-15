@@ -7,6 +7,7 @@ import { Input } from '@/components/shadcn/input'
 import { Button } from '@/components/shadcn/button'
 import { Plus } from 'lucide-react'
 import { DataTable } from '@/components/shared/data-table/data-table'
+import { useRouter } from 'next/navigation'
 
 // Debounce hook to delay API calls
 function useDebounce(value: string, delay: number) {
@@ -25,6 +26,7 @@ function useDebounce(value: string, delay: number) {
 export default function CourseTable() {
   const { openModal } = useModal()
   const columns = useGetCourseAction()
+  const router = useRouter()
 
   const [searchQuery, setSearchQuery] = useState('')
   // Debounce the search query to avoid excessive API calls
@@ -36,7 +38,9 @@ export default function CourseTable() {
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
-  const handleCreate = () => {}
+  const handleCreate = () => {
+    router.push('/admin/course/create')
+  }
 
   return (
     <div>
@@ -47,7 +51,7 @@ export default function CourseTable() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className='max-w-sm'
         />
-        <Button size={'icon'} className='bg-amber-custom-400 rounded-full' onClick={handleCreate}>
+        <Button size={'icon'} className='bg-amber-custom-400 cursor-pointer rounded-full' onClick={handleCreate}>
           <Plus />
         </Button>
       </div>

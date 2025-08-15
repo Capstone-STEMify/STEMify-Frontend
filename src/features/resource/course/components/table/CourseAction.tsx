@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { Course, CourseLevel, CourseStatus } from '../../types/course.type'
 import { ColumnDef } from '@tanstack/react-table'
@@ -53,7 +54,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
   }
 
   const handleStatusUpdate = async (id: number, title: string, status: CourseStatus) => {
-    const action = status === CourseStatus.APPROVED ? 'approve' : 'reject'
+    const action = status === CourseStatus.PUBLISHED ? 'publish' : 'reject'
     openModal('confirm', {
       message: `Are you sure you want to ${action} course "${title}"?`,
       onConfirm: async () => {
@@ -93,7 +94,17 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     {
       accessorKey: 'title',
       header: () => <div>Title</div>,
-      cell: ({ row }) => <div className='cursor-pointer font-bold'>{row.getValue('title')}</div>
+      cell: ({ row }) => {
+        const courseId = row.original.id
+        return (
+          <div
+            onClick={() => router.push(`/admin/course/${courseId}`)}
+            className='cursor-pointer font-bold transition hover:opacity-80'
+          >
+            {row.getValue('title')}
+          </div>
+        )
+      }
     },
     {
       accessorKey: 'level',
@@ -142,8 +153,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
       {
         label: 'Edit',
         onClick: ({ original }) => {
-          // Open the upsert modal in "edit" mode
-          //   openModal('upsertCourse', { id: original.id })
+          router.push(`/admin/course/update/${original.id}`)
         }
       },
       {
@@ -161,7 +171,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
         separatorBefore: true,
         label: 'Approve',
         hidden: ({ original }) => original.status !== CourseStatus.PENDING,
-        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.APPROVED)
+        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.PUBLISHED)
       },
       {
         label: 'Reject',
