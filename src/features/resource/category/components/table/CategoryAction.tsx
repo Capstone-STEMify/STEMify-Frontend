@@ -69,7 +69,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
-            message: `Are you sure you want to delete category "${original.categoryName}"?`,
+            message: `Are you sure you want to delete category "${original.id}"?`,
             onConfirm: () => handleDelete(original.id)
           })
         }
