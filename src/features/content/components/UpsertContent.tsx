@@ -17,7 +17,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 
 const contentSchema = z.object({
-  contentName: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
+  contentBody: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
     message: 'Content must have at least 50 characters of actual text (excluding Markdown and whitespace)'
   }),
   contentType: z.enum(['Text', 'Video', 'Document']),
@@ -29,7 +29,7 @@ const contentSchema = z.object({
 type ContentFormData = z.infer<typeof contentSchema>
 
 const defaultContentData: Omit<ContentFormData, 'sectionId'> = {
-  contentName: '',
+  contentBody: '',
   contentType: 'Text',
   file: null,
   filePreviewUrl: ''
@@ -38,7 +38,7 @@ const defaultContentData: Omit<ContentFormData, 'sectionId'> = {
 function buildContentFormData(data: ContentFormData, isUpdate = false) {
   const formData = new FormData()
 
-  formData.append('ContentName', data.contentName || '')
+  formData.append('ContentBody', data.contentBody || '')
   formData.append('ContentType', data.contentType)
 
   if (isUpdate) {
@@ -81,7 +81,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
     // },
     defaultValues: contentItem
       ? {
-          contentName: contentItem?.contentName || '',
+          contentBody: contentItem?.contentBody || '',
           contentType: contentItem?.contentType || 'Text',
           sectionId: contentItem?.sectionId || sectionId,
           file: null,
@@ -112,7 +112,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
   useEffect(() => {
     if (contentData?.data) {
       form.reset({
-        contentName: contentItem?.contentName || '',
+        contentBody: contentItem?.contentBody || '',
         contentType: contentItem?.contentType || 'Text',
         sectionId: contentItem?.sectionId || sectionId,
         file: null,
@@ -181,7 +181,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
                     <field.TextAreaField className='h-50' label='Content Name' placeholder='Enter content name' />
                   )}
                 /> */}
-                <form.AppField name='contentName' children={(field) => <field.MarkdownEditorField />} />
+                <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
 
                 {/* <form.AppField
                   name='file'

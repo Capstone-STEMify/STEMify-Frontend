@@ -4,7 +4,7 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 export type Content = {
   id: number
   contentType: ContentType
-  contentName: string
+  contentBody: string
   fileName: string
   fileUrl: string
   uploadDate: string
