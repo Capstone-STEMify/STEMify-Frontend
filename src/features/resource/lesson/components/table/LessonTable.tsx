@@ -7,6 +7,7 @@ import { Plus } from 'lucide-react'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useGetLessonAction } from './LessonAction'
 import { useSearchLessonQuery } from '../../api/lessonApi'
+import { useRouter } from 'next/navigation'
 
 // Debounce hook to delay API calls
 function useDebounce(value: string, delay: number) {
@@ -25,6 +26,7 @@ function useDebounce(value: string, delay: number) {
 export default function LessonTable() {
   const { openModal } = useModal()
   const columns = useGetLessonAction()
+  const router = useRouter()
 
   const [searchQuery, setSearchQuery] = useState('')
   // Debounce the search query to avoid excessive API calls
@@ -36,7 +38,9 @@ export default function LessonTable() {
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
-  const handleCreate = () => {}
+  const handleCreate = () => {
+    router.push('/admin/lesson/create')
+  }
 
   return (
     <div>
@@ -47,9 +51,9 @@ export default function LessonTable() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className='max-w-sm'
         />
-        <Button size={'icon'} className='bg-amber-custom-400 rounded-full' onClick={handleCreate}>
+        {/* <Button size={'icon'} className='bg-amber-custom-400 cursor-pointer rounded-full' onClick={handleCreate}>
           <Plus />
-        </Button>
+        </Button> */}
       </div>
       <DataTable data={rows} columns={columns} enableRowSelection />
     </div>
