@@ -12,9 +12,6 @@ export const baseCourseSchema = z.object({
   slug: z.string().optional(),
   description: z.string().min(50, 'Description must be at least 50 characters long'),
   ageRangeId: z.string().min(1, 'Age range is required'),
-  skills: z.array(z.string()).min(1, 'At least one skill is required'),
-  categories: z.array(z.string()).min(1, 'At least one category is required'),
-  standards: z.array(z.string()).min(1, 'At least one standard is required'),
   imagePreviewUrl: z.string().optional()
 })
 

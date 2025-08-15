@@ -2,6 +2,7 @@
 import { SCard } from '@/components/shared/card/SCard'
 import React, { useRef, useEffect } from 'react'
 import {
+  useCreateLessonMutation,
   useCreateLessonWithFormDataMutation,
   useGetLessonByIdQuery,
   useUpdateLessonWithFormDataMutation
@@ -17,11 +18,22 @@ import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 import Link from 'next/link'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useTranslations } from 'next-intl'
+import { ApiSuccessResponse } from '@/types/baseModel'
+import { Lesson } from '@/features/resource/lesson/types/lesson.type'
+import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
+import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
+import { useGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
+import { useGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
+import { fileToBase64 } from '@/utils/index'
 
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
   description: z.string().min(50, 'Description must be at least 50 characters long'),
   courseId: z.number().positive({ message: 'Course ID must be a positive number' }),
+  learningOutcome: z.string().min(20, 'Learning outcome must be at least 20 characters long'),
+  topics: z.array(z.number().positive()).min(1, 'At least one topic must be selected'),
+  skills: z.array(z.number().positive()).min(1, 'At least one skill must be selected'),
+  standards: z.array(z.number().positive()).min(1, 'At least one standard must be selected'),
   imageUrl: z
     .union([z.instanceof(File), z.null()])
     .refine((file) => file === null || file.size > 0, 'Cover image is required')
@@ -34,22 +46,65 @@ type LessonFormData = z.infer<typeof lessonSchema>
 const defaultLessonData: LessonFormData = {
   title: '',
   description: '',
-  courseId: 0,
+  courseId: 1,
+  learningOutcome: '',
+  topics: [],
+  skills: [],
+  standards: [],
   imageUrl: null as any,
   imagePreviewUrl: ''
 }
 
-function buildLessonFormData(data: LessonFormData, userId: string) {
-  const formData = new FormData()
-  formData.append('Title', data.title || '')
-  formData.append('Description', data.description || '')
-  formData.append('createdByUserId', userId)
-  formData.append('courseId', data.courseId.toString())
-  formData.append('Status', 'Published')
-  if (data.imageUrl) {
-    formData.append('Image', data.imageUrl)
+function mapLessonData(
+  lesson: ApiSuccessResponse<Lesson>,
+  allSkills: any[],
+  allCategories: any[],
+  allStandards: any[]
+): LessonFormData {
+  const skillNames = lesson.data.skillNames ?? []
+  const topicNames = lesson.data.topicNames ?? []
+  const standardNames = lesson.data.standardNames ?? []
+
+  const skillIds = allSkills
+    .filter((s) => skillNames.some((n) => n.trim().toLowerCase() === s.skillName.trim().toLowerCase()))
+    .map((s) => s.id.toString())
+  const topicIds = allCategories
+    .filter((c) => topicNames.some((n) => n.trim().toLowerCase() === c.categoryName.trim().toLowerCase()))
+    .map((c) => c.id.toString())
+  const standardIds = allStandards
+    .filter((s) => standardNames.some((n) => n.trim().toLowerCase() === s.standardName.trim().toLowerCase()))
+    .map((s) => s.id.toString())
+
+  return {
+    title: lesson.data.title ?? '',
+    description: lesson.data.description ?? '',
+    learningOutcome: lesson.data.learningOutcome ?? '',
+    courseId: lesson.data.courseId ?? 1,
+    topics: topicIds ?? [],
+    skills: skillIds,
+    standards: standardIds,
+    imageUrl: null as any
   }
-  return formData
+}
+
+async function CreateLessonJsonPayload(data: LessonFormData, userId: string, courseId: number) {
+  let imageBase64: string | null = null
+
+  if (data.imageUrl && typeof data.imageUrl !== 'string') {
+    imageBase64 = await fileToBase64(data.imageUrl)
+  }
+
+  return {
+    title: data.title,
+    description: data.description,
+    learningOutcome: data.learningOutcome,
+    topicIds: data.topics.map(Number),
+    skillIds: data.skills.map(Number),
+    standardIds: data.standards.map(Number),
+    courseId: courseId,
+    createdByUserId: userId,
+    image: imageBase64
+  }
 }
 
 interface UpsertLessonProps {
@@ -75,6 +130,10 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const lessonIdRaw = params?.lessonId
   const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
 
+  const { data: ageRanges } = useGetAllAgeRangeQuery()
+  const { data: skills } = useGetAllSkillQuery()
+  const { data: categories } = useGetAllCategoryQuery()
+  const { data: standards } = useGetAllStandardQuery()
   const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(lessonId as number, {
     skip: !lessonId
   })
@@ -85,36 +144,24 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const isCreating = !lessonId
   const showCourseMissingError = isCreating && !isLoading && (!finalCourseId || !course?.data)
 
-  const [createLesson] = useCreateLessonWithFormDataMutation()
-  const [updateLesson] = useUpdateLessonWithFormDataMutation()
+  // const [createLesson] = useCreateLessonWithFormDataMutation()
+  const [createLesson] = useCreateLessonMutation()
 
   // Initialize form with lesson data if it exists
   const form = useAppForm({
-    defaultValues: lessonData?.data
-      ? {
-          title: lessonData.data.title || '',
-          description: lessonData.data.description || '',
-          courseId: lessonData.data.courseId || 0,
-          imageUrl: null
-        }
-      : {
-          ...defaultLessonData,
-          courseId: finalCourseId
-        },
+    defaultValues: defaultLessonData,
     // validators: {
     //   onChange: lessonSchema
     // },
     onSubmit: async ({ value }) => {
       try {
-        const formData = buildLessonFormData(value, userId!)
-
         if (lessonId) {
-          await updateLesson({ id: lessonId, body: formData }).unwrap()
-          toast.success('Lesson updated successfully')
+          console.log('Updating lesson with ID:', lessonId)
         } else {
-          await createLesson(formData).unwrap()
-          toast.success('Lesson created successfully')
-          form.reset()
+          const jsonPayload = await CreateLessonJsonPayload(value, userId!, finalCourseId)
+          const res = await createLesson(jsonPayload).unwrap()
+          toast.success(`Lesson created successfully (${res.data.title})`)
+          // form.reset()
         }
         onSuccess?.()
       } catch (err) {
@@ -124,18 +171,29 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     }
   })
 
-  // if has lesson data, update form value when lessonData changed
+  const initialCourseDataRef = useRef<LessonFormData | null>(null)
+
+  const didResetOnce = useRef(false)
+
   useEffect(() => {
-    if (lessonData?.data) {
-      form.reset({
-        title: lessonData.data.title || '',
-        description: lessonData.data.description || '',
-        courseId: lessonData.data.courseId || 0,
-        imageUrl: null,
-        imagePreviewUrl: lessonData.data.imageUrl || ''
-      })
+    const skillItems = skills?.data?.items ?? []
+    const categoryItems = categories?.data?.items ?? []
+    const standardItems = standards?.data?.items ?? []
+
+    if (
+      !didResetOnce.current &&
+      lessonData?.data &&
+      skillItems.length > 0 &&
+      categoryItems.length > 0 &&
+      standardItems.length > 0
+    ) {
+      const mapped = mapLessonData(lessonData, skillItems, categoryItems, standardItems)
+
+      form.reset(mapped)
+      initialCourseDataRef.current = mapped
+      didResetOnce.current = true
     }
-  }, [lessonData])
+  }, [lessonData, skills, categories, standards])
 
   const handleEditImage = () => {
     const currentImage = form.state.values.imageUrl
@@ -167,7 +225,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     )
   }
 
-  if (isLessonLoading) {
+  if (isLessonLoading || !ageRanges || !skills || !categories || !standards) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />
@@ -224,6 +282,83 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
                   <field.TextAreaField
                     placeholder={t('description.placeholder')}
                     className='h-50 rounded-lg border-gray-300'
+                  />
+                )}
+              />
+            }
+          />
+
+          <SCard
+            className='gap-3'
+            title={t('learningOutcome.label')}
+            description={t('learningOutcome.note')}
+            content={
+              <form.AppField
+                name='learningOutcome'
+                children={(field) => (
+                  <field.TextAreaField
+                    placeholder={t('learningOutcome.placeholder')}
+                    className='h-50 rounded-lg border-gray-300'
+                  />
+                )}
+              />
+            }
+          />
+
+          <SCard
+            className='gap-2'
+            title={t('skill.label')}
+            description={t('skill.note')}
+            content={
+              <form.AppField
+                name='skills'
+                children={(field: any) => (
+                  <field.MultipleCheckboxField
+                    options={skills?.data.items.map((s) => ({
+                      value: s.id.toString(),
+                      label: s.skillName
+                    }))}
+                    className='flex flex-wrap gap-x-8 gap-y-4'
+                  />
+                )}
+              />
+            }
+          />
+
+          <SCard
+            className='gap-2'
+            title={t('topic.label')}
+            description={t('topic.note')}
+            content={
+              <form.AppField
+                name='topics'
+                children={(field: any) => (
+                  <field.MultipleCheckboxField
+                    options={categories?.data.items.map((c) => ({
+                      value: c.id.toString(),
+                      label: c.name
+                    }))}
+                    className='flex flex-wrap gap-x-8 gap-y-4'
+                  />
+                )}
+              />
+            }
+          />
+
+          <SCard
+            className='gap-3'
+            title={t('standard.label')}
+            description={t('standard.note')}
+            content={
+              <form.AppField
+                name='standards'
+                children={(field: any) => (
+                  <field.MultipleCheckboxField
+                    options={standards?.data.items.map((s) => ({
+                      value: s.id.toString(),
+                      label: s.standardName
+                    }))}
+                    className='flex flex-wrap gap-x-8 gap-y-4'
                   />
                 )}
               />

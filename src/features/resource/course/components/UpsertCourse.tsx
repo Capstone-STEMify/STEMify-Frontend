@@ -37,13 +37,8 @@ const defaultCourseData: CourseFormData = {
   prerequisites: '',
   studentTasks: '',
   level: '',
-  skills: [],
-  categories: [],
-  standards: [],
   imageUrl: null as any
 }
-
-
 
 /**
  *
@@ -65,10 +60,7 @@ async function CreateCourseJsonPayload(data: CourseFormData, userId: string) {
     ageRangeId: parseInt(data.ageRangeId),
     createdByUserId: userId,
     studentTasks: data.studentTasks,
-    skillIds: data.skills.map(Number),
-    categoryIds: data.categories.map(Number),
-    standardIds: data.standards.map(Number),
-    image: imageBase64 // gửi binary ảnh (bytes)
+    image: imageBase64
   }
 }
 
@@ -85,18 +77,6 @@ function PatchCourseFormData(oldData: CourseFormData, newData: CourseFormData): 
   if (oldData.slug !== newData.slug) formData.append('slug', newData.slug ?? '')
   if (oldData.description !== newData.description) formData.append('description', newData.description)
   if (oldData.ageRangeId !== newData.ageRangeId) formData.append('ageRangeId', newData.ageRangeId)
-
-  if (JSON.stringify(oldData.skills) !== JSON.stringify(newData.skills)) {
-    newData.skills.forEach((s) => formData.append('SkillIds', s))
-  }
-
-  if (JSON.stringify(oldData.categories) !== JSON.stringify(newData.categories)) {
-    newData.categories.forEach((c) => formData.append('CategoryIds', c))
-  }
-
-  if (JSON.stringify(oldData.standards) !== JSON.stringify(newData.standards)) {
-    newData.standards.forEach((s) => formData.append('StandardIds', s))
-  }
 
   if (newData.imageUrl && typeof newData.imageUrl !== 'string') {
     formData.append('Image', newData.imageUrl)
@@ -117,26 +97,7 @@ function generateSlug(text: string): string {
     .replace(/^-+|-+$/g, '') // xóa '-' ở đầu và cuối
 }
 
-function mapCourseToFormData(
-  course: ApiSuccessResponse<Course>,
-  allSkills: any[],
-  allCategories: any[],
-  allStandards: any[]
-): CourseFormData {
-  const skillNames = course.data.skillNames ?? []
-  const topicNames = course.data.topicNames ?? []
-  const standardNames = course.data.standardNames ?? []
-
-  const skillIds = allSkills
-    .filter((s) => skillNames.some((n) => n.trim().toLowerCase() === s.skillName.trim().toLowerCase()))
-    .map((s) => s.id.toString())
-  const categoryIds = allCategories
-    .filter((c) => topicNames.some((n) => n.trim().toLowerCase() === c.categoryName.trim().toLowerCase()))
-    .map((c) => c.id.toString())
-  const standardIds = allStandards
-    .filter((s) => standardNames.some((n) => n.trim().toLowerCase() === s.standardName.trim().toLowerCase()))
-    .map((s) => s.id.toString())
-
+function mapCourseToFormData(course: ApiSuccessResponse<Course>): CourseFormData {
   return {
     code: course.data.code ?? '',
     title: course.data.title ?? '',
@@ -146,9 +107,6 @@ function mapCourseToFormData(
     studentTasks: course.data.studentTasks ?? '',
     prerequisites: course.data.prerequisites ?? '',
     ageRangeId: course.data.ageRangeId?.toString() ?? '',
-    skills: skillIds,
-    categories: categoryIds,
-    standards: standardIds,
     imageUrl: null as any,
     imagePreviewUrl: course.data.imageUrl ?? undefined
   }
@@ -223,7 +181,7 @@ export default function UpsertCourse() {
       categoryItems.length > 0 &&
       standardItems.length > 0
     ) {
-      const mapped = mapCourseToFormData(courseData, skillItems, categoryItems, standardItems)
+      const mapped = mapCourseToFormData(courseData)
 
       form.reset(mapped)
       initialCourseDataRef.current = mapped
@@ -265,7 +223,6 @@ export default function UpsertCourse() {
       <div className='grid grid-cols-3 gap-8'>
         <div className='space-y-6 lg:col-span-2'>
           <CourseBasicInfoSection form={form} />
-          <CourseAttributesSection form={form} skills={skills} categories={categories} standards={standards} />
         </div>
 
         <div className='space-y-6'>
