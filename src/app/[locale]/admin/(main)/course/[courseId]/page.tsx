@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function CourseDetailPage() {
   return (
-    <div>
+    <div className='flex gap-5'>
       <BackButton />
       <CourseDetailForAdmin />
     </div>
