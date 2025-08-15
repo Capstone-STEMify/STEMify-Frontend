@@ -16,9 +16,9 @@ export type Course = {
   createdByUserId: string
   reviewedByUserId?: string
   ageRangeId: number
-  createdDate: string // DateTimeOffset → string (ISO format)
-  lastModifiedDate?: string // DateTimeOffset? → string | undefined
-  reviewedAt?: string // DateTime? → string | undefined
+  createdDate: string
+  lastModifiedDate?: string
+  reviewedAt?: string
   ageRangeLabel: string
   lessonIds: number[]
   topicNames: string[]

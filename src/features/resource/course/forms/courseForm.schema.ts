@@ -4,7 +4,11 @@ import { z } from 'zod'
  * Upsert course basic schema used for both create and update operations.
  */
 export const baseCourseSchema = z.object({
+  code: z.string().min(3, 'Code must be at least 3 characters long'),
   title: z.string().min(10, 'Title must be at least 10 characters long'),
+  studentTasks: z.string().min(10, 'Student tasks must be at least 10 characters long'),
+  prerequisites: z.string().min(3, 'Prerequisites must be at least 3 characters long'),
+  level: z.string().optional(),
   slug: z.string().optional(),
   description: z.string().min(50, 'Description must be at least 50 characters long'),
   ageRangeId: z.string().min(1, 'Age range is required'),

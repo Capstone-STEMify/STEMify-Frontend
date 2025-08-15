@@ -15,6 +15,7 @@ import { useGetAllStandardQuery } from '@/features/resource/standard/api/standar
 import { useAppForm } from '@/components/shared/form/items'
 import { CourseSidebarSection } from '@/features/resource/course/components/upsert/CourseSidebarSection'
 import {
+  useCreateCourseMutation,
   useCreateCourseWithFormDataMutation,
   useGetCourseByIdQuery,
   useUpdateCourseWithFormDataMutation
@@ -25,41 +26,50 @@ import {
   updateCourseSchema
 } from '@/features/resource/course/forms/courseForm.schema'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import { fileToBase64 } from '@/utils/index'
 
 const defaultCourseData: CourseFormData = {
+  code: '',
   title: '',
   slug: '',
   description: '',
   ageRangeId: '1',
+  prerequisites: '',
+  studentTasks: '',
+  level: '',
   skills: [],
   categories: [],
   standards: [],
   imageUrl: null as any
 }
 
+
+
 /**
  *
  * @param data The course form data to be submitted.
  * @returns The FormData object containing the course form data.
  */
-function CreateCourseFormData(data: CourseFormData, userId: string) {
-  const formData = new FormData()
-  formData.append('title', data.title)
-  formData.append('description', data.description)
-  formData.append('ageRangeId', data.ageRangeId.toString())
-  formData.append('createdByUserId', userId)
-  formData.append('courseId', '1')
-  formData.append('slug', data.slug ?? '')
+async function CreateCourseJsonPayload(data: CourseFormData, userId: string) {
+  let imageBase64: string | null = null
 
-  data.skills.forEach((skill) => formData.append('SkillIds', skill))
-  data.categories.forEach((category) => formData.append('CategoryIds', category))
-  data.standards.forEach((standard) => formData.append('StandardIds', standard))
-
-  if (data.imageUrl) {
-    formData.append('Image', data.imageUrl)
+  if (data.imageUrl && typeof data.imageUrl !== 'string') {
+    imageBase64 = await fileToBase64(data.imageUrl)
   }
 
-  return formData
+  return {
+    code: data.code,
+    title: data.title,
+    slug: data.slug,
+    description: data.description,
+    ageRangeId: parseInt(data.ageRangeId),
+    createdByUserId: userId,
+    studentTasks: data.studentTasks,
+    skillIds: data.skills.map(Number),
+    categoryIds: data.categories.map(Number),
+    standardIds: data.standards.map(Number),
+    image: imageBase64 // gửi binary ảnh (bytes)
+  }
 }
 
 /**
@@ -116,11 +126,6 @@ function mapCourseToFormData(
   const skillNames = course.data.skillNames ?? []
   const topicNames = course.data.topicNames ?? []
   const standardNames = course.data.standardNames ?? []
-  console.log('>> skillNames from API:', course.data.skillNames)
-  console.log(
-    '>> allSkills from API:',
-    allSkills.map((s) => s.skillName)
-  )
 
   const skillIds = allSkills
     .filter((s) => skillNames.some((n) => n.trim().toLowerCase() === s.skillName.trim().toLowerCase()))
@@ -133,9 +138,13 @@ function mapCourseToFormData(
     .map((s) => s.id.toString())
 
   return {
+    code: course.data.code ?? '',
     title: course.data.title ?? '',
     slug: course.data.slug ?? '',
     description: course.data.description ?? '',
+    level: course.data.level ?? '',
+    studentTasks: course.data.studentTasks ?? '',
+    prerequisites: course.data.prerequisites ?? '',
     ageRangeId: course.data.ageRangeId?.toString() ?? '',
     skills: skillIds,
     categories: categoryIds,
@@ -161,15 +170,16 @@ export default function UpsertCourse() {
     skip: !courseId
   })
 
-  const [createCourse, { isLoading: isCreating }] = useCreateCourseWithFormDataMutation()
+  // const [createCourse, { isLoading: isCreating }] = useCreateCourseWithFormDataMutation()
+  const [createCourse, { isLoading: isCreating }] = useCreateCourseMutation()
   const [updateCourse, { isLoading: isUpdating }] = useUpdateCourseWithFormDataMutation()
   const isSubmitting = isCreating || isUpdating
 
   const form = useAppForm({
     defaultValues: defaultCourseData,
-    validators: {
-      onChange: (courseId ? updateCourseSchema : createCourseSchema) as any
-    },
+    // validators: {
+    //   onChange: (courseId ? updateCourseSchema : createCourseSchema) as any
+    // },
     onSubmit: async ({ value }) => {
       try {
         value.slug = generateSlug(value.title)
@@ -185,8 +195,8 @@ export default function UpsertCourse() {
             }
           })
         } else {
-          const formData = CreateCourseFormData(value, userId!)
-          const res = await createCourse(formData).unwrap()
+          const jsonPayload = await CreateCourseJsonPayload(value, userId!)
+          const res = await createCourse(jsonPayload).unwrap()
           toast.success(`Course created successfully (${res.data.title})`)
           router.push(`/resource/course/${res.data.id}`)
         }
