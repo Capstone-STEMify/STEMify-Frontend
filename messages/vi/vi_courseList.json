@@ -1,33 +1,35 @@
 {
-    "CourseList": {
-        "title": "Các Khóa Học",
-        "subtitle": "Khóa Học",
-        "description": "Các hướng dẫn theo chủ đề, được căn chỉnh theo chương trình giảng dạy với phương pháp sư phạm giáo dục. Các khóa học có góc nhìn của giáo viên và học sinh.",
-        "filterTitle": "Lọc Khóa Học",
-        "noCourse": "Không Tìm Thấy Khóa Học Nào.",
-        "noCourseFound": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm các khóa học phù hợp.",
-        "filterBy": "Tìm kiếm",
-        "placeHolder": {
-            "search": "Tìm kiếm khóa học...",
-            "category": "Danh Mục (Chọn một tùy chọn)",
-            "skill": "Kỹ Năng (Chọn một tùy chọn)",
-            "ageRange": "Độ Tuổi (Chọn một tùy chọn)",
-            "standard": "Tiêu Chuẩn (Chọn một tùy chọn)"
-        },
-        "tags": {
-            "search": "Tìm kiếm",
-            "category": "Danh Mục",
-            "skill": "Kỹ Năng",
-            "ageRange": "Độ Tuổi",
-            "standard": "Tiêu Chuẩn"
-        },
-        "actions": {
-            "searchBtn": "Tìm kiếm",
-            "clearBtn": "Xóa Tất Cả",
-            "add": "Thêm vào khóa học",
-            "share": "Chia sẻ",
-            "view": "Xem",
-            "create": "Tạo Khóa Học Mới"
-        }
+  "CourseList": {
+    "title": "Các Khóa Học",
+    "subtitle": "Khóa Học",
+    "description": "Các hướng dẫn theo chủ đề, được căn chỉnh theo chương trình giảng dạy với phương pháp sư phạm giáo dục. Các khóa học có góc nhìn của giáo viên và học sinh.",
+    "filterTitle": "Lọc Khóa Học",
+    "noCourse": "Không Tìm Thấy Khóa Học Nào.",
+    "noCourseFound": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm các khóa học phù hợp.",
+    "filterBy": "Tìm kiếm",
+    "placeHolder": {
+      "search": "Tìm kiếm khóa học...",
+      "category": "Danh Mục (Chọn một tùy chọn)",
+      "skill": "Kỹ Năng (Chọn một tùy chọn)",
+      "ageRange": "Độ Tuổi (Chọn một tùy chọn)",
+      "standard": "Tiêu Chuẩn (Chọn một tùy chọn)",
+      "status": "Trạng Thái (Chọn một tùy chọn)"
+    },
+    "tags": {
+      "search": "Tìm kiếm",
+      "category": "Danh Mục",
+      "skill": "Kỹ Năng",
+      "ageRange": "Độ Tuổi",
+      "standard": "Tiêu Chuẩn",
+      "status": "Trạng Thái"
+    },
+    "actions": {
+      "searchBtn": "Tìm kiếm",
+      "clearBtn": "Xóa Tất Cả",
+      "add": "Thêm vào khóa học",
+      "share": "Chia sẻ",
+      "view": "Xem",
+      "create": "Tạo Khóa Học Mới"
     }
+  }
 }

@@ -48,12 +48,12 @@ const data = {
     // },
     {
       title: 'Course',
-      url: 'course',
+      url: '/admin/course',
       icon: IconListDetails
     },
     {
       title: 'Lesson',
-      url: 'lesson',
+      url: '/admin/lesson',
       icon: IconChartBar
     }
   ],
@@ -125,22 +125,22 @@ const data = {
   documents: [
     {
       name: 'Topic',
-      url: 'topic',
+      url: '/admin/topic',
       icon: IconDatabase
     },
     {
       name: 'Skill',
-      url: 'skill',
+      url: '/admin/skill',
       icon: IconReport
     },
     {
       name: 'Age range',
-      url: 'age-range',
+      url: '/admin/age-range',
       icon: IconReport
     },
     {
       name: 'Standard',
-      url: 'standard',
+      url: '/admin/standard',
       icon: IconFileWord
     }
   ]

@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
+import { SPagination } from '../SPagination'
 
 export type DataTableProps<TData, TValue> = {
   data: TData[]
@@ -30,6 +31,9 @@ export type DataTableProps<TData, TValue> = {
   enableRowSelection?: boolean
   className?: string
   toolbarRight?: React.ReactNode
+  pagingData?: any
+  pagingParams?: any
+  handlePageChange?: (page: number) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -39,7 +43,10 @@ export function DataTable<TData, TValue>({
   placeholder,
   enableRowSelection,
   className,
-  toolbarRight
+  toolbarRight,
+  pagingData,
+  pagingParams,
+  handlePageChange
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -66,7 +73,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className={className}>
       {/* Toolbar */}
-      <div className='flex items-center gap-2 py-4'>
+      {/* <div className='flex items-center gap-2 py-4'>
         {filterCol && (
           <Input
             placeholder={placeholder ?? 'Filter...'}
@@ -100,7 +107,7 @@ export function DataTable<TData, TValue>({
         </DropdownMenu>
 
         {toolbarRight}
-      </div>
+      </div> */}
 
       {/* Table */}
       <div className='overflow-hidden rounded-md border'>
@@ -137,26 +144,21 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Footer */}
-      <div className='flex items-center justify-end gap-2 py-4'>
+      <div className='flex items-center justify-between gap-2 py-4'>
         {enableRowSelection && (
-          <div className='text-muted-foreground flex-1 text-sm'>
+          <div className='text-muted-foreground w-full text-sm'>
             {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
             selected.
           </div>
         )}
-        <div className='space-x-2'>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button variant='outline' size='sm' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
-        </div>
+        {pagingData?.data?.totalPages > 1 && (
+          <SPagination
+            pageNumber={pagingParams?.pageNumber}
+            totalPages={pagingData.data.totalPages}
+            onPageChanged={handlePageChange ?? (() => {})}
+            className='w-fit'
+          />
+        )}
       </div>
     </div>
   )

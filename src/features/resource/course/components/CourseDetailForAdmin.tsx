@@ -1,53 +1,85 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import LessonTable from '../../lesson/components/table/LessonTable'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
-import { Course, CourseStatus } from '../types/course.type'
+import { Course, CourseLevel, CourseStatus } from '../types/course.type'
 import { SCard } from '@/components/shared/card/SCard'
-import { useUpdateCourseMutation } from '../api/courseApi'
+import { useGetCourseByIdQuery, useUpdateCourseMutation } from '../api/courseApi'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import { Edit } from 'lucide-react'
-const course = {
-  id: 1,
-  title: 'City Building',
-  imageUrl: 'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fcou_city-building_cover.jpg&w=1920&q=75',
-  slug: 'city-building',
-  description:
-    'City development involves creating an environment with an understanding of how urban spaces can shape residents’ lives. It requires careful planning and consideration of various elements. Designing a city involves envisioning areas for housing, transportation, parks, schools, hospitals, and other essential amenities and promoting sustainability, accessibility, and community engagement.',
-  studentTasks:
-    '1. Research how cities are structured and identify common urban elements (e.g., housing, transportation, green spaces).\n2. Design a city layout on paper or using a digital tool, planning zones for residential, commercial, and public services.\n3. Build a physical city model using straws or recycled materials, focusing on stability and space usage.\n4. Present the city model to the class and explain design decisions based on accessibility, sustainability, and community needs.\n5. Reflect on challenges faced during the building process and propose improvements for future development.',
-  duration: 310,
-  status: 'PENDING',
-  level: 'BEGINNER',
-  createdByUserId: 'b7e2c7e2-8c1a-4e2e-9b2a-2e7c8e2a1b3c',
-  ageRangeId: 1,
-  createdDate: '2025-08-16T00:13:22.729325Z',
-  lastModifiedDate: '2025-08-16T00:13:22.729325Z',
-  ageRangeLabel: '4-7',
-  topicNames: ['Storytelling', 'Coding', 'Urban Planning', 'Biology', 'Physics'],
-  skillNames: ['Creativity', 'Teamwork', 'Coding', 'Engineering Design', 'Critical Thinking'],
-  standardNames: ['Engineering Design', 'ISTE 1.1 Empowered Learner', 'Energy', 'Innovative Designer'],
-  code: 'CB001',
-  createdByUserName: ''
+import { useParams, useRouter } from 'next/navigation'
+import { BookOpen, Edit } from 'lucide-react'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import SEmpty from '@/components/shared/empty/SEmpty'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { setParam } from '../slice/courseSlice'
+
+const levelBadgeClass = (level?: string): string => {
+  const map: Record<string, string> = {
+    [CourseLevel.BEGINNER]: 'bg-green-100 text-green-800',
+    [CourseLevel.INTERMEDIATE]: 'bg-yellow-100 text-yellow-800',
+    [CourseLevel.ADVANCED]: 'bg-red-100 text-red-800'
+  }
+  return map[level ?? ''] ?? 'bg-muted text-muted-foreground'
+}
+
+const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
+  const map: Record<CourseStatus, string> = {
+    [CourseStatus.DRAFT]: 'bg-gray-200 text-gray-800',
+    [CourseStatus.PUBLISHED]: 'bg-blue-100 text-blue-800',
+    [CourseStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800',
+    [CourseStatus.DELETED]: 'bg-red-100 text-red-800',
+    [CourseStatus.PENDING]: 'bg-amber-100 text-amber-800',
+    [CourseStatus.REJECTED]: 'bg-red-200 text-red-900',
+    [CourseStatus.APPROVED]: 'bg-green-100 text-green-800'
+  }
+
+  return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
 }
 
 export default function CourseDetailPage() {
   const t = useTranslations('CourseDetails')
-  const createdAt = course.createdDate ? new Date(course.createdDate).toLocaleString() : 'N/A'
-  const updatedAt = course.lastModifiedDate ? new Date(course.lastModifiedDate).toLocaleString() : 'N/A'
-  const createdBy = course.createdByUserName?.trim() || 'STEMify Staff'
+
+  const params = useParams()
   const router = useRouter()
 
+  // Set courseId in Redux store
+  const courseIdParam = params?.courseId
+  const courseId = courseIdParam ? Number(courseIdParam) : undefined
+
+  // Fetch course details
+  const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const [updateCourseStatus] = useUpdateCourseMutation()
+
+  if (isLoading)
+    return (
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
+  if (error) return <div className='p-8 text-red-500'>Error loading course details.</div>
+  if (!course?.data)
+    return (
+      <div className='flex h-screen items-center justify-center bg-white'>
+        <SEmpty
+          title='Course not found'
+          description='The course you are looking for does not exist or has been removed.'
+          icon={<BookOpen className='h-12 w-12 text-gray-400' />}
+        />
+      </div>
+    )
+
+  const createdAt = course.data.createdDate ? new Date(course.data.createdDate).toLocaleString() : 'N/A'
+  const updatedAt = course.data.lastModifiedDate ? new Date(course.data.lastModifiedDate).toLocaleString() : 'N/A'
+  const createdBy = course.data.createdByUserName?.trim() || 'STEMify Staff'
+
   const handleUpdateCourseStatus = async (status: CourseStatus) => {
     try {
       await updateCourseStatus({
-        id: course.id,
+        id: course.data.id,
         body: {
           status
         }
@@ -59,144 +91,193 @@ export default function CourseDetailPage() {
     }
   }
   const handleUpdate = () => {
-    router.push(`/admin/course/update/${course.id}`)
+    router.push(`/admin/course/update/${courseId}`)
   }
 
   return (
-    <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
-      {/* Left Column */}
-      <div className='space-y-4 md:col-span-2'>
+    <div className='grid grid-cols-1 gap-8 md:grid-cols-12'>
+      {/* LEFT: Course content */}
+      <div className='space-y-6 md:col-span-8'>
+        {/* Course Header */}
         <SCard
-          title={course.title}
-          titleClassName='text-3xl font-semibold'
+          title={course.data.title}
+          titleClassName='text-3xl font-bold tracking-tight'
           content={
-            <div className='text-muted-foreground mt-2 flex flex-wrap gap-3 text-sm'>
-              <span>Code: {course.code}</span>
+            <div className='text-muted-foreground mt-3 flex flex-wrap items-center gap-4 text-sm'>
               <span>
-                Status:{' '}
-                <span>
-                  {' '}
-                  <Badge>{course.status}</Badge>
-                </span>
+                Code: <strong>{course.data.code}</strong>
               </span>
               <span>
-                Level:{' '}
-                <span>
-                  {' '}
-                  <Badge>{course.level}</Badge>
-                </span>
+                Status: <Badge className={getCourseStatusBadgeClass(course.data.status)}>{course.data.status}</Badge>
               </span>
               <span>
-                Age Range:{' '}
-                <span>
-                  {' '}
-                  <Badge>{course.ageRangeLabel}</Badge>
-                </span>
+                Level: <Badge className={levelBadgeClass(course.data.level)}>{course.data.level}</Badge>
+              </span>
+              <span>
+                Age Range: <Badge className='bg-red-100 text-red-800'>{course.data.ageRangeLabel}</Badge>
               </span>
             </div>
           }
         />
 
+        {/* Description */}
         <SCard
           title='Description'
-          titleClassName='text-2xl font-semibold'
-          content={<div className='text-sm leading-relaxed whitespace-pre-wrap'>{course.description}</div>}
+          content={
+            course.data.description ? (
+              <p className='text-sm leading-relaxed whitespace-pre-wrap text-gray-700'>{course.data.description}</p>
+            ) : (
+              <p className='text-muted-foreground italic'>No description provided.</p>
+            )
+          }
         />
 
+        {/* Student Tasks */}
         <SCard
           title='Student Tasks'
-          content={<div className='text-sm leading-relaxed whitespace-pre-wrap'>{course.studentTasks}</div>}
+          content={
+            course.data.studentTasks ? (
+              <p className='text-sm leading-relaxed whitespace-pre-wrap text-gray-700'>{course.data.studentTasks}</p>
+            ) : (
+              <p className='text-muted-foreground italic'>No student tasks listed.</p>
+            )
+          }
         />
 
+        {/* Prerequisites */}
         <SCard
-          title='Topics'
+          title='Prerequisites'
           content={
-            <div className='mt-2 flex gap-2'>
-              {course.topicNames.map((topic) => (
-                <Badge key={topic} variant='secondary' className='bg-red-100 text-red-800'>
-                  {topic}
-                </Badge>
-              ))}
-            </div>
+            course.data.prerequisites ? (
+              <p className='text-sm leading-relaxed whitespace-pre-wrap text-gray-700'>{course.data.prerequisites}</p>
+            ) : (
+              <p className='text-muted-foreground italic'>No prerequisites listed.</p>
+            )
           }
         />
 
         <SCard
-          title='Skills'
+          title='Tags'
           content={
-            <div className='mt-2 flex gap-2'>
-              {course.skillNames.map((skill) => (
-                <Badge key={skill} variant='outline' className='bg-emerald-100 text-emerald-700'>
-                  {skill}
-                </Badge>
-              ))}
-            </div>
-          }
-        />
+            <div className='space-y-4'>
+              {/* Topics */}
+              <div>
+                <p className='mb-1 text-sm font-semibold text-gray-600'>Topics</p>
+                {course.data.topicNames?.length > 0 ? (
+                  <div className='flex flex-wrap gap-2'>
+                    {course.data.topicNames.map((topic) => (
+                      <Badge key={topic} variant='secondary' className='bg-red-100 text-red-800'>
+                        {topic}
+                      </Badge>
+                    ))}
+                  </div>
+                ) : (
+                  <p className='text-muted-foreground text-sm italic'>No topics listed.</p>
+                )}
+              </div>
 
-        <SCard
-          title='Standards'
-          content={
-            <div className='mt-2 flex gap-2'>
-              {course.standardNames.map((standard) => (
-                <Badge key={standard} variant='outline' className='text-orange-custom-500 bg-yellow-custom-50'>
-                  {standard}
-                </Badge>
-              ))}
+              {/* Skills */}
+              <div>
+                <p className='mb-1 text-sm font-semibold text-gray-600'>Skills</p>
+                {course.data.skillNames?.length > 0 ? (
+                  <div className='flex flex-wrap gap-2'>
+                    {course.data.skillNames.map((skill) => (
+                      <Badge key={skill} variant='outline' className='bg-emerald-100 text-emerald-700'>
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                ) : (
+                  <p className='text-muted-foreground text-sm italic'>No skills listed.</p>
+                )}
+              </div>
+
+              {/* Standards */}
+              <div>
+                <p className='mb-1 text-sm font-semibold text-gray-600'>Standards</p>
+                {course.data.standardNames?.length > 0 ? (
+                  <div className='flex flex-wrap gap-2'>
+                    {course.data.standardNames.map((standard) => (
+                      <Badge key={standard} variant='outline' className='bg-yellow-custom-50 text-orange-custom-500'>
+                        {standard}
+                      </Badge>
+                    ))}
+                  </div>
+                ) : (
+                  <p className='text-muted-foreground text-sm italic'>No standards assigned.</p>
+                )}
+              </div>
             </div>
           }
         />
       </div>
 
-      {/* Right Column */}
-      <div className='space-y-4'>
-        <div className='relative aspect-[4/3] w-full overflow-hidden rounded-4xl shadow-lg'>
+      {/* RIGHT: Thumbnail, Metadata, Actions */}
+      <div className='space-y-6 md:col-span-4'>
+        {/* Thumbnail */}
+        <div className='relative aspect-video w-full overflow-hidden rounded-2xl shadow-md'>
           <Image
-            src={course.imageUrl}
-            alt={course.title}
+            src={course.data.imageUrl || 'images/fallback.png'}
+            alt={course.data.title}
             fill
             className='object-cover'
             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           />
         </div>
 
+        {/* Metadata */}
         <SCard
           title='Metadata'
           content={
-            <div className='space-y-1 text-sm'>
+            <div className='space-y-1 text-sm text-gray-700'>
               <div>
-                <strong>Created at:</strong> {createdAt}
+                <strong>Created at: </strong> {createdAt}
               </div>
               <div>
-                <strong>Last Modified:</strong> {updatedAt}
+                <strong>Last Modified: </strong> {updatedAt}
               </div>
               <div>
-                <strong>Created By:</strong> {createdBy}
+                <strong>Created By: </strong> {createdBy}
               </div>
             </div>
           }
         />
-        {course.status == CourseStatus.PENDING && (
-          <div className='mt-4 space-x-4'>
+
+        {/* Action Buttons */}
+        <div>
+          <Button
+            onClick={handleUpdate}
+            className='text-sky-custom-600 w-full cursor-pointer bg-gray-200 font-semibold shadow'
+            variant='outline'
+          >
+            {t('notEnrolled.button.update')}
+          </Button>
+        </div>
+        {course.data.status === CourseStatus.PENDING && (
+          <div className='flex flex-wrap justify-center gap-3'>
             <Button
-              size='default'
-              className='shadow-6 bg-red-600 font-semibold text-white'
+              className='cursor-pointer bg-red-600 font-semibold text-white shadow'
               onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
             >
               {t('enrolled.action.reject')}
             </Button>
             <Button
-              size='default'
-              className='shadow-6 bg-green-600 font-semibold text-white'
+              className='cursor-pointer bg-green-600 font-semibold text-white shadow'
               onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
             >
               {t('enrolled.action.approve')}
             </Button>
-            <Button onClick={handleUpdate} className='bg-sky-custom-600 shadow-6 font-semibold text-white'>
-              {t('notEnrolled.button.update')}
-            </Button>
           </div>
         )}
+      </div>
+      {/* Divider Section before Lesson Table */}
+      <div className='pt-5 md:col-span-12'>
+        <div className='flex items-center gap-3 pb-3'>
+          <hr className='flex-grow border-t border-gray-300' />
+          <h1 className='text-sky-custom-600 text-3xl font-semibold'>Lessons List</h1>
+          <hr className='flex-grow border-t border-gray-300' />
+        </div>
+        <LessonTable courseIdSelected={course.data.id} />
       </div>
     </div>
   )
