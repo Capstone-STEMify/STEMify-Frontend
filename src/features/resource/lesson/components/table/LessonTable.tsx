@@ -27,10 +27,9 @@ function useDebounce(value: string, delay: number) {
   return debouncedValue
 }
 
-export default function LessonTable() {
+export default function LessonTable({courseIdSelected}: { courseIdSelected?: number }) {
   const dispatch = useAppDispatch()
   const lessonStatusSelected = useAppSelector((state) => state.lesson.status)
-  const courseIdSelected = useAppSelector((state) => state.lesson.courseId)
   const { openModal } = useModal()
   const columns = useGetLessonAction()
   const router = useRouter()

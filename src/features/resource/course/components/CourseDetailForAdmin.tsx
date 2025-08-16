@@ -45,16 +45,10 @@ export default function CourseDetailPage() {
 
   const params = useParams()
   const router = useRouter()
-  const dispatch = useAppDispatch()
 
   // Set courseId in Redux store
   const courseIdParam = params?.courseId
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
-  useEffect(() => {
-    if (courseId !== undefined) {
-      dispatch(setParam({ key: 'courseId', value: courseId }))
-    }
-  }, [dispatch, courseId])
 
   // Fetch course details
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
@@ -283,7 +277,7 @@ export default function CourseDetailPage() {
           <h1 className='text-sky-custom-600 text-3xl font-semibold'>Lessons List</h1>
           <hr className='flex-grow border-t border-gray-300' />
         </div>
-        <LessonTable />
+        <LessonTable courseIdSelected={course.data.id} />
       </div>
     </div>
   )
