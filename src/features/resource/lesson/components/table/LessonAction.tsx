@@ -52,6 +52,11 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
       }
     })
   }
+
+  const handleOpenLessonDetailModal = async (id: number) => {
+    openModal('lessonDetail', { lessonId: id })
+  }
+
   return [
     createSelectColumn<Lesson>(),
     {
@@ -82,7 +87,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
         const lessonId = row.original.id
         return (
           <div
-            onClick={() => router.push(`/admin/lesson/${lessonId}`)}
+            onClick={() => handleOpenLessonDetailModal(lessonId)}
             className='cursor-pointer font-bold transition hover:opacity-80'
           >
             {row.getValue('title')}

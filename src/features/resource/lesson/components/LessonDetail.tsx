@@ -15,10 +15,11 @@ import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentAp
 import { useSearchStudentProgressQuery } from '@/features/student-progress/api/studentProgressApi'
 import { useTranslations } from 'next-intl'
 
-export default function LessonDetail() {
+export default function LessonDetail({ id }: { id?: number }) {
   const t = useTranslations('LessonDetails')
   const userId = useAppSelector((state) => state.auth.user?.userId)
-  const { lessonId } = useParams()
+  const params = useParams()
+  const lessonId = params?.lessonId ? Number(params.lessonId) : id
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null)
   const token = useAppSelector((state) => state.auth.token)
   const { data: lessonData, isLoading: lessonLoading } = useGetLessonByIdQuery(Number(lessonId))
