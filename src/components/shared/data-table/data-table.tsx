@@ -31,9 +31,9 @@ export type DataTableProps<TData, TValue> = {
   enableRowSelection?: boolean
   className?: string
   toolbarRight?: React.ReactNode
-  pagingData: any
-  pagingParams: any
-  handlePageChange: (page: number) => void
+  pagingData?: any
+  pagingParams?: any
+  handlePageChange?: (page: number) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -155,7 +155,7 @@ export function DataTable<TData, TValue>({
           <SPagination
             pageNumber={pagingParams?.pageNumber}
             totalPages={pagingData.data.totalPages}
-            onPageChanged={handlePageChange}
+            onPageChanged={handlePageChange ?? (() => {})}
             className='w-fit'
           />
         )}
