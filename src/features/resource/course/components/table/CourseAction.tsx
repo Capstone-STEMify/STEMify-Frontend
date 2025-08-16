@@ -170,13 +170,13 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
       {
         separatorBefore: true,
         label: 'Approve',
-        hidden: ({ original }) => original.status !== CourseStatus.PENDING,
+        hidden: ({ original }) => original.status !== CourseStatus.PENDING && original.status !== CourseStatus.DRAFT,
         onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.PUBLISHED)
       },
       {
         label: 'Reject',
         danger: true,
-        hidden: ({ original }) => original.status !== CourseStatus.PENDING,
+        hidden: ({ original }) => original.status !== CourseStatus.PENDING && original.status !== CourseStatus.DRAFT,
         onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.REJECTED)
       }
     ])

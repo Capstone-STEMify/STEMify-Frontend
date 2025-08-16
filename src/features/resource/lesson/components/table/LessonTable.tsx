@@ -5,9 +5,11 @@ import { useGetLessonAction } from './LessonAction'
 import { useSearchLessonQuery } from '../../api/lessonApi'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setPageIndex, setPageSize, setParam } from '@/features/resource/lesson/slice/lessonSlice'
-import { LessonQueryParams, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
+import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
+import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import LessonListAction from '../list/LessonListAction'
+import { Button } from '@/components/shadcn/button'
+import { IconPlus } from '@tabler/icons-react'
 
 // Debounce hook to delay API calls
 function useDebounce(value: string, delay: number) {
@@ -53,10 +55,24 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
+  const handleCreate = () => {
+    router.push(`/admin/lesson/create?courseId=${courseIdSelected}`)
+  }
 
   return (
-    <div className='space-y-10'>
+    <div>
       <LessonListAction />
+      {courseIdSelected && (
+        <Button
+          variant='outline'
+          size='sm'
+          className='bg-amber-custom-400 my-5 cursor-pointer text-white'
+          onClick={handleCreate}
+        >
+          <IconPlus />
+          <span className='hidden lg:inline'>Add New</span>
+        </Button>
+      )}
 
       <DataTable
         data={rows}
@@ -65,6 +81,7 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
         pagingData={data}
         pagingParams={queryParams}
         handlePageChange={handlePageChange}
+        className='mt-5'
       />
     </div>
   )
