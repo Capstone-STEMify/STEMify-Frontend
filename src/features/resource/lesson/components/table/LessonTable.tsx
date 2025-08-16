@@ -30,6 +30,7 @@ function useDebounce(value: string, delay: number) {
 export default function LessonTable() {
   const dispatch = useAppDispatch()
   const lessonStatusSelected = useAppSelector((state) => state.lesson.status)
+  const courseIdSelected = useAppSelector((state) => state.lesson.courseId)
   const { openModal } = useModal()
   const columns = useGetLessonAction()
   const router = useRouter()
@@ -40,7 +41,8 @@ export default function LessonTable() {
 
   const { data } = useSearchLessonQuery({
     search: debouncedSearchQuery,
-    status: lessonStatusSelected
+    status: lessonStatusSelected,
+    courseId: courseIdSelected
   })
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])

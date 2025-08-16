@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import LessonTable from '../../lesson/components/table/LessonTable'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
@@ -14,6 +14,8 @@ import { useParams, useRouter } from 'next/navigation'
 import { BookOpen, Edit } from 'lucide-react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { setParam } from '../slice/courseSlice'
 
 const levelBadgeClass = (level?: string): string => {
   const map: Record<string, string> = {
@@ -43,9 +45,18 @@ export default function CourseDetailPage() {
 
   const params = useParams()
   const router = useRouter()
+  const dispatch = useAppDispatch()
 
+  // Set courseId in Redux store
   const courseIdParam = params?.courseId
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
+  useEffect(() => {
+    if (courseId !== undefined) {
+      dispatch(setParam({ key: 'courseId', value: courseId }))
+    }
+  }, [dispatch, courseId])
+
+  // Fetch course details
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const [updateCourseStatus] = useUpdateCourseMutation()
 
@@ -264,6 +275,15 @@ export default function CourseDetailPage() {
             </Button>
           </div>
         )}
+      </div>
+      {/* Divider Section before Lesson Table */}
+      <div className='pt-5 md:col-span-12'>
+        <div className='flex items-center gap-3 pb-3'>
+          <hr className='flex-grow border-t border-gray-300' />
+          <h1 className='text-sky-custom-600 text-3xl font-semibold'>Lessons List</h1>
+          <hr className='flex-grow border-t border-gray-300' />
+        </div>
+        <LessonTable />
       </div>
     </div>
   )
