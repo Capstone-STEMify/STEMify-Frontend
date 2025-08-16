@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
 import z from 'zod'
 import { Badge } from '@/components/shadcn/badge'
-import { useDeleteLessonMutation } from '../../api/lessonApi'
+import { useDeleteLessonMutation, useUpdateLessonMutation } from '../../api/lessonApi'
 import { Lesson, LessonStatus } from '../../types/lesson.type'
 import Image from 'next/image'
 
@@ -28,6 +28,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
   const router = useRouter()
   const { openModal } = useModal()
   const [deleteLesson] = useDeleteLessonMutation()
+  const [updateLessonStatus] = useUpdateLessonMutation()
 
   const handleDelete = async (id: number) => {
     try {
@@ -36,6 +37,24 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     } catch (error) {
       toast.error('Failed to delete lesson.')
     }
+  }
+  const handleStatusUpdate = async (id: number, title: string, status: LessonStatus) => {
+    const action = status === LessonStatus.PUBLISHED ? 'publish' : 'reject'
+    openModal('confirm', {
+      message: `Are you sure you want to ${action} lesson "${title}"?`,
+      onConfirm: async () => {
+        try {
+          await updateLessonStatus({ id, body: { status } }).unwrap()
+          toast.success(`${action.charAt(0).toUpperCase() + action.slice(1)}d lesson "${title}"`)
+        } catch {
+          toast.error(`Failed to ${action} lesson.`)
+        }
+      }
+    })
+  }
+
+  const handleOpenLessonDetailModal = async (id: number) => {
+    openModal('lessonDetail', { lessonId: id })
   }
 
   return [
@@ -68,7 +87,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
         const lessonId = row.original.id
         return (
           <div
-            onClick={() => router.push(`/admin/lesson/${lessonId}`)}
+            onClick={() => handleOpenLessonDetailModal(lessonId)}
             className='cursor-pointer font-bold transition hover:opacity-80'
           >
             {row.getValue('title')}
@@ -124,6 +143,18 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
             onConfirm: () => handleDelete(original.id)
           })
         }
+      },
+      {
+        separatorBefore: true,
+        label: 'Approve',
+        hidden: ({ original }) => original.status !== LessonStatus.PENDING && original.status !== LessonStatus.DRAFT,
+        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, LessonStatus.PUBLISHED)
+      },
+      {
+        label: 'Reject',
+        danger: true,
+        hidden: ({ original }) => original.status !== LessonStatus.PENDING && original.status !== LessonStatus.DRAFT,
+        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, LessonStatus.REJECTED)
       }
     ])
   ]
