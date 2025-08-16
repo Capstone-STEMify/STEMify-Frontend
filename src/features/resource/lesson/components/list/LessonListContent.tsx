@@ -28,7 +28,7 @@ export default function LessonListContent() {
     courseId: lessonParams.courseId,
     createdByUserId: lessonParams.createdByUserId,
     ageRangeId: lessonParams.ageRangeId,
-    categoryId: lessonParams.categoryId,
+    topicId: lessonParams.topicId,
     skillId: lessonParams.skillId,
     standardId: lessonParams.standardId,
     pageNumber: lessonParams.pageNumber,
@@ -62,12 +62,7 @@ export default function LessonListContent() {
   }
 
   if (!lessonData || lessonData.data.items.length === 0) {
-    return (
-      <SEmpty
-        title={t('noLesson')}
-        description={t('noLessonFound')}
-      />
-    )
+    return <SEmpty title={t('noLesson')} description={t('noLessonFound')} />
   }
 
   return (

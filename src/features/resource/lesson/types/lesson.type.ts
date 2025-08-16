@@ -39,7 +39,7 @@ export type LessonQueryParams = {
   courseId?: number
   createdByUserId?: string
   ageRangeId?: number
-  categoryId?: number
+  topicId?: number
   skillId?: number
   standardId?: number
 } & SearchPaginatedRequestParams

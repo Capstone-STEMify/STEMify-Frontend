@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setPageSize, setParam, setSearchTerm } from '@/features/resource/lesson/slice/lessonSlice'
 import { getLabel, getOptions } from '@/utils/index'
 import { useTranslations } from 'next-intl'
+import { LessonStatus } from '../../types/lesson.type'
 
 export default function LessonListAction() {
   const t = useTranslations('LessonList')
@@ -32,7 +33,12 @@ export default function LessonListAction() {
   }
 
   const hasFilters = Boolean(
-    filters.search || filters.categoryId || filters.ageRangeId || filters.skillId || filters.standardId
+    filters.search ||
+      filters.categoryId ||
+      filters.ageRangeId ||
+      filters.skillId ||
+      filters.standardId ||
+      filters.status
   )
 
   // Function to render filter tags
@@ -50,10 +56,14 @@ export default function LessonListAction() {
     )
 
   // Options for selects
-  const categoryOptions = getOptions(categories?.data.items, 'categoryName')
+  const categoryOptions = getOptions(categories?.data.items, 'name')
   const skillOptions = getOptions(skills?.data.items, 'skillName')
   const ageRangeOptions = getOptions(ageRanges?.data.items, 'ageRangeLabel')
   const standardOptions = getOptions(standards?.data.items, 'standardName')
+  const statusOptions = Object.entries(LessonStatus).map(([key, value]) => ({
+    label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+    value: value
+  }))
 
   return (
     <div className='border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50'>
@@ -96,7 +106,7 @@ export default function LessonListAction() {
           <SSelect
             placeholder={t('placeHolder.category')}
             value={filters.categoryId?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'categoryId', value: Number(val) }))}
+            onChange={(val) => dispatch(setParam({ key: 'id', value: Number(val) }))}
             options={categoryOptions}
             onOpen={(open) => {
               if (open && !categories) getCategory()
@@ -135,6 +145,14 @@ export default function LessonListAction() {
               if (open && !standards) getStandard()
             }}
           />
+
+          {/* Status */}
+          <SSelect
+            placeholder={t('placeHolder.status')}
+            value={filters.status?.toString() ?? ''}
+            onChange={(val) => dispatch(setParam({ key: 'status', value: val as LessonStatus }))}
+            options={statusOptions}
+          />
         </div>
 
         {/* Active Filters */}
@@ -146,6 +164,7 @@ export default function LessonListAction() {
             {renderFilterTag('ageRangeId', `${t('tags.ageRange')}`, 'bg-purple-100 text-purple-800', ageRangeOptions)}
             {renderFilterTag('skillId', `${t('tags.skill')}`, 'bg-yellow-100 text-yellow-800', skillOptions)}
             {renderFilterTag('standardId', `${t('tags.standard')}`, 'bg-red-100 text-red-800', standardOptions)}
+            {renderFilterTag('status', `${t('tags.status')}`, 'bg-gray-100 text-gray-800', statusOptions)}
           </div>
         )}
       </div>
