@@ -32,7 +32,6 @@ export default function CourseDetailNotEnrolled({ courseId }: CourseDetailNotEnr
         />
       </div>
     )
-  console.log(course)
 
   return (
     <div className='min-h-screen bg-white'>
