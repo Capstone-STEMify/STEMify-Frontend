@@ -1,0 +1,20 @@
+{
+    "Admin": {
+        "side_bar": {
+            "course": "Khóa học",
+            "lesson": "Bài học",
+            "document": "Tài liệu",
+            "topic": "Chủ đề",
+            "skill": "Kỹ năng",
+            "ageRange": "Độ tuổi",
+            "standard": "Tiêu chuẩn",
+            "setting": "Cài đặt",
+            "help": "Trợ giúp",
+            "search": "Tìm kiếm"
+        },
+        "course_management": {
+            "title": "Quản lý tài nguyên",
+            "button": "Thêm Mới"
+        }
+    }
+}

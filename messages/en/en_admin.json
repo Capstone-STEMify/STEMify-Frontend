@@ -1,0 +1,20 @@
+{
+    "Admin": {
+        "side_bar": {
+            "course": "Courses",
+            "lesson": "Lessons",
+            "document": "Document",
+            "topic": "Topic",
+            "skill": "Skills",
+            "ageRange": "Age Range",
+            "standard": "Standard",
+            "setting": "Settings",
+            "help": "Get Help",
+            "search": "Search"
+        },
+        "course_management": {
+            "title": "Resource Management",
+            "button": "Add New"
+        }
+    }
+}
