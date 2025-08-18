@@ -13,9 +13,33 @@ import { resetParams, setPageSize, setParam, setSearchTerm } from '@/features/re
 import { getLabel, getOptions } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import { CourseStatus } from '../../types/course.type'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { UserRole } from '@/types/userRole'
 
 export default function CourseListAction() {
   const t = useTranslations('CourseList')
+
+  const { status } = useSession()
+  const role = useAppSelector((state) => state.auth.user?.role)
+
+    if (status === 'loading') {
+      return (
+        <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+          <LoadingComponent size={18} textShow={false} />
+        </div>
+      )
+  }
+
+  useEffect(() => {
+      if (status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.STAFF)) {
+        setStatusActive(true)
+      }else {
+        setStatusActive(false)}
+    }, [status, role])
+
+  const [statusActive, setStatusActive] = useState(false)
 
   // Redux hooks
   const dispatch = useAppDispatch()
@@ -148,12 +172,14 @@ export default function CourseListAction() {
           />
 
           {/* Status */}
-          <SSelect
+          {statusActive && (
+            <SSelect
             placeholder={t('placeHolder.status')}
             value={filters.status?.toString() ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'status', value: val as CourseStatus }))}
             options={statusOptions}
           />
+          )}
         </div>
 
         {/* Active Filters */}
