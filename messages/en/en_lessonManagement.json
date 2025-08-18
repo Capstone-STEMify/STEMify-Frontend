@@ -17,6 +17,11 @@
       "note": "Describe what students will learn after completing the lesson",
       "placeholder": "e.g., Students will understand basic programming concepts and be able to write simple programs."
     },
+    "requirement": {
+      "label": "Requirement",
+      "note": "Describe the prerequisites needed to complete the lesson",
+      "placeholder": "e.g., Students should have basic programming knowledge before attending this lesson."
+    },
     "topic": {
       "label": "Topics",
       "note": "Select the topics this course belongs to"

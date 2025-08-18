@@ -10,6 +10,7 @@ import {
 } from '@/features/resource/skill/api/skillApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
+import { useTranslations } from 'next-intl'
 
 // Schema validation cho form
 const skillSchema = z.object({
@@ -29,6 +30,8 @@ interface UpsertSkillProps {
 
 export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
   const isEditing = !!id
+
+  const t = useTranslations('Admin.skill')
 
   const { data: existingData, isLoading: isDataLoading } = useGetSkillByIdQuery(id as number, {
     skip: !isEditing
@@ -80,21 +83,21 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
       }}
       className='space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? 'Edit' : 'Create'} Skill</h2>
+      <h2 className='text-xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
       <SCard
-        title='Skill Name'
-        description='Enter the name of the skill.'
+        title={t('name')}
+        description={t('description')}
         content={
           <form.AppField
             name='skillName'
-            children={(field) => <field.TextAreaField placeholder='e.g., Critical Thinking' />}
+            children={(field) => <field.TextAreaField placeholder={t('placeholder')} />}
           />
         }
       />
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
-            {isEditing ? 'Update' : 'Create'}
+            {isEditing ? `${t('updateButton')}` : `${t('createButton')}`}
           </form.SubmitButton>
         </form.AppForm>
       </div>

@@ -27,7 +27,7 @@ function useDebounce(value: string, delay: number) {
 }
 
 export default function CourseTable() {
-  const t = useTranslations('CourseList')
+  const t = useTranslations('Admin')
   const dispatch = useAppDispatch()
   const courseParams = useAppSelector((state) => state.course)
   const columns = useGetCourseAction()
@@ -73,7 +73,7 @@ export default function CourseTable() {
         onClick={handleCreate}
       >
         <IconPlus />
-        <span className='hidden lg:inline'>Add New</span>
+        <span className='hidden lg:inline'>{t('course_management.button')}</span>
       </Button>
       <DataTable
         data={rows}

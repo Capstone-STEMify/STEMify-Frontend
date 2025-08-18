@@ -6,6 +6,7 @@ import { useSearchSkillQuery } from '@/features/resource/skill/api/skillApi'
 import { useGetSkillAction } from '@/features/resource/skill/components/table/SkillAction'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import React, { useState, useEffect } from 'react'
 
 function useDebounce(value: string, delay: number) {
@@ -25,6 +26,8 @@ export default function SkillTable() {
   const { openModal } = useModal()
   const columns = useGetSkillAction()
 
+  const t = useTranslations('Admin.placeholder')
+
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
@@ -42,7 +45,7 @@ export default function SkillTable() {
     <div>
       <div className='flex justify-between items-center py-4'>
         <Input
-          placeholder='Search by skill name...'
+          placeholder={t('skillSearch')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className='max-w-sm'

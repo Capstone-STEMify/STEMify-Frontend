@@ -22,15 +22,19 @@ import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
 import { useGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
 import { useGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
 import { fileToBase64 } from '@/utils/index'
+import { Skill } from '@/features/resource/skill/types/skill.type'
+import { Category } from '@/features/resource/category/types/category.type'
+import { Standard } from '@/features/resource/standard/types/standard.type'
 
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
   description: z.string().min(50, 'Description must be at least 50 characters long'),
   courseId: z.number().positive({ message: 'Course ID must be a positive number' }),
   learningOutcome: z.string().min(20, 'Learning outcome must be at least 20 characters long'),
-  topics: z.array(z.number().positive()).min(1, 'At least one topic must be selected'),
-  skills: z.array(z.number().positive()).min(1, 'At least one skill must be selected'),
-  standards: z.array(z.number().positive()).min(1, 'At least one standard must be selected'),
+  requirement: z.string().min(20, 'Requirement must be at least 20 characters long'),
+  topics: z.array(z.string()),
+  skills: z.array(z.string()),
+  standards: z.array(z.string()),
   imageUrl: z
     .union([z.instanceof(File), z.null()])
     .refine((file) => file === null || file.size > 0, 'Cover image is required')
@@ -41,10 +45,11 @@ const lessonSchema = z.object({
 type LessonFormData = z.infer<typeof lessonSchema>
 
 const defaultLessonData: LessonFormData = {
+  courseId: 0,
   title: '',
   description: '',
-  courseId: 0,
   learningOutcome: '',
+  requirement: '',
   topics: [],
   skills: [],
   standards: [],
@@ -54,9 +59,9 @@ const defaultLessonData: LessonFormData = {
 
 function mapLessonData(
   lesson: ApiSuccessResponse<Lesson>,
-  allSkills: any[],
-  allCategories: any[],
-  allStandards: any[]
+  allSkills: Skill[],
+  allCategories: Category[],
+  allStandards: Standard[]
 ): LessonFormData {
   const skillNames = lesson.data.skillNames ?? []
   const topicNames = lesson.data.topicNames ?? []
@@ -68,7 +73,7 @@ function mapLessonData(
         typeof s.skillName === 'string' &&
         skillNames.some((n) => typeof n === 'string' && n.trim().toLowerCase() === s.skillName.trim().toLowerCase())
     )
-    .map((s) => s.id.toString())
+    .map((s) => s.id)
 
   const topicIds = allCategories
     .filter(
@@ -76,7 +81,7 @@ function mapLessonData(
         typeof c.name === 'string' &&
         topicNames.some((n) => typeof n === 'string' && n.trim().toLowerCase() === c.name.trim().toLowerCase())
     )
-    .map((c) => c.id.toString())
+    .map((c) => c.id)
 
   const standardIds = allStandards
     .filter(
@@ -86,16 +91,17 @@ function mapLessonData(
           (n) => typeof n === 'string' && n.trim().toLowerCase() === s.standardName.trim().toLowerCase()
         )
     )
-    .map((s) => s.id.toString())
+    .map((s) => s.id)
 
   return {
     title: lesson.data.title ?? '',
     description: lesson.data.description ?? '',
     learningOutcome: lesson.data.learningOutcome ?? '',
     courseId: lesson.data.courseId ?? 0,
-    topics: topicIds,
-    skills: skillIds,
-    standards: standardIds,
+    requirement: lesson.data.requirement ?? '',
+    topics: topicIds.map(String),
+    skills: skillIds.map(String),
+    standards: standardIds.map(String),
     imageUrl: null as any,
     imagePreviewUrl: lesson.data.imageUrl ?? ''
   }
@@ -130,6 +136,7 @@ async function PatchLessonJsonPayload(oldData: LessonFormData, newData: LessonFo
   if (oldData.description !== newData.description) patchData.description = newData.description
   if (oldData.learningOutcome !== newData.learningOutcome) patchData.learningOutcome = newData.learningOutcome
   if (oldData.courseId !== newData.courseId) patchData.courseId = newData.courseId
+  if (oldData.requirement !== newData.requirement) patchData.requirement = newData.requirement
   if (oldData.topics !== newData.topics) patchData.topicIds = newData.topics.map(Number)
   if (oldData.skills !== newData.skills) patchData.skillIds = newData.skills.map(Number)
   if (oldData.standards !== newData.standards) patchData.standardIds = newData.standards.map(Number)
@@ -164,7 +171,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const lessonIdRaw = params?.lessonId
   const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
 
-  const { data: ageRanges } = useGetAllAgeRangeQuery()
   const { data: skills } = useGetAllSkillQuery()
   const { data: categories } = useGetAllCategoryQuery()
   const { data: standards } = useGetAllStandardQuery()
@@ -185,19 +191,19 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   // Initialize form with lesson data if it exists
   const form = useAppForm({
     defaultValues: defaultLessonData,
-    // validators: {
-    //   onChange: lessonSchema
-    // },
+    validators: {
+      onChange: lessonSchema
+    },
     onSubmit: async ({ value }) => {
       try {
         if (lessonId) {
           const jsonPayload = await PatchLessonJsonPayload(initialCourseDataRef.current!, value, userId!)
           const res = await updateLesson({ id: lessonId, body: jsonPayload }).unwrap()
+          toast.success(`Lesson updated successfully (${res.data.title})`)
         } else {
           const jsonPayload = await CreateLessonJsonPayload(value, userId!, finalCourseId)
           const res = await createLesson(jsonPayload).unwrap()
           toast.success(`Lesson created successfully (${res.data.title})`)
-          // form.reset()
         }
         onSuccess?.()
       } catch (err) {
@@ -216,16 +222,10 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     const categoryItems = categories?.data?.items ?? []
     const standardItems = standards?.data?.items ?? []
 
-    if (
-      !didResetOnce.current &&
-      lessonData?.data &&
-      skillItems.length > 0 &&
-      categoryItems.length > 0 &&
-      standardItems.length > 0
-    ) {
-      const mapped = mapLessonData(lessonData, skillItems, categoryItems, standardItems)
-      console.log('Initial lesson data:', mapped)
+    const shouldMap = lessonData?.data && skillItems.length > 0 && categoryItems.length > 0 && standardItems.length > 0
 
+    if (shouldMap && !didResetOnce.current) {
+      const mapped = mapLessonData(lessonData, skillItems, categoryItems, standardItems)
       form.reset(mapped)
       initialCourseDataRef.current = mapped
       didResetOnce.current = true
@@ -247,7 +247,13 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     )
   }
 
-  if (isLessonLoading || !ageRanges || !skills || !categories || !standards) {
+  if (
+    isLessonLoading ||
+    !lessonData ||
+    !skills?.data?.items.length ||
+    !categories?.data?.items.length ||
+    !standards?.data?.items.length
+  ) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />
@@ -318,6 +324,25 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
           />
 
           <SCard
+            className='gap-3'
+            title={t('requirement.label')}
+            description={t('requirement.note')}
+            content={
+              <form.AppField
+                name='requirement'
+                children={(field) => (
+                  <field.TextAreaField
+                    placeholder={t('requirement.placeholder')}
+                    className='h-30 rounded-lg border-gray-300'
+                  />
+                )}
+              />
+            }
+          />
+        </div>
+
+        <div className='space-y-6'>
+          <SCard
             className='gap-2'
             title={t('skill.label')}
             description={t('skill.note')}
@@ -336,7 +361,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
               />
             }
           />
-
           <SCard
             className='gap-2'
             title={t('topic.label')}
@@ -356,7 +380,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
               />
             }
           />
-
           <SCard
             className='gap-3'
             title={t('standard.label')}
@@ -376,9 +399,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
               />
             }
           />
-        </div>
-
-        <div className='space-y-6'>
           <form.AppField
             name='imageUrl'
             children={(field) => {
@@ -387,11 +407,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
             }}
           />
 
-          {/* <div className='flex flex-col gap-3 sm:flex-row'>
-            <Button type='button' onClick={handleEditImage} className='flex-1 rounded-full py-5'>
-              Edit Image
-            </Button>
-          </div> */}
           <form.AppForm>
             <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>{t('btn')}</form.SubmitButton>
           </form.AppForm>

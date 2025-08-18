@@ -6,6 +6,7 @@ import { useSearchStandardQuery } from '@/features/resource/standard/api/standar
 import { useGetStandardAction } from '@/features/resource/standard/components/table/StandardAction'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import React, { useState, useEffect } from 'react'
 
 // Debounce hook để trì hoãn việc gọi API
@@ -26,6 +27,8 @@ export default function StandardTable() {
   const { openModal } = useModal()
   const columns = useGetStandardAction()
 
+  const t = useTranslations('Admin.placeholder')
+
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
@@ -43,7 +46,7 @@ export default function StandardTable() {
     <div>
       <div className='flex justify-between items-center py-4'>
         <Input
-          placeholder='Search by standard name...'
+          placeholder={t('standardSearch')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className='max-w-sm'
