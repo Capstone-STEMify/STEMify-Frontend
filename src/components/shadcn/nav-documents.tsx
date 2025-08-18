@@ -18,6 +18,7 @@ import {
   SidebarMenuItem,
   useSidebar
 } from 'components/shadcn/sidebar'
+import { useTranslations } from 'next-intl'
 
 export function NavDocuments({
   items
@@ -29,17 +30,18 @@ export function NavDocuments({
   }[]
 }) {
   const { isMobile } = useSidebar()
+  const t = useTranslations('Admin')
 
   return (
     <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
-      <SidebarGroupLabel>Documents</SidebarGroupLabel>
+      <SidebarGroupLabel>{t('side_bar.document')}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <a href={item.url}>
                 <item.icon />
-                <span>{item.name}</span>
+                <span>{t(item.name)}</span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>
