@@ -36,7 +36,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
     },
     {
       accessorKey: 'categoryName',
-      header: 'Name',
+      header: 'Name'
     },
     createActionsColumnFromItems<Category>([
       {

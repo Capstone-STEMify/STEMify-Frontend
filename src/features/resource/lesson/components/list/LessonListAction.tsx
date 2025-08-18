@@ -23,8 +23,7 @@ export default function LessonListAction() {
   const { status } = useSession()
   const role = useAppSelector((state) => state.auth.user?.role)
 
-  const canSeeStatus =
-    status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.TEACHER)
+  const canSeeStatus = status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.TEACHER)
 
   // Redux
   const dispatch = useAppDispatch()
@@ -73,7 +72,6 @@ export default function LessonListAction() {
         <X className='h-3 w-3 cursor-pointer' onClick={() => dispatch(setParam({ key, value: '' }))} />
       </span>
     )
-
 
   return (
     <div className='border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50'>
@@ -180,7 +178,12 @@ export default function LessonListAction() {
                 <span className='text-sm font-medium text-gray-600'>Active filters:</span>
                 {renderFilterTag('search', `${t('tags.search')}`, 'bg-blue-100 text-blue-800')}
                 {renderFilterTag('categoryId', `${t('tags.category')}`, 'bg-green-100 text-green-800', categoryOptions)}
-                {renderFilterTag('ageRangeId', `${t('tags.ageRange')}`, 'bg-purple-100 text-purple-800', ageRangeOptions)}
+                {renderFilterTag(
+                  'ageRangeId',
+                  `${t('tags.ageRange')}`,
+                  'bg-purple-100 text-purple-800',
+                  ageRangeOptions
+                )}
                 {renderFilterTag('skillId', `${t('tags.skill')}`, 'bg-yellow-100 text-yellow-800', skillOptions)}
                 {renderFilterTag('standardId', `${t('tags.standard')}`, 'bg-red-100 text-red-800', standardOptions)}
                 {renderFilterTag('status', `${t('tags.status')}`, 'bg-gray-100 text-gray-800', statusOptions)}

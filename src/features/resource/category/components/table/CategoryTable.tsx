@@ -36,7 +36,7 @@ export default function CategoryTable() {
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
   const categoryParams = useAppSelector((state) => state.category)
-  
+
   const queryParams: CategoryQueryParams = {
     pageNumber: categoryParams.pageNumber,
     pageSize: categoryParams.pageSize,
@@ -48,10 +48,7 @@ export default function CategoryTable() {
     search: debouncedSearchQuery
   })
 
-  console.log('Category data:', data?.data)
-
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
-  console.log('Category rows:', rows)
 
   const handleCreate = () => {
     openModal('upsertCategory')
@@ -70,7 +67,7 @@ export default function CategoryTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams}/>
+      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams} />
     </div>
   )
 }

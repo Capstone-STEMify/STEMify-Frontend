@@ -24,14 +24,15 @@ export default function LessonListContent() {
   const [updateActive, setUpdateActive] = useState(false)
 
   const { status } = useSession()
-    const role = useAppSelector((state) => state.auth.user?.role)
-  
-    useEffect(() => {
-        if (status === 'authenticated' && role === UserRole.TEACHER) {
-          setUpdateActive(true)
-        }else {
-          setUpdateActive(false)}
-      }, [status, role])
+  const role = useAppSelector((state) => state.auth.user?.role)
+
+  useEffect(() => {
+    if (status === 'authenticated' && role === UserRole.TEACHER) {
+      setUpdateActive(true)
+    } else {
+      setUpdateActive(false)
+    }
+  }, [status, role])
 
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
@@ -77,13 +78,13 @@ export default function LessonListContent() {
     )
   }
 
-        if (status === 'loading') {
-        return (
-          <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
-            <LoadingComponent size={18} textShow={false} />
-          </div>
-        )
-    }
+  if (status === 'loading') {
+    return (
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+        <LoadingComponent size={18} textShow={false} />
+      </div>
+    )
+  }
 
   if (!lessonData || lessonData.data.items.length === 0) {
     return <SEmpty title={t('noLesson')} description={t('noLessonFound')} />
@@ -120,9 +121,7 @@ export default function LessonListContent() {
                   </p>,
                   updateActive && (
                     <Link href={`/resource/lesson/update/${lesson.id}`} key='update' className='text-sm'>
-                    <p>
-                      Update
-                    </p>
+                      <p>Update</p>
                     </Link>
                   ),
                   <p key='add-to-course' className='text-sm'>

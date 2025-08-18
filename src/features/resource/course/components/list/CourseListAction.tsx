@@ -26,11 +26,12 @@ export default function CourseListAction() {
   const role = useAppSelector((state) => state.auth.user?.role)
 
   useEffect(() => {
-      if (status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.TEACHER)) {
-        setStatusActive(true)
-      }else {
-        setStatusActive(false)}
-    }, [status, role])
+    if (status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.TEACHER)) {
+      setStatusActive(true)
+    } else {
+      setStatusActive(false)
+    }
+  }, [status, role])
 
   // Redux hooks
   const dispatch = useAppDispatch()
@@ -43,11 +44,11 @@ export default function CourseListAction() {
   const [getStandard, { data: standards }] = useLazyGetAllStandardQuery()
 
   if (status === 'loading') {
-      return (
-        <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
-          <LoadingComponent size={18} textShow={false} />
-        </div>
-      )
+    return (
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+        <LoadingComponent size={18} textShow={false} />
+      </div>
+    )
   }
 
   // Clear all filters and reset page size
@@ -173,11 +174,11 @@ export default function CourseListAction() {
           {/* Status */}
           {statusActive && (
             <SSelect
-            placeholder={t('placeHolder.status')}
-            value={filters.status?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'status', value: val as CourseStatus }))}
-            options={statusOptions}
-          />
+              placeholder={t('placeHolder.status')}
+              value={filters.status?.toString() ?? ''}
+              onChange={(val) => dispatch(setParam({ key: 'status', value: val as CourseStatus }))}
+              options={statusOptions}
+            />
           )}
         </div>
 

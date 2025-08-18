@@ -34,7 +34,7 @@ export default function SkillTable() {
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
   const skillParams = useAppSelector((state) => state.skill)
-  
+
   const queryParams: SkillQueryParams = {
     pageNumber: skillParams.pageNumber,
     pageSize: skillParams.pageSize,
@@ -54,7 +54,7 @@ export default function SkillTable() {
 
   return (
     <div>
-      <div className='flex justify-between items-center py-4'>
+      <div className='flex items-center justify-between py-4'>
         <Input
           placeholder={t('skillSearch')}
           value={searchQuery}

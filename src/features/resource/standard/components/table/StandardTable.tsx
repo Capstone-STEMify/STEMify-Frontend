@@ -35,7 +35,7 @@ export default function StandardTable() {
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
   const standardParams = useAppSelector((state) => state.standard)
-  
+
   const queryParams: StandardQueryParams = {
     pageNumber: standardParams.pageNumber,
     pageSize: standardParams.pageSize,
@@ -55,7 +55,7 @@ export default function StandardTable() {
 
   return (
     <div>
-      <div className='flex justify-between items-center py-4'>
+      <div className='flex items-center justify-between py-4'>
         <Input
           placeholder={t('standardSearch')}
           value={searchQuery}
