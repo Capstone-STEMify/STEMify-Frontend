@@ -22,7 +22,7 @@ const contentSchema = z.object({
   contentBody: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
     message: 'Content must have at least 50 characters of actual text (excluding Markdown and whitespace)'
   }),
-  contentType: z.nativeEnum(ContentType),
+  contentType: z.enum(ContentType),
   sectionId: z.number().positive({ message: 'Section ID must be a positive number' }),
   file: z.union([z.instanceof(File), z.null()]).optional(),
   filePreviewUrl: z.string().optional()
@@ -91,7 +91,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
         if (isUpdating) {
           const patchJson = await PatchContentJsonPayload(contentItem, { ...value, sectionId })
           const res = await updateContent({ id: contentItem.id, body: patchJson }).unwrap()
-          console.log('Update response:', res)
+          toast.success(`Content updated successfully`)
         } else {
           const jsonPayload = await CreateContentJsonPayload({
             ...value,
@@ -118,22 +118,6 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
       })
     }
   }, [contentData, form])
-
-  // const currentContentType = form.state.values.contentType
-
-  // NOTE: The cSpell warnings for the MIME types below can be ignored
-  // or added to your cspell dictionary. They are correct technical terms.
-  // const fileAcceptType = useMemo(() => {
-  //   switch (currentContentType) {
-  //     case 'Video':
-  //       return 'video/*'
-  //     case 'Text':
-  //     case 'Document':
-  //       return '.doc, .docx, .pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-  //     default:
-  //       return ''
-  //   }
-  // }, [currentContentType])
 
   if (isContentLoading) {
     return (
@@ -175,17 +159,6 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
                 />
 
                 <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
-
-                {/* <form.AppField
-                  name='file'
-                  children={(field) => (
-                    <field.FileField
-                      accept={fileAcceptType}
-                      previewUrlFromServer={form.state.values.filePreviewUrl}
-                      label={`Upload File`}
-                    />
-                  )}
-                /> */}
               </div>
             }
           />
@@ -195,7 +168,9 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
 
         <form.AppForm>
           <div className='flex w-full justify-end'>
-            <form.SubmitButton className='rounded-full px-10 py-6 text-xl'>{t('save_btn')} </form.SubmitButton>
+            <form.SubmitButton className='bg-amber-custom-400 rounded-full px-6 py-4'>
+              {t('save_btn')}
+            </form.SubmitButton>
           </div>
         </form.AppForm>
       </div>
