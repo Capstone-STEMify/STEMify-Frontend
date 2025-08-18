@@ -47,12 +47,12 @@ const data = {
     //   icon: IconDashboard
     // },
     {
-      title: 'Course',
+      title: 'side_bar.course',
       url: '/admin/course',
       icon: IconListDetails
     },
     {
-      title: 'Lesson',
+      title: 'side_bar.lesson',
       url: '/admin/lesson',
       icon: IconChartBar
     }
@@ -107,39 +107,39 @@ const data = {
   ],
   navSecondary: [
     {
-      title: 'Settings',
+      title: 'side_bar.setting',
       url: '#',
       icon: IconSettings
     },
     {
-      title: 'Get Help',
+      title: 'side_bar.help',
       url: '#',
       icon: IconHelp
     },
     {
-      title: 'Search',
+      title: 'side_bar.search',
       url: '#',
       icon: IconSearch
     }
   ],
   documents: [
     {
-      name: 'Topic',
+      name: 'side_bar.topic',
       url: '/admin/topic',
       icon: IconDatabase
     },
     {
-      name: 'Skill',
+      name: 'side_bar.skill',
       url: '/admin/skill',
       icon: IconReport
     },
     {
-      name: 'Age range',
+      name: 'side_bar.ageRange',
       url: '/admin/age-range',
       icon: IconReport
     },
     {
-      name: 'Standard',
+      name: 'side_bar.standard',
       url: '/admin/standard',
       icon: IconFileWord
     }

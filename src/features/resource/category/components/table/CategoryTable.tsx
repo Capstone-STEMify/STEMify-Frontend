@@ -7,6 +7,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { Input } from '@/components/shadcn/input'
+import { useTranslations } from 'next-intl'
 
 // Debounce hook to delay API calls
 function useDebounce(value: string, delay: number) {
@@ -26,6 +27,8 @@ export default function CategoryTable() {
   const { openModal } = useModal()
   const columns = useGetCategoryAction()
 
+  const t = useTranslations('Admin.placeholder')
+
   const [searchQuery, setSearchQuery] = useState('')
   // Debounce the search query to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
@@ -44,7 +47,7 @@ export default function CategoryTable() {
     <div>
       <div className='flex items-center justify-between py-4'>
         <Input
-          placeholder='Search by topic name...'
+          placeholder={t('topicSearch')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className='max-w-sm'

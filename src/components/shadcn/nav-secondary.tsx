@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "components/shadcn/sidebar"
+import { useTranslations } from "next-intl"
 
 export function NavSecondary({
   items,
@@ -21,6 +22,7 @@ export function NavSecondary({
     icon: Icon
   }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+  const t = useTranslations('Admin')
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
@@ -30,7 +32,7 @@ export function NavSecondary({
               <SidebarMenuButton asChild>
                 <a href={item.url}>
                   <item.icon />
-                  <span>{item.title}</span>
+                  <span>{t(item.title)}</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>

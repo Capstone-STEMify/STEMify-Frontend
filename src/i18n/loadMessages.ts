@@ -10,6 +10,7 @@ export async function loadMessages(locale: string) {
   const courseManagementMessages = (await import(`../../messages/${locale}/${locale}_courseManagement.json`)).default;
   const lessonManagementMessages = (await import(`../../messages/${locale}/${locale}_lessonManagement.json`)).default;
   const sectionManagementMessages = (await import(`../../messages/${locale}/${locale}_sectionManagement.json`)).default;
+  const adminMessages = (await import(`../../messages/${locale}/${locale}_admin.json`)).default;
 
   return {
     ...headerMessages,
@@ -22,6 +23,7 @@ export async function loadMessages(locale: string) {
     ...lessonDetailsMessages,
     ...courseManagementMessages,
     ...lessonManagementMessages,
-    ...sectionManagementMessages
+    ...sectionManagementMessages,
+    ...adminMessages,
   };
 }

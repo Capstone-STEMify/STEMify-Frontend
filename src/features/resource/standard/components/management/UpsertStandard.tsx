@@ -10,6 +10,7 @@ import {
 } from '@/features/resource/standard/api/standardApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
+import { useTranslations } from 'next-intl'
 
 // Schema validation cho form
 const standardSchema = z.object({
@@ -29,6 +30,8 @@ interface UpsertStandardProps {
 
 export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
   const isEditing = !!id
+
+  const t = useTranslations('Admin.standard')
 
   const { data: existingData, isLoading: isDataLoading } = useGetStandardByIdQuery(id as number, {
     skip: !isEditing
@@ -80,21 +83,21 @@ export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
       }}
       className='space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? 'Edit' : 'Create'} Standard</h2>
+      <h2 className='text-xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
       <SCard
-        title='Standard Name'
-        description='Enter the name of the standard.'
+        title={t('name')}
+        description={t('description')}
         content={
           <form.AppField
             name='standardName'
-            children={(field) => <field.TextAreaField placeholder='e.g., Common Core' />}
+            children={(field) => <field.TextAreaField placeholder={t('placeholder')} />}
           />
         }
       />
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
-            {isEditing ? 'Update' : 'Create'}
+            {isEditing ? `${t('updateButton')}` : `${t('createButton')}`}
           </form.SubmitButton>
         </form.AppForm>
       </div>
