@@ -217,7 +217,7 @@ export default function CourseDetailPage() {
         {/* Thumbnail */}
         <div className='relative aspect-video w-full overflow-hidden rounded-2xl shadow-md'>
           <Image
-            src={course.data.imageUrl || 'images/fallback.png'}
+            src={course.data.imageUrl || '/images/fallback.png'}
             alt={course.data.title}
             fill
             className='object-cover'
@@ -253,7 +253,7 @@ export default function CourseDetailPage() {
             {t('notEnrolled.button.update')}
           </Button>
         </div>
-        {course.data.status === CourseStatus.PENDING && (
+        {(course.data.status === CourseStatus.PENDING || course.data.status === CourseStatus.DRAFT) && (
           <div className='flex flex-wrap justify-center gap-3'>
             <Button
               className='cursor-pointer bg-red-600 font-semibold text-white shadow'
