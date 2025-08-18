@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode'
 import type { NextAuthOptions } from 'next-auth'
 import type { OAuthConfig } from 'next-auth/providers/oauth'
 import NextAuth, { type Profile } from 'next-auth'
+import { UserRole } from '@/types/userRole'
 
 interface OIDCProfile extends Profile {
   sub: string
@@ -63,6 +64,14 @@ export const authOptions: NextAuthOptions = {
   providers: [oidcProvider],
   secret: process.env.AUTH_SECRET,
   callbacks: {
+    async signIn({ user, account, profile, credentials, email }) {
+      console.log('SignIn Callback:', { user, account, profile, credentials, email })
+      if (user && (user as any).role === UserRole.ADMIN) {
+        return '/admin'
+      }
+      return true
+    },
+
     async jwt({ token, account, profile }) {
       if (account?.access_token) {
         token.accessToken = account.access_token
@@ -86,6 +95,7 @@ export const authOptions: NextAuthOptions = {
 
       return token
     },
+
     async session({ session, token }) {
       if (token) {
         session.accessToken = token.accessToken!
