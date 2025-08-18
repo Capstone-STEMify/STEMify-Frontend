@@ -14,13 +14,14 @@ export default withAuth(
     const isAdmin = role === UserRole.ADMIN
 
     const { pathname } = req.nextUrl
+    const locale = pathname.split('/')[1] || 'vi'
 
-    if (isAdmin && pathname === '/admin') {
-      return NextResponse.redirect(new URL('/admin/course', req.url))
+    if (isAdmin && !pathname.startsWith(`/${locale}/admin`)) {
+      return NextResponse.redirect(new URL(`/${locale}/admin/course`, req.url))
     }
 
-    if (!isAdmin && pathname.startsWith('/admin')) {
-      return NextResponse.redirect(new URL('/unauthorized', req.url))
+    if (!isAdmin && pathname.startsWith(`/${locale}/admin`)) {
+      return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url))
     }
 
     return res

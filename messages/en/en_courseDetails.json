@@ -58,7 +58,7 @@
           "dur_unit": "minutes",
           "age_unit": "ages",
           "nodata": "No Course Data",
-          "category": "Categories",
+          "topic": "Topics",
           "skill": "Skills",
           "standard": "Standards"
         }
