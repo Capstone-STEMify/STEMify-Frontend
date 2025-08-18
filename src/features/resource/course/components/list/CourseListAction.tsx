@@ -20,26 +20,17 @@ import { UserRole } from '@/types/userRole'
 
 export default function CourseListAction() {
   const t = useTranslations('CourseList')
+  const [statusActive, setStatusActive] = useState(false)
 
   const { status } = useSession()
   const role = useAppSelector((state) => state.auth.user?.role)
 
-    if (status === 'loading') {
-      return (
-        <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
-          <LoadingComponent size={18} textShow={false} />
-        </div>
-      )
-  }
-
   useEffect(() => {
-      if (status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.STAFF)) {
+      if (status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.TEACHER)) {
         setStatusActive(true)
       }else {
         setStatusActive(false)}
     }, [status, role])
-
-  const [statusActive, setStatusActive] = useState(false)
 
   // Redux hooks
   const dispatch = useAppDispatch()
@@ -50,6 +41,14 @@ export default function CourseListAction() {
   const [getSkill, { data: skills }] = useLazyGetAllSkillQuery()
   const [getAgeRange, { data: ageRanges }] = useLazyGetAllAgeRangeQuery()
   const [getStandard, { data: standards }] = useLazyGetAllStandardQuery()
+
+  if (status === 'loading') {
+      return (
+        <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+          <LoadingComponent size={18} textShow={false} />
+        </div>
+      )
+  }
 
   // Clear all filters and reset page size
   const clearAll = () => {
