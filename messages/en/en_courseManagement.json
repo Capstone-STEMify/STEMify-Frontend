@@ -20,6 +20,11 @@
       "note": "Enter the tasks students need to complete",
       "placeholder": "e.g., Complete the programming assignment"
     },
+    "prerequisites": {
+      "label": "Prerequisites",
+      "note": "Enter the prerequisites for this course",
+      "placeholder": "e.g., Basic knowledge of Python"
+    },
     "category": {
       "label": "Categories",
       "note": "Select the categories this course belongs to"
@@ -35,6 +40,15 @@
     "ageRange": {
       "label": "Age Range",
       "note": "Select the age range this course is suitable for"
+    },
+    "level": {
+      "label": "Level",
+      "note": "Select the level of this course",
+      "options": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      }
     },
     "image": {
       "label": "Cover Image",

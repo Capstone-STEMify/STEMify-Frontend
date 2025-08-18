@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
 import { Course, CourseLevel, CourseStatus } from '../types/course.type'
 import { SCard } from '@/components/shared/card/SCard'
-import { useGetCourseByIdQuery, useUpdateCourseMutation } from '../api/courseApi'
+import { useDeleteCourseMutation, useGetCourseByIdQuery, useUpdateCourseMutation } from '../api/courseApi'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { useParams, useRouter } from 'next/navigation'
@@ -53,6 +53,7 @@ export default function CourseDetailPage() {
   // Fetch course details
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const [updateCourseStatus] = useUpdateCourseMutation()
+  const [deleteCourse] = useDeleteCourseMutation()
 
   if (isLoading)
     return (
@@ -92,6 +93,19 @@ export default function CourseDetailPage() {
   }
   const handleUpdate = () => {
     router.push(`/admin/course/update/${courseId}`)
+  }
+
+  const handleDelete = () => {
+    if (!courseId) {
+      return toast.error('Course ID is required to delete a course.')
+    }
+    try {
+      const res = deleteCourse(courseId).unwrap()
+      toast.success(`Course deleted successfully.`)
+    } catch (error) {
+      toast.error('Failed to delete course')
+      console.error('Failed to delete course:', error)
+    }
   }
 
   return (
@@ -244,13 +258,16 @@ export default function CourseDetailPage() {
         />
 
         {/* Action Buttons */}
-        <div>
+        <div className='space-y-4'>
           <Button
             onClick={handleUpdate}
             className='text-sky-custom-600 w-full cursor-pointer bg-gray-200 font-semibold shadow'
             variant='outline'
           >
             {t('notEnrolled.button.update')}
+          </Button>
+          <Button onClick={handleDelete} variant='outline' className='w-full border-red-600 text-red-600'>
+            {t('notEnrolled.button.delete')}
           </Button>
         </div>
         {(course.data.status === CourseStatus.PENDING || course.data.status === CourseStatus.DRAFT) && (

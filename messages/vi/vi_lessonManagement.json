@@ -13,9 +13,14 @@
       "placeholder": "Ví dụ: Bài học này bao gồm các kiến thức cơ bản về lập trình bằng Python."
     },
     "learningOutcome": {
-      "label": "Kết Quả Học Tập",
+      "label": "Mục Tiêu Học Tập",
       "note": "Mô tả những gì học sinh sẽ học được sau khi hoàn thành bài học",
       "placeholder": "Ví dụ: Học sinh sẽ hiểu các khái niệm cơ bản về lập trình và có thể viết chương trình đơn giản."
+    },
+    "requirement": {
+      "label": "Yêu Cầu",
+      "note": "Mô tả các yêu cầu cần thiết để hoàn thành bài học",
+      "placeholder": "Ví dụ: Học sinh cần có kiến thức cơ bản về lập trình trước khi tham gia bài học này."
     },
     "topic": {
       "label": "Chủ Đề",

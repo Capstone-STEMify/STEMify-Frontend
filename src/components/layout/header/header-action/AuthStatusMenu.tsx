@@ -57,14 +57,6 @@ function MenuItem({
 export default function AuthStatusMenu() {
   const t = useTranslations('Header')
   const { data: session, status } = useSession()
-  const role = useAppSelector((state) => state.auth.user?.role)
-  const router = useRouter()
-
-  useEffect(() => {
-    if (status === 'authenticated' && role === UserRole.ADMIN) {
-      router.replace('/admin/course')
-    }
-  }, [status, role])
 
   if (status === 'loading') {
     return (

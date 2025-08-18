@@ -1,10 +1,8 @@
 'use client'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import CourseBasicInfoSection from '@/features/resource/course/components/upsert/CourseBasicInfoSection'
-import CourseAttributesSection from '@/features/resource/course/components/upsert/CourseAttributesSection'
 import { toast } from 'sonner'
 import { useParams, useRouter } from 'next/navigation'
-import { Course } from '../types/course.type'
+import { Course, CourseLevel } from '../types/course.type'
 import { useModal } from '@/providers/ModalProvider'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { useEffect, useRef } from 'react'
@@ -13,11 +11,10 @@ import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
 import { useGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
 import { useGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
 import { useAppForm } from '@/components/shared/form/items'
-import { CourseSidebarSection } from '@/features/resource/course/components/upsert/CourseSidebarSection'
 import {
   useCreateCourseMutation,
   useGetCourseByIdQuery,
-  useUpdateCourseMutation,
+  useUpdateCourseMutation
 } from '@/features/resource/course/api/courseApi'
 import {
   CourseFormData,
@@ -26,6 +23,8 @@ import {
 } from '@/features/resource/course/forms/courseForm.schema'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { fileToBase64 } from '@/utils/index'
+import { SCard } from '@/components/shared/card/SCard'
+import { useTranslations } from 'next-intl'
 
 const defaultCourseData: CourseFormData = {
   code: '',
@@ -35,15 +34,10 @@ const defaultCourseData: CourseFormData = {
   ageRangeId: '1',
   prerequisites: '',
   studentTasks: '',
-  level: '',
+  level: CourseLevel.BEGINNER,
   imageUrl: null as any
 }
 
-/**
- *
- * @param data The course form data to be submitted.
- * @returns The FormData object containing the course form data.
- */
 async function CreateCourseJsonPayload(data: CourseFormData, userId: string) {
   let imageBase64: string | null = null
 
@@ -59,16 +53,12 @@ async function CreateCourseJsonPayload(data: CourseFormData, userId: string) {
     ageRangeId: parseInt(data.ageRangeId),
     createdByUserId: userId,
     studentTasks: data.studentTasks,
+    prerequisites: data.prerequisites,
+    level: data.level,
     image: imageBase64
   }
 }
 
-/**
- *
- * @param oldData The original course form data.
- * @param newData The updated course form data.
- * @returns The FormData object containing the updated course form data.
- */
 async function PatchCourseJsonPayload(oldData: CourseFormData, newData: CourseFormData, userId: string): Promise<any> {
   const patchData: Record<string, any> = {
     createdByUserId: userId
@@ -80,6 +70,8 @@ async function PatchCourseJsonPayload(oldData: CourseFormData, newData: CourseFo
   if (oldData.ageRangeId !== newData.ageRangeId) patchData.ageRangeId = parseInt(newData.ageRangeId)
   if (oldData.studentTasks !== newData.studentTasks) patchData.studentTasks = newData.studentTasks
   if (oldData.code !== newData.code) patchData.code = newData.code
+  if (oldData.prerequisites !== newData.prerequisites) patchData.prerequisites = newData.prerequisites
+  if (oldData.level !== newData.level) patchData.level = newData.level
 
   if (newData.imageUrl && typeof newData.imageUrl !== 'string') {
     const base64 = await fileToBase64(newData.imageUrl)
@@ -107,7 +99,7 @@ function mapCourseToFormData(course: ApiSuccessResponse<Course>): CourseFormData
     title: course.data.title ?? '',
     slug: course.data.slug ?? '',
     description: course.data.description ?? '',
-    level: course.data.level ?? '',
+    level: course.data.level ?? CourseLevel.BEGINNER,
     studentTasks: course.data.studentTasks ?? '',
     prerequisites: course.data.prerequisites ?? '',
     ageRangeId: course.data.ageRangeId?.toString() ?? '',
@@ -123,11 +115,9 @@ export default function UpsertCourse() {
   const imageFieldRef = useRef<any>(null)
   const params = useParams()
   const courseId = params.courseId
+  const t = useTranslations('courseManagement')
 
   const { data: ageRanges } = useGetAllAgeRangeQuery()
-  const { data: skills } = useGetAllSkillQuery()
-  const { data: categories } = useGetAllCategoryQuery()
-  const { data: standards } = useGetAllStandardQuery()
   const { data: courseData, isLoading } = useGetCourseByIdQuery(courseId ? Number(courseId) : 0, {
     skip: !courseId
   })
@@ -138,9 +128,9 @@ export default function UpsertCourse() {
 
   const form = useAppForm({
     defaultValues: defaultCourseData,
-    // validators: {
-    //   onChange: (courseId ? updateCourseSchema : createCourseSchema) as any
-    // },
+    validators: {
+      onChange: (courseId ? updateCourseSchema : createCourseSchema) as any
+    },
     onSubmit: async ({ value }) => {
       try {
         value.slug = generateSlug(value.title)
@@ -173,41 +163,15 @@ export default function UpsertCourse() {
   const didResetOnce = useRef(false)
 
   useEffect(() => {
-    const skillItems = skills?.data?.items ?? []
-    const categoryItems = categories?.data?.items ?? []
-    const standardItems = standards?.data?.items ?? []
-
-    if (
-      !didResetOnce.current &&
-      courseData?.data &&
-      skillItems.length > 0 &&
-      categoryItems.length > 0 &&
-      standardItems.length > 0
-    ) {
+    if (!didResetOnce.current && courseData?.data) {
       const mapped = mapCourseToFormData(courseData)
-
       form.reset(mapped)
       initialCourseDataRef.current = mapped
       didResetOnce.current = true
     }
-  }, [courseData, skills, categories, standards])
+  }, [courseData])
 
-  const handleEditImage = () => {
-    const currentImage = form.state.values.imageUrl
-    if (!currentImage) return
-
-    const imageUrl = URL.createObjectURL(currentImage)
-
-    openModal('editImage', {
-      imageSrc: imageUrl,
-      onConfirm: (croppedFile: File) => {
-        imageFieldRef.current?.handleChange(croppedFile)
-        URL.revokeObjectURL(imageUrl)
-      }
-    })
-  }
-
-  if (!ageRanges || !skills || !categories || !standards || (isLoading && !courseData)) {
+  if (!courseId || !ageRanges || (isLoading && !courseData)) {
     return (
       <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>
         <LoadingComponent />
@@ -225,17 +189,145 @@ export default function UpsertCourse() {
     >
       <div className='grid grid-cols-3 gap-8'>
         <div className='space-y-6 lg:col-span-2'>
-          <CourseBasicInfoSection form={form} />
+          <div className='grid grid-cols-2 gap-5'>
+            <SCard
+              className='gap-3'
+              title={t('code.label')}
+              description={t('code.note')}
+              content={
+                <form.AppField
+                  name='code'
+                  children={(field: any) => (
+                    <field.TextAreaField placeholder={t('code.placeholder')} className='rounded-lg border-gray-300' />
+                  )}
+                />
+              }
+            />
+            <SCard
+              className='gap-3'
+              title={t('title.label')}
+              description={t('title.note')}
+              content={
+                <form.AppField
+                  name='title'
+                  children={(field: any) => (
+                    <field.TextAreaField placeholder={t('title.placeholder')} className='rounded-lg border-gray-300' />
+                  )}
+                />
+              }
+            />
+          </div>
+
+          <SCard
+            className='gap-3'
+            title={t('description.label')}
+            description={t('description.note')}
+            content={
+              <form.AppField
+                name='description'
+                children={(field: any) => (
+                  <field.TextAreaField
+                    placeholder={t('description.placeholder')}
+                    className='h-30 rounded-lg border-gray-300'
+                  />
+                )}
+              />
+            }
+          />
+
+          <SCard
+            className='gap-3'
+            title={t('prerequisites.label')}
+            description={t('prerequisites.note')}
+            content={
+              <form.AppField
+                name='prerequisites'
+                children={(field: any) => (
+                  <field.TextAreaField
+                    placeholder={t('prerequisites.placeholder')}
+                    className='h-30 rounded-lg border-gray-300'
+                  />
+                )}
+              />
+            }
+          />
+
+          <SCard
+            className='gap-3'
+            title={t('studentTasks.label')}
+            description={t('studentTasks.note')}
+            content={
+              <form.AppField
+                name='studentTasks'
+                children={(field: any) => (
+                  <field.TextAreaField
+                    placeholder={t('studentTasks.placeholder')}
+                    className='h-30 rounded-lg border-gray-300'
+                  />
+                )}
+              />
+            }
+          />
         </div>
 
         <div className='space-y-6'>
-          <CourseSidebarSection
-            form={form}
-            ageRanges={ageRanges}
-            imageFieldRef={imageFieldRef}
-            handleEditImage={handleEditImage}
-            isSubmitting={isSubmitting}
+          <SCard
+            className='gap-2'
+            title={t('ageRange.label')}
+            description={t('ageRange.note')}
+            content={
+              <form.AppField
+                name='ageRangeId'
+                children={(field) => (
+                  <field.RadioField
+                    options={ageRanges?.data.items
+                      .slice()
+                      .sort((a, b) => a.id - b.id)
+                      .map((a) => ({
+                        value: a.id.toString(),
+                        label: a.ageRangeLabel
+                      }))}
+                    className='grid grid-cols-4 gap-y-4'
+                  />
+                )}
+              />
+            }
           />
+
+          <SCard
+            className='gap-2'
+            title={t('level.label')}
+            description={t('level.note')}
+            content={
+              <form.AppField
+                name='level'
+                children={(field) => (
+                  <field.RadioField
+                    options={[
+                      { value: CourseLevel.BEGINNER, label: t('level.options.beginner') },
+                      { value: CourseLevel.INTERMEDIATE, label: t('level.options.intermediate') },
+                      { value: CourseLevel.ADVANCED, label: t('level.options.advanced') }
+                    ]}
+                    className='flex gap-y-4'
+                  />
+                )}
+              />
+            }
+          />
+
+          <form.AppField
+            name='imageUrl'
+            children={(field) => {
+              imageFieldRef.current = field
+              return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
+            }}
+          />
+
+          <form.AppForm>
+            <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 w-full rounded-full'>
+              {t('btn')}
+            </form.SubmitButton>
+          </form.AppForm>
         </div>
       </div>
     </form>

@@ -1,67 +1,68 @@
 {
-    "CourseDetails": {
-        "notEnrolled": {
-            "ageRange": "Độ Tuổi",
-            "category": "Danh Mục",
-            "skill": "Kỹ Năng",
-            "standard": "Tiêu Chuẩn",
-            "button": {
-                "enroll": "Đăng Ký Ngay",
-                "wishlist": "Danh Sách Yêu Thích",
-                "create": "Tạo Bài Học",
-                "update": "Cập nhật Khóa học",
-                "review": "Gửi để xem xét"
-            },
-            "stats": {
-                "section": "Chuyên mục khóa học",
-                "sec_description": "Chương trình học toàn diện",
-                "duration": "Thời Lượng",
-                "dur_description": "Học theo tốc độ của riêng bạn",
-                "downloads": "Tài Liệu",
-                "down_description": "Tham gia cộng đồng"
-            },
-            "lesson": {
-                "title": "Nội Dung Bài Học",
-                "description": "Các hoạt động hấp dẫn được thiết kế để truyền cảm hứng học tập và phát triển",
-                "button": {
-                    "view": "Xem Chi Tiết",
-                    "create": "Tạo Bài Học Mới",
-                    "update": "Cập nhật Bài Học",
-                    "delete": "Xóa Bài Học",
-                    "deleteConfirm": "Bạn có chắc chắn muốn xóa bài học này?"
-                }
-            },
-            "notFound": {
-                "title": "Không Tìm Thấy Bài Học",
-                "description": "Hiện tại không có bài học nào cho khóa học này."
-            }
-        },
-        "enrolled": {
-            "action": {
-                "reject": "Từ Chối",
-                "approve": "Phê Duyệt",
-                "add": "Thêm vào khóa học",
-                "favor": "Thêm vào yêu thích",
-                "share": "Chia sẻ",
-                "view": "Xem"
-            },
-            "content": {
-                "notFound": {
-                    "title": "Không Tìm Thấy Bài Học",
-                    "description": "Hãy thử thay đổi thuật ngữ tìm kiếm hoặc bộ lọc để tìm các bài học liên quan."
-                },
-                "lesson": "Bài Học",
-                "course": {
-                    "title": "Khóa Học",
-                    "about": "Về khóa học này",
-                    "dur_unit": "phút",
-                    "age_unit": "tuổi",
-                    "nodata": "Không có dữ liệu khóa học",
-                    "category": "Danh Mục",
-                    "skill": "Kỹ Năng",
-                    "standard": "Tiêu Chuẩn"
-                }
-            }
+  "CourseDetails": {
+    "notEnrolled": {
+      "ageRange": "Độ Tuổi",
+      "category": "Danh Mục",
+      "skill": "Kỹ Năng",
+      "standard": "Tiêu Chuẩn",
+      "button": {
+        "enroll": "Đăng Ký Ngay",
+        "wishlist": "Danh Sách Yêu Thích",
+        "create": "Tạo Bài Học",
+        "update": "Cập nhật Khóa học",
+        "review": "Gửi để xem xét",
+        "delete": "Xóa Khóa Học"
+      },
+      "stats": {
+        "section": "Chuyên mục khóa học",
+        "sec_description": "Chương trình học toàn diện",
+        "duration": "Thời Lượng",
+        "dur_description": "Học theo tốc độ của riêng bạn",
+        "downloads": "Tài Liệu",
+        "down_description": "Tham gia cộng đồng"
+      },
+      "lesson": {
+        "title": "Nội Dung Bài Học",
+        "description": "Các hoạt động hấp dẫn được thiết kế để truyền cảm hứng học tập và phát triển",
+        "button": {
+          "view": "Xem Chi Tiết",
+          "create": "Tạo Bài Học Mới",
+          "update": "Cập nhật Bài Học",
+          "delete": "Xóa Bài Học",
+          "deleteConfirm": "Bạn có chắc chắn muốn xóa bài học này?"
         }
+      },
+      "notFound": {
+        "title": "Không Tìm Thấy Bài Học",
+        "description": "Hiện tại không có bài học nào cho khóa học này."
+      }
+    },
+    "enrolled": {
+      "action": {
+        "reject": "Từ Chối",
+        "approve": "Phê Duyệt",
+        "add": "Thêm vào khóa học",
+        "favor": "Thêm vào yêu thích",
+        "share": "Chia sẻ",
+        "view": "Xem"
+      },
+      "content": {
+        "notFound": {
+          "title": "Không Tìm Thấy Bài Học",
+          "description": "Hãy thử thay đổi thuật ngữ tìm kiếm hoặc bộ lọc để tìm các bài học liên quan."
+        },
+        "lesson": "Bài Học",
+        "course": {
+          "title": "Khóa Học",
+          "about": "Về khóa học này",
+          "dur_unit": "phút",
+          "age_unit": "tuổi",
+          "nodata": "Không có dữ liệu khóa học",
+          "category": "Danh Mục",
+          "skill": "Kỹ Năng",
+          "standard": "Tiêu Chuẩn"
+        }
+      }
     }
+  }
 }

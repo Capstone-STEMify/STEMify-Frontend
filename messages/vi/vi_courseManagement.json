@@ -20,6 +20,11 @@
       "note": "Nhập các nhiệm vụ mà học sinh cần hoàn thành",
       "placeholder": "Ví dụ: Hoàn thành bài tập lập trình"
     },
+    "prerequisites": {
+      "label": "Điều Kiện Tiên Quyết",
+      "note": "Nhập các điều kiện tiên quyết cho khóa học này",
+      "placeholder": "Ví dụ: Kiến thức cơ bản về Python"
+    },
     "category": {
       "label": "Danh Mục",
       "note": "Chọn các danh mục mà khóa học này thuộc về"
@@ -35,6 +40,15 @@
     "ageRange": {
       "label": "Độ Tuổi",
       "note": "Chọn độ tuổi phù hợp cho khóa học này"
+    },
+    "level": {
+      "label": "Cấp Độ",
+      "note": "Chọn cấp độ của khóa học",
+      "options": {
+        "beginner": "Mới bắt đầu",
+        "intermediate": "Trung cấp",
+        "advanced": "Nâng cao"
+      }
     },
     "image": {
       "label": "Ảnh Bìa",
