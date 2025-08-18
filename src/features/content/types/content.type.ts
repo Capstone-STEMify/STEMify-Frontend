@@ -3,7 +3,7 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Content = {
   id: number
-  contentType: ContentType | string
+  contentType: ContentType
   contentBody: string
   contentName: string
   fileName: string

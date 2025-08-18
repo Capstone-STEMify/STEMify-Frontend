@@ -11,7 +11,7 @@ export type Course = {
   studentTasks: string
   prerequisites?: string
   duration: number
-  status: CourseStatus | string
+  status: CourseStatus
   level: CourseLevel
   createdByUserId: string
   reviewedByUserId?: string
