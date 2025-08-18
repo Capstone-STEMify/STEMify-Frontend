@@ -3,7 +3,7 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Content = {
   id: number
-  contentType: ContentType
+  contentType: ContentType | string
   contentBody: string
   contentName: string
   fileName: string
@@ -12,12 +12,7 @@ export type Content = {
   status: string
   sectionId: number
 }
-export enum ContetnStatus {
-  DRAFT = 'Draft',
-  PUBLISHED = 'Published',
-  ARCHIVED = 'Archived',
-  DELETED = 'Deleted'
-}
+
 export enum ContentType {
   TEXT = 'TEXT',
   VIDEO = 'VIDEO',

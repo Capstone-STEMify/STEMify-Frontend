@@ -11,7 +11,7 @@ export type Lesson = {
   requirement?: string
   duration: number
   orderIndex: number
-  status: LessonStatus
+  status: LessonStatus | string
   createdByUserId: string
   createdByUserName: string
   courseId: number
