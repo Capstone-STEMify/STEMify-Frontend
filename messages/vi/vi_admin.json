@@ -14,7 +14,52 @@
         },
         "course_management": {
             "title": "Quản lý tài nguyên",
-            "button": "Thêm Mới"
+            "button": "Thêm mới"
+        },
+        "placeholder": {
+            "topicSearch": "Tìm kiếm theo tên chủ đề...",
+            "skillSearch": "Tìm kiếm theo tên kỹ năng...",
+            "ageRangeSearch": "Tìm kiếm theo độ tuổi...",
+            "standardSearch": "Tìm kiếm theo tên tiêu chuẩn..."
+        },
+        "topic": {
+            "createTitle": "Tạo chủ đề",
+            "editTitle": "Chỉnh sửa chủ đề",
+            "name": "Tên chủ đề",
+            "description": "Nhập tên của chủ đề.",
+            "placeholder": "Ví dụ: Quy hoạch đô thị",
+            "createButton": "Tạo",
+            "updateButton": "Cập nhật"
+        },
+        "skill": {
+            "createTitle": "Tạo kỹ năng",
+            "editTitle": "Chỉnh sửa kỹ năng",
+            "name": "Tên kỹ năng",
+            "description": "Nhập tên của kỹ năng.",
+            "placeholder": "Ví dụ: Tư duy phản biện",
+            "createButton": "Tạo",
+            "updateButton": "Cập nhật"
+        },
+        "ageRange": {
+            "createTitle": "Tạo độ tuổi",
+            "editTitle": "Chỉnh sửa độ tuổi",
+            "mini_name": "Tuổi tối thiểu",
+            "max_name": "Tuổi tối đa",
+            "description": "Nhãn này sẽ được lưu vào cơ sở dữ liệu.",
+            "min_placeholder": "Chọn tuổi tối thiểu",
+            "max_placeholder": "Chọn tuổi tối đa",
+            "label": "Nhãn xem trước:",
+            "createButton": "Tạo",
+            "updateButton": "Cập nhật"
+        },
+        "standard": {
+            "createTitle": "Tạo tiêu chuẩn",
+            "editTitle": "Chỉnh sửa tiêu chuẩn",
+            "name": "Tên tiêu chuẩn",
+            "description": "Nhập tên của tiêu chuẩn.",
+            "placeholder": "Ví dụ: Common Core",
+            "createButton": "Tạo",
+            "updateButton": "Cập nhật"
         }
     }
 }

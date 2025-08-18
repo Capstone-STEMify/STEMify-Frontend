@@ -11,6 +11,7 @@ import {
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
 import { Button } from '@/components/shadcn/button'
+import { useTranslations } from 'next-intl'
 
 type NiceSelectProps = {
   label: string
@@ -149,6 +150,9 @@ interface UpsertAgeRangeProps {
 
 export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangeProps) {
   const isEditing = !!id
+
+  const t = useTranslations('Admin.ageRange')
+
   const { data: existingData, isLoading: isDataLoading } = useGetAgeRangeByIdQuery(id as number, {
     skip: !isEditing
   })
@@ -209,11 +213,11 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
 
   return (
     <form onSubmit={handleSubmit} className='space-y-6'>
-      <h2 className='text-2xl font-bold'>{isEditing ? 'Edit' : 'Create'} Age Range</h2>
+      <h2 className='text-2xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
 
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
         <NiceSelect
-          label='Minimum Age'
+          label={t('mini_name')}
           value={minAge}
           onChange={(v) => {
             setMinAge(v)
@@ -222,15 +226,15 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
             }
           }}
           options={minOptions}
-          placeholder='Select min age'
+          placeholder={t('mini_placeholder')}
         />
 
         <NiceSelect
-          label='Maximum Age'
+          label={t('max_name')}
           value={maxAge}
           onChange={setMaxAge}
           options={maxOptions}
-          placeholder='Select max age'
+          placeholder={t('max_placeholder')}
         />
       </div>
 
@@ -240,9 +244,9 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
           content={
             <>
               <p className='text-lg font-semibold'>
-                Preview Label: <span className='font-mono text-blue-600'>{`${minAge}-${maxAge}`}</span>
+                {t('label')} <span className='font-mono text-blue-600'>{`${minAge}-${maxAge}`}</span>
               </p>
-              <p className='text-sm text-gray-500'>This label will be saved to the database.</p>
+              <p className='text-sm text-gray-500'>{t('description')}</p>
             </>
           }
         />
@@ -250,7 +254,7 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
 
       <div className='flex justify-end gap-2 pt-4'>
         <Button type='submit' className='bg-amber-custom-400' disabled={!isValid || isCreating || isUpdating}>
-          {isEditing ? 'Update' : 'Create'}
+          {isEditing ? `${t('updateButton')}` : `${t('createButton')}`}
         </Button>
       </div>
     </form>

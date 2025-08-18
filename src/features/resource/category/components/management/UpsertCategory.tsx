@@ -11,6 +11,7 @@ import {
 } from '@/features/resource/category/api/categoryApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { code } from '@uiw/react-md-editor'
+import { useTranslations } from 'next-intl'
 
 const categorySchema = z.object({
   name: z.string().min(1, 'Category name is required')
@@ -29,6 +30,8 @@ interface UpsertCategoryProps {
 
 export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
   const isEditing = !!id
+
+  const t = useTranslations('Admin.topic')
 
   const { data: categoryData, isLoading: isCategoryLoading } = useGetCategoryByIdQuery(id as number, {
     skip: !isEditing
@@ -80,18 +83,18 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
       }}
       className='space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? 'Edit' : 'Create'} Topic</h2>
+      <h2 className='text-xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
       <SCard
-        title='Topic Name'
-        description='Enter the name of the topic.'
+        title={t('name')}
+        description={t('description')}
         content={
-          <form.AppField name='name' children={(field) => <field.TextAreaField placeholder='e.g., Urban Planning' />} />
+          <form.AppField name='name' children={(field) => <field.TextAreaField placeholder={t('placeholder')} />} />
         }
       />
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
-            {isEditing ? 'Update' : 'Create'}
+            {isEditing ? `${t('updateButton')}` : `${t('createButton')}`}
           </form.SubmitButton>
         </form.AppForm>
       </div>
