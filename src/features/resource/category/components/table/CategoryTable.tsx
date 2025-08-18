@@ -8,6 +8,8 @@ import { Plus } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { Input } from '@/components/shadcn/input'
 import { useTranslations } from 'next-intl'
+import { CategoryQueryParams } from '../../types/category.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 // Debounce hook to delay API calls
 function useDebounce(value: string, delay: number) {
@@ -33,11 +35,23 @@ export default function CategoryTable() {
   // Debounce the search query to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
+  const categoryParams = useAppSelector((state) => state.category)
+  
+  const queryParams: CategoryQueryParams = {
+    pageNumber: categoryParams.pageNumber,
+    pageSize: categoryParams.pageSize,
+    search: categoryParams.search,
+    status: categoryParams.status
+  }
+
   const { data } = useSearchCategoryQuery({
     search: debouncedSearchQuery
   })
 
+  console.log('Category data:', data?.data)
+
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
+  console.log('Category rows:', rows)
 
   const handleCreate = () => {
     openModal('upsertCategory')
@@ -56,7 +70,7 @@ export default function CategoryTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable data={rows} columns={columns} enableRowSelection />
+      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams}/>
     </div>
   )
 }

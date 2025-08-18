@@ -8,6 +8,8 @@ import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import React, { useState, useEffect } from 'react'
+import { AgeRangeQueryParams } from '../../types/ageRange.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value)
@@ -30,6 +32,15 @@ export default function AgeRangeTable() {
 
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
+
+    const ageRangeParams = useAppSelector((state) => state.ageRange)
+  
+  const queryParams: AgeRangeQueryParams = {
+    pageNumber: ageRangeParams.pageNumber,
+    pageSize: ageRangeParams.pageSize,
+    search: ageRangeParams.search,
+    status: ageRangeParams.status
+  }
 
   const { data, isLoading } = useSearchAgeRangeQuery({
     search: debouncedSearchQuery
@@ -54,7 +65,7 @@ export default function AgeRangeTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable data={rows} columns={columns} enableRowSelection />
+      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams}/>
     </div>
   )
 }
