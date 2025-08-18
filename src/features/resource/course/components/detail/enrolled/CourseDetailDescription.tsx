@@ -29,7 +29,7 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
   return (
     <div className='py-8'>
       <ScrollArea className='h-[480px]'>
-        <section className='px-6'>
+        <section className='w-sm px-6'>
           <div className='relative mx-auto mb-8 aspect-square w-[160px] overflow-hidden rounded-2xl'>
             <Image
               src={
@@ -73,46 +73,48 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
               <p className='leading-relaxed text-gray-700'>{courseData.data.description}</p>
             </div>
             {/* Tags Section */}
-            <div className='space-y-2'>
+            <div className='max-w-[260px] space-y-2 sm:max-w-[260px] md:max-w-[350px]'>
               {/* Topics */}
               {courseData.data.topicNames.length > 0 && (
-                <div className='flex items-center gap-x-2'>
-                  <h3 className='text-xs font-semibold text-gray-900'>{t('enrolled.content.course.topic')}</h3>
-                  <div className='flex gap-2'>
-                    {courseData.data.topicNames.map((topic) => (
-                      <Badge
-                        key={topic}
-                        className='border-blue-200 bg-blue-50 text-blue-700 transition-colors select-none hover:bg-blue-100'
-                      >
-                        {topic}
-                      </Badge>
-                    ))}
-                  </div>
+                <div className='flex flex-wrap items-center gap-x-2 gap-y-2'>
+                  <h3 className='text-xs font-semibold whitespace-nowrap text-gray-900'>
+                    {t('enrolled.content.course.topic')}:
+                  </h3>
+                  {courseData.data.topicNames.map((topic) => (
+                    <Badge
+                      key={topic}
+                      className='border-blue-200 bg-blue-50 text-blue-700 transition-colors select-none hover:bg-blue-100'
+                    >
+                      {topic}
+                    </Badge>
+                  ))}
                 </div>
               )}
 
               {/* Skills */}
               {courseData.data.skillNames.length > 0 && (
-                <div className='flex items-center gap-x-2'>
-                  <h3 className='text-xs font-semibold text-gray-900'>{t('enrolled.content.course.skill')}</h3>
-                  <div className='flex gap-2'>
-                    {courseData.data.skillNames.map((skill) => (
-                      <Badge
-                        key={skill}
-                        className='border-green-200 bg-green-50 text-green-700 transition-colors select-none hover:bg-green-100'
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
+                <div className='flex flex-wrap items-center gap-x-2 gap-y-2'>
+                  <h3 className='text-xs font-semibold whitespace-nowrap text-gray-900'>
+                    {t('enrolled.content.course.skill')}
+                  </h3>
+                  {courseData.data.skillNames.map((skill) => (
+                    <Badge
+                      key={skill}
+                      className='border-green-200 bg-green-50 text-green-700 transition-colors select-none hover:bg-green-100'
+                    >
+                      {skill}
+                    </Badge>
+                  ))}
                 </div>
               )}
 
               {/* Standards */}
               {courseData.data.standardNames.length > 0 && (
                 <div className='mb-2'>
-                  <h3 className='mb-2 text-xs font-semibold text-gray-900'>{t('enrolled.content.course.standard')}</h3>
-                  <div className='flex flex-wrap gap-2'>
+                  <div className='flex flex-wrap items-center gap-x-2 gap-y-2'>
+                    <h3 className='text-xs font-semibold whitespace-nowrap text-gray-900'>
+                      {t('enrolled.content.course.standard')}
+                    </h3>
                     {courseData.data.standardNames.map((standard) => (
                       <Badge
                         key={standard}
