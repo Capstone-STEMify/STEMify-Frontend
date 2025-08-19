@@ -51,8 +51,7 @@ export default async function RootLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
             <main>
-              {/* <SignalRProvider></SignalRProvider> */}
-              {children}
+              <SignalRProvider>{children}</SignalRProvider>
             </main>
           </Providers>
         </NextIntlClientProvider>

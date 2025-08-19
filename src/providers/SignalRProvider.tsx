@@ -25,7 +25,7 @@ export default function SignalRProvider({ children }: Props) {
   useEffect(() => {
     if (!connection.current && accessToken) {
       connection.current = new HubConnectionBuilder()
-        .withUrl('http://localhost:7004/api/notifications', {
+        .withUrl(`${process.env.NEXT_PUBLIC_API_URL}/api/notifications`, {
           accessTokenFactory: () => accessToken || ''
         })
         // .configureLogging('none')
