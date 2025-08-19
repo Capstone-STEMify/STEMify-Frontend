@@ -88,3 +88,4 @@ export const Connector3D = forwardRef<Group, Props>(({ connector, fade }, ref) =
     </group>
   )
 })
+Connector3D.displayName = 'Connector3D'
