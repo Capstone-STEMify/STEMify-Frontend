@@ -4,10 +4,12 @@ import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useSearchSkillQuery } from '@/features/resource/skill/api/skillApi'
 import { useGetSkillAction } from '@/features/resource/skill/components/table/SkillAction'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import React, { useState, useEffect } from 'react'
+import { SkillQueryParams } from '../../types/skill.type'
 
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value)
@@ -31,6 +33,15 @@ export default function SkillTable() {
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
+  const skillParams = useAppSelector((state) => state.skill)
+
+  const queryParams: SkillQueryParams = {
+    pageNumber: skillParams.pageNumber,
+    pageSize: skillParams.pageSize,
+    search: skillParams.search,
+    status: skillParams.status
+  }
+
   const { data, isLoading } = useSearchSkillQuery({
     search: debouncedSearchQuery
   })
@@ -43,7 +54,7 @@ export default function SkillTable() {
 
   return (
     <div>
-      <div className='flex justify-between items-center py-4'>
+      <div className='flex items-center justify-between py-4'>
         <Input
           placeholder={t('skillSearch')}
           value={searchQuery}
@@ -54,7 +65,7 @@ export default function SkillTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable data={rows} columns={columns} enableRowSelection />
+      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams} />
     </div>
   )
 }
