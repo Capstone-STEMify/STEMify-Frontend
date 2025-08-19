@@ -26,7 +26,7 @@ export default function CourseListAction() {
   const role = useAppSelector((state) => state.auth.user?.role)
 
   useEffect(() => {
-    if (status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.TEACHER)) {
+    if (status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.STAFF)) {
       setStatusActive(true)
     } else {
       setStatusActive(false)
