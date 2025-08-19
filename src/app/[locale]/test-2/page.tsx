@@ -1,48 +1,140 @@
 'use client'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Grid } from '@react-three/drei'
-import { ConnectorModel } from 'app/[locale]/test-2/Connector'
 import { Straw } from 'app/[locale]/test-2/Straw'
-import JointHelper from 'app/[locale]/test-2/JointHelper'
-import ActionRunner from 'app/[locale]/test-2/ActionRunner'
-import ActivityPanel from 'app/[locale]/test-2/ActivityPanel'
+import sceneData from '../test-2/straw-test.json'
+import { createRef, useEffect, useMemo, useRef, useState } from 'react'
+import { Group } from 'three'
 
-import sceneData from '../test-2/test.json'
-import { createRef, useRef } from 'react'
+// ✨ import react-spring
+import { a, useTransition } from '@react-spring/three'
+import { Connector3D } from './Connector'
 
 export default function App() {
-  const { straws, connectors, joints, actions, scene, activities } = sceneData
-  const strawRefs = useRef<{ [key: string]: React.RefObject<any> }>({})
+  const { straws, connectors, scene } = sceneData
+  const strawRefs = useRef<Record<string, React.Ref<Group>>>({})
+  const connectorRefs = useRef<Record<string, React.Ref<Group>>>({})
+
+  const getStrawRef = (key: string): React.Ref<Group> => (strawRefs.current[key] ??= createRef<Group>())
+  const getConnectorRef = (key: string): React.Ref<Group> => (connectorRefs.current[key] ??= createRef<Group>())
+
+  const [step, setStep] = useState(0)
+  const maxStep = straws.length + 1
+  const clampedStep = Math.min(Math.max(step, 0), maxStep)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') setStep((s) => Math.min(s + 1, maxStep))
+      if (e.key === 'ArrowLeft') setStep((s) => Math.max(s - 1, 0))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [maxStep])
+
+  const visibleStraws = useMemo(() => straws.slice(0, Math.max(clampedStep - 1, 0)), [straws, clampedStep])
+  const visibleConnectors = useMemo(() => {
+    return clampedStep > 0 ? connectors : []
+  }, [clampedStep, connectors])
+
+  const transitions = useTransition(visibleStraws, {
+    from: { s: 0.9, y: 0.2, o: 0 },
+    enter: { s: 1.0, y: 0.0, o: 1 },
+    leave: { s: 0.9, y: -0.2, o: 0 },
+    trail: 100,
+    config: (item, state, phase) => (phase === 'leave' ? { duration: 130 } : { tension: 170, friction: 20 })
+  })
+
+  const connectorTransitions = useTransition(visibleConnectors, {
+    from: { s: 0.8, y: 0.4, o: 0 },
+    enter: { s: 1, y: 0, o: 1 },
+    leave: { s: 0.8, y: -0.2, o: 0 },
+    trail: 100,
+    config: { tension: 160, friction: 18 }
+  })
+
+  {
+    transitions((style, s, _, i) => {
+      const refKey = `${s.id}-${i}`
+      return (
+        <a.group key={refKey} scale={style.s} position-y={style.y}>
+          <Straw straw={s} ref={getStrawRef(refKey)} /* fade={style.o} */ />
+        </a.group>
+      )
+    })
+  }
+
+  {
+    connectorTransitions((style, c, _, i) => {
+      const refKey = `${c.id}-${i}`
+      return (
+        <a.group key={refKey} scale={style.s} position-y={style.y}>
+          <Connector3D connector={c} ref={getConnectorRef(refKey)} />
+        </a.group>
+      )
+    })
+  }
 
   return (
     <div className='relative h-screen w-full'>
-      <Canvas camera={{ position: [0, 5, 20], fov: scene.environment.camera.fov }}>
+      {/* Controls */}
+      <div className='absolute top-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-white/80 px-3 py-2 shadow'>
+        <button
+          onClick={() => setStep((s) => Math.max(s - 1, 0))}
+          disabled={clampedStep === 0}
+          className='rounded-lg border px-3 py-1 disabled:opacity-50'
+          title='Previous (←)'
+        >
+          Previous
+        </button>
+        <div className='px-2 text-sm tabular-nums'>
+          {clampedStep} / {maxStep}
+        </div>
+        <button
+          onClick={() => setStep((s) => Math.min(s + 1, maxStep))}
+          disabled={clampedStep === maxStep}
+          className='rounded-lg border px-3 py-1 disabled:opacity-50'
+          title='Next (→)'
+        >
+          Next
+        </button>
+      </div>
+
+      <Canvas camera={{ position: [20, 10, 30], fov: scene.environment.camera.fov }}>
         <ambientLight color={scene.environment.lighting.ambient} />
         <directionalLight
           color={scene.environment.lighting.directional.color}
           intensity={scene.environment.lighting.directional.intensity}
-          position={
-            Object.values(scene.environment.lighting.directional.position).slice(0, 3) as [number, number, number]
-          }
+          position={[
+            scene.environment.lighting.directional.position.x,
+            scene.environment.lighting.directional.position.y,
+            scene.environment.lighting.directional.position.z
+          ]}
         />
         <OrbitControls />
-        <Grid args={[scene.workspace.grid.size, scene.workspace.grid.size, scene.workspace.grid.divisions]} />
+        {scene.workspace.grid.visible && (
+          <Grid args={[scene.workspace.grid.size, scene.workspace.grid.size, scene.workspace.grid.divisions]} />
+        )}
 
-        {straws.map((s) => {
-          strawRefs.current[s.id] = strawRefs.current[s.id] || createRef()
-          return <Straw key={s.id} {...s} ref={strawRefs.current[s.id]} />
+        {/* ✅ RENDER CONNECTORS TRƯỚC */}
+        {connectorTransitions((style, c, _, i) => {
+          const refKey = `${c.id}-${i}`
+          return (
+            <a.group key={refKey} scale={style.s} position-y={style.y}>
+              <Connector3D connector={c} ref={getConnectorRef(refKey)} />
+            </a.group>
+          )
         })}
-        {connectors.map((c) => (
-          <ConnectorModel key={c.id} connector={c} />
-        ))}
-        {joints.map((j) => (
-          <JointHelper key={j.id} joint={j} straws={straws} connectors={connectors} />
-        ))}
 
-        <ActionRunner actions={actions} refs={strawRefs.current} />
+        {/* ✅ RENDER STRAWS SAU */}
+        {transitions((style, s, _, i) => {
+          const refKey = `${s.id}-${i}`
+          return (
+            <a.group key={refKey} scale={style.s} position-y={style.y}>
+              <Straw straw={s} ref={getStrawRef(refKey)} fade={style.o} />
+            </a.group>
+          )
+        })}
       </Canvas>
-
-      <ActivityPanel activities={activities} />
     </div>
   )
 }
