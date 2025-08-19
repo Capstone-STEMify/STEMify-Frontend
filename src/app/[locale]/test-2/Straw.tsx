@@ -52,10 +52,10 @@ export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade 
     <group ref={ref} position={[pos.x, pos.y, pos.z]} rotation={[rot.x, rot.y, rot.z]} scale={[1, 1, 1]}>
       <mesh position={[0, 0, 0]}>
         <cylinderGeometry args={[geometry.diameter / 2, geometry.diameter / 2, len, 64]} />
-        <a.meshPhysicalMaterial
+        <meshPhysicalMaterial
           color={material.color}
           transparent={material.opacity < 1}
-          opacity={fade ? fade.to((v) => v * material.opacity) : material.opacity}
+          opacity={material.opacity}
           roughness={material.roughness}
           metalness={material.metalness}
           emissive={material.color}

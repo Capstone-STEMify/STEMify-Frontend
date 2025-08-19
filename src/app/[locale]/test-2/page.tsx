@@ -8,15 +8,18 @@ import { Group } from 'three'
 
 // ✨ import react-spring
 import { a, useTransition } from '@react-spring/three'
+import { Connector3D } from './Connector'
 
 export default function App() {
-  const { straws, scene } = sceneData
+  const { straws, connectors, scene } = sceneData
   const strawRefs = useRef<Record<string, React.Ref<Group>>>({})
+  const connectorRefs = useRef<Record<string, React.Ref<Group>>>({})
 
   const getStrawRef = (key: string): React.Ref<Group> => (strawRefs.current[key] ??= createRef<Group>())
+  const getConnectorRef = (key: string): React.Ref<Group> => (connectorRefs.current[key] ??= createRef<Group>())
 
   const [step, setStep] = useState(0)
-  const maxStep = straws.length
+  const maxStep = straws.length + 1
   const clampedStep = Math.min(Math.max(step, 0), maxStep)
 
   useEffect(() => {
@@ -28,7 +31,10 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [maxStep])
 
-  const visibleStraws = useMemo(() => straws.slice(0, clampedStep), [straws, clampedStep])
+  const visibleStraws = useMemo(() => straws.slice(0, Math.max(clampedStep - 1, 0)), [straws, clampedStep])
+  const visibleConnectors = useMemo(() => {
+    return clampedStep > 0 ? connectors : []
+  }, [clampedStep, connectors])
 
   const transitions = useTransition(visibleStraws, {
     from: { s: 0.9, y: 0.2, o: 0 },
@@ -38,12 +44,31 @@ export default function App() {
     config: (item, state, phase) => (phase === 'leave' ? { duration: 130 } : { tension: 170, friction: 20 })
   })
 
+  const connectorTransitions = useTransition(visibleConnectors, {
+    from: { s: 0.8, y: 0.4, o: 0 },
+    enter: { s: 1, y: 0, o: 1 },
+    leave: { s: 0.8, y: -0.2, o: 0 },
+    trail: 100,
+    config: { tension: 160, friction: 18 }
+  })
+
   {
     transitions((style, s, _, i) => {
       const refKey = `${s.id}-${i}`
       return (
         <a.group key={refKey} scale={style.s} position-y={style.y}>
           <Straw straw={s} ref={getStrawRef(refKey)} /* fade={style.o} */ />
+        </a.group>
+      )
+    })
+  }
+
+  {
+    connectorTransitions((style, c, _, i) => {
+      const refKey = `${c.id}-${i}`
+      return (
+        <a.group key={refKey} scale={style.s} position-y={style.y}>
+          <Connector3D connector={c} ref={getConnectorRef(refKey)} />
         </a.group>
       )
     })
@@ -74,7 +99,7 @@ export default function App() {
         </button>
       </div>
 
-      <Canvas camera={{ position: [0, 10, 30], fov: scene.environment.camera.fov }}>
+      <Canvas camera={{ position: [20, 10, 30], fov: scene.environment.camera.fov }}>
         <ambientLight color={scene.environment.lighting.ambient} />
         <directionalLight
           color={scene.environment.lighting.directional.color}
@@ -90,17 +115,21 @@ export default function App() {
           <Grid args={[scene.workspace.grid.size, scene.workspace.grid.size, scene.workspace.grid.divisions]} />
         )}
 
-        {/* Render với transitions */}
+        {/* ✅ RENDER CONNECTORS TRƯỚC */}
+        {connectorTransitions((style, c, _, i) => {
+          const refKey = `${c.id}-${i}`
+          return (
+            <a.group key={refKey} scale={style.s} position-y={style.y}>
+              <Connector3D connector={c} ref={getConnectorRef(refKey)} />
+            </a.group>
+          )
+        })}
+
+        {/* ✅ RENDER STRAWS SAU */}
         {transitions((style, s, _, i) => {
           const refKey = `${s.id}-${i}`
           return (
-            <a.group
-              key={refKey}
-              // animate scale & "nhảy" theo trục Y cục bộ
-              scale={style.s}
-              position-y={style.y}
-            >
-              {/* Truyền style.o làm fade nếu bạn đã sửa Straw nhận prop `fade` */}
+            <a.group key={refKey} scale={style.s} position-y={style.y}>
               <Straw straw={s} ref={getStrawRef(refKey)} fade={style.o} />
             </a.group>
           )

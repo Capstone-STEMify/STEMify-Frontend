@@ -15,7 +15,7 @@ export interface Straw {
 }
 
 export interface Geometry {
-  length: number
+  length?: number
   diameter: number
   wallThickness: number
 }
@@ -27,12 +27,12 @@ export interface Transform {
 }
 
 export interface Material {
-  type: string
-  color: string
-  flexibility: number // 0–100
+  type?: string
+  color?: string
+  flexibility?: number // 0–100
   opacity: number // 0–1
-  roughness: number // 0–1
-  metalness: number // 0–1
+  roughness?: number // 0–1
+  metalness?: number // 0–1
 }
 
 export interface Physics {
@@ -46,4 +46,21 @@ export interface Endpoint {
   localPosition: Vector3
   connectionId: string | null
   isAvailable: boolean
+}
+
+export interface Connector {
+  id: number
+  name: string
+  type: string // e.g., "connector"
+  diameter: number
+  material: Material
+  transform: Transform
+  ports: Port[]
+}
+
+export interface Port {
+  id: number
+  transform: Transform
+  endpoints: Endpoint[]
+  portIndex: number
 }

@@ -89,7 +89,7 @@
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 0, "y": 0, "z": 11.2 },
+          "localPosition": { "x": 0, "y": 0, "z": 11.7 },
           "connectionId": null,
           "isAvailable": true
         }
@@ -109,7 +109,7 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 0 },
+        "position": { "x": 0, "y": 0, "z": 1 },
         "rotation": { "x": 0, "y": 0, "z": 0 },
         "scale": { "x": 1, "y": 1, "z": 1 }
       },
@@ -142,20 +142,20 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 0 },
+        "position": { "x": 0, "y": 0, "z": 1 },
         "rotation": { "x": 0, "y": 0, "z": 0 },
         "scale": { "x": 1, "y": 1, "z": 1 }
       },
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 11.2, "y": 0, "z": 0 },
+          "localPosition": { "x": 11.7, "y": 0, "z": -0.5 },
           "connectionId": null,
           "isAvailable": true
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 11.2, "y": 0, "z": 11.2 },
+          "localPosition": { "x": 11.7, "y": 0, "z": 11.2 },
           "connectionId": null,
           "isAvailable": true
         }
@@ -215,7 +215,7 @@
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 11.2, "y": 0, "z": 0 },
+          "localPosition": { "x": 11.7, "y": 0, "z": 0 },
           "connectionId": null,
           "isAvailable": true
         },
@@ -248,7 +248,7 @@
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 0, "y": 0, "z": 11.2 },
+          "localPosition": { "x": 0, "y": 0, "z": 12.2 },
           "connectionId": null,
           "isAvailable": true
         },
@@ -281,7 +281,7 @@
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 11.2, "y": 0, "z": 11.2 },
+          "localPosition": { "x": 11.7, "y": 0, "z": 12.2 },
           "connectionId": null,
           "isAvailable": true
         },
@@ -293,6 +293,477 @@
         }
       ],
       "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
+    }
+  ],
+
+  "connectors": [
+    {
+      "id": 3,
+      "name": "3-leg Connector",
+      "type": "connector",
+      "diameter": 1,
+      "material": {
+        "type": "plastic",
+        "color": "#D4F300",
+        "opacity": 1,
+        "roughness": 0.3,
+        "metalness": 0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": 1,
+          "portIndex": 0,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p1_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p1_end",
+              "localPosition": { "x": 2, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "portIndex": 1,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p2_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p2_end",
+              "localPosition": { "x": 1, "y": 2, "z": 1 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "portIndex": 2,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p3_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p3_end",
+              "localPosition": { "x": 0, "y": 0, "z": 2 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "3-leg Connector",
+      "type": "connector",
+      "diameter": 1,
+      "material": {
+        "type": "plastic",
+        "color": "#D4F300",
+        "opacity": 1,
+        "roughness": 0.3,
+        "metalness": 0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 0, "z": 12.2 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": 1,
+          "portIndex": 0,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p1_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p1_end",
+              "localPosition": { "x": 2, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "portIndex": 1,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p2_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p2_end",
+              "localPosition": { "x": 1, "y": 2, "z": -1 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "portIndex": 2,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p3_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p3_end",
+              "localPosition": { "x": 0, "y": 0, "z": -2 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "3-leg Connector",
+      "type": "connector",
+      "diameter": 1,
+      "material": {
+        "type": "plastic",
+        "color": "#D4F300",
+        "opacity": 1,
+        "roughness": 0.3,
+        "metalness": 0
+      },
+      "transform": {
+        "position": { "x": 11.7, "y": 0, "z": 12.2 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": 1,
+          "portIndex": 0,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p1_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p1_end",
+              "localPosition": { "x": -2, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "portIndex": 1,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p2_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p2_end",
+              "localPosition": { "x": -1, "y": 2, "z": -1 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "portIndex": 2,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p3_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p3_end",
+              "localPosition": { "x": 0, "y": 0, "z": -2 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "3-leg Connector",
+      "type": "connector",
+      "diameter": 1,
+      "material": {
+        "type": "plastic",
+        "color": "#D4F300",
+        "opacity": 1,
+        "roughness": 0.3,
+        "metalness": 0
+      },
+      "transform": {
+        "position": { "x": 11.7, "y": 0, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": 1,
+          "portIndex": 0,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p1_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p1_end",
+              "localPosition": { "x": -2, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "portIndex": 1,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p2_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p2_end",
+              "localPosition": { "x": -1, "y": 2, "z": 1 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "portIndex": 2,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p3_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p3_end",
+              "localPosition": { "x": 0, "y": 0, "z": 2 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "3-leg Connector",
+      "type": "connector",
+      "diameter": 1,
+      "material": {
+        "type": "plastic",
+        "color": "#D4F300",
+        "opacity": 1,
+        "roughness": 0.3,
+        "metalness": 0
+      },
+      "transform": {
+        "position": { "x": 5.6, "y": 11.2, "z": 5.6 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": 1,
+          "portIndex": 0,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p1_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p1_end",
+              "localPosition": { "x": 1, "y": -2, "z": -1 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "portIndex": 1,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p2_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p2_end",
+              "localPosition": { "x": 1, "y": -2, "z": 1 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "portIndex": 2,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p3_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p3_end",
+              "localPosition": { "x": -1, "y": -2, "z": -1 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "portIndex": 2,
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "endpoints": [
+            {
+              "id": "p3_start",
+              "localPosition": { "x": 0, "y": 0, "z": 0 },
+              "connectionId": null,
+              "isAvailable": true
+            },
+            {
+              "id": "p3_end",
+              "localPosition": { "x": -1, "y": -2, "z": 1 },
+              "connectionId": null,
+              "isAvailable": true
+            }
+          ]
+        }
+      ]
     }
   ]
 }
