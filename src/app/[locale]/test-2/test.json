@@ -1,78 +1,40 @@
 {
   "straws": [
     {
-      "id": "straw_top",
-      "name": "Top Straw",
-      "geometry": { "length": 20.0, "diameter": 0.6, "wallThickness": 0.1 },
+      "id": "straw_blue",
+      "name": "Blue Straw",
+      "geometry": { "length": 24.0, "diameter": 0.6, "wallThickness": 0.1 },
       "material": {
         "type": "plastic",
-        "color": "#FF8C00",
+        "color": "#1AABE7",
         "flexibility": 30,
         "opacity": 1.0,
         "roughness": 0.3,
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 10, "z": 0 },
+        "position": { "x": -20, "y": 0, "z": 0 },
         "rotation": { "x": 0, "y": 0, "z": 0 },
         "scale": { "x": 1, "y": 1, "z": 1 }
       },
-      "endpoints": {
-        "start": {
-          "id": "straw_top_start",
-          "localPosition": { "x": -10, "y": 0, "z": 0 },
+      "endpoints": [
+        {
+          "id": "blue_start",
+          "localPosition": { "x": -12, "y": 0, "z": 0 },
           "connectionId": null,
           "isAvailable": true
         },
-        "end": {
-          "id": "straw_top_end",
-          "localPosition": { "x": 10, "y": 0, "z": 0 },
-          "connectionId": null,
-          "isAvailable": true
-        }
-      },
-      "physics": { "mass": 0.4, "friction": 0.4, "elasticity": 0.2 }
+        { "id": "blue_end", "localPosition": { "x": 12, "y": 0, "z": 0 }, "connectionId": null, "isAvailable": true }
+      ],
+      "physics": { "mass": 0.5, "friction": 0.4, "elasticity": 0.2 }
     },
     {
-      "id": "straw_bottom",
-      "name": "Bottom Straw",
-      "geometry": { "length": 20.0, "diameter": 0.6, "wallThickness": 0.1 },
+      "id": "straw_green",
+      "name": "Green Straw",
+      "geometry": { "length": 20.5, "diameter": 0.6, "wallThickness": 0.1 },
       "material": {
         "type": "plastic",
-        "color": "#4169E1",
-        "flexibility": 30,
-        "opacity": 1.0,
-        "roughness": 0.3,
-        "metalness": 0.0
-      },
-      "transform": {
-        "position": { "x": 0, "y": -10, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
-      },
-      "endpoints": {
-        "start": {
-          "id": "straw_bottom_start",
-          "localPosition": { "x": -10, "y": 0, "z": 0 },
-          "connectionId": null,
-          "isAvailable": true
-        },
-        "end": {
-          "id": "straw_bottom_end",
-          "localPosition": { "x": 10, "y": 0, "z": 0 },
-          "connectionId": null,
-          "isAvailable": true
-        }
-      },
-      "physics": { "mass": 0.4, "friction": 0.4, "elasticity": 0.2 }
-    },
-    {
-      "id": "straw_left",
-      "name": "Left Straw",
-      "geometry": { "length": 20.0, "diameter": 0.6, "wallThickness": 0.1 },
-      "material": {
-        "type": "plastic",
-        "color": "#32CD32",
+        "color": "#C0DF3F",
         "flexibility": 30,
         "opacity": 1.0,
         "roughness": 0.3,
@@ -80,32 +42,50 @@
       },
       "transform": {
         "position": { "x": -10, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 1.5708 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
         "scale": { "x": 1, "y": 1, "z": 1 }
       },
-      "endpoints": {
-        "start": {
-          "id": "straw_left_start",
+      "endpoints": [
+        {
+          "id": "green_start",
           "localPosition": { "x": -10, "y": 0, "z": 0 },
           "connectionId": null,
           "isAvailable": true
         },
-        "end": {
-          "id": "straw_left_end",
-          "localPosition": { "x": 10, "y": 0, "z": 0 },
-          "connectionId": null,
-          "isAvailable": true
-        }
-      },
-      "physics": { "mass": 0.4, "friction": 0.4, "elasticity": 0.2 }
+        { "id": "green_end", "localPosition": { "x": 10, "y": 0, "z": 0 }, "connectionId": null, "isAvailable": true }
+      ],
+      "physics": { "mass": 0.45, "friction": 0.4, "elasticity": 0.2 }
     },
     {
-      "id": "straw_right",
-      "name": "Right Straw",
-      "geometry": { "length": 20.0, "diameter": 0.6, "wallThickness": 0.1 },
+      "id": "straw_pink",
+      "name": "Pink Straw",
+      "geometry": { "length": 11.2, "diameter": 0.6, "wallThickness": 0.1 },
       "material": {
         "type": "plastic",
-        "color": "#FFD700",
+        "color": "#E7A4D2",
+        "flexibility": 30,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": [
+        { "id": "pink_start", "localPosition": { "x": -6, "y": 0, "z": 0 }, "connectionId": null, "isAvailable": true },
+        { "id": "pink_end", "localPosition": { "x": 6, "y": 0, "z": 0 }, "connectionId": null, "isAvailable": true }
+      ],
+      "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
+    },
+    {
+      "id": "straw_orange",
+      "name": "Orange Straw",
+      "geometry": { "length": 8.0, "diameter": 0.6, "wallThickness": 0.1 },
+      "material": {
+        "type": "plastic",
+        "color": "#F28C28",
         "flexibility": 30,
         "opacity": 1.0,
         "roughness": 0.3,
@@ -113,24 +93,47 @@
       },
       "transform": {
         "position": { "x": 10, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 1.5708 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
         "scale": { "x": 1, "y": 1, "z": 1 }
       },
-      "endpoints": {
-        "start": {
-          "id": "straw_right_start",
-          "localPosition": { "x": -10, "y": 0, "z": 0 },
+      "endpoints": [
+        {
+          "id": "orange_start",
+          "localPosition": { "x": -4, "y": 0, "z": 0 },
           "connectionId": null,
           "isAvailable": true
         },
-        "end": {
-          "id": "straw_right_end",
-          "localPosition": { "x": 10, "y": 0, "z": 0 },
+        { "id": "orange_end", "localPosition": { "x": 4, "y": 0, "z": 0 }, "connectionId": null, "isAvailable": true }
+      ],
+      "physics": { "mass": 0.25, "friction": 0.4, "elasticity": 0.2 }
+    },
+    {
+      "id": "straw_yellow",
+      "name": "Yellow Straw",
+      "geometry": { "length": 4.8, "diameter": 0.6, "wallThickness": 0.1 },
+      "material": {
+        "type": "plastic",
+        "color": "#F3D547",
+        "flexibility": 30,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 20, "y": 0, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": [
+        {
+          "id": "yellow_start",
+          "localPosition": { "x": -2.4, "y": 0, "z": 0 },
           "connectionId": null,
           "isAvailable": true
-        }
-      },
-      "physics": { "mass": 0.4, "friction": 0.4, "elasticity": 0.2 }
+        },
+        { "id": "yellow_end", "localPosition": { "x": 2.4, "y": 0, "z": 0 }, "connectionId": null, "isAvailable": true }
+      ],
+      "physics": { "mass": 0.2, "friction": 0.4, "elasticity": 0.2 }
     }
   ],
 
