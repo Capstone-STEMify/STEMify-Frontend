@@ -33,6 +33,7 @@ import {
   SidebarMenuItem
 } from 'components/shadcn/sidebar'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 
 const data = {
   user: {
@@ -147,6 +148,18 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const locale = useLocale()
+
+  const navMainWithLocale = data.navMain.map((item) => ({
+    ...item,
+    url: `/${locale}${item.url}`
+  }))
+
+  const documentsWithLocale = data.documents.map((item) => ({
+    ...item,
+    url: `/${locale}${item.url}`
+  }))
+
   return (
     <Sidebar collapsible='offcanvas' {...props}>
       <SidebarHeader>
@@ -162,8 +175,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        <NavMain items={navMainWithLocale} />
+        <NavDocuments items={documentsWithLocale} />
         <NavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
