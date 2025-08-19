@@ -13,14 +13,23 @@ import { resetParams, setPageSize, setParam, setSearchTerm } from '@/features/re
 import { getLabel, getOptions } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import { LessonStatus } from '../../types/lesson.type'
+import { useSession } from 'next-auth/react'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { UserRole } from '@/types/userRole'
 
 export default function LessonListAction() {
   const t = useTranslations('LessonList')
-  // Redux hooks
+
+  const { status } = useSession()
+  const role = useAppSelector((state) => state.auth.user?.role)
+
+  const canSeeStatus = status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.TEACHER)
+
+  // Redux
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.lesson)
 
-  // Lazy queries
+  // Lazy queries (hooks must always run)
   const [getCategory, { data: categories }] = useLazyGetAllCategoryQuery()
   const [getSkill, { data: skills }] = useLazyGetAllSkillQuery()
   const [getAgeRange, { data: ageRanges }] = useLazyGetAllAgeRangeQuery()
@@ -41,7 +50,16 @@ export default function LessonListAction() {
       filters.status
   )
 
-  // Function to render filter tags
+  // Options
+  const categoryOptions = getOptions(categories?.data.items, 'name')
+  const skillOptions = getOptions(skills?.data.items, 'skillName')
+  const ageRangeOptions = getOptions(ageRanges?.data.items, 'ageRangeLabel')
+  const standardOptions = getOptions(standards?.data.items, 'standardName')
+  const statusOptions = Object.entries(LessonStatus).map(([key, value]) => ({
+    label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+    value
+  }))
+
   const renderFilterTag = (
     key: keyof typeof filters,
     label: string,
@@ -55,117 +73,123 @@ export default function LessonListAction() {
       </span>
     )
 
-  // Options for selects
-  const categoryOptions = getOptions(categories?.data.items, 'name')
-  const skillOptions = getOptions(skills?.data.items, 'skillName')
-  const ageRangeOptions = getOptions(ageRanges?.data.items, 'ageRangeLabel')
-  const standardOptions = getOptions(standards?.data.items, 'standardName')
-  const statusOptions = Object.entries(LessonStatus).map(([key, value]) => ({
-    label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-    value: value
-  }))
-
   return (
     <div className='border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50'>
       <div className='px-8 py-6'>
-        <div className='mb-4 flex items-center justify-between'>
-          <h2 className='text-lg font-semibold text-gray-800'>{t('filterTitle')}</h2>
-          {hasFilters && (
-            <div className='flex items-center gap-8'>
-              {/* Search Button */}
-              <Button
-                onClick={() => console.log('Search clicked')}
-                className='border border-blue-200 bg-blue-50 px-4 text-blue-600 hover:bg-blue-100'
-              >
-                <Search className='h-4 w-4' />
-                {t('actions.searchBtn')}
-              </Button>
-              {/* Clear All Button */}
-              <Button onClick={clearAll} className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'>
-                <X className='h-4 w-4' />
-                {t('actions.clearBtn')}
-              </Button>
+        {status === 'loading' ? (
+          <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+            <LoadingComponent size={18} textShow={false} />
+          </div>
+        ) : (
+          <>
+            <div className='mb-4 flex items-center justify-between'>
+              <h2 className='text-lg font-semibold text-gray-800'>{t('filterTitle')}</h2>
+              {hasFilters && (
+                <div className='flex items-center gap-8'>
+                  <Button
+                    onClick={() => console.log('Search clicked')}
+                    className='border border-blue-200 bg-blue-50 px-4 text-blue-600 hover:bg-blue-100'
+                  >
+                    <Search className='h-4 w-4' />
+                    {t('actions.searchBtn')}
+                  </Button>
+                  <Button
+                    onClick={clearAll}
+                    className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'
+                  >
+                    <X className='h-4 w-4' />
+                    {t('actions.clearBtn')}
+                  </Button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div className='grid w-full grid-cols-1 items-center gap-4 md:grid-cols-2 xl:grid-cols-3'>
-          {/* Search Input */}
-          <div className='relative w-full'>
-            <Input
-              type='text'
-              placeholder={t('placeHolder.search')}
-              value={filters.search}
-              onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-              className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
-            />
-            <Search className='absolute top-3 left-3 h-4 w-4 text-gray-400' />
-          </div>
+            <div className='grid w-full grid-cols-1 items-center gap-4 md:grid-cols-2 xl:grid-cols-3'>
+              {/* Search */}
+              <div className='relative w-full'>
+                <Input
+                  type='text'
+                  placeholder={t('placeHolder.search')}
+                  value={filters.search}
+                  onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+                  className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
+                />
+                <Search className='absolute top-3 left-3 h-4 w-4 text-gray-400' />
+              </div>
 
-          {/* Category */}
-          <SSelect
-            placeholder={t('placeHolder.category')}
-            value={filters.categoryId?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'id', value: Number(val) }))}
-            options={categoryOptions}
-            onOpen={(open) => {
-              if (open && !categories) getCategory()
-            }}
-          />
+              {/* Category */}
+              <SSelect
+                placeholder={t('placeHolder.category')}
+                value={filters.categoryId?.toString() ?? ''}
+                onChange={(val) => dispatch(setParam({ key: 'categoryId', value: Number(val) }))}
+                options={categoryOptions}
+                onOpen={(open) => {
+                  if (open && !categories) getCategory()
+                }}
+              />
 
-          {/* Skill */}
-          <SSelect
-            placeholder={t('placeHolder.skill')}
-            value={filters.skillId?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'skillId', value: Number(val) }))}
-            options={skillOptions}
-            onOpen={(open) => {
-              if (open && !skills) getSkill()
-            }}
-          />
+              {/* Skill */}
+              <SSelect
+                placeholder={t('placeHolder.skill')}
+                value={filters.skillId?.toString() ?? ''}
+                onChange={(val) => dispatch(setParam({ key: 'skillId', value: Number(val) }))}
+                options={skillOptions}
+                onOpen={(open) => {
+                  if (open && !skills) getSkill()
+                }}
+              />
 
-          {/* Age Range */}
-          <SSelect
-            placeholder={t('placeHolder.ageRange')}
-            value={filters.ageRangeId?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'ageRangeId', value: Number(val) }))}
-            options={ageRangeOptions}
-            onOpen={(open) => {
-              if (open && !ageRanges) getAgeRange()
-            }}
-          />
+              {/* Age Range */}
+              <SSelect
+                placeholder={t('placeHolder.ageRange')}
+                value={filters.ageRangeId?.toString() ?? ''}
+                onChange={(val) => dispatch(setParam({ key: 'ageRangeId', value: Number(val) }))}
+                options={ageRangeOptions}
+                onOpen={(open) => {
+                  if (open && !ageRanges) getAgeRange()
+                }}
+              />
 
-          {/* Standard */}
-          <SSelect
-            placeholder={t('placeHolder.standard')}
-            value={filters.standardId?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'standardId', value: Number(val) }))}
-            options={standardOptions}
-            onOpen={(open) => {
-              if (open && !standards) getStandard()
-            }}
-          />
+              {/* Standard */}
+              <SSelect
+                placeholder={t('placeHolder.standard')}
+                value={filters.standardId?.toString() ?? ''}
+                onChange={(val) => dispatch(setParam({ key: 'standardId', value: Number(val) }))}
+                options={standardOptions}
+                onOpen={(open) => {
+                  if (open && !standards) getStandard()
+                }}
+              />
 
-          {/* Status */}
-          <SSelect
-            placeholder={t('placeHolder.status')}
-            value={filters.status?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'status', value: val as LessonStatus }))}
-            options={statusOptions}
-          />
-        </div>
+              {/* Status (role-gated) */}
+              {canSeeStatus && (
+                <SSelect
+                  placeholder={t('placeHolder.status')}
+                  value={filters.status?.toString() ?? ''}
+                  onChange={(val) => dispatch(setParam({ key: 'status', value: val as LessonStatus }))}
+                  options={statusOptions}
+                />
+              )}
+            </div>
 
-        {/* Active Filters */}
-        {hasFilters && (
-          <div className='mt-4 flex flex-wrap gap-2'>
-            <span className='text-sm font-medium text-gray-600'>Active filters:</span>
-            {renderFilterTag('search', `${t('tags.search')}`, 'bg-blue-100 text-blue-800')}
-            {renderFilterTag('categoryId', `${t('tags.category')}`, 'bg-green-100 text-green-800', categoryOptions)}
-            {renderFilterTag('ageRangeId', `${t('tags.ageRange')}`, 'bg-purple-100 text-purple-800', ageRangeOptions)}
-            {renderFilterTag('skillId', `${t('tags.skill')}`, 'bg-yellow-100 text-yellow-800', skillOptions)}
-            {renderFilterTag('standardId', `${t('tags.standard')}`, 'bg-red-100 text-red-800', standardOptions)}
-            {renderFilterTag('status', `${t('tags.status')}`, 'bg-gray-100 text-gray-800', statusOptions)}
-          </div>
+            {/* Active Filters */}
+            {hasFilters && (
+              <div className='mt-4 flex flex-wrap gap-2'>
+                <span className='text-sm font-medium text-gray-600'>Active filters:</span>
+                {renderFilterTag('search', `${t('tags.search')}`, 'bg-blue-100 text-blue-800')}
+                {renderFilterTag('categoryId', `${t('tags.category')}`, 'bg-green-100 text-green-800', categoryOptions)}
+                {renderFilterTag(
+                  'ageRangeId',
+                  `${t('tags.ageRange')}`,
+                  'bg-purple-100 text-purple-800',
+                  ageRangeOptions
+                )}
+                {renderFilterTag('skillId', `${t('tags.skill')}`, 'bg-yellow-100 text-yellow-800', skillOptions)}
+                {renderFilterTag('standardId', `${t('tags.standard')}`, 'bg-red-100 text-red-800', standardOptions)}
+                {renderFilterTag('status', `${t('tags.status')}`, 'bg-gray-100 text-gray-800', statusOptions)}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

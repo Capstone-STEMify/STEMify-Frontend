@@ -35,6 +35,10 @@ import {
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 
+import { signOut, useSession } from 'next-auth/react'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import LoadingComponent from '../shared/loading/LoadingComponent'
+
 const data = {
   user: {
     name: 'shadcn',
@@ -159,6 +163,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ...item,
     url: `/${locale}${item.url}`
   }))
+  const { data: session, status } = useSession()
+  const role = useAppSelector((state) => state.auth.user?.role)
+
+  if (status === 'loading') {
+    return (
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+        <LoadingComponent size={18} textShow={false} />
+      </div>
+    )
+  }
 
   return (
     <Sidebar collapsible='offcanvas' {...props}>
@@ -180,7 +194,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={session?.user} />
       </SidebarFooter>
     </Sidebar>
   )
