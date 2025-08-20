@@ -1,0 +1,59 @@
+{
+  "id": "string",
+  "name": "string",
+  "description": "string",
+  "estimatedTime": "number",
+  "objective": "string",
+  "steps": [
+    {
+      "id": "string",
+      "name": "string",
+      "description": "string",
+      "order": "number",
+      "straws": [
+        {
+          "id": "string",
+          "name": "string",
+          "geometry": { "length": "number", "diameter": "number", "wallThickness": "number" },
+          "color": "string",
+          "transform": {
+            "position": ["number", "number", "number"],
+            "rotation": ["number", "number", "number"],
+            "scale": ["number", "number", "number", "number"]
+          },
+          "endpoints": [
+            {
+              "id": "pink_start",
+              "localPosition": ["number", "number", "number"]
+            },
+            {
+              "id": "pink_end",
+              "localPosition": ["number", "number", "number"]
+            }
+          ],
+          "physics": { "mass": "number", "friction": "number", "elasticity": "number" }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "string",
+          "name": "string",
+          "diameter": "number",
+          "color": "string",
+          "transform": {
+            "position": ["number", "number", "number"],
+            "rotation": ["number", "number", "number"],
+            "scale": ["number", "number", "number", "number"]
+          },
+          "ports": [
+            {
+              "id": "string",
+              "localPosition": ["number", "number", "number"],
+              "direction": ["number", "number", "number"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
