@@ -7,10 +7,11 @@ import { Plus } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useGetUserAction } from './UserAction'
 import { useSearchUserQuery } from '../../api/userApi'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { UserQueryParams } from '../../types/user.type'
 import { use } from 'matter'
 import { useTranslations } from 'next-intl'
+import { setPageIndex } from '../../slice/userSlice'
 
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value)
@@ -29,6 +30,7 @@ export default function UserTable() {
   const t = useTranslations('Admin.placeholder')
   const { openModal } = useModal()
   const columns = useGetUserAction()
+   const dispatch = useAppDispatch()
 
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
@@ -52,6 +54,10 @@ export default function UserTable() {
     openModal('upsertUser')
   }
 
+  const handlePageChange = (page: number) => {
+      dispatch(setPageIndex(page))
+  }
+
   return (
     <div>
       <div className='flex items-center justify-between py-4'>
@@ -65,7 +71,7 @@ export default function UserTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams}/>
+      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams} handlePageChange={handlePageChange}/>
     </div>
   )
 }
