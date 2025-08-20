@@ -8,23 +8,10 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import React, { useState, useEffect } from 'react'
 import { StandardQueryParams } from '../../types/standard.type'
-import { setPageIndex } from '@/features/resource/standard/slice/standardSlice'
-
-// Debounce hook để trì hoãn việc gọi API
-function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value)
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
-  return debouncedValue
-}
+import { setPageIndex, setSearchTerm } from '@/features/resource/standard/slice/standardSlice'
+import useDebounce from '@/hooks/useDebounce'
+import { useMemo } from 'react'
 
 export default function StandardTable() {
   const { openModal } = useModal()
@@ -33,23 +20,19 @@ export default function StandardTable() {
 
   const t = useTranslations('Admin.placeholder')
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const debouncedSearchQuery = useDebounce(searchQuery, 500)
-
   const standardParams = useAppSelector((state) => state.standard)
+  const debouncedSearchQuery = useDebounce(standardParams.search, 500)
 
   const queryParams: StandardQueryParams = {
     pageNumber: standardParams.pageNumber,
     pageSize: standardParams.pageSize,
-    search: standardParams.search,
+    search: debouncedSearchQuery,
     status: standardParams.status
   }
 
-  const { data, isLoading } = useSearchStandardQuery({
-    search: debouncedSearchQuery
-  })
+  const { data } = useSearchStandardQuery(queryParams)
 
-  const rows = React.useMemo(() => data?.data.items ?? [], [data])
+  const rows = useMemo(() => data?.data.items ?? [], [data])
 
   const handleCreate = () => {
     openModal('upsertStandard')
@@ -64,8 +47,8 @@ export default function StandardTable() {
       <div className='flex items-center justify-between py-4'>
         <Input
           placeholder={t('standardSearch')}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={standardParams.search}
+          onChange={(e) => dispatch(setSearchTerm(e.target.value))}
           className='max-w-sm'
         />
         <Button size={'icon'} className='bg-amber-custom-400 rounded-full' onClick={handleCreate}>

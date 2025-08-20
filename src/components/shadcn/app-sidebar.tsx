@@ -164,7 +164,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     url: `/${locale}${item.url}`
   }))
   const { data: session, status } = useSession()
-  const role = useAppSelector((state) => state.auth.user?.role)
 
   if (status === 'loading') {
     return (

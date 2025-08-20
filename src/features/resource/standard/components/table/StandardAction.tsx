@@ -26,8 +26,23 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
       header: 'ID'
     },
     {
+      accessorKey: 'code',
+      header: 'Code'
+    },
+    {
       accessorKey: 'standardName',
       header: 'Standard Name'
+    },
+    {
+      accessorKey: 'description',
+      header: 'Description',
+      cell: ({ row }) => {
+        return (
+          <div className='w-140 truncate' title={String(row.getValue('description'))}>
+            {row.getValue('description')}
+          </div>
+        )
+      }
     },
     createActionsColumnFromItems<Standard>([
       {
