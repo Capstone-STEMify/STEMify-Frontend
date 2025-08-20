@@ -51,7 +51,7 @@ export interface Endpoint {
 export interface Connector {
   id: number
   name: string
-  type: string // e.g., "connector"
+  type: string
   diameter: number
   material: Material
   transform: Transform
@@ -60,7 +60,7 @@ export interface Connector {
 
 export interface Port {
   id: number
-  transform: Transform
-  endpoints: Endpoint[]
+  localPosition: number[]
+  direction: number[]
   portIndex: number
 }

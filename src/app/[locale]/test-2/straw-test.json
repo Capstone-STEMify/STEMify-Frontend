@@ -318,71 +318,20 @@
         {
           "id": 1,
           "portIndex": 0,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p1_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p1_end",
-              "localPosition": { "x": 2, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [2, 0, 0]
         },
         {
           "id": 2,
           "portIndex": 1,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p2_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p2_end",
-              "localPosition": { "x": 1, "y": 2, "z": 1 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [1, 2, 1]
         },
         {
           "id": 3,
           "portIndex": 2,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p3_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p3_end",
-              "localPosition": { "x": 0, "y": 0, "z": 2 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [0, 0, 2]
         }
       ]
     },
@@ -407,71 +356,20 @@
         {
           "id": 1,
           "portIndex": 0,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p1_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p1_end",
-              "localPosition": { "x": 2, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [2, 0, 0]
         },
         {
           "id": 2,
           "portIndex": 1,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p2_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p2_end",
-              "localPosition": { "x": 1, "y": 2, "z": -1 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [1, 2, -1]
         },
         {
           "id": 3,
           "portIndex": 2,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p3_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p3_end",
-              "localPosition": { "x": 0, "y": 0, "z": -2 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [0, 0, -2]
         }
       ]
     },
@@ -496,71 +394,20 @@
         {
           "id": 1,
           "portIndex": 0,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p1_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p1_end",
-              "localPosition": { "x": -2, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [-2, 0, 0]
         },
         {
           "id": 2,
           "portIndex": 1,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p2_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p2_end",
-              "localPosition": { "x": -1, "y": 2, "z": -1 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [-1, 2, -1]
         },
         {
           "id": 3,
           "portIndex": 2,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p3_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p3_end",
-              "localPosition": { "x": 0, "y": 0, "z": -2 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [0, 0, -2]
         }
       ]
     },
@@ -585,71 +432,20 @@
         {
           "id": 1,
           "portIndex": 0,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p1_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p1_end",
-              "localPosition": { "x": -2, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [-2, 0, 0]
         },
         {
           "id": 2,
           "portIndex": 1,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p2_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p2_end",
-              "localPosition": { "x": -1, "y": 2, "z": 1 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [-1, 2, 1]
         },
         {
           "id": 3,
           "portIndex": 2,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p3_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p3_end",
-              "localPosition": { "x": 0, "y": 0, "z": 2 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [0, 0, 2]
         }
       ]
     },
@@ -674,94 +470,26 @@
         {
           "id": 1,
           "portIndex": 0,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p1_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p1_end",
-              "localPosition": { "x": 1, "y": -2, "z": -1 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [1, -2, -1]
         },
         {
           "id": 2,
           "portIndex": 1,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p2_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p2_end",
-              "localPosition": { "x": 1, "y": -2, "z": 1 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [1, -2, 1]
         },
         {
           "id": 3,
           "portIndex": 2,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p3_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p3_end",
-              "localPosition": { "x": -1, "y": -2, "z": -1 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [-1, -2, -1]
         },
         {
           "id": 3,
           "portIndex": 2,
-          "transform": {
-            "position": { "x": 0, "y": 0, "z": 0 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 }
-          },
-          "endpoints": [
-            {
-              "id": "p3_start",
-              "localPosition": { "x": 0, "y": 0, "z": 0 },
-              "connectionId": null,
-              "isAvailable": true
-            },
-            {
-              "id": "p3_end",
-              "localPosition": { "x": -1, "y": -2, "z": 1 },
-              "connectionId": null,
-              "isAvailable": true
-            }
-          ]
+          "localPosition": [0, 0, 0],
+          "direction": [-1, -2, 1]
         }
       ]
     }
