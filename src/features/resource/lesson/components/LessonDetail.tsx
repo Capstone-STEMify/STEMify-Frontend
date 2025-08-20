@@ -12,7 +12,7 @@ import LessonDescription from '@/features/resource/lesson/components/detail/Less
 import LessonOutline from '@/features/resource/lesson/components/detail/LessonOutline'
 import LessonContent from '@/features/resource/lesson/components/detail/LessonContent'
 import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
-import { useSearchStudentProgressQuery } from '@/features/student-progress/api/studentProgressApi'
+import { useGetSectionStudentProgressQuery } from '@/features/student-progress/api/studentProgressApi'
 import { useTranslations } from 'next-intl'
 
 export default function LessonDetail({ id }: { id?: number }) {
@@ -38,7 +38,7 @@ export default function LessonDetail({ id }: { id?: number }) {
 
   const enrollmentId = enrollment?.data.items?.[0]?.id || 0
 
-  const { data: sectionStatus } = useSearchStudentProgressQuery(
+  const { data: sectionStatus } = useGetSectionStudentProgressQuery(
     {
       enrollmentId: enrollmentId,
       lessonId: Number(lessonId)

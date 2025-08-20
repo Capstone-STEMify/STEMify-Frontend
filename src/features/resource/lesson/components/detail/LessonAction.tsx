@@ -1,5 +1,5 @@
 import { Button } from '@/components/shadcn/button'
-import { useUpdateStudentProgressMutation } from '@/features/student-progress/api/studentProgressApi'
+import { useUpdateLessonStudentProgressMutation } from '@/features/student-progress/api/studentProgressApi'
 import { ProgressStatus } from '@/features/student-progress/types/studentProgress.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { Bookmark, Plus, Share2 } from 'lucide-react'
@@ -12,12 +12,12 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
   const dispatch = useAppDispatch()
   const lessonStatus = useAppSelector((state) => state.studentProgress.selectedLessonStatus)
   const enrollmentId = useAppSelector((state) => state.studentProgress.selectedEnrollmentId)
-  const [startLesson, { isLoading }] = useUpdateStudentProgressMutation()
+  const [startLesson, { isLoading }] = useUpdateLessonStudentProgressMutation()
 
   const handleStartLearningLesson = async () => {
     try {
       if (enrollmentId) {
-        await startLesson({ id: enrollmentId, body: { lessonId } }).unwrap()
+        await startLesson({ lessonId, enrollmentId }).unwrap()
         dispatch(studentProgressSlice.actions.setSelectedLessonStatus(ProgressStatus.IN_PROGRESS))
         toast.success('Lesson started!')
       }
@@ -37,7 +37,9 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
             onClick={handleStartLearningLesson}
             disabled={isLoading}
           >
-            <div className='text-xs uppercase'>{isLoading ? `${t('action.start_loading')}` : `${t('action.learning')}`}</div>
+            <div className='text-xs uppercase'>
+              {isLoading ? `${t('action.start_loading')}` : `${t('action.learning')}`}
+            </div>
           </Button>
         </div>
       )}
