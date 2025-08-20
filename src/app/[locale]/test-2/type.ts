@@ -3,7 +3,7 @@ export interface Straw {
   name: string
   geometry: Geometry
   transform: Transform
-  material: Material
+  color: string
   endpoints: Endpoint[]
   physics: Physics
 }
@@ -20,15 +20,6 @@ export interface Transform {
   scale: number[]
 }
 
-export interface Material {
-  type?: string
-  color?: string
-  flexibility?: number // 0–100
-  opacity: number // 0–1
-  roughness?: number // 0–1
-  metalness?: number // 0–1
-}
-
 export interface Physics {
   mass: number
   friction: number
@@ -43,9 +34,8 @@ export interface Endpoint {
 export interface Connector {
   id: string
   name: string
-  type: string
   diameter: number
-  material: Material
+  color: string
   transform: Transform
   ports: Port[]
 }
@@ -54,13 +44,13 @@ export interface Port {
   id: string
   localPosition: number[]
   direction: number[]
-  portIndex: number
 }
 
 export interface Assembly {
   id: string
   name: string
   description?: string
+  imageUrl?: string
   estimatedTime: number // in minutes
   objective?: string
   steps: Action[]

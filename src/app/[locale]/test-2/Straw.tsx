@@ -8,7 +8,7 @@ interface StrawProps {
   fade?: SpringValue<number>
 }
 export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade }, ref) {
-  const { geometry, material, transform, endpoints } = straw
+  const { geometry, color, transform, endpoints } = straw
 
   const { pos, rot, len } = useMemo(() => {
     if (!endpoints || endpoints.length < 2) {
@@ -52,16 +52,7 @@ export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade 
     <group ref={ref} position={[pos.x, pos.y, pos.z]} rotation={[rot.x, rot.y, rot.z]} scale={[1, 1, 1]}>
       <mesh position={[0, 0, 0]}>
         <cylinderGeometry args={[geometry.diameter / 2, geometry.diameter / 2, len, 64]} />
-        <meshPhysicalMaterial
-          color={material.color}
-          transparent={material.opacity < 1}
-          opacity={material.opacity}
-          roughness={material.roughness}
-          metalness={material.metalness}
-          emissive={material.color}
-          emissiveIntensity={0.2}
-          clearcoat={1}
-        />
+        <meshPhysicalMaterial color={color} roughness={0.3} emissive={color} emissiveIntensity={0.2} clearcoat={1} />
       </mesh>
     </group>
   )

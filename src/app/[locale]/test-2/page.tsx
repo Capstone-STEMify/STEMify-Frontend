@@ -8,6 +8,9 @@ import { a, useTransition } from '@react-spring/three'
 import { Connector3D } from './Connector'
 import { sceneData } from '@/utils/cts'
 import assembly from './straw-test.json'
+import strawType from './straw-type.json'
+import connectorType from './connector-type.json'
+import Image from 'next/image'
 
 export default function App() {
   const { steps } = assembly
@@ -20,6 +23,23 @@ export default function App() {
   const [step, setStep] = useState(0)
   const maxStep = steps.length
   const clampedStep = Math.min(Math.max(step, 0), maxStep)
+  const currentStep = steps[clampedStep - 1]
+
+  const strawTypeCount = useMemo(() => {
+    const counts: Record<string, number> = {}
+    currentStep?.straws?.forEach((s) => {
+      counts[s.id] = (counts[s.id] || 0) + 1
+    })
+    return counts
+  }, [currentStep])
+
+  const connectorTypeCount = useMemo(() => {
+    const counts: Record<string, number> = {}
+    currentStep?.connectors?.forEach((c) => {
+      counts[c.id] = (counts[c.id] || 0) + 1
+    })
+    return counts
+  }, [currentStep])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -63,6 +83,52 @@ export default function App() {
         <div className='absolute top-4 left-4 z-10 w-100 rounded-xl border bg-white/90 px-4 py-3 text-sm shadow'>
           <div className='text-sky-custom-600 mb-2 text-lg font-semibold'>Step {clampedStep}</div>
           <div className='text-lg text-gray-700'>{steps[clampedStep - 1]?.description}</div>
+
+          <div className='mt-4'>
+            <div className='mb-1 font-semibold text-gray-600'>Straws:</div>
+            <ul className='space-y-1'>
+              {Object.entries(strawTypeCount).map(([typeId, count]) => {
+                const type = strawType.find((t) => t.id === typeId)
+                return (
+                  <li key={typeId} className='flex items-center gap-2'>
+                    <Image
+                      src={type?.imageUrl || ''}
+                      alt={type?.name || ''}
+                      className='object-contain'
+                      width={100}
+                      height={100}
+                    />
+                    <span>
+                      {type?.name || typeId}: x{count}
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+
+          <div className='mt-3'>
+            <div className='mb-1 font-semibold text-gray-600'>Connectors:</div>
+            <ul className='space-y-1'>
+              {Object.entries(connectorTypeCount).map(([typeId, count]) => {
+                const type = connectorType.find((t) => t.id === typeId)
+                return (
+                  <li key={typeId} className='flex items-center gap-2'>
+                    <Image
+                      src={type?.imageUrl || ''}
+                      alt={type?.name || ''}
+                      className='object-contain'
+                      width={100}
+                      height={100}
+                    />
+                    <span>
+                      {type?.name || typeId}: x{count}
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         </div>
       )}
 

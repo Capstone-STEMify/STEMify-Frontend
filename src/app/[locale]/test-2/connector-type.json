@@ -1,0 +1,22 @@
+[
+  {
+    "id": "C001",
+    "name": "1-leg Connector",
+    "imageUrl": "/images/components/connector_1_leg.png"
+  },
+  {
+    "id": "C002",
+    "name": "2-leg Connector",
+    "imageUrl": "/images/components/connector_2_leg.png"
+  },
+  {
+    "id": "C003",
+    "name": "3-leg Connector",
+    "imageUrl": "/images/components/connector_3_leg.png"
+  },
+  {
+    "id": "C005",
+    "name": "5-leg Connector",
+    "imageUrl": "/images/components/connector_5_leg.png"
+  }
+]

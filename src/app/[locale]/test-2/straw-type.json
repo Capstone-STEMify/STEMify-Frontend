@@ -1,0 +1,27 @@
+[
+  {
+    "id": "straw_pink",
+    "name": "Pink Straw",
+    "imageUrl": "/images/components/straw_pink.png"
+  },
+  {
+    "id": "straw_blue",
+    "name": "Blue Straw",
+    "imageUrl": "/images/components/straw_blue.png"
+  },
+  {
+    "id": "straw_green",
+    "name": "Green Straw",
+    "imageUrl": "/images/components/straw_green.png"
+  },
+  {
+    "id": "straw_yellow",
+    "name": "Yellow Straw",
+    "imageUrl": "/images/components/straw_yellow.png"
+  },
+  {
+    "id": "straw_orange",
+    "name": "Orange Straw",
+    "imageUrl": "/images/components/straw_orange.png"
+  }
+]
