@@ -56,3 +56,21 @@ export interface Port {
   direction: number[]
   portIndex: number
 }
+
+export interface Assembly {
+  id: string
+  name: string
+  description?: string
+  estimatedTime: number // in minutes
+  objective?: string
+  steps: Action[]
+}
+
+export interface Action {
+  id: string
+  name: string
+  description?: string
+  order: number
+  straws?: Straw[]
+  connectors?: Connector[]
+}
