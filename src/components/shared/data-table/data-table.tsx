@@ -11,15 +11,7 @@ import {
   type VisibilityState,
   useReactTable
 } from '@tanstack/react-table'
-import { Button } from '@/components/shadcn/button'
-import { Input } from '@/components/shadcn/input'
-import { ChevronDown } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger
-} from '@/components/shadcn/dropdown-menu'
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { SPagination } from '../SPagination'
 
@@ -33,7 +25,7 @@ export type DataTableProps<TData, TValue> = {
   toolbarRight?: React.ReactNode
   pagingData?: any
   pagingParams?: any
-  handlePageChange?: (page: number) => void
+  handlePageChange: (page: number) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -155,7 +147,7 @@ export function DataTable<TData, TValue>({
           <SPagination
             pageNumber={pagingParams?.pageNumber}
             totalPages={pagingData.data.totalPages}
-            onPageChanged={handlePageChange ?? (() => {})}
+            onPageChanged={handlePageChange}
             className='w-fit'
           />
         )}

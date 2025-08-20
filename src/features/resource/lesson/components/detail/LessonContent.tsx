@@ -3,9 +3,7 @@
 import React from 'react'
 import { useSearchContentQuery } from '@/features/content/api/contentApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import {
-  useUpdateStudentProgressMutation
-} from '@/features/student-progress/api/studentProgressApi'
+import { useUpdateSectionStudentProgressMutation } from '@/features/student-progress/api/studentProgressApi'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 import { ProgressStatus, StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { toast } from 'sonner'
@@ -34,12 +32,12 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
     }
   )
 
-  const [completeSection, { isLoading }] = useUpdateStudentProgressMutation()
+  const [completeSection, { isLoading }] = useUpdateSectionStudentProgressMutation()
 
   const handleCompleteSection = async () => {
     try {
       if (enrollmentId) {
-        await completeSection({ id: enrollmentId, body: { lessonId, sectionId } }).unwrap()
+        await completeSection({ enrollmentId, lessonId, sectionId }).unwrap()
         dispatch(studentProgressSlice.actions.setSelectedSectionStatus(ProgressStatus.COMPLETED))
         toast.success('Section completed!')
       }

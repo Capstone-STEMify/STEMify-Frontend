@@ -3,6 +3,7 @@
 import { Badge } from '@/components/shadcn/badge'
 import CardLayout from '@/components/shared/card/CardLayout'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
@@ -10,13 +11,29 @@ import { useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { UserRole } from '@/types/userRole'
 import { EllipsisVertical } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function LessonListContent() {
   const t = useTranslations('LessonList')
+
+  const [updateActive, setUpdateActive] = useState(false)
+
+  const { status } = useSession()
+  const role = useAppSelector((state) => state.auth.user?.role)
+
+  useEffect(() => {
+    if (status === 'authenticated' && role === UserRole.STAFF) {
+      setUpdateActive(true)
+    } else {
+      setUpdateActive(false)
+    }
+  }, [status, role])
+
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
 
@@ -61,6 +78,14 @@ export default function LessonListContent() {
     )
   }
 
+  if (status === 'loading') {
+    return (
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+        <LoadingComponent size={18} textShow={false} />
+      </div>
+    )
+  }
+
   if (!lessonData || lessonData.data.items.length === 0) {
     return <SEmpty title={t('noLesson')} description={t('noLessonFound')} />
   }
@@ -94,13 +119,18 @@ export default function LessonListContent() {
                   <p key='view' className='text-sm'>
                     View
                   </p>,
+                  updateActive ? (
+                    <Link href={`/resource/lesson/update/${lesson.id}`} key='update' className='text-sm'>
+                      <p>Update</p>
+                    </Link>
+                  ) : null,
                   <p key='add-to-course' className='text-sm'>
                     Add to Course
                   </p>,
                   <p key='share' className='text-sm'>
                     Share
                   </p>
-                ]}
+                ].filter(Boolean)}
               />
             </div>
           </div>

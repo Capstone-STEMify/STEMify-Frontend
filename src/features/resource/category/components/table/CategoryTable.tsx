@@ -8,6 +8,9 @@ import { Plus } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { Input } from '@/components/shadcn/input'
 import { useTranslations } from 'next-intl'
+import { CategoryQueryParams } from '../../types/category.type'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setPageIndex } from '@/features/resource/category/slice/categorySlice'
 
 // Debounce hook to delay API calls
 function useDebounce(value: string, delay: number) {
@@ -24,14 +27,22 @@ function useDebounce(value: string, delay: number) {
 }
 
 export default function CategoryTable() {
+  const t = useTranslations('Admin.placeholder')
   const { openModal } = useModal()
+  const dispatch = useAppDispatch()
   const columns = useGetCategoryAction()
 
-  const t = useTranslations('Admin.placeholder')
-
   const [searchQuery, setSearchQuery] = useState('')
-  // Debounce the search query to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
+
+  const categoryParams = useAppSelector((state) => state.category)
+
+  const queryParams: CategoryQueryParams = {
+    pageNumber: categoryParams.pageNumber,
+    pageSize: categoryParams.pageSize,
+    search: categoryParams.search,
+    status: categoryParams.status
+  }
 
   const { data } = useSearchCategoryQuery({
     search: debouncedSearchQuery
@@ -41,6 +52,10 @@ export default function CategoryTable() {
 
   const handleCreate = () => {
     openModal('upsertCategory')
+  }
+
+  const handlePageChange = (page: number) => {
+    dispatch(setPageIndex(page))
   }
 
   return (
@@ -56,7 +71,14 @@ export default function CategoryTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable data={rows} columns={columns} enableRowSelection />
+      <DataTable
+        data={rows}
+        columns={columns}
+        enableRowSelection
+        pagingData={data}
+        pagingParams={queryParams}
+        handlePageChange={handlePageChange}
+      />
     </div>
   )
 }

@@ -21,9 +21,6 @@ import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
-import { useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
-import { useRouter } from 'next/navigation'
 
 function MenuItem({
   children,

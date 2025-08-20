@@ -13,9 +13,25 @@ import { resetParams, setPageSize, setParam, setSearchTerm } from '@/features/re
 import { getLabel, getOptions } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import { CourseStatus } from '../../types/course.type'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { UserRole } from '@/types/userRole'
 
 export default function CourseListAction() {
   const t = useTranslations('CourseList')
+  const [statusActive, setStatusActive] = useState(false)
+
+  const { status } = useSession()
+  const role = useAppSelector((state) => state.auth.user?.role)
+
+  useEffect(() => {
+    if (status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.STAFF)) {
+      setStatusActive(true)
+    } else {
+      setStatusActive(false)
+    }
+  }, [status, role])
 
   // Redux hooks
   const dispatch = useAppDispatch()
@@ -26,6 +42,14 @@ export default function CourseListAction() {
   const [getSkill, { data: skills }] = useLazyGetAllSkillQuery()
   const [getAgeRange, { data: ageRanges }] = useLazyGetAllAgeRangeQuery()
   const [getStandard, { data: standards }] = useLazyGetAllStandardQuery()
+
+  if (status === 'loading') {
+    return (
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+        <LoadingComponent size={18} textShow={false} />
+      </div>
+    )
+  }
 
   // Clear all filters and reset page size
   const clearAll = () => {
@@ -148,12 +172,14 @@ export default function CourseListAction() {
           />
 
           {/* Status */}
-          <SSelect
-            placeholder={t('placeHolder.status')}
-            value={filters.status?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'status', value: val as CourseStatus }))}
-            options={statusOptions}
-          />
+          {statusActive && (
+            <SSelect
+              placeholder={t('placeHolder.status')}
+              value={filters.status?.toString() ?? ''}
+              onChange={(val) => dispatch(setParam({ key: 'status', value: val as CourseStatus }))}
+              options={statusOptions}
+            />
+          )}
         </div>
 
         {/* Active Filters */}

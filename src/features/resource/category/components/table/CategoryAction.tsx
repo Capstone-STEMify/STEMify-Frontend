@@ -36,8 +36,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
     },
     {
       accessorKey: 'name',
-      header: () => <div>Name</div>,
-      cell: ({ row }) => <div className='cursor-pointer'>{row.getValue('name')}</div>
+      header: 'Name'
     },
     createActionsColumnFromItems<Category>([
       {
