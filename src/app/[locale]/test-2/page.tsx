@@ -2,16 +2,17 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Grid } from '@react-three/drei'
 import { Straw } from 'app/[locale]/test-2/Straw'
-import sceneData from '../test-2/straw-test.json'
 import { createRef, useEffect, useMemo, useRef, useState } from 'react'
 import { Group } from 'three'
 
 // ✨ import react-spring
 import { a, useTransition } from '@react-spring/three'
 import { Connector3D } from './Connector'
+import { sceneData } from '@/utils/cts'
+import assembly from './straw-test.json'
 
 export default function App() {
-  const { straws, connectors, scene } = sceneData
+  const { straws, connectors } = assembly
   const strawRefs = useRef<Record<string, React.Ref<Group>>>({})
   const connectorRefs = useRef<Record<string, React.Ref<Group>>>({})
 
@@ -99,20 +100,28 @@ export default function App() {
         </button>
       </div>
 
-      <Canvas camera={{ position: [20, 10, 30], fov: scene.environment.camera.fov }}>
-        <ambientLight color={scene.environment.lighting.ambient} />
+      <Canvas camera={{ position: [20, 10, 30], fov: sceneData.environment.camera.fov }}>
+        <color attach='background' args={['#f5f5f5']} />
+
+        {/* 💡 Ambient light nhẹ để làm sáng toàn bộ */}
+        <ambientLight color={sceneData.environment.lighting.ambient || '#ffffff'} intensity={0.5} />
+
+        {/* ☀️ Directional light mạnh và chiếu vào đúng hướng */}
         <directionalLight
-          color={scene.environment.lighting.directional.color}
-          intensity={scene.environment.lighting.directional.intensity}
+          color={sceneData.environment.lighting.directional.color || '#ffffff'}
+          intensity={sceneData.environment.lighting.directional.intensity || 1.5}
           position={[
-            scene.environment.lighting.directional.position.x,
-            scene.environment.lighting.directional.position.y,
-            scene.environment.lighting.directional.position.z
+            sceneData.environment.lighting.directional.position.x || 5,
+            sceneData.environment.lighting.directional.position.y || 10,
+            sceneData.environment.lighting.directional.position.z || 5
           ]}
+          castShadow
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
         />
         <OrbitControls />
-        {scene.workspace.grid.visible && (
-          <Grid args={[scene.workspace.grid.size, scene.workspace.grid.size, scene.workspace.grid.divisions]} />
+        {sceneData.workspace.grid.visible && (
+          <Grid args={[sceneData.workspace.grid.size, sceneData.workspace.grid.size, sceneData.workspace.grid.divisions]} />
         )}
 
         {/* ✅ RENDER CONNECTORS TRƯỚC */}
