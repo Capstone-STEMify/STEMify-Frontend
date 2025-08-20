@@ -10,6 +10,7 @@ import { createActionsColumnFromItems, createSelectColumn } from '@/components/s
 import z from 'zod'
 import { Badge } from '@/components/shadcn/badge'
 import Image from 'next/image'
+import { useLocale } from 'next-intl'
 
 export const courseTableSchema = z.object({
   id: z.number()
@@ -41,8 +42,9 @@ const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
 export function useGetCourseAction(): ColumnDef<Course>[] {
   const router = useRouter()
   const { openModal } = useModal()
-  const [deleteCourse] = useDeleteCourseMutation() // Hook for deletion
+  const [deleteCourse] = useDeleteCourseMutation()
   const [updateCourseStatus] = useUpdateCourseMutation()
+  const locale = useLocale()
 
   const handleDelete = async (id: number) => {
     try {
@@ -98,7 +100,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
         const courseId = row.original.id
         return (
           <div
-            onClick={() => router.push(`/admin/course/${courseId}`)}
+            onClick={() => router.push(`/${locale}/admin/course/${courseId}`)}
             className='cursor-pointer font-bold transition hover:opacity-80'
           >
             {row.getValue('title')}
@@ -153,7 +155,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
       {
         label: 'Edit',
         onClick: ({ original }) => {
-          router.push(`/admin/course/update/${original.id}`)
+          router.push(`/${locale}/admin/course/update/${original.id}`)
         }
       },
       {

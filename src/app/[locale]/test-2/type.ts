@@ -1,15 +1,9 @@
-export type Vector3 = {
-  x: number
-  y: number
-  z: number
-}
-
 export interface Straw {
   id: string
   name: string
   geometry: Geometry
   transform: Transform
-  material: Material
+  color: string
   endpoints: Endpoint[]
   physics: Physics
 }
@@ -21,18 +15,9 @@ export interface Geometry {
 }
 
 export interface Transform {
-  position: Vector3
-  rotation: Vector3
-  scale: Vector3
-}
-
-export interface Material {
-  type?: string
-  color?: string
-  flexibility?: number // 0–100
-  opacity: number // 0–1
-  roughness?: number // 0–1
-  metalness?: number // 0–1
+  position: number[]
+  rotation: number[]
+  scale: number[]
 }
 
 export interface Physics {
@@ -43,24 +28,39 @@ export interface Physics {
 
 export interface Endpoint {
   id: string
-  localPosition: Vector3
-  connectionId: string | null
-  isAvailable: boolean
+  localPosition: number[]
 }
 
 export interface Connector {
-  id: number
+  id: string
   name: string
-  type: string // e.g., "connector"
   diameter: number
-  material: Material
+  color: string
   transform: Transform
   ports: Port[]
 }
 
 export interface Port {
-  id: number
-  transform: Transform
-  endpoints: Endpoint[]
-  portIndex: number
+  id: string
+  localPosition: number[]
+  direction: number[]
+}
+
+export interface Assembly {
+  id: string
+  name: string
+  description?: string
+  imageUrl?: string
+  estimatedTime: number // in minutes
+  objective?: string
+  steps: Action[]
+}
+
+export interface Action {
+  id: string
+  name: string
+  description?: string
+  order: number
+  straws?: Straw[]
+  connectors?: Connector[]
 }

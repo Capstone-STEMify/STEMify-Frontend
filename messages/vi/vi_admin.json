@@ -74,7 +74,10 @@
         "firstName": "Tên",
         "lastName": "Họ",
         "createButton": "Tạo",
-        "updateButton": "Cập nhật"
-    }
+        "updateButton": "Cập nhật",
+        "account": "Tài khoản",
+        "notifications": "Thông báo",
+        "signOut": "Đăng xuất"
+      }
     }
 }
