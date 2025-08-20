@@ -27,7 +27,7 @@ export default function LessonListContent() {
   const role = useAppSelector((state) => state.auth.user?.role)
 
   useEffect(() => {
-    if (status === 'authenticated' && role === UserRole.TEACHER) {
+    if (status === 'authenticated' && role === UserRole.STAFF) {
       setUpdateActive(true)
     } else {
       setUpdateActive(false)
@@ -119,18 +119,18 @@ export default function LessonListContent() {
                   <p key='view' className='text-sm'>
                     View
                   </p>,
-                  updateActive && (
+                  updateActive ? (
                     <Link href={`/resource/lesson/update/${lesson.id}`} key='update' className='text-sm'>
                       <p>Update</p>
                     </Link>
-                  ),
+                  ) : null,
                   <p key='add-to-course' className='text-sm'>
                     Add to Course
                   </p>,
                   <p key='share' className='text-sm'>
                     Share
                   </p>
-                ]}
+                ].filter(Boolean)}
               />
             </div>
           </div>

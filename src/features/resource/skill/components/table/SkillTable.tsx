@@ -4,12 +4,13 @@ import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useSearchSkillQuery } from '@/features/resource/skill/api/skillApi'
 import { useGetSkillAction } from '@/features/resource/skill/components/table/SkillAction'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import React, { useState, useEffect } from 'react'
 import { SkillQueryParams } from '../../types/skill.type'
+import { setPageIndex } from '@/features/resource/skill/slice/skillSlice'
 
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value)
@@ -27,6 +28,7 @@ function useDebounce(value: string, delay: number) {
 export default function SkillTable() {
   const { openModal } = useModal()
   const columns = useGetSkillAction()
+  const dispatch = useAppDispatch()
 
   const t = useTranslations('Admin.placeholder')
 
@@ -52,6 +54,10 @@ export default function SkillTable() {
     openModal('upsertSkill')
   }
 
+  const handlePageChange = (page: number) => {
+    dispatch(setPageIndex(page))
+  }
+
   return (
     <div>
       <div className='flex items-center justify-between py-4'>
@@ -65,7 +71,14 @@ export default function SkillTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams} />
+      <DataTable
+        data={rows}
+        columns={columns}
+        enableRowSelection
+        pagingData={data}
+        pagingParams={queryParams}
+        handlePageChange={handlePageChange}
+      />
     </div>
   )
 }

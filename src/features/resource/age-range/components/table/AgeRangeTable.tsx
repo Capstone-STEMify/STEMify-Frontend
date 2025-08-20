@@ -9,7 +9,8 @@ import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import React, { useState, useEffect } from 'react'
 import { AgeRangeQueryParams } from '../../types/ageRange.type'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setPageIndex, setPageSize } from '@/features/resource/age-range/slice/ageRangeSlice'
 
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value)
@@ -25,10 +26,11 @@ function useDebounce(value: string, delay: number) {
 }
 
 export default function AgeRangeTable() {
+  const t = useTranslations('Admin.placeholder')
+
   const { openModal } = useModal()
   const columns = useGetAgeRangeAction()
-
-  const t = useTranslations('Admin.placeholder')
+  const dispatch = useAppDispatch()
 
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
@@ -42,6 +44,10 @@ export default function AgeRangeTable() {
     status: ageRangeParams.status
   }
 
+  useEffect(() => {
+    dispatch(setPageSize(2))
+  }, [dispatch])
+
   const { data, isLoading } = useSearchAgeRangeQuery({
     search: debouncedSearchQuery
   })
@@ -50,6 +56,10 @@ export default function AgeRangeTable() {
 
   const handleCreate = () => {
     openModal('upsertAgeRange')
+  }
+
+  const handlePageChange = (page: number) => {
+    dispatch(setPageIndex(page))
   }
 
   return (
@@ -65,7 +75,14 @@ export default function AgeRangeTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams} />
+      <DataTable
+        data={rows}
+        columns={columns}
+        enableRowSelection
+        pagingData={data}
+        pagingParams={queryParams}
+        handlePageChange={handlePageChange}
+      />
     </div>
   )
 }
