@@ -11,7 +11,7 @@ export function useGetUserAction(): ColumnDef<User>[] {
   const { openModal } = useModal()
   const [deleteUser] = useDeleteUserMutation()
 
-  const handleDelete = async (id: number, userName: string) => {
+  const handleDelete = async (id: string, userName: string) => {
     try {
       await deleteUser(id).unwrap()
       toast.success(`Successfully deleted user ${userName}.`)

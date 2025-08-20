@@ -5,7 +5,7 @@ export const ROLES = ['STUDENT', 'TEACHER', 'STAFF', 'ADMIN'] as const
 export type Role = (typeof ROLES)[number]
 
 export type User = {
-  userId: number
+  userId: string
   email: string
   userName: string
   role: Role
