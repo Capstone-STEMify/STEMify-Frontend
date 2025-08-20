@@ -60,6 +60,11 @@ const data = {
       title: 'side_bar.lesson',
       url: '/admin/lesson',
       icon: IconChartBar
+    },
+    {
+      title: 'side_bar.user',
+      url: '/admin/user',
+      icon: IconUsers
     }
   ],
   navClouds: [

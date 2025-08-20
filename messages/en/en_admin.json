@@ -3,6 +3,7 @@
         "side_bar": {
             "course": "Courses",
             "lesson": "Lessons",
+            "user": "Users",
             "document": "Document",
             "topic": "Topic",
             "skill": "Skills",
@@ -20,7 +21,8 @@
             "topicSearch": "Search by topic name...",
             "skillSearch": "Search by skill name...",
             "ageRangeSearch": "Search by age range...",
-            "standardSearch": "Search by standard name..."
+            "standardSearch": "Search by standard name...",
+            "userSearch": "Search by username, email..."
         },
         "topic": {
             "createTitle": "Create Topic",
@@ -58,6 +60,19 @@
             "name": "Standard Name",
             "description": "Enter the name of the Standard.", 
             "placeholder": "e.g., Common Core",
+            "createButton": "Create",
+            "updateButton": "Update"
+        },
+        "user": {
+            "createTitle": "Create User",
+            "editTitle": "Edit User",
+            "email": "Email",
+            "username": "Username",
+            "password": "Password",
+            "passwordDescription": "Leave blank to keep current password", 
+            "role": "Role",
+            "firstName": "First Name",
+            "lastName": "Last Name",
             "createButton": "Create",
             "updateButton": "Update"
         }
