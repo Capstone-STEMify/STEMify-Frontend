@@ -1,7 +1,6 @@
 import { forwardRef, useMemo } from 'react'
-import { Group, Vector3, Euler, Quaternion } from 'three'
-import { CylinderGeometry, SphereGeometry } from 'three'
-import { useSpringValue, a } from '@react-spring/three'
+import { Group, Vector3, Quaternion, Euler } from 'three'
+import { a } from '@react-spring/three'
 import { Connector } from './type'
 
 interface Props {
@@ -12,53 +11,33 @@ interface Props {
 export const Connector3D = forwardRef<Group, Props>(({ connector, fade }, ref) => {
   const { diameter, material, transform, ports } = connector
 
-  // Tính thông tin cho mỗi port giống như Straw
   const portMeshes = useMemo(() => {
-    return ports
-      .map((port) => {
-        if (!port.endpoints || port.endpoints.length < 2) return null
+    return ports.map((port) => {
+      const localPos = new Vector3(...port.localPosition)
+      const localDir = new Vector3(...port.direction).normalize()
 
-        const A_local = new Vector3(
-          port.endpoints[0].localPosition.x,
-          port.endpoints[0].localPosition.y,
-          port.endpoints[0].localPosition.z
-        )
-        const B_local = new Vector3(
-          port.endpoints[1].localPosition.x,
-          port.endpoints[1].localPosition.y,
-          port.endpoints[1].localPosition.z
-        )
+      const portLength = 1.5
+      const end = localPos.clone().add(localDir.clone().multiplyScalar(portLength))
+      const mid = localPos.clone().add(end).multiplyScalar(0.5)
 
-        const scl = new Vector3(port.transform.scale.x, port.transform.scale.y, port.transform.scale.z)
-        const rotEuler = new Euler(
-          port.transform.rotation.x,
-          port.transform.rotation.y,
-          port.transform.rotation.z,
-          'XYZ'
-        )
-        const trn = new Vector3(port.transform.position.x, port.transform.position.y, port.transform.position.z)
+      const quaternion = new Quaternion().setFromUnitVectors(new Vector3(0, 1, 0), localDir)
+      const rotEuler = new Euler().setFromQuaternion(quaternion)
 
-        const A = A_local.clone().multiply(scl).applyEuler(rotEuler).add(trn)
-        const B = B_local.clone().multiply(scl).applyEuler(rotEuler).add(trn)
-
-        const mid = A.clone().add(B).multiplyScalar(0.5)
-        const len = A.distanceTo(B)
-        const dir = B.clone().sub(A).normalize()
-
-        const quat = new Quaternion().setFromUnitVectors(new Vector3(0, 1, 0), dir)
-        const eul = new Euler().setFromQuaternion(quat, 'XYZ')
-
-        return { id: port.id, pos: mid, rot: eul, len }
-      })
-      .filter(Boolean)
+      return {
+        id: port.id,
+        pos: mid,
+        rot: rotEuler,
+        len: portLength
+      }
+    })
   }, [ports])
 
   return (
     <group
       ref={ref}
-      position={[transform.position.x, transform.position.y, transform.position.z]}
-      rotation={[transform.rotation.x, transform.rotation.y, transform.rotation.z]}
-      scale={[transform.scale.x, transform.scale.y, transform.scale.z]}
+      position={[transform.position[0], transform.position[1], transform.position[2]]}
+      rotation={[transform.rotation[0], transform.rotation[1], transform.rotation[2]]}
+      scale={[transform.scale[0], transform.scale[1], transform.scale[2]]}
     >
       {/* connector hình cầu */}
       <mesh>
@@ -73,7 +52,7 @@ export const Connector3D = forwardRef<Group, Props>(({ connector, fade }, ref) =
         />
       </mesh>
 
-      {/* render các port giống straw (dưới dạng cylinder) */}
+      {/* render các port dưới dạng cylinder */}
       {portMeshes.map(
         (p) =>
           p && (
@@ -88,4 +67,5 @@ export const Connector3D = forwardRef<Group, Props>(({ connector, fade }, ref) =
     </group>
   )
 })
+
 Connector3D.displayName = 'Connector3D'

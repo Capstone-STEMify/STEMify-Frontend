@@ -40,8 +40,10 @@ export default function CourseListContent() {
     pageNumber: courseParams.pageNumber,
     pageSize: courseParams.pageSize,
     search: courseParams.search,
-    status: [UserRole.STUDENT, UserRole.GUEST].includes(userRole as UserRole) ? CourseStatus.PUBLISHED : undefined
+    status: courseParams.status
   }
+
+  console.log(queryParams)
 
   const { data: courseData, isLoading } = useSearchCourseQuery(queryParams)
 
