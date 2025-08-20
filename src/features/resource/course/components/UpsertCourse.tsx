@@ -7,9 +7,6 @@ import { useModal } from '@/providers/ModalProvider'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { useEffect, useRef } from 'react'
 import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
-import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
-import { useGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
-import { useGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
 import { useAppForm } from '@/components/shared/form/items'
 import {
   useCreateCourseMutation,
@@ -116,6 +113,7 @@ export default function UpsertCourse() {
   const params = useParams()
   const courseId = params.courseId
   const t = useTranslations('courseManagement')
+  const initialCourseDataRef = useRef<CourseFormData | null>(null)
 
   const { data: ageRanges } = useGetAllAgeRangeQuery()
   const { data: courseData, isLoading } = useGetCourseByIdQuery(courseId ? Number(courseId) : 0, {
@@ -127,7 +125,7 @@ export default function UpsertCourse() {
   const isSubmitting = isCreating || isUpdating
 
   const form = useAppForm({
-    defaultValues: defaultCourseData,
+    defaultValues: courseId && courseData?.data ? mapCourseToFormData(courseData) : defaultCourseData,
     validators: {
       onChange: (courseId ? updateCourseSchema : createCourseSchema) as any
     },
@@ -158,20 +156,22 @@ export default function UpsertCourse() {
     }
   })
 
-  const initialCourseDataRef = useRef<CourseFormData | null>(null)
+  // const didResetOnce = useRef(false)
 
-  const didResetOnce = useRef(false)
+  // useEffect(() => {
+  //   console.log('courseData: ', courseData)
 
-  useEffect(() => {
-    if (!didResetOnce.current && courseData?.data) {
-      const mapped = mapCourseToFormData(courseData)
-      form.reset(mapped)
-      initialCourseDataRef.current = mapped
-      didResetOnce.current = true
-    }
-  }, [courseData])
+  //   if (!didResetOnce.current && courseData?.data) {
+  //     const mapped = mapCourseToFormData(courseData)
+  //     console.log('Mapped form data:', mapped)
 
-  if (!courseId || !ageRanges || (isLoading && !courseData)) {
+  //     form.reset(mapped)
+  //     initialCourseDataRef.current = mapped
+  //     didResetOnce.current = true
+  //   }
+  // }, [courseData])
+
+  if ((courseId && (!courseData || isLoading)) || !ageRanges) {
     return (
       <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>
         <LoadingComponent />
