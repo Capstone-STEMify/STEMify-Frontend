@@ -38,12 +38,10 @@ export interface Physics {
 export interface Endpoint {
   id: string
   localPosition: number[]
-  connectionId: string | null
-  isAvailable: boolean
 }
 
 export interface Connector {
-  id: number
+  id: string
   name: string
   type: string
   diameter: number
@@ -53,7 +51,7 @@ export interface Connector {
 }
 
 export interface Port {
-  id: number
+  id: string
   localPosition: number[]
   direction: number[]
   portIndex: number

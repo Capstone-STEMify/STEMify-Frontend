@@ -268,7 +268,7 @@
 
   "connectors": [
     {
-      "id": 3,
+      "id": "C003",
       "name": "3-leg Connector",
       "type": "connector",
       "diameter": 1,
@@ -286,19 +286,19 @@
       },
       "ports": [
         {
-          "id": 1,
+          "id": "C003-1",
           "portIndex": 0,
           "localPosition": [0, 0, 0],
           "direction": [2, 0, 0]
         },
         {
-          "id": 2,
+          "id": "C003-2",
           "portIndex": 1,
           "localPosition": [0, 0, 0],
           "direction": [1, 2, 1]
         },
         {
-          "id": 3,
+          "id": "C003-3",
           "portIndex": 2,
           "localPosition": [0, 0, 0],
           "direction": [0, 0, 2]
@@ -306,7 +306,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": "C003",
       "name": "3-leg Connector",
       "type": "connector",
       "diameter": 1,
@@ -324,19 +324,19 @@
       },
       "ports": [
         {
-          "id": 1,
+          "id": "C003-1",
           "portIndex": 0,
           "localPosition": [0, 0, 0],
           "direction": [2, 0, 0]
         },
         {
-          "id": 2,
+          "id": "C003-2",
           "portIndex": 1,
           "localPosition": [0, 0, 0],
           "direction": [1, 2, -1]
         },
         {
-          "id": 3,
+          "id": "C003-3",
           "portIndex": 2,
           "localPosition": [0, 0, 0],
           "direction": [0, 0, -2]
@@ -344,7 +344,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": "C003",
       "name": "3-leg Connector",
       "type": "connector",
       "diameter": 1,
@@ -362,19 +362,19 @@
       },
       "ports": [
         {
-          "id": 1,
+          "id": "C003-1",
           "portIndex": 0,
           "localPosition": [0, 0, 0],
           "direction": [-2, 0, 0]
         },
         {
-          "id": 2,
+          "id": "C003-2",
           "portIndex": 1,
           "localPosition": [0, 0, 0],
           "direction": [-1, 2, -1]
         },
         {
-          "id": 3,
+          "id": "C003-3",
           "portIndex": 2,
           "localPosition": [0, 0, 0],
           "direction": [0, 0, -2]
@@ -382,7 +382,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": "C003",
       "name": "3-leg Connector",
       "type": "connector",
       "diameter": 1,
@@ -400,19 +400,19 @@
       },
       "ports": [
         {
-          "id": 1,
+          "id": "C003-1",
           "portIndex": 0,
           "localPosition": [0, 0, 0],
           "direction": [-2, 0, 0]
         },
         {
-          "id": 2,
+          "id": "C003-2",
           "portIndex": 1,
           "localPosition": [0, 0, 0],
           "direction": [-1, 2, 1]
         },
         {
-          "id": 3,
+          "id": "C003-3",
           "portIndex": 2,
           "localPosition": [0, 0, 0],
           "direction": [0, 0, 2]
@@ -420,8 +420,8 @@
       ]
     },
     {
-      "id": 3,
-      "name": "3-leg Connector",
+      "id": "C005",
+      "name": "4-leg Connector",
       "type": "connector",
       "diameter": 1,
       "material": {
@@ -438,25 +438,25 @@
       },
       "ports": [
         {
-          "id": 1,
+          "id": "C005-1",
           "portIndex": 0,
           "localPosition": [0, 0, 0],
           "direction": [1, -2, -1]
         },
         {
-          "id": 2,
+          "id": "C005-2",
           "portIndex": 1,
           "localPosition": [0, 0, 0],
           "direction": [1, -2, 1]
         },
         {
-          "id": 3,
+          "id": "C005-3",
           "portIndex": 2,
           "localPosition": [0, 0, 0],
           "direction": [-1, -2, -1]
         },
         {
-          "id": 3,
+          "id": "C005-4",
           "portIndex": 2,
           "localPosition": [0, 0, 0],
           "direction": [-1, -2, 1]
