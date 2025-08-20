@@ -347,7 +347,7 @@
           "id": "C005",
           "name": "4-leg Connector",
           "diameter": 1,
-          "color": "#D4F300",
+          "color": "#f46863",
           "transform": {
             "position": [5.6, 11.2, 5.6],
             "rotation": [0, 0, 0],

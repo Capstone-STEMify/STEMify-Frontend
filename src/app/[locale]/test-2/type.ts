@@ -50,6 +50,7 @@ export interface Assembly {
   id: string
   name: string
   description?: string
+  imageUrl?: string
   estimatedTime: number // in minutes
   objective?: string
   steps: Action[]
