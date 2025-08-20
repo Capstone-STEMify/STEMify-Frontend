@@ -13,20 +13,20 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 0, "y": 0, "z": 0 },
+          "localPosition": [0, 0, 0],
           "connectionId": null,
           "isAvailable": true
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 11.2, "y": 0, "z": 0 },
+          "localPosition": [11.2, 0, 0],
           "connectionId": null,
           "isAvailable": true
         }
@@ -46,20 +46,20 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 0, "y": 0, "z": 0 },
+          "localPosition": [0, 0, 0],
           "connectionId": null,
           "isAvailable": true
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 0, "y": 0, "z": 11.7 },
+          "localPosition": [0, 0, 11.7],
           "connectionId": null,
           "isAvailable": true
         }
@@ -79,20 +79,20 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 1 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 1],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 0, "y": 0, "z": 11.2 },
+          "localPosition": [0, 0, 11.2],
           "connectionId": null,
           "isAvailable": true
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 11.2, "y": 0, "z": 11.2 },
+          "localPosition": [11.2, 0, 11.2],
           "connectionId": null,
           "isAvailable": true
         }
@@ -112,20 +112,20 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 1 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 1],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 11.7, "y": 0, "z": -0.5 },
+          "localPosition": [11.7, 0, -0.5],
           "connectionId": null,
           "isAvailable": true
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 11.7, "y": 0, "z": 11.2 },
+          "localPosition": [11.7, 0, 11.2],
           "connectionId": null,
           "isAvailable": true
         }
@@ -145,20 +145,20 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 0, "y": 0, "z": 0 },
+          "localPosition": [0, 0, 0],
           "connectionId": null,
           "isAvailable": true
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 5.6, "y": 11.2, "z": 5.6 },
+          "localPosition": [5.6, 11.2, 5.6],
           "connectionId": null,
           "isAvailable": true
         }
@@ -178,20 +178,20 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 11.7, "y": 0, "z": 0 },
+          "localPosition": [11.7, 0, 0],
           "connectionId": null,
           "isAvailable": true
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 5.6, "y": 11.2, "z": 5.6 },
+          "localPosition": [5.6, 11.2, 5.6],
           "connectionId": null,
           "isAvailable": true
         }
@@ -211,20 +211,20 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 0, "y": 0, "z": 12.2 },
+          "localPosition": [0, 0, 12.2],
           "connectionId": null,
           "isAvailable": true
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 5.6, "y": 11.2, "z": 5.6 },
+          "localPosition": [5.6, 11.2, 5.6],
           "connectionId": null,
           "isAvailable": true
         }
@@ -244,20 +244,20 @@
         "metalness": 0.0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "endpoints": [
         {
           "id": "pink_start",
-          "localPosition": { "x": 11.7, "y": 0, "z": 12.2 },
+          "localPosition": [11.7, 0, 12.2],
           "connectionId": null,
           "isAvailable": true
         },
         {
           "id": "pink_end",
-          "localPosition": { "x": 5.6, "y": 11.2, "z": 5.6 },
+          "localPosition": [5.6, 11.2, 5.6],
           "connectionId": null,
           "isAvailable": true
         }
@@ -280,9 +280,9 @@
         "metalness": 0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "ports": [
         {
@@ -318,9 +318,9 @@
         "metalness": 0
       },
       "transform": {
-        "position": { "x": 0, "y": 0, "z": 12.2 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [0, 0, 12.2],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "ports": [
         {
@@ -356,9 +356,9 @@
         "metalness": 0
       },
       "transform": {
-        "position": { "x": 11.7, "y": 0, "z": 12.2 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [11.7, 0, 12.2],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "ports": [
         {
@@ -394,9 +394,9 @@
         "metalness": 0
       },
       "transform": {
-        "position": { "x": 11.7, "y": 0, "z": 0 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [11.7, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "ports": [
         {
@@ -432,9 +432,9 @@
         "metalness": 0
       },
       "transform": {
-        "position": { "x": 5.6, "y": 11.2, "z": 5.6 },
-        "rotation": { "x": 0, "y": 0, "z": 0 },
-        "scale": { "x": 1, "y": 1, "z": 1 }
+        "position": [5.6, 11.2, 5.6],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1]
       },
       "ports": [
         {

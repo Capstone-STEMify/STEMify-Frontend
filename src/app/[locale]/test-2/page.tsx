@@ -50,7 +50,7 @@ export default function App() {
     enter: { s: 1, y: 0, o: 1 },
     leave: { s: 0.8, y: -0.2, o: 0 },
     trail: 100,
-    config: { tension: 160, friction: 18 }
+    config: (item, state, phase) => (phase === 'leave' ? { duration: 130 } : { tension: 170, friction: 20 })
   })
 
   {
@@ -121,7 +121,9 @@ export default function App() {
         />
         <OrbitControls />
         {sceneData.workspace.grid.visible && (
-          <Grid args={[sceneData.workspace.grid.size, sceneData.workspace.grid.size, sceneData.workspace.grid.divisions]} />
+          <Grid
+            args={[sceneData.workspace.grid.size, sceneData.workspace.grid.size, sceneData.workspace.grid.divisions]}
+          />
         )}
 
         {/* ✅ RENDER CONNECTORS TRƯỚC */}

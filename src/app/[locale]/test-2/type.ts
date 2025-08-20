@@ -1,9 +1,3 @@
-export type Vector3 = {
-  x: number
-  y: number
-  z: number
-}
-
 export interface Straw {
   id: string
   name: string
@@ -21,9 +15,9 @@ export interface Geometry {
 }
 
 export interface Transform {
-  position: Vector3
-  rotation: Vector3
-  scale: Vector3
+  position: number[]
+  rotation: number[]
+  scale: number[]
 }
 
 export interface Material {
@@ -43,7 +37,7 @@ export interface Physics {
 
 export interface Endpoint {
   id: string
-  localPosition: Vector3
+  localPosition: number[]
   connectionId: string | null
   isAvailable: boolean
 }
