@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const Connector3D = forwardRef<Group, Props>(({ connector, fade }, ref) => {
-  const { diameter, material, transform, ports } = connector
+  const { diameter, color, transform, ports } = connector
 
   const portMeshes = useMemo(() => {
     return ports.map((port) => {
@@ -42,14 +42,7 @@ export const Connector3D = forwardRef<Group, Props>(({ connector, fade }, ref) =
       {/* connector hình cầu */}
       <mesh>
         <sphereGeometry args={[diameter / 2, 32, 32]} />
-        <meshPhysicalMaterial
-          color={material.color}
-          transparent={material.opacity < 1}
-          opacity={material.opacity}
-          roughness={material.roughness}
-          metalness={material.metalness}
-          clearcoat={1}
-        />
+        <meshPhysicalMaterial color={color} clearcoat={1} />
       </mesh>
 
       {/* render các port dưới dạng cylinder */}
@@ -59,7 +52,7 @@ export const Connector3D = forwardRef<Group, Props>(({ connector, fade }, ref) =
             <group key={p.id} position={p.pos.toArray()} rotation={p.rot.toArray()}>
               <mesh>
                 <cylinderGeometry args={[diameter / 6, diameter / 6, p.len, 32]} />
-                <meshPhysicalMaterial color={material.color} />
+                <meshPhysicalMaterial color={color} />
               </mesh>
             </group>
           )

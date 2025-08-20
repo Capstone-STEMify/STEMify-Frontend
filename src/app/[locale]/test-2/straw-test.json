@@ -15,15 +15,8 @@
         {
           "id": "C003",
           "name": "3-leg Connector",
-          "type": "connector",
           "diameter": 1,
-          "material": {
-            "type": "plastic",
-            "color": "#D4F300",
-            "opacity": 1,
-            "roughness": 0.3,
-            "metalness": 0
-          },
+          "color": "#D4F300",
           "transform": {
             "position": [0, 0, 0],
             "rotation": [0, 0, 0],
@@ -32,19 +25,16 @@
           "ports": [
             {
               "id": "C003-1",
-              "portIndex": 0,
               "localPosition": [0, 0, 0],
               "direction": [2, 0, 0]
             },
             {
               "id": "C003-2",
-              "portIndex": 1,
               "localPosition": [0, 0, 0],
               "direction": [1, 2, 1]
             },
             {
               "id": "C003-3",
-              "portIndex": 2,
               "localPosition": [0, 0, 0],
               "direction": [0, 0, 2]
             }
@@ -53,15 +43,8 @@
         {
           "id": "C003",
           "name": "3-leg Connector",
-          "type": "connector",
           "diameter": 1,
-          "material": {
-            "type": "plastic",
-            "color": "#D4F300",
-            "opacity": 1,
-            "roughness": 0.3,
-            "metalness": 0
-          },
+          "color": "#D4F300",
           "transform": {
             "position": [0, 0, 12.2],
             "rotation": [0, 0, 0],
@@ -70,19 +53,16 @@
           "ports": [
             {
               "id": "C003-1",
-              "portIndex": 0,
               "localPosition": [0, 0, 0],
               "direction": [2, 0, 0]
             },
             {
               "id": "C003-2",
-              "portIndex": 1,
               "localPosition": [0, 0, 0],
               "direction": [1, 2, -1]
             },
             {
               "id": "C003-3",
-              "portIndex": 2,
               "localPosition": [0, 0, 0],
               "direction": [0, 0, -2]
             }
@@ -91,15 +71,8 @@
         {
           "id": "C003",
           "name": "3-leg Connector",
-          "type": "connector",
           "diameter": 1,
-          "material": {
-            "type": "plastic",
-            "color": "#D4F300",
-            "opacity": 1,
-            "roughness": 0.3,
-            "metalness": 0
-          },
+          "color": "#D4F300",
           "transform": {
             "position": [11.7, 0, 12.2],
             "rotation": [0, 0, 0],
@@ -108,19 +81,16 @@
           "ports": [
             {
               "id": "C003-1",
-              "portIndex": 0,
               "localPosition": [0, 0, 0],
               "direction": [-2, 0, 0]
             },
             {
               "id": "C003-2",
-              "portIndex": 1,
               "localPosition": [0, 0, 0],
               "direction": [-1, 2, -1]
             },
             {
               "id": "C003-3",
-              "portIndex": 2,
               "localPosition": [0, 0, 0],
               "direction": [0, 0, -2]
             }
@@ -129,15 +99,8 @@
         {
           "id": "C003",
           "name": "3-leg Connector",
-          "type": "connector",
           "diameter": 1,
-          "material": {
-            "type": "plastic",
-            "color": "#D4F300",
-            "opacity": 1,
-            "roughness": 0.3,
-            "metalness": 0
-          },
+          "color": "#D4F300",
           "transform": {
             "position": [11.7, 0, 0],
             "rotation": [0, 0, 0],
@@ -146,19 +109,16 @@
           "ports": [
             {
               "id": "C003-1",
-              "portIndex": 0,
               "localPosition": [0, 0, 0],
               "direction": [-2, 0, 0]
             },
             {
               "id": "C003-2",
-              "portIndex": 1,
               "localPosition": [0, 0, 0],
               "direction": [-1, 2, 1]
             },
             {
               "id": "C003-3",
-              "portIndex": 2,
               "localPosition": [0, 0, 0],
               "direction": [0, 0, 2]
             }
@@ -176,14 +136,7 @@
           "id": "straw_pink",
           "name": "Pink Straw",
           "geometry": { "length": 11.2, "diameter": 0.6, "wallThickness": 0.1 },
-          "material": {
-            "type": "plastic",
-            "color": "#E7A4D2",
-            "flexibility": 30,
-            "opacity": 1.0,
-            "roughness": 0.3,
-            "metalness": 0.0
-          },
+          "color": "#E7A4D2",
           "transform": {
             "position": [0, 0, 0],
             "rotation": [0, 0, 0],
@@ -193,14 +146,12 @@
             {
               "id": "pink_start",
               "localPosition": [0, 0, 0],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             },
             {
               "id": "pink_end",
               "localPosition": [11.2, 0, 0],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             }
           ],
           "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
@@ -209,14 +160,7 @@
           "id": "straw_pink",
           "name": "Pink Straw",
           "geometry": { "length": 11.2, "diameter": 0.6, "wallThickness": 0.1 },
-          "material": {
-            "type": "plastic",
-            "color": "#E7A4D2",
-            "flexibility": 30,
-            "opacity": 1.0,
-            "roughness": 0.3,
-            "metalness": 0.0
-          },
+          "color": "#E7A4D2",
           "transform": {
             "position": [0, 0, 0],
             "rotation": [0, 0, 0],
@@ -226,14 +170,12 @@
             {
               "id": "pink_start",
               "localPosition": [0, 0, 0],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             },
             {
               "id": "pink_end",
               "localPosition": [0, 0, 11.7],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             }
           ],
           "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
@@ -242,14 +184,7 @@
           "id": "straw_pink",
           "name": "Pink Straw",
           "geometry": { "length": 11.2, "diameter": 0.6, "wallThickness": 0.1 },
-          "material": {
-            "type": "plastic",
-            "color": "#E7A4D2",
-            "flexibility": 30,
-            "opacity": 1.0,
-            "roughness": 0.3,
-            "metalness": 0.0
-          },
+          "color": "#E7A4D2",
           "transform": {
             "position": [0, 0, 1],
             "rotation": [0, 0, 0],
@@ -259,14 +194,12 @@
             {
               "id": "pink_start",
               "localPosition": [0, 0, 11.2],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             },
             {
               "id": "pink_end",
               "localPosition": [11.2, 0, 11.2],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             }
           ],
           "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
@@ -275,14 +208,7 @@
           "id": "straw_pink",
           "name": "Pink Straw",
           "geometry": { "length": 11.2, "diameter": 0.6, "wallThickness": 0.1 },
-          "material": {
-            "type": "plastic",
-            "color": "#E7A4D2",
-            "flexibility": 30,
-            "opacity": 1.0,
-            "roughness": 0.3,
-            "metalness": 0.0
-          },
+          "color": "#E7A4D2",
           "transform": {
             "position": [0, 0, 1],
             "rotation": [0, 0, 0],
@@ -292,14 +218,12 @@
             {
               "id": "pink_start",
               "localPosition": [11.7, 0, -0.5],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             },
             {
               "id": "pink_end",
               "localPosition": [11.7, 0, 11.2],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             }
           ],
           "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
@@ -317,14 +241,7 @@
           "id": "straw_pink",
           "name": "Pink Straw",
           "geometry": { "length": 11.2, "diameter": 0.6, "wallThickness": 0.1 },
-          "material": {
-            "type": "plastic",
-            "color": "#E7A4D2",
-            "flexibility": 30,
-            "opacity": 1.0,
-            "roughness": 0.3,
-            "metalness": 0.0
-          },
+          "color": "#E7A4D2",
           "transform": {
             "position": [0, 0, 0],
             "rotation": [0, 0, 0],
@@ -334,14 +251,12 @@
             {
               "id": "pink_start",
               "localPosition": [0, 0, 0],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             },
             {
               "id": "pink_end",
               "localPosition": [5.6, 11.2, 5.6],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             }
           ],
           "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
@@ -350,14 +265,7 @@
           "id": "straw_pink",
           "name": "Pink Straw",
           "geometry": { "length": 11.2, "diameter": 0.6, "wallThickness": 0.1 },
-          "material": {
-            "type": "plastic",
-            "color": "#E7A4D2",
-            "flexibility": 30,
-            "opacity": 1.0,
-            "roughness": 0.3,
-            "metalness": 0.0
-          },
+          "color": "#E7A4D2",
           "transform": {
             "position": [0, 0, 0],
             "rotation": [0, 0, 0],
@@ -367,14 +275,12 @@
             {
               "id": "pink_start",
               "localPosition": [11.7, 0, 0],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             },
             {
               "id": "pink_end",
               "localPosition": [5.6, 11.2, 5.6],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             }
           ],
           "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
@@ -383,14 +289,7 @@
           "id": "straw_pink",
           "name": "Pink Straw",
           "geometry": { "length": 11.2, "diameter": 0.6, "wallThickness": 0.1 },
-          "material": {
-            "type": "plastic",
-            "color": "#E7A4D2",
-            "flexibility": 30,
-            "opacity": 1.0,
-            "roughness": 0.3,
-            "metalness": 0.0
-          },
+          "color": "#E7A4D2",
           "transform": {
             "position": [0, 0, 0],
             "rotation": [0, 0, 0],
@@ -400,14 +299,12 @@
             {
               "id": "pink_start",
               "localPosition": [0, 0, 12.2],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             },
             {
               "id": "pink_end",
               "localPosition": [5.6, 11.2, 5.6],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             }
           ],
           "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
@@ -416,14 +313,7 @@
           "id": "straw_pink",
           "name": "Pink Straw",
           "geometry": { "length": 11.2, "diameter": 0.6, "wallThickness": 0.1 },
-          "material": {
-            "type": "plastic",
-            "color": "#E7A4D2",
-            "flexibility": 30,
-            "opacity": 1.0,
-            "roughness": 0.3,
-            "metalness": 0.0
-          },
+          "color": "#E7A4D2",
           "transform": {
             "position": [0, 0, 0],
             "rotation": [0, 0, 0],
@@ -433,14 +323,12 @@
             {
               "id": "pink_start",
               "localPosition": [11.7, 0, 12.2],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             },
             {
               "id": "pink_end",
               "localPosition": [5.6, 11.2, 5.6],
-              "connectionId": null,
-              "isAvailable": true
+              "connectionId": null
             }
           ],
           "physics": { "mass": 0.3, "friction": 0.4, "elasticity": 0.2 }
@@ -458,15 +346,8 @@
         {
           "id": "C005",
           "name": "4-leg Connector",
-          "type": "connector",
           "diameter": 1,
-          "material": {
-            "type": "plastic",
-            "color": "#D4F300",
-            "opacity": 1,
-            "roughness": 0.3,
-            "metalness": 0
-          },
+          "color": "#f46863",
           "transform": {
             "position": [5.6, 11.2, 5.6],
             "rotation": [0, 0, 0],
@@ -475,25 +356,21 @@
           "ports": [
             {
               "id": "C005-1",
-              "portIndex": 0,
               "localPosition": [0, 0, 0],
               "direction": [1, -2, -1]
             },
             {
               "id": "C005-2",
-              "portIndex": 1,
               "localPosition": [0, 0, 0],
               "direction": [1, -2, 1]
             },
             {
               "id": "C005-3",
-              "portIndex": 2,
               "localPosition": [0, 0, 0],
               "direction": [-1, -2, -1]
             },
             {
               "id": "C005-4",
-              "portIndex": 2,
               "localPosition": [0, 0, 0],
               "direction": [-1, -2, 1]
             }
