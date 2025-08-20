@@ -26,7 +26,7 @@ export default function CourseDetailEnrolled({ courseId, enrollmentId }: CourseD
           </div>
 
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>
-            <ResizablePanel defaultSize={20} minSize={20} className='h-fit'>
+            <ResizablePanel defaultSize={30} minSize={20} className='h-fit'>
               <CourseDescription courseId={Number(courseId)} />
             </ResizablePanel>
             <ResizableHandle />

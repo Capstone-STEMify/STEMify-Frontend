@@ -58,7 +58,7 @@
           "dur_unit": "phút",
           "age_unit": "tuổi",
           "nodata": "Không có dữ liệu khóa học",
-          "category": "Danh Mục",
+          "topic": "Chủ Đề",
           "skill": "Kỹ Năng",
           "standard": "Tiêu Chuẩn"
         }

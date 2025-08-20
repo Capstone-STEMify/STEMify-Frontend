@@ -9,10 +9,7 @@ import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
 import { useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
-import {
-  useGetStudentProgressByIdQuery,
-  useSearchStudentProgressQuery
-} from '@/features/student-progress/api/studentProgressApi'
+import { useGetLessonStudentProgressQuery } from '@/features/student-progress/api/studentProgressApi'
 import {
   setSelectedEnrollmentId,
   setSelectedLessonStatus
@@ -41,7 +38,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   }, [dispatch])
 
   const { data: lessonData, isLoading, isFetching } = useSearchLessonQuery({ courseId, ...lessonParams })
-  const { data: lessonProgressData } = useSearchStudentProgressQuery(enrollmentId ? { enrollmentId } : skipToken)
+  const { data: lessonProgressData } = useGetLessonStudentProgressQuery(enrollmentId ? { enrollmentId } : skipToken)
   const progressMap = lessonProgressData?.data?.items?.reduce(
     (acc, progress) => {
       if ('lessonId' in progress && progress.lessonId !== undefined) {
@@ -77,12 +74,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   }
 
   if (!lessonData || lessonData.data.items.length === 0) {
-    return (
-      <SEmpty
-        title={t('enrolled.notFound.title')}
-        description={t('enrolled.notFound.description')}
-      />
-    )
+    return <SEmpty title={t('enrolled.notFound.title')} description={t('enrolled.notFound.description')} />
   }
 
   return (

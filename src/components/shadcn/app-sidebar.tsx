@@ -33,6 +33,11 @@ import {
   SidebarMenuItem
 } from 'components/shadcn/sidebar'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
+
+import { signOut, useSession } from 'next-auth/react'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import LoadingComponent from '../shared/loading/LoadingComponent'
 
 const data = {
   user: {
@@ -147,6 +152,52 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const locale = useLocale()
+
+  const navMainWithLocale = data.navMain.map((item) => ({
+    ...item,
+    url: `/${locale}${item.url}`
+  }))
+
+  const documentsWithLocale = data.documents.map((item) => ({
+    ...item,
+    url: `/${locale}${item.url}`
+  }))
+  const { data: session, status } = useSession()
+  const role = useAppSelector((state) => state.auth.user?.role)
+
+  if (status === 'loading') {
+    return (
+      // <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+      //   <LoadingComponent size={18} textShow={false} />
+      // </div>
+      <Sidebar collapsible='offcanvas' {...props}>
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
+                <Link href='#'>
+                  <IconInnerShadowTop className='!size-5' />
+                  <span className='text-base font-semibold'>STEMify</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent>
+          <NavMain items={navMainWithLocale} />
+          <NavDocuments items={documentsWithLocale} />
+          <NavSecondary items={data.navSecondary} className='mt-auto' />
+        </SidebarContent>
+        <SidebarFooter>
+          <div>
+            <LoadingComponent size={18} textShow={false} />
+          </div>
+        </SidebarFooter>
+      </Sidebar>
+    )
+  }
+
   return (
     <Sidebar collapsible='offcanvas' {...props}>
       <SidebarHeader>
@@ -162,12 +213,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        <NavMain items={navMainWithLocale} />
+        <NavDocuments items={documentsWithLocale} />
         <NavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={session?.user} />
       </SidebarFooter>
     </Sidebar>
   )
