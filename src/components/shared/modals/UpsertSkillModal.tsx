@@ -1,5 +1,5 @@
 'use client'
-import { Dialog, DialogContent } from '@/components/shadcn/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import UpsertSkill from '@/features/resource/skill/components/management/UpsertSkill'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
@@ -21,7 +21,9 @@ export default function UpsertSkillModal({ id, onConfirm }: UpsertSkillModalProp
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='sm:max-w-[425px] w-full'>
+      <DialogTitle></DialogTitle>
+
+      <DialogContent className='w-full sm:max-w-[425px]'>
         <UpsertSkill id={id} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>

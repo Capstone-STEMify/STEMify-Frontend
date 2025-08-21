@@ -13,9 +13,7 @@ type CourseDetailEnrolledProps = {
 
 export default function CourseDetailEnrolled({ courseId, enrollmentId }: CourseDetailEnrolledProps) {
   const router = useRouter()
-  const handleCreate = () => {
-    router.push(`/resource/lesson/create?courseId=${courseId}`)
-  }
+
   return (
     <div className='bg-light pb-20'>
       <div className='container mx-auto max-w-7xl py-6'>

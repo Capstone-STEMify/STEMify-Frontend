@@ -14,7 +14,7 @@ import { Button } from '@/components/shadcn/button'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTranslations } from 'next-intl'
-import { useUpdateLessonMutation, useUpdateLessonSectionOrderMutation } from '@/features/resource/lesson/api/lessonApi'
+import { useUpdateLessonSectionOrderMutation } from '@/features/resource/lesson/api/lessonApi'
 
 export default function SectionAndContent() {
   const t = useTranslations('sectionManagement')

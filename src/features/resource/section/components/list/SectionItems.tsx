@@ -35,7 +35,7 @@ export default function SectionItems({
           <span className='cursor-grab text-gray-400' {...attributes} {...listeners}>
             ⠿
           </span>
-          <h3 className='text-lg font-semibold'>{section.description}</h3>
+          <h3 className='text-lg font-semibold'>{section.title}</h3>
 
           <Edit
             size={15}
