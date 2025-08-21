@@ -9,6 +9,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { useDeleteLessonMutation, useUpdateLessonMutation } from '../../api/lessonApi'
 import { Lesson, LessonStatus } from '../../types/lesson.type'
 import Image from 'next/image'
+import { useLocale } from 'next-intl'
 
 const getLessonStatusBadgeClass = (status?: LessonStatus): string => {
   const map: Record<LessonStatus, string> = {
@@ -26,6 +27,7 @@ const getLessonStatusBadgeClass = (status?: LessonStatus): string => {
 
 export function useGetLessonAction(): ColumnDef<Lesson>[] {
   const router = useRouter()
+  const locale = useLocale()
   const { openModal } = useModal()
   const [deleteLesson] = useDeleteLessonMutation()
   const [updateLessonStatus] = useUpdateLessonMutation()
@@ -130,7 +132,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
       {
         label: 'Edit',
         onClick: ({ original }) => {
-          router.push(`/admin/lesson/update/${original.id}`)
+          router.push(`/${locale}/admin/lesson/update/${original.id}`)
         }
       },
       {
