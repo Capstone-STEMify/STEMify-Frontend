@@ -24,7 +24,8 @@ export default function LessonListContent() {
   const [updateActive, setUpdateActive] = useState(false)
 
   const { status } = useSession()
-  const role = useAppSelector((state) => state.auth.user?.role)
+  const role = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
+  const PUBLIC_ROLES = UserRole.STUDENT || UserRole.GUEST || UserRole.TEACHER
 
   useEffect(() => {
     if (status === 'authenticated' && role === UserRole.STAFF) {
@@ -50,7 +51,8 @@ export default function LessonListContent() {
     standardId: lessonParams.standardId,
     pageNumber: lessonParams.pageNumber,
     pageSize: lessonParams.pageSize,
-    search: lessonParams.search
+    search: lessonParams.search,
+    status: PUBLIC_ROLES.includes(role) ? 'PUBLISHED' : ''
   }
 
   const { data: lessonData, isLoading } = useSearchLessonQuery(queryParams)
