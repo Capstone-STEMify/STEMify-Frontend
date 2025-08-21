@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 
 const assemblies = [
@@ -9,7 +10,7 @@ const assemblies = [
     description: 'Khám phá khối Bát Diện Đều – một trong năm khối đa diện Platonic đã làm say mê các nhà toán học...',
     estimatedTime: 30,
     objective: 'Học viên sẽ hiểu rõ hơn về đặc điểm và ý nghĩa toán học của khối Bát Diện Đều...',
-    imageUrl: '/images/placeholder.png' // dùng tạm ảnh
+    imageUrl: '/images/placeholder.png'
   },
   {
     id: 'assembly_2',
@@ -31,7 +32,13 @@ export default function AssemblyCarousel() {
       {/* Assembly item */}
       <div className='relative flex flex-col items-center'>
         <div className='flex h-64 w-64 items-center justify-center rounded-full bg-yellow-300 shadow-md'>
-          <img src={current.imageUrl} alt={current.name} className='h-40 w-40 object-contain' />
+          <Image
+            src={current.imageUrl}
+            alt={current.name}
+            width={160}
+            height={160}
+            className='h-40 w-40 object-contain'
+          />
         </div>
         <h2 className='mt-4 text-xl font-semibold'>{current.name}</h2>
         <p className='mt-2 px-4 text-center text-sm text-gray-600'>{current.description}</p>

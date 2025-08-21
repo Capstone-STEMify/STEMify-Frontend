@@ -19,7 +19,8 @@
       "category": "Danh Mục",
       "skill": "Kỹ Năng",
       "ageRange": "Độ Tuổi",
-      "standard": "Tiêu Chuẩn"
+      "standard": "Tiêu Chuẩn",
+      "status": "Trạng Thái"
     },
     "actions": {
       "searchBtn": "Tìm kiếm",

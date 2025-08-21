@@ -4,6 +4,7 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 // models
 export type Section = {
   id: number
+  title: string
   description: string
   duration: number
   orderIndex: number

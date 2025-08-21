@@ -9,44 +9,30 @@ import { useGetUserAction } from './UserAction'
 import { useSearchUserQuery } from '../../api/userApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { UserQueryParams } from '../../types/user.type'
-import { use } from 'matter'
 import { useTranslations } from 'next-intl'
 import { setPageIndex } from '../../slice/userSlice'
-
-function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value)
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
-  return debouncedValue
-}
+import useDebounce from '@/hooks/useDebounce'
+import { useSession } from 'next-auth/react'
 
 export default function UserTable() {
   const t = useTranslations('Admin.placeholder')
   const { openModal } = useModal()
   const columns = useGetUserAction()
-   const dispatch = useAppDispatch()
-
+  const dispatch = useAppDispatch()
+  const { status } = useSession()
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
   const userParams = useAppSelector((state) => state.user)
 
   const queryParams: UserQueryParams = {
-      pageNumber: userParams.pageNumber,
-      pageSize: userParams.pageSize,
-      search: userParams.search,
-      status: userParams.status
+    pageNumber: userParams.pageNumber,
+    pageSize: userParams.pageSize,
+    search: debouncedSearchQuery,
+    status: userParams.status
   }
 
-  const { data, isLoading } = useSearchUserQuery({
-    search: debouncedSearchQuery
-  })
+  const { data } = useSearchUserQuery(queryParams, { skip: status !== 'authenticated' })
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
@@ -55,7 +41,7 @@ export default function UserTable() {
   }
 
   const handlePageChange = (page: number) => {
-      dispatch(setPageIndex(page))
+    dispatch(setPageIndex(page))
   }
 
   return (
@@ -71,7 +57,14 @@ export default function UserTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} pagingParams={queryParams} handlePageChange={handlePageChange}/>
+      <DataTable
+        data={rows}
+        columns={columns}
+        enableRowSelection
+        pagingData={data}
+        pagingParams={queryParams}
+        handlePageChange={handlePageChange}
+      />
     </div>
   )
 }

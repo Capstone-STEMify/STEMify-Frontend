@@ -40,4 +40,5 @@ export type SearchPaginatedRequestParams = {
   search?: string
   orderBy?: string
   status?: string
+  sortDirection?: 'Asc' | 'Desc'
 }

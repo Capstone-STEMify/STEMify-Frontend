@@ -4,8 +4,6 @@ import { BaseQueryApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { notFound } from 'next/navigation'
 import { toast } from 'sonner'
 import { RootState } from '@/libs/redux/store'
-import { getToken } from 'next-auth/jwt'
-import { useAppSelector } from '@/hooks/redux-hooks'
 import { signIn } from 'next-auth/react'
 
 const customFetchBaseQuery = fetchBaseQuery({
@@ -16,7 +14,6 @@ const customFetchBaseQuery = fetchBaseQuery({
     })(),
   credentials: 'include',
   prepareHeaders: async (headers, api) => {
-    // Append token from the auth state tree Redux store
     const token = (api.getState() as RootState).auth.token
     if (token) {
       headers.set('Authorization', 'Bearer ' + token)
