@@ -1,18 +1,18 @@
 'use client'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Grid } from '@react-three/drei'
-import { Straw } from 'app/[locale]/test-2/Straw'
+import { Straw } from '@/features/assembly/components/Straw'
 import { createRef, useEffect, useMemo, useRef, useState } from 'react'
 import { Group } from 'three'
 import { a, useTransition } from '@react-spring/three'
-import { Connector3D } from './Connector'
+import { Connector3D } from '@/features/assembly/components/Connector'
 import { sceneData } from '@/utils/cts'
-import assembly from './straw-test.json'
-import strawType from './straw-type.json'
-import connectorType from './connector-type.json'
+import assembly from '@/features/assembly/data/octahedron.json'
+import strawType from '@/features/assembly/data/straw-type.json'
+import connectorType from '@/features/assembly/data/connector-type.json'
 import Image from 'next/image'
 
-export default function App() {
+export default function Workspace3D() {
   const { steps } = assembly
   const strawRefs = useRef<Record<string, React.Ref<Group>>>({})
   const connectorRefs = useRef<Record<string, React.Ref<Group>>>({})

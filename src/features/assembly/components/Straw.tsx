@@ -1,6 +1,6 @@
 import { forwardRef, useMemo } from 'react'
 import { Euler, Group, Quaternion, Vector3 } from 'three'
-import { Straw as StrawType } from './type'
+import { Straw as StrawType } from '../types/assembly.type'
 import { a, type SpringValue } from '@react-spring/three'
 
 interface StrawProps {
