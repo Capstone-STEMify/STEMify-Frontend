@@ -15,7 +15,7 @@ import { useTranslations } from 'next-intl'
 // Schema validation cho form
 const standardSchema = z.object({
   code: z.string().min(3, 'Standard code must be at least 3 characters long'),
-  standardName: z.string().min(3, 'Standard name must be at least 3 characters long'),
+  standardName: z.string().optional(),
   description: z.string().optional()
 })
 
