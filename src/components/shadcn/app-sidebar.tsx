@@ -60,6 +60,11 @@ const data = {
       title: 'side_bar.lesson',
       url: '/admin/lesson',
       icon: IconChartBar
+    },
+    {
+      title: 'side_bar.user',
+      url: '/admin/user',
+      icon: IconUsers
     }
   ],
   navClouds: [
@@ -164,7 +169,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     url: `/${locale}${item.url}`
   }))
   const { data: session, status } = useSession()
-  const role = useAppSelector((state) => state.auth.user?.role)
 
   if (status === 'loading') {
     return (

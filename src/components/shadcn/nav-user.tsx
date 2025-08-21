@@ -14,7 +14,9 @@ import {
 } from 'components/shadcn/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from 'components/shadcn/sidebar'
 import { signOut } from 'next-auth/react'
-
+import { useLocale } from 'next-intl'
+import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 export function NavUser({
   user
 }: {
@@ -24,6 +26,8 @@ export function NavUser({
     image?: string | null
   }
 }) {
+  const locale = useLocale()
+  const t = useTranslations('Admin')
   const { isMobile } = useSidebar()
   const handleSignOut = async () => {
     try {
@@ -81,23 +85,25 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle />
-                Account
-              </DropdownMenuItem>
+              <Link href={`/${locale}/admin/profile`}>
+                <DropdownMenuItem>
+                  <IconUserCircle />
+                  {t('user.account')}
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem>
                 <IconCreditCard />
                 Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <IconNotification />
-                Notifications
+                {t('user.notifications')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleSignOut}>
               <IconLogout />
-              Log out
+              {t('user.signOut')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

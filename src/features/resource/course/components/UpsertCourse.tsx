@@ -7,9 +7,6 @@ import { useModal } from '@/providers/ModalProvider'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { useEffect, useRef } from 'react'
 import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
-import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
-import { useGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
-import { useGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
 import { useAppForm } from '@/components/shared/form/items'
 import {
   useCreateCourseMutation,
@@ -24,7 +21,7 @@ import {
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { fileToBase64 } from '@/utils/index'
 import { SCard } from '@/components/shared/card/SCard'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 const defaultCourseData: CourseFormData = {
   code: '',
@@ -110,12 +107,13 @@ function mapCourseToFormData(course: ApiSuccessResponse<Course>): CourseFormData
 
 export default function UpsertCourse() {
   const userId = useAppSelector((state) => state.auth.user?.userId)
-  const { openModal } = useModal()
   const router = useRouter()
   const imageFieldRef = useRef<any>(null)
   const params = useParams()
   const courseId = params.courseId
   const t = useTranslations('courseManagement')
+  const initialCourseDataRef = useRef<CourseFormData | null>(null)
+  const locale = useLocale()
 
   const { data: ageRanges } = useGetAllAgeRangeQuery()
   const { data: courseData, isLoading } = useGetCourseByIdQuery(courseId ? Number(courseId) : 0, {
@@ -127,7 +125,7 @@ export default function UpsertCourse() {
   const isSubmitting = isCreating || isUpdating
 
   const form = useAppForm({
-    defaultValues: defaultCourseData,
+    defaultValues: courseId && courseData?.data ? mapCourseToFormData(courseData) : defaultCourseData,
     validators: {
       onChange: (courseId ? updateCourseSchema : createCourseSchema) as any
     },
@@ -141,7 +139,7 @@ export default function UpsertCourse() {
             action: {
               label: 'View Course',
               onClick: () => {
-                router.push(`/resource/course/${res.data.id}`)
+                router.push(`/${locale}/resource/course/${res.data.id}`)
               }
             }
           })
@@ -149,7 +147,7 @@ export default function UpsertCourse() {
           const jsonPayload = await CreateCourseJsonPayload(value, userId!)
           const res = await createCourse(jsonPayload).unwrap()
           toast.success(`Course created successfully (${res.data.title})`)
-          router.push(`/resource/course/${res.data.id}`)
+          router.push(`/${locale}/resource/course/${res.data.id}`)
         }
       } catch (err) {
         toast.error('Failed to submit course')
@@ -158,20 +156,7 @@ export default function UpsertCourse() {
     }
   })
 
-  const initialCourseDataRef = useRef<CourseFormData | null>(null)
-
-  const didResetOnce = useRef(false)
-
-  useEffect(() => {
-    if (!didResetOnce.current && courseData?.data) {
-      const mapped = mapCourseToFormData(courseData)
-      form.reset(mapped)
-      initialCourseDataRef.current = mapped
-      didResetOnce.current = true
-    }
-  }, [courseData])
-
-  if (!courseId || !ageRanges || (isLoading && !courseData)) {
+  if ((courseId && (!courseData || isLoading)) || !ageRanges) {
     return (
       <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>
         <LoadingComponent />

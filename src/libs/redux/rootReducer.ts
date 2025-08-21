@@ -23,6 +23,9 @@ import { contentApi } from '@/features/content/api/contentApi'
 import { studentProgresssApi } from '@/features/student-progress/api/studentProgressApi'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 import { notificationRealtimeSlice } from '@/features/notification/slice/notificationRealtimeSlice'
+import { use } from 'matter'
+import { userApi } from '@/features/user/api/userApi'
+import { userSlice } from '@/features/user/slice/userSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -38,6 +41,7 @@ export const rootReducer = combineReducers({
   notification: notificationSlice.reducer,
   studentProgress: studentProgressSlice.reducer,
   notificationRealtime: notificationRealtimeSlice.reducer,
+  user: userSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -52,5 +56,6 @@ export const rootReducer = combineReducers({
   [notificationApi.reducerPath]: notificationApi.reducer,
   [lessonApiExtended.reducerPath]: lessonApiExtended.reducer,
   [contentApi.reducerPath]: contentApi.reducer,
-  [studentProgresssApi.reducerPath]: studentProgresssApi.reducer
+  [studentProgresssApi.reducerPath]: studentProgresssApi.reducer,
+  [userApi.reducerPath]: userApi.reducer
 })

@@ -3,6 +3,7 @@
         "side_bar": {
             "course": "Khóa học",
             "lesson": "Bài học",
+            "user": "Người dùng",
             "document": "Tài liệu",
             "topic": "Chủ đề",
             "skill": "Kỹ năng",
@@ -20,7 +21,8 @@
             "topicSearch": "Tìm kiếm theo tên chủ đề...",
             "skillSearch": "Tìm kiếm theo tên kỹ năng...",
             "ageRangeSearch": "Tìm kiếm theo độ tuổi...",
-            "standardSearch": "Tìm kiếm theo tên tiêu chuẩn..."
+            "standardSearch": "Tìm kiếm theo tên tiêu chuẩn...",
+            "userSearch": "Tìm kiếm theo tên người dùng, email..."
         },
         "topic": {
             "createTitle": "Tạo chủ đề",
@@ -60,6 +62,22 @@
             "placeholder": "Ví dụ: Common Core",
             "createButton": "Tạo",
             "updateButton": "Cập nhật"
-        }
+        },
+        "user": {
+        "createTitle": "Tạo người dùng",
+        "editTitle": "Chỉnh sửa người dùng",
+        "email": "Email",
+        "username": "Tên người dùng",
+        "password": "Mật khẩu",
+        "passwordDescription": "Để trống để giữ nguyên mật khẩu hiện tại",
+        "role": "Vai trò",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "createButton": "Tạo",
+        "updateButton": "Cập nhật",
+        "account": "Tài khoản",
+        "notifications": "Thông báo",
+        "signOut": "Đăng xuất"
+      }
     }
 }

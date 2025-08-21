@@ -7,15 +7,21 @@ import { useSession } from 'next-auth/react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import Image from 'next/image'
 import { Button } from '@/components/shadcn/button'
+import { useGetUserByIdQuery } from '@/features/user/api/userApi'
+import { use } from 'matter'
 
 export default function ProfileDetails() {
   const { data: session, status } = useSession()
 
+  const { data: userData } = useGetUserByIdQuery(session?.user.userId as string, {
+    skip: !session?.user?.userId
+  })
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    firstName: '',
-    lastName: '',
+    firstName: userData?.data.firstName || '',
+    lastName: userData?.data.lastName ||'',
     website: '',
     bio: ''
   })
@@ -113,7 +119,7 @@ export default function ProfileDetails() {
                   type='text'
                   id='firstName'
                   name='firstName'
-                  value={formData.firstName}
+                  value={userData?.data.firstName || ''}
                   onChange={handleInputChange}
                   placeholder='Enter your first name'
                 />
@@ -145,7 +151,7 @@ export default function ProfileDetails() {
                   type='text'
                   id='lastName'
                   name='lastName'
-                  value={formData.lastName}
+                  value={userData?.data.lastName || ''}
                   onChange={handleInputChange}
                   placeholder='Enter your last name'
                 />

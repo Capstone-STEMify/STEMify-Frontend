@@ -26,8 +26,24 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
       header: 'ID'
     },
     {
-      accessorKey: 'standardName',
-      header: 'Standard Name'
+      id: 'standardDisplay',
+      header: 'Standard Name',
+      cell: ({ row }) => {
+        const code = row.original.code
+        const name = row.original.standardName
+        return `${code} - ${name}`
+      }
+    },
+    {
+      accessorKey: 'description',
+      header: 'Description',
+      cell: ({ row }) => {
+        return (
+          <div className='w-180 truncate' title={String(row.getValue('description'))}>
+            {row.getValue('description')}
+          </div>
+        )
+      }
     },
     createActionsColumnFromItems<Standard>([
       {

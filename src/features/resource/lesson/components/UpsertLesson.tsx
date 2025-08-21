@@ -188,9 +188,15 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const [createLesson] = useCreateLessonMutation()
   const [updateLesson] = useUpdateLessonMutation()
 
+  const skillItems = skills?.data?.items ?? []
+  const categoryItems = categories?.data?.items ?? []
+  const standardItems = standards?.data?.items ?? []
   // Initialize form with lesson data if it exists
   const form = useAppForm({
-    defaultValues: defaultLessonData,
+    defaultValues:
+      lessonId && lessonData?.data
+        ? mapLessonData(lessonData, skillItems, categoryItems, standardItems)
+        : defaultLessonData,
     validators: {
       onChange: lessonSchema
     },
@@ -215,23 +221,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
 
   const initialCourseDataRef = useRef<LessonFormData | null>(null)
 
-  const didResetOnce = useRef(false)
-
-  useEffect(() => {
-    const skillItems = skills?.data?.items ?? []
-    const categoryItems = categories?.data?.items ?? []
-    const standardItems = standards?.data?.items ?? []
-
-    const shouldMap = lessonData?.data && skillItems.length > 0 && categoryItems.length > 0 && standardItems.length > 0
-
-    if (shouldMap && !didResetOnce.current) {
-      const mapped = mapLessonData(lessonData, skillItems, categoryItems, standardItems)
-      form.reset(mapped)
-      initialCourseDataRef.current = mapped
-      didResetOnce.current = true
-    }
-  }, [lessonData, skills, categories, standards])
-
   if (showCourseMissingError) {
     return (
       <div className='flex h-screen flex-col items-center justify-center gap-4 text-center'>
@@ -247,13 +236,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     )
   }
 
-  if (
-    isLessonLoading ||
-    !lessonData ||
-    !skills?.data?.items.length ||
-    !categories?.data?.items.length ||
-    !standards?.data?.items.length
-  ) {
+  if (isLessonLoading || !skills || !categories || !standards) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />

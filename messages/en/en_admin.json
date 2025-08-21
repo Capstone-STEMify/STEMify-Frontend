@@ -1,65 +1,83 @@
 {
-    "Admin": {
-        "side_bar": {
-            "course": "Courses",
-            "lesson": "Lessons",
-            "document": "Document",
-            "topic": "Topic",
-            "skill": "Skills",
-            "ageRange": "Age Range",
-            "standard": "Standard",
-            "setting": "Settings",
-            "help": "Get Help",
-            "search": "Search"
-        },
-        "course_management": {
-            "title": "Resource Management",
-            "button": "Add New"
-        },
-        "placeholder": {
-            "topicSearch": "Search by topic name...",
-            "skillSearch": "Search by skill name...",
-            "ageRangeSearch": "Search by age range...",
-            "standardSearch": "Search by standard name..."
-        },
-        "topic": {
-            "createTitle": "Create Topic",
-            "editTitle": "Edit Topic",
-            "name": "Topic Name",
-            "description": "Enter the name of the topic.", 
-            "placeholder": "e.g., Urban Planning",
-            "createButton": "Create",
-            "updateButton": "Update"
-        },
-        "skill": {
-            "createTitle": "Create Skill",
-            "editTitle": "Edit Skill",
-            "name": "Skill Name",
-            "description": "Enter the name of the skill.", 
-            "placeholder": "e.g., Critical Thinking",
-            "createButton": "Create",
-            "updateButton": "Update"
-        },
-        "ageRange": {
-            "createTitle": "Create Age Range",
-            "editTitle": "Edit Age Range",
-            "mini_name": "Minimum Age",
-            "max_name": "Maximum Age",
-            "description": "This label will be saved to the database.", 
-            "min_placeholder": "Select min age",
-            "max_placeholder": "Select max age",
-            "label": "Preview label:",
-            "createButton": "Create",
-            "updateButton": "Update"
-        },
-        "standard": {
-            "createTitle": "Create Standard",
-            "editTitle": "Edit Standard",
-            "name": "Standard Name",
-            "description": "Enter the name of the Standard.", 
-            "placeholder": "e.g., Common Core",
-            "createButton": "Create",
-            "updateButton": "Update"
-        }
+  "Admin": {
+    "side_bar": {
+      "course": "Courses",
+      "lesson": "Lessons",
+      "user": "Users",
+      "document": "Document",
+      "topic": "Topic",
+      "skill": "Skills",
+      "ageRange": "Age Range",
+      "standard": "Standard",
+      "setting": "Settings",
+      "help": "Get Help",
+      "search": "Search"
+    },
+    "course_management": {
+      "title": "Resource Management",
+      "button": "Add New"
+    },
+    "placeholder": {
+      "topicSearch": "Search by topic name...",
+      "skillSearch": "Search by skill name...",
+      "ageRangeSearch": "Search by age range...",
+      "standardSearch": "Search by standard name...",
+      "userSearch": "Search by username, email..."
+    },
+    "topic": {
+      "createTitle": "Create Topic",
+      "editTitle": "Edit Topic",
+      "name": "Topic Name",
+      "description": "Enter the name of the topic.",
+      "placeholder": "e.g., Urban Planning",
+      "createButton": "Create",
+      "updateButton": "Update"
+    },
+    "skill": {
+      "createTitle": "Create Skill",
+      "editTitle": "Edit Skill",
+      "name": "Skill Name",
+      "description": "Enter the name of the skill.",
+      "placeholder": "e.g., Critical Thinking",
+      "createButton": "Create",
+      "updateButton": "Update"
+    },
+    "ageRange": {
+      "createTitle": "Create Age Range",
+      "editTitle": "Edit Age Range",
+      "mini_name": "Minimum Age",
+      "max_name": "Maximum Age",
+      "description": "This label will be saved to the database.",
+      "min_placeholder": "Select min age",
+      "max_placeholder": "Select max age",
+      "label": "Preview label:",
+      "createButton": "Create",
+      "updateButton": "Update"
+    },
+    "standard": {
+      "createTitle": "Create Standard",
+      "editTitle": "Edit Standard",
+      "name": "Standard Name",
+      "description": "Enter the name of the Standard.",
+      "placeholder": "e.g., Common Core",
+      "createButton": "Create",
+      "updateButton": "Update"
+    },
+    "user": {
+      "createTitle": "Create User",
+      "editTitle": "Edit User",
+      "email": "Email",
+      "username": "Username",
+      "password": "Password",
+      "passwordDescription": "Leave blank to keep current password",
+      "role": "Role",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "createButton": "Create",
+      "updateButton": "Update",
+      "account": "Account",
+      "notifications": "Notifications",
+      "signOut": "Sign out"
     }
+  }
 }
