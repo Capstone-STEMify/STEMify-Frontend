@@ -1,6 +1,5 @@
 import { forwardRef, useMemo } from 'react'
 import { Group, Vector3, Quaternion, Euler } from 'three'
-import { a } from '@react-spring/three'
 import { Connector } from '../types/assembly.type'
 
 interface Props {
