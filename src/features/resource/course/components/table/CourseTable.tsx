@@ -32,7 +32,9 @@ export default function CourseTable() {
     pageNumber: courseParams.pageNumber,
     pageSize: courseParams.pageSize,
     search: courseParams.search,
-    status: courseParams.status
+    status: courseParams.status,
+    orderBy: 'createdDate',
+    sortDirection: 'Desc'
   }
 
   useEffect(() => {

@@ -12,28 +12,13 @@ import { Button } from '@/components/shadcn/button'
 import { IconPlus } from '@tabler/icons-react'
 import { useLocale } from 'next-intl'
 
-// Debounce hook to delay API calls
-function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value)
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
-  return debouncedValue
-}
-
 export default function LessonTable({ courseIdSelected }: { courseIdSelected?: number }) {
   const locale = useLocale()
   const router = useRouter()
+  const columns = useGetLessonAction()
 
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
-
-  const columns = useGetLessonAction()
 
   const queryParams: LessonQueryParams = {
     courseId: courseIdSelected || lessonParams.courseId,
@@ -45,7 +30,9 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
     pageNumber: lessonParams.pageNumber,
     pageSize: lessonParams.pageSize,
     search: lessonParams.search,
-    status: lessonParams.status
+    status: lessonParams.status,
+    orderBy: 'createdDate',
+    sortDirection: 'Desc'
   }
 
   useEffect(() => {

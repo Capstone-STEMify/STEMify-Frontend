@@ -25,6 +25,7 @@ export default function CourseListContent() {
   const courseParams = useAppSelector((state) => state.course)
   const auth = useAppSelector((state) => state.auth)
   const userRole = auth.user?.role || UserRole.GUEST
+  const PUBLIC_ROLES = UserRole.STUDENT || UserRole.GUEST || UserRole.TEACHER
 
   useEffect(() => {
     dispatch(setPageSize(12))
@@ -40,10 +41,8 @@ export default function CourseListContent() {
     pageNumber: courseParams.pageNumber,
     pageSize: courseParams.pageSize,
     search: courseParams.search,
-    status: courseParams.status
+    status: PUBLIC_ROLES.includes(userRole) ? CourseStatus.PUBLISHED : ''
   }
-
-  console.log(queryParams)
 
   const { data: courseData, isLoading } = useSearchCourseQuery(queryParams)
 

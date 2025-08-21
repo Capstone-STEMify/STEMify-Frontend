@@ -92,10 +92,6 @@ export function NavUser({
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuItem>
-                <IconCreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
                 <IconNotification />
                 {t('user.notifications')}
               </DropdownMenuItem>

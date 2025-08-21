@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import {
   useGetSectionByIdQuery,
   useCreateSectionMutation,
-  useUpdateSectionMutation,
+  useUpdateSectionMutation
 } from '@/features/resource/section/api/sectionApi'
 import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
@@ -15,6 +15,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 
 const sectionSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
   duration: z.number().min(0, 'Duration must be a non-negative number'),
   lessonId: z.number().positive('Lesson ID must be a positive number')
@@ -23,6 +24,7 @@ const sectionSchema = z.object({
 type SectionFormData = z.infer<typeof sectionSchema>
 
 const defaultSectionData: Omit<SectionFormData, 'lessonId'> = {
+  title: '',
   description: '',
   duration: 0
 }
@@ -63,6 +65,7 @@ export default function UpsertSection({
   const form = useAppForm({
     defaultValues: sectionData?.data
       ? {
+          title: sectionData.data.title || '',
           description: sectionData.data.description || '',
           duration: sectionData.data.duration || 0,
           lessonId: sectionData.data.lessonId || lessonId || 0
@@ -105,6 +108,7 @@ export default function UpsertSection({
   useEffect(() => {
     if (sectionData?.data) {
       form.reset({
+        title: sectionData.data.title || '',
         description: sectionData.data.description || '',
         duration: sectionData.data.duration || 0,
         lessonId: sectionData.data.lessonId || lessonId || 0
@@ -150,9 +154,28 @@ export default function UpsertSection({
             description={t('title.note')}
             content={
               <form.AppField
-                name='description'
+                name='title'
                 children={(field) => (
                   <field.TextField placeholder={t('title.placeholder')} className='h-8 rounded-lg border-gray-300' />
+                )}
+              />
+            }
+          />
+        </div>
+
+        <div className='lg:col-span-2'>
+          <SCard
+            className='gap-3'
+            title={t('description.label')}
+            description={t('description.note')}
+            content={
+              <form.AppField
+                name='description'
+                children={(field) => (
+                  <field.TextField
+                    placeholder={t('description.placeholder')}
+                    className='h-8 rounded-lg border-gray-300'
+                  />
                 )}
               />
             }
