@@ -10,7 +10,6 @@ import {
   useUpdateCategoryMutation
 } from '@/features/resource/category/api/categoryApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { code } from '@uiw/react-md-editor'
 import { useTranslations } from 'next-intl'
 
 const categorySchema = z.object({

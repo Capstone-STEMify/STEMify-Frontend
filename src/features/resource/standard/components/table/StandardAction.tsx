@@ -31,7 +31,7 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
       cell: ({ row }) => {
         const code = row.original.code
         const name = row.original.standardName
-        return `${code} - ${name}`
+        return `${code} ${name}`
       }
     },
     {

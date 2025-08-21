@@ -385,7 +385,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
                   <field.MultipleCheckboxField
                     options={standards?.data.items.map((s) => ({
                       value: s.id.toString(),
-                      label: s.standardName
+                      label: `${s.code} ${s.standardName}`
                     }))}
                     className='flex flex-wrap gap-x-8 gap-y-4'
                   />
