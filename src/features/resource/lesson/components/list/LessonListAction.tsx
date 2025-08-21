@@ -23,7 +23,7 @@ export default function LessonListAction() {
   const { status } = useSession()
   const role = useAppSelector((state) => state.auth.user?.role)
 
-  const canSeeStatus = status === 'authenticated' && role === UserRole.STAFF
+  const canSeeStatus = status === 'authenticated' && (role === UserRole.STAFF || role === UserRole.ADMIN)
 
   // Redux
   const dispatch = useAppDispatch()
