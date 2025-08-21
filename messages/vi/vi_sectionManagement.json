@@ -6,6 +6,7 @@
       "order_btn": "Lưu Thứ Tự",
       "del_message": "Bạn có chắc muốn xóa chuyên mục này?",
       "dur": "Thời lượng",
+      "description": "Mô tả",
       "status": "Trạng thái",
       "contentType": {
         "label": "Loại nội dung",

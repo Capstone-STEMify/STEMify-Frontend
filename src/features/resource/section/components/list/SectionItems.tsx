@@ -69,7 +69,7 @@ export default function SectionItems({
 
       {isExpanded(section.id) && (
         <div className='mt-3 text-sm text-gray-700'>
-          <div className='flex gap-10 px-5'>
+          <div className='flex gap-10 px-3'>
             <p>
               <strong className='mr-2'>{t('section.dur')}:</strong> {section.duration} mins
             </p>
@@ -77,6 +77,15 @@ export default function SectionItems({
               <strong className='mr-2'>{t('section.status')}:</strong> {section.status}
             </p>
           </div>
+          <div className='px-3'>
+            <p>
+              <strong className='mr-2 leading-relaxed break-words whitespace-pre-wrap'>
+                {t('section.description')}:
+              </strong>
+            </p>
+
+            <div className='mt-1 break-words whitespace-pre-wrap text-gray-700'>{section.description}</div>
+          </div>{' '}
           <ContentManagement sectionId={section.id} />
         </div>
       )}
