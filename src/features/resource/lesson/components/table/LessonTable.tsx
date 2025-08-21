@@ -10,6 +10,7 @@ import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import LessonListAction from '../list/LessonListAction'
 import { Button } from '@/components/shadcn/button'
 import { IconPlus } from '@tabler/icons-react'
+import { useLocale } from 'next-intl'
 
 // Debounce hook to delay API calls
 function useDebounce(value: string, delay: number) {
@@ -26,10 +27,13 @@ function useDebounce(value: string, delay: number) {
 }
 
 export default function LessonTable({ courseIdSelected }: { courseIdSelected?: number }) {
+  const locale = useLocale()
+  const router = useRouter()
+
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
+
   const columns = useGetLessonAction()
-  const router = useRouter()
 
   const queryParams: LessonQueryParams = {
     courseId: courseIdSelected || lessonParams.courseId,
@@ -56,7 +60,7 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
     dispatch(setPageIndex(newPage))
   }
   const handleCreate = () => {
-    router.push(`/admin/lesson/create?courseId=${courseIdSelected}`)
+    router.push(`/${locale}/admin/lesson/create?courseId=${courseIdSelected}`)
   }
 
   return (

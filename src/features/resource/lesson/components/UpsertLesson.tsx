@@ -236,7 +236,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     )
   }
 
-  if (isLessonLoading || !lessonData || !skills || !categories || !standards) {
+  if (isLessonLoading || !skills || !categories || !standards) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />

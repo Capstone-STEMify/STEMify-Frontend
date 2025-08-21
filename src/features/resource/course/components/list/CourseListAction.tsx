@@ -17,6 +17,7 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { UserRole } from '@/types/userRole'
+import useDebounce from '@/hooks/useDebounce'
 
 export default function CourseListAction() {
   const t = useTranslations('CourseList')
@@ -36,6 +37,7 @@ export default function CourseListAction() {
   // Redux hooks
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.course)
+  const debouncedSearchQuery = useDebounce(filters.search, 500)
 
   // Lazy queries
   const [getCategory, { data: categories }] = useLazyGetAllCategoryQuery()
@@ -58,7 +60,7 @@ export default function CourseListAction() {
   }
 
   const hasFilters = Boolean(
-    filters.search ||
+    debouncedSearchQuery ||
       filters.categoryId ||
       filters.ageRangeId ||
       filters.skillId ||

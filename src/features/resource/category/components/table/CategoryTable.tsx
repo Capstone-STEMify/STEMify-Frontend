@@ -10,21 +10,8 @@ import { Input } from '@/components/shadcn/input'
 import { useTranslations } from 'next-intl'
 import { CategoryQueryParams } from '../../types/category.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setPageIndex } from '@/features/resource/category/slice/categorySlice'
-
-// Debounce hook to delay API calls
-function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value)
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
-  return debouncedValue
-}
+import { setPageIndex, setSearchTerm } from '@/features/resource/category/slice/categorySlice'
+import useDebounce from '@/hooks/useDebounce'
 
 export default function CategoryTable() {
   const t = useTranslations('Admin.placeholder')
@@ -32,21 +19,17 @@ export default function CategoryTable() {
   const dispatch = useAppDispatch()
   const columns = useGetCategoryAction()
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const debouncedSearchQuery = useDebounce(searchQuery, 500)
-
   const categoryParams = useAppSelector((state) => state.category)
+  const debouncedSearchQuery = useDebounce(categoryParams.search, 500)
 
   const queryParams: CategoryQueryParams = {
     pageNumber: categoryParams.pageNumber,
     pageSize: categoryParams.pageSize,
-    search: categoryParams.search,
+    search: debouncedSearchQuery,
     status: categoryParams.status
   }
 
-  const { data } = useSearchCategoryQuery({
-    search: debouncedSearchQuery
-  })
+  const { data } = useSearchCategoryQuery(queryParams)
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
@@ -63,8 +46,8 @@ export default function CategoryTable() {
       <div className='flex items-center justify-between py-4'>
         <Input
           placeholder={t('topicSearch')}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={queryParams.search}
+          onChange={(e) => dispatch(setSearchTerm(e.target.value))}
           className='max-w-sm'
         />
         <Button size={'icon'} className='bg-amber-custom-400 rounded-full' onClick={handleCreate}>

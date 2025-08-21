@@ -8,7 +8,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { Course, CourseLevel, CourseStatus } from '../types/course.type'
 import { SCard } from '@/components/shared/card/SCard'
 import { useDeleteCourseMutation, useGetCourseByIdQuery, useUpdateCourseMutation } from '../api/courseApi'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { useParams, useRouter } from 'next/navigation'
 import { BookOpen, Edit } from 'lucide-react'
@@ -43,6 +43,7 @@ const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
 export default function CourseDetailPage() {
   const t = useTranslations('CourseDetails')
 
+  const locale = useLocale()
   const params = useParams()
   const router = useRouter()
 
@@ -92,7 +93,7 @@ export default function CourseDetailPage() {
     }
   }
   const handleUpdate = () => {
-    router.push(`/admin/course/update/${courseId}`)
+    router.push(`/${locale}/admin/course/update/${courseId}`)
   }
 
   const handleDelete = () => {

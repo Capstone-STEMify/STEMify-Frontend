@@ -6,32 +6,21 @@ import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useRouter } from 'next/navigation'
 import CourseListAction from '@/features/resource/course/components/list/CourseListAction'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { CourseQueryParams, CourseStatus } from '@/features/resource/course/types/course.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize, setParam } from '@/features/resource/course/slice/courseSlice'
 import { IconPlus } from '@tabler/icons-react'
-
-// Debounce hook to delay API calls
-function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value)
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
-  return debouncedValue
-}
+import useDebounce from '@/hooks/useDebounce'
 
 export default function CourseTable() {
   const t = useTranslations('Admin')
   const dispatch = useAppDispatch()
-  const courseParams = useAppSelector((state) => state.course)
   const columns = useGetCourseAction()
   const router = useRouter()
+  const locale = useLocale()
+
+  const courseParams = useAppSelector((state) => state.course)
 
   const queryParams: CourseQueryParams = {
     courseId: courseParams.courseId,
@@ -55,7 +44,7 @@ export default function CourseTable() {
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
   const handleCreate = () => {
-    router.push('/admin/course/create')
+    router.push(`/${locale}/admin/course/create`)
   }
 
   const handlePageChange = (newPage: number) => {
