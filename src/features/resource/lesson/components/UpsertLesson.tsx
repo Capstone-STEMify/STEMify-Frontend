@@ -31,7 +31,7 @@ const lessonSchema = z.object({
   description: z.string().min(50, 'Description must be at least 50 characters long'),
   courseId: z.number().positive({ message: 'Course ID must be a positive number' }),
   learningOutcome: z.string().min(20, 'Learning outcome must be at least 20 characters long'),
-  requirement: z.string().min(20, 'Requirement must be at least 20 characters long'),
+  requirement: z.string().optional(),
   topics: z.array(z.string()),
   skills: z.array(z.string()),
   standards: z.array(z.string()),
@@ -220,6 +220,17 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   })
 
   const initialCourseDataRef = useRef<LessonFormData | null>(null)
+
+  useEffect(() => {
+    if (lessonData?.data && lessonId) {
+      initialCourseDataRef.current = mapLessonData(
+        lessonData,
+        skills?.data?.items ?? [],
+        categories?.data?.items ?? [],
+        standards?.data?.items ?? []
+      )
+    }
+  }, [lessonData, lessonId, skills, categories, standards])
 
   if (showCourseMissingError) {
     return (

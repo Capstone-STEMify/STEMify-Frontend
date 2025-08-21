@@ -1,5 +1,5 @@
 'use client'
-import { Dialog, DialogContent } from '@/components/shadcn/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import UpsertStandard from '@/features/resource/standard/components/management/UpsertStandard'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
@@ -21,7 +21,8 @@ export default function UpsertStandardModal({ id, onConfirm }: UpsertStandardMod
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='sm:max-w-[425px] w-full'>
+      <DialogTitle></DialogTitle>
+      <DialogContent className='w-full sm:max-w-[425px]'>
         <UpsertStandard id={id} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>

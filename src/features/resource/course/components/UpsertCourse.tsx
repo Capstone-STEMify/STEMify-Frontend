@@ -3,7 +3,6 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { toast } from 'sonner'
 import { useParams, useRouter } from 'next/navigation'
 import { Course, CourseLevel } from '../types/course.type'
-import { useModal } from '@/providers/ModalProvider'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { useEffect, useRef } from 'react'
 import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
@@ -155,6 +154,12 @@ export default function UpsertCourse() {
       }
     }
   })
+
+  useEffect(() => {
+    if (courseData?.data && courseId) {
+      initialCourseDataRef.current = mapCourseToFormData(courseData)
+    }
+  }, [courseData, courseId])
 
   if ((courseId && (!courseData || isLoading)) || !ageRanges) {
     return (

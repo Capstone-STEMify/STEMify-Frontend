@@ -8,7 +8,7 @@ export const baseCourseSchema = z.object({
   code: z.string().min(3, 'Code must be at least 3 characters long'),
   title: z.string().min(10, 'Title must be at least 10 characters long'),
   studentTasks: z.string().min(10, 'Student tasks must be at least 10 characters long'),
-  prerequisites: z.string().min(3, 'Prerequisites must be at least 3 characters long'),
+  prerequisites: z.string().optional(),
   level: z.enum(CourseLevel),
   slug: z.string().optional(),
   description: z.string().min(50, 'Description must be at least 50 characters long'),
