@@ -44,8 +44,8 @@ const lessonSchema = z.object({
 
 type LessonFormData = z.infer<typeof lessonSchema>
 
-const defaultLessonData: LessonFormData = {
-  courseId: 0,
+const defaultLessonData: (courseId: number) => LessonFormData = (courseId) => ({
+  courseId,
   title: '',
   description: '',
   learningOutcome: '',
@@ -55,7 +55,7 @@ const defaultLessonData: LessonFormData = {
   standards: [],
   imageUrl: null as any,
   imagePreviewUrl: ''
-}
+})
 
 function mapLessonData(
   lesson: ApiSuccessResponse<Lesson>,
@@ -196,7 +196,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     defaultValues:
       lessonId && lessonData?.data
         ? mapLessonData(lessonData, skillItems, categoryItems, standardItems)
-        : defaultLessonData,
+        : defaultLessonData(finalCourseId),
     validators: {
       onChange: lessonSchema
     },
