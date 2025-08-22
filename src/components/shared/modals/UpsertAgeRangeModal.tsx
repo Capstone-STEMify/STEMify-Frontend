@@ -1,5 +1,5 @@
 'use client'
-import { Dialog, DialogContent } from '@/components/shadcn/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import UpsertAgeRange from '@/features/resource/age-range/components/management/UpsertAgeRange'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
@@ -21,7 +21,9 @@ export default function UpsertAgeRangeModal({ id, onConfirm }: UpsertAgeRangeMod
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='sm:max-w-lg w-full'>
+      <DialogTitle></DialogTitle>
+
+      <DialogContent className='w-full sm:max-w-lg'>
         <UpsertAgeRange id={id} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>

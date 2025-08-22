@@ -49,7 +49,7 @@ export default function LessonOutline({
                 onClick={() => onSelectSection(sec.id)}
               >
                 {isCompleted && <Check size={16} className='text-blue-500' />}
-                {sec.description}
+                {sec.title}
               </button>
             )
           })}

@@ -6,10 +6,13 @@ import { Bookmark, Plus, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 import { useTranslations } from 'next-intl'
+import { UserRole } from '@/types/userRole'
+import Link from 'next/link'
 
 export default function LessonAction({ lessonId }: { lessonId: number }) {
   const t = useTranslations('LessonDetails')
   const dispatch = useAppDispatch()
+  const userRole = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
   const lessonStatus = useAppSelector((state) => state.studentProgress.selectedLessonStatus)
   const enrollmentId = useAppSelector((state) => state.studentProgress.selectedEnrollmentId)
   const [startLesson, { isLoading }] = useUpdateLessonStudentProgressMutation()
@@ -28,6 +31,14 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
   return (
     <section className='mt-3 mb-5 flex flex-col items-center'>
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
+
+      {(userRole === UserRole.STAFF || userRole === UserRole.TEACHER) && (
+        <Link target='_blank' href={`/resource/lesson/${lessonId}/pacing-guard`}>
+          <Button size='default' className='mt-4 bg-yellow-400 font-semibold text-black shadow-md hover:bg-yellow-500'>
+            Pacing guide
+          </Button>
+        </Link>
+      )}
 
       {lessonStatus === ProgressStatus.NOT_STARTED && (
         <div className='mt-4'>

@@ -1,5 +1,3 @@
-// src/features/content/components/CreateContent.tsx
-
 'use client'
 import React, { useEffect, useMemo } from 'react'
 import { z } from 'zod'

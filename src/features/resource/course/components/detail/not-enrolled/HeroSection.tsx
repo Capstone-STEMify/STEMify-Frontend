@@ -29,13 +29,15 @@ type TagGroupProps = {
 }
 
 const TagGroup = ({ label, items, className }: TagGroupProps) => (
-  <div className='mb-4 flex items-center gap-1'>
-    <p className='font-semibold'>{label}: </p>
-    {items.map((item, index) => (
-      <Badge key={index} className={`${className} rounded-full px-3 py-1`}>
-        {item}
-      </Badge>
-    ))}
+  <div className='mb-4 gap-1'>
+    <div className='flex flex-wrap gap-2'>
+      <p className='font-semibold'>{label}: </p>
+      {items.map((item, index) => (
+        <Badge key={index} className={`${className} rounded-full px-3 py-1`}>
+          {item}
+        </Badge>
+      ))}
+    </div>
   </div>
 )
 
@@ -158,7 +160,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
             )}
           </div>
 
-          <div className='mb-5 w-full'>
+          <div className='mb-5 w-full flex-1'>
             <Image
               src={course.imageUrl || '/images/fallback.png'}
               width={400}

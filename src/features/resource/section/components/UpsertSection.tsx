@@ -81,6 +81,7 @@ export default function UpsertSection({
 
         if (sectionId) {
           const updatePayload = {
+            title: value.title,
             description: value.description,
             duration: Number(value.duration)
           }
@@ -88,6 +89,7 @@ export default function UpsertSection({
           toast.success('Section updated successfully')
         } else {
           const createPayload = {
+            title: value.title,
             description: value.description,
             duration: Number(value.duration),
             lessonId
@@ -172,9 +174,9 @@ export default function UpsertSection({
               <form.AppField
                 name='description'
                 children={(field) => (
-                  <field.TextField
+                  <field.TextAreaField
                     placeholder={t('description.placeholder')}
-                    className='h-8 rounded-lg border-gray-300'
+                    className='h-25 rounded-lg border-gray-300'
                   />
                 )}
               />
