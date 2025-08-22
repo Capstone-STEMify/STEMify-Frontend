@@ -5,7 +5,11 @@ import { Badge } from '@/components/shadcn/badge'
 import { formatDuration } from '@/utils/index'
 import { EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
 import { SPagination } from '@/components/shared/SPagination'
-import { useDeleteLessonMutation, useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
+import {
+  useDeleteLessonMutation,
+  useSearchLessonQuery,
+  useUpdateLessonMutation
+} from '@/features/resource/lesson/api/lessonApi'
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
@@ -20,7 +24,7 @@ import { useTranslations } from 'next-intl'
 import { DndContext, PointerSensor, useSensor, useSensors, DragEndEvent, closestCenter } from '@dnd-kit/core'
 import { SortableContext, rectSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Lesson } from '@/features/resource/lesson/types/lesson.type'
+import { Lesson, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 import { Button } from '@/components/shadcn/button'
 import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
 
@@ -29,7 +33,7 @@ function SortableLessonCard({
   children,
   disabled
 }: {
-  lesson: any
+  lesson: Lesson
   children: React.ReactNode
   disabled?: boolean
 }) {
@@ -82,8 +86,10 @@ export default function ContentSection() {
   const { data: lessons } = useSearchLessonQuery({ ...lessonsQuery, courseId: Number(courseId) })
   const [deleteLesson] = useDeleteLessonMutation()
   const [updateCourseLessonOrder] = useUpdateLessonOrderMutation()
+  const [sendLessonRequest] = useUpdateLessonMutation()
 
   const [items, setItems] = useState<Lesson[]>([])
+
   useEffect(() => {
     if (lessons?.data?.items) setItems(lessons.data.items)
   }, [lessons?.data?.items])
@@ -105,6 +111,15 @@ export default function ContentSection() {
     } else {
       router.push(`/resource/lesson/create?courseId=${courseId}`)
     }
+  }
+
+  const handleSendLessonRequest = async (lessonId: number) => {
+    try {
+      await sendLessonRequest({
+        id: lessonId,
+        body: { courseId: Number(courseId), status: LessonStatus.PENDING }
+      }).unwrap()
+    } catch (error) {}
   }
 
   const handleDeleteLesson = async (lessonId: number) => {
@@ -245,6 +260,13 @@ export default function ContentSection() {
                                 {t('notEnrolled.lesson.button.update')}
                               </p>,
                               <p
+                                onClick={() => handleSendLessonRequest(lesson.id)}
+                                key='send_request'
+                                className='text-sm'
+                              >
+                                {t('notEnrolled.lesson.button.send_request')}
+                              </p>,
+                              <p
                                 key='delete-lesson'
                                 className='text-sm'
                                 onClick={() =>
@@ -275,8 +297,10 @@ export default function ContentSection() {
                   className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
                   onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
                 >
-                  <PlusCircle size={70} className='text-gray-500' />
-                  <p className='mt-4 text-sm font-medium text-gray-500'>{t('notEnrolled.lesson.button.create')}</p>
+                  <PlusCircle size={70} className='mt-20 text-gray-500' />
+                  <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
+                    {t('notEnrolled.lesson.button.create')}
+                  </p>
                 </div>
               </div>
             </SortableContext>
