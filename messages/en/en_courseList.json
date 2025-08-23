@@ -20,7 +20,8 @@
       "category": "Category",
       "skill": "Skill",
       "ageRange": "Age Range",
-      "standard": "Standard"
+      "standard": "Standard",
+      "status": "Status"
     },
     "actions": {
       "searchBtn": "Search",

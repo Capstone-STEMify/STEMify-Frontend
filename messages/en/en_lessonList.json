@@ -1,5 +1,6 @@
 {
   "LessonList": {
+    "lesson": "Lesson",
     "title": "Lessons",
     "description": "Curriculum-aligned, thematic guides with following educational pedagogical approach. Lessons have teacher and student perspectives.",
     "filterTitle": "Filter Lessons",
@@ -24,6 +25,12 @@
     "actions": {
       "searchBtn": "Search",
       "clearBtn": "Clear All"
+    },
+    "dropdown": {
+      "view": "View",
+      "update": "Update",
+      "addToCourse": "Add to Course",
+      "share": "Share"
     }
   }
 }

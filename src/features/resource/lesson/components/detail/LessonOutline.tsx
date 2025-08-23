@@ -40,17 +40,18 @@ export default function LessonOutline({
             const isCompleted = completedSectionIds.has(sec.id)
 
             return (
-              <button
+              <div
                 key={sec.id}
                 className={cn(
-                  'flex items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors',
+                  'flex items-center justify-between gap-2 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors',
                   isSelected ? 'bg-muted border-l-4 border-blue-500 font-semibold text-blue-700' : 'hover:bg-muted/60'
                 )}
                 onClick={() => onSelectSection(sec.id)}
               >
                 {isCompleted && <Check size={16} className='text-blue-500' />}
-                {sec.title}
-              </button>
+                <div>{sec.title}</div>
+                <div className='text-muted-foreground'>{sec.duration} mins</div>
+              </div>
             )
           })}
       </div>

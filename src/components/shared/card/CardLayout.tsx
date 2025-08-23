@@ -12,6 +12,8 @@ interface CardLayoutProps {
   children?: React.ReactNode
   action?: React.ReactNode
   href?: string
+  isScale?: boolean
+  onClick?: () => void
 }
 
 const sizeClasses: Record<Size, { width: string; height: string; imageHeight: string }> = {
@@ -37,7 +39,9 @@ export default function CardLayout({
   infor,
   children,
   action,
-  href
+  href,
+  isScale = true,
+  onClick
 }: CardLayoutProps) {
   const { width, height, imageHeight } = sizeClasses[size]
   const sizes = sizeToSizes[size]
@@ -45,10 +49,12 @@ export default function CardLayout({
   const cardContent = (
     <div
       className={clsx(
-        'hover:shadow-6 relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md transition-all duration-300 hover:scale-[1.02]',
+        `hover:shadow-6 relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md transition-all duration-300`,
+        isScale && 'hover:scale-[1.02]',
         width,
         height
       )}
+      onClick={href ? undefined : onClick}
     >
       {/* Image */}
       <div className={clsx('relative w-full', imageHeight)}>

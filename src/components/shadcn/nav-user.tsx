@@ -17,6 +17,7 @@ import { signOut } from 'next-auth/react'
 import { useLocale } from 'next-intl'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
 export function NavUser({
   user
 }: {

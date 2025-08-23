@@ -55,8 +55,9 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     })
   }
 
-  const handleOpenLessonDetailModal = async (id: number) => {
-    openModal('lessonDetail', { lessonId: id })
+  const handleNavigatePacingGuide = async (id: number) => {
+    router.push(`/${locale}/admin/lesson/${id}/pacing-guide`)
+    // openModal('lessonDetail', { lessonId: id })
   }
 
   return [
@@ -89,7 +90,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
         const lessonId = row.original.id
         return (
           <div
-            onClick={() => handleOpenLessonDetailModal(lessonId)}
+            onClick={() => handleNavigatePacingGuide(lessonId)}
             className='cursor-pointer font-bold transition hover:opacity-80'
           >
             {row.getValue('title')}

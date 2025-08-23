@@ -1,3 +1,4 @@
+import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
 import { Button } from 'components/shadcn/button'
 import { Separator } from 'components/shadcn/separator'
 import { SidebarTrigger } from 'components/shadcn/sidebar'
@@ -12,6 +13,7 @@ export function SiteHeader() {
         <Separator orientation='vertical' className='mx-2 data-[orientation=vertical]:h-4' />
         <h1 className='text-base font-medium'>{t('course_management.title')}</h1>
       </div>
+      <LanguageSwitcher />
     </header>
   )
 }

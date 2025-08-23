@@ -151,7 +151,7 @@ export default function LessonListAction() {
               />
 
               {/* Standard */}
-              <SSelect
+              {/* <SSelect
                 placeholder={t('placeHolder.standard')}
                 value={filters.standardId?.toString() ?? ''}
                 onChange={(val) => dispatch(setParam({ key: 'standardId', value: Number(val) }))}
@@ -159,7 +159,7 @@ export default function LessonListAction() {
                 onOpen={(open) => {
                   if (open && !standards) getStandard()
                 }}
-              />
+              /> */}
 
               {/* Status (role-gated) */}
               {canSeeStatus && (

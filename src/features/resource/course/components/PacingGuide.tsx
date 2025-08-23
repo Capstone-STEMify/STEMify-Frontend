@@ -7,16 +7,8 @@ import GuideLessonDetails from './pacing-guide/GuideLessonDetails'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
-}
+import { containerVariants } from '@/utils/motion'
+import BackButton from '@/components/shared/button/BackButton'
 
 export default function PacingGuide() {
   const { lessonId } = useParams()
@@ -34,11 +26,15 @@ export default function PacingGuide() {
   }
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='min-h-screen'>
       <div className='mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8'>
         <motion.div variants={containerVariants} initial='hidden' animate='visible' className='space-y-8'>
-          <GuideLessonDetails lesson={data?.data} />
-          <SyllabusTable />
+          <div className='flex gap-5'>
+            <BackButton />
+
+            <GuideLessonDetails lesson={data?.data} />
+          </div>
+          <SyllabusTable lessonId={Number(lessonId)} />
         </motion.div>
       </div>
     </div>
