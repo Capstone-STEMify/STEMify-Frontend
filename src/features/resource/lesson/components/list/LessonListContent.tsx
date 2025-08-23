@@ -133,7 +133,7 @@ export default function LessonListContent() {
 
   return (
     <div className='px-5 select-none'>
-      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6'>
+      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
         {lessonData.data.items.map((lesson) => (
           <div key={lesson.id} className='relative flex gap-1'>
             <CardLayout imageSrc={lesson.imageUrl} size='sm' isScale={false}>
