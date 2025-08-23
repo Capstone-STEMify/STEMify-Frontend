@@ -79,9 +79,9 @@ export default function CourseListContent() {
 
   return (
     <div className='px-5 select-none'>
-      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6'>
+      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
         {courseData.data.items.map((course) => (
-          <div key={course.id} className='relative flex gap-1'>
+          <div key={course.id} className='relative flex min-w-0 gap-1'>
             <Link href={`/resource/course/${course.id}`} className='flex w-fit flex-col justify-between'>
               <CardLayout imageSrc={course.imageUrl || '/images/fallback.png'} size='sm'>
                 <div>

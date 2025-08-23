@@ -65,7 +65,7 @@ export default function LessonDetail({ id }: { id?: number }) {
           </div>
 
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>
-            <ResizablePanel defaultSize={30} minSize={20} className='min-h-[500px]'>
+            <ResizablePanel defaultSize={35} minSize={20} className='min-h-[500px]'>
               <STabs
                 customStyle={{
                   list: 'px-4 py-8 rounded-none bg-[#f8fbff] shadow-6 gap-3 mb-3',

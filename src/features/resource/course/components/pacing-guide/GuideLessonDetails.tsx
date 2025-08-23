@@ -35,34 +35,38 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
           <h1 className='mt-2 text-3xl font-bold text-gray-900 sm:text-4xl'>{lesson.title}</h1>
 
           <p className='mt-2 text-sm text-gray-700'>
-            By <span className='font-semibold'>{lesson.createdByUserName}</span>
+            By <span className='font-semibold'>{lesson.createdByUserName || 'STEMify'}</span>
           </p>
 
-          <p className='mt-4 leading-7 text-gray-700'>{lesson.description}</p>
+          <p className='mt-4 whitespace-pre-line text-gray-700'>{lesson.description}</p>
 
           <div className='mt-8'>
             <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('learningOutcome')}</h3>
-            <p className='leading-relaxed text-gray-700'>{lesson.learningOutcome}</p>
+            <p className='leading-relaxed whitespace-pre-line text-gray-700'>{lesson.learningOutcome}</p>{' '}
           </div>
 
           <div className='mt-8'>
             <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('requirement')}</h3>
-            <p className='leading-relaxed text-gray-700'>{lesson.requirement}</p>
+            <p className='leading-relaxed text-gray-700'>{lesson.requirement || 'No requirements specified.'}</p>
           </div>
 
           <div className='mt-8'>
             <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('standards')}</h3>
-            <p className='leading-relaxed text-gray-700'>{lesson.standardNames.join(', ')}</p>
+            <p className='leading-relaxed text-gray-700'>
+              {lesson.standardNames.join(', ') || 'No standards specified.'}
+            </p>
           </div>
 
           <div className='mt-6'>
             <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('skills')}</h3>
-            <p className='leading-relaxed text-gray-700'>{lesson.skillNames.join(', ')}</p>
+            <p className='leading-relaxed text-gray-700'>{lesson.skillNames.join(', ') || 'No skills specified.'}</p>
           </div>
 
           <div className='mt-6'>
             <h3 className='mb-3 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('topics')}</h3>
-            <div className='flex flex-wrap gap-3'>{lesson.topicNames.join(', ')}</div>
+            <div className='flex flex-wrap gap-3 text-gray-700'>
+              {lesson.topicNames.join(', ') || 'No topics specified.'}
+            </div>
           </div>
         </div>
 

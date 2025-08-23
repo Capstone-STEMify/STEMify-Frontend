@@ -146,16 +146,6 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
           </div>
         </TabsContent>
       </Tabs>
-
-      <DataTable
-        data={rows}
-        columns={columns}
-        enableRowSelection
-        pagingData={data}
-        pagingParams={queryParams}
-        handlePageChange={handlePageChange}
-        className='mt-5'
-      />
     </div>
   )
 }
