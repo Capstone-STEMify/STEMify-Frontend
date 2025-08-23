@@ -163,7 +163,7 @@ export default function CourseListAction() {
           />
 
           {/* Standard */}
-          <SSelect
+          {/* <SSelect
             placeholder={t('placeHolder.standard')}
             value={filters.standardId?.toString() ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'standardId', value: Number(val) }))}
@@ -171,7 +171,7 @@ export default function CourseListAction() {
             onOpen={(open) => {
               if (open && !standards) getStandard()
             }}
-          />
+          /> */}
 
           {/* Status */}
           {statusActive && (
@@ -180,6 +180,9 @@ export default function CourseListAction() {
               value={filters.status?.toString() ?? ''}
               onChange={(val) => dispatch(setParam({ key: 'status', value: val as CourseStatus }))}
               options={statusOptions}
+              onOpen={() => {
+                // No action needed; statusOptions is static
+              }}
             />
           )}
         </div>

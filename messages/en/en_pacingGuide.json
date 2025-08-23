@@ -1,0 +1,16 @@
+{
+  "PacingGuide": {
+    "ageRange": "Age Range",
+    "duration": "Duration",
+    "standards": "Standards",
+    "skills": "Skills",
+    "topics": "Topics",
+    "requirement": "Requirements",
+    "learningOutcome": "Learning Outcome",
+    "table": {
+      "section": "Section",
+      "duration": "Duration",
+      "description": "Description"
+    }
+  }
+}

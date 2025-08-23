@@ -1,5 +1,6 @@
 {
   "LessonList": {
+    "lesson": "Bài Học",
     "title": "Các Bài Học",
     "description": "Các hướng dẫn theo chủ đề, được căn chỉnh theo chương trình giảng dạy với phương pháp sư phạm giáo dục. Các bài Học có góc nhìn của giáo viên và học sinh.",
     "filterTitle": "Lọc Bài Học",
@@ -25,6 +26,12 @@
     "actions": {
       "searchBtn": "Tìm kiếm",
       "clearBtn": "Xóa Tất Cả"
+    },
+    "dropdown": {
+      "view": "Xem",
+      "update": "Cập Nhật",
+      "addToCourse": "Thêm vào Khóa Học",
+      "share": "Chia Sẻ"
     }
   }
 }

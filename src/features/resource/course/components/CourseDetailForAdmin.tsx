@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react'
-import LessonTable from '../../lesson/components/table/LessonTable'
+import LessonTable from '../../lesson/components/table/LessonManagement'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import Image from 'next/image'

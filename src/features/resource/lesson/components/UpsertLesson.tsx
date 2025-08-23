@@ -9,12 +9,12 @@ import {
 import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { toast } from 'sonner'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 import Link from 'next/link'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Lesson } from '@/features/resource/lesson/types/lesson.type'
 import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
@@ -25,6 +25,7 @@ import { fileToBase64 } from '@/utils/index'
 import { Skill } from '@/features/resource/skill/types/skill.type'
 import { Category } from '@/features/resource/category/types/category.type'
 import { Standard } from '@/features/resource/standard/types/standard.type'
+import { UserRole } from '@/types/userRole'
 
 const lessonSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
@@ -155,6 +156,8 @@ interface UpsertLessonProps {
 }
 
 export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonProps) {
+  const locale = useLocale()
+  const router = useRouter()
   const t = useTranslations('lessonManagement')
 
   const searchParams = useSearchParams()
@@ -162,6 +165,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const courseIdFromQuery = courseId ? Number(courseId) : 0
   const finalCourseId = courseIdModal || courseIdFromQuery
 
+  const role = useAppSelector((state) => state.auth.user?.role)
   const userId = useAppSelector((state) => state.auth.user?.userId)
 
   const imageFieldRef = useRef<any>(null)
@@ -210,6 +214,8 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
           const jsonPayload = await CreateLessonJsonPayload(value, userId!, finalCourseId)
           const res = await createLesson(jsonPayload).unwrap()
           toast.success(`Lesson created successfully (${res.data.title})`)
+          if (role === UserRole.STAFF) router.push(`/${locale}/resource/lesson/update/${res.data.id}`)
+          else if (role === UserRole.ADMIN) router.push(`/${locale}/admin/lesson/update/${res.data.id}`)
         }
         onSuccess?.()
       } catch (err) {

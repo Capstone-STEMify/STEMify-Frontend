@@ -7,24 +7,31 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
+import { useLazySearchEnrollmentQuery, useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
+import { to } from '@react-spring/core'
 import { EllipsisVertical } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 export default function LessonListContent() {
-  const t = useTranslations('LessonList')
-
-  const [updateActive, setUpdateActive] = useState(false)
-
+  const router = useRouter()
+  const locale = useLocale()
   const { status } = useSession()
+  const t = useTranslations('LessonList')
+  const [updateActive, setUpdateActive] = useState(false)
+  const [loadingLessonId, setLoadingLessonId] = useState<number | null>(null)
   const role = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
+  const userId = useAppSelector((state) => state.auth.user?.id)
+
   const PUBLIC_ROLES = UserRole.STUDENT || UserRole.GUEST || UserRole.TEACHER
 
   useEffect(() => {
@@ -57,8 +64,40 @@ export default function LessonListContent() {
 
   const { data: lessonData, isLoading } = useSearchLessonQuery(queryParams)
 
+  const [fetchEnrollment] = useLazySearchEnrollmentQuery()
+
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
+  }
+
+  const handleViewLesson = async (lessonId: number, courseId: number) => {
+    if (loadingLessonId === lessonId) return // Ngăn double click
+    setLoadingLessonId(lessonId)
+    try {
+      console.log('role', role)
+
+      if (role === UserRole.STAFF || role === UserRole.TEACHER) {
+        router.push(`/${locale}/resource/lesson/${lessonId}`)
+        return
+      }
+
+      if (role === UserRole.STUDENT) {
+        console.log('student access')
+        const result = await fetchEnrollment({ courseId, studentId: userId }).unwrap()
+        const enrolled = result?.data?.items?.length > 0
+
+        if (enrolled) {
+          router.push(`/${locale}/resource/lesson/${lessonId}`)
+        } else {
+          router.push(`/${locale}/resource/course/${courseId}`)
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching enrollment:', err)
+      toast.message('Something went wrong. Please try again.')
+    } finally {
+      setLoadingLessonId(null)
+    }
   }
 
   if (isLoading) {
@@ -97,44 +136,57 @@ export default function LessonListContent() {
       <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6'>
         {lessonData.data.items.map((lesson) => (
           <div key={lesson.id} className='relative flex gap-1'>
-            <Link href={`/resource/lesson/${lesson.id}`} className='flex w-fit flex-col justify-between'>
-              <CardLayout imageSrc={lesson.imageUrl} size='sm'>
-                <div>
-                  <p className='text-muted-foreground text-xs font-medium'>Lesson</p>
-                  <h3 className='text-sm font-semibold text-gray-900'>{lesson.title}</h3>
-                  <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
-                </div>
+            <CardLayout imageSrc={lesson.imageUrl} size='sm' isScale={false}>
+              <div
+                key={lesson.id}
+                className='absolute top-2 right-2 flex rounded-sm bg-gray-500/70 px-1 pb-1 text-white backdrop:blur-sm'
+              >
+                <SDropDown
+                  trigger={<EllipsisVertical className='mt-1 h-5 w-5 text-white' />}
+                  items={[
+                    <div
+                      key={`view-${lesson.id}`}
+                      className='text-sm'
+                      onClick={() => {
+                        setTimeout(() => {
+                          handleViewLesson(lesson.id, lesson.courseId)
+                        }, 0)
+                      }}
+                    >
+                      {t('dropdown.view')}
+                    </div>,
+                    updateActive ? (
+                      <Link
+                        href={`/resource/lesson/update/${lesson.id}`}
+                        key={`update-${lesson.id}`}
+                        className='text-sm'
+                      >
+                        <p>{t('dropdown.update')}</p>
+                      </Link>
+                    ) : null,
+                    <p key={`add-${lesson.id}`} className='text-sm'>
+                      {t('dropdown.addToCourse')}
+                    </p>,
+                    <p key={`share-${lesson.id}`} className='text-sm'>
+                      {t('dropdown.share')}
+                    </p>
+                  ].filter(Boolean)}
+                />
+              </div>
+              <div>
+                <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
+                <h3 className='text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+                <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
+              </div>
 
-                <div className='mt-auto flex flex-wrap items-center gap-2'>
-                  <Badge className='bg-sky-custom-300'>Age 10–12</Badge>
-                  <Badge className='bg-red-300'>45:00</Badge>
-                </div>
-              </CardLayout>
-            </Link>
-
-            <div key={lesson.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
-              <SDropDown
-                trigger={
-                  <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
-                }
-                items={[
-                  <p key='view' className='text-sm'>
-                    View
-                  </p>,
-                  updateActive ? (
-                    <Link href={`/resource/lesson/update/${lesson.id}`} key='update' className='text-sm'>
-                      <p>Update</p>
-                    </Link>
-                  ) : null,
-                  <p key='add-to-course' className='text-sm'>
-                    Add to Course
-                  </p>,
-                  <p key='share' className='text-sm'>
-                    Share
-                  </p>
-                ].filter(Boolean)}
-              />
-            </div>
+              <div className='mt-auto flex flex-wrap items-center gap-2'>
+                <Badge className='bg-sky-custom-300'>
+                  <div className='mr-0.5'>{t('tags.ageRange')}:</div>
+                  {lesson.ageRangeLabel}
+                </Badge>
+                <Badge className='bg-red-300'>{lesson.duration} mins</Badge>
+              </div>
+            </CardLayout>
           </div>
         ))}
       </div>

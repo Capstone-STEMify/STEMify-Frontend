@@ -1,4 +1,4 @@
-import CourseTable from '@/features/resource/course/components/table/CourseTable'
+import CourseTable from '@/features/resource/course/components/table/CourseManagement'
 
 export default function AdminCourse() {
   return <CourseTable />

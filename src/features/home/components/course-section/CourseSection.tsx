@@ -1,21 +1,31 @@
 'use client'
 import { Badge } from '@/components/shadcn/badge'
 import CardLayout from '@/components/shared/card/CardLayout'
-import { useGetAllCourseQuery } from '@/features/resource/course/api/courseApi'
+import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
+import { setPageSize } from '@/features/resource/course/slice/courseSlice'
+import { CourseStatus } from '@/features/resource/course/types/course.type'
+import { useAppDispatch } from '@/hooks/redux-hooks'
 import { formatDuration } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function ExploreResourcesSection() {
   const t = useTranslations('ExploreResourcesSection')
+  const dispatch = useAppDispatch()
 
-  const { data: CourseData, error, isLoading } = useGetAllCourseQuery()
+  const { data: CourseData } = useSearchCourseQuery({ status: CourseStatus.PUBLISHED })
+
+  useEffect(() => {
+    dispatch(setPageSize(3))
+  }, [CourseData])
 
   const truncateText = (text: string, maxLength = 80) => {
     if (text.length <= maxLength) return text
     return text.substring(0, maxLength).trim() + '...'
   }
+
+  if (!CourseData) return null
 
   return (
     <section className='relative overflow-hidden px-6 py-16'>
