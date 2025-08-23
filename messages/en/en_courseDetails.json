@@ -27,6 +27,7 @@
         "button": {
           "view": "View Detail",
           "create": "Create New Lesson",
+          "send_request": "Send Request",
           "update": "Update Lesson",
           "delete": "Delete Lesson",
           "deleteConfirm": "Are you sure you want to delete this lesson?"

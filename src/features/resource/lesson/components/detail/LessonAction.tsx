@@ -33,7 +33,7 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
 
       {(userRole === UserRole.STAFF || userRole === UserRole.TEACHER) && (
-        <Link target='_blank' href={`/resource/lesson/${lessonId}/pacing-guard`}>
+        <Link target='_blank' href={`/resource/lesson/${lessonId}/pacing-guide`}>
           <Button size='default' className='mt-4 bg-yellow-400 font-semibold text-black shadow-md hover:bg-yellow-500'>
             Pacing guide
           </Button>
