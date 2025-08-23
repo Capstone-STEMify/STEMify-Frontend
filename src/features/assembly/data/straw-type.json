@@ -1,27 +1,57 @@
 [
   {
-    "id": "straw_pink",
-    "name": "Pink Straw",
-    "imageUrl": "/images/components/straw_pink.png"
-  },
-  {
     "id": "straw_blue",
     "name": "Blue Straw",
-    "imageUrl": "/images/components/straw_blue.png"
+    "imageUrl": "/images/components/straw_blue.png",
+    "color": "#A4D2E7",
+    "geometry": {
+      "length": 24.0,
+      "diameter": 0.5,
+      "wallThickness": 20
+    }
   },
   {
     "id": "straw_green",
     "name": "Green Straw",
-    "imageUrl": "/images/components/straw_green.png"
+    "imageUrl": "/images/components/straw_green.png",
+    "color": "#c1e500 ",
+    "geometry": {
+      "length": 20.5,
+      "diameter": 0.5,
+      "wallThickness": 20
+    }
   },
   {
-    "id": "straw_yellow",
-    "name": "Yellow Straw",
-    "imageUrl": "/images/components/straw_yellow.png"
+    "id": "straw_pink",
+    "name": "Pink Straw",
+    "imageUrl": "/images/components/straw_pink.png",
+    "color": "#E7A4D2",
+    "geometry": {
+      "length": 11.2,
+      "diameter": 0.5,
+      "wallThickness": 20
+    }
   },
   {
     "id": "straw_orange",
     "name": "Orange Straw",
-    "imageUrl": "/images/components/straw_orange.png"
+    "imageUrl": "/images/components/straw_orange.png",
+    "color": "#E7A4A4",
+    "geometry": {
+      "length": 8.0,
+      "diameter": 0.5,
+      "wallThickness": 20
+    }
+  },
+  {
+    "id": "straw_yellow",
+    "name": "Yellow Straw",
+    "imageUrl": "/images/components/straw_yellow.png",
+    "color": "#E7D2A4",
+    "geometry": {
+      "length": 4.8,
+      "diameter": 0.5,
+      "wallThickness": 20
+    }
   }
 ]

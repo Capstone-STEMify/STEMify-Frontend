@@ -41,7 +41,7 @@ export const Connector3D = forwardRef<Group, Props>(({ connector, fade }, ref) =
       {/* connector hình cầu */}
       <mesh>
         <sphereGeometry args={[diameter / 2, 32, 32]} />
-        <meshPhysicalMaterial color={color} clearcoat={1} />
+        <meshPhysicalMaterial color={color} roughness={0.3} emissive={color} emissiveIntensity={0.5} clearcoat={1} />
       </mesh>
 
       {/* render các port dưới dạng cylinder */}
@@ -51,7 +51,13 @@ export const Connector3D = forwardRef<Group, Props>(({ connector, fade }, ref) =
             <group key={p.id} position={p.pos.toArray()} rotation={p.rot.toArray()}>
               <mesh>
                 <cylinderGeometry args={[diameter / 6, diameter / 6, p.len, 32]} />
-                <meshPhysicalMaterial color={color} />
+                <meshPhysicalMaterial
+                  color={color}
+                  roughness={0.3}
+                  emissive={color}
+                  emissiveIntensity={0.5}
+                  clearcoat={1}
+                />
               </mesh>
             </group>
           )
