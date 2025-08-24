@@ -18,6 +18,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { formatDuration } from '@/utils/index'
 import { SPagination } from '@/components/shared/SPagination'
 import { LayoutGrid, TableIcon } from 'lucide-react'
+import { getCourseStatusBadgeClass } from '@/utils/badgeColor'
 
 type ViewMode = 'table' | 'card'
 
@@ -119,8 +120,10 @@ export default function CourseManagement() {
                     </div>
 
                     <div className='mt-auto flex flex-wrap items-center gap-2'>
-                      {course.duration && <Badge className='bg-red-300'>{formatDuration(course.duration)}</Badge>}
-                      {course.status && <Badge className='bg-blue-200'>{String(course.status).toUpperCase()}</Badge>}
+                      {course.duration && <Badge className='bg-green-400'>{formatDuration(course.duration)}</Badge>}
+                      {course.status && (
+                        <Badge className={`${getCourseStatusBadgeClass(course.status)}`}>{course.status}</Badge>
+                      )}
                     </div>
                   </CardLayout>
                 </Link>

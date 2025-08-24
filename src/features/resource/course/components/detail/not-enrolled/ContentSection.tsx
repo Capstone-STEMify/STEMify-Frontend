@@ -120,7 +120,11 @@ export default function ContentSection() {
         id: lessonId,
         body: { courseId: Number(courseId), status: LessonStatus.PENDING }
       }).unwrap()
-    } catch (error) {}
+      toast.success('Lesson submitted for review')
+    } catch (error) {
+      toast.error('Failed to submit lesson for review')
+      console.error('Send lesson request error:', error)
+    }
   }
 
   const handleDeleteLesson = async (lessonId: number) => {
@@ -247,7 +251,7 @@ export default function ContentSection() {
                         <div className='flex min-h-0 flex-1 flex-col'>
                           <div className='absolute top-2 right-2 text-white'>
                             <SDropDown
-                              trigger={<Ellipsis className='mt-2 h-5 w-6 rounded-sm bg-gray-400 text-white' />}
+                              trigger={<EllipsisVertical className='h-6.5 w-5 rounded-sm bg-gray-400 text-white' />}
                               items={[
                                 <p
                                   key={`view-detail-${lesson.id}`}
