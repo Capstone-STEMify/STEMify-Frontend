@@ -6,7 +6,7 @@ import { useSearchLessonQuery } from '../../api/lessonApi'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
-import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
+import { Lesson, LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import LessonListAction from '../list/LessonListAction'
 import { Button } from '@/components/shadcn/button'
 import { IconPlus } from '@tabler/icons-react'
@@ -114,21 +114,19 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
         {/* CARD VIEW */}
         <TabsContent value='card'>
           <div className='px-2'>
-            <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6'>
-              {rows.map((course: any) => (
-                <Link key={course.id} href={`/${locale}/admin/course/${course.id}`} className='w-full'>
-                  <CardLayout imageSrc={course.imageUrl} size='sm'>
+            <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
+              {rows.map((lesson: Lesson) => (
+                <Link key={lesson.id} href={`/${locale}/admin/lesson/${lesson.id}`} className='w-full'>
+                  <CardLayout imageSrc={lesson.imageUrl} size='sm'>
                     <div>
-                      <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
-                      <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{course.title}</h3>
-                      <p className='line-clamp-2 text-xs text-gray-600'>{course.description}</p>
+                      <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+                      <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
                     </div>
 
                     <div className='mt-auto flex flex-wrap items-center gap-2'>
-                      {course.ageRangeLabel && <Badge className='bg-sky-custom-300'>{course.ageRangeLabel}</Badge>}
-                      {course.duration && <Badge className='bg-red-300'>{formatDuration(course.duration)}</Badge>}
-                      {course.level && <Badge className='bg-emerald-200'>{String(course.level).toUpperCase()}</Badge>}
-                      {course.status && <Badge className='bg-blue-200'>{String(course.status).toUpperCase()}</Badge>}
+                      {lesson.ageRangeLabel && <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>}
+                      {lesson.duration && <Badge className='bg-red-300'>{formatDuration(lesson.duration)}</Badge>}
+                      {lesson.status && <Badge className='bg-blue-200'>{String(lesson.status).toUpperCase()}</Badge>}
                     </div>
                   </CardLayout>
                 </Link>

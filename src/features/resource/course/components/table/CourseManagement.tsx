@@ -108,7 +108,7 @@ export default function CourseManagement() {
         {/* CARD VIEW */}
         <TabsContent value='card'>
           <div className='px-2'>
-            <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6'>
+            <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 xl:grid-cols-5'>
               {rows.map((course: any) => (
                 <Link key={course.id} href={`/${locale}/admin/course/${course.id}`} className='w-full'>
                   <CardLayout imageSrc={course.imageUrl} size='sm'>
@@ -119,9 +119,7 @@ export default function CourseManagement() {
                     </div>
 
                     <div className='mt-auto flex flex-wrap items-center gap-2'>
-                      {course.ageRangeLabel && <Badge className='bg-sky-custom-300'>{course.ageRangeLabel}</Badge>}
                       {course.duration && <Badge className='bg-red-300'>{formatDuration(course.duration)}</Badge>}
-                      {course.level && <Badge className='bg-emerald-200'>{String(course.level).toUpperCase()}</Badge>}
                       {course.status && <Badge className='bg-blue-200'>{String(course.status).toUpperCase()}</Badge>}
                     </div>
                   </CardLayout>
