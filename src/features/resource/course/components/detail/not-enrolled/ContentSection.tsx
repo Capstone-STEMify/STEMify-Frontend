@@ -3,7 +3,7 @@ import { fadeInUp } from '@/utils/motion'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { formatDuration } from '@/utils/index'
-import { EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
+import { Ellipsis, EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
 import { SPagination } from '@/components/shared/SPagination'
 import {
   useDeleteLessonMutation,
@@ -247,44 +247,53 @@ export default function ContentSection() {
                         <div className='flex min-h-0 flex-1 flex-col'>
                           <div className='absolute top-2 right-2 text-white'>
                             <SDropDown
-                              trigger={
-                                <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
-                              }
+                              trigger={<Ellipsis className='mt-2 h-5 w-6 rounded-sm bg-gray-400 text-white' />}
                               items={[
                                 <p
-                                  key='view-detail'
+                                  key={`view-detail-${lesson.id}`}
                                   className='text-sm'
                                   onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
                                 >
                                   {t('notEnrolled.lesson.button.view')}
                                 </p>,
                                 <p
-                                  onClick={() => handleNavigateUpsertLesson(lesson.id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleNavigateUpsertLesson(lesson.id)
+                                  }}
                                   key='update'
                                   className='text-sm'
                                 >
                                   {t('notEnrolled.lesson.button.update')}
                                 </p>,
-                                <p
-                                  onClick={() => handleSendLessonRequest(lesson.id)}
-                                  key='send_request'
-                                  className='text-sm'
-                                >
-                                  {t('notEnrolled.lesson.button.send_request')}
-                                </p>,
-                                <p
-                                  key='delete-lesson'
-                                  className='text-sm'
-                                  onClick={() =>
-                                    openModal('confirm', {
-                                      message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
-                                      onConfirm: () => handleDeleteLesson(lesson.id)
-                                    })
-                                  }
-                                >
-                                  {t('notEnrolled.lesson.button.delete')}
-                                </p>
-                              ]}
+                                lesson.status === LessonStatus.DRAFT ? (
+                                  <p
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleSendLessonRequest(lesson.id)
+                                    }}
+                                    key={`send-request-${lesson.id}`}
+                                    className='text-sm'
+                                  >
+                                    {t('notEnrolled.lesson.button.send_request')}
+                                  </p>
+                                ) : null,
+                                lesson.status === LessonStatus.DRAFT ? (
+                                  <p
+                                    key={`delete-lesson-${lesson.id}`}
+                                    className='text-sm'
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      openModal('confirm', {
+                                        message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
+                                        onConfirm: () => handleDeleteLesson(lesson.id)
+                                      })
+                                    }}
+                                  >
+                                    {t('notEnrolled.lesson.button.delete')}
+                                  </p>
+                                ) : null
+                              ].filter(Boolean)}
                             />
                           </div>
                           <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>

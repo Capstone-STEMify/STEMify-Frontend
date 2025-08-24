@@ -2,6 +2,7 @@ import { Checkbox } from '@/components/shadcn/checkbox'
 import { FieldErrors } from './field-errors'
 import { Label } from '@/components/shadcn/label'
 import { useFieldContext } from '@/components/shared/form/items'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
 
 type CheckboxOption = {
   value: string
@@ -13,22 +14,22 @@ type CheckboxFieldProps = {
   options: CheckboxOption[]
   description?: string
   className?: string
+  scrollHeight?: string
 }
 
 export const MultipleCheckboxField = ({
   label,
   options,
   description,
-  className
+  className,
+  scrollHeight = '64'
 }: CheckboxFieldProps) => {
   const field = useFieldContext<string[]>()
 
   const handleToggle = (optionValue: string, checked: boolean) => {
     const currentValues = field.state.value || []
 
-    const newValue = checked
-      ? [...currentValues, optionValue]
-      : currentValues.filter((val) => val !== optionValue)
+    const newValue = checked ? [...currentValues, optionValue] : currentValues.filter((val) => val !== optionValue)
 
     field.handleChange(newValue)
   }
@@ -40,22 +41,23 @@ export const MultipleCheckboxField = ({
         {description && <p className='text-muted-foreground text-sm'>{description}</p>}
       </div>
 
-      <div className={className}>
-        {options.map((option) => (
-          <div key={option.value} className='flex items-center space-x-2'>
-            <Checkbox
-              id={`${field.name}-${option.value}`}
-              checked={!!field.state.value?.includes(option.value)}
-              onCheckedChange={(checked) => handleToggle(option.value, checked === true)}
-              onBlur={field.handleBlur}
-            />
-            <Label htmlFor={`${field.name}-${option.value}`} className='cursor-pointer'>
-              {option.label}
-            </Label>
-          </div>
-        ))}
-      </div>
-
+      <ScrollArea className={`h-28 pr-2`}>
+        <div className={className}>
+          {options.map((option) => (
+            <div key={option.value} className='flex items-center space-x-2'>
+              <Checkbox
+                id={`${field.name}-${option.value}`}
+                checked={!!field.state.value?.includes(option.value)}
+                onCheckedChange={(checked) => handleToggle(option.value, checked === true)}
+                onBlur={field.handleBlur}
+              />
+              <Label htmlFor={`${field.name}-${option.value}`} className='cursor-pointer'>
+                {option.label}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
       <FieldErrors meta={field.state.meta} />
     </div>
   )
