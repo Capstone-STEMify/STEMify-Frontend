@@ -86,13 +86,13 @@ export default function LessonListAction() {
               <h2 className='text-lg font-semibold text-gray-800'>{t('filterTitle')}</h2>
               {hasFilters && (
                 <div className='flex items-center gap-8'>
-                  <Button
+                  {/* <Button
                     onClick={() => console.log('Search clicked')}
                     className='border border-blue-200 bg-blue-50 px-4 text-blue-600 hover:bg-blue-100'
                   >
                     <Search className='h-4 w-4' />
                     {t('actions.searchBtn')}
-                  </Button>
+                  </Button> */}
                   <Button
                     onClick={clearAll}
                     className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'
@@ -109,7 +109,7 @@ export default function LessonListAction() {
               <div className='relative w-full'>
                 <Input
                   type='text'
-                  placeholder={t('placeHolder.search')}
+                  placeholder={t('placeHolder.search') ?? ''}
                   value={filters.search}
                   onChange={(e) => dispatch(setSearchTerm(e.target.value))}
                   className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'

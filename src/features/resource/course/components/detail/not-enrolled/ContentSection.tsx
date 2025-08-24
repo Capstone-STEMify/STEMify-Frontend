@@ -27,6 +27,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { Lesson, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 import { Button } from '@/components/shadcn/button'
 import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
+import Link from 'next/link'
 
 function SortableLessonCard({
   lesson,
@@ -241,54 +242,60 @@ export default function ContentSection() {
               <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
                 {items.map((lesson) => (
                   <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>
-                    <CardLayout imageSrc={lesson.imageUrl || '/images/fallback.png'}>
-                      <div className='flex min-h-0 flex-1 flex-col'>
-                        <div className='absolute top-2 right-2 text-white'>
-                          <SDropDown
-                            trigger={
-                              <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
-                            }
-                            items={[
-                              <p
-                                key='view-detail'
-                                className='text-sm'
-                                onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
-                              >
-                                {t('notEnrolled.lesson.button.view')}
-                              </p>,
-                              <p onClick={() => handleNavigateUpsertLesson(lesson.id)} key='update' className='text-sm'>
-                                {t('notEnrolled.lesson.button.update')}
-                              </p>,
-                              <p
-                                onClick={() => handleSendLessonRequest(lesson.id)}
-                                key='send_request'
-                                className='text-sm'
-                              >
-                                {t('notEnrolled.lesson.button.send_request')}
-                              </p>,
-                              <p
-                                key='delete-lesson'
-                                className='text-sm'
-                                onClick={() =>
-                                  openModal('confirm', {
-                                    message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
-                                    onConfirm: () => handleDeleteLesson(lesson.id)
-                                  })
-                                }
-                              >
-                                {t('notEnrolled.lesson.button.delete')}
-                              </p>
-                            ]}
-                          />
+                    <Link href={`/resource/lesson/${lesson.id}`}>
+                      <CardLayout imageSrc={lesson.imageUrl || '/images/fallback.png'}>
+                        <div className='flex min-h-0 flex-1 flex-col'>
+                          <div className='absolute top-2 right-2 text-white'>
+                            <SDropDown
+                              trigger={
+                                <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
+                              }
+                              items={[
+                                <p
+                                  key='view-detail'
+                                  className='text-sm'
+                                  onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
+                                >
+                                  {t('notEnrolled.lesson.button.view')}
+                                </p>,
+                                <p
+                                  onClick={() => handleNavigateUpsertLesson(lesson.id)}
+                                  key='update'
+                                  className='text-sm'
+                                >
+                                  {t('notEnrolled.lesson.button.update')}
+                                </p>,
+                                <p
+                                  onClick={() => handleSendLessonRequest(lesson.id)}
+                                  key='send_request'
+                                  className='text-sm'
+                                >
+                                  {t('notEnrolled.lesson.button.send_request')}
+                                </p>,
+                                <p
+                                  key='delete-lesson'
+                                  className='text-sm'
+                                  onClick={() =>
+                                    openModal('confirm', {
+                                      message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
+                                      onConfirm: () => handleDeleteLesson(lesson.id)
+                                    })
+                                  }
+                                >
+                                  {t('notEnrolled.lesson.button.delete')}
+                                </p>
+                              ]}
+                            />
+                          </div>
+                          <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
+                          <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
+                          <div className='mt-auto flex items-center gap-2'>
+                            <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
+                            <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
+                          </div>
                         </div>
-                        <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
-                        <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
-                        <div className='mt-auto flex items-center gap-2'>
-                          <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
-                          <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
-                        </div>
-                      </div>
-                    </CardLayout>
+                      </CardLayout>
+                    </Link>
                   </SortableLessonCard>
                 ))}
 

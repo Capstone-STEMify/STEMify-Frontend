@@ -100,13 +100,13 @@ export default function CourseListAction() {
           {hasFilters && (
             <div className='flex items-center gap-8'>
               {/* Search Button */}
-              <Button
+              {/* <Button
                 onClick={() => console.log('Search clicked')}
                 className='border border-blue-200 bg-blue-50 px-4 text-blue-600 hover:bg-blue-100'
               >
                 <Search className='h-4 w-4' />
                 {t('actions.searchBtn')}
-              </Button>
+              </Button> */}
               {/* Clear All Button */}
               <Button onClick={clearAll} className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'>
                 <X className='h-4 w-4' />

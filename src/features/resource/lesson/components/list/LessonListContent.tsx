@@ -10,7 +10,7 @@ import { SPagination } from '@/components/shared/SPagination'
 import { useLazySearchEnrollmentQuery, useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
-import { LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
+import { LessonQueryParams, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
 import { to } from '@react-spring/core'
@@ -59,7 +59,7 @@ export default function LessonListContent() {
     pageNumber: lessonParams.pageNumber,
     pageSize: lessonParams.pageSize,
     search: lessonParams.search,
-    status: PUBLIC_ROLES.includes(role) ? 'PUBLISHED' : ''
+    status: PUBLIC_ROLES ? LessonStatus.PUBLISHED : lessonParams.status
   }
 
   const { data: lessonData, isLoading } = useSearchLessonQuery(queryParams)
@@ -70,8 +70,27 @@ export default function LessonListContent() {
     dispatch(setPageIndex(newPage))
   }
 
+  const isReadOnly = role === UserRole.STUDENT || role === UserRole.GUEST
+
+  const handleStudentClick = async (lessonId: number, courseId: number) => {
+    try {
+      const result = await fetchEnrollment({ courseId, studentId: userId }).unwrap()
+      const enrolled = result?.data?.items?.length > 0
+
+      if (enrolled) {
+        router.push(`/${locale}/resource/lesson/${lessonId}`)
+      } else {
+        router.push(`/${locale}/resource/course/${courseId}`)
+      }
+    } catch (error) {
+      console.error('Error handling student click:', error)
+    } finally {
+      setLoadingLessonId(null)
+    }
+  }
+
   const handleViewLesson = async (lessonId: number, courseId: number) => {
-    if (loadingLessonId === lessonId) return // Ngăn double click
+    if (loadingLessonId === lessonId) return
     setLoadingLessonId(lessonId)
     try {
       console.log('role', role)
@@ -131,7 +150,7 @@ export default function LessonListContent() {
     return <SEmpty title={t('noLesson')} description={t('noLessonFound')} />
   }
 
-  return (
+  const content = isReadOnly ? (
     <div className='px-5 select-none'>
       <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
         {lessonData.data.items.map((lesson) => (
@@ -147,30 +166,11 @@ export default function LessonListContent() {
                     <div
                       key={`view-${lesson.id}`}
                       className='text-sm'
-                      onClick={() => {
-                        setTimeout(() => {
-                          handleViewLesson(lesson.id, lesson.courseId)
-                        }, 0)
-                      }}
+                      onClick={() => handleStudentClick(lesson.id, lesson.courseId)}
                     >
                       {t('dropdown.view')}
-                    </div>,
-                    updateActive ? (
-                      <Link
-                        href={`/resource/lesson/update/${lesson.id}`}
-                        key={`update-${lesson.id}`}
-                        className='text-sm'
-                      >
-                        <p>{t('dropdown.update')}</p>
-                      </Link>
-                    ) : null,
-                    <p key={`add-${lesson.id}`} className='text-sm'>
-                      {t('dropdown.addToCourse')}
-                    </p>,
-                    <p key={`share-${lesson.id}`} className='text-sm'>
-                      {t('dropdown.share')}
-                    </p>
-                  ].filter(Boolean)}
+                    </div>
+                  ]}
                 />
               </div>
               <div>
@@ -200,5 +200,78 @@ export default function LessonListContent() {
         />
       )}
     </div>
+  ) : (
+    <div className='px-5 select-none'>
+      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+        {lessonData.data.items.map((lesson) => (
+          <div key={lesson.id} className='relative flex gap-1'>
+            <Link href={`/resource/lesson/${lesson.id}`}>
+              <CardLayout imageSrc={lesson.imageUrl} size='sm' isScale={false}>
+                <div
+                  key={lesson.id}
+                  className='absolute top-2 right-2 flex rounded-sm bg-gray-500/70 px-1 pb-1 text-white backdrop:blur-sm'
+                >
+                  <SDropDown
+                    trigger={<EllipsisVertical className='mt-1 h-5 w-5 text-white' />}
+                    items={[
+                      <div
+                        key={`view-${lesson.id}`}
+                        className='text-sm'
+                        onClick={() => {
+                          setTimeout(() => {
+                            handleViewLesson(lesson.id, lesson.courseId)
+                          }, 0)
+                        }}
+                      >
+                        {t('dropdown.view')}
+                      </div>,
+                      updateActive ? (
+                        <Link
+                          href={`/resource/lesson/update/${lesson.id}`}
+                          key={`update-${lesson.id}`}
+                          className='text-sm'
+                        >
+                          <p>{t('dropdown.update')}</p>
+                        </Link>
+                      ) : null,
+                      <p key={`add-${lesson.id}`} className='text-sm'>
+                        {t('dropdown.addToCourse')}
+                      </p>,
+                      <p key={`share-${lesson.id}`} className='text-sm'>
+                        {t('dropdown.share')}
+                      </p>
+                    ].filter(Boolean)}
+                  />
+                </div>
+                <div>
+                  <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
+                  <h3 className='text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+                  <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
+                </div>
+
+                <div className='mt-auto flex flex-wrap items-center gap-2'>
+                  <Badge className='bg-sky-custom-300'>
+                    <div className='mr-0.5'>{t('tags.ageRange')}:</div>
+                    {lesson.ageRangeLabel}
+                  </Badge>
+                  <Badge className='bg-red-300'>{lesson.duration} mins</Badge>
+                </div>
+              </CardLayout>
+            </Link>
+          </div>
+        ))}
+      </div>
+
+      {lessonData.data.totalPages > 1 && (
+        <SPagination
+          pageNumber={lessonParams.pageNumber}
+          totalPages={lessonData.data.totalPages}
+          onPageChanged={handlePageChange}
+          className='pb-10'
+        />
+      )}
+    </div>
   )
+
+  return content
 }
