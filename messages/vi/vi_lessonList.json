@@ -30,8 +30,7 @@
     "dropdown": {
       "view": "Xem",
       "update": "Cập Nhật",
-      "addToCourse": "Thêm vào Khóa Học",
-      "share": "Chia Sẻ"
+      "delete": "Xóa"
     }
   }
 }

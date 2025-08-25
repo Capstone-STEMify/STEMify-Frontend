@@ -7,15 +7,15 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
-import { useLazySearchEnrollmentQuery, useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
-import { useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
+import { useLazySearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
+import { useDeleteLessonMutation, useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { LessonQueryParams, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { useModal } from '@/providers/ModalProvider'
 import { UserRole } from '@/types/userRole'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
-import { to } from '@react-spring/core'
 import { EllipsisVertical } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useLocale, useTranslations } from 'next-intl'
@@ -25,24 +25,15 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export default function LessonListContent() {
+  const { openModal } = useModal()
   const router = useRouter()
   const locale = useLocale()
   const { status } = useSession()
   const t = useTranslations('LessonList')
-  const [updateActive, setUpdateActive] = useState(false)
-  const [loadingLessonId, setLoadingLessonId] = useState<number | null>(null)
   const role = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
   const userId = useAppSelector((state) => state.auth.user?.id)
 
   const PUBLIC_ROLES = UserRole.STUDENT || UserRole.GUEST || UserRole.TEACHER
-
-  useEffect(() => {
-    if (status === 'authenticated' && role === UserRole.STAFF) {
-      setUpdateActive(true)
-    } else {
-      setUpdateActive(false)
-    }
-  }, [status, role])
 
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
@@ -65,14 +56,14 @@ export default function LessonListContent() {
   }
 
   const { data: lessonData, isLoading } = useSearchLessonQuery(queryParams)
-
+  const [deleteLesson] = useDeleteLessonMutation()
   const [fetchEnrollment] = useLazySearchEnrollmentQuery()
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
 
-  const isReadOnly = role === UserRole.STUDENT || role === UserRole.GUEST
+  const isReadOnly = role === UserRole.STUDENT || role === UserRole.GUEST || role === UserRole.TEACHER
 
   const handleStudentClick = async (lessonId: number, courseId: number) => {
     try {
@@ -86,38 +77,22 @@ export default function LessonListContent() {
       }
     } catch (error) {
       console.error('Error handling student click:', error)
-    } finally {
-      setLoadingLessonId(null)
     }
   }
 
-  const handleViewLesson = async (lessonId: number, courseId: number) => {
-    if (loadingLessonId === lessonId) return
-    setLoadingLessonId(lessonId)
+  const handleDelete = async (e: React.MouseEvent, lessonId: number) => {
+    e.stopPropagation()
+    e.preventDefault()
     try {
-      console.log('role', role)
-
-      if (role === UserRole.STAFF || role === UserRole.TEACHER) {
-        router.push(`/${locale}/resource/lesson/${lessonId}`)
-        return
-      }
-
-      if (role === UserRole.STUDENT) {
-        console.log('student access')
-        const result = await fetchEnrollment({ courseId, studentId: userId }).unwrap()
-        const enrolled = result?.data?.items?.length > 0
-
-        if (enrolled) {
-          router.push(`/${locale}/resource/lesson/${lessonId}`)
-        } else {
-          router.push(`/${locale}/resource/course/${courseId}`)
+      openModal('confirm', {
+        message: 'Are you sure you want to delete this lesson?',
+        onConfirm: async () => {
+          await deleteLesson(lessonId).unwrap()
+          toast.success('Deleted successfully')
         }
-      }
-    } catch (err) {
-      console.error('Error fetching enrollment:', err)
-      toast.message('Something went wrong. Please try again.')
-    } finally {
-      setLoadingLessonId(null)
+      })
+    } catch (error) {
+      toast.error('Failed to delete lesson')
     }
   }
 
@@ -157,24 +132,12 @@ export default function LessonListContent() {
       <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
         {lessonData.data.items.map((lesson) => (
           <div key={lesson.id} className='relative flex gap-1'>
-            <CardLayout imageSrc={lesson.imageUrl} size='sm' isScale={false}>
-              <div
-                key={lesson.id}
-                className='absolute top-2 right-2 flex rounded-sm bg-gray-500/70 px-1 pb-1 text-white backdrop:blur-sm'
-              >
-                <SDropDown
-                  trigger={<EllipsisVertical className='mt-1 h-5 w-5 text-white' />}
-                  items={[
-                    <div
-                      key={`view-${lesson.id}`}
-                      className='text-sm'
-                      onClick={() => handleStudentClick(lesson.id, lesson.courseId)}
-                    >
-                      {t('dropdown.view')}
-                    </div>
-                  ]}
-                />
-              </div>
+            <CardLayout
+              imageSrc={lesson.imageUrl}
+              size='sm'
+              isScale={false}
+              onClick={() => handleStudentClick(lesson.id, lesson.courseId)}
+            >
               <div>
                 <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
                 <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
@@ -223,33 +186,25 @@ export default function LessonListContent() {
                   <SDropDown
                     trigger={<EllipsisVertical className='mt-1 h-5 w-5 text-white' />}
                     items={[
-                      <div
-                        key={`view-${lesson.id}`}
+                      <Link
+                        href={`/resource/lesson/update/${lesson.id}`}
+                        key={`update-${lesson.id}`}
                         className='text-sm'
-                        onClick={() => {
-                          setTimeout(() => {
-                            handleViewLesson(lesson.id, lesson.courseId)
-                          }, 0)
+                      >
+                        <p>{t('dropdown.update')}</p>
+                      </Link>,
+                      <button
+                        key={`delete-${lesson.id}`}
+                        className='text-sm'
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          handleDelete(e, lesson.id)
                         }}
                       >
-                        {t('dropdown.view')}
-                      </div>,
-                      updateActive ? (
-                        <Link
-                          href={`/resource/lesson/update/${lesson.id}`}
-                          key={`update-${lesson.id}`}
-                          className='text-sm'
-                        >
-                          <p>{t('dropdown.update')}</p>
-                        </Link>
-                      ) : null,
-                      <p key={`add-${lesson.id}`} className='text-sm'>
-                        {t('dropdown.addToCourse')}
-                      </p>,
-                      <p key={`share-${lesson.id}`} className='text-sm'>
-                        {t('dropdown.share')}
-                      </p>
-                    ].filter(Boolean)}
+                        {t('dropdown.delete')}
+                      </button>
+                    ]}
                   />
                 </div>
                 <div>
@@ -259,10 +214,7 @@ export default function LessonListContent() {
                 </div>
 
                 <div className='mt-auto flex flex-wrap items-center gap-2'>
-                  <Badge className='bg-sky-custom-300'>
-                    <div className='mr-0.5'>{t('tags.ageRange')}:</div>
-                    {lesson.ageRangeLabel}
-                  </Badge>
+                  <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
                   <Badge className='bg-red-300'>{lesson.duration} mins</Badge>
                 </div>
               </CardLayout>
