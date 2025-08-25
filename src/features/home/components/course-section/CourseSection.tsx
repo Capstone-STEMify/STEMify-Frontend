@@ -12,13 +12,8 @@ import React, { useEffect } from 'react'
 
 export default function ExploreResourcesSection() {
   const t = useTranslations('ExploreResourcesSection')
-  const dispatch = useAppDispatch()
 
-  const { data: CourseData } = useSearchCourseQuery({ status: CourseStatus.PUBLISHED })
-
-  useEffect(() => {
-    dispatch(setPageSize(3))
-  }, [CourseData])
+  const { data: CourseData } = useSearchCourseQuery({ status: CourseStatus.PUBLISHED, pageSize: 3 })
 
   const truncateText = (text: string, maxLength = 80) => {
     if (text.length <= maxLength) return text
@@ -40,7 +35,7 @@ export default function ExploreResourcesSection() {
         </h2>
 
         <div className='mx-auto flex max-w-7xl justify-around gap-6'>
-          {CourseData?.data.items.slice(1, 4).map((resource, index) => (
+          {CourseData?.data.items.map((resource, index) => (
             <CardLayout
               size='lg'
               key={index}

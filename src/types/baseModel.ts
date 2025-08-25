@@ -34,11 +34,14 @@ export type ApiErrorResponse = {
 } & ApiResponse
 
 // Request params
+export type BaseOrderBy = 'createdDate' | 'title' | ''
+export type SortDirection = 'Asc' | 'Desc'
+
 export type SearchPaginatedRequestParams = {
   pageNumber?: number
   pageSize?: number
   search?: string
-  orderBy?: string
+  orderBy?: BaseOrderBy
   status?: string
   sortDirection?: 'Asc' | 'Desc'
 }

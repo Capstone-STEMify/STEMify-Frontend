@@ -30,8 +30,7 @@
     "dropdown": {
       "view": "View",
       "update": "Update",
-      "addToCourse": "Add to Course",
-      "share": "Share"
+      "delete": "Delete"
     }
   }
 }

@@ -19,11 +19,13 @@ import { capitalizeFirst, formatDuration } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import { getCourseStatusBadgeClass, getLevelBadgeClass } from '@/utils/badgeColor'
 import { toast } from 'sonner'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function CourseListContent() {
   const t = useTranslations('CourseList')
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const { openModal } = useModal()
   const courseParams = useAppSelector((state) => state.course)
   const auth = useAppSelector((state) => state.auth)
   const userRole = auth.user?.role || UserRole.GUEST
@@ -43,7 +45,9 @@ export default function CourseListContent() {
     pageNumber: courseParams.pageNumber,
     pageSize: courseParams.pageSize,
     search: courseParams.search,
-    status: PUBLIC_ROLES ? CourseStatus.PUBLISHED : courseParams.status
+    status: PUBLIC_ROLES ? CourseStatus.PUBLISHED : courseParams.status,
+    orderBy: 'createdDate',
+    sortDirection: 'Desc'
   }
 
   const { data: courseData, isLoading } = useSearchCourseQuery(queryParams)
@@ -78,10 +82,17 @@ export default function CourseListContent() {
     } else router.push('/resource/course/create')
   }
 
-  const handleDelete = async (courseId: number) => {
+  const handleDelete = async (e: React.MouseEvent, courseId: number) => {
+    e.stopPropagation()
+    e.preventDefault()
     try {
-      await deleteCourse(courseId).unwrap()
-      toast.success('Deleted successfully')
+      openModal('confirm', {
+        message: 'Are you sure you want to delete this course?',
+        onConfirm: async () => {
+          await deleteCourse(courseId).unwrap()
+          toast.success('Deleted successfully')
+        }
+      })
     } catch (error) {
       toast.error('Failed to delete course')
     }
@@ -127,9 +138,9 @@ export default function CourseListContent() {
                     <p key={`update-${course.id}`} className='text-sm' onClick={() => handleNavigate(course.id)}>
                       {t('actions.update')}
                     </p>,
-                    <p key={`delete-${course.id}`} className='text-sm' onClick={() => handleDelete(course.id)}>
+                    <button key={`delete-${course.id}`} className='text-sm' onClick={(e) => handleDelete(e, course.id)}>
                       {t('actions.delete')}
-                    </p>
+                    </button>
                   ].filter(Boolean)}
                 />
               </div>

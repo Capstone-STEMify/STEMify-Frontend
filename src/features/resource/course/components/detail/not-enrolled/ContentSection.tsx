@@ -85,7 +85,12 @@ export default function ContentSection() {
   const params = useParams()
   const courseId = params.courseId
 
-  const { data: lessons } = useSearchLessonQuery({ ...lessonsQuery, courseId: Number(courseId) })
+  const { data: lessons } = useSearchLessonQuery({
+    ...lessonsQuery,
+    courseId: Number(courseId),
+    orderBy: 'createdDate',
+    sortDirection: 'Desc'
+  })
   const [deleteLesson] = useDeleteLessonMutation()
   const [updateCourseLessonOrder] = useUpdateLessonOrderMutation()
   const [sendLessonRequest] = useUpdateLessonMutation()

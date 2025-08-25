@@ -1,4 +1,3 @@
-import { classroomApi } from '@/features/classroom/api/classroomApi'
 import { enrollmentApi } from '@/features/enrollment/api/enrollmentApi'
 import { ageRangeApi } from '@/features/resource/age-range/api/ageRangeApi'
 import { ageRangeSlice } from '@/features/resource/age-range/slice/ageRangeSlice'
@@ -48,7 +47,6 @@ export const rootReducer = combineReducers({
   [lessonApi.reducerPath]: lessonApi.reducer,
   [sectionApi.reducerPath]: sectionApi.reducer,
   [enrollmentApi.reducerPath]: enrollmentApi.reducer,
-  [classroomApi.reducerPath]: classroomApi.reducer,
   [ageRangeApi.reducerPath]: ageRangeApi.reducer,
   [skillApi.reducerPath]: skillApi.reducer,
   [standardApi.reducerPath]: standardApi.reducer,

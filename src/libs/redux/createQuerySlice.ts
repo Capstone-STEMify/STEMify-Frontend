@@ -1,10 +1,11 @@
+import { BaseOrderBy } from '@/types/baseModel'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface SliceQueryParams {
   pageNumber: number
   pageSize: number
   search: string
-  orderBy?: string
+  orderBy?: BaseOrderBy
   status?: string
   [key: string]: any
 }
