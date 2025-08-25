@@ -6,7 +6,7 @@ import SEmpty from '@/components/shared/empty/SEmpty'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
-import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
+import { useDeleteCourseMutation, useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { CourseQueryParams, CourseStatus } from '@/features/resource/course/types/course.type'
 import { setPageIndex, setPageSize } from '@/features/resource/course/slice/courseSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
@@ -17,7 +17,8 @@ import { UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
 import { capitalizeFirst, formatDuration } from '@/utils/index'
 import { useTranslations } from 'next-intl'
-import { getLevelBadgeClass } from '@/utils/badgeColor'
+import { getCourseStatusBadgeClass, getLevelBadgeClass } from '@/utils/badgeColor'
+import { toast } from 'sonner'
 
 export default function CourseListContent() {
   const t = useTranslations('CourseList')
@@ -46,6 +47,7 @@ export default function CourseListContent() {
   }
 
   const { data: courseData, isLoading } = useSearchCourseQuery(queryParams)
+  const [deleteCourse] = useDeleteCourseMutation()
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
@@ -70,14 +72,19 @@ export default function CourseListContent() {
     )
   }
 
-  // const handleNavigateCreateCourse = () => {
-  //   router.push('/resource/course/create')
-  // }
-
   const handleNavigate = (courseId?: number) => {
     if (courseId) {
       router.push(`/resource/course/update/${courseId}`)
     } else router.push('/resource/course/create')
+  }
+
+  const handleDelete = async (courseId: number) => {
+    try {
+      await deleteCourse(courseId).unwrap()
+      toast.success('Deleted successfully')
+    } catch (error) {
+      toast.error('Failed to delete course')
+    }
   }
 
   if (!courseData || courseData.data.items.length === 0) {
@@ -90,7 +97,13 @@ export default function CourseListContent() {
         {courseData.data.items.map((course) => (
           <div key={course.id} className='relative flex min-w-0 gap-1'>
             <Link href={`/resource/course/${course.id}`} className='flex w-fit flex-col justify-between'>
-              <CardLayout imageSrc={course.imageUrl || '/images/fallback.png'} size='sm'>
+              <CardLayout
+                imageSrc={course.imageUrl || '/images/fallback.png'}
+                size='sm'
+                badge={
+                  <Badge className={getCourseStatusBadgeClass(course.status)}>{capitalizeFirst(course.status)}</Badge>
+                }
+              >
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
                   <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{course.title}</h3>
@@ -111,14 +124,11 @@ export default function CourseListContent() {
                     <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
                   }
                   items={[
-                    <p key={`view-${course.id}`} className='text-sm'>
-                      {t('actions.view')}
-                    </p>,
-                    <p key={`add-${course.id}`} className='text-sm' onClick={() => handleNavigate()}>
-                      {t('actions.add')}
-                    </p>,
                     <p key={`update-${course.id}`} className='text-sm' onClick={() => handleNavigate(course.id)}>
                       {t('actions.update')}
+                    </p>,
+                    <p key={`delete-${course.id}`} className='text-sm' onClick={() => handleDelete(course.id)}>
+                      {t('actions.delete')}
                     </p>
                   ].filter(Boolean)}
                 />

@@ -27,7 +27,8 @@
       "searchBtn": "Search",
       "clearBtn": "Clear All",
       "add": "Add new course",
-      "update": "Update course",
+      "update": "Update",
+      "delete": "Delete",
       "view": "View",
       "create": "Create New Course"
     }
