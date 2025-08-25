@@ -86,7 +86,7 @@ export default function CourseListContent() {
               <CardLayout imageSrc={course.imageUrl || '/images/fallback.png'} size='sm'>
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
-                  <h3 className='text-sm font-semibold text-gray-900'>{course.title}</h3>
+                  <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{course.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{course.description}</p>
                 </div>
 
