@@ -21,8 +21,8 @@ export const studentProgresssApi = createCrudApi<StudentProgress, StudentProgres
     }),
     updateLessonStudentProgress: builder.mutation<void, { lessonId: number; enrollmentId: number }>({
       query: ({ lessonId, enrollmentId }) => ({
-        url: `/student-progress/lesson`,
-        method: 'PUT',
+        url: `/student-progress/lessons`,
+        method: 'PATCH',
         body: { lessonId, enrollmentId }
       })
     }),
@@ -41,8 +41,8 @@ export const studentProgresssApi = createCrudApi<StudentProgress, StudentProgres
     updateSectionStudentProgress: builder.mutation<void, { sectionId: number; enrollmentId: number; lessonId: number }>(
       {
         query: ({ sectionId, enrollmentId, lessonId }) => ({
-          url: `/student-progress/section`,
-          method: 'PUT',
+          url: `/student-progress/sections`,
+          method: 'PATCH',
           body: { sectionId, enrollmentId, lessonId }
         })
       }

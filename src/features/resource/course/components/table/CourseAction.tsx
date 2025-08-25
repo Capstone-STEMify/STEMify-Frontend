@@ -11,6 +11,7 @@ import z from 'zod'
 import { Badge } from '@/components/shadcn/badge'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
+import { getCourseStatusBadgeClass } from '@/utils/badgeColor'
 
 export const courseTableSchema = z.object({
   id: z.number()
@@ -23,20 +24,6 @@ const levelBadgeClass = (level?: string): string => {
     [CourseLevel.ADVANCED]: 'bg-red-100 text-red-800'
   }
   return map[level ?? ''] ?? 'bg-muted text-muted-foreground'
-}
-
-const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
-  const map: Record<CourseStatus, string> = {
-    [CourseStatus.DRAFT]: 'bg-gray-200 text-gray-800',
-    [CourseStatus.PUBLISHED]: 'bg-blue-100 text-blue-800',
-    [CourseStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800',
-    [CourseStatus.DELETED]: 'bg-red-100 text-red-800',
-    [CourseStatus.PENDING]: 'bg-amber-100 text-amber-800',
-    [CourseStatus.REJECTED]: 'bg-red-200 text-red-900',
-    [CourseStatus.APPROVED]: 'bg-green-100 text-green-800'
-  }
-
-  return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
 }
 
 export function useGetCourseAction(): ColumnDef<Course>[] {

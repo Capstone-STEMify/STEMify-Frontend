@@ -387,7 +387,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
             content={
               <form.AppField
                 name='standards'
-                children={(field: any) => (
+                children={(field) => (
                   <field.MultipleCheckboxField
                     options={standards?.data.items.map((s) => ({
                       value: s.id.toString(),

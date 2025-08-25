@@ -28,7 +28,7 @@
           "view": "Xem Chi Tiết",
           "create": "Tạo Bài Học Mới",
           "update": "Cập nhật Bài Học",
-          "send_request": "Gửi Yêu Cầu",
+          "send_request": "Gửi Yêu Cầu Phê Duyệt",
           "delete": "Xóa Bài Học",
           "deleteConfirm": "Bạn có chắc chắn muốn xóa bài học này?"
         }

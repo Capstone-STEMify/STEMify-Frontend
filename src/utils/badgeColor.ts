@@ -1,3 +1,4 @@
+import { CourseStatus } from '@/features/resource/course/types/course.type'
 import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 
 export const getStatusBadgeClass = (status: LessonStatus) => {
@@ -19,4 +20,18 @@ export const getStatusBadgeClass = (status: LessonStatus) => {
     default:
       return 'bg-gray-100 text-gray-800'
   }
+}
+
+export const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
+  const map: Record<CourseStatus, string> = {
+    [CourseStatus.DRAFT]: 'bg-gray-200 text-gray-800',
+    [CourseStatus.PUBLISHED]: 'bg-blue-100 text-blue-800',
+    [CourseStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800',
+    [CourseStatus.DELETED]: 'bg-red-100 text-red-800',
+    [CourseStatus.PENDING]: 'bg-amber-100 text-amber-800',
+    [CourseStatus.REJECTED]: 'bg-red-200 text-red-900',
+    [CourseStatus.APPROVED]: 'bg-green-100 text-green-800'
+  }
+
+  return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
 }
