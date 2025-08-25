@@ -11,6 +11,10 @@
       "section": "Phần",
       "duration": "Thời gian",
       "description": "Mô tả"
+    },
+    "button": {
+      "approve": "Chấp nhận",
+      "reject": "Từ chối"
     }
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Lesson } from '@/features/resource/lesson/types/lesson.type'
+import { Lesson, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 import { itemVariants } from '@/utils/motion'
 import { useLocale, useTranslations } from 'next-intl'
 import { useAppSelector } from '@/hooks/redux-hooks'
@@ -8,6 +8,8 @@ import { Button } from '@/components/shadcn/button'
 import Link from 'next/link'
 import { UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
+import { useUpdateLessonMutation } from '@/features/resource/lesson/api/lessonApi'
+import { toast } from 'sonner'
 
 type GuideLessonDetailsProps = {
   lesson: Lesson
@@ -19,11 +21,23 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
   const t = useTranslations('PacingGuide')
   const role = useAppSelector((state) => state.auth.user?.role)
 
+  const [updateLesson] = useUpdateLessonMutation()
+
   const handleNavigateUpdate = (lessonId: number) => {
     if (role === UserRole.ADMIN) {
       router.push(`/${locale}/admin/lesson/update/${lessonId}`)
     } else if (role === UserRole.STAFF) {
       router.push(`/${locale}/resource/lesson/update/${lessonId}`)
+    }
+  }
+
+  const handleUpdateLessonStatus = async (lessonId: number, status: LessonStatus) => {
+    try {
+      await updateLesson({ id: lessonId, body: { status } }).unwrap()
+      toast.success(`Lesson status updated to ${status}`)
+    } catch (error) {
+      toast.error('Failed to update lesson status')
+      console.error('Error updating lesson status:', error)
     }
   }
 
@@ -95,13 +109,34 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
             </div>
           </div>
 
-          <Button
-            onClick={() => handleNavigateUpdate(lesson.id)}
-            className='bg-amber-custom-400 mt-8 w-full text-lg'
-            size={'lg'}
-          >
-            Update Lesson
-          </Button>
+          <div>
+            <Button
+              onClick={() => handleNavigateUpdate(lesson.id)}
+              className='bg-amber-custom-400 mt-8 w-full text-lg'
+              size={'lg'}
+            >
+              Update Lesson
+            </Button>
+
+            {(lesson.status === LessonStatus.PENDING || lesson.status === LessonStatus.DRAFT) &&
+              (role === UserRole.ADMIN || role === UserRole.STAFF) && (
+                <div className='mt-5 mr-2 flex gap-x-2'>
+                  <Button
+                    onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.REJECTED)}
+                    className='w-1/2 border-red-500 text-red-500'
+                    variant={'outline'}
+                  >
+                    {t('button.reject')}
+                  </Button>
+                  <Button
+                    onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.APPROVED)}
+                    className='w-1/2 bg-green-500 text-white'
+                  >
+                    {t('button.approve')}
+                  </Button>
+                </div>
+              )}
+          </div>
         </div>
       </div>
     </motion.section>

@@ -175,9 +175,9 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const lessonIdRaw = params?.lessonId
   const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
 
-  const { data: skills } = useGetAllSkillQuery()
-  const { data: categories } = useGetAllCategoryQuery()
-  const { data: standards } = useGetAllStandardQuery()
+  const { data: skills } = useGetAllSkillQuery({ pageSize: 50 })
+  const { data: categories } = useGetAllCategoryQuery({ pageSize: 50 })
+  const { data: standards } = useGetAllStandardQuery({ pageSize: 50 })
   const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(lessonId as number, {
     skip: !lessonId
   })
