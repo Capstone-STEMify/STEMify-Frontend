@@ -47,22 +47,28 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
       <div className='grid grid-cols-1 items-start gap-10 lg:grid-cols-[1.7fr_1fr]'>
         <div>
           <h1 className='mt-2 text-3xl font-bold text-gray-900 sm:text-4xl'>{lesson.title}</h1>
-
           <p className='mt-2 text-sm text-gray-700'>
             By <span className='font-semibold'>{lesson.createdByUserName || 'STEMify'}</span>
           </p>
-
           <p className='mt-4 whitespace-pre-line text-gray-700'>{lesson.description}</p>
 
-          <div className='mt-8'>
+          <hr className='my-6 border-gray-300' />
+
+          <div>
             <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('learningOutcome')}</h3>
-            <p className='leading-relaxed whitespace-pre-line text-gray-700'>{lesson.learningOutcome}</p>{' '}
+            <p className='leading-relaxed whitespace-pre-line text-gray-700'>{lesson.learningOutcome}</p>
           </div>
 
-          <div className='mt-8'>
+          <hr className='my-6 border-gray-300' />
+
+          <div>
             <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('requirement')}</h3>
-            <p className='leading-relaxed text-gray-700'>{lesson.requirement || 'No requirements specified.'}</p>
+            <p className='leading-relaxed whitespace-pre-line text-gray-700'>
+              {lesson.requirement || 'No requirements specified.'}
+            </p>
           </div>
+
+          <hr className='my-6 border-gray-300' />
 
           <div className='mt-8'>
             <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('standards')}</h3>
@@ -119,7 +125,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
             </Button>
 
             {(lesson.status === LessonStatus.PENDING || lesson.status === LessonStatus.DRAFT) &&
-              (role === UserRole.ADMIN || role === UserRole.STAFF) && (
+              role === UserRole.ADMIN && (
                 <div className='mt-5 mr-2 flex gap-x-2'>
                   <Button
                     onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.REJECTED)}

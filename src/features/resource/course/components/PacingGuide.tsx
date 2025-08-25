@@ -27,13 +27,10 @@ export default function PacingGuide() {
 
   return (
     <div className='min-h-screen'>
-      <div className='mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8'>
+      <div className='mx-auto flex max-w-7xl gap-5 px-4 py-8 sm:px-6 lg:px-8'>
+        <BackButton />
         <motion.div variants={containerVariants} initial='hidden' animate='visible' className='space-y-8'>
-          <div className='flex gap-5'>
-            <BackButton />
-
-            <GuideLessonDetails lesson={data?.data} />
-          </div>
+          <GuideLessonDetails lesson={data?.data} />
           <SyllabusTable lessonId={Number(lessonId)} />
         </motion.div>
       </div>
