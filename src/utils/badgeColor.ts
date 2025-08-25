@@ -1,4 +1,4 @@
-import { CourseStatus } from '@/features/resource/course/types/course.type'
+import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
 import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 
 export const getStatusBadgeClass = (status: LessonStatus) => {
@@ -34,4 +34,17 @@ export const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
   }
 
   return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
+}
+
+export const getLevelBadgeClass = (level: CourseLevel): string => {
+  switch (level) {
+    case CourseLevel.BEGINNER:
+      return 'bg-green-100 text-green-800'
+    case CourseLevel.INTERMEDIATE:
+      return 'bg-yellow-100 text-yellow-800'
+    case CourseLevel.ADVANCED:
+      return 'bg-red-100 text-red-800'
+    default:
+      return 'bg-gray-100 text-gray-800'
+  }
 }

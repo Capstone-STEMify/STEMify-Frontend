@@ -18,7 +18,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { capitalizeFirst, formatDuration } from '@/utils/index'
 import { SPagination } from '@/components/shared/SPagination'
 import { LayoutGrid, TableIcon } from 'lucide-react'
-import { getCourseStatusBadgeClass } from '@/utils/badgeColor'
+import { getCourseStatusBadgeClass, getLevelBadgeClass } from '@/utils/badgeColor'
 
 type ViewMode = 'table' | 'card'
 
@@ -129,7 +129,7 @@ export default function CourseManagement() {
 
                     <div className='mt-auto flex flex-wrap items-center gap-2'>
                       {course.duration > 0 && (
-                        <Badge className='bg-sky-custom-300'>{formatDuration(course.duration)}</Badge>
+                        <Badge className={getLevelBadgeClass(course.level)}>{capitalizeFirst(course.level)}</Badge>
                       )}
                     </div>
                   </CardLayout>

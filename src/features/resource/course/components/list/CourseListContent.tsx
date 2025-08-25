@@ -15,8 +15,9 @@ import Link from 'next/link'
 import { useEffect } from 'react'
 import { UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
-import { formatDuration } from '@/utils/index'
+import { capitalizeFirst, formatDuration } from '@/utils/index'
 import { useTranslations } from 'next-intl'
+import { getLevelBadgeClass } from '@/utils/badgeColor'
 
 export default function CourseListContent() {
   const t = useTranslations('CourseList')
@@ -69,8 +70,14 @@ export default function CourseListContent() {
     )
   }
 
-  const handleNavigateCreateCourse = () => {
-    router.push('/resource/course/create')
+  // const handleNavigateCreateCourse = () => {
+  //   router.push('/resource/course/create')
+  // }
+
+  const handleNavigate = (courseId?: number) => {
+    if (courseId) {
+      router.push(`/resource/course/update/${courseId}`)
+    } else router.push('/resource/course/create')
   }
 
   if (!courseData || courseData.data.items.length === 0) {
@@ -92,7 +99,7 @@ export default function CourseListContent() {
 
                 <div className='mt-auto flex flex-wrap items-center gap-2'>
                   <Badge className='bg-sky-custom-300'>{course.ageRangeLabel}</Badge>
-                  <Badge className='bg-red-300'>{formatDuration(course.duration)}</Badge>
+                  <Badge className={getLevelBadgeClass(course.level)}>{capitalizeFirst(course.level)}</Badge>
                 </div>
               </CardLayout>
             </Link>
@@ -107,10 +114,10 @@ export default function CourseListContent() {
                     <p key={`view-${course.id}`} className='text-sm'>
                       {t('actions.view')}
                     </p>,
-                    <p key={`add-${course.id}`} className='text-sm'>
+                    <p key={`add-${course.id}`} className='text-sm' onClick={() => handleNavigate()}>
                       {t('actions.add')}
                     </p>,
-                    <p key={`update-${course.id}`} className='text-sm'>
+                    <p key={`update-${course.id}`} className='text-sm' onClick={() => handleNavigate(course.id)}>
                       {t('actions.update')}
                     </p>
                   ].filter(Boolean)}
@@ -122,7 +129,7 @@ export default function CourseListContent() {
         {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? null : (
           <div
             className='shadow-6 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-9.5 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-            onClick={handleNavigateCreateCourse}
+            onClick={() => handleNavigate()}
           >
             <PlusCircle size={70} className='text-gray-500' />
             <p className='mt-4 text-sm font-medium text-gray-500'>{t('actions.create')}</p>
