@@ -122,6 +122,7 @@ async function CreateLessonJsonPayload(data: LessonFormData, userId: string, cou
     topicIds: data.topics.map(Number),
     skillIds: data.skills.map(Number),
     standardIds: data.standards.map(Number),
+    requirement: data.requirement,
     courseId: courseId,
     createdByUserId: userId,
     image: imageBase64
