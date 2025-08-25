@@ -94,8 +94,8 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
       }),
 
       // GET: classrooms
-      getAll: builder.query<ApiSuccessResponse<PaginatedResult<T>>, void>({
-        query: () => ({ url: baseUrl }),
+      getAll: builder.query<ApiSuccessResponse<PaginatedResult<T>>, void | SearchPaginatedRequestParams>({
+        query: (params) => ({ url: baseUrl, params }),
         providesTags: [tagType]
       }),
 

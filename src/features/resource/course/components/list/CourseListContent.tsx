@@ -28,7 +28,7 @@ export default function CourseListContent() {
   const PUBLIC_ROLES = userRole === UserRole.STUDENT || userRole === UserRole.GUEST || userRole === UserRole.TEACHER
 
   useEffect(() => {
-    dispatch(setPageSize(12))
+    dispatch(setPageSize(10))
   }, [dispatch])
 
   const queryParams: CourseQueryParams = {
@@ -85,7 +85,7 @@ export default function CourseListContent() {
             <Link href={`/resource/course/${course.id}`} className='flex w-fit flex-col justify-between'>
               <CardLayout imageSrc={course.imageUrl || '/images/fallback.png'} size='sm'>
                 <div>
-                  <p className='text-muted-foreground text-xs font-medium'>{t('subtitle')}</p>
+                  <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
                   <h3 className='text-sm font-semibold text-gray-900'>{course.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{course.description}</p>
                 </div>
@@ -97,24 +97,26 @@ export default function CourseListContent() {
               </CardLayout>
             </Link>
 
-            <div key={course.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
-              <SDropDown
-                trigger={
-                  <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
-                }
-                items={[
-                  <p key='view' className='text-sm'>
-                    {t('actions.view')}
-                  </p>,
-                  <p key='add-to-course' className='text-sm'>
-                    {t('actions.add')}
-                  </p>,
-                  <p key='share' className='text-sm'>
-                    {t('actions.share')}
-                  </p>
-                ]}
-              />
-            </div>
+            {userRole === UserRole.STAFF && (
+              <div key={course.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
+                <SDropDown
+                  trigger={
+                    <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
+                  }
+                  items={[
+                    <p key={`view-${course.id}`} className='text-sm'>
+                      {t('actions.view')}
+                    </p>,
+                    <p key={`add-${course.id}`} className='text-sm'>
+                      {t('actions.add')}
+                    </p>,
+                    <p key={`update-${course.id}`} className='text-sm'>
+                      {t('actions.update')}
+                    </p>
+                  ].filter(Boolean)}
+                />
+              </div>
+            )}
           </div>
         ))}
         {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? null : (

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { fadeInUp } from '@/utils/motion'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
-import { formatDuration } from '@/utils/index'
+import { capitalizeFirst, formatDuration } from '@/utils/index'
 import { Ellipsis, EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
 import { SPagination } from '@/components/shared/SPagination'
 import {
@@ -28,6 +28,7 @@ import { Lesson, LessonStatus } from '@/features/resource/lesson/types/lesson.ty
 import { Button } from '@/components/shadcn/button'
 import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
 import Link from 'next/link'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 
 function SortableLessonCard({
   lesson,
@@ -229,7 +230,6 @@ export default function ContentSection() {
             {items.map((lesson) => (
               <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
                 <div className='flex min-h-0 flex-1 flex-col'>
-                  {/* no dropdown for read-only */}
                   <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
                   <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
                   <div className='mt-auto flex items-center gap-2'>
@@ -247,7 +247,14 @@ export default function ContentSection() {
                 {items.map((lesson) => (
                   <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>
                     <Link href={`/resource/lesson/${lesson.id}`}>
-                      <CardLayout imageSrc={lesson.imageUrl || '/images/fallback.png'}>
+                      <CardLayout
+                        imageSrc={lesson.imageUrl || '/images/fallback.png'}
+                        infor={
+                          <Badge className={`${getStatusBadgeClass(lesson.status)}`}>
+                            {capitalizeFirst(lesson.status)}
+                          </Badge>
+                        }
+                      >
                         <div className='flex min-h-0 flex-1 flex-col'>
                           <div className='absolute top-2 right-2 text-white'>
                             <SDropDown

@@ -13,6 +13,8 @@ import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/less
 import { LessonQueryParams, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { capitalizeFirst } from '@/utils/index'
 import { to } from '@react-spring/core'
 import { EllipsisVertical } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -46,7 +48,7 @@ export default function LessonListContent() {
   const lessonParams = useAppSelector((state) => state.lesson)
 
   useEffect(() => {
-    dispatch(setPageSize(12))
+    dispatch(setPageSize(10))
   }, [dispatch])
 
   const queryParams: LessonQueryParams = {
@@ -175,7 +177,7 @@ export default function LessonListContent() {
               </div>
               <div>
                 <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
-                <h3 className='text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+                <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
                 <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
               </div>
 
@@ -206,7 +208,14 @@ export default function LessonListContent() {
         {lessonData.data.items.map((lesson) => (
           <div key={lesson.id} className='relative flex gap-1'>
             <Link href={`/resource/lesson/${lesson.id}`}>
-              <CardLayout imageSrc={lesson.imageUrl} size='sm' isScale={false}>
+              <CardLayout
+                imageSrc={lesson.imageUrl}
+                size='sm'
+                isScale={false}
+                badge={
+                  <Badge className={`${getStatusBadgeClass(lesson.status)}`}>{capitalizeFirst(lesson.status)}</Badge>
+                }
+              >
                 <div
                   key={lesson.id}
                   className='absolute top-2 right-2 flex rounded-sm bg-gray-500/70 px-1 pb-1 text-white backdrop:blur-sm'
@@ -245,7 +254,7 @@ export default function LessonListContent() {
                 </div>
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
-                  <h3 className='text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+                  <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
                 </div>
 

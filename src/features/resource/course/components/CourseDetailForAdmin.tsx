@@ -14,8 +14,6 @@ import { useParams, useRouter } from 'next/navigation'
 import { BookOpen, Edit } from 'lucide-react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { useAppDispatch } from '@/hooks/redux-hooks'
-import { setParam } from '../slice/courseSlice'
 
 const levelBadgeClass = (level?: string): string => {
   const map: Record<string, string> = {

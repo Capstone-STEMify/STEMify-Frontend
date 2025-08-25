@@ -26,8 +26,8 @@
     "actions": {
       "searchBtn": "Search",
       "clearBtn": "Clear All",
-      "add": "Add to course",
-      "share": "Share",
+      "add": "Add new course",
+      "update": "Update course",
       "view": "View",
       "create": "Create New Course"
     }

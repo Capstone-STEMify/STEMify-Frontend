@@ -15,7 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/ta
 import Link from 'next/link'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
-import { formatDuration } from '@/utils/index'
+import { capitalizeFirst, formatDuration } from '@/utils/index'
 import { SPagination } from '@/components/shared/SPagination'
 import { LayoutGrid, TableIcon } from 'lucide-react'
 import { getCourseStatusBadgeClass } from '@/utils/badgeColor'
@@ -109,10 +109,18 @@ export default function CourseManagement() {
         {/* CARD VIEW */}
         <TabsContent value='card'>
           <div className='px-2'>
-            <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 xl:grid-cols-5'>
+            <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
               {rows.map((course: any) => (
-                <Link key={course.id} href={`/${locale}/admin/course/${course.id}`} className='w-full'>
-                  <CardLayout imageSrc={course.imageUrl} size='sm'>
+                <Link key={course.id} href={`/${locale}/admin/course/${course.id}`}>
+                  <CardLayout
+                    imageSrc={course.imageUrl}
+                    size='sm'
+                    badge={
+                      <Badge className={`${getCourseStatusBadgeClass(course.status)}`}>
+                        {capitalizeFirst(course.status)}
+                      </Badge>
+                    }
+                  >
                     <div>
                       <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
                       <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{course.title}</h3>
@@ -120,9 +128,8 @@ export default function CourseManagement() {
                     </div>
 
                     <div className='mt-auto flex flex-wrap items-center gap-2'>
-                      {course.duration && <Badge className='bg-green-400'>{formatDuration(course.duration)}</Badge>}
-                      {course.status && (
-                        <Badge className={`${getCourseStatusBadgeClass(course.status)}`}>{course.status}</Badge>
+                      {course.duration > 0 && (
+                        <Badge className='bg-sky-custom-300'>{formatDuration(course.duration)}</Badge>
                       )}
                     </div>
                   </CardLayout>

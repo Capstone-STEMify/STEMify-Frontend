@@ -26,8 +26,8 @@
     "actions": {
       "searchBtn": "Tìm kiếm",
       "clearBtn": "Xóa Tất Cả",
-      "add": "Thêm vào khóa học",
-      "share": "Chia sẻ",
+      "add": "Thêm khóa học",
+      "update": "Cập nhật",
       "view": "Xem",
       "create": "Tạo Khóa Học Mới"
     }
