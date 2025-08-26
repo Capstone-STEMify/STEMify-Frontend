@@ -37,11 +37,15 @@ export default withAuth(
     callbacks: {
       authorized: ({ req, token }) => {
         const { pathname } = req.nextUrl
+        const locales = routing.locales
+        const matched = locales.find((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`))
+        const locale = matched ?? 'vi'
+        const pathNoLocale = pathname.replace(new RegExp(`^/${locale}`), '') || '/'
 
-        const PUBLIC_PATHS = ['/unauthorized', '/api/auth/signin']
+        const PUBLIC_PATHS = ['/', '/unauthorized', '/api/auth/signin']
 
         const isPublic =
-          PUBLIC_PATHS.includes(pathname) ||
+          PUBLIC_PATHS.includes(pathNoLocale) ||
           (!pathname.startsWith('/admin') && !pathname.startsWith('/resource/lesson'))
 
         return isPublic ? true : !!token

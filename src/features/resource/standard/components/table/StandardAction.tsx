@@ -26,13 +26,8 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
       header: 'ID'
     },
     {
-      id: 'standardDisplay',
-      header: 'Standard Name',
-      cell: ({ row }) => {
-        const code = row.original.code
-        const name = row.original.standardName
-        return `${code} ${name}`
-      }
+      id: 'standardName',
+      header: 'Standard Name'
     },
     {
       accessorKey: 'description',
