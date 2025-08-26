@@ -30,7 +30,7 @@ export default function MacCard({ children }: { children?: React.ReactNode }) {
                 readOnly
                 type='text'
                 className='w-full rounded-md border border-gray-200 bg-white py-1.5 pr-3 pl-9 text-sm transition-all duration-200 select-none focus:border-transparent focus:ring-1 focus:ring-blue-500 focus:outline-none'
-                defaultValue='stemify.eduweb.workers.dev/'
+                defaultValue='https://www.stemifi.com'
               />
             </div>
           </section>

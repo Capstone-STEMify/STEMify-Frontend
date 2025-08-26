@@ -1,5 +1,5 @@
 import type { NextConfig } from 'next'
-import createNextIntlPlugin from 'next-intl/plugin';
+import createNextIntlPlugin from 'next-intl/plugin'
 
 const nextConfig: NextConfig = {
   images: {
@@ -9,11 +9,12 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'github.com' },
       { protocol: 'https', hostname: 'encrypted-tbn0.gstatic.com' },
       { protocol: 'https', hostname: 'classroom.strawbees.com' },
-      { protocol: 'http', hostname: 'res.cloudinary.com' }
+      { protocol: 'http', hostname: 'res.cloudinary.com' },
+      { protocol: 'https', hostname: 'res.cloudinary.com' }
     ]
   }
 }
 
-const withNextIntl = createNextIntlPlugin();
+const withNextIntl = createNextIntlPlugin()
 
-export default withNextIntl(nextConfig);
+export default withNextIntl(nextConfig)

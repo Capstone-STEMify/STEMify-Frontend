@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Search, Sparkles } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
+import Image from 'next/image'
 
 interface HeroSectionProps {
   onAnimationComplete: (complete: boolean) => void
@@ -120,36 +121,32 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
   }, [animationProgress, onAnimationComplete, animatedElements])
 
   const handleChangeType = (value: string) => {
-    setSelectedType(value);
-};
+    setSelectedType(value)
+  }
 
   return (
     <section className='relative flex h-screen items-center justify-center overflow-hidden'>
       <div className='absolute inset-0 h-full w-full'>
-        <video autoPlay loop muted playsInline className='h-full w-full object-cover'>
-          <source src='https://res.cloudinary.com/dtjgueyp2/video/upload/vd-63.mp4' type='video/mp4' />
-          <div className='absolute inset-0 animate-pulse bg-gradient-to-br from-blue-400 via-purple-500 to-pink-400'></div>
-        </video>
-
-        <div className='absolute inset-0 z-10'></div>
-        <div className='absolute right-0 bottom-0 left-0 z-20 h-80 bg-gradient-to-t from-white via-white/70 to-transparent'></div>
-        <div className='absolute right-0 bottom-0 left-0 z-25 h-60 bg-gradient-to-t from-white via-white/50 to-transparent'></div>
-        <div className='absolute right-0 bottom-0 left-0 z-30 h-40 bg-gradient-to-t from-white via-white/30 to-transparent'></div>
+        <Image
+          src='https://res.cloudinary.com/dgdi9wvpz/image/upload/strawbee_mh1shg.png'
+          alt='Hero Image'
+          fill
+          className='object-cover'
+        />
+        <div className='absolute inset-0 bg-slate-800/30' />
       </div>
 
       <div ref={containerRef} className='relative z-40 mx-auto max-w-4xl px-6 text-center'>
-        <p ref={subtitleRef} className='mb-4 text-lg font-medium text-white/90 drop-shadow-lg'>
+        <p ref={subtitleRef} className='mb-4 text-xl font-medium text-white/90 drop-shadow-lg'>
           {t('subtitle')}
         </p>
 
         <div ref={titleRef} className='mb-4'>
-          <h1 className='text-6xl leading-tight font-bold text-white drop-shadow-2xl md:text-7xl'>
-            {t('title')}
-          </h1>
+          <h1 className='text-6xl leading-tight font-bold text-white drop-shadow-2xl md:text-7xl'>{t('title')}</h1>
         </div>
 
         <div ref={brandRef} className='mb-12'>
-          <p className='animate-pulse bg-gradient-to-r from-orange-400 via-orange-300 to-orange-200 bg-clip-text text-6xl font-bold text-transparent drop-shadow-lg md:text-7xl'>
+          <p className='from-orange-custom-500 bg-gradient-to-r via-amber-500 to-orange-200 bg-clip-text text-6xl font-bold text-transparent drop-shadow-lg md:text-7xl'>
             STEMify
           </p>
         </div>
@@ -162,13 +159,13 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
             <div className='flex items-center space-x-2 border-r border-gray-200 px-4 py-3'>
               <Sparkles className='h-5 w-5 text-amber-400' />
               <Select onValueChange={handleChangeType} defaultValue={'Course'}>
-                <SelectTrigger className="w-[120px] border-none shadow-none bg-transparent focus-visible:ring-0">
+                <SelectTrigger className='w-[120px] border-none bg-transparent shadow-none focus-visible:ring-0'>
                   <SelectValue placeholder={selectedType} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Course">{t('course')}</SelectItem>
-                  <SelectItem value="Lesson">{t('lesson')}</SelectItem>
-                  <SelectItem value="Activity">{t('activity')}</SelectItem>
+                  <SelectItem value='Course'>{t('course')}</SelectItem>
+                  <SelectItem value='Lesson'>{t('lesson')}</SelectItem>
+                  <SelectItem value='Activity'>{t('activity')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
