@@ -32,7 +32,7 @@ export default function CourseListContent() {
   const PUBLIC_ROLES = userRole === UserRole.STUDENT || userRole === UserRole.GUEST || userRole === UserRole.TEACHER
 
   useEffect(() => {
-    dispatch(setPageSize(10))
+    dispatch(setPageSize(9))
   }, [dispatch])
 
   const queryParams: CourseQueryParams = {
@@ -105,6 +105,15 @@ export default function CourseListContent() {
   return (
     <div className='px-5 select-none'>
       <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+        {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? null : (
+          <div
+            className='shadow-6 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-9.5 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
+            onClick={() => handleNavigate()}
+          >
+            <PlusCircle size={70} className='text-gray-500' />
+            <p className='mt-4 text-sm font-medium text-gray-500'>{t('actions.create')}</p>
+          </div>
+        )}
         {courseData.data.items.map((course) => (
           <div key={course.id} className='relative flex min-w-0 gap-1'>
             <Link href={`/resource/course/${course.id}`} className='flex w-fit flex-col justify-between'>
@@ -147,15 +156,6 @@ export default function CourseListContent() {
             )}
           </div>
         ))}
-        {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? null : (
-          <div
-            className='shadow-6 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-9.5 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-            onClick={() => handleNavigate()}
-          >
-            <PlusCircle size={70} className='text-gray-500' />
-            <p className='mt-4 text-sm font-medium text-gray-500'>{t('actions.create')}</p>
-          </div>
-        )}
       </div>
 
       {courseData.data.totalPages > 1 && (

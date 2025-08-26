@@ -19,8 +19,6 @@ import { UserRole } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { useTranslations } from 'next-intl'
-
-// --- dnd-kit imports ---
 import { DndContext, PointerSensor, useSensor, useSensors, DragEndEvent, closestCenter } from '@dnd-kit/core'
 import { SortableContext, rectSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -79,7 +77,7 @@ export default function ContentSection() {
 
   const lessonsQuery = useAppSelector((state) => state.lesson)
   useEffect(() => {
-    dispatch(setPageSize(8))
+    dispatch(setPageSize(7))
   }, [dispatch])
 
   const params = useParams()
@@ -246,97 +244,100 @@ export default function ContentSection() {
             ))}
           </div>
         ) : (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-            <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
-              <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-                {items.map((lesson) => (
-                  <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>
-                    <Link href={`/resource/lesson/${lesson.id}`}>
-                      <CardLayout
-                        imageSrc={lesson.imageUrl || '/images/fallback.png'}
-                        infor={
-                          <Badge className={`${getStatusBadgeClass(lesson.status)}`}>
-                            {capitalizeFirst(lesson.status)}
-                          </Badge>
-                        }
-                      >
-                        <div className='flex min-h-0 flex-1 flex-col'>
-                          <div className='absolute top-2 right-2 text-white'>
-                            <SDropDown
-                              trigger={<EllipsisVertical className='h-6.5 w-5 rounded-sm bg-gray-400 text-white' />}
-                              items={[
-                                <p
-                                  key={`view-detail-${lesson.id}`}
-                                  className='text-sm'
-                                  onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
-                                >
-                                  {t('notEnrolled.lesson.button.view')}
-                                </p>,
-                                <p
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleNavigateUpsertLesson(lesson.id)
-                                  }}
-                                  key='update'
-                                  className='text-sm'
-                                >
-                                  {t('notEnrolled.lesson.button.update')}
-                                </p>,
-                                lesson.status === LessonStatus.DRAFT ? (
+          <div>
+            {/* Create card */}
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+              <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
+                <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
+                  {lessons.data.pageNumber === 1 && (
+                    <div
+                      className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
+                      onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
+                    >
+                      <PlusCircle size={70} className='mt-20 text-gray-500' />
+                      <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
+                        {t('notEnrolled.lesson.button.create')}
+                      </p>
+                    </div>
+                  )}
+                  {items.map((lesson) => (
+                    <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>
+                      <Link href={`/resource/lesson/${lesson.id}`}>
+                        <CardLayout
+                          imageSrc={lesson.imageUrl || '/images/fallback.png'}
+                          infor={
+                            <Badge className={`${getStatusBadgeClass(lesson.status)}`}>
+                              {capitalizeFirst(lesson.status)}
+                            </Badge>
+                          }
+                        >
+                          <div className='flex min-h-0 flex-1 flex-col'>
+                            <div className='absolute top-2 right-2 text-white'>
+                              <SDropDown
+                                trigger={<EllipsisVertical className='h-6.5 w-5 rounded-sm bg-gray-400 text-white' />}
+                                items={[
+                                  <p
+                                    key={`view-detail-${lesson.id}`}
+                                    className='text-sm'
+                                    onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
+                                  >
+                                    {t('notEnrolled.lesson.button.view')}
+                                  </p>,
                                   <p
                                     onClick={(e) => {
                                       e.stopPropagation()
-                                      handleSendLessonRequest(lesson.id)
+                                      handleNavigateUpsertLesson(lesson.id)
                                     }}
-                                    key={`send-request-${lesson.id}`}
+                                    key='update'
                                     className='text-sm'
                                   >
-                                    {t('notEnrolled.lesson.button.send_request')}
-                                  </p>
-                                ) : null,
-                                lesson.status === LessonStatus.DRAFT ? (
-                                  <p
-                                    key={`delete-lesson-${lesson.id}`}
-                                    className='text-sm'
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      openModal('confirm', {
-                                        message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
-                                        onConfirm: () => handleDeleteLesson(lesson.id)
-                                      })
-                                    }}
-                                  >
-                                    {t('notEnrolled.lesson.button.delete')}
-                                  </p>
-                                ) : null
-                              ].filter(Boolean)}
-                            />
+                                    {t('notEnrolled.lesson.button.update')}
+                                  </p>,
+                                  lesson.status === LessonStatus.DRAFT ? (
+                                    <p
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleSendLessonRequest(lesson.id)
+                                      }}
+                                      key={`send-request-${lesson.id}`}
+                                      className='text-sm'
+                                    >
+                                      {t('notEnrolled.lesson.button.send_request')}
+                                    </p>
+                                  ) : null,
+                                  lesson.status === LessonStatus.DRAFT ? (
+                                    <p
+                                      key={`delete-lesson-${lesson.id}`}
+                                      className='text-sm'
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        openModal('confirm', {
+                                          message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
+                                          onConfirm: () => handleDeleteLesson(lesson.id)
+                                        })
+                                      }}
+                                    >
+                                      {t('notEnrolled.lesson.button.delete')}
+                                    </p>
+                                  ) : null
+                                ].filter(Boolean)}
+                              />
+                            </div>
+                            <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
+                            <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
+                            <div className='mt-auto flex items-center gap-2'>
+                              <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
+                              <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
+                            </div>
                           </div>
-                          <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
-                          <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
-                          <div className='mt-auto flex items-center gap-2'>
-                            <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
-                            <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
-                          </div>
-                        </div>
-                      </CardLayout>
-                    </Link>
-                  </SortableLessonCard>
-                ))}
-
-                {/* Create card */}
-                <div
-                  className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-                  onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
-                >
-                  <PlusCircle size={70} className='mt-20 text-gray-500' />
-                  <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
-                    {t('notEnrolled.lesson.button.create')}
-                  </p>
+                        </CardLayout>
+                      </Link>
+                    </SortableLessonCard>
+                  ))}
                 </div>
-              </div>
-            </SortableContext>
-          </DndContext>
+              </SortableContext>
+            </DndContext>
+          </div>
         )}
 
         {lessons.data.totalPages > 1 && (
