@@ -249,7 +249,7 @@ export default function ContentSection() {
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
               <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
                 <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-                  {lessons.data.pageNumber === 1 && (
+                  {lessons.data.pageNumber === 1 && courseId && (
                     <div
                       className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
                       onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}

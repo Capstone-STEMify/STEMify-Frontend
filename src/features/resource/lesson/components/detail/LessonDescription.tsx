@@ -111,7 +111,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
               )}
 
               {/* Standards */}
-              {/* {lessonData.data.standardNames.length > 0 && (
+              {lessonData.data.standardNames.length > 0 && (
                 <div className='flex flex-wrap gap-2'>
                   <h3 className='mb-2 text-xs font-semibold whitespace-nowrap text-gray-900'>{t('lesson.standard')}</h3>
                   {lessonData.data.standardNames.map((standard) => (
@@ -124,7 +124,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
                     </Badge>
                   ))}
                 </div>
-              )} */}
+              )}
             </div>
           </div>
         </section>
