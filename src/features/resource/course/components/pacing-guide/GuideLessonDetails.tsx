@@ -135,7 +135,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                     {t('button.reject')}
                   </Button>
                   <Button
-                    onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.APPROVED)}
+                    onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.PUBLISHED)}
                     className='w-1/2 bg-green-500 text-white'
                   >
                     {t('button.approve')}
