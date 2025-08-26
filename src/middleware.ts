@@ -12,9 +12,9 @@ export default withAuth(
     const { pathname, search } = req.nextUrl
     const missingLocale = routing.locales.every((locale) => !pathname.startsWith(`/${locale}`))
 
-    if (missingLocale) {
-      return NextResponse.redirect(new URL(`/vi${pathname}${search}`, req.url))
-    }
+    // if (missingLocale) {
+    //   return NextResponse.redirect(new URL(`/vi${pathname}${search}`, req.url))
+    // }
 
     const res = intlMiddleware(req)
     const role = req.nextauth.token?.role
