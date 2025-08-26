@@ -88,8 +88,8 @@ export default function ContentSection() {
   const { data: lessons } = useSearchLessonQuery({
     ...lessonsQuery,
     courseId: Number(courseId),
-    orderBy: 'createdDate',
-    sortDirection: 'Desc'
+    orderBy: 'orderindex',
+    sortDirection: 'Asc'
   })
   const [deleteLesson] = useDeleteLessonMutation()
   const [updateCourseLessonOrder] = useUpdateLessonOrderMutation()
