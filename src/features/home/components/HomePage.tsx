@@ -205,7 +205,7 @@ export default function HomePage() {
   return (
     <div ref={containerRef} className='min-h-screen'>
       {/* Hero Section */}
-      <div>
+      <div className='mb-10'>
         <HeroSection onAnimationComplete={handleAnimationComplete} animationProgress={animationProgress} />
       </div>
 
