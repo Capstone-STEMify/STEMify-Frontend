@@ -80,8 +80,9 @@ export default function ContentSection() {
     dispatch(setPageSize(7))
   }, [dispatch])
 
-  const params = useParams()
-  const courseId = params.courseId
+  const { courseId } = useParams()
+  console.log(courseId)
+  // const courseId = params.courseId
 
   const { data: lessons } = useSearchLessonQuery({
     ...lessonsQuery,
@@ -249,17 +250,17 @@ export default function ContentSection() {
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
               <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
                 <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-                  {lessons.data.pageNumber === 1 && courseId && (
-                    <div
-                      className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-                      onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
-                    >
-                      <PlusCircle size={70} className='mt-20 text-gray-500' />
-                      <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
-                        {t('notEnrolled.lesson.button.create')}
-                      </p>
-                    </div>
-                  )}
+                  <div
+                    className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
+                    onClick={() => {
+                      router.push(`/resource/lesson/create?courseId=${courseId}`)
+                    }}
+                  >
+                    <PlusCircle size={70} className='mt-20 text-gray-500' />
+                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
+                      {t('notEnrolled.lesson.button.create')}
+                    </p>
+                  </div>
                   {items.map((lesson) => (
                     <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>
                       <Link href={`/resource/lesson/${lesson.id}`}>
