@@ -95,7 +95,7 @@ export default function UpsertSection({
             lessonId
           }
           const res = await createSection(createPayload).unwrap()
-          toast.success('Section created successfully: ' + res.data.description)
+          toast.success('Section created successfully: ' + res.data.title)
           form.reset()
         }
         onSuccess?.()

@@ -37,7 +37,11 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
     dispatch(setPageSize(12))
   }, [dispatch])
 
-  const { data: lessonData, isLoading, isFetching } = useSearchLessonQuery({ courseId, ...lessonParams })
+  const {
+    data: lessonData,
+    isLoading,
+    isFetching
+  } = useSearchLessonQuery({ ...lessonParams, courseId, orderBy: 'orderindex', sortDirection: 'Asc' })
   const { data: lessonProgressData } = useGetLessonStudentProgressQuery(enrollmentId ? { enrollmentId } : skipToken)
   const progressMap = lessonProgressData?.data?.items?.reduce(
     (acc, progress) => {

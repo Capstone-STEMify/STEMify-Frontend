@@ -34,7 +34,7 @@ export type ApiErrorResponse = {
 } & ApiResponse
 
 // Request params
-export type BaseOrderBy = 'createdDate' | 'title' | ''
+export type BaseOrderBy = 'createdDate' | 'title' | '' | 'orderindex'
 export type SortDirection = 'Asc' | 'Desc'
 
 export type SearchPaginatedRequestParams = {
