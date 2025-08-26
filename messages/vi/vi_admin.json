@@ -79,6 +79,40 @@
       "account": "Tài khoản",
       "notifications": "Thông báo",
       "signOut": "Đăng xuất"
+    },
+    "course_details": {
+      "description": "Mô tả",
+      "task": "Nhiệm vụ của học sinh",
+      "prerequisites": "Yêu cầu tiên quyết",
+      "tag": "Thẻ",
+      "lesson": "Danh sách bài học",
+      "status": "Trạng thái",
+      "level": "Cấp độ",
+      "age": "Độ tuổi",
+      "topic": "Chủ đề",
+      "skill":"Kỹ năng",
+      "standard":"Tiêu chuẩn",
+      "code": "Mã",
+      "button": {
+        "update": "Cập nhật Khóa học",
+        "delete": "Xóa Khóa Học",
+        "reject": "Từ Chối",
+        "approve": "Phê Duyệt",
+        "add": "Thêm mới"
+      },
+      "metadata": {
+        "created_at": "Ngày tạo",
+        "modified": "Lần sửa gần nhất",
+        "created_by": "Tạo bởi"
+      },
+      "nodata": {
+        "description": "Chưa có mô tả.",
+        "task": "Chưa có nhiệm vụ học sinh nào được liệt kê.",
+        "prerequisites": "Chưa có điều kiện tiên quyết nào được liệt kê.",
+        "topic": "Chưa có chủ đề nào được liệt kê.",
+        "skill": "Chưa có kỹ năng nào được liệt kê.",
+        "standard": "Chưa có tiêu chuẩn nào được chỉ định."
+      }
     }
   }
 }
