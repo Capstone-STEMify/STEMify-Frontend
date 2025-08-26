@@ -9,11 +9,18 @@ const intlMiddleware = createMiddleware(routing)
 
 export default withAuth(
   (req) => {
+    const { pathname } = req.nextUrl
+
+    const missingLocale = routing.locales.every((locale) => !pathname.startsWith(`/${locale}`))
+
+    if (missingLocale) {
+      return NextResponse.redirect(new URL(`/vi${pathname}`, req.url))
+    }
+
     const res = intlMiddleware(req)
     const role = req.nextauth.token?.role
     const isAdmin = role === UserRole.ADMIN
 
-    const { pathname } = req.nextUrl
     const locale = pathname.split('/')[1] || 'vi'
 
     if (isAdmin && !pathname.startsWith(`/${locale}/admin`)) {

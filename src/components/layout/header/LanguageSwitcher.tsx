@@ -15,10 +15,10 @@ export default function LanguageSwitcher() {
   // map locale -> component cờ
   const flagByLocale = {
     en: US,
-    vi: VN,
+    vi: VN
   } as const
 
-  const CurrentFlag = flagByLocale[(locale as 'en' | 'vi')] ?? US
+  const CurrentFlag = flagByLocale[locale as 'en' | 'vi'] ?? US
 
   const onSelectChange = (newLocale: string) => {
     const segments = pathname.split('/')
@@ -28,26 +28,24 @@ export default function LanguageSwitcher() {
 
   return (
     <Select onValueChange={onSelectChange} defaultValue={locale}>
-      <SelectTrigger className="w-fit border-none bg-transparent shadow-none focus-visible:ring-0">
-        <div className="flex items-center gap-2">
-          <CurrentFlag className="h-5 w-5 overflow-hidden" title={locale === 'vi' ? 'Việt Nam' : 'English'} />
-          <span className="text-gray-700">
-            {locale === 'vi' ? t('vietnamese') : t('english')}
-          </span>
+      <SelectTrigger className='w-fit border-none bg-transparent shadow-none focus-visible:ring-0'>
+        <div className='flex items-center gap-2'>
+          <CurrentFlag className='h-5 w-5 overflow-hidden' title={locale === 'vi' ? 'Việt Nam' : 'English'} />
+          <span className='text-gray-700'>{locale === 'vi' ? t('vietnamese') : t('english')}</span>
         </div>
       </SelectTrigger>
 
-      <SelectContent align="end">
-        <SelectItem value="en">
-          <div className="flex items-center gap-2">
-            <US className="h-5 w-5 overflow-hidden" title="English" />
+      <SelectContent align='end'>
+        <SelectItem value='en'>
+          <div className='flex items-center gap-2'>
+            <US className='h-5 w-5 overflow-hidden' title='English' />
             <span>{t('english')}</span>
           </div>
         </SelectItem>
 
-        <SelectItem value="vi">
-          <div className="flex items-center gap-2">
-            <VN className="h-5 w-5 overflow-hidden" title="Việt Nam" />
+        <SelectItem value='vi'>
+          <div className='flex items-center gap-2'>
+            <VN className='h-5 w-5 overflow-hidden' title='Việt Nam' />
             <span>{t('vietnamese')}</span>
           </div>
         </SelectItem>
