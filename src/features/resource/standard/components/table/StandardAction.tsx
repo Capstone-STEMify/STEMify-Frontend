@@ -28,7 +28,7 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
       header: t('id')
     },
     {
-      id: 'standardName',
+      accessorKey: 'standardName',
       header: t('standardName')
     },
     {
