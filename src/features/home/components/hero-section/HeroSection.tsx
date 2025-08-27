@@ -125,37 +125,80 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
   }
 
   return (
-    <section className='relative flex h-screen items-center justify-center overflow-hidden'>
+    <section className='relative flex min-h-screen items-center justify-center overflow-hidden px-4 sm:px-6'>
       <div className='absolute inset-0 h-full w-full'>
         <Image
           src='https://res.cloudinary.com/dgdi9wvpz/image/upload/strawbee_mh1shg.png'
           alt='Hero Image'
           fill
           className='object-cover'
+          priority
         />
         <div className='absolute inset-0 bg-slate-800/30' />
       </div>
 
-      <div ref={containerRef} className='relative z-40 mx-auto max-w-4xl px-6 text-center'>
-        <p ref={subtitleRef} className='mb-4 text-xl font-medium text-white/90 drop-shadow-lg'>
+      <div ref={containerRef} className='relative z-40 mx-auto w-full max-w-4xl text-center'>
+        {/* Subtitle */}
+        <p ref={subtitleRef} className='mb-3 text-lg font-medium text-white/90 drop-shadow-lg sm:mb-4 sm:text-xl'>
           {t('subtitle')}
         </p>
 
-        <div ref={titleRef} className='mb-4'>
-          <h1 className='text-6xl leading-tight font-bold text-white drop-shadow-2xl md:text-7xl'>{t('title')}</h1>
+        {/* Main Title */}
+        <div ref={titleRef} className='mb-3 sm:mb-4'>
+          <h1 className='text-4xl font-bold leading-tight text-white drop-shadow-2xl sm:text-5xl md:text-6xl lg:text-7xl'>
+            {t('title')}
+          </h1>
         </div>
 
-        <div ref={brandRef} className='mb-12'>
-          <p className='from-orange-custom-500 bg-gradient-to-r via-amber-500 to-orange-200 bg-clip-text text-6xl font-bold text-transparent drop-shadow-lg md:text-7xl'>
+        {/* Brand Name */}
+        <div ref={brandRef} className='mb-8 sm:mb-12'>
+          <p className='bg-gradient-to-r from-orange-custom-500 via-amber-500 to-orange-200 bg-clip-text text-4xl font-bold text-transparent drop-shadow-lg sm:text-5xl md:text-6xl lg:text-7xl'>
             STEMify
           </p>
         </div>
 
+        {/* Search Bar */}
         <div
           ref={searchRef}
-          className='mx-auto max-w-3xl rounded-2xl border border-white/20 bg-white/95 p-2 shadow-2xl backdrop-blur-sm'
+          className='mx-auto w-full max-w-3xl rounded-2xl border border-white/20 bg-white/95 p-2 shadow-2xl backdrop-blur-sm'
         >
-          <div className='flex items-center'>
+          {/* Mobile Layout */}
+          <div className='block sm:hidden'>
+            {/* Type selector on top for mobile */}
+            <div className='mb-2 flex items-center justify-center border-b border-gray-200 px-4 py-2'>
+              <div className='flex items-center space-x-2'>
+                <Sparkles className='h-4 w-4 text-amber-400' />
+                <Select onValueChange={handleChangeType} defaultValue={'Course'}>
+                  <SelectTrigger className='w-[100px] border-none bg-transparent text-sm shadow-none focus-visible:ring-0'>
+                    <SelectValue placeholder={selectedType} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='Course'>{t('course')}</SelectItem>
+                    <SelectItem value='Lesson'>{t('lesson')}</SelectItem>
+                    <SelectItem value='Activity'>{t('activity')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
+            {/* Search input and button */}
+            <div className='flex items-center'>
+              <input
+                type='text'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t('searchPlaceholder')}
+                className='flex-1 border-none bg-transparent px-4 py-3 text-base text-gray-700 placeholder-gray-500 outline-none'
+              />
+              
+              <button className='m-1 flex transform items-center justify-center rounded-xl bg-amber-400 p-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
+                <Search className='h-5 w-5' />
+              </button>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className='hidden items-center sm:flex'>
             <div className='flex items-center space-x-2 border-r border-gray-200 px-4 py-3'>
               <Sparkles className='h-5 w-5 text-amber-400' />
               <Select onValueChange={handleChangeType} defaultValue={'Course'}>
@@ -180,18 +223,19 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
 
             <button className='flex transform items-center space-x-2 rounded-xl bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
               <Search className='h-5 w-5' />
-              <span>{t('exploreButton')}</span>
+              <span className='hidden sm:inline'>{t('exploreButton')}</span>
             </button>
           </div>
         </div>
 
+        {/* Floating Blobs */}
         <div
           ref={blob1Ref}
-          className='animate-float absolute -top-20 -left-20 h-40 w-40 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-3xl'
+          className='animate-float absolute -left-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-2xl sm:-left-20 sm:-top-20 sm:h-40 sm:w-40 sm:blur-3xl'
         ></div>
         <div
           ref={blob2Ref}
-          className='animate-float-delayed absolute -right-20 -bottom-10 h-32 w-32 rounded-full bg-gradient-to-r from-pink-400/20 to-yellow-400/20 blur-3xl'
+          className='animate-float-delayed absolute -bottom-5 -right-10 h-20 w-20 rounded-full bg-gradient-to-r from-pink-400/20 to-yellow-400/20 blur-2xl sm:-bottom-10 sm:-right-20 sm:h-32 sm:w-32 sm:blur-3xl'
         ></div>
       </div>
 
