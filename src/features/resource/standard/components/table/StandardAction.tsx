@@ -1,5 +1,6 @@
 'use client'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import { useTranslations } from 'next-intl'
 import { useDeleteStandardMutation } from '@/features/resource/standard/api/standardApi'
 import { Standard } from '@/features/resource/standard/types/standard.type'
 import { useModal } from '@/providers/ModalProvider'
@@ -9,6 +10,7 @@ import { toast } from 'sonner'
 export function useGetStandardAction(): ColumnDef<Standard>[] {
   const { openModal } = useModal()
   const [deleteStandard] = useDeleteStandardMutation()
+  const t = useTranslations('tableHeader')
 
   const handleDelete = async (id: number) => {
     try {
@@ -23,15 +25,15 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
     createSelectColumn<Standard>(),
     {
       accessorKey: 'id',
-      header: 'ID'
+      header: t('id')
     },
     {
       id: 'standardName',
-      header: 'Standard Name'
+      header: t('standardName')
     },
     {
       accessorKey: 'description',
-      header: 'Description',
+      header: t('description'),
       cell: ({ row }) => {
         return (
           <div className='w-180 truncate' title={String(row.getValue('description'))}>
@@ -42,13 +44,13 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
     },
     createActionsColumnFromItems<Standard>([
       {
-        label: 'Edit',
+        label: t('edit'),
         onClick: ({ original }) => {
           openModal('upsertStandard', { id: original.id })
         }
       },
       {
-        label: 'Delete',
+        label: t('delete'),
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {

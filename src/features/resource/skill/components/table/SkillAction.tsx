@@ -1,5 +1,6 @@
 'use client'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import { useTranslations } from 'next-intl'
 import { useDeleteSkillMutation } from '@/features/resource/skill/api/skillApi'
 import { Skill } from '@/features/resource/skill/types/skill.type'
 import { useModal } from '@/providers/ModalProvider'
@@ -9,6 +10,7 @@ import { toast } from 'sonner'
 export function useGetSkillAction(): ColumnDef<Skill>[] {
   const { openModal } = useModal()
   const [deleteSkill] = useDeleteSkillMutation()
+  const t = useTranslations('tableHeader')
 
   const handleDelete = async (id: number) => {
     try {
@@ -23,21 +25,21 @@ export function useGetSkillAction(): ColumnDef<Skill>[] {
     createSelectColumn<Skill>(),
     {
       accessorKey: 'id',
-      header: 'ID'
+      header: t('id')
     },
     {
       accessorKey: 'skillName',
-      header: 'Skill Name'
+      header: t('skillName')
     },
     createActionsColumnFromItems<Skill>([
       {
-        label: 'Edit',
+        label: t('edit'),
         onClick: ({ original }) => {
           openModal('upsertSkill', { id: original.id })
         }
       },
       {
-        label: 'Delete',
+        label: t('delete'),
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
