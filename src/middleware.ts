@@ -1,4 +1,3 @@
-// middleware.ts
 import { NextResponse } from 'next/server'
 import { withAuth } from 'next-auth/middleware'
 import createMiddleware from 'next-intl/middleware'
@@ -9,12 +8,7 @@ const intlMiddleware = createMiddleware(routing)
 
 export default withAuth(
   (req) => {
-    const { pathname, search } = req.nextUrl
-    const missingLocale = routing.locales.every((locale) => !pathname.startsWith(`/${locale}`))
-
-    // if (missingLocale) {
-    //   return NextResponse.redirect(new URL(`/vi${pathname}${search}`, req.url))
-    // }
+    const { pathname } = req.nextUrl
 
     const res = intlMiddleware(req)
     const role = req.nextauth.token?.role

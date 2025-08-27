@@ -1,5 +1,4 @@
 import Providers from '@/providers/Providers'
-import SignalRProvider from '@/providers/SignalRProvider'
 import { loadMessages } from 'i18n/loadMessages'
 import { routing } from 'i18n/routing'
 import { Metadata } from 'next'
