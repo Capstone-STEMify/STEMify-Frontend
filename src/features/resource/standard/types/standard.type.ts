@@ -3,7 +3,7 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Standard = {
   id: number
-  code: string
+  // code: string
   standardName: string
   description: string
 }

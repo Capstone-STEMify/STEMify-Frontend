@@ -14,7 +14,6 @@ import { useTranslations } from 'next-intl'
 
 // Schema validation cho form
 const standardSchema = z.object({
-  code: z.string().min(3, 'Standard code must be at least 3 characters long'),
   standardName: z.string().optional(),
   description: z.string().optional()
 })
@@ -22,7 +21,6 @@ const standardSchema = z.object({
 type StandardFormData = z.infer<typeof standardSchema>
 
 const defaultStandardData: StandardFormData = {
-  code: '',
   standardName: '',
   description: ''
 }
@@ -70,7 +68,6 @@ export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
   React.useEffect(() => {
     if (isEditing && existingData?.data) {
       form.reset({
-        code: existingData.data.code,
         standardName: existingData.data.standardName,
         description: existingData.data.description || ''
       })
@@ -90,11 +87,6 @@ export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
       className='space-y-4'
     >
       <h2 className='text-xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
-
-      <SCard
-        title={t('code')}
-        content={<form.AppField name='code' children={(field) => <field.TextField placeholder={'ITSL-1.2'} />} />}
-      />
 
       <SCard
         title={t('name')}

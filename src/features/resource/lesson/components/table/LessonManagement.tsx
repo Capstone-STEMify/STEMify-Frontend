@@ -10,7 +10,7 @@ import { Lesson, LessonQueryParams } from '@/features/resource/lesson/types/less
 import LessonListAction from '../list/LessonListAction'
 import { Button } from '@/components/shadcn/button'
 import { IconPlus } from '@tabler/icons-react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import Link from 'next/link'
 import CardLayout from '@/components/shared/card/CardLayout'
@@ -26,6 +26,8 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
   const locale = useLocale()
   const router = useRouter()
   const columns = useGetLessonAction()
+
+  const t = useTranslations('Admin.course_details')
 
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
@@ -50,8 +52,8 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
     pageSize: lessonParams.pageSize,
     search: lessonParams.search,
     status: lessonParams.status,
-    orderBy: 'createdDate',
-    sortDirection: 'Desc'
+    orderBy: courseIdSelected ? 'orderindex' : 'createdDate',
+    sortDirection: courseIdSelected ? 'Asc' : 'Desc'
   }
 
   useEffect(() => {
@@ -83,7 +85,7 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
             onClick={handleCreate}
           >
             <IconPlus />
-            <span className='hidden lg:inline'>Add New</span>
+            <span className='hidden lg:inline'>{t('button.add')}</span>
           </Button>
         )}
         <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>

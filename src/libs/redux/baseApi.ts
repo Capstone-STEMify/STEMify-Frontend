@@ -1,7 +1,7 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react'
 import { ApiResponse, ApiSuccessResponse, PaginatedResult, SearchPaginatedRequestParams } from '@/types/baseModel'
 import { BaseQueryApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { toast } from 'sonner'
 import { RootState } from '@/libs/redux/store'
 import { signIn } from 'next-auth/react'
@@ -40,15 +40,16 @@ export const customFetchBaseQueryWithErrorHandling = async (
         break
       case 401:
         toast.error(message || 'Unauthorized! Please sign in for access')
-        // signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
+        signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
         break
       case 403:
         toast.error(message || 'Forbidden')
-        // signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
+        redirect('/unauthorized')
         break
       case 404:
         toast.error(message || 'Not Found')
-        notFound() // Redirect to 404 page
+        notFound()
+        break
       case 500:
         toast.error(message || 'Server Error')
         break

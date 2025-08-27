@@ -133,7 +133,10 @@ export default function HomePage() {
   useEffect(() => {
     if (typeof window === 'undefined') return
 
-    const handleScroll = (e: WheelEvent | TouchEvent) => {
+    let touchStartY = 0
+    let touchEndY = 0
+
+    const handleScroll = (e: WheelEvent) => {
       if (!heroAnimationComplete) {
         e.preventDefault()
         let delta: number = 0
@@ -143,8 +146,6 @@ export default function HomePage() {
           delta = (e as any).detail * 40
         } else if ('wheelDelta' in e && typeof (e as any).wheelDelta === 'number') {
           delta = -(e as any).wheelDelta / 2
-        } else if ('touches' in e && (e as TouchEvent).touches.length > 0) {
-          delta = 0
         }
         const scrollSensitivity: number = 0.002
 
@@ -154,6 +155,30 @@ export default function HomePage() {
         setAnimationProgress(heroScrollProgress.current)
 
         // Enable normal scrolling only when hero animation is complete
+        if (heroScrollProgress.current >= 1) {
+          setIsScrollingEnabled(true)
+        }
+      }
+    }
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (!heroAnimationComplete) {
+        touchStartY = e.touches[0].clientY
+      }
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!heroAnimationComplete) {
+        e.preventDefault()
+        touchEndY = e.touches[0].clientY
+        const delta = (touchStartY - touchEndY) * 2
+        const scrollSensitivity: number = 0.002
+
+        heroScrollProgress.current += delta * scrollSensitivity
+        heroScrollProgress.current = Math.max(0, Math.min(1, heroScrollProgress.current))
+
+        setAnimationProgress(heroScrollProgress.current)
+
         if (heroScrollProgress.current >= 1) {
           setIsScrollingEnabled(true)
         }
@@ -183,12 +208,14 @@ export default function HomePage() {
 
     window.addEventListener('wheel', handleScroll, { passive: false })
     window.addEventListener('keydown', handleKeyScroll, { passive: false })
-    window.addEventListener('touchmove', handleScroll, { passive: false })
+    window.addEventListener('touchstart', handleTouchStart, { passive: false })
+    window.addEventListener('touchmove', handleTouchMove, { passive: false })
 
     return () => {
       window.removeEventListener('wheel', handleScroll)
       window.removeEventListener('keydown', handleKeyScroll)
-      window.removeEventListener('touchmove', handleScroll)
+      window.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchmove', handleTouchMove)
     }
   }, [heroAnimationComplete])
 

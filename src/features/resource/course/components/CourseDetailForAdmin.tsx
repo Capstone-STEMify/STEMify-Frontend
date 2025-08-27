@@ -39,7 +39,7 @@ const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
 }
 
 export default function CourseDetailPage() {
-  const t = useTranslations('CourseDetails')
+  const t = useTranslations('Admin.course_details')
 
   const locale = useLocale()
   const params = useParams()
@@ -118,16 +118,16 @@ export default function CourseDetailPage() {
           content={
             <div className='text-muted-foreground mt-3 flex flex-wrap items-center gap-4 text-sm'>
               <span>
-                Code: <strong>{course.data.code}</strong>
+                {t('code')}: <strong>{course.data.code}</strong>
               </span>
               <span>
-                Status: <Badge className={getCourseStatusBadgeClass(course.data.status)}>{course.data.status}</Badge>
+                {t('status')}: <Badge className={getCourseStatusBadgeClass(course.data.status)}>{course.data.status}</Badge>
               </span>
               <span>
-                Level: <Badge className={levelBadgeClass(course.data.level)}>{course.data.level}</Badge>
+                {t('level')}: <Badge className={levelBadgeClass(course.data.level)}>{course.data.level}</Badge>
               </span>
               <span>
-                Age Range: <Badge className='bg-red-100 text-red-800'>{course.data.ageRangeLabel}</Badge>
+                {t('age')}: <Badge className='bg-red-100 text-red-800'>{course.data.ageRangeLabel}</Badge>
               </span>
             </div>
           }
@@ -135,47 +135,47 @@ export default function CourseDetailPage() {
 
         {/* Description */}
         <SCard
-          title='Description'
+          title={t('description')}
           content={
             course.data.description ? (
               <p className='text-sm leading-relaxed whitespace-pre-wrap text-gray-700'>{course.data.description}</p>
             ) : (
-              <p className='text-muted-foreground italic'>No description provided.</p>
+              <p className='text-muted-foreground italic'>{t('nodata.description')}</p>
             )
           }
         />
 
         {/* Student Tasks */}
         <SCard
-          title='Student Tasks'
+          title={t('task')}
           content={
             course.data.studentTasks ? (
               <p className='text-sm leading-relaxed whitespace-pre-wrap text-gray-700'>{course.data.studentTasks}</p>
             ) : (
-              <p className='text-muted-foreground italic'>No student tasks listed.</p>
+              <p className='text-muted-foreground italic'>{t('nodata.task')}</p>
             )
           }
         />
 
         {/* Prerequisites */}
         <SCard
-          title='Prerequisites'
+          title={t('prerequisites')}
           content={
             course.data.prerequisites ? (
               <p className='text-sm leading-relaxed whitespace-pre-wrap text-gray-700'>{course.data.prerequisites}</p>
             ) : (
-              <p className='text-muted-foreground italic'>No prerequisites listed.</p>
+              <p className='text-muted-foreground italic'>{t('nodata.prerequisites')}</p>
             )
           }
         />
 
         <SCard
-          title='Tags'
+          title={t('tag')}
           content={
             <div className='space-y-4'>
               {/* Topics */}
               <div>
-                <p className='mb-1 text-sm font-semibold text-gray-600'>Topics</p>
+                <p className='mb-1 text-sm font-semibold text-gray-600'>{t('topic')}</p>
                 {course.data.topicNames?.length > 0 ? (
                   <div className='flex flex-wrap gap-2'>
                     {course.data.topicNames.map((topic) => (
@@ -185,13 +185,13 @@ export default function CourseDetailPage() {
                     ))}
                   </div>
                 ) : (
-                  <p className='text-muted-foreground text-sm italic'>No topics listed.</p>
+                  <p className='text-muted-foreground text-sm italic'>{t('nodata.topic')}</p>
                 )}
               </div>
 
               {/* Skills */}
               <div>
-                <p className='mb-1 text-sm font-semibold text-gray-600'>Skills</p>
+                <p className='mb-1 text-sm font-semibold text-gray-600'>{t('skill')}</p>
                 {course.data.skillNames?.length > 0 ? (
                   <div className='flex flex-wrap gap-2'>
                     {course.data.skillNames.map((skill) => (
@@ -201,13 +201,13 @@ export default function CourseDetailPage() {
                     ))}
                   </div>
                 ) : (
-                  <p className='text-muted-foreground text-sm italic'>No skills listed.</p>
+                  <p className='text-muted-foreground text-sm italic'>{t('nodata.skill')}</p>
                 )}
               </div>
 
               {/* Standards */}
               <div>
-                <p className='mb-1 text-sm font-semibold text-gray-600'>Standards</p>
+                <p className='mb-1 text-sm font-semibold text-gray-600'>{t('standard')}</p>
                 {course.data.standardNames?.length > 0 ? (
                   <div className='flex flex-wrap gap-2'>
                     {course.data.standardNames.map((standard) => (
@@ -217,7 +217,7 @@ export default function CourseDetailPage() {
                     ))}
                   </div>
                 ) : (
-                  <p className='text-muted-foreground text-sm italic'>No standards assigned.</p>
+                  <p className='text-muted-foreground text-sm italic'>{t('nodata.standard')}</p>
                 )}
               </div>
             </div>
@@ -244,13 +244,13 @@ export default function CourseDetailPage() {
           content={
             <div className='space-y-1 text-sm text-gray-700'>
               <div>
-                <strong>Created at: </strong> {createdAt}
+                <strong>{t('metadata.created_at')}: </strong> {createdAt}
               </div>
               <div>
-                <strong>Last Modified: </strong> {updatedAt}
+                <strong>{t('metadata.modified')}: </strong> {updatedAt}
               </div>
               <div>
-                <strong>Created By: </strong> {createdBy}
+                <strong>{t('metadata.created_by')}: </strong> {createdBy}
               </div>
             </div>
           }
@@ -263,10 +263,10 @@ export default function CourseDetailPage() {
             className='text-sky-custom-600 w-full cursor-pointer bg-gray-200 font-semibold shadow'
             variant='outline'
           >
-            {t('notEnrolled.button.update')}
+            {t('button.update')}
           </Button>
           <Button onClick={handleDelete} variant='outline' className='w-full border-red-600 text-red-600'>
-            {t('notEnrolled.button.delete')}
+            {t('button.delete')}
           </Button>
         </div>
         {(course.data.status === CourseStatus.PENDING || course.data.status === CourseStatus.DRAFT) && (
@@ -275,13 +275,13 @@ export default function CourseDetailPage() {
               className='cursor-pointer bg-red-600 font-semibold text-white shadow'
               onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
             >
-              {t('enrolled.action.reject')}
+              {t('action.reject')}
             </Button>
             <Button
               className='cursor-pointer bg-green-600 font-semibold text-white shadow'
               onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
             >
-              {t('enrolled.action.approve')}
+              {t('action.approve')}
             </Button>
           </div>
         )}
@@ -290,7 +290,7 @@ export default function CourseDetailPage() {
       <div className='pt-5 md:col-span-12'>
         <div className='flex items-center gap-3 pb-3'>
           <hr className='flex-grow border-t border-gray-300' />
-          <h1 className='text-sky-custom-600 text-3xl font-semibold'>Lessons List</h1>
+          <h1 className='text-sky-custom-600 text-3xl font-semibold'>{t('lesson')}</h1>
           <hr className='flex-grow border-t border-gray-300' />
         </div>
         <LessonTable courseIdSelected={course.data.id} />

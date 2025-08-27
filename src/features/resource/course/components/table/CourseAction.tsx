@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { Course, CourseLevel, CourseStatus } from '../../types/course.type'
 import { ColumnDef } from '@tanstack/react-table'
 import { useRouter } from 'next/navigation'
@@ -32,6 +33,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
   const [deleteCourse] = useDeleteCourseMutation()
   const [updateCourseStatus] = useUpdateCourseMutation()
   const locale = useLocale()
+  const t = useTranslations('tableHeader')
 
   const handleDelete = async (id: number) => {
     try {
@@ -61,12 +63,12 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     createSelectColumn<Course>(),
     {
       accessorKey: 'code',
-      header: 'Code',
+      header: t('code'),
       cell: ({ row }) => row.getValue('code')
     },
     {
       accessorKey: 'imageUrl',
-      header: () => <div>Image</div>,
+      header: () => <div>{t('image')}</div>,
       cell: ({ row }) => {
         const src = row.getValue<string>('imageUrl')
         return (
@@ -74,7 +76,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
             {src ? (
               <Image src={src} alt='preview' className='h-full w-full object-cover' width={56} height={56} />
             ) : (
-              <div className='text-muted flex h-full w-full items-center justify-center text-xs'>No Image</div>
+              <div className='text-muted flex h-full w-full items-center justify-center text-xs'>{t('noImage')}</div>
             )}
           </div>
         )
@@ -82,7 +84,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     },
     {
       accessorKey: 'title',
-      header: () => <div>Title</div>,
+      header: () => <div>{t('title')}</div>,
       cell: ({ row }) => {
         const courseId = row.original.id
         return (
@@ -97,7 +99,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     },
     {
       accessorKey: 'level',
-      header: () => <div>Level</div>,
+      header: () => <div>{t('level')}</div>,
       cell: ({ row }) => {
         const value = row.getValue<string>('level')
         return (
@@ -109,10 +111,9 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     },
     {
       accessorKey: 'status',
-      header: () => <div>Status</div>,
+      header: () => <div>{t('status')}</div>,
       cell: ({ row }) => {
         const value = row.getValue<CourseStatus>('status')
-
         return (
           <Badge className={`cursor-pointer ${getCourseStatusBadgeClass(value)}`} variant='outline'>
             {value}
@@ -122,7 +123,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     },
     {
       accessorKey: 'createdByUserName',
-      header: () => <div>Created By</div>,
+      header: () => <div>{t('createdBy')}</div>,
       cell: ({ row }) => {
         const value = row.getValue<string>('createdByUserName')
         const display = value?.trim() ? value : 'STEMify Staff'
@@ -131,7 +132,7 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     },
     {
       accessorKey: 'createdDate',
-      header: () => <div>Created Date</div>,
+      header: () => <div>{t('createdDate')}</div>,
       cell: ({ row }) => {
         const raw = row.getValue<string>('createdDate')
         const date = raw ? new Date(raw).toLocaleDateString('vi-VN') : 'N/A'
@@ -140,13 +141,13 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
     },
     createActionsColumnFromItems<Course>([
       {
-        label: 'Edit',
+        label: t('edit'),
         onClick: ({ original }) => {
           router.push(`/${locale}/admin/course/update/${original.id}`)
         }
       },
       {
-        label: 'Delete',
+        label: t('delete'),
         danger: true,
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
@@ -158,12 +159,12 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
       },
       {
         separatorBefore: true,
-        label: 'Approve',
+        label: t('approve'),
         hidden: ({ original }) => original.status !== CourseStatus.PENDING && original.status !== CourseStatus.DRAFT,
         onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.PUBLISHED)
       },
       {
-        label: 'Reject',
+        label: t('reject'),
         danger: true,
         hidden: ({ original }) => original.status !== CourseStatus.PENDING && original.status !== CourseStatus.DRAFT,
         onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.REJECTED)
