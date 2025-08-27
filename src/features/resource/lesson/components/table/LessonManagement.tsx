@@ -52,8 +52,8 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
     pageSize: lessonParams.pageSize,
     search: lessonParams.search,
     status: lessonParams.status,
-    orderBy: 'createdDate',
-    sortDirection: 'Desc'
+    orderBy: courseIdSelected ? 'orderindex' : 'createdDate',
+    sortDirection: courseIdSelected ? 'Asc' : 'Desc'
   }
 
   useEffect(() => {
