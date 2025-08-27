@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '@/components/shadcn/sheet'
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter } from '@/components/shadcn/sheet'
 import StemifyLogo from '@/components/shared/StemifyLogo'
 import HeaderNavigation from '@/components/layout/header/HeaderNavigation'
 import HeaderRightSection from '@/components/layout/header/HeaderAction'
 import { Button } from '@/components/shadcn/button'
 import { Menu } from 'lucide-react'
+import HeaderNavigationMobile from '@/components/layout/header/header-action/HeaderNavivationMoile'
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,24 +26,19 @@ export default function MobileMenu() {
       <SheetContent side='left' className='w-[80vw] p-4 sm:w-[360px]'>
         <SheetHeader className='pb-4'>
           <SheetTitle>
-            <StemifyLogo className='mx-auto h-8 w-auto' />
+            <StemifyLogo className='mx-auto h-20 w-auto' />
           </SheetTitle>
         </SheetHeader>
 
         <div className='flex h-full flex-col space-y-6'>
-          {/* Navigation Section */}
           <div className='flex-1'>
-            <HeaderNavigation />
+            <HeaderNavigationMobile />
           </div>
 
-          {/* Divider */}
-          <div className='border-muted border-t' />
-
-          {/* Right Section - Search & Account */}
-          <div className='pb-6'>
-            <HeaderRightSection />
-          </div>
         </div>
+        <SheetFooter>
+          <HeaderRightSection />
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   )
