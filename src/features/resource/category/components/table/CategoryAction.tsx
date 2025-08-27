@@ -1,4 +1,5 @@
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import { useTranslations } from 'next-intl'
 import { useDeleteCategoryMutation } from '@/features/resource/category/api/categoryApi' // Import delete mutation
 import { Category } from '@/features/resource/category/types/category.type'
 import { useModal } from '@/providers/ModalProvider'
@@ -17,6 +18,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
   const router = useRouter()
   const { openModal } = useModal()
   const [deleteCategory] = useDeleteCategoryMutation() // Hook for deletion
+  const t = useTranslations('tableHeader')
 
   const handleDelete = async (id: number) => {
     try {
@@ -31,23 +33,23 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
     createSelectColumn<Category>(),
     {
       accessorKey: 'id',
-      header: 'ID',
+      header: t('id'),
       cell: ({ row }) => row.getValue('id')
     },
     {
       accessorKey: 'name',
-      header: 'Name'
+      header: t('name')
     },
     createActionsColumnFromItems<Category>([
       {
-        label: 'Edit',
+        label: t('edit'),
         onClick: ({ original }) => {
           // Open the upsert modal in "edit" mode
           openModal('upsertCategory', { id: original.id })
         }
       },
       {
-        label: 'Delete',
+        label: t('delete'),
         danger: true,
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion

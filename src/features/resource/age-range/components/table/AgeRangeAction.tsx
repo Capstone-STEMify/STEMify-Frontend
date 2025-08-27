@@ -1,5 +1,6 @@
 'use client'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import { useTranslations } from 'next-intl'
 import { useDeleteAgeRangeMutation } from '@/features/resource/age-range/api/ageRangeApi'
 import { AgeRange } from '@/features/resource/age-range/types/ageRange.type'
 import { useModal } from '@/providers/ModalProvider'
@@ -9,6 +10,7 @@ import { toast } from 'sonner'
 export function useGetAgeRangeAction(): ColumnDef<AgeRange>[] {
   const { openModal } = useModal()
   const [deleteAgeRange] = useDeleteAgeRangeMutation()
+  const t = useTranslations('tableHeader')
 
   const handleDelete = async (id: number) => {
     try {
@@ -23,29 +25,29 @@ export function useGetAgeRangeAction(): ColumnDef<AgeRange>[] {
     createSelectColumn<AgeRange>(),
     {
       accessorKey: 'id',
-      header: 'ID'
+      header: t('id')
     },
     {
       accessorKey: 'ageRangeLabel',
-      header: 'Label'
+      header: t('ageRangeLabel')
     },
     {
       accessorKey: 'minAge',
-      header: 'Min Age'
+      header: t('minAge')
     },
     {
       accessorKey: 'maxAge',
-      header: 'Max Age'
+      header: t('maxAge')
     },
     createActionsColumnFromItems<AgeRange>([
       {
-        label: 'Edit',
+        label: t('edit'),
         onClick: ({ original }) => {
           openModal('upsertAgeRange', { id: original.id })
         }
       },
       {
-        label: 'Delete',
+        label: t('delete'),
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
