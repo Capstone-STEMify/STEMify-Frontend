@@ -11,7 +11,12 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'classroom.strawbees.com' },
       { protocol: 'http', hostname: 'res.cloudinary.com' },
       { protocol: 'https', hostname: 'res.cloudinary.com' }
-    ]
+    ],
+    formats: ['image/webp'],
+    minimumCacheTTL: 2678400,
+    deviceSizes: [640, 768, 1024],
+    imageSizes: [16, 32, 64, 128],
+    qualities: [75]
   }
 }
 

@@ -121,7 +121,8 @@ export default function CourseDetailPage() {
                 {t('code')}: <strong>{course.data.code}</strong>
               </span>
               <span>
-                {t('status')}: <Badge className={getCourseStatusBadgeClass(course.data.status)}>{course.data.status}</Badge>
+                {t('status')}:{' '}
+                <Badge className={getCourseStatusBadgeClass(course.data.status)}>{course.data.status}</Badge>
               </span>
               <span>
                 {t('level')}: <Badge className={levelBadgeClass(course.data.level)}>{course.data.level}</Badge>
@@ -275,13 +276,13 @@ export default function CourseDetailPage() {
               className='cursor-pointer bg-red-600 font-semibold text-white shadow'
               onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
             >
-              {t('action.reject')}
+              {t('button.reject')}
             </Button>
             <Button
               className='cursor-pointer bg-green-600 font-semibold text-white shadow'
               onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
             >
-              {t('action.approve')}
+              {t('button.approve')}
             </Button>
           </div>
         )}
