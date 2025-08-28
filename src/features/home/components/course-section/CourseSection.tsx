@@ -1,5 +1,6 @@
 'use client'
 import { Badge } from '@/components/shadcn/badge'
+import CardCarousel from '@/components/shared/card/CardCarousel'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { setPageSize } from '@/features/resource/course/slice/courseSlice'
@@ -34,8 +35,34 @@ export default function ExploreResourcesSection() {
           <div className='mx-auto mt-5 h-1 w-50 rounded-full bg-gradient-to-r from-blue-400 to-purple-400' />
         </h2>
 
-        <div className='mx-auto flex max-w-7xl justify-around gap-6'>
-          {CourseData?.data.items.map((resource, index) => (
+        {/* --- Mobile Carousel --- */}
+        <div className='md:hidden'>
+          <div className='no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 py-2'>
+            {CourseData.data.items.map((resource, index) => (
+              <div key={index} className='w-[88vw] shrink-0 snap-center'>
+                <CardCarousel
+                  size='lg'
+                  className='w-full'
+                  imageSrc={resource.imageUrl || ''}
+                  infor={<Badge>{resource.topicNames}</Badge>}
+                >
+                  <div className='flex min-h-0 flex-1 flex-col'>
+                    <h3 className='text-lg font-semibold'>{resource.title}</h3>
+                    <p className='text-sm text-gray-600'>{truncateText(resource.description)}</p>
+                    <div className='mt-auto flex items-center gap-2'>
+                      <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
+                      <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
+                    </div>
+                  </div>
+                </CardCarousel>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* --- Desktop (giữ nguyên) --- */}
+        <div className='mx-auto hidden max-w-7xl justify-around gap-6 md:flex'>
+          {CourseData.data.items.map((resource, index) => (
             <CardLayout
               size='lg'
               key={index}
@@ -45,7 +72,6 @@ export default function ExploreResourcesSection() {
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{resource.title}</h3>
                 <p className='text-sm text-gray-600'>{truncateText(resource.description)}</p>
-                {/* footer */}
                 <div className='mt-auto flex items-center gap-2'>
                   <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
                   <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
@@ -76,6 +102,15 @@ export default function ExploreResourcesSection() {
         }
         .animate-slow-spin {
           animation: slow-spin 20s linear infinite;
+        }
+
+        /* hide scrollbar for the carousel */
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
     </section>
