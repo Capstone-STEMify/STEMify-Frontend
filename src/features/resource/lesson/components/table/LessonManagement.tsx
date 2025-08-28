@@ -29,7 +29,7 @@ export default function LessonManagement({
   refetch
 }: {
   courseIdSelected?: number
-  refetch: () => void
+  refetch?: () => void
 }) {
   const locale = useLocale()
   const router = useRouter()
@@ -138,7 +138,7 @@ export default function LessonManagement({
             onReorder={(newData) => {
               const orderedLessonIds = newData.map((item) => item.id)
               handleSaveOrder(orderedLessonIds)
-              refetch()
+              if (refetch) refetch()
             }}
             className='mt-5'
           />
