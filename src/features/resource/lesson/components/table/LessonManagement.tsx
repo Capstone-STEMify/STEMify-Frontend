@@ -17,14 +17,20 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { SPagination } from '@/components/shared/SPagination'
 import { capitalizeFirst, formatDuration } from '@/utils/index'
-import { LayoutGrid, TableIcon } from 'lucide-react'
+import { Clock, LayoutGrid, TableIcon } from 'lucide-react'
 import { getCourseStatusBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
 import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
 import { toast } from 'sonner'
 
 type ViewMode = 'table' | 'card'
 
-export default function LessonManagement({ courseIdSelected }: { courseIdSelected?: number }) {
+export default function LessonManagement({
+  courseIdSelected,
+  refetch
+}: {
+  courseIdSelected?: number
+  refetch: () => void
+}) {
   const locale = useLocale()
   const router = useRouter()
   const { courseId } = useParams()
@@ -76,7 +82,6 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
 
   const handleSaveOrder = async (orderedLessonIds: number[]) => {
     try {
-      // const orderedLessonIds = rows.map((item) => item.id)
       await updateCourseLessonOrder({
         id: Number(courseId),
         orderedLessonIds
@@ -133,6 +138,7 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
             onReorder={(newData) => {
               const orderedLessonIds = newData.map((item) => item.id)
               handleSaveOrder(orderedLessonIds)
+              refetch()
             }}
             className='mt-5'
           />
@@ -141,7 +147,7 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
         {/* CARD VIEW */}
         <TabsContent value='card'>
           <div className='px-2'>
-            <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
+            <div className='grid grid-cols-1 justify-items-center-safe gap-y-10 py-6 sm:grid-cols-2 xl:grid-cols-4'>
               {rows.map((lesson: Lesson) => (
                 <Link key={lesson.id} href={`/${locale}/admin/lesson/${lesson.id}/pacing-guide`} className='w-full'>
                   <CardLayout
@@ -159,8 +165,18 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
                     </div>
 
                     <div className='mt-auto flex flex-wrap items-center gap-2'>
-                      {lesson.ageRangeLabel && <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>}
-                      {lesson.duration > 0 && <Badge className={`bg-red-300`}>{formatDuration(lesson.duration)}</Badge>}
+                      {lesson.ageRangeLabel && (
+                        <Badge className='bg-sky-custom-300'>
+                          <span className='mr-0.5'> {t('card.age')}</span>
+                          {lesson.ageRangeLabel}
+                        </Badge>
+                      )}
+                      {lesson.duration > 0 && (
+                        <Badge className={`bg-red-300`}>
+                          <Clock className='mr-0.5' />
+                          {formatDuration(lesson.duration)}
+                        </Badge>
+                      )}
                     </div>
                   </CardLayout>
                 </Link>

@@ -3,8 +3,13 @@ import { ReactNode } from 'react'
 
 type TabsItem = {
   value: string
-  label: string
+  label: ReactNode
   content: ReactNode
+}
+
+type Additional = {
+  leftSide?: ReactNode
+  rightSide?: ReactNode
 }
 
 type STabsProps = {
@@ -15,19 +20,24 @@ type STabsProps = {
     list?: string
     trigger?: string
   }
+  additionalContent?: Additional
 }
 
-export default function STabs({ defaultValue, items, className, customStyle }: STabsProps) {
+export default function STabs({ defaultValue, items, className, customStyle, additionalContent }: STabsProps) {
+  const { leftSide, rightSide } = additionalContent || {}
   return (
     <Tabs defaultValue={defaultValue} className={`${className}`}>
-      <TabsList className={`w-full ${customStyle?.list}`}>
-        {items.map((item) => (
-          <TabsTrigger key={item.value} value={item.value} className={`${customStyle?.trigger}`}>
-            {item.label}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-
+      <div className='flex justify-between'>
+        {leftSide && <div>{leftSide}</div>}
+        <TabsList className={` ${customStyle?.list}`}>
+          {items.map((item) => (
+            <TabsTrigger key={item.value} value={item.value} className={`${customStyle?.trigger}`}>
+              {item.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {rightSide && <div>{rightSide}</div>}
+      </div>
       {items.map((item) => (
         <TabsContent key={item.value} value={item.value}>
           {item.content}

@@ -80,11 +80,17 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [localData, setLocalData] = React.useState(data)
+
+  React.useEffect(() => {
+    setLocalData(data)
+  }, [data])
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor), useSensor(KeyboardSensor))
+  const itemIds = React.useMemo(() => localData.map((d) => d.id), [localData])
 
   const table = useReactTable({
-    data,
+    data: localData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -98,8 +104,6 @@ export function DataTable<TData extends { id: string | number }, TValue>({
     enableRowSelection
   })
 
-  const itemIds = React.useMemo(() => data.map((d) => d.id), [data])
-
   const handleDragEnd = React.useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event
@@ -108,11 +112,11 @@ export function DataTable<TData extends { id: string | number }, TValue>({
       const newIndex = data.findIndex((item) => item.id === over.id)
       if (oldIndex === -1 || newIndex === -1) return
       const newData = arrayMove(data, oldIndex, newIndex)
+      setLocalData(newData)
       onReorder?.(newData)
     },
-    [onReorder, data]
+    [localData, onReorder]
   )
-
   return (
     <div className={className}>
       <div className='overflow-hidden rounded-md border'>

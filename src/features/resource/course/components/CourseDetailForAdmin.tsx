@@ -49,7 +49,7 @@ export default function CourseDetailPage() {
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
 
   // Fetch course details
-  const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
+  const { data: course, error, isLoading, refetch } = useGetCourseByIdQuery(Number(courseId))
   const [updateCourseStatus] = useUpdateCourseMutation()
   const [deleteCourse] = useDeleteCourseMutation()
 
@@ -293,7 +293,7 @@ export default function CourseDetailPage() {
           <h1 className='text-sky-custom-600 text-3xl font-semibold'>{t('lesson')}</h1>
           <hr className='flex-grow border-t border-gray-300' />
         </div>
-        <LessonTable courseIdSelected={course.data.id} />
+        <LessonTable courseIdSelected={course.data.id} refetch={refetch} />
       </div>
     </div>
   )

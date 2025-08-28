@@ -4,7 +4,7 @@
       "course": "Courses",
       "lesson": "Lessons",
       "user": "Users",
-      "document": "Document",
+      "catalog": "Catalog",
       "topic": "Topic",
       "skill": "Skills",
       "ageRange": "Age Range",
@@ -81,38 +81,41 @@
       "signOut": "Sign out"
     },
     "course_details": {
-    "description": "Description",
-    "task": "Student task",
-    "prerequisites": "Prerequisites",
-    "tag": "Tags",
-    "lesson": "Lesson list",
-    "status": "Status",
-    "level": "Level",
-    "age": "Age Range",
-    "topic": "Topics",
-    "skill": "Skills",
-    "standard": "Standards",
-    "code": "Code",
-    "button": {
-      "update": "Update Course",
-      "delete": "Delete Course",
-      "reject": "Reject",
-      "approve": "Approve",
-      "add": "Add New"
-    },
-    "metadata": {
-      "created_at": "Created date",
-      "modified": "Last modified",
-      "created_by": "Created by"
-    },
-    "nodata": {
-      "description": "No description provided.",
-      "task": "No student tasks listed.",
-      "prerequisites": "No prerequisites listed.",
-      "topic": "No topics listed.",
-      "skill": "No skills listed.",
-      "standard": "No standards assigned."
+      "description": "Description",
+      "task": "Student task",
+      "prerequisites": "Prerequisites",
+      "tag": "Tags",
+      "lesson": "Lesson list",
+      "status": "Status",
+      "level": "Level",
+      "age": "Age Range",
+      "topic": "Topics",
+      "skill": "Skills",
+      "standard": "Standards",
+      "code": "Code",
+      "button": {
+        "update": "Update Course",
+        "delete": "Delete Course",
+        "reject": "Reject",
+        "approve": "Approve",
+        "add": "Add New"
+      },
+      "metadata": {
+        "created_at": "Created date",
+        "modified": "Last modified",
+        "created_by": "Created by"
+      },
+      "nodata": {
+        "description": "No description provided.",
+        "task": "No student tasks listed.",
+        "prerequisites": "No prerequisites listed.",
+        "topic": "No topics listed.",
+        "skill": "No skills listed.",
+        "standard": "No standards assigned."
+      },
+      "card": {
+        "age": "Age"
+      }
     }
-  }
   }
 }
