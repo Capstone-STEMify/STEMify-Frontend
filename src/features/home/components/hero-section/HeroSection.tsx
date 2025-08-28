@@ -26,7 +26,7 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
   const [animatedElements, setAnimatedElements] = useState({
     subtitle: false,
     title: false,
-    brand: false,
+    // brand: false,
     search: false
   })
 
@@ -40,13 +40,15 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
         if (
           !animatedElements.subtitle &&
           !animatedElements.title &&
-          !animatedElements.brand &&
+          // !animatedElements.brand &&
           !animatedElements.search
         ) {
-          gsap.set([subtitleRef.current, titleRef.current, brandRef.current, searchRef.current], {
+          gsap.set([subtitleRef.current, titleRef.current, searchRef.current], {
             opacity: 0,
             y: 50
           })
+
+          gsap.set(brandRef.current, { opacity: 1, y: 0 })
 
           gsap.set([blob1Ref.current, blob2Ref.current], {
             opacity: 0,
@@ -77,16 +79,16 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
           setAnimatedElements((prev) => ({ ...prev, title: true }))
         }
 
-        if (progress >= 0.75 && !animatedElements.brand) {
-          gsap.to(brandRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            delay: 0.4,
-            ease: 'power2.out'
-          })
-          setAnimatedElements((prev) => ({ ...prev, brand: true }))
-        }
+        // if (progress >= 0.75 && !animatedElements.brand) {
+        //   gsap.to(brandRef.current, {
+        //     opacity: 1,
+        //     y: 0,
+        //     duration: 0.6,
+        //     delay: 0.4,
+        //     ease: 'power2.out'
+        //   })
+        //   setAnimatedElements((prev) => ({ ...prev, brand: true }))
+        // }
 
         if (progress >= 1 && !animatedElements.search) {
           gsap.to(searchRef.current, {
@@ -145,14 +147,14 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
 
         {/* Main Title */}
         <div ref={titleRef} className='mb-3 sm:mb-4'>
-          <h1 className='text-4xl leading-tight font-bold text-white drop-shadow-2xl sm:text-5xl md:text-6xl lg:text-7xl'>
+          <h1 className='text-3xl leading-tight font-bold text-white drop-shadow-2xl sm:text-4xl md:text-5xl lg:text-6xl'>
             {t('title')}
           </h1>
         </div>
 
         {/* Brand Name */}
-        <div ref={brandRef} className='mb-8 sm:mb-12'>
-          <p className='from-orange-custom-500 bg-gradient-to-r via-amber-500 to-orange-200 bg-clip-text text-4xl font-bold text-transparent drop-shadow-lg sm:text-5xl md:text-6xl lg:text-7xl'>
+        <div ref={brandRef} className='mb-10 overflow-visible sm:mb-14'>
+          <p className='from-orange-custom-500 inline-block bg-gradient-to-r via-amber-500 to-orange-200 bg-clip-text pb-2 text-6xl leading-[1.15] font-bold tracking-tight text-transparent drop-shadow-lg sm:text-7xl md:pb-3 md:text-8xl lg:text-9xl'>
             Stemify
           </p>
         </div>
