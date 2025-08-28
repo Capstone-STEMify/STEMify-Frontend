@@ -35,8 +35,8 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/token`,
     params: {
       grant_type: 'authorization_code',
-      client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI
+      client_id: process.env.NEXT_PUBLIC_CLIENT_ID
+      // redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI
     }
   },
   userinfo: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/userinfo`,
@@ -57,7 +57,7 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
 }
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
+  // debug: true,
   session: {
     strategy: 'jwt'
   },
