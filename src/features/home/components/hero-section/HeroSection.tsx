@@ -26,7 +26,7 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
   const [animatedElements, setAnimatedElements] = useState({
     subtitle: false,
     title: false,
-    brand: false,
+    // brand: false,
     search: false
   })
 
@@ -40,13 +40,15 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
         if (
           !animatedElements.subtitle &&
           !animatedElements.title &&
-          !animatedElements.brand &&
+          // !animatedElements.brand &&
           !animatedElements.search
         ) {
-          gsap.set([subtitleRef.current, titleRef.current, brandRef.current, searchRef.current], {
+          gsap.set([subtitleRef.current, titleRef.current, searchRef.current], {
             opacity: 0,
             y: 50
           })
+
+          gsap.set(brandRef.current, { opacity: 1, y: 0 })
 
           gsap.set([blob1Ref.current, blob2Ref.current], {
             opacity: 0,
@@ -77,16 +79,16 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
           setAnimatedElements((prev) => ({ ...prev, title: true }))
         }
 
-        if (progress >= 0.75 && !animatedElements.brand) {
-          gsap.to(brandRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            delay: 0.4,
-            ease: 'power2.out'
-          })
-          setAnimatedElements((prev) => ({ ...prev, brand: true }))
-        }
+        // if (progress >= 0.75 && !animatedElements.brand) {
+        //   gsap.to(brandRef.current, {
+        //     opacity: 1,
+        //     y: 0,
+        //     duration: 0.6,
+        //     delay: 0.4,
+        //     ease: 'power2.out'
+        //   })
+        //   setAnimatedElements((prev) => ({ ...prev, brand: true }))
+        // }
 
         if (progress >= 1 && !animatedElements.search) {
           gsap.to(searchRef.current, {
@@ -145,15 +147,15 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
 
         {/* Main Title */}
         <div ref={titleRef} className='mb-3 sm:mb-4'>
-          <h1 className='text-4xl font-bold leading-tight text-white drop-shadow-2xl sm:text-5xl md:text-6xl lg:text-7xl'>
+          <h1 className='text-3xl leading-tight font-bold text-white drop-shadow-2xl sm:text-4xl md:text-5xl lg:text-6xl'>
             {t('title')}
           </h1>
         </div>
 
         {/* Brand Name */}
-        <div ref={brandRef} className='mb-8 sm:mb-12'>
-          <p className='bg-gradient-to-r from-orange-custom-500 via-amber-500 to-orange-200 bg-clip-text text-4xl font-bold text-transparent drop-shadow-lg sm:text-5xl md:text-6xl lg:text-7xl'>
-            STEMify
+        <div ref={brandRef} className='mb-10 overflow-visible sm:mb-14'>
+          <p className='from-orange-custom-500 inline-block bg-gradient-to-r via-amber-500 to-orange-200 bg-clip-text pb-2 text-6xl leading-[1.15] font-bold tracking-tight text-transparent drop-shadow-lg sm:text-7xl md:pb-3 md:text-8xl lg:text-9xl'>
+            Stemify
           </p>
         </div>
 
@@ -180,7 +182,7 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
                 </Select>
               </div>
             </div>
-            
+
             {/* Search input and button */}
             <div className='flex items-center'>
               <input
@@ -190,7 +192,7 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
                 placeholder={t('searchPlaceholder')}
                 className='flex-1 border-none bg-transparent px-4 py-3 text-base text-gray-700 placeholder-gray-500 outline-none'
               />
-              
+
               <button className='m-1 flex transform items-center justify-center rounded-xl bg-amber-400 p-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
                 <Search className='h-5 w-5' />
               </button>
@@ -231,11 +233,11 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
         {/* Floating Blobs */}
         <div
           ref={blob1Ref}
-          className='animate-float absolute -left-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-2xl sm:-left-20 sm:-top-20 sm:h-40 sm:w-40 sm:blur-3xl'
+          className='animate-float absolute -top-10 -left-10 h-24 w-24 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-2xl sm:-top-20 sm:-left-20 sm:h-40 sm:w-40 sm:blur-3xl'
         ></div>
         <div
           ref={blob2Ref}
-          className='animate-float-delayed absolute -bottom-5 -right-10 h-20 w-20 rounded-full bg-gradient-to-r from-pink-400/20 to-yellow-400/20 blur-2xl sm:-bottom-10 sm:-right-20 sm:h-32 sm:w-32 sm:blur-3xl'
+          className='animate-float-delayed absolute -right-10 -bottom-5 h-20 w-20 rounded-full bg-gradient-to-r from-pink-400/20 to-yellow-400/20 blur-2xl sm:-right-20 sm:-bottom-10 sm:h-32 sm:w-32 sm:blur-3xl'
         ></div>
       </div>
 
