@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useGetLessonAction } from './LessonAction'
 import { useSearchLessonQuery } from '../../api/lessonApi'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { Lesson, LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
@@ -19,12 +19,15 @@ import { SPagination } from '@/components/shared/SPagination'
 import { capitalizeFirst, formatDuration } from '@/utils/index'
 import { LayoutGrid, TableIcon } from 'lucide-react'
 import { getCourseStatusBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
+import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
+import { toast } from 'sonner'
 
 type ViewMode = 'table' | 'card'
 
 export default function LessonManagement({ courseIdSelected }: { courseIdSelected?: number }) {
   const locale = useLocale()
   const router = useRouter()
+  const { courseId } = useParams()
   const columns = useGetLessonAction()
 
   const t = useTranslations('Admin.course_details')
@@ -57,16 +60,33 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
   }
 
   useEffect(() => {
-    dispatch(setPageSize(10))
+    if (courseId) {
+      dispatch(setPageSize(50))
+    } else dispatch(setPageSize(10))
   }, [dispatch])
 
   const { data } = useSearchLessonQuery(queryParams)
+  const [updateCourseLessonOrder] = useUpdateLessonOrderMutation()
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
+
+  const handleSaveOrder = async (orderedLessonIds: number[]) => {
+    try {
+      // const orderedLessonIds = rows.map((item) => item.id)
+      await updateCourseLessonOrder({
+        id: Number(courseId),
+        orderedLessonIds
+      }).unwrap()
+      toast.success('Lesson order saved successfully')
+    } catch (e) {
+      toast.error('Failed to save lesson order')
+    }
+  }
+
   const handleCreate = () => {
     router.push(`/${locale}/admin/lesson/create?courseId=${courseIdSelected}`)
   }
@@ -101,7 +121,6 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
       </div>
 
       <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
-        {/* TABLE VIEW */}
         <TabsContent value='table'>
           <DataTable
             data={rows}
@@ -110,6 +129,11 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
             pagingData={data}
             pagingParams={queryParams}
             handlePageChange={handlePageChange}
+            enableDnd
+            onReorder={(newData) => {
+              const orderedLessonIds = newData.map((item) => item.id)
+              handleSaveOrder(orderedLessonIds)
+            }}
             className='mt-5'
           />
         </TabsContent>

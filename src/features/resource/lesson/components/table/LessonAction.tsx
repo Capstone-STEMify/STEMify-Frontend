@@ -1,16 +1,18 @@
 import React from 'react'
 import { useTranslations } from 'next-intl'
-import { ColumnDef } from '@tanstack/react-table'
-import { useRouter } from 'next/navigation'
+import { ColumnDef, Row } from '@tanstack/react-table'
+import { useParams, useRouter } from 'next/navigation'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
-import z from 'zod'
 import { Badge } from '@/components/shadcn/badge'
 import { useDeleteLessonMutation, useUpdateLessonMutation } from '../../api/lessonApi'
 import { Lesson, LessonStatus } from '../../types/lesson.type'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
+import { useSortable } from '@dnd-kit/sortable'
+import { Button } from '@/components/shadcn/button'
+import { IconGripVertical } from '@tabler/icons-react'
 
 const getLessonStatusBadgeClass = (status?: LessonStatus): string => {
   const map: Record<LessonStatus, string> = {
@@ -26,6 +28,23 @@ const getLessonStatusBadgeClass = (status?: LessonStatus): string => {
   return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
 }
 
+function DragHandle({ id }: { id: number }) {
+  const { attributes, listeners } = useSortable({ id })
+
+  return (
+    <Button
+      {...attributes}
+      {...listeners}
+      variant='ghost'
+      size='icon'
+      className='hover:cursor-grab active:cursor-grabbing'
+    >
+      <IconGripVertical className='text-muted-foreground size-3' />
+      <span className='sr-only'>Drag to reorder</span>
+    </Button>
+  )
+}
+
 export function useGetLessonAction(): ColumnDef<Lesson>[] {
   const router = useRouter()
   const locale = useLocale()
@@ -33,7 +52,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
   const [deleteLesson] = useDeleteLessonMutation()
   const [updateLessonStatus] = useUpdateLessonMutation()
   const t = useTranslations('tableHeader')
-
+  const { courseId } = useParams()
   const handleDelete = async (id: number) => {
     try {
       await deleteLesson(id).unwrap()
@@ -63,6 +82,17 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
   }
 
   return [
+    ...(courseId
+      ? [
+          {
+            id: 'drag',
+            header: () => null,
+            cell: ({ row }: { row: Row<Lesson> }) => <DragHandle id={row.original.id} />,
+            enableSorting: false,
+            enableHiding: false
+          }
+        ]
+      : []),
     createSelectColumn<Lesson>(),
     {
       accessorKey: 'id',
@@ -98,7 +128,8 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
             {row.getValue('title')}
           </div>
         )
-      }
+      },
+      enableSorting: true
     },
     {
       accessorKey: 'status',
