@@ -1,10 +1,8 @@
-// app/page.tsx
 'use client';
 
 import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
 
-// Giả sử bạn đã cập nhật TiptapEditor để nhận prop onChange
 const TiptapEditor = dynamic(() => import('@/components/tiptap/TiptapEditor'), { ssr: false });
 
 

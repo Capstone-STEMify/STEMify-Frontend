@@ -14,7 +14,6 @@ type Props = {
   editor: Editor | null;
 };
 
-// Component nút chung để tái sử dụng
 const ToolbarButton = ({ onClick, isActive, children, disabled }: {
   onClick: () => void;
   isActive?: boolean;

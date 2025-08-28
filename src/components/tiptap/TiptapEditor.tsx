@@ -24,7 +24,6 @@ const TiptapEditor = ({ content, onChange }: TiptapEditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        // Tắt các extension mặc định để cấu hình riêng bên dưới nếu cần
         bulletList: false,
         orderedList: false,
         blockquote: false,
