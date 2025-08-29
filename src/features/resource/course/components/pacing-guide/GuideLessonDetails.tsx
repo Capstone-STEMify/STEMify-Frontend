@@ -110,7 +110,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
             <div className='flex items-start gap-3 border-l-4 border-l-gray-500 pl-1'>
               <div>
                 <h3 className='text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('duration')}</h3>
-                <p className='text-lg font-bold text-gray-800'>{lesson.duration} mins</p>
+                <p className='text-lg font-bold text-gray-800'>{lesson.duration} {t('min')}</p>
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
               className='bg-amber-custom-400 mt-8 w-full text-lg'
               size={'lg'}
             >
-              Update Lesson
+              {t('button.update')}
             </Button>
 
             {(lesson.status === LessonStatus.PENDING || lesson.status === LessonStatus.DRAFT) &&
