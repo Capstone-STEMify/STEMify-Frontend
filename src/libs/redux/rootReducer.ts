@@ -25,6 +25,7 @@ import { notificationRealtimeSlice } from '@/features/notification/slice/notific
 import { use } from 'matter'
 import { userApi } from '@/features/user/api/userApi'
 import { userSlice } from '@/features/user/slice/userSlice'
+import { curriculumApi } from '@/features/resource/curriculum/api/curriculumApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -55,5 +56,6 @@ export const rootReducer = combineReducers({
   [lessonApiExtended.reducerPath]: lessonApiExtended.reducer,
   [contentApi.reducerPath]: contentApi.reducer,
   [studentProgresssApi.reducerPath]: studentProgresssApi.reducer,
-  [userApi.reducerPath]: userApi.reducer
+  [userApi.reducerPath]: userApi.reducer,
+  [curriculumApi.reducerPath]: curriculumApi.reducer
 })
