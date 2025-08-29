@@ -25,6 +25,13 @@
     "description": "Mô tả",
     "ageRangeLabel": "Nhãn độ tuổi",
     "minAge": "Tuổi tối thiểu",
-    "maxAge": "Tuổi tối đa"
+    "maxAge": "Tuổi tối đa",
+    "paging": {
+      "previous": "Trước",
+      "next": "Sau",
+      "of": "trên",
+      "row": "dòng ",
+      "select": "được chọn"
+    }
   }
 }

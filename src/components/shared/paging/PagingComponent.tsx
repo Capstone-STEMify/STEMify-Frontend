@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 type ModernPaginationProps = {
   currentPage: number
@@ -13,6 +14,7 @@ export default function ModernPagination({
   onPageChange,
   className = ''
 }: ModernPaginationProps) {
+  const t = useTranslations("tableHeader.paging")
   const getVisiblePages = () => {
     const pages = []
     const showEllipsis = totalPages > 7
@@ -65,7 +67,7 @@ export default function ModernPagination({
         } `}
       >
         <ChevronLeft />
-        Previous
+        {t('previous')}
       </button>
 
       {/* Page Numbers */}
@@ -109,7 +111,7 @@ export default function ModernPagination({
             : 'border border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 hover:shadow-sm'
         } `}
       >
-        Next
+        {t('next')}
         <ChevronRight className='ml-1 h-4 w-4' />
       </button>
     </div>
