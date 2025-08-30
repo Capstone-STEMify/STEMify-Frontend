@@ -5,6 +5,7 @@ import { ageRangeApi } from '@/features/resource/age-range/api/ageRangeApi'
 import { categoryApi } from '@/features/resource/category/api/categoryApi'
 import { courseApi } from '@/features/resource/course/api/courseApi'
 import { curriculumApi } from '@/features/resource/curriculum/api/curriculumApi'
+import { learningOutcomeApi } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
 import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
 import { sectionApi } from '@/features/resource/section/api/sectionApi'
 import { skillApi } from '@/features/resource/skill/api/skillApi'
@@ -27,6 +28,7 @@ export const apiMiddlewares: Middleware[] = [
   studentProgresssApi.middleware,
   userApi.middleware,
   curriculumApi.middleware,
+  learningOutcomeApi.middleware,
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]

@@ -26,6 +26,7 @@ import { use } from 'matter'
 import { userApi } from '@/features/user/api/userApi'
 import { userSlice } from '@/features/user/slice/userSlice'
 import { curriculumApi } from '@/features/resource/curriculum/api/curriculumApi'
+import { learningOutcomeApi } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -57,5 +58,6 @@ export const rootReducer = combineReducers({
   [contentApi.reducerPath]: contentApi.reducer,
   [studentProgresssApi.reducerPath]: studentProgresssApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
-  [curriculumApi.reducerPath]: curriculumApi.reducer
+  [curriculumApi.reducerPath]: curriculumApi.reducer,
+  [learningOutcomeApi.reducerPath]: learningOutcomeApi.reducer
 })
