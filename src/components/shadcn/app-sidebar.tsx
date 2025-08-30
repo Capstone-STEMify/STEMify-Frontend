@@ -46,11 +46,11 @@ const data = {
     avatar: '/avatars/shadcn.jpg'
   },
   navMain: [
-    // {
-    //   title: 'Dashboard',
-    //   url: 'dashboard',
-    //   icon: IconDashboard
-    // },
+    {
+      title: 'side_bar.curriculum',
+      url: '/admin/curriculum',
+      icon: IconListDetails
+    },
     {
       title: 'side_bar.course',
       url: '/admin/course',

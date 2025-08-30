@@ -1,6 +1,7 @@
 {
   "Admin": {
     "side_bar": {
+      "curriculum": "Curriculum",
       "course": "Courses",
       "lesson": "Lessons",
       "user": "Users",
