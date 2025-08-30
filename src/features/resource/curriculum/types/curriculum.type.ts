@@ -1,6 +1,5 @@
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 import { Course } from '../../course/types/course.type'
-import { Kit } from './kit.type'
 
 export type Curriculum = {
   id: number

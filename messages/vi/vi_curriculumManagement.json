@@ -1,0 +1,24 @@
+{
+  "Curriculum": {
+    "code": {
+      "label": "Mã",
+      "note": "Mã định danh duy nhất cho khung chương trình",
+      "placeholder": "e.g SU001"
+    },
+    "title": {
+      "label": "Tiêu đề",
+      "note": "Tiêu đề cho khung chương trình",
+      "placeholder": "vd: Mùa hè vui nhộn"
+    },
+    "description": {
+      "label": "Mô tả",
+      "note": "Mô tả cho khung chương trình",
+      "placeholder": "vd: Khung chương trình này bao gồm các kĩ năng tư duy, sáng tạo cho trẻ"
+    },
+    "btn": "Gửi",
+    "successMessage": "Khóa học đã được tạo thành công!",
+    "errorMessage": "Đã xảy ra lỗi khi tạo khóa học. Vui lòng thử lại.",
+    "create": "Tạo Khung Chương Trình",
+    "update": "Cập Nhật Khung Chương Trình"
+  }
+}

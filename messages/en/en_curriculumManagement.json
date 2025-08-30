@@ -1,0 +1,24 @@
+{
+  "Curriculum": {
+    "code": {
+      "label": "Code",
+      "note": "Unique identifier for the curriculum",
+      "placeholder": "e.g SU001"
+    },
+    "title": {
+      "label": "Title",
+      "note": "Title for the curriculum",
+      "placeholder": "e.g: Fun Summer"
+    },
+    "description": {
+      "label": "Description",
+      "note": "Description for the curriculum",
+      "placeholder": "e.g: This curriculum includes critical thinking and creativity skills for children"
+    },
+    "btn": "Submit",
+    "successMessage": "Curriculum created successfully!",
+    "errorMessage": "An error occurred while creating the curriculum. Please try again.",
+    "create": "Create Curriculum",
+    "update": "Update Curriculum"
+  }
+}
