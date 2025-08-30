@@ -25,6 +25,13 @@
   "description": "Description",
   "ageRangeLabel": "Label",
   "minAge": "Min Age",
-  "maxAge": "Max Age"
+  "maxAge": "Max Age",
+  "paging": {
+      "previous": "Previous",
+      "next": "Next",
+      "of": "of",
+      "row": "row(s) ",
+      "select": "selected"
+    }
 }
 }

@@ -66,6 +66,7 @@ import { Label } from 'components/shadcn/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'components/shadcn/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'components/shadcn/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'components/shadcn/tabs'
+import { useTranslations } from 'next-intl'
 
 export const schema = z.object({
   id: z.number(),
@@ -295,6 +296,7 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
 }
 
 export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[] }) {
+  const t = useTranslations("tableHeader.paging")
   const [data, setData] = React.useState(() => initialData)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -451,8 +453,8 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
         </div>
         <div className='flex items-center justify-between px-4'>
           <div className='text-muted-foreground hidden flex-1 text-sm lg:flex'>
-            {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-            selected.
+            {table.getFilteredSelectedRowModel().rows.length} {t('of')} {table.getFilteredRowModel().rows.length} {t('row')}
+            {t('select')}.
           </div>
           <div className='flex w-full items-center gap-8 lg:w-fit'>
             <div className='hidden items-center gap-2 lg:flex'>
