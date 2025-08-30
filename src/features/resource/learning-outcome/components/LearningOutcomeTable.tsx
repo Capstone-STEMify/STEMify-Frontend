@@ -11,7 +11,7 @@ import { motion } from 'framer-motion'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 
 export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: number }) {
-  const t = useTranslations('table')
+  const t = useTranslations('LearningOutcome.PLO')
   const queryParams: LearningOutcomeQueryParams = {
     curriculumId
   }
@@ -31,7 +31,7 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
       <div className='flex items-center justify-between'>
         <div className='flex items-center space-x-2 text-lg font-semibold'>
           <label htmlFor='select-backlog' className='cursor-default'>
-            Curriculum Learning Outcomes
+            {t('title')}
           </label>
           <span className='rounded bg-green-200 px-2 text-sm'>0</span>
         </div>
@@ -40,7 +40,7 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
       {/* Empty learning outcomes */}
       {isLoading || !learningOutcomes || learningOutcomes?.data.items.length === 0 ? (
         <Card className='border-2 border-dashed border-gray-300 py-10 text-center text-sm text-gray-500'>
-          Curriculum learning outcomes is empty.
+          {t('empty')}
         </Card>
       ) : (
         <div className='overflow-x-auto'>
@@ -74,7 +74,7 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
       {/* Create learning outcome */}
       <Button size='sm' className='bg-amber-400 text-sm'>
         <Plus className='mr-1 h-4 w-4' />
-        Add
+        {t('add_btn')}
       </Button>
     </div>
   )

@@ -1,0 +1,17 @@
+{
+  "LearningOutcome": {
+    "PLO": {
+      "title": "Chuẩn đầu ra chương trình học",
+      "name": "Tên PLO",
+      "description": "Mô tả PLO",
+      "empty": "Không có kết quả học tập nào trong chương trình học."
+    },
+    "CLO": {
+      "title": "Chuẩn đầu ra khóa học",
+      "name": "Tên CLO",
+      "description": "Mô tả CLO",
+      "empty": "Không có kết quả học tập nào trong khóa học."
+    },
+    "add_btn": "Thêm mới"
+  }
+}

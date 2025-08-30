@@ -19,6 +19,13 @@
     "successMessage": "Khóa học đã được tạo thành công!",
     "errorMessage": "Đã xảy ra lỗi khi tạo khóa học. Vui lòng thử lại.",
     "create": "Tạo Khung Chương Trình",
-    "update": "Cập Nhật Khung Chương Trình"
+    "update": "Cập Nhật Khung Chương Trình",
+    "approve": "Phê Duyệt",
+    "reject": "Từ Chối",
+    "courseList": {
+      "title": "Danh Sách Khóa Học"
+    },
+    "detail_title": "Chi Tiết Khung Chương Trình",
+    "update_title": "Cập Nhật Khung Chương Trình"
   }
 }

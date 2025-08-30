@@ -23,7 +23,7 @@ import STabs from '@/components/shared/STabs'
 
 type ViewMode = 'table' | 'card'
 
-export default function CourseManagement() {
+export default function CourseManagement({ curriculumId }: { curriculumId?: number }) {
   const t = useTranslations('Admin')
   const dispatch = useAppDispatch()
   const columns = useGetCourseAction()
@@ -42,6 +42,7 @@ export default function CourseManagement() {
   const courseParams = useAppSelector((state) => state.course)
 
   const queryParams: CourseQueryParams = {
+    curriculumId,
     courseId: courseParams.courseId,
     createdByUserId: courseParams.createdByUserId,
     ageRangeId: courseParams.ageRangeId,
@@ -75,8 +76,6 @@ export default function CourseManagement() {
 
   return (
     <div>
-      <CourseListAction />
-
       <STabs
         className='mt-4'
         defaultValue={viewMode}

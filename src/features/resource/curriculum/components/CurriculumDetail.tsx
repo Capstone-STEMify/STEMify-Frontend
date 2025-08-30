@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
-import { BadgeCheck, Users, School } from 'lucide-react'
+import { School } from 'lucide-react'
 import { useGetCurriculumByIdQuery } from '../api/curriculumApi'
 import KitInformationSection from './KitInformationSection'
 import BackButton from '@/components/shared/button/BackButton'
@@ -18,21 +18,10 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
   return (
     <div className='mx-auto max-w-6xl px-4 py-12'>
       <BackButton />
-      <div className='grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
-        {/* Image Section */}
-        <div className='relative overflow-hidden rounded-2xl shadow-md'>
-          <Image
-            src='/images/curriculum/curriculum-detail.jpg'
-            alt='STEM Starter Curriculum'
-            width={600}
-            height={600}
-            className='h-full w-full object-cover'
-          />
-        </div>
-
+      <div className='mt-5 grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
         {/* Content Section */}
-        <div className='flex flex-col justify-center'>
-          <h2 className='mb-2 text-sm text-gray-500 uppercase'>Stemify Curriculum</h2>
+        <div className='flex flex-col'>
+          <h2 className='mb-2 text-sm text-gray-500 uppercase'>STEM_STRAW_K1</h2>
           <h1 className='mb-4 text-4xl font-bold text-gray-900'>STEM Starter Curriculum</h1>
           <div className='mb-6 h-1 w-12 bg-yellow-500' />
 
@@ -55,6 +44,16 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
           <Button className='bg-amber-custom-400 w-fit rounded-xl p-6 text-lg text-black hover:bg-yellow-600'>
             EXPLORE NOW
           </Button>
+        </div>
+        {/* Image Section */}
+        <div className='relative overflow-hidden rounded-2xl shadow-md'>
+          <Image
+            src='https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
+            alt='STEM Starter Curriculum'
+            width={600}
+            height={600}
+            className='h-full w-full object-cover'
+          />
         </div>
       </div>
 

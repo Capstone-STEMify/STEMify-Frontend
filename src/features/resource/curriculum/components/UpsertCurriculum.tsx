@@ -4,11 +4,11 @@ import BackButton from '@/components/shared/button/BackButton'
 import { SCard } from '@/components/shared/card/SCard'
 import { useAppForm } from '@/components/shared/form/items'
 import { useTranslations } from 'next-intl'
-import { useParams } from 'next/navigation'
 import { useRef } from 'react'
 import z from 'zod'
 import LearningOutcomeTable from '../../learning-outcome/components/LearningOutcomeTable'
 import { Separator } from '@/components/shadcn/separator'
+import CourseManagement from '../../course/components/table/CourseManagement'
 
 const curriculumFormSchema = z.object({
   code: z.string().min(3, 'Code must be at least 3 characters long'),
@@ -32,8 +32,7 @@ const defaultCurriculum: CurriculumForm = {
   imagePreviewUrl: ''
 }
 
-export default function UpsertCurriculum() {
-  const { curriculumId } = useParams()
+export default function UpsertCurriculum({ curriculumId }: { curriculumId?: number }) {
   const t = useTranslations('Curriculum')
   const imageFieldRef = useRef<any>(null)
 
@@ -51,10 +50,6 @@ export default function UpsertCurriculum() {
           form.handleSubmit()
         }}
       >
-        <div className='flex items-center gap-5 pb-5'>
-          <BackButton />
-          <h1>{curriculumId ? t('update') : t('create')}</h1>
-        </div>
         <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
           <div className='space-y-6 lg:col-span-2'>
             <SCard
@@ -115,9 +110,6 @@ export default function UpsertCurriculum() {
           </div>
         </div>
       </form>
-      <Separator className='my-10' />
-
-      <LearningOutcomeTable curriculumId={Number(curriculumId)} />
     </div>
   )
 }

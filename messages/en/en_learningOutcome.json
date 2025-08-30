@@ -1,0 +1,17 @@
+{
+  "LearningOutcome": {
+    "PLO": {
+      "title": "Curriculum Learning Outcomes",
+      "name": "PLO Name",
+      "description": "PLO Description",
+      "empty": "Curriculum learning outcomes is empty."
+    },
+    "CLO": {
+      "title": "Course Learning Outcomes",
+      "name": "CLO Name",
+      "description": "CLO Description",
+      "empty": "Course learning outcomes is empty."
+    },
+    "add_btn": "Add"
+  }
+}
