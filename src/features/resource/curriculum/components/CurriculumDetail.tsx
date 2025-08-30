@@ -5,6 +5,8 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { BadgeCheck, Users, School } from 'lucide-react'
 import { useGetCurriculumByIdQuery } from '../api/curriculumApi'
 import KitInformationSection from './KitInformationSection'
+import BackButton from '@/components/shared/button/BackButton'
+import CurriculumCourseSection from './CurriculumCourseSection'
 
 type CurriculumDetailProps = {
   curriculumId?: number
@@ -14,8 +16,9 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
   const { data: curriculum, error, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId))
 
   return (
-    <div className='mx-auto max-w-7xl'>
-      <div className='grid grid-cols-1 gap-12 px-4 py-12 md:grid-cols-2'>
+    <div className='mx-auto max-w-6xl px-4 py-12'>
+      <BackButton />
+      <div className='grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
         {/* Image Section */}
         <div className='relative overflow-hidden rounded-2xl shadow-md'>
           <Image
@@ -54,8 +57,12 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
           </Button>
         </div>
       </div>
+
       {/* Kit Information Section */}
       <KitInformationSection kitIds={curriculum?.data.kitIds} />
+
+      {/* Course Section Carousel */}
+      <CurriculumCourseSection />
     </div>
   )
 }
