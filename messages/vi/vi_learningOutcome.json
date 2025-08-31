@@ -12,6 +12,10 @@
       "description": "Mô tả CLO",
       "empty": "Không có kết quả học tập nào trong khóa học."
     },
-    "add_btn": "Thêm mới"
+    "add_btn": "Thêm mới",
+    "save_btn": "Lưu",
+    "placeholder": "Nhập nội dung ở đây...",
+    "editTitle": "Chỉnh sửa chuẩn đầu ra",
+    "createTitle": "Tạo chuẩn đầu ra"
   }
 }

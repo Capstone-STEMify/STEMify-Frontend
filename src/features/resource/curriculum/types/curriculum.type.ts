@@ -1,5 +1,6 @@
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 import { Course } from '../../course/types/course.type'
+import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 
 export type Curriculum = {
   id: number
@@ -19,6 +20,10 @@ export type CurriculumQueryParams = {
   status?: CurriculumStatus
   ageRangeId?: number
 } & SearchPaginatedRequestParams
+
+export type CurriculumSliceParams = {
+  curriculumId?: number
+} & SliceQueryParams
 
 export enum CurriculumStatus {
   DRAFT = 'DRAFT',

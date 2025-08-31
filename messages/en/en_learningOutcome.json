@@ -12,6 +12,10 @@
       "description": "CLO Description",
       "empty": "Course learning outcomes is empty."
     },
-    "add_btn": "Add"
+    "add_btn": "Add",
+    "placeholder": "Enter text here...",
+    "editTitle": "Edit Learning Outcome",
+    "createTitle": "Create Learning Outcome",
+    "save_btn": "Save"
   }
 }

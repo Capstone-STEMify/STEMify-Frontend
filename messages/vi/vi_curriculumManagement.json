@@ -26,6 +26,16 @@
       "title": "Danh Sách Khóa Học"
     },
     "detail_title": "Chi Tiết Khung Chương Trình",
-    "update_title": "Cập Nhật Khung Chương Trình"
+    "update_title": "Cập Nhật Khung Chương Trình",
+    "list": {
+      "title": "Danh Sách Khung Chương Trình",
+      "create_btn": "Tạo Khung Chương Trình",
+      "search_placeholder": "Tìm kiếm theo mã hoặc tiêu đề...",
+      "no_data": "Không tìm thấy khung chương trình nào.",
+      "no_data_detail": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm khung chương trình phù hợp.",
+      "loading": "Đang tải khung chương trình...",
+      "error": "Đã xảy ra lỗi khi lấy khung chương trình. Vui lòng thử lại.",
+      "total": "{count} khung chương trình"
+    }
   }
 }

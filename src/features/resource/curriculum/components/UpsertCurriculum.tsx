@@ -6,7 +6,7 @@ import { useAppForm } from '@/components/shared/form/items'
 import { useTranslations } from 'next-intl'
 import { useRef } from 'react'
 import z from 'zod'
-import LearningOutcomeTable from '../../learning-outcome/components/LearningOutcomeTable'
+import LearningOutcomeTable from '../../learning-outcome/components/list/LearningOutcomeTable'
 import { Separator } from '@/components/shadcn/separator'
 import CourseManagement from '../../course/components/table/CourseManagement'
 
