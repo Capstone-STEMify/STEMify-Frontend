@@ -4,16 +4,15 @@ import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 
 export type Curriculum = {
   id: number
-  name: string
-  description?: string
-  imageUrl?: string
-  courses: Course[]
-  createdAt: string
-  updatedAt?: string
-  approvedAt?: string
+  title: string
+  code: string
+  imageUrl: string
+  description: string
   status: CurriculumStatus
-  ageRangeLabel: string
-  kitIds: number[]
+  createdByUserId: string
+  createdDate: string
+  lastModifiedDate: string
+  createdByUserName: string
 }
 
 export type CurriculumQueryParams = {

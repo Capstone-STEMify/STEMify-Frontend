@@ -2,6 +2,7 @@
 import { Button } from '@/components/shadcn/button'
 import BackButton from '@/components/shared/button/BackButton'
 import CurriculumInformationSection from '@/features/resource/curriculum/components/CurriculumInformationSection'
+import AdminCurriculumCourseList from '@/features/resource/curriculum/components/manage/AdminCurriculumCourseList'
 import UpsertCurriculum from '@/features/resource/curriculum/components/UpsertCurriculum'
 import LearningOutcomeTable from '@/features/resource/learning-outcome/components/list/LearningOutcomeTable'
 import { useModal } from '@/providers/ModalProvider'
@@ -33,19 +34,13 @@ export default function AdminCurriculumDetail() {
 
       {curriculumId && (
         <>
-          {/* Courses List Section */}
           <hr className='my-10' />
-          {/* Learning Outcomes Section */}
+
           <LearningOutcomeTable curriculumId={Number(curriculumId)} />
+
           <hr className='my-10' />
-          <h2 className='text-center text-3xl'>{t('courseList.title')}</h2>
-          <Button
-            onClick={() => {
-              openModal('courseList', { id: Number(curriculumId) })
-            }}
-          >
-            Add Course
-          </Button>
+
+          <AdminCurriculumCourseList curriculumId={Number(curriculumId)} />
         </>
       )}
     </div>
