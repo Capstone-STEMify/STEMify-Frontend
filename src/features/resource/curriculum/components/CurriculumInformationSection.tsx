@@ -14,7 +14,8 @@ type Props = {
   onEdit: () => void
 }
 export default function CurriculumInformationSection({ onEdit }: Props) {
-  const t = useTranslations('Curriculum')
+  // Translations
+  const tBtn = useTranslations('button')
   const { curriculumId } = useParams()
 
   const [deleteCurriculum] = useDeleteCurriculumMutation()
@@ -58,13 +59,13 @@ export default function CurriculumInformationSection({ onEdit }: Props) {
             className='cursor-pointer bg-green-600 font-semibold text-white shadow'
             onClick={() => handleUpdateCurriculumStatus(CurriculumStatus.PUBLISHED)}
           >
-            {t('approve')}
+            {tBtn('approve')}
           </Button>
           <Button
             className='cursor-pointer border border-red-600 bg-white font-semibold text-red-600 shadow'
             onClick={() => handleUpdateCurriculumStatus(CurriculumStatus.REJECTED)}
           >
-            {t('reject')}
+            {tBtn('reject')}
           </Button>
         </div>
       </div>

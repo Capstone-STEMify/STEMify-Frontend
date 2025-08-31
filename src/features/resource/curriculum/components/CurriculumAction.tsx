@@ -9,7 +9,10 @@ import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
 
 export default function CurriculumAction() {
-  const t = useTranslations('Curriculum')
+  // Translations
+  const tList = useTranslations('curriculum.list')
+  const tBtn = useTranslations('button')
+  // Modal
   const { openModal } = useModal()
 
   const dispatch = useAppDispatch()
@@ -20,7 +23,7 @@ export default function CurriculumAction() {
       {/* Search input */}
       <Input
         type='text'
-        placeholder={t('placeholder.search')}
+        placeholder={tList('placeholder.search')}
         value={filters.search}
         onChange={(e) => dispatch(setSearchTerm(e.target.value))}
         className='flex-1 border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
@@ -31,11 +34,11 @@ export default function CurriculumAction() {
       <Button
         className='bg-amber-custom-400 cursor-pointer'
         onClick={() => {
-            openModal('upsertCurriculum')
+          openModal('upsertCurriculum')
         }}
       >
         <Plus className='mr-1 h-4 w-4' />
-        {t('button.create')}
+        {tBtn('create')}
       </Button>
     </div>
   )

@@ -29,7 +29,7 @@ export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
     },
     {
       accessorKey: 'name',
-      header: t('PLO.name')
+      header: t('name')
     },
     createActionsColumnFromItems<LearningOutcome>([
       {

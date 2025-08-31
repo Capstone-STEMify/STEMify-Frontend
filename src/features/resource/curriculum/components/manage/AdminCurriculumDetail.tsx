@@ -11,7 +11,7 @@ import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
 
 export default function AdminCurriculumDetail() {
-  const t = useTranslations('Curriculum')
+  const t = useTranslations('curriculum')
   const [isEditing, setIsEditing] = useState(false)
   const { curriculumId } = useParams()
   const { openModal } = useModal()
@@ -23,7 +23,7 @@ export default function AdminCurriculumDetail() {
     <div>
       <div className='flex items-center gap-5 pb-5'>
         {!isEditing ? <BackButton /> : <BackButton onClick={() => setIsEditing(false)} />}
-        <h1>{isEditing ? t('update_title') : t('detail_title')}</h1>
+        <h1>{isEditing ? t('form.title.update') : t('details.title')}</h1>
       </div>
 
       {!isEditing ? (

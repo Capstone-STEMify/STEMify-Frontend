@@ -1,0 +1,31 @@
+{
+  "button": {
+    "create": "Tạo Mới",
+    "update": "Cập Nhật",
+    "delete": "Xóa",
+    "approve": "Phê Duyệt",
+    "reject": "Từ Chối",
+    "submit": "Gửi",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "back": "Quay Lại"
+  },
+  "tableHeader": {
+    "id": "ID",
+    "code": "Mã",
+    "name": "Tên",
+    "image": "Ảnh",
+    "description": "Mô Tả",
+    "status": "Trạng Thái",
+    "createdBy": "Người Tạo",
+    "createdDate": "Ngày Tạo",
+    "actions": "Hành Động"
+  },
+  "paging": {
+    "previous": "Trước",
+    "next": "Tiếp Theo",
+    "of": "của",
+    "row": "hàng",
+    "select": "đã chọn"
+  }
+}
