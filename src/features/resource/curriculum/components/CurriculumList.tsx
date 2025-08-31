@@ -71,38 +71,36 @@ export default function CurriculumList() {
 
   return (
     <div>
-      <div className='px-2'>
-        <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
-          {rows.map((curriculum: any) => (
-            <Link key={curriculum.id} href={`/${locale}/admin/course/${curriculum.id}`}>
-              <CardLayout
-                imageSrc={curriculum.imageUrl}
-                size='lg'
-                badge={
-                  <Badge className={`${getStatusBadgeClass(curriculum.status)}`}>
-                    {capitalizeFirst(curriculum.status)}
-                  </Badge>
-                }
-              >
-                <div>
-                  <p className='text-muted-foreground text-xs font-medium'>{curriculum.code}</p>
-                  <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{curriculum.title}</h3>
-                  <p className='line-clamp-2 text-xs text-gray-600'>{curriculum.description}</p>
-                </div>
-              </CardLayout>
-            </Link>
-          ))}
-        </div>
-
-        {curriculumData?.data?.totalPages > 1 && (
-          <SPagination
-            pageNumber={curriculumData.data.pageNumber}
-            totalPages={curriculumData.data.totalPages}
-            onPageChanged={handlePageChange}
-            className='pb-6'
-          />
-        )}
+      <div className='grid h-fit grid-cols-1 justify-items-stretch gap-y-10 py-6 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'>
+        {rows.map((curriculum: any) => (
+          <Link key={curriculum.id} href={`/${locale}/admin/curriculum/${curriculum.id}`}>
+            <CardLayout
+              imageSrc={curriculum.imageUrl}
+              size='md'
+              badge={
+                <Badge className={`${getStatusBadgeClass(curriculum.status)}`}>
+                  {capitalizeFirst(curriculum.status)}
+                </Badge>
+              }
+            >
+              <div>
+                <p className='text-amber-custom-400 text-xs font-semibold'>{curriculum.code}</p>
+                <h3 className='text-md font-semibold text-gray-700'>{curriculum.title}</h3>
+                <p className='mt-3 line-clamp-3 text-sm text-gray-500'>{curriculum.description}</p>
+              </div>
+            </CardLayout>
+          </Link>
+        ))}
       </div>
+
+      {curriculumData?.data?.totalPages > 1 && (
+        <SPagination
+          pageNumber={curriculumData.data.pageNumber}
+          totalPages={curriculumData.data.totalPages}
+          onPageChanged={handlePageChange}
+          className='pb-6'
+        />
+      )}
     </div>
   )
 }

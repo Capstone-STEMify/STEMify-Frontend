@@ -36,6 +36,12 @@
       "loading": "Đang tải khung chương trình...",
       "error": "Đã xảy ra lỗi khi lấy khung chương trình. Vui lòng thử lại.",
       "total": "{count} khung chương trình"
+    },
+    "button": {
+      "create": "Tạo mới"
+    },
+    "placeholder": {
+      "search": "Tìm kiếm theo mã hoặc tiêu đề..."
     }
   }
 }
