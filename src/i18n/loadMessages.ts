@@ -14,6 +14,8 @@ export async function loadMessages(locale: string) {
   const adminMessages = (await import(`../../messages/${locale}/${locale}_admin.json`)).default
   const profileMessages = (await import(`../../messages/${locale}/${locale}_profile.json`)).default
   const tableHeaderMessages = (await import(`../../messages/${locale}/${locale}_tableHeader.json`)).default
+  const curriculumMessages = (await import(`../../messages/${locale}/${locale}_curriculumManagement.json`)).default
+  const learningOutcomeMessages = (await import(`../../messages/${locale}/${locale}_learningOutcome.json`)).default
 
   return {
     ...headerMessages,
@@ -30,6 +32,8 @@ export async function loadMessages(locale: string) {
     ...pacingGuideMessages,
     ...adminMessages,
     ...profileMessages,
-    ...tableHeaderMessages
+    ...tableHeaderMessages,
+    ...curriculumMessages,
+    ...learningOutcomeMessages
   }
 }

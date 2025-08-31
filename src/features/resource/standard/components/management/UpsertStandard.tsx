@@ -14,8 +14,8 @@ import { useTranslations } from 'next-intl'
 
 // Schema validation cho form
 const standardSchema = z.object({
-  standardName: z.string().optional(),
-  description: z.string().optional()
+  standardName: z.string().min(2).max(100),
+  description: z.string().min(2).max(500).optional()
 })
 
 type StandardFormData = z.infer<typeof standardSchema>

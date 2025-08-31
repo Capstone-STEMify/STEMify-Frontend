@@ -68,7 +68,7 @@ export default function LessonDetail({ id }: { id?: number }) {
             <ResizablePanel defaultSize={35} minSize={20} className='min-h-[500px]'>
               <STabs
                 customStyle={{
-                  list: 'px-4 py-8 rounded-none bg-[#f8fbff] shadow-6 gap-3 mb-3',
+                  list: 'px-4 py-8 rounded-none bg-[#f8fbff] shadow-6 gap-3 mb-3 w-full',
                   trigger:
                     'py-5 bg-white text-sky-700 rounded-lg border border-gray-200 hover:bg-sky-50 hover:text-sky-700 transition duration-200 data-[state=active]:bg-sky-300 data-[state=active]:text-white'
                 }}

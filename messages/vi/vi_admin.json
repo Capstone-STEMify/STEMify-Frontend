@@ -1,10 +1,11 @@
 {
   "Admin": {
     "side_bar": {
+      "curriculum": "Khung chương trình",
       "course": "Khóa học",
       "lesson": "Bài học",
       "user": "Người dùng",
-      "document": "Tài liệu",
+      "catalog": "Danh mục",
       "topic": "Chủ đề",
       "skill": "Kỹ năng",
       "ageRange": "Độ tuổi",
@@ -90,8 +91,8 @@
       "level": "Cấp độ",
       "age": "Độ tuổi",
       "topic": "Chủ đề",
-      "skill":"Kỹ năng",
-      "standard":"Tiêu chuẩn",
+      "skill": "Kỹ năng",
+      "standard": "Tiêu chuẩn",
       "code": "Mã",
       "button": {
         "update": "Cập nhật Khóa học",
@@ -112,6 +113,9 @@
         "topic": "Chưa có chủ đề nào được liệt kê.",
         "skill": "Chưa có kỹ năng nào được liệt kê.",
         "standard": "Chưa có tiêu chuẩn nào được chỉ định."
+      },
+      "card": {
+        "age": "Độ tuổi"
       }
     }
   }

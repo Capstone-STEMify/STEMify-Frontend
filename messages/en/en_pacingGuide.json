@@ -7,6 +7,7 @@
     "topics": "Topics",
     "requirement": "Requirements",
     "learningOutcome": "Learning Outcome",
+    "min": "mins",
     "table": {
       "section": "Section",
       "duration": "Duration",
@@ -14,7 +15,8 @@
     },
     "button": {
       "approve": "Approve",
-      "reject": "Reject"
+      "reject": "Reject",
+      "update": "Update Lesson"
     }
   }
 }

@@ -1,0 +1,41 @@
+{
+  "Curriculum": {
+    "code": {
+      "label": "Code",
+      "note": "Unique identifier for the curriculum",
+      "placeholder": "e.g SU001"
+    },
+    "title": {
+      "label": "Title",
+      "note": "Title for the curriculum",
+      "placeholder": "e.g: Fun Summer"
+    },
+    "description": {
+      "label": "Description",
+      "note": "Description for the curriculum",
+      "placeholder": "e.g: This curriculum includes critical thinking and creativity skills for children"
+    },
+    "btn": "Submit",
+    "successMessage": "Curriculum created successfully!",
+    "errorMessage": "An error occurred while creating the curriculum. Please try again.",
+    "create": "Create Curriculum",
+    "update": "Update Curriculum",
+    "approve": "Approve",
+    "reject": "Reject",
+    "courseList": {
+      "title": "Course List"
+    },
+    "detail_title": "Curriculum Detail",
+    "update_title": "Update Curriculum",
+    "list": {
+      "title": "Curriculums List",
+      "create_btn": "Create Curriculum",
+      "search_placeholder": "Search by code or title...",
+      "no_data": "No curriculums found.",
+      "no_data_detail": "Try changing the search term or filters to find relevant curriculums.",
+      "loading": "Loading curriculums...",
+      "error": "An error occurred while fetching curriculums. Please try again.",
+      "total": "{count} curriculums"
+    }
+  }
+}

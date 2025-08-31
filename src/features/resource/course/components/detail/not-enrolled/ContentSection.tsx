@@ -77,7 +77,7 @@ export default function ContentSection() {
 
   const lessonsQuery = useAppSelector((state) => state.lesson)
   useEffect(() => {
-    dispatch(setPageSize(7))
+    dispatch(setPageSize(50))
   }, [dispatch])
 
   const { courseId } = useParams()
@@ -341,14 +341,14 @@ export default function ContentSection() {
           </div>
         )}
 
-        {lessons.data.totalPages > 1 && (
+        {/* {lessons.data.totalPages > 1 && (
           <SPagination
             pageNumber={lessons.data.pageNumber}
             totalPages={lessons.data.totalPages}
             onPageChanged={handlePageChange}
             className='mt-10'
           />
-        )}
+        )} */}
       </div>
     </motion.section>
   )

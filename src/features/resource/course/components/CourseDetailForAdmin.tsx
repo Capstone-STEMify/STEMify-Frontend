@@ -1,11 +1,10 @@
 'use client'
-import React, { useEffect } from 'react'
+import React from 'react'
 import LessonTable from '../../lesson/components/table/LessonManagement'
 import { Button } from '@/components/shadcn/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
-import { Course, CourseLevel, CourseStatus } from '../types/course.type'
+import { CourseLevel, CourseStatus } from '../types/course.type'
 import { SCard } from '@/components/shared/card/SCard'
 import { useDeleteCourseMutation, useGetCourseByIdQuery, useUpdateCourseMutation } from '../api/courseApi'
 import { useLocale, useTranslations } from 'next-intl'
@@ -50,7 +49,7 @@ export default function CourseDetailPage() {
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
 
   // Fetch course details
-  const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
+  const { data: course, error, isLoading, refetch } = useGetCourseByIdQuery(Number(courseId))
   const [updateCourseStatus] = useUpdateCourseMutation()
   const [deleteCourse] = useDeleteCourseMutation()
 
@@ -294,7 +293,7 @@ export default function CourseDetailPage() {
           <h1 className='text-sky-custom-600 text-3xl font-semibold'>{t('lesson')}</h1>
           <hr className='flex-grow border-t border-gray-300' />
         </div>
-        <LessonTable courseIdSelected={course.data.id} />
+        <LessonTable courseIdSelected={course.data.id} refetch={refetch} />
       </div>
     </div>
   )

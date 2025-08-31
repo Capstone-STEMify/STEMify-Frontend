@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useGetLessonAction } from './LessonAction'
 import { useSearchLessonQuery } from '../../api/lessonApi'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { Lesson, LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
@@ -17,14 +17,23 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { SPagination } from '@/components/shared/SPagination'
 import { capitalizeFirst, formatDuration } from '@/utils/index'
-import { LayoutGrid, TableIcon } from 'lucide-react'
+import { Clock, LayoutGrid, TableIcon } from 'lucide-react'
 import { getCourseStatusBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
+import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
+import { toast } from 'sonner'
 
 type ViewMode = 'table' | 'card'
 
-export default function LessonManagement({ courseIdSelected }: { courseIdSelected?: number }) {
+export default function LessonManagement({
+  courseIdSelected,
+  refetch
+}: {
+  courseIdSelected?: number
+  refetch?: () => void
+}) {
   const locale = useLocale()
   const router = useRouter()
+  const { courseId } = useParams()
   const columns = useGetLessonAction()
 
   const t = useTranslations('Admin.course_details')
@@ -57,16 +66,32 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
   }
 
   useEffect(() => {
-    dispatch(setPageSize(10))
+    if (courseId) {
+      dispatch(setPageSize(50))
+    } else dispatch(setPageSize(10))
   }, [dispatch])
 
   const { data } = useSearchLessonQuery(queryParams)
+  const [updateCourseLessonOrder] = useUpdateLessonOrderMutation()
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
+
+  const handleSaveOrder = async (orderedLessonIds: number[]) => {
+    try {
+      await updateCourseLessonOrder({
+        id: Number(courseId),
+        orderedLessonIds
+      }).unwrap()
+      toast.success('Lesson order saved successfully')
+    } catch (e) {
+      toast.error('Failed to save lesson order')
+    }
+  }
+
   const handleCreate = () => {
     router.push(`/${locale}/admin/lesson/create?courseId=${courseIdSelected}`)
   }
@@ -101,7 +126,6 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
       </div>
 
       <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
-        {/* TABLE VIEW */}
         <TabsContent value='table'>
           <DataTable
             data={rows}
@@ -110,6 +134,12 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
             pagingData={data}
             pagingParams={queryParams}
             handlePageChange={handlePageChange}
+            enableDnd
+            onReorder={(newData) => {
+              const orderedLessonIds = newData.map((item) => item.id)
+              handleSaveOrder(orderedLessonIds)
+              if (refetch) refetch()
+            }}
             className='mt-5'
           />
         </TabsContent>
@@ -117,7 +147,7 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
         {/* CARD VIEW */}
         <TabsContent value='card'>
           <div className='px-2'>
-            <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
+            <div className='grid grid-cols-1 justify-items-center-safe gap-y-10 py-6 sm:grid-cols-2 xl:grid-cols-4'>
               {rows.map((lesson: Lesson) => (
                 <Link key={lesson.id} href={`/${locale}/admin/lesson/${lesson.id}/pacing-guide`} className='w-full'>
                   <CardLayout
@@ -135,8 +165,18 @@ export default function LessonManagement({ courseIdSelected }: { courseIdSelecte
                     </div>
 
                     <div className='mt-auto flex flex-wrap items-center gap-2'>
-                      {lesson.ageRangeLabel && <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>}
-                      {lesson.duration > 0 && <Badge className={`bg-red-300`}>{formatDuration(lesson.duration)}</Badge>}
+                      {lesson.ageRangeLabel && (
+                        <Badge className='bg-sky-custom-300'>
+                          <span className='mr-0.5'> {t('card.age')}</span>
+                          {lesson.ageRangeLabel}
+                        </Badge>
+                      )}
+                      {lesson.duration > 0 && (
+                        <Badge className={`bg-red-300`}>
+                          <Clock className='mr-0.5' />
+                          {formatDuration(lesson.duration)}
+                        </Badge>
+                      )}
                     </div>
                   </CardLayout>
                 </Link>
