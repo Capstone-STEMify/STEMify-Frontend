@@ -26,6 +26,10 @@
     "ageRangeLabel": "Nhãn độ tuổi",
     "minAge": "Tuổi tối thiểu",
     "maxAge": "Tuổi tối đa",
+    "PLO": {
+      "name": "Tên",
+      "description": "Mô tả"
+    },
     "paging": {
       "previous": "Trước",
       "next": "Sau",

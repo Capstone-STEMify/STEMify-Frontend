@@ -16,7 +16,7 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
   const { data: curriculum, error, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId))
 
   return (
-    <div className='mx-auto max-w-6xl px-4 py-12'>
+    <div className='mx-auto max-w-5xl px-4 py-12'>
       <BackButton />
       <div className='mt-5 grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
         {/* Content Section */}
