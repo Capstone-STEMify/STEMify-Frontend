@@ -1,14 +1,10 @@
 'use client'
 
-import BackButton from '@/components/shared/button/BackButton'
 import { SCard } from '@/components/shared/card/SCard'
 import { useAppForm } from '@/components/shared/form/items'
 import { useTranslations } from 'next-intl'
 import { useRef } from 'react'
 import z from 'zod'
-import LearningOutcomeTable from '../../learning-outcome/components/list/LearningOutcomeTable'
-import { Separator } from '@/components/shadcn/separator'
-import CourseManagement from '../../course/components/table/CourseManagement'
 
 const curriculumFormSchema = z.object({
   code: z.string().min(3, 'Code must be at least 3 characters long'),
@@ -38,7 +34,9 @@ interface UpsertCurriculumProps {
 }
 
 export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: UpsertCurriculumProps) {
-  const t = useTranslations('Curriculum')
+  // Translations
+  const t = useTranslations('curriculum')
+  const tBtn = useTranslations('button')
   const imageFieldRef = useRef<any>(null)
   const gridCols = inModal ? 'grid-cols-1' : 'sm:grid-cols-1 lg:grid-cols-3'
 
@@ -60,40 +58,46 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
           <div className='space-y-6 lg:col-span-2'>
             <SCard
               className='gap-3'
-              title={t('code.label')}
-              description={t('code.note')}
+              title={t('form.fields.code.label')}
+              description={t('form.fields.code.note')}
               content={
                 <form.AppField
                   name='code'
                   children={(field) => (
-                    <field.TextField placeholder={t('code.placeholder')} className='rounded-lg border-gray-300' />
+                    <field.TextField
+                      placeholder={t('form.fields.code.placeholder')}
+                      className='rounded-lg border-gray-300'
+                    />
                   )}
                 />
               }
             />
             <SCard
               className='gap-3'
-              title={t('title.label')}
-              description={t('title.note')}
+              title={t('form.fields.name.label')}
+              description={t('form.fields.name.note')}
               content={
                 <form.AppField
                   name='title'
                   children={(field) => (
-                    <field.TextField placeholder={t('title.placeholder')} className='rounded-lg border-gray-300' />
+                    <field.TextField
+                      placeholder={t('form.fields.name.placeholder')}
+                      className='rounded-lg border-gray-300'
+                    />
                   )}
                 />
               }
             />
             <SCard
               className='gap-3'
-              title={t('description.label')}
-              description={t('description.note')}
+              title={t('form.fields.description.label')}
+              description={t('form.fields.description.note')}
               content={
                 <form.AppField
                   name='description'
                   children={(field) => (
                     <field.TextAreaField
-                      placeholder={t('description.placeholder')}
+                      placeholder={t('form.fields.description.placeholder')}
                       className='h-30 rounded-lg border-gray-300'
                     />
                   )}
@@ -111,7 +115,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
             />
 
             <form.AppForm>
-              <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>{t('btn')}</form.SubmitButton>
+              <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>{tBtn('save')}</form.SubmitButton>
             </form.AppForm>
           </div>
         </div>

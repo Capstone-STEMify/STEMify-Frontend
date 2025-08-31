@@ -17,7 +17,7 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
 
 export default function CurriculumList() {
-  const t = useTranslations('Curriculum')
+  const t = useTranslations('curriculum')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { openModal } = useModal()

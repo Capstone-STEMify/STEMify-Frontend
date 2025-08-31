@@ -1,0 +1,52 @@
+{
+  "curriculum": {
+    "list": {
+      "title": "Danh Sách Khung Chương Trình",
+      "placeholder": {
+        "search": "Tìm kiếm theo mã hoặc tiêu đề..."
+      },
+      "noData": "Không tìm thấy khung chương trình nào.",
+      "noDataDetail": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm khung chương trình phù hợp.",
+      "loading": "Đang tải khung chương trình...",
+      "error": "Đã xảy ra lỗi trong quá trình lấy khung chương trình. Vui lòng thử lại."
+    },
+    "details": {
+      "title": "Chi Tiết Khung Chương Trình"
+    },
+
+    "form": {
+      "title": {
+        "create": "Tạo Khung Chương Trình",
+        "update": "Cập Nhật Khung Chương Trình"
+      },
+      "fields": {
+        "name": {
+          "label": "Tên",
+          "note": "Tên cho khung chương trình",
+          "placeholder": "ví dụ: Mùa Hè Vui Vẻ"
+        },
+        "description": {
+          "label": "Mô Tả",
+          "note": "Mô tả cho khung chương trình",
+          "placeholder": "ví dụ: Khung chương trình này bao gồm các kỹ năng tư duy phản biện và sáng tạo cho trẻ em"
+        },
+        "code": {
+          "label": "Mã",
+          "note": "Mã định danh duy nhất cho khung chương trình",
+          "placeholder": "ví dụ: SU001"
+        }
+      },
+
+      "successMessage": {
+        "create": "Tạo khung chương trình thành công!",
+        "update": "Cập nhật khung chương trình thành công!",
+        "delete": "Xóa khung chương trình thành công!"
+      },
+      "errorMessage": {
+        "create": "Đã xảy ra lỗi trong quá trình tạo khung chương trình. Vui lòng thử lại.",
+        "update": "Đã xảy ra lỗi trong quá trình cập nhật khung chương trình. Vui lòng thử lại.",
+        "delete": "Đã xảy ra lỗi trong quá trình xóa khung chương trình. Vui lòng thử lại."
+      }
+    }
+  }
+}

@@ -15,6 +15,7 @@ import { useAppDispatch } from '@/hooks/redux-hooks'
 
 export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: number }) {
   const t = useTranslations('LearningOutcome')
+  const tc = useTranslations('common')
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const queryParams: LearningOutcomeQueryParams = {

@@ -1,0 +1,52 @@
+{
+  "curriculum": {
+    "list": {
+      "title": "Curriculums List",
+      "placeholder": {
+        "search": "Search by code or title..."
+      },
+      "noData": "No curriculums found.",
+      "noDataDetail": "Try changing the search term or filters to find relevant curriculums.",
+      "loading": "Loading curriculums...",
+      "error": "An error occurred while fetching curriculums. Please try again."
+    },
+    "details": {
+      "title": "Curriculum Details"
+    },
+
+    "form": {
+      "title": {
+        "create": "Create Curriculum",
+        "update": "Update Curriculum"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "note": "Name for the curriculum",
+          "placeholder": "e.g: Fun Summer"
+        },
+        "description": {
+          "label": "Description",
+          "note": "Description for the curriculum",
+          "placeholder": "e.g: This curriculum includes critical thinking and creativity skills for children"
+        },
+        "code": {
+          "label": "Code",
+          "note": "Unique identifier for the curriculum",
+          "placeholder": "e.g SU001"
+        }
+      },
+
+      "successMessage": {
+        "create": "Curriculum created successfully!",
+        "update": "Curriculum updated successfully!",
+        "delete": "Curriculum deleted successfully!"
+      },
+      "errorMessage": {
+        "create": "An error occurred while creating the curriculum. Please try again.",
+        "update": "An error occurred while updating the curriculum. Please try again.",
+        "delete": "An error occurred while deleting the curriculum. Please try again."
+      }
+    }
+  }
+}
