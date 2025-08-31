@@ -40,7 +40,7 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
   }
 
   return (
-    <div className='mx-auto my-10 w-full max-w-7xl space-y-4 rounded-lg border bg-blue-50 p-4 shadow-sm'>
+    <div className='mx-auto my-10 w-full max-w-7xl space-y-4 rounded-lg border p-4 shadow-sm'>
       {/* Header */}
       <div className='flex items-center justify-between'>
         <div className='flex items-center space-x-2 text-lg font-semibold'>
