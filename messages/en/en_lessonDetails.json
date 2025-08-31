@@ -25,6 +25,11 @@
       "share": "Share",
       "learning": "Start Learning",
       "start_loading": "Starting..."
+    },
+    "requestSignIn": {
+      "title": "YOU ARE NOT LOGGED IN",
+      "description": "Please login or sign up for free to get access to this content.",
+      "button": "Sign In"
     }
   }
 }
