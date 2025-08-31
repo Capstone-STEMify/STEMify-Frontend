@@ -18,6 +18,7 @@ import LessonDetailModal from '@/features/resource/lesson/components/detail/Less
 import UpsertUserModal from '@/components/shared/modals/UpsertUserModal'
 import UpsertLearningOutcomeModal from '@/features/resource/learning-outcome/components/upsert/UpsertLearningOutcomeModal'
 import CourseListModal from '@/features/resource/course/components/CourseListModal'
+import UpsertCurriculumModal from '@/features/resource/curriculum/components/UpsertCurriculumModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -60,6 +61,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertUser' && <UpsertUserModal {...modalProps} />}
       {modalType === 'upsertLearningOutcome' && <UpsertLearningOutcomeModal {...modalProps} />}
       {modalType === 'courseList' && <CourseListModal {...modalProps} />}
+      {modalType === 'upsertCurriculum' && <UpsertCurriculumModal {...modalProps} />} 
       {/* Assuming UpsertSectionModal is used for courses as well */}
     </ModalContext.Provider>
   )

@@ -86,7 +86,8 @@ export default function CurriculumList() {
               <div>
                 <p className='text-amber-custom-400 text-xs font-semibold'>{curriculum.code}</p>
                 <h3 className='text-md font-semibold text-gray-700'>{curriculum.title}</h3>
-                <p className='mt-3 line-clamp-3 text-sm text-gray-500'>{curriculum.description}</p>
+                <p className='my-2 line-clamp-3 text-sm text-gray-500'>{curriculum.description}</p>
+                <Badge className='bg-rose-300'>10 courses</Badge>
               </div>
             </CardLayout>
           </Link>

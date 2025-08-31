@@ -25,6 +25,7 @@ export type ModalType =
   | 'upsertUser'
   | 'upsertLearningOutcome'
   | 'courseList'
+  | 'upsertCurriculum'
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void

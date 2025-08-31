@@ -31,10 +31,16 @@ const defaultCurriculum: CurriculumForm = {
   imageUrl: null,
   imagePreviewUrl: ''
 }
+interface UpsertCurriculumProps {
+  curriculumId?: number
+  onSuccess?: () => void
+  inModal?: boolean
+}
 
-export default function UpsertCurriculum({ curriculumId }: { curriculumId?: number }) {
+export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: UpsertCurriculumProps) {
   const t = useTranslations('Curriculum')
   const imageFieldRef = useRef<any>(null)
+  const gridCols = inModal ? 'grid-cols-1' : 'sm:grid-cols-1 lg:grid-cols-3'
 
   const form = useAppForm({
     defaultValues: defaultCurriculum,
@@ -50,7 +56,7 @@ export default function UpsertCurriculum({ curriculumId }: { curriculumId?: numb
           form.handleSubmit()
         }}
       >
-        <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
+        <div className={`grid gap-8 ${gridCols}`}>
           <div className='space-y-6 lg:col-span-2'>
             <SCard
               className='gap-3'

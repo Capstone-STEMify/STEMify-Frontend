@@ -31,7 +31,7 @@ export default function CurriculumAction() {
       <Button
         className='bg-amber-custom-400 cursor-pointer'
         onClick={() => {
-          //   openModal('createCurriculum')
+            openModal('upsertCurriculum')
         }}
       >
         <Plus className='mr-1 h-4 w-4' />
