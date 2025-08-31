@@ -5,6 +5,7 @@ import CourseManagement from '@/features/resource/course/components/table/Course
 import CurriculumInformationSection from '@/features/resource/curriculum/components/CurriculumInformationSection'
 import UpsertCurriculum from '@/features/resource/curriculum/components/UpsertCurriculum'
 import LearningOutcomeTable from '@/features/resource/learning-outcome/components/list/LearningOutcomeTable'
+import { useModal } from '@/providers/ModalProvider'
 import { Separator } from '@radix-ui/react-select'
 import { ChevronLeft } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -16,6 +17,7 @@ export default function CurriculumDetailPage() {
   const t = useTranslations('Curriculum')
   const [isEditing, setIsEditing] = useState(false)
   const { curriculumId } = useParams()
+  const { openModal } = useModal()
 
   const handleEdit = () => {
     setIsEditing(true)
@@ -41,6 +43,13 @@ export default function CurriculumDetailPage() {
           <LearningOutcomeTable curriculumId={Number(curriculumId)} />
           <hr className='my-10' />
           <h2 className='text-center text-3xl'>{t('courseList.title')}</h2>
+          <Button
+            onClick={() => {
+              openModal('courseList', { id: Number(curriculumId) })
+            }}
+          >
+            Add Course
+          </Button>
           <CourseManagement curriculumId={Number(curriculumId)} />
         </>
       )}
