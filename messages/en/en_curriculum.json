@@ -8,10 +8,12 @@
       "noData": "No curriculums found.",
       "noDataDetail": "Try changing the search term or filters to find relevant curriculums.",
       "loading": "Loading curriculums...",
-      "error": "An error occurred while fetching curriculums. Please try again."
+      "error": "An error occurred while fetching curriculums. Please try again.",
+      "courseListTitle": "Courses List"
     },
     "details": {
-      "title": "Curriculum Details"
+      "title": "Curriculum Details",
+      "addCourse": "Add Course"
     },
 
     "form": {

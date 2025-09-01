@@ -15,7 +15,7 @@ import { useAppDispatch } from '@/hooks/redux-hooks'
 
 export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: number }) {
   const t = useTranslations('LearningOutcome')
-  const tc = useTranslations('common')
+  const tBtn = useTranslations('button')
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const queryParams: LearningOutcomeQueryParams = {
@@ -48,12 +48,12 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
           <label htmlFor='select-backlog' className='cursor-default'>
             {t('PLO.title')}
           </label>
-          <span className='rounded bg-green-200 px-2 text-sm'>0</span>
+          <span className='rounded bg-green-200 px-2 text-sm'>{learningOutcomes?.data.totalCount}</span>
         </div>
         {/* Create learning outcome */}
         <Button size='sm' className='bg-amber-400 text-sm' onClick={handleCreate}>
           <Plus className='mr-1 h-4 w-4' />
-          {t('add_btn')}
+          {tBtn('create')}
         </Button>
       </div>
 
