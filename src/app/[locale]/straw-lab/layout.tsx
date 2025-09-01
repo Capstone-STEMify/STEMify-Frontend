@@ -12,9 +12,7 @@ export default async function CodeLab({
 }>) {
   return (
     <>
-      <ModalProvider>
-        <div className='bg-light'>{children}</div>
-      </ModalProvider>
+      <div className='bg-light'>{children}</div>
     </>
   )
 }
