@@ -1,7 +1,8 @@
 import { useFieldContext } from '@/components/shared/form/items'
 import { FieldErrors } from '@/components/shared/form/items/field-errors'
-import TiptapEditor from '@/components/tiptap/TiptapEditor'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic'
+const TiptapEditor = dynamic(() => import('@/components/tiptap/TiptapEditor'), { ssr: false })
 
 export const MarkdownEditorField = () => {
   const t = useTranslations('sectionManagement')
