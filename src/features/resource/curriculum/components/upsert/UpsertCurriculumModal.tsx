@@ -1,8 +1,8 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/shadcn/dialog'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
-import UpsertCurriculum from './UpsertCurriculum'
 import { useTranslations } from 'next-intl'
+import UpsertCurriculum from './UpsertCurriculum'
 interface UpsertCurriculumModalProps {
   id?: number
   onConfirm?: () => void

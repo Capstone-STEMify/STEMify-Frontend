@@ -7,14 +7,14 @@ import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
-import { useDeleteCurriculumMutation, useSearchCurriculumQuery } from '../api/curriculumApi'
 import { useAppDispatch } from '@/hooks/redux-hooks'
-import { setPageIndex, setPageSize } from '../slice/curriculumSlice'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { toast } from 'sonner'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
+import { setPageIndex, setPageSize } from '../../slice/curriculumSlice'
+import { useDeleteCurriculumMutation, useSearchCurriculumQuery } from '../../api/curriculumApi'
 
 export default function CurriculumList() {
   const t = useTranslations('curriculum')

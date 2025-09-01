@@ -6,7 +6,7 @@ import { School } from 'lucide-react'
 import { useGetCurriculumByIdQuery } from '../api/curriculumApi'
 import KitInformationSection from './KitInformationSection'
 import BackButton from '@/components/shared/button/BackButton'
-import CurriculumCourseSection from './CurriculumCourseSection'
+import CurriculumCourseSection from './detail/CurriculumCourseSection'
 
 type CurriculumDetailProps = {
   curriculumId?: number

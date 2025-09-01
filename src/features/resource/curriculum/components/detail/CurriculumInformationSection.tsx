@@ -2,7 +2,6 @@ import { Button } from '@/components/shadcn/button'
 import { School, SquarePen, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
-import { CurriculumStatus } from '../types/curriculum.type'
 import { Badge } from '@/components/shadcn/badge'
 import { useTranslations } from 'next-intl'
 import {
@@ -10,6 +9,7 @@ import {
   useGetCurriculumByIdQuery
 } from '@/features/resource/curriculum/api/curriculumApi'
 import { useParams } from 'next/navigation'
+import { CurriculumStatus } from '../../types/curriculum.type'
 type Props = {
   onEdit: () => void
 }

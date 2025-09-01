@@ -1,14 +1,14 @@
 'use client'
 import { Button } from '@/components/shadcn/button'
 import BackButton from '@/components/shared/button/BackButton'
-import CurriculumInformationSection from '@/features/resource/curriculum/components/CurriculumInformationSection'
-import AdminCurriculumCourseList from '@/features/resource/curriculum/components/manage/AdminCurriculumCourseList'
-import UpsertCurriculum from '@/features/resource/curriculum/components/UpsertCurriculum'
+import AdminCurriculumCourseList from '@/features/resource/curriculum/components/list/AdminCurriculumCourseList'
+import UpsertCurriculum from '@/features/resource/curriculum/components/upsert/UpsertCurriculum'
 import LearningOutcomeTable from '@/features/resource/learning-outcome/components/list/LearningOutcomeTable'
 import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
+import CurriculumInformationSection from './CurriculumInformationSection'
 
 export default function AdminCurriculumDetail() {
   const t = useTranslations('curriculum')

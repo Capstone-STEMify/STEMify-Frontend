@@ -4,9 +4,9 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { Plus, Search } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import React from 'react'
-import { setSearchTerm } from '../slice/curriculumSlice'
 import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
+import { setSearchTerm } from '../../slice/curriculumSlice'
 
 export default function CurriculumAction() {
   // Translations
