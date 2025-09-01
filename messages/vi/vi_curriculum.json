@@ -48,6 +48,10 @@
         "create": "Đã xảy ra lỗi trong quá trình tạo khung chương trình. Vui lòng thử lại.",
         "update": "Đã xảy ra lỗi trong quá trình cập nhật khung chương trình. Vui lòng thử lại.",
         "delete": "Đã xảy ra lỗi trong quá trình xóa khung chương trình. Vui lòng thử lại."
+      },
+      "confirmMessage": {
+        "delete": "Bạn có chắc chắn muốn xóa khung chương trình này không?",
+        "discard": "Bạn có chắc chắn muốn hủy bỏ những thay đổi này không?"
       }
     }
   }

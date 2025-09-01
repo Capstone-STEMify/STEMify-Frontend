@@ -48,6 +48,10 @@
         "create": "An error occurred while creating the curriculum. Please try again.",
         "update": "An error occurred while updating the curriculum. Please try again.",
         "delete": "An error occurred while deleting the curriculum. Please try again."
+      },
+      "confirmMessage": {
+        "delete": "Are you sure you want to delete this curriculum?",
+        "discard": "Are you sure you want to discard your changes?"
       }
     }
   }

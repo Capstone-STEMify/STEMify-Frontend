@@ -54,19 +54,19 @@ export default function CurriculumList() {
     e.preventDefault()
     try {
       openModal('confirm', {
-        message: 'Are you sure you want to delete this curriculum?',
+        message: t('form.confirmMessage.delete'),
         onConfirm: async () => {
           await deleteCurriculum(curriculumId).unwrap()
-          toast.success('Deleted successfully')
+          toast.success(t('form.successMessage.delete'))
         }
       })
     } catch (error) {
-      toast.error('Failed to delete curriculum')
+      toast.error(t('form.errorMessage.delete'))
     }
   }
 
   if (!curriculumData || curriculumData.data.items.length === 0) {
-    return <SEmpty title={t('list.no_data')} description={t('list.no_data_detail')} />
+    return <SEmpty title={t('list.noData')} description={t('list.noDataDetail')} />
   }
 
   return (
@@ -87,7 +87,7 @@ export default function CurriculumList() {
                 <p className='text-amber-custom-400 text-xs font-semibold'>{curriculum.code}</p>
                 <h3 className='text-md font-semibold text-gray-700'>{curriculum.title}</h3>
                 <p className='my-2 line-clamp-3 text-sm text-gray-500'>{curriculum.description}</p>
-                <Badge className='bg-rose-300'>10 courses</Badge>
+                <Badge className='bg-rose-300'>{curriculum.courseCount || 0} courses</Badge>
               </div>
             </CardLayout>
           </Link>
