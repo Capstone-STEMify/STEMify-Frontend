@@ -19,28 +19,14 @@ import { useRouter } from 'next/navigation'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
-const curriculumFormSchema = z.object({
-  code: z.string().min(3, 'Code must be at least 3 characters long'),
-  title: z.string().min(3, 'Title must be at least 3 characters long'),
-  description: z.string().min(3, 'Description must be at least 3 characters long'),
-  imageUrl: z
-    .union([z.instanceof(File), z.null()])
-    .refine((file) => file === null || file.size > 0, 'Cover image is required')
-    .refine((file) => file === null || file.size < 5 * 1024 * 1024, 'Max 5MB allowed')
-    .optional(),
-  imagePreviewUrl: z.string().optional()
-})
-
-type CurriculumForm = z.infer<typeof curriculumFormSchema>
-
-const defaultCurriculum: CurriculumForm = {
+const defaultCurriculum: CurriculumFormData = {
   code: '',
   title: '',
   description: '',
-  imageUrl: null,
+  imageUrl: undefined,
   imagePreviewUrl: ''
 }
-async function CreateCurriculumJsonPayload(data: CurriculumForm, userId: string) {
+async function CreateCurriculumJsonPayload(data: CurriculumFormData, userId: string) {
   let imageBase64: string | null = null
 
   if (data.imageUrl && typeof data.imageUrl !== 'string') {
