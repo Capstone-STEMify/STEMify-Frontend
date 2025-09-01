@@ -31,6 +31,10 @@ export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
       accessorKey: 'name',
       header: t('name')
     },
+    {
+      accessorKey: 'description',
+      header: t('description')
+    },
     createActionsColumnFromItems<LearningOutcome>([
       {
         label: t('edit'),
