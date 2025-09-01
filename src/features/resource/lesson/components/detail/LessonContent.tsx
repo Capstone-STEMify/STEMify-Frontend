@@ -42,7 +42,7 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
   const { data: content } = useSearchContentQuery(
     { sectionId },
     {
-      skip: !sectionId || !token
+      skip: !sectionId
     }
   )
 
@@ -101,7 +101,7 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
                 <h3 className='mb-2 text-lg font-semibold'>{t('requestSignIn.title')}</h3>
                 <p className='text-sm'>{t('requestSignIn.description')}</p>
               </div>
-              <Button 
+              <Button
                 className='bg-white text-sky-500 hover:bg-gray-50'
                 onClick={() => signIn('oidc', { callbackUrl: '/', prompt: 'login' })}
               >
