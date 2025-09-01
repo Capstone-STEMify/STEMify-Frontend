@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 export function useGetAgeRangeAction(): ColumnDef<AgeRange>[] {
   const { openModal } = useModal()
   const [deleteAgeRange] = useDeleteAgeRangeMutation()
-  const t = useTranslations('tableHeader')
+  const tc = useTranslations('common')
 
   const handleDelete = async (id: number) => {
     try {
@@ -25,29 +25,29 @@ export function useGetAgeRangeAction(): ColumnDef<AgeRange>[] {
     createSelectColumn<AgeRange>(),
     {
       accessorKey: 'id',
-      header: t('id')
+      header: tc('tableHeader.id')
     },
     {
       accessorKey: 'ageRangeLabel',
-      header: t('ageRangeLabel')
+      header: tc('tableHeader.ageRangeLabel')
     },
     {
       accessorKey: 'minAge',
-      header: t('minAge')
+      header: tc('tableHeader.minAge')
     },
     {
       accessorKey: 'maxAge',
-      header: t('maxAge')
+      header: tc('tableHeader.maxAge')
     },
     createActionsColumnFromItems<AgeRange>([
       {
-        label: t('edit'),
+        label: tc('button.update'),
         onClick: ({ original }) => {
           openModal('upsertAgeRange', { id: original.id })
         }
       },
       {
-        label: t('delete'),
+        label: tc('button.delete'),
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {

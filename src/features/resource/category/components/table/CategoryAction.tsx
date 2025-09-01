@@ -7,6 +7,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import z from 'zod'
+import { use } from 'matter'
 
 export const categoryTableSchema = z.object({
   id: z.number(),
@@ -18,7 +19,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
   const router = useRouter()
   const { openModal } = useModal()
   const [deleteCategory] = useDeleteCategoryMutation() // Hook for deletion
-  const t = useTranslations('tableHeader')
+  const tc = useTranslations('common')
 
   const handleDelete = async (id: number) => {
     try {
@@ -33,23 +34,23 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
     createSelectColumn<Category>(),
     {
       accessorKey: 'id',
-      header: t('id'),
+      header: tc('tableHeader.id'),
       cell: ({ row }) => row.getValue('id')
     },
     {
       accessorKey: 'name',
-      header: t('name')
+      header: tc('tableHeader.name')
     },
     createActionsColumnFromItems<Category>([
       {
-        label: t('edit'),
+        label: tc('button.update'),
         onClick: ({ original }) => {
           // Open the upsert modal in "edit" mode
           openModal('upsertCategory', { id: original.id })
         }
       },
       {
-        label: t('delete'),
+        label: tc('button.delete'),
         danger: true,
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion

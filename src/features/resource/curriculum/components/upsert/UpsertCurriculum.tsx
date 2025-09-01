@@ -82,7 +82,7 @@ interface UpsertCurriculumProps {
 export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: UpsertCurriculumProps) {
   // Translations
   const t = useTranslations('curriculum')
-  const tBtn = useTranslations('button')
+  const tc = useTranslations('common')
   const imageFieldRef = useRef<any>(null)
   const gridCols = inModal ? 'grid-cols-1' : 'sm:grid-cols-1 lg:grid-cols-3'
   const initialCurriculumDataRef = useRef<CurriculumFormData | null>(null)
@@ -211,7 +211,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
 
             <form.AppForm>
               <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 w-full rounded-full'>
-                {tBtn('save')}
+                {tc('button.save')}
               </form.SubmitButton>
             </form.AppForm>
           </div>

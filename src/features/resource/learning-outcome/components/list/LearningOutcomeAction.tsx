@@ -10,7 +10,7 @@ import { LearningOutcome } from '../../types/learningOutcome.type'
 export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
   const { openModal } = useModal()
   const [deleteLearningOutcome] = useDeleteLearningOutcomeMutation()
-  const t = useTranslations('tableHeader')
+  const tc = useTranslations('common')
 
   const handleDelete = async (id: number) => {
     try {
@@ -25,25 +25,25 @@ export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
     createSelectColumn<LearningOutcome>(),
     {
       accessorKey: 'id',
-      header: t('id')
+      header: tc('tableHeader.id')
     },
     {
       accessorKey: 'name',
-      header: t('name')
+      header: tc('tableHeader.name')
     },
     {
       accessorKey: 'description',
-      header: t('description')
+      header: tc('tableHeader.description')
     },
     createActionsColumnFromItems<LearningOutcome>([
       {
-        label: t('edit'),
+        label: tc('button.update'),
         onClick: ({ original }) => {
           openModal('upsertLearningOutcome', { id: original.id })
         }
       },
       {
-        label: t('delete'),
+        label: tc('button.delete'),
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {

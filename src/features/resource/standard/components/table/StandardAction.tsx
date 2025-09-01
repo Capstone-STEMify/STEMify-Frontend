@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 export function useGetStandardAction(): ColumnDef<Standard>[] {
   const { openModal } = useModal()
   const [deleteStandard] = useDeleteStandardMutation()
-  const t = useTranslations('tableHeader')
+  const tc = useTranslations('common')
 
   const handleDelete = async (id: number) => {
     try {
@@ -25,15 +25,15 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
     createSelectColumn<Standard>(),
     {
       accessorKey: 'id',
-      header: t('id')
+      header: tc('tableHeader.id')
     },
     {
       accessorKey: 'standardName',
-      header: t('standardName')
+      header: tc('tableHeader.name')
     },
     {
       accessorKey: 'description',
-      header: t('description'),
+      header: tc('tableHeader.description'),
       cell: ({ row }) => {
         return (
           <div className='w-180 truncate' title={String(row.getValue('description'))}>
@@ -44,13 +44,13 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
     },
     createActionsColumnFromItems<Standard>([
       {
-        label: t('edit'),
+        label: tc('button.update'),
         onClick: ({ original }) => {
           openModal('upsertStandard', { id: original.id })
         }
       },
       {
-        label: t('delete'),
+        label: tc('button.delete'),
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {

@@ -51,7 +51,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
   const { openModal } = useModal()
   const [deleteLesson] = useDeleteLessonMutation()
   const [updateLessonStatus] = useUpdateLessonMutation()
-  const t = useTranslations('tableHeader')
+  const tc = useTranslations('common')
   const { courseId } = useParams()
   const handleDelete = async (id: number) => {
     try {
@@ -96,12 +96,12 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     createSelectColumn<Lesson>(),
     {
       accessorKey: 'id',
-      header: t('id'),
+      header: tc('tableHeader.id'),
       cell: ({ row }) => row.getValue('id')
     },
     {
       accessorKey: 'imageUrl',
-      header: () => <div>{t('image')}</div>,
+      header: () => <div>{tc('tableHeader.image')}</div>,
       cell: ({ row }) => {
         const src = row.getValue<string>('imageUrl')
         return (
@@ -109,7 +109,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
             {src ? (
               <Image src={src} alt='preview' className='h-full w-full object-cover' width={56} height={56} />
             ) : (
-              <div className='text-muted flex h-full w-full items-center justify-center text-xs'>{t('noImage')}</div>
+              <div className='text-muted flex h-full w-full items-center justify-center text-xs'>{tc('noImage')}</div>
             )}
           </div>
         )
@@ -117,7 +117,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     },
     {
       accessorKey: 'title',
-      header: () => <div>{t('title')}</div>,
+      header: () => <div>{tc('tableHeader.title')}</div>,
       cell: ({ row }) => {
         const lessonId = row.original.id
         return (
@@ -133,7 +133,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     },
     {
       accessorKey: 'status',
-      header: () => <div>{t('status')}</div>,
+      header: () => <div>{tc('tableHeader.status')}</div>,
       cell: ({ row }) => {
         const value = row.getValue<LessonStatus>('status')
         return (
@@ -145,7 +145,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     },
     {
       accessorKey: 'createdByUserName',
-      header: () => <div>{t('createdBy')}</div>,
+      header: () => <div>{tc('tableHeader.createdBy')}</div>,
       cell: ({ row }) => {
         const value = row.getValue<string>('createdByUserName')
         const display = value?.trim() ? value : 'STEMify Staff'
@@ -154,7 +154,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     },
     {
       accessorKey: 'createdDate',
-      header: () => <div>{t('createdDate')}</div>,
+      header: () => <div>{tc('tableHeader.createdDate')}</div>,
       cell: ({ row }) => {
         const raw = row.getValue<string>('createdDate')
         const date = raw ? new Date(raw).toLocaleDateString('vi-VN') : 'N/A'
@@ -163,13 +163,13 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     },
     createActionsColumnFromItems<Lesson>([
       {
-        label: t('edit'),
+        label: tc('button.update'),
         onClick: ({ original }) => {
           router.push(`/${locale}/admin/lesson/update/${original.id}`)
         }
       },
       {
-        label: t('delete'),
+        label: tc('button.delete'),
         danger: true,
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
@@ -181,12 +181,12 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
       },
       {
         separatorBefore: true,
-        label: t('approve'),
+        label: tc('button.approve'),
         hidden: ({ original }) => original.status !== LessonStatus.PENDING && original.status !== LessonStatus.DRAFT,
         onClick: ({ original }) => handleStatusUpdate(original.id, original.title, LessonStatus.PUBLISHED)
       },
       {
-        label: t('reject'),
+        label: tc('button.reject'),
         danger: true,
         hidden: ({ original }) => original.status !== LessonStatus.PENDING && original.status !== LessonStatus.DRAFT,
         onClick: ({ original }) => handleStatusUpdate(original.id, original.title, LessonStatus.REJECTED)

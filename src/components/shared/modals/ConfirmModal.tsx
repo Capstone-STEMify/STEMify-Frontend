@@ -11,7 +11,6 @@ interface ConfirmModalProps {
 }
 
 export default function ConfirmModal({ message, onConfirm }: ConfirmModalProps) {
-  const tb = useTranslations('button')
   const tc = useTranslations('common')
   const { closeModal } = useModal()
 
@@ -29,10 +28,10 @@ export default function ConfirmModal({ message, onConfirm }: ConfirmModalProps) 
         <p className='text-muted-foreground text-sm'>{message}</p>
         <DialogFooter className='flex justify-end gap-2 pt-4'>
           <Button variant='outline' onClick={closeModal}>
-            {tb('cancel')}
+            {tc('button.cancel')}
           </Button>
           <Button variant='destructive' onClick={handleConfirm}>
-            {tb('confirm')}
+            {tc('button.confirm')}
           </Button>
         </DialogFooter>
       </DialogContent>

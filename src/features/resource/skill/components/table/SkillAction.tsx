@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 export function useGetSkillAction(): ColumnDef<Skill>[] {
   const { openModal } = useModal()
   const [deleteSkill] = useDeleteSkillMutation()
-  const t = useTranslations('tableHeader')
+  const tc = useTranslations('common')
 
   const handleDelete = async (id: number) => {
     try {
@@ -25,21 +25,21 @@ export function useGetSkillAction(): ColumnDef<Skill>[] {
     createSelectColumn<Skill>(),
     {
       accessorKey: 'id',
-      header: t('id')
+      header: tc('tableHeader.id')
     },
     {
       accessorKey: 'skillName',
-      header: t('skillName')
+      header: tc('tableHeader.name')
     },
     createActionsColumnFromItems<Skill>([
       {
-        label: t('edit'),
+        label: tc('button.update'),
         onClick: ({ original }) => {
           openModal('upsertSkill', { id: original.id })
         }
       },
       {
-        label: t('delete'),
+        label: tc('button.delete'),
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {

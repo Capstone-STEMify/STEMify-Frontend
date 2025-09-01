@@ -77,7 +77,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   enableDnd,
   onReorder
 }: DataTableProps<TData, TValue>) {
-  const tc = useTranslations('paging')
+  const tc = useTranslations('common')
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -188,8 +188,8 @@ export function DataTable<TData extends { id: string | number }, TValue>({
       <div className='flex items-center justify-between gap-2 py-4'>
         {enableRowSelection && (
           <div className='text-muted-foreground w-full text-sm'>
-            {table.getFilteredSelectedRowModel().rows.length} {tc('of')} {table.getFilteredRowModel().rows.length}{' '}
-            {tc('row')} {tc('select')}.
+            {table.getFilteredSelectedRowModel().rows.length} {tc('paging.of')}{' '}
+            {table.getFilteredRowModel().rows.length} {tc('paging.row')} {tc('paging.select')}.
           </div>
         )}
         {pagingData?.data?.totalPages > 1 && (

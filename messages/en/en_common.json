@@ -1,40 +1,45 @@
 {
   "common": {
-    "confirmationLabel": "Are you sure?"
-  },
-  "button": {
-    "create": "Create New",
-    "update": "Update",
-    "delete": "Delete",
-    "approve": "Approve",
-    "reject": "Reject",
-    "submit": "Submit",
-    "cancel": "Cancel",
-    "save": "Save",
-    "back": "Back",
-    "confirm": "Confirm"
-  },
-  "tableHeader": {
-    "id": "ID",
-    "code": "Code",
-    "name": "Name",
-    "image": "Image",
-    "description": "Description",
-    "status": "Status",
-    "createdBy": "Created By",
-    "createdDate": "Created Date",
-    "actions": "Actions"
-  },
-  "paging": {
-    "previous": "Previous",
-    "next": "Next",
-    "of": "of",
-    "row": "row(s) ",
-    "select": "selected"
-  },
-  "validationMessage": {
-    "required": "This field is required.",
-    "minLength": "This field must be at least {min} characters long.",
-    "maxLength": "This field must be at most {max} characters long."
+    "confirmationLabel": "Are you sure?",
+    "button": {
+      "create": "Create New",
+      "update": "Update",
+      "delete": "Delete",
+      "approve": "Approve",
+      "reject": "Reject",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "back": "Back",
+      "confirm": "Confirm"
+    },
+    "tableHeader": {
+      "id": "ID",
+      "code": "Code",
+      "name": "Name",
+      "image": "Image",
+      "title": "Title",
+      "level": "Level",
+      "description": "Description",
+      "status": "Status",
+      "createdBy": "Created By",
+      "createdDate": "Created Date",
+      "ageRangeLabel": "Age Range Label",
+      "minAge": "Min Age",
+      "maxAge": "Max Age",
+      "actions": "Actions"
+    },
+    "paging": {
+      "previous": "Previous",
+      "next": "Next",
+      "of": "of",
+      "row": "row(s) ",
+      "select": "selected"
+    },
+    "validationMessage": {
+      "required": "This field is required.",
+      "minLength": "This field must be at least {min} characters long.",
+      "maxLength": "This field must be at most {max} characters long."
+    }
   }
 }

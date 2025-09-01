@@ -11,7 +11,7 @@ import { setSearchTerm } from '../../slice/curriculumSlice'
 export default function CurriculumAction() {
   // Translations
   const tList = useTranslations('curriculum.list')
-  const tBtn = useTranslations('button')
+  const tc = useTranslations('common')
   // Modal
   const { openModal } = useModal()
 
@@ -38,7 +38,7 @@ export default function CurriculumAction() {
         }}
       >
         <Plus className='mr-1 h-4 w-4' />
-        {tBtn('create')}
+        {tc('button.create')}
       </Button>
     </div>
   )

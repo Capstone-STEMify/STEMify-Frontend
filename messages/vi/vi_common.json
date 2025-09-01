@@ -1,40 +1,45 @@
 {
   "common": {
-    "confirmationLabel": "Bạn có chắc chắn không?"
-  },
-  "button": {
-    "create": "Tạo Mới",
-    "update": "Cập Nhật",
-    "delete": "Xóa",
-    "approve": "Phê Duyệt",
-    "reject": "Từ Chối",
-    "submit": "Gửi",
-    "cancel": "Hủy",
-    "save": "Lưu",
-    "back": "Quay Lại",
-    "confirm": "Xác Nhận"
-  },
-  "tableHeader": {
-    "id": "ID",
-    "code": "Mã",
-    "name": "Tên",
-    "image": "Ảnh",
-    "description": "Mô Tả",
-    "status": "Trạng Thái",
-    "createdBy": "Người Tạo",
-    "createdDate": "Ngày Tạo",
-    "actions": "Hành Động"
-  },
-  "paging": {
-    "previous": "Trước",
-    "next": "Tiếp Theo",
-    "of": "của",
-    "row": "hàng",
-    "select": "đã chọn"
-  },
-  "validationMessage": {
-    "required": "Trường này là bắt buộc.",
-    "minLength": "Trường này phải có ít nhất {min} ký tự.",
-    "maxLength": "Trường này phải có tối đa {max} ký tự."
+    "confirmationLabel": "Bạn có chắc chắn không?",
+    "button": {
+      "create": "Tạo Mới",
+      "update": "Cập Nhật",
+      "delete": "Xóa",
+      "approve": "Phê Duyệt",
+      "reject": "Từ Chối",
+      "submit": "Gửi",
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "back": "Quay Lại",
+      "confirm": "Xác Nhận"
+    },
+    "tableHeader": {
+      "id": "ID",
+      "code": "Mã",
+      "name": "Tên",
+      "image": "Ảnh",
+      "title": "Tiêu Đề",
+      "level": "Cấp Độ",
+      "description": "Mô Tả",
+      "status": "Trạng Thái",
+      "createdBy": "Người Tạo",
+      "createdDate": "Ngày Tạo",
+      "ageRangeLabel": "Nhóm Tuổi",
+      "minAge": "Tuổi Tối Thiểu",
+      "maxAge": "Tuổi Tối Đa",
+      "actions": "Hành Động"
+    },
+    "paging": {
+      "previous": "Trước",
+      "next": "Sau",
+      "of": "của",
+      "row": "hàng",
+      "select": "đã chọn"
+    },
+    "validationMessage": {
+      "required": "Trường này là bắt buộc.",
+      "minLength": "Trường này phải có ít nhất {min} ký tự.",
+      "maxLength": "Trường này phải có tối đa {max} ký tự."
+    }
   }
 }

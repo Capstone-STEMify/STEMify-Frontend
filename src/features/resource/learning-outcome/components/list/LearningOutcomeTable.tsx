@@ -15,7 +15,7 @@ import { useAppDispatch } from '@/hooks/redux-hooks'
 
 export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: number }) {
   const t = useTranslations('LearningOutcome')
-  const tBtn = useTranslations('button')
+  const tc = useTranslations('common')
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const queryParams: LearningOutcomeQueryParams = {
@@ -53,7 +53,7 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
         {/* Create learning outcome */}
         <Button size='sm' className='bg-amber-400 text-sm' onClick={handleCreate}>
           <Plus className='mr-1 h-4 w-4' />
-          {tBtn('create')}
+          {tc('button.create')}
         </Button>
       </div>
 
