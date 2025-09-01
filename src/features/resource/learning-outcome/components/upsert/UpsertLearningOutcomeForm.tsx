@@ -50,14 +50,14 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
       try {
         if (isEditing) {
           await updateLearningOutcome({ id: id!, body: value }).unwrap()
-          toast.success('Learning outcome updated successfully!')
+          toast.success(t('successMessage.update'))
         } else {
           await createLearningOutcome(value).unwrap()
-          toast.success('Learning outcome created successfully!')
+          toast.success(t('successMessage.create'))
         }
         onSuccess?.()
       } catch (err: any) {
-        toast.error('Failed to submit learning outcome.')
+        toast.error(t('errorMessage'))
         console.error(err)
       }
     }
@@ -85,19 +85,19 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
       }}
       className='space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
+      <h2 className='text-xl font-bold'>{isEditing ? `${t('form.title.update')}` : `${t('form.title.create')}`}</h2>
       <SCard
-        title={t('PLO.name')}
+        title={t('form.fields.PLOName.label')}
         content={
-          <form.AppField name='name' children={(field) => <field.TextAreaField placeholder={t('placeholder')} />} />
+          <form.AppField name='name' children={(field) => <field.TextAreaField placeholder={t('form.fields.PLOName.placeholder')} />} />
         }
       />
       <SCard
-        title={t('PLO.description')}
+        title={t('form.fields.PLODescription.label')}
         content={
           <form.AppField
             name='description'
-            children={(field) => <field.TextAreaField placeholder={t('placeholder')} />}
+            children={(field) => <field.TextAreaField placeholder={t('form.fields.PLODescription.placeholder')} />}
           />
         }
       />
