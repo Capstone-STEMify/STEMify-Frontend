@@ -10,13 +10,16 @@ import {
 } from '@/features/resource/curriculum/api/curriculumApi'
 import { useParams } from 'next/navigation'
 import { CurriculumStatus } from '../../types/curriculum.type'
+import { useModal } from '@/providers/ModalProvider'
 type Props = {
   onEdit: () => void
 }
 export default function CurriculumInformationSection({ onEdit }: Props) {
   // Translations
   const tBtn = useTranslations('button')
+  const t = useTranslations('curriculum')
   const { curriculumId } = useParams()
+  const { openModal } = useModal()
 
   const [deleteCurriculum] = useDeleteCurriculumMutation()
 
@@ -38,7 +41,14 @@ export default function CurriculumInformationSection({ onEdit }: Props) {
             <SquarePen onClick={onEdit} />
           </span>
           <span className='cursor-pointer text-red-500'>
-            <Trash2 onClick={handleDelete} />
+            <Trash2
+              onClick={() => {
+                openModal('confirm', {
+                  message: `${t('form.confirmMessage.delete')}`,
+                  onConfirm: () => handleDelete()
+                })
+              }}
+            />
           </span>
         </div>
 

@@ -16,23 +16,25 @@ interface UpsertLearningOutcomeProps {
   id?: number
   onSuccess?: () => void
 }
-// Schema validation cho form
-const learningOutcomeSchema = z.object({
-  name: z.string().min(3, 'Learning outcome name must be at least 3 characters long'),
-  description: z.string().min(10, 'Learning outcome description must be at least 10 characters long')
-})
 
-type LearningOutcomeFormData = z.infer<typeof learningOutcomeSchema>
-
-const defaultLearningOutcomeData: LearningOutcomeFormData = {
-  name: '',
-  description: ''
-}
 export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearningOutcomeProps) {
   const isEditing = !!id
 
   const t = useTranslations('LearningOutcome')
   const tb = useTranslations('button')
+  const tv = useTranslations('validationMessage')
+
+  // Schema validation cho form
+  const learningOutcomeSchema = z.object({
+    name: z.string().min(3, tv('minLength', { min: 3 })),
+    description: z.string().min(10, tv('minLength', { min: 10 }))
+  })
+  type LearningOutcomeFormData = z.infer<typeof learningOutcomeSchema>
+
+  const defaultLearningOutcomeData: LearningOutcomeFormData = {
+    name: '',
+    description: ''
+  }
 
   const { data: existingData, isLoading: isDataLoading } = useGetLearningOutcomeByIdQuery(id as number, {
     skip: !isEditing
@@ -89,7 +91,10 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
       <SCard
         title={t('form.fields.PLOName.label')}
         content={
-          <form.AppField name='name' children={(field) => <field.TextAreaField placeholder={t('form.fields.PLOName.placeholder')} />} />
+          <form.AppField
+            name='name'
+            children={(field) => <field.TextAreaField placeholder={t('form.fields.PLOName.placeholder')} />}
+          />
         }
       />
       <SCard

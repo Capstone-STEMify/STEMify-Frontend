@@ -1,4 +1,7 @@
 {
+  "common": {
+    "confirmationLabel": "Bạn có chắc chắn không?"
+  },
   "button": {
     "create": "Tạo Mới",
     "update": "Cập Nhật",
@@ -8,7 +11,8 @@
     "submit": "Gửi",
     "cancel": "Hủy",
     "save": "Lưu",
-    "back": "Quay Lại"
+    "back": "Quay Lại",
+    "confirm": "Xác Nhận"
   },
   "tableHeader": {
     "id": "ID",
@@ -27,5 +31,10 @@
     "of": "của",
     "row": "hàng",
     "select": "đã chọn"
+  },
+  "validationMessage": {
+    "required": "Trường này là bắt buộc.",
+    "minLength": "Trường này phải có ít nhất {min} ký tự.",
+    "maxLength": "Trường này phải có tối đa {max} ký tự."
   }
 }

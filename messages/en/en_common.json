@@ -1,4 +1,7 @@
 {
+  "common": {
+    "confirmationLabel": "Are you sure?"
+  },
   "button": {
     "create": "Create New",
     "update": "Update",
@@ -8,7 +11,8 @@
     "submit": "Submit",
     "cancel": "Cancel",
     "save": "Save",
-    "back": "Back"
+    "back": "Back",
+    "confirm": "Confirm"
   },
   "tableHeader": {
     "id": "ID",
@@ -27,5 +31,10 @@
     "of": "of",
     "row": "row(s) ",
     "select": "selected"
+  },
+  "validationMessage": {
+    "required": "This field is required.",
+    "minLength": "This field must be at least {min} characters long.",
+    "maxLength": "This field must be at most {max} characters long."
   }
 }
