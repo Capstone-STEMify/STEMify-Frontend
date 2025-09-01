@@ -25,6 +25,11 @@
       "share": "Chia sẻ",
       "learning": "Bắt Đầu Học",
       "start_loading": "Đang bắt đầu..."
+    },
+    "requestSignIn": {
+      "title": "BẠN CHƯA ĐĂNG NHẬP",
+      "description": "Vui lòng đăng nhập hoặc đăng ký miễn phí để truy cập nội dung này.",
+      "button": "Đăng Nhập"
     }
   }
 }
