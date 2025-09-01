@@ -87,12 +87,17 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
       try {
         const isUpdating = !!contentItem?.id
         if (isUpdating) {
-          const patchJson = await PatchContentJsonPayload(contentItem, { ...value, sectionId })
+          const patchJson = await PatchContentJsonPayload(contentItem, {
+            ...value,
+            sectionId,
+            contentType: ContentType.TEXT
+          })
           const res = await updateContent({ id: contentItem.id, body: patchJson }).unwrap()
           toast.success(`Content updated successfully`)
         } else {
           const jsonPayload = await CreateContentJsonPayload({
             ...value,
+            contentType: ContentType.TEXT,
             sectionId
           })
 
@@ -137,29 +142,9 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
     >
       <div>
         <div className='space-y-6'>
-          <SCard
-            className='w-full gap-3'
-            content={
-              <div className='space-y-4 p-4'>
-                <form.AppField
-                  name='contentType'
-                  children={(field) => (
-                    <field.SelectField
-                      label={t('section.contentType.label')}
-                      placeholder='Select a type'
-                      options={[
-                        { value: ContentType.TEXT, label: `${t('section.contentType.text')}` },
-                        { value: ContentType.VIDEO, label: `${t('section.contentType.video')}` },
-                        { value: ContentType.DOCUMENT, label: `${t('section.contentType.document')}` }
-                      ]}
-                    />
-                  )}
-                />
-
-                <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
-              </div>
-            }
-          />
+          <div className='p-4'>
+            <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
+          </div>
 
           <div className='mb-5'></div>
         </div>

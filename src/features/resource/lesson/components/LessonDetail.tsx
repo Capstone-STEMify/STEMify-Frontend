@@ -23,7 +23,7 @@ export default function LessonDetail({ id }: { id?: number }) {
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null)
   const token = useAppSelector((state) => state.auth.token)
   const { data: lessonData, isLoading: lessonLoading } = useGetLessonByIdQuery(Number(lessonId))
-  const { data: sections } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !lessonId || !token })
+  const { data: sections } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !lessonId })
 
   const courseId = lessonData?.data.courseId
 
@@ -65,7 +65,7 @@ export default function LessonDetail({ id }: { id?: number }) {
           </div>
 
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>
-            <ResizablePanel defaultSize={35} minSize={20} className='min-h-[500px]'>
+            <ResizablePanel defaultSize={40} minSize={20} className='min-h-[500px]'>
               <STabs
                 customStyle={{
                   list: 'px-4 py-8 rounded-none bg-[#f8fbff] shadow-6 gap-3 mb-3 w-full',
@@ -100,7 +100,7 @@ export default function LessonDetail({ id }: { id?: number }) {
             <ResizablePanel defaultSize={70} minSize={40}>
               {selectedSectionId ? (
                 <LessonContent
-                  sectionId={selectedSectionId}
+                  sectionId={selectedSectionId || 1}
                   token={token}
                   lessonId={Number(lessonId)}
                   sectionStatus={sectionStatus}

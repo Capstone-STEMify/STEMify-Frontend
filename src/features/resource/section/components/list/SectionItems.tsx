@@ -73,9 +73,9 @@ export default function SectionItems({
             <p>
               <strong className='mr-2'>{t('section.dur')}:</strong> {section.duration} mins
             </p>
-            <p>
+            {/* <p>
               <strong className='mr-2'>{t('section.status')}:</strong> {section.status}
-            </p>
+            </p> */}
           </div>
           <div className='px-3'>
             <p>
