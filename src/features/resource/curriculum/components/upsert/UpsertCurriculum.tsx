@@ -76,10 +76,9 @@ function mapCurriculumToFormData(curriculum: ApiSuccessResponse<Curriculum>): Cu
 interface UpsertCurriculumProps {
   curriculumId?: number
   onSuccess?: () => void
-  inModal?: boolean
 }
 
-export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: UpsertCurriculumProps) {
+export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurriculumProps) {
   const t = useTranslations('curriculum')
   const tc = useTranslations('common')
   const imageFieldRef = useRef<any>(null)
@@ -115,8 +114,9 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
           const jsonPayload = await CreateCurriculumJsonPayload(value, userId!)
           const res = await createCurriculum(jsonPayload).unwrap()
           toast.success(`${tc('successMessage.create')} (${res.data.title})`)
-          router.push(`/${locale}/resource/curriculum/${res.data.id}`)
+          router.push(`/${locale}/admin/curriculum/${res.data.id}`)
         }
+        onSuccess?.()
       } catch (err) {
         toast.error(`${tc('errorMessage')}`)
         console.error(err)
@@ -182,7 +182,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
             <field.TextAreaField
               label='Description'
               placeholder={t('form.fields.description.placeholder')}
-              className='h-30 rounded-lg border-gray-300'
+              className='h-30 rounded-lg border-gray-300 lg:w-[550px]'
             />
           )}
         />

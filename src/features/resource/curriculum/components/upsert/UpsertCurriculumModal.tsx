@@ -29,7 +29,7 @@ export default function UpsertCurriculumModal({ id, onConfirm }: UpsertCurriculu
         </DialogHeader>
         <hr />
         <ScrollArea className='h-[500px]'>
-          <UpsertCurriculum curriculumId={id} onSuccess={handleSuccess} inModal />
+          <UpsertCurriculum curriculumId={id} onSuccess={handleSuccess} />
         </ScrollArea>
       </DialogContent>
     </Dialog>
