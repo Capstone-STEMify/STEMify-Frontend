@@ -37,17 +37,6 @@
           "note": "Unique identifier for the curriculum",
           "placeholder": "e.g SU001"
         }
-      },
-
-      "successMessage": {
-        "create": "Curriculum created successfully!",
-        "update": "Curriculum updated successfully!",
-        "delete": "Curriculum deleted successfully!"
-      },
-      "errorMessage": "An error occurred. Please try again.",
-      "confirmMessage": {
-        "delete": "Are you sure you want to delete this curriculum?",
-        "discard": "Are you sure you want to discard your changes?"
       }
     }
   }

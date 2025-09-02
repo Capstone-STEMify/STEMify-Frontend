@@ -40,6 +40,16 @@
       "required": "Trường này là bắt buộc.",
       "minLength": "Trường này phải có ít nhất {min} ký tự.",
       "maxLength": "Trường này phải có tối đa {max} ký tự."
+    },
+    "successMessage": {
+      "create": "Tạo \"{title}\" thành công!",
+      "update": "Cập nhật \"{title}\" thành công!",
+      "delete": "Xóa \"{title}\" thành công!"
+    },
+    "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "confirmMessage": {
+      "delete": "Bạn có chắc chắn muốn xóa \"{title}\" không?",
+      "discard": "Bạn có chắc chắn muốn hủy bỏ thay đổi của mình không?"
     }
   }
 }

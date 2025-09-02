@@ -21,13 +21,12 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
   const isEditing = !!id
 
   const t = useTranslations('LearningOutcome')
-  const tb = useTranslations('button')
-  const tv = useTranslations('validationMessage')
+  const tc = useTranslations('common')
 
   // Schema validation cho form
   const learningOutcomeSchema = z.object({
-    name: z.string().min(3, tv('minLength', { min: 3 })),
-    description: z.string().min(10, tv('minLength', { min: 10 }))
+    name: z.string().min(3, tc('validationMessage.minLength', { min: 3 })),
+    description: z.string().min(10, tc('validationMessage.minLength', { min: 10 }))
   })
   type LearningOutcomeFormData = z.infer<typeof learningOutcomeSchema>
 
@@ -109,7 +108,7 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
-            {tb('save')}
+            {tc('button.save')}
           </form.SubmitButton>
         </form.AppForm>
       </div>
