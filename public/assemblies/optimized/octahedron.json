@@ -145,15 +145,106 @@
     {
       "id": "octahedron_assembly",
       "name": "Octahedron Assembly Lab",
+      "description": "Learn to construct a regular octahedron using connectors and straws - understanding 3D geometric principles through hands-on assembly",
       "difficulty": "intermediate",
       "estimatedTime": 1800,
+      "objectives": [
+        "Understand octahedron geometry and symmetry",
+        "Practice systematic 3D construction techniques",
+        "Learn connector port alignment and joint strength",
+        "Develop spatial reasoning through step-by-step assembly"
+      ],
       "steps": [
-        {"actionId": "action_prepare_connectors", "title": "Prepare Base Connectors"},
-        {"actionId": "action_build_base", "title": "Form Base Square"},
-        {"actionId": "action_add_verticals", "title": "Add Vertical Support"},
-        {"actionId": "action_add_bottom_verticals", "title": "Complete Structure"},
-        {"actionId": "action_final_highlight", "title": "Verify Octahedron"}
-      ]
+        {
+          "actionId": "action_prepare_connectors",
+          "title": "Prepare Base Connectors",
+          "description": "Identify and position the four 3-leg connectors that will form the base square of the octahedron",
+          "expectedResult": "4 three-leg connectors are visible and highlighted",
+          "hints": [
+            "Each connector has 3 ports for straw connections",
+            "Notice the red color indicating connector type",
+            "Observe the spatial arrangement forming square corners"
+          ],
+          "validation": {
+            "type": "structure",
+            "criteria": {
+              "requiredConnectors": ["connector_3leg_1", "connector_3leg_2", "connector_3leg_3", "connector_3leg_4"],
+              "visibility": true
+            }
+          }
+        },
+        {
+          "actionId": "action_build_base",
+          "title": "Form Base Square",
+          "description": "Connect the 4 connectors with straws to create the square foundation of the octahedron",
+          "expectedResult": "A complete square base is formed with proper connections",
+          "hints": [
+            "Each side of the square uses one straw",
+            "Straws should fit snugly into connector ports",
+            "Verify all connections are properly aligned"
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredConnectionsGroup": "base_square",
+              "connected": true
+            }
+          }
+        },
+        {
+          "actionId": "action_add_verticals",
+          "title": "Add Vertical Support",
+          "description": "Attach vertical straws from each corner of the base square, pointing upward toward the top connector",
+          "expectedResult": "4 vertical straws extend upward from base connectors",
+          "hints": [
+            "Use the upward-facing ports on each base connector",
+            "Vertical straws should be parallel to each other",
+            "Maintain proper alignment for top connector placement"
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredConnectionsGroup": "vertical_up",
+              "connected": true
+            }
+          }
+        },
+        {
+          "actionId": "action_add_bottom_verticals",
+          "title": "Complete Structure",
+          "description": "Attach vertical straws downward from each base connector toward the bottom apex",
+          "expectedResult": "4 additional vertical straws extend downward from base",
+          "hints": [
+            "Use the remaining ports on base connectors (conceptually mirrored)",
+            "Mirror the upward straws but in opposite direction",
+            "Maintain symmetry with top half of octahedron"
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredConnectionsGroup": "vertical_down",
+              "connected": true
+            }
+          }
+        },
+        {
+          "actionId": "action_final_highlight",
+          "title": "Verify Octahedron",
+          "description": "Observe the completed regular octahedron and understand its geometric properties",
+          "expectedResult": "Perfect octahedron with 8 triangular faces, 6 vertices, and 12 edges",
+          "hints": [
+            "Count 8 triangular faces (4 top, 4 bottom)",
+            "Identify 6 vertices (4 base corners + 2 apex points)",
+            "Observe 12 edges (4 base + 4 top + 4 bottom)"
+          ]
+        }
+      ],
+      "playbackControls": {
+        "allowRewind": true,
+        "allowPause": true,
+        "allowSkip": false,
+        "speed": 1.0
+      }
     }
   ],
 
