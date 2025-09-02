@@ -5,8 +5,8 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { School } from 'lucide-react'
 import KitInformationSection from './KitInformationSection'
 import BackButton from '@/components/shared/button/BackButton'
-import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import CurriculumCourseSection from '@/features/resource/curriculum/components/detail/CurriculumCourseSection'
+import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 
 type CurriculumDetailProps = {
   curriculumId?: number

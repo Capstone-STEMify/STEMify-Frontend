@@ -103,7 +103,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
         if (curriculumId) {
           const patchJson = await PatchCurriculumJsonPayload(initialCurriculumDataRef.current!, value, userId!)
           const res = await updateCurriculum({ id: Number(curriculumId), body: patchJson }).unwrap()
-          toast.success(`${t('form.successMessage.update')} (${res.data.title})`, {
+          toast.success(`${tc('successMessage.update')} (${res.data.title})`, {
             action: {
               label: 'View Curriculum',
               onClick: () => {
@@ -114,11 +114,11 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
         } else {
           const jsonPayload = await CreateCurriculumJsonPayload(value, userId!)
           const res = await createCurriculum(jsonPayload).unwrap()
-          toast.success(`${t('form.successMessage.create')} (${res.data.title})`)
+          toast.success(`${tc('successMessage.create')} (${res.data.title})`)
           router.push(`/${locale}/resource/curriculum/${res.data.id}`)
         }
       } catch (err) {
-        toast.error(`${t('form.errorMessage')}`)
+        toast.error(`${tc('errorMessage')}`)
         console.error(err)
       }
     }

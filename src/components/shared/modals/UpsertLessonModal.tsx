@@ -1,5 +1,5 @@
 import { Dialog, DialogContent } from '@/components/shadcn/dialog'
-import UpsertLesson from '@/features/resource/lesson/components/UpsertLesson'
+import UpsertLesson from '@/features/resource/lesson/components/upsert/UpsertLesson'
 import { useModal } from '@/providers/ModalProvider'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import React from 'react'

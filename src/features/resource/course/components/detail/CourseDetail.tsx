@@ -2,8 +2,8 @@
 
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
-import CourseDetailEnrolled from '@/features/resource/course/components/detail/CourseDetailEnrolled'
-import CourseDetailNotEnrolled from '@/features/resource/course/components/detail/CourseDetailNotEnrolled'
+import CourseDetailEnrolled from '@/features/resource/course/components/detail/enrolled/CourseDetailEnrolled'
+import CourseDetailNotEnrolled from '@/features/resource/course/components/detail/not-enrolled/CourseDetailNotEnrolled'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
 import { useParams } from 'next/navigation'

@@ -1,9 +1,8 @@
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/shadcn/resizable'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import BackButton from '@/components/shared/button/BackButton'
-import CourseDescription from './enrolled/CourseDetailDescription'
-import CourseDetailContent from './enrolled/CourseDetailContent'
-import { Button } from '@/components/shadcn/button'
+import CourseDetailContent from '@/features/resource/course/components/detail/enrolled/CourseDetailContent'
+import CourseDetailDescription from '@/features/resource/course/components/detail/enrolled/CourseDetailDescription'
 import { useRouter } from 'next/navigation'
 
 type CourseDetailEnrolledProps = {
@@ -25,7 +24,7 @@ export default function CourseDetailEnrolled({ courseId, enrollmentId }: CourseD
 
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>
             <ResizablePanel defaultSize={35} minSize={20} className='h-fit'>
-              <CourseDescription courseId={Number(courseId)} />
+              <CourseDetailDescription courseId={Number(courseId)} />
             </ResizablePanel>
             <ResizableHandle />
 

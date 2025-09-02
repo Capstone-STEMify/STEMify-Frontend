@@ -3,7 +3,6 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useSearchAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
-import { useGetAgeRangeAction } from '@/features/resource/age-range/components/table/AgeRangeAction'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -11,6 +10,7 @@ import React, { useState, useEffect } from 'react'
 import { AgeRangeQueryParams } from '../../types/ageRange.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/age-range/slice/ageRangeSlice'
+import { useGetAgeRangeAction } from '@/features/resource/age-range/components/list/AgeRangeAction'
 
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value)

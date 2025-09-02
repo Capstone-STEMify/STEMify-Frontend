@@ -2,7 +2,6 @@
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { toast } from 'sonner'
 import { useParams, useRouter } from 'next/navigation'
-import { Course, CourseLevel } from '../types/course.type'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { useEffect, useRef } from 'react'
 import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
@@ -21,6 +20,7 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import { fileToBase64 } from '@/utils/index'
 import { SCard } from '@/components/shared/card/SCard'
 import { useLocale, useTranslations } from 'next-intl'
+import { Course, CourseLevel } from '@/features/resource/course/types/course.type'
 
 const defaultCourseData: CourseFormData = {
   code: '',

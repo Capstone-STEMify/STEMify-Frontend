@@ -1,13 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { DataTable } from '@/components/shared/data-table/data-table'
-import { useGetLessonAction } from './LessonAction'
+import { useGetLessonAction } from './LessonTableAction'
 import { useSearchLessonQuery } from '../../api/lessonApi'
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { Lesson, LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
-import LessonListAction from '../list/LessonListAction'
+import LessonListAction from './LessonListAction'
 import { Button } from '@/components/shadcn/button'
 import { IconPlus } from '@tabler/icons-react'
 import { useLocale, useTranslations } from 'next-intl'
@@ -24,7 +24,7 @@ import { toast } from 'sonner'
 
 type ViewMode = 'table' | 'card'
 
-export default function LessonManagement({
+export default function LessonTable({
   courseIdSelected,
   refetch
 }: {

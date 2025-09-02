@@ -1,18 +1,22 @@
 'use client'
 import React from 'react'
-import LessonTable from '../../lesson/components/table/LessonManagement'
 import { Button } from '@/components/shadcn/button'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
-import { CourseLevel, CourseStatus } from '../types/course.type'
 import { SCard } from '@/components/shared/card/SCard'
-import { useDeleteCourseMutation, useGetCourseByIdQuery, useUpdateCourseMutation } from '../api/courseApi'
 import { useLocale, useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { useParams, useRouter } from 'next/navigation'
 import { BookOpen, Edit } from 'lucide-react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
+import {
+  useDeleteCourseMutation,
+  useGetCourseByIdQuery,
+  useUpdateCourseMutation
+} from '@/features/resource/course/api/courseApi'
+import LessonTable from '@/features/resource/lesson/components/list/LessonTable'
 
 const levelBadgeClass = (level?: string): string => {
   const map: Record<string, string> = {
@@ -37,7 +41,7 @@ const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
   return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
 }
 
-export default function CourseDetailPage() {
+export default function CourseDetailForAdmin() {
   const t = useTranslations('Admin.course_details')
 
   const locale = useLocale()

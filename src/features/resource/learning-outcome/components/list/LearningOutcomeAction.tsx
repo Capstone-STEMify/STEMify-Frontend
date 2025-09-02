@@ -5,7 +5,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { toast } from 'sonner'
 import { useDeleteLearningOutcomeMutation } from '../../api/learningOutcomeApi'
-import { LearningOutcome } from '../../types/learningOutcome.type'
+import { LearningOutcome } from '@/features/resource/learning-outcome/types/learningOutcome.type'
 
 export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
   const { openModal } = useModal()

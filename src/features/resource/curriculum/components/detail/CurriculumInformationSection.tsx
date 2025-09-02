@@ -52,7 +52,7 @@ export default function CurriculumInformationSection({ onEdit }: Props) {
             <Trash2
               onClick={() => {
                 openModal('confirm', {
-                  message: `${t('form.confirmMessage.delete')}`,
+                  message: `${tc('confirmMessage.delete', { title: data?.data.title || '' })}`,
                   onConfirm: () => handleDelete()
                 })
               }}
