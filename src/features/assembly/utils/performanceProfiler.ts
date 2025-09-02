@@ -165,7 +165,7 @@ export class PerformanceProfiler {
     
     return () => {
       const elapsed = performance.now() - startTime
-      console.log(`${label}: ${elapsed.toFixed(2)}ms`)
+      console.log(`⏱️ ${label}: ${elapsed.toFixed(2)}ms`)
       return elapsed
     }
   }

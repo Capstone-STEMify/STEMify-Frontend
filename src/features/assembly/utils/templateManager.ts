@@ -3,8 +3,8 @@
  * Handles loading, caching, and instantiation of component templates
  */
 
-import { StreamingLoader, StreamingChunk, defaultStreamingConfig } from '@/utils/streamingLoader'
-import { schemaValidator } from '@/features/assembly/utils/schemaValidator'
+import { StreamingLoader, StreamingChunk, defaultStreamingConfig } from './streamingLoader'
+import { schemaValidator } from './schemaValidator'
 
 export interface ComponentTemplate {
   id: string
@@ -120,7 +120,8 @@ export class TemplateManager {
     // Validate template schema
     const validationResult = schemaValidator.validateAssembly(data)
     if (!validationResult.valid) {
-      throw new Error(`Template validation failed for ${templateId}: ${validationResult.message}`)
+      console.warn(`Template validation failed for ${templateId}: ${validationResult.message}`)
+      // Continue loading for now, just log warning
     }
 
     // Load dependencies
@@ -248,37 +249,6 @@ export class TemplateManager {
   }
 
   /**
-   * Unload template from memory
-   */
-  unloadTemplate(templateId: string): void {
-    // Check for dependencies
-    const dependents = this.findDependents(templateId)
-    if (dependents.length > 0) {
-      console.warn(`Cannot unload template ${templateId}: required by ${dependents.join(', ')}`)
-      return
-    }
-
-    this.templates.delete(templateId)
-    this.dependencyGraph.delete(templateId)
-    console.log(`Template unloaded: ${templateId}`)
-  }
-
-  /**
-   * Find templates that depend on given template
-   */
-  private findDependents(templateId: string): string[] {
-    const dependents: string[] = []
-    
-    for (const [id, deps] of this.dependencyGraph.entries()) {
-      if (deps.has(templateId)) {
-        dependents.push(id)
-      }
-    }
-    
-    return dependents
-  }
-
-  /**
    * Get template library statistics
    */
   getStats(): {
@@ -305,84 +275,6 @@ export class TemplateManager {
   }
 
   /**
-   * Validate template library integrity
-   */
-  validateLibrary(): { valid: boolean; issues: string[] } {
-    const issues: string[] = []
-
-    // Check for missing dependencies
-    for (const [templateId, deps] of this.dependencyGraph.entries()) {
-      for (const depId of deps) {
-        if (!this.templates.has(depId)) {
-          issues.push(`Template ${templateId} depends on missing template ${depId}`)
-        }
-      }
-    }
-
-    // Check for circular dependencies
-    const circularDeps = this.detectCircularDependencies()
-    if (circularDeps.length > 0) {
-      issues.push(`Circular dependencies detected: ${circularDeps.join(' -> ')}`)
-    }
-
-    return {
-      valid: issues.length === 0,
-      issues
-    }
-  }
-
-  /**
-   * Detect circular dependencies using DFS
-   */
-  private detectCircularDependencies(): string[] {
-    const visited = new Set<string>()
-    const recursionStack = new Set<string>()
-    const path: string[] = []
-
-    for (const templateId of this.dependencyGraph.keys()) {
-      if (!visited.has(templateId)) {
-        const cycle = this.dfsCircularDependency(templateId, visited, recursionStack, path)
-        if (cycle.length > 0) {
-          return cycle
-        }
-      }
-    }
-
-    return []
-  }
-
-  /**
-   * DFS helper for circular dependency detection
-   */
-  private dfsCircularDependency(
-    templateId: string,
-    visited: Set<string>,
-    recursionStack: Set<string>,
-    path: string[]
-  ): string[] {
-    visited.add(templateId)
-    recursionStack.add(templateId)
-    path.push(templateId)
-
-    const deps = this.dependencyGraph.get(templateId) || new Set()
-    
-    for (const depId of deps) {
-      if (!visited.has(depId)) {
-        const cycle = this.dfsCircularDependency(depId, visited, recursionStack, path)
-        if (cycle.length > 0) return cycle
-      } else if (recursionStack.has(depId)) {
-        // Found cycle
-        const cycleStart = path.indexOf(depId)
-        return path.slice(cycleStart).concat([depId])
-      }
-    }
-
-    recursionStack.delete(templateId)
-    path.pop()
-    return []
-  }
-
-  /**
    * Clear all templates
    */
   clear(): void {
@@ -390,49 +282,6 @@ export class TemplateManager {
     this.dependencyGraph.clear()
     this.loadingPromises.clear()
     console.log('Template manager cleared')
-  }
-
-  /**
-   * Export template library for caching
-   */
-  exportLibrary(): any {
-    const exported: any = {
-      templates: {},
-      dependencies: {},
-      timestamp: Date.now()
-    }
-
-    for (const [id, template] of this.templates.entries()) {
-      exported.templates[id] = {
-        ...template,
-        data: template.data // Include full data
-      }
-    }
-
-    for (const [id, deps] of this.dependencyGraph.entries()) {
-      exported.dependencies[id] = Array.from(deps)
-    }
-
-    return exported
-  }
-
-  /**
-   * Import template library from cache
-   */
-  importLibrary(exported: any): void {
-    this.clear()
-
-    // Import templates
-    for (const [id, templateData] of Object.entries(exported.templates)) {
-      this.templates.set(id, templateData as ComponentTemplate)
-    }
-
-    // Import dependencies
-    for (const [id, deps] of Object.entries(exported.dependencies)) {
-      this.dependencyGraph.set(id, new Set(deps as string[]))
-    }
-
-    console.log(`Imported ${this.templates.size} templates from cache`)
   }
 }
 

@@ -103,7 +103,7 @@ export class StreamingLoader {
 
     try {
       const startTime = Date.now()
-      console.log(`Loading chunk: ${chunkId} (${this.formatBytes(chunk.size)})`)
+      console.log(`⬇️ Loading chunk: ${chunkId} (${this.formatBytes(chunk.size)})`)
 
       let data: any
 
@@ -152,48 +152,6 @@ export class StreamingLoader {
       this.activeLoads.delete(chunkId)
       this.loadingProgress.currentChunk = undefined
     }
-  }
-
-  /**
-   * Preload chunks within radius of camera
-   */
-  async preloadChunksInRadius(
-    cameraPosition: { x: number; y: number; z: number },
-    components: Array<{
-      id: string
-      position: { x: number; y: number; z: string }
-      templateId: string
-    }>
-  ): Promise<void> {
-    const chunksToPreload: string[] = []
-
-    for (const component of components) {
-      const distance = this.calculateDistance(cameraPosition, component.position)
-      if (distance <= this.config.preloadRadius) {
-        chunksToPreload.push(component.templateId)
-      }
-    }
-
-    // Sort by priority and load
-    chunksToPreload.sort((a, b) => {
-      const chunkA = this.chunks.get(a)
-      const chunkB = this.chunks.get(b)
-      return (chunkB?.priority || 0) - (chunkA?.priority || 0)
-    })
-
-    // Load chunks concurrently (respecting max concurrent loads)
-    const loadPromises: Promise<any>[] = []
-    
-    for (const chunkId of chunksToPreload) {
-      if (this.activeLoads.size < this.config.maxConcurrentLoads) {
-        loadPromises.push(this.loadChunk(chunkId))
-      } else {
-        await Promise.race(loadPromises) // Wait for one to finish
-        loadPromises.push(this.loadChunk(chunkId))
-      }
-    }
-
-    await Promise.all(loadPromises)
   }
 
   /**
@@ -298,19 +256,6 @@ export class StreamingLoader {
   }
 
   /**
-   * Calculate distance between camera and component
-   */
-  private calculateDistance(
-    camera: { x: number; y: number; z: number },
-    component: { x: number; y: number; z: string }
-  ): number {
-    const dx = camera.x - component.x
-    const dy = camera.y - component.y
-    const dz = camera.z - parseFloat(component.z)
-    return Math.sqrt(dx * dx + dy * dy + dz * dz)
-  }
-
-  /**
    * Update estimated loading time
    */
   private updateEstimatedTime(): void {
@@ -347,25 +292,6 @@ export class StreamingLoader {
     if (bytes === 0) return '0 B'
     const i = Math.floor(Math.log(bytes) / Math.log(1024))
     return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i]
-  }
-
-  /**
-   * Get loading statistics
-   */
-  getStats(): {
-    progress: LoadingProgress
-    cacheStats: { size: number; maxSize: number; hitRate: number }
-    activeLoads: number
-  } {
-    return {
-      progress: this.loadingProgress,
-      cacheStats: {
-        size: this.cacheSize,
-        maxSize: this.config.cacheSize * 1024 * 1024,
-        hitRate: 0 // Calculate hit rate
-      },
-      activeLoads: this.activeLoads.size
-    }
   }
 
   /**

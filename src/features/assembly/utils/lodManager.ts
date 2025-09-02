@@ -77,7 +77,7 @@ export class LODManager {
 
         // Log significant LOD changes for debugging
         if (currentLOD && currentLOD.currentLevel.name !== newLevel.name) {
-          console.log(`🎯 LOD Change: ${component.id} ${currentLOD.currentLevel.name} → ${newLevel.name} (dist: ${distance.toFixed(1)})`)
+          console.log(`LOD Change: ${component.id} ${currentLOD.currentLevel.name} → ${newLevel.name} (dist: ${distance.toFixed(1)})`)
         }
       }
     }
@@ -102,7 +102,7 @@ export class LODManager {
    * Determine appropriate LOD level based on distance and template
    */
   private determineLODLevel(distance: number, template: any): LODLevel {
-    if (!template.lod) {
+    if (!template || !template.lod) {
       return this.config.levels[1] // Default to medium
     }
 
@@ -199,7 +199,7 @@ export class LODManager {
     // Performance is well above target - increase quality
     else if (avgFPS > this.config.targetFPS * 1.2) {
       this.isAdjusting = true
-      console.log(`📈 Performance headroom detected (${avgFPS.toFixed(1)} FPS). Increasing LOD quality.`)
+      console.log(`Performance headroom detected (${avgFPS.toFixed(1)} FPS). Increasing LOD quality.`)
       
       // Decrease LOD distances (less aggressive culling)
       this.config.levels.forEach(level => {
@@ -236,19 +236,19 @@ export class LODManager {
   }
 
   /**
+   * Update configuration
+   */
+  updateConfig(newConfig: Partial<LODConfiguration>): void {
+    this.config = { ...this.config, ...newConfig }
+  }
+
+  /**
    * Reset LOD system
    */
   reset(): void {
     this.componentLODs.clear()
     this.performanceHistory = []
     this.isAdjusting = false
-  }
-
-  /**
-   * Update configuration
-   */
-  updateConfig(newConfig: Partial<LODConfiguration>): void {
-    this.config = { ...this.config, ...newConfig }
   }
 }
 
