@@ -40,6 +40,7 @@
         "down_description": "Tham gia cộng đồng"
       },
       "lesson": {
+        "cardTitle": "Bài Học",
         "title": "Danh sách các bài học",
         "description": "Các hoạt động hấp dẫn được thiết kế để truyền cảm hứng cho việc học tập và phát triển",
         "noData": "Không tìm thấy bài học",

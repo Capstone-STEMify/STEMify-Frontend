@@ -102,7 +102,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
                 }
               >
                 <div>
-                  <p className='text-muted-foreground text-xs font-medium'>{t('details.stats.lesson')}</p>
+                  <p className='text-muted-foreground text-xs font-medium'>{t('details.lesson.cardTitle')}</p>
                   <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
                 </div>
