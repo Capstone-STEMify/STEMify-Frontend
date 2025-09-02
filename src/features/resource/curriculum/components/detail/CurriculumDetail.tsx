@@ -3,10 +3,10 @@ import Image from 'next/image'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { School } from 'lucide-react'
-import { useGetCurriculumByIdQuery } from '../api/curriculumApi'
 import KitInformationSection from './KitInformationSection'
 import BackButton from '@/components/shared/button/BackButton'
-import CurriculumCourseSection from './detail/CurriculumCourseSection'
+import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
+import CurriculumCourseSection from '@/features/resource/curriculum/components/detail/CurriculumCourseSection'
 
 type CurriculumDetailProps = {
   curriculumId?: number
@@ -58,7 +58,7 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
       </div>
 
       {/* Kit Information Section */}
-      <KitInformationSection kitIds={curriculum?.data.kitIds} />
+      <KitInformationSection kitIds={curriculum?.data.kits} />
 
       {/* Course Section Carousel */}
       <CurriculumCourseSection />

@@ -11,6 +11,7 @@ import {
 import { useParams } from 'next/navigation'
 import { CurriculumStatus } from '../../types/curriculum.type'
 import { useModal } from '@/providers/ModalProvider'
+import { toast } from 'sonner'
 type Props = {
   onEdit: () => void
 }
@@ -24,7 +25,8 @@ export default function CurriculumInformationSection({ onEdit }: Props) {
   const [deleteCurriculum] = useDeleteCurriculumMutation()
 
   const handleDelete = async () => {
-    const res = await deleteCurriculum(Number(curriculumId)).unwrap()
+    await deleteCurriculum(Number(curriculumId)).unwrap()
+    toast.success(t('form.successMessage.delete'))
   }
 
   const { data } = useGetCurriculumByIdQuery(Number(curriculumId), { skip: !curriculumId })
@@ -38,7 +40,13 @@ export default function CurriculumInformationSection({ onEdit }: Props) {
         <div className='flex items-center gap-2'>
           <h1 className='mb-4 text-4xl font-bold text-gray-900'>{data?.data.title}</h1>
           <span className='cursor-pointer text-blue-500'>
-            <SquarePen onClick={onEdit} />
+            {/* <SquarePen onClick={onEdit} />
+             */}
+            <SquarePen
+              onClick={() => {
+                openModal('upsertCurriculum', { curriculum: data?.data.id })
+              }}
+            />
           </span>
           <span className='cursor-pointer text-red-500'>
             <Trash2
