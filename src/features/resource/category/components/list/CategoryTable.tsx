@@ -2,7 +2,6 @@
 import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useSearchCategoryQuery } from '@/features/resource/category/api/categoryApi'
-import { useGetCategoryAction } from '@/features/resource/category/components/table/CategoryAction'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
@@ -12,6 +11,7 @@ import { CategoryQueryParams } from '../../types/category.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setSearchTerm } from '@/features/resource/category/slice/categorySlice'
 import useDebounce from '@/hooks/useDebounce'
+import { useGetCategoryAction } from '@/features/resource/category/components/list/CategoryAction'
 
 export default function CategoryTable() {
   const t = useTranslations('Admin.placeholder')

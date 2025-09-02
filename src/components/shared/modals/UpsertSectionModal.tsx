@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/shadcn/dialog'
 import { useModal } from '../../../providers/ModalProvider'
-import CreateSection from '@/features/resource/section/components/UpsertSection'
+import CreateSection from '@/features/resource/section/components/upsert/UpsertSection'
 import { Button } from '@/components/shadcn/button'
 interface ConfirmModalProps {
   lessonId: number

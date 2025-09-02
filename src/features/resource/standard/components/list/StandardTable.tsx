@@ -3,7 +3,6 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useSearchStandardQuery } from '@/features/resource/standard/api/standardApi'
-import { useGetStandardAction } from '@/features/resource/standard/components/table/StandardAction'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
@@ -12,6 +11,7 @@ import { StandardQueryParams } from '../../types/standard.type'
 import { setPageIndex, setSearchTerm } from '@/features/resource/standard/slice/standardSlice'
 import useDebounce from '@/hooks/useDebounce'
 import { useMemo } from 'react'
+import { useGetStandardAction } from '@/features/resource/standard/components/list/StandardAction'
 
 export default function StandardTable() {
   const { openModal } = useModal()

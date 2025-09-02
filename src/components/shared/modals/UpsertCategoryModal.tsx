@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
-import UpsertCategory from '@/features/resource/category/components/management/UpsertCategory'
+import UpsertCategory from '@/features/resource/category/components/upsert/UpsertCategory'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 

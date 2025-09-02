@@ -1,6 +1,6 @@
 'use client'
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
-import UpsertStandard from '@/features/resource/standard/components/management/UpsertStandard'
+import UpsertStandard from '@/features/resource/standard/components/upsert/UpsertStandard'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 

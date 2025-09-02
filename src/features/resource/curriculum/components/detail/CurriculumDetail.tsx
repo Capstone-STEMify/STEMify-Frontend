@@ -3,10 +3,10 @@ import Image from 'next/image'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { School } from 'lucide-react'
-import { useGetCurriculumByIdQuery } from '../api/curriculumApi'
 import KitInformationSection from './KitInformationSection'
 import BackButton from '@/components/shared/button/BackButton'
-import CurriculumCourseSection from './detail/CurriculumCourseSection'
+import CurriculumCourseSection from '@/features/resource/curriculum/components/detail/CurriculumCourseSection'
+import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 
 type CurriculumDetailProps = {
   curriculumId?: number

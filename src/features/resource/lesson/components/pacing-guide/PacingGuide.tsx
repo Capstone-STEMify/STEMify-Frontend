@@ -1,14 +1,14 @@
 'use client'
 import React from 'react'
 import { motion } from 'framer-motion'
-import SyllabusTable from './pacing-guide/GuideTable'
 import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
-import GuideLessonDetails from './pacing-guide/GuideLessonDetails'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { containerVariants } from '@/utils/motion'
 import BackButton from '@/components/shared/button/BackButton'
+import GuideLessonDetails from '@/features/resource/lesson/components/pacing-guide/GuideLessonDetails'
+import GuideTable from '@/features/resource/lesson/components/pacing-guide/GuideTable'
 
 export default function PacingGuide() {
   const { lessonId } = useParams()
@@ -31,7 +31,7 @@ export default function PacingGuide() {
         <BackButton />
         <motion.div variants={containerVariants} initial='hidden' animate='visible' className='space-y-8'>
           <GuideLessonDetails lesson={data?.data} />
-          <SyllabusTable lessonId={Number(lessonId)} />
+          <GuideTable lessonId={Number(lessonId)} />
         </motion.div>
       </div>
     </div>

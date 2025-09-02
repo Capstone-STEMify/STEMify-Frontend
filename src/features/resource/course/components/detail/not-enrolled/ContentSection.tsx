@@ -3,8 +3,7 @@ import { fadeInUp } from '@/utils/motion'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { capitalizeFirst, formatDuration } from '@/utils/index'
-import { Ellipsis, EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
-import { SPagination } from '@/components/shared/SPagination'
+import { EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
 import {
   useDeleteLessonMutation,
   useSearchLessonQuery,
