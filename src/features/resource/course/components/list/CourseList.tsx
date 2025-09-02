@@ -5,15 +5,12 @@ import CourseListContent from '@/features/resource/course/components/list/Course
 import { useTranslations } from 'next-intl'
 
 export default function CourseList() {
-  const t = useTranslations('CourseList')
+  const t = useTranslations('course')
 
   return (
     <BreadcrumbPageLayout color={'yellow'} size='md' weight='semibold' title='Courses'>
       <div className='shadow-6 mt-6 rounded-lg bg-white'>
-        <SListTitle
-          title={t('title')}
-          description={t('description')}
-        />
+        <SListTitle title={t('list.title')} description={t('list.description')} />
         <CourseListAction />
         <CourseListContent />
       </div>

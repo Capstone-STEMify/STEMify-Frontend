@@ -67,7 +67,9 @@ function SortableLessonCard({
 }
 
 export default function ContentSection() {
-  const t = useTranslations('CourseDetails')
+  const t = useTranslations('course')
+  const tc = useTranslations('common')
+
   const router = useRouter()
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
@@ -172,9 +174,9 @@ export default function ContentSection() {
             <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
               <div className='text-center'>
                 <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-                  {t('notEnrolled.notFound.title')}
+                  {t('details.lesson.noData')}
                 </h2>
-                <p className='text-lg text-gray-600'>{t('notEnrolled.notFound.description')}</p>
+                <p className='text-lg text-gray-600'>{t('details.lesson.noDataDescription')}</p>
               </div>
             </div>
           </div>
@@ -182,9 +184,9 @@ export default function ContentSection() {
           <div className='mx-auto mt-24 max-w-7xl px-4 sm:px-6 lg:px-8'>
             <div className='mt-30 mb-12 text-center'>
               <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-                {t('notEnrolled.lesson.title')}
+                {t('details.lesson.title')}
               </h2>
-              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('notEnrolled.lesson.description')}</p>
+              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
             </div>
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
               <div
@@ -192,7 +194,7 @@ export default function ContentSection() {
                 onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
               >
                 <PlusCircle size={70} className='text-gray-500' />
-                <p className='mt-4 text-sm font-medium text-gray-500'>{t('notEnrolled.button.create')}</p>
+                <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.create')}</p>
               </div>
             </div>
           </div>
@@ -213,9 +215,9 @@ export default function ContentSection() {
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='mb-12 text-center'>
           <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-            {t('notEnrolled.lesson.title')}
+            {t('details.lesson.title')}
           </h2>
-          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('notEnrolled.lesson.description')}</p>
+          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
         </div>
         {!isReadOnly && (
           <div className='mb-4 flex justify-end gap-2 px-4 lg:px-8'>
@@ -256,9 +258,7 @@ export default function ContentSection() {
                     }}
                   >
                     <PlusCircle size={70} className='mt-20 text-gray-500' />
-                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
-                      {t('notEnrolled.lesson.button.create')}
-                    </p>
+                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>{tc('button.create')}</p>
                   </div>
                   {items.map((lesson) => (
                     <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>
@@ -281,7 +281,7 @@ export default function ContentSection() {
                                     className='text-sm'
                                     onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
                                   >
-                                    {t('notEnrolled.lesson.button.view')}
+                                    {tc('button.view')}
                                   </p>,
                                   <p
                                     onClick={(e) => {
@@ -291,7 +291,7 @@ export default function ContentSection() {
                                     key='update'
                                     className='text-sm'
                                   >
-                                    {t('notEnrolled.lesson.button.update')}
+                                    {tc('button.update')}
                                   </p>,
                                   lesson.status === LessonStatus.DRAFT ? (
                                     <p
@@ -302,7 +302,7 @@ export default function ContentSection() {
                                       key={`send-request-${lesson.id}`}
                                       className='text-sm'
                                     >
-                                      {t('notEnrolled.lesson.button.send_request')}
+                                      {tc('button.review')}
                                     </p>
                                   ) : null,
                                   lesson.status === LessonStatus.DRAFT ? (
@@ -312,12 +312,12 @@ export default function ContentSection() {
                                       onClick={(e) => {
                                         e.stopPropagation()
                                         openModal('confirm', {
-                                          message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
+                                          message: `${tc('confirmMessage.delete', { lessonTitle: lesson.title })}`,
                                           onConfirm: () => handleDeleteLesson(lesson.id)
                                         })
                                       }}
                                     >
-                                      {t('notEnrolled.lesson.button.delete')}
+                                      {tc('button.delete')}
                                     </p>
                                   ) : null
                                 ].filter(Boolean)}

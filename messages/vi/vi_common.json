@@ -11,7 +11,15 @@
       "cancel": "Hủy",
       "save": "Lưu",
       "back": "Quay Lại",
-      "confirm": "Xác Nhận"
+      "confirm": "Xác Nhận",
+      "clear": "Xóa Tất Cả",
+      "enroll": "Đăng Ký Ngay",
+      "wishlist": "Yêu Thích",
+      "review": "Gửi yêu cầu phê duyệt",
+      "view": "Xem Chi Tiết",
+      "browse": "Chọn Tệp",
+      "add": "Thêm",
+      "share": "Chia Sẻ"
     },
     "tableHeader": {
       "id": "ID",
