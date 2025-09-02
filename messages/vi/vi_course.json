@@ -1,0 +1,122 @@
+{
+  "course": {
+    "list": {
+      "title": "Danh Sách Khóa Học",
+      "description": "Hướng dẫn theo chủ đề, phù hợp với chương trình giảng dạy với phương pháp giáo dục sau. Các khóa học có quan điểm của giáo viên và học sinh.",
+      "placeholder": {
+        "search": "Tìm kiếm theo mã hoặc tiêu đề...",
+        "category": "Danh Mục (Chọn một tùy chọn)",
+        "skill": "Kỹ Năng (Chọn một tùy chọn)",
+        "ageRange": "Độ Tuổi (Chọn một tùy chọn)",
+        "standard": "Tiêu Chuẩn (Chọn một tùy chọn)",
+        "status": "Trạng Thái (Chọn một tùy chọn)"
+      },
+      "filter": {
+        "title": "Lọc Khóa Học",
+        "search": "Tìm kiếm",
+        "topic": "Chủ đề",
+        "skill": "Kỹ Năng",
+        "ageRange": "Độ Tuổi",
+        "standard": "Tiêu Chuẩn",
+        "status": "Trạng Thái"
+      },
+      "noData": "Không tìm thấy khóa học.",
+      "noDataDetail": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm các khóa học phù hợp.",
+      "loading": "Đang tải khóa học...",
+      "error": "Đã xảy ra lỗi trong quá trình lấy khóa học. Vui lòng thử lại.",
+      "courseListTitle": "Danh Sách Khóa Học"
+    },
+    "details": {
+      "title": "Chi Tiết Khóa Học",
+      "about": "Về khóa học này",
+      "notFound": "Không tìm thấy khóa học",
+      "notFoundDescription": "Chúng tôi xin lỗi, nhưng khóa học bạn đang tìm kiếm không tồn tại.",
+      "stats": {
+        "lesson": "Bài Học",
+        "lesson_description": "Chương trình giảng dạy toàn diện",
+        "duration": "Thời gian",
+        "dur_description": "Học tập theo tiến độ cá nhân",
+        "downloads": "Tải xuống",
+        "down_description": "Tham gia cộng đồng"
+      },
+      "lesson": {
+        "title": "Danh sách các bài học",
+        "description": "Các hoạt động hấp dẫn được thiết kế để truyền cảm hứng cho việc học tập và phát triển",
+        "noData": "Không tìm thấy bài học",
+        "noDataDescription": "Hiện tại không có bài học nào có sẵn cho khóa học này."
+      },
+      "tags": {
+        "topic": "Chủ đề",
+        "skill": "Kỹ Năng",
+        "standard": "Tiêu Chuẩn",
+        "ageRange": "Độ Tuổi",
+        "dur_unit": "phút",
+        "age_unit": "tuổi"
+      }
+    },
+
+    "form": {
+      "title": {
+        "create": "Tạo Khóa Học",
+        "update": "Cập Nhật Khóa Học"
+      },
+      "fields": {
+        "title": {
+          "label": "Tiêu Đề",
+          "note": "Tiêu đề của khóa học",
+          "placeholder": "e.g: Mùa Hè Vui Vẻ"
+        },
+        "description": {
+          "label": "Mô Tả",
+          "note": "Mô tả cho khóa học",
+          "placeholder": "e.g: Khóa học này bao gồm các kỹ năng tư duy phản biện và sáng tạo cho trẻ em"
+        },
+        "code": {
+          "label": "Mã",
+          "note": "Mã định danh duy nhất cho khóa học",
+          "placeholder": "e.g STEM001"
+        },
+        "studentTasks": {
+          "label": "Nhiệm Vụ Học Sinh",
+          "note": "Nhập các nhiệm vụ mà học sinh cần hoàn thành",
+          "placeholder": "Ví dụ: Hoàn thành bài tập lập trình"
+        },
+        "prerequisites": {
+          "label": "Điều Kiện Tiên Quyết",
+          "note": "Nhập các điều kiện tiên quyết cho khóa học này",
+          "placeholder": "Ví dụ: Kiến thức cơ bản về Python"
+        },
+        "category": {
+          "label": "Danh Mục",
+          "note": "Chọn các danh mục mà khóa học này thuộc về"
+        },
+        "skill": {
+          "label": "Kỹ Năng",
+          "note": "Chọn các kỹ năng mà khóa học này sẽ giúp phát triển"
+        },
+        "standard": {
+          "label": "Tiêu Chuẩn",
+          "note": "Chọn các tiêu chuẩn giáo dục mà khóa học này tuân thủ"
+        },
+        "ageRange": {
+          "label": "Độ Tuổi",
+          "note": "Chọn độ tuổi phù hợp cho khóa học này"
+        },
+        "level": {
+          "label": "Cấp Độ",
+          "note": "Chọn cấp độ của khóa học",
+          "options": {
+            "beginner": "Mới bắt đầu",
+            "intermediate": "Trung cấp",
+            "advanced": "Nâng cao"
+          }
+        },
+        "image": {
+          "label": "Ảnh Bìa",
+          "note": "Tải lên ảnh bìa",
+          "placeholder": "Làm cho tài liệu trở nên hấp dẫn hơn"
+        }
+      }
+    }
+  }
+}

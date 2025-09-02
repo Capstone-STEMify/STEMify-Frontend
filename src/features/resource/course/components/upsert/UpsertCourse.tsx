@@ -110,7 +110,8 @@ export default function UpsertCourse() {
   const imageFieldRef = useRef<any>(null)
   const params = useParams()
   const courseId = params.courseId
-  const t = useTranslations('courseManagement')
+  const t = useTranslations('course')
+  const tc = useTranslations('common')
   const initialCourseDataRef = useRef<CourseFormData | null>(null)
   const locale = useLocale()
 
@@ -182,26 +183,32 @@ export default function UpsertCourse() {
           <div className='grid grid-cols-2 gap-5'>
             <SCard
               className='gap-3'
-              title={t('code.label')}
-              description={t('code.note')}
+              title={t('form.fields.code.label')}
+              description={t('form.fields.code.note')}
               content={
                 <form.AppField
                   name='code'
                   children={(field: any) => (
-                    <field.TextAreaField placeholder={t('code.placeholder')} className='rounded-lg border-gray-300' />
+                    <field.TextAreaField
+                      placeholder={t('form.fields.code.placeholder')}
+                      className='rounded-lg border-gray-300'
+                    />
                   )}
                 />
               }
             />
             <SCard
               className='gap-3'
-              title={t('title.label')}
-              description={t('title.note')}
+              title={t('form.fields.title.label')}
+              description={t('form.fields.title.note')}
               content={
                 <form.AppField
                   name='title'
                   children={(field: any) => (
-                    <field.TextAreaField placeholder={t('title.placeholder')} className='rounded-lg border-gray-300' />
+                    <field.TextAreaField
+                      placeholder={t('form.fields.title.placeholder')}
+                      className='rounded-lg border-gray-300'
+                    />
                   )}
                 />
               }
@@ -210,14 +217,14 @@ export default function UpsertCourse() {
 
           <SCard
             className='gap-3'
-            title={t('description.label')}
-            description={t('description.note')}
+            title={t('form.fields.description.label')}
+            description={t('form.fields.description.note')}
             content={
               <form.AppField
                 name='description'
                 children={(field: any) => (
                   <field.TextAreaField
-                    placeholder={t('description.placeholder')}
+                    placeholder={t('form.fields.description.placeholder')}
                     className='h-30 rounded-lg border-gray-300'
                   />
                 )}
@@ -227,14 +234,14 @@ export default function UpsertCourse() {
 
           <SCard
             className='gap-3'
-            title={t('prerequisites.label')}
-            description={t('prerequisites.note')}
+            title={t('form.fields.prerequisites.label')}
+            description={t('form.fields.prerequisites.note')}
             content={
               <form.AppField
                 name='prerequisites'
                 children={(field: any) => (
                   <field.TextAreaField
-                    placeholder={t('prerequisites.placeholder')}
+                    placeholder={t('form.fields.prerequisites.placeholder')}
                     className='h-30 rounded-lg border-gray-300'
                   />
                 )}
@@ -244,14 +251,14 @@ export default function UpsertCourse() {
 
           <SCard
             className='gap-3'
-            title={t('studentTasks.label')}
-            description={t('studentTasks.note')}
+            title={t('form.fields.studentTasks.label')}
+            description={t('form.fields.studentTasks.note')}
             content={
               <form.AppField
                 name='studentTasks'
                 children={(field: any) => (
                   <field.TextAreaField
-                    placeholder={t('studentTasks.placeholder')}
+                    placeholder={t('form.fields.studentTasks.placeholder')}
                     className='h-30 rounded-lg border-gray-300'
                   />
                 )}
@@ -263,8 +270,8 @@ export default function UpsertCourse() {
         <div className='space-y-6'>
           <SCard
             className='gap-2'
-            title={t('ageRange.label')}
-            description={t('ageRange.note')}
+            title={t('form.fields.ageRange.label')}
+            description={t('form.fields.ageRange.note')}
             content={
               <form.AppField
                 name='ageRangeId'
@@ -286,17 +293,17 @@ export default function UpsertCourse() {
 
           <SCard
             className='gap-2'
-            title={t('level.label')}
-            description={t('level.note')}
+            title={t('form.fields.level.label')}
+            description={t('form.fields.level.note')}
             content={
               <form.AppField
                 name='level'
                 children={(field) => (
                   <field.RadioField
                     options={[
-                      { value: CourseLevel.BEGINNER, label: t('level.options.beginner') },
-                      { value: CourseLevel.INTERMEDIATE, label: t('level.options.intermediate') },
-                      { value: CourseLevel.ADVANCED, label: t('level.options.advanced') }
+                      { value: CourseLevel.BEGINNER, label: t('form.fields.level.options.beginner') },
+                      { value: CourseLevel.INTERMEDIATE, label: t('form.fields.level.options.intermediate') },
+                      { value: CourseLevel.ADVANCED, label: t('form.fields.level.options.advanced') }
                     ]}
                     className='flex gap-y-4'
                   />
@@ -315,7 +322,7 @@ export default function UpsertCourse() {
 
           <form.AppForm>
             <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 w-full rounded-full'>
-              {t('btn')}
+              {tc('button.save')}
             </form.SubmitButton>
           </form.AppForm>
         </div>

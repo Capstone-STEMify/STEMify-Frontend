@@ -11,7 +11,15 @@
       "cancel": "Cancel",
       "save": "Save",
       "back": "Back",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "clear": "Clear All",
+      "enroll": "Enroll Now",
+      "wishlist": "Wishlist",
+      "review": "Send Approval Request",
+      "view": "View Detail",
+      "browse": "Browse",
+      "add": "Add",
+      "share": "Share"
     },
     "tableHeader": {
       "id": "ID",

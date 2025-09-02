@@ -9,7 +9,8 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 
 export default function ImageField({ previewUrlFromServer }: { previewUrlFromServer?: string }) {
-  const t = useTranslations('courseManagement')
+  const t = useTranslations('course')
+  const tc = useTranslations('common')
 
   const field = useFieldContext<File | null>()
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
@@ -45,7 +46,7 @@ export default function ImageField({ previewUrlFromServer }: { previewUrlFromSer
     <SCard
       content={
         <>
-          <h3 className='mb-3 text-xl font-semibold text-gray-800'>{t('image.label')}</h3>
+          <h3 className='mb-3 text-xl font-semibold text-gray-800'>{t('form.fields.image.label')}</h3>
           <div className='relative rounded-2xl border-2 border-dashed border-gray-300 p-8 text-center'>
             {previewUrl ? (
               <Image
@@ -58,14 +59,14 @@ export default function ImageField({ previewUrlFromServer }: { previewUrlFromSer
             ) : (
               <Upload className='mx-auto mb-3 h-12 w-12 text-gray-400' />
             )}
-            <p className='mb-1 text-gray-600'>{t('image.note')}</p>
-            <p className='mb-4 text-sm text-gray-400'>{t('image.placeholder')}</p>
+            <p className='mb-1 text-gray-600'>{t('form.fields.image.note')}</p>
+            <p className='mb-4 text-sm text-gray-400'>{t('form.fields.image.placeholder')}</p>
             <Button
               type='button'
               className='bg-amber-custom-400 rounded-full px-4 py-2'
               onClick={() => fileInputRef.current?.click()}
             >
-              {t('image.btn')}
+              {tc('button.browse')}
             </Button>
             <input type='file' accept='image/*' ref={fileInputRef} onChange={handleFileChange} className='hidden' />
           </div>
