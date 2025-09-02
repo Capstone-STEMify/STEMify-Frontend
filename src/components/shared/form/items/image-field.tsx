@@ -43,7 +43,7 @@ export default function ImageField({ previewUrlFromServer }: { previewUrlFromSer
 
   return (
     <>
-      <h3 className='mb-3 text-base font-semibold text-gray-800'>{t('image.label')}</h3>
+      <h3 className='mb-3 text-base font-semibold text-gray-800'>{t('form.fields.image.label')}</h3>
       <div className='mx-auto w-64'>
         <div className='relative aspect-square overflow-hidden rounded-2xl border-2 border-dashed border-gray-300'>
           <div className='flex h-full flex-col items-center justify-center gap-4 p-4 text-center'>
@@ -63,14 +63,14 @@ export default function ImageField({ previewUrlFromServer }: { previewUrlFromSer
             ) : (
               <>
                 <Upload className='h-12 w-12 text-gray-400' />
-                <p className='text-sm text-gray-600'>{t('image.note')}</p>
+                <p className='text-sm text-gray-600'>{t('form.fields.image.note')}</p>
                 <Button
                   type='button'
                   className='rounded-full border-gray-400 px-4 py-2'
                   variant='outline'
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  {t('image.btn')}
+                  {tc('button.browse')}
                 </Button>
               </>
             )}
