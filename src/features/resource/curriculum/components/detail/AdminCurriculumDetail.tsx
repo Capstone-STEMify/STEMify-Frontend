@@ -14,7 +14,6 @@ export default function AdminCurriculumDetail() {
   const t = useTranslations('curriculum')
   const [isEditing, setIsEditing] = useState(false)
   const { curriculumId } = useParams()
-  const { openModal } = useModal()
 
   const handleEdit = () => {
     setIsEditing(true)

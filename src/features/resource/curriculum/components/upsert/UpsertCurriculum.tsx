@@ -63,13 +63,13 @@ async function PatchCurriculumJsonPayload(
   return patchData
 }
 
-function mapCurriculumToFormData(course: ApiSuccessResponse<Curriculum>): CurriculumFormData {
+function mapCurriculumToFormData(curriculum: ApiSuccessResponse<Curriculum>): CurriculumFormData {
   return {
-    code: course.data.code ?? '',
-    title: course.data.title ?? '',
-    description: course.data.description ?? '',
+    code: curriculum.data.code ?? '',
+    title: curriculum.data.title ?? '',
+    description: curriculum.data.description ?? '',
     imageUrl: null as any,
-    imagePreviewUrl: course.data.imageUrl ?? undefined
+    imagePreviewUrl: curriculum.data.imageUrl ?? undefined
   }
 }
 
@@ -146,48 +146,46 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
         form.handleSubmit()
       }}
     >
-      <div>
-        <div className='space-y-6'>
-          <form.AppField
-            name='imageUrl'
-            children={(field) => {
-              imageFieldRef.current = field
-              return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
-            }}
-          />
-          <form.AppField
-            name='code'
-            children={(field) => (
-              <field.TextField
-                label='Code'
-                placeholder={t('form.fields.code.placeholder')}
-                className='rounded-lg border-gray-300'
-              />
-            )}
-          />
+      <div className='space-y-6'>
+        <form.AppField
+          name='imageUrl'
+          children={(field) => {
+            imageFieldRef.current = field
+            return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
+          }}
+        />
+        <form.AppField
+          name='code'
+          children={(field) => (
+            <field.TextField
+              label='Code'
+              placeholder={t('form.fields.code.placeholder')}
+              className='rounded-lg border-gray-300'
+            />
+          )}
+        />
 
-          <form.AppField
-            name='title'
-            children={(field) => (
-              <field.TextField
-                label='Title'
-                placeholder={t('form.fields.name.placeholder')}
-                className='rounded-lg border-gray-300'
-              />
-            )}
-          />
+        <form.AppField
+          name='title'
+          children={(field) => (
+            <field.TextField
+              label='Title'
+              placeholder={t('form.fields.name.placeholder')}
+              className='rounded-lg border-gray-300'
+            />
+          )}
+        />
 
-          <form.AppField
-            name='description'
-            children={(field) => (
-              <field.TextAreaField
-                label='Description'
-                placeholder={t('form.fields.description.placeholder')}
-                className='h-30 rounded-lg border-gray-300'
-              />
-            )}
-          />
-        </div>
+        <form.AppField
+          name='description'
+          children={(field) => (
+            <field.TextAreaField
+              label='Description'
+              placeholder={t('form.fields.description.placeholder')}
+              className='h-30 rounded-lg border-gray-300'
+            />
+          )}
+        />
       </div>
       <div className='flex justify-end'>
         <form.AppForm>

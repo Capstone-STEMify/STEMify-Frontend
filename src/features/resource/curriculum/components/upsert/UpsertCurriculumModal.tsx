@@ -3,7 +3,6 @@ import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 import { useTranslations } from 'next-intl'
 import UpsertCurriculum from './UpsertCurriculum'
-import { Button } from '@/components/shadcn/button'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 interface UpsertCurriculumModalProps {
   id?: number
@@ -24,7 +23,7 @@ export default function UpsertCurriculumModal({ id, onConfirm }: UpsertCurriculu
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='flex w-full flex-col'>
+      <DialogContent className='flex w-full flex-col lg:w-[660px]'>
         <DialogHeader className='shrink-0'>
           <DialogTitle>{t('form.title.create')}</DialogTitle>
         </DialogHeader>
