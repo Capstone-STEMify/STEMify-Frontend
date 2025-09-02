@@ -17,7 +17,7 @@ export default function AdminCurriculumCourseList({ curriculumId }: AdminCurricu
       <Button
         className='bg-amber-custom-400'
         onClick={() => {
-          openModal('courseList', { curriculumId })
+          openModal('curriculumSelectCourseListModal', { curriculumId })
         }}
       >
         <Plus className='mr-1 h-4 w-4' />
