@@ -3,7 +3,7 @@ import { SCarousel } from '@/components/shared/SCarousel'
 import Image from 'next/image'
 
 type KitInformationSectionProps = {
-  kitIds: number[] | undefined
+  kitIds?: any[]
 }
 
 export default function KitInformationSection({ kitIds }: KitInformationSectionProps) {

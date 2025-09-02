@@ -63,28 +63,25 @@ async function PatchCurriculumJsonPayload(
   return patchData
 }
 
-function mapCurriculumToFormData(course: ApiSuccessResponse<Curriculum>): CurriculumFormData {
+function mapCurriculumToFormData(curriculum: ApiSuccessResponse<Curriculum>): CurriculumFormData {
   return {
-    code: course.data.code ?? '',
-    title: course.data.title ?? '',
-    description: course.data.description ?? '',
+    code: curriculum.data.code ?? '',
+    title: curriculum.data.title ?? '',
+    description: curriculum.data.description ?? '',
     imageUrl: null as any,
-    imagePreviewUrl: course.data.imageUrl ?? undefined
+    imagePreviewUrl: curriculum.data.imageUrl ?? undefined
   }
 }
 
 interface UpsertCurriculumProps {
   curriculumId?: number
   onSuccess?: () => void
-  inModal?: boolean
 }
 
-export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: UpsertCurriculumProps) {
-  // Translations
+export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurriculumProps) {
   const t = useTranslations('curriculum')
   const tc = useTranslations('common')
   const imageFieldRef = useRef<any>(null)
-  const gridCols = inModal ? 'grid-cols-1' : 'sm:grid-cols-1 lg:grid-cols-3'
   const initialCurriculumDataRef = useRef<CurriculumFormData | null>(null)
   const router = useRouter()
   const userId = useAppSelector((state) => state.auth.user?.userId)
@@ -117,8 +114,9 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
           const jsonPayload = await CreateCurriculumJsonPayload(value, userId!)
           const res = await createCurriculum(jsonPayload).unwrap()
           toast.success(`${tc('successMessage.create')} (${res.data.title})`)
-          router.push(`/${locale}/resource/curriculum/${res.data.id}`)
+          router.push(`/${locale}/admin/curriculum/${res.data.id}`)
         }
+        onSuccess?.()
       } catch (err) {
         toast.error(`${tc('errorMessage')}`)
         console.error(err)
@@ -134,89 +132,68 @@ export default function UpsertCurriculum({ curriculumId, onSuccess, inModal }: U
 
   if (curriculumId && (!curriculumData || isLoading)) {
     return (
-      <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>
+      <div className='flex h-fit items-center justify-center text-lg font-semibold text-gray-600'>
         <LoadingComponent />
       </div>
     )
   }
 
   return (
-    <div>
-      <form
-        className='space-y-4'
-        onSubmit={(e) => {
-          e.preventDefault()
-          form.handleSubmit()
-        }}
-      >
-        <div className={`grid gap-8 ${gridCols}`}>
-          <div className='space-y-6 lg:col-span-2'>
-            <SCard
-              className='gap-3'
-              title={t('form.fields.code.label')}
-              description={t('form.fields.code.note')}
-              content={
-                <form.AppField
-                  name='code'
-                  children={(field) => (
-                    <field.TextField
-                      placeholder={t('form.fields.code.placeholder')}
-                      className='rounded-lg border-gray-300'
-                    />
-                  )}
-                />
-              }
+    <form
+      className='space-y-4 px-7'
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+    >
+      <div className='space-y-6'>
+        <form.AppField
+          name='imageUrl'
+          children={(field) => {
+            imageFieldRef.current = field
+            return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
+          }}
+        />
+        <form.AppField
+          name='code'
+          children={(field) => (
+            <field.TextField
+              label='Code'
+              placeholder={t('form.fields.code.placeholder')}
+              className='rounded-lg border-gray-300'
             />
-            <SCard
-              className='gap-3'
-              title={t('form.fields.name.label')}
-              description={t('form.fields.name.note')}
-              content={
-                <form.AppField
-                  name='title'
-                  children={(field) => (
-                    <field.TextField
-                      placeholder={t('form.fields.name.placeholder')}
-                      className='rounded-lg border-gray-300'
-                    />
-                  )}
-                />
-              }
-            />
-            <SCard
-              className='gap-3'
-              title={t('form.fields.description.label')}
-              description={t('form.fields.description.note')}
-              content={
-                <form.AppField
-                  name='description'
-                  children={(field) => (
-                    <field.TextAreaField
-                      placeholder={t('form.fields.description.placeholder')}
-                      className='h-30 rounded-lg border-gray-300'
-                    />
-                  )}
-                />
-              }
-            />
-          </div>
-          <div className='space-y-6'>
-            <form.AppField
-              name='imageUrl'
-              children={(field) => {
-                imageFieldRef.current = field
-                return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
-              }}
-            />
+          )}
+        />
 
-            <form.AppForm>
-              <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 w-full rounded-full'>
-                {tc('button.save')}
-              </form.SubmitButton>
-            </form.AppForm>
-          </div>
-        </div>
-      </form>
-    </div>
+        <form.AppField
+          name='title'
+          children={(field) => (
+            <field.TextField
+              label='Title'
+              placeholder={t('form.fields.name.placeholder')}
+              className='rounded-lg border-gray-300'
+            />
+          )}
+        />
+
+        <form.AppField
+          name='description'
+          children={(field) => (
+            <field.TextAreaField
+              label='Description'
+              placeholder={t('form.fields.description.placeholder')}
+              className='h-30 rounded-lg border-gray-300 lg:w-[550px]'
+            />
+          )}
+        />
+      </div>
+      <div className='flex justify-end'>
+        <form.AppForm>
+          <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 rounded-full'>
+            {tc('button.save')}
+          </form.SubmitButton>
+        </form.AppForm>
+      </div>
+    </form>
   )
 }

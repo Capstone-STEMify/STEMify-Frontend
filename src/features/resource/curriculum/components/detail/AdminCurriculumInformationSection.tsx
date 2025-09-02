@@ -1,5 +1,5 @@
 import { Button } from '@/components/shadcn/button'
-import { School, SquarePen, Trash2 } from 'lucide-react'
+import { SquarePen, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 import { Badge } from '@/components/shadcn/badge'
@@ -9,42 +9,51 @@ import {
   useGetCurriculumByIdQuery
 } from '@/features/resource/curriculum/api/curriculumApi'
 import { useParams } from 'next/navigation'
-import { CurriculumStatus } from '../../types/curriculum.type'
+import { Curriculum, CurriculumStatus } from '../../types/curriculum.type'
 import { useModal } from '@/providers/ModalProvider'
-type Props = {
-  onEdit: () => void
+import { toast } from 'sonner'
+
+type AdminCurriculumInformationSectionProps = {
+  curriculumId: number
+  curriculum: Curriculum
 }
-export default function CurriculumInformationSection({ onEdit }: Props) {
+
+export default function AdminCurriculumInformationSection({
+  curriculumId,
+  curriculum
+}: AdminCurriculumInformationSectionProps) {
   // Translations
   const tc = useTranslations('common')
   const t = useTranslations('curriculum')
-  const { curriculumId } = useParams()
   const { openModal } = useModal()
-
   const [deleteCurriculum] = useDeleteCurriculumMutation()
 
   const handleDelete = async () => {
-    const res = await deleteCurriculum(Number(curriculumId)).unwrap()
+    await deleteCurriculum(Number(curriculumId)).unwrap()
+    toast.success(t('form.successMessage.delete'))
   }
 
-  const { data } = useGetCurriculumByIdQuery(Number(curriculumId), { skip: !curriculumId })
   const handleUpdateCurriculumStatus = (status: CurriculumStatus) => {}
 
   return (
     <div className='grid grid-cols-1 gap-12 py-5 md:grid-cols-3'>
       {/* Content Section */}
       <div className='flex flex-col md:col-span-2'>
-        <h2 className='mb-2 text-sm text-gray-500 uppercase'>{data?.data.code}</h2>
+        <h2 className='mb-2 text-sm text-gray-500 uppercase'>{curriculum.code}</h2>
         <div className='flex items-center gap-2'>
-          <h1 className='mb-4 text-4xl font-bold text-gray-900'>{data?.data.title}</h1>
+          <h1 className='mb-4 text-4xl font-bold text-gray-900'>{curriculum.title}</h1>
           <span className='cursor-pointer text-blue-500'>
-            <SquarePen onClick={onEdit} />
+            <SquarePen
+              onClick={() => {
+                openModal('upsertCurriculum', { curriculum: curriculum.id })
+              }}
+            />
           </span>
           <span className='cursor-pointer text-red-500'>
             <Trash2
               onClick={() => {
                 openModal('confirm', {
-                  message: `${tc('confirmMessage.delete', { title: data?.data.title || '' })}`,
+                  message: `${tc('confirmMessage.delete', { title: curriculum.title || '' })}`,
                   onConfirm: () => handleDelete()
                 })
               }}
@@ -56,11 +65,11 @@ export default function CurriculumInformationSection({ onEdit }: Props) {
 
         {/* badges */}
         <div className='mb-4 flex flex-wrap gap-2'>
-          <Badge className='bg-blue-100 text-blue-800'>{data?.data.status}</Badge>
+          <Badge className='bg-blue-100 text-blue-800'>{curriculum.status}</Badge>
           {/* <Badge className='bg-amber-100 text-amber-800'>Ages {data?.data.}</Badge> */}
         </div>
 
-        <p className='mb-4 text-lg text-gray-700'>{data?.data.description}</p>
+        <p className='mb-4 text-lg text-gray-700'>{curriculum.description}</p>
 
         {/* Review actions */}
         {/* {(curriculum.data.status === CurriculumStatus.PENDING || curriculum.data.status === CurriculumStatus.DRAFT) && ( */}
@@ -82,8 +91,8 @@ export default function CurriculumInformationSection({ onEdit }: Props) {
       {/* Image Section */}
       <div className='relative max-h-[400px] max-w-[400px] overflow-hidden rounded-2xl shadow-md'>
         <Image
-          src={data?.data.imageUrl || '/images/fallback.png'}
-          alt='STEM Starter Curriculum'
+          src={curriculum.imageUrl || '/images/fallback.png'}
+          alt='STEAM Starter Curriculum'
           width={400}
           height={400}
           className='h-full w-full object-cover'

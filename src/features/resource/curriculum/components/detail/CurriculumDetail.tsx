@@ -58,7 +58,7 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
       </div>
 
       {/* Kit Information Section */}
-      <KitInformationSection kitIds={curriculum?.data.kitIds} />
+      <KitInformationSection kitIds={curriculum?.data.kits} />
 
       {/* Course Section Carousel */}
       <CurriculumCourseSection />

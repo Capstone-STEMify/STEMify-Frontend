@@ -16,7 +16,7 @@ import { capitalizeFirst } from '@/utils/index'
 import { setPageIndex, setPageSize } from '../../slice/curriculumSlice'
 import { useDeleteCurriculumMutation, useSearchCurriculumQuery } from '../../api/curriculumApi'
 
-export default function CurriculumList() {
+export default function AdminCurriculumList() {
   const t = useTranslations('curriculum')
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -71,22 +71,23 @@ export default function CurriculumList() {
 
   return (
     <div>
-      <div className='grid h-fit grid-cols-1 justify-items-stretch gap-y-10 py-6 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'>
+      <div className='grid h-fit grid-cols-1 justify-items-stretch gap-y-10 py-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {rows.map((curriculum: any) => (
           <Link key={curriculum.id} href={`/${locale}/admin/curriculum/${curriculum.id}`}>
             <CardLayout
               imageSrc={curriculum.imageUrl}
-              size='md'
+              size='sm'
               badge={
                 <Badge className={`${getStatusBadgeClass(curriculum.status)}`}>
                   {capitalizeFirst(curriculum.status)}
                 </Badge>
               }
             >
-              <div>
-                <p className='text-amber-custom-400 text-xs font-semibold'>{curriculum.code}</p>
-                <h3 className='text-md font-semibold text-gray-700'>{curriculum.title}</h3>
-                <p className='my-2 line-clamp-3 text-sm text-gray-500'>{curriculum.description}</p>
+              <p className='text-amber-custom-400 line-clamp-1 text-xs font-semibold'>{curriculum.code}</p>
+              <h3 className='line-clamp-1 text-base font-semibold text-gray-700'>{curriculum.title}</h3>
+              <p className='line-clamp-2 text-sm text-gray-500'>{curriculum.description}</p>
+
+              <div className='mt-auto'>
                 <Badge className='bg-rose-300'>{curriculum.courseCount || 0} courses</Badge>
               </div>
             </CardLayout>

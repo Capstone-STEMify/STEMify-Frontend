@@ -1,5 +1,5 @@
 import CurriculumAction from '@/features/resource/curriculum/components/list/CurriculumAction'
-import CurriculumList from '@/features/resource/curriculum/components/list/CurriculumList'
+import CurriculumList from '@/features/resource/curriculum/components/list/AdminCurriculumList'
 import React from 'react'
 
 export default function AdminCurriculum() {
