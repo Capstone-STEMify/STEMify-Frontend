@@ -52,6 +52,8 @@
     "@tanstack/react-table": "^8.21.3",
     "@uiw/react-markdown-preview": "^5.1.4",
     "@uiw/react-md-editor": "^4.0.8",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "blockly": "^12.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
