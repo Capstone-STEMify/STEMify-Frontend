@@ -38,7 +38,7 @@ export default function CourseListAction() {
   // Redux hooks
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.course)
-  const debouncedSearchQuery = useDebounce(filters.search, 500)
+  const debouncedSearchQuery = useDebounce(filters.search || '', 500)
 
   // Lazy queries
   const [getCategory, { data: categories }] = useLazyGetAllCategoryQuery()

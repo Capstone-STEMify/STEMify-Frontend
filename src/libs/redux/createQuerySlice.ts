@@ -23,12 +23,7 @@ export function createQuerySlice<T extends SliceQueryParams>(name: string, initi
       },
       setSearchTerm(state, action: PayloadAction<string>) {
         const value = action.payload.trim()
-        if (value) {
-          state.search = value
-        } else {
-          delete state.search
-        }
-        state.pageNumber = 1
+        state.search = value
       },
       setParam(state, action: PayloadAction<{ key: keyof T; value: any }>) {
         const { key, value } = action.payload

@@ -15,6 +15,7 @@ export type Curriculum = {
   createdByUserName: string
   courseCount: number
   kits: any[]
+  courses: Course[]
 }
 
 export type CurriculumQueryParams = {

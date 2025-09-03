@@ -143,7 +143,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                   ) : (
                     <TableRow>
                       <TableCell colSpan={table.getAllLeafColumns().length} className='h-24 text-center'>
-                        No results.
+                        {placeholder || tc('tableHeader.empty')}
                       </TableCell>
                     </TableRow>
                   )}
@@ -176,7 +176,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               ) : (
                 <TableRow>
                   <TableCell colSpan={table.getAllLeafColumns().length} className='h-24 text-center'>
-                    No results.
+                    {placeholder || tc('tableHeader.empty')}
                   </TableCell>
                 </TableRow>
               )}

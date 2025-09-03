@@ -35,7 +35,8 @@
       "ageRangeLabel": "Nhóm Tuổi",
       "minAge": "Tuổi Tối Thiểu",
       "maxAge": "Tuổi Tối Đa",
-      "actions": "Hành Động"
+      "actions": "Hành Động",
+      "empty": "Không tìm thấy kết quả."
     },
     "paging": {
       "previous": "Trước",

@@ -1,17 +1,14 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useSearchCourseQuery } from '../../api/courseApi'
-import { useGetCourseAction } from './CourseAction'
 import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useRouter } from 'next/navigation'
-import CourseListAction from '@/features/resource/course/components/list/CourseListAction'
 import { useLocale, useTranslations } from 'next-intl'
 import { CourseQueryParams, CourseStatus } from '@/features/resource/course/types/course.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize, setParam } from '@/features/resource/course/slice/courseSlice'
 import { IconPlus } from '@tabler/icons-react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import Link from 'next/link'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
@@ -20,13 +17,14 @@ import { SPagination } from '@/components/shared/SPagination'
 import { LayoutGrid, TableIcon } from 'lucide-react'
 import { getCourseStatusBadgeClass, getLevelBadgeClass } from '@/utils/badgeColor'
 import STabs from '@/components/shared/STabs'
+import { useGetCourseColumn } from '@/features/resource/course/components/list/CourseColum'
 
 type ViewMode = 'table' | 'card'
 
 export default function AdminCourseList() {
   const t = useTranslations('Admin')
   const dispatch = useAppDispatch()
-  const columns = useGetCourseAction()
+  const columns = useGetCourseColumn({ isPopup: false })
   const router = useRouter()
   const locale = useLocale()
 

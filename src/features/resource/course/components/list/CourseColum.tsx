@@ -27,7 +27,7 @@ const levelBadgeClass = (level?: string): string => {
   return map[level ?? ''] ?? 'bg-muted text-muted-foreground'
 }
 
-export function useGetCourseAction(): ColumnDef<Course>[] {
+export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDef<Course>[] {
   const router = useRouter()
   const { openModal } = useModal()
   const [deleteCourse] = useDeleteCourseMutation()
@@ -88,12 +88,30 @@ export function useGetCourseAction(): ColumnDef<Course>[] {
       cell: ({ row }) => {
         const courseId = row.original.id
         return (
-          <div
-            onClick={() => router.push(`/${locale}/admin/course/${courseId}`)}
-            className='cursor-pointer font-bold transition hover:opacity-80'
-          >
-            {row.getValue('title')}
-          </div>
+          <>
+            {isPopup ? (
+              <div className='font-bold'>{row.getValue('title')}</div>
+            ) : (
+              <div
+                onClick={() => router.push(`/${locale}/admin/course/${courseId}`)}
+                className='cursor-pointer font-bold transition hover:opacity-80'
+              >
+                {row.getValue('title')}
+              </div>
+            )}
+          </>
+        )
+      }
+    },
+    {
+      accessorKey: 'description',
+      header: () => <div>{tc('tableHeader.description')}</div>,
+      cell: ({ row }) => {
+        const courseId = row.original.id
+        return (
+          <>
+            <div className='w-52 truncate'>{row.getValue('description')}</div>
+          </>
         )
       }
     },

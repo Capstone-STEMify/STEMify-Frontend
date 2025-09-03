@@ -33,7 +33,7 @@ export default function AdminCurriculumDetail() {
 
           <hr className='my-10' />
 
-          <AdminCurriculumCourseList curriculumId={Number(curriculumId)} />
+          <AdminCurriculumCourseList curriculumId={Number(curriculumId)} courses={data?.data?.courses} />
         </>
       )}
     </div>

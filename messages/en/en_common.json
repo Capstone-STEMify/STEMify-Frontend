@@ -35,7 +35,8 @@
       "ageRangeLabel": "Age Range Label",
       "minAge": "Min Age",
       "maxAge": "Max Age",
-      "actions": "Actions"
+      "actions": "Actions",
+      "empty": "No results found."
     },
     "paging": {
       "previous": "Previous",
