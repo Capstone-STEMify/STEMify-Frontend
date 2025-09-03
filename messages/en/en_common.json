@@ -19,7 +19,8 @@
       "view": "View Detail",
       "browse": "Browse",
       "add": "Add",
-      "share": "Share"
+      "share": "Share",
+      "remove": "Remove"
     },
     "tableHeader": {
       "id": "ID",
@@ -58,6 +59,7 @@
     "errorMessage": "An error occurred. Please try again.",
     "confirmMessage": {
       "delete": "Are you sure you want to delete \"{title}\"?",
+      "removeCourse": "Are you sure you want to remove \"{title}\" from this curriculum?",
       "discard": "Are you sure you want to discard your changes?"
     }
   }

@@ -3,7 +3,7 @@ import React from 'react'
 import { useTranslations } from 'next-intl'
 import { Course, CourseLevel, CourseStatus } from '../../types/course.type'
 import { ColumnDef } from '@tanstack/react-table'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useModal } from '@/providers/ModalProvider'
 import { useDeleteCourseMutation, useUpdateCourseMutation } from '../../api/courseApi'
 import { toast } from 'sonner'
@@ -28,12 +28,14 @@ const levelBadgeClass = (level?: string): string => {
 }
 
 export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDef<Course>[] {
+  const tc = useTranslations('common')
+
   const router = useRouter()
   const { openModal } = useModal()
   const [deleteCourse] = useDeleteCourseMutation()
   const [updateCourseStatus] = useUpdateCourseMutation()
   const locale = useLocale()
-  const tc = useTranslations('common')
+  const { curriculumId } = useParams()
 
   const handleDelete = async (id: number) => {
     try {
@@ -88,7 +90,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       cell: ({ row }) => {
         const courseId = row.original.id
         return (
-          <>
+          <div className='line-clamp-3 w-32 whitespace-pre-wrap'>
             {isPopup ? (
               <div className='font-bold'>{row.getValue('title')}</div>
             ) : (
@@ -99,7 +101,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
                 {row.getValue('title')}
               </div>
             )}
-          </>
+          </div>
         )
       }
     },
@@ -107,24 +109,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       accessorKey: 'description',
       header: () => <div>{tc('tableHeader.description')}</div>,
       cell: ({ row }) => {
-        const courseId = row.original.id
-        return (
-          <>
-            <div className='w-52 truncate'>{row.getValue('description')}</div>
-          </>
-        )
-      }
-    },
-    {
-      accessorKey: 'level',
-      header: () => <div>{tc('tableHeader.level')}</div>,
-      cell: ({ row }) => {
-        const value = row.getValue<string>('level')
-        return (
-          <Badge className={`cursor-pointer ${levelBadgeClass(value)}`} variant='outline'>
-            {value}
-          </Badge>
-        )
+        return <div className='line-clamp-5 w-md whitespace-pre-wrap'>{row.getValue('description')}</div>
       }
     },
     {
@@ -140,15 +125,6 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       }
     },
     {
-      accessorKey: 'createdByUserName',
-      header: () => <div>{tc('tableHeader.createdBy')}</div>,
-      cell: ({ row }) => {
-        const value = row.getValue<string>('createdByUserName')
-        const display = value?.trim() ? value : 'STEMify Staff'
-        return <div className='cursor-pointer'>{display}</div>
-      }
-    },
-    {
       accessorKey: 'createdDate',
       header: () => <div>{tc('tableHeader.createdDate')}</div>,
       cell: ({ row }) => {
@@ -159,19 +135,32 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
     },
     createActionsColumnFromItems<Course>([
       {
-        label: tc('button.update'),
+        label: tc('button.view'),
         onClick: ({ original }) => {
-          router.push(`/${locale}/admin/course/update/${original.id}`)
+          router.push(`/${locale}/admin/course/${original.id}`)
         }
       },
       {
         label: tc('button.delete'),
         danger: true,
+        hidden: () => curriculumId !== undefined,
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
             message: `Are you sure you want to delete course "${original.title}"?`,
             onConfirm: () => handleDelete(original.id)
+          })
+        }
+      },
+      {
+        label: tc('button.remove'),
+        danger: true,
+        hidden: () => curriculumId === undefined,
+        onClick: async ({ original }) => {
+          // Open the confirmation modal for removing course from curriculum
+          openModal('confirm', {
+            message: tc('confirmMessage.removeCourse', { title: original.title })
+            // onConfirm: () => handleRemove(original.id)
           })
         }
       },

@@ -76,9 +76,8 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     })
   }
 
-  const handleNavigatePacingGuide = async (id: number) => {
+  const handleNavigatePacingGuide = (id: number) => {
     router.push(`/${locale}/admin/lesson/${id}/pacing-guide`)
-    // openModal('lessonDetail', { lessonId: id })
   }
 
   return [
@@ -163,9 +162,9 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
     },
     createActionsColumnFromItems<Lesson>([
       {
-        label: tc('button.update'),
+        label: tc('button.view'),
         onClick: ({ original }) => {
-          router.push(`/${locale}/admin/lesson/update/${original.id}`)
+          router.push(`/${locale}/admin/lesson/${original.id}/pacing-guide`)
         }
       },
       {

@@ -20,7 +20,7 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
   const { openModal } = useModal()
   const t = useTranslations('curriculum')
   const columns = useGetCourseColumn({ isPopup: false })
-  const visibleKeys = ['select', 'code', 'title', 'imageUrl', 'description']
+  const visibleKeys = ['select', 'code', 'title', 'imageUrl', 'description', 'actions']
   const filteredColumns = columns.filter((col) =>
     'accessorKey' in col ? visibleKeys.includes(col.accessorKey as string) : visibleKeys.includes(col.id ?? '')
   )

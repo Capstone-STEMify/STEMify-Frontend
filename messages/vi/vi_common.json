@@ -19,7 +19,8 @@
       "view": "Xem Chi Tiết",
       "browse": "Chọn Tệp",
       "add": "Thêm",
-      "share": "Chia Sẻ"
+      "share": "Chia Sẻ",
+      "remove": "Xóa Khỏi Danh Sách"
     },
     "tableHeader": {
       "id": "ID",
@@ -58,6 +59,7 @@
     "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "confirmMessage": {
       "delete": "Bạn có chắc chắn muốn xóa \"{title}\" không?",
+      "removeCourse": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi khung chương trình không?",
       "discard": "Bạn có chắc chắn muốn hủy bỏ thay đổi của mình không?"
     }
   }
