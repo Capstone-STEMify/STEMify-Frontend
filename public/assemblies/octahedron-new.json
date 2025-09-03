@@ -1,0 +1,1615 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-01-15T08:00:00Z",
+    "lastModified": "2025-01-15T08:00:00Z",
+    "author": "STEM Education Team",
+    "description": "Octahedron assembly lab - 3D regular octahedron construction with step-by-step guidance"
+  },
+  
+  "straws": [
+    {
+      "id": "straw_green_1",
+      "name": "Green Straw Base 1",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_1_start",
+          "localPosition": { "x": -5.6, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_1_end",
+          "localPosition": { "x": 5.6, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_2",
+      "name": "Green Straw Base 2",
+      "geometry": {
+        "length": 11.7,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 1.5708 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_2_start",
+          "localPosition": { "x": 0, "y": 0, "z": -5.85 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_2_end",
+          "localPosition": { "x": 0, "y": 0, "z": 5.85 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.32,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_3",
+      "name": "Green Straw Base 3",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 0, "z": 12.2 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_3_start",
+          "localPosition": { "x": -5.6, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_3_end",
+          "localPosition": { "x": 5.6, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_4",
+      "name": "Green Straw Base 4",
+      "geometry": {
+        "length": 11.7,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 11.7, "y": 0, "z": 6.1 },
+        "rotation": { "x": 0, "y": 0, "z": 1.5708 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_4_start",
+          "localPosition": { "x": 0, "y": 0, "z": -5.85 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_4_end",
+          "localPosition": { "x": 0, "y": 0, "z": 5.85 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.32,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_5",
+      "name": "Green Straw Vertical 1",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 5.6, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_5_start",
+          "localPosition": { "x": 0, "y": -5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_5_end",
+          "localPosition": { "x": 0, "y": 5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_6",
+      "name": "Green Straw Vertical 2",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 11.7, "y": 5.6, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_6_start",
+          "localPosition": { "x": 0, "y": -5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_6_end",
+          "localPosition": { "x": 0, "y": 5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_7",
+      "name": "Green Straw Vertical 3",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 5.6, "z": 12.2 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_7_start",
+          "localPosition": { "x": 0, "y": -5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_7_end",
+          "localPosition": { "x": 0, "y": 5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_8",
+      "name": "Green Straw Vertical 4",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 11.7, "y": 5.6, "z": 12.2 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_8_start",
+          "localPosition": { "x": 0, "y": -5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_8_end",
+          "localPosition": { "x": 0, "y": 5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_9",
+      "name": "Green Straw Bottom Vertical 1",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": -5.6, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_9_start",
+          "localPosition": { "x": 0, "y": -5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_9_end",
+          "localPosition": { "x": 0, "y": 5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_10",
+      "name": "Green Straw Bottom Vertical 2",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 11.7, "y": -5.6, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_10_start",
+          "localPosition": { "x": 0, "y": -5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_10_end",
+          "localPosition": { "x": 0, "y": 5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_11",
+      "name": "Green Straw Bottom Vertical 3",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": -5.6, "z": 12.2 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_11_start",
+          "localPosition": { "x": 0, "y": -5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_11_end",
+          "localPosition": { "x": 0, "y": 5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_green_12",
+      "name": "Green Straw Bottom Vertical 4",
+      "geometry": {
+        "length": 11.2,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#c1e500",
+        "flexibility": 15,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 11.7, "y": -5.6, "z": 12.2 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_green_12_start",
+          "localPosition": { "x": 0, "y": -5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_green_12_end",
+          "localPosition": { "x": 0, "y": 5.6, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.3,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    }
+  ],
+  
+  "connectors": [
+    {
+      "id": "connector_3leg_1",
+      "name": "3-leg Connector Base 1",
+      "type": "custom",
+      "geometry": {
+        "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
+        "portDiameter": 0.65,
+        "shape": "custom"
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#f0201c",
+        "flexibility": 5,
+        "opacity": 1.0,
+        "roughness": 0.4,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "rotation": { "x": 1.5708, "y": 0, "z": 1.5708 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": "connector_3leg_1_port_0",
+          "localPosition": { "x": 2.0, "y": 0, "z": 0 },
+          "orientation": { "x": 0, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 0
+        },
+        {
+          "id": "connector_3leg_1_port_1",
+          "localPosition": { "x": 1.0, "y": 2.0, "z": 1.0 },
+          "orientation": { "x": 0, "y": 90, "z": 45 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 1
+        },
+        {
+          "id": "connector_3leg_1_port_2",
+          "localPosition": { "x": 0, "y": 0, "z": 2.0 },
+          "orientation": { "x": 0, "y": 0, "z": 90 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 2
+        }
+      ],
+      "constraints": {
+        "maxConnections": 3,
+        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+      }
+    },
+    {
+      "id": "connector_3leg_2",
+      "name": "3-leg Connector Base 2",
+      "type": "custom",
+      "geometry": {
+        "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
+        "portDiameter": 0.65,
+        "shape": "custom"
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#f0201c",
+        "flexibility": 5,
+        "opacity": 1.0,
+        "roughness": 0.4,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 0, "z": 12.2 },
+        "rotation": { "x": 1.5708, "y": 0, "z": 1.5708 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": "connector_3leg_2_port_0",
+          "localPosition": { "x": 2.0, "y": 0, "z": 0 },
+          "orientation": { "x": 0, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 0
+        },
+        {
+          "id": "connector_3leg_2_port_1",
+          "localPosition": { "x": 1.0, "y": 2.0, "z": -1.0 },
+          "orientation": { "x": 0, "y": 90, "z": -45 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 1
+        },
+        {
+          "id": "connector_3leg_2_port_2",
+          "localPosition": { "x": 0, "y": 0, "z": -2.0 },
+          "orientation": { "x": 0, "y": 0, "z": -90 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 2
+        }
+      ],
+      "constraints": {
+        "maxConnections": 3,
+        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+      }
+    },
+    {
+      "id": "connector_3leg_3",
+      "name": "3-leg Connector Base 3",
+      "type": "custom",
+      "geometry": {
+        "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
+        "portDiameter": 0.65,
+        "shape": "custom"
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#f0201c",
+        "flexibility": 5,
+        "opacity": 1.0,
+        "roughness": 0.4,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 11.7, "y": 0, "z": 12.2 },
+        "rotation": { "x": 1.5708, "y": 0, "z": 1.5708 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": "connector_3leg_3_port_0",
+          "localPosition": { "x": -2.0, "y": 0, "z": 0 },
+          "orientation": { "x": 0, "y": 0, "z": 180 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 0
+        },
+        {
+          "id": "connector_3leg_3_port_1",
+          "localPosition": { "x": -1.0, "y": 2.0, "z": -1.0 },
+          "orientation": { "x": 0, "y": 90, "z": 225 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 1
+        },
+        {
+          "id": "connector_3leg_3_port_2",
+          "localPosition": { "x": 0, "y": 0, "z": -2.0 },
+          "orientation": { "x": 0, "y": 0, "z": 270 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 2
+        }
+      ],
+      "constraints": {
+        "maxConnections": 3,
+        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+      }
+    },
+    {
+      "id": "connector_3leg_4",
+      "name": "3-leg Connector Base 4",
+      "type": "custom",
+      "geometry": {
+        "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
+        "portDiameter": 0.65,
+        "shape": "custom"
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#f0201c",
+        "flexibility": 5,
+        "opacity": 1.0,
+        "roughness": 0.4,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 11.7, "y": 0, "z": 0 },
+        "rotation": { "x": -1.5708, "y": 0, "z": 1.5708 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": "connector_3leg_4_port_0",
+          "localPosition": { "x": -2.0, "y": 0, "z": 0 },
+          "orientation": { "x": 0, "y": 0, "z": 180 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 0
+        },
+        {
+          "id": "connector_3leg_4_port_1",
+          "localPosition": { "x": -1.0, "y": 2.0, "z": 1.0 },
+          "orientation": { "x": 0, "y": 90, "z": 135 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 1
+        },
+        {
+          "id": "connector_3leg_4_port_2",
+          "localPosition": { "x": 0, "y": 0, "z": 2.0 },
+          "orientation": { "x": 0, "y": 0, "z": 90 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 2
+        }
+      ],
+      "constraints": {
+        "maxConnections": 3,
+        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+      }
+    },
+    {
+      "id": "connector_5leg_top",
+      "name": "5-leg Connector Top",
+      "type": "custom",
+      "geometry": {
+        "size": { "x": 2.5, "y": 2.5, "z": 2.5 },
+        "portDiameter": 0.65,
+        "shape": "custom"
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#f0201c",
+        "flexibility": 5,
+        "opacity": 1.0,
+        "roughness": 0.4,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 5.85, "y": 11.2, "z": 6.1 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": "connector_5leg_top_port_0",
+          "localPosition": { "x": 1.0, "y": -2.0, "z": -1.0 },
+          "orientation": { "x": 0, "y": -90, "z": -45 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 0
+        },
+        {
+          "id": "connector_5leg_top_port_1",
+          "localPosition": { "x": 1.0, "y": -2.0, "z": 1.0 },
+          "orientation": { "x": 0, "y": -90, "z": 45 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 1
+        },
+        {
+          "id": "connector_5leg_top_port_2",
+          "localPosition": { "x": -1.0, "y": -2.0, "z": -1.0 },
+          "orientation": { "x": 0, "y": -90, "z": 225 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 2
+        },
+        {
+          "id": "connector_5leg_top_port_3",
+          "localPosition": { "x": -1.0, "y": -2.0, "z": 1.0 },
+          "orientation": { "x": 0, "y": -90, "z": 135 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 3
+        }
+      ],
+      "constraints": {
+        "maxConnections": 4,
+        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+      }
+    },
+    {
+      "id": "connector_5leg_bottom",
+      "name": "5-leg Connector Bottom",
+      "type": "custom",
+      "geometry": {
+        "size": { "x": 2.5, "y": 2.5, "z": 2.5 },
+        "portDiameter": 0.65,
+        "shape": "custom"
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#f0201c",
+        "flexibility": 5,
+        "opacity": 1.0,
+        "roughness": 0.4,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 5.85, "y": -11.2, "z": 6.1 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": "connector_5leg_bottom_port_0",
+          "localPosition": { "x": 1.0, "y": 2.0, "z": -1.0 },
+          "orientation": { "x": 0, "y": 90, "z": -45 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 0
+        },
+        {
+          "id": "connector_5leg_bottom_port_1",
+          "localPosition": { "x": 1.0, "y": 2.0, "z": 1.0 },
+          "orientation": { "x": 0, "y": 90, "z": 45 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 1
+        },
+        {
+          "id": "connector_5leg_bottom_port_2",
+          "localPosition": { "x": -1.0, "y": 2.0, "z": -1.0 },
+          "orientation": { "x": 0, "y": 90, "z": 225 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 2
+        },
+        {
+          "id": "connector_5leg_bottom_port_3",
+          "localPosition": { "x": -1.0, "y": 2.0, "z": 1.0 },
+          "orientation": { "x": 0, "y": 90, "z": 135 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 3
+        }
+      ],
+      "constraints": {
+        "maxConnections": 4,
+        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+      }
+    }
+  ],
+  
+  "joints": [
+    {
+      "id": "joint_base_1_2",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_1",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_1_start"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_1",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_1_port_0"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_base_1_4",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_1",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_1_end"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_4",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_4_port_0"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_base_2_1",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_2",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_2_start"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_1",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_1_port_2"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_base_2_2",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_2",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_2_end"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_2",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_2_port_2"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_base_3_2",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_3",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_3_start"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_2",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_2_port_0"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_base_3_3",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_3",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_3_end"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_3",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_3_port_0"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_base_4_3",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_4",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_4_start"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_3",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_3_port_2"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_base_4_4",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_4",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_4_end"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_4",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_4_port_2"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_vert_up_1",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_5",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_5_start"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_1",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_1_port_1"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_vert_up_2",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_6",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_6_start"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_4",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_4_port_1"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_vert_up_3",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_7",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_7_start"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_2",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_2_port_1"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_vert_up_4",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_8",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_8_start"
+      },
+      "componentB": {
+        "componentId": "connector_3leg_3",
+        "componentType": "connector",
+        "attachmentPointId": "connector_3leg_3_port_1"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_top_1",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_5",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_5_end"
+      },
+      "componentB": {
+        "componentId": "connector_5leg_top",
+        "componentType": "connector",
+        "attachmentPointId": "connector_5leg_top_port_0"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_top_2",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_6",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_6_end"
+      },
+      "componentB": {
+        "componentId": "connector_5leg_top",
+        "componentType": "connector",
+        "attachmentPointId": "connector_5leg_top_port_1"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_top_3",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_7",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_7_end"
+      },
+      "componentB": {
+        "componentId": "connector_5leg_top",
+        "componentType": "connector",
+        "attachmentPointId": "connector_5leg_top_port_2"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_top_4",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_8",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_8_end"
+      },
+      "componentB": {
+        "componentId": "connector_5leg_top",
+        "componentType": "connector",
+        "attachmentPointId": "connector_5leg_top_port_3"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_bottom_1",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_9",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_9_end"
+      },
+      "componentB": {
+        "componentId": "connector_5leg_bottom",
+        "componentType": "connector",
+        "attachmentPointId": "connector_5leg_bottom_port_0"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_bottom_2",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_10",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_10_end"
+      },
+      "componentB": {
+        "componentId": "connector_5leg_bottom",
+        "componentType": "connector",
+        "attachmentPointId": "connector_5leg_bottom_port_1"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_bottom_3",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_11",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_11_end"
+      },
+      "componentB": {
+        "componentId": "connector_5leg_bottom",
+        "componentType": "connector",
+        "attachmentPointId": "connector_5leg_bottom_port_2"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "joint_bottom_4",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_green_12",
+        "componentType": "straw",
+        "attachmentPointId": "straw_green_12_end"
+      },
+      "componentB": {
+        "componentId": "connector_5leg_bottom",
+        "componentType": "connector",
+        "attachmentPointId": "connector_5leg_bottom_port_3"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 95,
+      "created": "2025-01-15T08:00:00Z"
+    }
+  ],
+  
+  "actions": [
+    {
+      "id": "action_prepare_connectors",
+      "name": "Show Base Connectors",
+      "type": "highlight",
+      "targetId": "group_base_connectors",
+      "targetType": "group",
+      "parameters": {
+        "duration": 2.0,
+        "delay": 0.5,
+        "easing": "ease-in-out",
+        "loop": false,
+        "autoReverse": false
+      },
+      "animation": {
+        "keyframes": [
+          {
+            "time": 0.0,
+            "material": {
+              "type": "plastic",
+              "color": "#f0201c",
+              "opacity": 1.0
+            }
+          },
+          {
+            "time": 0.5,
+            "material": {
+              "type": "plastic",
+              "color": "#FFD700",
+              "opacity": 1.0
+            }
+          },
+          {
+            "time": 1.0,
+            "material": {
+              "type": "plastic",
+              "color": "#f0201c",
+              "opacity": 1.0
+            }
+          }
+        ],
+        "interpolation": "cubic"
+      },
+      "triggers": [
+        {
+          "event": "completion",
+          "nextActionId": "action_show_base_square"
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "action_show_base_square",
+      "name": "Show Base Square Formation",
+      "type": "connect",
+      "targetId": "group_base_joints",
+      "targetType": "group",
+      "parameters": {
+        "duration": 3.0,
+        "delay": 0.0,
+        "easing": "ease-out",
+        "loop": false
+      },
+      "triggers": [
+        {
+          "event": "completion",
+          "nextActionId": "action_add_vertical_straws"
+        }
+      ],
+      "order": 2
+    },
+    {
+      "id": "action_add_vertical_straws",
+      "name": "Add Vertical Straws",
+      "type": "connect",
+      "targetId": "group_vertical_joints",
+      "targetType": "group",
+      "parameters": {
+        "duration": 2.5,
+        "delay": 0.5,
+        "easing": "ease-in-out",
+        "loop": false
+      },
+      "triggers": [
+        {
+          "event": "completion",
+          "nextActionId": "action_connect_top"
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "action_connect_top",
+      "name": "Connect Top Connector",
+      "type": "connect",
+      "targetId": "group_top_joints",
+      "targetType": "group",
+      "parameters": {
+        "duration": 2.0,
+        "delay": 0.0,
+        "easing": "ease-in",
+        "loop": false
+      },
+      "triggers": [
+        {
+          "event": "completion",
+          "nextActionId": "action_add_bottom_verticals"
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "action_add_bottom_verticals",
+      "name": "Add Bottom Vertical Straws",
+      "type": "connect",
+      "targetId": "group_bottom_vertical_joints",
+      "targetType": "group",
+      "parameters": {
+        "duration": 2.5,
+        "delay": 0.0,
+        "easing": "ease-in-out",
+        "loop": false
+      },
+      "triggers": [
+        {
+          "event": "completion",
+          "nextActionId": "action_connect_bottom"
+        }
+      ],
+      "order": 5
+    },
+    {
+      "id": "action_connect_bottom",
+      "name": "Connect Bottom Connector",
+      "type": "connect",
+      "targetId": "group_bottom_joints",
+      "targetType": "group",
+      "parameters": {
+        "duration": 2.0,
+        "delay": 0.0,
+        "easing": "ease-in",
+        "loop": false
+      },
+      "triggers": [
+        {
+          "event": "completion",
+          "nextActionId": "action_final_highlight"
+        }
+      ],
+      "order": 6
+    },
+    {
+      "id": "action_final_highlight",
+      "name": "Final Octahedron Highlight",
+      "type": "highlight",
+      "targetId": "group_complete_octahedron",
+      "targetType": "group",
+      "parameters": {
+        "duration": 3.0,
+        "delay": 0.5,
+        "easing": "ease-in-out",
+        "loop": true,
+        "autoReverse": true
+      },
+      "animation": {
+        "keyframes": [
+          {
+            "time": 0.0,
+            "transform": {
+              "position": { "x": 0, "y": 0, "z": 0 },
+              "rotation": { "x": 0, "y": 0, "z": 0 },
+              "scale": { "x": 1, "y": 1, "z": 1 }
+            }
+          },
+          {
+            "time": 1.0,
+            "transform": {
+              "position": { "x": 0, "y": 0, "z": 0 },
+              "rotation": { "x": 0, "y": 6.28318, "z": 0 },
+              "scale": { "x": 1.1, "y": 1.1, "z": 1.1 }
+            }
+          }
+        ],
+        "interpolation": "cubic"
+      },
+      "order": 7
+    }
+  ],
+  
+  "activities": [
+    {
+      "id": "activity_octahedron_assembly",
+      "name": "Octahedron Assembly Lab",
+      "description": "Learn to construct a regular octahedron using connectors and straws - understanding 3D geometric principles through hands-on assembly",
+      "difficulty": "intermediate",
+      "estimatedTime": 1800,
+      "objectives": [
+        "Understand octahedron geometry and symmetry",
+        "Practice systematic 3D construction techniques",
+        "Learn connector port alignment and joint strength",
+        "Develop spatial reasoning through step-by-step assembly"
+      ],
+      "steps": [
+        {
+          "id": "step_prepare_base",
+          "order": 1,
+          "title": "Prepare Base Connectors",
+          "description": "Identify and position the four 3-leg connectors that will form the base square of the octahedron",
+          "actionIds": ["action_prepare_connectors"],
+          "expectedResult": "4 three-leg connectors are visible and highlighted",
+          "hints": [
+            "Each connector has 3 ports for straw connections",
+            "Notice the red color indicating connector type",
+            "Observe the spatial arrangement forming square corners"
+          ],
+          "validation": {
+            "type": "structure",
+            "criteria": {
+              "requiredConnectors": ["connector_3leg_1", "connector_3leg_2", "connector_3leg_3", "connector_3leg_4"],
+              "visibility": true
+            }
+          }
+        },
+        {
+          "id": "step_build_base_square",
+          "order": 2,
+          "title": "Form Base Square",
+          "description": "Connect the 4 connectors with straws to create the square foundation of the octahedron",
+          "actionIds": ["action_show_base_square"],
+          "expectedResult": "A complete square base is formed with proper joint connections",
+          "hints": [
+            "Each side of the square uses one straw",
+            "Straws should fit snugly into connector ports",
+            "Verify all joints are properly aligned"
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredJoints": ["joint_base_1_2", "joint_base_1_4", "joint_base_2_1", "joint_base_2_2", "joint_base_3_2", "joint_base_3_3", "joint_base_4_3", "joint_base_4_4"],
+              "connected": true
+            }
+          }
+        },
+        {
+          "id": "step_add_vertical_straws",
+          "order": 3,
+          "title": "Add Vertical Support Straws",
+          "description": "Attach vertical straws from each corner of the base square, pointing upward toward the top connector",
+          "actionIds": ["action_add_vertical_straws"],
+          "expectedResult": "4 vertical straws extend upward from base connectors",
+          "hints": [
+            "Use the upward-facing ports on each base connector",
+            "Vertical straws should be parallel to each other",
+            "Maintain proper alignment for top connector placement"
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredJoints": ["joint_vert_up_1", "joint_vert_up_2", "joint_vert_up_3", "joint_vert_up_4"],
+              "connected": true
+            }
+          }
+        },
+        {
+          "id": "step_connect_top_apex",
+          "order": 4,
+          "title": "Connect Top Apex",
+          "description": "Place and connect the 5-leg connector at the top center, joining all vertical straws",
+          "actionIds": ["action_connect_top"],
+          "expectedResult": "Top connector is centered and connected to all 4 vertical straws",
+          "hints": [
+            "The 5-leg connector has ports angled downward",
+            "Ensure equal distance from all base corners",
+            "All 4 connections should be secure"
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredJoints": ["joint_top_1", "joint_top_2", "joint_top_3", "joint_top_4"],
+              "connected": true
+            }
+          }
+        },
+        {
+          "id": "step_add_bottom_verticals",
+          "order": 5,
+          "title": "Add Bottom Vertical Straws",
+          "description": "Attach vertical straws downward from each base connector toward the bottom apex",
+          "actionIds": ["action_add_bottom_verticals"],
+          "expectedResult": "4 additional vertical straws extend downward from base",
+          "hints": [
+            "Use the remaining ports on base connectors",
+            "Mirror the upward straws but in opposite direction",
+            "Maintain symmetry with top half of octahedron"
+          ]
+        },
+        {
+          "id": "step_complete_bottom",
+          "order": 6,
+          "title": "Complete Bottom Apex",
+          "description": "Place the bottom 5-leg connector and complete the octahedron structure",
+          "actionIds": ["action_connect_bottom"],
+          "expectedResult": "Complete octahedron with both top and bottom apex connectors",
+          "hints": [
+            "Bottom connector mirrors the top connector",
+            "All 8 triangular faces should be clearly visible",
+            "Structure should be perfectly symmetrical"
+          ],
+          "validation": {
+            "type": "structure",
+            "criteria": {
+              "requiredJoints": ["joint_bottom_1", "joint_bottom_2", "joint_bottom_3", "joint_bottom_4"],
+              "connected": true,
+              "symmetry": true
+            }
+          }
+        },
+        {
+          "id": "step_verify_completion",
+          "order": 7,
+          "title": "Verify Complete Octahedron",
+          "description": "Observe the completed regular octahedron and understand its geometric properties",
+          "actionIds": ["action_final_highlight"],
+          "expectedResult": "Perfect octahedron with 8 triangular faces, 6 vertices, and 12 edges",
+          "hints": [
+            "Count 8 triangular faces (4 top, 4 bottom)",
+            "Identify 6 vertices (4 base corners + 2 apex points)", 
+            "Observe 12 edges (4 base + 4 top + 4 bottom)"
+          ]
+        }
+      ],
+      "playbackControls": {
+        "allowRewind": true,
+        "allowPause": true,
+        "allowSkip": false,
+        "speed": 1.0
+      }
+    }
+  ],
+  
+  "scene": {
+    "environment": {
+      "background": "#F0F8FF",
+      "lighting": {
+        "ambient": "#404040",
+        "directional": {
+          "color": "#FFFFFF",
+          "intensity": 1.2,
+          "position": { "x": 10, "y": 15, "z": 8 }
+        }
+      },
+      "camera": {
+        "position": { "x": 25, "y": 15, "z": 25 },
+        "target": { "x": 5.85, "y": 0, "z": 6.1 },
+        "fov": 50,
+        "controls": "orbit"
+      }
+    },
+    "workspace": {
+      "bounds": {
+        "min": { "x": -20, "y": -25, "z": -20 },
+        "max": { "x": 35, "y": 25, "z": 35 }
+      },
+      "grid": {
+        "visible": true,
+        "size": 50,
+        "divisions": 25
+      }
+    }
+  }
+}
