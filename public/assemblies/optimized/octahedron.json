@@ -28,23 +28,23 @@
       {
         "templateId": "green_11_2",
         "instances": [
-          {"id": "straw_green_1", "transform": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_3", "transform": {"position": {"x": 0, "y": 0, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_1", "transform": {"position": {"x": 5.6, "y": 0, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_3", "transform": {"position": {"x": 5.6, "y": 0, "z": 11.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
           {"id": "straw_green_5", "transform": {"position": {"x": 0, "y": 5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_6", "transform": {"position": {"x": 11.7, "y": 5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_7", "transform": {"position": {"x": 0, "y": 5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_8", "transform": {"position": {"x": 11.7, "y": 5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_6", "transform": {"position": {"x": 11.2, "y": 5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_7", "transform": {"position": {"x": 0, "y": 5.6, "z": 11.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_8", "transform": {"position": {"x": 11.2, "y": 5.6, "z": 11.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
           {"id": "straw_green_9", "transform": {"position": {"x": 0, "y": -5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_10", "transform": {"position": {"x": 11.7, "y": -5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_11", "transform": {"position": {"x": 0, "y": -5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_12", "transform": {"position": {"x": 11.7, "y": -5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}}
+          {"id": "straw_green_10", "transform": {"position": {"x": 11.2, "y": -5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_11", "transform": {"position": {"x": 0, "y": -5.6, "z": 11.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_12", "transform": {"position": {"x": 11.2, "y": -5.6, "z": 11.2}, "rotation": {"x": 0, "y": 0, "z": 0}}}
         ]
       },
       {
         "templateId": "green_11_7",
         "instances": [
-          {"id": "straw_green_2", "transform": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 1.5708}}},
-          {"id": "straw_green_4", "transform": {"position": {"x": 11.7, "y": 0, "z": 6.1}, "rotation": {"x": 0, "y": 0, "z": 1.5708}}}
+          {"id": "straw_green_2", "transform": {"position": {"x": 0, "y": 0, "z": 5.6}, "rotation": {"x": 0, "y": 0, "z": 1.5708}}},
+          {"id": "straw_green_4", "transform": {"position": {"x": 11.2, "y": 0, "z": 5.6}, "rotation": {"x": 0, "y": 0, "z": 1.5708}}}
         ]
       }
     ],
@@ -61,8 +61,8 @@
       {
         "templateId": "5leg_red",
         "instances": [
-          {"id": "connector_5leg_top", "transform": {"position": {"x": 5.85, "y": 11.2, "z": 6.1}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "connector_5leg_bottom", "transform": {"position": {"x": 5.85, "y": -11.2, "z": 6.1}, "rotation": {"x": 0, "y": 0, "z": 0}}}
+          {"id": "connector_5leg_top", "transform": {"position": {"x": 5.6, "y": 11.2, "z": 5.6}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "connector_5leg_bottom", "transform": {"position": {"x": 5.6, "y": -11.2, "z": 5.6}, "rotation": {"x": 0, "y": 0, "z": 0}}}
         ]
       }
     ]
@@ -261,7 +261,7 @@
       },
       "camera": {
         "position": {"x": 25, "y": 15, "z": 25},
-        "target": {"x": 5.85, "y": 0, "z": 6.1},
+        "target": {"x": 5.6, "y": 0, "z": 5.6},
         "fov": 50
       }
     },

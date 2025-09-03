@@ -1,0 +1,396 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Virtual Lab Components Schema",
+  "description": "JSON schema for storing and managing virtual lab components for 3D educational activities",
+  
+  "definitions": {
+    "vector3": {
+      "type": "object",
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "z": { "type": "number" }
+      },
+      "required": ["x", "y", "z"]
+    },
+    
+    "transform": {
+      "type": "object",
+      "properties": {
+        "position": { "$ref": "#/definitions/vector3" },
+        "rotation": { "$ref": "#/definitions/vector3" },
+        "scale": { "$ref": "#/definitions/vector3" }
+      },
+      "required": ["position", "rotation", "scale"]
+    },
+    
+    "material": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["plastic", "rubber", "metal", "wood", "tpu"] },
+        "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "flexibility": { "type": "number", "minimum": 0, "maximum": 100 },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "roughness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "metalness": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "required": ["type", "color"]
+    }
+  },
+  
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "created": { "type": "string", "format": "date-time" },
+        "lastModified": { "type": "string", "format": "date-time" },
+        "author": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["version", "created"]
+    },
+    
+    "straws": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "geometry": {
+            "type": "object",
+            "properties": {
+              "length": { "type": "number", "minimum": 0 },
+              "diameter": { "type": "number", "minimum": 0 },
+              "wallThickness": { "type": "number", "minimum": 0 }
+            },
+            "required": ["length", "diameter"]
+          },
+          "material": { "$ref": "#/definitions/material" },
+          "transform": { "$ref": "#/definitions/transform" },
+          "endpoints": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "localPosition": { "$ref": "#/definitions/vector3" },
+                  "connectionId": { "type": ["string", "null"] },
+                  "isAvailable": { "type": "boolean" }
+                },
+                "required": ["id", "localPosition", "isAvailable"]
+              },
+              "end": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "localPosition": { "$ref": "#/definitions/vector3" },
+                  "connectionId": { "type": ["string", "null"] },
+                  "isAvailable": { "type": "boolean" }
+                },
+                "required": ["id", "localPosition", "isAvailable"]
+              }
+            },
+            "required": ["start", "end"]
+          },
+          "physics": {
+            "type": "object",
+            "properties": {
+              "mass": { "type": "number", "minimum": 0 },
+              "friction": { "type": "number", "minimum": 0 },
+              "elasticity": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        },
+        "required": ["id", "geometry", "material", "transform", "endpoints"]
+      }
+    },
+    
+    "connectors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { 
+            "type": "string", 
+            "enum": ["straight", "elbow", "tee", "cross", "custom"] 
+          },
+          "geometry": {
+            "type": "object",
+            "properties": {
+              "size": { "$ref": "#/definitions/vector3" },
+              "portDiameter": { "type": "number", "minimum": 0 },
+              "shape": { "type": "string", "enum": ["cylindrical", "cubic", "spherical", "custom"] }
+            },
+            "required": ["size", "portDiameter"]
+          },
+          "material": { "$ref": "#/definitions/material" },
+          "transform": { "$ref": "#/definitions/transform" },
+          "ports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "localPosition": { "$ref": "#/definitions/vector3" },
+                "orientation": { "$ref": "#/definitions/vector3" },
+                "connectionId": { "type": ["string", "null"] },
+                "isAvailable": { "type": "boolean" },
+                "portIndex": { "type": "integer", "minimum": 0 }
+              },
+              "required": ["id", "localPosition", "orientation", "isAvailable", "portIndex"]
+            },
+            "minItems": 1
+          },
+          "constraints": {
+            "type": "object",
+            "properties": {
+              "maxConnections": { "type": "integer", "minimum": 1 },
+              "allowedAngles": {
+                "type": "array",
+                "items": { "type": "number" }
+              }
+            }
+          }
+        },
+        "required": ["id", "type", "geometry", "material", "transform", "ports"]
+      }
+    },
+    
+    "joints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "enum": ["fixed", "hinged", "ball", "slider"] },
+          "componentA": {
+            "type": "object",
+            "properties": {
+              "componentId": { "type": "string" },
+              "componentType": { "type": "string", "enum": ["straw", "connector"] },
+              "attachmentPointId": { "type": "string" }
+            },
+            "required": ["componentId", "componentType", "attachmentPointId"]
+          },
+          "componentB": {
+            "type": "object",
+            "properties": {
+              "componentId": { "type": "string" },
+              "componentType": { "type": "string", "enum": ["straw", "connector"] },
+              "attachmentPointId": { "type": "string" }
+            },
+            "required": ["componentId", "componentType", "attachmentPointId"]
+          },
+          "constraints": {
+            "type": "object",
+            "properties": {
+              "allowRotation": { "$ref": "#/definitions/vector3" },
+              "allowTranslation": { "$ref": "#/definitions/vector3" },
+              "limits": {
+                "type": "object",
+                "properties": {
+                  "rotation": {
+                    "type": "object",
+                    "properties": {
+                      "min": { "$ref": "#/definitions/vector3" },
+                      "max": { "$ref": "#/definitions/vector3" }
+                    }
+                  },
+                  "translation": {
+                    "type": "object",
+                    "properties": {
+                      "min": { "$ref": "#/definitions/vector3" },
+                      "max": { "$ref": "#/definitions/vector3" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "strength": { "type": "number", "minimum": 0, "maximum": 100 },
+          "created": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "type", "componentA", "componentB"]
+      }
+    },
+    
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { 
+            "type": "string", 
+            "enum": ["move", "rotate", "scale", "connect", "disconnect", "highlight", "animate"] 
+          },
+          "targetId": { "type": "string" },
+          "targetType": { "type": "string", "enum": ["straw", "connector", "joint", "group"] },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "duration": { "type": "number", "minimum": 0 },
+              "delay": { "type": "number", "minimum": 0 },
+              "easing": { "type": "string", "enum": ["linear", "ease-in", "ease-out", "ease-in-out"] },
+              "loop": { "type": "boolean" },
+              "autoReverse": { "type": "boolean" }
+            }
+          },
+          "animation": {
+            "type": "object",
+            "properties": {
+              "keyframes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "time": { "type": "number", "minimum": 0, "maximum": 1 },
+                    "transform": { "$ref": "#/definitions/transform" },
+                    "material": { "$ref": "#/definitions/material" }
+                  },
+                  "required": ["time"]
+                }
+              },
+              "interpolation": { "type": "string", "enum": ["linear", "cubic", "step"] }
+            }
+          },
+          "triggers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "event": { "type": "string", "enum": ["click", "hover", "collision", "time", "completion"] },
+                "condition": { "type": "string" },
+                "nextActionId": { "type": ["string", "null"] }
+              },
+              "required": ["event"]
+            }
+          },
+          "order": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["id", "type", "targetId", "targetType"]
+      }
+    },
+    
+    "activities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "difficulty": { "type": "string", "enum": ["beginner", "intermediate", "advanced"] },
+          "estimatedTime": { "type": "integer", "minimum": 0 },
+          "objectives": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "order": { "type": "integer", "minimum": 0 },
+                "title": { "type": "string" },
+                "description": { "type": "string" },
+                "actionIds": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "expectedResult": { "type": "string" },
+                "hints": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "validation": {
+                  "type": "object",
+                  "properties": {
+                    "type": { "type": "string", "enum": ["position", "connection", "structure", "custom"] },
+                    "criteria": { "type": "object" }
+                  }
+                }
+              },
+              "required": ["id", "order", "title"]
+            }
+          },
+          "playbackControls": {
+            "type": "object",
+            "properties": {
+              "allowRewind": { "type": "boolean" },
+              "allowPause": { "type": "boolean" },
+              "allowSkip": { "type": "boolean" },
+              "speed": { "type": "number", "minimum": 0.1, "maximum": 5.0 }
+            }
+          }
+        },
+        "required": ["id", "name", "steps"]
+      }
+    },
+    
+    "scene": {
+      "type": "object",
+      "properties": {
+        "environment": {
+          "type": "object",
+          "properties": {
+            "background": { "type": "string" },
+            "lighting": {
+              "type": "object",
+              "properties": {
+                "ambient": { "type": "string" },
+                "directional": {
+                  "type": "object",
+                  "properties": {
+                    "color": { "type": "string" },
+                    "intensity": { "type": "number" },
+                    "position": { "$ref": "#/definitions/vector3" }
+                  }
+                }
+              }
+            },
+            "camera": {
+              "type": "object",
+              "properties": {
+                "position": { "$ref": "#/definitions/vector3" },
+                "target": { "$ref": "#/definitions/vector3" },
+                "fov": { "type": "number" },
+                "controls": { "type": "string", "enum": ["orbit", "fly", "first-person"] }
+              }
+            }
+          }
+        },
+        "workspace": {
+          "type": "object",
+          "properties": {
+            "bounds": {
+              "type": "object",
+              "properties": {
+                "min": { "$ref": "#/definitions/vector3" },
+                "max": { "$ref": "#/definitions/vector3" }
+              }
+            },
+            "grid": {
+              "type": "object",
+              "properties": {
+                "visible": { "type": "boolean" },
+                "size": { "type": "number" },
+                "divisions": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  
+  "required": ["metadata", "straws", "connectors", "joints", "actions", "activities", "scene"]
+}
