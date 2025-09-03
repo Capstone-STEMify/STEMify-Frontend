@@ -1,17 +1,14 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
-import { DataTable } from '@/components/shared/data-table/data-table'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 import { useSearchCourseQuery } from '../../../features/resource/course/api/courseApi'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { setPageIndex } from '../../../features/resource/course/slice/courseSlice'
 import { useGetCourseAction } from '../../../features/resource/course/components/list/CourseAction'
-import CardLayout from '@/components/shared/card/CardLayout'
+
 import { ScrollArea } from '@/components/shadcn/scroll-area'
-import { Badge } from '@/components/shadcn/badge'
-import { getCourseStatusBadgeClass, getLevelBadgeClass } from '@/utils/badgeColor'
-import { capitalizeFirst } from '@/utils/index'
-import CourseManagement from '@/features/resource/course/components/list/CourseManagement'
+import AdminCourseList from '@/features/resource/course/components/list/AdminCourseList'
+import AdminCurriculumSelectCourseList from '@/features/resource/curriculum/components/list/AdminCurriculumSelectCourseList'
 
 interface CourseListModalProps {
   curriculumId?: number
@@ -39,9 +36,9 @@ export default function CurriculumSelectCourseListModal({ curriculumId, onConfir
       <DialogContent className='h-fit w-full max-w-7xl'>
         <DialogTitle>Select Courses</DialogTitle>
 
-        <ScrollArea className='h-[550px]'>
-          <CourseManagement />
-        </ScrollArea>
+        <div>
+          <AdminCurriculumSelectCourseList />
+        </div>
       </DialogContent>
     </Dialog>
   )

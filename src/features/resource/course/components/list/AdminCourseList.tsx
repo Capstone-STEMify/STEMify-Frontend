@@ -23,7 +23,7 @@ import STabs from '@/components/shared/STabs'
 
 type ViewMode = 'table' | 'card'
 
-export default function CourseManagement() {
+export default function AdminCourseList() {
   const t = useTranslations('Admin')
   const dispatch = useAppDispatch()
   const columns = useGetCourseAction()

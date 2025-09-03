@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export interface SliceQueryParams {
   pageNumber: number
   pageSize: number
-  search: string
+  search?: string
   orderBy?: BaseOrderBy
   status?: string
   [key: string]: any
@@ -22,7 +22,12 @@ export function createQuerySlice<T extends SliceQueryParams>(name: string, initi
         state.pageSize = action.payload
       },
       setSearchTerm(state, action: PayloadAction<string>) {
-        state.search = action.payload
+        const value = action.payload.trim()
+        if (value) {
+          state.search = value
+        } else {
+          delete state.search
+        }
         state.pageNumber = 1
       },
       setParam(state, action: PayloadAction<{ key: keyof T; value: any }>) {
