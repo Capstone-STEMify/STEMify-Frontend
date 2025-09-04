@@ -1,0 +1,83 @@
+{
+  "id": "3leg_red",
+  "name": "3-Leg Red Connector",
+  "version": "1.0",
+  "category": "connector",
+  "baseGeometry": {
+    "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
+    "portDiameter": 0.65,
+    "shape": "custom",
+    "modelPath": "/models/Strawbees2.glb",
+    "meshName": "connector_3leg"
+  },
+  "materialRef": "plastic_red",
+  "portTemplate": [
+    {
+      "portIndex": 0,
+      "localPosition": { "x": 2.0, "y": 0, "z": 0 },
+      "orientation": { "x": 0, "y": 0, "z": 0 },
+      "socketType": "standard",
+      "allowedRotation": { "x": 0, "y": 0, "z": 360 }
+    },
+    {
+      "portIndex": 1,
+      "localPosition": { "x": 1.0, "y": 2.0, "z": 1.0 },
+      "orientation": { "x": 0, "y": 90, "z": 45 },
+      "socketType": "angled",
+      "allowedRotation": { "x": 0, "y": 0, "z": 0 }
+    },
+    {
+      "portIndex": 2,
+      "localPosition": { "x": 0, "y": 0, "z": 2.0 },
+      "orientation": { "x": 0, "y": 0, "z": 90 },
+      "socketType": "standard",
+      "allowedRotation": { "x": 0, "y": 0, "z": 360 }
+    }
+  ],
+  "physics": {
+    "mass": 1.2,
+    "centerOfMass": { "x": 0.66, "y": 0.66, "z": 0.66 },
+    "momentOfInertia": { "x": 0.5, "y": 0.5, "z": 0.5 }
+  },
+  "constraints": {
+    "maxConnections": 3,
+    "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315],
+    "minStrawLength": 5.0,
+    "maxStrawLength": 20.0
+  },
+  "lod": {
+    "high": {
+      "geometryComplexity": "detailed",
+      "polyCount": 2048,
+      "textureResolution": 1024,
+      "renderDistance": 50,
+      "enableAnimations": true
+    },
+    "medium": {
+      "geometryComplexity": "standard",
+      "polyCount": 512,
+      "textureResolution": 512,
+      "renderDistance": 100,
+      "enableAnimations": false
+    },
+    "low": {
+      "geometryComplexity": "basic",
+      "polyCount": 128,
+      "textureResolution": 256,
+      "renderDistance": 200,
+      "enableAnimations": false
+    }
+  },
+  "streaming": {
+    "priority": 3,
+    "chunkSize": "large",
+    "compressionLevel": 5,
+    "preloadDistance": 30
+  },
+  "validation": {
+    "structuralIntegrity": 95,
+    "maxStress": 100,
+    "compatibleStraws": ["green_11_2", "green_11_7", "blue_15_0"],
+    "testingRequired": true
+  }
+}

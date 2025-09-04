@@ -1,0 +1,284 @@
+{
+  "metadata": {
+    "version": "2.0",
+    "created": "2025-01-15T08:00:00Z",
+    "lastModified": "2025-01-15T10:00:00Z",
+    "author": "STEM Education Team",
+    "description": "Optimized Octahedron assembly using component templates - 80% size reduction",
+    "originalSize": "1616 lines",
+    "optimizedSize": "~300 lines",
+    "compressionRatio": "5.4:1"
+  },
+
+  "templates": {
+    "materials": [
+      {"id": "plastic_green", "source": "/components/templates/MaterialLibrary/plastic_green.json"},
+      {"id": "plastic_red", "source": "/components/templates/MaterialLibrary/plastic_red.json"}
+    ],
+    "components": [
+      {"id": "green_11_2", "source": "/components/templates/StrawTypes/green_11_2.json"},
+      {"id": "green_11_7", "source": "/components/templates/StrawTypes/green_11_7.json"},
+      {"id": "3leg_red", "source": "/components/templates/ConnectorTypes/3leg_red.json"},
+      {"id": "5leg_red", "source": "/components/templates/ConnectorTypes/5leg_red.json"}
+    ]
+  },
+
+  "instances": {
+    "straws": [
+      {
+        "templateId": "green_11_2",
+        "instances": [
+          {"id": "straw_green_1", "transform": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_3", "transform": {"position": {"x": 0, "y": 0, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_5", "transform": {"position": {"x": 0, "y": 5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_6", "transform": {"position": {"x": 11.7, "y": 5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_7", "transform": {"position": {"x": 0, "y": 5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_8", "transform": {"position": {"x": 11.7, "y": 5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_9", "transform": {"position": {"x": 0, "y": -5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_10", "transform": {"position": {"x": 11.7, "y": -5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_11", "transform": {"position": {"x": 0, "y": -5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_12", "transform": {"position": {"x": 11.7, "y": -5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}}
+        ]
+      },
+      {
+        "templateId": "green_11_7",
+        "instances": [
+          {"id": "straw_green_2", "transform": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 1.5708}}},
+          {"id": "straw_green_4", "transform": {"position": {"x": 11.7, "y": 0, "z": 6.1}, "rotation": {"x": 0, "y": 0, "z": 1.5708}}}
+        ]
+      }
+    ],
+    "connectors": [
+      {
+        "templateId": "3leg_red",
+        "instances": [
+          {"id": "connector_3leg_1", "transform": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"x": 1.5708, "y": 0, "z": 1.5708}}},
+          {"id": "connector_3leg_2", "transform": {"position": {"x": 0, "y": 0, "z": 12.2}, "rotation": {"x": 1.5708, "y": 0, "z": 1.5708}}},
+          {"id": "connector_3leg_3", "transform": {"position": {"x": 11.7, "y": 0, "z": 12.2}, "rotation": {"x": 1.5708, "y": 0, "z": 1.5708}}},
+          {"id": "connector_3leg_4", "transform": {"position": {"x": 11.7, "y": 0, "z": 0}, "rotation": {"x": -1.5708, "y": 0, "z": 1.5708}}}
+        ]
+      },
+      {
+        "templateId": "5leg_red",
+        "instances": [
+          {"id": "connector_5leg_top", "transform": {"position": {"x": 5.85, "y": 11.2, "z": 6.1}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "connector_5leg_bottom", "transform": {"position": {"x": 5.85, "y": -11.2, "z": 6.1}, "rotation": {"x": 0, "y": 0, "z": 0}}}
+        ]
+      }
+    ]
+  },
+
+  "connections": {
+    "base_square": [
+      {"strawId": "straw_green_1", "endpoint": "start", "connectorId": "connector_3leg_1", "port": 0},
+      {"strawId": "straw_green_1", "endpoint": "end", "connectorId": "connector_3leg_4", "port": 0},
+      {"strawId": "straw_green_2", "endpoint": "start", "connectorId": "connector_3leg_1", "port": 2},
+      {"strawId": "straw_green_2", "endpoint": "end", "connectorId": "connector_3leg_2", "port": 2},
+      {"strawId": "straw_green_3", "endpoint": "start", "connectorId": "connector_3leg_2", "port": 0},
+      {"strawId": "straw_green_3", "endpoint": "end", "connectorId": "connector_3leg_3", "port": 0},
+      {"strawId": "straw_green_4", "endpoint": "start", "connectorId": "connector_3leg_3", "port": 2},
+      {"strawId": "straw_green_4", "endpoint": "end", "connectorId": "connector_3leg_4", "port": 2}
+    ],
+    "vertical_up": [
+      {"strawId": "straw_green_5", "endpoint": "start", "connectorId": "connector_3leg_1", "port": 1},
+      {"strawId": "straw_green_5", "endpoint": "end", "connectorId": "connector_5leg_top", "port": 0},
+      {"strawId": "straw_green_6", "endpoint": "start", "connectorId": "connector_3leg_4", "port": 1},
+      {"strawId": "straw_green_6", "endpoint": "end", "connectorId": "connector_5leg_top", "port": 1},
+      {"strawId": "straw_green_7", "endpoint": "start", "connectorId": "connector_3leg_2", "port": 1},
+      {"strawId": "straw_green_7", "endpoint": "end", "connectorId": "connector_5leg_top", "port": 2},
+      {"strawId": "straw_green_8", "endpoint": "start", "connectorId": "connector_3leg_3", "port": 1},
+      {"strawId": "straw_green_8", "endpoint": "end", "connectorId": "connector_5leg_top", "port": 3}
+    ],
+    "vertical_down": [
+      {"strawId": "straw_green_9", "endpoint": "end", "connectorId": "connector_5leg_bottom", "port": 0},
+      {"strawId": "straw_green_10", "endpoint": "end", "connectorId": "connector_5leg_bottom", "port": 1},
+      {"strawId": "straw_green_11", "endpoint": "end", "connectorId": "connector_5leg_bottom", "port": 2},
+      {"strawId": "straw_green_12", "endpoint": "end", "connectorId": "connector_5leg_bottom", "port": 3}
+    ]
+  },
+
+  "actions": [
+    {
+      "id": "action_prepare_connectors",
+      "name": "Show Base Connectors",
+      "type": "highlight",
+      "targets": ["connector_3leg_1", "connector_3leg_2", "connector_3leg_3", "connector_3leg_4"],
+      "duration": 2.0,
+      "animation": {
+        "colorHighlight": "#FFD700",
+        "pulseEffect": true
+      }
+    },
+    {
+      "id": "action_build_base",
+      "name": "Form Base Square",
+      "type": "connect",
+      "connectionGroup": "base_square",
+      "duration": 3.0,
+      "sequenceDelay": 0.5
+    },
+    {
+      "id": "action_add_verticals",
+      "name": "Add Vertical Straws",
+      "type": "connect",
+      "connectionGroup": "vertical_up",
+      "duration": 2.5
+    },
+    {
+      "id": "action_add_bottom_verticals",
+      "name": "Add Bottom Verticals",
+      "type": "connect", 
+      "connectionGroup": "vertical_down",
+      "duration": 2.5
+    },
+    {
+      "id": "action_final_highlight",
+      "name": "Complete Octahedron",
+      "type": "rotate_highlight",
+      "targets": "all",
+      "duration": 3.0,
+      "rotationSpeed": 1.0
+    }
+  ],
+
+  "activities": [
+    {
+      "id": "octahedron_assembly",
+      "name": "Octahedron Assembly Lab",
+      "description": "Learn to construct a regular octahedron using connectors and straws - understanding 3D geometric principles through hands-on assembly",
+      "difficulty": "intermediate",
+      "estimatedTime": 1800,
+      "objectives": [
+        "Understand octahedron geometry and symmetry",
+        "Practice systematic 3D construction techniques",
+        "Learn connector port alignment and joint strength",
+        "Develop spatial reasoning through step-by-step assembly"
+      ],
+      "steps": [
+        {
+          "actionId": "action_prepare_connectors",
+          "title": "Prepare Base Connectors",
+          "description": "Identify and position the four 3-leg connectors that will form the base square of the octahedron",
+          "expectedResult": "4 three-leg connectors are visible and highlighted",
+          "hints": [
+            "Each connector has 3 ports for straw connections",
+            "Notice the red color indicating connector type",
+            "Observe the spatial arrangement forming square corners"
+          ],
+          "validation": {
+            "type": "structure",
+            "criteria": {
+              "requiredConnectors": ["connector_3leg_1", "connector_3leg_2", "connector_3leg_3", "connector_3leg_4"],
+              "visibility": true
+            }
+          }
+        },
+        {
+          "actionId": "action_build_base",
+          "title": "Form Base Square",
+          "description": "Connect the 4 connectors with straws to create the square foundation of the octahedron",
+          "expectedResult": "A complete square base is formed with proper connections",
+          "hints": [
+            "Each side of the square uses one straw",
+            "Straws should fit snugly into connector ports",
+            "Verify all connections are properly aligned"
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredConnectionsGroup": "base_square",
+              "connected": true
+            }
+          }
+        },
+        {
+          "actionId": "action_add_verticals",
+          "title": "Add Vertical Support",
+          "description": "Attach vertical straws from each corner of the base square, pointing upward toward the top connector",
+          "expectedResult": "4 vertical straws extend upward from base connectors",
+          "hints": [
+            "Use the upward-facing ports on each base connector",
+            "Vertical straws should be parallel to each other",
+            "Maintain proper alignment for top connector placement"
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredConnectionsGroup": "vertical_up",
+              "connected": true
+            }
+          }
+        },
+        {
+          "actionId": "action_add_bottom_verticals",
+          "title": "Complete Structure",
+          "description": "Attach vertical straws downward from each base connector toward the bottom apex",
+          "expectedResult": "4 additional vertical straws extend downward from base",
+          "hints": [
+            "Use the remaining ports on base connectors (conceptually mirrored)",
+            "Mirror the upward straws but in opposite direction",
+            "Maintain symmetry with top half of octahedron"
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredConnectionsGroup": "vertical_down",
+              "connected": true
+            }
+          }
+        },
+        {
+          "actionId": "action_final_highlight",
+          "title": "Verify Octahedron",
+          "description": "Observe the completed regular octahedron and understand its geometric properties",
+          "expectedResult": "Perfect octahedron with 8 triangular faces, 6 vertices, and 12 edges",
+          "hints": [
+            "Count 8 triangular faces (4 top, 4 bottom)",
+            "Identify 6 vertices (4 base corners + 2 apex points)",
+            "Observe 12 edges (4 base + 4 top + 4 bottom)"
+          ]
+        }
+      ],
+      "playbackControls": {
+        "allowRewind": true,
+        "allowPause": true,
+        "allowSkip": false,
+        "speed": 1.0
+      }
+    }
+  ],
+
+  "scene": {
+    "environment": {
+      "background": "#F0F8FF",
+      "lighting": {
+        "ambient": "#404040",
+        "directional": {
+          "color": "#FFFFFF",
+          "intensity": 1.2,
+          "position": {"x": 10, "y": 15, "z": 8}
+        }
+      },
+      "camera": {
+        "position": {"x": 25, "y": 15, "z": 25},
+        "target": {"x": 5.85, "y": 0, "z": 6.1},
+        "fov": 50
+      }
+    },
+    "lod": {
+      "enabled": true,
+      "distances": [50, 100, 200],
+      "autoAdjust": true
+    },
+    "streaming": {
+      "enabled": true,
+      "chunkSize": "1MB",
+      "preloadRadius": 50
+    },
+    "performance": {
+      "targetFPS": 60,
+      "maxDrawCalls": 100,
+      "enableOcclusion": true
+    }
+  }
+}
