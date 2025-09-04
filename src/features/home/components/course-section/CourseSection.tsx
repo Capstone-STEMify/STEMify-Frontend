@@ -13,6 +13,7 @@ import React, { useEffect } from 'react'
 
 export default function ExploreResourcesSection() {
   const t = useTranslations('ExploreResourcesSection')
+  const tc = useTranslations('common')
 
   const { data: CourseData } = useSearchCourseQuery({ status: CourseStatus.PUBLISHED, pageSize: 3 })
 
@@ -84,7 +85,7 @@ export default function ExploreResourcesSection() {
         <div className='mt-12 text-center'>
           <Link href='/resource'>
             <button className='relative transform rounded-full bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
-              {t('exploreButton')}
+              {tc('button.exploreArrow')}
               <div className='absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full bg-pink-400 opacity-60'></div>
             </button>
           </Link>

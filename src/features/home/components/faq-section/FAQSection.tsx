@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl'
 
 export default function FAQSection() {
   const t = useTranslations('FAQSection')
+  const tc = useTranslations('common')
   return (
     <section className='relative overflow-hidden bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8'>
       {/* Decorative elements - adjusted for responsive */}
@@ -31,7 +32,7 @@ export default function FAQSection() {
             <div className='absolute -top-1 -right-1 h-3 w-3 rounded-full bg-yellow-300 opacity-0 transition-opacity duration-300 focus-within:animate-ping focus-within:opacity-60 sm:-top-2 sm:-right-2 sm:h-4 sm:w-4'></div>
           </div>
           <button className='relative w-full max-w-xs transform rounded-lg bg-yellow-400 px-6 py-2.5 text-sm font-semibold text-black shadow-lg transition-all duration-300 hover:scale-105 hover:bg-yellow-500 hover:shadow-xl sm:w-auto sm:px-8 sm:py-3 sm:text-base'>
-            {t('subscribeButton')}
+            {t('button.subscribe')}
             <div className='absolute -top-0.5 -right-0.5 h-2 w-2 animate-pulse rounded-full bg-orange-400 opacity-60 sm:-top-1 sm:-right-1 sm:h-3 sm:w-3'></div>
           </button>
         </div>

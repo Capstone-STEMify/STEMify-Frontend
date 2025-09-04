@@ -25,6 +25,7 @@ type ViewMode = 'table' | 'card'
 
 export default function CourseManagement({ curriculumId }: { curriculumId?: number }) {
   const t = useTranslations('Admin')
+  const tc = useTranslations('common')
   const dispatch = useAppDispatch()
   const columns = useGetCourseAction()
   const router = useRouter()
@@ -84,7 +85,7 @@ export default function CourseManagement({ curriculumId }: { curriculumId?: numb
             <div className='flex items-center justify-between gap-3'>
               <Button variant='outline' size='sm' className='bg-amber-custom-400 text-white' onClick={handleCreate}>
                 <IconPlus />
-                <span className='hidden lg:inline'>{t('course_management.button')}</span>
+                <span className='hidden lg:inline'>{tc('button.add')}</span>
               </Button>
             </div>
           )

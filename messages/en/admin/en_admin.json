@@ -15,8 +15,7 @@
       "search": "Search"
     },
     "course_management": {
-      "title": "Resource Management",
-      "button": "Add New"
+      "title": "Resource Management"
     },
     "placeholder": {
       "topicSearch": "Search by topic name...",
