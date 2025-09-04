@@ -2,21 +2,21 @@ import { CourseLevel, CourseStatus } from '@/features/resource/course/types/cour
 import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 
-export const getStatusBadgeClass = (status: LessonStatus | CurriculumStatus) => {
+export const getStatusBadgeClass = (status: LessonStatus | CurriculumStatus | CourseStatus) => {
   switch (status) {
-    case LessonStatus.DRAFT || CurriculumStatus.DRAFT:
+    case LessonStatus.DRAFT || CurriculumStatus.DRAFT || CourseStatus.DRAFT:
       return 'bg-gray-100 text-gray-800'
-    case LessonStatus.PUBLISHED || CurriculumStatus.PUBLISHED:
+    case LessonStatus.PUBLISHED || CurriculumStatus.PUBLISHED || CourseStatus.PUBLISHED:
       return 'bg-blue-100 text-blue-800'
-    case LessonStatus.ARCHIVED || CurriculumStatus.ARCHIVED:
+    case LessonStatus.ARCHIVED || CurriculumStatus.ARCHIVED || CourseStatus.ARCHIVED:
       return 'bg-green-100 text-green-800'
-    case LessonStatus.DELETED || CurriculumStatus.DELETED:
+    case LessonStatus.DELETED || CurriculumStatus.DELETED || CourseStatus.DELETED:
       return 'bg-red-100 text-red-800'
-    case LessonStatus.PENDING || CurriculumStatus.PENDING:
+    case LessonStatus.PENDING || CurriculumStatus.PENDING || CourseStatus.PENDING:
       return 'bg-yellow-100 text-yellow-800'
-    case LessonStatus.REJECTED || CurriculumStatus.REJECTED:
+    case LessonStatus.REJECTED || CurriculumStatus.REJECTED || CourseStatus.REJECTED:
       return 'bg-red-200 text-red-900'
-    case LessonStatus.APPROVED || CurriculumStatus.APPROVED:
+    case LessonStatus.APPROVED || CurriculumStatus.APPROVED || CourseStatus.APPROVED:
       return 'bg-green-200 text-green-900'
     default:
       return 'bg-gray-100 text-gray-800'

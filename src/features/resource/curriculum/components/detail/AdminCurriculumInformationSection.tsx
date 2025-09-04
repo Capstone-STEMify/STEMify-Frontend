@@ -6,12 +6,14 @@ import { Badge } from '@/components/shadcn/badge'
 import { useTranslations } from 'next-intl'
 import {
   useDeleteCurriculumMutation,
-  useGetCurriculumByIdQuery
+  useGetCurriculumByIdQuery,
+  useUpdateCurriculumMutation
 } from '@/features/resource/curriculum/api/curriculumApi'
 import { useParams } from 'next/navigation'
 import { Curriculum, CurriculumStatus } from '../../types/curriculum.type'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 
 type AdminCurriculumInformationSectionProps = {
   curriculumId: number
@@ -27,13 +29,21 @@ export default function AdminCurriculumInformationSection({
   const t = useTranslations('curriculum')
   const { openModal } = useModal()
   const [deleteCurriculum] = useDeleteCurriculumMutation()
+  const [updateCurriculumStatus] = useUpdateCurriculumMutation()
 
   const handleDelete = async () => {
     await deleteCurriculum(Number(curriculumId)).unwrap()
     toast.success(t('form.successMessage.delete'))
   }
 
-  const handleUpdateCurriculumStatus = (status: CurriculumStatus) => {}
+  const handleUpdateCurriculumStatus = async (status: CurriculumStatus) => {
+    try {
+      await updateCurriculumStatus({ id: curriculumId, body: { status } }).unwrap()
+      toast.success('Update successful')
+    } catch (error) {
+      toast.error('Update failed, please try again' + error)
+    }
+  }
 
   return (
     <div className='grid grid-cols-1 gap-12 py-5 md:grid-cols-3'>
@@ -65,28 +75,38 @@ export default function AdminCurriculumInformationSection({
 
         {/* badges */}
         <div className='mb-4 flex flex-wrap gap-2'>
-          <Badge className='bg-blue-100 text-blue-800'>{curriculum.status}</Badge>
-          {/* <Badge className='bg-amber-100 text-amber-800'>Ages {data?.data.}</Badge> */}
+          <Badge className={getStatusBadgeClass(curriculum.status)}>{curriculum.status}</Badge>
         </div>
 
         <p className='mb-4 text-lg text-gray-700'>{curriculum.description}</p>
 
         {/* Review actions */}
-        {/* {(curriculum.data.status === CurriculumStatus.PENDING || curriculum.data.status === CurriculumStatus.DRAFT) && ( */}
-        <div className='flex gap-3'>
-          <Button
-            className='cursor-pointer bg-green-600 font-semibold text-white shadow'
-            onClick={() => handleUpdateCurriculumStatus(CurriculumStatus.PUBLISHED)}
-          >
-            {tc('button.approve')}
-          </Button>
-          <Button
-            className='cursor-pointer border border-red-600 bg-white font-semibold text-red-600 shadow'
-            onClick={() => handleUpdateCurriculumStatus(CurriculumStatus.REJECTED)}
-          >
-            {tc('button.reject')}
-          </Button>
-        </div>
+        {(curriculum.status === CurriculumStatus.PENDING || curriculum.status === CurriculumStatus.DRAFT) && (
+          <div className='flex gap-3'>
+            <Button
+              className='cursor-pointer bg-green-600 font-semibold text-white shadow'
+              onClick={() =>
+                openModal('confirm', {
+                  message: `${'Are you sure to make '}${curriculum.title} ${CurriculumStatus.PUBLISHED}?`,
+                  onConfirm: () => handleUpdateCurriculumStatus(CurriculumStatus.PUBLISHED)
+                })
+              }
+            >
+              {tc('button.approve')}
+            </Button>
+            <Button
+              className='cursor-pointer border border-red-600 bg-white font-semibold text-red-600 shadow'
+              onClick={() =>
+                openModal('confirm', {
+                  message: `${'Are you sure to make '}${curriculum.title} ${CurriculumStatus.REJECTED}?`,
+                  onConfirm: () => handleUpdateCurriculumStatus(CurriculumStatus.REJECTED)
+                })
+              }
+            >
+              {tc('button.reject')}
+            </Button>
+          </div>
+        )}
       </div>
       {/* Image Section */}
       <div className='relative max-h-[400px] max-w-[400px] overflow-hidden rounded-2xl shadow-md'>

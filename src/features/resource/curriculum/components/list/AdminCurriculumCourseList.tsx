@@ -21,9 +21,10 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
   const t = useTranslations('curriculum')
   const columns = useGetCourseColumn({ isPopup: false })
   const visibleKeys = ['select', 'code', 'title', 'imageUrl', 'description', 'actions']
-  const filteredColumns = columns.filter((col) =>
-    'accessorKey' in col ? visibleKeys.includes(col.accessorKey as string) : visibleKeys.includes(col.id ?? '')
-  )
+  const filteredColumns = columns.filter((col) => {
+    const key = 'accessorKey' in col ? col.accessorKey : col.id
+    return key ? visibleKeys.includes(key as string) : false
+  })
 
   const courseParams = useAppSelector((state) => state.course)
 

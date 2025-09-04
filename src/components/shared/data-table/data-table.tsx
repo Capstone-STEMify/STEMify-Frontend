@@ -40,6 +40,8 @@ export type DataTableProps<TData extends { id: string | number }, TValue> = {
   toolbarRight?: React.ReactNode
   pagingData?: any
   pagingParams?: any
+  rowSelection?: (string | number)[]
+  onSelectionChange?: (ids: (string | number)[]) => void
   handlePageChange?: (page: number) => void
   enableDnd?: boolean
   onReorder?: (newData: TData[]) => void
@@ -73,6 +75,8 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   toolbarRight,
   pagingData,
   pagingParams,
+  rowSelection,
+  onSelectionChange,
   handlePageChange,
   enableDnd,
   onReorder
@@ -81,8 +85,8 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
   const [localData, setLocalData] = React.useState(data)
+  const [internalRowSelection, setInternalRowSelection] = React.useState<Record<string | number, boolean>>({})
 
   React.useEffect(() => {
     setLocalData(data)
@@ -94,6 +98,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   const table = useReactTable({
     data: localData,
     columns,
+    getRowId: (row) => row.id.toString(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -101,10 +106,17 @@ export function DataTable<TData extends { id: string | number }, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: { sorting, columnFilters, columnVisibility, rowSelection },
+    onRowSelectionChange: setInternalRowSelection,
+    state: { sorting, columnFilters, columnVisibility, rowSelection: internalRowSelection },
     enableRowSelection
   })
+
+  React.useEffect(() => {
+    const selectedIds = Object.keys(internalRowSelection)
+      .filter((key) => internalRowSelection[key as any])
+      .map((id) => (isNaN(Number(id)) ? id : Number(id)))
+    onSelectionChange?.(selectedIds)
+  }, [table.getState().rowSelection])
 
   const handleDragEnd = React.useCallback(
     (event: DragEndEvent) => {

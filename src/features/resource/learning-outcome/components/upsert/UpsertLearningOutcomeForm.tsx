@@ -64,7 +64,6 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
     }
   })
 
-  // Điền dữ liệu vào form khi ở chế độ edit
   React.useEffect(() => {
     if (isEditing && existingData?.data) {
       form.reset({
@@ -87,23 +86,25 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
       className='space-y-4'
     >
       <h2 className='text-xl font-bold'>{isEditing ? `${t('form.title.update')}` : `${t('form.title.create')}`}</h2>
-      <SCard
-        title={t('form.fields.PLOName.label')}
-        content={
-          <form.AppField
-            name='name'
-            children={(field) => <field.TextAreaField placeholder={t('form.fields.PLOName.placeholder')} />}
+
+      <form.AppField
+        name='name'
+        children={(field) => (
+          <field.TextAreaField
+            label={t('form.fields.PLOName.label')}
+            placeholder={t('form.fields.PLOName.placeholder')}
           />
-        }
+        )}
       />
-      <SCard
-        title={t('form.fields.PLODescription.label')}
-        content={
-          <form.AppField
-            name='description'
-            children={(field) => <field.TextAreaField placeholder={t('form.fields.PLODescription.placeholder')} />}
+
+      <form.AppField
+        name='description'
+        children={(field) => (
+          <field.TextAreaField
+            label={t('form.fields.PLODescription.label')}
+            placeholder={t('form.fields.PLODescription.placeholder')}
           />
-        }
+        )}
       />
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>

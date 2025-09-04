@@ -17,7 +17,7 @@ export default function AdminCurriculumSelectCourseList() {
   const filteredColumns = columns.filter((col) =>
     'accessorKey' in col ? visibleKeys.includes(col.accessorKey as string) : visibleKeys.includes(col.id ?? '')
   )
-
+  const [selectedIds, setSelectedIds] = React.useState<(number | string)[]>([])
   const courseParams = useAppSelector((state) => state.course)
 
   const queryParams: CourseQueryParams = {
@@ -69,6 +69,11 @@ export default function AdminCurriculumSelectCourseList() {
         pagingData={data}
         pagingParams={queryParams}
         handlePageChange={handlePageChange}
+        rowSelection={selectedIds}
+        onSelectionChange={(ids) => {
+          setSelectedIds(ids)
+          console.log('Selected course IDs:', ids)
+        }}
       />
     </div>
   )
