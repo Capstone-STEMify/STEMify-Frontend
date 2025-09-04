@@ -51,13 +51,11 @@
       }
     },
     "image": {
-      "label": "Ảnh Bìa",
-      "note": "Tải lên ảnh bìa",
-      "placeholder": "Làm cho tài liệu trở nên hấp dẫn hơn",
-      "btn": "Chọn Tệp"
-    },
-    "btn": "Gửi",
-    "successMessage": "Khóa học đã được tạo thành công!",
-    "errorMessage": "Đã xảy ra lỗi khi tạo khóa học. Vui lòng thử lại."
+  "label": "Ảnh Bìa",
+  "note": "Tải lên ảnh bìa",
+  "placeholder": "Làm cho tài liệu trở nên hấp dẫn hơn"
+    }
+    
+    
   }
 }

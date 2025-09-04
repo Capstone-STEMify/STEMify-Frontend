@@ -15,7 +15,6 @@
     "add_btn": "Add",
     "placeholder": "Enter text here...",
     "editTitle": "Edit Learning Outcome",
-    "createTitle": "Create Learning Outcome",
-    "save_btn": "Save"
+    "createTitle": "Create Learning Outcome"
   }
 }

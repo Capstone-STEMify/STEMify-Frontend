@@ -12,11 +12,6 @@
       "section": "Section",
       "duration": "Duration",
       "description": "Description"
-    },
-    "button": {
-      "approve": "Approve",
-      "reject": "Reject",
-      "update": "Update Lesson"
     }
   }
 }

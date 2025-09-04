@@ -51,13 +51,9 @@
       }
     },
     "image": {
-      "label": "Cover Image",
-      "note": "Upload cover image",
-      "placeholder": "Make the document more engaging",
-      "btn": "Choose File"
-    },
-    "btn": "Submit",
-    "successMessage": "Course created successfully!",
-    "errorMessage": "Error creating course. Please try again."
+  "label": "Cover Image",
+  "note": "Upload cover image",
+  "placeholder": "Make the document more engaging"
+    }
   }
 }

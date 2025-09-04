@@ -2,8 +2,7 @@
   "sectionManagement": {
     "section": {
       "title": "Quản Lý Chuyên Mục",
-      "add_btn": "Thêm chuyên mục mới",
-      "order_btn": "Lưu Thứ Tự",
+      
       "del_message": "Bạn có chắc muốn xóa chuyên mục này?",
       "dur": "Thời lượng",
       "description": "Mô tả",
@@ -34,9 +33,7 @@
       "note": "Nhập thời lượng ước tính của chuyên mục",
       "placeholder": "Ví dụ: 15"
     },
-    "update_btn": "Cập Nhật Chuyên Mục",
-    "create_btn": "Tạo Chuyên Mục",
-    "save_btn": "Lưu",
+    
     "lessonNotFound": {
       "description": "ID bài học không hợp lệ. Không thể tạo hoặc chỉnh sửa chuyên mục."
     }

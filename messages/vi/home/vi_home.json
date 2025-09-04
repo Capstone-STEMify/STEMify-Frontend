@@ -3,14 +3,14 @@
     "subtitle": "Biến STEM thành trò chơi - Truyền cảm hứng, đam mê, sáng tạo",
     "title": "Bừng sáng tương lai cho học sinh",
     "searchPlaceholder": "Bạn muốn khám phá điều gì hôm nay?",
-    "exploreButton": "Khám phá",
+    
     "course": "Khóa học",
     "lesson": "Bài học",
     "activity": "Hoạt động"
   },
   "ExploreResourcesSection": {
-    "title": "Khám phá tài nguyên",
-    "exploreButton": "Khám phá →"
+    "title": "Khám phá tài nguyên"
+    
   },
   "ToolsSection": {
     "title": "STEMify là gì?",
@@ -34,7 +34,7 @@
   "FAQSection": {
     "title": "Bạn vẫn còn câu hỏi nào không?",
     "description": "Đặt lịch hẹn để tìm hiểu về tài liệu ngoại tuyến của chúng tôi. Chúng tôi sẽ liên hệ với bạn để chăm sóc khách hàng.",
-    "emailPlaceholder": "Nhập email của bạn",
-    "subscribeButton": "Đăng ký"
+    "emailPlaceholder": "Nhập email của bạn"
+    
   }
 }

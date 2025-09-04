@@ -39,16 +39,15 @@
       "note": "Select the age range this course is suitable for"
     },
     "image": {
-      "label": "Cover Image",
-      "note": "Upload cover image",
-      "placeholder": "Make the document more engaging",
-      "btn": "Choose File"
+  "label": "Cover Image",
+  "note": "Upload cover image",
+  "placeholder": "Make the document more engaging"
     },
-    "btn": "Submit",
+    
     "courseNotFound": {
       "title": "Course not found",
-      "description": "You need to select a course before creating a lesson.",
-      "btn": "Go to Course List"
+      "description": "You need to select a course before creating a lesson."
+      
     }
   }
 }

@@ -8,9 +8,7 @@
         "lastName": "Last Name",
         "bio": "Bio",
         "button": {
-            "save": "Save Changes",
-            "cancel": "Cancel",
-            "edit": "Edit cover photo"
+            
         },
         "placeholders": {
             "username": "Enter your username",

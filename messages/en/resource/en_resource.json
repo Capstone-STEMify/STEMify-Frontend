@@ -1,0 +1,31 @@
+{
+    "Resource": {
+        "title": "Library",
+        "description": "Curated courses, curriculum-aligned lessons, engaging activities, and support materials made by expert teachers.",
+        "courses": {
+        "title": "Courses",
+        "description": "Comprehensive courses designed to enhance STEM learning and accelerate your career growth."
+      
+        },
+        "lessons": {
+        "title": "Lessons",
+        "description": "Engaging lessons aligned with curriculum standards to foster critical thinking and problem-solving skills."
+      
+        },
+        "activities": {
+        "title": "Activities",
+        "description": "Interactive activities designed to make learning fun and engaging, enhancing student participation and understanding."
+      
+        },
+        "support": {
+        "title": "Support",
+        "description": "Resources and support materials for teachers to enhance their teaching effectiveness and student outcomes."
+      
+        },
+        "news": {
+        "title": "News and Blogs",
+        "description": "Stay updated with the latest news, trends, and insights in STEM education through our blogs and articles."
+      
+        }
+    }
+}

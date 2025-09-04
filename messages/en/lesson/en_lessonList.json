@@ -24,13 +24,10 @@
       "status": "Status"
     },
     "actions": {
-      "searchBtn": "Search",
-      "clearBtn": "Clear All"
+      
     },
     "dropdown": {
-      "view": "View",
-      "update": "Update",
-      "delete": "Delete"
+      
     }
   }
 }

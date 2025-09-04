@@ -38,16 +38,15 @@
       "placeholder": "Ví dụ: Chuẩn 1, Chuẩn 2"
     },
     "image": {
-      "label": "Ảnh Bìa",
-      "note": "Tải lên ảnh bìa",
-      "placeholder": "Làm cho tài liệu trở nên hấp dẫn hơn",
-      "btn": "Chọn Tệp"
+  "label": "Ảnh Bìa",
+  "note": "Tải lên ảnh bìa",
+  "placeholder": "Làm cho tài liệu trở nên hấp dẫn hơn"
     },
-    "btn": "Gửi",
+    
     "courseNotFound": {
       "title": "Không thấy Khóa học",
-      "description": "Bạn cần chọn khóa học trước khi tạo bài học.",
-      "btn": "Đi đến danh sách Khóa học"
+      "description": "Bạn cần chọn khóa học trước khi tạo bài học."
+      
     }
   }
 }

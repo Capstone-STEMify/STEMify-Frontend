@@ -2,8 +2,7 @@
   "sectionManagement": {
     "section": {
       "title": "Manage Section",
-      "add_btn": "Add new section",
-      "order_btn": "Save Order",
+      
       "del_message": "Are you sure you want to delete this section?",
       "dur": "Duration",
       "description": "Description",
@@ -34,9 +33,7 @@
       "note": "Enter the estimated duration of the section",
       "placeholder": "e.g., 15"
     },
-    "update_btn": "Update Section",
-    "create_btn": "Create Section",
-    "save_btn": "Save",
+    
     "lessonNotFound": {
       "description": "Invalid Lesson ID. Cannot create or edit a section."
     }

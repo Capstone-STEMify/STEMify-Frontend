@@ -8,9 +8,7 @@
         "lastName": "Họ",
         "bio": "Tiểu sử",
         "button": {
-            "save": "Lưu thay đổi",
-            "cancel": "Hủy",
-            "edit": "Chỉnh sửa ảnh bìa"
+            
         },
         "placeholders": {
             "username": "Nhập tên người dùng của bạn",
