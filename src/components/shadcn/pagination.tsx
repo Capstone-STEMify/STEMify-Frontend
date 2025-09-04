@@ -49,7 +49,7 @@ function PaginationLink({ className, isActive, size = 'icon', ...props }: Pagina
 }
 
 function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
-  const t = useTranslations("tableHeader.paging")
+  const t = useTranslations('common.paging')
   return (
     <PaginationLink
       aria-label='Go to previous page'
@@ -64,7 +64,7 @@ function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof
 }
 
 function PaginationNext({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
-  const t = useTranslations("tableHeader.paging")
+  const t = useTranslations('common.paging')
   return (
     <PaginationLink
       aria-label='Go to next page'

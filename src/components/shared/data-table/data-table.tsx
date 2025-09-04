@@ -40,6 +40,8 @@ export type DataTableProps<TData extends { id: string | number }, TValue> = {
   toolbarRight?: React.ReactNode
   pagingData?: any
   pagingParams?: any
+  rowSelection?: (string | number)[]
+  onSelectionChange?: (ids: (number)[]) => void
   handlePageChange?: (page: number) => void
   enableDnd?: boolean
   onReorder?: (newData: TData[]) => void
@@ -50,7 +52,7 @@ function DraggableRow<TData extends { id: string | number }>({ row }: { row: Row
 
   return (
     <TableRow
-      ref={setNodeRef}
+      // ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       data-dragging
       {...attributes}
@@ -73,27 +75,39 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   toolbarRight,
   pagingData,
   pagingParams,
+  rowSelection,
+  onSelectionChange,
   handlePageChange,
   enableDnd,
   onReorder
 }: DataTableProps<TData, TValue>) {
-  const tc = useTranslations('paging')
+  const tc = useTranslations('common')
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
   const [localData, setLocalData] = React.useState(data)
+  const [internalRowSelection, setInternalRowSelection] = React.useState<Record<string | number, boolean>>({})
 
   React.useEffect(() => {
     setLocalData(data)
   }, [data])
 
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor), useSensor(KeyboardSensor))
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        delay: 80,
+        tolerance: 5
+      }
+    }),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor)
+  )
   const itemIds = React.useMemo(() => localData.map((d) => d.id), [localData])
 
   const table = useReactTable({
     data: localData,
     columns,
+    getRowId: (row) => row.id.toString(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -101,10 +115,18 @@ export function DataTable<TData extends { id: string | number }, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: { sorting, columnFilters, columnVisibility, rowSelection },
+    onRowSelectionChange: setInternalRowSelection,
+    state: { sorting, columnFilters, columnVisibility, rowSelection: internalRowSelection },
     enableRowSelection
   })
+
+  React.useEffect(() => {
+    const selectedIds = Object.keys(internalRowSelection)
+      .filter((key) => internalRowSelection[key as any])
+      .map((id) => Number(id))
+      .filter((id) => !isNaN(id))
+    onSelectionChange?.(selectedIds)
+  }, [table.getState().rowSelection])
 
   const handleDragEnd = React.useCallback(
     (event: DragEndEvent) => {
@@ -143,7 +165,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                   ) : (
                     <TableRow>
                       <TableCell colSpan={table.getAllLeafColumns().length} className='h-24 text-center'>
-                        No results.
+                        {placeholder || tc('tableHeader.empty')}
                       </TableCell>
                     </TableRow>
                   )}
@@ -176,7 +198,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               ) : (
                 <TableRow>
                   <TableCell colSpan={table.getAllLeafColumns().length} className='h-24 text-center'>
-                    No results.
+                    {placeholder || tc('tableHeader.empty')}
                   </TableCell>
                 </TableRow>
               )}
@@ -188,8 +210,8 @@ export function DataTable<TData extends { id: string | number }, TValue>({
       <div className='flex items-center justify-between gap-2 py-4'>
         {enableRowSelection && (
           <div className='text-muted-foreground w-full text-sm'>
-            {table.getFilteredSelectedRowModel().rows.length} {tc('of')} {table.getFilteredRowModel().rows.length}{' '}
-            {tc('row')} {tc('select')}.
+            {table.getFilteredSelectedRowModel().rows.length} {tc('paging.of')}{' '}
+            {table.getFilteredRowModel().rows.length} {tc('paging.row')} {tc('paging.select')}.
           </div>
         )}
         {pagingData?.data?.totalPages > 1 && (

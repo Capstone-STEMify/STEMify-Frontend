@@ -11,8 +11,10 @@ export function TextField<T = string>({ label, ...inputProps }: TextFieldProps) 
   const field = useFieldContext<T>()
 
   return (
-    <div className='space-y-1'>
-      <Label htmlFor={field.name}>{label}</Label>
+    <div className='space-y-2'>
+      <Label className='text-base' htmlFor={field.name}>
+        {label}
+      </Label>
       <Input
         id={field.name}
         value={field.state.value as any}

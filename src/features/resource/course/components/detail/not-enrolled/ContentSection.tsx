@@ -3,8 +3,7 @@ import { fadeInUp } from '@/utils/motion'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { capitalizeFirst, formatDuration } from '@/utils/index'
-import { Ellipsis, EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
-import { SPagination } from '@/components/shared/SPagination'
+import { EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
 import {
   useDeleteLessonMutation,
   useSearchLessonQuery,
@@ -68,8 +67,9 @@ function SortableLessonCard({
 }
 
 export default function ContentSection() {
-  const t = useTranslations('CourseDetails')
+  const t = useTranslations('course')
   const tc = useTranslations('common')
+
   const router = useRouter()
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
@@ -174,9 +174,9 @@ export default function ContentSection() {
             <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
               <div className='text-center'>
                 <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-                  {t('notEnrolled.notFound.title')}
+                  {t('details.lesson.noData')}
                 </h2>
-                <p className='text-lg text-gray-600'>{t('notEnrolled.notFound.description')}</p>
+                <p className='text-lg text-gray-600'>{t('details.lesson.noDataDescription')}</p>
               </div>
             </div>
           </div>
@@ -184,9 +184,9 @@ export default function ContentSection() {
           <div className='mx-auto mt-24 max-w-7xl px-4 sm:px-6 lg:px-8'>
             <div className='mt-30 mb-12 text-center'>
               <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-                {t('notEnrolled.lesson.title')}
+                {t('details.lesson.title')}
               </h2>
-              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('notEnrolled.lesson.description')}</p>
+              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
             </div>
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
               <div
@@ -215,9 +215,9 @@ export default function ContentSection() {
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='mb-12 text-center'>
           <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-            {t('notEnrolled.lesson.title')}
+            {t('details.lesson.title')}
           </h2>
-          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('notEnrolled.lesson.description')}</p>
+          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
         </div>
         {!isReadOnly && (
           <div className='mb-4 flex justify-end gap-2 px-4 lg:px-8'>
@@ -314,7 +314,7 @@ export default function ContentSection() {
                                       onClick={(e) => {
                                         e.stopPropagation()
                                         openModal('confirm', {
-                                          message: `${tc('button.deleteConfirm')}`,
+                                          message: `${tc('confirmMessage.delete', { lessonTitle: lesson.title })}`,
                                           onConfirm: () => handleDeleteLesson(lesson.id)
                                         })
                                       }}

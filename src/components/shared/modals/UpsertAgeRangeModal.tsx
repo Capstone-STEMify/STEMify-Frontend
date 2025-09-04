@@ -1,6 +1,6 @@
 'use client'
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
-import UpsertAgeRange from '@/features/resource/age-range/components/management/UpsertAgeRange'
+import UpsertAgeRange from '@/features/resource/age-range/components/upsert/UpsertAgeRange'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 

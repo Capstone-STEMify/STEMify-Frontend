@@ -29,8 +29,8 @@ export function createSelectColumn<T>(): ColumnDef<T> {
     id: 'select',
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-        onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
+        checked={table.getIsAllRowsSelected() || (table.getIsSomeRowsSelected() && 'indeterminate')}
+        onCheckedChange={(v) => table.toggleAllRowsSelected(!!v)}
         aria-label='Select all'
       />
     ),

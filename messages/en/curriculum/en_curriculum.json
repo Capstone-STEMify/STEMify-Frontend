@@ -8,10 +8,12 @@
       "noData": "No curriculums found.",
       "noDataDetail": "Try changing the search term or filters to find relevant curriculums.",
       "loading": "Loading curriculums...",
-      "error": "An error occurred while fetching curriculums. Please try again."
+      "error": "An error occurred while fetching curriculums. Please try again.",
+      "courseListTitle": "Courses List"
     },
     "details": {
-      "title": "Curriculum Details"
+      "title": "Curriculum Details",
+      "addCourse": "Add Course"
     },
 
     "form": {
@@ -35,17 +37,6 @@
           "note": "Unique identifier for the curriculum",
           "placeholder": "e.g SU001"
         }
-      },
-
-      "successMessage": {
-        "create": "Curriculum created successfully!",
-        "update": "Curriculum updated successfully!",
-        "delete": "Curriculum deleted successfully!"
-      },
-      "errorMessage": {
-        "create": "An error occurred while creating the curriculum. Please try again.",
-        "update": "An error occurred while updating the curriculum. Please try again.",
-        "delete": "An error occurred while deleting the curriculum. Please try again."
       }
     }
   }

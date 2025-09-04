@@ -1,5 +1,5 @@
-import LessonManagement from '@/features/resource/lesson/components/table/LessonManagement';
+import LessonTable from '@/features/resource/lesson/components/list/LessonTable'
 
 export default function AdminLesson() {
-  return <LessonManagement />
+  return <LessonTable />
 }

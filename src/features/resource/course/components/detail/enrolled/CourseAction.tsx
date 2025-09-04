@@ -11,7 +11,7 @@ type CourseActionProps = {
 }
 
 export default function CourseAction({ course }: CourseActionProps) {
-  const t = useTranslations('CourseDetails')
+  const t = useTranslations('course')
   const tc = useTranslations('common')
   const userRole = useAppSelector((state) => state.auth.user?.role)
   const [updateCourseStatus] = useUpdateCourseMutation()
@@ -54,15 +54,15 @@ export default function CourseAction({ course }: CourseActionProps) {
       <div className='text-muted-foreground mt-4 grid w-full max-w-md grid-cols-3 gap-6 text-center text-xs'>
         <div className='flex flex-col items-center gap-1'>
           <Plus className='h-5 w-5' />
-          <span>{t('enrolled.action.add')}</span>
+          <span>{tc('button.add')}</span>
         </div>
         <div className='flex flex-col items-center gap-1'>
           <Bookmark className='h-5 w-5' />
-          <span>{t('enrolled.action.favor')}</span>
+          <span>{tc('button.wishlist')}</span>
         </div>
         <div className='flex flex-col items-center gap-1'>
           <Share2 className='h-5 w-5' />
-          <span>{t('enrolled.action.share')}</span>
+          <span>{tc('button.share')}</span>
         </div>
       </div>
     </section>

@@ -24,6 +24,7 @@ export const createCourseSchema = baseCourseSchema.extend({
     .instanceof(File)
     .refine((file) => file.size > 0, 'Cover image is required')
     .refine((file) => file.size < 5 * 1024 * 1024, 'Max 5MB allowed')
+    .optional()
 })
 
 /**
@@ -36,4 +37,4 @@ export const updateCourseSchema = baseCourseSchema.extend({
 /**
  * Type for course form data based on the create course schema.
  */
-export type CourseFormData = z.infer<typeof createCourseSchema>
+export type CourseFormData = z.infer<typeof createCourseSchema> | z.infer<typeof updateCourseSchema>

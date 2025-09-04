@@ -19,7 +19,7 @@ import { authSlice } from '@/features/auth/authSlice'
 import { notificationSlice } from '@/features/notification/slice/notificationSlice'
 import { notificationApi } from '@/features/notification/api/notificationApi'
 import { contentApi } from '@/features/content/api/contentApi'
-import { studentProgresssApi } from '@/features/student-progress/api/studentProgressApi'
+import { studentProgressApi } from '@/features/student-progress/api/studentProgressApi'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 import { notificationRealtimeSlice } from '@/features/notification/slice/notificationRealtimeSlice'
 import { use } from 'matter'
@@ -58,7 +58,7 @@ export const rootReducer = combineReducers({
   [notificationApi.reducerPath]: notificationApi.reducer,
   [lessonApiExtended.reducerPath]: lessonApiExtended.reducer,
   [contentApi.reducerPath]: contentApi.reducer,
-  [studentProgresssApi.reducerPath]: studentProgresssApi.reducer,
+  [studentProgressApi.reducerPath]: studentProgressApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [curriculumApi.reducerPath]: curriculumApi.reducer,
   [learningOutcomeApi.reducerPath]: learningOutcomeApi.reducer

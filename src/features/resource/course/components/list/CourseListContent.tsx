@@ -22,8 +22,8 @@ import { toast } from 'sonner'
 import { useModal } from '@/providers/ModalProvider'
 
 export default function CourseListContent() {
-  const t = useTranslations('CourseList')
   const tc = useTranslations('common')
+  const t = useTranslations('course')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
@@ -100,7 +100,7 @@ export default function CourseListContent() {
   }
 
   if (!courseData || courseData.data.items.length === 0) {
-    return <SEmpty title={t('noCourse')} description={t('noCourseFound')} />
+    return <SEmpty title={t('list.noData')} description={t('list.noDataDescription')} />
   }
 
   return (

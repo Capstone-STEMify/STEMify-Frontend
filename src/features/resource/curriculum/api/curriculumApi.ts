@@ -3,8 +3,40 @@ import { Curriculum, CurriculumQueryParams } from '../types/curriculum.type'
 
 export const curriculumApi = createCrudApi<Curriculum, CurriculumQueryParams>({
   reducerPath: 'curriculumApi',
-  tagType: 'Curriculum',
+  tagTypes: ['Curriculum', 'Course'],
   baseUrl: '/curriculums'
+}).injectEndpoints({
+  endpoints: (builder) => ({
+    addCourseToCurriculum: builder.mutation<Curriculum, { curriculumId: number; courseIds: number[] }>({
+      query: ({ curriculumId, courseIds }) => ({
+        url: `/curriculums/${curriculumId}/courses`,
+        method: 'POST',
+        body: {
+          courseIds
+        }
+      }),
+      invalidatesTags: (result, error, { curriculumId }) => [
+        { type: 'Curriculum', id: curriculumId },
+        'Curriculum',
+        'Course'
+      ]
+    }),
+
+    deleteCourseFromCurriculum: builder.mutation<Curriculum, { curriculumId: number; courseIds: number[] }>({
+      query: ({ curriculumId, courseIds }) => ({
+        url: `/curriculums/${curriculumId}/courses`,
+        method: 'DELETE',
+        body: {
+          courseIds
+        }
+      }),
+      invalidatesTags: (result, error, { curriculumId }) => [
+        { type: 'Curriculum', id: curriculumId },
+        'Curriculum',
+        'Course'
+      ]
+    })
+  })
 })
 
 export const {
@@ -18,5 +50,9 @@ export const {
   // lazy
   useLazySearchQuery: useLazySearchCurriculumQuery,
   useLazyGetAllQuery: useLazyGetAllCurriculumQuery,
-  useLazyGetByIdQuery: useLazyGetCurriculumByIdQuery
+  useLazyGetByIdQuery: useLazyGetCurriculumByIdQuery,
+
+  // curriculum courses
+  useAddCourseToCurriculumMutation,
+  useDeleteCourseFromCurriculumMutation
 } = curriculumApi

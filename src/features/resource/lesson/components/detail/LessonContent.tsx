@@ -8,13 +8,15 @@ import { studentProgressSlice } from '@/features/student-progress/slice/studentP
 import { ProgressStatus, StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { toast } from 'sonner'
 import { Button } from '@/components/shadcn/button'
-import MDEditor from '@uiw/react-md-editor'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 import { useTranslations } from 'next-intl'
 import { signIn, useSession } from 'next-auth/react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { Info } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const TiptapViewer = dynamic(() => import('@/components/tiptap/TiptapViewer'), { ssr: false })
 
 type LessonContentProps = {
   sectionId: number
@@ -42,7 +44,7 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
   const { data: content } = useSearchContentQuery(
     { sectionId },
     {
-      skip: !sectionId || !token
+      skip: !sectionId
     }
   )
 
@@ -73,20 +75,11 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
     return (
       <div className='relative flex min-h-[650px] flex-col gap-6 p-6'>
         {/* Content with conditional blur */}
-        <div className={`flex-1 ${!isLoggedIn ? 'blur-sm' : ''}`}>
+        <div className={`flex-1 ${!isLoggedIn ? 'blur-xs' : ''}`}>
           {content.data.items.map((c) => (
             <div key={c.id} className='prose flex-1'>
               <ScrollArea className='h-[650px]'>
-                <MDEditor.Markdown
-                  source={normalizeMarkdown(c.contentName)}
-                  style={{
-                    backgroundColor: 'white',
-                    color: 'black',
-                    padding: '1rem',
-                    borderRadius: '8px'
-                  }}
-                  data-color-mode='light'
-                />
+                <TiptapViewer content={normalizeMarkdown(c.contentName)} />
               </ScrollArea>
             </div>
           ))}
@@ -95,13 +88,13 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
         {/* Login overlay when not logged in */}
         {!isLoggedIn && (
           <div className='absolute inset-0 flex items-center justify-center bg-white/80'>
-            <div className='flex max-w-md flex-col items-center gap-4 rounded-lg bg-sky-500 p-6 text-white shadow-lg'>
+            <div className='bg-sky-custom-300 flex max-w-md flex-col items-center gap-4 rounded-lg p-6 text-white shadow-lg'>
               <Info size={24} className='text-white' />
               <div className='text-center'>
                 <h3 className='mb-2 text-lg font-semibold'>{t('requestSignIn.title')}</h3>
                 <p className='text-sm'>{t('requestSignIn.description')}</p>
               </div>
-              <Button 
+              <Button
                 className='bg-white text-sky-500 hover:bg-gray-50'
                 onClick={() => signIn('oidc', { callbackUrl: '/', prompt: 'login' })}
               >

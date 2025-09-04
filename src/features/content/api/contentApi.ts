@@ -6,7 +6,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 // The original API definition created by createCrudApi
 export const contentApi = createCrudApi<Content, ContentQueryParams>({
   reducerPath: 'contentApi',
-  tagType: 'Content',
+  tagTypes: ['Content', 'Lesson'],
   baseUrl: '/contents'
 })
 

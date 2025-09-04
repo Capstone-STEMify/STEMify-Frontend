@@ -1,4 +1,4 @@
-import StandardTable from "@/features/resource/standard/components/table/StandardTable";
+import StandardTable from '@/features/resource/standard/components/list/StandardTable';
 
 export default function AdminStandard() {
   return <StandardTable/>
