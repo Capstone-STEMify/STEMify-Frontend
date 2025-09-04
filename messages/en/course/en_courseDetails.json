@@ -5,14 +5,6 @@
       "category": "Category",
       "skill": "Skill",
       "standard": "Standard",
-      "button": {
-        "enroll": "Enroll Now",
-        "wishlist": "Wishlist",
-        "create": "Create New Lesson",
-        "update": "Update Course",
-        "review": "Submit to Review",
-        "delete": "Delete Course"
-      },
       "stats": {
         "section": "Course section(s)",
         "sec_description": "Comprehensive curriculum",
@@ -23,15 +15,7 @@
       },
       "lesson": {
         "title": "Lesson Content",
-        "description": "Engaging activities designed to inspire learning and growth",
-        "button": {
-          "view": "View Detail",
-          "create": "Create New Lesson",
-          "send_request": "Send Approval Request",
-          "update": "Update Lesson",
-          "delete": "Delete Lesson",
-          "deleteConfirm": "Are you sure you want to delete this lesson?"
-        }
+        "description": "Engaging activities designed to inspire learning and growth"
       },
       "notFound": {
         "title": "No Lesson Found",

@@ -23,6 +23,7 @@ import { useModal } from '@/providers/ModalProvider'
 
 export default function CourseListContent() {
   const t = useTranslations('CourseList')
+  const tc = useTranslations('common')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
@@ -111,7 +112,7 @@ export default function CourseListContent() {
             onClick={() => handleNavigate()}
           >
             <PlusCircle size={70} className='text-gray-500' />
-            <p className='mt-4 text-sm font-medium text-gray-500'>{t('actions.create')}</p>
+            <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.createCourse')}</p>
           </div>
         )}
         {courseData.data.items.map((course) => (
@@ -145,10 +146,10 @@ export default function CourseListContent() {
                   }
                   items={[
                     <p key={`update-${course.id}`} className='text-sm' onClick={() => handleNavigate(course.id)}>
-                      {t('actions.update')}
+                      {tc('button.update')}
                     </p>,
                     <button key={`delete-${course.id}`} className='text-sm' onClick={(e) => handleDelete(e, course.id)}>
-                      {t('actions.delete')}
+                      {tc('button.delete')}
                     </button>
                   ].filter(Boolean)}
                 />

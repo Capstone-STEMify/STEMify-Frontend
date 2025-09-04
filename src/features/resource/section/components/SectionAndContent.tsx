@@ -18,6 +18,7 @@ import { useUpdateLessonSectionOrderMutation } from '@/features/resource/lesson/
 
 export default function SectionAndContent() {
   const t = useTranslations('sectionManagement')
+  const tc = useTranslations('common')
 
   const { lessonId } = useParams()
   const token = useAppSelector((state) => state.auth.token)
@@ -91,7 +92,7 @@ export default function SectionAndContent() {
                 variant='outline'
                 onClick={() => openModal('upsertSection', { lessonId: Number(lessonId) })}
               >
-                <Plus className='mr-2 h-5 w-5' /> {t('section.add_btn')}
+                <Plus className='mr-2 h-5 w-5' /> {tc('button.addSection')}
               </Button>
             </div>
             {isOrderChanged && (
@@ -114,7 +115,7 @@ export default function SectionAndContent() {
                   }
                 }}
               >
-                {t('section.order_btn')}
+                {tc('button.order')}
               </Button>
             )}
           </SortableContext>

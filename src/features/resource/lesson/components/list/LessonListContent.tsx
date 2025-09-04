@@ -30,6 +30,7 @@ export default function LessonListContent() {
   const locale = useLocale()
   const { status } = useSession()
   const t = useTranslations('LessonList')
+  const tc = useTranslations('common')
   const role = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
   const userId = useAppSelector((state) => state.auth.user?.id)
 
@@ -191,7 +192,7 @@ export default function LessonListContent() {
                         key={`update-${lesson.id}`}
                         className='text-sm'
                       >
-                        <p>{t('dropdown.update')}</p>
+                        <p>{tc('button.update')}</p>
                       </Link>,
                       <button
                         key={`delete-${lesson.id}`}
@@ -202,7 +203,7 @@ export default function LessonListContent() {
                           handleDelete(e, lesson.id)
                         }}
                       >
-                        {t('dropdown.delete')}
+                        {tc('button.delete')}
                       </button>
                     ]}
                   />

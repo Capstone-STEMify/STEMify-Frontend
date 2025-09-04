@@ -21,6 +21,7 @@ import useDebounce from '@/hooks/useDebounce'
 
 export default function CourseListAction() {
   const t = useTranslations('CourseList')
+  const tc = useTranslations('common')
   const [statusActive, setStatusActive] = useState(false)
 
   const { status } = useSession()
@@ -110,7 +111,7 @@ export default function CourseListAction() {
               {/* Clear All Button */}
               <Button onClick={clearAll} className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'>
                 <X className='h-4 w-4' />
-                {t('actions.clearBtn')}
+                {tc('button.clear')}
               </Button>
             </div>
           )}

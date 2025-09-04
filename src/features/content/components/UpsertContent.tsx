@@ -64,6 +64,7 @@ type UpsertContentProps = {
 
 export default function UpsertContent({ sectionId }: UpsertContentProps) {
   const t = useTranslations('sectionManagement')
+  const tc = useTranslations('common')
   const token = useAppSelector((state) => state.auth.token)
 
   const { data: contentData, isLoading: isContentLoading } = useSearchContentQuery(
@@ -167,7 +168,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
         <form.AppForm>
           <div className='flex w-full justify-end'>
             <form.SubmitButton className='bg-amber-custom-400 rounded-full px-6 py-4'>
-              {t('save_btn')}
+              {tc('button.save')}
             </form.SubmitButton>
           </div>
         </form.AppForm>

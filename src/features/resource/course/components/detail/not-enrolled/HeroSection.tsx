@@ -43,6 +43,7 @@ const TagGroup = ({ label, items, className }: TagGroupProps) => (
 
 export default function HeroSection({ course, token }: HeroSectionProps) {
   const t = useTranslations('CourseDetails')
+  const tc = useTranslations('common')
 
   const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
@@ -131,11 +132,11 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
                   className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
                 >
                   <TbDoorExit className='h-5 w-5' />
-                  {t('notEnrolled.button.enroll')}
+                  {tc('button.enroll')}
                 </Button>
                 <Button className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-4xl border bg-white py-6 text-lg'>
                   <Heart className='h-5 w-5' />
-                  {t('notEnrolled.button.wishlist')}
+                  {tc('button.wishlist')}
                 </Button>
               </div>
             ) : (
@@ -145,7 +146,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
                   className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
                 >
                   <Edit className='h-5 w-5' />
-                  {t('notEnrolled.button.update')}
+                  {tc('button.updateCourse')}
                 </Button>
                 {course.status === CourseStatus.DRAFT && (
                   <Button
@@ -153,7 +154,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
                     className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-4xl border bg-white py-6 text-lg'
                   >
                     <Edit className='h-5 w-5' />
-                    {t('notEnrolled.button.review')}
+                    {tc('button.review')}
                   </Button>
                 )}
               </div>

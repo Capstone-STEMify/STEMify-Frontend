@@ -10,6 +10,7 @@ type AdminCurriculumCourseListProps = {
 export default function AdminCurriculumCourseList({ curriculumId }: AdminCurriculumCourseListProps) {
   const { openModal } = useModal()
   const t = useTranslations('Curriculum')
+  const tc = useTranslations('common')
   return (
     <div>
       <h2 className='text-center text-3xl'>{t('courseList.title')}</h2>
@@ -18,7 +19,7 @@ export default function AdminCurriculumCourseList({ curriculumId }: AdminCurricu
           openModal('courseList', { curriculumId })
         }}
       >
-        Add Course
+        {tc('button.addCourse')}
       </Button>
     </div>
   )

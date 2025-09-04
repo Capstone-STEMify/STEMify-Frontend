@@ -32,6 +32,7 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
   const isEditing = !!id
 
   const t = useTranslations('LearningOutcome')
+  const tc = useTranslations('common')
 
   const { data: existingData, isLoading: isDataLoading } = useGetLearningOutcomeByIdQuery(id as number, {
     skip: !isEditing
@@ -103,7 +104,7 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
-            {t('save_btn')}
+            {tc('button.save')}
           </form.SubmitButton>
         </form.AppForm>
       </div>

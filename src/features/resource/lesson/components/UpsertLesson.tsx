@@ -160,6 +160,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const locale = useLocale()
   const router = useRouter()
   const t = useTranslations('lessonManagement')
+  const tc = useTranslations('common')
 
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
@@ -248,7 +249,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
           href='/resource/courses'
           className='mt-4 rounded-lg bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700'
         >
-          {t('courseNotFound.btn')}
+          {tc('button.goToCourseList')}
         </Link>
       </div>
     )
@@ -409,7 +410,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
           />
 
           <form.AppForm>
-            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>{t('btn')}</form.SubmitButton>
+            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>{tc('button.submit')}</form.SubmitButton>
           </form.AppForm>
         </div>
       </div>

@@ -12,6 +12,7 @@ type CourseActionProps = {
 
 export default function CourseAction({ course }: CourseActionProps) {
   const t = useTranslations('CourseDetails')
+  const tc = useTranslations('common')
   const userRole = useAppSelector((state) => state.auth.user?.role)
   const [updateCourseStatus] = useUpdateCourseMutation()
   const handleUpdateCourseStatus = async (status: CourseStatus) => {
@@ -37,14 +38,14 @@ export default function CourseAction({ course }: CourseActionProps) {
             className='shadow-6 bg-red-500 font-semibold text-white'
             onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
           >
-            <div className='text-xs uppercase'>{t('enrolled.action.reject')}</div>
+            <div className='text-xs uppercase'>{tc('button.reject')}</div>
           </Button>
           <Button
             size='default'
             className='shadow-6 bg-green-500 font-semibold text-white'
             onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
           >
-            <div className='text-xs uppercase'>{t('enrolled.action.approve')}</div>
+            <div className='text-xs uppercase'>{tc('button.approve')}</div>
           </Button>
         </div>
       )}

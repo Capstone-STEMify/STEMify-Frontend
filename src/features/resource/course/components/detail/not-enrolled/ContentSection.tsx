@@ -69,6 +69,7 @@ function SortableLessonCard({
 
 export default function ContentSection() {
   const t = useTranslations('CourseDetails')
+  const tc = useTranslations('common')
   const router = useRouter()
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
@@ -193,7 +194,7 @@ export default function ContentSection() {
                 onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
               >
                 <PlusCircle size={70} className='text-gray-500' />
-                <p className='mt-4 text-sm font-medium text-gray-500'>{t('notEnrolled.button.create')}</p>
+                <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.createLesson')}</p>
               </div>
             </div>
           </div>
@@ -221,10 +222,10 @@ export default function ContentSection() {
         {!isReadOnly && (
           <div className='mb-4 flex justify-end gap-2 px-4 lg:px-8'>
             <Button variant={'ghost'} onClick={() => setItems(lessons?.data?.items || [])}>
-              Cancel
+              {tc('button.cancel')}
             </Button>
             <Button className='bg-amber-custom-400' onClick={handleSaveOrder}>
-              Save Order
+              {tc('button.order')}
             </Button>
           </div>
         )}
@@ -258,7 +259,7 @@ export default function ContentSection() {
                   >
                     <PlusCircle size={70} className='mt-20 text-gray-500' />
                     <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
-                      {t('notEnrolled.lesson.button.create')}
+                      {tc('button.createLesson')}
                     </p>
                   </div>
                   {items.map((lesson) => (
@@ -282,7 +283,7 @@ export default function ContentSection() {
                                     className='text-sm'
                                     onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
                                   >
-                                    {t('notEnrolled.lesson.button.view')}
+                                    {tc('button.view')}
                                   </p>,
                                   <p
                                     onClick={(e) => {
@@ -292,7 +293,7 @@ export default function ContentSection() {
                                     key='update'
                                     className='text-sm'
                                   >
-                                    {t('notEnrolled.lesson.button.update')}
+                                    {tc('button.updateLesson')}
                                   </p>,
                                   lesson.status === LessonStatus.DRAFT ? (
                                     <p
@@ -303,7 +304,7 @@ export default function ContentSection() {
                                       key={`send-request-${lesson.id}`}
                                       className='text-sm'
                                     >
-                                      {t('notEnrolled.lesson.button.send_request')}
+                                      {tc('button.sendRequest')}
                                     </p>
                                   ) : null,
                                   lesson.status === LessonStatus.DRAFT ? (
@@ -313,12 +314,12 @@ export default function ContentSection() {
                                       onClick={(e) => {
                                         e.stopPropagation()
                                         openModal('confirm', {
-                                          message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
+                                          message: `${tc('button.deleteConfirm')}`,
                                           onConfirm: () => handleDeleteLesson(lesson.id)
                                         })
                                       }}
                                     >
-                                      {t('notEnrolled.lesson.button.delete')}
+                                      {tc('button.deleteLesson')}
                                     </p>
                                   ) : null
                                 ].filter(Boolean)}
