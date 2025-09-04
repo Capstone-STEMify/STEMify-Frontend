@@ -52,7 +52,7 @@ function DraggableRow<TData extends { id: string | number }>({ row }: { row: Row
 
   return (
     <TableRow
-      ref={setNodeRef}
+      // ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       data-dragging
       {...attributes}
@@ -92,7 +92,16 @@ export function DataTable<TData extends { id: string | number }, TValue>({
     setLocalData(data)
   }, [data])
 
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor), useSensor(KeyboardSensor))
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        delay: 80,
+        tolerance: 5
+      }
+    }),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor)
+  )
   const itemIds = React.useMemo(() => localData.map((d) => d.id), [localData])
 
   const table = useReactTable({

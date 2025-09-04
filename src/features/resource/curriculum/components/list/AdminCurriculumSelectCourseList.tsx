@@ -1,3 +1,4 @@
+import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import SearchBar from '@/components/shared/search/SearchBar'
@@ -57,9 +58,14 @@ export default function AdminCurriculumSelectCourseList() {
           onDebouncedSearch={(value) => dispatch(setSearchTerm(value))}
         />
 
-        <div>
-          <Button variant='ghost'>{tc('button.cancel')}</Button>
-          <Button className='bg-amber-custom-400'>{tc('button.save')}</Button>
+        <div className='flex items-center gap-2'>
+          <Badge variant={'outline'} className='bg-sky-100 text-blue-500'>
+            Selected courses: {selectedIds.length}
+          </Badge>
+          <div>
+            <Button variant='ghost'>{tc('button.cancel')}</Button>
+            <Button className='bg-amber-custom-400'>{tc('button.save')}</Button>
+          </div>
         </div>
       </div>
       <DataTable

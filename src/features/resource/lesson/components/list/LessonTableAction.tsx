@@ -29,10 +29,11 @@ const getLessonStatusBadgeClass = (status?: LessonStatus): string => {
 }
 
 function DragHandle({ id }: { id: number }) {
-  const { attributes, listeners } = useSortable({ id })
+  const { attributes, listeners, setNodeRef } = useSortable({ id })
 
   return (
     <Button
+      ref={setNodeRef}
       {...attributes}
       {...listeners}
       variant='ghost'
