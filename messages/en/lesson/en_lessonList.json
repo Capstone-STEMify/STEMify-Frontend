@@ -22,15 +22,6 @@
       "ageRange": "Age Range",
       "standard": "Standard",
       "status": "Status"
-    },
-    "actions": {
-      "searchBtn": "Search",
-      "clearBtn": "Clear All"
-    },
-    "dropdown": {
-      "view": "View",
-      "update": "Update",
-      "delete": "Delete"
     }
   }
 }

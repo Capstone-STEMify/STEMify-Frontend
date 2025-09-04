@@ -194,7 +194,7 @@ export default function ContentSection() {
                 onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
               >
                 <PlusCircle size={70} className='text-gray-500' />
-                <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.create')}</p>
+                <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.createLesson')}</p>
               </div>
             </div>
           </div>
@@ -222,10 +222,10 @@ export default function ContentSection() {
         {!isReadOnly && (
           <div className='mb-4 flex justify-end gap-2 px-4 lg:px-8'>
             <Button variant={'ghost'} onClick={() => setItems(lessons?.data?.items || [])}>
-              Cancel
+              {tc('button.cancel')}
             </Button>
             <Button className='bg-amber-custom-400' onClick={handleSaveOrder}>
-              Save Order
+              {tc('button.order')}
             </Button>
           </div>
         )}
@@ -258,7 +258,9 @@ export default function ContentSection() {
                     }}
                   >
                     <PlusCircle size={70} className='mt-20 text-gray-500' />
-                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>{tc('button.create')}</p>
+                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
+                      {tc('button.createLesson')}
+                    </p>
                   </div>
                   {items.map((lesson) => (
                     <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>
@@ -291,7 +293,7 @@ export default function ContentSection() {
                                     key='update'
                                     className='text-sm'
                                   >
-                                    {tc('button.update')}
+                                    {tc('button.updateLesson')}
                                   </p>,
                                   lesson.status === LessonStatus.DRAFT ? (
                                     <p
@@ -302,7 +304,7 @@ export default function ContentSection() {
                                       key={`send-request-${lesson.id}`}
                                       className='text-sm'
                                     >
-                                      {tc('button.review')}
+                                      {tc('button.sendRequest')}
                                     </p>
                                   ) : null,
                                   lesson.status === LessonStatus.DRAFT ? (
@@ -317,7 +319,7 @@ export default function ContentSection() {
                                         })
                                       }}
                                     >
-                                      {tc('button.delete')}
+                                      {tc('button.deleteLesson')}
                                     </p>
                                   ) : null
                                 ].filter(Boolean)}

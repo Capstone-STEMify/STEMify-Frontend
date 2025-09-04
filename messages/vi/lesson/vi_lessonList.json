@@ -22,15 +22,6 @@
       "ageRange": "Độ Tuổi",
       "standard": "Tiêu Chuẩn",
       "status": "Trạng Thái"
-    },
-    "actions": {
-      "searchBtn": "Tìm kiếm",
-      "clearBtn": "Xóa Tất Cả"
-    },
-    "dropdown": {
-      "view": "Xem",
-      "update": "Cập Nhật",
-      "delete": "Xóa"
     }
   }
 }

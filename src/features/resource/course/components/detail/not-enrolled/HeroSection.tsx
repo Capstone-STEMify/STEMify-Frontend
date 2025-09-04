@@ -142,7 +142,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
                   className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
                 >
                   <Edit className='h-5 w-5' />
-                  {tc('button.update')}
+                  {tc('button.updateCourse')}
                 </Button>
                 {course.status === CourseStatus.DRAFT && (
                   <Button

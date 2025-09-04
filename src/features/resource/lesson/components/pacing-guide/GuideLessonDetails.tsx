@@ -19,6 +19,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
   const router = useRouter()
   const locale = useLocale()
   const t = useTranslations('PacingGuide')
+  const tc = useTranslations('common')
   const role = useAppSelector((state) => state.auth.user?.role)
 
   const [updateLesson] = useUpdateLessonMutation()
@@ -121,7 +122,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
               className='bg-amber-custom-400 mt-8 w-full text-lg'
               size={'lg'}
             >
-              {t('button.update')}
+              {tc('button.updateLesson')}
             </Button>
 
             {(lesson.status === LessonStatus.PENDING || lesson.status === LessonStatus.DRAFT) &&
@@ -132,13 +133,13 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                     className='w-1/2 border-red-500 text-red-500'
                     variant={'outline'}
                   >
-                    {t('button.reject')}
+                    {tc('button.reject')}
                   </Button>
                   <Button
                     onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.PUBLISHED)}
                     className='w-1/2 bg-green-500 text-white'
                   >
-                    {t('button.approve')}
+                    {tc('button.approve')}
                   </Button>
                 </div>
               )}

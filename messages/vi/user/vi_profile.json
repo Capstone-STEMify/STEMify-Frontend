@@ -1,0 +1,27 @@
+{
+  "profile": {
+    "title": "Cài đặt",
+    "description": "Cập nhật ảnh và thông tin cá nhân của bạn",
+    "username": "Tên người dùng",
+    "email": "Email",
+    "firstName": "Tên",
+    "lastName": "Họ",
+    "bio": "Tiểu sử",
+    "button": {},
+    "placeholders": {
+      "username": "Nhập tên người dùng của bạn",
+      "email": "Nhập email của bạn",
+      "firstName": "Nhập tên của bạn",
+      "lastName": "Nhập họ của bạn",
+      "bio": "Giới thiệu cho chúng tôi về bản thân bạn"
+    },
+    "settings": {
+      "profile": "Thông tin hồ sơ",
+      "account": "Cài đặt tài khoản",
+      "notifications": "Thông báo",
+      "privacy": "Quyền riêng tư & Bảo mật",
+      "help": "Trợ giúp & Hỗ trợ",
+      "signout": "Đăng xuất"
+    }
+  }
+}

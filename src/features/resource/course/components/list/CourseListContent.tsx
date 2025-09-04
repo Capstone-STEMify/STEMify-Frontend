@@ -112,7 +112,7 @@ export default function CourseListContent() {
             onClick={() => handleNavigate()}
           >
             <PlusCircle size={70} className='text-gray-500' />
-            <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.create')}</p>
+            <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.createCourse')}</p>
           </div>
         )}
         {courseData.data.items.map((course) => (

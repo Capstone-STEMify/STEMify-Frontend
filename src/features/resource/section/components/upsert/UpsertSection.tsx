@@ -44,6 +44,7 @@ export default function UpsertSection({
   const token = useAppSelector((state) => state.auth.token)
 
   const t = useTranslations('sectionManagement')
+  const tc = useTranslations('common')
 
   // Get lessonId and sectionId from URL and parse them to numbers
   const lessonIdRaw = propLessonId ?? params?.lessonId
@@ -205,7 +206,7 @@ export default function UpsertSection({
           />
           <form.AppForm>
             <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full py-3 text-lg'>
-              {sectionId ? `${t('update_btn')}` : `${t('create_btn')}`}
+              {sectionId ? `${t('button.updateSection')}` : `${t('button.createSection')}`}
             </form.SubmitButton>
           </form.AppForm>
         </div>

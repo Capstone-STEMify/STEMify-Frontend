@@ -53,7 +53,7 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
         {/* Create learning outcome */}
         <Button size='sm' className='bg-amber-400 text-sm' onClick={handleCreate}>
           <Plus className='mr-1 h-4 w-4' />
-          {tc('button.create')}
+          {tc('button.add')}
         </Button>
       </div>
 

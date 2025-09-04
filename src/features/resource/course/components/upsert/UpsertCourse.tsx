@@ -322,7 +322,7 @@ export default function UpsertCourse() {
 
           <form.AppForm>
             <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 w-full rounded-full'>
-              {tc('button.save')}
+              {tc('button.submit')}
             </form.SubmitButton>
           </form.AppForm>
         </div>

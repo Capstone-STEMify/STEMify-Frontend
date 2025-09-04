@@ -1,0 +1,14 @@
+{
+  "MyLearning": {
+    "title": "Hành Trình Học Tập Của Bạn",
+    "subtitle": "Tiếp tục hành trình học tập của bạn với các khóa học này",
+    "description": "Tiếp tục học hỏi và phát triển kỹ năng với các khóa học bạn đã đăng ký.",
+    "total": "Tổng Số Khóa Học",
+    "completed": "Đã Hoàn Thành",
+    "inProgress": "Đang Học",
+    "cancelled": "Đã Hủy",
+    "overallProgress": "Tiến Độ Chung",
+    "noEnrollments": "Chưa Đăng Ký Khóa Học Nào.",
+    "noCourses": "Bạn chưa đăng ký bất kỳ khóa học nào. Hãy khám phá danh mục của chúng tôi để tìm các khóa học bạn quan tâm."
+  }
+}
