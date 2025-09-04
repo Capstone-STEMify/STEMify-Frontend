@@ -41,7 +41,7 @@ export type DataTableProps<TData extends { id: string | number }, TValue> = {
   pagingData?: any
   pagingParams?: any
   rowSelection?: (string | number)[]
-  onSelectionChange?: (ids: (string | number)[]) => void
+  onSelectionChange?: (ids: (number)[]) => void
   handlePageChange?: (page: number) => void
   enableDnd?: boolean
   onReorder?: (newData: TData[]) => void
@@ -123,7 +123,8 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   React.useEffect(() => {
     const selectedIds = Object.keys(internalRowSelection)
       .filter((key) => internalRowSelection[key as any])
-      .map((id) => (isNaN(Number(id)) ? id : Number(id)))
+      .map((id) => Number(id))
+      .filter((id) => !isNaN(id))
     onSelectionChange?.(selectedIds)
   }, [table.getState().rowSelection])
 

@@ -13,6 +13,7 @@ import { Badge } from '@/components/shadcn/badge'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
 import { getCourseStatusBadgeClass } from '@/utils/badgeColor'
+import { useDeleteCourseFromCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
 
 export const courseTableSchema = z.object({
   id: z.number()
@@ -34,6 +35,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
   const { openModal } = useModal()
   const [deleteCourse] = useDeleteCourseMutation()
   const [updateCourseStatus] = useUpdateCourseMutation()
+  const [deleteCourseFromCurriculum] = useDeleteCourseFromCurriculumMutation()
   const locale = useLocale()
   const { curriculumId } = useParams()
 
@@ -59,6 +61,10 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
         }
       }
     })
+  }
+
+  const handleRemoveCourse = async (courseIds: number[]) => {
+    await deleteCourseFromCurriculum({ curriculumId: Number(curriculumId!), courseIds }).unwrap()
   }
 
   return [
@@ -159,8 +165,8 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
         onClick: async ({ original }) => {
           // Open the confirmation modal for removing course from curriculum
           openModal('confirm', {
-            message: tc('confirmMessage.removeCourse', { title: original.title })
-            // onConfirm: () => handleRemove(original.id)
+            message: tc('confirmMessage.removeCourse', { title: original.title }),
+            onConfirm: () => handleRemoveCourse([original.id])
           })
         }
       },
