@@ -1,8 +1,7 @@
 export async function loadMessages(locale: string) {
   const commonMessages = (await import(`../../messages/${locale}/common${locale}_common.json`)).default
   const curriculumMessages = (await import(`../../messages/${locale}/curriculum/${locale}_curriculum.json`)).default
-  const courseMessages = (await import(`../../messages/${locale}/${locale}_course.json`)).default
-
+  const courseMessages = (await import(`../../messages/${locale}/course/${locale}_course.json`)).default
   const headerMessages = (await import(`../../messages/${locale}/header/${locale}_header.json`)).default
   const homeMessages = (await import(`../../messages/${locale}/home/${locale}_home.json`)).default
   const resourceMessages = (await import(`../../messages/${locale}/resource/${locale}_resource.json`)).default

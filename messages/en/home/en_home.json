@@ -3,14 +3,13 @@
     "subtitle": "Turn STEM into a game - Inspire passion, creativity",
     "title": "The students' light bulbs are coming on",
     "searchPlaceholder": "What would you like to explore today?",
-    
+
     "course": "Course",
     "lesson": "Lesson",
     "activity": "Activity"
   },
   "ExploreResourcesSection": {
     "title": "Explore resources"
-    
   },
   "ToolsSection": {
     "title": "What is STEMify?",
@@ -35,6 +34,5 @@
     "title": "Do you still have any questions?",
     "description": "Book a meeting to learn about our offline materials. We will contact you for customer care.",
     "emailPlaceholder": "Enter your email"
-    
   }
 }
