@@ -3,7 +3,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const enrollmentApi = createCrudApi<Enrollment, EnrollmentQueryParams>({
   reducerPath: 'enrollmentApi',
-  tagType: 'Enrollment',
+  tagTypes: ['Enrollment'],
   baseUrl: '/enrollments'
 })
 

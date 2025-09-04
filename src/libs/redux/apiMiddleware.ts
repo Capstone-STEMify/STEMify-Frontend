@@ -10,7 +10,7 @@ import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
 import { sectionApi } from '@/features/resource/section/api/sectionApi'
 import { skillApi } from '@/features/resource/skill/api/skillApi'
 import { standardApi } from '@/features/resource/standard/api/standardApi'
-import { studentProgresssApi } from '@/features/student-progress/api/studentProgressApi'
+import { studentProgressApi } from '@/features/student-progress/api/studentProgressApi'
 import { userApi } from '@/features/user/api/userApi'
 import { Middleware } from '@reduxjs/toolkit'
 
@@ -25,7 +25,7 @@ export const apiMiddlewares: Middleware[] = [
   standardApi.middleware,
   notificationApi.middleware,
   contentApi.middleware,
-  studentProgresssApi.middleware,
+  studentProgressApi.middleware,
   userApi.middleware,
   curriculumApi.middleware,
   learningOutcomeApi.middleware,

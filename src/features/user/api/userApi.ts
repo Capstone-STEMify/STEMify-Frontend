@@ -3,7 +3,7 @@ import { User, UserQueryParams } from '../types/user.type'
 
 export const userApi = createCrudApi<User, UserQueryParams>({
   reducerPath: 'userApi',
-  tagType: 'User',
+  tagTypes: ['User'],
   baseUrl: '/users'
 })
 

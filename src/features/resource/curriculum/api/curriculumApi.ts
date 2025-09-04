@@ -3,7 +3,7 @@ import { Curriculum, CurriculumQueryParams } from '../types/curriculum.type'
 
 export const curriculumApi = createCrudApi<Curriculum, CurriculumQueryParams>({
   reducerPath: 'curriculumApi',
-  tagType: 'Curriculum',
+  tagTypes: ['Curriculum'],
   baseUrl: '/curriculums'
 })
 

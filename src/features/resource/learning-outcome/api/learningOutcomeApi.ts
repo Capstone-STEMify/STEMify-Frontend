@@ -3,7 +3,7 @@ import { LearningOutcome, LearningOutcomeQueryParams } from '../types/learningOu
 
 export const learningOutcomeApi = createCrudApi<LearningOutcome, LearningOutcomeQueryParams>({
   reducerPath: 'learningOutcomeApi',
-  tagType: 'LearningOutcome',
+  tagTypes: ['LearningOutcome'],
   baseUrl: '/program-learning-outcomes'
 })
 
