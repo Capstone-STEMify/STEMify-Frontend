@@ -212,11 +212,11 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
         if (lessonId) {
           const jsonPayload = await PatchLessonJsonPayload(initialCourseDataRef.current!, value, userId!)
           const res = await updateLesson({ id: lessonId, body: jsonPayload }).unwrap()
-          toast.success(tt('successMessage.update', {title: res.data.title}))
+          toast.success(tt('successMessage.update', { title: res.data.title }))
         } else {
           const jsonPayload = await CreateLessonJsonPayload(value, userId!, finalCourseId)
           const res = await createLesson(jsonPayload).unwrap()
-          toast.success(tt('successMessage.create', {title: res.data.title}))
+          toast.success(tt('successMessage.create', { title: res.data.title }))
           if (role === UserRole.STAFF) router.push(`/${locale}/resource/lesson/update/${res.data.id}`)
           else if (role === UserRole.ADMIN) router.push(`/${locale}/admin/lesson/update/${res.data.id}`)
         }
@@ -272,9 +272,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
         form.handleSubmit()
       }}
     >
-      <h1 className='mb-5 text-center text-5xl font-bold text-gray-800'>
-        {lessonId ? `${t('updateTitle')}` : `${t('createTitle')}`}
-      </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
           <div className='flex justify-between gap-2'>
@@ -411,7 +408,9 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
           />
 
           <form.AppForm>
-            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>{tc('button.submit')}</form.SubmitButton>
+            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>
+              {tc('button.submit')}
+            </form.SubmitButton>
           </form.AppForm>
         </div>
       </div>
