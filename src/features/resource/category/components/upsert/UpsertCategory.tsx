@@ -12,8 +12,10 @@ import {
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 
+const tv = useTranslations('validation')
+
 const categorySchema = z.object({
-  name: z.string().min(1, 'Category name is required')
+  name: z.string().min(1, tv('category.name'))
 })
 
 type CategoryFormData = z.infer<typeof categorySchema>

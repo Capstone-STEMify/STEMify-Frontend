@@ -1,16 +1,19 @@
+import { useTranslations } from 'next-intl'
 import z from 'zod'
+
+const tv = useTranslations('validation')
 
 /**
  * Upsert curriculum basic schema used for both create and update operations.
  */
 export const curriculumSchema = z.object({
-  code: z.string().min(3, 'Code must be at least 3 characters long'),
-  title: z.string().min(10, 'Title must be at least 10 characters long'),
-  description: z.string().min(50, 'Description must be at least 50 characters long'),
+  code: z.string().min(3, tv('curriculum.code', {length: 3})),
+  title: z.string().min(10, tv('curriculum.title', {length: 10})),
+  description: z.string().min(50, tv('curriculum.description', {length: 50})),
   imageUrl: z
     .instanceof(File)
-    .refine((file) => file.size > 0, 'Cover image is required')
-    .refine((file) => file.size < 5 * 1024 * 1024, 'Max 5MB allowed')
+    .refine((file) => file.size > 0, tv('curriculum.imageUrl'))
+    .refine((file) => file.size < 5 * 1024 * 1024, tv('curriculum.imageSize', {size: 5}))
     .optional(),
   imagePreviewUrl: z.string().optional()
 })
