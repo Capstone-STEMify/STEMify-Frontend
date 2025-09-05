@@ -12,6 +12,7 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
   const [deleteStandard] = useDeleteStandardMutation()
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tm = useTranslations('message')
 
   const handleDelete = async (id: number) => {
     try {
@@ -55,7 +56,7 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: `Are you sure you want to delete standard "${original.standardName}"?`,
+            message: tm('confirmDelMessage', { title: original.standardName }),
             onConfirm: () => handleDelete(original.id)
           })
         }

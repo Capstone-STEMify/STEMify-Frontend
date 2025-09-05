@@ -54,6 +54,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
   const [updateLessonStatus] = useUpdateLessonMutation()
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tm = useTranslations('message')
   const { courseId } = useParams()
   const handleDelete = async (id: number) => {
     try {
@@ -177,7 +178,7 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
-            message: `Are you sure you want to delete lesson "${original.title}"?`,
+            message: tm('confirmDelMessage', { title: original.title }),
             onConfirm: () => handleDelete(original.id)
           })
         }

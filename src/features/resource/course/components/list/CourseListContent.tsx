@@ -25,6 +25,7 @@ export default function CourseListContent() {
   const tc = useTranslations('common')
   const t = useTranslations('course')
   const tt = useTranslations('toast')
+  const tm = useTranslations('message')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
@@ -89,7 +90,7 @@ export default function CourseListContent() {
     e.preventDefault()
     try {
       openModal('confirm', {
-        message: 'Are you sure you want to delete this course?',
+        message: tm('confirmDelMessage', { title: '' }),
         onConfirm: async () => {
           await deleteCourse(courseId).unwrap()
           toast.success(tt('successMessage.delete'))

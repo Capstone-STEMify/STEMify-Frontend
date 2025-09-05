@@ -21,6 +21,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
   const [deleteCategory] = useDeleteCategoryMutation() // Hook for deletion
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tm = useTranslations('message')
 
   const handleDelete = async (id: number) => {
     try {
@@ -56,7 +57,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
-            message: `Are you sure you want to delete topic "${original.name}"?`,
+            message: `${tm('category')} "${original.name}"?`,
             onConfirm: () => handleDelete(original.id)
           })
         }
