@@ -8,6 +8,7 @@
       "email": "Địa chỉ email không hợp lệ",
       "userName": "Tên người dùng phải có ít nhất {length} ký tự",
       "password": "Mật khẩu phải có ít nhất {length} ký tự",
+      "passwordRequired": "Không được để trống ô mật khẩu",
       "firstName": "Tên không được để trống",
       "lastName": "Họ không được để trống"
     },
