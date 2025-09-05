@@ -31,6 +31,7 @@ const levelBadgeClass = (level?: string): string => {
 export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDef<Course>[] {
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tm = useTranslations('message')
 
   const router = useRouter()
   const { openModal } = useModal()
@@ -52,7 +53,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
   const handleStatusUpdate = async (id: number, title: string, status: CourseStatus) => {
     const action = status === CourseStatus.PUBLISHED ? 'publish' : 'reject'
     openModal('confirm', {
-      message: `Are you sure you want to ${action} course "${title}"?`,
+      message: tt('confirmMessage.askStatus', { action, title }),
       onConfirm: async () => {
         try {
           await updateCourseStatus({ id, body: { status } }).unwrap()
@@ -156,7 +157,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
-            message: `Are you sure you want to delete course "${original.title}"?`,
+            message: tm('confirmDelMessage', { title: original.title }),
             onConfirm: () => handleDelete(original.id)
           })
         }

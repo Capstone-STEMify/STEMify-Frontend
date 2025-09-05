@@ -12,6 +12,7 @@ export function useGetSkillAction(): ColumnDef<Skill>[] {
   const [deleteSkill] = useDeleteSkillMutation()
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tm = useTranslations('message')
 
   const handleDelete = async (id: number) => {
     try {
@@ -44,7 +45,7 @@ export function useGetSkillAction(): ColumnDef<Skill>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: `Are you sure you want to delete skill "${original.skillName}"?`,
+            message: tm('confirmDelMessage', { title: original.skillName }),
             onConfirm: () => handleDelete(original.id)
           })
         }

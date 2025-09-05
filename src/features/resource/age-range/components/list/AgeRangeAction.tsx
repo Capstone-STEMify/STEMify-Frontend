@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 export function useGetAgeRangeAction(): ColumnDef<AgeRange>[] {
   const { openModal } = useModal()
   const [deleteAgeRange] = useDeleteAgeRangeMutation()
+  const tm = useTranslations('message')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
 
@@ -52,7 +53,7 @@ export function useGetAgeRangeAction(): ColumnDef<AgeRange>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: `Are you sure you want to delete age range "${original.ageRangeLabel}"?`,
+            message: `${tm('ageRange')} "${original.ageRangeLabel}"?`,
             onConfirm: () => handleDelete(original.id)
           })
         }

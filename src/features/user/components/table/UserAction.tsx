@@ -14,6 +14,7 @@ export function useGetUserAction(): ColumnDef<User>[] {
   const [deleteUser] = useDeleteUserMutation()
   const t = useTranslations('tableHeader')
   const tt = useTranslations('toast')
+  const tm = useTranslations('message')
 
   const handleDelete = async (id: string, userName: string) => {
     try {
@@ -62,7 +63,7 @@ export function useGetUserAction(): ColumnDef<User>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: `Are you sure you want to disable user "${original.userName}"?`,
+            message: tm('confirmDelMessage', { title: original.userName }),
             onConfirm: () => handleDelete(original.userId, original.userName)
           })
         }

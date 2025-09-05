@@ -32,6 +32,7 @@ export default function LessonListContent() {
   const t = useTranslations('LessonList')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tm = useTranslations('message')
   const role = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
   const userId = useAppSelector((state) => state.auth.user?.id)
 
@@ -87,7 +88,7 @@ export default function LessonListContent() {
     e.preventDefault()
     try {
       openModal('confirm', {
-        message: 'Are you sure you want to delete this lesson?',
+        message: tm('confirmDelMessage', { title: 'lesson' }),
         onConfirm: async () => {
           await deleteLesson(lessonId).unwrap()
           toast.success(tt('successMessage.delete'))

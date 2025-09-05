@@ -7,6 +7,8 @@ import { parseWithZod } from '@conform-to/zod/v4'
 
 export default function UserForm() {
   const tv = useTranslations('validation')
+  const tm = useTranslations('message')
+  const tc = useTranslations('common')
 
   const contactMethods = ['email', 'phone', 'whatsapp', 'sms'] as const
   type ContactMethod = (typeof contactMethods)[number]
@@ -27,7 +29,7 @@ export default function UserForm() {
       .min(3, tv('user.surnameLength', { length: 3 }))
       .regex(/^[A-Z]/, tv('user.surname')),
     isAcceptingTerms: z.boolean().refine((val) => val, {
-      message: 'You must accept the terms and conditions'
+      message: tm('user')
     }),
     contact: z.object({
       email: z.string().email(tv('user.email')),
@@ -113,7 +115,7 @@ export default function UserForm() {
       </div>
 
       <form.AppForm>
-        <form.SubmitButton>Submit</form.SubmitButton>
+        <form.SubmitButton>{tc('button.submit')}</form.SubmitButton>
       </form.AppForm>
     </form>
   )

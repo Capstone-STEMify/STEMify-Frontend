@@ -12,6 +12,7 @@ export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
   const [deleteLearningOutcome] = useDeleteLearningOutcomeMutation()
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tm = useTranslations('message')
 
   const handleDelete = async (id: number) => {
     try {
@@ -48,7 +49,7 @@ export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: `Are you sure you want to delete learning outcome "${original.name}"?`,
+            message: tm('confirmDelMessage', { title: original.name }),
             onConfirm: () => handleDelete(original.id)
           })
         }
