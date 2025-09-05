@@ -3,6 +3,7 @@
     "button": {
       "create": "Tạo Mới",
       "update": "Cập Nhật",
+      "browse": "Tải Lên",
       "delete": "Xóa",
       "remove": "Loại bỏ",
       "approve": "Phê Duyệt",

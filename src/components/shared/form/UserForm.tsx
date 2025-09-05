@@ -3,7 +3,7 @@
 import { useAppForm } from '@/components/shared/form/items'
 import { useTranslations } from 'next-intl'
 import { z } from 'zod'
-import { parseWithZod } from '@conform-to/zod'
+import { parseWithZod } from '@conform-to/zod/v4'
 
 export default function UserForm() {
   const tv = useTranslations('validation')

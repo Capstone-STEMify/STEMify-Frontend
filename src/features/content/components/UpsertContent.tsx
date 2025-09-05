@@ -14,7 +14,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 import { fileToBase64 } from '@/utils/index'
 import { ContentType } from '@/features/content/types/content.type'
-import { parseWithZod } from '@conform-to/zod'
+import { parseWithZod } from '@conform-to/zod/v4'
 
 const contentSchema = (tv: ReturnType<typeof useTranslations<'validation'>>) =>
   z.object({

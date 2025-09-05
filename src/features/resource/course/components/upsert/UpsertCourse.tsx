@@ -11,11 +11,7 @@ import {
   useGetCourseByIdQuery,
   useUpdateCourseMutation
 } from '@/features/resource/course/api/courseApi'
-import {
-  CourseFormData,
-  createCourseSchema,
-  updateCourseSchema
-} from '@/features/resource/course/forms/courseForm.schema'
+import { CourseFormData, useCourseSchemas } from '@/features/resource/course/forms/courseForm.schema'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { fileToBase64 } from '@/utils/index'
 import { SCard } from '@/components/shared/card/SCard'
@@ -125,6 +121,8 @@ export default function UpsertCourse() {
   const [updateCourse, { isLoading: isUpdating }] = useUpdateCourseMutation()
   const isSubmitting = isCreating || isUpdating
 
+  const { createCourseSchema, updateCourseSchema } = useCourseSchemas()
+
   const form = useAppForm({
     defaultValues: courseId && courseData?.data ? mapCourseToFormData(courseData) : defaultCourseData,
     validators: {
@@ -136,7 +134,7 @@ export default function UpsertCourse() {
         if (courseId) {
           const patchJson = await PatchCourseJsonPayload(initialCourseDataRef.current!, value, userId!)
           const res = await updateCourse({ id: Number(courseId), body: patchJson }).unwrap()
-          toast.success(tt('successMessage.update', {title: res.data.title}), {
+          toast.success(tt('successMessage.update', { title: res.data.title }), {
             action: {
               label: 'View Course',
               onClick: () => {
@@ -147,7 +145,7 @@ export default function UpsertCourse() {
         } else {
           const jsonPayload = await CreateCourseJsonPayload(value, userId!)
           const res = await createCourse(jsonPayload).unwrap()
-          toast.success(tt('successMessage.create', {title: res.data.title}))
+          toast.success(tt('successMessage.create', { title: res.data.title }))
           router.push(`/${locale}/resource/course/${res.data.id}`)
         }
       } catch (err) {

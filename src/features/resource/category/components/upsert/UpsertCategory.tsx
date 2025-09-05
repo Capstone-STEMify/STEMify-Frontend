@@ -11,7 +11,7 @@ import {
 } from '@/features/resource/category/api/categoryApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
-import { parseWithZod } from '@conform-to/zod'
+import { parseWithZod } from '@conform-to/zod/v4'
 
 type CategoryFormData = {
   name: string

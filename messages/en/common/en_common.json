@@ -3,6 +3,7 @@
     "button": {
       "create": "Create New",
       "update": "Update",
+      "browse": "Browse",
       "delete": "Delete",
       "remove": "Remove",
       "approve": "Approve",

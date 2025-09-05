@@ -7,7 +7,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { Role, ROLES } from '../../types/user.type'
 import { useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } from '../../api/userApi'
 import { useTranslations } from 'next-intl'
-import { parseWithZod } from '@conform-to/zod'
+import { parseWithZod } from '@conform-to/zod/v4'
 
 const defaultUserData = {
   email: '',
