@@ -18,6 +18,7 @@ import { useDeleteCurriculumMutation, useSearchCurriculumQuery } from '../../api
 
 export default function AdminCurriculumList() {
   const t = useTranslations('curriculum')
+  const tt = useTranslations('toast')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
@@ -54,14 +55,14 @@ export default function AdminCurriculumList() {
     e.preventDefault()
     try {
       openModal('confirm', {
-        message: t('form.confirmMessage.delete'),
+        message: tt('confirmMessage.delete'),
         onConfirm: async () => {
           await deleteCurriculum(curriculumId).unwrap()
-          toast.success(t('form.successMessage.delete'))
+          toast.success(tt('successMessage.delete'))
         }
       })
     } catch (error) {
-      toast.error(t('form.errorMessage.delete'))
+      toast.error(tt('errorMessage'))
     }
   }
 

@@ -20,6 +20,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
   const locale = useLocale()
   const t = useTranslations('PacingGuide')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const role = useAppSelector((state) => state.auth.user?.role)
 
   const [updateLesson] = useUpdateLessonMutation()
@@ -35,9 +36,9 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
   const handleUpdateLessonStatus = async (lessonId: number, status: LessonStatus) => {
     try {
       await updateLesson({ id: lessonId, body: { status } }).unwrap()
-      toast.success(`Lesson status updated to ${status}`)
+      toast.success(tt('successMessage.lessonStatus', {status}))
     } catch (error) {
-      toast.error('Failed to update lesson status')
+      toast.error(tt('errorMessage'))
       console.error('Error updating lesson status:', error)
     }
   }

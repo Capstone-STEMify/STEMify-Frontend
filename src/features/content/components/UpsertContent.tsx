@@ -15,6 +15,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 import { fileToBase64 } from '@/utils/index'
 import { ContentType } from '@/features/content/types/content.type'
+import { title } from 'process'
 
 const contentSchema = z.object({
   contentBody: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
@@ -63,7 +64,7 @@ type UpsertContentProps = {
 }
 
 export default function UpsertContent({ sectionId }: UpsertContentProps) {
-  const t = useTranslations('sectionManagement')
+  const tt = useTranslations('toast')
   const tc = useTranslations('common')
   const token = useAppSelector((state) => state.auth.token)
 
@@ -94,7 +95,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
             contentType: ContentType.TEXT
           })
           const res = await updateContent({ id: contentItem.id, body: patchJson }).unwrap()
-          toast.success(`Content updated successfully`)
+          toast.success(tt('successMessage.update', {title: res.data.contentName}))
         } else {
           const jsonPayload = await CreateContentJsonPayload({
             ...value,
@@ -103,10 +104,10 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
           })
 
           await createContent(jsonPayload).unwrap()
-          toast.success('Content created successfully')
+          toast.success(tt('successMessage.create'))
         }
       } catch (err) {
-        toast.error('Failed to submit content')
+        toast.error(tt('errorMessage'))
         console.error(err)
       }
     }

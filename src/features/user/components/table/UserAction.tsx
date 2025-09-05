@@ -13,13 +13,14 @@ export function useGetUserAction(): ColumnDef<User>[] {
   const { openModal } = useModal()
   const [deleteUser] = useDeleteUserMutation()
   const t = useTranslations('tableHeader')
+  const tt = useTranslations('toast')
 
   const handleDelete = async (id: string, userName: string) => {
     try {
       await deleteUser(id).unwrap()
-      toast.success(`Successfully deleted user ${userName}.`)
+      toast.success(tt('successMessage.delete', {title: userName}))
     } catch (error) {
-      toast.error('Failed to delete user.')
+      toast.error(tt('errorMessage'))
     }
   }
 

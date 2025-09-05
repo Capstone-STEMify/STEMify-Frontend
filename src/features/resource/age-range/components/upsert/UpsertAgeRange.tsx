@@ -152,6 +152,7 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
   const isEditing = !!id
 
   const t = useTranslations('Admin.ageRange')
+  const tt = useTranslations('toast')
 
   const { data: existingData, isLoading: isDataLoading } = useGetAgeRangeByIdQuery(id as number, {
     skip: !isEditing
@@ -199,14 +200,14 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
     try {
       if (isEditing) {
         await updateAgeRange({ id: id!, body }).unwrap()
-        toast.success('Age Range updated successfully!')
+        toast.success(tt('successMessage.update'))
       } else {
         await createAgeRange(body).unwrap()
-        toast.success('Age Range created successfully!')
+        toast.success(tt('successMessage.create'))
       }
       onSuccess?.()
     } catch (err) {
-      toast.error('Failed to submit Age Range.')
+      toast.error(tt('errorMessage'))
       console.error(err)
     }
   }

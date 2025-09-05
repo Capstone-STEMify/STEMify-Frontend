@@ -11,13 +11,14 @@ export function useGetAgeRangeAction(): ColumnDef<AgeRange>[] {
   const { openModal } = useModal()
   const [deleteAgeRange] = useDeleteAgeRangeMutation()
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const handleDelete = async (id: number) => {
     try {
       await deleteAgeRange(id).unwrap()
-      toast.success(`Successfully deleted age range ${id}.`)
+      toast.success(`${tt('successMessage.delete', {title: id || ''})}`)
     } catch (error) {
-      toast.error('Failed to delete age range.')
+      toast.error(tt('errorMessage'))
     }
   }
 

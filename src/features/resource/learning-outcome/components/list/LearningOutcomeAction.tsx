@@ -11,13 +11,14 @@ export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
   const { openModal } = useModal()
   const [deleteLearningOutcome] = useDeleteLearningOutcomeMutation()
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const handleDelete = async (id: number) => {
     try {
       await deleteLearningOutcome(id).unwrap()
-      toast.success(`Successfully deleted learning outcome ${id}.`)
+      toast.success(tt('successMessage.delete'))
     } catch (error) {
-      toast.error('Failed to delete learning outcome.')
+      toast.error(tt('errorMessage'))
     }
   }
 

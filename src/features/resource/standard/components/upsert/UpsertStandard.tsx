@@ -34,6 +34,7 @@ export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
   const isEditing = !!id
 
   const t = useTranslations('Admin.standard')
+  const tt = useTranslations('toast')
 
   const { data: existingData, isLoading: isDataLoading } = useGetStandardByIdQuery(id as number, {
     skip: !isEditing
@@ -51,14 +52,14 @@ export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
       try {
         if (isEditing) {
           await updateStandard({ id: id!, body: value }).unwrap()
-          toast.success('Standard updated successfully!')
+          toast.success(tt('successMessage.update'))
         } else {
           await createStandard(value).unwrap()
-          toast.success('Standard created successfully!')
+          toast.success(tt('successMessage.create'))
         }
         onSuccess?.()
       } catch (err: any) {
-        toast.error('Failed to submit standard.')
+        toast.error(tt('errorMessage'))
         console.error(err)
       }
     }

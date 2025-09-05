@@ -31,6 +31,7 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
   const isEditing = !!id
 
   const t = useTranslations('Admin.topic')
+  const tt = useTranslations('toast')
 
   const { data: categoryData, isLoading: isCategoryLoading } = useGetCategoryByIdQuery(id as number, {
     skip: !isEditing
@@ -49,14 +50,14 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
         if (isEditing) {
           const body = { name: value.name }
           await updateCategory({ id: id!, body }).unwrap()
-          toast.success('Category updated successfully!')
+          toast.success(tt('successMessage.update'))
         } else {
           await createCategory(value).unwrap()
-          toast.success('Category created successfully!')
+          toast.success(tt('successMessage.create'))
         }
         onSuccess?.()
       } catch (err) {
-        toast.error('Failed to submit category.')
+        toast.error(tt('errorMessage'))
         console.error(err)
       }
     }

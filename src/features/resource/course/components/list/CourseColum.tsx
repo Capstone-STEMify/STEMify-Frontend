@@ -30,6 +30,7 @@ const levelBadgeClass = (level?: string): string => {
 
 export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDef<Course>[] {
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const router = useRouter()
   const { openModal } = useModal()
@@ -42,9 +43,9 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
   const handleDelete = async (id: number) => {
     try {
       await deleteCourse(id).unwrap()
-      toast.success(`Successfully deleted course ${id}.`)
+      toast.success(tt('successMessage.delete'))
     } catch (error) {
-      toast.error('Failed to delete course.')
+      toast.error(tt('errorMessage'))
     }
   }
 
@@ -55,9 +56,11 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       onConfirm: async () => {
         try {
           await updateCourseStatus({ id, body: { status } }).unwrap()
-          toast.success(`${action.charAt(0).toUpperCase() + action.slice(1)}d course "${title}"`)
+
+          const actionText = action.charAt(0).toUpperCase() + action.slice(1) + "d"
+          toast.success(tt("successMessage.action", { action: actionText, title }))
         } catch {
-          toast.error(`Failed to ${action} course.`)
+          toast.error(tt('errorSpecific.status', {status: action}))
         }
       }
     })

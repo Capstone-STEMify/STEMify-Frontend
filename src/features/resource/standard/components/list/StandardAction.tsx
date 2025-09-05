@@ -11,13 +11,14 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
   const { openModal } = useModal()
   const [deleteStandard] = useDeleteStandardMutation()
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const handleDelete = async (id: number) => {
     try {
       await deleteStandard(id).unwrap()
-      toast.success(`Successfully deleted standard ${id}.`)
+      toast.success(tt('successMessage.delete'))
     } catch (error) {
-      toast.error('Failed to delete standard.')
+      toast.error(tt('errorMessage'))
     }
   }
 

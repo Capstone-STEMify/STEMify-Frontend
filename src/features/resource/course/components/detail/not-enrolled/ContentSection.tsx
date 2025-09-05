@@ -69,6 +69,7 @@ function SortableLessonCard({
 export default function ContentSection() {
   const t = useTranslations('course')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const router = useRouter()
   const { openModal } = useModal()
@@ -126,9 +127,9 @@ export default function ContentSection() {
         id: lessonId,
         body: { courseId: Number(courseId), status: LessonStatus.PENDING }
       }).unwrap()
-      toast.success('Lesson submitted for review')
+      toast.success(tt('successMessage.review'))
     } catch (error) {
-      toast.error('Failed to submit lesson for review')
+      toast.error(tt('errorSpecific.review'))
       console.error('Send lesson request error:', error)
     }
   }
@@ -136,9 +137,9 @@ export default function ContentSection() {
   const handleDeleteLesson = async (lessonId: number) => {
     try {
       await deleteLesson(lessonId).unwrap()
-      toast.success('Lesson deleted successfully')
+      toast.success(tt('successMessage.delete'))
     } catch (error) {
-      toast.error('Failed to delete lesson')
+      toast.error(tt('errorMessage'))
       console.error('Delete lesson error:', error)
     }
   }
@@ -160,9 +161,9 @@ export default function ContentSection() {
         id: Number(courseId),
         orderedLessonIds
       }).unwrap()
-      toast.success('Lesson order saved successfully')
+      toast.success(tt('successMessage.saveOrder'))
     } catch (e) {
-      toast.error('Failed to save lesson order')
+      toast.error(tt('errorMessage'))
     }
   }
 
