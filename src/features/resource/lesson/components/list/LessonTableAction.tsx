@@ -53,25 +53,29 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
   const [deleteLesson] = useDeleteLessonMutation()
   const [updateLessonStatus] = useUpdateLessonMutation()
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const { courseId } = useParams()
   const handleDelete = async (id: number) => {
     try {
       await deleteLesson(id).unwrap()
-      toast.success(`Successfully deleted lesson ${id}.`)
+      toast.success(tt('successMessage.delete'))
     } catch (error) {
-      toast.error('Failed to delete lesson.')
+      toast.error(tt('errorMessage'))
     }
   }
   const handleStatusUpdate = async (id: number, title: string, status: LessonStatus) => {
     const action = status === LessonStatus.PUBLISHED ? 'publish' : 'reject'
     openModal('confirm', {
-      message: `Are you sure you want to ${action} lesson "${title}"?`,
+      message: tt('confirmMessage.askStatus', {action, title}),
       onConfirm: async () => {
         try {
           await updateLessonStatus({ id, body: { status } }).unwrap()
-          toast.success(`${action.charAt(0).toUpperCase() + action.slice(1)}d lesson "${title}"`)
+
+          const actionText = action.charAt(0).toUpperCase() + action.slice(1) + "d"
+          toast.success(tt("successMessage.action", { action: actionText, title }))
+
         } catch {
-          toast.error(`Failed to ${action} lesson.`)
+          toast.error(tt('errorSpecific.status'))
         }
       }
     })

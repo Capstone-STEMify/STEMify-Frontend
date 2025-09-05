@@ -30,6 +30,7 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
   const dispatch = useAppDispatch()
 
   const t = useTranslations('LessonDetails')
+  const tt = useTranslations('toast')
 
   const { data: userData, status } = useSession()
 
@@ -55,10 +56,10 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
       if (enrollmentId) {
         await completeSection({ enrollmentId, lessonId, sectionId }).unwrap()
         dispatch(studentProgressSlice.actions.setSelectedSectionStatus(ProgressStatus.COMPLETED))
-        toast.success('Section completed!')
+        toast.success(tt('successMessage.sectionComplete'))
       }
     } catch (err: any) {
-      toast.error(err?.data?.message || 'Failed to complete section')
+      toast.error(tt('errorMessage'))
     }
   }
 

@@ -26,22 +26,22 @@ export default function AdminCurriculumInformationSection({
 }: AdminCurriculumInformationSectionProps) {
   // Translations
   const tc = useTranslations('common')
-  const t = useTranslations('curriculum')
+  const tt = useTranslations('toast')
   const { openModal } = useModal()
   const [deleteCurriculum] = useDeleteCurriculumMutation()
   const [updateCurriculumStatus] = useUpdateCurriculumMutation()
 
   const handleDelete = async () => {
     await deleteCurriculum(Number(curriculumId)).unwrap()
-    toast.success(t('form.successMessage.delete'))
+    toast.success(`${tt('successMessage.delete', {title: curriculum.title || ''})}`)
   }
 
   const handleUpdateCurriculumStatus = async (status: CurriculumStatus) => {
     try {
       await updateCurriculumStatus({ id: curriculumId, body: { status } }).unwrap()
-      toast.success('Update successful')
+      toast.success(`${tt('successMessage.update')}`)
     } catch (error) {
-      toast.error('Update failed, please try again' + error)
+      toast.error(tt('errorMessage'))
     }
   }
 
@@ -63,7 +63,7 @@ export default function AdminCurriculumInformationSection({
             <Trash2
               onClick={() => {
                 openModal('confirm', {
-                  message: `${tc('confirmMessage.delete', { title: curriculum.title || '' })}`,
+                  message: `${tt('confirmMessage.delete', { title: curriculum.title || '' })}`,
                   onConfirm: () => handleDelete()
                 })
               }}
@@ -87,7 +87,7 @@ export default function AdminCurriculumInformationSection({
               className='cursor-pointer bg-green-600 font-semibold text-white shadow'
               onClick={() =>
                 openModal('confirm', {
-                  message: `${'Are you sure to make '}${curriculum.title} ${CurriculumStatus.PUBLISHED}?`,
+                  message: `${tt('confirmMessage.ask')}${curriculum.title} ${CurriculumStatus.PUBLISHED}?`,
                   onConfirm: () => handleUpdateCurriculumStatus(CurriculumStatus.PUBLISHED)
                 })
               }
@@ -98,7 +98,7 @@ export default function AdminCurriculumInformationSection({
               className='cursor-pointer border border-red-600 bg-white font-semibold text-red-600 shadow'
               onClick={() =>
                 openModal('confirm', {
-                  message: `${'Are you sure to make '}${curriculum.title} ${CurriculumStatus.REJECTED}?`,
+                  message: `${tt('confirmMessage.ask')}${curriculum.title} ${CurriculumStatus.REJECTED}?`,
                   onConfirm: () => handleUpdateCurriculumStatus(CurriculumStatus.REJECTED)
                 })
               }

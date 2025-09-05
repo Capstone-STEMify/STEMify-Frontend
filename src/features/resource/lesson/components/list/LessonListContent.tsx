@@ -31,6 +31,7 @@ export default function LessonListContent() {
   const { status } = useSession()
   const t = useTranslations('LessonList')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const role = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
   const userId = useAppSelector((state) => state.auth.user?.id)
 
@@ -89,11 +90,11 @@ export default function LessonListContent() {
         message: 'Are you sure you want to delete this lesson?',
         onConfirm: async () => {
           await deleteLesson(lessonId).unwrap()
-          toast.success('Deleted successfully')
+          toast.success(tt('successMessage.delete'))
         }
       })
     } catch (error) {
-      toast.error('Failed to delete lesson')
+      toast.error(tt('errorMessage'))
     }
   }
 

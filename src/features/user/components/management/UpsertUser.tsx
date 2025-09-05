@@ -39,6 +39,7 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
   const isEditing = !!id
 
   const t = useTranslations('Admin.user')
+  const tt = useTranslations('toast')
 
   const { data: existingData, isLoading: isDataLoading } = useGetUserByIdQuery(id as number, {
     skip: !isEditing
@@ -61,15 +62,15 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
             requestBody.password = password
           }
           await updateUser({ id: id!, body: requestBody }).unwrap()
-          toast.success('User updated successfully!')
+          toast.success(tt('successMessage.update'))
         } else {
           requestBody.password = password
           await createUser(requestBody).unwrap()
-          toast.success('User created successfully!')
+          toast.success(tt('successMessage.create'))
         }
         onSuccess?.()
       } catch (err: any) {
-        toast.error('Failed to submit user.')
+        toast.error(tt('errorMessage'))
         console.error(err)
       }
     }

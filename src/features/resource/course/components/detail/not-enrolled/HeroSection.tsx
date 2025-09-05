@@ -1,5 +1,5 @@
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion, time } from 'framer-motion'
 import { CalendarFold, Edit, Heart } from 'lucide-react'
 import { TbDoorExit } from 'react-icons/tb'
 import { fadeInUp } from '@/utils/motion'
@@ -44,6 +44,7 @@ const TagGroup = ({ label, items, className }: TagGroupProps) => (
 export default function HeroSection({ course, token }: HeroSectionProps) {
   const t = useTranslations('course')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
@@ -59,8 +60,8 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
     if (course.id) {
       createEnroll({ courseId: course.id, studentId: auth?.user?.userId })
     }
-    toast.success('Enrollment request submitted successfully!', {
-      description: `You have enroll to ${enroll?.data.courseTitle} at  ${enroll?.data.enrolledAt} `,
+    toast.success(tt('successMessage.enroll'), {
+      description: `${tt('successMessage.enrollDes', {title: enroll?.data.courseTitle || '', time: enroll?.data.enrolledAt || ''})}`,
       action: {
         label: 'View Enrollment',
         onClick: () => {
@@ -76,7 +77,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
 
   const handleSubmitToReview = async () => {
     try {
-      toast.info('Your course is submitted for review. Please wait for approval.')
+      toast.info(tt('successMessage.review'))
 
       await updateCourseStatus({
         id: course.id,

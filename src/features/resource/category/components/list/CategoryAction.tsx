@@ -20,13 +20,14 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
   const { openModal } = useModal()
   const [deleteCategory] = useDeleteCategoryMutation() // Hook for deletion
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const handleDelete = async (id: number) => {
     try {
       await deleteCategory(id).unwrap()
-      toast.success(`Successfully deleted topic ${id}.`)
+      toast.success(tt('successMessage.delete'))
     } catch (error) {
-      toast.error('Failed to delete topic.')
+      toast.error(tt('errorMessage'))
     }
   }
 

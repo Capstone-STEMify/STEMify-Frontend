@@ -32,6 +32,7 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
   const isEditing = !!id
 
   const t = useTranslations('Admin.skill')
+  const tt = useTranslations('toast')
 
   const { data: existingData, isLoading: isDataLoading } = useGetSkillByIdQuery(id as number, {
     skip: !isEditing
@@ -49,14 +50,14 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
       try {
         if (isEditing) {
           await updateSkill({ id: id!, body: value }).unwrap()
-          toast.success('Skill updated successfully!')
+          toast.success(tt('successMessage.update'))
         } else {
           await createSkill(value).unwrap()
-          toast.success('Skill created successfully!')
+          toast.success(tt('successMessage.create'))
         }
         onSuccess?.()
       } catch (err: any) {
-        toast.error('Failed to submit skill.')
+        toast.error(tt('errorMessage'))
         console.error(err)
       }
     }

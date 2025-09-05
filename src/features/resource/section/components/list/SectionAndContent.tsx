@@ -19,6 +19,7 @@ import { useUpdateLessonSectionOrderMutation } from '@/features/resource/lesson/
 export default function SectionAndContent() {
   const t = useTranslations('sectionManagement')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const { lessonId } = useParams()
   const token = useAppSelector((state) => state.auth.token)
@@ -108,10 +109,10 @@ export default function SectionAndContent() {
                     const response = await updateSectionOrder({ id: Number(lessonId), body: jsonPayload }).unwrap()
                     console.log('response', response)
 
-                    toast.success('Order saved successfully.')
+                    toast.success(tt('successMessage.saveOrder'))
                     setIsOrderChanged(false)
                   } catch (err) {
-                    toast.error('Failed to save order.')
+                    toast.error(tt('errorMessage'))
                   }
                 }}
               >

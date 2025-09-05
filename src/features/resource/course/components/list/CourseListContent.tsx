@@ -24,6 +24,7 @@ import { useModal } from '@/providers/ModalProvider'
 export default function CourseListContent() {
   const tc = useTranslations('common')
   const t = useTranslations('course')
+  const tt = useTranslations('toast')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
@@ -91,11 +92,11 @@ export default function CourseListContent() {
         message: 'Are you sure you want to delete this course?',
         onConfirm: async () => {
           await deleteCourse(courseId).unwrap()
-          toast.success('Deleted successfully')
+          toast.success(tt('successMessage.delete'))
         }
       })
     } catch (error) {
-      toast.error('Failed to delete course')
+      toast.error(tt('errorMessage'))
     }
   }
 

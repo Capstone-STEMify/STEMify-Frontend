@@ -43,6 +43,7 @@ const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
 
 export default function CourseDetailForAdmin() {
   const t = useTranslations('Admin.course_details')
+  const tt = useTranslations('toast')
 
   const locale = useLocale()
   const params = useParams()
@@ -87,9 +88,9 @@ export default function CourseDetailForAdmin() {
           status
         }
       }).unwrap()
-      toast.success(`Course status updated to ${status}`)
+      toast.success(`${tt('successMessage.update', {title: status || ''})}`)
     } catch (error) {
-      toast.error('Failed to review course')
+      toast.error(tt('errorMessage'))
       console.error('Failed to update course status:', error)
     }
   }
@@ -99,13 +100,13 @@ export default function CourseDetailForAdmin() {
 
   const handleDelete = () => {
     if (!courseId) {
-      return toast.error('Course ID is required to delete a course.')
+      return toast.error(tt('errorSpecific.id'))
     }
     try {
       const res = deleteCourse(courseId).unwrap()
-      toast.success(`Course deleted successfully.`)
+      toast.success(tt('successMessage.delete'))
     } catch (error) {
-      toast.error('Failed to delete course')
+      toast.error(tt('errorMessage'))
       console.error('Failed to delete course:', error)
     }
   }

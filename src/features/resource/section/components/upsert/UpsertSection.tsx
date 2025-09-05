@@ -45,6 +45,7 @@ export default function UpsertSection({
 
   const t = useTranslations('sectionManagement')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   // Get lessonId and sectionId from URL and parse them to numbers
   const lessonIdRaw = propLessonId ?? params?.lessonId
@@ -76,7 +77,7 @@ export default function UpsertSection({
     onSubmit: async ({ value }) => {
       try {
         if (!lessonId) {
-          toast.error('Lesson ID is missing.')
+          toast.error(tt('errorSpecific.id'))
           return
         }
 
@@ -87,7 +88,7 @@ export default function UpsertSection({
             duration: Number(value.duration)
           }
           await updateSection({ id: sectionId, body: updatePayload }).unwrap()
-          toast.success('Section updated successfully')
+          toast.success(tt('successMessage.update'))
         } else {
           const createPayload = {
             title: value.title,
@@ -96,12 +97,12 @@ export default function UpsertSection({
             lessonId
           }
           const res = await createSection(createPayload).unwrap()
-          toast.success('Section created successfully: ' + res.data.title)
+          toast.success(tt('successMessage.create', {title: res.data.title}))
           form.reset()
         }
         onSuccess?.()
       } catch (err) {
-        toast.error('Failed to submit section')
+        toast.error(tt('errorMessage'))
         console.error(err)
       }
     }

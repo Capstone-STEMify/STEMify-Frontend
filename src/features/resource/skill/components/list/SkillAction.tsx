@@ -11,13 +11,14 @@ export function useGetSkillAction(): ColumnDef<Skill>[] {
   const { openModal } = useModal()
   const [deleteSkill] = useDeleteSkillMutation()
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const handleDelete = async (id: number) => {
     try {
       await deleteSkill(id).unwrap()
-      toast.success(`Successfully deleted skill ${id}.`)
+      toast.success(tt('successMessage.delete'))
     } catch (error) {
-      toast.error('Failed to delete skill.')
+      toast.error(tt('errorMessage'))
     }
   }
 

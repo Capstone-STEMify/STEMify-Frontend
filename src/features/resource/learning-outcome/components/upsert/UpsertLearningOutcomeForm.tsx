@@ -21,6 +21,7 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
   const isEditing = !!id
 
   const t = useTranslations('LearningOutcome')
+  const tt = useTranslations('toast')
   const tc = useTranslations('common')
 
   // Schema validation cho form
@@ -51,14 +52,14 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
       try {
         if (isEditing) {
           await updateLearningOutcome({ id: id!, body: value }).unwrap()
-          toast.success(t('successMessage.update'))
+          toast.success(tt('successMessage.update'))
         } else {
           await createLearningOutcome(value).unwrap()
-          toast.success(t('successMessage.create'))
+          toast.success(tt('successMessage.create'))
         }
         onSuccess?.()
       } catch (err: any) {
-        toast.error(t('errorMessage'))
+        toast.error(tt('errorMessage'))
         console.error(err)
       }
     }

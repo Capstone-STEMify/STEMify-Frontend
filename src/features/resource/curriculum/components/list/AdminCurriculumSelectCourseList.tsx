@@ -22,6 +22,7 @@ export default function AdminCurriculumSelectCourseList({
   onSuccess
 }: AdminCurriculumSelectCourseListProps) {
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const dispatch = useAppDispatch()
 
   const columns = useGetCourseColumn({ isPopup: true })
@@ -62,7 +63,7 @@ export default function AdminCurriculumSelectCourseList({
 
   const handleAddCoursesToCurriculum = async (courseIds: number[]) => {
     await addCourseToCurriculum({ curriculumId, courseIds })
-    toast.success('Courses added to curriculum successfully.')
+    toast.success(tt('successMessage.addToCurriculum'))
     onSuccess?.()
   }
 

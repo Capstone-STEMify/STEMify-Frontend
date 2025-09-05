@@ -112,6 +112,7 @@ export default function UpsertCourse() {
   const courseId = params.courseId
   const t = useTranslations('course')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const initialCourseDataRef = useRef<CourseFormData | null>(null)
   const locale = useLocale()
 
@@ -135,7 +136,7 @@ export default function UpsertCourse() {
         if (courseId) {
           const patchJson = await PatchCourseJsonPayload(initialCourseDataRef.current!, value, userId!)
           const res = await updateCourse({ id: Number(courseId), body: patchJson }).unwrap()
-          toast.success(`Course updated successfully (${res.data.title})`, {
+          toast.success(tt('successMessage.update', {title: res.data.title}), {
             action: {
               label: 'View Course',
               onClick: () => {
@@ -146,11 +147,11 @@ export default function UpsertCourse() {
         } else {
           const jsonPayload = await CreateCourseJsonPayload(value, userId!)
           const res = await createCourse(jsonPayload).unwrap()
-          toast.success(`Course created successfully (${res.data.title})`)
+          toast.success(tt('successMessage.create', {title: res.data.title}))
           router.push(`/${locale}/resource/course/${res.data.id}`)
         }
       } catch (err) {
-        toast.error('Failed to submit course')
+        toast.error(tt('errorMessage'))
         console.error(err)
       }
     }

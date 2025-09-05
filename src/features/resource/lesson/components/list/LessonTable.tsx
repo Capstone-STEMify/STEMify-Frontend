@@ -37,6 +37,7 @@ export default function LessonTable({
   const columns = useGetLessonAction()
 
   const t = useTranslations('Admin.course_details')
+  const tt = useTranslations('toast')
 
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
@@ -86,9 +87,9 @@ export default function LessonTable({
         id: Number(courseId),
         orderedLessonIds
       }).unwrap()
-      toast.success('Lesson order saved successfully')
+      toast.success(tt('successMessage.saveOrder'))
     } catch (e) {
-      toast.error('Failed to save lesson order')
+      toast.error(tt('errorMessage'))
     }
   }
 

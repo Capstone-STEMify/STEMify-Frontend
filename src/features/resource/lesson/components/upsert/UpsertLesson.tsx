@@ -161,6 +161,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const router = useRouter()
   const t = useTranslations('lessonManagement')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
@@ -211,17 +212,17 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
         if (lessonId) {
           const jsonPayload = await PatchLessonJsonPayload(initialCourseDataRef.current!, value, userId!)
           const res = await updateLesson({ id: lessonId, body: jsonPayload }).unwrap()
-          toast.success(`Lesson updated successfully (${res.data.title})`)
+          toast.success(tt('successMessage.update', {title: res.data.title}))
         } else {
           const jsonPayload = await CreateLessonJsonPayload(value, userId!, finalCourseId)
           const res = await createLesson(jsonPayload).unwrap()
-          toast.success(`Lesson created successfully (${res.data.title})`)
+          toast.success(tt('successMessage.create', {title: res.data.title}))
           if (role === UserRole.STAFF) router.push(`/${locale}/resource/lesson/update/${res.data.id}`)
           else if (role === UserRole.ADMIN) router.push(`/${locale}/admin/lesson/update/${res.data.id}`)
         }
         onSuccess?.()
       } catch (err) {
-        toast.error('Failed to submit lesson')
+        toast.error(tt('errorMessage'))
         console.error(err)
       }
     }
