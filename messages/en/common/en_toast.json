@@ -1,6 +1,6 @@
 {
-    "toast": {
-      "successMessage": {
+  "toast": {
+    "successMessage": {
       "create": "Successfully created \"{title}\"!",
       "update": "Successfully updated \"{title}\"!",
       "delete": "Successfully deleted \"{title}\"!",
@@ -15,7 +15,7 @@
       "sectionComplete": "Section Completed!"
     },
     "errorMessage": "An error occurred. Please try again. ",
-    "errorSpecific":{
+    "errorSpecific": {
       "id": "ID is missing.",
       "review": "Failed to submit for review.",
       "status": "Failed to {status}!"
@@ -27,5 +27,5 @@
       "ask": "Are you sure to make ",
       "askStatus": "Are you sure to {action} \"{title}\"?"
     }
-    }
+  }
 }
