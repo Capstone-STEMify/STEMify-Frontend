@@ -57,10 +57,10 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
         try {
           await updateCourseStatus({ id, body: { status } }).unwrap()
 
-          const actionText = action.charAt(0).toUpperCase() + action.slice(1) + "d"
-          toast.success(tt("successMessage.action", { action: actionText, title }))
+          const actionText = action.charAt(0).toUpperCase() + action.slice(1) + 'd'
+          toast.success(tt('successMessage.action', { action: actionText, title }))
         } catch {
-          toast.error(tt('errorSpecific.status', {status: action}))
+          toast.error(tt('errorSpecific.status', { status: action }))
         }
       }
     })
