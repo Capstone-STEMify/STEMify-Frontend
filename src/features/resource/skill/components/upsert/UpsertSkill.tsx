@@ -12,14 +12,9 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
 import { useTranslations } from 'next-intl'
 
-const tv = useTranslations('validation')
-
-// Schema validation cho form
-const skillSchema = z.object({
-  skillName: z.string().min(3, tv('skill.length', {length: 3}))
-})
-
-type SkillFormData = z.infer<typeof skillSchema>
+type SkillFormData = {
+  skillName: string
+}
 
 const defaultSkillData: SkillFormData = {
   skillName: ''
@@ -35,6 +30,11 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
 
   const t = useTranslations('Admin.skill')
   const tt = useTranslations('toast')
+  const tv = useTranslations('validation')
+
+  const skillSchema = z.object({
+    skillName: z.string().min(3, tv('skill.length', { length: 3 }))
+  })
 
   const { data: existingData, isLoading: isDataLoading } = useGetSkillByIdQuery(id as number, {
     skip: !isEditing
@@ -65,7 +65,6 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
     }
   })
 
-  // Điền dữ liệu vào form khi ở chế độ edit
   React.useEffect(() => {
     if (isEditing && existingData?.data) {
       form.reset({
@@ -86,7 +85,8 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
       }}
       className='space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
+      <h2 className='text-xl font-bold'>{isEditing ? t('editTitle') : t('createTitle')}</h2>
+
       <SCard
         title={t('name')}
         description={t('description')}
@@ -97,10 +97,11 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
           />
         }
       />
+
       <div className='flex justify-end gap-2 pt-4'>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
-            {isEditing ? `${t('updateButton')}` : `${t('createButton')}`}
+            {isEditing ? t('updateButton') : t('createButton')}
           </form.SubmitButton>
         </form.AppForm>
       </div>

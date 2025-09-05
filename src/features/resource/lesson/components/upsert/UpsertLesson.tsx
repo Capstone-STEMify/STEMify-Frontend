@@ -17,7 +17,6 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import { useLocale, useTranslations } from 'next-intl'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Lesson } from '@/features/resource/lesson/types/lesson.type'
-import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
 import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
 import { useGetAllCategoryQuery } from '@/features/resource/category/api/categoryApi'
 import { useGetAllStandardQuery } from '@/features/resource/standard/api/standardApi'
@@ -27,27 +26,20 @@ import { Category } from '@/features/resource/category/types/category.type'
 import { Standard } from '@/features/resource/standard/types/standard.type'
 import { UserRole } from '@/types/userRole'
 
-const tv = useTranslations('validation')
+type LessonFormData = {
+  title: string
+  description: string
+  learningOutcome: string
+  courseId: number
+  requirement?: string
+  topics: string[]
+  skills: string[]
+  standards: string[]
+  imageUrl: File | null
+  imagePreviewUrl?: string
+}
 
-const lessonSchema = z.object({
-  title: z.string().min(10, tv('lesson.title', {length: 10})),
-  description: z.string().min(50, tv('lesson.description', {length: 50})),
-  courseId: z.number().positive({ message: tv('lesson.courseId')}),
-  learningOutcome: z.string().min(20, tv('lesson.learningOutcome', {length: 20})),
-  requirement: z.string().optional(),
-  topics: z.array(z.string()),
-  skills: z.array(z.string()),
-  standards: z.array(z.string()),
-  imageUrl: z
-    .union([z.instanceof(File), z.null()])
-    .refine((file) => file === null || file.size > 0, tv('lesson.imageUrl'))
-    .refine((file) => file === null || file.size < 5 * 1024 * 1024, tv('lesson.imageSize', {size: 5})),
-  imagePreviewUrl: z.string().optional()
-})
-
-type LessonFormData = z.infer<typeof lessonSchema>
-
-const defaultLessonData: (courseId: number) => LessonFormData = (courseId) => ({
+const defaultLessonData = (courseId: number): LessonFormData => ({
   courseId,
   title: '',
   description: '',
@@ -56,7 +48,7 @@ const defaultLessonData: (courseId: number) => LessonFormData = (courseId) => ({
   topics: [],
   skills: [],
   standards: [],
-  imageUrl: null as any,
+  imageUrl: null,
   imagePreviewUrl: ''
 })
 
@@ -105,18 +97,16 @@ function mapLessonData(
     topics: topicIds.map(String),
     skills: skillIds.map(String),
     standards: standardIds.map(String),
-    imageUrl: null as any,
+    imageUrl: null,
     imagePreviewUrl: lesson.data.imageUrl ?? ''
   }
 }
 
 async function CreateLessonJsonPayload(data: LessonFormData, userId: string, courseId: number) {
   let imageBase64: string | null = null
-
   if (data.imageUrl && typeof data.imageUrl !== 'string') {
     imageBase64 = await fileToBase64(data.imageUrl)
   }
-
   return {
     title: data.title,
     description: data.description,
@@ -131,11 +121,8 @@ async function CreateLessonJsonPayload(data: LessonFormData, userId: string, cou
   }
 }
 
-async function PatchLessonJsonPayload(oldData: LessonFormData, newData: LessonFormData, userId: string): Promise<any> {
-  const patchData: Record<string, any> = {
-    createdByUserId: userId
-  }
-
+async function PatchLessonJsonPayload(oldData: LessonFormData, newData: LessonFormData, userId: string) {
+  const patchData: Record<string, any> = { createdByUserId: userId }
   if (oldData.title !== newData.title) patchData.title = newData.title
   if (oldData.description !== newData.description) patchData.description = newData.description
   if (oldData.learningOutcome !== newData.learningOutcome) patchData.learningOutcome = newData.learningOutcome
@@ -149,7 +136,6 @@ async function PatchLessonJsonPayload(oldData: LessonFormData, newData: LessonFo
     const base64 = await fileToBase64(newData.imageUrl)
     patchData.image = base64
   }
-
   return patchData
 }
 
@@ -164,6 +150,23 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const t = useTranslations('lessonManagement')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tv = useTranslations('validation')
+
+  const lessonSchema = z.object({
+    title: z.string().min(10, tv('lesson.title', { length: 10 })),
+    description: z.string().min(50, tv('lesson.description', { length: 50 })),
+    courseId: z.number().positive({ message: tv('lesson.courseId') }),
+    learningOutcome: z.string().min(20, tv('lesson.learningOutcome', { length: 20 })),
+    requirement: z.string().optional(),
+    topics: z.array(z.string()),
+    skills: z.array(z.string()),
+    standards: z.array(z.string()),
+    imageUrl: z
+      .union([z.instanceof(File), z.null()])
+      .refine((file) => file === null || file.size > 0, tv('lesson.imageUrl'))
+      .refine((file) => file === null || file.size < 5 * 1024 * 1024, tv('lesson.imageSize', { size: 5 })),
+    imagePreviewUrl: z.string().optional()
+  })
 
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
@@ -175,7 +178,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
 
   const imageFieldRef = useRef<any>(null)
 
-  // Get lessonId from URL
   const params = useParams()
   const lessonIdRaw = params?.lessonId
   const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
@@ -193,14 +195,13 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
   const isCreating = !lessonId
   const showCourseMissingError = isCreating && !isLoading && (!finalCourseId || !course?.data)
 
-  // const [createLesson] = useCreateLessonWithFormDataMutation()
   const [createLesson] = useCreateLessonMutation()
   const [updateLesson] = useUpdateLessonMutation()
 
   const skillItems = skills?.data?.items ?? []
   const categoryItems = categories?.data?.items ?? []
   const standardItems = standards?.data?.items ?? []
-  // Initialize form with lesson data if it exists
+
   const form = useAppForm({
     defaultValues:
       lessonId && lessonData?.data
@@ -276,21 +277,20 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     >
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
-          <div className='flex justify-between gap-2'>
-            <SCard
-              className='w-full gap-3'
-              title={t('title.label')}
-              description={t('title.note')}
-              content={
-                <form.AppField
-                  name='title'
-                  children={(field) => (
-                    <field.TextAreaField placeholder={t('title.placeholder')} className='rounded-lg border-gray-300' />
-                  )}
-                />
-              }
-            />
-          </div>
+          <SCard
+            className='w-full gap-3'
+            title={t('title.label')}
+            description={t('title.note')}
+            content={
+              <form.AppField
+                name='title'
+                children={(field) => (
+                  <field.TextAreaField placeholder={t('title.placeholder')} className='rounded-lg border-gray-300' />
+                )}
+              />
+            }
+          />
+
           <SCard
             className='gap-3'
             title={t('description.label')}
@@ -363,6 +363,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
               />
             }
           />
+
           <SCard
             className='gap-2'
             title={t('topic.label')}
@@ -370,7 +371,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
             content={
               <form.AppField
                 name='topics'
-                children={(field: any) => (
+                children={(field) => (
                   <field.MultipleCheckboxField
                     options={categories?.data.items.map((c) => ({
                       value: c.id.toString(),
@@ -382,6 +383,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
               />
             }
           />
+
           <SCard
             className='gap-3'
             title={t('standard.label')}
@@ -393,7 +395,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
                   <field.MultipleCheckboxField
                     options={standards?.data.items.map((s) => ({
                       value: s.id.toString(),
-                      label: `${s.standardName}`
+                      label: s.standardName
                     }))}
                     className='flex flex-wrap gap-x-8 gap-y-4'
                   />
@@ -401,6 +403,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
               />
             }
           />
+
           <form.AppField
             name='imageUrl'
             children={(field) => {

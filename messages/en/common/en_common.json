@@ -82,7 +82,8 @@
       "ageRangeLabel": "Label",
       "minAge": "Min Age",
       "maxAge": "Max Age",
-      "actions": "Actions"
+      "actions": "Actions",
+      "duration": "Duration"
     },
     "paging": {
       "previous": "Previous",
@@ -90,22 +91,6 @@
       "of": "of",
       "row": "row(s) ",
       "select": "selected"
-    },
-    "validationMessage": {
-      "required": "This field is required.",
-      "minLength": "This field must be at least {min} characters long.",
-      "maxLength": "This field must be at most {max} characters long."
-    },
-    "successMessage": {
-      "create": "Successfully created \"{title}\"!",
-      "update": "Successfully updated \"{title}\"!",
-      "delete": "Successfully deleted \"{title}\"!"
-    },
-    "errorMessage": "An error occurred. Please try again.",
-    "confirmMessage": {
-      "delete": "Are you sure you want to delete \"{title}\"?",
-      "removeCourse": "Are you sure you want to remove \"{title}\" from this curriculum?",
-      "discard": "Are you sure you want to discard your changes?"
     }
   }
 }

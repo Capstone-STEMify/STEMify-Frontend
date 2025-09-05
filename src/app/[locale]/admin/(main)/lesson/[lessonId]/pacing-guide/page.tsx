@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function PacingGuidePage() {
   return (
-    <div className='flex'>
+    <div>
       <PacingGuide />
     </div>
   )
