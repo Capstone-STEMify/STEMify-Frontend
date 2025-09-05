@@ -14,16 +14,12 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 
-const tv = useTranslations('validation')
-
-const sectionSchema = z.object({
-  title: z.string().min(1, tv('section.title')),
-  description: z.string().min(1, tv('section.description')),
-  duration: z.number().min(0, tv('section.duration')),
-  lessonId: z.number().positive(tv('section.lessonId'))
-})
-
-type SectionFormData = z.infer<typeof sectionSchema>
+type SectionFormData = {
+  title: string
+  description: string
+  duration: number
+  lessonId: number
+}
 
 const defaultSectionData: Omit<SectionFormData, 'lessonId'> = {
   title: '',
@@ -48,24 +44,28 @@ export default function UpsertSection({
   const t = useTranslations('sectionManagement')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tv = useTranslations('validation')
 
-  // Get lessonId and sectionId from URL and parse them to numbers
+  const sectionSchema = z.object({
+    title: z.string().min(1, tv('section.title')),
+    description: z.string().min(1, tv('section.description')),
+    duration: z.number().min(0, tv('section.duration')),
+    lessonId: z.number().positive(tv('section.lessonId'))
+  })
+
   const lessonIdRaw = propLessonId ?? params?.lessonId
   const sectionIdRaw = propSectionId ?? params?.sectionId
 
   const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
   const sectionId = sectionIdRaw ? Number(Array.isArray(sectionIdRaw) ? sectionIdRaw[0] : sectionIdRaw) : undefined
 
-  // Fetch section data if sectionId exists (for editing)
   const { data: sectionData, isLoading: isSectionLoading } = useGetSectionByIdQuery(sectionId as number, {
     skip: !sectionId || !token
   })
 
-  // API mutations for creating and updating a section
   const [createSection] = useCreateSectionMutation()
   const [updateSection] = useUpdateSectionMutation()
 
-  // Initialize the form
   const form = useAppForm({
     defaultValues: sectionData?.data
       ? {
@@ -75,7 +75,9 @@ export default function UpsertSection({
           lessonId: sectionData.data.lessonId || lessonId || 0
         }
       : { ...defaultSectionData, lessonId: lessonId || 0 },
-
+    validators: {
+      onChange: sectionSchema
+    },
     onSubmit: async ({ value }) => {
       try {
         if (!lessonId) {
@@ -99,7 +101,7 @@ export default function UpsertSection({
             lessonId
           }
           const res = await createSection(createPayload).unwrap()
-          toast.success(tt('successMessage.create', {title: res.data.title}))
+          toast.success(tt('successMessage.create', { title: res.data.title }))
           form.reset()
         }
         onSuccess?.()
@@ -110,7 +112,6 @@ export default function UpsertSection({
     }
   })
 
-  // Effect to reset form values when fetched section data changes (for editing)
   useEffect(() => {
     if (sectionData?.data) {
       form.reset({
@@ -122,7 +123,6 @@ export default function UpsertSection({
     }
   }, [sectionData, lessonId, form])
 
-  // Show loading state while fetching data for the edit form or the sections list for creation
   if (isSectionLoading) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
@@ -134,7 +134,7 @@ export default function UpsertSection({
   if (!lessonId && !isSectionLoading) {
     return (
       <div className='flex h-screen items-center justify-center text-lg font-semibold text-red-600'>
-        `${t('lessonNotFound.description')}`
+        {t('lessonNotFound.description')}
       </div>
     )
   }
@@ -148,71 +148,64 @@ export default function UpsertSection({
       }}
     >
       <h1 className='text-center text-3xl font-bold text-gray-800'>
-        {sectionId ? `${t('updateTitle')}` : `${t('createTitle')}`}
+        {sectionId ? t('updateTitle') : t('createTitle')}
       </h1>
 
       <div className='w-xl space-y-10'>
-        {/* Left Column: Description */}
-        <div className='lg:col-span-2'>
-          <SCard
-            className='gap-3'
-            title={t('title.label')}
-            description={t('title.note')}
-            content={
-              <form.AppField
-                name='title'
-                children={(field) => (
-                  <field.TextField placeholder={t('title.placeholder')} className='h-8 rounded-lg border-gray-300' />
-                )}
-              />
-            }
-          />
-        </div>
+        <SCard
+          className='gap-3'
+          title={t('title.label')}
+          description={t('title.note')}
+          content={
+            <form.AppField
+              name='title'
+              children={(field) => (
+                <field.TextField placeholder={t('title.placeholder')} className='h-8 rounded-lg border-gray-300' />
+              )}
+            />
+          }
+        />
 
-        <div className='lg:col-span-2'>
-          <SCard
-            className='gap-3'
-            title={t('description.label')}
-            description={t('description.note')}
-            content={
-              <form.AppField
-                name='description'
-                children={(field) => (
-                  <field.TextAreaField
-                    placeholder={t('description.placeholder')}
-                    className='h-25 rounded-lg border-gray-300'
-                  />
-                )}
-              />
-            }
-          />
-        </div>
+        <SCard
+          className='gap-3'
+          title={t('description.label')}
+          description={t('description.note')}
+          content={
+            <form.AppField
+              name='description'
+              children={(field) => (
+                <field.TextAreaField
+                  placeholder={t('description.placeholder')}
+                  className='h-25 rounded-lg border-gray-300'
+                />
+              )}
+            />
+          }
+        />
 
-        {/* Right Column: Inputs */}
-        <div className='space-y-6'>
-          <SCard
-            className='w-full gap-3'
-            title={t('duration.label')}
-            description={t('duration.note')}
-            content={
-              <form.AppField
-                name='duration'
-                children={(field) => (
-                  <field.TextField<number>
-                    type='number'
-                    placeholder={t('duration.placeholder')}
-                    className='rounded-lg border-gray-300'
-                  />
-                )}
-              />
-            }
-          />
-          <form.AppForm>
-            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full py-3 text-lg'>
-              {sectionId ? `${t('button.updateSection')}` : `${t('button.createSection')}`}
-            </form.SubmitButton>
-          </form.AppForm>
-        </div>
+        <SCard
+          className='w-full gap-3'
+          title={t('duration.label')}
+          description={t('duration.note')}
+          content={
+            <form.AppField
+              name='duration'
+              children={(field) => (
+                <field.TextField<number>
+                  type='number'
+                  placeholder={t('duration.placeholder')}
+                  className='rounded-lg border-gray-300'
+                />
+              )}
+            />
+          }
+        />
+
+        <form.AppForm>
+          <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full py-3 text-lg'>
+            {sectionId ? t('button.updateSection') : t('button.createSection')}
+          </form.SubmitButton>
+        </form.AppForm>
       </div>
     </form>
   )

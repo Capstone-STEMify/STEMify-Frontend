@@ -8,6 +8,7 @@
       "email": "Invalid email address",
       "userName": "Username must be at least {length} characters",
       "password": "Password must be at least {length} characters",
+      "passwordRequired": "Password field cannot be left blank",
       "firstName": "First name is required",
       "lastName": "Last name is required"
     },

@@ -1,8 +1,7 @@
 'use client'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { SCard } from '@/components/shared/card/SCard'
 import { useAppForm } from '@/components/shared/form/items'
 import {
   useSearchContentQuery,
@@ -15,21 +14,20 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 import { fileToBase64 } from '@/utils/index'
 import { ContentType } from '@/features/content/types/content.type'
-import { title } from 'process'
+import { parseWithZod } from '@conform-to/zod'
 
-const tv = useTranslations('validation')
+const contentSchema = (tv: ReturnType<typeof useTranslations<'validation'>>) =>
+  z.object({
+    contentBody: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
+      message: tv('content.length')
+    }),
+    contentType: z.enum(ContentType),
+    sectionId: z.number().positive({ message: tv('content.sectionId') }),
+    file: z.union([z.instanceof(File), z.null()]).optional(),
+    filePreviewUrl: z.string().optional()
+  })
 
-const contentSchema = z.object({
-  contentBody: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
-    message: tv('content.length')
-  }),
-  contentType: z.enum(ContentType),
-  sectionId: z.number().positive({ message: tv('content.sectionId') }),
-  file: z.union([z.instanceof(File), z.null()]).optional(),
-  filePreviewUrl: z.string().optional()
-})
-
-type ContentFormData = z.infer<typeof contentSchema>
+type ContentFormData = z.infer<ReturnType<typeof contentSchema>>
 
 const defaultContentData: Omit<ContentFormData, 'sectionId'> = {
   contentBody: '',
@@ -47,7 +45,7 @@ async function CreateContentJsonPayload(data: ContentFormData) {
 
   return {
     contentBody: data.contentBody,
-    ContentType: data.contentType,
+    contentType: data.contentType,
     sectionId: data.sectionId,
     file: fileBase64
   }
@@ -57,7 +55,6 @@ async function PatchContentJsonPayload(oldData: ContentFormData, newData: Conten
   const patchData: Record<string, any> = {}
   if (oldData.contentBody !== newData.contentBody) patchData.contentBody = newData.contentBody
   if (oldData.contentType !== newData.contentType) patchData.contentType = newData.contentType
-
   return patchData
 }
 
@@ -66,27 +63,29 @@ type UpsertContentProps = {
 }
 
 export default function UpsertContent({ sectionId }: UpsertContentProps) {
+  const tv = useTranslations('validation')
   const tt = useTranslations('toast')
   const tc = useTranslations('common')
   const token = useAppSelector((state) => state.auth.token)
 
   const { data: contentData, isLoading: isContentLoading } = useSearchContentQuery(
     { sectionId },
-    {
-      skip: !sectionId || !token
-    }
+    { skip: !sectionId || !token }
   )
 
   const [createContent] = useCreateContentMutation()
   const [updateContent] = useUpdateContentMutation()
 
   const contentItem = contentData?.data.items?.[0] ?? null
-  console.log('contentItem', contentItem)
+
   const form = useAppForm({
-    // validators: {
-    //   onChange: ({ value }) => contentSchema.safeParse(value)
-    // },
     defaultValues: defaultContentData,
+    validators: {
+      onChange: (value) =>
+        parseWithZod(new FormData(Object.entries(value) as any), {
+          schema: contentSchema(tv)
+        })
+    },
     onSubmit: async ({ value }) => {
       try {
         const isUpdating = !!contentItem?.id
@@ -97,14 +96,13 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
             contentType: ContentType.TEXT
           })
           const res = await updateContent({ id: contentItem.id, body: patchJson }).unwrap()
-          toast.success(tt('successMessage.update', {title: res.data.contentName}))
+          toast.success(tt('successMessage.update', { title: res.data.contentName }))
         } else {
           const jsonPayload = await CreateContentJsonPayload({
             ...value,
             contentType: ContentType.TEXT,
             sectionId
           })
-
           await createContent(jsonPayload).unwrap()
           toast.success(tt('successMessage.create'))
         }
@@ -139,8 +137,6 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
       className='mt-5 w-full space-y-8'
       onSubmit={(e) => {
         e.preventDefault()
-        console.log('Submit event triggered')
-
         form.handleSubmit()
       }}
     >
@@ -149,7 +145,6 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
           <div className='p-4'>
             <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
           </div>
-
           <div className='mb-5'></div>
         </div>
 

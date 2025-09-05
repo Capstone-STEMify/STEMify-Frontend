@@ -11,14 +11,11 @@ import {
 } from '@/features/resource/category/api/categoryApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
+import { parseWithZod } from '@conform-to/zod'
 
-const tv = useTranslations('validation')
-
-const categorySchema = z.object({
-  name: z.string().min(1, tv('category.name'))
-})
-
-type CategoryFormData = z.infer<typeof categorySchema>
+type CategoryFormData = {
+  name: string
+}
 
 const defaultCategoryData: CategoryFormData = {
   name: ''
@@ -32,8 +29,13 @@ interface UpsertCategoryProps {
 export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
   const isEditing = !!id
 
+  const tv = useTranslations('validation')
   const t = useTranslations('Admin.topic')
   const tt = useTranslations('toast')
+
+  const categorySchema = z.object({
+    name: z.string().min(1, tv('category.name'))
+  })
 
   const { data: categoryData, isLoading: isCategoryLoading } = useGetCategoryByIdQuery(id as number, {
     skip: !isEditing
@@ -45,7 +47,10 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
   const form = useAppForm({
     defaultValues: defaultCategoryData,
     validators: {
-      onChange: categorySchema
+      // nếu useAppForm accept zod:
+      // onChange: categorySchema
+      // nếu cần StandardSchema (conform):
+      onChange: (value) => parseWithZod(new FormData(Object.entries(value) as any), { schema: categorySchema })
     },
     onSubmit: async ({ value }) => {
       try {

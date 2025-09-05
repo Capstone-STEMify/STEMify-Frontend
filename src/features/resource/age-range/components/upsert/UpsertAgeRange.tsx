@@ -94,7 +94,6 @@ function NiceSelect({ label, value, onChange, options, placeholder = 'Select…'
         </svg>
       </button>
 
-      {/* Dropdown */}
       {open && (
         <div role='listbox' tabIndex={-1} className='relative z-50 mt-2'>
           <div className='absolute right-0 left-0 max-h-60 overflow-auto rounded-xl border border-gray-200 bg-white shadow-xl ring-1 ring-black/5'>
@@ -108,7 +107,9 @@ function NiceSelect({ label, value, onChange, options, placeholder = 'Select…'
                   aria-selected={selected}
                   onMouseEnter={() => setHighlight(idx)}
                   onClick={() => commit(idx)}
-                  className={`flex cursor-pointer items-center justify-between px-3 py-2 ${active ? 'bg-gray-100' : ''} ${selected ? 'font-semibold' : 'font-normal'}`}
+                  className={`flex cursor-pointer items-center justify-between px-3 py-2 ${
+                    active ? 'bg-gray-100' : ''
+                  } ${selected ? 'font-semibold' : 'font-normal'}`}
                 >
                   <span>{n}</span>
                   {selected && (
@@ -130,19 +131,6 @@ function NiceSelect({ label, value, onChange, options, placeholder = 'Select…'
   )
 }
 
-const tv = useTranslations('validation')
-
-const ageRangeSchema = z
-  .object({
-    minAge: z.number().min(6, tv('ageRange.min')),
-    maxAge: z.number().min(6, tv('ageRange.max'))
-  })
-  .refine((d) => d.maxAge > d.minAge, {
-    message: tv('ageRange.maxMin'),
-    path: ['maxAge']
-  })
-
-type FormErr = Partial<Record<'minAge' | 'maxAge', string>>
 const AGES = Array.from({ length: 5 }, (_, i) => i + 6)
 
 interface UpsertAgeRangeProps {
@@ -153,8 +141,19 @@ interface UpsertAgeRangeProps {
 export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangeProps) {
   const isEditing = !!id
 
+  const tv = useTranslations('validation')
   const t = useTranslations('Admin.ageRange')
   const tt = useTranslations('toast')
+
+  const ageRangeSchema = z
+    .object({
+      minAge: z.number().min(6, tv('ageRange.min')),
+      maxAge: z.number().min(6, tv('ageRange.max'))
+    })
+    .refine((d) => d.maxAge > d.minAge, {
+      message: tv('ageRange.maxMin'),
+      path: ['maxAge']
+    })
 
   const { data: existingData, isLoading: isDataLoading } = useGetAgeRangeByIdQuery(id as number, {
     skip: !isEditing
@@ -177,8 +176,8 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
   const minOptions = React.useMemo(() => AGES.filter((n) => (typeof maxAge === 'number' ? n < maxAge : true)), [maxAge])
   const maxOptions = React.useMemo(() => AGES.filter((n) => (typeof minAge === 'number' ? n > minAge : true)), [minAge])
 
-  const errors: FormErr = React.useMemo(() => {
-    const err: FormErr = {}
+  const errors = React.useMemo(() => {
+    const err: Partial<Record<'minAge' | 'maxAge', string>> = {}
     if (typeof minAge === 'number' || typeof maxAge === 'number') {
       const res = ageRangeSchema.safeParse({ minAge: minAge ?? 0, maxAge: maxAge ?? 0 })
       if (!res.success) {
@@ -189,7 +188,7 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
       }
     }
     return err
-  }, [minAge, maxAge])
+  }, [minAge, maxAge, ageRangeSchema])
 
   const isValid = typeof minAge === 'number' && typeof maxAge === 'number' && Object.keys(errors).length === 0
 
