@@ -17,12 +17,14 @@ import { fileToBase64 } from '@/utils/index'
 import { ContentType } from '@/features/content/types/content.type'
 import { title } from 'process'
 
+const tv = useTranslations('validation')
+
 const contentSchema = z.object({
   contentBody: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
-    message: 'Content must have at least 50 characters of actual text (excluding Markdown and whitespace)'
+    message: tv('content.length')
   }),
   contentType: z.enum(ContentType),
-  sectionId: z.number().positive({ message: 'Section ID must be a positive number' }),
+  sectionId: z.number().positive({ message: tv('content.sectionId') }),
   file: z.union([z.instanceof(File), z.null()]).optional(),
   filePreviewUrl: z.string().optional()
 })

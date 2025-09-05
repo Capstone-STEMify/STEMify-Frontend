@@ -1,6 +1,7 @@
 export async function loadMessages(locale: string) {
   const commonMessages = (await import(`../../messages/${locale}/common/${locale}_common.json`)).default
   const toastMessages = (await import(`../../messages/${locale}/common/${locale}_toast.json`)).default
+  const validMessages = (await import(`../../messages/${locale}/common/${locale}_validation.json`)).default
   const curriculumMessages = (await import(`../../messages/${locale}/curriculum/${locale}_curriculum.json`)).default
   const courseMessages = (await import(`../../messages/${locale}/course/${locale}_course.json`)).default
   const headerMessages = (await import(`../../messages/${locale}/header/${locale}_header.json`)).default
@@ -23,6 +24,7 @@ export async function loadMessages(locale: string) {
   return {
     ...commonMessages,
     ...toastMessages,
+    ...validMessages,
     ...curriculumMessages,
     ...courseMessages,
     ...headerMessages,

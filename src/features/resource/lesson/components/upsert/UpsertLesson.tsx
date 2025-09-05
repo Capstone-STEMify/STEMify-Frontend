@@ -27,19 +27,21 @@ import { Category } from '@/features/resource/category/types/category.type'
 import { Standard } from '@/features/resource/standard/types/standard.type'
 import { UserRole } from '@/types/userRole'
 
+const tv = useTranslations('validation')
+
 const lessonSchema = z.object({
-  title: z.string().min(10, 'Title must be at least 10 characters long'),
-  description: z.string().min(50, 'Description must be at least 50 characters long'),
-  courseId: z.number().positive({ message: 'Course ID must be a positive number' }),
-  learningOutcome: z.string().min(20, 'Learning outcome must be at least 20 characters long'),
+  title: z.string().min(10, tv('lesson.title', {length: 10})),
+  description: z.string().min(50, tv('lesson.description', {length: 50})),
+  courseId: z.number().positive({ message: tv('lesson.courseId')}),
+  learningOutcome: z.string().min(20, tv('lesson.learningOutcome', {length: 20})),
   requirement: z.string().optional(),
   topics: z.array(z.string()),
   skills: z.array(z.string()),
   standards: z.array(z.string()),
   imageUrl: z
     .union([z.instanceof(File), z.null()])
-    .refine((file) => file === null || file.size > 0, 'Cover image is required')
-    .refine((file) => file === null || file.size < 5 * 1024 * 1024, 'Max 5MB allowed'),
+    .refine((file) => file === null || file.size > 0, tv('lesson.imageUrl'))
+    .refine((file) => file === null || file.size < 5 * 1024 * 1024, tv('lesson.imageSize', {size: 5})),
   imagePreviewUrl: z.string().optional()
 })
 
@@ -212,11 +214,11 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
         if (lessonId) {
           const jsonPayload = await PatchLessonJsonPayload(initialCourseDataRef.current!, value, userId!)
           const res = await updateLesson({ id: lessonId, body: jsonPayload }).unwrap()
-          toast.success(tt('successMessage.update', {title: res.data.title}))
+          toast.success(tt('successMessage.update', { title: res.data.title }))
         } else {
           const jsonPayload = await CreateLessonJsonPayload(value, userId!, finalCourseId)
           const res = await createLesson(jsonPayload).unwrap()
-          toast.success(tt('successMessage.create', {title: res.data.title}))
+          toast.success(tt('successMessage.create', { title: res.data.title }))
           if (role === UserRole.STAFF) router.push(`/${locale}/resource/lesson/update/${res.data.id}`)
           else if (role === UserRole.ADMIN) router.push(`/${locale}/admin/lesson/update/${res.data.id}`)
         }
@@ -272,9 +274,6 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
         form.handleSubmit()
       }}
     >
-      <h1 className='mb-5 text-center text-5xl font-bold text-gray-800'>
-        {lessonId ? `${t('updateTitle')}` : `${t('createTitle')}`}
-      </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
           <div className='flex justify-between gap-2'>
@@ -411,7 +410,9 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
           />
 
           <form.AppForm>
-            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>{tc('button.submit')}</form.SubmitButton>
+            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>
+              {tc('button.submit')}
+            </form.SubmitButton>
           </form.AppForm>
         </div>
       </div>

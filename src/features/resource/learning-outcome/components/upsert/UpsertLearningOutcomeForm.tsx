@@ -23,11 +23,12 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
   const t = useTranslations('LearningOutcome')
   const tt = useTranslations('toast')
   const tc = useTranslations('common')
+  const tv = useTranslations('validation')
 
   // Schema validation cho form
   const learningOutcomeSchema = z.object({
-    name: z.string().min(3, tc('validationMessage.minLength', { min: 3 })),
-    description: z.string().min(10, tc('validationMessage.minLength', { min: 10 }))
+    name: z.string().min(3, tv('learningOutcome.minLength', { min: 3 })),
+    description: z.string().min(10, tv('learningOutcome.minLength', { min: 10 }))
   })
   type LearningOutcomeFormData = z.infer<typeof learningOutcomeSchema>
 

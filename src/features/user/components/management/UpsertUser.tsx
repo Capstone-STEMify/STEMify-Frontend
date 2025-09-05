@@ -8,13 +8,15 @@ import { Role, ROLES } from '../../types/user.type'
 import { useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } from '../../api/userApi'
 import { useTranslations } from 'next-intl'
 
+const tv = useTranslations('validation')
+
 const createUserSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  userName: z.string().min(3, 'Username must be at least 3 characters'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().email(tv('user.email')),
+  userName: z.string().min(3, tv('user.userName', {length: 3})),
+  password: z.string().min(6, tv('user.password', {length: 6})),
   role: z.enum(ROLES),
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required')
+  firstName: z.string().min(1, tv('user.firstName')),
+  lastName: z.string().min(1, tv('user.lastName'))
 })
 
 const updateUserSchema = createUserSchema.extend({

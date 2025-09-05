@@ -12,7 +12,6 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
 import { useTranslations } from 'next-intl'
 
-// Schema validation cho form
 const standardSchema = z.object({
   standardName: z.string().min(2).max(100),
   description: z.string().min(2).max(500).optional()

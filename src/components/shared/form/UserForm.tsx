@@ -1,6 +1,7 @@
 'use client'
 
 import { useAppForm } from '@/components/shared/form/items'
+import { useTranslations } from 'next-intl'
 import { z } from 'zod'
 
 const ContactMethod = z.union([z.literal('email'), z.literal('phone'), z.literal('whatsapp'), z.literal('sms')])
@@ -11,20 +12,22 @@ const ContactMethods = ContactMethod.options.map(({ value }) => ({
   label: value.charAt(0).toUpperCase() + value.slice(1)
 }))
 
+const tv = useTranslations('validation')
+
 const UserSchema = z.object({
   name: z
     .string()
-    .regex(/^[A-Z]/, 'Name must start with a capital letter')
-    .min(3, 'Name must be at least 3 characters long'),
+    .regex(/^[A-Z]/, tv('user.name'))
+    .min(3, tv('user.nameLength', {length: 3})),
   surname: z
     .string()
-    .min(3, 'Surname must be at least 3 characters long')
-    .regex(/^[A-Z]/, 'Surname must start with a capital letter'),
+    .min(3, tv('user.surnameLength', {length: 3}))
+    .regex(/^[A-Z]/, tv('user.surname')),
   isAcceptingTerms: z.boolean().refine((val) => val, {
     message: 'You must accept the terms and conditions'
   }),
   contact: z.object({
-    email: z.string().email('Invalid email address'),
+    email: z.string().email(tv('user.email')),
     phone: z.string().optional(),
     preferredContactMethod: ContactMethod
   })
