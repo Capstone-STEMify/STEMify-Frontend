@@ -27,19 +27,21 @@ import { Category } from '@/features/resource/category/types/category.type'
 import { Standard } from '@/features/resource/standard/types/standard.type'
 import { UserRole } from '@/types/userRole'
 
+const tv = useTranslations('validation')
+
 const lessonSchema = z.object({
-  title: z.string().min(10, 'Title must be at least 10 characters long'),
-  description: z.string().min(50, 'Description must be at least 50 characters long'),
-  courseId: z.number().positive({ message: 'Course ID must be a positive number' }),
-  learningOutcome: z.string().min(20, 'Learning outcome must be at least 20 characters long'),
+  title: z.string().min(10, tv('lesson.title', {length: 10})),
+  description: z.string().min(50, tv('lesson.description', {length: 50})),
+  courseId: z.number().positive({ message: tv('lesson.courseId')}),
+  learningOutcome: z.string().min(20, tv('lesson.learningOutcome', {length: 20})),
   requirement: z.string().optional(),
   topics: z.array(z.string()),
   skills: z.array(z.string()),
   standards: z.array(z.string()),
   imageUrl: z
     .union([z.instanceof(File), z.null()])
-    .refine((file) => file === null || file.size > 0, 'Cover image is required')
-    .refine((file) => file === null || file.size < 5 * 1024 * 1024, 'Max 5MB allowed'),
+    .refine((file) => file === null || file.size > 0, tv('lesson.imageUrl'))
+    .refine((file) => file === null || file.size < 5 * 1024 * 1024, tv('lesson.imageSize', {size: 5})),
   imagePreviewUrl: z.string().optional()
 })
 

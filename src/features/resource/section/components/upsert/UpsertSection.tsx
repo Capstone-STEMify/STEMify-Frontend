@@ -14,11 +14,13 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 
+const tv = useTranslations('validation')
+
 const sectionSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().min(1, 'Description is required'),
-  duration: z.number().min(0, 'Duration must be a non-negative number'),
-  lessonId: z.number().positive('Lesson ID must be a positive number')
+  title: z.string().min(1, tv('section.title')),
+  description: z.string().min(1, tv('section.description')),
+  duration: z.number().min(0, tv('section.duration')),
+  lessonId: z.number().positive(tv('section.lessonId'))
 })
 
 type SectionFormData = z.infer<typeof sectionSchema>

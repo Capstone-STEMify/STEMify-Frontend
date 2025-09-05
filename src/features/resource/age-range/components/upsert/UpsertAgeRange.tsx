@@ -130,13 +130,15 @@ function NiceSelect({ label, value, onChange, options, placeholder = 'Select…'
   )
 }
 
+const tv = useTranslations('validation')
+
 const ageRangeSchema = z
   .object({
-    minAge: z.number().min(6, 'Min age must be at least 6'),
-    maxAge: z.number().min(6, 'Max age must be at least 6')
+    minAge: z.number().min(6, tv('ageRange.min')),
+    maxAge: z.number().min(6, tv('ageRange.max'))
   })
   .refine((d) => d.maxAge > d.minAge, {
-    message: 'Max age must be greater than Min age',
+    message: tv('ageRange.maxMin'),
     path: ['maxAge']
   })
 

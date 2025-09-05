@@ -12,9 +12,11 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
 import { useTranslations } from 'next-intl'
 
+const tv = useTranslations('validation')
+
 // Schema validation cho form
 const skillSchema = z.object({
-  skillName: z.string().min(3, 'Skill name must be at least 3 characters long')
+  skillName: z.string().min(3, tv('skill.length', {length: 3}))
 })
 
 type SkillFormData = z.infer<typeof skillSchema>
