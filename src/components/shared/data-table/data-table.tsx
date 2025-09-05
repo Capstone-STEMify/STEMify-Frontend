@@ -41,7 +41,7 @@ export type DataTableProps<TData extends { id: string | number }, TValue> = {
   pagingData?: any
   pagingParams?: any
   rowSelection?: (string | number)[]
-  onSelectionChange?: (ids: (number)[]) => void
+  onSelectionChange?: (ids: number[]) => void
   handlePageChange?: (page: number) => void
   enableDnd?: boolean
   onReorder?: (newData: TData[]) => void
@@ -52,7 +52,7 @@ function DraggableRow<TData extends { id: string | number }>({ row }: { row: Row
 
   return (
     <TableRow
-      // ref={setNodeRef}
+      ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       data-dragging
       {...attributes}
@@ -95,7 +95,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        delay: 80,
+        delay: 100,
         tolerance: 5
       }
     }),

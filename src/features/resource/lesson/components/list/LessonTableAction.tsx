@@ -66,14 +66,13 @@ export function useGetLessonAction(): ColumnDef<Lesson>[] {
   const handleStatusUpdate = async (id: number, title: string, status: LessonStatus) => {
     const action = status === LessonStatus.PUBLISHED ? 'publish' : 'reject'
     openModal('confirm', {
-      message: tt('confirmMessage.askStatus', {action, title}),
+      message: tt('confirmMessage.askStatus', { action, title }),
       onConfirm: async () => {
         try {
           await updateLessonStatus({ id, body: { status } }).unwrap()
 
-          const actionText = action.charAt(0).toUpperCase() + action.slice(1) + "d"
-          toast.success(tt("successMessage.action", { action: actionText, title }))
-
+          const actionText = action.charAt(0).toUpperCase() + action.slice(1) + 'd'
+          toast.success(tt('successMessage.action', { action: actionText, title }))
         } catch {
           toast.error(tt('errorSpecific.status'))
         }
