@@ -17,7 +17,7 @@ export default function AdminCurriculumDetail() {
   if (!data) return <SEmpty title='No Curriculum Found' description='Please check the curriculum and try again.' />
 
   return (
-    <div>
+    <div className='mx-auto min-h-screen max-w-6xl px-4 py-8 sm:px-6 lg:px-8'>
       <div className='flex items-center gap-5 pb-5'>
         <BackButton />
         <h1>{t('details.title')}</h1>

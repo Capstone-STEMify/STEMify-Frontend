@@ -33,7 +33,7 @@ export default function AdminCurriculumInformationSection({
 
   const handleDelete = async () => {
     await deleteCurriculum(Number(curriculumId)).unwrap()
-    toast.success(`${tt('successMessage.delete', {title: curriculum.title || ''})}`)
+    toast.success(`${tt('successMessage.delete', { title: curriculum.title || '' })}`)
   }
 
   const handleUpdateCurriculumStatus = async (status: CurriculumStatus) => {
@@ -71,14 +71,17 @@ export default function AdminCurriculumInformationSection({
           </span>
         </div>
 
-        <div className='mb-6 h-1 w-20 bg-yellow-500' />
-
         {/* badges */}
         <div className='mb-4 flex flex-wrap gap-2'>
+          <p className='text-sm text-gray-700 italic'>
+            By <span className='font-semibold'>{curriculum.createdByUserName || 'STEMify'}</span>
+          </p>
           <Badge className={getStatusBadgeClass(curriculum.status)}>{curriculum.status}</Badge>
         </div>
 
-        <p className='mb-4 text-lg text-gray-700'>{curriculum.description}</p>
+        <div className='mb-6 h-1 w-20 bg-yellow-500' />
+
+        <p className='mb-4 text-gray-700'>{curriculum.description}</p>
 
         {/* Review actions */}
         {(curriculum.status === CurriculumStatus.PENDING || curriculum.status === CurriculumStatus.DRAFT) && (
