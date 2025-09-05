@@ -16,6 +16,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
 import { SCard } from '@/components/shared/card/SCard'
+import Image from 'next/image'
 
 type GuideLessonDetailsProps = {
   lesson: Lesson
@@ -58,9 +59,9 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
 
   const fallback = 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=1200&auto=format&fit=crop'
   return (
-    <motion.section initial='hidden' animate='visible' variants={itemVariants} className='space-y-8'>
-      <div className='grid grid-cols-1 items-start gap-10 lg:grid-cols-[1.7fr_1fr]'>
-        <div>
+    <div className='space-y-8'>
+      <div className='grid grid-cols-1 items-start gap-10 lg:grid-cols-3'>
+        <div className='col-span-2 grid'>
           <div className='flex items-center gap-2'>
             <h1 className='mb-4 text-4xl font-bold text-gray-900'>{lesson.title}</h1>
             <span className='cursor-pointer text-blue-500'>
@@ -82,7 +83,6 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
             </span>
           </div>
 
-          {/* badges */}
           <div className='mb-4 flex flex-wrap gap-2'>
             <p className='text-sm text-gray-700 italic'>
               By <span className='font-semibold'>{lesson.createdByUserName || 'STEMify'}</span>
@@ -117,13 +117,15 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
           </div>
         </div>
 
-        <div className='lg:pl-2'>
-          <div className='overflow-hidden rounded-2xl shadow-sm'>
-            <img
+        <div>
+          <div className='overflow-hidden rounded-3xl shadow-sm'>
+            <Image
               src={lesson.imageUrl || fallback}
               alt='Lesson artwork'
-              className='aspect-[4/3] h-full w-full object-cover'
+              className='aspect-square'
               loading='lazy'
+              width={300}
+              height={300}
             />
           </div>
           <div className='mt-6'>
@@ -202,6 +204,6 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
           </div>
         </div>
       </div>
-    </motion.section>
+    </div>
   )
 }

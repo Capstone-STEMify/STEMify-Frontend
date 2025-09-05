@@ -26,16 +26,15 @@ export default function PacingGuide() {
   }
 
   return (
-    <div className='mx-auto min-h-screen max-w-6xl px-4 py-8 sm:px-6 lg:px-8'>
+    <div className=''>
       <div className='flex items-center gap-5 pb-5'>
         <BackButton />
-        {/* <h1>{t('details.title')}</h1> */}
         <h1>Lesson Details</h1>
       </div>
-      <motion.div variants={containerVariants} initial='hidden' animate='visible' className='space-y-8'>
+      <div className='space-y-8'>
         <GuideLessonDetails lesson={data?.data} />
         <GuideTable lessonId={Number(lessonId)} />
-      </motion.div>
+      </div>
     </div>
   )
 }

@@ -63,7 +63,9 @@
       "status": "Status",
       "createdBy": "Created By",
       "createdDate": "Created Date",
-      "actions": "Actions"
+      "actions": "Actions",
+      "title": "Title",
+      "duration": "Duration"
     },
     "paging": {
       "previous": "Previous",

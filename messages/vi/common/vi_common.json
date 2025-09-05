@@ -63,7 +63,9 @@
       "status": "Trạng Thái",
       "createdBy": "Được Tạo Bởi",
       "createdDate": "Ngày Tạo",
-      "actions": "Hành Động"
+      "actions": "Hành Động",
+      "title": "Tiêu Đề",
+      "duration": "Thời Lượng"
     },
     "paging": {
       "previous": "Trước",
