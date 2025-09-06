@@ -86,7 +86,8 @@
       "maxAge": "Max Age",
       "actions": "Actions",
       "duration": "Duration",
-      "empty": "No results found."
+      "empty": "No results found.",
+      "content": "Content"
     },
     "paging": {
       "previous": "Previous",

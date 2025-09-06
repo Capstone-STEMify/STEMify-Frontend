@@ -89,6 +89,7 @@ export default function AdminCourseDetail() {
   return (
     <div className='grid grid-cols-1 gap-12 xl:grid-cols-3'>
       <div className='xl:col-span-2'>
+        <h2 className='mb-2 text-sm text-gray-500 uppercase'>{course.data.code}</h2>
         <div className='flex items-center gap-2'>
           <h1 className='mb-4 text-4xl font-bold text-gray-900'>{course.data.title}</h1>
           <span className='cursor-pointer text-blue-500'>

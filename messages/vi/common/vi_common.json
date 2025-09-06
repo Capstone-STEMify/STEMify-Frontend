@@ -86,7 +86,8 @@
       "maxAge": "Tuổi tối đa",
       "actions": "Hành Động",
       "duration": "Thời Lượng",
-      "empty": "Không tìm thấy kết quả."
+      "empty": "Không tìm thấy kết quả.",
+      "content": "Nội dung"
     },
     "paging": {
       "previous": "Trước",

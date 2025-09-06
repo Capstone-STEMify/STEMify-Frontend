@@ -38,7 +38,7 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
       header: `${tc('tableHeader.duration')}`,
       cell: ({ row }) => {
         return (
-          <div className='w-32'>
+          <div className='w-20'>
             {row.getValue('duration')} {tc('unit.minute')}
           </div>
         )
@@ -48,7 +48,16 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
       accessorKey: 'description',
       header: tc('tableHeader.description'),
       cell: ({ row }) => {
-        return <div className='line-clamp-5 w-md whitespace-pre-wrap'>{row.getValue('description')}</div>
+        return <div className='line-clamp-5 w-72 whitespace-pre-wrap'>{row.getValue('description')}</div>
+      }
+    },
+    {
+      accessorKey: '',
+      header: tc('tableHeader.content'),
+      cell: ({ row }) => {
+        return (
+          <div className='line-clamp-5 cursor-pointer whitespace-pre-wrap text-blue-500 italic underline'>View</div>
+        )
       }
     },
     {
