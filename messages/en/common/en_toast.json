@@ -21,6 +21,7 @@
       "status": "Failed to {status}!"
     },
     "confirmMessage": {
+      "confirmLabel": "Are you sure?",
       "delete": "Are you sure you want to delete \"{title}\"?",
       "removeCourse": "Are you sure you want to remove \"{title}\" from this curriculum?",
       "discard": "Are you sure you want to discard your changes?",

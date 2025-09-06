@@ -12,6 +12,7 @@ interface ConfirmModalProps {
 
 export default function ConfirmModal({ message, onConfirm }: ConfirmModalProps) {
   const tc = useTranslations('common')
+  const tm = useTranslations('toast.confirmMessage')
   const { closeModal } = useModal()
 
   const handleConfirm = () => {
@@ -23,7 +24,7 @@ export default function ConfirmModal({ message, onConfirm }: ConfirmModalProps) 
     <Dialog open onOpenChange={closeModal}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{tc('confirmationLabel')}</DialogTitle>
+          <DialogTitle>{tm('confirmLabel')}</DialogTitle>
         </DialogHeader>
         <p className='text-muted-foreground text-sm'>{message}</p>
         <DialogFooter className='flex justify-end gap-2 pt-4'>
