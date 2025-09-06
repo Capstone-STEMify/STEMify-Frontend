@@ -257,12 +257,12 @@ export default function AdminCourseDetail() {
       </div>
       {/* Divider Section before Lesson Table */}
       <div className='col-span-1 pt-5 xl:col-span-3'>
-        <div className='flex items-center gap-3'>
+        <div className='mb-5 flex items-center gap-3'>
           <hr className='flex-grow border-t border-gray-300' />
           <h1 className='text-sky-custom-600 text-3xl font-semibold'>{t('lesson')}</h1>
           <hr className='flex-grow border-t border-gray-300' />
         </div>
-        <LessonTable courseIdSelected={course.data.id} refetch={refetch} />
+        <LessonTable courseIdSelected={course.data.id} />
       </div>
     </div>
   )

@@ -9,10 +9,9 @@ import { useParams } from 'next/navigation'
 import React from 'react'
 
 interface UpsertLessonModalProps {
-  courseIdModal?: number
   onConfirm?: () => void
 }
-export default function UpsertLessonModal({ courseIdModal, onConfirm }: UpsertLessonModalProps) {
+export default function UpsertLessonModal({ onConfirm }: UpsertLessonModalProps) {
   const { lessonId } = useParams()
   const { closeModal } = useModal()
   const t = useTranslations('LessonDetails')
@@ -32,7 +31,7 @@ export default function UpsertLessonModal({ courseIdModal, onConfirm }: UpsertLe
         </DialogTitle>
         <hr />
         <ScrollArea className='h-[500px] w-4xl pr-5'>
-          <UpsertLesson courseIdModal={courseIdModal} onSuccess={handleSuccess} />
+          <UpsertLesson onSuccess={handleSuccess} />
         </ScrollArea>
       </DialogContent>
     </Dialog>

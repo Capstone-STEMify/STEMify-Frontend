@@ -21,20 +21,16 @@ import { Clock, LayoutGrid, TableIcon } from 'lucide-react'
 import { getCourseStatusBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
 import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
 import { toast } from 'sonner'
+import { useModal } from '@/providers/ModalProvider'
+import STabs from '@/components/shared/STabs'
 
 type ViewMode = 'table' | 'card'
 
-export default function LessonTable({
-  courseIdSelected,
-  refetch
-}: {
-  courseIdSelected?: number
-  refetch?: () => void
-}) {
+export default function LessonTable({ courseIdSelected }: { courseIdSelected?: number }) {
   const locale = useLocale()
-  const router = useRouter()
   const { courseId } = useParams()
   const columns = useGetLessonAction()
+  const { openModal } = useModal()
 
   const t = useTranslations('Admin.course_details')
   const tt = useTranslations('toast')
@@ -93,107 +89,106 @@ export default function LessonTable({
     }
   }
 
-  const handleCreate = () => {
-    router.push(`/${locale}/admin/lesson/create?courseId=${courseIdSelected}`)
-  }
-
   if (!data) return null
 
   return (
     <div>
       <LessonListAction />
-      <div className='flex items-center justify-between gap-3'>
-        {courseIdSelected && (
-          <Button
-            variant='outline'
-            size='sm'
-            className='bg-amber-custom-400 my-5 cursor-pointer text-white'
-            onClick={handleCreate}
-          >
-            <IconPlus />
-            <span className='hidden lg:inline'>{t('button.add')}</span>
-          </Button>
-        )}
-        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
-          <TabsList>
-            <TabsTrigger value='table' className='flex items-center gap-1'>
-              <TableIcon className='h-4 w-4' />
-            </TabsTrigger>
-            <TabsTrigger value='card' className='flex items-center gap-1'>
-              <LayoutGrid className='h-4 w-4' />
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
 
-      <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
-        <TabsContent value='table'>
-          <DataTable
-            data={rows}
-            columns={columns}
-            enableRowSelection
-            pagingData={data}
-            pagingParams={queryParams}
-            handlePageChange={handlePageChange}
-            enableDnd
-            onReorder={(newData) => {
-              const orderedLessonIds = newData.map((item) => item.id)
-              handleSaveOrder(orderedLessonIds)
-              if (refetch) refetch()
-            }}
-          />
-        </TabsContent>
-
-        {/* CARD VIEW */}
-        <TabsContent value='card'>
-          <div className='px-2'>
-            <div className='grid grid-cols-1 justify-items-center-safe gap-y-10 py-6 sm:grid-cols-2 xl:grid-cols-4'>
-              {rows.map((lesson: Lesson) => (
-                <Link key={lesson.id} href={`/${locale}/admin/lesson/${lesson.id}/pacing-guide`} className='w-full'>
-                  <CardLayout
-                    imageSrc={lesson.imageUrl}
-                    size='sm'
-                    badge={
-                      <Badge className={`${getStatusBadgeClass(lesson.status)}`}>
-                        {capitalizeFirst(lesson.status)}
-                      </Badge>
-                    }
-                  >
-                    <div>
-                      <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
-                      <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
-                    </div>
-
-                    <div className='mt-auto flex flex-wrap items-center gap-2'>
-                      {lesson.ageRangeLabel && (
-                        <Badge className='bg-sky-custom-300'>
-                          <span className='mr-0.5'> {t('card.age')}</span>
-                          {lesson.ageRangeLabel}
-                        </Badge>
-                      )}
-                      {lesson.duration > 0 && (
-                        <Badge className={`bg-red-300`}>
-                          <Clock className='mr-0.5' />
-                          {formatDuration(lesson.duration)}
-                        </Badge>
-                      )}
-                    </div>
-                  </CardLayout>
-                </Link>
-              ))}
+      <STabs
+        className='mt-4'
+        defaultValue={'table'}
+        additionalContent={{
+          leftSide: (
+            <div>
+              {courseIdSelected && (
+                <Button
+                  variant='outline'
+                  size='sm'
+                  className='bg-amber-custom-400 cursor-pointer text-white'
+                  onClick={() => openModal('upsertLesson', { courseId: courseIdSelected })}
+                >
+                  <IconPlus />
+                  <span className='hidden lg:inline'>{t('button.add')}</span>
+                </Button>
+              )}
             </div>
-
-            {data?.data?.totalPages > 1 && (
-              <SPagination
-                pageNumber={queryParams.pageNumber!}
-                totalPages={data.data.totalPages}
-                onPageChanged={handlePageChange}
-                className='pb-6'
+          )
+        }}
+        items={[
+          {
+            value: 'table',
+            label: <TableIcon className='h-4 w-4' />,
+            content: (
+              <DataTable
+                data={rows}
+                columns={columns}
+                enableRowSelection
+                pagingData={data}
+                pagingParams={queryParams}
+                handlePageChange={handlePageChange}
+                enableDnd
+                onReorder={(newData) => {
+                  const orderedLessonIds = newData.map((item) => item.id)
+                  handleSaveOrder(orderedLessonIds)
+                }}
               />
-            )}
-          </div>
-        </TabsContent>
-      </Tabs>
+            )
+          },
+          {
+            value: 'card',
+            label: <LayoutGrid className='h-4 w-4' />,
+            content: (
+              <div className='px-2'>
+                <div className='grid grid-cols-1 justify-items-center-safe gap-y-10 py-6 sm:grid-cols-2 xl:grid-cols-4'>
+                  {rows.map((lesson: Lesson) => (
+                    <Link key={lesson.id} href={`/${locale}/admin/lesson/${lesson.id}/pacing-guide`} className='w-full'>
+                      <CardLayout
+                        imageSrc={lesson.imageUrl}
+                        size='sm'
+                        badge={
+                          <Badge className={`${getStatusBadgeClass(lesson.status)}`}>
+                            {capitalizeFirst(lesson.status)}
+                          </Badge>
+                        }
+                      >
+                        <div>
+                          <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+                          <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
+                        </div>
+
+                        <div className='mt-auto flex flex-wrap items-center gap-2'>
+                          {lesson.ageRangeLabel && (
+                            <Badge className='bg-sky-custom-300'>
+                              <span className='mr-0.5'> {t('card.age')}</span>
+                              {lesson.ageRangeLabel}
+                            </Badge>
+                          )}
+                          {lesson.duration > 0 && (
+                            <Badge className={`bg-red-300`}>
+                              <Clock className='mr-0.5' />
+                              {formatDuration(lesson.duration)}
+                            </Badge>
+                          )}
+                        </div>
+                      </CardLayout>
+                    </Link>
+                  ))}
+                </div>
+
+                {data?.data?.totalPages > 1 && (
+                  <SPagination
+                    pageNumber={queryParams.pageNumber!}
+                    totalPages={data.data.totalPages}
+                    onPageChanged={handlePageChange}
+                    className='pb-6'
+                  />
+                )}
+              </div>
+            )
+          }
+        ]}
+      />
     </div>
   )
 }

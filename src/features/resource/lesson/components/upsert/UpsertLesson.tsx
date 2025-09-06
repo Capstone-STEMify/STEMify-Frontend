@@ -9,12 +9,12 @@ import {
 import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { toast } from 'sonner'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 import Link from 'next/link'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Lesson } from '@/features/resource/lesson/types/lesson.type'
 import { useGetAllSkillQuery } from '@/features/resource/skill/api/skillApi'
@@ -24,7 +24,6 @@ import { fileToBase64 } from '@/utils/index'
 import { Skill } from '@/features/resource/skill/types/skill.type'
 import { Category } from '@/features/resource/category/types/category.type'
 import { Standard } from '@/features/resource/standard/types/standard.type'
-import { UserRole } from '@/types/userRole'
 
 type LessonFormData = {
   title: string
@@ -140,13 +139,11 @@ async function PatchLessonJsonPayload(oldData: LessonFormData, newData: LessonFo
 }
 
 interface UpsertLessonProps {
-  courseIdModal?: number
   onSuccess?: () => void
 }
 
-export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonProps) {
-  const locale = useLocale()
-  const router = useRouter()
+export default function UpsertLesson({ onSuccess }: UpsertLessonProps) {
+  const { courseId, lessonId } = useParams()
   const t = useTranslations('LessonDetails')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
@@ -168,32 +165,26 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     imagePreviewUrl: z.string().optional()
   })
 
-  const searchParams = useSearchParams()
-  const courseId = searchParams.get('courseId')
-  const courseIdFromQuery = courseId ? Number(courseId) : 0
-  const finalCourseId = courseIdModal || courseIdFromQuery
-
-  const role = useAppSelector((state) => state.auth.user?.role)
   const userId = useAppSelector((state) => state.auth.user?.userId)
 
   const imageFieldRef = useRef<any>(null)
 
   const params = useParams()
   const lessonIdRaw = params?.lessonId
-  const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
+  // const lessonId = lessonIdRaw ? Number(Array.isArray(lessonIdRaw) ? lessonIdRaw[0] : lessonIdRaw) : undefined
 
   const { data: skills } = useGetAllSkillQuery({ pageSize: 50 })
   const { data: categories } = useGetAllCategoryQuery({ pageSize: 50 })
   const { data: standards } = useGetAllStandardQuery({ pageSize: 50 })
-  const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(lessonId as number, {
+  const { data: lessonData, isLoading: isLessonLoading } = useGetLessonByIdQuery(Number(lessonId), {
     skip: !lessonId
   })
-  const { data: course, isLoading } = useGetCourseByIdQuery(finalCourseId, {
-    skip: !finalCourseId || finalCourseId <= 0
+  const { data: course, isLoading } = useGetCourseByIdQuery(Number(courseId), {
+    skip: !courseId
   })
 
   const isCreating = !lessonId
-  const showCourseMissingError = isCreating && !isLoading && (!finalCourseId || !course?.data)
+  const showCourseMissingError = isCreating && !isLoading && (!courseId || !course?.data)
 
   const [createLesson] = useCreateLessonMutation()
   const [updateLesson] = useUpdateLessonMutation()
@@ -206,7 +197,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     defaultValues:
       lessonId && lessonData?.data
         ? mapLessonData(lessonData, skillItems, categoryItems, standardItems)
-        : defaultLessonData(finalCourseId),
+        : defaultLessonData(Number(courseId)),
     validators: {
       onChange: lessonSchema
     },
@@ -214,14 +205,12 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
       try {
         if (lessonId) {
           const jsonPayload = await PatchLessonJsonPayload(initialCourseDataRef.current!, value, userId!)
-          const res = await updateLesson({ id: lessonId, body: jsonPayload }).unwrap()
+          const res = await updateLesson({ id: Number(lessonId), body: jsonPayload }).unwrap()
           toast.success(tt('successMessage.update', { title: res.data.title }))
         } else {
-          const jsonPayload = await CreateLessonJsonPayload(value, userId!, finalCourseId)
+          const jsonPayload = await CreateLessonJsonPayload(value, userId!, Number(courseId))
           const res = await createLesson(jsonPayload).unwrap()
           toast.success(tt('successMessage.create', { title: res.data.title }))
-          if (role === UserRole.STAFF) router.push(`/${locale}/resource/lesson/update/${res.data.id}`)
-          else if (role === UserRole.ADMIN) router.push(`/${locale}/admin/lesson/update/${res.data.id}`)
         }
         onSuccess?.()
       } catch (err) {
@@ -275,125 +264,121 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
         form.handleSubmit()
       }}
     >
-      <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
-        <div className='space-y-6 lg:col-span-2'>
-          <form.AppField
-            name='title'
-            children={(field) => (
-              <field.TextAreaField
-                label={t('form.fields.title.label')}
-                placeholder={t('form.fields.title.placeholder')}
-                className='rounded-lg border-gray-300'
-              />
-            )}
-          />
+      <form.AppField
+        name='imageUrl'
+        children={(field) => {
+          imageFieldRef.current = field
+          return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
+        }}
+      />
+      <div className='space-y-6 lg:col-span-2'>
+        <form.AppField
+          name='title'
+          children={(field) => (
+            <field.TextAreaField
+              label={t('form.fields.title.label')}
+              placeholder={t('form.fields.title.placeholder')}
+              className='rounded-lg border-gray-300'
+            />
+          )}
+        />
 
-          <form.AppField
-            name='description'
-            children={(field) => (
-              <field.TextAreaField
-                label={t('form.fields.description.label')}
-                placeholder={t('form.fields.description.placeholder')}
-                className='h-50 rounded-lg border-gray-300'
-              />
-            )}
-          />
+        <form.AppField
+          name='description'
+          children={(field) => (
+            <field.TextAreaField
+              label={t('form.fields.description.label')}
+              placeholder={t('form.fields.description.placeholder')}
+              className='h-50 rounded-lg border-gray-300'
+            />
+          )}
+        />
 
-          <form.AppField
-            name='learningOutcome'
-            children={(field) => (
-              <field.TextAreaField
-                label={t('form.fields.learningOutcome.label')}
-                placeholder={t('learningOutcome.placeholder')}
-                className='h-50 rounded-lg border-gray-300'
-              />
-            )}
-          />
+        <form.AppField
+          name='learningOutcome'
+          children={(field) => (
+            <field.TextAreaField
+              label={t('form.fields.learningOutcome.label')}
+              placeholder={t('learningOutcome.placeholder')}
+              className='h-50 rounded-lg border-gray-300'
+            />
+          )}
+        />
 
-          <form.AppField
-            name='requirement'
-            children={(field) => (
-              <field.TextAreaField
-                label={t('form.fields.requirements.label')}
-                placeholder={t('form.fields.requirements.placeholder')}
-                className='h-30 rounded-lg border-gray-300'
-              />
-            )}
-          />
-        </div>
+        <form.AppField
+          name='requirement'
+          children={(field) => (
+            <field.TextAreaField
+              label={t('form.fields.requirements.label')}
+              placeholder={t('form.fields.requirements.placeholder')}
+              className='h-30 rounded-lg border-gray-300'
+            />
+          )}
+        />
+      </div>
 
-        <div className='space-y-6'>
-          <SCard
-            className='gap-2'
-            title={t('form.fields.skills.label')}
-            content={
-              <form.AppField
-                name='skills'
-                children={(field) => (
-                  <field.MultipleCheckboxField
-                    options={skills?.data.items.map((s) => ({
-                      value: s.id.toString(),
-                      label: s.skillName
-                    }))}
-                    className='flex flex-wrap gap-x-8 gap-y-4'
-                  />
-                )}
-              />
-            }
-          />
+      <div className='grid grid-cols-3 gap-6'>
+        <SCard
+          className='gap-2'
+          title={t('form.fields.skills.label')}
+          content={
+            <form.AppField
+              name='skills'
+              children={(field) => (
+                <field.MultipleCheckboxField
+                  options={skills?.data.items.map((s) => ({
+                    value: s.id.toString(),
+                    label: s.skillName
+                  }))}
+                  className='flex flex-wrap gap-x-4 gap-y-3'
+                />
+              )}
+            />
+          }
+        />
 
-          <SCard
-            className='gap-2'
-            title={t('form.fields.topics.label')}
-            content={
-              <form.AppField
-                name='topics'
-                children={(field) => (
-                  <field.MultipleCheckboxField
-                    options={categories?.data.items.map((c) => ({
-                      value: c.id.toString(),
-                      label: c.name
-                    }))}
-                    className='flex flex-wrap gap-x-8 gap-y-4'
-                  />
-                )}
-              />
-            }
-          />
+        <SCard
+          className='gap-2'
+          title={t('form.fields.topics.label')}
+          content={
+            <form.AppField
+              name='topics'
+              children={(field) => (
+                <field.MultipleCheckboxField
+                  options={categories?.data.items.map((c) => ({
+                    value: c.id.toString(),
+                    label: c.name
+                  }))}
+                  className='flex flex-wrap gap-x-4 gap-y-3'
+                />
+              )}
+            />
+          }
+        />
 
-          <SCard
-            className='gap-3'
-            title={t('form.fields.standards.label')}
-            content={
-              <form.AppField
-                name='standards'
-                children={(field) => (
-                  <field.MultipleCheckboxField
-                    options={standards?.data.items.map((s) => ({
-                      value: s.id.toString(),
-                      label: s.standardName
-                    }))}
-                    className='flex flex-wrap gap-x-8 gap-y-4'
-                  />
-                )}
-              />
-            }
-          />
-
-          <form.AppField
-            name='imageUrl'
-            children={(field) => {
-              imageFieldRef.current = field
-              return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
-            }}
-          />
-
-          <form.AppForm>
-            <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full'>
-              {tc('button.submit')}
-            </form.SubmitButton>
-          </form.AppForm>
-        </div>
+        <SCard
+          className='gap-3'
+          title={t('form.fields.standards.label')}
+          content={
+            <form.AppField
+              name='standards'
+              children={(field) => (
+                <field.MultipleCheckboxField
+                  options={standards?.data.items.map((s) => ({
+                    value: s.id.toString(),
+                    label: s.standardName
+                  }))}
+                  className='flex flex-wrap gap-x-4 gap-y-3'
+                />
+              )}
+            />
+          }
+        />
+      </div>
+      <div className='flex justify-end'>
+        <form.AppForm>
+          <form.SubmitButton className='bg-amber-custom-400 rounded-full'>{tc('button.submit')}</form.SubmitButton>
+        </form.AppForm>
       </div>
     </form>
   )

@@ -48,7 +48,7 @@ export default function UpsertSection({
   const sectionSchema = z.object({
     title: z.string().min(1, tv('section.title')),
     description: z.string().min(1, tv('section.description')),
-    duration: z.number().min(0, tv('section.duration')),
+    duration: z.number().min(1, tv('section.duration')),
     lessonId: z.number().positive(tv('section.lessonId'))
   })
 
@@ -160,7 +160,7 @@ export default function UpsertSection({
         <form.AppField
           name='duration'
           children={(field) => (
-            <field.TextField<number>
+            <field.TextField
               type='number'
               label={t('form.fields.duration.label')}
               placeholder={t('form.fields.duration.placeholder')}

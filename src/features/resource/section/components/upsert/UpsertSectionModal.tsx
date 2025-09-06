@@ -27,9 +27,9 @@ export default function UpsertSectionModal({ lessonId, sectionId, onConfirm }: C
           <DialogTitle>{sectionId ? t('form.title.update') : t('form.title.create')}</DialogTitle>
         </DialogHeader>
         <hr />
-        <ScrollArea className='max-h-[450px]'>
+        <div>
           <UpsertSection lessonId={lessonId} sectionId={sectionId} onSuccess={handleSuccess} />
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   )

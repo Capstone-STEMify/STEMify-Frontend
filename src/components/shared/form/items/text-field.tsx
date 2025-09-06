@@ -3,12 +3,12 @@ import { Label } from '@/components/shadcn/label'
 import { useFieldContext } from '@/components/shared/form/items'
 import { FieldErrors } from '@/components/shared/form/items/field-errors'
 
-type TextFieldProps<T = string> = {
+type TextFieldProps = {
   label?: string
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export function TextField<T = string>({ label, ...inputProps }: TextFieldProps) {
-  const field = useFieldContext<T>()
+export function TextField({ label, ...inputProps }: TextFieldProps) {
+  const field = useFieldContext<string | number>()
 
   return (
     <div className='space-y-2'>
@@ -17,8 +17,12 @@ export function TextField<T = string>({ label, ...inputProps }: TextFieldProps) 
       </Label>
       <Input
         id={field.name}
-        value={field.state.value as any}
-        onChange={(e) => field.handleChange(e.target.value as any)}
+        value={field.state.value ?? ''}
+        onChange={(e) => {
+          const value =
+            inputProps.type === 'number' ? (e.target.value === '' ? undefined : e.target.valueAsNumber) : e.target.value
+          field.handleChange(value ?? '')
+        }}
         onBlur={field.handleBlur}
         {...inputProps}
       />
