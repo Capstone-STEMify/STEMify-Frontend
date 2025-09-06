@@ -4,7 +4,11 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 import { useParams, useRouter } from 'next/navigation'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
-import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import {
+  createActionsColumnFromItems,
+  createSelectColumn,
+  DragHandle
+} from '@/components/shared/data-table/columns-helpers'
 import { Badge } from '@/components/shadcn/badge'
 import { useDeleteLessonMutation, useUpdateLessonMutation } from '../../api/lessonApi'
 import { Lesson, LessonStatus } from '../../types/lesson.type'
@@ -28,25 +32,7 @@ const getLessonStatusBadgeClass = (status?: LessonStatus): string => {
   return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
 }
 
-function DragHandle({ id }: { id: number }) {
-  const { attributes, listeners, setNodeRef } = useSortable({ id })
-
-  return (
-    <Button
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      variant='ghost'
-      size='icon'
-      className='hover:cursor-grab active:cursor-grabbing'
-    >
-      <IconGripVertical className='text-muted-foreground size-3' />
-      <span className='sr-only'>Drag to reorder</span>
-    </Button>
-  )
-}
-
-export function useGetLessonAction(): ColumnDef<Lesson>[] {
+export function useGetLessonColumn(): ColumnDef<Lesson>[] {
   const router = useRouter()
   const locale = useLocale()
   const { openModal } = useModal()

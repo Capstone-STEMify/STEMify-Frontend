@@ -101,12 +101,12 @@ export default function SectionAndContent() {
                 className='bg-amber-custom-400 mt-4 w-full py-6 text-base'
                 onClick={async () => {
                   try {
-                    const sectionIds = items.map((s) => s.id)
+                    const orderedSectionIds = items.map((s) => s.id)
 
-                    const jsonPayload = {
-                      orderedSectionIds: sectionIds
-                    }
-                    const response = await updateSectionOrder({ id: Number(lessonId), body: jsonPayload }).unwrap()
+                    const response = await updateSectionOrder({
+                      id: Number(lessonId),
+                      orderedSectionIds
+                    }).unwrap()
                     console.log('response', response)
 
                     toast.success(tt('successMessage.saveOrder'))

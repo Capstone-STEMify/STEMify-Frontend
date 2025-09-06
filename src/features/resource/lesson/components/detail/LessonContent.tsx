@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useSearchContentQuery } from '@/features/content/api/contentApi'
+import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useUpdateSectionStudentProgressMutation } from '@/features/student-progress/api/studentProgressApi'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
@@ -33,6 +33,13 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
   const tt = useTranslations('toast')
 
   const { data: userData, status } = useSession()
+  const { data: content } = useSearchContentQuery(
+    { sectionId },
+    {
+      skip: !sectionId
+    }
+  )
+  const [completeSection, { isLoading }] = useUpdateSectionStudentProgressMutation()
 
   if (status === 'loading') {
     return (
@@ -41,15 +48,6 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
       </div>
     )
   }
-
-  const { data: content } = useSearchContentQuery(
-    { sectionId },
-    {
-      skip: !sectionId
-    }
-  )
-
-  const [completeSection, { isLoading }] = useUpdateSectionStudentProgressMutation()
 
   const handleCompleteSection = async () => {
     try {

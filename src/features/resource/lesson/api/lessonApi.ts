@@ -5,18 +5,13 @@ export const lessonApi = createCrudApi<Lesson, LessonQueryParams>({
   reducerPath: 'lessonApi',
   tagTypes: ['Lesson', 'Content'],
   baseUrl: '/lessons'
-})
-
-export const lessonApiExtended = lessonApi.injectEndpoints({
+}).injectEndpoints({
   endpoints: (builder) => ({
-    updateLessonSectionOrder: builder.mutation<any, { id: number; body: { orderedSectionIds: number[] } }>({
-      query: ({ id, body }) => ({
+    updateLessonSectionOrder: builder.mutation<any, { id: number; orderedSectionIds: number[] }>({
+      query: ({ id, orderedSectionIds }) => ({
         url: `/lessons/${id}/sections-reorder`,
         method: 'PATCH',
-        body,
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        body: { orderedSectionIds }
       }),
       invalidatesTags: ['Lesson']
     })
@@ -33,7 +28,7 @@ export const {
   // lazy
   useLazySearchQuery: useLazySearchLessonQuery,
   useLazyGetAllQuery: useLazyGetAllLessonQuery,
-  useLazyGetByIdQuery: useLazyGetLessonByIdQuery
-} = lessonApi
+  useLazyGetByIdQuery: useLazyGetLessonByIdQuery,
 
-export const { useUpdateLessonSectionOrderMutation } = lessonApiExtended
+  useUpdateLessonSectionOrderMutation
+} = lessonApi

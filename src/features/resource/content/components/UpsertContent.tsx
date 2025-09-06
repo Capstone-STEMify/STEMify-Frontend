@@ -7,13 +7,13 @@ import {
   useSearchContentQuery,
   useCreateContentMutation,
   useUpdateContentMutation
-} from '@/features/content/api/contentApi'
+} from '@/features/resource/content/api/contentApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import removeMd from 'remove-markdown'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 import { fileToBase64 } from '@/utils/index'
-import { ContentType } from '@/features/content/types/content.type'
+import { ContentType } from '@/features/resource/content/types/content.type'
 import { parseWithZod } from '@conform-to/zod/v4'
 
 const contentSchema = (tv: ReturnType<typeof useTranslations<'validation'>>) =>

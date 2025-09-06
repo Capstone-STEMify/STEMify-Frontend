@@ -1,6 +1,6 @@
 // src/features/content/api/contentApi.ts
 
-import { Content, ContentQueryParams } from '@/features/content/types/content.type'
+import { Content, ContentQueryParams } from '@/features/resource/content/types/content.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
 // The original API definition created by createCrudApi

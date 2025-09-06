@@ -1,4 +1,4 @@
-import ContentManagement from '@/features/content/components/UpsertContent'
+import ContentManagement from '@/features/resource/content/components/UpsertContent'
 import { useDeleteSectionMutation, useUpdateSectionMutation } from '@/features/resource/section/api/sectionApi'
 import { Section } from '@/features/resource/section/types/section.type'
 import { useModal } from '@/providers/ModalProvider'

@@ -1,4 +1,4 @@
-import { contentApi } from '@/features/content/api/contentApi'
+import { contentApi } from '@/features/resource/content/api/contentApi'
 import { enrollmentApi } from '@/features/enrollment/api/enrollmentApi'
 import { notificationApi } from '@/features/notification/api/notificationApi'
 import { ageRangeApi } from '@/features/resource/age-range/api/ageRangeApi'
@@ -28,7 +28,7 @@ export const apiMiddlewares: Middleware[] = [
   studentProgressApi.middleware,
   userApi.middleware,
   curriculumApi.middleware,
-  learningOutcomeApi.middleware,
+  learningOutcomeApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]

@@ -1,9 +1,8 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { DataTable } from '@/components/shared/data-table/data-table'
-import { useGetLessonAction } from './LessonTableAction'
 import { useSearchLessonQuery } from '../../api/lessonApi'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { Lesson, LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
@@ -11,25 +10,23 @@ import LessonListAction from './LessonListAction'
 import { Button } from '@/components/shadcn/button'
 import { IconPlus } from '@tabler/icons-react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import Link from 'next/link'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { SPagination } from '@/components/shared/SPagination'
 import { capitalizeFirst, formatDuration } from '@/utils/index'
 import { Clock, LayoutGrid, TableIcon } from 'lucide-react'
-import { getCourseStatusBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
 import { toast } from 'sonner'
 import { useModal } from '@/providers/ModalProvider'
 import STabs from '@/components/shared/STabs'
-
-type ViewMode = 'table' | 'card'
+import { useGetLessonColumn } from '@/features/resource/lesson/components/list/LessonColumn'
 
 export default function LessonTable({ courseIdSelected }: { courseIdSelected?: number }) {
   const locale = useLocale()
   const { courseId } = useParams()
-  const columns = useGetLessonAction()
+  const columns = useGetLessonColumn()
   const { openModal } = useModal()
 
   const t = useTranslations('Admin.course_details')
@@ -37,15 +34,6 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
 
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
-
-  const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    if (typeof window === 'undefined') return 'table'
-    return (localStorage.getItem('course_view_mode') as ViewMode) || 'table'
-  })
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') localStorage.setItem('course_view_mode', viewMode)
-  }, [viewMode])
 
   const queryParams: LessonQueryParams = {
     courseId: courseIdSelected || lessonParams.courseId,

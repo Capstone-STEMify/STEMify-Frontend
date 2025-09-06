@@ -1,10 +1,11 @@
-import { createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import { createSelectColumn, DragHandle } from '@/components/shared/data-table/columns-helpers'
 import { useDeleteSectionMutation } from '@/features/resource/section/api/sectionApi'
 import { Section } from '@/features/resource/section/types/section.type'
 import { useModal } from '@/providers/ModalProvider'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, Row } from '@tanstack/react-table'
 import { Edit, ExternalLink, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 import React from 'react'
 import { toast } from 'sonner'
 
@@ -13,6 +14,7 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
   const tt = useTranslations('toast')
   const t = useTranslations('section')
   const { openModal } = useModal()
+  const { lessonId } = useParams()
 
   const [deleteSection] = useDeleteSectionMutation()
   const handleDelete = async (sectionId: number) => {
@@ -25,6 +27,17 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
   }
 
   return [
+    ...(lessonId
+      ? [
+          {
+            id: 'drag',
+            header: () => null,
+            cell: ({ row }: { row: Row<Section> }) => <DragHandle id={row.original.id} />,
+            enableSorting: false,
+            enableHiding: false
+          }
+        ]
+      : []),
     createSelectColumn<Section>(),
     {
       accessorKey: 'title',
