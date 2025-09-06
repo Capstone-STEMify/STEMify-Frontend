@@ -1,10 +1,8 @@
 'use client'
 
-import { SCard } from '@/components/shared/card/SCard'
 import { useAppForm } from '@/components/shared/form/items'
 import { useLocale, useTranslations } from 'next-intl'
 import { useEffect, useRef } from 'react'
-import z from 'zod'
 import {
   useCreateCurriculumMutation,
   useGetCurriculumByIdQuery,

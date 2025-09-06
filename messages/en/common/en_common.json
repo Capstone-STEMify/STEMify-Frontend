@@ -93,6 +93,10 @@
       "of": "of",
       "row": "row(s) ",
       "select": "selected"
+    },
+    "unit": {
+      "minute": "minute",
+      "age": "age"
     }
   }
 }

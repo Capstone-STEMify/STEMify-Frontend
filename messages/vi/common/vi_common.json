@@ -93,6 +93,10 @@
       "of": "của",
       "row": "hàng ",
       "select": "đã chọn"
+    },
+    "unit": {
+      "minute": "phút",
+      "age": "tuổi"
     }
   }
 }

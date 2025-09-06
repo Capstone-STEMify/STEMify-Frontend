@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl'
 import React from 'react'
 import { toast } from 'sonner'
 
-export default function useGetGuideColumn(): ColumnDef<Section>[] {
+export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
   const tc = useTranslations('common')
   const t = useTranslations('section')
   const { openModal } = useModal()
@@ -43,7 +43,7 @@ export default function useGetGuideColumn(): ColumnDef<Section>[] {
       cell: ({ row }) => {
         return (
           <div className='w-32'>
-            {row.getValue('duration')} {t('min')}
+            {row.getValue('duration')} {tc('unit.minute')}
           </div>
         )
       }

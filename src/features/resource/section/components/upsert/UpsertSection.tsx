@@ -1,5 +1,4 @@
 'use client'
-import { SCard } from '@/components/shared/card/SCard'
 import React, { useEffect } from 'react'
 import {
   useGetSectionByIdQuery,
@@ -41,7 +40,7 @@ export default function UpsertSection({
   const params = useParams()
   const token = useAppSelector((state) => state.auth.token)
 
-  const t = useTranslations('sectionManagement')
+  const t = useTranslations('section')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const tv = useTranslations('validation')
@@ -92,7 +91,7 @@ export default function UpsertSection({
             duration: Number(value.duration)
           }
           await updateSection({ id: sectionId, body: updatePayload }).unwrap()
-          toast.success(tt('successMessage.update'))
+          toast.success(tt('successMessage.update', { title: value.title }))
         } else {
           const createPayload = {
             title: value.title,
@@ -147,63 +146,42 @@ export default function UpsertSection({
         form.handleSubmit()
       }}
     >
-      <h1 className='text-center text-3xl font-bold text-gray-800'>
-        {sectionId ? t('updateTitle') : t('createTitle')}
-      </h1>
-
-      <div className='w-xl space-y-10'>
-        <SCard
-          className='gap-3'
-          title={t('title.label')}
-          description={t('title.note')}
-          content={
-            <form.AppField
-              name='title'
-              children={(field) => (
-                <field.TextField placeholder={t('title.placeholder')} className='h-8 rounded-lg border-gray-300' />
-              )}
+      <div className='w-xl space-y-6'>
+        <form.AppField
+          name='title'
+          children={(field) => (
+            <field.TextField
+              label={t('form.fields.title.label')}
+              placeholder={t('form.fields.title.placeholder')}
+              className='h-8 rounded-lg border-gray-300'
             />
-          }
+          )}
         />
-
-        <SCard
-          className='gap-3'
-          title={t('description.label')}
-          description={t('description.note')}
-          content={
-            <form.AppField
-              name='description'
-              children={(field) => (
-                <field.TextAreaField
-                  placeholder={t('description.placeholder')}
-                  className='h-25 rounded-lg border-gray-300'
-                />
-              )}
+        <form.AppField
+          name='duration'
+          children={(field) => (
+            <field.TextField<number>
+              type='number'
+              label={t('form.fields.duration.label')}
+              placeholder={t('form.fields.duration.placeholder')}
+              className='rounded-lg border-gray-300'
             />
-          }
+          )}
         />
-
-        <SCard
-          className='w-full gap-3'
-          title={t('duration.label')}
-          description={t('duration.note')}
-          content={
-            <form.AppField
-              name='duration'
-              children={(field) => (
-                <field.TextField<number>
-                  type='number'
-                  placeholder={t('duration.placeholder')}
-                  className='rounded-lg border-gray-300'
-                />
-              )}
+        <form.AppField
+          name='description'
+          children={(field) => (
+            <field.TextAreaField
+              label={t('form.fields.description.label')}
+              placeholder={t('form.fields.description.placeholder')}
+              className='h-25 rounded-lg border-gray-300'
             />
-          }
+          )}
         />
 
         <form.AppForm>
           <form.SubmitButton className='bg-amber-custom-400 w-full rounded-full py-3 text-lg'>
-            {sectionId ? t('button.updateSection') : t('button.createSection')}
+            {tc('button.save')}
           </form.SubmitButton>
         </form.AppForm>
       </div>

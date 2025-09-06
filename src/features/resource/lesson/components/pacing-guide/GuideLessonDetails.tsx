@@ -25,7 +25,7 @@ type GuideLessonDetailsProps = {
 export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) {
   const router = useRouter()
   const locale = useLocale()
-  const t = useTranslations('PacingGuide')
+  const t = useTranslations('LessonDetails')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const role = useAppSelector((state) => state.auth.user?.role)
@@ -59,9 +59,9 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
 
   const fallback = 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=1200&auto=format&fit=crop'
   return (
-    <div className='space-y-8'>
+    <div>
       <div className='grid grid-cols-1 items-start gap-10 lg:grid-cols-3'>
-        <div className='col-span-2 grid'>
+        <div className='col-span-2 flex flex-col'>
           <div className='flex items-center gap-2'>
             <h1 className='mb-4 text-4xl font-bold text-gray-900'>{lesson.title}</h1>
             <span className='cursor-pointer text-blue-500'>
@@ -89,13 +89,13 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
             </p>
             <Badge className={getStatusBadgeClass(lesson.status)}>{capitalizeFirst(lesson.status)}</Badge>
             <Badge className='border-amber-300 bg-amber-100 text-amber-800'>
-              {t('age')} {lesson.ageRangeLabel}
+              {tc('unit.age')} {lesson.ageRangeLabel}
             </Badge>
             <Badge className='border-green-300 bg-green-100 text-green-800'>
-              <Clock className='mr-1' /> {lesson.duration} {t('min')}
+              <Clock className='mr-1' /> {lesson.duration} {tc('unit.minute')}
             </Badge>
           </div>
-          <div className='mb-6 h-1 w-20 bg-yellow-500' />
+          <div className='mb-6 h-1 w-50 bg-yellow-500' />
           {/* Description */}
           <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('description')}</h3>
           <p className='whitespace-pre-line text-gray-700'>{lesson.description}</p>
@@ -110,24 +110,22 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
           <hr className='my-6 border-gray-300' />
 
           <div>
-            <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('requirement')}</h3>
+            <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('requirements')}</h3>
             <p className='leading-relaxed whitespace-pre-line text-gray-700'>
               {lesson.requirement || 'No requirements specified.'}
             </p>
           </div>
         </div>
 
-        <div>
-          <div className='overflow-hidden rounded-3xl shadow-sm'>
-            <Image
-              src={lesson.imageUrl || fallback}
-              alt='Lesson artwork'
-              className='aspect-square'
-              loading='lazy'
-              width={300}
-              height={300}
-            />
-          </div>
+        <div className='flex flex-col'>
+          <Image
+            src={lesson.imageUrl || fallback}
+            alt='Lesson artwork'
+            className='aspect-square rounded-3xl object-cover'
+            loading='lazy'
+            width={400}
+            height={400}
+          />
           <div className='mt-6'>
             <div className='space-y-6'>
               <SCard
@@ -135,7 +133,9 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                 content={
                   <div className='space-y-4'>
                     <div>
-                      <h4 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('skills')}</h4>
+                      <h4 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>
+                        {t('lesson.skill')}
+                      </h4>
                       {lesson.skillNames.length > 0 ? (
                         <div className='flex flex-wrap gap-2'>
                           {lesson.skillNames.map((skill) => (
@@ -149,7 +149,9 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                       )}
                     </div>
                     <div>
-                      <h4 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('topics')}</h4>
+                      <h4 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>
+                        {t('lesson.topic')}
+                      </h4>
                       {lesson.topicNames.length > 0 ? (
                         <div className='flex flex-wrap gap-2'>
                           {lesson.topicNames.map((topic) => (
@@ -163,7 +165,9 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                       )}
                     </div>
                     <div>
-                      <h4 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('standards')}</h4>
+                      <h4 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>
+                        {t('lesson.standard')}
+                      </h4>
                       {lesson.standardNames.length > 0 ? (
                         <div className='flex flex-wrap gap-2'>
                           {lesson.standardNames.map((standard) => (

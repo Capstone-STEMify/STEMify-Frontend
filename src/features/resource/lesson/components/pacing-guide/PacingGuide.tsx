@@ -1,16 +1,16 @@
 'use client'
 import React from 'react'
-import { motion } from 'framer-motion'
 import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { containerVariants } from '@/utils/motion'
 import BackButton from '@/components/shared/button/BackButton'
 import GuideLessonDetails from '@/features/resource/lesson/components/pacing-guide/GuideLessonDetails'
-import GuideTable from '@/features/resource/lesson/components/pacing-guide/GuideTable'
+import SectionListTable from '@/features/resource/section/components/list/SectionListTable'
+import { useTranslations } from 'next-intl'
 
 export default function PacingGuide() {
+  const t = useTranslations('LessonDetails')
   const { lessonId } = useParams()
   const { data, isLoading } = useGetLessonByIdQuery(Number(lessonId), { skip: !lessonId })
 
@@ -26,14 +26,14 @@ export default function PacingGuide() {
   }
 
   return (
-    <div className=''>
+    <div className='mx-auto min-h-screen max-w-6xl px-4 pt-2 sm:px-6 lg:px-8'>
       <div className='flex items-center gap-5 pb-5'>
         <BackButton />
-        <h1>Lesson Details</h1>
+        <h1>{t('title')}</h1>
       </div>
-      <div className='space-y-8'>
+      <div>
         <GuideLessonDetails lesson={data?.data} />
-        <GuideTable lessonId={Number(lessonId)} />
+        <SectionListTable lessonId={Number(lessonId)} />
       </div>
     </div>
   )

@@ -1,6 +1,9 @@
 {
   "LessonDetails": {
+    "title": "Lesson Details",
     "description": "Description",
+    "learningOutcome": "Learning Outcomes",
+    "requirements": "Requirements",
     "sections": "Sections",
     "lesson": {
       "title": "Lesson",

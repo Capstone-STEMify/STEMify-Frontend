@@ -1,6 +1,9 @@
 {
   "LessonDetails": {
+    "title": "Chi Tiết Bài Học",
     "description": "Mô Tả",
+    "learningOutcome": "Mục Tiêu Học Tập",
+    "requirements": "Yêu Cầu",
     "sections": "Chuyên mục",
     "lesson": {
       "title": "Bài Học",
