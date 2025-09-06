@@ -3,7 +3,7 @@ import { useDeleteSectionMutation } from '@/features/resource/section/api/sectio
 import { Section } from '@/features/resource/section/types/section.type'
 import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
-import { Edit, Trash2 } from 'lucide-react'
+import { Edit, ExternalLink, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import React from 'react'
 import { toast } from 'sonner'
@@ -30,7 +30,12 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
       accessorKey: 'title',
       header: tc('tableHeader.title'),
       cell: ({ row }) => {
-        return <div className='line-clamp-5 w-32 font-semibold whitespace-pre-wrap'>{row.getValue('title')}</div>
+        return (
+          <div className='line-clamp-5 w-32 cursor-pointer whitespace-pre-wrap text-blue-500 italic underline'>
+            {row.getValue('title')}
+            <ExternalLink className='ml-1 inline' size={14} />
+          </div>
+        )
       }
     },
     {
@@ -48,16 +53,7 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
       accessorKey: 'description',
       header: tc('tableHeader.description'),
       cell: ({ row }) => {
-        return <div className='line-clamp-5 w-72 whitespace-pre-wrap'>{row.getValue('description')}</div>
-      }
-    },
-    {
-      accessorKey: '',
-      header: tc('tableHeader.content'),
-      cell: ({ row }) => {
-        return (
-          <div className='line-clamp-5 cursor-pointer whitespace-pre-wrap text-blue-500 italic underline'>View</div>
-        )
+        return <div className='line-clamp-5 w-md whitespace-pre-wrap'>{row.getValue('description')}</div>
       }
     },
     {
