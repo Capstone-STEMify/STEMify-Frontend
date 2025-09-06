@@ -95,9 +95,7 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
     >
       <form.AppField
         name='name'
-        children={(field) => (
-          <field.TextAreaField label={t('form.fields.name.label')} placeholder={t('form.fields.name.placeholder')} />
-        )}
+        children={(field) => <field.TextAreaField label={t('name')} placeholder={t('description')} />}
       />
 
       <div className='mb-3 flex justify-end gap-3'>

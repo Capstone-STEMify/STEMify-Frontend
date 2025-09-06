@@ -57,7 +57,7 @@ export function useGetCategoryAction(): ColumnDef<Category>[] {
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
-            message: `${tm('category')} "${original.name}"?`,
+            message: `${tt('confirmMessage.delete', { title: original.name })}`,
             onConfirm: () => handleDelete(original.id)
           })
         }
