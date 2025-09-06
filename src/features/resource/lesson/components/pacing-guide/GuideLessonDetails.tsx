@@ -95,7 +95,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
               <Clock className='mr-1' /> {lesson.duration} {tc('unit.minute')}
             </Badge>
           </div>
-          <div className='mb-6 h-1 w-50 bg-yellow-500' />
+          <hr className='mb-6 border-gray-300' />
           {/* Description */}
           <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('description')}</h3>
           <p className='whitespace-pre-line text-gray-700'>{lesson.description}</p>

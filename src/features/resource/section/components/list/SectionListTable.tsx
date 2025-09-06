@@ -32,7 +32,7 @@ export default function SectionListTable({ lessonId }: SectionListTableProps) {
     <div>
       <hr className='my-10' />
       <div className='flex flex-col items-center justify-between gap-4 sm:flex-row'>
-        <h2 className='text-center text-2xl'>{t('list.title')}</h2>
+        <h2 className='text-sky-custom-600 text-center text-2xl'>{t('list.title')}</h2>
         <Button
           className='bg-amber-custom-400 my-5'
           onClick={() => {

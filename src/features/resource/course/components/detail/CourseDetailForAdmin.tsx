@@ -7,7 +7,7 @@ import { SCard } from '@/components/shared/card/SCard'
 import { useLocale, useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { useParams, useRouter } from 'next/navigation'
-import { BookOpen, Edit } from 'lucide-react'
+import { BookOpen, Clock, Edit, SquarePen, Trash2 } from 'lucide-react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
@@ -17,25 +17,28 @@ import {
   useUpdateCourseMutation
 } from '@/features/resource/course/api/courseApi'
 import LessonTable from '@/features/resource/lesson/components/list/LessonTable'
+import { useModal } from '@/providers/ModalProvider'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { capitalizeFirst } from '@/utils/index'
 
 const levelBadgeClass = (level?: string): string => {
   const map: Record<string, string> = {
-    [CourseLevel.BEGINNER]: 'bg-green-100 text-green-800',
-    [CourseLevel.INTERMEDIATE]: 'bg-yellow-100 text-yellow-800',
-    [CourseLevel.ADVANCED]: 'bg-red-100 text-red-800'
+    [CourseLevel.BEGINNER]: 'bg-green-100 text-green-800 border-green-300',
+    [CourseLevel.INTERMEDIATE]: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+    [CourseLevel.ADVANCED]: 'bg-red-100 text-red-800 border-red-300'
   }
   return map[level ?? ''] ?? 'bg-muted text-muted-foreground'
 }
 
 const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
   const map: Record<CourseStatus, string> = {
-    [CourseStatus.DRAFT]: 'bg-gray-200 text-gray-800',
-    [CourseStatus.PUBLISHED]: 'bg-blue-100 text-blue-800',
-    [CourseStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800',
-    [CourseStatus.DELETED]: 'bg-red-100 text-red-800',
-    [CourseStatus.PENDING]: 'bg-amber-100 text-amber-800',
-    [CourseStatus.REJECTED]: 'bg-red-200 text-red-900',
-    [CourseStatus.APPROVED]: 'bg-green-100 text-green-800'
+    [CourseStatus.DRAFT]: 'bg-gray-200 text-gray-800 border-gray-300',
+    [CourseStatus.PUBLISHED]: 'bg-blue-100 text-blue-800 border-blue-300',
+    [CourseStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+    [CourseStatus.DELETED]: 'bg-red-100 text-red-800 border-red-300',
+    [CourseStatus.PENDING]: 'bg-amber-100 text-amber-800 border-amber-300',
+    [CourseStatus.REJECTED]: 'bg-red-200 text-red-900 border-red-300',
+    [CourseStatus.APPROVED]: 'bg-green-100 text-green-800 border-green-300'
   }
 
   return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
@@ -44,10 +47,12 @@ const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
 export default function CourseDetailForAdmin() {
   const t = useTranslations('Admin.course_details')
   const tt = useTranslations('toast')
+  const tc = useTranslations('common')
 
   const locale = useLocale()
   const params = useParams()
   const router = useRouter()
+  const { openModal } = useModal()
 
   // Set courseId in Redux store
   const courseIdParam = params?.courseId
@@ -88,7 +93,7 @@ export default function CourseDetailForAdmin() {
           status
         }
       }).unwrap()
-      toast.success(`${tt('successMessage.update', {title: status || ''})}`)
+      toast.success(`${tt('successMessage.update', { title: status || '' })}`)
     } catch (error) {
       toast.error(tt('errorMessage'))
       console.error('Failed to update course status:', error)
@@ -112,70 +117,95 @@ export default function CourseDetailForAdmin() {
   }
 
   return (
-    <div className='grid grid-cols-1 gap-8 md:grid-cols-12'>
+    <div className='grid grid-cols-1 gap-12 md:grid-cols-3'>
       {/* LEFT: Course content */}
-      <div className='space-y-6 md:col-span-8'>
+      <div className='flex flex-col md:col-span-2'>
         {/* Course Header */}
-        <SCard
-          title={course.data.title}
-          titleClassName='text-3xl font-bold tracking-tight'
-          content={
-            <div className='text-muted-foreground mt-3 flex flex-wrap items-center gap-4 text-sm'>
-              <span>
-                {t('code')}: <strong>{course.data.code}</strong>
-              </span>
-              <span>
-                {t('status')}:{' '}
-                <Badge className={getCourseStatusBadgeClass(course.data.status)}>{course.data.status}</Badge>
-              </span>
-              <span>
-                {t('level')}: <Badge className={levelBadgeClass(course.data.level)}>{course.data.level}</Badge>
-              </span>
-              <span>
-                {t('age')}: <Badge className='bg-red-100 text-red-800'>{course.data.ageRangeLabel}</Badge>
-              </span>
-            </div>
-          }
-        />
+        <div className='flex items-center gap-2'>
+          <h1 className='mb-4 text-4xl font-bold text-gray-900'>{course.data.title}</h1>
+          <span className='cursor-pointer text-blue-500'>
+            <SquarePen
+              onClick={() => {
+                openModal('upsertLesson', { lesson: course.data.id })
+              }}
+            />
+          </span>
+          <span className='cursor-pointer text-red-500'>
+            <Trash2
+              onClick={() => {
+                openModal('confirm', {
+                  message: `${tt('confirmMessage.delete', { title: course.data.title })}`,
+                  onConfirm: () => handleDelete()
+                })
+              }}
+            />
+          </span>
+        </div>
+
+        <div className='mb-4 flex flex-wrap gap-2 text-sm'>
+          <p className='text-sm text-gray-700 italic'>
+            By <span className='font-semibold'>{course.data.createdByUserName || 'STEMify'}</span>
+          </p>
+          <p>Ngày tạo: {createdAt}</p>
+          <p>Chỉnh sửa gần nhất: {updatedAt}</p>
+        </div>
+        <div className='mb-4 flex flex-wrap gap-4 text-sm'>
+          <span>
+            {t('status')}:{' '}
+            <Badge className={getStatusBadgeClass(course.data.status)}>{capitalizeFirst(course.data.status)}</Badge>
+          </span>
+          <span>
+            {t('age')}: <Badge className='border-rose-300 bg-rose-100 text-rose-800'>{course.data.ageRangeLabel}</Badge>
+          </span>
+          <span>
+            {t('level')}:{' '}
+            <Badge className={levelBadgeClass(course.data.level)}>{capitalizeFirst(course.data.level)}</Badge>
+          </span>
+        </div>
+        <hr className='mb-6 border-gray-300' />
 
         {/* Description */}
-        <SCard
-          title={t('description')}
-          content={
-            course.data.description ? (
-              <p className='text-sm leading-relaxed whitespace-pre-wrap text-gray-700'>{course.data.description}</p>
-            ) : (
-              <p className='text-muted-foreground italic'>{t('nodata.description')}</p>
-            )
-          }
-        />
+        <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('description')}</h3>
+        <p className='whitespace-pre-line text-gray-700'>{course.data.description}</p>
 
+        <hr className='my-6 border-gray-300' />
         {/* Student Tasks */}
-        <SCard
-          title={t('task')}
-          content={
-            course.data.studentTasks ? (
-              <p className='text-sm leading-relaxed whitespace-pre-wrap text-gray-700'>{course.data.studentTasks}</p>
-            ) : (
-              <p className='text-muted-foreground italic'>{t('nodata.task')}</p>
-            )
-          }
-        />
+        <div>
+          <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('task')}</h3>
+          {!course.data.studentTasks ? (
+            <p className='text-muted-foreground italic'>{t('nodata.task')}</p>
+          ) : (
+            <p className='leading-relaxed whitespace-pre-line text-gray-700'>{course.data.studentTasks}</p>
+          )}
+        </div>
 
+        <hr className='my-6 border-gray-300' />
         {/* Prerequisites */}
-        <SCard
-          title={t('prerequisites')}
-          content={
-            course.data.prerequisites ? (
-              <p className='text-sm leading-relaxed whitespace-pre-wrap text-gray-700'>{course.data.prerequisites}</p>
-            ) : (
-              <p className='text-muted-foreground italic'>{t('nodata.prerequisites')}</p>
-            )
-          }
-        />
+        <div>
+          <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('prerequisites')}</h3>
+          {!course.data.prerequisites ? (
+            <p className='text-muted-foreground italic'>{t('nodata.prerequisites')}</p>
+          ) : (
+            <p className='leading-relaxed whitespace-pre-line text-gray-700'>{course.data.prerequisites}</p>
+          )}
+        </div>
+      </div>
 
+      {/* RIGHT: Thumbnail, Metadata, Actions */}
+      <div className='space-y-6'>
+        {/* Thumbnail */}
+        <div className='relative aspect-video w-full overflow-hidden rounded-2xl shadow-md'>
+          <Image
+            src={course.data.imageUrl || '/images/fallback.png'}
+            alt={course.data.title}
+            fill
+            className='object-cover'
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+          />
+        </div>
+
+        {/* Metadata */}
         <SCard
-          title={t('tag')}
           content={
             <div className='space-y-4'>
               {/* Topics */}
@@ -228,71 +258,30 @@ export default function CourseDetailForAdmin() {
             </div>
           }
         />
-      </div>
-
-      {/* RIGHT: Thumbnail, Metadata, Actions */}
-      <div className='space-y-6 md:col-span-4'>
-        {/* Thumbnail */}
-        <div className='relative aspect-video w-full overflow-hidden rounded-2xl shadow-md'>
-          <Image
-            src={course.data.imageUrl || '/images/fallback.png'}
-            alt={course.data.title}
-            fill
-            className='object-cover'
-            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-          />
-        </div>
-
-        {/* Metadata */}
-        <SCard
-          title='Metadata'
-          content={
-            <div className='space-y-1 text-sm text-gray-700'>
-              <div>
-                <strong>{t('metadata.created_at')}: </strong> {createdAt}
-              </div>
-              <div>
-                <strong>{t('metadata.modified')}: </strong> {updatedAt}
-              </div>
-              <div>
-                <strong>{t('metadata.created_by')}: </strong> {createdBy}
-              </div>
-            </div>
-          }
-        />
 
         {/* Action Buttons */}
-        <div className='space-y-4'>
-          <Button
-            onClick={handleUpdate}
-            className='text-sky-custom-600 w-full cursor-pointer bg-gray-200 font-semibold shadow'
-            variant='outline'
-          >
-            {t('button.update')}
-          </Button>
-          <Button onClick={handleDelete} variant='outline' className='w-full border-red-600 text-red-600'>
-            {t('button.delete')}
-          </Button>
-        </div>
+
         {(course.data.status === CourseStatus.PENDING || course.data.status === CourseStatus.DRAFT) && (
-          <div className='flex flex-wrap justify-center gap-3'>
+          <div className='space-y-4'>
             <Button
-              className='cursor-pointer bg-red-600 font-semibold text-white shadow'
-              onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
-            >
-              {t('button.reject')}
-            </Button>
-            <Button
-              className='cursor-pointer bg-green-600 font-semibold text-white shadow'
               onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
+              className='text-sky-custom-600 w-full cursor-pointer bg-gray-200 font-semibold shadow'
+              variant='outline'
             >
               {t('button.approve')}
+            </Button>
+            <Button
+              onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
+              variant='outline'
+              className='w-full border-red-600 text-red-600'
+            >
+              {t('button.reject')}
             </Button>
           </div>
         )}
       </div>
       {/* Divider Section before Lesson Table */}
-      <div className='pt-5 md:col-span-12'>
+      <div className='pt-5 md:col-span-3'>
         <div className='flex items-center gap-3 pb-3'>
           <hr className='flex-grow border-t border-gray-300' />
           <h1 className='text-sky-custom-600 text-3xl font-semibold'>{t('lesson')}</h1>
