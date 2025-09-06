@@ -81,10 +81,10 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
   const form = useAppForm({
     defaultValues: defaultContentData,
     validators: {
-      onChange: (value) =>
-        parseWithZod(new FormData(Object.entries(value) as any), {
-          schema: contentSchema(tv)
-        })
+      // onChange: (value) =>
+      //   parseWithZod(new FormData(Object.entries(value) as any), {
+      //     schema: contentSchema(tv)
+      //   })
     },
     onSubmit: async ({ value }) => {
       try {
@@ -134,28 +134,16 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
 
   return (
     <form
-      className='mt-5 w-full space-y-8'
+      className='space-y-8'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
       }}
     >
-      <div>
-        <div className='space-y-6'>
-          <div className='p-4'>
-            <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
-          </div>
-          <div className='mb-5'></div>
-        </div>
-
-        <form.AppForm>
-          <div className='flex w-full justify-end'>
-            <form.SubmitButton className='bg-amber-custom-400 rounded-full px-6 py-4'>
-              {tc('button.save')}
-            </form.SubmitButton>
-          </div>
-        </form.AppForm>
-      </div>
+      <form.AppField
+        name='contentBody'
+        children={(field) => <field.MarkdownEditorField onSave={form.handleSubmit} />}
+      />
     </form>
   )
 }

@@ -44,7 +44,7 @@ export default function TiptapViewer({ content }: TiptapViewerProps) {
     ],
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert h-full w-full max-w-full p-6 focus:outline-none'
+        class: 'prose dark:prose-invert h-full w-full max-w-full focus:outline-none'
       }
     },
     immediatelyRender: false

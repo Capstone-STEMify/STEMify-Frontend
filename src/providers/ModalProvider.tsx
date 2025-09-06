@@ -20,6 +20,8 @@ import UpsertLearningOutcomeModal from '@/features/resource/learning-outcome/com
 import UpsertCurriculumModal from '@/features/resource/curriculum/components/upsert/UpsertCurriculumModal'
 import CurriculumSelectCourseListModal from '@/components/shared/modals/CurriculumSelectCourseListModal'
 import UpsertCourseModal from '@/features/resource/course/components/modal/UpsertCourseModal'
+import ContentDetailModal from '@/features/resource/content/components/modal/ContentDetailModal'
+import UpsertContentModal from '@/features/resource/content/components/modal/UpsertContentModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -46,24 +48,32 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ModalContext.Provider value={{ openModal, closeModal, modalType, modalProps }}>
       {children}
-      {/* Add modal here */}
+      {/* general */}
       {modalType === 'userForm' && <UserFormModal {...modalProps} />}
       {modalType === 'confirm' && <ConfirmModal {...modalProps} />}
       {modalType === 'image' && <PhotoUploadModal {...modalProps} />}
       {modalType === 'enroll' && <EnrollModal {...modalProps} />}
       {modalType === 'editImage' && <EditImageModal {...modalProps} />}
+
+      {/* upsert */}
       {modalType === 'upsertLesson' && <UpsertLessonModal {...modalProps} />}
       {modalType === 'upsertSection' && <UpsertSectionModal {...modalProps} />}
       {modalType === 'upsertCategory' && <UpsertCategoryModal {...modalProps} />}
       {modalType === 'upsertAgeRange' && <UpsertAgeRangeModal {...modalProps} />}
       {modalType === 'upsertStandard' && <UpsertStandardModal {...modalProps} />}
       {modalType === 'upsertSkill' && <UpsertSkillModal {...modalProps} />}
-      {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}
       {modalType === 'upsertUser' && <UpsertUserModal {...modalProps} />}
       {modalType === 'upsertLearningOutcome' && <UpsertLearningOutcomeModal {...modalProps} />}
-      {modalType === 'curriculumSelectCourseListModal' && <CurriculumSelectCourseListModal {...modalProps} />}
       {modalType === 'upsertCurriculum' && <UpsertCurriculumModal {...modalProps} />}
       {modalType === 'upsertCourse' && <UpsertCourseModal {...modalProps} />}
+      {modalType === 'upsertContent' && <UpsertContentModal {...modalProps} />}
+
+
+      {/* detail */}
+      {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}
+      {modalType === 'contentDetail' && <ContentDetailModal {...modalProps} />}
+
+      {modalType === 'curriculumSelectCourseListModal' && <CurriculumSelectCourseListModal {...modalProps} />}
     </ModalContext.Provider>
   )
 }

@@ -15,13 +15,15 @@ import Subscript from '@tiptap/extension-subscript'
 
 import { Toolbar } from './Toolbar'
 import { useEffect } from 'react'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
 
 interface TiptapEditorProps {
   content?: string
   onChange: (richText: string) => void
+  onSave: () => void
 }
 
-export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
+export default function TiptapEditor({ content, onChange, onSave }: TiptapEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -86,10 +88,10 @@ export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
   }, [content, editor])
   return (
     <div className='rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900'>
-      <Toolbar editor={editor} />
-      <div className='overflow-y-auto'>
+      <Toolbar onSave={onSave} editor={editor} />
+      <ScrollArea className='h-[550px]'>
         <EditorContent editor={editor} />
-      </div>
+      </ScrollArea>
     </div>
   )
 }
