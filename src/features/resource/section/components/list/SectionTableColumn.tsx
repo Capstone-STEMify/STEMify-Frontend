@@ -10,22 +10,18 @@ import { toast } from 'sonner'
 
 export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const t = useTranslations('section')
   const { openModal } = useModal()
 
   const [deleteSection] = useDeleteSectionMutation()
   const handleDelete = async (sectionId: number) => {
-    openModal('confirm', {
-      message: `${tc('confirmMessage.delete', { title: t('details.name').toLowerCase() })}`,
-      onConfirm: async () => {
-        try {
-          await deleteSection(sectionId).unwrap()
-          toast.success(tc('successMessage.delete'))
-        } catch (err) {
-          toast.error(tc('errorMessage'))
-        }
-      }
-    })
+    try {
+      await deleteSection(sectionId).unwrap()
+      toast.success(tc('successMessage.delete'))
+    } catch (err) {
+      toast.error(tc('errorMessage'))
+    }
   }
 
   return [
@@ -71,7 +67,12 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
             <Trash2
               size={16}
               className='cursor-pointer text-red-500 hover:text-red-600'
-              onClick={() => handleDelete(row.original.id)}
+              onClick={() =>
+                openModal('confirm', {
+                  message: tt('confirmMessage.delete', { title: row.original.title }),
+                  onConfirm: () => handleDelete(row.original.id)
+                })
+              }
             />
           </div>
         )

@@ -198,7 +198,7 @@ export default function UpsertCourse({ courseId, onSuccess }: UpsertCourseProps)
           <form.AppField
             name='code'
             children={(field) => (
-              <field.TextAreaField
+              <field.TextField
                 label={t('form.fields.code.label')}
                 placeholder={t('form.fields.code.placeholder')}
                 className='rounded-lg border-gray-300'
@@ -209,7 +209,7 @@ export default function UpsertCourse({ courseId, onSuccess }: UpsertCourseProps)
           <form.AppField
             name='title'
             children={(field) => (
-              <field.TextAreaField
+              <field.TextField
                 label={t('form.fields.title.label')}
                 placeholder={t('form.fields.title.placeholder')}
                 className='rounded-lg border-gray-300'

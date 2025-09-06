@@ -279,7 +279,7 @@ export default function UpsertLesson({ onSuccess }: UpsertLessonProps) {
         <form.AppField
           name='title'
           children={(field) => (
-            <field.TextAreaField
+            <field.TextField
               label={t('form.fields.title.label')}
               placeholder={t('form.fields.title.placeholder')}
               className='rounded-lg border-gray-300'
@@ -293,7 +293,7 @@ export default function UpsertLesson({ onSuccess }: UpsertLessonProps) {
             <field.TextAreaField
               label={t('form.fields.description.label')}
               placeholder={t('form.fields.description.placeholder')}
-              className='h-50 rounded-lg border-gray-300'
+              className='h-30 rounded-lg border-gray-300'
             />
           )}
         />
@@ -303,8 +303,8 @@ export default function UpsertLesson({ onSuccess }: UpsertLessonProps) {
           children={(field) => (
             <field.TextAreaField
               label={t('form.fields.learningOutcome.label')}
-              placeholder={t('learningOutcome.placeholder')}
-              className='h-50 rounded-lg border-gray-300'
+              placeholder={t('form.fields.learningOutcome.placeholder')}
+              className='h-30 rounded-lg border-gray-300'
             />
           )}
         />
