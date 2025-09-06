@@ -117,15 +117,10 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
           </div>
         </div>
 
-        <div className='flex flex-col'>
-          <Image
-            src={lesson.imageUrl || fallback}
-            alt='Lesson artwork'
-            className='aspect-square rounded-3xl object-cover'
-            loading='lazy'
-            width={400}
-            height={400}
-          />
+        <div className='space-y-6'>
+          <div className='relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-md'>
+            <Image src={lesson.imageUrl || fallback} alt='Lesson artwork' fill className='object-cover' />
+          </div>
           <div className='mt-6'>
             <div className='space-y-6'>
               <SCard

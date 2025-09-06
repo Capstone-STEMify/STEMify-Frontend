@@ -194,13 +194,12 @@ export default function CourseDetailForAdmin() {
       {/* RIGHT: Thumbnail, Metadata, Actions */}
       <div className='space-y-6'>
         {/* Thumbnail */}
-        <div className='relative aspect-video w-full overflow-hidden rounded-2xl shadow-md'>
+        <div className='relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-md'>
           <Image
             src={course.data.imageUrl || '/images/fallback.png'}
             alt={course.data.title}
             fill
             className='object-cover'
-            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           />
         </div>
 
@@ -214,7 +213,7 @@ export default function CourseDetailForAdmin() {
                 {course.data.topicNames?.length > 0 ? (
                   <div className='flex flex-wrap gap-2'>
                     {course.data.topicNames.map((topic) => (
-                      <Badge key={topic} variant='secondary' className='bg-red-100 text-red-800'>
+                      <Badge key={topic} variant='secondary' className='border-red-300 bg-red-100 text-red-800'>
                         {topic}
                       </Badge>
                     ))}
@@ -230,7 +229,11 @@ export default function CourseDetailForAdmin() {
                 {course.data.skillNames?.length > 0 ? (
                   <div className='flex flex-wrap gap-2'>
                     {course.data.skillNames.map((skill) => (
-                      <Badge key={skill} variant='outline' className='bg-emerald-100 text-emerald-700'>
+                      <Badge
+                        key={skill}
+                        variant='outline'
+                        className='border-emerald-300 bg-emerald-100 text-emerald-700'
+                      >
                         {skill}
                       </Badge>
                     ))}
@@ -246,7 +249,11 @@ export default function CourseDetailForAdmin() {
                 {course.data.standardNames?.length > 0 ? (
                   <div className='flex flex-wrap gap-2'>
                     {course.data.standardNames.map((standard) => (
-                      <Badge key={standard} variant='outline' className='bg-yellow-custom-50 text-orange-custom-500'>
+                      <Badge
+                        key={standard}
+                        variant='outline'
+                        className='bg-yellow-custom-50 text-orange-custom-500 border-yellow-300'
+                      >
                         {standard}
                       </Badge>
                     ))}

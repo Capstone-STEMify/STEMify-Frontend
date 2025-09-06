@@ -112,13 +112,12 @@ export default function AdminCurriculumInformationSection({
         )}
       </div>
       {/* Image Section */}
-      <div className='relative max-h-[400px] max-w-[400px] overflow-hidden rounded-2xl shadow-md'>
+      <div className='relative aspect-[4/4] w-full overflow-hidden rounded-2xl shadow-md'>
         <Image
           src={curriculum.imageUrl || '/images/fallback.png'}
           alt='STEAM Starter Curriculum'
-          width={400}
-          height={400}
-          className='h-full w-full object-cover'
+          fill
+          className='object-cover'
         />
       </div>
     </div>
