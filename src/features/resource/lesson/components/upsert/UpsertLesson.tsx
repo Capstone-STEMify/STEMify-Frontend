@@ -147,7 +147,7 @@ interface UpsertLessonProps {
 export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonProps) {
   const locale = useLocale()
   const router = useRouter()
-  const t = useTranslations('lessonManagement')
+  const t = useTranslations('LessonDetails')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const tv = useTranslations('validation')
@@ -277,77 +277,55 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
     >
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <div className='space-y-6 lg:col-span-2'>
-          <SCard
-            className='w-full gap-3'
-            title={t('title.label')}
-            description={t('title.note')}
-            content={
-              <form.AppField
-                name='title'
-                children={(field) => (
-                  <field.TextAreaField placeholder={t('title.placeholder')} className='rounded-lg border-gray-300' />
-                )}
+          <form.AppField
+            name='title'
+            children={(field) => (
+              <field.TextAreaField
+                label={t('form.fields.title.label')}
+                placeholder={t('form.fields.title.placeholder')}
+                className='rounded-lg border-gray-300'
               />
-            }
+            )}
           />
 
-          <SCard
-            className='gap-3'
-            title={t('description.label')}
-            description={t('description.note')}
-            content={
-              <form.AppField
-                name='description'
-                children={(field) => (
-                  <field.TextAreaField
-                    placeholder={t('description.placeholder')}
-                    className='h-50 rounded-lg border-gray-300'
-                  />
-                )}
+          <form.AppField
+            name='description'
+            children={(field) => (
+              <field.TextAreaField
+                label={t('form.fields.description.label')}
+                placeholder={t('form.fields.description.placeholder')}
+                className='h-50 rounded-lg border-gray-300'
               />
-            }
+            )}
           />
 
-          <SCard
-            className='gap-3'
-            title={t('learningOutcome.label')}
-            description={t('learningOutcome.note')}
-            content={
-              <form.AppField
-                name='learningOutcome'
-                children={(field) => (
-                  <field.TextAreaField
-                    placeholder={t('learningOutcome.placeholder')}
-                    className='h-50 rounded-lg border-gray-300'
-                  />
-                )}
+          <form.AppField
+            name='learningOutcome'
+            children={(field) => (
+              <field.TextAreaField
+                label={t('form.fields.learningOutcome.label')}
+                placeholder={t('learningOutcome.placeholder')}
+                className='h-50 rounded-lg border-gray-300'
               />
-            }
+            )}
           />
 
-          <SCard
-            className='gap-3'
-            title={t('requirement.label')}
-            description={t('requirement.note')}
-            content={
-              <form.AppField
-                name='requirement'
-                children={(field) => (
-                  <field.TextAreaField
-                    placeholder={t('requirement.placeholder')}
-                    className='h-30 rounded-lg border-gray-300'
-                  />
-                )}
+          <form.AppField
+            name='requirement'
+            children={(field) => (
+              <field.TextAreaField
+                label={t('form.fields.requirements.label')}
+                placeholder={t('form.fields.requirements.placeholder')}
+                className='h-30 rounded-lg border-gray-300'
               />
-            }
+            )}
           />
         </div>
 
         <div className='space-y-6'>
           <SCard
             className='gap-2'
-            title={t('skill.label')}
-            description={t('skill.note')}
+            title={t('form.fields.skills.label')}
             content={
               <form.AppField
                 name='skills'
@@ -366,8 +344,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
 
           <SCard
             className='gap-2'
-            title={t('topic.label')}
-            description={t('topic.note')}
+            title={t('form.fields.topics.label')}
             content={
               <form.AppField
                 name='topics'
@@ -386,8 +363,7 @@ export default function UpsertLesson({ courseIdModal, onSuccess }: UpsertLessonP
 
           <SCard
             className='gap-3'
-            title={t('standard.label')}
-            description={t('standard.note')}
+            title={t('form.fields.standards.label')}
             content={
               <form.AppField
                 name='standards'

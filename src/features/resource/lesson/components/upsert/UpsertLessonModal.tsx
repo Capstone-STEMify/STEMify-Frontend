@@ -1,3 +1,4 @@
+import { Button } from '@/components/shadcn/button'
 import { Dialog, DialogContent } from '@/components/shadcn/dialog'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import UpsertLesson from '@/features/resource/lesson/components/upsert/UpsertLesson'
@@ -14,7 +15,7 @@ interface UpsertLessonModalProps {
 export default function UpsertLessonModal({ courseIdModal, onConfirm }: UpsertLessonModalProps) {
   const { lessonId } = useParams()
   const { closeModal } = useModal()
-  const t = useTranslations('lessonManagement')
+  const t = useTranslations('LessonDetails')
 
   const handleSuccess = () => {
     if (typeof onConfirm === 'function') {
@@ -27,9 +28,10 @@ export default function UpsertLessonModal({ courseIdModal, onConfirm }: UpsertLe
     <Dialog open onOpenChange={closeModal}>
       <DialogContent>
         <DialogTitle>
-          <h1>{lessonId ? `${t('updateTitle')}` : `${t('createTitle')}`}</h1>
+          <h1>{lessonId ? `${t('form.title.update')}` : `${t('form.title.create')}`}</h1>
         </DialogTitle>
-        <ScrollArea className='h-[550px] w-5xl pr-5'>
+        <hr />
+        <ScrollArea className='h-[500px] w-4xl pr-5'>
           <UpsertLesson courseIdModal={courseIdModal} onSuccess={handleSuccess} />
         </ScrollArea>
       </DialogContent>

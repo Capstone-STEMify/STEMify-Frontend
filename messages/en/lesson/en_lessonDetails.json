@@ -33,6 +33,42 @@
       "title": "YOU ARE NOT LOGGED IN",
       "description": "Please login or sign up for free to get access to this content.",
       "button": "Sign In"
+    },
+    "form": {
+      "title": {
+        "create": "Create Lesson",
+        "update": "Update Lesson"
+      },
+      "fields": {
+        "title": {
+          "label": "Lesson Title",
+          "placeholder": "Enter lesson title"
+        },
+        "description": {
+          "label": "Lesson Description",
+          "placeholder": "Enter lesson description"
+        },
+        "learningOutcome": {
+          "label": "Learning Outcomes",
+          "placeholder": "Enter learning outcomes"
+        },
+        "requirements": {
+          "label": "Requirements",
+          "placeholder": "Enter requirements"
+        },
+        "skills": {
+          "label": "Skills",
+          "note": "Select skills"
+        },
+        "topics": {
+          "label": "Topics",
+          "note": "Select topics"
+        },
+        "standards": {
+          "label": "Standards",
+          "note": "Select standards"
+        }
+      }
     }
   }
 }
