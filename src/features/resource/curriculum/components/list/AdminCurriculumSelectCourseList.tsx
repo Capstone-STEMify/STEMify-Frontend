@@ -8,6 +8,7 @@ import { setPageIndex, setPageSize, setSearchTerm } from '@/features/resource/co
 import { CourseQueryParams } from '@/features/resource/course/types/course.type'
 import { useAddCourseToCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
 import React, { useEffect } from 'react'
 import { toast } from 'sonner'
@@ -24,7 +25,7 @@ export default function AdminCurriculumSelectCourseList({
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const dispatch = useAppDispatch()
-
+  const { closeModal } = useModal()
   const columns = useGetCourseColumn({ isPopup: true })
   const visibleKeys = ['select', 'code', 'title', 'imageUrl']
   const filteredColumns = columns.filter((col) =>
@@ -81,8 +82,10 @@ export default function AdminCurriculumSelectCourseList({
           <Badge variant={'outline'} className='bg-sky-100 text-blue-500'>
             Selected courses: {selectedIds.length}
           </Badge>
-          <div>
-            <Button variant='ghost'>{tc('button.cancel')} </Button>
+          <div className='space-x-2'>
+            <Button type='button' variant='outline' onClick={closeModal}>
+              {tc('button.cancel')}
+            </Button>
             <Button className='bg-amber-custom-400' onClick={() => handleAddCoursesToCurriculum(selectedIds)}>
               {tc('button.save')}
             </Button>

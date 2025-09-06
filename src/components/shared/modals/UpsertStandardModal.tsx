@@ -2,6 +2,7 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import UpsertStandard from '@/features/resource/standard/components/upsert/UpsertStandard'
 import { useModal } from '@/providers/ModalProvider'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 interface UpsertStandardModalProps {
@@ -11,6 +12,7 @@ interface UpsertStandardModalProps {
 
 export default function UpsertStandardModal({ id, onConfirm }: UpsertStandardModalProps) {
   const { closeModal } = useModal()
+  const t = useTranslations('standard')
 
   const handleSuccess = () => {
     if (typeof onConfirm === 'function') {
@@ -21,8 +23,11 @@ export default function UpsertStandardModal({ id, onConfirm }: UpsertStandardMod
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogTitle></DialogTitle>
-      <DialogContent className='w-full sm:max-w-[425px]'>
+      <DialogContent className='w-[95%] rounded-xl p-4 sm:max-w-md sm:p-6 md:max-w-lg lg:max-w-xl'>
+        <DialogTitle>
+          <h1>{id ? `${t('form.title.update')}` : `${t('form.title.create')}`}</h1>
+        </DialogTitle>
+        <hr />
         <UpsertStandard id={id} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>

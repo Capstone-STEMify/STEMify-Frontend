@@ -12,6 +12,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
 import { Button } from '@/components/shadcn/button'
 import { useTranslations } from 'next-intl'
+import { useModal } from '@/providers/ModalProvider'
 
 type NiceSelectProps = {
   label: string
@@ -140,10 +141,11 @@ interface UpsertAgeRangeProps {
 
 export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangeProps) {
   const isEditing = !!id
-
+  const { closeModal } = useModal()
   const tv = useTranslations('validation')
   const t = useTranslations('Admin.ageRange')
   const tt = useTranslations('toast')
+  const tc = useTranslations('common')
 
   const ageRangeSchema = z
     .object({
@@ -215,8 +217,6 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
 
   return (
     <form onSubmit={handleSubmit} className='space-y-6'>
-      <h2 className='text-2xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
-
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
         <NiceSelect
           label={t('mini_name')}
@@ -254,7 +254,10 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
         />
       ) : null}
 
-      <div className='flex justify-end gap-2 pt-4'>
+      <div className='mb-3 flex justify-end gap-3'>
+        <Button type='button' variant='outline' onClick={closeModal}>
+          {tc('button.cancel')}
+        </Button>
         <Button type='submit' className='bg-amber-custom-400' disabled={!isValid || isCreating || isUpdating}>
           {isEditing ? `${t('updateButton')}` : `${t('createButton')}`}
         </Button>

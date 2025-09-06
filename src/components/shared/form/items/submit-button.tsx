@@ -9,7 +9,7 @@ type SubmitButtonProps = {
   size?: 'sm' | 'lg' | 'default' | 'icon' | null | undefined
 }
 
-export const SubmitButton = ({ children, className, loading = false, size = 'lg' }: SubmitButtonProps) => {
+export const SubmitButton = ({ children, className, loading = false, size = 'default' }: SubmitButtonProps) => {
   const form = useFormContext()
 
   const [isSubmitting, canSubmit] = useStore(form.store, (state) => [state.isSubmitting, state.canSubmit])

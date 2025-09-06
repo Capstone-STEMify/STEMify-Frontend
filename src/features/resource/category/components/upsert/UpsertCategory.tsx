@@ -12,6 +12,8 @@ import {
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 import { parseWithZod } from '@conform-to/zod/v4'
+import { Button } from '@/components/shadcn/button'
+import { useModal } from '@/providers/ModalProvider'
 
 type CategoryFormData = {
   name: string
@@ -28,10 +30,11 @@ interface UpsertCategoryProps {
 
 export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
   const isEditing = !!id
-
+  const { closeModal } = useModal()
   const tv = useTranslations('validation')
   const t = useTranslations('Admin.topic')
   const tt = useTranslations('toast')
+  const tc = useTranslations('common')
 
   const categorySchema = z.object({
     name: z.string().min(1, tv('category.name'))
@@ -90,15 +93,17 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
       }}
       className='space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
-      <SCard
-        title={t('name')}
-        description={t('description')}
-        content={
-          <form.AppField name='name' children={(field) => <field.TextAreaField placeholder={t('placeholder')} />} />
-        }
+      <form.AppField
+        name='name'
+        children={(field) => (
+          <field.TextAreaField label={t('form.fields.name.label')} placeholder={t('form.fields.name.placeholder')} />
+        )}
       />
-      <div className='flex justify-end gap-2 pt-4'>
+
+      <div className='mb-3 flex justify-end gap-3'>
+        <Button type='button' variant='outline' onClick={closeModal}>
+          {tc('button.cancel')}
+        </Button>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
             {isEditing ? `${t('updateButton')}` : `${t('createButton')}`}

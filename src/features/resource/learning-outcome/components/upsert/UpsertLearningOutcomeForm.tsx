@@ -11,6 +11,8 @@ import z from 'zod'
 import { de } from 'zod/v4/locales'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
+import { Button } from '@/components/shadcn/button'
+import { useModal } from '@/providers/ModalProvider'
 
 interface UpsertLearningOutcomeProps {
   id?: number
@@ -19,7 +21,7 @@ interface UpsertLearningOutcomeProps {
 
 export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearningOutcomeProps) {
   const isEditing = !!id
-
+  const { closeModal } = useModal()
   const t = useTranslations('LearningOutcome')
   const tt = useTranslations('toast')
   const tc = useTranslations('common')
@@ -108,7 +110,10 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
           />
         )}
       />
-      <div className='flex justify-end gap-2 pt-4'>
+      <div className='mb-3 flex justify-end gap-3'>
+        <Button type='button' variant='outline' onClick={closeModal}>
+          {tc('button.cancel')}
+        </Button>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
             {tc('button.save')}

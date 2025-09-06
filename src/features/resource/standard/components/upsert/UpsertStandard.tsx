@@ -11,6 +11,8 @@ import {
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/shadcn/button'
+import { useModal } from '@/providers/ModalProvider'
 
 const standardSchema = z.object({
   standardName: z.string().min(2).max(100),
@@ -31,7 +33,8 @@ interface UpsertStandardProps {
 
 export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
   const isEditing = !!id
-
+  const { closeModal } = useModal()
+  const tc = useTranslations('common')
   const t = useTranslations('Admin.standard')
   const tt = useTranslations('toast')
 
@@ -86,31 +89,20 @@ export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
       }}
       className='space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? `${t('editTitle')}` : `${t('createTitle')}`}</h2>
-
-      <SCard
-        title={t('name')}
-        description={t('description')}
-        content={
-          <form.AppField
-            name='standardName'
-            children={(field) => <field.TextAreaField placeholder={'Empowered Learner'} />}
-          />
-        }
+      <form.AppField
+        name='standardName'
+        children={(field) => <field.TextAreaField label={t('name')} placeholder={'Empowered Learner'} />}
       />
 
-      <SCard
-        title={t('description')}
-        description={t('description')}
-        content={
-          <form.AppField
-            name='description'
-            children={(field) => <field.TextAreaField placeholder={t('placeholder')} />}
-          />
-        }
+      <form.AppField
+        name='description'
+        children={(field) => <field.TextAreaField label={t('description')} placeholder={t('placeholder')} />}
       />
 
-      <div className='flex justify-end gap-2 pt-4'>
+      <div className='mb-3 flex justify-end gap-3'>
+        <Button type='button' variant='outline' onClick={closeModal}>
+          {tc('button.cancel')}
+        </Button>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
             {isEditing ? `${t('updateButton')}` : `${t('createButton')}`}

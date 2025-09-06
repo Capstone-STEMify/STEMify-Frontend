@@ -24,6 +24,8 @@ import { fileToBase64 } from '@/utils/index'
 import { Skill } from '@/features/resource/skill/types/skill.type'
 import { Category } from '@/features/resource/category/types/category.type'
 import { Standard } from '@/features/resource/standard/types/standard.type'
+import { useModal } from '@/providers/ModalProvider'
+import { Button } from '@/components/shadcn/button'
 
 type LessonFormData = {
   title: string
@@ -143,11 +145,13 @@ interface UpsertLessonProps {
 }
 
 export default function UpsertLesson({ onSuccess }: UpsertLessonProps) {
-  const { courseId, lessonId } = useParams()
   const t = useTranslations('LessonDetails')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const tv = useTranslations('validation')
+
+  const { closeModal } = useModal()
+  const { courseId, lessonId } = useParams()
 
   const lessonSchema = z.object({
     title: z.string().min(10, tv('lesson.title', { length: 10 })),
@@ -375,9 +379,13 @@ export default function UpsertLesson({ onSuccess }: UpsertLessonProps) {
           }
         />
       </div>
-      <div className='flex justify-end'>
+      <div className='mb-3 flex justify-end gap-3'>
+        <Button type='button' variant='outline' onClick={closeModal}>
+          {tc('button.cancel')}
+        </Button>
+
         <form.AppForm>
-          <form.SubmitButton className='bg-amber-custom-400 rounded-full'>{tc('button.submit')}</form.SubmitButton>
+          <form.SubmitButton className='bg-amber-custom-400'>{tc('button.submit')}</form.SubmitButton>
         </form.AppForm>
       </div>
     </form>

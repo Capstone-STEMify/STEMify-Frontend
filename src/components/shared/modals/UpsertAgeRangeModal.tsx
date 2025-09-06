@@ -2,6 +2,7 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import UpsertAgeRange from '@/features/resource/age-range/components/upsert/UpsertAgeRange'
 import { useModal } from '@/providers/ModalProvider'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 interface UpsertAgeRangeModalProps {
@@ -11,6 +12,7 @@ interface UpsertAgeRangeModalProps {
 
 export default function UpsertAgeRangeModal({ id, onConfirm }: UpsertAgeRangeModalProps) {
   const { closeModal } = useModal()
+  const t = useTranslations('category')
 
   const handleSuccess = () => {
     if (typeof onConfirm === 'function') {
@@ -21,9 +23,12 @@ export default function UpsertAgeRangeModal({ id, onConfirm }: UpsertAgeRangeMod
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogTitle></DialogTitle>
+      <DialogContent className='w-[95%] rounded-xl p-4 sm:max-w-md sm:p-6 md:max-w-lg lg:max-w-xl'>
+        <DialogTitle>
+          <h1>{id ? `${t('form.title.update')}` : `${t('form.title.create')}`}</h1>
+        </DialogTitle>
+        <hr />
 
-      <DialogContent className='w-full sm:max-w-lg'>
         <UpsertAgeRange id={id} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>

@@ -17,6 +17,8 @@ import { fileToBase64 } from '@/utils/index'
 import { SCard } from '@/components/shared/card/SCard'
 import { useLocale, useTranslations } from 'next-intl'
 import { Course, CourseLevel } from '@/features/resource/course/types/course.type'
+import { Button } from '@/components/shadcn/button'
+import { useModal } from '@/providers/ModalProvider'
 
 const defaultCourseData: CourseFormData = {
   code: '',
@@ -109,12 +111,12 @@ export default function UpsertCourse({ courseId, onSuccess }: UpsertCourseProps)
   const userId = useAppSelector((state) => state.auth.user?.userId)
   const router = useRouter()
   const imageFieldRef = useRef<any>(null)
-  // const courseId = params.courseId
   const t = useTranslations('course')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const initialCourseDataRef = useRef<CourseFormData | null>(null)
   const locale = useLocale()
+  const { closeModal } = useModal()
 
   const { data: ageRanges } = useGetAllAgeRangeQuery()
   const { data: courseData, isLoading } = useGetCourseByIdQuery(courseId!, {
@@ -293,9 +295,12 @@ export default function UpsertCourse({ courseId, onSuccess }: UpsertCourseProps)
           }
         />
       </div>
-      <div className='mb-2 flex justify-end'>
+      <div className='mb-3 flex justify-end gap-3'>
+        <Button type='button' variant='outline' onClick={closeModal}>
+          {tc('button.cancel')}
+        </Button>
         <form.AppForm>
-          <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 rounded-full'>
+          <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400'>
             {tc('button.submit')}
           </form.SubmitButton>
         </form.AppForm>

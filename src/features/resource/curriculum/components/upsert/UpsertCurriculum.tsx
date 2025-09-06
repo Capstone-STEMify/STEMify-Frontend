@@ -16,6 +16,8 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { Button } from '@/components/shadcn/button'
+import { useModal } from '@/providers/ModalProvider'
 
 const defaultCurriculum: CurriculumFormData = {
   code: '',
@@ -80,6 +82,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
   const t = useTranslations('curriculum')
   const tt = useTranslations('toast')
   const tc = useTranslations('common')
+  const { closeModal } = useModal()
   const imageFieldRef = useRef<any>(null)
   const initialCurriculumDataRef = useRef<CurriculumFormData | null>(null)
   const router = useRouter()
@@ -139,7 +142,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
 
   return (
     <form
-      className='space-y-4 px-7'
+      className='space-y-4 px-5'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
@@ -186,9 +189,12 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
           )}
         />
       </div>
-      <div className='flex justify-end'>
+      <div className='mb-3 flex justify-end gap-3'>
+        <Button type='button' variant='outline' onClick={closeModal}>
+          {tc('button.cancel')}
+        </Button>
         <form.AppForm>
-          <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 rounded-full'>
+          <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400'>
             {tc('button.save')}
           </form.SubmitButton>
         </form.AppForm>
