@@ -102,7 +102,7 @@ export default function LessonTable({
   return (
     <div>
       <LessonListAction />
-      <div className='my-4 flex items-center justify-between gap-3'>
+      <div className='flex items-center justify-between gap-3'>
         {courseIdSelected && (
           <Button
             variant='outline'
@@ -141,7 +141,6 @@ export default function LessonTable({
               handleSaveOrder(orderedLessonIds)
               if (refetch) refetch()
             }}
-            className='mt-5'
           />
         </TabsContent>
 

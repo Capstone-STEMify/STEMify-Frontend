@@ -4,13 +4,13 @@ import { Button } from '@/components/shadcn/button'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
 import { SCard } from '@/components/shared/card/SCard'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
-import { useParams, useRouter } from 'next/navigation'
-import { BookOpen, Clock, Edit, SquarePen, Trash2 } from 'lucide-react'
+import { useParams } from 'next/navigation'
+import { BookOpen, SquarePen, Trash2 } from 'lucide-react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
+import { CourseStatus } from '@/features/resource/course/types/course.type'
 import {
   useDeleteCourseMutation,
   useGetCourseByIdQuery,
@@ -18,40 +18,14 @@ import {
 } from '@/features/resource/course/api/courseApi'
 import LessonTable from '@/features/resource/lesson/components/list/LessonTable'
 import { useModal } from '@/providers/ModalProvider'
-import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { getLevelBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
 
-const levelBadgeClass = (level?: string): string => {
-  const map: Record<string, string> = {
-    [CourseLevel.BEGINNER]: 'bg-green-100 text-green-800 border-green-300',
-    [CourseLevel.INTERMEDIATE]: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    [CourseLevel.ADVANCED]: 'bg-red-100 text-red-800 border-red-300'
-  }
-  return map[level ?? ''] ?? 'bg-muted text-muted-foreground'
-}
-
-const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
-  const map: Record<CourseStatus, string> = {
-    [CourseStatus.DRAFT]: 'bg-gray-200 text-gray-800 border-gray-300',
-    [CourseStatus.PUBLISHED]: 'bg-blue-100 text-blue-800 border-blue-300',
-    [CourseStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    [CourseStatus.DELETED]: 'bg-red-100 text-red-800 border-red-300',
-    [CourseStatus.PENDING]: 'bg-amber-100 text-amber-800 border-amber-300',
-    [CourseStatus.REJECTED]: 'bg-red-200 text-red-900 border-red-300',
-    [CourseStatus.APPROVED]: 'bg-green-100 text-green-800 border-green-300'
-  }
-
-  return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
-}
-
-export default function CourseDetailForAdmin() {
+export default function AdminCourseDetail() {
   const t = useTranslations('Admin.course_details')
   const tt = useTranslations('toast')
-  const tc = useTranslations('common')
 
-  const locale = useLocale()
   const params = useParams()
-  const router = useRouter()
   const { openModal } = useModal()
 
   // Set courseId in Redux store
@@ -83,7 +57,6 @@ export default function CourseDetailForAdmin() {
 
   const createdAt = course.data.createdDate ? new Date(course.data.createdDate).toLocaleString() : 'N/A'
   const updatedAt = course.data.lastModifiedDate ? new Date(course.data.lastModifiedDate).toLocaleString() : 'N/A'
-  const createdBy = course.data.createdByUserName?.trim() || 'STEMify Staff'
 
   const handleUpdateCourseStatus = async (status: CourseStatus) => {
     try {
@@ -99,16 +72,13 @@ export default function CourseDetailForAdmin() {
       console.error('Failed to update course status:', error)
     }
   }
-  const handleUpdate = () => {
-    router.push(`/${locale}/admin/course/update/${courseId}`)
-  }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!courseId) {
       return toast.error(tt('errorSpecific.id'))
     }
     try {
-      const res = deleteCourse(courseId).unwrap()
+      deleteCourse(courseId).unwrap()
       toast.success(tt('successMessage.delete'))
     } catch (error) {
       toast.error(tt('errorMessage'))
@@ -117,16 +87,14 @@ export default function CourseDetailForAdmin() {
   }
 
   return (
-    <div className='grid grid-cols-1 gap-12 md:grid-cols-3'>
-      {/* LEFT: Course content */}
-      <div className='flex flex-col md:col-span-2'>
-        {/* Course Header */}
+    <div className='grid grid-cols-1 gap-12 xl:grid-cols-3'>
+      <div className='xl:col-span-2'>
         <div className='flex items-center gap-2'>
           <h1 className='mb-4 text-4xl font-bold text-gray-900'>{course.data.title}</h1>
           <span className='cursor-pointer text-blue-500'>
             <SquarePen
               onClick={() => {
-                openModal('upsertLesson', { lesson: course.data.id })
+                openModal('upsertCourse', { courseId: course.data.id })
               }}
             />
           </span>
@@ -159,7 +127,7 @@ export default function CourseDetailForAdmin() {
           </span>
           <span>
             {t('level')}:{' '}
-            <Badge className={levelBadgeClass(course.data.level)}>{capitalizeFirst(course.data.level)}</Badge>
+            <Badge className={getLevelBadgeClass(course.data.level)}>{capitalizeFirst(course.data.level)}</Badge>
           </span>
         </div>
         <hr className='mb-6 border-gray-300' />
@@ -192,9 +160,9 @@ export default function CourseDetailForAdmin() {
       </div>
 
       {/* RIGHT: Thumbnail, Metadata, Actions */}
-      <div className='space-y-6'>
+      <div className='space-y-6 xl:col-span-1'>
         {/* Thumbnail */}
-        <div className='relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-md'>
+        <div className='relative mx-auto aspect-[4/3] max-w-[300px] overflow-hidden rounded-2xl shadow-md xl:max-w-xs'>
           <Image
             src={course.data.imageUrl || '/images/fallback.png'}
             alt={course.data.title}
@@ -288,8 +256,8 @@ export default function CourseDetailForAdmin() {
         )}
       </div>
       {/* Divider Section before Lesson Table */}
-      <div className='pt-5 md:col-span-3'>
-        <div className='flex items-center gap-3 pb-3'>
+      <div className='col-span-1 pt-5 xl:col-span-3'>
+        <div className='flex items-center gap-3'>
           <hr className='flex-grow border-t border-gray-300' />
           <h1 className='text-sky-custom-600 text-3xl font-semibold'>{t('lesson')}</h1>
           <hr className='flex-grow border-t border-gray-300' />

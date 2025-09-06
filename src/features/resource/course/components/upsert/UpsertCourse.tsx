@@ -100,12 +100,16 @@ function mapCourseToFormData(course: ApiSuccessResponse<Course>): CourseFormData
   }
 }
 
-export default function UpsertCourse() {
+type UpsertCourseProps = {
+  courseId?: number
+  onSuccess?: () => void
+}
+
+export default function UpsertCourse({ courseId, onSuccess }: UpsertCourseProps) {
   const userId = useAppSelector((state) => state.auth.user?.userId)
   const router = useRouter()
   const imageFieldRef = useRef<any>(null)
-  const params = useParams()
-  const courseId = params.courseId
+  // const courseId = params.courseId
   const t = useTranslations('course')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
@@ -113,7 +117,7 @@ export default function UpsertCourse() {
   const locale = useLocale()
 
   const { data: ageRanges } = useGetAllAgeRangeQuery()
-  const { data: courseData, isLoading } = useGetCourseByIdQuery(courseId ? Number(courseId) : 0, {
+  const { data: courseData, isLoading } = useGetCourseByIdQuery(courseId!, {
     skip: !courseId
   })
 
@@ -134,6 +138,7 @@ export default function UpsertCourse() {
         if (courseId) {
           const patchJson = await PatchCourseJsonPayload(initialCourseDataRef.current!, value, userId!)
           const res = await updateCourse({ id: Number(courseId), body: patchJson }).unwrap()
+          onSuccess?.()
           toast.success(tt('successMessage.update', { title: res.data.title }), {
             action: {
               label: 'View Course',
@@ -146,6 +151,7 @@ export default function UpsertCourse() {
           const jsonPayload = await CreateCourseJsonPayload(value, userId!)
           const res = await createCourse(jsonPayload).unwrap()
           toast.success(tt('successMessage.create', { title: res.data.title }))
+          onSuccess?.()
           router.push(`/${locale}/resource/course/${res.data.id}`)
         }
       } catch (err) {
@@ -171,107 +177,84 @@ export default function UpsertCourse() {
 
   return (
     <form
-      className='mb-20'
+      className='space-y-5'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
       }}
     >
-      <div className='grid grid-cols-3 gap-8'>
-        <div className='space-y-6 lg:col-span-2'>
-          <div className='grid grid-cols-2 gap-5'>
-            <SCard
-              className='gap-3'
-              title={t('form.fields.code.label')}
-              description={t('form.fields.code.note')}
-              content={
-                <form.AppField
-                  name='code'
-                  children={(field: any) => (
-                    <field.TextAreaField
-                      placeholder={t('form.fields.code.placeholder')}
-                      className='rounded-lg border-gray-300'
-                    />
-                  )}
-                />
-              }
-            />
-            <SCard
-              className='gap-3'
-              title={t('form.fields.title.label')}
-              description={t('form.fields.title.note')}
-              content={
-                <form.AppField
-                  name='title'
-                  children={(field: any) => (
-                    <field.TextAreaField
-                      placeholder={t('form.fields.title.placeholder')}
-                      className='rounded-lg border-gray-300'
-                    />
-                  )}
-                />
-              }
-            />
-          </div>
+      <div className='space-y-6'>
+        <form.AppField
+          name='imageUrl'
+          children={(field) => {
+            imageFieldRef.current = field
+            return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
+          }}
+        />
 
-          <SCard
-            className='gap-3'
-            title={t('form.fields.description.label')}
-            description={t('form.fields.description.note')}
-            content={
-              <form.AppField
-                name='description'
-                children={(field: any) => (
-                  <field.TextAreaField
-                    placeholder={t('form.fields.description.placeholder')}
-                    className='h-30 rounded-lg border-gray-300'
-                  />
-                )}
+        <div className='grid grid-cols-2 gap-5'>
+          <form.AppField
+            name='code'
+            children={(field) => (
+              <field.TextAreaField
+                label={t('form.fields.code.label')}
+                placeholder={t('form.fields.code.placeholder')}
+                className='rounded-lg border-gray-300'
               />
-            }
+            )}
           />
 
-          <SCard
-            className='gap-3'
-            title={t('form.fields.prerequisites.label')}
-            description={t('form.fields.prerequisites.note')}
-            content={
-              <form.AppField
-                name='prerequisites'
-                children={(field: any) => (
-                  <field.TextAreaField
-                    placeholder={t('form.fields.prerequisites.placeholder')}
-                    className='h-30 rounded-lg border-gray-300'
-                  />
-                )}
+          <form.AppField
+            name='title'
+            children={(field) => (
+              <field.TextAreaField
+                label={t('form.fields.title.label')}
+                placeholder={t('form.fields.title.placeholder')}
+                className='rounded-lg border-gray-300'
               />
-            }
-          />
-
-          <SCard
-            className='gap-3'
-            title={t('form.fields.studentTasks.label')}
-            description={t('form.fields.studentTasks.note')}
-            content={
-              <form.AppField
-                name='studentTasks'
-                children={(field: any) => (
-                  <field.TextAreaField
-                    placeholder={t('form.fields.studentTasks.placeholder')}
-                    className='h-30 rounded-lg border-gray-300'
-                  />
-                )}
-              />
-            }
+            )}
           />
         </div>
 
-        <div className='space-y-6'>
-          <SCard
-            className='gap-2'
-            title={t('form.fields.ageRange.label')}
-            description={t('form.fields.ageRange.note')}
-            content={
+        <form.AppField
+          name='description'
+          children={(field: any) => (
+            <field.TextAreaField
+              label={t('form.fields.description.label')}
+              placeholder={t('form.fields.description.placeholder')}
+              className='h-30 rounded-lg border-gray-300'
+            />
+          )}
+        />
+
+        <form.AppField
+          name='prerequisites'
+          children={(field: any) => (
+            <field.TextAreaField
+              label={t('form.fields.prerequisites.label')}
+              placeholder={t('form.fields.prerequisites.placeholder')}
+              className='h-30 rounded-lg border-gray-300'
+            />
+          )}
+        />
+
+        <form.AppField
+          name='studentTasks'
+          children={(field: any) => (
+            <field.TextAreaField
+              label={t('form.fields.studentTasks.label')}
+              placeholder={t('form.fields.studentTasks.placeholder')}
+              className='h-30 rounded-lg border-gray-300'
+            />
+          )}
+        />
+      </div>
+
+      <div className='grid grid-cols-2 gap-5'>
+        <SCard
+          title={t('form.fields.ageRange.label')}
+          content={
+            <>
               <form.AppField
                 name='ageRangeId'
                 children={(field) => (
@@ -283,48 +266,39 @@ export default function UpsertCourse() {
                         value: a.id.toString(),
                         label: a.ageRangeLabel
                       }))}
-                    className='grid grid-cols-4 gap-y-4'
+                    className='grid grid-cols-3 gap-y-4'
                   />
                 )}
               />
-            }
-          />
+            </>
+          }
+        />
 
-          <SCard
-            className='gap-2'
-            title={t('form.fields.level.label')}
-            description={t('form.fields.level.note')}
-            content={
-              <form.AppField
-                name='level'
-                children={(field) => (
-                  <field.RadioField
-                    options={[
-                      { value: CourseLevel.BEGINNER, label: t('form.fields.level.options.beginner') },
-                      { value: CourseLevel.INTERMEDIATE, label: t('form.fields.level.options.intermediate') },
-                      { value: CourseLevel.ADVANCED, label: t('form.fields.level.options.advanced') }
-                    ]}
-                    className='flex gap-y-4'
-                  />
-                )}
-              />
-            }
-          />
-
-          <form.AppField
-            name='imageUrl'
-            children={(field) => {
-              imageFieldRef.current = field
-              return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
-            }}
-          />
-
-          <form.AppForm>
-            <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 w-full rounded-full'>
-              {tc('button.submit')}
-            </form.SubmitButton>
-          </form.AppForm>
-        </div>
+        <SCard
+          title={t('form.fields.level.label')}
+          content={
+            <form.AppField
+              name='level'
+              children={(field) => (
+                <field.RadioField
+                  options={[
+                    { value: CourseLevel.BEGINNER, label: t('form.fields.level.options.beginner') },
+                    { value: CourseLevel.INTERMEDIATE, label: t('form.fields.level.options.intermediate') },
+                    { value: CourseLevel.ADVANCED, label: t('form.fields.level.options.advanced') }
+                  ]}
+                  className='grid grid-cols-3 gap-y-4'
+                />
+              )}
+            />
+          }
+        />
+      </div>
+      <div className='mb-2 flex justify-end'>
+        <form.AppForm>
+          <form.SubmitButton loading={isSubmitting} className='bg-amber-custom-400 rounded-full'>
+            {tc('button.submit')}
+          </form.SubmitButton>
+        </form.AppForm>
       </div>
     </form>
   )

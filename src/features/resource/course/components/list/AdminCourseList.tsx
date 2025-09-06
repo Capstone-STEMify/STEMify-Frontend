@@ -18,25 +18,15 @@ import { LayoutGrid, TableIcon } from 'lucide-react'
 import { getCourseStatusBadgeClass, getLevelBadgeClass } from '@/utils/badgeColor'
 import STabs from '@/components/shared/STabs'
 import { useGetCourseColumn } from '@/features/resource/course/components/list/CourseColum'
-
-type ViewMode = 'table' | 'card'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function AdminCourseList() {
-  const t = useTranslations('Admin')
   const tc = useTranslations('common')
   const dispatch = useAppDispatch()
   const columns = useGetCourseColumn({ isPopup: false })
   const router = useRouter()
   const locale = useLocale()
-
-  const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    if (typeof window === 'undefined') return 'table'
-    return (localStorage.getItem('course_view_mode') as ViewMode) || 'table'
-  })
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') localStorage.setItem('course_view_mode', viewMode)
-  }, [viewMode])
+  const { openModal } = useModal()
 
   const courseParams = useAppSelector((state) => state.course)
 
@@ -76,11 +66,18 @@ export default function AdminCourseList() {
     <div>
       <STabs
         className='mt-4'
-        defaultValue={viewMode}
+        defaultValue={'table'}
         additionalContent={{
           leftSide: (
             <div className='flex items-center justify-between gap-3'>
-              <Button variant='outline' size='sm' className='bg-amber-custom-400 text-white' onClick={handleCreate}>
+              <Button
+                variant='outline'
+                size='sm'
+                className='bg-amber-custom-400 text-white'
+                onClick={() => {
+                  openModal('upsertCourse')
+                }}
+              >
                 <IconPlus />
                 <span className='hidden lg:inline'>{tc('button.add')}</span>
               </Button>
