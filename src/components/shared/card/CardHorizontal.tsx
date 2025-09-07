@@ -34,7 +34,7 @@ export default function CardHorizontal({
               alt={title}
               width={150}
               height={150}
-              className='max-h-60 w-full rounded-lg object-cover md:h-[150px] md:w-[150px]'
+              className='aspect-square max-h-60 w-full rounded-lg object-cover md:h-[150px] md:w-[150px]'
             />
           </div>
 

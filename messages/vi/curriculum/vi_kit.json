@@ -1,0 +1,24 @@
+{
+  "kits": {
+    "list": {
+      "title": "Danh sách bộ kit",
+      "description": "Quản lý và tổ chức các bộ kit cho nền tảng giáo dục của bạn.",
+      "noData": "Không có bộ kit nào. Vui lòng thêm bộ kit mới để bắt đầu."
+    },
+    "detail": {
+      "title": "Chi tiết bộ kit",
+      "description": "Xem và chỉnh sửa chi tiết của bộ kit đã chọn."
+    },
+    "form": {
+      "title": {
+        "create": "Tạo bộ kit mới",
+        "edit": "Chỉnh sửa bộ kit"
+      },
+      "fields": {
+        "name": "Tên bộ kit",
+        "description": "Mô tả",
+        "imageUrl": "Hình ảnh"
+      }
+    }
+  }
+}

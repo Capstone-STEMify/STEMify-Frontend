@@ -17,6 +17,7 @@ import CardHorizontal from '@/components/shared/card/CardHorizontal'
 export default function AdminCurriculumList() {
   const t = useTranslations('curriculum')
   const tt = useTranslations('toast')
+  const tc = useTranslations('common')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
@@ -65,14 +66,14 @@ export default function AdminCurriculumList() {
 
   return (
     <div>
-      <div className='grid grid-cols-1 gap-10 lg:grid-cols-2'>
+      <div className='mt-4 grid grid-cols-1 gap-10 lg:grid-cols-2'>
         {rows.map((curriculum) => (
           <CardHorizontal
             key={curriculum.id}
             imageUrl={curriculum.imageUrl}
             title={curriculum.title}
             description={curriculum.description}
-            buttonText='View Details'
+            buttonText={tc('button.view')}
             onButtonClick={() => router.push(`/${locale}/admin/curriculum/${curriculum.id}`)}
           />
         ))}

@@ -8,6 +8,7 @@ import React from 'react'
 import AdminCurriculumInformationSection from './AdminCurriculumInformationSection'
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import KitList from '@/features/resource/kit/components/list/KitList'
 
 export default function AdminCurriculumDetail() {
   const { curriculumId } = useParams()
@@ -29,11 +30,10 @@ export default function AdminCurriculumDetail() {
         {curriculumId && (
           <>
             <hr className='my-10' />
-
             <LearningOutcomeTable curriculumId={Number(curriculumId)} />
-
             <hr className='my-10' />
-
+            <KitList kits={data?.data?.kits || []} />
+            <hr className='my-10' />
             <AdminCurriculumCourseList curriculumId={Number(curriculumId)} courses={data?.data?.courses} />
           </>
         )}

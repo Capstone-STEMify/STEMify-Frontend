@@ -76,25 +76,28 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
 
   return (
     <div>
-      <h2 className='text-center text-3xl'>{t('list.courseListTitle')}</h2>
-      <div className='mt-3 flex justify-end space-x-2'>
-        {orderedCourseIds.length > 0 && (
-          <Button className='bg-emerald-400' onClick={handleSaveOrder}>
-            <Plus className='mr-1 h-4 w-4' />
-            {tc('button.order')}
-          </Button>
-        )}
+      <div className='mb-3 flex items-center justify-between'>
+        <h2 className='text-2xl font-semibold'>{t('list.courseListTitle')}</h2>
+        <div className='flex justify-end space-x-2'>
+          {orderedCourseIds.length > 0 && (
+            <Button className='bg-emerald-400' onClick={handleSaveOrder}>
+              <Plus className='mr-1 h-4 w-4' />
+              {tc('button.order')}
+            </Button>
+          )}
 
-        <Button
-          className='bg-amber-custom-400 mb-5'
-          onClick={() => {
-            openModal('curriculumSelectCourseListModal', { curriculumId })
-          }}
-        >
-          <Plus className='mr-1 h-4 w-4' />
-          {t('details.addCourse')}
-        </Button>
+          <Button
+            className='bg-amber-custom-400 mb-5'
+            onClick={() => {
+              openModal('curriculumSelectCourseListModal', { curriculumId })
+            }}
+          >
+            <Plus className='mr-1 h-4 w-4' />
+            {t('details.addCourse')}
+          </Button>
+        </div>
       </div>
+
       <DataTable
         data={courses || []}
         columns={filteredColumns}
