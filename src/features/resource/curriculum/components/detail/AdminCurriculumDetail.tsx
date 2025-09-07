@@ -8,7 +8,7 @@ import React from 'react'
 import AdminCurriculumInformationSection from './AdminCurriculumInformationSection'
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import KitList from '@/features/resource/kit/components/list/KitList'
+import KitList from '@/features/resource/kit/components/list/CurriculumKitList'
 
 export default function AdminCurriculumDetail() {
   const { curriculumId } = useParams()
