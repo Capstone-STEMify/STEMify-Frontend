@@ -20,7 +20,10 @@
       "title": "Không có dữ liệu bài học",
       "description": "Hiện tại không có bài học nào cho khóa học này.",
       "no_section": "Không có nội dung cho phần này",
-      "no_section_v2": "Không có Phần nào"
+      "no_section_v2": "Không có Phần nào",
+      "noSkills": "Không có kỹ năng nào",
+      "noTopics": "Không có chủ đề nào",
+      "noStandards": "Không có tiêu chuẩn nào"
     },
     "action": {
       "add": "Thêm vào khóa học",

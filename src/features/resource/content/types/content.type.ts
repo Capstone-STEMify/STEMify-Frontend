@@ -5,7 +5,6 @@ export type Content = {
   id: number
   contentType: ContentType
   contentBody: string
-  contentName: string
   fileName: string
   fileUrl: string
   uploadDate: string

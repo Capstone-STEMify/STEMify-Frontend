@@ -20,8 +20,8 @@ import UpsertLearningOutcomeModal from '@/features/resource/learning-outcome/com
 import UpsertCurriculumModal from '@/features/resource/curriculum/components/upsert/UpsertCurriculumModal'
 import CurriculumSelectCourseListModal from '@/components/shared/modals/CurriculumSelectCourseListModal'
 import UpsertCourseModal from '@/features/resource/course/components/modal/UpsertCourseModal'
-import ContentDetailModal from '@/features/resource/content/components/modal/ContentDetailModal'
-import UpsertContentModal from '@/features/resource/content/components/modal/UpsertContentModal'
+import ContentDetailModal from '@/features/resource/content/components/detail/ContentDetailModal'
+import UpsertContentModal from '@/features/resource/content/components/upsert/UpsertContentModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},

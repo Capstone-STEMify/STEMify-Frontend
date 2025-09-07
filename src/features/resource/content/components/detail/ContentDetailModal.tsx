@@ -6,14 +6,14 @@ import ContentDetail from '@/features/resource/content/components/detail/Content
 import { useModal } from '@/providers/ModalProvider'
 
 type ContentDetailModalProps = {
-  contentId?: number
+  sectionId: number
 }
 
-export default function ContentDetailModal({ contentId }: ContentDetailModalProps) {
+export default function ContentDetailModal({ sectionId }: ContentDetailModalProps) {
   const { openModal, closeModal } = useModal()
 
   const handleEditContent = () => {
-    openModal('upsertContent', { contentId })
+    openModal('upsertContent', { sectionId })
   }
 
   return (
@@ -29,8 +29,8 @@ export default function ContentDetailModal({ contentId }: ContentDetailModalProp
         </DialogTitle>
         <hr />
 
-        <ScrollArea className='h-[550px] w-7xl'>
-          <ContentDetail contentId={contentId} />
+        <ScrollArea className='h-[60vh] w-[70vw] max-w-6xl'>
+          <ContentDetail sectionId={sectionId} />
         </ScrollArea>
       </DialogContent>
     </Dialog>

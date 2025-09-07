@@ -134,13 +134,13 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                       {lesson.skillNames.length > 0 ? (
                         <div className='flex flex-wrap gap-2'>
                           {lesson.skillNames.map((skill) => (
-                            <Badge key={skill} className='border border-rose-300 bg-rose-100 text-rose-800'>
+                            <Badge key={skill} className='border border-rose-300 bg-rose-100 text-sm text-rose-800'>
                               {skill}
                             </Badge>
                           ))}
                         </div>
                       ) : (
-                        <p className='text-gray-500'>{t('noSkills')}</p>
+                        <p className='text-sm text-gray-500'>{t('notFound.noSkills')}</p>
                       )}
                     </div>
                     <div>
@@ -156,7 +156,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                           ))}
                         </div>
                       ) : (
-                        <p className='text-gray-500'>{t('noTopics')}</p>
+                        <p className='text-sm text-gray-500'>{t('notFound.noTopics')}</p>
                       )}
                     </div>
                     <div>
@@ -172,7 +172,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                           ))}
                         </div>
                       ) : (
-                        <p className='text-gray-500'>{t('noStandards')}</p>
+                        <p className='text-sm text-gray-500'>{t('notFound.noStandards')}</p>
                       )}
                     </div>
                   </div>
