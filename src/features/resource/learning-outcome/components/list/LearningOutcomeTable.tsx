@@ -48,7 +48,7 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
           <label htmlFor='select-backlog' className='cursor-default'>
             {t('list.title')}
           </label>
-          <span className='rounded bg-green-200 px-2 text-sm'>{learningOutcomes?.data.totalCount}</span>
+          <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{learningOutcomes?.data.totalCount}</span>
         </div>
         {/* Create learning outcome */}
         <Button size='sm' className='bg-amber-400 text-sm' onClick={handleCreate}>

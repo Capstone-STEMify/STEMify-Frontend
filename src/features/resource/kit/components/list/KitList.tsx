@@ -14,7 +14,10 @@ export default function KitList({ kits }: KitListProps) {
 
   return (
     <div className='mt-4 gap-10'>
-      <h2 className='mb-6 text-2xl font-semibold'>{t('list.title')}</h2>
+      <h2 className='mb-6 text-2xl font-semibold'>
+        {t('list.title')} <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{kits.length}</span>
+      </h2>
+
       {kits.map((kit) => (
         <CardHorizontal
           key={kit.id}

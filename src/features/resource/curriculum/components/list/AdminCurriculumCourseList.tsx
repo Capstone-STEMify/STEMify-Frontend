@@ -77,7 +77,11 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
   return (
     <div>
       <div className='mb-3 flex items-center justify-between'>
-        <h2 className='text-2xl font-semibold'>{t('list.courseListTitle')}</h2>
+        <h2 className='text-2xl font-semibold'>
+          {t('list.courseListTitle')}{' '}
+          <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{data?.data.totalCount}</span>
+        </h2>
+
         <div className='flex justify-end space-x-2'>
           {orderedCourseIds.length > 0 && (
             <Button className='bg-emerald-400' onClick={handleSaveOrder}>
@@ -87,7 +91,7 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
           )}
 
           <Button
-            className='bg-amber-custom-400 mb-5'
+            className='bg-amber-custom-400'
             onClick={() => {
               openModal('curriculumSelectCourseListModal', { curriculumId })
             }}
