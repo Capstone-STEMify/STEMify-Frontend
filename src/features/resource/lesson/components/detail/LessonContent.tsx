@@ -78,7 +78,7 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
           {content.data.items.map((c) => (
             <div key={c.id} className='prose flex-1'>
               <ScrollArea className='h-[650px]'>
-                <TiptapViewer content={normalizeMarkdown(c.contentName)} />
+                <TiptapViewer content={normalizeMarkdown(c.contentBody)} />
               </ScrollArea>
             </div>
           ))}

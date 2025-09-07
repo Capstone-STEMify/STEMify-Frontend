@@ -21,7 +21,7 @@ import { useSession } from 'next-auth/react'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 export default function LessonListContent() {
