@@ -2,12 +2,16 @@
 import React from 'react'
 import { useTranslations } from 'next-intl'
 import { Course, CourseLevel, CourseStatus } from '../../types/course.type'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, Row } from '@tanstack/react-table'
 import { useParams, useRouter } from 'next/navigation'
 import { useModal } from '@/providers/ModalProvider'
 import { useDeleteCourseMutation, useUpdateCourseMutation } from '../../api/courseApi'
 import { toast } from 'sonner'
-import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import {
+  createActionsColumnFromItems,
+  createSelectColumn,
+  DragHandle
+} from '@/components/shared/data-table/columns-helpers'
 import z from 'zod'
 import { Badge } from '@/components/shadcn/badge'
 import Image from 'next/image'
@@ -77,6 +81,17 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
   }
 
   return [
+    ...(curriculumId
+      ? [
+          {
+            id: 'drag',
+            header: () => null,
+            cell: ({ row }: { row: Row<Course> }) => <DragHandle id={row.original.id} />,
+            enableSorting: false,
+            enableHiding: false
+          }
+        ]
+      : []),
     createSelectColumn<Course>(),
     {
       accessorKey: 'code',
