@@ -12,6 +12,7 @@ import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
+import Placeholder from '@tiptap/extension-placeholder'
 
 import { Toolbar } from './Toolbar'
 import { useEffect } from 'react'
@@ -68,22 +69,27 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
       Subscript,
       TextAlign.configure({
         types: ['heading', 'paragraph']
+      }),
+      Placeholder.configure({
+        placeholder: 'Bắt đầu viết nội dung ở đây...',
+        emptyEditorClass:
+          'before:content-[attr(data-placeholder)] before:text-gray-400 before:pointer-events-none before:absolute before:left-20 before:top-6'
       })
     ],
-    content: content || '<p>Bắt đầu viết ở đây...</p>',
+    content: content || '',
     onUpdate({ editor }) {
       onChange(editor.getHTML())
     },
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert w-full max-w-full py-6 px-20 focus:outline-none'
+        class: 'prose dark:prose-invert max-w-7xl py-6 pl-20 pr-5 focus:outline-none'
       }
     }
   })
   useEffect(() => {
     if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content || '<p>Bắt đầu viết ở đây...</p>')
+      editor.commands.setContent(content || '')
     }
   }, [content, editor])
   return (
