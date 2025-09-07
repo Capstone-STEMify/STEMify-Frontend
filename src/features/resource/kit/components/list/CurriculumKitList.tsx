@@ -7,7 +7,7 @@ import React from 'react'
 type KitListProps = {
   kits: Kit[]
 }
-export default function KitList({ kits }: KitListProps) {
+export default function CurriculumKitList({ kits }: KitListProps) {
   const t = useTranslations('kits')
   const tc = useTranslations('common')
   const { openModal } = useModal()
