@@ -1,4 +1,5 @@
 import { Button } from '@/components/shadcn/button'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import TiptapViewer from '@/components/tiptap/TiptapViewer'
 import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
 import { useModal } from '@/providers/ModalProvider'
@@ -17,7 +18,12 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
     openModal('upsertContent', { sectionId })
   }
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading)
+    return (
+      <div className='flex items-center justify-center'>
+        <LoadingComponent size={150} />
+      </div>
+    )
   if (!contentData?.data?.items?.length)
     return (
       <div className='flex flex-col items-center justify-center space-y-4 rounded-2xl border bg-gray-50 py-10 text-center'>
