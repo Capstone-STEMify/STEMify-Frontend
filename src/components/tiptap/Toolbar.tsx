@@ -236,8 +236,8 @@ export const Toolbar = ({ editor, onSave }: Props) => {
       </ToolbarButton>
       <div className='flex justify-end'>
         <SToolTip content='Lưu' side='bottom'>
-          <Button variant={'ghost'}>
-            <Save className='h-4 w-4' onClick={onSave} />
+          <Button variant={'ghost'} onClick={onSave}>
+            <Save className='h-4 w-4' />
           </Button>
         </SToolTip>
       </div>
