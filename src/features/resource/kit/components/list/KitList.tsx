@@ -22,7 +22,7 @@ export default function KitList() {
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
 
-  const queryParams : KitSliceParams = useAppSelector((state) => state.kit)
+  const queryParams: KitSliceParams = useAppSelector((state) => state.kit)
   const { data: kitData, isLoading } = useSearchKitQuery(queryParams)
   const [deleteKit] = useDeleteKitMutation()
 

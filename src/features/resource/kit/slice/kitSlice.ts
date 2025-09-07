@@ -3,7 +3,7 @@ import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: KitSliceParams = {
   pageNumber: 1,
-  pageSize: 5,
+  pageSize: 8,
   search: '',
   orderBy: '',
   status: ''
