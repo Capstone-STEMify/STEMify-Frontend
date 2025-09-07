@@ -63,7 +63,6 @@ type UpsertContentProps = {
 
 export default function UpsertContent({ sectionId, contentId }: UpsertContentProps) {
   const tt = useTranslations('toast')
-
   const { data, isLoading } = useGetContentByIdQuery(contentId!, { skip: !contentId })
 
   const [createContent] = useCreateContentMutation()
