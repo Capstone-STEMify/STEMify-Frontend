@@ -4,19 +4,16 @@ import * as React from 'react'
 import {
   IconCamera,
   IconChartBar,
-  IconDashboard,
   IconDatabase,
   IconFileAi,
   IconFileDescription,
   IconFileWord,
-  IconFolder,
   IconHelp,
   IconInnerShadowTop,
   IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
-  IconUsers
 } from '@tabler/icons-react'
 
 import { NavDocuments } from 'components/shadcn/nav-documents'
@@ -35,8 +32,7 @@ import {
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 
-import { signOut, useSession } from 'next-auth/react'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useSession } from 'next-auth/react'
 import LoadingComponent from '../shared/loading/LoadingComponent'
 
 const data = {
@@ -49,6 +45,11 @@ const data = {
     {
       title: 'side_bar.curriculum',
       url: '/admin/curriculum',
+      icon: IconListDetails
+    },
+    {
+      title: 'side_bar.kit',
+      url: '/admin/kit',
       icon: IconListDetails
     },
     {
