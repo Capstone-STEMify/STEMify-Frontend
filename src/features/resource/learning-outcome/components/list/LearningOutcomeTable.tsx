@@ -60,7 +60,7 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
       {/* Empty learning outcomes */}
       {isLoading || !learningOutcomes || learningOutcomes?.data.items.length === 0 ? (
         <Card className='border-2 border-dashed border-gray-300 py-10 text-center text-sm text-gray-500'>
-          {t('PLO.empty')}
+          {t('list.noData')}
         </Card>
       ) : (
         <DataTable
