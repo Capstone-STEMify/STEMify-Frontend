@@ -68,7 +68,12 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
   }
 
   const handleRemoveCourse = async (courseIds: number[]) => {
-    await deleteCourseFromCurriculum({ curriculumId: Number(curriculumId!), courseIds }).unwrap()
+    try {
+      await deleteCourseFromCurriculum({ curriculumId: Number(curriculumId!), courseIds }).unwrap()
+      toast.success(tt('successMessage.removeCourseFromCurriculum'))
+    } catch (error) {
+      toast.error(tt('errorMessage'))
+    }
   }
 
   return [
@@ -169,7 +174,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
         onClick: async ({ original }) => {
           // Open the confirmation modal for removing course from curriculum
           openModal('confirm', {
-            message: tc('confirmMessage.removeCourse', { title: original.title }),
+            message: tt('confirmMessage.removeCourse', { title: original.title }),
             onConfirm: () => handleRemoveCourse([original.id])
           })
         }

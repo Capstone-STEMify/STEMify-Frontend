@@ -10,6 +10,7 @@
       "enroll": "Enrollment request submitted successfully!. Please wait for approval",
       "enrollDes": "You have enroll to {title} at {time}",
       "addToCurriculum": "Successfully added to curriculum!",
+      "removeCourseFromCurriculum": "Successfully removed course from this curriculum!",
       "lessonStart": "Lesson Started!",
       "lessonStatus": "Lesson status updated to {status}!",
       "sectionComplete": "Section Completed!"

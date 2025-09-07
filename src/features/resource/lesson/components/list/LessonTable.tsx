@@ -142,7 +142,7 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
                       >
                         <div>
                           <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
-                          <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
+                          <p className='line-clamp-3 text-xs text-gray-600'>{lesson.description}</p>
                         </div>
 
                         <div className='mt-auto flex flex-wrap items-center gap-2'>
