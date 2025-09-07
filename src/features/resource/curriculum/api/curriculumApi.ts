@@ -21,13 +21,27 @@ export const curriculumApi = createCrudApi<Curriculum, CurriculumQueryParams>({
         'Course'
       ]
     }),
-
     deleteCourseFromCurriculum: builder.mutation<Curriculum, { curriculumId: number; courseIds: number[] }>({
       query: ({ curriculumId, courseIds }) => ({
         url: `/curriculums/${curriculumId}/courses`,
         method: 'DELETE',
         body: {
           courseIds
+        }
+      }),
+      invalidatesTags: (result, error, { curriculumId }) => [
+        { type: 'Curriculum', id: curriculumId },
+        'Curriculum',
+        'Course'
+      ]
+    }),
+
+    updateCourseOrder: builder.mutation<Curriculum, { curriculumId: number; orderedCourseIds: number[] }>({
+      query: ({ curriculumId, orderedCourseIds }) => ({
+        url: `/curriculums/${curriculumId}/courses`,
+        method: 'PATCH',
+        body: {
+          orderedCourseIds
         }
       }),
       invalidatesTags: (result, error, { curriculumId }) => [
@@ -54,5 +68,6 @@ export const {
 
   // curriculum courses
   useAddCourseToCurriculumMutation,
-  useDeleteCourseFromCurriculumMutation
+  useDeleteCourseFromCurriculumMutation,
+  useUpdateCourseOrderMutation
 } = curriculumApi
