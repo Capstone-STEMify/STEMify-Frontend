@@ -3,7 +3,8 @@
     "list": {
       "title": "Danh sách bộ kit",
       "description": "Quản lý và tổ chức các bộ kit cho nền tảng giáo dục của bạn.",
-      "noData": "Không có bộ kit nào. Vui lòng thêm bộ kit mới để bắt đầu."
+      "noData": "Không có bộ kit nào. Vui lòng thêm bộ kit mới để bắt đầu.",
+      "searchPlaceholder": "Tìm kiếm bộ kit ở đây..."
     },
     "detail": {
       "title": "Chi tiết bộ kit",
