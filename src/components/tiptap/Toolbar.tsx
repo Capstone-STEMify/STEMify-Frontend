@@ -108,7 +108,7 @@ export const Toolbar = ({ editor, onSave }: Props) => {
   }
 
   return (
-    <div className='flex flex-wrap items-center justify-center gap-1 rounded-t-lg border-b border-gray-200 bg-gray-50 p-1.5 pr-20 dark:border-gray-700 dark:bg-gray-900'>
+    <div className='flex flex-wrap items-center justify-start gap-1 rounded-t-lg border-b border-gray-200 bg-gray-50 p-1.5 pr-10 dark:border-gray-700 dark:bg-gray-900'>
       <input type='file' ref={fileInputRef} onChange={handleFileChange} className='hidden' accept='image/*' />
       <ToolbarButton onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()}>
         <Undo className='h-4 w-4' />

@@ -8,7 +8,6 @@ import {
   useUpdateContentMutation,
   useGetContentByIdQuery
 } from '@/features/resource/content/api/contentApi'
-import { useAppSelector } from '@/hooks/redux-hooks'
 import removeMd from 'remove-markdown'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
@@ -125,8 +124,6 @@ export default function UpsertContent({ sectionId, contentId }: UpsertContentPro
       </div>
     )
   }
-
-  if (!contentId) return <div>No content ID</div>
 
   return (
     <form
