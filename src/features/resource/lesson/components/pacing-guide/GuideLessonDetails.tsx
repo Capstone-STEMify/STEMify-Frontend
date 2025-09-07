@@ -98,21 +98,31 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
           <hr className='mb-6 border-gray-300' />
           {/* Description */}
           <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('description')}</h3>
-          <p className='whitespace-pre-line text-gray-700'>{lesson.description}</p>
+          <p
+            className={`leading-relaxed whitespace-pre-line text-gray-700 ${!lesson.description ? 'text-sm italic' : ''}`}
+          >
+            {lesson.description || t('notFound.noDescription')}
+          </p>
 
           <hr className='my-6 border-gray-300' />
           {/* Learning Outcome */}
           <div>
             <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('learningOutcome')}</h3>
-            <p className='leading-relaxed whitespace-pre-line text-gray-700'>{lesson.learningOutcome}</p>
+            <p
+              className={`leading-relaxed whitespace-pre-line text-gray-700 ${!lesson.learningOutcome ? 'text-sm italic' : ''}`}
+            >
+              {lesson.learningOutcome || t('notFound.noOutcomes')}
+            </p>
           </div>
 
           <hr className='my-6 border-gray-300' />
 
           <div>
             <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800 uppercase'>{t('requirements')}</h3>
-            <p className='leading-relaxed whitespace-pre-line text-gray-700'>
-              {lesson.requirement || 'No requirements specified.'}
+            <p
+              className={`leading-relaxed whitespace-pre-line text-gray-700 ${!lesson.requirement ? 'text-sm italic' : ''}`}
+            >
+              {lesson.requirement || t('notFound.noRequirements')}
             </p>
           </div>
         </div>
@@ -140,7 +150,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                           ))}
                         </div>
                       ) : (
-                        <p className='text-sm text-gray-500'>{t('notFound.noSkills')}</p>
+                        <p className='text-sm text-gray-500 italic'>{t('notFound.noSkills')}</p>
                       )}
                     </div>
                     <div>
@@ -156,7 +166,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                           ))}
                         </div>
                       ) : (
-                        <p className='text-sm text-gray-500'>{t('notFound.noTopics')}</p>
+                        <p className='text-sm text-gray-500 italic'>{t('notFound.noTopics')}</p>
                       )}
                     </div>
                     <div>
@@ -172,7 +182,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                           ))}
                         </div>
                       ) : (
-                        <p className='text-sm text-gray-500'>{t('notFound.noStandards')}</p>
+                        <p className='text-sm text-gray-500 italic'>{t('notFound.noStandards')}</p>
                       )}
                     </div>
                   </div>

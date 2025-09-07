@@ -23,7 +23,10 @@
       "no_section_v2": "No Sections Available",
       "noSkills": "No Skills Available",
       "noTopics": "No Topics Available",
-      "noStandards": "No Standards Available"
+      "noStandards": "No Standards Available",
+      "noRequirements": "No requirements specified.",
+      "noOutcomes": "No learning outcomes specified.",
+      "noDescription": "No description available."
     },
     "action": {
       "add": "Add to course",

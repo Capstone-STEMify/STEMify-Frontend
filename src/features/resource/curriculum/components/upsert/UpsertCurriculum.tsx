@@ -160,7 +160,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
           name='code'
           children={(field) => (
             <field.TextField
-              label='Code'
+              label={t('form.fields.code.label')}
               placeholder={t('form.fields.code.placeholder')}
               className='rounded-lg border-gray-300'
             />
@@ -171,7 +171,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
           name='title'
           children={(field) => (
             <field.TextField
-              label='Title'
+              label={t('form.fields.name.label')}
               placeholder={t('form.fields.name.placeholder')}
               className='rounded-lg border-gray-300'
             />
@@ -182,7 +182,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
           name='description'
           children={(field) => (
             <field.TextAreaField
-              label='Description'
+              label={t('form.fields.description.label')}
               placeholder={t('form.fields.description.placeholder')}
               className='h-30 rounded-lg border-gray-300 lg:w-[550px]'
             />
