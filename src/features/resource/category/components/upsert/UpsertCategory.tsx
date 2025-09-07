@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl'
 import { parseWithZod } from '@conform-to/zod/v4'
 import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
+import { title } from 'process'
 
 type CategoryFormData = {
   name: string
@@ -60,10 +61,10 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
         if (isEditing) {
           const body = { name: value.name }
           await updateCategory({ id: id!, body }).unwrap()
-          toast.success(tt('successMessage.update'))
+          toast.success(tt('successMessage.update', { title: value.name }))
         } else {
           await createCategory(value).unwrap()
-          toast.success(tt('successMessage.create'))
+          toast.success(tt('successMessage.create', { title: value.name }))
         }
         onSuccess?.()
       } catch (err) {
@@ -95,7 +96,7 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
     >
       <form.AppField
         name='name'
-        children={(field) => <field.TextAreaField label={t('name')} placeholder={t('description')} />}
+        children={(field) => <field.TextField label={t('name')} placeholder={t('description')} />}
       />
 
       <div className='mb-3 flex justify-end gap-3'>
