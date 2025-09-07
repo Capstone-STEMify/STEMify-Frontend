@@ -12,6 +12,7 @@ type CardHorizontalProps = {
   buttonText?: string
   onButtonClick?: () => void
   className?: string
+  height?: number
 }
 
 export default function CardHorizontal({
@@ -20,11 +21,12 @@ export default function CardHorizontal({
   description,
   buttonText = 'Learn More',
   onButtonClick,
-  className = ''
+  className = '',
+  height = 150
 }: CardHorizontalProps) {
   return (
     <SCard
-      className={`w-full max-w-3xl rounded-xl ${className}`}
+      className={`w-full rounded-xl ${className}`}
       content={
         <div className='flex flex-col items-start gap-4 md:flex-row'>
           {/* Image */}
@@ -32,14 +34,15 @@ export default function CardHorizontal({
             <Image
               src={imageUrl || '/images/resources/courses.png'}
               alt={title}
-              width={150}
-              height={150}
-              className='aspect-square max-h-60 w-full rounded-lg object-cover md:h-[150px] md:w-[150px]'
+              width={height}
+              height={height}
+              style={{ width: height, height: height }}
+              className='aspect-square max-h-60 w-full rounded-lg object-cover md:h-auto md:w-auto'
             />
           </div>
 
           {/* Text content */}
-          <div className='flex h-full min-h-[150px] w-full flex-col'>
+          <div className={`flex h-full min-h-[${height}px] w-full flex-col`}>
             <h3 className='line-clamp-1 text-lg font-semibold text-gray-800'>{title}</h3>
             <p className='mt-1 line-clamp-3 text-sm text-gray-600 2xl:line-clamp-5'>{description}</p>
 

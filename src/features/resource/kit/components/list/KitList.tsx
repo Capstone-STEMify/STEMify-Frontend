@@ -25,6 +25,8 @@ export default function KitList({ kits }: KitListProps) {
           title={kit.name}
           description={kit.description || ''}
           buttonText={tc('button.view')}
+          className='max-w-xl'
+          height={100}
         />
       ))}
     </div>

@@ -75,6 +75,7 @@ export default function AdminCurriculumList() {
             description={curriculum.description}
             buttonText={tc('button.view')}
             onButtonClick={() => router.push(`/${locale}/admin/curriculum/${curriculum.id}`)}
+            className='max-w-3xl'
           />
         ))}
       </div>
