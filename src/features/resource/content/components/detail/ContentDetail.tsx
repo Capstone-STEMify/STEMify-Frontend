@@ -1,7 +1,6 @@
 import TiptapViewer from '@/components/tiptap/TiptapViewer'
-import { useGetContentByIdQuery, useSearchContentQuery } from '@/features/resource/content/api/contentApi'
+import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
 import { normalizeMarkdown } from '@/utils/index'
-import { useParams } from 'next/navigation'
 
 type ContentDetailProps = {
   sectionId: number

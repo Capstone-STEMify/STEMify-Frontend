@@ -7,13 +7,14 @@ import { useModal } from '@/providers/ModalProvider'
 
 type ContentDetailModalProps = {
   sectionId: number
+  contentId?: number
 }
 
-export default function ContentDetailModal({ sectionId }: ContentDetailModalProps) {
+export default function ContentDetailModal({ sectionId, contentId }: ContentDetailModalProps) {
   const { openModal, closeModal } = useModal()
 
   const handleEditContent = () => {
-    openModal('upsertContent', { sectionId })
+    openModal('upsertContent', { contentId })
   }
 
   return (

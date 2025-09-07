@@ -77,7 +77,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert min-h-[400px] w-full max-w-full p-6 focus:outline-none'
+        class: 'prose dark:prose-invert  w-full max-w-full p-6 focus:outline-none'
       }
     }
   })
@@ -89,7 +89,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
   return (
     <div className='rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900'>
       <Toolbar onSave={onSave} editor={editor} />
-      <ScrollArea className='h-[550px]'>
+      <ScrollArea className='h-[calc(80vh-100px)]'>
         <EditorContent editor={editor} />
       </ScrollArea>
     </div>

@@ -4,9 +4,9 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { useAppForm } from '@/components/shared/form/items'
 import {
-  useSearchContentQuery,
   useCreateContentMutation,
-  useUpdateContentMutation
+  useUpdateContentMutation,
+  useGetContentByIdQuery
 } from '@/features/resource/content/api/contentApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import removeMd from 'remove-markdown'
@@ -14,7 +14,6 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 import { fileToBase64 } from '@/utils/index'
 import { ContentType } from '@/features/resource/content/types/content.type'
-import { parseWithZod } from '@conform-to/zod/v4'
 
 const contentSchema = (tv: ReturnType<typeof useTranslations<'validation'>>) =>
   z.object({
@@ -60,23 +59,18 @@ async function PatchContentJsonPayload(oldData: ContentFormData, newData: Conten
 
 type UpsertContentProps = {
   sectionId: number
+  contentId?: number
 }
 
-export default function UpsertContent({ sectionId }: UpsertContentProps) {
-  const tv = useTranslations('validation')
+export default function UpsertContent({ sectionId, contentId }: UpsertContentProps) {
   const tt = useTranslations('toast')
-  const tc = useTranslations('common')
-  const token = useAppSelector((state) => state.auth.token)
 
-  const { data: contentData, isLoading: isContentLoading } = useSearchContentQuery(
-    { sectionId },
-    { skip: !sectionId || !token }
-  )
+  const { data, isLoading } = useGetContentByIdQuery(contentId!, { skip: !contentId })
 
   const [createContent] = useCreateContentMutation()
   const [updateContent] = useUpdateContentMutation()
 
-  const contentItem = contentData?.data.items?.[0] ?? null
+  const contentItem = data?.data ?? null
 
   const form = useAppForm({
     defaultValues: defaultContentData,
@@ -96,7 +90,7 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
             contentType: ContentType.TEXT
           })
           const res = await updateContent({ id: contentItem.id, body: patchJson }).unwrap()
-          toast.success(tt('successMessage.update', { title: res.data.contentName }))
+          toast.success(tt('successMessage.update'))
         } else {
           const jsonPayload = await CreateContentJsonPayload({
             ...value,
@@ -114,17 +108,17 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
   })
 
   useEffect(() => {
-    if (contentData?.data) {
+    if (contentItem) {
       form.reset({
-        contentBody: contentItem?.contentName || '',
+        contentBody: contentItem?.contentBody || '',
         contentType: contentItem?.contentType || ContentType.TEXT,
         file: null,
         filePreviewUrl: contentItem?.fileUrl || ''
       })
     }
-  }, [contentData, form])
+  }, [contentItem, form])
 
-  if (isContentLoading) {
+  if (isLoading) {
     return (
       <div>
         <LoadingComponent size={50} />
@@ -132,12 +126,12 @@ export default function UpsertContent({ sectionId }: UpsertContentProps) {
     )
   }
 
+  if (!contentId) return <div>No content ID</div>
+
   return (
     <form
-      className='space-y-8'
       onSubmit={(e) => {
         e.preventDefault()
-        form.handleSubmit()
       }}
     >
       <form.AppField

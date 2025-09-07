@@ -6,17 +6,18 @@ import { useModal } from '@/providers/ModalProvider'
 
 type UpsertContentModalProps = {
   sectionId?: number
+  contentId?: number
 }
 
-export default function UpsertContentModal({ sectionId }: UpsertContentModalProps) {
+export default function UpsertContentModal({ sectionId, contentId }: UpsertContentModalProps) {
   const { closeModal } = useModal()
 
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogTitle></DialogTitle>
-      <DialogContent className='border-0 bg-transparent p-0 shadow-none'>
-        <div className='w-[70vw] max-w-6xl'>
-          <UpsertContent sectionId={sectionId!} />
+      <DialogContent className='h-[80vh] w-full max-w-5xl border-0 bg-transparent p-0 shadow-none [&>button]:right-8'>
+        <div className='h-full w-full'>
+          <UpsertContent sectionId={sectionId!} contentId={contentId!} />
         </div>
       </DialogContent>
     </Dialog>

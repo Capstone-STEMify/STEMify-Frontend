@@ -46,7 +46,9 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
         return (
           <div
             className='line-clamp-5 w-32 cursor-pointer whitespace-pre-wrap text-blue-500 italic underline'
-            onClick={() => openModal('contentDetail', { sectionId: row.original.id })}
+            onClick={() =>
+              openModal('contentDetail', { sectionId: row.original.id, contentId: row.original.contentIds[0] })
+            }
           >
             {row.getValue('title')}
             <ExternalLink className='ml-1 inline' size={14} />

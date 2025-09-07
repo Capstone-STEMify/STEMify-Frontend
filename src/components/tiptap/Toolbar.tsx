@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
+import SToolTip from '@/components/shared/SToolTip'
 import { type Editor } from '@tiptap/react'
 import {
   Bold,
@@ -24,7 +25,8 @@ import {
   AlignRight,
   AlignJustify,
   Subscript as SubIcon,
-  Superscript as SuperIcon
+  Superscript as SuperIcon,
+  Save
 } from 'lucide-react'
 import { useState, useCallback, useRef, ChangeEvent } from 'react'
 
@@ -106,7 +108,7 @@ export const Toolbar = ({ editor, onSave }: Props) => {
   }
 
   return (
-    <div className='flex flex-wrap items-center justify-center gap-1 rounded-t-lg border-b border-gray-200 bg-gray-50 p-2 dark:border-gray-700 dark:bg-gray-900'>
+    <div className='flex flex-wrap items-center justify-center gap-1 rounded-t-lg border-b border-gray-200 bg-gray-50 p-1.5 pr-20 dark:border-gray-700 dark:bg-gray-900'>
       <input type='file' ref={fileInputRef} onChange={handleFileChange} className='hidden' accept='image/*' />
       <ToolbarButton onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()}>
         <Undo className='h-4 w-4' />
@@ -233,9 +235,11 @@ export const Toolbar = ({ editor, onSave }: Props) => {
         <Eraser className='h-4 w-4' />
       </ToolbarButton>
       <div className='flex justify-end'>
-        <Button variant={'ghost'} onClick={onSave}>
-          Save
-        </Button>
+        <SToolTip content='Lưu' side='bottom'>
+          <Button variant={'ghost'}>
+            <Save className='h-4 w-4' onClick={onSave} />
+          </Button>
+        </SToolTip>
       </div>
     </div>
   )
