@@ -14,7 +14,7 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
   const { openModal } = useModal()
 
   const handleCreateContent = () => {
-    openModal('upsertContent')
+    openModal('upsertContent', { sectionId })
   }
 
   if (isLoading) return <div>Loading...</div>

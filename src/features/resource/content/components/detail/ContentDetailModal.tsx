@@ -14,7 +14,7 @@ export default function ContentDetailModal({ sectionId, contentId }: ContentDeta
   const { openModal, closeModal } = useModal()
 
   const handleEditContent = () => {
-    openModal('upsertContent', { contentId })
+    openModal('upsertContent', { contentId, sectionId })
   }
 
   return (
