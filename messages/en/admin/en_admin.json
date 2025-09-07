@@ -59,7 +59,7 @@
       "editTitle": "Edit Standard",
       "name": "Standard Name",
       "code": "Code",
-      "description": "Enter the name of the Standard.",
+      "description": "Description",
       "placeholder": "e.g., Common Core",
       "createButton": "Create",
       "updateButton": "Update"

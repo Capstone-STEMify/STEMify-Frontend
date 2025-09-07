@@ -3,7 +3,7 @@
     "successMessage": {
       "create": "Đã tạo \"{title}\" thành công!",
       "update": "Đã cập nhật \"{title}\" thành công!",
-      "delete": "Đã xóa \"{title}\" thành công!",
+      "delete": "Đã xóa thành công!",
       "action": "Đã {action} \"{title}\" thành công",
       "review": "Đã gửi để xét duyệt thành công!",
       "saveOrder": "Đã lưu thứ tự thành công!",

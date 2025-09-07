@@ -17,7 +17,7 @@ export function useGetAgeRangeAction(): ColumnDef<AgeRange>[] {
   const handleDelete = async (id: number) => {
     try {
       await deleteAgeRange(id).unwrap()
-      toast.success(`${tt('successMessage.delete', {title: id || ''})}`)
+      toast.success(`${tt('successMessage.delete', { title: id || '' })}`)
     } catch (error) {
       toast.error(tt('errorMessage'))
     }
@@ -53,7 +53,7 @@ export function useGetAgeRangeAction(): ColumnDef<AgeRange>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: `${tm('ageRange')} "${original.ageRangeLabel}"?`,
+            message: `${tt('confirmMessage.delete', { title: original.ageRangeLabel })}`,
             onConfirm: () => handleDelete(original.id)
           })
         }

@@ -54,10 +54,10 @@ export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
       try {
         if (isEditing) {
           await updateStandard({ id: id!, body: value }).unwrap()
-          toast.success(tt('successMessage.update'))
+          toast.success(tt('successMessage.update', { title: value.standardName }))
         } else {
           await createStandard(value).unwrap()
-          toast.success(tt('successMessage.create'))
+          toast.success(tt('successMessage.create', { title: value.standardName }))
         }
         onSuccess?.()
       } catch (err: any) {
@@ -91,7 +91,7 @@ export default function UpsertStandard({ id, onSuccess }: UpsertStandardProps) {
     >
       <form.AppField
         name='standardName'
-        children={(field) => <field.TextAreaField label={t('name')} placeholder={'Empowered Learner'} />}
+        children={(field) => <field.TextField label={t('name')} placeholder={'Empowered Learner'} />}
       />
 
       <form.AppField

@@ -55,10 +55,10 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
       try {
         if (isEditing) {
           await updateSkill({ id: id!, body: value }).unwrap()
-          toast.success(tt('successMessage.update'))
+          toast.success(tt('successMessage.update', { title: value.skillName }))
         } else {
           await createSkill(value).unwrap()
-          toast.success(tt('successMessage.create'))
+          toast.success(tt('successMessage.create', { title: value.skillName }))
         }
         onSuccess?.()
       } catch (err: any) {
@@ -90,12 +90,7 @@ export default function UpsertSkill({ id, onSuccess }: UpsertSkillProps) {
     >
       <form.AppField
         name='skillName'
-        children={(field) => (
-          <field.TextAreaField
-            label={t('form.fields.skillName.label')}
-            placeholder={t('form.fields.skillName.placeholder')}
-          />
-        )}
+        children={(field) => <field.TextAreaField label={t('name')} placeholder={t('description')} />}
       />
 
       <div className='flex justify-end gap-3'>

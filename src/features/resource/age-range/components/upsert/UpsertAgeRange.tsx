@@ -203,10 +203,10 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
     try {
       if (isEditing) {
         await updateAgeRange({ id: id!, body }).unwrap()
-        toast.success(tt('successMessage.update'))
+        toast.success(tt('successMessage.update', { title: body.ageRangeLabel }))
       } else {
         await createAgeRange(body).unwrap()
-        toast.success(tt('successMessage.create'))
+        toast.success(tt('successMessage.create', { title: body.ageRangeLabel }))
       }
       onSuccess?.()
     } catch (err) {

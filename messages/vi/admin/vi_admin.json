@@ -60,7 +60,7 @@
       "editTitle": "Chỉnh sửa tiêu chuẩn",
       "name": "Tên tiêu chuẩn",
       "code": "Mã",
-      "description": "Nhập miêu tả của tiêu chuẩn.",
+      "description": "Mô tả",
       "placeholder": "Ví dụ: Common Core",
       "createButton": "Tạo",
       "updateButton": "Cập nhật"

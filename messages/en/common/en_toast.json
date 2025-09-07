@@ -3,7 +3,7 @@
     "successMessage": {
       "create": "Successfully created \"{title}\"!",
       "update": "Successfully updated \"{title}\"!",
-      "delete": "Successfully deleted \"{title}\"!",
+      "delete": "Successfully deleted!",
       "action": "Successfully {action} \"{title}\"",
       "review": "Successfully submitted to review!",
       "saveOrder": "Successfully saved the order!",

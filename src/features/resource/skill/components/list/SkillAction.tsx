@@ -45,7 +45,7 @@ export function useGetSkillAction(): ColumnDef<Skill>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: tm('confirmDelMessage', { title: original.skillName }),
+            message: tt('confirmMessage.delete', { title: original.skillName }),
             onConfirm: () => handleDelete(original.id)
           })
         }

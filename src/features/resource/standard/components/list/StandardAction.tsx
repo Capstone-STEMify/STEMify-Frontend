@@ -56,7 +56,7 @@ export function useGetStandardAction(): ColumnDef<Standard>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: tm('confirmDelMessage', { title: original.standardName }),
+            message: tt('confirmMessage.delete', { title: original.standardName }),
             onConfirm: () => handleDelete(original.id)
           })
         }

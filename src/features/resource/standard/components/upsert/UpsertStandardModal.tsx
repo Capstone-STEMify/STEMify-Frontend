@@ -12,7 +12,7 @@ interface UpsertStandardModalProps {
 
 export default function UpsertStandardModal({ id, onConfirm }: UpsertStandardModalProps) {
   const { closeModal } = useModal()
-  const t = useTranslations('standard')
+  const t = useTranslations('Admin.standard')
 
   const handleSuccess = () => {
     if (typeof onConfirm === 'function') {
@@ -25,7 +25,7 @@ export default function UpsertStandardModal({ id, onConfirm }: UpsertStandardMod
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className='w-[95%] rounded-xl p-4 sm:max-w-md sm:p-6 md:max-w-lg lg:max-w-xl'>
         <DialogTitle>
-          <h1>{id ? `${t('form.title.update')}` : `${t('form.title.create')}`}</h1>
+          <h1>{id ? `${t('editTitle')}` : `${t('createTitle')}`}</h1>
         </DialogTitle>
         <hr />
         <UpsertStandard id={id} onSuccess={handleSuccess} />
