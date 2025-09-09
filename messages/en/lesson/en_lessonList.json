@@ -1,7 +1,7 @@
 {
   "LessonList": {
     "lesson": "Lesson",
-    "title": "Lessons",
+    "title": "Lesson List",
     "description": "Curriculum-aligned, thematic guides with following educational pedagogical approach. Lessons have teacher and student perspectives.",
     "filterTitle": "Filter Lessons",
     "noLesson": "No Lessons Found.",

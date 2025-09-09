@@ -1,7 +1,7 @@
 {
   "LessonList": {
     "lesson": "Bài Học",
-    "title": "Các Bài Học",
+    "title": "Danh Sách Các Bài Học",
     "description": "Các hướng dẫn theo chủ đề, được căn chỉnh theo chương trình giảng dạy với phương pháp sư phạm giáo dục. Các bài Học có góc nhìn của giáo viên và học sinh.",
     "filterTitle": "Lọc Bài Học",
     "noLesson": "Không Tìm Thấy Bài Học Nào.",
