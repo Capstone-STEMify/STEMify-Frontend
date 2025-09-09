@@ -22,6 +22,7 @@ export default function AdminCurriculumSelectCourseList({
   curriculumId,
   onSuccess
 }: AdminCurriculumSelectCourseListProps) {
+  const t = useTranslations('curriculum')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const dispatch = useAppDispatch()
@@ -74,13 +75,13 @@ export default function AdminCurriculumSelectCourseList({
       <div className='flex justify-between'>
         <SearchBar
           className='w-72'
-          placeholder='Enter course title'
+          placeholder={t('custom.searchCoursePlaceholder')}
           onDebouncedSearch={(value) => dispatch(setSearchTerm(value))}
         />
 
         <div className='flex items-center gap-2'>
           <Badge variant={'outline'} className='bg-sky-100 text-blue-500'>
-            Selected courses: {selectedIds.length}
+            {t('custom.selectedCourses')}: {selectedIds.length}
           </Badge>
           <div className='space-x-2'>
             <Button type='button' variant='outline' onClick={closeModal}>

@@ -45,7 +45,10 @@
       "courseTag": "Course",
       "kitListTitle": "Stemify Kit Included",
       "kitListDescription": "Each curriculum is designed to be used with a specific Stemify Kit, which includes all the necessary materials and components for hands-on learning and exploration. The kit provides a comprehensive set of tools and resources that align with the curriculum's learning objectives, allowing students to engage in interactive and experiential learning activities.",
-      "kitTag": "Stemify Kit"
+      "kitTag": "Stemify Kit",
+      "selectCourseTitle": "Select Courses",
+      "selectedCourses": "Selected courses",
+      "searchCoursePlaceholder": "Search courses by code or title..."
     }
   }
 }
