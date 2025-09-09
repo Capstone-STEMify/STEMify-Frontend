@@ -15,7 +15,7 @@
 //           </div>
 //         }
 //       >
-//         <Workspace3DNew 
+//         <Workspace3DNew
 //           assemblyUrl="/features/assembly/data/octahedron-new.json"
 //           mode="player"
 //           showUI={true}
@@ -27,3 +27,7 @@
 //     </div>
 //   )
 // }
+
+export default function page() {
+  return <div>page</div>
+}

@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Grid } from '@react-three/drei'
 import { Strawbees2Direct } from '@/features/assembly/components/Strawbees2Direct'
 import Workspace3D from '@/features/assembly/components/Workspace3D'
+import Link from 'next/link'
 export default function Strawbees2DirectPage() {
   return (
     <div className='relative h-screen w-full'>
@@ -17,24 +18,24 @@ export default function Strawbees2DirectPage() {
 
       {/* Navigation */}
       <div className='absolute top-4 right-4 z-20 space-x-2'>
-        <a 
+        <Link
           href="/code-lab"
           className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg shadow-lg transition-colors text-sm"
         >
           ← Code Lab
-        </a>
-        <a 
+        </Link>
+        <Link
           href="/code-lab/strawbees2-basic"
           className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg shadow-lg transition-colors text-sm"
         >
           Basic Test
-        </a>
-        <a 
+        </Link>
+        <Link
           href="/code-lab/strawbees2-test"
           className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg shadow-lg transition-colors text-sm"
         >
           Advanced Test
-        </a>
+        </Link>
       </div>
 
       {/* Canvas */}
@@ -46,14 +47,14 @@ export default function Strawbees2DirectPage() {
           intensity={1}
           castShadow
         />
-        
-        <OrbitControls 
+
+        <OrbitControls
           enablePan={true}
           enableZoom={true}
           enableRotate={true}
         />
-        
-        <Grid 
+
+        <Grid
           args={[20, 20, 20, 20]}
           cellSize={1}
           cellThickness={0.5}
@@ -75,7 +76,7 @@ export default function Strawbees2DirectPage() {
         <pointLight position={[10, -10, 10]} intensity={0.3} color="#ffffff" />
       </Canvas>
 
-      <Workspace3D 
+      <Workspace3D
       assemblyUrl='/assemblies/optimized/octahedron.json'
       showUI={true}
       />
