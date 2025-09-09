@@ -20,6 +20,8 @@ import LessonTable from '@/features/resource/lesson/components/list/LessonTable'
 import { useModal } from '@/providers/ModalProvider'
 import { getLevelBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { resetParams, setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 
 export default function AdminCourseDetail() {
   const t = useTranslations('Admin.course_details')
@@ -27,6 +29,7 @@ export default function AdminCourseDetail() {
 
   const params = useParams()
   const { openModal } = useModal()
+  const dispatch = useAppDispatch()
 
   // Set courseId in Redux store
   const courseIdParam = params?.courseId
@@ -36,6 +39,12 @@ export default function AdminCourseDetail() {
   const { data: course, error, isLoading, refetch } = useGetCourseByIdQuery(Number(courseId))
   const [updateCourseStatus] = useUpdateCourseMutation()
   const [deleteCourse] = useDeleteCourseMutation()
+
+  React.useEffect(() => {
+    dispatch(resetParams())
+    dispatch(setPageIndex(1)) // Reset to first page when courseId changes
+    dispatch(setPageSize(50)) // Reset to default page size when courseId changes
+  }, [courseId, refetch])
 
   if (isLoading)
     return (
