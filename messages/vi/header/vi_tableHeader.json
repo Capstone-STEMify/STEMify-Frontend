@@ -1,0 +1,41 @@
+{
+  "tableHeader": {
+    "id": "ID",
+    "userName": "Tên đăng nhập",
+    "email": "Email",
+    "firstName": "Tên",
+    "lastName": "Họ",
+    "userRole": "Vai trò",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "disable": "Vô hiệu hóa",
+    "name": "Tên",
+    "code": "Mã",
+    "image": "Hình ảnh",
+    "noImage": "Không có hình",
+    "title": "Tiêu đề",
+    "level": "Trình độ",
+    "status": "Trạng thái",
+    "createdBy": "Người tạo",
+    "createdDate": "Ngày tạo",
+    "approve": "Duyệt",
+    "reject": "Từ chối",
+    "skillName": "Tên kỹ năng",
+    "standardName": "Tên tiêu chuẩn",
+    "description": "Mô tả",
+    "ageRangeLabel": "Nhãn độ tuổi",
+    "minAge": "Tuổi tối thiểu",
+    "maxAge": "Tuổi tối đa",
+    "PLO": {
+      "name": "Tên",
+      "description": "Mô tả"
+    },
+    "paging": {
+      "previous": "Trước",
+      "next": "Sau",
+      "of": "trên",
+      "row": "dòng ",
+      "select": "được chọn"
+    }
+  }
+}

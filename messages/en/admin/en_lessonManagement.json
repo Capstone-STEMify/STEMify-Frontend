@@ -1,0 +1,52 @@
+{
+  "lessonManagement": {
+    "createTitle": "Create New Lesson",
+    "updateTitle": "Update Lesson",
+    "title": {
+      "label": "Lesson Title",
+      "note": "Enter a descriptive title for the lesson",
+      "placeholder": "e.g., Lesson 1"
+    },
+    "description": {
+      "label": "Lesson Description",
+      "note": "Provide a brief description of the lesson",
+      "placeholder": "e.g., This lesson covers the basics of programming using Python."
+    },
+    "learningOutcome": {
+      "label": "Learning Outcome",
+      "note": "Describe what students will learn after completing the lesson",
+      "placeholder": "e.g., Students will understand basic programming concepts and be able to write simple programs."
+    },
+    "requirement": {
+      "label": "Requirement",
+      "note": "Describe the prerequisites needed to complete the lesson",
+      "placeholder": "e.g., Students should have basic programming knowledge before attending this lesson."
+    },
+    "topic": {
+      "label": "Topics",
+      "note": "Select the topics this course belongs to"
+    },
+    "skill": {
+      "label": "Skills",
+      "note": "Select the skills this course will help develop"
+    },
+    "standard": {
+      "label": "Standards",
+      "note": "Select the education standards this course aligns with"
+    },
+    "ageRange": {
+      "label": "Age Range",
+      "note": "Select the age range this course is suitable for"
+    },
+    "image": {
+      "label": "Cover Image",
+      "note": "Upload cover image",
+      "placeholder": "Make the document more engaging"
+    },
+
+    "courseNotFound": {
+      "title": "Course not found",
+      "description": "You need to select a course before creating a lesson."
+    }
+  }
+}

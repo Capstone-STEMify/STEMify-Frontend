@@ -29,7 +29,8 @@ type CourseDetailContentProps = {
 }
 
 export default function CourseDetailContent({ courseId, enrollmentId }: CourseDetailContentProps) {
-  const t = useTranslations('CourseDetails')
+  const t = useTranslations('course')
+  const tc = useTranslations('common')
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
 
@@ -78,7 +79,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   }
 
   if (!lessonData || lessonData.data.items.length === 0) {
-    return <SEmpty title={t('enrolled.notFound.title')} description={t('enrolled.notFound.description')} />
+    return <SEmpty title={t('details.notFound')} description={t('details.notFoundDescription')} />
   }
 
   return (
@@ -101,7 +102,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
                 }
               >
                 <div>
-                  <p className='text-muted-foreground text-xs font-medium'>{t('enrolled.content.lesson')}</p>
+                  <p className='text-muted-foreground text-xs font-medium'>{t('details.lesson.cardTitle')}</p>
                   <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
                 </div>
@@ -120,13 +121,13 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
                 }
                 items={[
                   <p key='view' className='text-sm'>
-                    {t('enrolled.action.view')}
+                    {tc('button.view')}
                   </p>,
                   <p key='add-to-course' className='text-sm'>
-                    {t('enrolled.action.add')}
+                    {tc('button.add')}
                   </p>,
                   <p key='share' className='text-sm'>
-                    {t('enrolled.action.share')}
+                    {tc('button.share')}
                   </p>
                 ]}
               />

@@ -1,0 +1,51 @@
+{
+  "lessonManagement": {
+    "createTitle": "Tạo bài học mới",
+    "updateTitle": "Cập nhật bài học",
+    "title": {
+      "label": "Tên Bài Học",
+      "note": "Nhập tiêu đề mô tả cho bài học",
+      "placeholder": "Ví dụ: Bài học 1"
+    },
+    "description": {
+      "label": "Mô Tả Bài Học",
+      "note": "Cung cấp một mô tả ngắn gọn về bài học",
+      "placeholder": "Ví dụ: Bài học này bao gồm các kiến thức cơ bản về lập trình bằng Python."
+    },
+    "learningOutcome": {
+      "label": "Mục Tiêu Học Tập",
+      "note": "Mô tả những gì học sinh sẽ học được sau khi hoàn thành bài học",
+      "placeholder": "Ví dụ: Học sinh sẽ hiểu các khái niệm cơ bản về lập trình và có thể viết chương trình đơn giản."
+    },
+    "requirement": {
+      "label": "Yêu Cầu",
+      "note": "Mô tả các yêu cầu cần thiết để hoàn thành bài học",
+      "placeholder": "Ví dụ: Học sinh cần có kiến thức cơ bản về lập trình trước khi tham gia bài học này."
+    },
+    "topic": {
+      "label": "Chủ Đề",
+      "note": "Chọn các chủ đề liên quan đến bài học",
+      "placeholder": "Ví dụ: Lập trình, Python"
+    },
+    "skill": {
+      "label": "Kỹ Năng",
+      "note": "Chọn các kỹ năng liên quan đến bài học",
+      "placeholder": "Ví dụ: Lập trình, Python"
+    },
+    "standard": {
+      "label": "Chuẩn Kiến Thức",
+      "note": "Chọn các chuẩn kiến thức liên quan đến bài học",
+      "placeholder": "Ví dụ: Chuẩn 1, Chuẩn 2"
+    },
+    "image": {
+      "label": "Ảnh Bìa",
+      "note": "Tải lên ảnh bìa",
+      "placeholder": "Làm cho tài liệu trở nên hấp dẫn hơn"
+    },
+
+    "courseNotFound": {
+      "title": "Không thấy Khóa học",
+      "description": "Bạn cần chọn khóa học trước khi tạo bài học."
+    }
+  }
+}

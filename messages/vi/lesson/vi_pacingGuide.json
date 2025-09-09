@@ -1,0 +1,17 @@
+{
+  "PacingGuide": {
+    "ageRange": "Độ tuổi",
+    "duration": "Thời gian",
+    "standards": "Tiêu chuẩn",
+    "skills": "Kỹ năng",
+    "topics": "Chủ đề",
+    "requirement": "Yêu cầu",
+    "learningOutcome": "Mục tiêu học tập",
+    "min": "phút",
+    "table": {
+      "section": "Phần",
+      "duration": "Thời gian",
+      "description": "Mô tả"
+    }
+  }
+}

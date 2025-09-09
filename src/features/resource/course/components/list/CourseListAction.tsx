@@ -20,7 +20,8 @@ import { UserRole } from '@/types/userRole'
 import useDebounce from '@/hooks/useDebounce'
 
 export default function CourseListAction() {
-  const t = useTranslations('CourseList')
+  const t = useTranslations('course')
+  const tc = useTranslations('common')
   const [statusActive, setStatusActive] = useState(false)
 
   const { status } = useSession()
@@ -37,7 +38,7 @@ export default function CourseListAction() {
   // Redux hooks
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.course)
-  const debouncedSearchQuery = useDebounce(filters.search, 500)
+  const debouncedSearchQuery = useDebounce(filters.search || '', 500)
 
   // Lazy queries
   const [getCategory, { data: categories }] = useLazyGetAllCategoryQuery()
@@ -96,7 +97,7 @@ export default function CourseListAction() {
     <div className='border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50'>
       <div className='px-8 py-6'>
         <div className='mb-4 flex items-center justify-between'>
-          <h2 className='text-lg font-semibold text-gray-800'>{t('filterTitle')}</h2>
+          <h2 className='text-lg font-semibold text-gray-800'>{t('list.filter.title')}</h2>
           {hasFilters && (
             <div className='flex items-center gap-8'>
               {/* Search Button */}
@@ -110,7 +111,7 @@ export default function CourseListAction() {
               {/* Clear All Button */}
               <Button onClick={clearAll} className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'>
                 <X className='h-4 w-4' />
-                {t('actions.clearBtn')}
+                {tc('button.clear')}
               </Button>
             </div>
           )}
@@ -121,7 +122,7 @@ export default function CourseListAction() {
           <div className='relative w-full'>
             <Input
               type='text'
-              placeholder={t('placeHolder.search')}
+              placeholder={t('list.placeholder.search')}
               value={filters.search}
               onChange={(e) => dispatch(setSearchTerm(e.target.value))}
               className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
@@ -131,7 +132,7 @@ export default function CourseListAction() {
 
           {/* Category */}
           <SSelect
-            placeholder={t('placeHolder.category')}
+            placeholder={t('list.placeholder.category')}
             value={filters.categoryId?.toString() ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'categoryId', value: Number(val) }))}
             options={categoryOptions}
@@ -142,7 +143,7 @@ export default function CourseListAction() {
 
           {/* Skill */}
           <SSelect
-            placeholder={t('placeHolder.skill')}
+            placeholder={t('list.placeholder.skill')}
             value={filters.skillId?.toString() ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'skillId', value: Number(val) }))}
             options={skillOptions}
@@ -153,7 +154,7 @@ export default function CourseListAction() {
 
           {/* Age Range */}
           <SSelect
-            placeholder={t('placeHolder.ageRange')}
+            placeholder={t('list.placeholder.ageRange')}
             value={filters.ageRangeId?.toString() ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'ageRangeId', value: Number(val) }))}
             options={ageRangeOptions}
@@ -176,7 +177,7 @@ export default function CourseListAction() {
           {/* Status */}
           {statusActive && (
             <SSelect
-              placeholder={t('placeHolder.status')}
+              placeholder={t('list.placeholder.status')}
               value={filters.status?.toString() ?? ''}
               onChange={(val) => dispatch(setParam({ key: 'status', value: val as CourseStatus }))}
               options={statusOptions}
