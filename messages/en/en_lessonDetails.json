@@ -1,0 +1,30 @@
+{
+  "LessonDetails": {
+    "description": "Description",
+    "sections": "Sections",
+    "lesson": {
+      "title": "Lesson",
+      "about": "About this lesson",
+      "dur_unit": "minutes",
+      "age_unit": "ages",
+      "nodata": "No Lesson Data",
+      "category": "Categories",
+      "skill": "Skills",
+      "standard": "Standards",
+      "topic": "Topics"
+    },
+    "notFound": {
+      "title": "No lesson data available",
+      "description": "There are currently no lessons available for this course.",
+      "no_section": "No Content Available For This Section",
+      "no_section_v2": "No Sections Available"
+    },
+    "action": {
+      "add": "Add to course",
+      "favor": "Add to favorites",
+      "share": "Share",
+      "learning": "Start Learning",
+      "start_loading": "Starting..."
+    }
+  }
+}

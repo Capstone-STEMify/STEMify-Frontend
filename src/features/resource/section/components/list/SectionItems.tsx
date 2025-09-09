@@ -1,4 +1,4 @@
-import ContentManagement from '@/features/resource/content/components/upsert/UpsertContent'
+import ContentManagement from '@/features/content/components/UpsertContent'
 import { useDeleteSectionMutation, useUpdateSectionMutation } from '@/features/resource/section/api/sectionApi'
 import { Section } from '@/features/resource/section/types/section.type'
 import { useModal } from '@/providers/ModalProvider'
@@ -22,7 +22,6 @@ export default function SectionItems({
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: section.id })
 
   const t = useTranslations('sectionManagement')
-  const tt = useTranslations('toast')
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -56,9 +55,9 @@ export default function SectionItems({
                 onConfirm: async () => {
                   try {
                     await deleteSection(section.id).unwrap()
-                    toast.success(tt('successMessage.delete'))
+                    toast.success('Section deleted.')
                   } catch (err) {
-                    toast.error(tt('errorMessage'))
+                    toast.error('Failed to delete section.')
                   }
                 }
               })
@@ -74,9 +73,9 @@ export default function SectionItems({
             <p>
               <strong className='mr-2'>{t('section.dur')}:</strong> {section.duration} mins
             </p>
-            {/* <p>
+            <p>
               <strong className='mr-2'>{t('section.status')}:</strong> {section.status}
-            </p> */}
+            </p>
           </div>
           <div className='px-3'>
             <p>

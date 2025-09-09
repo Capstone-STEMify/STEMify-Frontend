@@ -4,9 +4,14 @@ import Image from 'next/image';
 
 const Footer = () => {
   return (
-    <footer className="relative text-white overflow-hidden min-h-[400px] bg-sky-400 md:bg-cover md:bg-center md:bg-no-repeat md:bg-[url('/images/footer.png')]">
-
-      <div className="absolute top-4 left-8 z-10 hidden md:block">
+    <footer 
+      className="relative text-white bg-cover bg-center bg-no-repeat overflow-hidden"
+      style={{
+        background: "url('/images/footer.png')",
+        minHeight: '400px'
+      }}
+    > 
+      <div className="absolute top-4 left-8 z-10">
         <Image 
           width={64}
           height={80}
@@ -16,7 +21,7 @@ const Footer = () => {
         />
       </div>
 
-      <div className="absolute top-8 right-80 z-10 hidden md:block">
+      <div className="absolute top-8 right-80 z-10">
         <Image 
           width={120}
           height={120}
@@ -26,9 +31,9 @@ const Footer = () => {
         />
       </div>
 
-      <div className="relative pt-16 md:pt-36 pb-8 px-4 sm:px-6 lg:px-8 z-20">
+      <div className="relative pt-36 pb-8 px-4 sm:px-6 lg:px-8 z-20">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             <div className="space-y-4">
               <h3 className="text-lg font-semibold mb-4">Information For Parents</h3>
               <p className="text-sm leading-relaxed opacity-90">

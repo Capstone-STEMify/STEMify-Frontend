@@ -94,7 +94,3 @@ export function fileToBase64(file: File): Promise<string> {
 
 export const capitalizeFirst = (text: string) =>
   text ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase() : ''
-
-export function normalizeMarkdown(text: string): string {
-  return text.replace(/\\n/g, '\n')
-}

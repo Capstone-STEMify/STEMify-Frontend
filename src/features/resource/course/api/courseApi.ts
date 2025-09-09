@@ -3,7 +3,7 @@ import { Course, CourseQueryParams } from '../types/course.type'
 
 export const courseApi = createCrudApi<Course, CourseQueryParams>({
   reducerPath: 'courseApi',
-  tagTypes: ['Course'],
+  tagType: 'Course',
   baseUrl: '/courses'
 }).injectEndpoints({
   endpoints: (builder) => ({

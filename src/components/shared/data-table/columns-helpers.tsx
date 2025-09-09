@@ -13,8 +13,6 @@ import {
 } from '@/components/shadcn/dropdown-menu'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Button } from '@/components/shadcn/button'
-import { useSortable } from '@dnd-kit/sortable'
-import { IconGripVertical } from '@tabler/icons-react'
 
 export type ActionItem<T> = {
   label: string
@@ -31,8 +29,8 @@ export function createSelectColumn<T>(): ColumnDef<T> {
     id: 'select',
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllRowsSelected() || (table.getIsSomeRowsSelected() && 'indeterminate')}
-        onCheckedChange={(v) => table.toggleAllRowsSelected(!!v)}
+        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+        onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
         aria-label='Select all'
       />
     ),
@@ -93,22 +91,4 @@ export function createActionsColumnFromItems<T>(items: ActionItem<T>[], label = 
       )
     }
   }
-}
-
-export function DragHandle({ id }: { id: number }) {
-  const { attributes, listeners, setNodeRef } = useSortable({ id })
-
-  return (
-    <Button
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      variant='ghost'
-      size='icon'
-      className='hover:cursor-grab active:cursor-grabbing'
-    >
-      <IconGripVertical className='text-muted-foreground size-3' />
-      <span className='sr-only'>Drag to reorder</span>
-    </Button>
-  )
 }

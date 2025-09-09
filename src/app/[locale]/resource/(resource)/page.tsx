@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl'
 
 export default function LibraryPage() {
   const t = useTranslations('Resource')
-  const tc = useTranslations('common')
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
       <div className='mx-auto max-w-7xl'>
@@ -39,7 +38,7 @@ export default function LibraryPage() {
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>{tc('button.exploreCourses')}</span>
+                <span>{t('courses.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
@@ -63,7 +62,7 @@ export default function LibraryPage() {
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>{tc('button.exploreLessons')}</span>
+                <span>{t('lessons.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
@@ -87,7 +86,7 @@ export default function LibraryPage() {
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>{tc('button.exploreActivities')}</span>
+                <span>{t('activities.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
@@ -111,7 +110,7 @@ export default function LibraryPage() {
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>{tc('button.getHelp')}</span>
+                <span>{t('support.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>
@@ -135,7 +134,7 @@ export default function LibraryPage() {
               </div>
 
               <Button className='group bg-blue-500'>
-                <span>{tc('button.readBlogs')}</span>
+                <span>{t('news.button')}</span>
                 <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
               </Button>
             </div>

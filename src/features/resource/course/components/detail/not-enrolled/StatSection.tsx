@@ -11,29 +11,29 @@ interface StatsSectionProps {
 }
 
 export default function StatsSection({ course }: StatsSectionProps) {
-  const t = useTranslations('course')
+  const t = useTranslations('CourseDetails')
   const statsData = [
     {
       icon: BookOpen,
       value: course.lessonIds.length,
-      title: `${t('details.stats.lesson')}`,
-      subtitle: `${t('details.stats.lesson_description')}`,
+      title: `${t('notEnrolled.stats.section')}`,
+      subtitle: `${t('notEnrolled.stats.sec_description')}`,
       iconColor: 'text-blue-600',
       bgColor: 'bg-blue-100'
     },
     {
       icon: Clock,
       value: formatDuration(course.duration),
-      title: `${t('details.stats.duration')}`,
-      subtitle: `${t('details.stats.dur_description')}`,
+      title: `${t('notEnrolled.stats.duration')}`,
+      subtitle: `${t('notEnrolled.stats.dur_description')}`,
       iconColor: 'text-purple-600',
       bgColor: 'bg-purple-100'
     },
     {
       icon: Users,
       value: 0,
-      title: `${t('details.stats.downloads')}`,
-      subtitle: `${t('details.stats.down_description')}`,
+      title: `${t('notEnrolled.stats.downloads')}`,
+      subtitle: `${t('notEnrolled.stats.down_description')}`,
       iconColor: 'text-red-500',
       bgColor: 'bg-red-100'
     }

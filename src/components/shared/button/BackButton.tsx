@@ -7,10 +7,9 @@ import React from 'react'
 
 type Props = {
   url?: string
-  onClick?: () => void
 }
 
-export default function BackButton({ url, onClick }: Props) {
+export default function BackButton({ url }: Props) {
   const router = useRouter()
 
   function goBack() {
@@ -22,7 +21,7 @@ export default function BackButton({ url, onClick }: Props) {
   }
 
   return (
-    <Button onClick={onClick || goBack} variant='secondary' className='cursor-pointer'>
+    <Button onClick={goBack} variant='secondary' className='cursor-pointer'>
       <ChevronLeft className='link text-gray-600 hover:text-black' />
     </Button>
   )

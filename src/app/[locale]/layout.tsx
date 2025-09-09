@@ -4,7 +4,13 @@ import { routing } from 'i18n/routing'
 import { Metadata } from 'next'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { notFound } from 'next/navigation'
+import { Reem_Kufi } from 'next/font/google'
 import './globals.css'
+
+const fontReemKufi = Reem_Kufi({
+  subsets: ['latin'],
+  display: 'swap'
+})
 
 export const metadata: Metadata = {
   title: 'STEMify Education',

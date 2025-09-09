@@ -3,7 +3,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const categoryApi = createCrudApi<Category, CategoryQueryParams>({
   reducerPath: 'categoryApi',
-  tagTypes: ['Category'],
+  tagType: 'Category',
   baseUrl: '/categories'
 })
 

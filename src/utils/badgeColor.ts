@@ -1,25 +1,24 @@
 import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
-import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 
-export const getStatusBadgeClass = (status: LessonStatus | CurriculumStatus | CourseStatus) => {
+export const getStatusBadgeClass = (status: LessonStatus) => {
   switch (status) {
-    case LessonStatus.DRAFT || CurriculumStatus.DRAFT || CourseStatus.DRAFT:
-      return 'bg-gray-100 text-gray-800 border border-gray-300'
-    case LessonStatus.PUBLISHED || CurriculumStatus.PUBLISHED || CourseStatus.PUBLISHED:
-      return 'bg-blue-100 text-blue-800 border border-blue-300'
-    case LessonStatus.ARCHIVED || CurriculumStatus.ARCHIVED || CourseStatus.ARCHIVED:
-      return 'bg-green-100 text-green-800 border border-green-300'
-    case LessonStatus.DELETED || CurriculumStatus.DELETED || CourseStatus.DELETED:
-      return 'bg-red-100 text-red-800 border border-red-300'
-    case LessonStatus.PENDING || CurriculumStatus.PENDING || CourseStatus.PENDING:
-      return 'bg-yellow-100 text-yellow-800 border border-yellow-300'
-    case LessonStatus.REJECTED || CurriculumStatus.REJECTED || CourseStatus.REJECTED:
-      return 'bg-red-200 text-red-900 border border-red-400'
-    case LessonStatus.APPROVED || CurriculumStatus.APPROVED || CourseStatus.APPROVED:
-      return 'bg-green-200 text-green-900 border border-green-400'
+    case LessonStatus.DRAFT:
+      return 'bg-gray-100 text-gray-800'
+    case LessonStatus.PUBLISHED:
+      return 'bg-blue-100 text-blue-800'
+    case LessonStatus.ARCHIVED:
+      return 'bg-green-100 text-green-800'
+    case LessonStatus.DELETED:
+      return 'bg-red-100 text-red-800'
+    case LessonStatus.PENDING:
+      return 'bg-yellow-100 text-yellow-800'
+    case LessonStatus.REJECTED:
+      return 'bg-red-200 text-red-900'
+    case LessonStatus.APPROVED:
+      return 'bg-green-200 text-green-900'
     default:
-      return 'bg-gray-100 text-gray-800 border border-gray-300'
+      return 'bg-gray-100 text-gray-800'
   }
 }
 
@@ -40,11 +39,11 @@ export const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
 export const getLevelBadgeClass = (level: CourseLevel): string => {
   switch (level) {
     case CourseLevel.BEGINNER:
-      return 'bg-green-100 text-green-800 border border-green-300'
+      return 'bg-green-100 text-green-800'
     case CourseLevel.INTERMEDIATE:
-      return 'bg-yellow-100 text-yellow-800 border border-yellow-300'
+      return 'bg-yellow-100 text-yellow-800'
     case CourseLevel.ADVANCED:
-      return 'bg-red-100 text-red-800 border border-red-300'
+      return 'bg-red-100 text-red-800'
     default:
       return 'bg-gray-100 text-gray-800'
   }

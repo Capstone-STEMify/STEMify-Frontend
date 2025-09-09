@@ -2,9 +2,8 @@ import { Section } from '@/features/resource/section/types/section.type'
 import { ProgressStatus, StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 import { cn } from '@/utils/shadcn/utils'
-import { Check, Lock } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useSession } from 'next-auth/react'
 
 type LessonOutlineProps = {
   sectionData?: Section[]
@@ -20,7 +19,6 @@ export default function LessonOutline({
   sectionStatus
 }: LessonOutlineProps) {
   const t = useTranslations('LessonDetails')
-  const { data: userData } = useSession()
 
   if (!sectionData || sectionData.length === 0) {
     return <div className='flex h-screen items-center justify-center'>{t('notFound.no_section_v2')}</div>
@@ -29,8 +27,6 @@ export default function LessonOutline({
   const completedSectionIds = new Set(
     sectionStatus?.data.items.filter((item) => item.status === ProgressStatus.COMPLETED).map((item) => item.sectionId)
   )
-
-  const isLoggedIn = !!userData
 
   return (
     <div className='px-4'>
@@ -48,26 +44,13 @@ export default function LessonOutline({
                 key={sec.id}
                 className={cn(
                   'flex items-center justify-between gap-2 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors',
-                  isSelected ? 'bg-muted border-l-4 border-blue-500 font-semibold text-blue-700' : 'hover:bg-muted/60',
-                  !isLoggedIn ? 'cursor-default' : 'cursor-pointer'
+                  isSelected ? 'bg-muted border-l-4 border-blue-500 font-semibold text-blue-700' : 'hover:bg-muted/60'
                 )}
-                onClick={() => {
-                  if (isLoggedIn) {
-                    onSelectSection(sec.id)
-                  }
-                }}
+                onClick={() => onSelectSection(sec.id)}
               >
-                <div className='flex items-center gap-2'>
-                  {!isLoggedIn ? (
-                    <Lock size={16} className='text-gray-400' />
-                  ) : (
-                    isCompleted && <Check size={16} className='text-blue-500' />
-                  )}
-                  <div className={!isLoggedIn ? 'text-gray-500' : ''}>{sec.title}</div>
-                </div>
-                <div className={cn('text-muted-foreground', !isLoggedIn && 'text-gray-400')}>
-                  {sec.duration} mins
-                </div>
+                {isCompleted && <Check size={16} className='text-blue-500' />}
+                <div>{sec.title}</div>
+                <div className='text-muted-foreground'>{sec.duration} mins</div>
               </div>
             )
           })}

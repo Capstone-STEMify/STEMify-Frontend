@@ -11,8 +11,7 @@ type CourseActionProps = {
 }
 
 export default function CourseAction({ course }: CourseActionProps) {
-  const t = useTranslations('course')
-  const tc = useTranslations('common')
+  const t = useTranslations('CourseDetails')
   const userRole = useAppSelector((state) => state.auth.user?.role)
   const [updateCourseStatus] = useUpdateCourseMutation()
   const handleUpdateCourseStatus = async (status: CourseStatus) => {
@@ -38,14 +37,14 @@ export default function CourseAction({ course }: CourseActionProps) {
             className='shadow-6 bg-red-500 font-semibold text-white'
             onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
           >
-            <div className='text-xs uppercase'>{tc('button.reject')}</div>
+            <div className='text-xs uppercase'>{t('enrolled.action.reject')}</div>
           </Button>
           <Button
             size='default'
             className='shadow-6 bg-green-500 font-semibold text-white'
             onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
           >
-            <div className='text-xs uppercase'>{tc('button.approve')}</div>
+            <div className='text-xs uppercase'>{t('enrolled.action.approve')}</div>
           </Button>
         </div>
       )}
@@ -54,15 +53,15 @@ export default function CourseAction({ course }: CourseActionProps) {
       <div className='text-muted-foreground mt-4 grid w-full max-w-md grid-cols-3 gap-6 text-center text-xs'>
         <div className='flex flex-col items-center gap-1'>
           <Plus className='h-5 w-5' />
-          <span>{tc('button.add')}</span>
+          <span>{t('enrolled.action.add')}</span>
         </div>
         <div className='flex flex-col items-center gap-1'>
           <Bookmark className='h-5 w-5' />
-          <span>{tc('button.wishlist')}</span>
+          <span>{t('enrolled.action.favor')}</span>
         </div>
         <div className='flex flex-col items-center gap-1'>
           <Share2 className='h-5 w-5' />
-          <span>{tc('button.share')}</span>
+          <span>{t('enrolled.action.share')}</span>
         </div>
       </div>
     </section>

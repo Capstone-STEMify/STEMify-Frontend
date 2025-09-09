@@ -12,10 +12,8 @@ export const TextAreaField = ({ label, ...inputProps }: TextAreaProps) => {
   const field = useFieldContext<string>()
 
   return (
-    <div className='space-y-2'>
-      <Label className='text-base' htmlFor={field.name}>
-        {label}
-      </Label>
+    <div className='space-y-1'>
+      <Label htmlFor={field.name}>{label}</Label>
       <Textarea
         id={field.name}
         value={field.state.value}
