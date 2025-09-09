@@ -1,7 +1,7 @@
+import { Curriculum, CurriculumSliceParams } from '@/features/resource/curriculum/types/curriculum.type';
 import { createCrudApi } from '@/libs/redux/baseApi'
-import { Curriculum, CurriculumQueryParams } from '../types/curriculum.type'
 
-export const curriculumApi = createCrudApi<Curriculum, CurriculumQueryParams>({
+export const curriculumApi = createCrudApi<Curriculum, CurriculumSliceParams>({
   reducerPath: 'curriculumApi',
   tagTypes: ['Curriculum', 'Course'],
   baseUrl: '/curriculums'

@@ -4,7 +4,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { toast } from 'sonner'
 import SEmpty from '@/components/shared/empty/SEmpty'
@@ -13,6 +13,7 @@ import { useDeleteCurriculumMutation, useSearchCurriculumQuery } from '../../api
 import { SCard } from '@/components/shared/card/SCard'
 import Image from 'next/image'
 import CardHorizontal from '@/components/shared/card/CardHorizontal'
+import { CurriculumSliceParams } from '@/features/resource/curriculum/types/curriculum.type'
 
 export default function AdminCurriculumList() {
   const t = useTranslations('curriculum')
@@ -23,14 +24,15 @@ export default function AdminCurriculumList() {
   const { openModal } = useModal()
   const locale = useLocale()
 
+  const queryParams: CurriculumSliceParams = useAppSelector((state) => state.curriculum)
+  const { data: curriculumData, isLoading } = useSearchCurriculumQuery(queryParams)
+  const rows = React.useMemo(() => curriculumData?.data.items ?? [], [curriculumData])
+
+  const [deleteCurriculum] = useDeleteCurriculumMutation()
+
   useEffect(() => {
     dispatch(setPageSize(6))
   }, [dispatch])
-
-  const { data: curriculumData, isLoading } = useSearchCurriculumQuery({})
-  const [deleteCurriculum] = useDeleteCurriculumMutation()
-
-  const rows = React.useMemo(() => curriculumData?.data.items ?? [], [curriculumData])
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))

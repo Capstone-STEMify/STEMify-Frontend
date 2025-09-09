@@ -18,13 +18,9 @@ export type Curriculum = {
   courses: Course[]
 }
 
-export type CurriculumQueryParams = {
+export type CurriculumSliceParams = {
   status?: CurriculumStatus
   ageRangeId?: number
-} & SearchPaginatedRequestParams
-
-export type CurriculumSliceParams = {
-  curriculumId?: number
 } & SliceQueryParams
 
 export enum CurriculumStatus {
