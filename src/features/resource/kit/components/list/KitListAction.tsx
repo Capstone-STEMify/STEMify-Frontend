@@ -35,7 +35,7 @@ export default function KitAction() {
         className='bg-amber-custom-400 cursor-pointer'
         onClick={() => {
           // Open modal for creating a new kit
-          //   openModal('upsertKit')
+          openModal('upsertKit')
         }}
       >
         <Plus className='mr-1 h-4 w-4' />

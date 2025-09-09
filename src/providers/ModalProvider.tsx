@@ -22,6 +22,7 @@ import CurriculumSelectCourseListModal from '@/components/shared/modals/Curricul
 import UpsertCourseModal from '@/features/resource/course/components/modal/UpsertCourseModal'
 import ContentDetailModal from '@/features/resource/content/components/detail/ContentDetailModal'
 import UpsertContentModal from '@/features/resource/content/components/upsert/UpsertContentModal'
+import UpsertKitModal from '@/features/resource/kit/components/upsert/UpsertKitModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -67,7 +68,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertCurriculum' && <UpsertCurriculumModal {...modalProps} />}
       {modalType === 'upsertCourse' && <UpsertCourseModal {...modalProps} />}
       {modalType === 'upsertContent' && <UpsertContentModal {...modalProps} />}
-
+      {modalType === 'upsertKit' && <UpsertKitModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}

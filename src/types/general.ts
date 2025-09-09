@@ -30,6 +30,7 @@ export type ModalType =
   | 'upsertLearningOutcome'
   | 'upsertCurriculum'
   | 'upsertContent'
+  | 'upsertKit'
 
   // detail
   | 'lessonDetail'

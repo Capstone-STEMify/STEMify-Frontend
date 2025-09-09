@@ -1,6 +1,5 @@
 'use client'
 import BackButton from '@/components/shared/button/BackButton'
-import CardHorizontal from '@/components/shared/card/CardHorizontal'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCarousel } from '@/components/shared/SCarousel'
@@ -60,7 +59,7 @@ export default function KitDetail() {
               <span className='cursor-pointer text-blue-500'>
                 <SquarePen
                   onClick={() => {
-                    openModal('upsertCurriculum', { curriculum: kitData.data.id })
+                    openModal('upsertKit', { kitId: kitData.data.id })
                   }}
                 />
               </span>
