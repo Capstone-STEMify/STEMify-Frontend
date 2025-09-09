@@ -16,7 +16,7 @@ export default function KitAction() {
   const { openModal } = useModal()
 
   const dispatch = useAppDispatch()
-  const filters = useAppSelector((state) => state.curriculum)
+  const filters = useAppSelector((state) => state.kit)
 
   return (
     <div className='relative flex w-full max-w-[700px] items-center justify-start gap-4 py-4 md:flex-row'>
