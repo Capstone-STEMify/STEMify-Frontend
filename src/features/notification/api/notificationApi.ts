@@ -3,7 +3,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const notificationApi = createCrudApi<Notification, NotificationQueryParams>({
   reducerPath: 'NotificationApi',
-  tagTypes: ['Notification'],
+  tagType: 'Notification',
   baseUrl: '/notifications'
 })
 

@@ -12,7 +12,6 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onAnimationComplete, animationProgress }: HeroSectionProps) {
   const t = useTranslations('HeroSection')
-  const tc = useTranslations('common')
   const containerRef = useRef(null)
   const subtitleRef = useRef(null)
   const titleRef = useRef(null)
@@ -226,7 +225,7 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
 
             <button className='flex transform items-center space-x-2 rounded-xl bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
               <Search className='h-5 w-5' />
-              <span className='hidden sm:inline'>{tc('button.explore')}</span>
+              <span className='hidden sm:inline'>{t('exploreButton')}</span>
             </button>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import UpsertLesson from '@/features/resource/lesson/components/upsert/UpsertLesson'
-import UpsertSection from '@/features/resource/section/components/list/SectionAndContent'
+import UpsertLesson from '@/features/resource/lesson/components/UpsertLesson'
+import UpsertSection from '@/features/resource/section/components/SectionAndContent'
 import React, { Suspense } from 'react'
 
 export default function LessonUpdatePage() {

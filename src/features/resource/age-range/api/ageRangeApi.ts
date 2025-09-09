@@ -3,7 +3,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const ageRangeApi = createCrudApi<AgeRange, AgeRangeQueryParams>({
   reducerPath: 'ageRangeApi',
-  tagTypes: ['AgeRange'],
+  tagType: 'AgeRange',
   baseUrl: '/ageranges'
 })
 

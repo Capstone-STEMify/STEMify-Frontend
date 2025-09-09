@@ -9,35 +9,20 @@ export type AvatarProps = {
 // Modal
 export type ModalType =
   | null
-
-  // general
   | 'userForm'
   | 'confirm'
   | 'profile'
   | 'image'
   | 'enroll'
   | 'editImage'
-
-  // upsert
-  | 'upsertCourse'
-  | 'upsertLesson'
   | 'upsertSection'
+  | 'upsertLesson'
   | 'upsertCategory'
   | 'upsertAgeRange'
   | 'upsertStandard'
   | 'upsertSkill'
-  | 'upsertUser'
-  | 'upsertLearningOutcome'
-  | 'upsertCurriculum'
-  | 'upsertContent'
-  | 'upsertKit'
-
-  // detail
   | 'lessonDetail'
-  | 'contentDetail'
-
-  // orther
-  | 'curriculumSelectCourseListModal'
+  | 'upsertUser'
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void

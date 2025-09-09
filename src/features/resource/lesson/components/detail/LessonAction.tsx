@@ -11,7 +11,6 @@ import Link from 'next/link'
 
 export default function LessonAction({ lessonId }: { lessonId: number }) {
   const t = useTranslations('LessonDetails')
-  const tt = useTranslations('toast')
   const dispatch = useAppDispatch()
   const userRole = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
   const lessonStatus = useAppSelector((state) => state.studentProgress.selectedLessonStatus)
@@ -23,10 +22,10 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
       if (enrollmentId) {
         await startLesson({ lessonId, enrollmentId }).unwrap()
         dispatch(studentProgressSlice.actions.setSelectedLessonStatus(ProgressStatus.IN_PROGRESS))
-        toast.success(tt('successMessage.lessonStart'))
+        toast.success('Lesson started!')
       }
     } catch (err: any) {
-      toast.error(tt('errorMessage'))
+      toast.error(err?.data?.message || 'Failed to start lesson')
     }
   }
   return (

@@ -3,7 +3,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const standardApi = createCrudApi<Standard, StandardQueryParams>({
   reducerPath: 'standardApi',
-  tagTypes: ['Standard'],
+  tagType: 'Standard',
   baseUrl: '/standards'
 })
 

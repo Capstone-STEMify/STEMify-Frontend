@@ -2,6 +2,8 @@ import Header from '@/components/layout/Header'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import BackButton from '@/components/shared/button/BackButton'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
+import { ResourceManageHeader } from '@/features/resource/layout/ResourceManageHeader'
+import { ResourceManageSidebar } from '@/features/resource/layout/ResourceManageSidebar'
 import { UserRole } from '@/types/userRole'
 
 export default async function LessonStaffLayout({

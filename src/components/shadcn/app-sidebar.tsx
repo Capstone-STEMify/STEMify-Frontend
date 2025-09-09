@@ -4,16 +4,19 @@ import * as React from 'react'
 import {
   IconCamera,
   IconChartBar,
+  IconDashboard,
   IconDatabase,
   IconFileAi,
   IconFileDescription,
   IconFileWord,
+  IconFolder,
   IconHelp,
   IconInnerShadowTop,
   IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
+  IconUsers
 } from '@tabler/icons-react'
 
 import { NavDocuments } from 'components/shadcn/nav-documents'
@@ -32,7 +35,8 @@ import {
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '../shared/loading/LoadingComponent'
 
 const data = {
@@ -42,16 +46,11 @@ const data = {
     avatar: '/avatars/shadcn.jpg'
   },
   navMain: [
-    {
-      title: 'side_bar.curriculum',
-      url: '/admin/curriculum',
-      icon: IconListDetails
-    },
-    {
-      title: 'side_bar.kit',
-      url: '/admin/kit',
-      icon: IconListDetails
-    },
+    // {
+    //   title: 'Dashboard',
+    //   url: 'dashboard',
+    //   icon: IconDashboard
+    // },
     {
       title: 'side_bar.course',
       url: '/admin/course',
@@ -61,12 +60,12 @@ const data = {
       title: 'side_bar.lesson',
       url: '/admin/lesson',
       icon: IconChartBar
+    },
+    {
+      title: 'side_bar.user',
+      url: '/admin/user',
+      icon: IconUsers
     }
-    // {
-    //   title: 'side_bar.user',
-    //   url: '/admin/user',
-    //   icon: IconUsers
-    // }
   ],
   navClouds: [
     {
@@ -183,7 +182,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
                 <Link href='#'>
                   <IconInnerShadowTop className='!size-5' />
-                  <span className='text-base font-semibold'>Stemify</span>
+                  <span className='text-base font-semibold'>STEMify</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -211,7 +210,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
               <Link href='#'>
                 <IconInnerShadowTop className='!size-5' />
-                <span className='text-base font-semibold'>Stemify</span>
+                <span className='text-base font-semibold'>STEMify</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -220,7 +219,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={navMainWithLocale} />
         <NavDocuments items={documentsWithLocale} />
-        {/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}
+        <NavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={session?.user} />

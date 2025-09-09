@@ -15,7 +15,7 @@ type CourseDetailDescriptionProps = {
 }
 
 export default function CourseDetailDescription({ courseId }: CourseDetailDescriptionProps) {
-  const t = useTranslations('course')
+  const t = useTranslations('CourseDetails')
   const { data: courseData, isLoading: courseLoading, isFetching: courseFetching } = useGetCourseByIdQuery(courseId)
 
   if (courseLoading || courseFetching)
@@ -45,7 +45,7 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
           </div>
 
           <div>
-            <p className='my-1 text-xs font-semibold uppercase'>{t('details.title')}</p>
+            <p className='my-1 text-xs font-semibold uppercase'>{t('enrolled.content.course.title')}</p>
             <div className='bg-muted-foreground mb-2 h-[0.1px] w-full'></div>
 
             <h1 className='mb-2 text-lg leading-tight font-bold text-gray-900 lg:text-lg'>{courseData.data.title}</h1>
@@ -55,7 +55,7 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
               <div className='flex items-center gap-1'>
                 <Clock className='h-4 w-4' />
                 <span>
-                  {courseData.data.duration} {t('details.tags.dur_unit')}
+                  {courseData.data.duration} {t('enrolled.content.course.dur_unit')}
                 </span>
               </div>
               <div className='flex items-center gap-1'>
@@ -63,13 +63,13 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
                 <span>{formatDate(courseData.data.createdDate)}</span>
               </div>
               {/* Age Range */}
-              {courseData.data.ageRangeLabel} {t('details.tags.age_unit')}
+              {courseData.data.ageRangeLabel} {t('enrolled.content.course.age_unit')}
             </div>
           </div>
 
           <div className='w-full space-y-3 text-left'>
             <div className='text-xs'>
-              <h2 className='text-base font-semibold text-gray-900'>{t('details.about')}</h2>
+              <h2 className='text-base font-semibold text-gray-900'>{t('enrolled.content.course.about')}</h2>
               <p className='leading-relaxed text-gray-700'>{courseData.data.description}</p>
             </div>
             {/* Tags Section */}
@@ -77,7 +77,9 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
               {/* Topics */}
               {courseData.data.topicNames.length > 0 && (
                 <div className='flex flex-wrap items-center gap-x-2 gap-y-2'>
-                  <h3 className='text-xs font-semibold whitespace-nowrap text-gray-900'>{t('details.tags.topic')}:</h3>
+                  <h3 className='text-xs font-semibold whitespace-nowrap text-gray-900'>
+                    {t('enrolled.content.course.topic')}:
+                  </h3>
                   {courseData.data.topicNames.map((topic) => (
                     <Badge
                       key={topic}
@@ -92,7 +94,9 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
               {/* Skills */}
               {courseData.data.skillNames.length > 0 && (
                 <div className='flex flex-wrap items-center gap-x-2 gap-y-2'>
-                  <h3 className='text-xs font-semibold whitespace-nowrap text-gray-900'>{t('details.tags.skill')}</h3>
+                  <h3 className='text-xs font-semibold whitespace-nowrap text-gray-900'>
+                    {t('enrolled.content.course.skill')}
+                  </h3>
                   {courseData.data.skillNames.map((skill) => (
                     <Badge
                       key={skill}
@@ -109,7 +113,7 @@ export default function CourseDetailDescription({ courseId }: CourseDetailDescri
                 <div className='mb-2'>
                   <div className='flex flex-wrap items-center gap-x-2 gap-y-2'>
                     <h3 className='text-xs font-semibold whitespace-nowrap text-gray-900'>
-                      {t('details.tags.standard')}
+                      {t('enrolled.content.course.standard')}
                     </h3>
                     {courseData.data.standardNames.map((standard) => (
                       <Badge

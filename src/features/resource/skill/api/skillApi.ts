@@ -3,7 +3,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const skillApi = createCrudApi<Skill, SkillQueryParams>({
   reducerPath: 'skillApi',
-  tagTypes: ['Skill'],
+  tagType: 'Skill',
   baseUrl: '/skills'
 })
 

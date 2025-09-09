@@ -19,7 +19,6 @@ import { UserRole } from '@/types/userRole'
 
 export default function LessonListAction() {
   const t = useTranslations('LessonList')
-  const tc = useTranslations('common')
 
   const { status } = useSession()
   const role = useAppSelector((state) => state.auth.user?.role)
@@ -99,7 +98,7 @@ export default function LessonListAction() {
                     className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'
                   >
                     <X className='h-4 w-4' />
-                    {tc('button.clear')}
+                    {t('actions.clearBtn')}
                   </Button>
                 </div>
               )}

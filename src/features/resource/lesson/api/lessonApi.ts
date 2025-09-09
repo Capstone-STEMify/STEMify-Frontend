@@ -3,15 +3,20 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const lessonApi = createCrudApi<Lesson, LessonQueryParams>({
   reducerPath: 'lessonApi',
-  tagTypes: ['Lesson', 'Content'],
+  tagType: 'Lesson',
   baseUrl: '/lessons'
-}).injectEndpoints({
+})
+
+export const lessonApiExtended = lessonApi.injectEndpoints({
   endpoints: (builder) => ({
-    updateLessonSectionOrder: builder.mutation<any, { id: number; orderedSectionIds: number[] }>({
-      query: ({ id, orderedSectionIds }) => ({
+    updateLessonSectionOrder: builder.mutation<any, { id: number; body: { orderedSectionIds: number[] } }>({
+      query: ({ id, body }) => ({
         url: `/lessons/${id}/sections-reorder`,
         method: 'PATCH',
-        body: { orderedSectionIds }
+        body,
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }),
       invalidatesTags: ['Lesson']
     })
@@ -28,7 +33,7 @@ export const {
   // lazy
   useLazySearchQuery: useLazySearchLessonQuery,
   useLazyGetAllQuery: useLazyGetAllLessonQuery,
-  useLazyGetByIdQuery: useLazyGetLessonByIdQuery,
-
-  useUpdateLessonSectionOrderMutation
+  useLazyGetByIdQuery: useLazyGetLessonByIdQuery
 } = lessonApi
+
+export const { useUpdateLessonSectionOrderMutation } = lessonApiExtended

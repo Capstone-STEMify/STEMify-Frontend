@@ -9,7 +9,6 @@ import {
 } from '@/components/shadcn/breadcrumb'
 import { textVariants } from '@/utils/shadcn/variants'
 import { VariantProps } from 'class-variance-authority'
-import { useLocale } from 'next-intl'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Fragment } from 'react'
@@ -28,24 +27,21 @@ function resolveHref(href: string): string {
 
 export default function SBreadcrumb({ title, size = 'md', color, weight }: SBreadcrumbProps) {
   const pathname = usePathname()
-  const locale = useLocale()
-  const segments = pathname
-    .split('/')
-    .filter((segment) => segment !== locale)
-    .filter(Boolean)
+  const segments = pathname.split('/').filter(Boolean)
 
   function formatLabel(segment: string): string {
     return segment.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
   }
 
   const items = segments.map((segment, index) => {
-    const href = '/' + [locale, ...segments.slice(0, index + 1)].join('/')
+    const href = '/' + segments.slice(0, index + 1).join('/')
     return {
       label: formatLabel(segment),
       href
     }
   })
-  const allItems = [{ label: 'Home', href: `/${locale}` }, ...items]
+
+  const allItems = [{ label: 'Home', href: '/' }, ...items]
 
   return (
     <Breadcrumb>
