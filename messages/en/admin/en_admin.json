@@ -26,6 +26,7 @@
       "userSearch": "Search by username, email..."
     },
     "topic": {
+      "listTitle": "Topic List",
       "createTitle": "Create Topic",
       "editTitle": "Edit Topic",
       "name": "Topic Name",
@@ -35,6 +36,7 @@
       "updateButton": "Update"
     },
     "skill": {
+      "listTitle": "Skill List",
       "createTitle": "Create Skill",
       "editTitle": "Edit Skill",
       "name": "Skill Name",
@@ -44,6 +46,7 @@
       "updateButton": "Update"
     },
     "ageRange": {
+      "listTitle": "Age Range List",
       "createTitle": "Create Age Range",
       "editTitle": "Edit Age Range",
       "mini_name": "Minimum Age",
@@ -56,6 +59,7 @@
       "updateButton": "Update"
     },
     "standard": {
+      "listTitle": "Standard List",
       "createTitle": "Create Standard",
       "editTitle": "Edit Standard",
       "name": "Standard Name",

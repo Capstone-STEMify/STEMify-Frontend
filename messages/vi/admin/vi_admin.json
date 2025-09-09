@@ -27,6 +27,7 @@
       "userSearch": "Tìm kiếm theo tên người dùng, email..."
     },
     "topic": {
+      "listTitle": "Danh sách chủ đề",
       "createTitle": "Tạo chủ đề",
       "editTitle": "Chỉnh sửa chủ đề",
       "name": "Tên chủ đề",
@@ -36,6 +37,7 @@
       "updateButton": "Cập nhật"
     },
     "skill": {
+      "listTitle": "Danh sách kỹ năng",
       "createTitle": "Tạo kỹ năng",
       "editTitle": "Chỉnh sửa kỹ năng",
       "name": "Tên kỹ năng",
@@ -45,6 +47,7 @@
       "updateButton": "Cập nhật"
     },
     "ageRange": {
+      "listTitle": "Danh sách độ tuổi",
       "createTitle": "Tạo độ tuổi",
       "editTitle": "Chỉnh sửa độ tuổi",
       "mini_name": "Tuổi tối thiểu",
@@ -57,6 +60,7 @@
       "updateButton": "Cập nhật"
     },
     "standard": {
+      "listTitle": "Danh sách tiêu chuẩn",
       "createTitle": "Tạo tiêu chuẩn",
       "editTitle": "Chỉnh sửa tiêu chuẩn",
       "name": "Tên tiêu chuẩn",
