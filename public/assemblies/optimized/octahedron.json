@@ -284,6 +284,7 @@
       "name": "Adjust Additional Connector Arms",
       "type": "transform_arm",
       "connectionGroup": "second_third_squares",
+      "instantAppear": true,
       "targets": ["connector_3leg_5", "connector_3leg_6", "connector_3leg_7", "connector_3leg_8", "connector_3leg_9", "connector_3leg_10", "connector_3leg_11", "connector_3leg_12"],
       "duration": 2.0,
       "connectorArmTransforms": {
@@ -402,6 +403,7 @@
       "name": "Assemble Diamond",
       "type": "component_assembly",
       "assemblyId": "diamond_assembly",
+      "showRealtimeControls": true,
       "duration": 3.0,
       "componentTransforms": {
         "square_second": {

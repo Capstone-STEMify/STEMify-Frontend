@@ -211,6 +211,69 @@ export default function Workspace3D({
     return counts
   }, [visibleInstances.connectors])
 
+  // Build active connections up to current step: strawId -> { start: {connectorId, port}, end: {...} }
+  const activeConnections = useMemo(() => {
+    if (!assembly || !currentActivity) return {}
+
+    const totalSteps = currentActivity.steps.length
+    const stepsUpToNow = currentActivity.steps.slice(0, Math.min(clampedStep + 1, totalSteps))
+    const allowedActionIds = new Set(stepsUpToNow.map((s: any) => s.actionId))
+    const actionsForNow = (assembly.actions || []).filter((a) => allowedActionIds.has(a.id))
+
+    const map: Record<string, { start?: { connectorId: string; port: number }; end?: { connectorId: string; port: number } }> = {}
+
+    for (const action of actionsForNow) {
+      if (action.connectionGroup && assembly.connections?.[action.connectionGroup]) {
+        const conns = assembly.connections[action.connectionGroup]
+        for (const c of conns) {
+          const entry = (map[c.strawId] ||= {})
+          if (c.endpoint === 'start') entry.start = { connectorId: c.connectorId, port: c.port }
+          if (c.endpoint === 'end') entry.end = { connectorId: c.connectorId, port: c.port }
+        }
+      }
+    }
+
+    return map
+  }, [assembly, currentActivity, clampedStep])
+
+  // Helper: get connector instance by id
+  const getConnectorInstanceById = useCallback(
+    (id: string) => visibleInstances.connectors.find((c) => c.id === id),
+    [visibleInstances.connectors]
+  )
+
+  // Helper: compute world position of a connector port by index using final transform overrides
+  const getConnectorPortWorldPosition = useCallback(
+    (connectorId: string, portIndex: number): { x: number; y: number; z: number } | null => {
+      const inst = getConnectorInstanceById(connectorId)
+      if (!inst) return null
+
+      const base = {
+        position: inst.transform.position,
+        rotation: inst.transform.rotation
+      }
+      const tr = getTransformOverrides(connectorId, base.position, base.rotation)
+      const port = inst.data.portTemplate?.[portIndex]
+      if (!port) return null
+      const lp = port.localPosition || { x: 0, y: 0, z: 0 }
+      // Apply rotation then translation
+      const e = new THREE.Euler(tr.rotation.x || 0, tr.rotation.y || 0, tr.rotation.z || 0, EULER_ORDER)
+      const q = new THREE.Quaternion().setFromEuler(e)
+      const v = new THREE.Vector3(lp.x, lp.y, lp.z).applyQuaternion(q)
+      return { x: v.x + tr.position.x, y: v.y + tr.position.y, z: v.z + tr.position.z }
+    },
+    [getConnectorInstanceById]
+  )
+
+  // Helper: compute rotation to align local X axis to direction vector
+  const getRotationAlignXToDir = useCallback((dir: THREE.Vector3) => {
+    const from = new THREE.Vector3(1, 0, 0)
+    const to = dir.clone().normalize()
+    const q = new THREE.Quaternion().setFromUnitVectors(from, to)
+    const e = new THREE.Euler().setFromQuaternion(q, EULER_ORDER)
+    return { x: e.x, y: e.y, z: e.z }
+  }, [])
+
   // Calculate armPose for connectors based on ALL previous steps (accumulative)
   const getArmPoseForConnector = useCallback(
     (connectorId: string) => {
@@ -277,7 +340,12 @@ export default function Workspace3D({
     return () => window.removeEventListener('keydown', onKey)
   }, [maxStep, nextStep, previousStep])
 
-  const instantAppear = currentStep?.actionId === 'action_adjust_additional_connector_arms'
+  // Generic instant appear based on action property
+  const instantAppear = useMemo(() => {
+    if (!assembly || !currentStep) return false
+    const action = assembly.actions?.find((a: any) => a.id === currentStep.actionId)
+    return action?.instantAppear === true
+  }, [assembly, currentStep])
 
   const transitions = useTransition(visibleInstances.straws, {
     keys: (inst) => inst.id,
@@ -716,402 +784,106 @@ export default function Workspace3D({
         </div>
       )}
 
-      {/* Realtime Control Panel for Assembly (Step 7) */}
-      {showUI && currentStep?.actionId === 'action_assemble_diamond' && (
+      {/* Realtime Control Panel for Component Assembly */}
+      {showUI && (() => {
+        const action = assembly?.actions?.find((a: any) => a.id === currentStep?.actionId)
+        return action?.type === 'component_assembly' && action?.showRealtimeControls === true
+      })() && (
         <div className='absolute bottom-4 left-4 z-10 w-[360px] rounded-xl border bg-white/95 p-3 shadow'>
-          <div className='mb-2 font-semibold text-gray-700'>Realtime Controls — Diamond Assembly</div>
-          <div className='mb-1 text-xs text-gray-500'>
-            🎯 Component Assembly: TransformAsUnit = true - All elements move together
-          </div>
-          <div className='grid grid-cols-3 gap-2 text-xs'>
-            <div className='col-span-3 font-medium text-gray-600'>Rotation (rad)</div>
-            {(['x', 'y', 'z'] as const).map((axis) => (
-              <div key={`rot-${axis}`} className='flex flex-col gap-1'>
-                <label className='text-[11px] text-gray-500'>R{axis.toUpperCase()}</label>
-                <input
-                  type='number'
-                  step='0.01745'
-                  className='w-full rounded border px-2 py-1'
-                  value={runtimeComponentOverrides['square_second']?.rotation?.[axis] ?? (axis === 'x' ? -0.7854 : 0)}
-                  onChange={(e) => {
-                    const v = parseFloat(e.target.value || '0')
-                    setRuntimeComponentOverrides((prev) => ({
-                      ...prev,
-                      square_second: {
-                        rotation: {
-                          x: axis === 'x' ? (isNaN(v) ? -0.7854 : v) : (prev.square_second?.rotation?.x ?? -0.7854),
-                          y: axis === 'y' ? (isNaN(v) ? 0 : v) : (prev.square_second?.rotation?.y ?? 0),
-                          z: axis === 'z' ? (isNaN(v) ? 0 : v) : (prev.square_second?.rotation?.z ?? 0)
-                        },
-                        translation: prev.square_second?.translation ?? { x: -12, y: 8, z: 0 }
-                      }
-                    }))
-                  }}
-                />
-              </div>
-            ))}
-
-            <div className='col-span-3 mt-2 font-medium text-gray-600'>Translation</div>
-            {(['x', 'y', 'z'] as const).map((axis) => (
-              <div key={`trs-${axis}`} className='flex flex-col gap-1'>
-                <label className='text-[11px] text-gray-500'>T{axis.toUpperCase()}</label>
-                <input
-                  type='number'
-                  step='0.5'
-                  className='w-full rounded border px-2 py-1'
-                  value={
-                    runtimeComponentOverrides['square_second']?.translation?.[axis] ??
-                    (axis === 'x' ? -12 : axis === 'y' ? 8 : 0)
-                  }
-                  onChange={(e) => {
-                    const v = parseFloat(e.target.value || '0')
-                    setRuntimeComponentOverrides((prev) => ({
-                      ...prev,
-                      square_second: {
-                        rotation: prev.square_second?.rotation ?? { x: -0.7854, y: 0, z: 0 },
-                        translation: {
-                          x: prev.square_second?.translation?.x ?? -12,
-                          y: prev.square_second?.translation?.y ?? 8,
-                          z: prev.square_second?.translation?.z ?? 0,
-                          [axis]: isNaN(v) ? 0 : v
-                        }
-                      }
-                    }))
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-          <div className='mt-3 flex gap-2'>
-            <button
-              className='rounded border px-2 py-1 text-xs'
-              onClick={() =>
-                setRuntimeComponentOverrides((prev) => ({
-                  ...prev,
-                  square_second: { rotation: { x: -0.7854, y: 0, z: 0 }, translation: { x: -12, y: 8, z: 0 } }
-                }))
-              }
-            >
-              Reset
-            </button>
-            <button className='rounded border px-2 py-1 text-xs' onClick={() => setRuntimeComponentOverrides({})}>
-              Clear
-            </button>
-            <button
-              className='rounded border bg-blue-50 px-2 py-1 text-xs'
-              onClick={() => {
-                console.log('🔍 [DEBUG] Current Runtime State:', {
-                  runtimeOverrides: runtimeComponentOverrides,
-                  currentStep: currentStep?.actionId,
-                  stepIndex: clampedStep,
-                  timestamp: new Date().toISOString()
-                })
-              }}
-            >
-              Debug
-            </button>
-            <button
-              className='rounded border bg-green-50 px-2 py-1 text-xs'
-              onClick={() =>
-                setRuntimeComponentOverrides((prev) => ({
-                  ...prev,
-                  square_second: {
-                    rotation: { x: -0.7854, y: 0, z: 0 },
-                    translation: prev.square_second?.translation ?? { x: -12, y: 8, z: 0 }
-                  }
-                }))
-              }
-            >
-              RZ→0
-            </button>
-            <button
-              className='rounded border bg-cyan-50 px-2 py-1 text-xs'
-              onClick={() => {
-                // Test square_base rotation
-                setRuntimeComponentOverrides((prev) => ({
-                  ...prev,
-                  square_base: {
-                    rotation: { x: 0, y: 0.5, z: 0 },
-                    translation: { x: 0, y: 0, z: 0 }
-                  }
-                }))
-                console.log('🔍 [TEST] Applied RY=0.5 to square_base component')
-              }}
-            >
-              Test Base
-            </button>
-            <button
-              className='rounded border bg-yellow-50 px-2 py-1 text-xs'
-              onClick={() => {
-                // Test quaternion composition
-                const base = { x: 1.5708, y: 0, z: 2.3562 }
-                const comp = { x: 0, y: 0.5, z: 0 }
-                const result = composeRot(base, comp)
-                console.log('🔍 [QUATERNION TEST]:', {
-                  baseRotation: base,
-                  componentRotation: comp,
-                  quaternionResult: result,
-                  eulerAddition: {
-                    x: base.x + comp.x,
-                    y: base.y + comp.y,
-                    z: base.z + comp.z
-                  }
-                })
-              }}
-            >
-              Quat Test
-            </button>
-            <button
-              className='rounded border bg-purple-50 px-2 py-1 text-xs'
-              onClick={() => {
-                // Quick debug for one specific element
-                const sampleElement = visibleInstances.connectors.find((c) => c.id === 'connector_3leg_5')
-                if (sampleElement) {
-                  const basePos = sampleElement.transform.position
-                  const baseRot = sampleElement.transform.rotation
-                  const result = getTransformOverrides('connector_3leg_5', basePos, baseRot)
-                  console.log('🔍 [SINGLE ELEMENT DEBUG] connector_3leg_5:', {
-                    base: { position: basePos, rotation: baseRot },
-                    result: result,
-                    runtimeOverrides: runtimeComponentOverrides
-                  })
-                }
-              }}
-            >
-              Debug1
-            </button>
-            <button
-              className='rounded border bg-orange-50 px-2 py-1 text-xs'
-              onClick={() => {
-                // Manual matrix test
-                const testPos = { x: 20, y: 0, z: 0 } // connector_3leg_5 position
-                const pivot = { x: 27.8, y: 0, z: 7.8 } // square_second center
-                const rotation = runtimeComponentOverrides['square_second']?.rotation || { x: -0.7854, y: 0, z: 0 }
-                const translation = runtimeComponentOverrides['square_second']?.translation || { x: -12, y: 8, z: 0 }
-
-                // Manual calculation
-                const x = testPos.x - pivot.x // -7.8
-                const y = testPos.y - pivot.y // 0
-                const z = testPos.z - pivot.z // -7.8
-
-                const rx = rotation.x,
-                  ry = rotation.y,
-                  rz = rotation.z
-                const cx = Math.cos(rx),
-                  sx = Math.sin(rx)
-                const cy = Math.cos(ry),
-                  sy = Math.sin(ry)
-                const cz = Math.cos(rz),
-                  sz = Math.sin(rz)
-
-                // XYZ rotation matrix
-                const r11 = cy * cz,
-                  r12 = -cy * sz,
-                  r13 = sy
-                const r21 = sx * sy * cz + cx * sz,
-                  r22 = -sx * sy * sz + cx * cz,
-                  r23 = -sx * cy
-                const r31 = -cx * sy * cz + sx * sz,
-                  r32 = cx * sy * sz + sx * cz,
-                  r33 = cx * cy
-
-                const newX = r11 * x + r12 * y + r13 * z
-                const newY = r21 * x + r22 * y + r23 * z
-                const newZ = r31 * x + r32 * y + r33 * z
-
-                const final = {
-                  x: newX + pivot.x + translation.x,
-                  y: newY + pivot.y + translation.y,
-                  z: newZ + pivot.z + translation.z
-                }
-
-                console.log('🔍 [MANUAL MATRIX TEST]:', {
-                  original: testPos,
-                  pivot,
-                  rotation,
-                  translation,
-                  relative: { x, y, z },
-                  rotated: { x: newX, y: newY, z: newZ },
-                  final,
-                  rotationDegrees: { rx: (rx * 180) / Math.PI, ry: (ry * 180) / Math.PI, rz: (rz * 180) / Math.PI }
-                })
-              }}
-            >
-              Matrix
-            </button>
-            <button
-              className='rounded border bg-red-50 px-2 py-1 text-xs'
-              onClick={() => {
-                // Check initial state WITHOUT component transform
-                console.log('🔍 [INITIAL STATE CHECK]:', {
-                  componentCenter: assembly?.components?.squares?.find((c) => c.id === 'square_second')?.center,
-                  runtimeOverrides: runtimeComponentOverrides,
-                  allSquareSecondElements: assembly?.components?.squares?.find((c) => c.id === 'square_second')
-                    ?.elements,
-                  sampleOriginalPositions: {
-                    connector_3leg_5: visibleInstances.connectors.find((c) => c.id === 'connector_3leg_5')?.transform
-                      .position,
-                    straw_green_5: visibleInstances.straws.find((s) => s.id === 'straw_green_5')?.transform.position
-                  },
-                  currentStep: currentStep?.actionId,
-                  defaultMatrix: {
-                    position: { x: -12, y: 8, z: 0 },
-                    rotation: { x: -0.7854, y: 0, z: 0 }
-                  }
-                })
-              }}
-            >
-              Initial
-            </button>
-            <button
-              className={`rounded border px-2 py-1 text-xs ${disableComponentTransform ? 'bg-yellow-200' : 'bg-gray-50'}`}
-              onClick={() => setDisableComponentTransform(!disableComponentTransform)}
-            >
-              {disableComponentTransform ? 'Enable Transform' : 'Disable Transform'}
-            </button>
-            <button
-              className='rounded border bg-pink-50 px-2 py-1 text-xs'
-              onClick={() => {
-                // Debug rotation values for connectors - test BOTH square_base and square_second
-                console.log('🔍 [COMPONENT ROTATION DEBUG]:', {
-                  square_base_overrides: runtimeComponentOverrides['square_base'],
-                  square_second_overrides: runtimeComponentOverrides['square_second'],
-                  currentStep: currentStep?.actionId
-                })
-
-                // Test square_second connectors (should have rotation)
-                const squareSecondConnectors = visibleInstances.connectors.filter((c) =>
-                  ['connector_3leg_5', 'connector_3leg_6', 'connector_3leg_7', 'connector_3leg_8'].includes(c.id)
-                )
-
-                console.log('🔍 [SQUARE_SECOND CONNECTORS]:')
-                squareSecondConnectors.forEach((connector) => {
-                  const base = connector.transform
-                  const tr = getTransformOverrides(connector.id, base.position, base.rotation)
-                  const elementComponentId = getElementComponent(connector.id)
-                  const isInComponentAssembly = elementComponentId && !disableComponentTransform
-
-                  console.log(`  ${connector.id}:`, {
-                    basePosition: base.position,
-                    baseRotation: base.rotation,
-                    finalPosition: tr.position,
-                    componentRotation: tr.rotation,
-                    isInComponentAssembly,
-                    elementComponentId,
-                    runtimeRY: runtimeComponentOverrides['square_second']?.rotation?.y,
-                    finalRotation: isInComponentAssembly ? tr.rotation : tr.rotation
-                  })
-                })
-
-                // Test square_base connectors (should NOT have rotation)
-                const squareBaseConnectors = visibleInstances.connectors.filter((c) =>
-                  ['connector_3leg_1', 'connector_3leg_2', 'connector_3leg_3', 'connector_3leg_4'].includes(c.id)
-                )
-
-                console.log('🔍 [SQUARE_BASE CONNECTORS]:')
-                squareBaseConnectors.forEach((connector) => {
-                  const base = connector.transform
-                  const tr = getTransformOverrides(connector.id, base.position, base.rotation)
-                  const elementComponentId = getElementComponent(connector.id)
-                  const isInComponentAssembly = elementComponentId && !disableComponentTransform
-
-                  console.log(`  ${connector.id}:`, {
-                    basePosition: base.position,
-                    baseRotation: base.rotation,
-                    finalPosition: tr.position,
-                    componentRotation: tr.rotation,
-                    isInComponentAssembly,
-                    elementComponentId,
-                    runtimeRY: runtimeComponentOverrides['square_second']?.rotation?.y,
-                    finalRotation: isInComponentAssembly ? tr.rotation : tr.rotation
-                  })
-                })
-              }}
-            >
-              ConnRot
-            </button>
-            <button
-              className='rounded border bg-indigo-50 px-2 py-1 text-xs'
-              onClick={() => {
-                // Debug position and rotation values for straws - test BOTH square_base and square_second
-                console.log('🔍 [STRAW DEBUG]:', {
-                  square_base_overrides: runtimeComponentOverrides['square_base'],
-                  square_second_overrides: runtimeComponentOverrides['square_second'],
-                  currentStep: currentStep?.actionId
-                })
-
-                // Test square_second straws (should have rotation)
-                const squareSecondStraws = visibleInstances.straws.filter((s) =>
-                  ['straw_green_5', 'straw_green_6', 'straw_green_7', 'straw_green_8'].includes(s.id)
-                )
-
-                console.log('🔍 [SQUARE_SECOND STRAWS]:')
-                squareSecondStraws.forEach((straw) => {
-                  const base = straw.transform
-                  const tr = getTransformOverrides(straw.id, base.position, base.rotation)
-                  const elementComponentId = getElementComponent(straw.id)
-                  const isInComponentAssembly = elementComponentId && !disableComponentTransform
-                  const o = getRotationOverrideForInstance(straw.id)
-
-                  console.log(`  ${straw.id}:`, {
-                    basePosition: base.position,
-                    baseRotation: base.rotation,
-                    finalPosition: tr.position,
-                    finalRotation: tr.rotation,
-                    isInComponentAssembly,
-                    elementComponentId,
-                    runtimeRY: runtimeComponentOverrides['square_second']?.rotation?.y,
-                    individualOverride: o,
-                    finalStrawRotation: isInComponentAssembly
-                      ? tr.rotation
-                      : o
-                        ? {
-                            x: tr.rotation.x + (o.x || 0),
-                            y: tr.rotation.y + (o.y || 0),
-                            z: tr.rotation.z + (o.z || 0)
+          {(() => {
+            const action = assembly?.actions?.find((a: any) => a.id === currentStep?.actionId)
+            const componentTransforms = action?.componentTransforms || {}
+            const firstComponentId = Object.keys(componentTransforms)[0]
+            const firstTransform = componentTransforms[firstComponentId]?.matrix
+            
+            if (!firstComponentId || !firstTransform) return null
+            
+            return (
+              <>
+                <div className='mb-2 font-semibold text-gray-700'>Realtime Controls — {action?.name || 'Component Assembly'}</div>
+                <div className='mb-1 text-xs text-gray-500'>
+                  🎯 Component Assembly: TransformAsUnit = true - All elements move together
+                </div>
+                <div className='grid grid-cols-3 gap-2 text-xs'>
+                  <div className='col-span-3 font-medium text-gray-600'>Rotation (rad)</div>
+                  {(['x', 'y', 'z'] as const).map((axis) => (
+                    <div key={`rot-${axis}`} className='flex flex-col gap-1'>
+                      <label className='text-[11px] text-gray-500'>R{axis.toUpperCase()}</label>
+                      <input
+                        type='number'
+                        step='0.01745'
+                        className='w-full rounded border px-2 py-1'
+                        value={runtimeComponentOverrides[firstComponentId]?.rotation?.[axis] ?? (firstTransform.rotation?.[axis] || 0)}
+                        onChange={(e) => {
+                          const v = parseFloat(e.target.value || '0')
+                          setRuntimeComponentOverrides((prev) => ({
+                            ...prev,
+                            [firstComponentId]: {
+                              rotation: {
+                                x: axis === 'x' ? (isNaN(v) ? (firstTransform.rotation?.x || 0) : v) : (prev[firstComponentId]?.rotation?.x ?? (firstTransform.rotation?.x || 0)),
+                                y: axis === 'y' ? (isNaN(v) ? (firstTransform.rotation?.y || 0) : v) : (prev[firstComponentId]?.rotation?.y ?? (firstTransform.rotation?.y || 0)),
+                                z: axis === 'z' ? (isNaN(v) ? (firstTransform.rotation?.z || 0) : v) : (prev[firstComponentId]?.rotation?.z ?? (firstTransform.rotation?.z || 0))
+                              },
+                              translation: prev[firstComponentId]?.translation ?? firstTransform.position
+                            }
+                          }))
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                  <div className='col-span-3 mt-2 font-medium text-gray-600'>Translation</div>
+                  {(['x', 'y', 'z'] as const).map((axis) => (
+                    <div key={`trs-${axis}`} className='flex flex-col gap-1'>
+                      <label className='text-[11px] text-gray-500'>T{axis.toUpperCase()}</label>
+                      <input
+                        type='number'
+                        step='0.5'
+                        className='w-full rounded border px-2 py-1'
+                        value={runtimeComponentOverrides[firstComponentId]?.translation?.[axis] ?? (firstTransform.position?.[axis] || 0)}
+                        onChange={(e) => {
+                          const v = parseFloat(e.target.value || '0')
+                          setRuntimeComponentOverrides((prev) => ({
+                            ...prev,
+                            [firstComponentId]: {
+                              rotation: prev[firstComponentId]?.rotation ?? firstTransform.rotation,
+                              translation: {
+                                x: prev[firstComponentId]?.translation?.x ?? (firstTransform.position?.x || 0),
+                                y: prev[firstComponentId]?.translation?.y ?? (firstTransform.position?.y || 0),
+                                z: prev[firstComponentId]?.translation?.z ?? (firstTransform.position?.z || 0),
+                                [axis]: isNaN(v) ? (firstTransform.position?.[axis] || 0) : v
+                              }
+                            }
+                          }))
+                        }}
+                      />
+                    </div>
+                  ))}
+                  <div className='mt-3 flex gap-2'>
+                    <button
+                      className='rounded border px-2 py-1 text-xs'
+                      onClick={() =>
+                        setRuntimeComponentOverrides((prev) => ({
+                          ...prev,
+                          [firstComponentId]: { 
+                            rotation: firstTransform.rotation || { x: 0, y: 0, z: 0 }, 
+                            translation: firstTransform.position || { x: 0, y: 0, z: 0 } 
                           }
-                        : tr.rotation
-                  })
-                })
-
-                // Test square_base straws (should NOT have rotation)
-                const squareBaseStraws = visibleInstances.straws.filter((s) =>
-                  ['straw_green_1', 'straw_green_2', 'straw_green_3', 'straw_green_4'].includes(s.id)
-                )
-
-                console.log('🔍 [SQUARE_BASE STRAWS]:')
-                squareBaseStraws.forEach((straw) => {
-                  const base = straw.transform
-                  const tr = getTransformOverrides(straw.id, base.position, base.rotation)
-                  const elementComponentId = getElementComponent(straw.id)
-                  const isInComponentAssembly = elementComponentId && !disableComponentTransform
-                  const o = getRotationOverrideForInstance(straw.id)
-
-                  console.log(`  ${straw.id}:`, {
-                    basePosition: base.position,
-                    baseRotation: base.rotation,
-                    finalPosition: tr.position,
-                    finalRotation: tr.rotation,
-                    isInComponentAssembly,
-                    elementComponentId,
-                    runtimeRY: runtimeComponentOverrides['square_second']?.rotation?.y,
-                    individualOverride: o,
-                    finalStrawRotation: isInComponentAssembly
-                      ? tr.rotation
-                      : o
-                        ? {
-                            x: tr.rotation.x + (o.x || 0),
-                            y: tr.rotation.y + (o.y || 0),
-                            z: tr.rotation.z + (o.z || 0)
-                          }
-                        : tr.rotation
-                  })
-                })
-              }}
-            >
-              StrawRot
-            </button>
-          </div>
+                        }))
+                      }
+                    >
+                      Reset
+                    </button>
+                    <button 
+                      className='rounded border px-2 py-1 text-xs' 
+                      onClick={() => setRuntimeComponentOverrides({})}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </>
+              )
+            })()}
         </div>
       )}
 
@@ -1221,6 +993,26 @@ export default function Workspace3D({
                     }
                     const o = getRotationOverrideForInstance(instance.id)
                     const tr = getTransformOverrides(instance.id, base.position, base.rotation)
+
+                    // Port-based snapping: if both endpoints are connected, align straw between ports
+                    const conn = activeConnections[instance.id]
+                    if (conn?.start && conn?.end) {
+                      const pA = getConnectorPortWorldPosition(conn.start.connectorId, conn.start.port)
+                      const pB = getConnectorPortWorldPosition(conn.end.connectorId, conn.end.port)
+                      if (pA && pB) {
+                        const a = new THREE.Vector3(pA.x, pA.y, pA.z)
+                        const b = new THREE.Vector3(pB.x, pB.y, pB.z)
+                        const mid = a.clone().add(b).multiplyScalar(0.5)
+                        const dir = b.clone().sub(a)
+                        const rot = getRotationAlignXToDir(dir)
+
+                        return {
+                          position: { x: mid.x, y: mid.y, z: mid.z },
+                          rotation: rot,
+                          scale: base.scale
+                        }
+                      }
+                    }
 
                     // 🔧 FIX: For component assembly, use only component rotation, not additive
                     const elementComponentId = getElementComponent(instance.id)
