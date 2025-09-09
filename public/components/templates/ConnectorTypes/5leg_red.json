@@ -11,34 +11,54 @@
     "meshName": "connector_5leg"
   },
   "materialRef": "plastic_red",
-  "portTemplate": [
+  "arms": [
     {
+      "id": "arm_1",
+      "meshName": "Arm_1",
+      "defaultRotation": { "x": 0, "y": -90, "z": -45 },
       "portIndex": 0,
-      "localPosition": { "x": 1.0, "y": -2.0, "z": -1.0 },
-      "orientation": { "x": 0, "y": -90, "z": -45 },
-      "socketType": "angled",
-      "allowedRotation": { "x": 0, "y": 0, "z": 0 }
+      "port": {
+        "localPosition": { "x": 1.0, "y": -2.0, "z": -1.0 },
+        "orientation": { "x": 0, "y": -90, "z": -45 },
+        "socketType": "angled",
+        "allowedRotation": { "x": 0, "y": 0, "z": 0 }
+      }
     },
     {
+      "id": "arm_2",
+      "meshName": "Arm_2",
+      "defaultRotation": { "x": 0, "y": -90, "z": 45 },
       "portIndex": 1,
-      "localPosition": { "x": 1.0, "y": -2.0, "z": 1.0 },
-      "orientation": { "x": 0, "y": -90, "z": 45 },
-      "socketType": "angled",
-      "allowedRotation": { "x": 0, "y": 0, "z": 0 }
+      "port": {
+        "localPosition": { "x": 1.0, "y": -2.0, "z": 1.0 },
+        "orientation": { "x": 0, "y": -90, "z": 45 },
+        "socketType": "angled",
+        "allowedRotation": { "x": 0, "y": 0, "z": 0 }
+      }
     },
     {
+      "id": "arm_3",
+      "meshName": "Arm_3",
+      "defaultRotation": { "x": 0, "y": -90, "z": 225 },
       "portIndex": 2,
-      "localPosition": { "x": -1.0, "y": -2.0, "z": -1.0 },
-      "orientation": { "x": 0, "y": -90, "z": 225 },
-      "socketType": "angled",
-      "allowedRotation": { "x": 0, "y": 0, "z": 0 }
+      "port": {
+        "localPosition": { "x": -1.0, "y": -2.0, "z": -1.0 },
+        "orientation": { "x": 0, "y": -90, "z": 225 },
+        "socketType": "angled",
+        "allowedRotation": { "x": 0, "y": 0, "z": 0 }
+      }
     },
     {
+      "id": "arm_4",
+      "meshName": "Arm_4",
+      "defaultRotation": { "x": 0, "y": -90, "z": 135 },
       "portIndex": 3,
-      "localPosition": { "x": -1.0, "y": -2.0, "z": 1.0 },
-      "orientation": { "x": 0, "y": -90, "z": 135 },
-      "socketType": "angled",
-      "allowedRotation": { "x": 0, "y": 0, "z": 0 }
+      "port": {
+        "localPosition": { "x": -1.0, "y": -2.0, "z": 1.0 },
+        "orientation": { "x": 0, "y": -90, "z": 135 },
+        "socketType": "angled",
+        "allowedRotation": { "x": 0, "y": 0, "z": 0 }
+      }
     }
   ],
   "physics": {

@@ -11,7 +11,7 @@ export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade 
   const { geometry, material, transform, endpoints } = straw
 
   const { pos, rot, len } = useMemo(() => {
-    // Safe fallbacks for endpoints
+    // Use template endpoints if available, otherwise calculate from geometry.length
     const start = endpoints?.start?.localPosition || { x: -geometry.length / 2, y: 0, z: 0 }
     const end = endpoints?.end?.localPosition || { x: geometry.length / 2, y: 0, z: 0 }
 
@@ -47,7 +47,7 @@ export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade 
     const eul = new Euler().setFromQuaternion(quat, 'XYZ')
 
     return { pos: mid, rot: eul, len: lengthWorld }
-  }, [geometry.length, endpoints, transform])
+  }, [geometry.length, endpoints?.start?.localPosition, endpoints?.end?.localPosition, transform.position, transform.rotation, transform.scale])
 
   return (
     <group ref={ref} position={[pos.x, pos.y, pos.z]} rotation={[rot.x, rot.y, rot.z]} scale={[1, 1, 1]}>

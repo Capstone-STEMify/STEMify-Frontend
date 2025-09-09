@@ -13,10 +13,14 @@ interface Props {
   modelScale?: [number, number, number] | number
   rotationOffset?: [number, number, number]
   showDebug?: boolean
+  armPose?: { arm1?: number; arm2?: number }
 }
 
-export const Connector3D = forwardRef<Group, Props>(({ connector, fade, animate = false, modelUrl = '/models/Strawbees2.glb', modelScale = [0.05, 0.05, 0.05], rotationOffset = [0, 0, 0], showDebug = false }, ref) => {
+export const Connector3D = forwardRef<Group, Props>(({ connector, fade, animate = false, modelUrl = '/models/Strawbees2.glb', modelScale = [0.05, 0.05, 0.05], rotationOffset = [0, 0, 0], showDebug = false, armPose }, ref) => {
   const { transform } = connector
+  
+  // Use existing ports from connector
+  const effectivePorts = connector.ports || []
   const { scene } = useGLTF(modelUrl)
   
   // State cho animation - sử dụng useRef để tránh re-render
@@ -46,21 +50,21 @@ export const Connector3D = forwardRef<Group, Props>(({ connector, fade, animate 
     const position = transform.position
     const scale = transform.scale
     
-    console.log(`[${id}] Connector3D mounted:`, {
-      connectorId,
-      position,
-      scale,
-      timestamp: Date.now()
-    })
+    // console.log(`[${id}] Connector3D mounted:`, {
+    //   connectorId,
+    //   position,
+    //   scale,
+    //   timestamp: Date.now()
+    // })
 
-    return () => {
-      console.log(`[${id}] Connector3D unmounting:`, {
-        connectorId,
-        frameCount: frameCount.current,
-        errorCount: errorCount.current,
-        timestamp: Date.now()
-      })
-    }
+    // return () => {
+    //   console.log(`[${id}] Connector3D unmounting:`, {
+    //     connectorId,
+    //     frameCount: frameCount.current,
+    //     errorCount: errorCount.current,
+    //     timestamp: Date.now()
+    //   })
+    // }
   }, [connector.id, transform.position, transform.scale])
 
   // Setup model và tìm các object - chỉ chạy khi scene thay đổi
@@ -97,18 +101,36 @@ export const Connector3D = forwardRef<Group, Props>(({ connector, fade, animate 
     }
   }, [clonedScene])
 
+  // Apply armPose when provided, with fallback to connector.data.arms default rotations
+  useEffect(() => {
+    if (!isInitialized.current) return
+    
+    // Apply arm1 pose or default
+    if (arm1Ref.current) {
+      const angle1 = armPose?.arm1 ?? 0
+      try { setHinge(arm1Ref.current, angle1, 'z') } catch {}
+    }
+    
+    // Apply arm2 pose or default  
+    if (arm2Ref.current) {
+      const angle2 = armPose?.arm2 ?? 0
+      try { setHinge(arm2Ref.current, angle2, 'z') } catch {}
+    }
+  }, [armPose])
+
   // Hàm xoay có clamp với error handling - sử dụng useCallback
-  const setHinge = useCallback((obj: THREE.Object3D | null, deg: number, axis: 'x' | 'y' | 'z' = 'z', min: number = -60, max: number = 60) => {
+  // Giá trị đầu vào là radian, clamp từ -π/2 đến π/2 (tương đương -90° đến 90°)
+  const setHinge = useCallback((obj: THREE.Object3D | null, rad: number, axis: 'x' | 'y' | 'z' = 'z', min: number = -Math.PI/2, max: number = Math.PI/2) => {
     if (!obj) return
     
     try {
-      const r = THREE.MathUtils.degToRad(THREE.MathUtils.clamp(deg, min, max))
+      const r = THREE.MathUtils.clamp(rad, min, max)
       obj.rotation[axis] = r
     } catch (error) {
       console.error(`[${componentId.current}] Error in setHinge:`, error, {
         obj: obj.name,
         axis,
-        deg,
+        rad,
         timestamp: Date.now()
       })
       errorCount.current++

@@ -1,10 +1,10 @@
 {
   "id": "green_11_2",
-  "name": "Green Straw 11.2cm",
+  "name": "Green Straw 15.0cm",
   "version": "1.0",
   "category": "straw",
   "baseGeometry": {
-    "length": 11.2,
+    "length": 15.0,
     "diameter": 0.6,
     "wallThickness": 0.1,
     "segments": 32,
@@ -13,12 +13,12 @@
   "materialRef": "plastic_green",
   "endpointTemplate": {
     "start": {
-      "localPosition": { "x": -5.6, "y": 0, "z": 0 },
+      "localPosition": { "x": -7.5, "y": 0, "z": 0 },
       "socketType": "standard",
       "connectionRadius": 0.65
     },
     "end": {
-      "localPosition": { "x": 5.6, "y": 0, "z": 0 },
+      "localPosition": { "x": 7.5, "y": 0, "z": 0 },
       "socketType": "standard", 
       "connectionRadius": 0.65
     }

@@ -18,6 +18,41 @@ export interface Assembly {
     materials: Array<{ id: string; source: string }>
     components: Array<{ id: string; source: string }>
   }
+  components?: {
+    squares?: Array<{
+      id: string
+      name: string
+      center: { x: number; y: number; z: number }
+      elements: {
+        straws: string[]
+        connectors: string[]
+      }
+      connections: string
+      bounds?: {
+        min: { x: number; y: number; z: number }
+        max: { x: number; y: number; z: number }
+      }
+      state: string
+      componentMatrix: {
+        position: { x: number; y: number; z: number }
+        rotation: { x: number; y: number; z: number }
+        scale: { x: number; y: number; z: number }
+      }
+    }>
+  }
+  assemblies?: Record<string, {
+    id: string
+    name: string
+    description: string
+    components: string[]
+    subAssemblies?: string[]
+    assemblyMatrix: {
+      position: { x: number; y: number; z: number }
+      rotation: { x: number; y: number; z: number }
+      scale: { x: number; y: number; z: number }
+    }
+    state: string
+  }>
   instances: {
     straws: Array<{
       templateId: string
