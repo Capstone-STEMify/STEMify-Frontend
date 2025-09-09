@@ -17,10 +17,102 @@
     ],
     "components": [
       {"id": "green_11_2", "source": "/components/templates/StrawTypes/green_11_2.json"},
-      {"id": "green_11_7", "source": "/components/templates/StrawTypes/green_11_7.json"},
       {"id": "3leg_red", "source": "/components/templates/ConnectorTypes/3leg_red.json"},
       {"id": "5leg_red", "source": "/components/templates/ConnectorTypes/5leg_red.json"}
     ]
+  },
+
+  "components": {
+    "squares": [
+      {
+        "id": "square_base",
+        "name": "Base Square",
+        "center": {"x": 7.8, "y": 0, "z": 7.8},
+        "elements": {
+          "straws": ["straw_green_1", "straw_green_2", "straw_green_3", "straw_green_4"],
+          "connectors": ["connector_3leg_1", "connector_3leg_2", "connector_3leg_3", "connector_3leg_4"]
+        },
+        "connections": "base_square",
+        "bounds": {
+          "min": {"x": 0, "y": 0, "z": 0},
+          "max": {"x": 15.6, "y": 0, "z": 15.6}
+        },
+        "state": "built",
+        "componentMatrix": {
+          "position": {"x": 0, "y": 0, "z": 0},
+          "rotation": {"x": 0, "y": 0, "z": 0},
+          "scale": {"x": 1, "y": 1, "z": 1}
+        }
+      },
+      {
+        "id": "square_second",
+        "name": "Second Square",
+        "center": {"x": 27.8, "y": 0, "z": 7.8},
+        "elements": {
+          "straws": ["straw_green_5", "straw_green_6", "straw_green_7", "straw_green_8"],
+          "connectors": ["connector_3leg_5", "connector_3leg_6", "connector_3leg_7", "connector_3leg_8"]
+        },
+        "connections": "second_square",
+        "bounds": {
+          "min": {"x": 20, "y": 0, "z": 0},
+          "max": {"x": 35.6, "y": 0, "z": 15.6}
+        },
+        "state": "built",
+        "componentMatrix": {
+          "position": {"x": 0, "y": 0, "z": 0},
+          "rotation": {"x": 0, "y": 0, "z": 0},
+          "scale": {"x": 1, "y": 1, "z": 1}
+        }
+      },
+      {
+        "id": "square_third",
+        "name": "Third Square", 
+        "center": {"x": 47.8, "y": 0, "z": 7.8},
+        "elements": {
+          "straws": ["straw_green_9", "straw_green_10", "straw_green_11", "straw_green_12"],
+          "connectors": ["connector_3leg_9", "connector_3leg_10", "connector_3leg_11", "connector_3leg_12"]
+        },
+        "connections": "third_square",
+        "bounds": {
+          "min": {"x": 40, "y": 0, "z": 0},
+          "max": {"x": 55.6, "y": 0, "z": 15.6}
+        },
+        "state": "built",
+        "componentMatrix": {
+          "position": {"x": 0, "y": 0, "z": 0},
+          "rotation": {"x": 0, "y": 0, "z": 0},
+          "scale": {"x": 1, "y": 1, "z": 1}
+        }
+      }
+    ]
+  },
+
+  "assemblies": {
+    "diamond_assembly": {
+      "id": "diamond_assembly",
+      "name": "Diamond Assembly",
+      "description": "Assembly combining base and second square into diamond shape",
+      "components": ["square_base", "square_second"],
+      "assemblyMatrix": {
+        "position": {"x": 0, "y": 0, "z": 0},
+        "rotation": {"x": 0, "y": 0, "z": 0},
+        "scale": {"x": 1, "y": 1, "z": 1}
+      },
+      "state": "separate"
+    },
+    "octahedron_assembly": {
+      "id": "octahedron_assembly", 
+      "name": "Octahedron Assembly",
+      "description": "Final octahedron structure",
+      "components": ["square_base", "square_second", "square_third"],
+      "subAssemblies": ["diamond_assembly"],
+      "assemblyMatrix": {
+        "position": {"x": 0, "y": 0, "z": 0},
+        "rotation": {"x": 0, "y": 0, "z": 0},
+        "scale": {"x": 1, "y": 1, "z": 1}
+      },
+      "state": "separate"
+    }
   },
 
   "instances": {
@@ -28,23 +120,20 @@
       {
         "templateId": "green_11_2",
         "instances": [
-          {"id": "straw_green_1", "transform": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_3", "transform": {"position": {"x": 0, "y": 0, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_5", "transform": {"position": {"x": 0, "y": 5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_6", "transform": {"position": {"x": 11.7, "y": 5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_7", "transform": {"position": {"x": 0, "y": 5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_8", "transform": {"position": {"x": 11.7, "y": 5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_9", "transform": {"position": {"x": 0, "y": -5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_10", "transform": {"position": {"x": 11.7, "y": -5.6, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_11", "transform": {"position": {"x": 0, "y": -5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "straw_green_12", "transform": {"position": {"x": 11.7, "y": -5.6, "z": 12.2}, "rotation": {"x": 0, "y": 0, "z": 0}}}
-        ]
-      },
-      {
-        "templateId": "green_11_7",
-        "instances": [
-          {"id": "straw_green_2", "transform": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"x": 0, "y": 0, "z": 1.5708}}},
-          {"id": "straw_green_4", "transform": {"position": {"x": 11.7, "y": 0, "z": 6.1}, "rotation": {"x": 0, "y": 0, "z": 1.5708}}}
+          {"id": "straw_green_1", "transform": {"position": {"x": 7.77, "y": 0, "z": -0.25}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_2", "transform": {"position": {"x": -0.3, "y": 0, "z": 7.77}, "rotation": {"x": 0, "y": 1.5708, "z": 0}}},
+          {"id": "straw_green_3", "transform": {"position": {"x": 7.75, "y": 0, "z": 16}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_4", "transform": {"position": {"x": 16, "y": 0, "z": 7.77}, "rotation": {"x": 0, "y": 1.5708, "z": 0}}},
+
+          {"id": "straw_green_5", "transform": {"position": {"x": 27.77, "y": 0, "z": -0.25}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_6", "transform": {"position": {"x": 19.7, "y": 0, "z": 7.77}, "rotation": {"x": 0, "y": 1.5708, "z": 0}}},
+          {"id": "straw_green_7", "transform": {"position": {"x": 27.77, "y": 0, "z": 16}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_8", "transform": {"position": {"x": 36, "y": 0, "z": 7.77}, "rotation": {"x": 0, "y": 1.5708, "z": 0}}},
+
+          {"id": "straw_green_9", "transform": {"position": {"x": 47.77, "y": 0, "z": -0.25}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_10", "transform": {"position": {"x": 39.7, "y": 0, "z": 7.77}, "rotation": {"x": 0, "y": 1.5708, "z": 0}}},
+          {"id": "straw_green_11", "transform": {"position": {"x": 47.77, "y": 0, "z": 16}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "straw_green_12", "transform": {"position": {"x": 56, "y": 0, "z": 7.77}, "rotation": {"x": 0, "y": 1.5708, "z": 0}}}
         ]
       }
     ],
@@ -52,21 +141,32 @@
       {
         "templateId": "3leg_red",
         "instances": [
-          {"id": "connector_3leg_1", "transform": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"x": 1.5708, "y": 0, "z": 1.5708}}},
-          {"id": "connector_3leg_2", "transform": {"position": {"x": 0, "y": 0, "z": 12.2}, "rotation": {"x": 1.5708, "y": 0, "z": 1.5708}}},
-          {"id": "connector_3leg_3", "transform": {"position": {"x": 11.7, "y": 0, "z": 12.2}, "rotation": {"x": 1.5708, "y": 0, "z": 1.5708}}},
-          {"id": "connector_3leg_4", "transform": {"position": {"x": 11.7, "y": 0, "z": 0}, "rotation": {"x": -1.5708, "y": 0, "z": 1.5708}}}
+          {"id": "connector_3leg_1", "transform": {"position": {"x": 0, "y": 0, "z": 0}, "rotation": {"x": 1.5708, "y": 0, "z": 2.3562}}},
+          {"id": "connector_3leg_2", "transform": {"position": {"x": 0, "y": 0, "z": 15.6}, "rotation": {"x": 1.5708, "y": 0, "z": 0.7854}}},
+          {"id": "connector_3leg_3", "transform": {"position": {"x": 15.6, "y": 0, "z": 15.6}, "rotation": {"x": 1.5708, "y": 0, "z": 2.3562}}},
+          {"id": "connector_3leg_4", "transform": {"position": {"x": 15.6, "y": 0, "z": 0}, "rotation": {"x": 1.5708, "y": 0, "z": 0.7854}}},
+          
+          {"id": "connector_3leg_5", "transform": {"position": {"x": 20, "y": 0, "z": 0}, "rotation": {"x": 1.5708, "y": 0, "z": 2.3562}}},
+          {"id": "connector_3leg_6", "transform": {"position": {"x": 20, "y": 0, "z": 15.6}, "rotation": {"x": 1.5708, "y": 0, "z": 0.7854}}},
+          {"id": "connector_3leg_7", "transform": {"position": {"x": 35.6, "y": 0, "z": 15.6}, "rotation": {"x": 1.5708, "y": 0, "z": 2.3562}}},
+          {"id": "connector_3leg_8", "transform": {"position": {"x": 35.6, "y": 0, "z": 0}, "rotation": {"x": 1.5708, "y": 0, "z": 0.7854}}},
+          
+          {"id": "connector_3leg_9", "transform": {"position": {"x": 40, "y": 0, "z": 0}, "rotation": {"x": 1.5708, "y": 0, "z": 2.3562}}},
+          {"id": "connector_3leg_10", "transform": {"position": {"x": 40, "y": 0, "z": 15.6}, "rotation": {"x": 1.5708, "y": 0, "z": 0.7854}}},
+          {"id": "connector_3leg_11", "transform": {"position": {"x": 55.6, "y": 0, "z": 15.6}, "rotation": {"x": 1.5708, "y": 0, "z": 2.3562}}},
+          {"id": "connector_3leg_12", "transform": {"position": {"x": 55.6, "y": 0, "z": 0}, "rotation": {"x": 1.5708, "y": 0, "z": 0.7854}}}
         ]
       },
       {
         "templateId": "5leg_red",
         "instances": [
-          {"id": "connector_5leg_top", "transform": {"position": {"x": 5.85, "y": 11.2, "z": 6.1}, "rotation": {"x": 0, "y": 0, "z": 0}}},
-          {"id": "connector_5leg_bottom", "transform": {"position": {"x": 5.85, "y": -11.2, "z": 6.1}, "rotation": {"x": 0, "y": 0, "z": 0}}}
+          {"id": "connector_5leg_top", "transform": {"position": {"x": 7.5, "y": 15.0, "z": 7.5}, "rotation": {"x": 0, "y": 0, "z": 0}}},
+          {"id": "connector_5leg_bottom", "transform": {"position": {"x": 7.5, "y": -15.0, "z": 7.5}, "rotation": {"x": 0, "y": 0, "z": 0}}}
         ]
       }
     ]
   },
+
 
   "connections": {
     "base_square": [
@@ -78,6 +178,26 @@
       {"strawId": "straw_green_3", "endpoint": "end", "connectorId": "connector_3leg_3", "port": 0},
       {"strawId": "straw_green_4", "endpoint": "start", "connectorId": "connector_3leg_3", "port": 2},
       {"strawId": "straw_green_4", "endpoint": "end", "connectorId": "connector_3leg_4", "port": 2}
+    ],
+    "second_square": [
+      {"strawId": "straw_green_5", "endpoint": "start", "connectorId": "connector_3leg_5", "port": 0},
+      {"strawId": "straw_green_5", "endpoint": "end", "connectorId": "connector_3leg_8", "port": 0},
+      {"strawId": "straw_green_6", "endpoint": "start", "connectorId": "connector_3leg_5", "port": 2},
+      {"strawId": "straw_green_6", "endpoint": "end", "connectorId": "connector_3leg_6", "port": 2},
+      {"strawId": "straw_green_7", "endpoint": "start", "connectorId": "connector_3leg_6", "port": 0},
+      {"strawId": "straw_green_7", "endpoint": "end", "connectorId": "connector_3leg_7", "port": 0},
+      {"strawId": "straw_green_8", "endpoint": "start", "connectorId": "connector_3leg_7", "port": 2},
+      {"strawId": "straw_green_8", "endpoint": "end", "connectorId": "connector_3leg_8", "port": 2}
+    ],
+    "third_square": [
+      {"strawId": "straw_green_9", "endpoint": "start", "connectorId": "connector_3leg_9", "port": 0},
+      {"strawId": "straw_green_9", "endpoint": "end", "connectorId": "connector_3leg_12", "port": 0},
+      {"strawId": "straw_green_10", "endpoint": "start", "connectorId": "connector_3leg_9", "port": 2},
+      {"strawId": "straw_green_10", "endpoint": "end", "connectorId": "connector_3leg_10", "port": 2},
+      {"strawId": "straw_green_11", "endpoint": "start", "connectorId": "connector_3leg_10", "port": 0},
+      {"strawId": "straw_green_11", "endpoint": "end", "connectorId": "connector_3leg_11", "port": 0},
+      {"strawId": "straw_green_12", "endpoint": "start", "connectorId": "connector_3leg_11", "port": 2},
+      {"strawId": "straw_green_12", "endpoint": "end", "connectorId": "connector_3leg_12", "port": 2}
     ],
     "vertical_up": [
       {"strawId": "straw_green_5", "endpoint": "start", "connectorId": "connector_3leg_1", "port": 1},
@@ -118,6 +238,89 @@
       "sequenceDelay": 0.5
     },
     {
+      "id": "action_build_second_square",
+      "name": "Form Second Square",
+      "type": "connect",
+      "connectionGroup": "second_square",
+      "duration": 3.0,
+      "sequenceDelay": 0.3
+    },
+    {
+      "id": "action_build_third_square",
+      "name": "Form Third Square",
+      "type": "connect",
+      "connectionGroup": "third_square",
+      "duration": 3.0,
+      "sequenceDelay": 0.3
+    },
+    {
+      "id": "action_adjust_additional_connector_arms",
+      "name": "Adjust Additional Connector Arms",
+      "type": "transform_arm",
+      "targets": ["connector_3leg_5", "connector_3leg_6", "connector_3leg_7", "connector_3leg_8", "connector_3leg_9", "connector_3leg_10", "connector_3leg_11", "connector_3leg_12"],
+      "duration": 2.0,
+      "connectorArmTransforms": {
+        "connector_3leg_5": {
+          "arm_1": { "x": 0, "y": 0, "z": -0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": 0.7854 }
+        },
+        "connector_3leg_6": {
+          "arm_1": { "x": 0, "y": 0, "z": -0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": 0.7854 }
+        },
+        "connector_3leg_7": {
+          "arm_1": { "x": 0, "y": 0, "z": 0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": -0.7854 }
+        },
+        "connector_3leg_8": {
+          "arm_1": { "x": 0, "y": 0, "z": 0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": -0.7854 }
+        },
+        "connector_3leg_9": {
+          "arm_1": { "x": 0, "y": 0, "z": -0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": 0.7854 }
+        },
+        "connector_3leg_10": {
+          "arm_1": { "x": 0, "y": 0, "z": -0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": 0.7854 }
+        },
+        "connector_3leg_11": {
+          "arm_1": { "x": 0, "y": 0, "z": 0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": -0.7854 }
+        },
+        "connector_3leg_12": {
+          "arm_1": { "x": 0, "y": 0, "z": 0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": -0.7854 }
+        }
+      },
+      "interpolation": "easeInOut"
+    },
+    {
+      "id": "action_assemble_diamond",
+      "name": "Assemble Diamond",
+      "type": "component_assembly",
+      "assemblyId": "diamond_assembly",
+      "duration": 3.0,
+      "componentTransforms": {
+        "square_second": {
+          "type": "matrix_transform",
+          "matrix": {
+            "position": { "x": -12, "y": 8, "z": 0 },
+            "rotation": { "x": -0.7854, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "pivot": "component_center",
+          "transformAsUnit": true,
+          "constraints": {
+            "maintainRelativePositions": true,
+            "preventBreaking": true
+          }
+        }
+      },
+      "assemblyState": "assembled",
+      "description": "Component-assembly approach: Transform square_second as a complete unit around component center - all elements move together maintaining structural integrity"
+    },
+    {
       "id": "action_add_verticals",
       "name": "Add Vertical Straws",
       "type": "connect",
@@ -130,6 +333,50 @@
       "type": "connect", 
       "connectionGroup": "vertical_down",
       "duration": 2.5
+    },
+    {
+      "id": "action_adjust_connector_arms",
+      "name": "Adjust Top Connector Arms",
+      "type": "transform_arm",
+      "targets": ["connector_5leg_top","connector_5leg_bottom"],
+      "duration": 2.0,
+      "connectorArmTransforms": {
+        "connector_5leg_top": {
+          "arm_1": { "x": 0, "y": 0, "z": -30 },
+          "arm_2": { "x": 0, "y": 0, "z": 30 }
+        },
+        "connector_5leg_bottom": {
+          "arm_1": { "x": 0, "y": 0, "z": 45 },
+          "arm_2": { "x": 0, "y": 0, "z": -45 }
+        }
+      },
+      "interpolation": "easeInOut"
+    },
+    {
+      "id": "action_adjust_base_connector_arms",
+      "name": "Adjust Base Connector Arms",
+      "type": "transform_arm",
+      "targets": ["connector_3leg_1", "connector_3leg_2", "connector_3leg_3", "connector_3leg_4"],
+      "duration": 2.0,
+      "connectorArmTransforms": {
+        "connector_3leg_1": {
+          "arm_1": { "x": 0, "y": 0, "z": -0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": 0.7854 }
+        },
+        "connector_3leg_2": {
+          "arm_1": { "x": 0, "y": 0, "z": -0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": 0.7854  }
+        },
+        "connector_3leg_3": {
+          "arm_1": { "x": 0, "y": 0, "z": 0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": -0.7854 }
+        },
+        "connector_3leg_4": {
+          "arm_1": { "x": 0, "y": 0, "z": 0.7854 },
+          "arm_2": { "x": 0, "y": 0, "z": -0.7854 }
+        }
+      },
+      "interpolation": "easeInOut"
     },
     {
       "id": "action_final_highlight",
@@ -174,6 +421,23 @@
           }
         },
         {
+          "actionId": "action_adjust_base_connector_arms",
+          "title": "Adjust Base Connector Arms",
+          "description": "Fine-tune the arm angles of all base connectors for optimal alignment",
+          "expectedResult": "All base connector arms are positioned at the correct angles",
+          "hints": [
+            "Adjust arm_1 to +15 degrees for better alignment",
+            "Adjust arm_2 to -15 degrees to balance the structure",
+            "All 4 base connectors should have consistent arm angles"
+          ],
+          "validation": {
+            "type": "arm_transform",
+            "criteria": {
+              
+            }
+          }
+        },
+        {
           "actionId": "action_build_base",
           "title": "Form Base Square",
           "description": "Connect the 4 connectors with straws to create the square foundation of the octahedron",
@@ -192,51 +456,146 @@
           }
         },
         {
-          "actionId": "action_add_verticals",
-          "title": "Add Vertical Support",
-          "description": "Attach vertical straws from each corner of the base square, pointing upward toward the top connector",
-          "expectedResult": "4 vertical straws extend upward from base connectors",
+          "actionId": "action_build_second_square",
+          "title": "Form Second Square",
+          "description": "Create the second square that will form the diamond shape",
+          "expectedResult": "A complete second square is formed with proper connections",
           "hints": [
-            "Use the upward-facing ports on each base connector",
-            "Vertical straws should be parallel to each other",
-            "Maintain proper alignment for top connector placement"
+            "This square is positioned to the right of the base square",
+            "Use the same connection pattern as the base square",
+            "This square will be rotated to create the diamond effect"
           ],
           "validation": {
             "type": "connection",
             "criteria": {
-              "requiredConnectionsGroup": "vertical_up",
+              "requiredConnectionsGroup": "second_square",
               "connected": true
             }
           }
         },
         {
-          "actionId": "action_add_bottom_verticals",
-          "title": "Complete Structure",
-          "description": "Attach vertical straws downward from each base connector toward the bottom apex",
-          "expectedResult": "4 additional vertical straws extend downward from base",
+          "actionId": "action_build_third_square",
+          "title": "Form Third Square",
+          "description": "Create the third square for additional structure",
+          "expectedResult": "A complete third square is formed with proper connections",
           "hints": [
-            "Use the remaining ports on base connectors (conceptually mirrored)",
-            "Mirror the upward straws but in opposite direction",
-            "Maintain symmetry with top half of octahedron"
+            "This square provides additional structural support",
+            "Position it to the right of the second square",
+            "Ensure all connections are properly aligned"
           ],
           "validation": {
             "type": "connection",
             "criteria": {
-              "requiredConnectionsGroup": "vertical_down",
+              "requiredConnectionsGroup": "third_square",
               "connected": true
             }
           }
         },
         {
-          "actionId": "action_final_highlight",
-          "title": "Verify Octahedron",
-          "description": "Observe the completed regular octahedron and understand its geometric properties",
-          "expectedResult": "Perfect octahedron with 8 triangular faces, 6 vertices, and 12 edges",
+          "actionId": "action_adjust_additional_connector_arms",
+          "title": "Adjust Additional Connector Arms",
+          "description": "Fine-tune the arm angles of all additional connectors for optimal alignment",
+          "expectedResult": "All additional connector arms are positioned at the correct angles",
           "hints": [
-            "Count 8 triangular faces (4 top, 4 bottom)",
-            "Identify 6 vertices (4 base corners + 2 apex points)",
-            "Observe 12 edges (4 base + 4 top + 4 bottom)"
-          ]
+            "Adjust arm_1 to +15 degrees for better alignment",
+            "Adjust arm_2 to -15 degrees to balance the structure",
+            "All 8 additional connectors should have consistent arm angles"
+          ],
+          "validation": {
+            "type": "arm_transform",
+            "criteria": {
+              "connectorValidations": [
+                {
+                  "connectorId": "connector_3leg_5",
+                  "armValidations": [
+                    {
+                      "armId": "arm_1",
+                      "expectedRotation": { "x": 0, "y": 0, "z": 0 },
+                      "tolerance": 5
+                    },
+                    {
+                      "armId": "arm_2", 
+                      "expectedRotation": { "x": 0, "y": 0, "z": 0 },
+                      "tolerance": 5
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "actionId": "action_assemble_diamond",
+          "title": "Assemble Diamond",
+          "description": "Combine the base and second square components into a diamond assembly while maintaining component integrity",
+          "expectedResult": "Diamond assembly is formed with components properly positioned and rotated as units",
+          "hints": [
+            "Components are assembled as complete units, not individual elements",
+            "The second square component rotates 45° as a whole around its center",
+            "Component matrix transformation ensures all elements move together",
+            "Assembly maintains the structural integrity of each component"
+          ],
+          "validation": {
+            "type": "assembly_state",
+            "criteria": {
+              "assemblyId": "diamond_assembly",
+              "expectedState": "assembled",
+              "componentMatrices": {
+                "square_second": {
+                  "rotation": { "x": -0.7854, "y": 0, "z": 0 },
+                  "tolerance": 0.1
+                }
+              }
+            }
+          }
+        },
+        {
+          "actionId": "action_adjust_connector_arms",
+          "title": "Adjust Top Connector Arms",
+          "description": "Fine-tune the arm angles of the top connector for optimal straw alignment",
+          "expectedResult": "Top connector arms are positioned at the correct angles for stable connections",
+          "hints": [
+            "Adjust arm_1 to -30 degrees for better straw alignment",
+            "Adjust arm_2 to +30 degrees to balance the structure",
+            "Watch how the arm rotation affects the overall geometry"
+          ],
+          "validation": {
+            "type": "arm_transform",
+            "criteria": {
+              "connectorValidations": [
+                {
+                  "connectorId": "connector_5leg_top",
+                  "armValidations": [
+                    {
+                      "armId": "arm_1",
+                      "expectedRotation": { "x": 0, "y": 0, "z": -30 },
+                      "tolerance": 5
+                    },
+                    {
+                      "armId": "arm_2", 
+                      "expectedRotation": { "x": 0, "y": 0, "z": 30 },
+                      "tolerance": 5
+                    }
+                  ]
+                },
+                {
+                  "connectorId": "connector_5leg_bottom",
+                  "armValidations": [
+                    {
+                      "armId": "arm_1",
+                      "expectedRotation": { "x": 0, "y": 0, "z": 45 },
+                      "tolerance": 5
+                    },
+                    {
+                      "armId": "arm_2", 
+                      "expectedRotation": { "x": 0, "y": 0, "z": -45 },
+                      "tolerance": 5
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
       ],
       "playbackControls": {
@@ -250,7 +609,7 @@
 
   "scene": {
     "environment": {
-      "background": "#F0F8FF",
+      "background": "#f5f5f5",
       "lighting": {
         "ambient": "#404040",
         "directional": {
@@ -260,9 +619,9 @@
         }
       },
       "camera": {
-        "position": {"x": 25, "y": 15, "z": 25},
-        "target": {"x": 5.85, "y": 0, "z": 6.1},
-        "fov": 50
+        "position": {"x": 40, "y": 20, "z": 40},
+        "target": {"x": 27.5, "y": 0, "z": 8},
+        "fov": 60
       }
     },
     "lod": {

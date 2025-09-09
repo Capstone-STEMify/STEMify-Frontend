@@ -1,0 +1,382 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-08-05T10:30:00Z",
+    "lastModified": "2025-08-05T14:20:00Z",
+    "author": "Lab Designer",
+    "description": "Basic connector assembly lab for beginners"
+  },
+  
+  "straws": [
+    {
+      "id": "straw_1",
+      "name": "Orange Straw 25cm",
+      "geometry": {
+        "length": 25.0,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#FF8C00",
+        "flexibility": 30,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_1_start",
+          "localPosition": { "x": -12.5, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_1_end",
+          "localPosition": { "x": 12.5, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.5,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    },
+    {
+      "id": "straw_2",
+      "name": "Blue Straw 19cm",
+      "geometry": {
+        "length": 19.0,
+        "diameter": 0.6,
+        "wallThickness": 0.1
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#4169E1",
+        "flexibility": 30,
+        "opacity": 1.0,
+        "roughness": 0.3,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 30, "y": 0, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "endpoints": {
+        "start": {
+          "id": "straw_2_start",
+          "localPosition": { "x": -9.5, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        },
+        "end": {
+          "id": "straw_2_end",
+          "localPosition": { "x": 9.5, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true
+        }
+      },
+      "physics": {
+        "mass": 0.4,
+        "friction": 0.4,
+        "elasticity": 0.2
+      }
+    }
+  ],
+  
+  "connectors": [
+    {
+      "id": "connector_1",
+      "name": "T-Joint Connector",
+      "type": "tee",
+      "geometry": {
+        "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
+        "portDiameter": 0.65,
+        "shape": "cylindrical"
+      },
+      "material": {
+        "type": "plastic",
+        "color": "#32CD32",
+        "flexibility": 10,
+        "opacity": 1.0,
+        "roughness": 0.4,
+        "metalness": 0.0
+      },
+      "transform": {
+        "position": { "x": 15, "y": 0, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 }
+      },
+      "ports": [
+        {
+          "id": "connector_1_port_0",
+          "localPosition": { "x": -1.0, "y": 0, "z": 0 },
+          "orientation": { "x": 0, "y": 0, "z": 180 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 0
+        },
+        {
+          "id": "connector_1_port_1",
+          "localPosition": { "x": 1.0, "y": 0, "z": 0 },
+          "orientation": { "x": 0, "y": 0, "z": 0 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 1
+        },
+        {
+          "id": "connector_1_port_2",
+          "localPosition": { "x": 0, "y": 1.0, "z": 0 },
+          "orientation": { "x": 0, "y": 0, "z": 90 },
+          "connectionId": null,
+          "isAvailable": true,
+          "portIndex": 2
+        }
+      ],
+      "constraints": {
+        "maxConnections": 3,
+        "allowedAngles": [0, 90, 180, 270]
+      }
+    }
+  ],
+  
+  "joints": [
+    {
+      "id": "joint_1",
+      "type": "fixed",
+      "componentA": {
+        "componentId": "straw_1",
+        "componentType": "straw",
+        "attachmentPointId": "straw_1_end"
+      },
+      "componentB": {
+        "componentId": "connector_1",
+        "componentType": "connector",
+        "attachmentPointId": "connector_1_port_0"
+      },
+      "constraints": {
+        "allowRotation": { "x": 0, "y": 0, "z": 0 },
+        "allowTranslation": { "x": 0, "y": 0, "z": 0 }
+      },
+      "strength": 90,
+      "created": "2025-01-15T12:00:00Z"
+    }
+  ],
+  
+  "actions": [
+    {
+      "id": "action_1",
+      "name": "Move Straw to Connector",
+      "type": "move",
+      "targetId": "straw_1",
+      "targetType": "straw",
+      "parameters": {
+        "duration": 2.0,
+        "delay": 0.5,
+        "easing": "ease-in-out",
+        "loop": false,
+        "autoReverse": false
+      },
+      "animation": {
+        "keyframes": [
+          {
+            "time": 0.0,
+            "transform": {
+              "position": { "x": 0, "y": 0, "z": 0 },
+              "rotation": { "x": 0, "y": 0, "z": 0 },
+              "scale": { "x": 1, "y": 1, "z": 1 }
+            }
+          },
+          {
+            "time": 1.0,
+            "transform": {
+              "position": { "x": 2.5, "y": 0, "z": 0 },
+              "rotation": { "x": 0, "y": 0, "z": 0 },
+              "scale": { "x": 1, "y": 1, "z": 1 }
+            }
+          }
+        ],
+        "interpolation": "cubic"
+      },
+      "triggers": [
+        {
+          "event": "click",
+          "condition": "user_click_play",
+          "nextActionId": "action_2"
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "action_2",
+      "name": "Connect Straw to Connector",
+      "type": "connect",
+      "targetId": "joint_1",
+      "targetType": "joint",
+      "parameters": {
+        "duration": 1.0,
+        "delay": 0.0,
+        "easing": "ease-out"
+      },
+      "triggers": [
+        {
+          "event": "completion",
+          "nextActionId": "action_3"
+        }
+      ],
+      "order": 2
+    },
+    {
+      "id": "action_3",
+      "name": "Highlight Connection",
+      "type": "highlight",
+      "targetId": "joint_1",
+      "targetType": "joint",
+      "parameters": {
+        "duration": 1.5,
+        "loop": true
+      },
+      "animation": {
+        "keyframes": [
+          {
+            "time": 0.0,
+            "material": {
+              "type": "plastic",
+              "color": "#32CD32",
+              "opacity": 1.0
+            }
+          },
+          {
+            "time": 0.5,
+            "material": {
+              "type": "plastic",
+              "color": "#FFD700",
+              "opacity": 1.0
+            }
+          },
+          {
+            "time": 1.0,
+            "material": {
+              "type": "plastic",
+              "color": "#32CD32",
+              "opacity": 1.0
+            }
+          }
+        ]
+      },
+      "order": 3
+    }
+  ],
+  
+  "activities": [
+    {
+      "id": "activity_1",
+      "name": "Basic T-Joint Assembly",
+      "description": "Learn how to connect straws using a T-joint connector",
+      "difficulty": "beginner",
+      "estimatedTime": 300,
+      "objectives": [
+        "Understand connector types",
+        "Practice precise alignment",
+        "Learn connection validation"
+      ],
+      "steps": [
+        {
+          "id": "step_1",
+          "order": 1,
+          "title": "Identify Components",
+          "description": "Locate the orange straw and green T-connector",
+          "actionIds": [],
+          "expectedResult": "Components are visually identified",
+          "hints": ["Look for the orange colored straw", "Find the T-shaped green connector"]
+        },
+        {
+          "id": "step_2",
+          "order": 2,
+          "title": "Position Straw",
+          "description": "Move the straw close to the connector",
+          "actionIds": ["action_1"],
+          "expectedResult": "Straw is positioned near the connector port",
+          "hints": ["Drag the straw slowly", "Watch for snap-to guides"],
+          "validation": {
+            "type": "position",
+            "criteria": {
+              "maxDistance": 2.0,
+              "targetPosition": { "x": 15, "y": 0, "z": 0 }
+            }
+          }
+        },
+        {
+          "id": "step_3",
+          "order": 3,
+          "title": "Make Connection",
+          "description": "Align and connect the straw to the connector port",
+          "actionIds": ["action_2"],
+          "expectedResult": "Straw is firmly connected to connector",
+          "hints": ["Look for the connection highlight", "Ensure proper alignment"],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "jointId": "joint_1",
+              "connected": true
+            }
+          }
+        },
+        {
+          "id": "step_4",
+          "order": 4,
+          "title": "Verify Connection",
+          "description": "Observe the connection highlighting",
+          "actionIds": ["action_3"],
+          "expectedResult": "Connection is highlighted and secure",
+          "hints": ["Watch for the golden highlight effect"]
+        }
+      ],
+      "playbackControls": {
+        "allowRewind": true,
+        "allowPause": true,
+        "allowSkip": false,
+        "speed": 1.0
+      }
+    }
+  ],
+  
+  "scene": {
+    "environment": {
+      "background": "#F0F8FF",
+      "lighting": {
+        "ambient": "#404040",
+        "directional": {
+          "color": "#FFFFFF",
+          "intensity": 0.8,
+          "position": { "x": 10, "y": 10, "z": 5 }
+        }
+      },
+      "camera": {
+        "position": { "x": 0, "y": 5, "z": 20 },
+        "target": { "x": 0, "y": 0, "z": 0 },
+        "fov": 45,
+        "controls": "orbit"
+      }
+    },
+    "workspace": {
+      "bounds": {
+        "min": { "x": -50, "y": -20, "z": -50 },
+        "max": { "x": 50, "y": 20, "z": 50 }
+      },
+      "grid": {
+        "visible": true,
+        "size": 100,
+        "divisions": 20
+      }
+    }
+  }
+}

@@ -1,10 +1,15 @@
 {
   "metadata": {
     "version": "1.0",
+    "schemaVersion": "2.0.0",
+    "angleUnit": "radian",
     "created": "2025-01-15T08:00:00Z",
     "lastModified": "2025-01-15T08:00:00Z",
     "author": "STEM Education Team",
-    "description": "Octahedron assembly lab - 3D regular octahedron construction with step-by-step guidance"
+    "description": "Octahedron assembly lab - 3D regular octahedron construction with step-by-step guidance",
+    "notes": {
+      "strawLengths": "Base straws 2 and 4 use length 11.7 for proper octahedron geometry, while all other straws use 11.2. This variation is intentional for correct 3D structure formation."
+    }
   },
   
   "straws": [
@@ -537,7 +542,7 @@
         {
           "id": "connector_3leg_1_port_1",
           "localPosition": { "x": 1.0, "y": 2.0, "z": 1.0 },
-          "orientation": { "x": 0, "y": 90, "z": 45 },
+          "orientation": { "x": 0, "y": 1.5708, "z": 0.7854 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 1
@@ -545,7 +550,7 @@
         {
           "id": "connector_3leg_1_port_2",
           "localPosition": { "x": 0, "y": 0, "z": 2.0 },
-          "orientation": { "x": 0, "y": 0, "z": 90 },
+          "orientation": { "x": 0, "y": 0, "z": 1.5708 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 2
@@ -553,7 +558,7 @@
       ],
       "constraints": {
         "maxConnections": 3,
-        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+        "allowedAngles": [0, 0.7854, 1.5708, 2.3562, 3.1416, 3.9270, 4.7124, 5.4978]
       }
     },
     {
@@ -590,7 +595,7 @@
         {
           "id": "connector_3leg_2_port_1",
           "localPosition": { "x": 1.0, "y": 2.0, "z": -1.0 },
-          "orientation": { "x": 0, "y": 90, "z": -45 },
+          "orientation": { "x": 0, "y": 1.5708, "z": -0.7854 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 1
@@ -598,7 +603,7 @@
         {
           "id": "connector_3leg_2_port_2",
           "localPosition": { "x": 0, "y": 0, "z": -2.0 },
-          "orientation": { "x": 0, "y": 0, "z": -90 },
+          "orientation": { "x": 0, "y": 0, "z": -1.5708 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 2
@@ -606,7 +611,7 @@
       ],
       "constraints": {
         "maxConnections": 3,
-        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+        "allowedAngles": [0, 0.7854, 1.5708, 2.3562, 3.1416, 3.9270, 4.7124, 5.4978]
       }
     },
     {
@@ -635,7 +640,7 @@
         {
           "id": "connector_3leg_3_port_0",
           "localPosition": { "x": -2.0, "y": 0, "z": 0 },
-          "orientation": { "x": 0, "y": 0, "z": 180 },
+          "orientation": { "x": 0, "y": 0, "z": 3.1416 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 0
@@ -643,7 +648,7 @@
         {
           "id": "connector_3leg_3_port_1",
           "localPosition": { "x": -1.0, "y": 2.0, "z": -1.0 },
-          "orientation": { "x": 0, "y": 90, "z": 225 },
+          "orientation": { "x": 0, "y": 1.5708, "z": 3.9270 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 1
@@ -651,7 +656,7 @@
         {
           "id": "connector_3leg_3_port_2",
           "localPosition": { "x": 0, "y": 0, "z": -2.0 },
-          "orientation": { "x": 0, "y": 0, "z": 270 },
+          "orientation": { "x": 0, "y": 0, "z": 4.7124 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 2
@@ -659,7 +664,7 @@
       ],
       "constraints": {
         "maxConnections": 3,
-        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+        "allowedAngles": [0, 0.7854, 1.5708, 2.3562, 3.1416, 3.9270, 4.7124, 5.4978]
       }
     },
     {
@@ -688,7 +693,7 @@
         {
           "id": "connector_3leg_4_port_0",
           "localPosition": { "x": -2.0, "y": 0, "z": 0 },
-          "orientation": { "x": 0, "y": 0, "z": 180 },
+          "orientation": { "x": 0, "y": 0, "z": 3.1416 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 0
@@ -696,7 +701,7 @@
         {
           "id": "connector_3leg_4_port_1",
           "localPosition": { "x": -1.0, "y": 2.0, "z": 1.0 },
-          "orientation": { "x": 0, "y": 90, "z": 135 },
+          "orientation": { "x": 0, "y": 1.5708, "z": 2.3562 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 1
@@ -704,7 +709,7 @@
         {
           "id": "connector_3leg_4_port_2",
           "localPosition": { "x": 0, "y": 0, "z": 2.0 },
-          "orientation": { "x": 0, "y": 0, "z": 90 },
+          "orientation": { "x": 0, "y": 0, "z": 1.5708 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 2
@@ -712,12 +717,12 @@
       ],
       "constraints": {
         "maxConnections": 3,
-        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+        "allowedAngles": [0, 0.7854, 1.5708, 2.3562, 3.1416, 3.9270, 4.7124, 5.4978]
       }
     },
     {
-      "id": "connector_5leg_top",
-      "name": "5-leg Connector Top",
+      "id": "connector_4leg_top",
+      "name": "4-leg Connector Top",
       "type": "custom",
       "geometry": {
         "size": { "x": 2.5, "y": 2.5, "z": 2.5 },
@@ -739,33 +744,33 @@
       },
       "ports": [
         {
-          "id": "connector_5leg_top_port_0",
+          "id": "connector_4leg_top_port_0",
           "localPosition": { "x": 1.0, "y": -2.0, "z": -1.0 },
-          "orientation": { "x": 0, "y": -90, "z": -45 },
+          "orientation": { "x": 0, "y": -1.5708, "z": -0.7854 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 0
         },
         {
-          "id": "connector_5leg_top_port_1",
+          "id": "connector_4leg_top_port_1",
           "localPosition": { "x": 1.0, "y": -2.0, "z": 1.0 },
-          "orientation": { "x": 0, "y": -90, "z": 45 },
+          "orientation": { "x": 0, "y": -1.5708, "z": 0.7854 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 1
         },
         {
-          "id": "connector_5leg_top_port_2",
+          "id": "connector_4leg_top_port_2",
           "localPosition": { "x": -1.0, "y": -2.0, "z": -1.0 },
-          "orientation": { "x": 0, "y": -90, "z": 225 },
+          "orientation": { "x": 0, "y": -1.5708, "z": 3.9270 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 2
         },
         {
-          "id": "connector_5leg_top_port_3",
+          "id": "connector_4leg_top_port_3",
           "localPosition": { "x": -1.0, "y": -2.0, "z": 1.0 },
-          "orientation": { "x": 0, "y": -90, "z": 135 },
+          "orientation": { "x": 0, "y": -1.5708, "z": 2.3562 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 3
@@ -773,12 +778,12 @@
       ],
       "constraints": {
         "maxConnections": 4,
-        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+        "allowedAngles": [0, 0.7854, 1.5708, 2.3562, 3.1416, 3.9270, 4.7124, 5.4978]
       }
     },
     {
-      "id": "connector_5leg_bottom",
-      "name": "5-leg Connector Bottom",
+      "id": "connector_4leg_bottom",
+      "name": "4-leg Connector Bottom",
       "type": "custom",
       "geometry": {
         "size": { "x": 2.5, "y": 2.5, "z": 2.5 },
@@ -800,33 +805,33 @@
       },
       "ports": [
         {
-          "id": "connector_5leg_bottom_port_0",
+          "id": "connector_4leg_bottom_port_0",
           "localPosition": { "x": 1.0, "y": 2.0, "z": -1.0 },
-          "orientation": { "x": 0, "y": 90, "z": -45 },
+          "orientation": { "x": 0, "y": 1.5708, "z": -0.7854 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 0
         },
         {
-          "id": "connector_5leg_bottom_port_1",
+          "id": "connector_4leg_bottom_port_1",
           "localPosition": { "x": 1.0, "y": 2.0, "z": 1.0 },
-          "orientation": { "x": 0, "y": 90, "z": 45 },
+          "orientation": { "x": 0, "y": 1.5708, "z": 0.7854 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 1
         },
         {
-          "id": "connector_5leg_bottom_port_2",
+          "id": "connector_4leg_bottom_port_2",
           "localPosition": { "x": -1.0, "y": 2.0, "z": -1.0 },
-          "orientation": { "x": 0, "y": 90, "z": 225 },
+          "orientation": { "x": 0, "y": 1.5708, "z": 3.9270 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 2
         },
         {
-          "id": "connector_5leg_bottom_port_3",
+          "id": "connector_4leg_bottom_port_3",
           "localPosition": { "x": -1.0, "y": 2.0, "z": 1.0 },
-          "orientation": { "x": 0, "y": 90, "z": 135 },
+          "orientation": { "x": 0, "y": 1.5708, "z": 2.3562 },
           "connectionId": null,
           "isAvailable": true,
           "portIndex": 3
@@ -834,7 +839,7 @@
       ],
       "constraints": {
         "maxConnections": 4,
-        "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315]
+        "allowedAngles": [0, 0.7854, 1.5708, 2.3562, 3.1416, 3.9270, 4.7124, 5.4978]
       }
     }
   ],
@@ -1089,9 +1094,9 @@
         "attachmentPointId": "straw_green_5_end"
       },
       "componentB": {
-        "componentId": "connector_5leg_top",
+        "componentId": "connector_4leg_top",
         "componentType": "connector",
-        "attachmentPointId": "connector_5leg_top_port_0"
+        "attachmentPointId": "connector_4leg_top_port_0"
       },
       "constraints": {
         "allowRotation": { "x": 0, "y": 0, "z": 0 },
@@ -1109,9 +1114,9 @@
         "attachmentPointId": "straw_green_6_end"
       },
       "componentB": {
-        "componentId": "connector_5leg_top",
+        "componentId": "connector_4leg_top",
         "componentType": "connector",
-        "attachmentPointId": "connector_5leg_top_port_1"
+        "attachmentPointId": "connector_4leg_top_port_1"
       },
       "constraints": {
         "allowRotation": { "x": 0, "y": 0, "z": 0 },
@@ -1129,9 +1134,9 @@
         "attachmentPointId": "straw_green_7_end"
       },
       "componentB": {
-        "componentId": "connector_5leg_top",
+        "componentId": "connector_4leg_top",
         "componentType": "connector",
-        "attachmentPointId": "connector_5leg_top_port_2"
+        "attachmentPointId": "connector_4leg_top_port_2"
       },
       "constraints": {
         "allowRotation": { "x": 0, "y": 0, "z": 0 },
@@ -1149,9 +1154,9 @@
         "attachmentPointId": "straw_green_8_end"
       },
       "componentB": {
-        "componentId": "connector_5leg_top",
+        "componentId": "connector_4leg_top",
         "componentType": "connector",
-        "attachmentPointId": "connector_5leg_top_port_3"
+        "attachmentPointId": "connector_4leg_top_port_3"
       },
       "constraints": {
         "allowRotation": { "x": 0, "y": 0, "z": 0 },
@@ -1169,9 +1174,9 @@
         "attachmentPointId": "straw_green_9_end"
       },
       "componentB": {
-        "componentId": "connector_5leg_bottom",
+        "componentId": "connector_4leg_bottom",
         "componentType": "connector",
-        "attachmentPointId": "connector_5leg_bottom_port_0"
+        "attachmentPointId": "connector_4leg_bottom_port_0"
       },
       "constraints": {
         "allowRotation": { "x": 0, "y": 0, "z": 0 },
@@ -1189,9 +1194,9 @@
         "attachmentPointId": "straw_green_10_end"
       },
       "componentB": {
-        "componentId": "connector_5leg_bottom",
+        "componentId": "connector_4leg_bottom",
         "componentType": "connector",
-        "attachmentPointId": "connector_5leg_bottom_port_1"
+        "attachmentPointId": "connector_4leg_bottom_port_1"
       },
       "constraints": {
         "allowRotation": { "x": 0, "y": 0, "z": 0 },
@@ -1209,9 +1214,9 @@
         "attachmentPointId": "straw_green_11_end"
       },
       "componentB": {
-        "componentId": "connector_5leg_bottom",
+        "componentId": "connector_4leg_bottom",
         "componentType": "connector",
-        "attachmentPointId": "connector_5leg_bottom_port_2"
+        "attachmentPointId": "connector_4leg_bottom_port_2"
       },
       "constraints": {
         "allowRotation": { "x": 0, "y": 0, "z": 0 },
@@ -1229,9 +1234,9 @@
         "attachmentPointId": "straw_green_12_end"
       },
       "componentB": {
-        "componentId": "connector_5leg_bottom",
+        "componentId": "connector_4leg_bottom",
         "componentType": "connector",
-        "attachmentPointId": "connector_5leg_bottom_port_3"
+        "attachmentPointId": "connector_4leg_bottom_port_3"
       },
       "constraints": {
         "allowRotation": { "x": 0, "y": 0, "z": 0 },
@@ -1239,6 +1244,51 @@
       },
       "strength": 95,
       "created": "2025-01-15T08:00:00Z"
+    }
+  ],
+  
+  "groups": [
+    {
+      "id": "group_base_connectors",
+      "name": "Base Connectors",
+      "description": "The four 3-leg connectors forming the base square",
+      "componentIds": ["connector_3leg_1", "connector_3leg_2", "connector_3leg_3", "connector_3leg_4"]
+    },
+    {
+      "id": "group_base_joints",
+      "name": "Base Square Joints",
+      "description": "Joints connecting the base square formation",
+      "componentIds": ["joint_base_1_2", "joint_base_1_4", "joint_base_2_1", "joint_base_2_2", "joint_base_3_2", "joint_base_3_3", "joint_base_4_3", "joint_base_4_4"]
+    },
+    {
+      "id": "group_vertical_joints",
+      "name": "Vertical Support Joints",
+      "description": "Joints connecting vertical straws to base connectors",
+      "componentIds": ["joint_vert_up_1", "joint_vert_up_2", "joint_vert_up_3", "joint_vert_up_4"]
+    },
+    {
+      "id": "group_top_joints",
+      "name": "Top Apex Joints",
+      "description": "Joints connecting vertical straws to top connector",
+      "componentIds": ["joint_top_1", "joint_top_2", "joint_top_3", "joint_top_4"]
+    },
+    {
+      "id": "group_bottom_vertical_joints",
+      "name": "Bottom Vertical Joints",
+      "description": "Joints connecting bottom vertical straws to base connectors",
+      "componentIds": ["joint_bottom_1", "joint_bottom_2", "joint_bottom_3", "joint_bottom_4"]
+    },
+    {
+      "id": "group_bottom_joints",
+      "name": "Bottom Apex Joints",
+      "description": "Joints connecting bottom vertical straws to bottom connector",
+      "componentIds": ["joint_bottom_1", "joint_bottom_2", "joint_bottom_3", "joint_bottom_4"]
+    },
+    {
+      "id": "group_complete_octahedron",
+      "name": "Complete Octahedron",
+      "description": "All components forming the complete octahedron structure",
+      "componentIds": ["straw_green_1", "straw_green_2", "straw_green_3", "straw_green_4", "straw_green_5", "straw_green_6", "straw_green_7", "straw_green_8", "straw_green_9", "straw_green_10", "straw_green_11", "straw_green_12", "connector_3leg_1", "connector_3leg_2", "connector_3leg_3", "connector_3leg_4", "connector_4leg_top", "connector_4leg_bottom"]
     }
   ],
   
@@ -1509,11 +1559,11 @@
           "id": "step_connect_top_apex",
           "order": 4,
           "title": "Connect Top Apex",
-          "description": "Place and connect the 5-leg connector at the top center, joining all vertical straws",
+          "description": "Place and connect the 4-leg connector at the top center, joining all vertical straws",
           "actionIds": ["action_connect_top"],
           "expectedResult": "Top connector is centered and connected to all 4 vertical straws",
           "hints": [
-            "The 5-leg connector has ports angled downward",
+            "The 4-leg connector has ports angled downward",
             "Ensure equal distance from all base corners",
             "All 4 connections should be secure"
           ],
@@ -1536,13 +1586,20 @@
             "Use the remaining ports on base connectors",
             "Mirror the upward straws but in opposite direction",
             "Maintain symmetry with top half of octahedron"
-          ]
+          ],
+          "validation": {
+            "type": "connection",
+            "criteria": {
+              "requiredJoints": ["joint_bottom_1", "joint_bottom_2", "joint_bottom_3", "joint_bottom_4"],
+              "connected": true
+            }
+          }
         },
         {
           "id": "step_complete_bottom",
           "order": 6,
           "title": "Complete Bottom Apex",
-          "description": "Place the bottom 5-leg connector and complete the octahedron structure",
+          "description": "Place the bottom 4-leg connector and complete the octahedron structure",
           "actionIds": ["action_connect_bottom"],
           "expectedResult": "Complete octahedron with both top and bottom apex connectors",
           "hints": [
