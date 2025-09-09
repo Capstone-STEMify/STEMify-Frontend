@@ -89,7 +89,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
   const userId = useAppSelector((state) => state.auth.user?.userId)
   const locale = useLocale()
 
-  const { data: curriculumData, isLoading } = useGetCurriculumByIdQuery(curriculumId ? Number(curriculumId) : 0, {
+  const { data: curriculumData, isLoading } = useGetCurriculumByIdQuery(curriculumId!, {
     skip: !curriculumId
   })
   const [createCurriculum, { isLoading: isCreating }] = useCreateCurriculumMutation()
@@ -97,14 +97,14 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
   const isSubmitting = isCreating || isUpdating
 
   const form = useAppForm({
-    defaultValues: curriculumId && curriculumData?.data ? mapCurriculumToFormData(curriculumData) : defaultCurriculum,
+    defaultValues: curriculumData?.data ? mapCurriculumToFormData(curriculumData) : defaultCurriculum,
     validators: {},
     onSubmit: async ({ value }) => {
       try {
         if (curriculumId) {
           const patchJson = await PatchCurriculumJsonPayload(initialCurriculumDataRef.current!, value, userId!)
           const res = await updateCurriculum({ id: Number(curriculumId), body: patchJson }).unwrap()
-          toast.success(`${tt('successMessage.update')} (${res.data.title})`, {
+          toast.success(`${tt('successMessage.update', { title: res.data.title })}`, {
             action: {
               label: 'View Curriculum',
               onClick: () => {
@@ -115,7 +115,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
         } else {
           const jsonPayload = await CreateCurriculumJsonPayload(value, userId!)
           const res = await createCurriculum(jsonPayload).unwrap()
-          toast.success(`${tt('successMessage.create')} (${res.data.title})`)
+          toast.success(`${tt('successMessage.create', { title: res.data.title })}`)
           router.push(`/${locale}/admin/curriculum/${res.data.id}`)
         }
         onSuccess?.()
@@ -129,6 +129,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
   useEffect(() => {
     if (curriculumData?.data && curriculumId) {
       initialCurriculumDataRef.current = mapCurriculumToFormData(curriculumData)
+      form.reset(initialCurriculumDataRef.current)
     }
   }, [curriculumData, curriculumId])
 
