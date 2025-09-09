@@ -199,6 +199,24 @@
       {"strawId": "straw_green_12", "endpoint": "start", "connectorId": "connector_3leg_11", "port": 2},
       {"strawId": "straw_green_12", "endpoint": "end", "connectorId": "connector_3leg_12", "port": 2}
     ],
+    "second_third_squares": [
+      {"strawId": "straw_green_5", "endpoint": "start", "connectorId": "connector_3leg_5", "port": 0},
+      {"strawId": "straw_green_5", "endpoint": "end", "connectorId": "connector_3leg_8", "port": 0},
+      {"strawId": "straw_green_6", "endpoint": "start", "connectorId": "connector_3leg_5", "port": 2},
+      {"strawId": "straw_green_6", "endpoint": "end", "connectorId": "connector_3leg_6", "port": 2},
+      {"strawId": "straw_green_7", "endpoint": "start", "connectorId": "connector_3leg_6", "port": 0},
+      {"strawId": "straw_green_7", "endpoint": "end", "connectorId": "connector_3leg_7", "port": 0},
+      {"strawId": "straw_green_8", "endpoint": "start", "connectorId": "connector_3leg_7", "port": 2},
+      {"strawId": "straw_green_8", "endpoint": "end", "connectorId": "connector_3leg_8", "port": 2},
+      {"strawId": "straw_green_9", "endpoint": "start", "connectorId": "connector_3leg_9", "port": 0},
+      {"strawId": "straw_green_9", "endpoint": "end", "connectorId": "connector_3leg_12", "port": 0},
+      {"strawId": "straw_green_10", "endpoint": "start", "connectorId": "connector_3leg_9", "port": 2},
+      {"strawId": "straw_green_10", "endpoint": "end", "connectorId": "connector_3leg_10", "port": 2},
+      {"strawId": "straw_green_11", "endpoint": "start", "connectorId": "connector_3leg_10", "port": 0},
+      {"strawId": "straw_green_11", "endpoint": "end", "connectorId": "connector_3leg_11", "port": 0},
+      {"strawId": "straw_green_12", "endpoint": "start", "connectorId": "connector_3leg_11", "port": 2},
+      {"strawId": "straw_green_12", "endpoint": "end", "connectorId": "connector_3leg_12", "port": 2}
+    ],
     "vertical_up": [
       {"strawId": "straw_green_5", "endpoint": "start", "connectorId": "connector_3leg_1", "port": 1},
       {"strawId": "straw_green_5", "endpoint": "end", "connectorId": "connector_5leg_top", "port": 0},
@@ -254,9 +272,18 @@
       "sequenceDelay": 0.3
     },
     {
+      "id": "action_build_both_squares",
+      "name": "Form Second and Third Squares",
+      "type": "connect",
+      "connectionGroup": "second_third_squares",
+      "duration": 4.0,
+      "sequenceDelay": 0.3
+    },
+    {
       "id": "action_adjust_additional_connector_arms",
       "name": "Adjust Additional Connector Arms",
       "type": "transform_arm",
+      "connectionGroup": "second_third_squares",
       "targets": ["connector_3leg_5", "connector_3leg_6", "connector_3leg_7", "connector_3leg_8", "connector_3leg_9", "connector_3leg_10", "connector_3leg_11", "connector_3leg_12"],
       "duration": 2.0,
       "connectorArmTransforms": {
@@ -456,50 +483,14 @@
           }
         },
         {
-          "actionId": "action_build_second_square",
-          "title": "Form Second Square",
-          "description": "Create the second square that will form the diamond shape",
-          "expectedResult": "A complete second square is formed with proper connections",
-          "hints": [
-            "This square is positioned to the right of the base square",
-            "Use the same connection pattern as the base square",
-            "This square will be rotated to create the diamond effect"
-          ],
-          "validation": {
-            "type": "connection",
-            "criteria": {
-              "requiredConnectionsGroup": "second_square",
-              "connected": true
-            }
-          }
-        },
-        {
-          "actionId": "action_build_third_square",
-          "title": "Form Third Square",
-          "description": "Create the third square for additional structure",
-          "expectedResult": "A complete third square is formed with proper connections",
-          "hints": [
-            "This square provides additional structural support",
-            "Position it to the right of the second square",
-            "Ensure all connections are properly aligned"
-          ],
-          "validation": {
-            "type": "connection",
-            "criteria": {
-              "requiredConnectionsGroup": "third_square",
-              "connected": true
-            }
-          }
-        },
-        {
           "actionId": "action_adjust_additional_connector_arms",
-          "title": "Adjust Additional Connector Arms",
-          "description": "Fine-tune the arm angles of all additional connectors for optimal alignment",
-          "expectedResult": "All additional connector arms are positioned at the correct angles",
+          "title": "Form Second and Third Squares & Adjust Arms",
+          "description": "Create the second and third squares together and immediately adjust additional connector arm angles",
+          "expectedResult": "Both second and third squares are formed and the additional connector arms are set to the specified angles",
           "hints": [
-            "Adjust arm_1 to +15 degrees for better alignment",
-            "Adjust arm_2 to -15 degrees to balance the structure",
-            "All 8 additional connectors should have consistent arm angles"
+            "The second square is positioned to the right of the base square",
+            "Use the same connection pattern as the base square for both",
+            "After connecting, the arm angles are adjusted automatically"
           ],
           "validation": {
             "type": "arm_transform",
@@ -546,54 +537,6 @@
                   "tolerance": 0.1
                 }
               }
-            }
-          }
-        },
-        {
-          "actionId": "action_adjust_connector_arms",
-          "title": "Adjust Top Connector Arms",
-          "description": "Fine-tune the arm angles of the top connector for optimal straw alignment",
-          "expectedResult": "Top connector arms are positioned at the correct angles for stable connections",
-          "hints": [
-            "Adjust arm_1 to -30 degrees for better straw alignment",
-            "Adjust arm_2 to +30 degrees to balance the structure",
-            "Watch how the arm rotation affects the overall geometry"
-          ],
-          "validation": {
-            "type": "arm_transform",
-            "criteria": {
-              "connectorValidations": [
-                {
-                  "connectorId": "connector_5leg_top",
-                  "armValidations": [
-                    {
-                      "armId": "arm_1",
-                      "expectedRotation": { "x": 0, "y": 0, "z": -30 },
-                      "tolerance": 5
-                    },
-                    {
-                      "armId": "arm_2", 
-                      "expectedRotation": { "x": 0, "y": 0, "z": 30 },
-                      "tolerance": 5
-                    }
-                  ]
-                },
-                {
-                  "connectorId": "connector_5leg_bottom",
-                  "armValidations": [
-                    {
-                      "armId": "arm_1",
-                      "expectedRotation": { "x": 0, "y": 0, "z": 45 },
-                      "tolerance": 5
-                    },
-                    {
-                      "armId": "arm_2", 
-                      "expectedRotation": { "x": 0, "y": 0, "z": -45 },
-                      "tolerance": 5
-                    }
-                  ]
-                }
-              ]
             }
           }
         }
