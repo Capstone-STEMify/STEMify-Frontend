@@ -7,13 +7,20 @@ import KitInformationSection from '../../../kit/components/list/KitInformationSe
 import BackButton from '@/components/shared/button/BackButton'
 import CurriculumCourseSection from '@/features/resource/curriculum/components/detail/CurriculumCourseSection'
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useParams } from 'next/navigation'
 
-type CurriculumDetailProps = {
-  curriculumId?: number
-}
+export default function CurriculumDetail() {
+  const { curriculumId } = useParams()
+  const { data: curriculumData, error, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId))
 
-export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps) {
-  const { data: curriculum, error, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId))
+  if (isLoading) {
+    return (
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
+  }
 
   return (
     <div className='mx-auto max-w-5xl px-4 py-12'>
@@ -21,18 +28,11 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
       <div className='mt-5 grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
         {/* Content Section */}
         <div className='flex flex-col'>
-          <h2 className='mb-2 text-sm text-gray-500 uppercase'>STEM_STRAW_K1</h2>
-          <h1 className='mb-4 text-4xl font-bold text-gray-900'>STEM Starter Curriculum</h1>
+          <h2 className='mb-2 text-sm text-gray-500 uppercase'>{curriculumData?.data.code}</h2>
+          <h1 className='mb-4 text-4xl font-bold text-gray-900'>{curriculumData?.data.title}</h1>
           <div className='mb-6 h-1 w-12 bg-yellow-500' />
 
-          <p className='mb-4 text-lg text-gray-700'>
-            This is an introductory toolbox designed for educators in learning environments and young makers at home who
-            are looking for a STEM solution.
-          </p>
-          <p className='mb-6 text-lg text-gray-700'>
-            This kit is a great introduction to the world of STEM education and offers a fun and engaging way to learn
-            about science, technology, engineering, art, and math.
-          </p>
+          <p className='mb-4 text-lg text-gray-700'>{curriculumData?.data.description}</p>
 
           <div className='mb-6 flex items-center gap-6'>
             <Card className='flex items-center gap-2 px-4 py-2'>
@@ -48,7 +48,10 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
         {/* Image Section */}
         <div className='relative overflow-hidden rounded-2xl shadow-md'>
           <Image
-            src='https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
+            src={
+              curriculumData?.data.imageUrl ||
+              'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
+            }
             alt='STEM Starter Curriculum'
             width={600}
             height={600}
@@ -58,10 +61,10 @@ export default function CurriculumDetail({ curriculumId }: CurriculumDetailProps
       </div>
 
       {/* Kit Information Section */}
-      <KitInformationSection kitIds={curriculum?.data.kits} />
+      <KitInformationSection kits={curriculumData?.data.kits || []} />
 
       {/* Course Section Carousel */}
-      <CurriculumCourseSection />
+      <CurriculumCourseSection courses={curriculumData?.data.courses || []} />
     </div>
   )
 }

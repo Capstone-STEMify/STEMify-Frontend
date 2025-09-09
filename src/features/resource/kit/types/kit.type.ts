@@ -9,7 +9,7 @@ export type Kit = {
 
 export type KitImage = {
   id: number
-  url?: string
+  imageUrl?: string
   alt?: string
 }
 
