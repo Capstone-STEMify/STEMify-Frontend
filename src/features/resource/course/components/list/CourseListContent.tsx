@@ -123,9 +123,9 @@ export default function CourseListContent() {
               <CardLayout
                 imageSrc={course.imageUrl || '/images/fallback.png'}
                 size='sm'
-                badge={
-                  <Badge className={getCourseStatusBadgeClass(course.status)}>{capitalizeFirst(course.status)}</Badge>
-                }
+                // badge={
+                //   <Badge className={getCourseStatusBadgeClass(course.status)}>{capitalizeFirst(course.status)}</Badge>
+                // }
               >
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
