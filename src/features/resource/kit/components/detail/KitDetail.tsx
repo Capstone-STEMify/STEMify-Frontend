@@ -84,14 +84,12 @@ export default function KitDetail() {
             className='mx-auto w-full rounded-md shadow-md'
             variant='plugin'
             autoplayDelay={2000}
-            items={(kitData.data.kitImages?.length
-              ? kitData.data.kitImages
-              : [{ url: '/images/fallback.png', alt: 'Fallback Image' }]
-            ).map((img, i) => (
+            items={(kitData.data.kitImages || []
+            ).map((kitImage, i) => (
               <div className='p-1' key={i}>
                 <Image
-                  src={img.url || '/images/fallback.png'}
-                  alt={img.alt || 'Kit Image'}
+                  src={kitImage.imageUrl || '/images/fallback.png'}
+                  alt={kitImage.alt || 'Kit Image'}
                   width={500}
                   height={500}
                   className='w-full max-w-xl rounded-3xl object-cover shadow-xs'
