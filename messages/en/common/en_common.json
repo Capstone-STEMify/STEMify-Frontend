@@ -45,7 +45,8 @@
       "exploreLessons": "Explore Lessons",
       "exploreActivities": "Explore Activities",
       "getHelp": "Get Help",
-      "readBlogs": "Read Blogs"
+      "readBlogs": "Read Blogs",
+      "addKit": "Add Kit"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
