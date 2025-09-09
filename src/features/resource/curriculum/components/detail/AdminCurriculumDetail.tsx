@@ -9,12 +9,20 @@ import AdminCurriculumInformationSection from './AdminCurriculumInformationSecti
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import CurriculumKitList from '@/features/resource/kit/components/list/CurriculumKitList'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 export default function AdminCurriculumDetail() {
   const { curriculumId } = useParams()
   const t = useTranslations('curriculum')
-  const { data } = useGetCurriculumByIdQuery(Number(curriculumId), { skip: !Number(curriculumId) })
+  const { data, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId), { skip: !Number(curriculumId) })
 
+  if (isLoading) {
+    return (
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
+  }
   if (!data) return <SEmpty title='No Curriculum Found' description='Please check the curriculum and try again.' />
 
   return (

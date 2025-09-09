@@ -74,6 +74,7 @@ export default function AdminCurriculumList() {
             title={curriculum.title}
             description={curriculum.description}
             className='max-w-3xl'
+            onClick={() => router.push(`/${locale}/admin/curriculum/${curriculum.id}`)}
           />
         ))}
       </div>
