@@ -323,6 +323,81 @@
       "interpolation": "easeInOut"
     },
     {
+      "id": "action_rotate_base_square",
+      "name": "Rotate Base Square 45°",
+      "type": "component_assembly",
+      "assemblyId": "diamond_assembly",
+      "duration": 1.2,
+      "componentTransforms": {
+        "square_base": {
+          "type": "matrix_transform",
+          "matrix": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0.7854, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "pivot": "component_center",
+          "transformAsUnit": true,
+          "constraints": {
+            "maintainRelativePositions": true,
+            "preventBreaking": true
+          }
+        }
+      },
+      "assemblyState": "separate",
+      "description": "Rotate the base square component around its center by 45 degrees (Y axis)"
+    },
+    {
+      "id": "action_position_square_second",
+      "name": "Position Second Square to Base",
+      "type": "component_assembly",
+      "assemblyId": "diamond_assembly",
+      "duration": 1,
+      "componentTransforms": {
+        "square_second": {
+          "type": "matrix_transform",
+          "matrix": {
+            "position": { "x": -20, "y": 0, "z": 0 },
+            "rotation": { "x": 1.5708, "y": 0.785, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "pivot": "component_center",
+          "transformAsUnit": true,
+          "constraints": {
+            "maintainRelativePositions": true,
+            "preventBreaking": true
+          }
+        }
+      },
+      "assemblyState": "separate",
+      "description": "Translate the second square component over the base square without rotation"
+    },
+    {
+      "id": "action_position_square_third",
+      "name": "Position Third Square to Top/Front",
+      "type": "component_assembly",
+      "assemblyId": "octahedron_assembly",
+      "duration": 1.4,
+      "componentTransforms": {
+        "square_third": {
+          "type": "matrix_transform",
+          "matrix": {
+            "position": { "x": -40, "y": 0, "z": 0 },
+            "rotation": { "x": 0.785, "y": 0, "z": 1.5708 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "pivot": "component_center",
+          "transformAsUnit": true,
+          "constraints": {
+            "maintainRelativePositions": true,
+            "preventBreaking": true
+          }
+        }
+      },
+      "assemblyState": "separate",
+      "description": "Animate the third square component into its front/top position (rotate Z 90°, tilt X 45°)"
+    },
+    {
       "id": "action_assemble_diamond",
       "name": "Assemble Diamond",
       "type": "component_assembly",
@@ -512,6 +587,80 @@
                   ]
                 }
               ]
+            }
+          }
+        },
+        {
+          "actionId": "action_rotate_base_square",
+          "title": "Rotate Base Square 45°",
+          "description": "Rotate the base square component by 45° around its center to match the diagonal orientation.",
+          "expectedResult": "Base square straws and connectors align at the target diagonal positions.",
+          "hints": [
+            "The base rotates as a whole, not individual parts",
+            "Rotation happens around the component center",
+            "No translation is applied in this step"
+          ],
+          "validation": {
+            "type": "assembly_state",
+            "criteria": {
+              "assemblyId": "diamond_assembly",
+              "expectedState": "separate",
+              "componentMatrices": {
+                "square_base": {
+                  "rotation": { "x": 0, "y": 0.7854, "z": 0 },
+                  "tolerance": 0.05
+                }
+              }
+            }
+          }
+        },
+        {
+          "actionId": "action_position_square_second",
+          "title": "Position Second Square over Base",
+          "description": "Move the second square component above the base square (no rotation yet)",
+          "expectedResult": "Second square is translated into position above the base square without rotation",
+          "hints": [
+            "The second square moves as a whole component",
+            "No rotation is applied in this step",
+            "This prepares for the diamond assembly"
+          ],
+          "validation": {
+            "type": "assembly_state",
+            "criteria": {
+              "assemblyId": "diamond_assembly",
+              "expectedState": "separate",
+              "componentMatrices": {
+                "square_second": {
+                  "rotation": { "x": 0, "y": 0, "z": 0 },
+                  "position": { "x": -12, "y": 8, "z": 0 },
+                  "tolerance": 0.2
+                }
+              }
+            }
+          }
+        },
+        {
+          "actionId": "action_position_square_third",
+          "title": "Position Third Square",
+          "description": "Animate the third square component into its front/top position",
+          "expectedResult": "Third square is positioned with correct tilt and orientation",
+          "hints": [
+            "The third square moves as a whole component",
+            "Rotation around Z (90°) and tilt around X (45°)",
+            "Transforms apply around component center"
+          ],
+          "validation": {
+            "type": "assembly_state",
+            "criteria": {
+              "assemblyId": "octahedron_assembly",
+              "expectedState": "separate",
+              "componentMatrices": {
+                "square_third": {
+                  "rotation": { "x": 0.785, "y": 0, "z": 1.5708 },
+                  "position": { "x": -40, "y": 0, "z": 0 },
+                  "tolerance": 0.2
+                }
+              }
             }
           }
         },

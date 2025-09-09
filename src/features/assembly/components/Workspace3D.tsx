@@ -51,6 +51,8 @@ export default function Workspace3D({
 
   // Temporary disable component transformation for debugging
   const [disableComponentTransform, setDisableComponentTransform] = useState(false)
+  // Component animation progress for current action (0..1)
+  const [componentAnimT, setComponentAnimT] = useState(1)
 
   // Load assembly on mount
   useEffect(() => {
@@ -64,6 +66,34 @@ export default function Workspace3D({
       setStepIndex(index)
     }
   }, [currentActivity, currentStep])
+
+  // Animate component movement for any component_assembly action (generic, JSON-driven)
+  useEffect(() => {
+    if (!assembly || !currentStep) {
+      setComponentAnimT(1)
+      return
+    }
+
+    const action = (assembly.actions || []).find((a: any) => a.id === currentStep.actionId)
+    if (action && action.type === 'component_assembly') {
+      const durationMs = Math.max(100, Math.floor(((action.duration as number) || 2) * 1000))
+      let rafId = 0
+      const start = performance.now()
+      setComponentAnimT(0)
+
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / durationMs)
+        setComponentAnimT(t)
+        if (t < 1) rafId = requestAnimationFrame(tick)
+      }
+
+      rafId = requestAnimationFrame(tick)
+      return () => cancelAnimationFrame(rafId)
+    } else {
+      // For other steps, apply instantly
+      setComponentAnimT(1)
+    }
+  }, [assembly, currentStep])
 
   const maxStep = currentActivity?.steps.length || 0
   const clampedStep = Math.min(Math.max(stepIndex, 0), Math.max(maxStep - 1, 0))
@@ -247,22 +277,24 @@ export default function Workspace3D({
     return () => window.removeEventListener('keydown', onKey)
   }, [maxStep, nextStep, previousStep])
 
+  const instantAppear = currentStep?.actionId === 'action_adjust_additional_connector_arms'
+
   const transitions = useTransition(visibleInstances.straws, {
     keys: (inst) => inst.id,
-    from: { s: 0.9, y: 0.2, o: 0 },
-    enter: { s: 1.0, y: 0.0, o: 1 },
+    from: instantAppear ? { s: 1.0, y: 0.0, o: 1 } : { s: 0.9, y: 0.2, o: 0 },
+    enter: instantAppear ? { s: 1.0, y: 0.0, o: 1 } : { s: 1.0, y: 0.0, o: 1 },
     leave: null,
-    trail: 100,
-    config: { tension: 170, friction: 20 }
+    trail: instantAppear ? 0 : 100,
+    config: instantAppear ? { tension: 1, friction: 0 } : { tension: 170, friction: 20 }
   })
 
   const connectorTransitions = useTransition(visibleInstances.connectors, {
     keys: (inst) => inst.id,
-    from: { s: 0.8, y: 0.4, o: 0 },
-    enter: { s: 1, y: 0, o: 1 },
+    from: instantAppear ? { s: 1, y: 0, o: 1 } : { s: 0.8, y: 0.4, o: 0 },
+    enter: instantAppear ? { s: 1, y: 0, o: 1 } : { s: 1, y: 0, o: 1 },
     leave: null,
-    trail: 100,
-    config: { tension: 170, friction: 20 }
+    trail: instantAppear ? 0 : 100,
+    config: instantAppear ? { tension: 1, friction: 0 } : { tension: 170, friction: 20 }
   })
 
   // Aggregate per-instance rotation overrides from actions (e.g., transform_instance)
@@ -434,18 +466,38 @@ export default function Workspace3D({
                 }
               }
 
+              // If this is the current positioning action, interpolate matrix using componentAnimT
+              let finalMatrix = matrix
+              if (isCurrentAction && action.type === 'component_assembly') {
+                const t = componentAnimT
+                const pos = matrix.position || { x: 0, y: 0, z: 0 }
+                const rot = matrix.rotation || { x: 0, y: 0, z: 0 }
+                // Lerp position from 0 to target
+                const lerpPos = { x: pos.x * t, y: pos.y * t, z: pos.z * t }
+                // Slerp rotation from identity to target (XYZ order)
+                const qFrom = new THREE.Quaternion() // identity
+                const qTo = new THREE.Quaternion().setFromEuler(new THREE.Euler(rot.x || 0, rot.y || 0, rot.z || 0, EULER_ORDER))
+                const qOut = new THREE.Quaternion().slerpQuaternions(qFrom, qTo, t)
+                const eOut = new THREE.Euler().setFromQuaternion(qOut, EULER_ORDER)
+                finalMatrix = {
+                  position: lerpPos,
+                  rotation: { x: eOut.x, y: eOut.y, z: eOut.z },
+                  scale: matrix.scale
+                }
+              }
+
               // 🔧 DEBUG: Log when component matrix is being applied (DISABLED for performance)
               // console.log(`🔍 [COMPONENT MATRIX APPLICATION] ${componentId}:`, {
               //   isCurrentAction,
               //   hasRuntimeOverride: !!runtimeOverride,
               //   originalMatrix: transformData.matrix,
-              //   finalMatrix: matrix,
+              //   finalMatrix,
               //   stepId: currentStep?.actionId
               // })
 
               // Store enhanced matrix with component assembly metadata
               currentComponentMatrices[componentId] = {
-                ...matrix,
+                ...finalMatrix,
                 _transformAsUnit: transformAsUnit,
                 _pivot: pivot,
                 _constraints: transformData.constraints || {}
@@ -554,7 +606,8 @@ export default function Workspace3D({
       getComponentElements,
       getElementComponent,
       currentStep?.actionId,
-      runtimeComponentOverrides
+      runtimeComponentOverrides,
+      componentAnimT
     ]
   )
 
