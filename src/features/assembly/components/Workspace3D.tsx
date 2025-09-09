@@ -891,7 +891,9 @@ export default function Workspace3D({
                   const isInComponentAssembly = elementComponentId && !disableComponentTransform
                   
                   console.log(`  ${connector.id}:`, {
+                    basePosition: base.position,
                     baseRotation: base.rotation,
+                    finalPosition: tr.position,
                     componentRotation: tr.rotation,
                     isInComponentAssembly,
                     elementComponentId,
@@ -913,7 +915,9 @@ export default function Workspace3D({
                   const isInComponentAssembly = elementComponentId && !disableComponentTransform
                   
                   console.log(`  ${connector.id}:`, {
+                    basePosition: base.position,
                     baseRotation: base.rotation,
+                    finalPosition: tr.position,
                     componentRotation: tr.rotation,
                     isInComponentAssembly,
                     elementComponentId,
@@ -924,6 +928,71 @@ export default function Workspace3D({
               }}
             >
               ConnRot
+            </button>
+            <button
+              className='rounded border px-2 py-1 text-xs bg-indigo-50'
+              onClick={() => {
+                // Debug position and rotation values for straws - test BOTH square_base and square_second
+                console.log('🔍 [STRAW DEBUG]:', {
+                  square_base_overrides: runtimeComponentOverrides['square_base'],
+                  square_second_overrides: runtimeComponentOverrides['square_second'],
+                  currentStep: currentStep?.actionId
+                })
+                
+                // Test square_second straws (should have rotation)
+                const squareSecondStraws = visibleInstances.straws.filter(s => 
+                  ['straw_green_5', 'straw_green_6', 'straw_green_7', 'straw_green_8'].includes(s.id)
+                )
+                
+                console.log('🔍 [SQUARE_SECOND STRAWS]:')
+                squareSecondStraws.forEach(straw => {
+                  const base = straw.transform
+                  const tr = getTransformOverrides(straw.id, base.position, base.rotation)
+                  const elementComponentId = getElementComponent(straw.id)
+                  const isInComponentAssembly = elementComponentId && !disableComponentTransform
+                  const o = getRotationOverrideForInstance(straw.id)
+                  
+                  console.log(`  ${straw.id}:`, {
+                    basePosition: base.position,
+                    baseRotation: base.rotation,
+                    finalPosition: tr.position,
+                    finalRotation: tr.rotation,
+                    isInComponentAssembly,
+                    elementComponentId,
+                    runtimeRY: runtimeComponentOverrides['square_second']?.rotation?.y,
+                    individualOverride: o,
+                    finalStrawRotation: isInComponentAssembly ? tr.rotation : (o ? { x: tr.rotation.x + (o.x||0), y: tr.rotation.y + (o.y||0), z: tr.rotation.z + (o.z||0)} : tr.rotation)
+                  })
+                })
+                
+                // Test square_base straws (should NOT have rotation)
+                const squareBaseStraws = visibleInstances.straws.filter(s => 
+                  ['straw_green_1', 'straw_green_2', 'straw_green_3', 'straw_green_4'].includes(s.id)
+                )
+                
+                console.log('🔍 [SQUARE_BASE STRAWS]:')
+                squareBaseStraws.forEach(straw => {
+                  const base = straw.transform
+                  const tr = getTransformOverrides(straw.id, base.position, base.rotation)
+                  const elementComponentId = getElementComponent(straw.id)
+                  const isInComponentAssembly = elementComponentId && !disableComponentTransform
+                  const o = getRotationOverrideForInstance(straw.id)
+                  
+                  console.log(`  ${straw.id}:`, {
+                    basePosition: base.position,
+                    baseRotation: base.rotation,
+                    finalPosition: tr.position,
+                    finalRotation: tr.rotation,
+                    isInComponentAssembly,
+                    elementComponentId,
+                    runtimeRY: runtimeComponentOverrides['square_second']?.rotation?.y,
+                    individualOverride: o,
+                    finalStrawRotation: isInComponentAssembly ? tr.rotation : (o ? { x: tr.rotation.x + (o.x||0), y: tr.rotation.y + (o.y||0), z: tr.rotation.z + (o.z||0)} : tr.rotation)
+                  })
+                })
+              }}
+            >
+              StrawRot
             </button>
           </div>
         </div>

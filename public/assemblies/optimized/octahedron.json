@@ -167,6 +167,7 @@
     ]
   },
 
+
   "connections": {
     "base_square": [
       {"strawId": "straw_green_1", "endpoint": "start", "connectorId": "connector_3leg_1", "port": 0},
@@ -549,42 +550,6 @@
           }
         },
         {
-          "actionId": "action_add_verticals",
-          "title": "Add Vertical Support",
-          "description": "Attach vertical straws from each corner of the base square, pointing upward toward the top connector",
-          "expectedResult": "4 vertical straws extend upward from base connectors",
-          "hints": [
-            "Use the upward-facing ports on each base connector",
-            "Vertical straws should be parallel to each other",
-            "Maintain proper alignment for top connector placement"
-          ],
-          "validation": {
-            "type": "connection",
-            "criteria": {
-              "requiredConnectionsGroup": "vertical_up",
-              "connected": true
-            }
-          }
-        },
-        {
-          "actionId": "action_add_bottom_verticals",
-          "title": "Complete Structure",
-          "description": "Attach vertical straws downward from each base connector toward the bottom apex",
-          "expectedResult": "4 additional vertical straws extend downward from base",
-          "hints": [
-            "Use the remaining ports on base connectors (conceptually mirrored)",
-            "Mirror the upward straws but in opposite direction",
-            "Maintain symmetry with top half of octahedron"
-          ],
-          "validation": {
-            "type": "connection",
-            "criteria": {
-              "requiredConnectionsGroup": "vertical_down",
-              "connected": true
-            }
-          }
-        },
-        {
           "actionId": "action_adjust_connector_arms",
           "title": "Adjust Top Connector Arms",
           "description": "Fine-tune the arm angles of the top connector for optimal straw alignment",
@@ -631,17 +596,6 @@
               ]
             }
           }
-        },
-        {
-          "actionId": "action_final_highlight",
-          "title": "Verify Octahedron",
-          "description": "Observe the completed regular octahedron and understand its geometric properties",
-          "expectedResult": "Perfect octahedron with 8 triangular faces, 6 vertices, and 12 edges",
-          "hints": [
-            "Count 8 triangular faces (4 top, 4 bottom)",
-            "Identify 6 vertices (4 base corners + 2 apex points)",
-            "Observe 12 edges (4 base + 4 top + 4 bottom)"
-          ]
         }
       ],
       "playbackControls": {
