@@ -1,0 +1,16 @@
+{
+  "content": {
+    "list": {},
+    "detail": {
+      "title": "Nội dung",
+      "noData": "Không tìm thấy nội dung.",
+      "noDataDetail": "Bạn chưa tạo nội dung nào."
+    },
+    "form": {
+      "title": {
+        "create": "Tạo nội dung",
+        "update": "Cập nhật nội dung"
+      }
+    }
+  }
+}
