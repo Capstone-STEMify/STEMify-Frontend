@@ -185,7 +185,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
             <field.TextAreaField
               label={t('form.fields.description.label')}
               placeholder={t('form.fields.description.placeholder')}
-              className='h-30 rounded-lg border-gray-300 lg:w-[550px]'
+              className='h-45 rounded-lg border-gray-300'
             />
           )}
         />

@@ -23,7 +23,7 @@ export default function UpsertCurriculumModal({ curriculumId, onConfirm }: Upser
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='flex w-full flex-col lg:w-[660px]'>
+      <DialogContent className='flex w-full max-w-[800px] flex-col'>
         <DialogHeader className='shrink-0'>
           <DialogTitle>{t('form.title.create')}</DialogTitle>
         </DialogHeader>
