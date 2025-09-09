@@ -1,0 +1,54 @@
+{
+  "curriculum": {
+    "list": {
+      "title": "Danh Sách Khung Chương Trình",
+      "placeholder": {
+        "search": "Tìm kiếm theo mã hoặc tiêu đề..."
+      },
+      "noData": "Không tìm thấy khung chương trình nào.",
+      "noDataDetail": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm khung chương trình phù hợp.",
+      "loading": "Đang tải khung chương trình...",
+      "error": "Đã xảy ra lỗi trong quá trình lấy khung chương trình. Vui lòng thử lại.",
+      "courseListTitle": "Danh Sách Các Khóa Học"
+    },
+    "details": {
+      "title": "Chi Tiết Khung Chương Trình",
+      "addCourse": "Thêm Khóa Học"
+    },
+
+    "form": {
+      "title": {
+        "create": "Tạo Khung Chương Trình",
+        "update": "Cập Nhật Khung Chương Trình"
+      },
+      "fields": {
+        "name": {
+          "label": "Tên",
+          "note": "Tên cho khung chương trình",
+          "placeholder": "ví dụ: Mùa Hè Vui Vẻ"
+        },
+        "description": {
+          "label": "Mô Tả",
+          "note": "Mô tả cho khung chương trình",
+          "placeholder": "ví dụ: Khung chương trình này bao gồm các kỹ năng tư duy phản biện và sáng tạo cho trẻ em"
+        },
+        "code": {
+          "label": "Mã",
+          "note": "Mã định danh duy nhất cho khung chương trình",
+          "placeholder": "ví dụ: SU001"
+        }
+      }
+    },
+    "custom": {
+      "courseListTitle": "Tài nguyên chuẩn chương trình",
+      "courseListDescription": "Bạn sẽ có quyền truy cập vào đầy đủ các bài học, hoạt động và khám phá cũng như các cách khác nhau để điều hướng qua nó, làm nổi bật các chiến lược học tập khác nhau và kết quả mong đợi mà bạn có thể phân phối trực tiếp cho học sinh thông qua Stemify Classroom.",
+      "courseTag": "Khóa Học",
+      "kitListTitle": "Bộ Dụng Cụ Stemify",
+      "kitListDescription": "Mỗi khung chương trình được thiết kế để sử dụng với một Bộ Dụng Cụ Stemify cụ thể, bao gồm tất cả các vật liệu và thành phần cần thiết cho việc học tập và khám phá thực hành. Bộ dụng cụ cung cấp một bộ công cụ và tài nguyên toàn diện phù hợp với các mục tiêu học tập của khung chương trình, cho phép học sinh tham gia vào các hoạt động học tập tương tác và trải nghiệm.",
+      "kitTag": "Stemify Kit",
+      "selectCourseTitle": "Chọn Khóa Học",
+      "selectedCourses": "Khóa học đã chọn",
+      "searchCoursePlaceholder": "Tìm kiếm khóa học theo mã hoặc tiêu đề..."
+    }
+  }
+}

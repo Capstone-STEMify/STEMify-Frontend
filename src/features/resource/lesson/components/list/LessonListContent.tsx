@@ -21,7 +21,7 @@ import { useSession } from 'next-auth/react'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 export default function LessonListContent() {
@@ -30,6 +30,9 @@ export default function LessonListContent() {
   const locale = useLocale()
   const { status } = useSession()
   const t = useTranslations('LessonList')
+  const tc = useTranslations('common')
+  const tt = useTranslations('toast')
+  const tm = useTranslations('message')
   const role = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
   const userId = useAppSelector((state) => state.auth.user?.id)
 
@@ -85,14 +88,14 @@ export default function LessonListContent() {
     e.preventDefault()
     try {
       openModal('confirm', {
-        message: 'Are you sure you want to delete this lesson?',
+        message: tm('confirmDelMessage', { title: 'lesson' }),
         onConfirm: async () => {
           await deleteLesson(lessonId).unwrap()
-          toast.success('Deleted successfully')
+          toast.success(tt('successMessage.delete'))
         }
       })
     } catch (error) {
-      toast.error('Failed to delete lesson')
+      toast.error(tt('errorMessage'))
     }
   }
 
@@ -191,7 +194,7 @@ export default function LessonListContent() {
                         key={`update-${lesson.id}`}
                         className='text-sm'
                       >
-                        <p>{t('dropdown.update')}</p>
+                        <p>{tc('button.update')}</p>
                       </Link>,
                       <button
                         key={`delete-${lesson.id}`}
@@ -202,7 +205,7 @@ export default function LessonListContent() {
                           handleDelete(e, lesson.id)
                         }}
                       >
-                        {t('dropdown.delete')}
+                        {tc('button.delete')}
                       </button>
                     ]}
                   />

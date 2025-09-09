@@ -1,0 +1,27 @@
+{
+  "profile": {
+    "title": "Settings",
+    "description": "Update your photo and personal detail",
+    "username": "Username",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "bio": "Bio",
+    "button": {},
+    "placeholders": {
+      "username": "Enter your username",
+      "email": "Enter your email",
+      "firstName": "Enter your first name",
+      "lastName": "Enter your last name",
+      "bio": "Tell us about yourself"
+    },
+    "settings": {
+      "profile": "Profile Information",
+      "account_settings": "Account Settings",
+      "notifications": "Notification",
+      "privacy": "Privacy & Security",
+      "help": "Help & Support",
+      "signout": "Sign Out"
+    }
+  }
+}

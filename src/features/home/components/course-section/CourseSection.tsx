@@ -1,5 +1,6 @@
 'use client'
 import { Badge } from '@/components/shadcn/badge'
+import CardCarousel from '@/components/shared/card/CardCarousel'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { setPageSize } from '@/features/resource/course/slice/courseSlice'
@@ -12,6 +13,7 @@ import React, { useEffect } from 'react'
 
 export default function ExploreResourcesSection() {
   const t = useTranslations('ExploreResourcesSection')
+  const tc = useTranslations('common')
 
   const { data: CourseData } = useSearchCourseQuery({ status: CourseStatus.PUBLISHED, pageSize: 3 })
 
@@ -25,7 +27,7 @@ export default function ExploreResourcesSection() {
   return (
     <section className='relative overflow-hidden px-6 py-16'>
       <div className='absolute top-0 left-0 h-40 w-40 animate-pulse rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 opacity-20'></div>
-      <div className='animate-slow-spin absolute right-0 bottom-0 h-60 w-60 rounded-full bg-gradient-to-tl from-purple-500 to-pink-500 opacity-15'></div>
+      <div className='absolute right-0 bottom-0 h-60 w-60 rounded-full bg-gradient-to-tl from-purple-500 to-pink-500 opacity-15'></div>
       <div className='absolute top-1/2 left-1/4 h-8 w-8 animate-bounce rounded-full bg-yellow-400 opacity-40'></div>
 
       <div className='relative z-10'>
@@ -34,8 +36,34 @@ export default function ExploreResourcesSection() {
           <div className='mx-auto mt-5 h-1 w-50 rounded-full bg-gradient-to-r from-blue-400 to-purple-400' />
         </h2>
 
-        <div className='mx-auto flex max-w-7xl justify-around gap-6'>
-          {CourseData?.data.items.map((resource, index) => (
+        {/* --- Mobile Carousel --- */}
+        <div className='md:hidden'>
+          <div className='no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 py-2'>
+            {CourseData.data.items.map((resource, index) => (
+              <div key={index} className='w-[88vw] shrink-0 snap-center'>
+                <CardCarousel
+                  size='lg'
+                  className='w-full'
+                  imageSrc={resource.imageUrl || ''}
+                  infor={<Badge>{resource.topicNames}</Badge>}
+                >
+                  <div className='flex min-h-0 flex-1 flex-col'>
+                    <h3 className='text-lg font-semibold'>{resource.title}</h3>
+                    <p className='text-sm text-gray-600'>{truncateText(resource.description)}</p>
+                    <div className='mt-auto flex items-center gap-2'>
+                      <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
+                      <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
+                    </div>
+                  </div>
+                </CardCarousel>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* --- Desktop (giữ nguyên) --- */}
+        <div className='mx-auto hidden max-w-7xl justify-around gap-6 md:flex'>
+          {CourseData.data.items.map((resource, index) => (
             <CardLayout
               size='lg'
               key={index}
@@ -45,7 +73,6 @@ export default function ExploreResourcesSection() {
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='text-lg font-semibold'>{resource.title}</h3>
                 <p className='text-sm text-gray-600'>{truncateText(resource.description)}</p>
-                {/* footer */}
                 <div className='mt-auto flex items-center gap-2'>
                   <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
                   <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
@@ -58,7 +85,7 @@ export default function ExploreResourcesSection() {
         <div className='mt-12 text-center'>
           <Link href='/resource'>
             <button className='relative transform rounded-full bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
-              {t('exploreButton')}
+              {tc('button.exploreArrow')}
               <div className='absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full bg-pink-400 opacity-60'></div>
             </button>
           </Link>
@@ -76,6 +103,15 @@ export default function ExploreResourcesSection() {
         }
         .animate-slow-spin {
           animation: slow-spin 20s linear infinite;
+        }
+
+        /* hide scrollbar for the carousel */
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
     </section>

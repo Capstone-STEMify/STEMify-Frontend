@@ -1,0 +1,127 @@
+{
+  "Admin": {
+    "side_bar": {
+      "curriculum": "Khung chương trình",
+      "kit": "Bộ công cụ",
+      "course": "Khóa học",
+      "lesson": "Bài học",
+      "user": "Người dùng",
+      "catalog": "Danh mục",
+      "topic": "Chủ đề",
+      "skill": "Kỹ năng",
+      "ageRange": "Độ tuổi",
+      "standard": "Tiêu chuẩn",
+      "setting": "Cài đặt",
+      "help": "Trợ giúp",
+      "search": "Tìm kiếm"
+    },
+    "course_management": {
+      "title": "Quản lý tài nguyên",
+      "button": "Thêm mới"
+    },
+    "placeholder": {
+      "topicSearch": "Tìm kiếm theo tên chủ đề...",
+      "skillSearch": "Tìm kiếm theo tên kỹ năng...",
+      "ageRangeSearch": "Tìm kiếm theo độ tuổi...",
+      "standardSearch": "Tìm kiếm theo tên tiêu chuẩn...",
+      "userSearch": "Tìm kiếm theo tên người dùng, email..."
+    },
+    "topic": {
+      "listTitle": "Danh sách chủ đề",
+      "createTitle": "Tạo chủ đề",
+      "editTitle": "Chỉnh sửa chủ đề",
+      "name": "Tên chủ đề",
+      "description": "Nhập tên của chủ đề.",
+      "placeholder": "Ví dụ: Quy hoạch đô thị",
+      "createButton": "Tạo",
+      "updateButton": "Cập nhật"
+    },
+    "skill": {
+      "listTitle": "Danh sách kỹ năng",
+      "createTitle": "Tạo kỹ năng",
+      "editTitle": "Chỉnh sửa kỹ năng",
+      "name": "Tên kỹ năng",
+      "description": "Nhập tên của kỹ năng.",
+      "placeholder": "Ví dụ: Tư duy phản biện",
+      "createButton": "Tạo",
+      "updateButton": "Cập nhật"
+    },
+    "ageRange": {
+      "listTitle": "Danh sách độ tuổi",
+      "createTitle": "Tạo độ tuổi",
+      "editTitle": "Chỉnh sửa độ tuổi",
+      "mini_name": "Tuổi tối thiểu",
+      "max_name": "Tuổi tối đa",
+      "description": "Nhãn này sẽ được lưu vào cơ sở dữ liệu.",
+      "min_placeholder": "Chọn tuổi tối thiểu",
+      "max_placeholder": "Chọn tuổi tối đa",
+      "label": "Nhãn xem trước:",
+      "createButton": "Tạo",
+      "updateButton": "Cập nhật"
+    },
+    "standard": {
+      "listTitle": "Danh sách tiêu chuẩn",
+      "createTitle": "Tạo tiêu chuẩn",
+      "editTitle": "Chỉnh sửa tiêu chuẩn",
+      "name": "Tên tiêu chuẩn",
+      "code": "Mã",
+      "description": "Mô tả",
+      "placeholder": "Ví dụ: Common Core",
+      "createButton": "Tạo",
+      "updateButton": "Cập nhật"
+    },
+    "user": {
+      "createTitle": "Tạo người dùng",
+      "editTitle": "Chỉnh sửa người dùng",
+      "email": "Email",
+      "username": "Tên người dùng",
+      "password": "Mật khẩu",
+      "passwordDescription": "Để trống để giữ nguyên mật khẩu hiện tại",
+      "role": "Vai trò",
+      "firstName": "Tên",
+      "lastName": "Họ",
+      "createButton": "Tạo",
+      "updateButton": "Cập nhật",
+      "account": "Tài khoản",
+      "notifications": "Thông báo",
+      "signOut": "Đăng xuất"
+    },
+    "course_details": {
+      "description": "Mô tả",
+      "task": "Nhiệm vụ của học sinh",
+      "prerequisites": "Yêu cầu tiên quyết",
+      "tag": "Thẻ",
+      "lesson": "Danh sách bài học",
+      "status": "Trạng thái",
+      "level": "Cấp độ",
+      "age": "Độ tuổi",
+      "topic": "Chủ đề",
+      "skill": "Kỹ năng",
+      "standard": "Tiêu chuẩn",
+      "code": "Mã",
+      "button": {
+        "update": "Cập nhật Khóa học",
+        "delete": "Xóa Khóa Học",
+        "reject": "Từ Chối",
+        "approve": "Phê Duyệt",
+        "add": "Thêm mới"
+      },
+      "metadata": {
+        "created_at": "Ngày tạo",
+        "modified": "Lần sửa gần nhất",
+        "created_by": "Tạo bởi"
+      },
+      "nodata": {
+        "description": "Chưa có mô tả.",
+        "task": "Chưa có nhiệm vụ học sinh nào được liệt kê.",
+        "prerequisites": "Chưa có điều kiện tiên quyết nào được liệt kê.",
+        "topic": "Chưa có chủ đề nào được liệt kê.",
+        "skill": "Chưa có kỹ năng nào được liệt kê.",
+        "standard": "Chưa có tiêu chuẩn nào được liệt kê."
+      },
+      "card": {
+        "age": "Độ tuổi"
+      }
+    }
+  }
+}

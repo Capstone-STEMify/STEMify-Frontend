@@ -1,0 +1,33 @@
+{
+  "toast": {
+    "successMessage": {
+      "create": "Successfully created \"{title}\"!",
+      "update": "Successfully updated \"{title}\"!",
+      "delete": "Successfully deleted!",
+      "action": "Successfully {action} \"{title}\"",
+      "review": "Successfully submitted to review!",
+      "saveOrder": "Successfully saved the order!",
+      "enroll": "Enrollment request submitted successfully!. Please wait for approval",
+      "enrollDes": "You have enroll to {title} at {time}",
+      "addToCurriculum": "Successfully added to curriculum!",
+      "removeCourseFromCurriculum": "Successfully removed course from this curriculum!",
+      "lessonStart": "Lesson Started!",
+      "lessonStatus": "Lesson status updated to {status}!",
+      "sectionComplete": "Section Completed!"
+    },
+    "errorMessage": "An error occurred. Please try again. ",
+    "errorSpecific": {
+      "id": "ID is missing.",
+      "review": "Failed to submit for review.",
+      "status": "Failed to {status}!"
+    },
+    "confirmMessage": {
+      "confirmLabel": "Are you sure?",
+      "delete": "Are you sure you want to delete \"{title}\"?",
+      "removeCourse": "Are you sure you want to remove \"{title}\" from this curriculum?",
+      "discard": "Are you sure you want to discard your changes?",
+      "ask": "Are you sure to make ",
+      "askStatus": "Are you sure to {action} \"{title}\"?"
+    }
+  }
+}

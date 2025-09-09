@@ -45,11 +45,9 @@ export const customFetchBaseQueryWithErrorHandling = async (
       case 403:
         toast.error(message || 'Forbidden')
         redirect('/unauthorized')
-        break
       case 404:
         toast.error(message || 'Not Found')
         notFound()
-        break
       case 500:
         toast.error(message || 'Server Error')
         break
@@ -69,14 +67,14 @@ export const customFetchBaseQueryWithErrorHandling = async (
 
 type CrudApiOptions = {
   reducerPath: string
-  tagType: string
+  tagTypes: string[]
   baseUrl: string
   baseQuery?: BaseQueryFn
 }
 
 export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
   reducerPath,
-  tagType,
+  tagTypes,
   baseUrl,
   baseQuery = customFetchBaseQueryWithErrorHandling
 }: CrudApiOptions) {
@@ -85,19 +83,19 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
 
     baseQuery,
 
-    tagTypes: [tagType],
+    tagTypes,
 
     endpoints: (builder) => ({
       // GET: classrooms/1
       getById: builder.query<ApiSuccessResponse<T>, number | string>({
         query: (id) => `${baseUrl}/${id}`,
-        providesTags: (result, error, id) => [{ type: tagType, id }]
+        providesTags: (result, error, id) => [...tagTypes.map((t) => ({ type: t, id }))]
       }),
 
       // GET: classrooms
       getAll: builder.query<ApiSuccessResponse<PaginatedResult<T>>, void | SearchPaginatedRequestParams>({
         query: (params) => ({ url: baseUrl, params }),
-        providesTags: [tagType]
+        providesTags: tagTypes
       }),
 
       // GET: search/classrooms?sort=nameAsc&pageNumber=1&pageSize=3&search=steam
@@ -111,7 +109,7 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
             ...params
           }
         }),
-        providesTags: [tagType]
+        providesTags: tagTypes
       }),
       // POST: classrooms/2
       create: builder.mutation<ApiSuccessResponse<T>, Partial<T>>({
@@ -120,17 +118,7 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
           method: 'POST',
           body
         }),
-        invalidatesTags: [tagType]
-      }),
-
-      // POST: classrooms/2
-      createFormData: builder.mutation<ApiSuccessResponse<T>, FormData>({
-        query: (body) => ({
-          url: baseUrl,
-          method: 'POST',
-          body
-        }),
-        invalidatesTags: [tagType]
+        invalidatesTags: tagTypes
       }),
 
       // PUT: classrooms/2
@@ -140,17 +128,7 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
           method: 'PATCH',
           body
         }),
-        invalidatesTags: (result, error, { id }) => [{ type: tagType, id }, tagType]
-      }),
-
-      // PUT: classrooms/2
-      updateFormData: builder.mutation<ApiSuccessResponse<T>, { id: string | number; body: FormData }>({
-        query: ({ id, body }) => ({
-          url: `${baseUrl}/${id}`,
-          method: 'PATCH',
-          body
-        }),
-        invalidatesTags: (result, error, { id }) => [{ type: tagType, id }, tagType]
+        invalidatesTags: (result, error, { id }) => [...tagTypes.map((t) => ({ type: t, id })), ...tagTypes]
       }),
 
       // DELETE: classrooms/2
@@ -159,7 +137,7 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
           url: `${baseUrl}/${id}`,
           method: 'DELETE'
         }),
-        invalidatesTags: (result, error, id) => [{ type: tagType, id }, tagType]
+        invalidatesTags: (result, error, id) => [...tagTypes.map((t) => ({ type: t, id })), ...tagTypes]
       })
     })
   })

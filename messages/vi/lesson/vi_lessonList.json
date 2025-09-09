@@ -1,0 +1,27 @@
+{
+  "LessonList": {
+    "lesson": "Bài Học",
+    "title": "Danh Sách Các Bài Học",
+    "description": "Các hướng dẫn theo chủ đề, được căn chỉnh theo chương trình giảng dạy với phương pháp sư phạm giáo dục. Các bài Học có góc nhìn của giáo viên và học sinh.",
+    "filterTitle": "Lọc Bài Học",
+    "noLesson": "Không Tìm Thấy Bài Học Nào.",
+    "noLessonFound": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm các Bài Học phù hợp.",
+    "filterBy": "Tìm kiếm",
+    "placeHolder": {
+      "search": "Tìm kiếm bài Học...",
+      "category": "Danh Mục (Chọn một tùy chọn)",
+      "skill": "Kỹ Năng (Chọn một tùy chọn)",
+      "ageRange": "Độ Tuổi (Chọn một tùy chọn)",
+      "standard": "Tiêu Chuẩn (Chọn một tùy chọn)",
+      "status": "Trạng Thái (Chọn một tùy chọn)"
+    },
+    "tags": {
+      "search": "Tìm kiếm",
+      "category": "Danh Mục",
+      "skill": "Kỹ Năng",
+      "ageRange": "Độ Tuổi",
+      "standard": "Tiêu Chuẩn",
+      "status": "Trạng Thái"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "curriculum": {
+    "list": {
+      "title": "Curriculums List",
+      "placeholder": {
+        "search": "Search by code or title..."
+      },
+      "noData": "No curriculums found.",
+      "noDataDetail": "Try changing the search term or filters to find relevant curriculums.",
+      "loading": "Loading curriculums...",
+      "error": "An error occurred while fetching curriculums. Please try again.",
+      "courseListTitle": "Courses List"
+    },
+    "details": {
+      "title": "Curriculum Details",
+      "addCourse": "Add Course"
+    },
+
+    "form": {
+      "title": {
+        "create": "Create Curriculum",
+        "update": "Update Curriculum"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "note": "Name for the curriculum",
+          "placeholder": "e.g: Fun Summer"
+        },
+        "description": {
+          "label": "Description",
+          "note": "Description for the curriculum",
+          "placeholder": "e.g: This curriculum includes critical thinking and creativity skills for children"
+        },
+        "code": {
+          "label": "Code",
+          "note": "Unique identifier for the curriculum",
+          "placeholder": "e.g SU001"
+        }
+      }
+    },
+    "custom": {
+      "courseListTitle": "Curriculum Aligned Resources",
+      "courseListDescription": "You will have access to a full range of lessons, activities and explorations as well as different ways to navigate through it, highlighting different learning strategies and expected outcomes you can directly distribute to students via Stemify Classroom.",
+      "courseTag": "Course",
+      "kitListTitle": "Stemify Kit Included",
+      "kitListDescription": "Each curriculum is designed to be used with a specific Stemify Kit, which includes all the necessary materials and components for hands-on learning and exploration. The kit provides a comprehensive set of tools and resources that align with the curriculum's learning objectives, allowing students to engage in interactive and experiential learning activities.",
+      "kitTag": "Stemify Kit",
+      "selectCourseTitle": "Select Courses",
+      "selectedCourses": "Selected courses",
+      "searchCoursePlaceholder": "Search courses by code or title..."
+    }
+  }
+}

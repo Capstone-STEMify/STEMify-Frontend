@@ -1,0 +1,25 @@
+{
+  "kits": {
+    "list": {
+      "title": "Kits List",
+      "description": "Manage and organize kits for your educational platform.",
+      "noData": "No kits available. Please add new kits to get started.",
+      "searchPlaceholder": "Search kits here..."
+    },
+    "detail": {
+      "title": "Kit Details",
+      "description": "View and edit details of the selected kit."
+    },
+    "form": {
+      "title": {
+        "create": "Create New Kit",
+        "edit": "Edit Kit"
+      },
+      "fields": {
+        "name": "Kit Name",
+        "description": "Description",
+        "imageUrl": "Image URL"
+      }
+    }
+  }
+}

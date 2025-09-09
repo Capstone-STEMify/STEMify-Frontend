@@ -39,7 +39,7 @@ export default withAuth(
 
         const isPublic =
           PUBLIC_PATHS.includes(pathNoLocale) ||
-          (!pathname.startsWith('/admin') && !pathname.startsWith('/resource/lesson'))
+          (!pathname.startsWith('/admin'))
 
         return isPublic ? true : !!token
       }
