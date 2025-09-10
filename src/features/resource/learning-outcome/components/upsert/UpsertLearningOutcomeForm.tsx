@@ -13,13 +13,15 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCard } from '@/components/shared/card/SCard'
 import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
+import { title } from 'process'
 
 interface UpsertLearningOutcomeProps {
   id?: number
+  curriculumId?: number
   onSuccess?: () => void
 }
 
-export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearningOutcomeProps) {
+export default function UpsertLearningOutcomeForm({ id, curriculumId, onSuccess }: UpsertLearningOutcomeProps) {
   const isEditing = !!id
   const { closeModal } = useModal()
   const t = useTranslations('LearningOutcome')
@@ -55,10 +57,10 @@ export default function UpsertLearningOutcomeForm({ id, onSuccess }: UpsertLearn
       try {
         if (isEditing) {
           await updateLearningOutcome({ id: id!, body: value }).unwrap()
-          toast.success(tt('successMessage.update'))
+          toast.success(tt('successMessage.update', { title: value.name }))
         } else {
-          await createLearningOutcome(value).unwrap()
-          toast.success(tt('successMessage.create'))
+          await createLearningOutcome({ ...value, curriculumId }).unwrap()
+          toast.success(tt('successMessage.create', { title: value.name }))
         }
         onSuccess?.()
       } catch (err: any) {

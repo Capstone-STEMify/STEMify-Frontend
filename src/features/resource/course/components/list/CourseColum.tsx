@@ -177,7 +177,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
-            message: tm('confirmDelMessage', { title: original.title }),
+            message: tt('confirmMessage.delete', { title: original.title }),
             onConfirm: () => handleDelete(original.id)
           })
         }

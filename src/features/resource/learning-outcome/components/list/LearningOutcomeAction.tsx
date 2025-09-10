@@ -49,7 +49,7 @@ export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: tm('confirmDelMessage', { title: original.name }),
+            message: tt('confirmMessage.delete', { title: original.name }),
             onConfirm: () => handleDelete(original.id)
           })
         }

@@ -3,7 +3,8 @@
     "list": {
       "title": "Danh Sách Khung Chương Trình",
       "placeholder": {
-        "search": "Tìm kiếm theo mã hoặc tiêu đề..."
+        "search": "Tìm kiếm theo mã hoặc tiêu đề...",
+        "status": "Trạng thái"
       },
       "noData": "Không tìm thấy khung chương trình nào.",
       "noDataDetail": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm khung chương trình phù hợp.",

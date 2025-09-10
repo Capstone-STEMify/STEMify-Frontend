@@ -55,7 +55,7 @@ export default function AdminCurriculumInformationSection({
           <span className='cursor-pointer text-blue-500'>
             <SquarePen
               onClick={() => {
-                openModal('upsertCurriculum', { curriculum: curriculum.id })
+                openModal('upsertCurriculum', { curriculumId: curriculum.id })
               }}
             />
           </span>

@@ -26,7 +26,7 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
   const columns = useGetLearningOutcomeAction()
 
   const handleCreate = () => {
-    openModal('upsertLearningOutcome')
+    openModal('upsertLearningOutcome', { curriculumId })
   }
   const handlePageChange = (page: number) => {
     // dispatch(setPageIndex(page))

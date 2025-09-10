@@ -2,16 +2,16 @@
   "Admin": {
     "side_bar": {
       "curriculum": "Curriculum",
-      "kit": "Kits",
-      "course": "Courses",
-      "lesson": "Lessons",
-      "user": "Users",
+      "kit": "Kit",
+      "course": "Course",
+      "lesson": "Lesson",
+      "user": "User",
       "catalog": "Catalog",
       "topic": "Topic",
-      "skill": "Skills",
+      "skill": "Skill",
       "ageRange": "Age Range",
       "standard": "Standard",
-      "setting": "Settings",
+      "setting": "Setting",
       "help": "Get Help",
       "search": "Search"
     },
