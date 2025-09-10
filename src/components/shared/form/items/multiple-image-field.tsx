@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import { Upload, X } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useFieldContext } from '@/components/shared/form/items'
+import Image from 'next/image'
 
 type MultiImageFieldProps = {
   label?: string
@@ -60,8 +61,14 @@ export default function MultiImageField({
             key={index}
             className='relative aspect-square overflow-hidden rounded-2xl border-2 border-dashed border-gray-300'
           >
-            <img src={url} alt={`Preview ${index + 1}`} className='h-full w-full rounded-2xl object-cover' />
-            {/* <div className='absolute inset-0 bg-black/30' /> */}
+            <Image
+              src={url}
+              alt={`Preview ${index + 1}`}
+              width={100}
+              height={100}
+              className='h-full w-full rounded-2xl object-cover'
+            />
+            <div className='absolute inset-0 bg-black/30' />
             <Button
               type='button'
               className='absolute top-2 right-2 z-10 rounded-full border-gray-400 text-black backdrop-blur-md'
@@ -73,8 +80,7 @@ export default function MultiImageField({
           </div>
         ))}
 
-        {/* Nút thêm ảnh */}
-        {allPreviews.length < 5 && ( // limit 5 ảnh
+        {allPreviews.length < 5 && (
           <div
             className='flex aspect-square cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gray-300 hover:bg-gray-50'
             onClick={() => fileInputRef.current?.click()}
