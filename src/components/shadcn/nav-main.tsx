@@ -40,8 +40,15 @@ export function NavMain({
                   <Link
                     href={item.url}
                     className={cn(
-                      'ext-black flex items-center gap-2 rounded-md px-2 py-1.5 text-xs transition-colors',
-                      isActive && 'bg-primary text-primary-foreground'
+                      'flex items-center gap-2 rounded-md px-2 py-1.5 text-xs transition-colors',
+                      // khi hover (chưa active)
+                      !isActive && 'hover:bg-blue-100 hover:text-blue-600',
+                      // khi active (như hover)
+                      isActive && 'bg-blue-100 text-blue-600',
+                      // khi active + hover -> màu khác
+                      isActive && 'hover:bg-blue-200 hover:text-blue-700',
+                      // mặc định
+                      !isActive && 'text-black'
                     )}
                   >
                     {item.icon && <item.icon size={20} />}
