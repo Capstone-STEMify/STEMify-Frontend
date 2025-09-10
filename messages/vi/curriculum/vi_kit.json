@@ -16,9 +16,17 @@
         "edit": "Chỉnh sửa bộ kit"
       },
       "fields": {
-        "name": "Tên bộ kit",
-        "description": "Mô tả",
-        "imageUrl": "Hình ảnh"
+        "name": {
+          "label": "Tên",
+          "placeholder": "Nhập tên bộ kit"
+        },
+        "description": {
+          "label": "Mô tả",
+          "placeholder": "Nhập mô tả bộ kit"
+        },
+        "imageUrl": {
+          "label": "Hình ảnh"
+        }
       }
     }
   }

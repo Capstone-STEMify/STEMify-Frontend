@@ -16,9 +16,17 @@
         "edit": "Edit Kit"
       },
       "fields": {
-        "name": "Kit Name",
-        "description": "Description",
-        "imageUrl": "Image URL"
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter kit name"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter kit description"
+        },
+        "imageUrl": {
+          "label": "Image URL"
+        }
       }
     }
   }

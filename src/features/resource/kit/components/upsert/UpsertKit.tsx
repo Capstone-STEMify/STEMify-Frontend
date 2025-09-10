@@ -58,6 +58,8 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
   const initialKitDataRef = useRef<KitFormData | null>(null)
   const { closeModal } = useModal()
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
+  const t = useTranslations('kits')
 
   const { data: kitData, isLoading } = useGetKitByIdQuery(kitId!, {
     skip: !kitId
@@ -77,11 +79,11 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
         if (kitId) {
           const patchJson = await PatchKitJsonPayload(initialKitDataRef.current!, value)
           const res = await updateKit({ id: kitId, body: patchJson }).unwrap()
-          toast.success(tc('toast.update_success', { name: 'Kit' }))
+          toast.success(tt('successMessage.update', { title: 'Kit' }))
         } else {
           const createJson = await CreateKitJsonPayload(value)
           const res = await createKit(createJson).unwrap()
-          toast.success(tc('toast.create_success', { name: 'Kit' }))
+          toast.success(tt('successMessage.create', { title: 'Kit' }))
         }
         onSuccess?.()
       } catch (error: any) {
@@ -115,17 +117,31 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
         form.handleSubmit()
       }}
     >
-      <form.AppField name='name' children={(field) => <field.TextField label='Name' placeholder='Enter kit name' />} />
+      <form.AppField
+        name='name'
+        children={(field) => (
+          <field.TextField label={t('form.fields.name.label')} placeholder={t('form.fields.name.placeholder')} />
+        )}
+      />
       <form.AppField
         name='description'
         children={(field) => (
-          <field.TextAreaField label='Description' placeholder='Enter kit description' className='min-h-[120px]' />
+          <field.TextAreaField
+            label={t('form.fields.description.label')}
+            placeholder={t('form.fields.description.placeholder')}
+            className='min-h-[120px]'
+          />
         )}
       />
 
       <form.AppField
         name='images'
-        children={(field) => <field.MultiImageField label='Kit Image' previewUrlsFromServer={previewUrlsFromServer} />}
+        children={(field) => (
+          <field.MultiImageField
+            label={t('form.fields.imageUrl.label')}
+            previewUrlsFromServer={previewUrlsFromServer}
+          />
+        )}
       />
       <div className='mb-3 flex justify-end gap-3'>
         <Button type='button' variant='outline' onClick={closeModal}>
