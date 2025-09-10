@@ -3,7 +3,8 @@
     "list": {
       "title": "Curriculums List",
       "placeholder": {
-        "search": "Search by code or title..."
+        "search": "Search by code or title...",
+        "status": "Status"
       },
       "noData": "No curriculums found.",
       "noDataDetail": "Try changing the search term or filters to find relevant curriculums.",
