@@ -5,10 +5,10 @@ import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import UpsertKit from '@/features/resource/kit/components/upsert/UpsertKit'
 interface UpsertKitModalProps {
-  id?: number
+  kitId?: number
   onConfirm: () => void
 }
-export default function UpsertKitModal({ id, onConfirm }: UpsertKitModalProps) {
+export default function UpsertKitModal({ kitId, onConfirm }: UpsertKitModalProps) {
   const tc = useTranslations('common')
   const t = useTranslations('kits')
   const { closeModal } = useModal()
@@ -28,7 +28,7 @@ export default function UpsertKitModal({ id, onConfirm }: UpsertKitModalProps) {
         </DialogHeader>
         <hr />
         <ScrollArea className='h-[500px]'>
-          <UpsertKit kitId={id} onSuccess={handleSuccess} />
+          <UpsertKit kitId={kitId} onSuccess={handleSuccess} />
         </ScrollArea>
       </DialogContent>
     </Dialog>
