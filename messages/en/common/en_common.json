@@ -88,7 +88,8 @@
       "actions": "Actions",
       "duration": "Duration",
       "empty": "No results found.",
-      "content": "Content"
+      "content": "Content",
+      "publish": "Publish"
     },
     "paging": {
       "previous": "Previous",

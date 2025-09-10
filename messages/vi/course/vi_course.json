@@ -24,7 +24,15 @@
       "noDataDetail": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm các khóa học phù hợp.",
       "loading": "Đang tải khóa học...",
       "error": "Đã xảy ra lỗi trong quá trình lấy khóa học. Vui lòng thử lại.",
-      "courseListTitle": "Danh Sách Khóa Học"
+      "courseListTitle": "Danh Sách Khóa Học",
+      "tags": {
+        "search": "Tìm kiếm",
+        "category": "Danh Mục",
+        "skill": "Kỹ Năng",
+        "ageRange": "Độ Tuổi",
+        "standard": "Tiêu Chuẩn",
+        "status": "Trạng Thái"
+      }
     },
     "details": {
       "title": "Chi Tiết Khóa Học",

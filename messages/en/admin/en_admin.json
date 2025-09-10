@@ -120,7 +120,8 @@
       },
       "card": {
         "age": "Age"
-      }
+      },
+      "reviewMessage": "Course submission is under review."
     }
   }
 }

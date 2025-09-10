@@ -121,7 +121,8 @@
       },
       "card": {
         "age": "Độ tuổi"
-      }
+      },
+      "reviewMessage": "Khóa học đang đợi quản trị viên phê duyệt."
     }
   }
 }

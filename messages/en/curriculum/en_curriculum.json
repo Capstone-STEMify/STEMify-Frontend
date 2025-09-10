@@ -49,7 +49,8 @@
       "kitTag": "Stemify Kit",
       "selectCourseTitle": "Select Courses",
       "selectedCourses": "Selected courses",
-      "searchCoursePlaceholder": "Search courses by code or title..."
+      "searchCoursePlaceholder": "Search courses by code or title...",
+      "reviewMessage": "Curriculum submission is under review."
     }
   }
 }

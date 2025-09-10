@@ -46,7 +46,8 @@
       "exploreActivities": "Khám Phá Các Hoạt Động",
       "getHelp": "Nhận Trợ Giúp",
       "readBlogs": "Đọc Blog",
-      "addKit": "Thêm Bộ Kit"
+      "addKit": "Thêm Bộ Kit",
+      "publish": "Xuất Bản"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",
