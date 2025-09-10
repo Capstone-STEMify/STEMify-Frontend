@@ -97,7 +97,7 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
     }
   }, [kitData, kitId, form])
 
-  const previewUrlsFromServer = kitData?.data?.images?.map((img) => `data:image/*;base64,${img.image}`) ?? []
+  const previewUrlsFromServer = kitData?.data?.images?.map((img) => img.imageUrl) ?? []
 
   if (kitId && (!kitData || isLoading)) {
     return (

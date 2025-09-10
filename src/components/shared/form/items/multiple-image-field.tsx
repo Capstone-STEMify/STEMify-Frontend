@@ -4,14 +4,15 @@ import { Button } from '@/components/shadcn/button'
 import { useFieldContext } from '@/components/shared/form/items'
 
 type MultiImageFieldProps = {
+  label?: string
   previewUrlsFromServer?: string[]
   onDeleteServerImage?: (url: string, index: number) => void
 }
 export default function MultiImageField({
+  label = 'Pictures',
   previewUrlsFromServer = [],
-  onDeleteServerImage,
-  label = 'Pictures'
-}: MultiImageFieldProps & { label?: string }) {
+  onDeleteServerImage
+}: MultiImageFieldProps) {
   const field = useFieldContext<File[]>()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [localPreviews, setLocalPreviews] = useState<string[]>([])
@@ -25,6 +26,8 @@ export default function MultiImageField({
       urls.forEach((url) => URL.revokeObjectURL(url))
     }
   }, [field.state.value])
+
+  console.log('previewUrlsFromServer', previewUrlsFromServer)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -60,7 +63,7 @@ export default function MultiImageField({
             className='relative aspect-square overflow-hidden rounded-2xl border-2 border-dashed border-gray-300'
           >
             <img src={url} alt={`Preview ${index + 1}`} className='h-full w-full rounded-2xl object-cover' />
-            <div className='absolute inset-0 bg-black/30' />
+            {/* <div className='absolute inset-0 bg-black/30' /> */}
             <Button
               type='button'
               className='absolute top-2 right-2 z-10 rounded-full border-gray-400 text-black backdrop-blur-md'

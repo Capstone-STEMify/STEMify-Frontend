@@ -82,7 +82,7 @@ export default function KitDetail() {
             items={(kitData.data.images || []).map((images, i) => (
               <div className='p-1' key={i}>
                 <Image
-                  src={images.image || '/images/fallback.png'}
+                  src={images.imageUrl || '/images/fallback.png'}
                   alt={images.alt || 'Kit Image'}
                   width={500}
                   height={500}
