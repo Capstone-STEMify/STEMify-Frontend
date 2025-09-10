@@ -19,7 +19,7 @@ const defaultKit: KitFormData = {
 async function CreateKitJsonPayload(data: KitFormData) {
   const imagesPayload = await Promise.all(
     data.images.map(async (img, index) => ({
-      image: await fileToBase64(img),
+      imageUrl: await fileToBase64(img),
       altText: `${data.name} ${index + 1}`
     }))
   )
@@ -97,7 +97,7 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
     }
   }, [kitData, kitId, form])
 
-  const previewUrlsFromServer = kitData?.data?.images?.map((img) => img.imageUrl) ?? []
+  const previewUrlsFromServer = (kitData?.data?.images?.map((img) => img.imageUrl).filter(Boolean) as string[]) ?? []
 
   if (kitId && (!kitData || isLoading)) {
     return (

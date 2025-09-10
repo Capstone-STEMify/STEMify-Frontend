@@ -8,7 +8,7 @@ export type Kit = {
 }
 
 export type KitImage = {
-  image?: string
+  imageUrl?: string
   alt?: string
 }
 

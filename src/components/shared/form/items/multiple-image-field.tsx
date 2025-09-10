@@ -27,8 +27,6 @@ export default function MultiImageField({
     }
   }, [field.state.value])
 
-  console.log('previewUrlsFromServer', previewUrlsFromServer)
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (files && files.length > 0) {
