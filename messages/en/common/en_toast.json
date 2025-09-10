@@ -25,6 +25,7 @@
       "confirmLabel": "Are you sure?",
       "delete": "Are you sure you want to delete \"{title}\"?",
       "removeCourse": "Are you sure you want to remove \"{title}\" from this curriculum?",
+      "removeKit": "Are you sure you want to remove \"{title}\" from this curriculum?",
       "discard": "Are you sure you want to discard your changes?",
       "ask": "Are you sure to make ",
       "askStatus": "Are you sure to {action} \"{title}\"?"

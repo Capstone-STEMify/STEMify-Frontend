@@ -14,9 +14,6 @@ import { useDeleteLessonMutation, useUpdateLessonMutation } from '../../api/less
 import { Lesson, LessonStatus } from '../../types/lesson.type'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
-import { useSortable } from '@dnd-kit/sortable'
-import { Button } from '@/components/shadcn/button'
-import { IconGripVertical } from '@tabler/icons-react'
 
 const getLessonStatusBadgeClass = (status?: LessonStatus): string => {
   const map: Record<LessonStatus, string> = {
@@ -164,7 +161,7 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
-            message: tm('confirmDelMessage', { title: original.title }),
+            message: tt('confirmMessage.delete', { title: original.title }),
             onConfirm: () => handleDelete(original.id)
           })
         }
