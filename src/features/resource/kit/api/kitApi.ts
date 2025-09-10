@@ -1,6 +1,5 @@
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { Kit, KitSliceParams } from '@/features/resource/kit/types/kit.type'
-import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 
 export const kitApi = createCrudApi<Kit, KitSliceParams>({
   reducerPath: 'kitApi',

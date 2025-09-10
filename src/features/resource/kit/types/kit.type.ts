@@ -4,12 +4,11 @@ export type Kit = {
   id: number
   name: string
   description?: string
-  kitImages: KitImage[]
+  images: KitImage[]
 }
 
 export type KitImage = {
-  id: number
-  imageUrl?: string
+  image?: string
   alt?: string
 }
 
