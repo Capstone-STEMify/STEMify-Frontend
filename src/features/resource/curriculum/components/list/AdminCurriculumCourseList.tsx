@@ -34,32 +34,11 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
     return key ? visibleKeys.includes(key as string) : false
   })
 
-  const courseParams = useAppSelector((state) => state.course)
-
-  const queryParams: CourseQueryParams = {
-    courseId: courseParams.courseId,
-    createdByUserId: courseParams.createdByUserId,
-    ageRangeId: courseParams.ageRangeId,
-    topicId: courseParams.topicId,
-    skillId: courseParams.skillId,
-    standardId: courseParams.standardId,
-    pageNumber: courseParams.pageNumber,
-    pageSize: courseParams.pageSize,
-    search: courseParams.search,
-    status: courseParams.status,
-    orderBy: 'createdDate',
-    sortDirection: 'Desc'
-  }
-
   useEffect(() => {
     dispatch(setPageSize(50))
   }, [dispatch])
 
-  const { data } = useSearchCourseQuery(queryParams)
   const [updateCourseOrder] = useUpdateCourseOrderMutation()
-  const handlePageChange = (newPage: number) => {
-    dispatch(setPageIndex(newPage))
-  }
 
   const handleSaveOrder = async () => {
     try {
@@ -79,7 +58,7 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
       <div className='mb-3 flex items-center justify-between'>
         <h2 className='text-2xl font-semibold'>
           {t('list.courseListTitle')}{' '}
-          <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{data?.data.totalCount}</span>
+          <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{courses?.length}</span>
         </h2>
 
         <div className='flex justify-end space-x-2'>
@@ -106,9 +85,6 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
         data={courses || []}
         columns={filteredColumns}
         enableRowSelection
-        pagingData={data}
-        pagingParams={queryParams}
-        handlePageChange={handlePageChange}
         enableDnd
         onReorder={(data) => {
           const orderCourseIds = data.map((item) => item.id)

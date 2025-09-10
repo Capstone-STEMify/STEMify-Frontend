@@ -6,7 +6,6 @@ const initialState: CurriculumSliceParams = {
   pageSize: 5,
   search: '',
   orderBy: '',
-  status: CurriculumStatus.PUBLISHED,
   curriculumId: undefined
 }
 
