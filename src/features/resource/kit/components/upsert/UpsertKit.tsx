@@ -8,6 +8,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { fileToBase64 } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useRef } from 'react'
+import { toast } from 'sonner'
 
 const defaultKit: KitFormData = {
   name: '',
@@ -75,16 +76,14 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
       try {
         if (kitId) {
           const patchJson = await PatchKitJsonPayload(initialKitDataRef.current!, value)
-          console.log('📝 Patch JSON:', patchJson)
-
           const res = await updateKit({ id: kitId, body: patchJson }).unwrap()
-          console.log('✅ Update response:', res)
+          toast.success(tc('toast.update_success', { name: 'Kit' }))
         } else {
           const createJson = await CreateKitJsonPayload(value)
-          console.log('📦 Create JSON:', createJson)
           const res = await createKit(createJson).unwrap()
-          console.log('✅ Create response:', res)
+          toast.success(tc('toast.create_success', { name: 'Kit' }))
         }
+        onSuccess?.()
       } catch (error: any) {
         console.error('Error submitting form:', error.message)
       }
