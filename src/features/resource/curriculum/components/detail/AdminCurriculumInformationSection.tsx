@@ -33,7 +33,7 @@ export default function AdminCurriculumInformationSection({
   const { openModal } = useModal()
 
   // Get current user
-  const user = useAppSelector((state) => state.auth.user)
+  const user = useAppSelector((state) => state?.auth?.user)
 
   // API hooks
   const [deleteCurriculum] = useDeleteCurriculumMutation()
