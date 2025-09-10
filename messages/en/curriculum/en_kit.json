@@ -3,7 +3,7 @@
     "list": {
       "title": "Kits List",
       "description": "Manage and organize kits for your educational platform.",
-      "noData": "No kits available. Please add new kits to get started.",
+      "noData": "No kits available.",
       "searchPlaceholder": "Search kits here..."
     },
     "detail": {

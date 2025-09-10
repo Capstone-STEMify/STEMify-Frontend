@@ -16,7 +16,9 @@ export type Curriculum = {
   courseCount: number
   kits: any[]
   courses: Course[]
-  kitIds?: number[]
+  kitIds?: {
+    values: number[]
+  }
 }
 
 export type CurriculumSliceParams = {

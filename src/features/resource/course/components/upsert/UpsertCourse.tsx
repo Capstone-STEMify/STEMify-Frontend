@@ -202,6 +202,7 @@ export default function UpsertCourse({ courseId, onSuccess }: UpsertCourseProps)
                 label={t('form.fields.code.label')}
                 placeholder={t('form.fields.code.placeholder')}
                 className='rounded-lg border-gray-300'
+                disabled={!!courseId}
               />
             )}
           />

@@ -164,6 +164,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
               label={t('form.fields.code.label')}
               placeholder={t('form.fields.code.placeholder')}
               className='rounded-lg border-gray-300'
+              disabled={!!curriculumId}
             />
           )}
         />

@@ -1,4 +1,5 @@
 import { Button } from '@/components/shadcn/button'
+import { Card } from '@/components/shadcn/card'
 import CardHorizontal from '@/components/shared/card/CardHorizontal'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { useUpdateCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
@@ -32,7 +33,7 @@ export default function CurriculumKitList({ kits }: KitListProps) {
         onConfirm: async () => {
           await updateCurriculumkit({
             id: Number(curriculumId),
-            body: { kitIds: kits.filter((kit) => kit.id !== kitId).map((kit) => kit.id) }
+            body: { kitIds: { values: kits.filter((kit) => kit.id !== kitId).map((kit) => kit.id) } }
           }).unwrap()
           toast.success(tt('successMessage.delete'))
         }
@@ -54,36 +55,42 @@ export default function CurriculumKitList({ kits }: KitListProps) {
         </Button>
       </div>
 
-      {kits.map((kit) => (
-        <div key={kit.id} className='relative flex max-w-xl min-w-0 gap-1'>
-          <CardHorizontal
-            key={kit.id}
-            imageUrl={
-              kit.kitImages?.[0]?.imageUrl ||
-              'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
-            }
-            title={kit.name}
-            description={kit.description || ''}
-            className='max-w-xl'
-            height={100}
-          />
-
-          <div key={kit.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
-            <SDropDown
-              trigger={<EllipsisVertical className='mt-2 h-5 w-5 cursor-pointer text-yellow-400 hover:scale-[1.1]' />}
-              items={[
-                <button
-                  key={`delete-${kit.id}`}
-                  className='cursor-pointer text-sm text-red-500'
-                  onClick={(e) => handleDelete(e, kit.id, kit.name)}
-                >
-                  {tc('button.remove')}
-                </button>
-              ].filter(Boolean)}
+      {kits.length > 0 ? (
+        kits.map((kit) => (
+          <div key={kit.id} className='relative flex max-w-xl min-w-0 gap-1'>
+            <CardHorizontal
+              key={kit.id}
+              imageUrl={
+                kit.kitImages?.[0]?.imageUrl ||
+                'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
+              }
+              title={kit.name}
+              description={kit.description || ''}
+              className='mb-2 max-w-xl'
+              height={100}
             />
+
+            <div key={kit.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
+              <SDropDown
+                trigger={<EllipsisVertical className='mt-2 h-5 w-5 cursor-pointer text-yellow-400 hover:scale-[1.1]' />}
+                items={[
+                  <button
+                    key={`delete-${kit.id}`}
+                    className='cursor-pointer text-sm text-red-500'
+                    onClick={(e) => handleDelete(e, kit.id, kit.name)}
+                  >
+                    {tc('button.remove')}
+                  </button>
+                ].filter(Boolean)}
+              />
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <Card className='border-2 border-dashed border-gray-300 py-10 text-center text-sm text-gray-500'>
+          <p className='text-gray-500'>{t('list.noData')}</p>
+        </Card>
+      )}
     </div>
   )
 }
