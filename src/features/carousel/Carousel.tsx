@@ -36,7 +36,6 @@ const ITEMS: CarouselItem[] = [
     rating: 4.2,
     isAvailable: false
   },
-
   {
     id: 'sweeper',
     title: 'Hexahedron Platonic Solid',
@@ -111,7 +110,12 @@ function HeaderBar() {
 }
 
 export default function CarouselShowcase() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'center', dragFree: false, loop: true })
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: 'center',
+    dragFree: false,
+    loop: true,
+    containScroll: 'trimSnaps' // ⚙️ mượt ở seam
+  })
   const [selected, setSelected] = useState(0)
   const [progress, setProgress] = useState(0)
   const router = useRouter()
@@ -132,7 +136,7 @@ export default function CarouselShowcase() {
     emblaApi.on('select', onSelect)
     emblaApi.on('scroll', onScroll)
     emblaApi.on('reInit', onSelect)
-    emblaApi.on("reInit", onScroll);
+    emblaApi.on('reInit', onScroll)
   }, [emblaApi, onSelect, onScroll])
 
   const scrollTo = (i: number) => emblaApi?.scrollTo(i)
@@ -148,37 +152,37 @@ export default function CarouselShowcase() {
 
         {/* Carousel */}
         <div className='overflow-x-hidden overflow-y-visible py-8' ref={emblaRef}>
-          <div className='flex touch-pan-y gap-6'>
+          <div className='flex touch-pan-y gap-10 md:gap-12'>
             {ITEMS.map((item, i) => {
               const active = i === selected
               return (
                 <article
                   key={item.id}
-                  onClick={() => handleNavigate(item.id)}
-                  className={`min-w-0 shrink-0 grow-0 basis-[85%] transition-transform duration-300 ease-out sm:basis-[55%] md:basis-[42%] lg:basis-[33%] ${active ? 'z-10 scale-105 md:scale-110' : 'scale-[.9] opacity-90'} ${!item.isAvailable ? 'pointer-events-none opacity-90' : 'cursor-pointer'}`}
+                  onClick={() => item.isAvailable && handleNavigate(item.id)}
+                  className={`relative min-w-0 shrink-0 grow-0 basis-[85%] px-2 sm:basis-[55%] md:basis-[42%] md:px-4 lg:basis-[33%] ${
+                    item.isAvailable ? 'cursor-pointer' : 'pointer-events-none'
+                  }`}
                 >
+                  {/* Single circle container — scale ở đây để không bị cắt */}
                   <div
-                    className={`relative mx-auto aspect-square w-[74vw] max-w-[28rem] rounded-full ${item.bg} shadow-lg sm:w-[60vw] md:w-[28rem]`}
-                  ></div>
-                  <div className='pointer-events-none absolute -mt-[calc(min(74vw,28rem))] sm:-mt-[calc(min(60vw,28rem))] md:-mt-[28rem]' />
-                  <div className='relative -mt-[calc(min(74vw,28rem))] sm:-mt-[calc(min(60vw,28rem))] md:-mt-[28rem]'>
-                    <div
-                      className={`relative mx-auto aspect-square w-[74vw] max-w-[28rem] overflow-hidden rounded-full ${item.bg} ${active ? 'shadow-2xl' : 'shadow-lg'} ring-1 ring-black/5 sm:w-[60vw] md:w-[28rem]`}
-                    >
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        className='absolute inset-0 h-full w-full object-cover'
-                        width={448}
-                        height={448}
-                      />
-                      {/* Overlay khi chưa mở */}
-                      {!item.isAvailable && (
-                        <div className='absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xs'>
-                          <span className='text-2xl font-semibold text-white drop-shadow-md'>Coming Soon</span>
-                        </div>
-                      )}
-                    </div>
+                    className={`group relative mx-auto aspect-square w-[74vw] max-w-[28rem] overflow-hidden rounded-full ${item.bg} transform-gpu ring-1 ring-black/5 transition-transform duration-300 ease-out sm:w-[60vw] md:w-[28rem] ${
+                      active ? 'z-20 scale-105 shadow-2xl md:scale-110' : 'scale-95 opacity-95 shadow'
+                    }`}
+                  >
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className='object-cover'
+                      sizes='(max-width: 640px) 74vw, (max-width: 768px) 60vw, 28rem'
+                      priority={i === 0}
+                    />
+                    {/* Overlay khi chưa mở */}
+                    {!item.isAvailable && (
+                      <div className='absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
+                        <span className='text-2xl font-semibold text-white drop-shadow-md'>Coming Soon</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className='mt-4 text-center'>
