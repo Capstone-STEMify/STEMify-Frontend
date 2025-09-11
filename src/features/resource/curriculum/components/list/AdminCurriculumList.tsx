@@ -10,8 +10,6 @@ import { toast } from 'sonner'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { setPageIndex, setPageSize } from '../../slice/curriculumSlice'
 import { useDeleteCurriculumMutation, useSearchCurriculumQuery } from '../../api/curriculumApi'
-import { SCard } from '@/components/shared/card/SCard'
-import Image from 'next/image'
 import CardHorizontal from '@/components/shared/card/CardHorizontal'
 import { CurriculumSliceParams } from '@/features/resource/curriculum/types/curriculum.type'
 

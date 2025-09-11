@@ -1,6 +1,8 @@
 {
   "curriculum": {
     "list": {
+      "heroTitle": "Integrated STEM Curriculum",
+      "heroDescription": "Explore our integrated STEM curriculums, designed to inspire and foster creativity in learning. Each curriculum offers a comprehensive learning pathway, combining STEM subjects with hands-on activities and real-world explorations. From developing critical thinking skills to promoting collaboration, our curriculums aim to equip students with the tools they need to succeed in the modern world.",
       "title": "Curriculums List",
       "placeholder": {
         "search": "Search by code or title...",

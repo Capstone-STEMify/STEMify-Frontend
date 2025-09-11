@@ -1,8 +1,9 @@
-import { Badge } from '@/components/shadcn/badge'
+'use client'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { SCarousel } from '@/components/shared/SCarousel'
 import { Course } from '@/features/resource/course/types/course.type'
 import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 type CurriculumCourseSectionProps = {
@@ -10,6 +11,7 @@ type CurriculumCourseSectionProps = {
 }
 export default function CurriculumCourseSection({ courses }: CurriculumCourseSectionProps) {
   const t = useTranslations('curriculum')
+  const router = useRouter()
   return (
     <div className='space-y-10 py-10'>
       <div className='text-center'>
@@ -23,6 +25,7 @@ export default function CurriculumCourseSection({ courses }: CurriculumCourseSec
         items={Array.from({ length: courses.length }).map((_, i) => (
           <div className='p-1' key={i}>
             <CardLayout
+              onClick={() => router.push(`/resource/course/${courses[i].id}`)}
               imageSrc={courses[i].imageUrl || 'images/fallback.png'}
               size='md'
               children={
