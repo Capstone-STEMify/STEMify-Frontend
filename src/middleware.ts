@@ -12,15 +12,15 @@ export default withAuth(
 
     const res = intlMiddleware(req)
     const role = req.nextauth.token?.role
-    const isAdmin = role === UserRole.ADMIN
+    const hasManagementRole = role === UserRole.ADMIN || role === UserRole.STAFF
 
     const locale = pathname.split('/')[1] || 'vi'
 
-    if (isAdmin && !pathname.startsWith(`/${locale}/admin`)) {
-      return NextResponse.redirect(new URL(`/${locale}/admin/course`, req.url))
+    if (hasManagementRole && !pathname.startsWith(`/${locale}/admin`)) {
+      return NextResponse.redirect(new URL(`/${locale}/admin/curriculum`, req.url))
     }
 
-    if (!isAdmin && pathname.startsWith(`/${locale}/admin`)) {
+    if (!hasManagementRole && pathname.startsWith(`/${locale}/admin`)) {
       return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url))
     }
 
@@ -37,9 +37,7 @@ export default withAuth(
 
         const PUBLIC_PATHS = ['/', '/unauthorized', '/api/auth/signin']
 
-        const isPublic =
-          PUBLIC_PATHS.includes(pathNoLocale) ||
-          (!pathname.startsWith('/admin'))
+        const isPublic = PUBLIC_PATHS.includes(pathNoLocale) || !pathname.startsWith('/admin')
 
         return isPublic ? true : !!token
       }

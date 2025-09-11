@@ -83,8 +83,6 @@ export default function ContentSection() {
   }, [dispatch])
 
   const { courseId } = useParams()
-  console.log(courseId)
-  // const courseId = params.courseId
 
   const { data: lessons } = useSearchLessonQuery({
     ...lessonsQuery,
@@ -234,16 +232,18 @@ export default function ContentSection() {
         {isReadOnly ? (
           <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
             {items.map((lesson) => (
-              <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
-                <div className='flex min-h-0 flex-1 flex-col'>
-                  <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
-                  <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
-                  <div className='mt-auto flex items-center gap-2'>
-                    <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
-                    <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
+              <Link href={`/resource/lesson/${lesson.id}`} className='flex w-fit flex-col justify-between'>
+                <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
+                  <div className='flex min-h-0 flex-1 flex-col'>
+                    <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
+                    <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
+                    <div className='mt-auto flex items-center gap-2'>
+                      <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
+                      <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
+                    </div>
                   </div>
-                </div>
-              </CardLayout>
+                </CardLayout>
+              </Link>
             ))}
           </div>
         ) : (
@@ -259,9 +259,7 @@ export default function ContentSection() {
                     }}
                   >
                     <PlusCircle size={70} className='mt-20 text-gray-500' />
-                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
-                      {tc('button.createLesson')}
-                    </p>
+                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>{tc('button.createLesson')}</p>
                   </div>
                   {items.map((lesson) => (
                     <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>

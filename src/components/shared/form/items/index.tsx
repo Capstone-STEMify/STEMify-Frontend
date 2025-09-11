@@ -9,6 +9,7 @@ import { SubmitButton } from '@/components/shared/form/items/submit-button'
 import { TextAreaField } from '@/components/shared/form/items/text-area'
 import { TextField } from '@/components/shared/form/items/text-field'
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
+import MultiImageField from '@/components/shared/form/items/multi-image-field'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts()
 
@@ -22,7 +23,8 @@ export const { useAppForm } = createFormHook({
     RadioField,
     ImageField,
     FileField,
-    MarkdownEditorField
+    MarkdownEditorField,
+    MultiImageField
   },
   formComponents: {
     SubmitButton

@@ -23,7 +23,7 @@ export default function LessonOutline({
   const { data: userData } = useSession()
 
   if (!sectionData || sectionData.length === 0) {
-    return <div className='flex h-screen items-center justify-center'>{t('notFound.no_section_v2')}</div>
+    return <div className='flex items-center justify-center'>{t('notFound.no_section_v2')}</div>
   }
 
   const completedSectionIds = new Set(
@@ -65,9 +65,7 @@ export default function LessonOutline({
                   )}
                   <div className={!isLoggedIn ? 'text-gray-500' : ''}>{sec.title}</div>
                 </div>
-                <div className={cn('text-muted-foreground', !isLoggedIn && 'text-gray-400')}>
-                  {sec.duration} mins
-                </div>
+                <div className={cn('text-muted-foreground', !isLoggedIn && 'text-gray-400')}>{sec.duration} mins</div>
               </div>
             )
           })}

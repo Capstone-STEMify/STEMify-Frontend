@@ -24,7 +24,15 @@
       "noDataDetail": "Try changing the search term or filters to find relevant courses.",
       "loading": "Loading courses...",
       "error": "An error occurred while fetching courses. Please try again.",
-      "courseListTitle": "Courses List"
+      "courseListTitle": "Courses List",
+      "tags": {
+        "search": "Search",
+        "category": "Category",
+        "skill": "Skill",
+        "ageRange": "Age Range",
+        "standard": "Standard",
+        "status": "Status"
+      }
     },
     "details": {
       "title": "Course Details",

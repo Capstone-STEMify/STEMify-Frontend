@@ -44,9 +44,10 @@
       "exploreCourses": "Khám Phá Các Khóa Học",
       "exploreLessons": "Khám Phá Các Bài Học",
       "exploreActivities": "Khám Phá Các Hoạt Động",
-      "getHelp": "Nhận Trợ Giúp",
-      "readBlogs": "Đọc Blog",
-      "addKit": "Thêm Bộ Kit"
+      "exploreCurriculums": "Khám Phá Khung Chương Trình",
+      "readBlogs": "Xem Blog",
+      "addKit": "Thêm Bộ Kit",
+      "publish": "Xuất Bản"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",

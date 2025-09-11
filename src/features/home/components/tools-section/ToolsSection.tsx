@@ -26,9 +26,7 @@ export default function ToolsSection() {
 
       <div className='relative z-10 mb-12 text-center'>
         <h1 className='mb-4 text-5xl font-bold text-gray-900'>{t('title')}</h1>
-        <p className='mx-auto max-w-2xl text-gray-600'>
-          {t('description')}
-        </p>
+        <p className='mx-auto max-w-4xl text-lg text-gray-600'>{t('description')}</p>
       </div>
 
       <div className='relative mx-auto max-w-5xl'>

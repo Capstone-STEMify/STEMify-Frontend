@@ -1,8 +1,9 @@
+import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import { metadata } from 'app/[locale]/layout'
 
-metadata.title = 'Curriculum'
-export default async function PublicCurriculumLayout({
+metadata.title = 'Course'
+export default async function PublicCourseLayout({
   children
 }: Readonly<{
   children: React.ReactNode
@@ -11,6 +12,7 @@ export default async function PublicCurriculumLayout({
     <div className='bg-light min-h-screen'>
       <Header />
       <main className='mt-20'>{children}</main>
+      <Footer />
     </div>
   )
 }

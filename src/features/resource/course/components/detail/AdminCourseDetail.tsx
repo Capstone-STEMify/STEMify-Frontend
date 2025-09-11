@@ -20,13 +20,17 @@ import LessonTable from '@/features/resource/lesson/components/list/LessonTable'
 import { useModal } from '@/providers/ModalProvider'
 import { getLevelBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
+import { UserRole } from '@/types/userRole'
 
 export default function AdminCourseDetail() {
   const t = useTranslations('Admin.course_details')
   const tt = useTranslations('toast')
+  const tc = useTranslations('common')
 
+  // Get current user
+  const user = useAppSelector((state) => state.auth.user)
   const params = useParams()
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
@@ -244,26 +248,65 @@ export default function AdminCourseDetail() {
           }
         />
 
-        {/* Action Buttons */}
-
-        {(course.data.status === CourseStatus.PENDING || course.data.status === CourseStatus.DRAFT) && (
+        {/* review Buttons (only for admin users) */}
+        {user && user.role === UserRole.ADMIN && course.data.status === CourseStatus.PENDING && (
           <div className='space-y-4'>
             <Button
               onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
               className='text-sky-custom-600 w-full cursor-pointer bg-gray-200 font-semibold shadow'
               variant='outline'
             >
-              {t('button.approve')}
+              {tc('button.approve')}
             </Button>
             <Button
               onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
               variant='outline'
               className='w-full border-red-600 text-red-600'
             >
-              {t('button.reject')}
+              {tc('button.reject')}
             </Button>
           </div>
         )}
+        {/* if admin user is the creator and course is in draft status */}
+        {user &&
+          user.role === UserRole.ADMIN &&
+          user.userId === course.data.createdByUserId &&
+          course.data.status === CourseStatus.DRAFT && (
+            <div className='space-y-4'>
+              <Button
+                onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
+                className='bg-sky-custom-600 w-full cursor-pointer font-semibold text-white shadow'
+                variant='outline'
+              >
+                {tc('button.publish')}
+              </Button>
+            </div>
+          )}
+
+        {/* if staff user is the creator and course is in draft status */}
+        {user &&
+          user.role === UserRole.STAFF &&
+          user.userId === course.data.createdByUserId &&
+          course.data.status === CourseStatus.DRAFT && (
+            <div className='space-y-4'>
+              <Button
+                onClick={() => handleUpdateCourseStatus(CourseStatus.PENDING)}
+                className='bg-sky-custom-600 w-full cursor-pointer font-semibold text-white shadow'
+                variant='outline'
+              >
+                {tc('button.sendRequest')}
+              </Button>
+            </div>
+          )}
+        {/* Pending Review Message */}
+        {user &&
+          user.role === UserRole.STAFF &&
+          user.userId === course.data.createdByUserId &&
+          course.data.status === CourseStatus.PENDING && (
+            <div className='flex w-full items-center gap-3 rounded-md border border-yellow-300 bg-yellow-50 p-2'>
+              <p className='text-xs font-medium text-yellow-700'>{t('reviewMessage')}</p>
+            </div>
+          )}
       </div>
       {/* Divider Section before Lesson Table */}
       <div className='col-span-1 pt-5 xl:col-span-3'>

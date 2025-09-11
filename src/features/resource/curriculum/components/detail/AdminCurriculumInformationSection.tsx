@@ -14,6 +14,8 @@ import { Curriculum, CurriculumStatus } from '../../types/curriculum.type'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { UserRole } from '@/types/userRole'
 
 type AdminCurriculumInformationSectionProps = {
   curriculumId: number
@@ -27,10 +29,17 @@ export default function AdminCurriculumInformationSection({
   // Translations
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const t = useTranslations('curriculum')
   const { openModal } = useModal()
+
+  // Get current user
+  const user = useAppSelector((state) => state?.auth?.user)
+
+  // API hooks
   const [deleteCurriculum] = useDeleteCurriculumMutation()
   const [updateCurriculumStatus] = useUpdateCurriculumMutation()
 
+  // handle actions
   const handleDelete = async () => {
     await deleteCurriculum(Number(curriculumId)).unwrap()
     toast.success(`${tt('successMessage.delete', { title: curriculum.title || '' })}`)
@@ -83,8 +92,8 @@ export default function AdminCurriculumInformationSection({
 
         <p className='mb-4 text-gray-700'>{curriculum.description}</p>
 
-        {/* Review actions */}
-        {(curriculum.status === CurriculumStatus.PENDING || curriculum.status === CurriculumStatus.DRAFT) && (
+        {/* Review actions (only for admin users) */}
+        {user && user.role === UserRole.ADMIN && curriculum.status === CurriculumStatus.PENDING && (
           <div className='flex gap-3'>
             <Button
               className='cursor-pointer bg-green-600 font-semibold text-white shadow'
@@ -110,7 +119,53 @@ export default function AdminCurriculumInformationSection({
             </Button>
           </div>
         )}
+        {/* if admin user is the creator and curriculum is in draft status */}
+        {user &&
+          user.role === UserRole.ADMIN &&
+          curriculum.status === CurriculumStatus.DRAFT &&
+          curriculum.createdByUserId === user.userId && (
+            <Button
+              className='bg-sky-custom-600 w-30 cursor-pointer font-semibold text-white shadow'
+              onClick={() =>
+                openModal('confirm', {
+                  message: `${tt('confirmMessage.ask')}${curriculum.title} ${CurriculumStatus.PUBLISHED}?`,
+                  onConfirm: () => handleUpdateCurriculumStatus(CurriculumStatus.PUBLISHED)
+                })
+              }
+            >
+              {tc('button.publish')}
+            </Button>
+          )}
+
+        {/* if staff user is the creator and curriculum is in draft status, then show send request button */}
+        {user &&
+          user.role === UserRole.STAFF &&
+          user.userId === curriculum.createdByUserId &&
+          curriculum.status === CurriculumStatus.DRAFT && (
+            <Button
+              className='bg-sky-custom-600 w-30 cursor-pointer font-semibold text-white shadow'
+              onClick={() =>
+                openModal('confirm', {
+                  message: `${tt('confirmMessage.sendRequest', { title: curriculum.title })}`,
+                  onConfirm: () => handleUpdateCurriculumStatus(CurriculumStatus.PENDING)
+                })
+              }
+            >
+              {tc('button.publish')}
+            </Button>
+          )}
+
+        {/* if staff user is the creator and curriculum is in pending status */}
+        {user &&
+          user.role === UserRole.STAFF &&
+          user.userId === curriculum.createdByUserId &&
+          curriculum.status === CurriculumStatus.PENDING && (
+            <div className='flex w-xs items-center gap-3 rounded-md border border-yellow-300 bg-yellow-50 p-2'>
+              <p className='text-xs font-medium text-yellow-700'>{t('custom.reviewMessage')}</p>
+            </div>
+          )}
       </div>
+
       {/* Image Section */}
       <div className='relative aspect-[4/4] w-full overflow-hidden rounded-2xl shadow-md'>
         <Image

@@ -32,8 +32,17 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
   const t = useTranslations('LessonDetails')
   const tt = useTranslations('toast')
 
-  const { data: userData, status } = useSession()
-  const { data: content } = useSearchContentQuery(
+  // const { data: userData, status } = useSession()
+  const user = useAppSelector((state) => state.auth.user)
+  // Check if user is not logged in
+  const isLoggedIn = !!user
+
+  const {
+    data: content,
+    isLoading: fetchingContent,
+    isError,
+    error
+  } = useSearchContentQuery(
     { sectionId },
     {
       skip: !sectionId
@@ -41,7 +50,7 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
   )
   const [completeSection, { isLoading }] = useUpdateSectionStudentProgressMutation()
 
-  if (status === 'loading') {
+  if (fetchingContent) {
     return (
       <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
         <LoadingComponent size={18} textShow={false} />
@@ -66,9 +75,6 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
   }
 
   const currentSectionProgress = sectionStatus?.data.items.find((item) => item.sectionId === sectionId)
-
-  // Check if user is not logged in
-  const isLoggedIn = !!userData
 
   if (content) {
     return (

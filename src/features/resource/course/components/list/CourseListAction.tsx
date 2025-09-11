@@ -192,12 +192,22 @@ export default function CourseListAction() {
         {hasFilters && (
           <div className='mt-4 flex flex-wrap gap-2'>
             <span className='text-sm font-medium text-gray-600'>Active filters:</span>
-            {renderFilterTag('search', `${t('tags.search')}`, 'bg-blue-100 text-blue-800')}
-            {renderFilterTag('categoryId', `${t('tags.category')}`, 'bg-green-100 text-green-800', categoryOptions)}
-            {renderFilterTag('ageRangeId', `${t('tags.ageRange')}`, 'bg-purple-100 text-purple-800', ageRangeOptions)}
-            {renderFilterTag('skillId', `${t('tags.skill')}`, 'bg-yellow-100 text-yellow-800', skillOptions)}
-            {renderFilterTag('standardId', `${t('tags.standard')}`, 'bg-red-100 text-red-800', standardOptions)}
-            {renderFilterTag('status', `${t('tags.status')}`, 'bg-gray-100 text-gray-800', statusOptions)}
+            {renderFilterTag('search', `${t('list.tags.search')}`, 'bg-blue-100 text-blue-800')}
+            {renderFilterTag(
+              'categoryId',
+              `${t('list.tags.category')}`,
+              'bg-green-100 text-green-800',
+              categoryOptions
+            )}
+            {renderFilterTag(
+              'ageRangeId',
+              `${t('list.tags.ageRange')}`,
+              'bg-purple-100 text-purple-800',
+              ageRangeOptions
+            )}
+            {renderFilterTag('skillId', `${t('list.tags.skill')}`, 'bg-yellow-100 text-yellow-800', skillOptions)}
+            {renderFilterTag('standardId', `${t('list.tags.standard')}`, 'bg-red-100 text-red-800', standardOptions)}
+            {renderFilterTag('status', `${t('list.tags.status')}`, 'bg-gray-100 text-gray-800', statusOptions)}
           </div>
         )}
       </div>

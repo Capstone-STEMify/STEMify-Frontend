@@ -3,12 +3,7 @@ import BackButton from '@/components/shared/button/BackButton'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCarousel } from '@/components/shared/SCarousel'
-import {
-  useDeleteKitMutation,
-  useGetKitByIdQuery,
-  useSearchKitQuery,
-  useUpdateKitMutation
-} from '@/features/resource/kit/api/kitApi'
+import { useDeleteKitMutation, useGetKitByIdQuery, useUpdateKitMutation } from '@/features/resource/kit/api/kitApi'
 import { useModal } from '@/providers/ModalProvider'
 import { SquarePen, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -84,12 +79,11 @@ export default function KitDetail() {
             className='mx-auto w-full rounded-md shadow-md'
             variant='plugin'
             autoplayDelay={2000}
-            items={(kitData.data.kitImages || []
-            ).map((kitImage, i) => (
+            items={(kitData.data.images || []).map((images, i) => (
               <div className='p-1' key={i}>
                 <Image
-                  src={kitImage.imageUrl || '/images/fallback.png'}
-                  alt={kitImage.alt || 'Kit Image'}
+                  src={images.imageUrl || '/images/fallback.png'}
+                  alt={images.alt || 'Kit Image'}
                   width={500}
                   height={500}
                   className='w-full max-w-xl rounded-3xl object-cover shadow-xs'
