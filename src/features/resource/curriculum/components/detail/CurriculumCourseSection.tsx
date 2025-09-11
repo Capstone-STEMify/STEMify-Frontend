@@ -30,7 +30,7 @@ export default function CurriculumCourseSection({ courses }: CurriculumCourseSec
               <CardLayout
                 onClick={() => router.push(`/resource/course/${courses[i].id}`)}
                 imageSrc={courses[i].imageUrl || 'images/fallback.png'}
-                size='md'
+                size='lg'
               >
                 <div>
                   <h4 className='text-amber-custom-400 text-xs font-semibold'>
