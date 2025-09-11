@@ -28,8 +28,8 @@ const AnimatedBackground: React.FC = () => {
         'bg-cyan-400',
         'bg-red-400'
       ][Math.floor(Math.random() * 8)],
-      initialX: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920),
-      initialY: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080),
+      initialX: Math.random() * 100, // 0-100%
+      initialY: Math.random() * 100, // 0-100%
       duration: Math.random() * 20 + 15, // 15-35s
       delay: Math.random() * 5 // 0-5s delay
     }))
@@ -37,7 +37,7 @@ const AnimatedBackground: React.FC = () => {
   }, [])
 
   return (
-    <div className='pointer-events-none fixed inset-0 z-0 overflow-hidden'>
+    <div className='pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden'>
       {spheres.map((sphere) => (
         <div
           key={sphere.id}
@@ -45,28 +45,27 @@ const AnimatedBackground: React.FC = () => {
           style={{
             width: `${sphere.size}px`,
             height: `${sphere.size}px`,
-            left: `${sphere.initialX}px`,
-            top: `${sphere.initialY}px`,
+            left: `${sphere.initialX}%`,
+            top: `${sphere.initialY}%`,
             animation: `float-${sphere.id} ${sphere.duration}s infinite linear`,
             animationDelay: `${sphere.delay}s`
           }}
         />
       ))}
 
-      {/* CSS animations */}
       <style jsx>{`
         @keyframes float-0 {
           0% {
             transform: translate(0, 0) rotate(0deg);
           }
           25% {
-            transform: translate(-100px, -200px) rotate(90deg);
+            transform: translate(-30vw, -20vh) rotate(90deg);
           }
           50% {
-            transform: translate(200px, -100px) rotate(180deg);
+            transform: translate(40vw, -15vh) rotate(180deg);
           }
           75% {
-            transform: translate(100px, 200px) rotate(270deg);
+            transform: translate(20vw, 30vh) rotate(270deg);
           }
           100% {
             transform: translate(0, 0) rotate(360deg);
@@ -77,10 +76,10 @@ const AnimatedBackground: React.FC = () => {
             transform: translate(0, 0) rotate(0deg);
           }
           33% {
-            transform: translate(150px, -150px) rotate(120deg);
+            transform: translate(35vw, -25vh) rotate(120deg);
           }
           66% {
-            transform: translate(-200px, 100px) rotate(240deg);
+            transform: translate(-45vw, 20vh) rotate(240deg);
           }
           100% {
             transform: translate(0, 0) rotate(360deg);
@@ -91,16 +90,16 @@ const AnimatedBackground: React.FC = () => {
             transform: translate(0, 0) rotate(0deg);
           }
           20% {
-            transform: translate(-150px, -100px) rotate(72deg);
+            transform: translate(-40vw, -25vh) rotate(72deg);
           }
           40% {
-            transform: translate(100px, -200px) rotate(144deg);
+            transform: translate(30vw, -35vh) rotate(144deg);
           }
           60% {
-            transform: translate(200px, 50px) rotate(216deg);
+            transform: translate(50vw, 15vh) rotate(216deg);
           }
           80% {
-            transform: translate(-50px, 150px) rotate(288deg);
+            transform: translate(-15vw, 40vh) rotate(288deg);
           }
           100% {
             transform: translate(0, 0) rotate(360deg);
@@ -111,7 +110,7 @@ const AnimatedBackground: React.FC = () => {
             transform: translate(0, 0) rotate(0deg);
           }
           50% {
-            transform: translate(-250px, 150px) rotate(180deg);
+            transform: translate(-55vw, 35vh) rotate(180deg);
           }
           100% {
             transform: translate(0, 0) rotate(360deg);
@@ -122,13 +121,13 @@ const AnimatedBackground: React.FC = () => {
             transform: translate(0, 0) rotate(0deg);
           }
           25% {
-            transform: translate(120px, -180px) rotate(90deg);
+            transform: translate(45vw, -40vh) rotate(90deg);
           }
           50% {
-            transform: translate(-180px, -120px) rotate(180deg);
+            transform: translate(-50vw, -30vh) rotate(180deg);
           }
           75% {
-            transform: translate(-120px, 180px) rotate(270deg);
+            transform: translate(-25vw, 45vh) rotate(270deg);
           }
           100% {
             transform: translate(0, 0) rotate(360deg);
@@ -139,10 +138,10 @@ const AnimatedBackground: React.FC = () => {
             transform: translate(0, 0) rotate(0deg);
           }
           40% {
-            transform: translate(200px, -80px) rotate(144deg);
+            transform: translate(60vw, -20vh) rotate(144deg);
           }
           80% {
-            transform: translate(-100px, 200px) rotate(288deg);
+            transform: translate(-35vw, 50vh) rotate(288deg);
           }
           100% {
             transform: translate(0, 0) rotate(360deg);
@@ -153,13 +152,13 @@ const AnimatedBackground: React.FC = () => {
             transform: translate(0, 0) rotate(0deg);
           }
           30% {
-            transform: translate(-180px, -160px) rotate(108deg);
+            transform: translate(-50vw, -35vh) rotate(108deg);
           }
           60% {
-            transform: translate(160px, -80px) rotate(216deg);
+            transform: translate(55vw, -25vh) rotate(216deg);
           }
           90% {
-            transform: translate(80px, 160px) rotate(324deg);
+            transform: translate(25vw, 55vh) rotate(324deg);
           }
           100% {
             transform: translate(0, 0) rotate(360deg);
@@ -170,13 +169,13 @@ const AnimatedBackground: React.FC = () => {
             transform: translate(0, 0) rotate(0deg);
           }
           25% {
-            transform: translate(-140px, 120px) rotate(90deg);
+            transform: translate(-40vw, 35vh) rotate(90deg);
           }
           50% {
-            transform: translate(140px, 120px) rotate(180deg);
+            transform: translate(50vw, 40vh) rotate(180deg);
           }
           75% {
-            transform: translate(140px, -120px) rotate(270deg);
+            transform: translate(35vw, -35vh) rotate(270deg);
           }
           100% {
             transform: translate(0, 0) rotate(360deg);

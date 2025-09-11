@@ -13,7 +13,7 @@ export default function CurriculumCourseSection({ courses }: CurriculumCourseSec
   const t = useTranslations('curriculum')
   const router = useRouter()
   return (
-    <div className='space-y-10 py-10'>
+    <div className='py-10b space-y-10'>
       <div className='text-center'>
         <h1 className='text-5xl'>{t('custom.courseListTitle')}</h1>
         <hr className='mx-auto my-6 w-1/4 border-2 border-amber-400' />
