@@ -40,7 +40,7 @@ async function PatchKitJsonPayload(oldData: KitFormData, newData: KitFormData): 
   if ((newData.images?.length ?? 0) > 0) {
     const newImages = await Promise.all(
       newData.images.map(async (file, index) => ({
-        imageBytes: await fileToBase64(file),
+        imageUrl: await fileToBase64(file),
         altText: `${newData.name} ${index + 1}`
       }))
     )
