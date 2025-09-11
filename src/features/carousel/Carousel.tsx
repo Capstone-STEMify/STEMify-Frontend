@@ -103,7 +103,7 @@ function HeaderBar() {
 }
 
 export default function CarouselShowcase() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'center', dragFree: false, loop: false })
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'center', dragFree: false, loop: true })
   const [selected, setSelected] = useState(0)
   const [progress, setProgress] = useState(0)
   const router = useRouter()
@@ -124,6 +124,7 @@ export default function CarouselShowcase() {
     emblaApi.on('select', onSelect)
     emblaApi.on('scroll', onScroll)
     emblaApi.on('reInit', onSelect)
+    emblaApi.on("reInit", onScroll);
   }, [emblaApi, onSelect, onScroll])
 
   const scrollTo = (i: number) => emblaApi?.scrollTo(i)
