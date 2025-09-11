@@ -36,7 +36,7 @@ async function PatchKitJsonPayload(oldData: KitFormData, newData: KitFormData): 
 
   if (oldData.name !== newData.name) patchData.name = newData.name
   if (oldData.description !== newData.description) patchData.description = newData.description
-  
+
   if ((newData.images?.length ?? 0) > 0) {
     const newImages = await Promise.all(
       newData.images.map(async (file, index) => ({
@@ -148,6 +148,7 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
           <field.MultiImageField
             label={t('form.fields.imageUrl.label')}
             previewUrlsFromServer={previewUrlsFromServer}
+            onDeleteServerImage={() => {}}
           />
         )}
       />
