@@ -83,8 +83,6 @@ export default function ContentSection() {
   }, [dispatch])
 
   const { courseId } = useParams()
-  console.log(courseId)
-  // const courseId = params.courseId
 
   const { data: lessons } = useSearchLessonQuery({
     ...lessonsQuery,
@@ -259,9 +257,7 @@ export default function ContentSection() {
                     }}
                   >
                     <PlusCircle size={70} className='mt-20 text-gray-500' />
-                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
-                      {tc('button.createLesson')}
-                    </p>
+                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>{tc('button.createLesson')}</p>
                   </div>
                   {items.map((lesson) => (
                     <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>

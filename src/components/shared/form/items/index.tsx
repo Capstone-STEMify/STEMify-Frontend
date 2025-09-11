@@ -3,6 +3,7 @@ import FileField from '@/components/shared/form/items/file-field'
 import ImageField from '@/components/shared/form/items/image-field'
 import { MarkdownEditorField } from '@/components/shared/form/items/MarkdownEditorField'
 import { MultipleCheckboxField } from '@/components/shared/form/items/multiple-checkbox-field'
+import MultiImageField from '@/components/shared/form/items/multiple-image-field'
 import { RadioField } from '@/components/shared/form/items/radio-field'
 import { SelectField } from '@/components/shared/form/items/select-field'
 import { SubmitButton } from '@/components/shared/form/items/submit-button'
@@ -22,7 +23,8 @@ export const { useAppForm } = createFormHook({
     RadioField,
     ImageField,
     FileField,
-    MarkdownEditorField
+    MarkdownEditorField,
+    MultiImageField
   },
   formComponents: {
     SubmitButton

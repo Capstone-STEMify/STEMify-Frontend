@@ -35,7 +35,10 @@ export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
     },
     {
       accessorKey: 'description',
-      header: tc('tableHeader.description')
+      header: () => <div>{tc('tableHeader.description')}</div>,
+      cell: ({ row }) => {
+        return <div className='line-clamp-5 w-md whitespace-pre-wrap'>{row.getValue('description')}</div>
+      }
     },
     createActionsColumnFromItems<LearningOutcome>([
       {
@@ -49,7 +52,7 @@ export function useGetLearningOutcomeAction(): ColumnDef<LearningOutcome>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: tm('confirmDelMessage', { title: original.name }),
+            message: tt('confirmMessage.delete', { title: original.name }),
             onConfirm: () => handleDelete(original.id)
           })
         }

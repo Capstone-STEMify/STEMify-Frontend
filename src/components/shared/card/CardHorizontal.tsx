@@ -41,7 +41,7 @@ export default function CardHorizontal({
           {/* Text content */}
           <div className={`flex h-full w-full flex-col`}>
             <h3 className='line-clamp-1 text-lg font-semibold text-gray-800'>{title}</h3>
-            <p className='mt-1 line-clamp-3 text-sm text-gray-600 2xl:line-clamp-5'>{description}</p>
+            <p className='mt-1 line-clamp-5 text-sm text-gray-600 2xl:line-clamp-5'>{description}</p>
           </div>
         </div>
       }

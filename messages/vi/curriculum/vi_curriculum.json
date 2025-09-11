@@ -1,9 +1,12 @@
 {
   "curriculum": {
     "list": {
+      "heroTitle": "Khung Chương Trình STEMify",
+      "heroDescription": "Khám phá các khung chương trình STEM tích hợp của chúng tôi, được thiết kế để truyền cảm hứng và thúc đẩy sự sáng tạo trong học tập. Mỗi khung chương trình cung cấp một lộ trình học tập toàn diện, kết hợp các môn học STEM với các hoạt động thực hành và khám phá thực tế. Từ việc phát triển kỹ năng tư duy phản biện đến việc thúc đẩy sự hợp tác, các khung chương trình của chúng tôi nhằm trang bị cho học sinh những công cụ cần thiết để thành công trong thế giới hiện đại.",
       "title": "Danh Sách Khung Chương Trình",
       "placeholder": {
-        "search": "Tìm kiếm theo mã hoặc tiêu đề..."
+        "search": "Tìm kiếm theo mã hoặc tiêu đề...",
+        "status": "Trạng thái"
       },
       "noData": "Không tìm thấy khung chương trình nào.",
       "noDataDetail": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm khung chương trình phù hợp.",
@@ -48,7 +51,8 @@
       "kitTag": "Stemify Kit",
       "selectCourseTitle": "Chọn Khóa Học",
       "selectedCourses": "Khóa học đã chọn",
-      "searchCoursePlaceholder": "Tìm kiếm khóa học theo mã hoặc tiêu đề..."
+      "searchCoursePlaceholder": "Tìm kiếm khóa học theo mã hoặc tiêu đề...",
+      "reviewMessage": "Khung chương trình đang đợi quản trị viên phê duyệt."
     }
   }
 }

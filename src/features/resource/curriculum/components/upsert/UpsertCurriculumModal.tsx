@@ -5,10 +5,10 @@ import { useTranslations } from 'next-intl'
 import UpsertCurriculum from './UpsertCurriculum'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 interface UpsertCurriculumModalProps {
-  id?: number
+  curriculumId?: number
   onConfirm: () => void
 }
-export default function UpsertCurriculumModal({ id, onConfirm }: UpsertCurriculumModalProps) {
+export default function UpsertCurriculumModal({ curriculumId, onConfirm }: UpsertCurriculumModalProps) {
   const tc = useTranslations('common')
 
   const t = useTranslations('curriculum')
@@ -23,13 +23,13 @@ export default function UpsertCurriculumModal({ id, onConfirm }: UpsertCurriculu
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='flex w-full flex-col lg:w-[660px]'>
+      <DialogContent className='flex w-full max-w-[800px] flex-col'>
         <DialogHeader className='shrink-0'>
           <DialogTitle>{t('form.title.create')}</DialogTitle>
         </DialogHeader>
         <hr />
         <ScrollArea className='h-[500px]'>
-          <UpsertCurriculum curriculumId={id} onSuccess={handleSuccess} />
+          <UpsertCurriculum curriculumId={curriculumId} onSuccess={handleSuccess} />
         </ScrollArea>
       </DialogContent>
     </Dialog>

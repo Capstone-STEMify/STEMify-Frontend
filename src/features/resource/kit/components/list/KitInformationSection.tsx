@@ -31,7 +31,7 @@ export default function KitInformationSection({ kits }: KitInformationSectionPro
             <SCarousel
               variant='plugin'
               autoplayDelay={2000}
-              items={(kit.kitImages?.length ? kit.kitImages : [{ imageUrl: '/images/fallback.png' }]).map((img, j) => (
+              items={(kit.images?.length ? kit.images : [{ imageUrl: '/images/fallback.png' }]).map((img, j) => (
                 <div className='p-1' key={j}>
                   <Image
                     src={img?.imageUrl ?? '/images/fallback.png'}

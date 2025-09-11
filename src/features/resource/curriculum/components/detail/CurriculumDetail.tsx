@@ -23,14 +23,14 @@ export default function CurriculumDetail() {
   }
 
   return (
-    <div className='mx-auto max-w-5xl px-4 py-12'>
+    <div className='mx-auto max-w-5xl px-4 pt-8 pb-12'>
       <BackButton />
-      <div className='mt-5 grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
+      <div className='grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
         {/* Content Section */}
         <div className='flex flex-col'>
           <h2 className='mb-2 text-sm text-gray-500 uppercase'>{curriculumData?.data.code}</h2>
           <h1 className='mb-4 text-4xl font-bold text-gray-900'>{curriculumData?.data.title}</h1>
-          <div className='mb-6 h-1 w-12 bg-yellow-500' />
+          <div className='mb-6 h-1 w-24 bg-yellow-500' />
 
           <p className='mb-4 text-lg text-gray-700'>{curriculumData?.data.description}</p>
 

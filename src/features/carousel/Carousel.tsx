@@ -3,8 +3,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import type { EmblaCarouselType } from 'embla-carousel'
-import { BookOpen, Settings, Sparkles, Smile, ChevronUp, Star } from 'lucide-react'
+import { Settings, ChevronUp, Star, Cpu, FolderKanban } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { FaVectorSquare } from 'react-icons/fa'
 
 export type CarouselItem = {
   id: string
@@ -12,43 +14,55 @@ export type CarouselItem = {
   image: string
   bg: string
   rating?: number
+  isAvailable?: boolean
 }
 
 const ITEMS: CarouselItem[] = [
   {
     id: 'police',
-    title: 'Police Car',
-    image: 'https://images.unsplash.com/photo-1542367597-8849ebc2b3b2?q=80&w=1200&auto=format&fit=crop',
+    title: 'Octahedron Platonic Solid',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-octahedron-platonic-solid_cover.jpg&w=1920&q=75',
     bg: 'bg-indigo-400',
-    rating: 3.5
+    rating: 3.5,
+    isAvailable: true
   },
   {
     id: 'obstacle',
-    title: 'Obstacle Avoidance Car',
-    image: 'https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=1200&auto=format&fit=crop',
+    title: ' Tetrahedron Platonic Solid',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
     bg: 'bg-rose-400',
-    rating: 4.2
+    rating: 4.2,
+    isAvailable: false
   },
+
   {
     id: 'sweeper',
-    title: 'Street Sweeper',
-    image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1200&auto=format&fit=crop',
+    title: 'Hexahedron Platonic Solid',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
     bg: 'bg-amber-300',
-    rating: 3.1
+    rating: 3.1,
+    isAvailable: false
   },
   {
     id: 'robotarm',
-    title: 'Robot Arm',
-    image: 'https://images.unsplash.com/photo-1555255707-c07966088b7b?q=80&w=1200&auto=format&fit=crop',
+    title: 'Dodecahedron Platonic Solid',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-dodecahedron-platonic-solid_cover.jpg&w=1920&q=75',
     bg: 'bg-green-400',
-    rating: 4.6
+    rating: 4.6,
+    isAvailable: false
   },
   {
     id: 'forklift',
-    title: 'Forklift',
-    image: 'https://images.unsplash.com/photo-1614680376739-414d95ff43df?q=80&w=1200&auto=format&fit=crop',
+    title: 'Icosahedron Platonic Solid',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
     bg: 'bg-sky-400',
-    rating: 3.8
+    rating: 3.8,
+    isAvailable: false
   }
 ]
 
@@ -64,32 +78,26 @@ function RatingStars({ value = 0 }: { value?: number }) {
 
 function HeaderBar() {
   return (
-    <div className='flex items-center justify-between gap-2 md:gap-6'>
+    <div className='flex items-center justify-between gap-2 pb-5 md:gap-6'>
       {/* Left badge */}
       <div className='inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 shadow-sm backdrop-blur'>
-        <BookOpen className='h-5 w-5' />
-        <span className='text-lg font-semibold'>uKit Advanced</span>
+        <FaVectorSquare className='h-5 w-5' />
+        <span className='text-lg font-semibold'>Straw Assembly</span>
       </div>
 
       {/* Center tabs */}
       <nav className='hidden items-center gap-10 md:flex'>
         <button className='group inline-flex flex-col items-center text-zinc-700 hover:text-zinc-900'>
           <div className='flex items-center gap-2'>
-            <Sparkles className='h-6 w-6' />
-            <span className='text-lg font-semibold'>Curriculum</span>
+            <Cpu className='h-6 w-6' />
+            <span className='text-lg font-semibold'>Micro:bit</span>
           </div>
           <ChevronUp className='mt-1 hidden h-4 w-4 text-zinc-900 group-hover:block' />
         </button>
         <button className='inline-flex flex-col items-center text-zinc-500 hover:text-zinc-900'>
           <div className='flex items-center gap-2'>
-            <Smile className='h-6 w-6' />
+            <FolderKanban className='h-6 w-6' />
             <span className='text-lg font-medium'>My Project</span>
-          </div>
-        </button>
-        <button className='inline-flex flex-col items-center text-zinc-500 hover:text-zinc-900'>
-          <div className='flex items-center gap-2'>
-            <Sparkles className='h-6 w-6' />
-            <span className='text-lg font-medium'>AI Library</span>
           </div>
         </button>
       </nav>
@@ -147,7 +155,7 @@ export default function CarouselShowcase() {
                 <article
                   key={item.id}
                   onClick={() => handleNavigate(item.id)}
-                  className={`min-w-0 shrink-0 grow-0 basis-[85%] transition-transform duration-300 ease-out sm:basis-[55%] md:basis-[42%] lg:basis-[33%] ${active ? 'z-10 scale-105 md:scale-110' : 'scale-[.9] opacity-90'}`}
+                  className={`min-w-0 shrink-0 grow-0 basis-[85%] transition-transform duration-300 ease-out sm:basis-[55%] md:basis-[42%] lg:basis-[33%] ${active ? 'z-10 scale-105 md:scale-110' : 'scale-[.9] opacity-90'} ${!item.isAvailable ? 'pointer-events-none opacity-90' : 'cursor-pointer'}`}
                 >
                   <div
                     className={`relative mx-auto aspect-square w-[74vw] max-w-[28rem] rounded-full ${item.bg} shadow-lg sm:w-[60vw] md:w-[28rem]`}
@@ -157,7 +165,19 @@ export default function CarouselShowcase() {
                     <div
                       className={`relative mx-auto aspect-square w-[74vw] max-w-[28rem] overflow-hidden rounded-full ${item.bg} ${active ? 'shadow-2xl' : 'shadow-lg'} ring-1 ring-black/5 sm:w-[60vw] md:w-[28rem]`}
                     >
-                      <img src={item.image} alt={item.title} className='absolute inset-0 h-full w-full object-cover' />
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        className='absolute inset-0 h-full w-full object-cover'
+                        width={448}
+                        height={448}
+                      />
+                      {/* Overlay khi chưa mở */}
+                      {!item.isAvailable && (
+                        <div className='absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xs'>
+                          <span className='text-2xl font-semibold text-white drop-shadow-md'>Coming Soon</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 

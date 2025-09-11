@@ -44,8 +44,9 @@
       "exploreCourses": "Explore Courses",
       "exploreLessons": "Explore Lessons",
       "exploreActivities": "Explore Activities",
-      "getHelp": "Get Help",
-      "readBlogs": "Read Blogs"
+      "exploreCurriculums": "Explore Curriculums",
+      "readBlogs": "Read Blogs",
+      "addKit": "Add Kit"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -87,7 +88,8 @@
       "actions": "Actions",
       "duration": "Duration",
       "empty": "No results found.",
-      "content": "Content"
+      "content": "Content",
+      "publish": "Publish"
     },
     "paging": {
       "previous": "Previous",

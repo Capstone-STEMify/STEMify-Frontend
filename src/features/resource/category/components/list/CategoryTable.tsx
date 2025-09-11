@@ -20,7 +20,8 @@ export default function CategoryTable() {
   const columns = useGetCategoryAction()
 
   const categoryParams = useAppSelector((state) => state.category)
-  const debouncedSearchQuery = useDebounce(categoryParams.search, 500)
+  // Ensure debouncedSearchQuery is always a string
+  const debouncedSearchQuery = useDebounce(categoryParams.search ?? '', 500)
 
   const queryParams: CategoryQueryParams = {
     pageNumber: categoryParams.pageNumber,

@@ -25,9 +25,11 @@
       "confirmLabel": "Bạn có chắc chắn?",
       "delete": "Bạn có chắc chắn muốn xóa \"{title}\" không?",
       "removeCourse": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi chương trình học này không?",
+      "removeKit": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi chương trình học này không?",
       "discard": "Bạn có chắc chắn muốn hủy bỏ các thay đổi của mình không?",
       "ask": "Bạn có chắc chắn muốn thực hiện ",
-      "askStatus": "Bạn có chắc chắn muốn {action} \"{title}\" không?"
+      "askStatus": "Bạn có chắc chắn muốn {action} \"{title}\" không?",
+      "sendRequest": "Bạn có chắc chắn muốn gửi yêu cầu phê duyệt cho \"{title}\" không?"
     }
   }
 }

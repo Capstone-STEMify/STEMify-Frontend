@@ -31,10 +31,11 @@ export default function ExploreResourcesSection() {
       <div className='absolute top-1/2 left-1/4 h-8 w-8 animate-bounce rounded-full bg-yellow-400 opacity-40'></div>
 
       <div className='relative z-10'>
-        <h2 className='mb-12 text-center text-5xl font-bold text-black'>
+        <h2 className='mb-8 text-center text-5xl font-bold text-black'>
           {t('title')}
           <div className='mx-auto mt-5 h-1 w-50 rounded-full bg-gradient-to-r from-blue-400 to-purple-400' />
         </h2>
+        <p className='mx-auto mb-12 max-w-4xl text-center text-lg text-gray-700'>{t('description')}</p>
 
         {/* --- Mobile Carousel --- */}
         <div className='md:hidden'>
@@ -71,8 +72,9 @@ export default function ExploreResourcesSection() {
               infor={<Badge>{resource.topicNames}</Badge>}
             >
               <div className='flex min-h-0 flex-1 flex-col'>
-                <h3 className='text-lg font-semibold'>{resource.title}</h3>
-                <p className='text-sm text-gray-600'>{truncateText(resource.description)}</p>
+                <p className='text-amber-custom-400 text-xs font-medium'>COURSE</p>
+                <h3 className='my-1 line-clamp-2 text-lg font-semibold'>{resource.title}</h3>
+                <p className='line-clamp-4 text-sm text-gray-600'>{resource.description}</p>
                 <div className='mt-auto flex items-center gap-2'>
                   <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
                   <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>

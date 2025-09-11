@@ -2,7 +2,10 @@
 
 import * as React from 'react'
 import {
+  IconBook,
+  IconBox,
   IconCamera,
+  IconChalkboard,
   IconChartBar,
   IconDatabase,
   IconFileAi,
@@ -13,7 +16,7 @@ import {
   IconListDetails,
   IconReport,
   IconSearch,
-  IconSettings,
+  IconSettings
 } from '@tabler/icons-react'
 
 import { NavDocuments } from 'components/shadcn/nav-documents'
@@ -34,6 +37,10 @@ import { useLocale } from 'next-intl'
 
 import { useSession } from 'next-auth/react'
 import LoadingComponent from '../shared/loading/LoadingComponent'
+import { usePathname } from 'next/navigation'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { stat } from 'fs'
+import { useSelector } from 'react-redux'
 
 const data = {
   user: {
@@ -48,25 +55,20 @@ const data = {
       icon: IconListDetails
     },
     {
-      title: 'side_bar.kit',
-      url: '/admin/kit',
-      icon: IconListDetails
-    },
-    {
       title: 'side_bar.course',
       url: '/admin/course',
-      icon: IconListDetails
+      icon: IconBook
     },
     {
       title: 'side_bar.lesson',
       url: '/admin/lesson',
-      icon: IconChartBar
+      icon: IconChalkboard
+    },
+    {
+      title: 'side_bar.kit',
+      url: '/admin/kit',
+      icon: IconBox
     }
-    // {
-    //   title: 'side_bar.user',
-    //   url: '/admin/user',
-    //   icon: IconUsers
-    // }
   ],
   navClouds: [
     {
@@ -159,15 +161,20 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const locale = useLocale()
+  const pathname = usePathname()
+
+  const userRole = useAppSelector((state) => state?.auth?.user?.role)
 
   const navMainWithLocale = data.navMain.map((item) => ({
     ...item,
-    url: `/${locale}${item.url}`
+    url: `/${locale}${item.url}`,
+    isActive: pathname === `/${locale}${item.url}`
   }))
 
   const documentsWithLocale = data.documents.map((item) => ({
     ...item,
-    url: `/${locale}${item.url}`
+    url: `/${locale}${item.url}`,
+    isActive: pathname === `/${locale}${item.url}`
   }))
   const { data: session, status } = useSession()
 
@@ -219,7 +226,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMainWithLocale} />
-        <NavDocuments items={documentsWithLocale} />
+        {userRole && userRole === 'ADMIN' && <NavDocuments items={documentsWithLocale} />}
         {/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}
       </SidebarContent>
       <SidebarFooter>

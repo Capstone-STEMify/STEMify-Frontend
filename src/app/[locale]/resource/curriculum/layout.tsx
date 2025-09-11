@@ -1,8 +1,8 @@
 import Header from '@/components/layout/Header'
 import { metadata } from 'app/[locale]/layout'
 
-metadata.title = 'Curriculum'
-export default async function PublicCurriculumLayout({
+metadata.title = 'Course'
+export default async function PublicCourseLayout({
   children
 }: Readonly<{
   children: React.ReactNode

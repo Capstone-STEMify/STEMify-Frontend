@@ -21,7 +21,7 @@ export default function StandardTable() {
   const t = useTranslations('Admin.placeholder')
 
   const standardParams = useAppSelector((state) => state.standard)
-  const debouncedSearchQuery = useDebounce(standardParams.search, 500)
+  const debouncedSearchQuery = useDebounce(standardParams.search ?? '', 500)
 
   const queryParams: StandardQueryParams = {
     pageNumber: standardParams.pageNumber,

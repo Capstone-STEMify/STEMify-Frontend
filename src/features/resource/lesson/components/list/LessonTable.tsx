@@ -4,7 +4,7 @@ import { DataTable } from '@/components/shared/data-table/data-table'
 import { useSearchLessonQuery } from '../../api/lessonApi'
 import { useParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
+import { resetParams, setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { Lesson, LessonQueryParams } from '@/features/resource/lesson/types/lesson.type'
 import LessonListAction from './LessonListAction'
 import { Button } from '@/components/shadcn/button'
@@ -51,6 +51,7 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
   }
 
   useEffect(() => {
+    dispatch(resetParams())
     if (courseId) {
       dispatch(setPageSize(50))
     } else dispatch(setPageSize(10))

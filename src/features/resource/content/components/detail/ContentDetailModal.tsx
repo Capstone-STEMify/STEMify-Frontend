@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import ContentDetail from '@/features/resource/content/components/detail/ContentDetail'
 import { useModal } from '@/providers/ModalProvider'
+import { useTranslations } from 'next-intl'
 
 type ContentDetailModalProps = {
   sectionId: number
@@ -11,6 +12,8 @@ type ContentDetailModalProps = {
 }
 
 export default function ContentDetailModal({ sectionId, contentId }: ContentDetailModalProps) {
+  const t = useTranslations('content')
+  const tc = useTranslations('common')
   const { openModal, closeModal } = useModal()
 
   const handleEditContent = () => {
@@ -21,10 +24,10 @@ export default function ContentDetailModal({ sectionId, contentId }: ContentDeta
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className=''>
         <DialogTitle className='flex items-center justify-between'>
-          <div>Content Detail</div>
+          <div>{t('detail.title')}</div>
           <div className='mr-5'>
             <Button variant={'outline'} className='hover:bg-gray-200' onClick={handleEditContent}>
-              Edit
+              {tc('button.update')}
             </Button>
           </div>
         </DialogTitle>
