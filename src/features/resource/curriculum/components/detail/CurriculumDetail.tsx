@@ -25,20 +25,20 @@ export default function CurriculumDetail() {
   }
 
   return (
-    <div className='relative bg-gradient-to-br from-blue-50 via-white to-purple-50'>
-      {/* <AnimatedBackground /> */}
+    <div className='relative mx-auto w-full py-4'>
+      <AnimatedBackground />
       <div className='relative z-10 my-10'>
-        <div className='mx-auto grid max-w-7xl grid-cols-1 gap-10 py-5 md:grid-cols-2 md:gap-12'>
+        <div className='mx-auto grid max-w-7xl grid-cols-1 gap-8 py-5 md:grid-cols-2 md:gap-12'>
           {/* Content Section */}
           <div className='flex flex-col'>
-            <div>
+            <div className='space-y-4'>
               <BackButton />
-              <h2 className='mb-2 text-sm text-gray-500 uppercase'>{curriculumData?.data.code}</h2>
+              <span className='text-md m-4 font-semibold text-gray-700 uppercase'>{curriculumData?.data.code}</span>
               <h1 className='mb-4 text-4xl font-bold text-gray-900'>{curriculumData?.data.title}</h1>
               <div className='mb-6 h-1 w-24 bg-yellow-500' />
             </div>
 
-            <ScrollArea className='mb-4 h-[150px] text-base text-gray-700 sm:h-[200px] sm:text-lg'>
+            <ScrollArea className='text-gray-70 mb-4 text-base sm:text-lg'>
               {curriculumData?.data.description}
             </ScrollArea>
 
@@ -49,21 +49,21 @@ export default function CurriculumDetail() {
               </Card>
             </div>
 
-            <Button className='bg-amber-custom-400 w-fit rounded-xl p-6 text-lg text-black hover:bg-yellow-600'>
+            {/* <Button className='bg-amber-custom-400 w-fit rounded-xl p-6 text-lg text-black hover:bg-yellow-600'>
               EXPLORE NOW
-            </Button>
+            </Button> */}
           </div>
           {/* Image Section */}
-          <div className='relative order-1 overflow-hidden rounded-2xl shadow-md md:order-2'>
+          <div className='flex items-start justify-end'>
             <Image
               src={
                 curriculumData?.data.imageUrl ||
                 'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
               }
               alt='STEM Starter Curriculum'
-              width={600}
-              height={600}
-              className='aspect-square object-cover'
+              width={500}
+              height={500}
+              className='aspect-square rounded-2xl object-cover shadow-md'
             />
           </div>
         </div>
