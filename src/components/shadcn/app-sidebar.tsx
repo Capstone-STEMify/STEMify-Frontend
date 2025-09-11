@@ -41,6 +41,7 @@ import { usePathname } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { stat } from 'fs'
 import { useSelector } from 'react-redux'
+import { UserRole } from '@/types/userRole'
 
 const data = {
   user: {
@@ -226,7 +227,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMainWithLocale} />
-        {userRole && userRole === 'ADMIN' && <NavDocuments items={documentsWithLocale} />}
+        {userRole && userRole === UserRole.ADMIN && <NavDocuments items={documentsWithLocale} />}
         {/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}
       </SidebarContent>
       <SidebarFooter>
