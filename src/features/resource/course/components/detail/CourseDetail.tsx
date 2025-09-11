@@ -37,7 +37,7 @@ export default function CourseDetail() {
     return <CourseDetailEnrolled courseId={Number(courseId)} enrollmentId={firstEnrollment.id} />
   }
 
-  if (userRole === UserRole.ADMIN) {
+  if (userRole === UserRole.TEACHER) {
     return <CourseDetailEnrolled courseId={Number(courseId)} enrollmentId={firstEnrollment} />
   }
 
