@@ -9,6 +9,7 @@ import CurriculumCourseSection from '@/features/resource/curriculum/components/d
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useParams } from 'next/navigation'
+import AnimatedBackground from '@/components/layout/animation/AnimatedBackground'
 
 export default function CurriculumDetail() {
   const { curriculumId } = useParams()
@@ -23,48 +24,56 @@ export default function CurriculumDetail() {
   }
 
   return (
-    <div className='mx-auto max-w-5xl px-4 pt-8 pb-12'>
-      <BackButton />
-      <div className='grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
-        {/* Content Section */}
-        <div className='flex flex-col'>
-          <h2 className='mb-2 text-sm text-gray-500 uppercase'>{curriculumData?.data.code}</h2>
-          <h1 className='mb-4 text-4xl font-bold text-gray-900'>{curriculumData?.data.title}</h1>
-          <div className='mb-6 h-1 w-24 bg-yellow-500' />
+    <div className='relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>
+      <AnimatedBackground />
 
-          <p className='mb-4 text-lg text-gray-700'>{curriculumData?.data.description}</p>
+      <div className='relative z-10 mx-auto max-w-5xl px-4 pt-8 pb-12'>
+        <BackButton />
+        <div className='grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
+          {/* Content Section */}
+          <div className='flex flex-col'>
+            <h2 className='mb-2 text-sm text-gray-500 uppercase'>{curriculumData?.data.code}</h2>
+            <h1 className='mb-4 text-4xl font-bold text-gray-900'>{curriculumData?.data.title}</h1>
+            <div className='mb-6 h-1 w-24 bg-yellow-500' />
 
-          <div className='mb-6 flex items-center gap-6'>
-            <Card className='flex items-center gap-2 px-4 py-2'>
-              <School className='h-5 w-5 text-yellow-500' />
-              <CardContent className='p-0 text-sm font-medium'>Age 6–14 | Grade K–8</CardContent>
-            </Card>
+            <p className='mb-4 text-lg text-gray-700'>{curriculumData?.data.description}</p>
+
+            <div className='mb-6 flex items-center gap-6'>
+              <Card className='flex items-center gap-2 bg-white px-4 py-2'>
+                <School className='h-5 w-5 text-yellow-500' />
+                <CardContent className='p-0 text-sm font-medium'>Age 6–14 | Grade K–8</CardContent>
+              </Card>
+            </div>
+
+            <Button className='bg-amber-custom-400 w-fit rounded-xl p-6 text-lg text-black hover:bg-yellow-600'>
+              EXPLORE NOW
+            </Button>
           </div>
-
-          <Button className='bg-amber-custom-400 w-fit rounded-xl p-6 text-lg text-black hover:bg-yellow-600'>
-            EXPLORE NOW
-          </Button>
+          {/* Image Section */}
+          <div className='relative overflow-hidden rounded-2xl shadow-md'>
+            <Image
+              src={
+                curriculumData?.data.imageUrl ||
+                'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
+              }
+              alt='STEM Starter Curriculum'
+              width={600}
+              height={600}
+              className='h-full w-full object-cover'
+            />
+          </div>
         </div>
-        {/* Image Section */}
-        <div className='relative overflow-hidden rounded-2xl shadow-md'>
-          <Image
-            src={
-              curriculumData?.data.imageUrl ||
-              'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
-            }
-            alt='STEM Starter Curriculum'
-            width={600}
-            height={600}
-            className='h-full w-full object-cover'
-          />
+
+        {/* Kit Information Section */}
+        <div className='relative z-10'>
+          <KitInformationSection kits={curriculumData?.data.kits || []} />
+        </div>
+
+        {/* Course Section Carousel */}
+        <div className='relative z-10'>
+          <CurriculumCourseSection courses={curriculumData?.data.courses || []} />
         </div>
       </div>
-
-      {/* Kit Information Section */}
-      <KitInformationSection kits={curriculumData?.data.kits || []} />
-
-      {/* Course Section Carousel */}
-      <CurriculumCourseSection courses={curriculumData?.data.courses || []} />
     </div>
   )
 }
