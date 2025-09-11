@@ -61,7 +61,7 @@ export default function CurriculumKitList({ kits }: KitListProps) {
             <CardHorizontal
               key={kit.id}
               imageUrl={
-                kit.kitImages?.[0]?.imageUrl ||
+                kit.images?.[0]?.imageUrl ||
                 'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
               }
               title={kit.name}

@@ -60,7 +60,7 @@ export default function KitList() {
           <CardHorizontal
             onClick={() => router.push(`/${locale}/admin/kit/${kit.id}`)}
             key={kit.id}
-            imageUrl={kit.kitImages?.[0].imageUrl || '/images/resources/activities.png'}
+            imageUrl={kit.images?.[0].imageUrl || '/images/resources/activities.png'}
             title={kit.name}
             description={kit.description || ''}
             className='max-w-3xl'

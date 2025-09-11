@@ -232,7 +232,11 @@ export default function ContentSection() {
         {isReadOnly ? (
           <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
             {items.map((lesson) => (
-              <Link href={`/resource/lesson/${lesson.id}`} className='flex w-fit flex-col justify-between'>
+              <Link
+                href={`/resource/lesson/${lesson.id}`}
+                className='flex w-fit flex-col justify-between'
+                key={lesson.id}
+              >
                 <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
                   <div className='flex min-h-0 flex-1 flex-col'>
                     <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
