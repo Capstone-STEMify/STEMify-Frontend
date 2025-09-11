@@ -68,21 +68,6 @@ export default function LessonListContent() {
 
   const isReadOnly = role === UserRole.STUDENT || role === UserRole.GUEST || role === UserRole.TEACHER
 
-  const handleStudentClick = async (lessonId: number, courseId: number) => {
-    try {
-      const result = await fetchEnrollment({ courseId, studentId: userId }).unwrap()
-      const enrolled = result?.data?.items?.length > 0
-
-      if (enrolled) {
-        router.push(`/${locale}/resource/lesson/${lessonId}`)
-      } else {
-        router.push(`/${locale}/resource/course/${courseId}`)
-      }
-    } catch (error) {
-      console.error('Error handling student click:', error)
-    }
-  }
-
   const handleDelete = async (e: React.MouseEvent, lessonId: number) => {
     e.stopPropagation()
     e.preventDefault()
@@ -139,7 +124,7 @@ export default function LessonListContent() {
               imageSrc={lesson.imageUrl}
               size='sm'
               isScale={false}
-              onClick={() => handleStudentClick(lesson.id, lesson.courseId)}
+              onClick={() => router.push(`/${locale}/resource/lesson/${lesson.id}`)}
             >
               <div>
                 <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
