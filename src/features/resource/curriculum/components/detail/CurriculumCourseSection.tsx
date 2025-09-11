@@ -13,22 +13,25 @@ export default function CurriculumCourseSection({ courses }: CurriculumCourseSec
   const t = useTranslations('curriculum')
   const router = useRouter()
   return (
-    <div className='py-10b space-y-10'>
-      <div className='text-center'>
+    <div className='relative space-y-0 py-10'>
+      {/* Section nền vàng xéo */}
+      <div className='clip-slant relative h-[400px] bg-[#fec708] py-16 text-center'>
         <h1 className='text-5xl'>{t('custom.courseListTitle')}</h1>
-        <hr className='mx-auto my-6 w-1/4 border-2 border-amber-400' />
         <p className='mx-auto w-180 py-5'>{t('custom.courseListDescription')}</p>
       </div>
-      <SCarousel
-        variant='spacing'
-        autoplayDelay={2000}
-        items={Array.from({ length: courses.length }).map((_, i) => (
-          <div className='p-1' key={i}>
-            <CardLayout
-              onClick={() => router.push(`/resource/course/${courses[i].id}`)}
-              imageSrc={courses[i].imageUrl || 'images/fallback.png'}
-              size='md'
-              children={
+
+      {/* Carousel chồng lên */}
+      <div className='relative z-10 mx-auto -mt-30 max-w-7xl'>
+        <SCarousel
+          variant='spacing'
+          autoplayDelay={2000}
+          items={Array.from({ length: courses.length }).map((_, i) => (
+            <div className='p-1' key={i}>
+              <CardLayout
+                onClick={() => router.push(`/resource/course/${courses[i].id}`)}
+                imageSrc={courses[i].imageUrl || 'images/fallback.png'}
+                size='md'
+              >
                 <div>
                   <h4 className='text-amber-custom-400 text-xs font-semibold'>
                     {t('custom.courseTag').toLocaleUpperCase()}
@@ -36,11 +39,11 @@ export default function CurriculumCourseSection({ courses }: CurriculumCourseSec
                   <p className='text-md font-semibold text-gray-700'>{courses[i].title}</p>
                   <p className='mt-3 line-clamp-3 text-sm text-gray-500'>{courses[i].description}</p>
                 </div>
-              }
-            />
-          </div>
-        ))}
-      />
+              </CardLayout>
+            </div>
+          ))}
+        />
+      </div>
     </div>
   )
 }

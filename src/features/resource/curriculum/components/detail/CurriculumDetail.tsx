@@ -10,6 +10,7 @@ import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/cu
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useParams } from 'next/navigation'
 import AnimatedBackground from '@/components/layout/animation/AnimatedBackground'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
 
 export default function CurriculumDetail() {
   const { curriculumId } = useParams()
@@ -24,21 +25,24 @@ export default function CurriculumDetail() {
   }
 
   return (
-    <div className='relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50'>
-      <AnimatedBackground />
-
-      <div className='relative z-10 mx-auto max-w-5xl px-4 pt-8 pb-12'>
-        <BackButton />
-        <div className='grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
+    <div className='relative bg-gradient-to-br from-blue-50 via-white to-purple-50'>
+      {/* <AnimatedBackground /> */}
+      <div className='relative z-10 my-10'>
+        <div className='mx-auto grid max-w-7xl grid-cols-1 gap-10 py-5 md:grid-cols-2 md:gap-12'>
           {/* Content Section */}
           <div className='flex flex-col'>
-            <h2 className='mb-2 text-sm text-gray-500 uppercase'>{curriculumData?.data.code}</h2>
-            <h1 className='mb-4 text-4xl font-bold text-gray-900'>{curriculumData?.data.title}</h1>
-            <div className='mb-6 h-1 w-24 bg-yellow-500' />
+            <div>
+              <BackButton />
+              <h2 className='mb-2 text-sm text-gray-500 uppercase'>{curriculumData?.data.code}</h2>
+              <h1 className='mb-4 text-4xl font-bold text-gray-900'>{curriculumData?.data.title}</h1>
+              <div className='mb-6 h-1 w-24 bg-yellow-500' />
+            </div>
 
-            <p className='mb-4 text-lg text-gray-700'>{curriculumData?.data.description}</p>
+            <ScrollArea className='mb-4 h-[150px] text-base text-gray-700 sm:h-[200px] sm:text-lg'>
+              {curriculumData?.data.description}
+            </ScrollArea>
 
-            <div className='mb-6 flex items-center gap-6'>
+            <div className='mb-6 flex flex-wrap items-center gap-4 sm:gap-6'>
               <Card className='flex items-center gap-2 bg-white px-4 py-2'>
                 <School className='h-5 w-5 text-yellow-500' />
                 <CardContent className='p-0 text-sm font-medium'>Age 6–14 | Grade K–8</CardContent>
@@ -50,7 +54,7 @@ export default function CurriculumDetail() {
             </Button>
           </div>
           {/* Image Section */}
-          <div className='relative overflow-hidden rounded-2xl shadow-md'>
+          <div className='relative order-1 overflow-hidden rounded-2xl shadow-md md:order-2'>
             <Image
               src={
                 curriculumData?.data.imageUrl ||
@@ -59,18 +63,18 @@ export default function CurriculumDetail() {
               alt='STEM Starter Curriculum'
               width={600}
               height={600}
-              className='h-full w-full object-cover'
+              className='aspect-square object-cover'
             />
           </div>
         </div>
 
         {/* Kit Information Section */}
-        <div className='relative z-10'>
+        <div className='relative z-10 mt-8 sm:mt-12'>
           <KitInformationSection kits={curriculumData?.data.kits || []} />
         </div>
 
         {/* Course Section Carousel */}
-        <div className='relative z-10'>
+        <div className='relative z-10 mt-8 sm:mt-12'>
           <CurriculumCourseSection courses={curriculumData?.data.courses || []} />
         </div>
       </div>

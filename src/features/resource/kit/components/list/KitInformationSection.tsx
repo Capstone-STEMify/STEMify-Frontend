@@ -13,13 +13,12 @@ export default function KitInformationSection({ kits }: KitInformationSectionPro
 
   return (
     <div className='space-y-10 py-10'>
-      <div className='text-center'>
+      <div className='clip-slant relative h-[300px] bg-[#fec708] py-10 text-center'>
         <h1 className='text-5xl'>{t('custom.kitListTitle')}</h1>
-        <hr className='mx-auto my-6 w-1/4 border-2 border-amber-400' />
         <p className='mx-auto w-180 py-5'>{t('custom.kitListDescription')}</p>
       </div>
       {kits.map((kit, i) => (
-        <section key={kit.id} className='grid grid-cols-1 items-center gap-20 md:grid-cols-2'>
+        <section key={kit.id} className='mx-auto grid max-w-7xl grid-cols-1 items-center gap-20 md:grid-cols-2'>
           {/* Left Section (text) */}
           <div className={`max-w-2xl ${i % 2 === 1 ? 'md:order-2' : ''}`}>
             <h2 className='mb-4 text-4xl font-bold tracking-tight'>{kit.name}</h2>
