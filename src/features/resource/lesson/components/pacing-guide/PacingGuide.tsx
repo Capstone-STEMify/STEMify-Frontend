@@ -28,7 +28,7 @@ export default function PacingGuide() {
   return (
     <div className='mx-auto min-h-screen max-w-6xl px-4 pt-2 sm:px-6 lg:px-8'>
       <div className='flex items-center gap-5 pb-5'>
-        <BackButton />
+        {/* <BackButton /> */}
         <h1>{t('title')}</h1>
       </div>
       <div>

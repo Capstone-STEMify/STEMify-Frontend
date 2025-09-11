@@ -8,12 +8,12 @@ export default function PacingGuideModal() {
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='flex w-full max-w-[660px] flex-col lg:w-[660px]'>
+      <DialogContent className='flex w-full flex-col lg:max-w-7xl'>
         <DialogHeader className='shrink-0'>
-          <DialogTitle></DialogTitle>
+          <DialogTitle>PACING GUIDE</DialogTitle>
         </DialogHeader>
         <hr />
-        <ScrollArea className='h-[500px]'>
+        <ScrollArea className='h-[650px] max-w-7xl'>
           <PacingGuide />
         </ScrollArea>
       </DialogContent>

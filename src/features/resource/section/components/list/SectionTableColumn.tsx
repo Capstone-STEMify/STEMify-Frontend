@@ -1,7 +1,9 @@
 import { createSelectColumn, DragHandle } from '@/components/shared/data-table/columns-helpers'
 import { useDeleteSectionMutation } from '@/features/resource/section/api/sectionApi'
 import { Section } from '@/features/resource/section/types/section.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
+import { UserRole } from '@/types/userRole'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { Edit, ExternalLink, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -15,6 +17,7 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
   const t = useTranslations('section')
   const { openModal } = useModal()
   const { lessonId } = useParams()
+  const userRole = useAppSelector((state) => state.auth.user?.role)
 
   const [deleteSection] = useDeleteSectionMutation()
   const handleDelete = async (sectionId: number) => {
@@ -27,7 +30,7 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
   }
 
   return [
-    ...(lessonId
+    ...(lessonId && userRole !== UserRole.TEACHER
       ? [
           {
             id: 'drag',
@@ -44,15 +47,21 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
       header: tc('tableHeader.title'),
       cell: ({ row }) => {
         return (
-          <div
-            className='line-clamp-5 w-32 cursor-pointer whitespace-pre-wrap text-blue-500 italic underline'
-            onClick={() => {
-              openModal('contentDetail', { sectionId: row.original.id, contentId: row.original.contentIds[0] })
-            }}
-          >
-            {row.getValue('title')}
-            <ExternalLink className='ml-1 inline' size={14} />
-          </div>
+          <>
+            {userRole === UserRole.TEACHER ? (
+              <div className='line-clamp-5 w-32 whitespace-pre-wrap'>{row.getValue('title')}</div>
+            ) : (
+              <div
+                className='line-clamp-5 w-32 cursor-pointer whitespace-pre-wrap text-blue-500 italic underline'
+                onClick={() => {
+                  openModal('contentDetail', { sectionId: row.original.id, contentId: row.original.contentIds[0] })
+                }}
+              >
+                {row.getValue('title')}
+                <ExternalLink className='ml-1 inline' size={14} />
+              </div>
+            )}
+          </>
         )
       }
     },
@@ -78,6 +87,8 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
       accessorKey: 'actions',
       header: '',
       cell: ({ row }) => {
+        if (userRole === UserRole.TEACHER) return null
+
         return (
           <div className='flex justify-center gap-2'>
             <Edit

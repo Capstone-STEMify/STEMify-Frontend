@@ -31,25 +31,6 @@ export default function CourseAction({ course }: CourseActionProps) {
     <section className='mt-3 flex flex-col items-center'>
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
 
-      {userRole === UserRole.ADMIN && course.status != CourseStatus.PUBLISHED && (
-        <div className='mt-4 space-x-8'>
-          <Button
-            size='default'
-            className='shadow-6 bg-red-500 font-semibold text-white'
-            onClick={() => handleUpdateCourseStatus(CourseStatus.REJECTED)}
-          >
-            <div className='text-xs uppercase'>{tc('button.reject')}</div>
-          </Button>
-          <Button
-            size='default'
-            className='shadow-6 bg-green-500 font-semibold text-white'
-            onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
-          >
-            <div className='text-xs uppercase'>{tc('button.approve')}</div>
-          </Button>
-        </div>
-      )}
-
       {/* Secondary actions */}
       <div className='text-muted-foreground mt-4 grid w-full max-w-md grid-cols-3 gap-6 text-center text-xs'>
         <div className='flex flex-col items-center gap-1'>
