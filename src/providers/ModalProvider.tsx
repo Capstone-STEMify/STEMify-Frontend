@@ -24,6 +24,7 @@ import ContentDetailModal from '@/features/resource/content/components/detail/Co
 import UpsertContentModal from '@/features/resource/content/components/upsert/UpsertContentModal'
 import UpsertKitModal from '@/features/resource/kit/components/upsert/UpsertKitModal'
 import PacingGuideModal from '@/features/resource/lesson/components/modal/PacingGuideModal'
+import KitListTableModal from '@/features/resource/kit/components/list/KitListTableModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -78,6 +79,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {/* other */}
       {modalType === 'pacingGuide' && <PacingGuideModal {...modalProps} />}
       {modalType === 'curriculumSelectCourseListModal' && <CurriculumSelectCourseListModal {...modalProps} />}
+      {modalType === 'kitListTableModal' && <KitListTableModal {...modalProps} />}
     </ModalContext.Provider>
   )
 }

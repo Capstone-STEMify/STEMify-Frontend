@@ -49,7 +49,12 @@ export default function CurriculumKitList({ kits }: KitListProps) {
         <h2 className='text-2xl font-semibold'>
           {t('list.title')} <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{kits.length}</span>
         </h2>
-        <Button className='bg-amber-custom-400' onClick={() => {}}>
+        <Button
+          className='bg-amber-custom-400'
+          onClick={() => {
+            openModal('kitListTableModal', { kitIds: kits.map((kit) => kit.id) })
+          }}
+        >
           <Plus className='mr-1 h-4 w-4' />
           {tc('button.addKit')}
         </Button>
@@ -66,7 +71,7 @@ export default function CurriculumKitList({ kits }: KitListProps) {
               }
               title={kit.name}
               description={kit.description || ''}
-              className='mb-2 max-w-xl'
+              className='mb-4 max-w-xl'
               height={100}
             />
 

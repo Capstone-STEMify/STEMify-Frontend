@@ -52,6 +52,9 @@
       "selectCourseTitle": "Select Courses",
       "selectedCourses": "Selected courses",
       "searchCoursePlaceholder": "Search courses by code or title...",
+      "selectKitTitle": "Select Kits",
+      "selectedKits": "Selected kits",
+      "searchKitPlaceholder": "Search kits here...",
       "reviewMessage": "Curriculum submission is under review."
     }
   }
