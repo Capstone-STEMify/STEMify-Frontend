@@ -12,6 +12,9 @@ import { setPageIndex, setPageSize } from '../../slice/curriculumSlice'
 import { useDeleteCurriculumMutation, useSearchCurriculumQuery } from '../../api/curriculumApi'
 import CardHorizontal from '@/components/shared/card/CardHorizontal'
 import { CurriculumSliceParams } from '@/features/resource/curriculum/types/curriculum.type'
+import { Badge } from '@/components/shadcn/badge'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { capitalizeFirst } from '@/utils/index'
 
 export default function AdminCurriculumList() {
   const t = useTranslations('curriculum')
@@ -69,6 +72,11 @@ export default function AdminCurriculumList() {
       <div className='mt-4 grid grid-cols-1 gap-10 lg:grid-cols-2'>
         {rows.map((curriculum) => (
           <CardHorizontal
+            badge={
+              <Badge className={`${getStatusBadgeClass(curriculum.status)}`}>
+                {capitalizeFirst(curriculum.status)}
+              </Badge>
+            }
             key={curriculum.id}
             imageUrl={curriculum.imageUrl}
             title={curriculum.title}
