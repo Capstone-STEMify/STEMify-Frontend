@@ -80,7 +80,7 @@ export default function KitDetail() {
               className='mx-auto w-full rounded-3xl shadow-md'
               variant='plugin'
               autoplayDelay={2000}
-              items={(kitData.data.images || [{ imageUrl: '/images/fallback.png' }])
+              items={(kitData.data.images?.length ? kitData.data.images : [{ imageUrl: '/images/fallback.png' }])
                 .filter((img) => img?.imageUrl && img.imageUrl.trim() !== '')
                 .map((images, i) => (
                   <Image
