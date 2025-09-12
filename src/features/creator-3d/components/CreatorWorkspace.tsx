@@ -51,19 +51,22 @@ export function CreatorWorkspace({
   const orbitControlsRef = useRef<any>(null)
 
   // Handle drop from palette
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(false)
-    
-    if (!dragSource) return
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault()
+      setIsDragOver(false)
 
-    // Calculate drop position (for now, place at origin)
-    // In a more advanced version, we could raycast to get the exact 3D position
-    const position = { x: 0, y: 0, z: 0 }
-    
-    onObjectAdd(dragSource.type, position)
-    onDragEnd()
-  }, [dragSource, onObjectAdd, onDragEnd])
+      if (!dragSource) return
+
+      // Calculate drop position (for now, place at origin)
+      // In a more advanced version, we could raycast to get the exact 3D position
+      const position = { x: 0, y: 0, z: 0 }
+
+      onObjectAdd(dragSource.type, position)
+      onDragEnd()
+    },
+    [dragSource, onObjectAdd, onDragEnd]
+  )
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -75,19 +78,19 @@ export function CreatorWorkspace({
   }, [])
 
   return (
-    <div 
-      className={`flex-1 relative ${isDragOver ? 'bg-blue-50' : 'bg-gray-100'}`}
+    <div
+      className={`relative h-screen flex-1 ${isDragOver ? 'bg-blue-50' : 'bg-gray-100'}`}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
     >
       {/* Drop Zone Overlay */}
       {isDragOver && dragSource && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-blue-500 bg-opacity-10 border-4 border-blue-400 border-dashed">
-          <div className="bg-white rounded-lg p-6 shadow-lg text-center">
-            <div className="text-2xl mb-2">📦</div>
-            <p className="font-medium text-gray-900">Drop to add {dragSource.name}</p>
-            <p className="text-sm text-gray-600">Will be placed at scene origin</p>
+        <div className='bg-opacity-10 absolute inset-0 z-10 flex items-center justify-center border-4 border-dashed border-blue-400 bg-blue-500'>
+          <div className='rounded-lg bg-white p-6 text-center shadow-lg'>
+            <div className='mb-2 text-2xl'>📦</div>
+            <p className='font-medium text-gray-900'>Drop to add {dragSource.name}</p>
+            <p className='text-sm text-gray-600'>Will be placed at scene origin</p>
           </div>
         </div>
       )}
@@ -98,9 +101,9 @@ export function CreatorWorkspace({
           position: [30, 20, 30],
           fov: 60
         }}
-        gl={{ 
+        gl={{
           antialias: true,
-          alpha: false 
+          alpha: false
         }}
       >
         <SceneContent
@@ -176,9 +179,12 @@ function SceneContent({
   }, [selectedObjectId])
 
   // Handle object click selection
-  const handleObjectClick = useCallback((objectId: string) => {
-    onObjectSelect(objectId)
-  }, [onObjectSelect])
+  const handleObjectClick = useCallback(
+    (objectId: string) => {
+      onObjectSelect(objectId)
+    },
+    [onObjectSelect]
+  )
 
   // Handle transform changes
   const handleTransformChange = useCallback(() => {
@@ -192,7 +198,7 @@ function SceneContent({
       y: targetObject.position.y,
       z: targetObject.position.z
     }
-    
+
     const rotation = {
       x: targetObject.rotation.x,
       y: targetObject.rotation.y,
@@ -204,7 +210,7 @@ function SceneContent({
       position.x = Math.round(position.x / gridSize) * gridSize
       position.y = Math.round(position.y / gridSize) * gridSize
       position.z = Math.round(position.z / gridSize) * gridSize
-      
+
       targetObject.position.set(position.x, position.y, position.z)
     }
 
@@ -214,10 +220,10 @@ function SceneContent({
   return (
     <>
       {/* Environment */}
-      <color attach="background" args={['#f5f5f5']} />
-      <ambientLight color="#404040" intensity={0.5} />
+      <color attach='background' args={['#f5f5f5']} />
+      <ambientLight color='#404040' intensity={0.5} />
       <directionalLight
-        color="#FFFFFF"
+        color='#FFFFFF'
         intensity={1.2}
         position={[10, 15, 8]}
         castShadow
@@ -226,12 +232,7 @@ function SceneContent({
       />
 
       {/* Controls */}
-      <OrbitControls
-        ref={orbitControlsRef}
-        target={[0, 0, 0]}
-        enableDamping
-        dampingFactor={0.05}
-      />
+      <OrbitControls ref={orbitControlsRef} target={[0, 0, 0]} enableDamping dampingFactor={0.05} />
 
       <TransformControls
         ref={transformControlsRef}
@@ -249,8 +250,8 @@ function SceneContent({
           position={[0, 0, 0]}
           cellSize={gridSize}
           sectionSize={gridSize * 10}
-          color="#888888"
-          sectionColor="#444444"
+          cellColor='#888888'
+          sectionColor='#444444'
         />
       )}
 
@@ -301,10 +302,13 @@ function SceneObjectComponent({ object, isSelected, onSelect, onRef }: SceneObje
     }
   }, [object.position, object.rotation, object.scale])
 
-  const handleClick = useCallback((e: any) => {
-    e.stopPropagation()
-    onSelect()
-  }, [onSelect])
+  const handleClick = useCallback(
+    (e: any) => {
+      e.stopPropagation()
+      onSelect()
+    },
+    [onSelect]
+  )
 
   return (
     <group
@@ -318,12 +322,7 @@ function SceneObjectComponent({ object, isSelected, onSelect, onRef }: SceneObje
       {isSelected && (
         <mesh>
           <boxGeometry args={[12, 12, 12]} />
-          <meshBasicMaterial
-            color="#00ff00"
-            wireframe
-            transparent
-            opacity={0.3}
-          />
+          <meshBasicMaterial color='#00ff00' wireframe transparent opacity={0.3} />
         </mesh>
       )}
 
@@ -333,8 +332,8 @@ function SceneObjectComponent({ object, isSelected, onSelect, onRef }: SceneObje
           straw={{
             id: object.id,
             name: object.name,
-            geometry: { type: 'cylinder', radius: 0.3, height: 11.2 },
-            material: { color: '#22c55e' },
+            geometry: { diameter: 1.6, length: 11.2, wallThickness: 0.1 },
+            material: { color: '#22c55e', opacity: 1, flexibility: 0.1, metalness: 0, roughness: 1, type: 'plastic' },
             transform: {
               position: { x: 0, y: 0, z: 0 },
               rotation: { x: 0, y: 0, z: 0 },
@@ -356,16 +355,23 @@ function SceneObjectComponent({ object, isSelected, onSelect, onRef }: SceneObje
             },
             physics: { mass: 0.3, friction: 0.4, elasticity: 0.2 }
           }}
-          fade={1}
+          fade={undefined}
         />
       ) : (
         <Connector3D
           connector={{
             id: object.id,
             name: object.name,
-            type: '3leg',
-            geometry: { type: 'custom' },
-            material: { color: '#dc2626' },
+            type: 'cross',
+            geometry: { portDiameter: 1.6, shape: 'cylindrical', size: { x: 4, y: 4, z: 4 } },
+            material: {
+              color: '#dc2626',
+              type: 'plastic',
+              flexibility: 0,
+              opacity: 1,
+              roughness: 1,
+              metalness: 0
+            },
             transform: {
               position: { x: 0, y: 0, z: 0 },
               rotation: { x: 0, y: 0, z: 0 },
@@ -429,47 +435,47 @@ function CreatorToolbar({
   onToggleSnap
 }: CreatorToolbarProps) {
   return (
-    <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg border border-gray-200 p-2">
-      <div className="flex items-center gap-2">
+    <div className='absolute top-4 left-4 rounded-lg border border-gray-200 bg-white p-2 shadow-lg'>
+      <div className='flex items-center gap-2'>
         {/* Transform Mode */}
-        <div className="flex bg-gray-100 rounded-md p-1">
+        <div className='flex rounded-md bg-gray-100 p-1'>
           <button
-            className={`px-3 py-1 text-xs rounded ${transformMode === 'translate' ? 'bg-white shadow' : ''}`}
+            className={`rounded px-3 py-1 text-xs ${transformMode === 'translate' ? 'bg-white shadow' : ''}`}
             onClick={() => onTransformModeChange('translate')}
           >
             Move
           </button>
           <button
-            className={`px-3 py-1 text-xs rounded ${transformMode === 'rotate' ? 'bg-white shadow' : ''}`}
+            className={`rounded px-3 py-1 text-xs ${transformMode === 'rotate' ? 'bg-white shadow' : ''}`}
             onClick={() => onTransformModeChange('rotate')}
           >
             Rotate
           </button>
           <button
-            className={`px-3 py-1 text-xs rounded ${transformMode === 'scale' ? 'bg-white shadow' : ''}`}
+            className={`rounded px-3 py-1 text-xs ${transformMode === 'scale' ? 'bg-white shadow' : ''}`}
             onClick={() => onTransformModeChange('scale')}
           >
             Scale
           </button>
         </div>
 
-        <div className="w-px h-6 bg-gray-300" />
+        <div className='h-6 w-px bg-gray-300' />
 
         {/* View Options */}
         <button
-          className={`px-2 py-1 text-xs rounded ${showGrid ? 'bg-blue-100 text-blue-800' : 'text-gray-600'}`}
+          className={`rounded px-2 py-1 text-xs ${showGrid ? 'bg-blue-100 text-blue-800' : 'text-gray-600'}`}
           onClick={onToggleGrid}
         >
           Grid
         </button>
         <button
-          className={`px-2 py-1 text-xs rounded ${showAxes ? 'bg-blue-100 text-blue-800' : 'text-gray-600'}`}
+          className={`rounded px-2 py-1 text-xs ${showAxes ? 'bg-blue-100 text-blue-800' : 'text-gray-600'}`}
           onClick={onToggleAxes}
         >
           Axes
         </button>
         <button
-          className={`px-2 py-1 text-xs rounded ${snapToGrid ? 'bg-blue-100 text-blue-800' : 'text-gray-600'}`}
+          className={`rounded px-2 py-1 text-xs ${snapToGrid ? 'bg-blue-100 text-blue-800' : 'text-gray-600'}`}
           onClick={onToggleSnap}
         >
           Snap

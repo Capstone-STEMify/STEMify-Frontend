@@ -40,13 +40,13 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
   const handleDragStart = (e: React.DragEvent, template: ComponentTemplate) => {
     setDraggedTemplate(template)
     onDragStart(template)
-    
+
     // Set drag effect
     e.dataTransfer.effectAllowed = 'copy'
     e.dataTransfer.setData('text/plain', template.id)
-    
+
     // Create drag image
-    const dragImage = new Image()
+    const dragImage = new window.Image()
     dragImage.src = template.icon
     e.dataTransfer.setDragImage(dragImage, 25, 25)
   }
@@ -60,16 +60,16 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
   }
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+    <div className='flex w-64 flex-col border-r border-gray-200 bg-white'>
       {/* Header */}
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="font-semibold text-gray-900">Components</h2>
-        <p className="text-xs text-gray-500 mt-1">Drag to add, double-click to place</p>
+      <div className='border-b border-gray-200 p-4'>
+        <h2 className='font-semibold text-gray-900'>Components</h2>
+        <p className='mt-1 text-xs text-gray-500'>Drag to add, double-click to place</p>
       </div>
 
       {/* Component List */}
-      <div className="flex-1 overflow-y-auto p-4">
-        <div className="space-y-3">
+      <div className='flex-1 overflow-y-auto p-4'>
+        <div className='space-y-3'>
           {COMPONENT_TEMPLATES.map((template) => (
             <ComponentCard
               key={template.id}
@@ -84,18 +84,18 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
       </div>
 
       {/* Instructions */}
-      <div className="p-4 border-t border-gray-200 bg-gray-50">
-        <div className="text-xs text-gray-600 space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+      <div className='border-t border-gray-200 bg-gray-50 p-4'>
+        <div className='space-y-1 text-xs text-gray-600'>
+          <div className='flex items-center gap-2'>
+            <div className='h-2 w-2 rounded-full bg-blue-500'></div>
             <span>Drag to add to scene</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+          <div className='flex items-center gap-2'>
+            <div className='h-2 w-2 rounded-full bg-green-500'></div>
             <span>Double-click to place at origin</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+          <div className='flex items-center gap-2'>
+            <div className='h-2 w-2 rounded-full bg-purple-500'></div>
             <span>Select & use gizmo to transform</span>
           </div>
         </div>
@@ -112,74 +112,65 @@ interface ComponentCardProps {
   onDoubleClick: () => void
 }
 
-function ComponentCard({ 
-  template, 
-  isDragging, 
-  onDragStart, 
-  onDragEnd, 
-  onDoubleClick 
-}: ComponentCardProps) {
+function ComponentCard({ template, isDragging, onDragStart, onDragEnd, onDoubleClick }: ComponentCardProps) {
   return (
     <div
-      className={`
-        relative p-3 border rounded-lg cursor-pointer transition-all duration-200
-        ${isDragging 
-          ? 'border-blue-300 bg-blue-50 shadow-lg scale-105' 
+      className={`relative cursor-pointer rounded-lg border p-3 transition-all duration-200 ${
+        isDragging
+          ? 'scale-105 border-blue-300 bg-blue-50 shadow-lg'
           : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
-        }
-      `}
+      } `}
       draggable
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onDoubleClick={onDoubleClick}
     >
       {/* Component Icon */}
-      <div className="flex items-center gap-3">
-        <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
+      <div className='flex items-center gap-3'>
+        <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-md bg-gray-100'>
           <Image
             src={template.icon}
             alt={template.name}
             width={40}
             height={40}
-            className="object-contain"
-            fallback={
-              <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center">
-                <span className="text-xs text-gray-600">
-                  {template.type === 'connector_3leg' ? '⚡' : '📏'}
-                </span>
-              </div>
-            }
+            className='object-contain'
+            onError={(e) => {
+              const target = e.target as HTMLImageElement
+              target.onerror = null
+              target.src = ''
+              target.style.display = 'none'
+              const fallbackDiv = document.createElement('div')
+              fallbackDiv.className = 'w-8 h-8 bg-gray-300 rounded flex items-center justify-center'
+              const span = document.createElement('span')
+              span.className = 'text-xs text-gray-600'
+              span.textContent = template.type === 'connector_3leg' ? '⚡' : '📏'
+              fallbackDiv.appendChild(span)
+              target.parentElement?.appendChild(fallbackDiv)
+            }}
           />
         </div>
-        
-        <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-sm text-gray-900 truncate">
-            {template.name}
-          </h3>
-          <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-            {template.description}
-          </p>
+
+        <div className='min-w-0 flex-1'>
+          <h3 className='truncate text-sm font-medium text-gray-900'>{template.name}</h3>
+          <p className='mt-1 line-clamp-2 text-xs text-gray-500'>{template.description}</p>
         </div>
       </div>
 
       {/* Type Badge */}
-      <div className="absolute top-2 right-2">
-        <span className={`
-          inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-          ${template.type === 'connector_3leg' 
-            ? 'bg-red-100 text-red-800' 
-            : 'bg-green-100 text-green-800'
-          }
-        `}>
+      <div className='absolute top-2 right-2'>
+        <span
+          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+            template.type === 'connector_3leg' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+          } `}
+        >
           {template.type === 'connector_3leg' ? 'Connector' : 'Straw'}
         </span>
       </div>
 
       {/* Drag Overlay */}
       {isDragging && (
-        <div className="absolute inset-0 bg-blue-500 bg-opacity-20 rounded-lg border-2 border-blue-400 border-dashed" />
+        <div className='bg-opacity-20 absolute inset-0 rounded-lg border-2 border-dashed border-blue-400 bg-blue-500' />
       )}
     </div>
   )
 }
-

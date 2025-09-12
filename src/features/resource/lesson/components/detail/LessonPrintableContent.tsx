@@ -1,6 +1,6 @@
 import { Lesson } from '@/features/resource/lesson/types/lesson.type'
 import { Section } from '@/features/resource/section/types/section.type'
-import PrintableSectionDetail from './PrintableSectionDetail' 
+import PrintableSectionDetail from './PrintableSectionDetail'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { useTranslations } from 'next-intl'
 import React from 'react'
@@ -56,20 +56,20 @@ export default function LessonPrintableContent({ lessonData, sectionData }: Less
 
       <h2 className='text-xl font-semibold'>{td('sections')}</h2>
       {sectionData && sectionData.length > 0 ? (
-                <div className="space-y-8">
-                    {sectionData
-                        .slice()
-                        .sort((a,b) => a.orderIndex - b.orderIndex)
-                        .map((sec, index) => (
-                            <div key={sec.id} className="mt-6 page-break-before:always">
-                                <h3 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4">
-                                   {index + 1}. {sec.description} ({sec.duration} mins)
-                                </h3>
-                                <PrintableSectionDetail sectionId={sec.id} />
-                            </div>
-                        ))}
-                </div>
-            ) : (
+        <div className='space-y-8'>
+          {sectionData
+            .slice()
+            .sort((a, b) => a.orderIndex - b.orderIndex)
+            .map((sec, index) => (
+              <div key={sec.id} className='page-break-before:always mt-6'>
+                <h3 className='mb-4 border-b pb-2 text-lg font-bold text-gray-800'>
+                  {index + 1}. {sec.description} ({sec.duration} mins)
+                </h3>
+                <PrintableSectionDetail sectionId={sec.id} />
+              </div>
+            ))}
+        </div>
+      ) : (
         <p>{td('notFound.no_section_v2')}</p>
       )}
     </div>

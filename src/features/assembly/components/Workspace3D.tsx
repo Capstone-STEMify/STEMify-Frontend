@@ -40,19 +40,21 @@ function ThirdSquareTransformHandle({
   const meshRef = useRef<THREE.Mesh>(null)
 
   // Calculate target position
-  const targetPos = useMemo(() => new THREE.Vector3(
-    componentCenter.x + currentTranslation.x,
-    componentCenter.y + currentTranslation.y,
-    componentCenter.z + currentTranslation.z
-  ), [componentCenter, currentTranslation])
+  const targetPos = useMemo(
+    () =>
+      new THREE.Vector3(
+        componentCenter.x + currentTranslation.x,
+        componentCenter.y + currentTranslation.y,
+        componentCenter.z + currentTranslation.z
+      ),
+    [componentCenter, currentTranslation]
+  )
 
   // Calculate target rotation
-  const targetRot = useMemo(() => new THREE.Euler(
-    currentRotation.x,
-    currentRotation.y,
-    currentRotation.z,
-    'XYZ'
-  ), [currentRotation])
+  const targetRot = useMemo(
+    () => new THREE.Euler(currentRotation.x, currentRotation.y, currentRotation.z, 'XYZ'),
+    [currentRotation]
+  )
 
   // Update mesh position and rotation every frame when not being transformed
   useFrame(() => {
@@ -84,9 +86,7 @@ function ThirdSquareTransformHandle({
   })
 
   // Different visual based on transform mode
-  const handleColor = isShiftPressed
-    ? (transformMode === 'translate' ? '#22c55e' : '#a855f7')
-    : '#9ca3af'
+  const handleColor = isShiftPressed ? (transformMode === 'translate' ? '#22c55e' : '#a855f7') : '#9ca3af'
 
   const handleOpacity = isShiftPressed ? 0.8 : 0.4
 
@@ -96,16 +96,8 @@ function ThirdSquareTransformHandle({
       position={[targetPos.x, targetPos.y, targetPos.z]}
       rotation={[targetRot.x, targetRot.y, targetRot.z]}
     >
-      {transformMode === 'translate' ? (
-        <sphereGeometry args={[0.6, 16, 16]} />
-      ) : (
-        <boxGeometry args={[1.2, 1.2, 1.2]} />
-      )}
-      <meshStandardMaterial
-        color={handleColor}
-        opacity={handleOpacity}
-        transparent
-      />
+      {transformMode === 'translate' ? <sphereGeometry args={[0.6, 16, 16]} /> : <boxGeometry args={[1.2, 1.2, 1.2]} />}
+      <meshStandardMaterial color={handleColor} opacity={handleOpacity} transparent />
     </mesh>
   )
 }
@@ -316,7 +308,10 @@ export default function Workspace3D({
     const allowedActionIds = new Set(stepsUpToNow.map((s: any) => s.actionId))
     const actionsForNow = (assembly.actions || []).filter((a) => allowedActionIds.has(a.id))
 
-    const map: Record<string, { start?: { connectorId: string; port: number }; end?: { connectorId: string; port: number } }> = {}
+    const map: Record<
+      string,
+      { start?: { connectorId: string; port: number }; end?: { connectorId: string; port: number } }
+    > = {}
 
     for (const action of actionsForNow) {
       if (action.connectionGroup && assembly.connections?.[action.connectionGroup]) {
@@ -678,7 +673,9 @@ export default function Workspace3D({
                 const lerpPos = { x: pos.x * t, y: pos.y * t, z: pos.z * t }
                 // Slerp rotation from identity to target (XYZ order)
                 const qFrom = new THREE.Quaternion() // identity
-                const qTo = new THREE.Quaternion().setFromEuler(new THREE.Euler(rot.x || 0, rot.y || 0, rot.z || 0, EULER_ORDER))
+                const qTo = new THREE.Quaternion().setFromEuler(
+                  new THREE.Euler(rot.x || 0, rot.y || 0, rot.z || 0, EULER_ORDER)
+                )
                 const qOut = new THREE.Quaternion().slerpQuaternions(qFrom, qTo, t)
                 const eOut = new THREE.Euler().setFromQuaternion(qOut, EULER_ORDER)
                 finalMatrix = {
@@ -719,7 +716,10 @@ export default function Workspace3D({
           const runtimeOverride = runtimeComponentOverrides[elementComponentId]
 
           if (runtimeOverride) {
-            console.log(`[RUNTIME OVERRIDE] Applying to ${elementComponentId} for instance ${instanceId}:`, runtimeOverride)
+            console.log(
+              `[RUNTIME OVERRIDE] Applying to ${elementComponentId} for instance ${instanceId}:`,
+              runtimeOverride
+            )
 
             const pivot = component.center
             const translation = runtimeOverride.translation || { x: 0, y: 0, z: 0 }
@@ -920,19 +920,17 @@ export default function Workspace3D({
           <div className='mb-3 flex gap-2'>
             <button
               onClick={() => setTransformMode('translate')}
-              className={`flex-1 rounded px-2 py-1 text-xs font-medium transition-colors ${transformMode === 'translate'
-                ? 'bg-blue-500 text-white'
-                : 'bg-white text-blue-700 hover:bg-blue-100'
-                }`}
+              className={`flex-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                transformMode === 'translate' ? 'bg-blue-500 text-white' : 'bg-white text-blue-700 hover:bg-blue-100'
+              }`}
             >
               Translate
             </button>
             <button
               onClick={() => setTransformMode('rotate')}
-              className={`flex-1 rounded px-2 py-1 text-xs font-medium transition-colors ${transformMode === 'rotate'
-                ? 'bg-purple-500 text-white'
-                : 'bg-white text-purple-700 hover:bg-purple-100'
-                }`}
+              className={`flex-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                transformMode === 'rotate' ? 'bg-purple-500 text-white' : 'bg-white text-purple-700 hover:bg-purple-100'
+              }`}
             >
               Rotate
             </button>
@@ -948,27 +946,31 @@ export default function Workspace3D({
             <div className='flex items-center gap-2'>
               <div className={`h-3 w-3 rounded-full ${isTransforming ? 'bg-yellow-500' : 'bg-gray-400'}`}></div>
               <span className={isTransforming ? 'font-medium' : ''}>
-                {isTransforming ? `Currently ${transformMode}ing Third Square` : `Third Square ready to ${transformMode}`}
+                {isTransforming
+                  ? `Currently ${transformMode}ing Third Square`
+                  : `Third Square ready to ${transformMode}`}
               </span>
             </div>
             <div className='mt-2 text-xs text-blue-600'>
               • Mode: <span className='font-medium'>{transformMode === 'translate' ? 'Position' : 'Rotation'}</span>
-              <br />
-              • Workspace rotation is {isTransforming ? 'disabled' : 'enabled'}
-              <br />
-              • {transformMode === 'translate' ? 'Green sphere indicates draggable position' : 'Purple cube can be rotated on X/Y/Z axes'}
-              <br />
-              • Shortcuts: <kbd className='rounded bg-white px-1 font-mono text-[10px]'>T</kbd> translate, <kbd className='rounded bg-white px-1 font-mono text-[10px]'>R</kbd> rotate
+              <br />• Workspace rotation is {isTransforming ? 'disabled' : 'enabled'}
+              <br />•{' '}
+              {transformMode === 'translate'
+                ? 'Green sphere indicates draggable position'
+                : 'Purple cube can be rotated on X/Y/Z axes'}
+              <br />• Shortcuts: <kbd className='rounded bg-white px-1 font-mono text-[10px]'>T</kbd> translate,{' '}
+              <kbd className='rounded bg-white px-1 font-mono text-[10px]'>R</kbd> rotate
             </div>
           </div>
         </div>
       )}
 
       {/* Realtime Control Panel for Component Assembly */}
-      {showUI && (() => {
-        const action = assembly?.actions?.find((a: any) => a.id === currentStep?.actionId)
-        return action?.type === 'component_assembly' && action?.showRealtimeControls === true
-      })() && (
+      {showUI &&
+        (() => {
+          const action = assembly?.actions?.find((a: any) => a.id === currentStep?.actionId)
+          return action?.type === 'component_assembly' && action?.showRealtimeControls === true
+        })() && (
           <div className='absolute bottom-4 left-4 z-10 w-[360px] rounded-xl border bg-white/95 p-3 shadow'>
             {(() => {
               const action = assembly?.actions?.find((a: any) => a.id === currentStep?.actionId)
@@ -980,7 +982,9 @@ export default function Workspace3D({
 
               return (
                 <>
-                  <div className='mb-2 font-semibold text-gray-700'>Realtime Controls — {action?.name || 'Component Assembly'}</div>
+                  <div className='mb-2 font-semibold text-gray-700'>
+                    Realtime Controls — {action?.name || 'Component Assembly'}
+                  </div>
                   <div className='mb-1 text-xs text-gray-500'>
                     Component Assembly: TransformAsUnit = true - All elements move together
                   </div>
@@ -993,16 +997,34 @@ export default function Workspace3D({
                           type='number'
                           step='0.01745'
                           className='w-full rounded border px-2 py-1'
-                          value={runtimeComponentOverrides[firstComponentId]?.rotation?.[axis] ?? (firstTransform.rotation?.[axis] || 0)}
+                          value={
+                            runtimeComponentOverrides[firstComponentId]?.rotation?.[axis] ??
+                            (firstTransform.rotation?.[axis] || 0)
+                          }
                           onChange={(e) => {
                             const v = parseFloat(e.target.value || '0')
                             setRuntimeComponentOverrides((prev) => ({
                               ...prev,
                               [firstComponentId]: {
                                 rotation: {
-                                  x: axis === 'x' ? (isNaN(v) ? (firstTransform.rotation?.x || 0) : v) : (prev[firstComponentId]?.rotation?.x ?? (firstTransform.rotation?.x || 0)),
-                                  y: axis === 'y' ? (isNaN(v) ? (firstTransform.rotation?.y || 0) : v) : (prev[firstComponentId]?.rotation?.y ?? (firstTransform.rotation?.y || 0)),
-                                  z: axis === 'z' ? (isNaN(v) ? (firstTransform.rotation?.z || 0) : v) : (prev[firstComponentId]?.rotation?.z ?? (firstTransform.rotation?.z || 0))
+                                  x:
+                                    axis === 'x'
+                                      ? isNaN(v)
+                                        ? firstTransform.rotation?.x || 0
+                                        : v
+                                      : (prev[firstComponentId]?.rotation?.x ?? (firstTransform.rotation?.x || 0)),
+                                  y:
+                                    axis === 'y'
+                                      ? isNaN(v)
+                                        ? firstTransform.rotation?.y || 0
+                                        : v
+                                      : (prev[firstComponentId]?.rotation?.y ?? (firstTransform.rotation?.y || 0)),
+                                  z:
+                                    axis === 'z'
+                                      ? isNaN(v)
+                                        ? firstTransform.rotation?.z || 0
+                                        : v
+                                      : (prev[firstComponentId]?.rotation?.z ?? (firstTransform.rotation?.z || 0))
                                 },
                                 translation: prev[firstComponentId]?.translation ?? firstTransform.position
                               }
@@ -1020,7 +1042,10 @@ export default function Workspace3D({
                         type='number'
                         step='0.5'
                         className='w-full rounded border px-2 py-1'
-                        value={runtimeComponentOverrides[firstComponentId]?.translation?.[axis] ?? (firstTransform.position?.[axis] || 0)}
+                        value={
+                          runtimeComponentOverrides[firstComponentId]?.translation?.[axis] ??
+                          (firstTransform.position?.[axis] || 0)
+                        }
                         onChange={(e) => {
                           const v = parseFloat(e.target.value || '0')
                           setRuntimeComponentOverrides((prev) => ({
@@ -1031,7 +1056,7 @@ export default function Workspace3D({
                                 x: prev[firstComponentId]?.translation?.x ?? (firstTransform.position?.x || 0),
                                 y: prev[firstComponentId]?.translation?.y ?? (firstTransform.position?.y || 0),
                                 z: prev[firstComponentId]?.translation?.z ?? (firstTransform.position?.z || 0),
-                                [axis]: isNaN(v) ? (firstTransform.position?.[axis] || 0) : v
+                                [axis]: isNaN(v) ? firstTransform.position?.[axis] || 0 : v
                               }
                             }
                           }))
@@ -1042,9 +1067,14 @@ export default function Workspace3D({
 
                   {/* Show current transform mode info */}
                   <div className='col-span-3 mt-3 flex items-center gap-2 rounded bg-gray-50 p-2'>
-                    <div className={`h-2 w-2 rounded-full ${transformMode === 'translate' ? 'bg-blue-500' : 'bg-purple-500'}`}></div>
+                    <div
+                      className={`h-2 w-2 rounded-full ${transformMode === 'translate' ? 'bg-blue-500' : 'bg-purple-500'}`}
+                    ></div>
                     <span className='text-xs text-gray-600'>
-                      Active Mode: <span className='font-medium'>{transformMode === 'translate' ? '📍 Translation' : ' Rotation'}</span>
+                      Active Mode:{' '}
+                      <span className='font-medium'>
+                        {transformMode === 'translate' ? '📍 Translation' : ' Rotation'}
+                      </span>
                     </span>
                   </div>
                   <div className='mt-3 flex gap-2'>
@@ -1087,7 +1117,7 @@ export default function Workspace3D({
         }}
       >
         {/* Drag control for square_third at step 4 (combined squares step) */}
-        {currentStep?.actionId === 'action_adjust_additional_connector_arms' && (
+        {currentStep?.actionId === 'action_adjust_additional_connector_arms' &&
           (() => {
             const comp = assembly.components?.squares?.find((c: any) => c.id === 'square_third')
             if (!comp) return null
@@ -1172,8 +1202,7 @@ export default function Workspace3D({
                 />
               </>
             )
-          })()
-        )}
+          })()}
         <primitive object={new AxesHelper(10)} />
         <color attach='background' args={[assembly.scene.environment.background]} />
         <ambientLight color={assembly.scene.environment.lighting.ambient} intensity={0.5} />
@@ -1302,10 +1331,10 @@ export default function Workspace3D({
                         ? tr.rotation
                         : o
                           ? {
-                            x: tr.rotation.x + (o.x || 0),
-                            y: tr.rotation.y + (o.y || 0),
-                            z: tr.rotation.z + (o.z || 0)
-                          }
+                              x: tr.rotation.x + (o.x || 0),
+                              y: tr.rotation.y + (o.y || 0),
+                              z: tr.rotation.z + (o.z || 0)
+                            }
                           : tr.rotation,
                       scale: base.scale
                     }
