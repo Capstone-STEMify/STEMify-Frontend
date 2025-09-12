@@ -75,22 +75,25 @@ export default function KitDetail() {
           </div>
 
           {/* Right Section */}
-          <SCarousel
-            className='mx-auto w-full rounded-md shadow-md'
-            variant='plugin'
-            autoplayDelay={2000}
-            items={(kitData.data.images || []).map((images, i) => (
-              <div className='p-1' key={i}>
-                <Image
-                  src={images.imageUrl || '/images/fallback.png'}
-                  alt={images.alt || 'Kit Image'}
-                  width={500}
-                  height={500}
-                  className='w-full max-w-xl rounded-3xl object-cover shadow-xs'
-                />
-              </div>
-            ))}
-          />
+          <div className='flex items-center'>
+            <SCarousel
+              className='mx-auto w-full rounded-3xl shadow-md'
+              variant='plugin'
+              autoplayDelay={2000}
+              items={(kitData.data.images || [{ imageUrl: '/images/fallback.png' }])
+                .filter((img) => img?.imageUrl && img.imageUrl.trim() !== '')
+                .map((images, i) => (
+                  <Image
+                    src={images.imageUrl || '/images/fallback.png'}
+                    alt={images.alt || 'Kit Image'}
+                    width={500}
+                    height={500}
+                    key={i}
+                    className='aspect-square w-full max-w-xl rounded-3xl object-cover shadow-xs'
+                  />
+                ))}
+            />
+          </div>
         </section>
       </div>
     </div>
