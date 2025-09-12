@@ -1,153 +1,60 @@
 'use client'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Grid, TransformControls } from '@react-three/drei'
-import { Straw } from '@/features/assembly/components/Straw'
-import { createRef, useEffect, useMemo, useRef, useState, useCallback } from 'react'
-import { AxesHelper, Group } from 'three'
-import * as THREE from 'three'
-import { a, useTransition } from '@react-spring/three'
-import { Connector3D } from '@/features/assembly/components/Connector'
+import { createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAssembly } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { sceneData } from '@/utils/cts'
-import Image from 'next/image'
-
-//  Quaternion rotation composition helper
-const EULER_ORDER: THREE.EulerOrder = 'XYZ'
-function composeRot(base: { x: number; y: number; z: number }, comp: { x: number; y: number; z: number }) {
-  const qBase = new THREE.Quaternion().setFromEuler(new THREE.Euler(base.x || 0, base.y || 0, base.z || 0, EULER_ORDER))
-  const qComp = new THREE.Quaternion().setFromEuler(new THREE.Euler(comp.x || 0, comp.y || 0, comp.z || 0, EULER_ORDER))
-  const qFinal = qComp.multiply(qBase) // Rcomp * Rbase
-  const eFinal = new THREE.Euler().setFromQuaternion(qFinal, EULER_ORDER)
-  return { x: eFinal.x, y: eFinal.y, z: eFinal.z }
-}
-
-//  Third Square Transform Handle Component
-function ThirdSquareTransformHandle({
-  componentCenter,
-  currentTranslation,
-  currentRotation,
-  isShiftPressed,
-  transformMode,
-  transformControlsRef
-}: {
-  componentCenter: { x: number; y: number; z: number }
-  currentTranslation: { x: number; y: number; z: number }
-  currentRotation: { x: number; y: number; z: number }
-  isShiftPressed: boolean
-  transformMode: 'translate' | 'rotate'
-  transformControlsRef: React.RefObject<any>
-}) {
-  const meshRef = useRef<THREE.Mesh>(null)
-
-  // Calculate target position
-  const targetPos = useMemo(
-    () =>
-      new THREE.Vector3(
-        componentCenter.x + currentTranslation.x,
-        componentCenter.y + currentTranslation.y,
-        componentCenter.z + currentTranslation.z
-      ),
-    [componentCenter, currentTranslation]
-  )
-
-  // Calculate target rotation
-  const targetRot = useMemo(
-    () => new THREE.Euler(currentRotation.x, currentRotation.y, currentRotation.z, 'XYZ'),
-    [currentRotation]
-  )
-
-  // Update mesh position and rotation every frame when not being transformed
-  useFrame(() => {
-    if (meshRef.current) {
-      // Only update when not actively being transformed
-      const isBeingTransformed = transformControlsRef.current?.dragging
-      if (!isBeingTransformed) {
-        meshRef.current.position.copy(targetPos)
-        meshRef.current.rotation.copy(targetRot)
-      }
-    }
-  })
-
-  // Attach transform controls when available
-  useEffect(() => {
-    if (transformControlsRef.current && meshRef.current) {
-      console.log('🔗 Attaching TransformControls to ThirdSquareHandle mesh')
-      transformControlsRef.current.attach(meshRef.current)
-    }
-  }, [transformControlsRef])
-
-  console.log(' ThirdSquareTransformHandle render:', {
-    componentCenter,
-    currentTranslation,
-    currentRotation,
-    transformMode,
-    targetPos: { x: targetPos.x, y: targetPos.y, z: targetPos.z },
-    isShiftPressed
-  })
-
-  // Different visual based on transform mode
-  const handleColor = isShiftPressed ? (transformMode === 'translate' ? '#22c55e' : '#a855f7') : '#9ca3af'
-
-  const handleOpacity = isShiftPressed ? 0.8 : 0.4
-
-  return (
-    <mesh
-      ref={meshRef}
-      position={[targetPos.x, targetPos.y, targetPos.z]}
-      rotation={[targetRot.x, targetRot.y, targetRot.z]}
-    >
-      {transformMode === 'translate' ? <sphereGeometry args={[0.6, 16, 16]} /> : <boxGeometry args={[1.2, 1.2, 1.2]} />}
-      <meshStandardMaterial color={handleColor} opacity={handleOpacity} transparent />
-    </mesh>
-  )
-}
-
-interface Props {
-  assemblyUrl?: string
-  mode?: 'player' | 'builder'
-  showUI?: boolean
-  onStepComplete?: (stepId: string) => void
-}
+import * as THREE from 'three'
+import { StepInfoPanel } from './StepInfoPanel'
+import { StepController } from './StepController'
+import { TransformInstructionPanel } from './TransformInstructionPanel'
+import { RealtimeControlPanel } from './RealtimeControlPanel'
+import { ThirdSquareTransformHandle } from '@/features/assembly/components/test/ThirdSquareTransformHandle'
+import { composeRot, EULER_ORDER } from '@/features/assembly/components/test/workspace'
+import { a, useTransition } from '@react-spring/three'
+import { Connector3D } from '@/features/assembly/components/Connector'
+import { AxesHelper, Group } from 'three'
+import { Straw } from '@/features/assembly/components/Straw'
 
 export default function Workspace3D({
   assemblyUrl = '/assemblies/optimized/octahedron.json',
   mode = 'player',
   showUI = true,
   onStepComplete
-}: Props) {
-  const strawRefs = useRef<Record<string, React.Ref<Group>>>({})
-  const connectorRefs = useRef<Record<string, React.Ref<Group>>>({})
+}: {
+  assemblyUrl?: string
+  mode?: 'player' | 'builder'
+  showUI?: boolean
+  onStepComplete?: (stepId: string) => void
+}) {
+  const [disableComponentTransform, setDisableComponentTransform] = useState(false)
   const orbitControlsRef = useRef<any>(null)
   const transformControlsRef = useRef<any>(null)
+  const [componentAnimT, setComponentAnimT] = useState(1)
+
+  const strawRefs = useRef<Record<string, React.Ref<Group>>>({})
+  const connectorRefs = useRef<Record<string, React.Ref<Group>>>({})
 
   const getStrawRef = (key: string): React.Ref<Group> => (strawRefs.current[key] ??= createRef<Group>())
   const getConnectorRef = (key: string): React.Ref<Group> => (connectorRefs.current[key] ??= createRef<Group>())
 
-  // State for shift key and transform mode
   const [isShiftPressed, setIsShiftPressed] = useState(false)
   const [isTransforming, setIsTransforming] = useState(false)
   const [transformMode, setTransformMode] = useState<'translate' | 'rotate'>('translate')
-
-  const { assembly, instances, currentActivity, currentStep, isLoading, error, loadAssembly, nextStep, previousStep } =
-    useAssembly()
-
   const [stepIndex, setStepIndex] = useState(0)
-  // Runtime overrides for realtime controls (per component)
   const [runtimeComponentOverrides, setRuntimeComponentOverrides] = useState<
     Record<string, { rotation: { x: number; y: number; z: number }; translation: { x: number; y: number; z: number } }>
   >({})
 
-  // Temporary disable component transformation for debugging
-  const [disableComponentTransform, setDisableComponentTransform] = useState(false)
-  // Component animation progress for current action (0..1)
-  const [componentAnimT, setComponentAnimT] = useState(1)
+  const { assembly, instances, currentActivity, currentStep, isLoading, error, loadAssembly, nextStep, previousStep } =
+    useAssembly()
 
-  // Load assembly on mount
+  // load assembly
   useEffect(() => {
     loadAssembly(assemblyUrl)
   }, [assemblyUrl, loadAssembly])
 
-  // Sync stepIndex with currentStep
+  // sync step
   useEffect(() => {
     if (currentActivity && currentStep) {
       const index = currentActivity.steps.findIndex((s: any) => s.actionId === currentStep.actionId)
@@ -155,38 +62,33 @@ export default function Workspace3D({
     }
   }, [currentActivity, currentStep])
 
-  // Animate component movement for any component_assembly action (generic, JSON-driven)
+  // hotkey shift / transform mode
   useEffect(() => {
-    if (!assembly || !currentStep) {
-      setComponentAnimT(1)
-      return
-    }
-
-    const action = (assembly.actions || []).find((a: any) => a.id === currentStep.actionId)
-    if (action && action.type === 'component_assembly') {
-      const durationMs = Math.max(100, Math.floor(((action.duration as number) || 2) * 1000))
-      let rafId = 0
-      const start = performance.now()
-      setComponentAnimT(0)
-
-      const tick = (now: number) => {
-        const t = Math.min(1, (now - start) / durationMs)
-        setComponentAnimT(t)
-        if (t < 1) rafId = requestAnimationFrame(tick)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setIsShiftPressed(true)
+      if (currentStep?.actionId === 'action_adjust_additional_connector_arms') {
+        if (e.key.toLowerCase() === 't') setTransformMode('translate')
+        if (e.key.toLowerCase() === 'r') setTransformMode('rotate')
       }
-
-      rafId = requestAnimationFrame(tick)
-      return () => cancelAnimationFrame(rafId)
-    } else {
-      // For other steps, apply instantly
-      setComponentAnimT(1)
     }
-  }, [assembly, currentStep])
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setIsShiftPressed(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [currentStep?.actionId])
 
+  // disable orbit khi transform
+  useEffect(() => {
+    if (orbitControlsRef.current) orbitControlsRef.current.enabled = !isTransforming
+  }, [isTransforming])
   const maxStep = currentActivity?.steps.length || 0
-  const clampedStep = Math.min(Math.max(stepIndex, 0), Math.max(maxStep - 1, 0))
 
-  // Helper function to get component elements
+  const clampedStep = Math.min(Math.max(stepIndex, 0), Math.max(maxStep - 1, 0))
   const getComponentElements = useCallback(
     (componentId: string): string[] => {
       if (!assembly?.components?.squares) return []
@@ -198,8 +100,6 @@ export default function Workspace3D({
     },
     [assembly]
   )
-
-  // Get visible instances based on current step using actions/connection groups
   const visibleInstances = useMemo(() => {
     if (!assembly || !instances || !currentActivity) {
       return { straws: [], connectors: [] }
@@ -299,7 +199,6 @@ export default function Workspace3D({
     return counts
   }, [visibleInstances.connectors])
 
-  // Build active connections up to current step: strawId -> { start: {connectorId, port}, end: {...} }
   const activeConnections = useMemo(() => {
     if (!assembly || !currentActivity) return {}
 
@@ -333,168 +232,6 @@ export default function Workspace3D({
     [visibleInstances.connectors]
   )
 
-  // Helper: compute world position of a connector port by index using final transform overrides
-  const getConnectorPortWorldPosition = useCallback(
-    (connectorId: string, portIndex: number): { x: number; y: number; z: number } | null => {
-      const inst = getConnectorInstanceById(connectorId)
-      if (!inst) return null
-
-      const base = {
-        position: inst.transform.position,
-        rotation: inst.transform.rotation
-      }
-      const tr = getTransformOverrides(connectorId, base.position, base.rotation)
-      const port = inst.data.portTemplate?.[portIndex]
-      if (!port) return null
-      const lp = port.localPosition || { x: 0, y: 0, z: 0 }
-      // Apply rotation then translation
-      const e = new THREE.Euler(tr.rotation.x || 0, tr.rotation.y || 0, tr.rotation.z || 0, EULER_ORDER)
-      const q = new THREE.Quaternion().setFromEuler(e)
-      const v = new THREE.Vector3(lp.x, lp.y, lp.z).applyQuaternion(q)
-      return { x: v.x + tr.position.x, y: v.y + tr.position.y, z: v.z + tr.position.z }
-    },
-    [getConnectorInstanceById]
-  )
-
-  // Helper: compute rotation to align local X axis to direction vector
-  const getRotationAlignXToDir = useCallback((dir: THREE.Vector3) => {
-    const from = new THREE.Vector3(1, 0, 0)
-    const to = dir.clone().normalize()
-    const q = new THREE.Quaternion().setFromUnitVectors(from, to)
-    const e = new THREE.Euler().setFromQuaternion(q, EULER_ORDER)
-    return { x: e.x, y: e.y, z: e.z }
-  }, [])
-
-  // Calculate armPose for connectors based on ALL previous steps (accumulative)
-  const getArmPoseForConnector = useCallback(
-    (connectorId: string) => {
-      if (!assembly || !currentActivity || clampedStep < 0) return undefined
-
-      let finalArmPose = { arm1: 0, arm2: 0 }
-
-      // Accumulate arm poses from all steps up to current step
-      for (let i = 0; i <= clampedStep; i++) {
-        const step = currentActivity.steps[i]
-        if (!step) continue
-
-        const action = assembly.actions.find((a) => a.id === step.actionId)
-        if (!action || action.type !== 'transform_arm') continue
-
-        // Check if this connector is targeted by the action
-        if (Array.isArray(action.targets) && action.targets.includes(connectorId)) {
-          // Try connectorArmTransforms first (per-connector specific)
-          const connectorArmTransforms = (action as any).connectorArmTransforms
-          if (connectorArmTransforms && connectorArmTransforms[connectorId]) {
-            const transforms = connectorArmTransforms[connectorId]
-            // console.log(`Step ${i+1}: Connector-specific arm transforms for ${connectorId}:`, transforms);
-            finalArmPose = {
-              arm1: transforms.arm_1?.z || finalArmPose.arm1,
-              arm2: transforms.arm_2?.z || finalArmPose.arm2
-            }
-          } else {
-            // Fallback to global armTransforms
-            const armTransforms = (action as any).armTransforms
-            if (armTransforms) {
-              console.log(`Step ${i + 1}: Global arm transforms for ${connectorId}:`, armTransforms)
-              finalArmPose = {
-                arm1: armTransforms.arm_1?.z || finalArmPose.arm1,
-                arm2: armTransforms.arm_2?.z || finalArmPose.arm2
-              }
-            }
-          }
-        }
-      }
-
-      // Only return if there's actually a change from default
-      if (finalArmPose.arm1 !== 0 || finalArmPose.arm2 !== 0) {
-        // console.log(`Final arm pose for ${connectorId}:`, finalArmPose);
-        return finalArmPose
-      }
-
-      return undefined
-    },
-    [assembly, currentActivity, clampedStep]
-  )
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') {
-        setStepIndex((s) => Math.min(s + 1, maxStep - 1))
-        nextStep()
-      }
-      if (e.key === 'ArrowLeft') {
-        setStepIndex((s) => Math.max(s - 1, 0))
-        previousStep()
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [maxStep, nextStep, previousStep])
-
-  // Handle Shift key for transform controls and mode switching
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Shift') {
-        setIsShiftPressed(true)
-      }
-      // Toggle transform mode with T (translate) and R (rotate) when in step 4
-      if (currentStep?.actionId === 'action_adjust_additional_connector_arms') {
-        if (e.key.toLowerCase() === 't' && !e.ctrlKey && !e.altKey) {
-          setTransformMode('translate')
-        } else if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey) {
-          setTransformMode('rotate')
-        }
-      }
-    }
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'Shift') {
-        setIsShiftPressed(false)
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    window.addEventListener('keyup', handleKeyUp)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-      window.removeEventListener('keyup', handleKeyUp)
-    }
-  }, [currentStep?.actionId])
-
-  // Disable OrbitControls when transforming
-  useEffect(() => {
-    if (orbitControlsRef.current) {
-      orbitControlsRef.current.enabled = !isTransforming
-    }
-  }, [isTransforming])
-
-  // Generic instant appear based on action property
-  const instantAppear = useMemo(() => {
-    if (!assembly || !currentStep) return false
-    const action = assembly.actions?.find((a: any) => a.id === currentStep.actionId)
-    return action?.instantAppear === true
-  }, [assembly, currentStep])
-
-  const transitions = useTransition(visibleInstances.straws, {
-    keys: (inst) => inst.id,
-    from: instantAppear ? { s: 1.0, y: 0.0, o: 1 } : { s: 0.9, y: 0.2, o: 0 },
-    enter: instantAppear ? { s: 1.0, y: 0.0, o: 1 } : { s: 1.0, y: 0.0, o: 1 },
-    leave: null,
-    trail: instantAppear ? 0 : 100,
-    config: instantAppear ? { tension: 1, friction: 0 } : { tension: 170, friction: 20 }
-  })
-
-  const connectorTransitions = useTransition(visibleInstances.connectors, {
-    keys: (inst) => inst.id,
-    from: instantAppear ? { s: 1, y: 0, o: 1 } : { s: 0.8, y: 0.4, o: 0 },
-    enter: instantAppear ? { s: 1, y: 0, o: 1 } : { s: 1, y: 0, o: 1 },
-    leave: null,
-    trail: instantAppear ? 0 : 100,
-    config: instantAppear ? { tension: 1, friction: 0 } : { tension: 170, friction: 20 }
-  })
-
-  // Aggregate per-instance rotation overrides from actions (e.g., transform_instance)
   const getRotationOverrideForInstance = useCallback(
     (instanceId: string) => {
       if (!assembly || !currentActivity || clampedStep < 0) return undefined
@@ -526,8 +263,6 @@ export default function Workspace3D({
     },
     [assembly, currentActivity, clampedStep]
   )
-
-  // Helper function to get component for an element
   const getElementComponent = useCallback(
     (elementId: string): string | null => {
       if (!assembly?.components?.squares) return null
@@ -541,8 +276,6 @@ export default function Workspace3D({
     },
     [assembly]
   )
-
-  // Compute position and rotation overrides including component matrix inheritance
   const getTransformOverrides = useCallback(
     (instanceId: string, basePosition: any, baseRotation: any) => {
       if (!assembly || !currentActivity || clampedStep < 0) return { position: basePosition, rotation: baseRotation }
@@ -806,317 +539,168 @@ export default function Workspace3D({
     ]
   )
 
-  if (isLoading) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <div className='text-center'>
-          <div className='h-32 w-32 animate-spin rounded-full border-b-2 border-gray-900'></div>
-          <p className='mt-4 text-lg'>Loading assembly...</p>
-        </div>
-      </div>
-    )
-  }
+  const getConnectorPortWorldPosition = useCallback(
+    (connectorId: string, portIndex: number): { x: number; y: number; z: number } | null => {
+      const inst = getConnectorInstanceById(connectorId)
+      if (!inst) return null
 
-  if (error) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <div className='text-center text-red-600'>
-          <h2 className='mb-2 text-xl font-bold'>Error Loading Assembly</h2>
-          <p>{error}</p>
-        </div>
-      </div>
-    )
-  }
+      const base = {
+        position: inst.transform.position,
+        rotation: inst.transform.rotation
+      }
+      const tr = getTransformOverrides(connectorId, base.position, base.rotation)
+      const port = inst.data.portTemplate?.[portIndex]
+      if (!port) return null
+      const lp = port.localPosition || { x: 0, y: 0, z: 0 }
+      // Apply rotation then translation
+      const e = new THREE.Euler(tr.rotation.x || 0, tr.rotation.y || 0, tr.rotation.z || 0, EULER_ORDER)
+      const q = new THREE.Quaternion().setFromEuler(e)
+      const v = new THREE.Vector3(lp.x, lp.y, lp.z).applyQuaternion(q)
+      return { x: v.x + tr.position.x, y: v.y + tr.position.y, z: v.z + tr.position.z }
+    },
+    [getConnectorInstanceById]
+  )
 
-  if (!assembly) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <p className='text-lg text-gray-600'>No assembly loaded</p>
-      </div>
-    )
-  }
+  // Helper: compute rotation to align local X axis to direction vector
+  const getRotationAlignXToDir = useCallback((dir: THREE.Vector3) => {
+    const from = new THREE.Vector3(1, 0, 0)
+    const to = dir.clone().normalize()
+    const q = new THREE.Quaternion().setFromUnitVectors(from, to)
+    const e = new THREE.Euler().setFromQuaternion(q, EULER_ORDER)
+    return { x: e.x, y: e.y, z: e.z }
+  }, [])
+
+  // Calculate armPose for connectors based on ALL previous steps (accumulative)
+  const getArmPoseForConnector = useCallback(
+    (connectorId: string) => {
+      if (!assembly || !currentActivity || clampedStep < 0) return undefined
+
+      let finalArmPose = { arm1: 0, arm2: 0 }
+
+      // Accumulate arm poses from all steps up to current step
+      for (let i = 0; i <= clampedStep; i++) {
+        const step = currentActivity.steps[i]
+        if (!step) continue
+
+        const action = assembly.actions.find((a) => a.id === step.actionId)
+        if (!action || action.type !== 'transform_arm') continue
+
+        // Check if this connector is targeted by the action
+        if (Array.isArray(action.targets) && action.targets.includes(connectorId)) {
+          // Try connectorArmTransforms first (per-connector specific)
+          const connectorArmTransforms = (action as any).connectorArmTransforms
+          if (connectorArmTransforms && connectorArmTransforms[connectorId]) {
+            const transforms = connectorArmTransforms[connectorId]
+            // console.log(`Step ${i+1}: Connector-specific arm transforms for ${connectorId}:`, transforms);
+            finalArmPose = {
+              arm1: transforms.arm_1?.z || finalArmPose.arm1,
+              arm2: transforms.arm_2?.z || finalArmPose.arm2
+            }
+          } else {
+            // Fallback to global armTransforms
+            const armTransforms = (action as any).armTransforms
+            if (armTransforms) {
+              console.log(`Step ${i + 1}: Global arm transforms for ${connectorId}:`, armTransforms)
+              finalArmPose = {
+                arm1: armTransforms.arm_1?.z || finalArmPose.arm1,
+                arm2: armTransforms.arm_2?.z || finalArmPose.arm2
+              }
+            }
+          }
+        }
+      }
+
+      // Only return if there's actually a change from default
+      if (finalArmPose.arm1 !== 0 || finalArmPose.arm2 !== 0) {
+        // console.log(`Final arm pose for ${connectorId}:`, finalArmPose);
+        return finalArmPose
+      }
+
+      return undefined
+    },
+    [assembly, currentActivity, clampedStep]
+  )
+
+  const instantAppear = useMemo(() => {
+    if (!assembly || !currentStep) return false
+    const action = assembly.actions?.find((a: any) => a.id === currentStep.actionId)
+    return action?.instantAppear === true
+  }, [assembly, currentStep])
+
+  const transitions = useTransition(visibleInstances.straws, {
+    keys: (inst) => inst.id,
+    from: instantAppear ? { s: 1.0, y: 0.0, o: 1 } : { s: 0.9, y: 0.2, o: 0 },
+    enter: instantAppear ? { s: 1.0, y: 0.0, o: 1 } : { s: 1.0, y: 0.0, o: 1 },
+    leave: null,
+    trail: instantAppear ? 0 : 100,
+    config: instantAppear ? { tension: 1, friction: 0 } : { tension: 170, friction: 20 }
+  })
+  const connectorTransitions = useTransition(visibleInstances.connectors, {
+    keys: (inst) => inst.id,
+    from: instantAppear ? { s: 1, y: 0, o: 1 } : { s: 0.8, y: 0.4, o: 0 },
+    enter: instantAppear ? { s: 1, y: 0, o: 1 } : { s: 1, y: 0, o: 1 },
+    leave: null,
+    trail: instantAppear ? 0 : 100,
+    config: instantAppear ? { tension: 1, friction: 0 } : { tension: 170, friction: 20 }
+  })
+
+  if (isLoading) return <div>Loading assembly...</div>
+  if (error) return <div>Error loading assembly: {error}</div>
+  if (!assembly) return <div>No assembly loaded</div>
 
   return (
     <div className='relative h-screen w-full'>
-      {/* Step Description Panel */}
-      {showUI && clampedStep >= 0 && currentStep && (
-        <div className='absolute top-4 left-4 z-10 w-100 rounded-xl border bg-white/90 px-4 py-3 text-sm shadow'>
-          <div className='mb-2 text-lg font-semibold text-sky-600'>Step {clampedStep + 1}</div>
-          <div className='text-lg text-gray-700'>{currentStep.title}</div>
-          {currentStep.description && <div className='mt-1 text-sm text-gray-600'>{currentStep.description}</div>}
-
-          <div className='mt-4'>
-            <div className='mb-1 font-semibold text-gray-600'>Straws:</div>
-            <ul className='space-y-1'>
-              {Object.entries(strawTypeCount).map(([templateId, count]) => {
-                return (
-                  <li key={templateId} className='flex items-center gap-2'>
-                    <div className='h-4 w-4 rounded-full bg-green-400' title={templateId} />
-                    <span>
-                      {templateId}: x{count}
-                    </span>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-
-          <div className='mt-3'>
-            <div className='mb-1 font-semibold text-gray-600'>Connectors:</div>
-            <ul className='space-y-1'>
-              {Object.entries(connectorTypeCount).map(([templateId, count]) => {
-                return (
-                  <li key={templateId} className='flex items-center gap-2'>
-                    <div className='h-4 w-4 rounded-sm bg-red-400' title={templateId} />
-                    <span>
-                      {templateId}: x{count}
-                    </span>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        </div>
+      {/* Step Info */}
+      {showUI && currentStep && (
+        <StepInfoPanel
+          stepIndex={stepIndex}
+          stepTitle={currentStep.title}
+          stepDescription={currentStep.description}
+          strawTypeCount={strawTypeCount}
+          connectorTypeCount={connectorTypeCount}
+        />
       )}
 
       {/* Step Controller */}
       {showUI && (
-        <div className='absolute top-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-white/80 px-3 py-2 shadow'>
-          <button
-            onClick={() => {
-              setStepIndex((s) => Math.max(s - 1, 0))
-              previousStep()
-            }}
-            disabled={clampedStep === 0}
-            className='rounded-lg border px-3 py-1 disabled:opacity-50'
-            title='Previous (←)'
-          >
-            Previous
-          </button>
-          <div className='px-2 text-sm tabular-nums'>
-            {Math.min(clampedStep + 1, maxStep)} / {maxStep}
-          </div>
-          <button
-            onClick={() => {
-              setStepIndex((s) => Math.min(s + 1, maxStep - 1))
-              nextStep()
-              onStepComplete?.(currentStep?.actionId || '')
-            }}
-            disabled={clampedStep >= maxStep - 1}
-            className='rounded-lg border px-3 py-1 disabled:opacity-50'
-            title='Next (→)'
-          >
-            Next
-          </button>
-        </div>
+        <StepController
+          stepIndex={stepIndex}
+          maxStep={maxStep}
+          onPrev={() => {
+            setStepIndex((s) => Math.max(s - 1, 0))
+            previousStep()
+          }}
+          onNext={() => {
+            setStepIndex((s) => Math.min(s + 1, maxStep - 1))
+            nextStep()
+            onStepComplete?.(currentStep?.actionId || '')
+          }}
+        />
       )}
 
-      {/* Transform Controls Instructions */}
+      {/* Transform Instruction */}
       {showUI && currentStep?.actionId === 'action_adjust_additional_connector_arms' && (
-        <div className='absolute top-4 right-4 z-10 w-80 rounded-xl border bg-blue-50/95 p-3 shadow'>
-          <div className='mb-2 font-semibold text-blue-800'>Third Square Transform Controls</div>
-
-          {/* Transform Mode Selection */}
-          <div className='mb-3 flex gap-2'>
-            <button
-              onClick={() => setTransformMode('translate')}
-              className={`flex-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
-                transformMode === 'translate' ? 'bg-blue-500 text-white' : 'bg-white text-blue-700 hover:bg-blue-100'
-              }`}
-            >
-              Translate
-            </button>
-            <button
-              onClick={() => setTransformMode('rotate')}
-              className={`flex-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
-                transformMode === 'rotate' ? 'bg-purple-500 text-white' : 'bg-white text-purple-700 hover:bg-purple-100'
-              }`}
-            >
-              Rotate
-            </button>
-          </div>
-
-          <div className='space-y-2 text-sm text-blue-700'>
-            <div className='flex items-center gap-2'>
-              <div className={`h-3 w-3 rounded-full ${isShiftPressed ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-              <span className={isShiftPressed ? 'font-medium' : ''}>
-                Hold <kbd className='rounded bg-white px-1 font-mono text-xs'>Shift</kbd> to enable {transformMode}
-              </span>
-            </div>
-            <div className='flex items-center gap-2'>
-              <div className={`h-3 w-3 rounded-full ${isTransforming ? 'bg-yellow-500' : 'bg-gray-400'}`}></div>
-              <span className={isTransforming ? 'font-medium' : ''}>
-                {isTransforming
-                  ? `Currently ${transformMode}ing Third Square`
-                  : `Third Square ready to ${transformMode}`}
-              </span>
-            </div>
-            <div className='mt-2 text-xs text-blue-600'>
-              • Mode: <span className='font-medium'>{transformMode === 'translate' ? 'Position' : 'Rotation'}</span>
-              <br />• Workspace rotation is {isTransforming ? 'disabled' : 'enabled'}
-              <br />•{' '}
-              {transformMode === 'translate'
-                ? 'Green sphere indicates draggable position'
-                : 'Purple cube can be rotated on X/Y/Z axes'}
-              <br />• Shortcuts: <kbd className='rounded bg-white px-1 font-mono text-[10px]'>T</kbd> translate,{' '}
-              <kbd className='rounded bg-white px-1 font-mono text-[10px]'>R</kbd> rotate
-            </div>
-          </div>
-        </div>
+        <TransformInstructionPanel
+          isShiftPressed={isShiftPressed}
+          isTransforming={isTransforming}
+          transformMode={transformMode}
+          onModeChange={setTransformMode}
+        />
       )}
 
-      {/* Realtime Control Panel for Component Assembly */}
-      {showUI &&
-        (() => {
-          const action = assembly?.actions?.find((a: any) => a.id === currentStep?.actionId)
-          return action?.type === 'component_assembly' && action?.showRealtimeControls === true
-        })() && (
-          <div className='absolute bottom-4 left-4 z-10 w-[360px] rounded-xl border bg-white/95 p-3 shadow'>
-            {(() => {
-              const action = assembly?.actions?.find((a: any) => a.id === currentStep?.actionId)
-              const componentTransforms = action?.componentTransforms || {}
-              const firstComponentId = Object.keys(componentTransforms)[0]
-              const firstTransform = componentTransforms[firstComponentId]?.matrix
-
-              if (!firstComponentId || !firstTransform) return null
-
-              return (
-                <>
-                  <div className='mb-2 font-semibold text-gray-700'>
-                    Realtime Controls — {action?.name || 'Component Assembly'}
-                  </div>
-                  <div className='mb-1 text-xs text-gray-500'>
-                    Component Assembly: TransformAsUnit = true - All elements move together
-                  </div>
-                  <div className='grid grid-cols-3 gap-2 text-xs'>
-                    <div className='col-span-3 font-medium text-gray-600'>Rotation (rad)</div>
-                    {(['x', 'y', 'z'] as const).map((axis) => (
-                      <div key={`rot-${axis}`} className='flex flex-col gap-1'>
-                        <label className='text-[11px] text-gray-500'>R{axis.toUpperCase()}</label>
-                        <input
-                          type='number'
-                          step='0.01745'
-                          className='w-full rounded border px-2 py-1'
-                          value={
-                            runtimeComponentOverrides[firstComponentId]?.rotation?.[axis] ??
-                            (firstTransform.rotation?.[axis] || 0)
-                          }
-                          onChange={(e) => {
-                            const v = parseFloat(e.target.value || '0')
-                            setRuntimeComponentOverrides((prev) => ({
-                              ...prev,
-                              [firstComponentId]: {
-                                rotation: {
-                                  x:
-                                    axis === 'x'
-                                      ? isNaN(v)
-                                        ? firstTransform.rotation?.x || 0
-                                        : v
-                                      : (prev[firstComponentId]?.rotation?.x ?? (firstTransform.rotation?.x || 0)),
-                                  y:
-                                    axis === 'y'
-                                      ? isNaN(v)
-                                        ? firstTransform.rotation?.y || 0
-                                        : v
-                                      : (prev[firstComponentId]?.rotation?.y ?? (firstTransform.rotation?.y || 0)),
-                                  z:
-                                    axis === 'z'
-                                      ? isNaN(v)
-                                        ? firstTransform.rotation?.z || 0
-                                        : v
-                                      : (prev[firstComponentId]?.rotation?.z ?? (firstTransform.rotation?.z || 0))
-                                },
-                                translation: prev[firstComponentId]?.translation ?? firstTransform.position
-                              }
-                            }))
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className='col-span-3 mt-2 font-medium text-gray-600'>Translation</div>
-                  {(['x', 'y', 'z'] as const).map((axis) => (
-                    <div key={`trs-${axis}`} className='flex flex-col gap-1'>
-                      <label className='text-[11px] text-gray-500'>T{axis.toUpperCase()}</label>
-                      <input
-                        type='number'
-                        step='0.5'
-                        className='w-full rounded border px-2 py-1'
-                        value={
-                          runtimeComponentOverrides[firstComponentId]?.translation?.[axis] ??
-                          (firstTransform.position?.[axis] || 0)
-                        }
-                        onChange={(e) => {
-                          const v = parseFloat(e.target.value || '0')
-                          setRuntimeComponentOverrides((prev) => ({
-                            ...prev,
-                            [firstComponentId]: {
-                              rotation: prev[firstComponentId]?.rotation ?? firstTransform.rotation,
-                              translation: {
-                                x: prev[firstComponentId]?.translation?.x ?? (firstTransform.position?.x || 0),
-                                y: prev[firstComponentId]?.translation?.y ?? (firstTransform.position?.y || 0),
-                                z: prev[firstComponentId]?.translation?.z ?? (firstTransform.position?.z || 0),
-                                [axis]: isNaN(v) ? firstTransform.position?.[axis] || 0 : v
-                              }
-                            }
-                          }))
-                        }}
-                      />
-                    </div>
-                  ))}
-
-                  {/* Show current transform mode info */}
-                  <div className='col-span-3 mt-3 flex items-center gap-2 rounded bg-gray-50 p-2'>
-                    <div
-                      className={`h-2 w-2 rounded-full ${transformMode === 'translate' ? 'bg-blue-500' : 'bg-purple-500'}`}
-                    ></div>
-                    <span className='text-xs text-gray-600'>
-                      Active Mode:{' '}
-                      <span className='font-medium'>
-                        {transformMode === 'translate' ? '📍 Translation' : ' Rotation'}
-                      </span>
-                    </span>
-                  </div>
-                  <div className='mt-3 flex gap-2'>
-                    <button
-                      className='rounded border px-2 py-1 text-xs'
-                      onClick={() =>
-                        setRuntimeComponentOverrides((prev) => ({
-                          ...prev,
-                          [firstComponentId]: {
-                            rotation: firstTransform.rotation || { x: 0, y: 0, z: 0 },
-                            translation: firstTransform.position || { x: 0, y: 0, z: 0 }
-                          }
-                        }))
-                      }
-                    >
-                      Reset
-                    </button>
-                    <button
-                      className='rounded border px-2 py-1 text-xs'
-                      onClick={() => setRuntimeComponentOverrides({})}
-                    >
-                      Clear
-                    </button>
-                  </div>
-                </>
-              )
-            })()}
-          </div>
-        )}
+      {/* Realtime Control */}
+      {showUI && (
+        <RealtimeControlPanel
+          currentStep={currentStep}
+          assembly={assembly}
+          runtimeComponentOverrides={runtimeComponentOverrides}
+          setRuntimeComponentOverrides={setRuntimeComponentOverrides}
+          transformMode={transformMode}
+        />
+      )}
 
       {/* Canvas */}
-      <Canvas
-        camera={{
-          position: [
-            assembly.scene.environment.camera.position.x,
-            assembly.scene.environment.camera.position.y,
-            assembly.scene.environment.camera.position.z
-          ],
-          fov: assembly.scene.environment.camera.fov
-        }}
-      >
-        {/* Drag control for square_third at step 4 (combined squares step) */}
+      <Canvas camera={{ position: [30, 20, 30], fov: 60 }}>
         {currentStep?.actionId === 'action_adjust_additional_connector_arms' &&
           (() => {
             const comp = assembly.components?.squares?.find((c: any) => c.id === 'square_third')
@@ -1203,6 +787,7 @@ export default function Workspace3D({
               </>
             )
           })()}
+
         <primitive object={new AxesHelper(10)} />
         <color attach='background' args={[assembly.scene.environment.background]} />
         <ambientLight color={assembly.scene.environment.lighting.ambient} intensity={0.5} />
@@ -1218,15 +803,7 @@ export default function Workspace3D({
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
         />
-        <OrbitControls
-          ref={orbitControlsRef}
-          target={[
-            assembly.scene.environment.camera.target.x,
-            assembly.scene.environment.camera.target.y,
-            assembly.scene.environment.camera.target.z
-          ]}
-          enabled={!isTransforming}
-        />
+        <OrbitControls ref={orbitControlsRef} enabled={!isTransforming} />
         {sceneData.workspace.grid.visible && (
           <Grid
             args={[sceneData.workspace.grid.size, sceneData.workspace.grid.size, sceneData.workspace.grid.divisions]}
