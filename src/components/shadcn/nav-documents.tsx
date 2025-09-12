@@ -50,7 +50,10 @@ export function NavDocuments({
                   href={item.url}
                   className={cn(
                     'flex items-center gap-2 rounded-md px-2 py-1.5 text-xs transition-colors',
-                    isActive && 'bg-primary text-primary-foreground'
+                    !isActive && 'hover:bg-blue-100 hover:text-blue-600',
+                    isActive && 'bg-blue-100 text-blue-600',
+                    isActive && 'hover:bg-blue-200 hover:text-blue-700',
+                    !isActive && 'text-black'
                   )}
                 >
                   <item.icon size={20} />
