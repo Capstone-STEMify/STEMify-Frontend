@@ -39,6 +39,7 @@ export type ModalType =
   // orther
   | 'pacingGuide'
   | 'curriculumSelectCourseListModal'
+  | 'kitListTableModal'
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void

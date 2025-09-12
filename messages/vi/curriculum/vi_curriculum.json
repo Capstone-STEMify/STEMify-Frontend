@@ -52,6 +52,9 @@
       "selectCourseTitle": "Chọn Khóa Học",
       "selectedCourses": "Khóa học đã chọn",
       "searchCoursePlaceholder": "Tìm kiếm khóa học theo mã hoặc tiêu đề...",
+      "selectKitTitle": "Chọn Bộ Dụng Cụ Học Tập",
+      "selectedKits": "Kit đã chọn",
+      "searchKitPlaceholder": "Tìm kiếm bộ dụng cụ ở đây...",
       "reviewMessage": "Khung chương trình đang đợi quản trị viên phê duyệt."
     }
   }
