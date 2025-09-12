@@ -46,7 +46,8 @@
       "exploreActivities": "Explore Activities",
       "exploreCurriculums": "Explore Curriculums",
       "readBlogs": "Read Blogs",
-      "addKit": "Add Kit"
+      "addKit": "Add Kit",
+      "print": "Print"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -56,7 +57,8 @@
       "curriculumDeleteSuccess": "Curriculum deleted successfully!",
       "curriculumCreateError": "An error occurred while creating the curriculum. Please try again.",
       "curriculumUpdateError": "An error occurred while updating the curriculum. Please try again.",
-      "curriculumDeleteError": "An error occurred while deleting the curriculum. Please try again."
+      "curriculumDeleteError": "An error occurred while deleting the curriculum. Please try again.",
+      "printPreview": "PRINT PREVIEW"
     },
     "tableHeader": {
       "id": "ID",

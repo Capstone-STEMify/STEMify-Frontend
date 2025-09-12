@@ -1,16 +1,17 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { type Icon } from "@tabler/icons-react"
+import * as React from 'react'
+import { type Icon } from '@tabler/icons-react'
 
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
-} from "components/shadcn/sidebar"
-import { useTranslations } from "next-intl"
+  SidebarMenuItem
+} from 'components/shadcn/sidebar'
+import { useTranslations } from 'next-intl'
+import Link from 'next/link'
 
 export function NavSecondary({
   items,
@@ -30,10 +31,10 @@ export function NavSecondary({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild>
-                <a href={item.url}>
+                <Link href={item.url}>
                   <item.icon />
                   <span>{t(item.title)}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

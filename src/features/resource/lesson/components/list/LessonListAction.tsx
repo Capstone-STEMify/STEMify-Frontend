@@ -56,10 +56,12 @@ export default function LessonListAction() {
   const skillOptions = getOptions(skills?.data.items, 'skillName')
   const ageRangeOptions = getOptions(ageRanges?.data.items, 'ageRangeLabel')
   const standardOptions = getOptions(standards?.data.items, 'standardName')
-  const statusOptions = Object.entries(LessonStatus).map(([key, value]) => ({
-    label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-    value
-  }))
+  const statusOptions = Object.entries(LessonStatus)
+    .filter(([key]) => key.toLowerCase() !== 'deleted')
+    .map(([key, value]) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      value
+    }))
 
   const renderFilterTag = (
     key: keyof typeof filters,
