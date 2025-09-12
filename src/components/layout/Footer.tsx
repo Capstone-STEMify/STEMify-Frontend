@@ -1,148 +1,135 @@
-import React from 'react';
-import { Facebook, Instagram } from 'lucide-react';
-import Image from 'next/image';
+import React from 'react'
+import { Facebook, Instagram } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
 
 const Footer = () => {
   return (
-    <footer className="relative text-white overflow-hidden min-h-[400px] bg-sky-400 md:bg-cover md:bg-center md:bg-no-repeat md:bg-[url('/images/footer.png')]">
-
-      <div className="absolute top-4 left-8 z-10 hidden md:block">
-        <Image 
-          width={64}
-          height={80}
-          src="/images/balloon.png" 
-          alt="Hot Air Balloon" 
-          className="object-contain"
-        />
+    <footer className="relative min-h-[400px] overflow-hidden bg-sky-400 text-white md:bg-[url('/images/footer.png')] md:bg-cover md:bg-center md:bg-no-repeat">
+      <div className='absolute top-4 left-8 z-10 hidden md:block'>
+        <Image width={64} height={80} src='/images/balloon.png' alt='Hot Air Balloon' className='object-contain' />
       </div>
 
-      <div className="absolute top-8 right-80 z-10 hidden md:block">
-        <Image 
-          width={120}
-          height={120}
-          src="/images/dino.png" 
-          alt="Dinosaur" 
-          className="w-30 h-30 object-contain"
-        />
+      <div className='absolute top-8 right-80 z-10 hidden md:block'>
+        <Image width={120} height={120} src='/images/dino.png' alt='Dinosaur' className='h-30 w-30 object-contain' />
       </div>
 
-      <div className="relative pt-16 md:pt-36 pb-8 px-4 sm:px-6 lg:px-8 z-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold mb-4">Information For Parents</h3>
-              <p className="text-sm leading-relaxed opacity-90">
-                We provide nurturing environment with developmentally appropriate 
-                activities and opportunities
+      <div className='relative z-20 px-4 pt-16 pb-8 sm:px-6 md:pt-36 lg:px-8'>
+        <div className='mx-auto max-w-7xl'>
+          <div className='mb-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4'>
+            <div className='space-y-4'>
+              <h3 className='mb-4 text-lg font-semibold'>Information For Parents</h3>
+              <p className='text-sm leading-relaxed opacity-90'>
+                We provide nurturing environment with developmentally appropriate activities and opportunities
               </p>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold mb-4">Info</h3>
-              <ul className="space-y-2 text-sm">
+            <div className='space-y-3'>
+              <h3 className='mb-4 text-lg font-semibold'>Info</h3>
+              <ul className='space-y-2 text-sm'>
                 <li>
-                  <a href="#" className="hover:text-blue-100 transition-colors">
+                  <Link href='#' className='transition-colors hover:text-blue-100'>
                     Home page
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-100 transition-colors">
+                  <Link href='#' className='transition-colors hover:text-blue-100'>
                     About us
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-100 transition-colors">
+                  <Link href='#' className='transition-colors hover:text-blue-100'>
                     Our news
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold mb-4">Education</h3>
-              <ul className="space-y-2 text-sm">
+            <div className='space-y-3'>
+              <h3 className='mb-4 text-lg font-semibold'>Education</h3>
+              <ul className='space-y-2 text-sm'>
                 <li>
-                  <a href="#" className="hover:text-blue-100 transition-colors">
+                  <Link href='#' className='transition-colors hover:text-blue-100'>
                     Our Programs
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-100 transition-colors">
+                  <Link href='#' className='transition-colors hover:text-blue-100'>
                     Our team
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-100 transition-colors">
+                  <Link href='#' className='transition-colors hover:text-blue-100'>
                     Full day programs
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold mb-4">Help</h3>
-              <ul className="space-y-2 text-sm">
+            <div className='space-y-3'>
+              <h3 className='mb-4 text-lg font-semibold'>Help</h3>
+              <ul className='space-y-2 text-sm'>
                 <li>
-                  <a href="#" className="hover:text-blue-100 transition-colors">
+                  <Link href='#' className='transition-colors hover:text-blue-100'>
                     Knowledge base
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-100 transition-colors">
+                  <Link href='#' className='transition-colors hover:text-blue-100'>
                     Video tutorials
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-100 transition-colors">
+                  <Link href='#' className='transition-colors hover:text-blue-100'>
                     Contact us
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center pt-8 border-t border-white border-opacity-20">
-            <div className="text-sm opacity-90 mb-4 sm:mb-0">
+          <div className='border-opacity-20 flex flex-col items-center justify-between border-t border-white pt-8 sm:flex-row'>
+            <div className='mb-4 text-sm opacity-90 sm:mb-0'>
               <span>© 2025 STEMH. </span>
-              <a href="#" className="hover:text-blue-100 transition-colors">
+              <Link href='#' className='transition-colors hover:text-blue-100'>
                 Website Development
-              </a>
-              <span className="mx-2">-</span>
-              <a href="#" className="text-yellow-300 hover:text-yellow-200 transition-colors">
+              </Link>
+              <span className='mx-2'>-</span>
+              <Link href='#' className='text-yellow-300 transition-colors hover:text-yellow-200'>
                 Designed
-              </a>
+              </Link>
             </div>
 
-            <div className="flex space-x-3">
-              <a 
-                href="#" 
-                className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-all duration-200"
-                aria-label="Facebook"
+            <div className='flex space-x-3'>
+              <Link
+                href='#'
+                className='flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 transition-all duration-200 hover:bg-blue-700'
+                aria-label='Facebook'
               >
-                <Facebook size={20} className="text-white" />
-              </a>
-              <a 
-                href="#" 
-                className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center hover:bg-pink-600 transition-all duration-200"
-                aria-label="Instagram"
+                <Facebook size={20} className='text-white' />
+              </Link>
+              <Link
+                href='#'
+                className='flex h-10 w-10 items-center justify-center rounded-full bg-pink-500 transition-all duration-200 hover:bg-pink-600'
+                aria-label='Instagram'
               >
-                <Instagram size={20} className="text-white" />
-              </a>
-              <a 
-                href="#" 
-                className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200"
-                aria-label="X (Twitter)"
+                <Instagram size={20} className='text-white' />
+              </Link>
+              <Link
+                href='#'
+                className='flex h-10 w-10 items-center justify-center rounded-full bg-black transition-all duration-200 hover:bg-gray-800'
+                aria-label='X (Twitter)'
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-white">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                <svg width='16' height='16' viewBox='0 0 24 24' fill='currentColor' className='text-white'>
+                  <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
                 </svg>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
