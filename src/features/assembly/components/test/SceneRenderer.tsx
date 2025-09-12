@@ -94,9 +94,9 @@ export function SceneRenderer({
 
     return map
   }, [assembly, currentActivity, clampedStep])
+
   const getElementComponent = useCallback(
     (elementId: string): string | null => {
-      getTransformOverrides
       if (!assembly?.components?.squares) return null
 
       for (const component of assembly.components.squares) {
