@@ -185,7 +185,7 @@ export default function CarouselShowcase() {
                     )}
                   </div>
 
-                  <div className='mt-4 text-center'>
+                  <div className='mt-12 text-center'>
                     <h3 className='text-xl font-semibold text-zinc-900'>{item.title}</h3>
                     <div className='mt-2 flex items-center justify-center gap-2'>
                       <RatingStars value={item.rating ?? 0} />
