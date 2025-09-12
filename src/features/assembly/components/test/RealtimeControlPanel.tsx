@@ -32,7 +32,7 @@ export function RealtimeControlPanel({
   if (!firstComponentId || !firstTransform) return null
 
   return (
-    <div className='absolute bottom-4 left-4 z-10 w-[360px] rounded-xl border bg-white/95 p-3 shadow'>
+    <div className='absolute right-4 bottom-4 z-10 w-[360px] rounded-xl border bg-white/95 p-3 shadow'>
       <div className='mb-2 font-semibold text-gray-700'>Realtime Controls — {action?.name || 'Component Assembly'}</div>
       <div className='mb-1 text-xs text-gray-500'>
         Component Assembly: TransformAsUnit = true - All elements move together

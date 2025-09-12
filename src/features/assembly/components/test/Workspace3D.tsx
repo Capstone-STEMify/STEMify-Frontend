@@ -187,7 +187,7 @@ export default function Workspace3D({
   if (!assembly) return <div>No assembly loaded</div>
 
   return (
-    <div className='relative h-screen w-full'>
+    <div className='relative h-[600px] w-full'>
       {/* Step Info */}
       {showUI && currentStep && (
         <StepInfoPanel
@@ -219,9 +219,9 @@ export default function Workspace3D({
       {/* Transform Instruction */}
       {showUI && currentStep?.actionId === 'action_adjust_additional_connector_arms' && (
         <TransformInstructionPanel
+          transformMode={transformMode}
           isShiftPressed={isShiftPressed}
           isTransforming={isTransforming}
-          transformMode={transformMode}
           onModeChange={setTransformMode}
         />
       )}
@@ -229,11 +229,11 @@ export default function Workspace3D({
       {/* Realtime Control */}
       {showUI && (
         <RealtimeControlPanel
-          currentStep={currentStep}
           assembly={assembly}
+          currentStep={currentStep}
+          transformMode={transformMode}
           runtimeComponentOverrides={runtimeComponentOverrides}
           setRuntimeComponentOverrides={setRuntimeComponentOverrides}
-          transformMode={transformMode}
         />
       )}
 
@@ -252,7 +252,7 @@ export default function Workspace3D({
         runtimeComponentOverrides={runtimeComponentOverrides}
         setIsTransforming={setIsTransforming}
         getComponentElements={getComponentElements}
-        />
+      />
     </div>
   )
 }
