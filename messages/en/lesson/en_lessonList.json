@@ -1,0 +1,27 @@
+{
+  "LessonList": {
+    "lesson": "Lesson",
+    "title": "Lesson List",
+    "description": "Curriculum-aligned, thematic guides with following educational pedagogical approach. Lessons have teacher and student perspectives.",
+    "filterTitle": "Filter Lessons",
+    "noLesson": "No Lessons Found.",
+    "noLessonFound": "Try changing the search term or filters to find relevant lessons.",
+    "filterBy": "Search",
+    "placeHolder": {
+      "search": "Search lessons...",
+      "category": "Category (Select one option)",
+      "skill": "Skill (Select one option)",
+      "ageRange": "Age Range (Select one option)",
+      "standard": "Standard (Select one option)",
+      "status": "Status (Select one option)"
+    },
+    "tags": {
+      "search": "Search",
+      "category": "Category",
+      "skill": "Skill",
+      "ageRange": "Age Range",
+      "standard": "Standard",
+      "status": "Status"
+    }
+  }
+}

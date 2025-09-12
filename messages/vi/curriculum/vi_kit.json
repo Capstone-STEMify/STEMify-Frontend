@@ -1,0 +1,33 @@
+{
+  "kits": {
+    "list": {
+      "title": "Danh sách bộ kit",
+      "description": "Quản lý và tổ chức các bộ kit cho nền tảng giáo dục của bạn.",
+      "noData": "Không có bộ kit nào.",
+      "searchPlaceholder": "Tìm kiếm bộ kit ở đây..."
+    },
+    "detail": {
+      "title": "Chi tiết bộ kit",
+      "description": "Xem và chỉnh sửa chi tiết của bộ kit đã chọn."
+    },
+    "form": {
+      "title": {
+        "create": "Tạo bộ kit mới",
+        "edit": "Chỉnh sửa bộ kit"
+      },
+      "fields": {
+        "name": {
+          "label": "Tên",
+          "placeholder": "Nhập tên bộ kit"
+        },
+        "description": {
+          "label": "Mô tả",
+          "placeholder": "Nhập mô tả bộ kit"
+        },
+        "imageUrl": {
+          "label": "Hình ảnh"
+        }
+      }
+    }
+  }
+}

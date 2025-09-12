@@ -2,21 +2,21 @@
 
 import * as React from 'react'
 import {
+  IconBook,
+  IconBox,
   IconCamera,
+  IconChalkboard,
   IconChartBar,
-  IconDashboard,
   IconDatabase,
   IconFileAi,
   IconFileDescription,
   IconFileWord,
-  IconFolder,
   IconHelp,
   IconInnerShadowTop,
   IconListDetails,
   IconReport,
   IconSearch,
-  IconSettings,
-  IconUsers
+  IconSettings
 } from '@tabler/icons-react'
 
 import { NavDocuments } from 'components/shadcn/nav-documents'
@@ -35,9 +35,13 @@ import {
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 
-import { signOut, useSession } from 'next-auth/react'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useSession } from 'next-auth/react'
 import LoadingComponent from '../shared/loading/LoadingComponent'
+import { usePathname } from 'next/navigation'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { stat } from 'fs'
+import { useSelector } from 'react-redux'
+import { UserRole } from '@/types/userRole'
 
 const data = {
   user: {
@@ -46,25 +50,25 @@ const data = {
     avatar: '/avatars/shadcn.jpg'
   },
   navMain: [
-    // {
-    //   title: 'Dashboard',
-    //   url: 'dashboard',
-    //   icon: IconDashboard
-    // },
+    {
+      title: 'side_bar.curriculum',
+      url: '/admin/curriculum',
+      icon: IconListDetails
+    },
     {
       title: 'side_bar.course',
       url: '/admin/course',
-      icon: IconListDetails
+      icon: IconBook
     },
     {
       title: 'side_bar.lesson',
       url: '/admin/lesson',
-      icon: IconChartBar
+      icon: IconChalkboard
     },
     {
-      title: 'side_bar.user',
-      url: '/admin/user',
-      icon: IconUsers
+      title: 'side_bar.kit',
+      url: '/admin/kit',
+      icon: IconBox
     }
   ],
   navClouds: [
@@ -158,15 +162,20 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const locale = useLocale()
+  const pathname = usePathname()
+
+  const userRole = useAppSelector((state) => state?.auth?.user?.role)
 
   const navMainWithLocale = data.navMain.map((item) => ({
     ...item,
-    url: `/${locale}${item.url}`
+    url: `/${locale}${item.url}`,
+    isActive: pathname === `/${locale}${item.url}`
   }))
 
   const documentsWithLocale = data.documents.map((item) => ({
     ...item,
-    url: `/${locale}${item.url}`
+    url: `/${locale}${item.url}`,
+    isActive: pathname === `/${locale}${item.url}`
   }))
   const { data: session, status } = useSession()
 
@@ -182,7 +191,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
                 <Link href='#'>
                   <IconInnerShadowTop className='!size-5' />
-                  <span className='text-base font-semibold'>STEMify</span>
+                  <span className='text-base font-semibold'>Stemify</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -210,7 +219,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
               <Link href='#'>
                 <IconInnerShadowTop className='!size-5' />
-                <span className='text-base font-semibold'>STEMify</span>
+                <span className='text-base font-semibold'>Stemify</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -218,8 +227,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMainWithLocale} />
-        <NavDocuments items={documentsWithLocale} />
-        <NavSecondary items={data.navSecondary} className='mt-auto' />
+        {userRole && userRole === UserRole.ADMIN && <NavDocuments items={documentsWithLocale} />}
+        {/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={session?.user} />

@@ -1,0 +1,26 @@
+{
+  "Resource": {
+    "title": "Thư viện",
+    "description": "Các khóa học được tuyển chọn kỹ lưỡng, bài học phù hợp với chương trình giảng dạy, hoạt động hấp dẫn và tài liệu hỗ trợ do các giáo viên chuyên gia biên soạn.",
+    "courses": {
+      "title": "Khóa học",
+      "description": "Các khóa học toàn diện được thiết kế để nâng cao việc học STEM và thúc đẩy sự phát triển sự nghiệp của bạn."
+    },
+    "lessons": {
+      "title": "Bài học",
+      "description": "Những bài học hấp dẫn, phù hợp với chương trình giảng dạy, giúp phát triển tư duy phản biện, kỹ năng giải quyết vấn đề."
+    },
+    "activities": {
+      "title": "Hoạt động",
+      "description": "Các hoạt động tương tác được thiết kế để giúp việc học trở nên thú vị và hấp dẫn, tăng cường sự tham gia và hiểu biết của học sinh."
+    },
+    "curriculum": {
+      "title": "Khung chương trình",
+      "description": "Khung chương trình được thiết kế bám sát dành cho học sinh từ lớp 3–8, tập trung vào sáng tạo và học tập qua thực hành."
+    },
+    "news": {
+      "title": "Tin tức và Blog",
+      "description": "Cập nhật những tin tức, xu hướng và góc nhìn mới nhất trong giáo dục STEM thông qua các bài viết và blog của chúng tôi."
+    }
+  }
+}

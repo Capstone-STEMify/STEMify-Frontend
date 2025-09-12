@@ -15,6 +15,7 @@ export default function ProfileDetails() {
   const { data: session, status } = useSession()
 
   const t = useTranslations('profile')
+  const tc = useTranslations('common')
 
   const { data: userData } = useGetUserByIdQuery(session?.user.userId as string, {
     skip: !session?.user?.userId
@@ -64,7 +65,7 @@ export default function ProfileDetails() {
           />
           <button className='absolute top-4 right-4 flex items-center space-x-2 rounded-lg bg-white/90 px-3 py-2 text-sm font-medium text-gray-700 backdrop-blur-sm transition-colors hover:bg-white'>
             <Edit onClick={() => openModal('image')} className='h-4 w-4' />
-            <span className='hidden sm:inline'>{t('button.edit')}</span>
+            <span className='hidden sm:inline'>{tc('button.editCoverPhoto')}</span>
           </button>
         </div>
 
@@ -183,13 +184,13 @@ export default function ProfileDetails() {
               className='bg-sky-custom-600 flex w-full items-center justify-center space-x-2 rounded-lg p-4 text-white transition-colors sm:w-auto'
             >
               <Save className='h-4 w-4' />
-              <span>{t('button.save')}</span>
+              <span>{tc('button.saveChanges')}</span>
             </Button>
             <Button
               onClick={handleSave}
               className='text-sky-custom-600 flex w-full items-center justify-center space-x-2 rounded-lg bg-gray-200 p-4 transition-colors sm:w-auto'
             >
-              <span>{t('button.cancel')}</span>
+              <span>{tc('button.cancel')}</span>
             </Button>
           </div>
         </div>

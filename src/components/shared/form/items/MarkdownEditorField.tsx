@@ -1,18 +1,17 @@
 import { useFieldContext } from '@/components/shared/form/items'
 import { FieldErrors } from '@/components/shared/form/items/field-errors'
-import MarkdownEditor from '@/components/shared/MarkdownEditor'
-import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic'
+const TiptapEditor = dynamic(() => import('@/components/tiptap/TiptapEditor'), { ssr: false })
+type MarkdownEditorFieldProps = {
+  onSave: () => void
+}
 
-export const MarkdownEditorField = () => {
-  const t = useTranslations('sectionManagement')
+export const MarkdownEditorField = ({ onSave }: MarkdownEditorFieldProps) => {
   const field = useFieldContext<string>()
 
   return (
     <div className='space-y-1'>
-      <label htmlFor={field.name} className='block text-sm font-medium text-gray-700'>
-        {t('section.contentName')}
-      </label>
-      <MarkdownEditor value={field.state.value} onChange={(val) => field.handleChange(val || '')} />
+      <TiptapEditor content={field.state.value} onChange={(val) => field.handleChange(val || '')} onSave={onSave} />
       <FieldErrors meta={field.state.meta} />
     </div>
   )

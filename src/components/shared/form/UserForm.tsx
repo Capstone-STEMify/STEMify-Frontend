@@ -1,51 +1,86 @@
 'use client'
 
 import { useAppForm } from '@/components/shared/form/items'
+import { useTranslations } from 'next-intl'
 import { z } from 'zod'
+import { parseWithZod } from '@conform-to/zod/v4'
 
-const ContactMethod = z.union([z.literal('email'), z.literal('phone'), z.literal('whatsapp'), z.literal('sms')])
-type ContactMethod = z.infer<typeof ContactMethod>
-
-const ContactMethods = ContactMethod.options.map(({ value }) => ({
-  value,
-  label: value.charAt(0).toUpperCase() + value.slice(1)
-}))
-
-const UserSchema = z.object({
-  name: z
-    .string()
-    .regex(/^[A-Z]/, 'Name must start with a capital letter')
-    .min(3, 'Name must be at least 3 characters long'),
-  surname: z
-    .string()
-    .min(3, 'Surname must be at least 3 characters long')
-    .regex(/^[A-Z]/, 'Surname must start with a capital letter'),
-  isAcceptingTerms: z.boolean().refine((val) => val, {
-    message: 'You must accept the terms and conditions'
-  }),
-  contact: z.object({
-    email: z.string().email('Invalid email address'),
-    phone: z.string().optional(),
-    preferredContactMethod: ContactMethod
-  })
-})
-type User = z.infer<typeof UserSchema>
-
-const defaultUser = {
-  name: '',
-  surname: '',
-  isAcceptingTerms: false,
-  contact: {
-    email: '',
-    phone: '',
-    preferredContactMethod: 'email'
-  }
-} as User
 export default function UserForm() {
+  const tv = useTranslations('validation')
+  const tm = useTranslations('message')
+  const tc = useTranslations('common')
+
+  const contactMethods = ['email', 'phone', 'whatsapp', 'sms'] as const
+  type ContactMethod = (typeof contactMethods)[number]
+
+  const ContactMethods: { value: string; label: string }[] = contactMethods.map((value) => ({
+    value,
+    label: value.charAt(0).toUpperCase() + value.slice(1)
+  }))
+
+  // Zod schema
+  const UserSchema = z.object({
+    name: z
+      .string()
+      .regex(/^[A-Z]/, tv('user.name'))
+      .min(3, tv('user.nameLength', { length: 3 })),
+    surname: z
+      .string()
+      .min(3, tv('user.surnameLength', { length: 3 }))
+      .regex(/^[A-Z]/, tv('user.surname')),
+    isAcceptingTerms: z.boolean().refine((val) => val, {
+      message: tm('user')
+    }),
+    contact: z.object({
+      email: z.string().email(tv('user.email')),
+      phone: z.string().default(''),
+      preferredContactMethod: z.enum(contactMethods)
+    })
+  })
+
+  type User = z.infer<typeof UserSchema>
+
+  const defaultUser: User = {
+    name: '',
+    surname: '',
+    isAcceptingTerms: false,
+    contact: {
+      email: '',
+      phone: '',
+      preferredContactMethod: 'email'
+    }
+  }
+
+  function objectToFormData(obj: any, prefix = ''): FormData {
+    const fd = new FormData()
+    const append = (key: string, value: any) => {
+      fd.append(key, value == null ? '' : String(value))
+    }
+
+    const walk = (o: any, pfx: string) => {
+      if (typeof o !== 'object' || o === null) {
+        append(pfx, o)
+        return
+      }
+      for (const k of Object.keys(o)) {
+        const v = o[k]
+        const key = pfx ? `${pfx}.${k}` : k
+        if (typeof v === 'object' && v !== null) {
+          walk(v, key)
+        } else {
+          append(key, v)
+        }
+      }
+    }
+
+    walk(obj, prefix)
+    return fd
+  }
+
   const form = useAppForm({
     defaultValues: defaultUser,
     validators: {
-      onChange: UserSchema
+      onChange: (value) => parseWithZod(objectToFormData(value), { schema: UserSchema })
     },
     onSubmit: ({ value }) => {
       console.log('Form submitted:', value)
@@ -78,8 +113,9 @@ export default function UserForm() {
           />
         </div>
       </div>
+
       <form.AppForm>
-        <form.SubmitButton>Submit</form.SubmitButton>
+        <form.SubmitButton>{tc('button.submit')}</form.SubmitButton>
       </form.AppForm>
     </form>
   )

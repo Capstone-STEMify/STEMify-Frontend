@@ -2,9 +2,9 @@ import { StudentProgress, StudentProgressQuery } from '@/features/student-progre
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
-export const studentProgresssApi = createCrudApi<StudentProgress, StudentProgressQuery>({
+export const studentProgressApi = createCrudApi<StudentProgress, StudentProgressQuery>({
   reducerPath: 'studentProgressApi',
-  tagType: 'StudentProgress',
+  tagTypes: ['StudentProgress'],
   baseUrl: '/student-progress'
 }).injectEndpoints({
   endpoints: (builder) => ({
@@ -58,4 +58,4 @@ export const {
   // new section progress api
   useGetSectionStudentProgressQuery,
   useUpdateSectionStudentProgressMutation
-} = studentProgresssApi
+} = studentProgressApi

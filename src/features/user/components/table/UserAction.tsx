@@ -13,13 +13,15 @@ export function useGetUserAction(): ColumnDef<User>[] {
   const { openModal } = useModal()
   const [deleteUser] = useDeleteUserMutation()
   const t = useTranslations('tableHeader')
+  const tt = useTranslations('toast')
+  const tm = useTranslations('message')
 
   const handleDelete = async (id: string, userName: string) => {
     try {
       await deleteUser(id).unwrap()
-      toast.success(`Successfully deleted user ${userName}.`)
+      toast.success(tt('successMessage.delete', {title: userName}))
     } catch (error) {
-      toast.error('Failed to delete user.')
+      toast.error(tt('errorMessage'))
     }
   }
 
@@ -61,7 +63,7 @@ export function useGetUserAction(): ColumnDef<User>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: `Are you sure you want to disable user "${original.userName}"?`,
+            message: tm('confirmDelMessage', { title: original.userName }),
             onConfirm: () => handleDelete(original.userId, original.userName)
           })
         }

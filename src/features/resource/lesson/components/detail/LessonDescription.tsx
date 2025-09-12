@@ -27,7 +27,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
 
   if (!lessonData || !lessonData.data) {
     return (
-      <div className='flex h-screen items-center justify-center'>
+      <div className='flex items-center justify-center'>
         <p className='text-gray-500'>{t('notFound.title')}</p>
       </div>
     )

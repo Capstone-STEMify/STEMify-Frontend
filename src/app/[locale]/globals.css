@@ -175,4 +175,8 @@ sky-gradient: right, #7dd3fc, #eff6ff
     background-color: #f1f5f9; /* slate-100 */
     margin: 1rem 0;
   }
+
+  .clip-slant {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+  }
 }

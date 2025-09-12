@@ -1,0 +1,16 @@
+{
+  "content": {
+    "list": {},
+    "detail": {
+      "title": "Content",
+      "noData": "No content found.",
+      "noDataDetail": "You haven’t created any content yet."
+    },
+    "form": {
+      "title": {
+        "create": "Create Content",
+        "update": "Update Content"
+      }
+    }
+  }
+}

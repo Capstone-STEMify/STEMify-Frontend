@@ -57,14 +57,14 @@ export default function UserTable() {
           <Plus />
         </Button>
       </div>
-      <DataTable
+      {/* <DataTable
         data={rows}
         columns={columns}
         enableRowSelection
         pagingData={data}
         pagingParams={queryParams}
         handlePageChange={handlePageChange}
-      />
+      /> */}
     </div>
   )
 }

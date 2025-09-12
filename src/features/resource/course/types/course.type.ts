@@ -45,6 +45,7 @@ export enum CourseLevel {
 
 // Query
 export type CourseQueryParams = {
+  curriculumId?: number
   courseId?: number
   createdByUserId?: string
   skillId?: number

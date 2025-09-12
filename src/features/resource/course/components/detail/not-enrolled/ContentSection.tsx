@@ -3,8 +3,7 @@ import { fadeInUp } from '@/utils/motion'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { capitalizeFirst, formatDuration } from '@/utils/index'
-import { Ellipsis, EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
-import { SPagination } from '@/components/shared/SPagination'
+import { EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
 import {
   useDeleteLessonMutation,
   useSearchLessonQuery,
@@ -68,7 +67,10 @@ function SortableLessonCard({
 }
 
 export default function ContentSection() {
-  const t = useTranslations('CourseDetails')
+  const t = useTranslations('course')
+  const tc = useTranslations('common')
+  const tt = useTranslations('toast')
+
   const router = useRouter()
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
@@ -77,12 +79,10 @@ export default function ContentSection() {
 
   const lessonsQuery = useAppSelector((state) => state.lesson)
   useEffect(() => {
-    dispatch(setPageSize(7))
+    dispatch(setPageSize(50))
   }, [dispatch])
 
   const { courseId } = useParams()
-  console.log(courseId)
-  // const courseId = params.courseId
 
   const { data: lessons } = useSearchLessonQuery({
     ...lessonsQuery,
@@ -125,9 +125,9 @@ export default function ContentSection() {
         id: lessonId,
         body: { courseId: Number(courseId), status: LessonStatus.PENDING }
       }).unwrap()
-      toast.success('Lesson submitted for review')
+      toast.success(tt('successMessage.review'))
     } catch (error) {
-      toast.error('Failed to submit lesson for review')
+      toast.error(tt('errorSpecific.review'))
       console.error('Send lesson request error:', error)
     }
   }
@@ -135,9 +135,9 @@ export default function ContentSection() {
   const handleDeleteLesson = async (lessonId: number) => {
     try {
       await deleteLesson(lessonId).unwrap()
-      toast.success('Lesson deleted successfully')
+      toast.success(tt('successMessage.delete'))
     } catch (error) {
-      toast.error('Failed to delete lesson')
+      toast.error(tt('errorMessage'))
       console.error('Delete lesson error:', error)
     }
   }
@@ -159,9 +159,9 @@ export default function ContentSection() {
         id: Number(courseId),
         orderedLessonIds
       }).unwrap()
-      toast.success('Lesson order saved successfully')
+      toast.success(tt('successMessage.saveOrder'))
     } catch (e) {
-      toast.error('Failed to save lesson order')
+      toast.error(tt('errorMessage'))
     }
   }
 
@@ -173,9 +173,9 @@ export default function ContentSection() {
             <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
               <div className='text-center'>
                 <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-                  {t('notEnrolled.notFound.title')}
+                  {t('details.lesson.noData')}
                 </h2>
-                <p className='text-lg text-gray-600'>{t('notEnrolled.notFound.description')}</p>
+                <p className='text-lg text-gray-600'>{t('details.lesson.noDataDescription')}</p>
               </div>
             </div>
           </div>
@@ -183,9 +183,9 @@ export default function ContentSection() {
           <div className='mx-auto mt-24 max-w-7xl px-4 sm:px-6 lg:px-8'>
             <div className='mt-30 mb-12 text-center'>
               <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-                {t('notEnrolled.lesson.title')}
+                {t('details.lesson.title')}
               </h2>
-              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('notEnrolled.lesson.description')}</p>
+              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
             </div>
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
               <div
@@ -193,7 +193,7 @@ export default function ContentSection() {
                 onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
               >
                 <PlusCircle size={70} className='text-gray-500' />
-                <p className='mt-4 text-sm font-medium text-gray-500'>{t('notEnrolled.button.create')}</p>
+                <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.createLesson')}</p>
               </div>
             </div>
           </div>
@@ -214,17 +214,17 @@ export default function ContentSection() {
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='mb-12 text-center'>
           <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-            {t('notEnrolled.lesson.title')}
+            {t('details.lesson.title')}
           </h2>
-          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('notEnrolled.lesson.description')}</p>
+          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
         </div>
         {!isReadOnly && (
           <div className='mb-4 flex justify-end gap-2 px-4 lg:px-8'>
             <Button variant={'ghost'} onClick={() => setItems(lessons?.data?.items || [])}>
-              Cancel
+              {tc('button.cancel')}
             </Button>
             <Button className='bg-amber-custom-400' onClick={handleSaveOrder}>
-              Save Order
+              {tc('button.order')}
             </Button>
           </div>
         )}
@@ -232,16 +232,22 @@ export default function ContentSection() {
         {isReadOnly ? (
           <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
             {items.map((lesson) => (
-              <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
-                <div className='flex min-h-0 flex-1 flex-col'>
-                  <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
-                  <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
-                  <div className='mt-auto flex items-center gap-2'>
-                    <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
-                    <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
+              <Link
+                href={`/resource/lesson/${lesson.id}`}
+                className='flex w-fit flex-col justify-between'
+                key={lesson.id}
+              >
+                <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
+                  <div className='flex min-h-0 flex-1 flex-col'>
+                    <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
+                    <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
+                    <div className='mt-auto flex items-center gap-2'>
+                      <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
+                      <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
+                    </div>
                   </div>
-                </div>
-              </CardLayout>
+                </CardLayout>
+              </Link>
             ))}
           </div>
         ) : (
@@ -257,9 +263,7 @@ export default function ContentSection() {
                     }}
                   >
                     <PlusCircle size={70} className='mt-20 text-gray-500' />
-                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>
-                      {t('notEnrolled.lesson.button.create')}
-                    </p>
+                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>{tc('button.createLesson')}</p>
                   </div>
                   {items.map((lesson) => (
                     <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>
@@ -282,7 +286,7 @@ export default function ContentSection() {
                                     className='text-sm'
                                     onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
                                   >
-                                    {t('notEnrolled.lesson.button.view')}
+                                    {tc('button.view')}
                                   </p>,
                                   <p
                                     onClick={(e) => {
@@ -292,7 +296,7 @@ export default function ContentSection() {
                                     key='update'
                                     className='text-sm'
                                   >
-                                    {t('notEnrolled.lesson.button.update')}
+                                    {tc('button.updateLesson')}
                                   </p>,
                                   lesson.status === LessonStatus.DRAFT ? (
                                     <p
@@ -303,7 +307,7 @@ export default function ContentSection() {
                                       key={`send-request-${lesson.id}`}
                                       className='text-sm'
                                     >
-                                      {t('notEnrolled.lesson.button.send_request')}
+                                      {tc('button.sendRequest')}
                                     </p>
                                   ) : null,
                                   lesson.status === LessonStatus.DRAFT ? (
@@ -313,12 +317,12 @@ export default function ContentSection() {
                                       onClick={(e) => {
                                         e.stopPropagation()
                                         openModal('confirm', {
-                                          message: `${t('notEnrolled.lesson.button.deleteConfirm')}`,
+                                          message: `${tc('confirmMessage.delete', { lessonTitle: lesson.title })}`,
                                           onConfirm: () => handleDeleteLesson(lesson.id)
                                         })
                                       }}
                                     >
-                                      {t('notEnrolled.lesson.button.delete')}
+                                      {tc('button.deleteLesson')}
                                     </p>
                                   ) : null
                                 ].filter(Boolean)}
@@ -341,14 +345,14 @@ export default function ContentSection() {
           </div>
         )}
 
-        {lessons.data.totalPages > 1 && (
+        {/* {lessons.data.totalPages > 1 && (
           <SPagination
             pageNumber={lessons.data.pageNumber}
             totalPages={lessons.data.totalPages}
             onPageChanged={handlePageChange}
             className='mt-10'
           />
-        )}
+        )} */}
       </div>
     </motion.section>
   )

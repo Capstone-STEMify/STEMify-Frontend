@@ -9,7 +9,7 @@ export default async function LessonLayout({
   return (
     <div>
       <Header />
-      <main className='mt-24'>{children}</main>
+      <main className='mt-20'>{children}</main>
     </div>
   )
 }

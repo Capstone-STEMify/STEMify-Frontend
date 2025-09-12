@@ -1,0 +1,51 @@
+{
+  "LearningOutcome": {
+    "list": {
+      "title": "Learning Outcome List",
+      "noData": "No learning outcomes found."
+    },
+    "form": {
+      "title": {
+        "create": "Create Learning Outcome",
+        "update": "Update Learning Outcome"
+      },
+      "fields": {
+        "PLOName": {
+          "label": "PLO Name",
+          "placeholder": "Enter text here..."
+        },
+        "PLODescription": {
+          "label": "PLO Description",
+          "placeholder": "Enter text here..."
+        },
+        "PLOCode": {
+          "label": "PLO Code",
+          "placeholder": "Enter text here..."
+        },
+        "CLOName": {
+          "label": "CLO Name",
+          "placeholder": "Enter text here..."
+        },
+        "CLODescription": {
+          "label": "CLO Description",
+          "placeholder": "Enter text here..."
+        },
+        "CLOCode": {
+          "label": "CLO Code",
+          "placeholder": "Enter text here..."
+        }
+      },
+
+      "successMessage": {
+        "create": "Learning outcome created successfully!",
+        "update": "Learning outcome updated successfully!",
+        "delete": "Learning outcome deleted successfully!"
+      },
+      "errorMessage": "An error occurred. Please try again.",
+      "confirmMessage": {
+        "delete": "Are you sure you want to delete this learning outcome?",
+        "discard": "Are you sure you want to discard your changes?"
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "LearningOutcome": {
+    "list": {
+      "title": "Danh sách chuẩn đầu ra",
+      "noData": "Không có kết quả học tập nào trong chương trình học."
+    },
+    "form": {
+      "title": {
+        "create": "Tạo chuẩn đầu ra",
+        "update": "Cập nhật chuẩn đầu ra"
+      },
+      "fields": {
+        "PLOName": {
+          "label": "Tên PLO",
+          "placeholder": "Nhập nội dung ở đây..."
+        },
+        "PLODescription": {
+          "label": "Mô tả PLO",
+          "placeholder": "Nhập nội dung ở đây..."
+        },
+        "PLOCode": {
+          "label": "Mã PLO",
+          "placeholder": "Nhập nội dung ở đây..."
+        },
+        "CLOName": {
+          "label": "Tên CLO",
+          "placeholder": "Nhập nội dung ở đây..."
+        },
+        "CLODescription": {
+          "label": "Mô tả CLO",
+          "placeholder": "Nhập nội dung ở đây..."
+        },
+        "CLOCode": {
+          "label": "Mã CLO",
+          "placeholder": "Nhập nội dung ở đây..."
+        }
+      },
+
+      "successMessage": {
+        "create": "Tạo chuẩn đầu ra thành công!",
+        "update": "Cập nhật chuẩn đầu ra thành công!",
+        "delete": "Xóa chuẩn đầu ra thành công!"
+      },
+      "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "confirmMessage": {
+        "delete": "Bạn có chắc chắn muốn xóa chuẩn đầu ra này không?",
+        "discard": "Bạn có chắc chắn muốn bỏ qua những thay đổi này không?"
+      }
+    }
+  }
+}
