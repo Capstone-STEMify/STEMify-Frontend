@@ -34,7 +34,8 @@ export default function PrintPreviewModal({ isOpen, onClose, title, children }: 
 
   const tc = useTranslations('common.button')
 
-  const handlePrint = useReactToPrint({ contentRef
+  const handlePrint = useReactToPrint({
+    contentRef
     // content: () => contentRef.current,
     // documentTitle: title,
     // pageStyle: `
