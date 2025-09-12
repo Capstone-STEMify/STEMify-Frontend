@@ -5,6 +5,8 @@ export type Kit = {
   name: string
   description?: string
   images: KitImage[]
+  kitImages?: KitImage[] // for backward compatibility
+  imageUrl?: string // for backward compatibility
 }
 
 export type KitImage = {
