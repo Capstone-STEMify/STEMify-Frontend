@@ -30,17 +30,19 @@ export default function KitInformationSection({ kits }: KitInformationSectionPro
             <SCarousel
               variant='plugin'
               autoplayDelay={2000}
-              items={(kit.images?.length ? kit.images : [{ imageUrl: '/images/fallback.png' }]).map((img, j) => (
-                <div className='flex justify-center p-1' key={j}>
-                  <Image
-                    src={img?.imageUrl ?? '/images/fallback.png'}
-                    alt='Kit Image'
-                    width={500}
-                    height={500}
-                    className='aspect-square rounded-3xl object-cover shadow-xs'
-                  />
-                </div>
-              ))}
+              items={(kit.kitImages?.length ? kit.kitImages : [{ imageUrl: '/images/fallback.png' }])
+                .filter((img) => img?.imageUrl && img.imageUrl.trim() !== '')
+                .map((img, j) => (
+                  <div className='flex justify-center p-1' key={j}>
+                    <Image
+                      src={img.imageUrl || '/images/fallback.png'}
+                      alt='Kit Image'
+                      width={500}
+                      height={500}
+                      className='aspect-square rounded-3xl object-cover shadow-xs'
+                    />
+                  </div>
+                ))}
             />
           </div>
         </section>
