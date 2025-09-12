@@ -47,7 +47,8 @@
       "exploreCurriculums": "Khám Phá Khung Chương Trình",
       "readBlogs": "Xem Blog",
       "addKit": "Thêm Bộ Kit",
-      "publish": "Xuất Bản"
+      "publish": "Xuất Bản",
+      "print": "In"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",
@@ -57,7 +58,8 @@
       "curriculumDeleteSuccess": "Chương trình học đã được xóa thành công!",
       "curriculumCreateError": "Đã xảy ra lỗi khi tạo chương trình học. Vui lòng thử lại.",
       "curriculumUpdateError": "Đã xảy ra lỗi khi cập nhật chương trình học. Vui lòng thử lại.",
-      "curriculumDeleteError": "Đã xảy ra lỗi khi xóa chương trình học. Vui lòng thử lại."
+      "curriculumDeleteError": "Đã xảy ra lỗi khi xóa chương trình học. Vui lòng thử lại.",
+      "printPreview": "BẢN XEM TRƯỚC"
     },
     "tableHeader": {
       "id": "ID",

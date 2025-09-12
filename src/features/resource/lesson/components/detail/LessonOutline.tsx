@@ -63,7 +63,7 @@ export default function LessonOutline({
                   ) : (
                     isCompleted && <Check size={16} className='text-blue-500' />
                   )}
-                  <div className={!isLoggedIn ? 'text-gray-500' : ''}>{sec.title}</div>
+                  <div className={!isLoggedIn ? 'text-gray-500' : ''}>{sec.description}</div>
                 </div>
                 <div className={cn('text-muted-foreground', !isLoggedIn && 'text-gray-400')}>{sec.duration} mins</div>
               </div>

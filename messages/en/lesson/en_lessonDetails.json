@@ -14,7 +14,9 @@
       "category": "Categories",
       "skill": "Skills",
       "standard": "Standards",
-      "topic": "Topics"
+      "topic": "Topics",
+      "ageRange": "Age Range",
+      "duration": "Duration"
     },
     "notFound": {
       "title": "No lesson data available",

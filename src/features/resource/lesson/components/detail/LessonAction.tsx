@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl'
 import { UserRole } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
 
-export default function LessonAction({ lessonId }: { lessonId: number }) {
+export default function LessonAction({ lessonId, onPrintClick }: { lessonId: number; onPrintClick: () => void }) {
   const t = useTranslations('LessonDetails')
   const tt = useTranslations('toast')
   const { openModal } = useModal()
@@ -39,9 +39,10 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
           variant='outline'
           size='default'
           className='mt-4 font-semibold text-black shadow-md'
-          onClick={() => {
-            openModal('pacingGuide')
-          }}
+          // onClick={() => {
+          //   openModal('pacingGuide')
+          // }}
+          onClick={onPrintClick}
         >
           Pacing guide
         </Button>

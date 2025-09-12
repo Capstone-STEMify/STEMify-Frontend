@@ -14,9 +14,12 @@ import LessonContent from '@/features/resource/lesson/components/detail/LessonCo
 import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useGetSectionStudentProgressQuery } from '@/features/student-progress/api/studentProgressApi'
 import { useTranslations } from 'next-intl'
+import PrintPreviewModal from '@/components/shared/modals/PrintPreviewModal'
+import LessonPrintableContent from './LessonPrintableContent'
 
 export default function LessonDetail({ id }: { id?: number }) {
   const t = useTranslations('LessonDetails')
+  const tc = useTranslations('common.message')
   const userId = useAppSelector((state) => state.auth.user?.userId)
   const params = useParams()
   const lessonId = params?.lessonId ? Number(params.lessonId) : id
@@ -24,6 +27,8 @@ export default function LessonDetail({ id }: { id?: number }) {
   const token = useAppSelector((state) => state.auth.token)
   const { data: lessonData, isLoading: lessonLoading } = useGetLessonByIdQuery(Number(lessonId))
   const { data: sections } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !lessonId })
+
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
 
   const courseId = lessonData?.data.courseId
 
@@ -77,7 +82,13 @@ export default function LessonDetail({ id }: { id?: number }) {
                   {
                     value: 'description',
                     label: `${t('description')}`,
-                    content: <LessonDescription lessonData={lessonData} lessonLoading={lessonLoading} />
+                    content: (
+                      <LessonDescription
+                        lessonData={lessonData}
+                        lessonLoading={lessonLoading}
+                        onPrintClick={() => setIsPrintModalOpen(true)}
+                      />
+                    )
                   },
                   {
                     value: 'sections',
@@ -113,6 +124,15 @@ export default function LessonDetail({ id }: { id?: number }) {
           </ResizablePanelGroup>
         </div>
       </div>
+
+      {/* Render Modal */}
+      <PrintPreviewModal
+        isOpen={isPrintModalOpen}
+        onClose={() => setIsPrintModalOpen(false)}
+        title={tc('printPreview')}
+      >
+        <LessonPrintableContent lessonData={lessonData} sectionData={sectionData} />
+      </PrintPreviewModal>
     </div>
   )
 }
