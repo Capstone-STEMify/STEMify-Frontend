@@ -18,7 +18,6 @@ export default function Workspace3D({
   showUI?: boolean
   onStepComplete?: (stepId: string) => void
 }) {
-  const [disableComponentTransform, setDisableComponentTransform] = useState(false)
   const orbitControlsRef = useRef<any>(null)
   const transformControlsRef = useRef<any>(null)
 
@@ -244,17 +243,16 @@ export default function Workspace3D({
         maxStep={maxStep}
         assembly={assembly}
         stepIndex={stepIndex}
+        currentStep={currentStep}
         transformMode={transformMode}
         currentActivity={currentActivity}
         orbitControlsRef={orbitControlsRef}
         visibleInstances={visibleInstances}
         transformControlsRef={transformControlsRef}
-        disableComponentTransform={disableComponentTransform}
-        currentStep={currentStep}
+        runtimeComponentOverrides={runtimeComponentOverrides}
         setIsTransforming={setIsTransforming}
         getComponentElements={getComponentElements}
-        runtimeComponentOverrides={runtimeComponentOverrides}
-      />
+        />
     </div>
   )
 }

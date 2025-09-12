@@ -39,7 +39,6 @@ type SceneRendererProps = {
   orbitControlsRef: RefObject<any>
   transformControlsRef: RefObject<any>
   currentActivity: any
-  disableComponentTransform: boolean
   setIsTransforming: (isTransforming: boolean) => void
   transformMode: 'translate' | 'rotate' | 'scale'
   getComponentElements: (componentId: string) => string[]
@@ -56,11 +55,11 @@ export function SceneRenderer({
   currentActivity,
   transformControlsRef,
   runtimeComponentOverrides,
-  disableComponentTransform,
   setIsTransforming,
   transformMode,
   getComponentElements
 }: SceneRendererProps) {
+  const [disableComponentTransform, setDisableComponentTransform] = useState(false)
   const clampedStep = Math.min(Math.max(stepIndex, 0), Math.max(maxStep - 1, 0))
   const strawRefs = useRef<Record<string, React.Ref<Group>>>({})
   const connectorRefs = useRef<Record<string, React.Ref<Group>>>({})
