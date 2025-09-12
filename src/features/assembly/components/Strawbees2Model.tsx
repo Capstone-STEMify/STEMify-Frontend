@@ -10,10 +10,10 @@ interface Strawbees2ModelProps {
   scale?: number
 }
 
-export function Strawbees2Model({ 
-  position = [0, 0, 0], 
-  rotation = [0, 0, 0], 
-  scale = 1 
+export function Strawbees2Model({
+  position = [0, 0, 0],
+  rotation = [0, 0, 0],
+  scale = 1
 }: Strawbees2ModelProps) {
   const groupRef = useRef<THREE.Group>(null)
   const [model, setModel] = useState<THREE.Group | null>(null)
@@ -21,7 +21,7 @@ export function Strawbees2Model({
   const [armS, setArmS] = useState<THREE.Object3D | null>(null)
   const [armE, setArmE] = useState<THREE.Object3D | null>(null)
   const [armW, setArmW] = useState<THREE.Object3D | null>(null)
-  
+
   // Animation states
   const [foldAngleN, setFoldAngleN] = useState(0)
   const [foldAngleS, setFoldAngleS] = useState(0)
@@ -64,11 +64,11 @@ export function Strawbees2Model({
     axis?: 'x' | 'y' | 'z'
   } = {}) => {
     if (!obj) return
-    
+
     const { min = -60, max = 60, axis = 'y' } = options
     const clampedDeg = THREE.MathUtils.clamp(deg, min, max)
     const radians = THREE.MathUtils.degToRad(clampedDeg)
-    
+
     if (axis === 'x') obj.rotation.x = radians
     else if (axis === 'y') obj.rotation.y = radians
     else if (axis === 'z') obj.rotation.z = radians
@@ -112,7 +112,7 @@ export function Strawbees2Model({
   return (
     <group ref={groupRef}>
       <primitive object={model} />
-      
+
       {/* Add some helper text or indicators */}
       <mesh position={[0, 2, 0]}>
         <boxGeometry args={[0.1, 0.1, 0.1]} />
