@@ -25,6 +25,7 @@ export type Course = {
   topicNames: string[]
   skillNames: string[]
   standardNames: string[]
+  courseOrderIndex?: number
 }
 
 export enum CourseStatus {

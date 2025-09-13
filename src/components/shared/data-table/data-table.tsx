@@ -29,6 +29,7 @@ import {
 import { SortableContext, useSortable, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useTranslations } from 'next-intl'
+import { DragHandle } from '@/components/shared/data-table/columns-helpers'
 
 export type DataTableProps<TData extends { id: string | number }, TValue> = {
   data: TData[]
@@ -48,16 +49,21 @@ export type DataTableProps<TData extends { id: string | number }, TValue> = {
 }
 
 function DraggableRow<TData extends { id: string | number }>({ row }: { row: Row<TData> }) {
-  const { setNodeRef, transform, transition, attributes, listeners } = useSortable({ id: row.original.id })
+  const { setNodeRef, transform, transition, attributes, listeners } = useSortable({
+    id: row.original.id
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  }
 
   return (
-    <TableRow
-      ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
-      data-dragging
-      {...attributes}
-      {...listeners}
-    >
+    <TableRow ref={setNodeRef} style={style} data-dragging>
+      <TableCell className='w-6'>
+        <DragHandle listeners={listeners} attributes={attributes} />
+      </TableCell>
+
       {row.getVisibleCells().map((cell) => (
         <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
       ))}
@@ -92,16 +98,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
     setLocalData(data)
   }, [data])
 
-  const sensors = useSensors(
-    useSensor(MouseSensor, {
-      activationConstraint: {
-        delay: 100,
-        tolerance: 5
-      }
-    }),
-    useSensor(TouchSensor),
-    useSensor(KeyboardSensor)
-  )
+  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor), useSensor(KeyboardSensor))
   const itemIds = React.useMemo(() => localData.map((d) => d.id), [localData])
 
   const table = useReactTable({
@@ -151,6 +148,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                 <TableHeader className='bg-muted sticky top-0 z-10'>
                   {table.getHeaderGroups().map((hg) => (
                     <TableRow key={hg.id}>
+                      <TableHead className='w-6' />
                       {hg.headers.map((h) => (
                         <TableHead key={h.id}>
                           {h.isPlaceholder ? null : flexRender(h.column.columnDef.header, h.getContext())}

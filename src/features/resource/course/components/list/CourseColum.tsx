@@ -23,15 +23,6 @@ export const courseTableSchema = z.object({
   id: z.number()
 })
 
-const levelBadgeClass = (level?: string): string => {
-  const map: Record<string, string> = {
-    [CourseLevel.BEGINNER]: 'bg-green-100 text-green-800',
-    [CourseLevel.INTERMEDIATE]: 'bg-yellow-100 text-yellow-800',
-    [CourseLevel.ADVANCED]: 'bg-red-100 text-red-800'
-  }
-  return map[level ?? ''] ?? 'bg-muted text-muted-foreground'
-}
-
 export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDef<Course>[] {
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
@@ -81,17 +72,6 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
   }
 
   return [
-    ...(curriculumId
-      ? [
-          {
-            id: 'drag',
-            header: () => null,
-            cell: ({ row }: { row: Row<Course> }) => <DragHandle id={row.original.id} />,
-            enableSorting: false,
-            enableHiding: false
-          }
-        ]
-      : []),
     createSelectColumn<Course>(),
     {
       accessorKey: 'code',

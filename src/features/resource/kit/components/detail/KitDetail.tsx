@@ -6,15 +6,17 @@ import { SCarousel } from '@/components/shared/SCarousel'
 import { useDeleteKitMutation, useGetKitByIdQuery, useUpdateKitMutation } from '@/features/resource/kit/api/kitApi'
 import { useModal } from '@/providers/ModalProvider'
 import { SquarePen, Trash2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React from 'react'
 import { toast } from 'sonner'
 
 export default function KitDetail() {
   const t = useTranslations('kits')
   const tt = useTranslations('toast')
+  const router = useRouter()
+  const locale = useLocale()
 
   const { openModal } = useModal()
   const { kitId } = useParams()
@@ -26,6 +28,7 @@ export default function KitDetail() {
   const handleDelete = async () => {
     await deleteKit(Number(kitId)).unwrap()
     toast.success(`${tt('successMessage.delete', { title: kitData?.data.name || '' })}`)
+    router.push(`${locale}/admin/kit`)
   }
 
   if (isLoading) {

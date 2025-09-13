@@ -2,7 +2,7 @@ import { Search } from 'lucide-react'
 
 type SEmptyProps = {
   title: string
-  description: string
+  description?: string
   icon?: React.ReactNode
 }
 
