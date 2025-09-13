@@ -5,6 +5,7 @@ import * as THREE from 'three'
 import { SceneObjectComponent } from '@/features/creator-3d/components/creator-workspace/SceneObjectComponent'
 import { AxesHelper as ThreeAxesHelper } from 'three'
 import { OrbitControls, Grid, TransformControls } from '@react-three/drei'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 interface SceneContentProps {
   objects: SceneObject[]
@@ -35,6 +36,7 @@ export function SceneContent({
 }: SceneContentProps) {
   const { scene } = useThree()
   const objectRefs = useRef<Record<string, THREE.Object3D>>({})
+  const cameraStatus = useAppSelector((state) => state.strawLab.cameraStatus)
 
   // Update transform controls target when selection changes
   useEffect(() => {
@@ -102,7 +104,13 @@ export function SceneContent({
       />
 
       {/* Controls */}
-      <OrbitControls ref={orbitControlsRef} target={[0, 0, 0]} enableDamping dampingFactor={0.05} />
+      <OrbitControls
+        ref={orbitControlsRef}
+        target={[0, 0, 0]}
+        enableDamping
+        dampingFactor={0.05}
+        enabled={cameraStatus}
+      />
 
       <TransformControls
         ref={transformControlsRef}
