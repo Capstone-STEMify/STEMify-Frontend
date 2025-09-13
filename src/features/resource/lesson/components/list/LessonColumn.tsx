@@ -69,17 +69,6 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
   }
 
   return [
-    ...(courseId
-      ? [
-          {
-            id: 'drag',
-            header: () => null,
-            cell: ({ row }: { row: Row<Lesson> }) => <DragHandle id={row.original.id} />,
-            enableSorting: false,
-            enableHiding: false
-          }
-        ]
-      : []),
     createSelectColumn<Lesson>(),
     {
       accessorKey: 'id',
