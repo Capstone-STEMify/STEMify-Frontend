@@ -1,10 +1,11 @@
 'use client'
 
-import { Canvas} from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { useRef, useCallback, useState } from 'react'
 import { SceneObject, ComponentTemplate } from '../../types/creator.types'
 import { CreatorToolbar } from '@/features/creator-3d/components/creator-workspace/CreatorToolbar'
 import { SceneContent } from '@/features/creator-3d/components/creator-workspace/SceneContent'
+import SceneTopRight from '@/features/creator-3d/components/creator-workspace/SceneTopRight'
 
 interface CreatorWorkspaceProps {
   objects: SceneObject[]
@@ -129,8 +130,7 @@ export function CreatorWorkspace({
         onToggleAxes={onToggleAxes}
         onToggleSnap={onToggleSnap}
       />
+      <SceneTopRight />
     </div>
   )
 }
-
-
