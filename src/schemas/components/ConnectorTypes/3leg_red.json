@@ -7,8 +7,8 @@
     "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
     "portDiameter": 0.65,
     "shape": "custom",
-    "modelPath": "/models/Strawbees2.glb",
-    "meshName": "connector_3leg"
+    "modelPath": "/models/connector_3legs.glb",
+    "meshName": "connector_3legs"
   },
   "materialRef": "plastic_red",
   "arms": [
@@ -26,7 +26,7 @@
     },
     {
       "id": "arm_2",
-      "meshName": "Arm_2", 
+      "meshName": "Arm_2",
       "defaultRotation": { "x": 0, "y": 90, "z": 45 },
       "portIndex": 1,
       "port": {

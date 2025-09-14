@@ -2,7 +2,7 @@ import Ajv, { JSONSchemaType } from 'ajv'
 import addFormats from 'ajv-formats'
 
 // Import schema từ file backend
-import labComponentsSchema from '../../../../public/models/lab-components-schema.json'
+import labComponentsSchema from '@/schemas/lab-components-schema.json'
 
 // Types cho validation
 export interface ValidationResult {
@@ -29,17 +29,17 @@ export interface AssemblyData {
 
 class SchemaValidator {
   private ajv: Ajv
-  
+
   constructor() {
-    this.ajv = new Ajv({ 
+    this.ajv = new Ajv({
       allErrors: true,
       strict: false,
-      validateFormats: true 
+      validateFormats: true
     })
-    
+
     // Add format validators (date-time, etc.)
     addFormats(this.ajv)
-    
+
     // Compile schema
     this.ajv.addSchema(labComponentsSchema, 'lab-components')
   }
@@ -50,7 +50,7 @@ class SchemaValidator {
   validateAssembly(data: any): ValidationResult {
     try {
       const validate = this.ajv.getSchema('lab-components')
-      
+
       if (!validate) {
         return {
           valid: false,
@@ -59,7 +59,7 @@ class SchemaValidator {
       }
 
       const valid = validate(data)
-      
+
       if (!valid) {
         return {
           valid: false,
@@ -69,7 +69,6 @@ class SchemaValidator {
       }
 
       return { valid: true }
-      
     } catch (error) {
       return {
         valid: false,
@@ -84,8 +83,8 @@ class SchemaValidator {
   validateStraw(straw: any): ValidationResult {
     // Basic straw validation
     const requiredFields = ['id', 'geometry', 'material', 'transform', 'endpoints']
-    const missingFields = requiredFields.filter(field => !straw[field])
-    
+    const missingFields = requiredFields.filter((field) => !straw[field])
+
     if (missingFields.length > 0) {
       return {
         valid: false,
@@ -114,8 +113,8 @@ class SchemaValidator {
 
   validateConnector(connector: any): ValidationResult {
     const requiredFields = ['id', 'type', 'geometry', 'material', 'transform', 'ports']
-    const missingFields = requiredFields.filter(field => !connector[field])
-    
+    const missingFields = requiredFields.filter((field) => !connector[field])
+
     if (missingFields.length > 0) {
       return {
         valid: false,
@@ -147,8 +146,8 @@ class SchemaValidator {
 
   validateJoint(joint: any): ValidationResult {
     const requiredFields = ['id', 'type', 'componentA', 'componentB']
-    const missingFields = requiredFields.filter(field => !joint[field])
-    
+    const missingFields = requiredFields.filter((field) => !joint[field])
+
     if (missingFields.length > 0) {
       return {
         valid: false,
@@ -184,12 +183,12 @@ class SchemaValidator {
 
       // Check if componentA exists
       if (compA.componentType === 'straw') {
-        const strawExists = data.straws.some(s => s.id === compA.componentId)
+        const strawExists = data.straws.some((s) => s.id === compA.componentId)
         if (!strawExists) {
           errors.push(`Joint ${joint.id} references non-existent straw: ${compA.componentId}`)
         }
       } else if (compA.componentType === 'connector') {
-        const connectorExists = data.connectors.some(c => c.id === compA.componentId)
+        const connectorExists = data.connectors.some((c) => c.id === compA.componentId)
         if (!connectorExists) {
           errors.push(`Joint ${joint.id} references non-existent connector: ${compA.componentId}`)
         }
@@ -197,12 +196,12 @@ class SchemaValidator {
 
       // Check if componentB exists
       if (compB.componentType === 'straw') {
-        const strawExists = data.straws.some(s => s.id === compB.componentId)
+        const strawExists = data.straws.some((s) => s.id === compB.componentId)
         if (!strawExists) {
           errors.push(`Joint ${joint.id} references non-existent straw: ${compB.componentId}`)
         }
       } else if (compB.componentType === 'connector') {
-        const connectorExists = data.connectors.some(c => c.id === compB.componentId)
+        const connectorExists = data.connectors.some((c) => c.id === compB.componentId)
         if (!connectorExists) {
           errors.push(`Joint ${joint.id} references non-existent connector: ${compB.componentId}`)
         }
@@ -211,11 +210,11 @@ class SchemaValidator {
 
     // Check for duplicate IDs
     const allIds = [
-      ...data.straws.map(s => s.id),
-      ...data.connectors.map(c => c.id),
-      ...data.joints.map(j => j.id),
-      ...data.actions.map(a => a.id),
-      ...data.activities.map(a => a.id)
+      ...data.straws.map((s) => s.id),
+      ...data.connectors.map((c) => c.id),
+      ...data.joints.map((j) => j.id),
+      ...data.actions.map((a) => a.id),
+      ...data.activities.map((a) => a.id)
     ]
 
     const duplicateIds = allIds.filter((id, index) => allIds.indexOf(id) !== index)
@@ -238,10 +237,12 @@ class SchemaValidator {
    * Format AJV errors into readable message
    */
   private formatErrors(errors: any[]): string {
-    return errors.map(error => {
-      const path = error.instancePath || 'root'
-      return `${path}: ${error.message}`
-    }).join('; ')
+    return errors
+      .map((error) => {
+        const path = error.instancePath || 'root'
+        return `${path}: ${error.message}`
+      })
+      .join('; ')
   }
 
   /**
@@ -260,17 +261,13 @@ class SchemaValidator {
 export const schemaValidator = new SchemaValidator()
 
 // Export validation functions for convenience
-export const validateAssembly = (data: any): ValidationResult => 
-  schemaValidator.validateAssembly(data)
+export const validateAssembly = (data: any): ValidationResult => schemaValidator.validateAssembly(data)
 
-export const validateStraw = (straw: any): ValidationResult => 
-  schemaValidator.validateStraw(straw)
+export const validateStraw = (straw: any): ValidationResult => schemaValidator.validateStraw(straw)
 
-export const validateConnector = (connector: any): ValidationResult => 
-  schemaValidator.validateConnector(connector)
+export const validateConnector = (connector: any): ValidationResult => schemaValidator.validateConnector(connector)
 
-export const validateJoint = (joint: any): ValidationResult => 
-  schemaValidator.validateJoint(joint)
+export const validateJoint = (joint: any): ValidationResult => schemaValidator.validateJoint(joint)
 
-export const validateStructuralIntegrity = (data: AssemblyData): ValidationResult => 
+export const validateStructuralIntegrity = (data: AssemblyData): ValidationResult =>
   schemaValidator.validateStructuralIntegrity(data)
