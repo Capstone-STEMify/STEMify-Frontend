@@ -88,10 +88,12 @@ export default function CourseListAction() {
   const skillOptions = getOptions(skills?.data.items, 'skillName')
   const ageRangeOptions = getOptions(ageRanges?.data.items, 'ageRangeLabel')
   const standardOptions = getOptions(standards?.data.items, 'standardName')
-  const statusOptions = Object.entries(CourseStatus).map(([key, value]) => ({
-    label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-    value: value
-  }))
+  const statusOptions = Object.entries(CourseStatus)
+    .filter(([key]) => key.toLowerCase() !== 'deleted')
+    .map(([key, value]) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      value: value
+    }))
 
   return (
     <div className='border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50'>

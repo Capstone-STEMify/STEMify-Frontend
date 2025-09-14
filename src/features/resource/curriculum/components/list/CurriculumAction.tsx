@@ -21,10 +21,12 @@ export default function CurriculumAction() {
   const filters = useAppSelector((state) => state.curriculum)
 
   // Options for selects
-  const statusOptions = Object.entries(CurriculumStatus).map(([key, value]) => ({
-    label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-    value: value
-  }))
+  const statusOptions = Object.entries(CurriculumStatus)
+    .filter(([key]) => key.toLowerCase() !== 'deleted')
+    .map(([key, value]) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      value: value
+    }))
 
   return (
     <div className='relative flex w-full max-w-[700px] items-center justify-start gap-4 py-4 md:flex-row'>

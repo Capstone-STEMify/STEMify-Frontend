@@ -21,6 +21,8 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
   const t = useTranslations('curriculum')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const [localCourses, setLocalCourses] = React.useState<Course[]>(courses || [])
+  console.log('localCourses', localCourses)
 
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
@@ -28,7 +30,7 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
 
   const [orderedCourseIds, setOrderedCourseIds] = React.useState<number[]>([])
 
-  const visibleKeys = ['select', 'code', 'title', 'imageUrl', 'description', 'actions', 'drag']
+  const visibleKeys = ['select', 'code', 'title', 'imageUrl', 'description', 'actions']
   const filteredColumns = columns.filter((col) => {
     const key = 'accessorKey' in col ? col.accessorKey : col.id
     return key ? visibleKeys.includes(key as string) : false
@@ -38,6 +40,12 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
     dispatch(setPageSize(50))
   }, [dispatch])
 
+  useEffect(() => {
+    if (courses) {
+      const sorted = [...courses].sort((a, b) => (a.courseOrderIndex ?? 0) - (b.courseOrderIndex ?? 0))
+      setLocalCourses(sorted)
+    }
+  }, [courses])
   const [updateCourseOrder] = useUpdateCourseOrderMutation()
 
   const handleSaveOrder = async () => {
@@ -82,13 +90,14 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
       </div>
 
       <DataTable
-        data={courses || []}
+        data={localCourses}
         columns={filteredColumns}
         enableRowSelection
         enableDnd
         onReorder={(data) => {
-          const orderCourseIds = data.map((item) => item.id)
-          setOrderedCourseIds(orderCourseIds)
+          setLocalCourses(data)
+          const orderedCourseIds = data.map((item) => item.id)
+          setOrderedCourseIds(orderedCourseIds)
         }}
       />
     </div>

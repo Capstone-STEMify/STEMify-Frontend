@@ -4,8 +4,8 @@ import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SPagination } from '@/components/shared/SPagination'
 import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
-import { setPageIndex, setPageSize } from '@/features/resource/curriculum/slice/curriculumSlice'
-import { CurriculumSliceParams } from '@/features/resource/curriculum/types/curriculum.type'
+import { setPageIndex, setPageSize, setParam } from '@/features/resource/curriculum/slice/curriculumSlice'
+import { CurriculumSliceParams, CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
@@ -20,6 +20,7 @@ export default function CurriculumList() {
   const { data: curriculumData, isLoading } = useSearchCurriculumQuery(queryParams)
 
   useEffect(() => {
+    dispatch(setParam({ key: 'status', value: CurriculumStatus.PUBLISHED }))
     dispatch(setPageSize(8))
   }, [dispatch])
 

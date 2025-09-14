@@ -1,10 +1,12 @@
 'use client'
 
+import { Badge } from '@/components/shadcn/badge'
 import { SCard } from '@/components/shared/card/SCard'
 import Image from 'next/image'
 import React from 'react'
 
 type CardHorizontalProps = {
+  badge?: React.ReactNode
   imageUrl?: string
   title: string
   description?: string
@@ -14,6 +16,7 @@ type CardHorizontalProps = {
 }
 
 export default function CardHorizontal({
+  badge,
   imageUrl,
   title,
   description,
@@ -40,8 +43,10 @@ export default function CardHorizontal({
 
           {/* Text content */}
           <div className={`flex h-full w-full flex-col`}>
-            <h3 className='line-clamp-1 text-lg font-semibold text-gray-800'>{title}</h3>
-            <p className='mt-1 line-clamp-5 text-sm text-gray-600 2xl:line-clamp-3'>{description}</p>
+            <h3 className='mb-1 line-clamp-1 text-lg font-semibold text-gray-800'>
+              {title} {badge && <span className='ml-2'>{badge}</span>}
+            </h3>
+            <p className='mt-1 line-clamp-4 text-sm text-gray-600 2xl:line-clamp-4'>{description}</p>
           </div>
         </div>
       }

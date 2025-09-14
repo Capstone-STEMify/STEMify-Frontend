@@ -109,19 +109,32 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
             value: 'table',
             label: <TableIcon className='h-4 w-4' />,
             content: (
-              <DataTable
-                data={rows}
-                columns={columns}
-                enableRowSelection
-                pagingData={data}
-                pagingParams={queryParams}
-                handlePageChange={handlePageChange}
-                enableDnd
-                onReorder={(newData) => {
-                  const orderedLessonIds = newData.map((item) => item.id)
-                  handleSaveOrder(orderedLessonIds)
-                }}
-              />
+              <>
+                {courseId ? (
+                  <DataTable
+                    data={rows}
+                    columns={columns}
+                    enableRowSelection
+                    pagingData={data}
+                    pagingParams={queryParams}
+                    handlePageChange={handlePageChange}
+                    enableDnd
+                    onReorder={(newData) => {
+                      const orderedLessonIds = newData.map((item) => item.id)
+                      handleSaveOrder(orderedLessonIds)
+                    }}
+                  />
+                ) : (
+                  <DataTable
+                    data={rows}
+                    columns={columns}
+                    enableRowSelection
+                    pagingData={data}
+                    pagingParams={queryParams}
+                    handlePageChange={handlePageChange}
+                  />
+                )}
+              </>
             )
           },
           {

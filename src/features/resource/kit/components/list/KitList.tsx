@@ -50,7 +50,7 @@ export default function KitList() {
     return <div>Loading...</div>
   }
   if (!kitData || kitData.data.items.length === 0) {
-    return <SEmpty title={t('list.noData')} description={t('list.noDataDescription')} />
+    return <SEmpty title={t('list.noData')} />
   }
 
   return (

@@ -95,20 +95,16 @@ export function createActionsColumnFromItems<T>(items: ActionItem<T>[], label = 
   }
 }
 
-export function DragHandle({ id }: { id: number }) {
-  const { attributes, listeners, setNodeRef } = useSortable({ id })
-
+export function DragHandle({ listeners, attributes }: any) {
   return (
     <Button
-      ref={setNodeRef}
       {...attributes}
       {...listeners}
       variant='ghost'
       size='icon'
       className='hover:cursor-grab active:cursor-grabbing'
     >
-      <IconGripVertical className='text-muted-foreground size-3' />
-      <span className='sr-only'>Drag to reorder</span>
+      ☰{/* <span className='sr-only'>Drag to reorder</span> */}
     </Button>
   )
 }

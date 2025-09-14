@@ -5,7 +5,7 @@ const initialState: CurriculumSliceParams = {
   pageNumber: 1,
   pageSize: 5,
   search: '',
-  orderBy: '',
+  orderBy: '',  
   curriculumId: undefined
 }
 

@@ -30,17 +30,6 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
   }
 
   return [
-    ...(lessonId && userRole !== UserRole.TEACHER
-      ? [
-          {
-            id: 'drag',
-            header: () => null,
-            cell: ({ row }: { row: Row<Section> }) => <DragHandle id={row.original.id} />,
-            enableSorting: false,
-            enableHiding: false
-          }
-        ]
-      : []),
     createSelectColumn<Section>(),
     {
       accessorKey: 'title',
