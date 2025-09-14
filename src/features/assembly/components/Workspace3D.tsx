@@ -110,7 +110,7 @@ interface Props {
 }
 
 export default function Workspace3D({
-  assemblyUrl = '/assemblies/optimized/octahedron.json',
+  assemblyUrl = '/assemblies/octahedron.json',
   mode = 'player',
   showUI = true,
   onStepComplete

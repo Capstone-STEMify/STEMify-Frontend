@@ -8,7 +8,7 @@ import { RealtimeControlPanel } from './RealtimeControlPanel'
 import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer'
 
 export default function Workspace3D({
-  assemblyUrl = 'schemas/assemblies/octahedron.json',
+  assemblyUrl = '/assemblies/octahedron.json',
   mode = 'player',
   showUI = true,
   onStepComplete
@@ -34,6 +34,7 @@ export default function Workspace3D({
 
   // load assembly
   useEffect(() => {
+    console.log('Loading assembly from URL:', assemblyUrl)
     loadAssembly(assemblyUrl)
   }, [assemblyUrl, loadAssembly])
 
