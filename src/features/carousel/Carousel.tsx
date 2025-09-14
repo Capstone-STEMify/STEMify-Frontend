@@ -19,7 +19,7 @@ export type CarouselItem = {
 
 const ITEMS: CarouselItem[] = [
   {
-    id: 'police',
+    id: 'octahedron',
     title: 'Octahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-octahedron-platonic-solid_cover.jpg&w=1920&q=75',
@@ -28,7 +28,16 @@ const ITEMS: CarouselItem[] = [
     isAvailable: true
   },
   {
-    id: 'obstacle',
+    id: 'hexahedron',
+    title: 'Hexahedron Platonic Solid',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
+    bg: 'bg-amber-300',
+    rating: 3.1,
+    isAvailable: true
+  },
+  {
+    id: 'tetrahedron',
     title: ' Tetrahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
@@ -37,16 +46,7 @@ const ITEMS: CarouselItem[] = [
     isAvailable: false
   },
   {
-    id: 'sweeper',
-    title: 'Hexahedron Platonic Solid',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    bg: 'bg-amber-300',
-    rating: 3.1,
-    isAvailable: false
-  },
-  {
-    id: 'robotarm',
+    id: 'dodecahedron',
     title: 'Dodecahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-dodecahedron-platonic-solid_cover.jpg&w=1920&q=75',
@@ -55,7 +55,7 @@ const ITEMS: CarouselItem[] = [
     isAvailable: false
   },
   {
-    id: 'forklift',
+    id: 'icosahedron',
     title: 'Icosahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',

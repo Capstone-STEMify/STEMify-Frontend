@@ -6,9 +6,10 @@ import { StepController } from './StepController'
 import { TransformInstructionPanel } from './TransformInstructionPanel'
 import { RealtimeControlPanel } from './RealtimeControlPanel'
 import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer'
+import { useParams } from 'next/navigation'
 
 export default function Workspace3D({
-  assemblyUrl = '/assemblies/octahedron.json',
+  assemblyUrl,
   mode = 'player',
   showUI = true,
   onStepComplete
@@ -18,6 +19,7 @@ export default function Workspace3D({
   showUI?: boolean
   onStepComplete?: (stepId: string) => void
 }) {
+  const { id } = useParams()
   const orbitControlsRef = useRef<any>(null)
   const transformControlsRef = useRef<any>(null)
 
@@ -34,6 +36,7 @@ export default function Workspace3D({
 
   // load assembly
   useEffect(() => {
+    assemblyUrl = assemblyUrl || (id ? `/assemblies/${id}.json` : '/assemblies/octahedron.json')
     console.log('Loading assembly from URL:', assemblyUrl)
     loadAssembly(assemblyUrl)
   }, [assemblyUrl, loadAssembly])
