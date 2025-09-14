@@ -11,14 +11,11 @@
   },
 
   "templates": {
-    "materials": [
-      { "id": "plastic_green", "source": "/components/templates/MaterialLibrary/plastic_green.json" },
-      { "id": "plastic_red", "source": "/components/templates/MaterialLibrary/plastic_red.json" }
-    ],
+    "materials": [{ "id": "plastic_green", "source": "/components/templates/MaterialLibrary/plastic_green.json" }],
     "components": [
       { "id": "green_11_2", "source": "/components/templates/StrawTypes/green_11_2.json" },
-      { "id": "3leg_red", "source": "/components/templates/ConnectorTypes/3leg_red.json" },
-      { "id": "5leg_red", "source": "/components/templates/ConnectorTypes/4leg_red.json" }
+      { "id": "3leg_red", "source": "/components/templates/ConnectorTypes/3legs.json" },
+      { "id": "5leg_red", "source": "/components/templates/ConnectorTypes/4legs.json" }
     ]
   },
 

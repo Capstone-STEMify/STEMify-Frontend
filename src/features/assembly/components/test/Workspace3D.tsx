@@ -110,6 +110,7 @@ export default function Workspace3D({
         if (Array.isArray(action.targets)) {
           for (const id of action.targets) {
             visibleConnectorIds.add(id)
+            visibleStrawIds.add(id)
           }
         } else if (action.targets === 'all') {
           showAll = true
