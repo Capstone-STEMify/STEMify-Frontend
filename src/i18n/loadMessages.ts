@@ -26,6 +26,7 @@ export async function loadMessages(locale: string) {
     ...commonMessages,
     ...toastMessages,
     ...validMessages,
+    ...popupMessage,
     ...curriculumMessages,
     ...courseMessages,
     ...headerMessages,
