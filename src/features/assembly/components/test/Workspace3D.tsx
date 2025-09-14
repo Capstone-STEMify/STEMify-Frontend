@@ -8,7 +8,7 @@ import { RealtimeControlPanel } from './RealtimeControlPanel'
 import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer'
 
 export default function Workspace3D({
-  assemblyUrl = '/assemblies/optimized/octahedron.json',
+  assemblyUrl = 'schemas/assemblies/octahedron.json',
   mode = 'player',
   showUI = true,
   onStepComplete

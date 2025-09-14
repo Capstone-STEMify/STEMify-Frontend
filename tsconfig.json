@@ -28,7 +28,8 @@
       "@/types/*": ["types/*"],
       "@/providers/*": ["providers/*"],
       "@/shadcn/*": ["utils/shadcn/*"],
-      "@/hooks/*": ["hooks/*"]
+      "@/hooks/*": ["hooks/*"],
+      "@/schemas/*": ["schemas/*"]
     }
   },
   "include": [
@@ -37,7 +38,14 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/providers/ExcalidrawWrapper.tsx",
-    "src/components/shared/CustomMenubar"
-, "src/features/blockly-phaser/blockly/BlocklyEditor.js", "src/app/[locale]/test/JointHelper.jsx", "src/app/[locale]/test/Connector.jsx", "src/app/[locale]/test/Straw.jsx", "src/app/[locale]/test/page.jsx", "src/app/[locale]/test-2/Connector.tsx", "src/app/[locale]/test-2/Straw.tsx"  ],
+    "src/components/shared/CustomMenubar",
+    "src/features/blockly-phaser/blockly/BlocklyEditor.js",
+    "src/app/[locale]/test/JointHelper.jsx",
+    "src/app/[locale]/test/Connector.jsx",
+    "src/app/[locale]/test/Straw.jsx",
+    "src/app/[locale]/test/page.jsx",
+    "src/app/[locale]/test-2/Connector.tsx",
+    "src/app/[locale]/test-2/Straw.tsx"
+  ],
   "exclude": ["node_modules"]
 }

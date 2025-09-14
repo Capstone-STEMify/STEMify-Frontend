@@ -1,6 +1,6 @@
 {
-  "id": "5leg_red",
-  "name": "5-Leg Red Connector",
+  "id": "4leg_red",
+  "name": "4-Leg Red Connector",
   "version": "1.0",
   "category": "connector",
   "baseGeometry": {
@@ -8,7 +8,7 @@
     "portDiameter": 0.65,
     "shape": "custom",
     "modelPath": "/models/connector_4legs.glb",
-    "meshName": "connector_5leg"
+    "meshName": "connector_4legs"
   },
   "materialRef": "plastic_red",
   "arms": [
