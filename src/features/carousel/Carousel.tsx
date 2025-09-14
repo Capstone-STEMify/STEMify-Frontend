@@ -146,8 +146,8 @@ export default function CarouselShowcase() {
   }
 
   return (
-    <div className='min-h-screen w-full bg-neutral-50'>
-      <div className='max-w-7.5xl mx-auto px-4 py-6 md:py-10'>
+    <div className=''>
+      <div className='mx-auto px-4 py-6 md:py-10'>
         <HeaderBar />
 
         {/* Carousel */}

@@ -1,8 +1,5 @@
-import CarouselShowcase from '@/features/carousel/Carousel'
-import React from 'react'
+import StrawLabList from '@/features/straw-lab-list/LabList'
 
 export default function CarouselPage() {
-  return (
-    <CarouselShowcase/>
-  )
+  return <StrawLabList />
 }

@@ -3,21 +3,7 @@ import React, { useState } from 'react'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
-import {
-  Heart,
-  Star,
-  Play,
-  Settings,
-  Bot,
-  Car,
-  Radar,
-  Award,
-  Music,
-  Eye,
-  Cpu,
-  Wrench,
-  Zap,
-} from 'lucide-react'
+import { Heart, Star, Play, Settings, Bot, Car, Radar, Award, Music, Eye, Cpu, Wrench, Zap } from 'lucide-react'
 
 interface ModelItem {
   id: number
@@ -172,34 +158,32 @@ export default function StrawLabList() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'>
+    <div>
       {/* Main Content with rounded background */}
-      <main className="container mx-auto px-4 py-6">
-        <div className="bg-white rounded-2xl shadow-sm p-6">
+      <main className='container mx-auto px-4'>
+        <div className='bg-white'>
           {/* Tab Navigation */}
-          <div className="mb-6">
-            <div className="flex items-center space-x-1 mb-4">
-              <span className="text-sm text-gray-600">Models</span>
-              <div className="flex items-center space-x-1 ml-4">
-                <Button 
-                  size="sm"
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-full px-4"
-                >
+          <div className='mb-6'>
+            <div className='mb-4 flex items-center space-x-1'>
+              <span className='text-sm text-gray-600'>Models</span>
+              <div className='ml-4 flex items-center space-x-1'>
+                <Button size='sm' className='rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-4'>
                   uKit Advanced Builds
                 </Button>
               </div>
             </div>
-            
-            <div className="flex flex-wrap gap-2">
+
+            <div className='flex flex-wrap gap-2'>
               {categories.map((category) => (
                 <Button
                   key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
-                  size="sm"
+                  variant={selectedCategory === category ? 'default' : 'outline'}
+                  size='sm'
                   onClick={() => setSelectedCategory(category)}
-                  className={selectedCategory === category 
-                    ? "scale-105 transform bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg rounded-full" 
-                    : "bg-gray-100 border-gray-200 hover:bg-gray-200 text-gray-700 rounded-full"
+                  className={
+                    selectedCategory === category
+                      ? 'scale-105 transform rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                      : 'rounded-full border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }
                 >
                   {category}
@@ -217,7 +201,9 @@ export default function StrawLabList() {
               >
                 <CardContent className='p-0'>
                   {/* Model Image/Icon Area */}
-                  <div className={`${model.bgColor} relative flex h-32 items-center justify-center overflow-hidden rounded-t-lg`}>
+                  <div
+                    className={`${model.bgColor} relative flex h-32 items-center justify-center overflow-hidden rounded-t-lg`}
+                  >
                     {/* Decorative elements */}
                     <div className='absolute top-2 right-2 h-6 w-6 animate-pulse rounded-full bg-white/20'></div>
                     <div className='absolute bottom-3 left-3 h-4 w-4 animate-pulse rounded-full bg-white/30 delay-300'></div>
