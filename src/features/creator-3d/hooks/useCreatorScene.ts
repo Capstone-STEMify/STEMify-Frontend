@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback, useMemo } from 'react'
-import { Assembly, ComponentTemplate, Straw, Connector, Transform } from "@/features/assembly/types/assembly.types"
+import { Assembly, ComponentTemplate, Straw, Connector, Transform } from '@/features/assembly/types/assembly.types'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 
 const INITIAL_SCENE: Assembly['scene'] = {
@@ -35,6 +35,60 @@ const INITIAL_SCENE: Assembly['scene'] = {
   }
 }
 
+export function createInstanceFromTemplate(
+  template: ComponentTemplate,
+  position: { x: number; y: number; z: number },
+  generateId: (prefix: string) => string
+): AssemblyInstance {
+  const id = generateId(template.type)
+
+  const baseTransform: Transform = {
+    position,
+    rotation: { x: 0, y: 0, z: 0 },
+    scale: { x: 1, y: 1, z: 1 }
+  }
+
+  // Clone default properties từ template
+  const data: Straw | Connector = {
+    id,
+    name: template.name,
+    transform: baseTransform,
+    material: template.defaultProperties.material,
+    geometry: template.defaultProperties.geometry,
+    ...(template.type === 'straw'
+      ? {
+          endpoints: {
+            start: { id: `${id}_start`, localPosition: { x: -5.6, y: 0, z: 0 }, connectionId: null, isAvailable: true },
+            end: { id: `${id}_end`, localPosition: { x: 5.6, y: 0, z: 0 }, connectionId: null, isAvailable: true }
+          }
+        }
+      : {
+          type: 'cross',
+          ports: [
+            {
+              id: `${id}_port_0`,
+              localPosition: { x: 0, y: 0, z: 2 },
+              orientation: { x: 0, y: 0, z: 1 },
+              connectionId: null,
+              isAvailable: true,
+              portIndex: 0
+            }
+          ],
+          constraints: { maxConnections: 3, allowedAngles: [] }
+        })
+  } as Straw | Connector
+
+  return {
+    id,
+    templateId: template.id,
+    category: template.type,
+    data,
+    transform: baseTransform,
+    isVisible: true,
+    distanceToCamera: 0
+  }
+}
+
 export function useCreatorScene() {
   const [instances, setInstances] = useState<AssemblyInstance[]>([])
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -51,80 +105,13 @@ export function useCreatorScene() {
 
   // Add object
   const addObject = useCallback(
-    (type: 'straw' | 'connector', position: { x: number; y: number; z: number }) => {
-      const id = generateId(type)
-
-      const baseTransform: Transform = {
-        position,
-        rotation: { x: 0, y: 0, z: 0 },
-        scale: { x: 1, y: 1, z: 1 }
-      }
-
-      let data: Straw | Connector
-      if (type === 'straw') {
-        data = {
-          id,
-          name: `Straw ${instances.length + 1}`,
-          transform: baseTransform,
-          material: {
-            type: 'plastic',
-            color: '#22c55e',
-            flexibility: 0.1,
-            opacity: 1,
-            roughness: 1,
-            metalness: 0
-          },
-          geometry: { diameter: 1.6, length: 11.2, wallThickness: 0.1 },
-          endpoints: {
-            start: { id: `${id}_start`, localPosition: { x: -5.6, y: 0, z: 0 }, connectionId: null, isAvailable: true },
-            end: { id: `${id}_end`, localPosition: { x: 5.6, y: 0, z: 0 }, connectionId: null, isAvailable: true }
-          },
-          physics: { mass: 0.3, friction: 0.4, elasticity: 0.2 }
-        }
-      } else {
-        data = {
-          id,
-          name: `Connector ${instances.length + 1}`,
-          transform: baseTransform,
-          material: {
-            type: 'plastic',
-            color: '#dc2626',
-            flexibility: 0,
-            opacity: 1,
-            roughness: 1,
-            metalness: 0
-          },
-          type: 'cross',
-          geometry: { portDiameter: 1.6, shape: 'cylindrical', size: { x: 4, y: 4, z: 4 } },
-          ports: [
-            {
-              id: `${id}_port_0`,
-              localPosition: { x: 0, y: 0, z: 2 },
-              orientation: { x: 0, y: 0, z: 1 },
-              connectionId: null,
-              isAvailable: true,
-              portIndex: 0
-            }
-          ],
-          constraints: { maxConnections: 3, allowedAngles: [] }
-        }
-      }
-
-      const newInstance: AssemblyInstance = {
-        id,
-        templateId: type === 'straw' ? 'green_11_2' : '3leg_red',
-        category: type,
-        data,
-        transform: baseTransform,
-        isVisible: true,
-        distanceToCamera: 0
-      }
-
+    (template: ComponentTemplate, position: { x: number; y: number; z: number }) => {
+      const newInstance = createInstanceFromTemplate(template, position, generateId)
       setInstances((prev) => [...prev, newInstance])
-      setSelectedId(id)
-      return id
+      setSelectedId(newInstance.id)
+      return newInstance.id
     },
-    [instances.length, generateId]
+    [generateId]
   )
 
   const removeObject = useCallback((id: string) => {

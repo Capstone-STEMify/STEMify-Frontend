@@ -56,16 +56,16 @@ export function Creator3D() {
 
   // Handle adding component from palette
   const handleAddComponent = useCallback(
-    (type: 'straw' | 'connector') => {
-      addObject(type, { x: 0, y: 0, z: 0 })
+    (template: ComponentTemplate) => {
+      addObject(template, { x: 0, y: 0, z: 0 })
     },
     [addObject]
   )
 
   // Handle adding component from workspace drop
   const handleWorkspaceAdd = useCallback(
-    (type: 'straw' | 'connector', position: { x: number; y: number; z: number }) => {
-      addObject(type, position)
+    (template: ComponentTemplate, position: { x: number; y: number; z: number }) => {
+      addObject(template, position)
     },
     [addObject]
   )

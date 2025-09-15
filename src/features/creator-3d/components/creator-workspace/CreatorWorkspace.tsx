@@ -19,7 +19,7 @@ interface CreatorWorkspaceProps {
   dragSource: ComponentTemplate | null
   onObjectSelect: (objectId: string | null) => void
   onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance['transform']>) => void
-  onObjectAdd: (type: 'straw' | 'connector', position: { x: number; y: number; z: number }) => void
+  onObjectAdd: (template: ComponentTemplate, position: { x: number; y: number; z: number }) => void
   onDragEnd: () => void
   onTransformModeChange: (mode: 'translate' | 'rotate' | 'scale') => void
   onToggleGrid: () => void
@@ -64,7 +64,7 @@ export function CreatorWorkspace({
       // category trong AssemblyInstance là 'straw' | 'connector'
       const category = dragSource.category as 'straw' | 'connector'
 
-      onObjectAdd(category, position)
+      onObjectAdd(dragSource, position)
       onDragEnd()
     },
     [dragSource, onObjectAdd, onDragEnd]

@@ -6,7 +6,7 @@ import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 
 interface ComponentPaletteProps {
   onDragStart: (template: ComponentTemplate) => void
-  onAddComponent: (type: 'straw' | 'connector') => void
+  onAddComponent: (template: ComponentTemplate) => void
 }
 
 export async function loadComponentTemplate(jsonPath: string): Promise<ComponentTemplate> {
@@ -31,7 +31,7 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
       },
       material: {
         type: data.materialRef?.includes('plastic') ? 'plastic' : 'metal',
-        color: data.materialRef === 'plastic_green' ? '#22c55e' : '#dc2626',
+        color: data.materialRef === 'plastic_green' ? '#c1e500' : '#fff51d',
         flexibility: 0.1,
         opacity: 1,
         roughness: 1,
@@ -53,10 +53,11 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
   useEffect(() => {
     async function loadTemplates() {
       try {
-        const straw = await loadComponentTemplate('/components/templates/StrawTypes/green_11_2.json')
+        const straw_green = await loadComponentTemplate('/components/templates/StrawTypes/green_11_2.json')
+        const straw_yellow = await loadComponentTemplate('/components/templates/StrawTypes/yellow_3_8.json')
         const connector = await loadComponentTemplate('/components/templates/ConnectorTypes/3legs.json')
 
-        setTemplates([straw, connector])
+        setTemplates([straw_green, straw_yellow, connector])
       } catch (err) {
         console.error('Failed to load templates', err)
       }
@@ -81,7 +82,7 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
   }
 
   const handleDoubleClick = (template: ComponentTemplate) => {
-    onAddComponent(template.type)
+    onAddComponent(template)
   }
 
   return (
