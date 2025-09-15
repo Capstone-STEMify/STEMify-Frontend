@@ -263,7 +263,7 @@ export interface ComponentTemplate {
   type: 'straw' | 'connector'
   category: string
   description: string
-  defaultProperties: Partial<Straw | Connector>
+  defaultProperties: Straw | Connector
   previewImageUrl?: string
   source?: string
 }
