@@ -1,16 +1,10 @@
 'use client'
 
 import { useState, useCallback, useMemo } from 'react'
-import { CreatorScene, SceneObject, ComponentType, CreatorState, AssemblyExport } from '../types/creator.types'
+import { Assembly, ComponentTemplate, Straw, Connector, Transform } from "@/features/assembly/types/assembly.types"
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 
-const INITIAL_SCENE: CreatorScene = {
-  objects: [],
-  selectedObjectId: null,
-  camera: {
-    position: { x: 30, y: 20, z: 30 },
-    target: { x: 0, y: 0, z: 0 },
-    fov: 60
-  },
+const INITIAL_SCENE: Assembly['scene'] = {
   environment: {
     background: '#f5f5f5',
     lighting: {
@@ -20,205 +14,147 @@ const INITIAL_SCENE: CreatorScene = {
         intensity: 1.2,
         position: { x: 10, y: 15, z: 8 }
       }
+    },
+    camera: {
+      position: { x: 30, y: 20, z: 30 },
+      target: { x: 0, y: 0, z: 0 },
+      fov: 60,
+      controls: 'orbit'
+    }
+  },
+  workspace: {
+    bounds: {
+      min: { x: -100, y: -100, z: -100 },
+      max: { x: 100, y: 100, z: 100 }
+    },
+    grid: {
+      visible: true,
+      size: 1,
+      divisions: 100
     }
   }
 }
 
-const INITIAL_STATE: CreatorState = {
-  scene: INITIAL_SCENE,
-  isDragging: false,
-  dragSource: null,
-  transformMode: 'translate',
-  snapToGrid: true,
-  gridSize: 1,
-  showGrid: true,
-  showAxes: true
-}
-
 export function useCreatorScene() {
-  const [state, setState] = useState<CreatorState>(INITIAL_STATE)
+  const [instances, setInstances] = useState<AssemblyInstance[]>([])
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [transformMode, setTransformMode] = useState<'translate' | 'rotate' | 'scale'>('translate')
+  const [showGrid, setShowGrid] = useState(true)
+  const [showAxes, setShowAxes] = useState(true)
+  const [snapToGrid, setSnapToGrid] = useState(true)
+  const [gridSize, setGridSize] = useState(1)
 
-  // Generate unique ID for new objects
-  const generateObjectId = useCallback(
-    (type: ComponentType): string => {
-      const timestamp = Date.now()
-      const count = state.scene.objects.filter((obj) => obj.type === type).length + 1
-      return `${type}_${count}_${timestamp}`
-    },
-    [state.scene.objects]
-  )
+  // Generate unique ID
+  const generateId = useCallback((prefix: string) => {
+    return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 1000)}`
+  }, [])
 
-  // Add object to scene
+  // Add object
   const addObject = useCallback(
-    (type: ComponentType, position: { x: number; y: number; z: number } = { x: 0, y: 0, z: 0 }) => {
-      const newObject: SceneObject = {
-        id: generateObjectId(type),
-        type,
-        name: `${type} ${state.scene.objects.length + 1}`,
+    (type: 'straw' | 'connector', position: { x: number; y: number; z: number }) => {
+      const id = generateId(type)
+
+      const baseTransform: Transform = {
         position,
         rotation: { x: 0, y: 0, z: 0 },
-        scale: { x: 1, y: 1, z: 1 },
-        templateId: type === 'connector_3leg' ? '3leg_red' : 'green_11_2',
-        created: Date.now()
+        scale: { x: 1, y: 1, z: 1 }
       }
 
-      setState((prev) => ({
-        ...prev,
-        scene: {
-          ...prev.scene,
-          objects: [...prev.scene.objects, newObject],
-          selectedObjectId: newObject.id
+      let data: Straw | Connector
+      if (type === 'straw') {
+        data = {
+          id,
+          name: `Straw ${instances.length + 1}`,
+          transform: baseTransform,
+          material: {
+            type: 'plastic',
+            color: '#22c55e',
+            flexibility: 0.1,
+            opacity: 1,
+            roughness: 1,
+            metalness: 0
+          },
+          geometry: { diameter: 1.6, length: 11.2, wallThickness: 0.1 },
+          endpoints: {
+            start: { id: `${id}_start`, localPosition: { x: -5.6, y: 0, z: 0 }, connectionId: null, isAvailable: true },
+            end: { id: `${id}_end`, localPosition: { x: 5.6, y: 0, z: 0 }, connectionId: null, isAvailable: true }
+          },
+          physics: { mass: 0.3, friction: 0.4, elasticity: 0.2 }
         }
-      }))
+      } else {
+        data = {
+          id,
+          name: `Connector ${instances.length + 1}`,
+          transform: baseTransform,
+          material: {
+            type: 'plastic',
+            color: '#dc2626',
+            flexibility: 0,
+            opacity: 1,
+            roughness: 1,
+            metalness: 0
+          },
+          type: 'cross',
+          geometry: { portDiameter: 1.6, shape: 'cylindrical', size: { x: 4, y: 4, z: 4 } },
+          ports: [
+            {
+              id: `${id}_port_0`,
+              localPosition: { x: 0, y: 0, z: 2 },
+              orientation: { x: 0, y: 0, z: 1 },
+              connectionId: null,
+              isAvailable: true,
+              portIndex: 0
+            }
+          ],
+          constraints: { maxConnections: 3, allowedAngles: [] }
+        }
+      }
 
-      return newObject.id
+      const newInstance: AssemblyInstance = {
+        id,
+        templateId: type === 'straw' ? 'green_11_2' : '3leg_red',
+        category: type,
+        data,
+        transform: baseTransform,
+        isVisible: true,
+        distanceToCamera: 0
+      }
+
+      setInstances((prev) => [...prev, newInstance])
+      setSelectedId(id)
+      return id
     },
-    [generateObjectId, state.scene.objects.length]
+    [instances.length, generateId]
   )
 
-  // Remove object from scene
-  const removeObject = useCallback((objectId: string) => {
-    setState((prev) => ({
-      ...prev,
-      scene: {
-        ...prev.scene,
-        objects: prev.scene.objects.filter((obj) => obj.id !== objectId),
-        selectedObjectId: prev.scene.selectedObjectId === objectId ? null : prev.scene.selectedObjectId
-      }
-    }))
+  const removeObject = useCallback((id: string) => {
+    setInstances((prev) => prev.filter((inst) => inst.id !== id))
+    setSelectedId((prev) => (prev === id ? null : prev))
   }, [])
 
-  // Update object properties
-  const updateObject = useCallback((objectId: string, updates: Partial<SceneObject>) => {
-    setState((prev) => ({
-      ...prev,
-      scene: {
-        ...prev.scene,
-        objects: prev.scene.objects.map((obj) => (obj.id === objectId ? { ...obj, ...updates } : obj))
-      }
-    }))
+  const updateObject = useCallback((id: string, updates: Partial<Transform>) => {
+    setInstances((prev) =>
+      prev.map((inst) => (inst.id === id ? { ...inst, transform: { ...inst.transform, ...updates } } : inst))
+    )
   }, [])
 
-  // Select object
-  const selectObject = useCallback((objectId: string | null) => {
-    setState((prev) => ({
-      ...prev,
-      scene: {
-        ...prev.scene,
-        selectedObjectId: objectId
-      }
-    }))
+  const selectObject = useCallback((id: string | null) => {
+    setSelectedId(id)
   }, [])
 
-  // Update transform mode
-  const setTransformMode = useCallback((mode: 'translate' | 'rotate' | 'scale') => {
-    setState((prev) => ({ ...prev, transformMode: mode }))
-  }, [])
-
-  // Toggle grid
-  const toggleGrid = useCallback(() => {
-    setState((prev) => ({ ...prev, showGrid: !prev.showGrid }))
-  }, [])
-
-  // Toggle axes
-  const toggleAxes = useCallback(() => {
-    setState((prev) => ({ ...prev, showAxes: !prev.showAxes }))
-  }, [])
-
-  // Toggle snap to grid
-  const toggleSnapToGrid = useCallback(() => {
-    setState((prev) => ({ ...prev, snapToGrid: !prev.snapToGrid }))
-  }, [])
-
-  // Set grid size
-  const setGridSize = useCallback((size: number) => {
-    setState((prev) => ({ ...prev, gridSize: size }))
-  }, [])
-
-  // Clear scene
   const clearScene = useCallback(() => {
-    setState((prev) => ({
-      ...prev,
-      scene: {
-        ...prev.scene,
-        objects: [],
-        selectedObjectId: null
-      }
-    }))
+    setInstances([])
+    setSelectedId(null)
   }, [])
 
-  // Get selected object
   const selectedObject = useMemo(() => {
-    return state.scene.objects.find((obj) => obj.id === state.scene.selectedObjectId) || null
-  }, [state.scene.objects, state.scene.selectedObjectId])
+    return instances.find((inst) => inst.id === selectedId) || null
+  }, [instances, selectedId])
 
-  // Export scene to assembly JSON
+  // Export ra Assembly chuẩn
   const exportAssembly = useCallback(
-    (metadata: { title: string; description: string; author: string }): AssemblyExport => {
+    (metadata: { title: string; description: string; author: string }): Assembly => {
       const now = new Date().toISOString()
-
-      // Group objects by type
-      const strawInstances = state.scene.objects
-        .filter((obj) => obj.type === 'straw_green')
-        .map((obj) => ({
-          id: obj.id,
-          transform: {
-            position: obj.position,
-            rotation: obj.rotation
-          }
-        }))
-
-      const connectorInstances = state.scene.objects
-        .filter((obj) => obj.type === 'connector_3leg')
-        .map((obj) => ({
-          id: obj.id,
-          transform: {
-            position: obj.position,
-            rotation: obj.rotation
-          }
-        }))
-
-      // Create basic actions for showing objects
-      const actions = [
-        {
-          id: 'action_show_all',
-          name: 'Show All Components',
-          description: 'Highlights all components in the scene',
-          actionType: 'highlight' as const,
-          targets: state.scene.objects.map((obj) => obj.id),
-          duration: 2.0,
-          animation: {
-            type: 'appear' as const,
-            params: {
-              colorHighlight: '#FFD700',
-              pulseEffect: true
-            }
-          }
-        }
-      ]
-
-      // Create basic activity
-      const activities = [
-        {
-          id: 'custom_assembly',
-          name: metadata.title,
-          description: metadata.description,
-          difficulty: 'beginner',
-          estimatedTime: 600,
-          steps: [
-            {
-              actionId: 'action_show_all',
-              title: 'Observe Components',
-              description: 'Study the arrangement of straws and connectors',
-              expectedResult: 'All components are visible and highlighted',
-              hints: [
-                'Notice the positioning of each component',
-                'Observe the relationships between straws and connectors'
-              ]
-            }
-          ]
-        }
-      ]
 
       return {
         metadata: {
@@ -226,66 +162,38 @@ export function useCreatorScene() {
           created: now,
           lastModified: now,
           author: metadata.author,
-          description: metadata.description,
-          title: metadata.title
+          description: metadata.description
         },
-        templates: {
-          materials: [
-            { id: 'plastic_green', source: '/components/templates/MaterialLibrary/plastic_green.json' },
-            { id: 'plastic_red', source: '/components/templates/MaterialLibrary/plastic_red.json' }
-          ],
-          components: [
-            { id: 'green_11_2', source: '/components/templates/StrawTypes/green_11_2.json' },
-            { id: '3leg_red', source: '/components/templates/ConnectorTypes/3leg_red.json' }
-          ]
-        },
-        instances: {
-          straws:
-            strawInstances.length > 0
-              ? [
-                  {
-                    templateId: 'green_11_2',
-                    instances: strawInstances
-                  }
-                ]
-              : [],
-          connectors:
-            connectorInstances.length > 0
-              ? [
-                  {
-                    templateId: '3leg_red',
-                    instances: connectorInstances
-                  }
-                ]
-              : []
-        },
-        actions,
-        activities,
-        scene: {
-          environment: {
-            ...state.scene.environment,
-            camera: state.scene.camera
-          }
-        }
+        straws: instances.filter((i) => i.category === 'straw').map((i) => i.data as Straw),
+        connectors: instances.filter((i) => i.category === 'connector').map((i) => i.data as Connector),
+        joints: [],
+        actions: [],
+        activities: [],
+        scene: INITIAL_SCENE
       }
     },
-    [state.scene]
+    [instances]
   )
 
   return {
-    // State
-    state,
+    state: {
+      instances,
+      selectedId,
+      transformMode,
+      showGrid,
+      showAxes,
+      snapToGrid,
+      gridSize
+    },
     selectedObject,
-
-    // Actions
     addObject,
     removeObject,
     updateObject,
     selectObject,
     setTransformMode,
-    toggleGrid,
-    toggleAxes,
-    toggleSnapToGrid,
+    toggleGrid: () => setShowGrid((prev) => !prev),
+    toggleAxes: () => setShowAxes((prev) => !prev),
+    toggleSnapToGrid: () => setSnapToGrid((prev) => !prev),
     setGridSize,
     clearScene,
     exportAssembly

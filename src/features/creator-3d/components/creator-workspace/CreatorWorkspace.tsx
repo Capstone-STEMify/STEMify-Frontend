@@ -2,13 +2,14 @@
 
 import { Canvas } from '@react-three/fiber'
 import { useRef, useCallback, useState } from 'react'
-import { SceneObject, ComponentTemplate } from '../../types/creator.types'
 import { CreatorToolbar } from '@/features/creator-3d/components/creator-workspace/CreatorToolbar'
 import { SceneContent } from '@/features/creator-3d/components/creator-workspace/SceneContent'
 import SceneTopRight from '@/features/creator-3d/components/creator-workspace/SceneTopRight'
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 
 interface CreatorWorkspaceProps {
-  objects: SceneObject[]
+  objects: AssemblyInstance[]
   selectedObjectId: string | null
   transformMode: 'translate' | 'rotate' | 'scale'
   showGrid: boolean
@@ -17,8 +18,8 @@ interface CreatorWorkspaceProps {
   gridSize: number
   dragSource: ComponentTemplate | null
   onObjectSelect: (objectId: string | null) => void
-  onObjectUpdate: (objectId: string, updates: Partial<SceneObject>) => void
-  onObjectAdd: (type: ComponentTemplate['type'], position: { x: number; y: number; z: number }) => void
+  onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance['transform']>) => void
+  onObjectAdd: (type: 'straw' | 'connector', position: { x: number; y: number; z: number }) => void
   onDragEnd: () => void
   onTransformModeChange: (mode: 'translate' | 'rotate' | 'scale') => void
   onToggleGrid: () => void
@@ -56,11 +57,14 @@ export function CreatorWorkspace({
 
       if (!dragSource) return
 
-      // Calculate drop position (for now, place at origin)
-      // In a more advanced version, we could raycast to get the exact 3D position
+      // Hiện tại: đặt tại origin (0,0,0).
+      // Sau này có thể raycast để lấy vị trí thực trong 3D.
       const position = { x: 0, y: 0, z: 0 }
 
-      onObjectAdd(dragSource.type, position)
+      // category trong AssemblyInstance là 'straw' | 'connector'
+      const category = dragSource.category as 'straw' | 'connector'
+
+      onObjectAdd(category, position)
       onDragEnd()
     },
     [dragSource, onObjectAdd, onDragEnd]

@@ -265,6 +265,7 @@ export interface ComponentTemplate {
   description: string
   defaultProperties: Partial<Straw | Connector>
   previewImageUrl?: string
+  source?: string
 }
 
 export interface ComponentLibrary {

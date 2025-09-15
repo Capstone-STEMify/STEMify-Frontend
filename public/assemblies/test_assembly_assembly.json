@@ -1,8 +1,8 @@
 {
   "metadata": {
     "version": "2.0",
-    "created": "2025-09-15T10:54:14.619Z",
-    "lastModified": "2025-09-15T10:54:14.619Z",
+    "created": "2025-09-15T11:40:59.301Z",
+    "lastModified": "2025-09-15T11:40:59.301Z",
     "author": "test",
     "description": "test",
     "title": "test"
@@ -35,41 +35,41 @@
         "templateId": "green_11_2",
         "instances": [
           {
-            "id": "straw_green_1_1757933610005",
+            "id": "straw_green_1_1757935650196",
             "transform": {
               "position": {
-                "x": 0,
+                "x": 3.4,
                 "y": 0,
-                "z": 0
+                "z": 5.8
               },
               "rotation": {
                 "x": 0,
-                "y": 0,
+                "y": -2.0943951023931953,
                 "z": 0
               }
             }
           },
           {
-            "id": "straw_green_2_1757933619928",
+            "id": "straw_green_2_1757935792082",
             "transform": {
               "position": {
-                "x": 0,
+                "x": -3.3,
                 "y": 0,
-                "z": 0
+                "z": 5.8
               },
               "rotation": {
                 "x": 0,
-                "y": 0,
+                "y": -1.0471975511965976,
                 "z": 0
               }
             }
           },
           {
-            "id": "straw_green_3_1757933621388",
+            "id": "straw_green_3_1757936153685",
             "transform": {
               "position": {
-                "x": -10,
-                "y": -7,
+                "x": 0,
+                "y": 0,
                 "z": 0
               },
               "rotation": {
@@ -90,7 +90,7 @@
       "name": "Show All Components",
       "description": "Highlights all components in the scene",
       "actionType": "highlight",
-      "targets": ["straw_green_1_1757933610005", "straw_green_2_1757933619928", "straw_green_3_1757933621388"],
+      "targets": ["straw_green_1_1757935650196", "straw_green_2_1757935792082", "straw_green_3_1757936153685"],
       "duration": 2,
       "animation": {
         "type": "appear",

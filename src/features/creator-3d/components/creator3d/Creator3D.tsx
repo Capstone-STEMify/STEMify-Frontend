@@ -2,14 +2,14 @@
 
 import { useState, useCallback, useMemo } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
-import { CreatorWorkspace } from '../creator-workspace/CreatorWorkspace'
 import { ObjectInspector } from '../ObjectInspector'
 import { useCreatorScene } from '../../hooks/useCreatorScene'
-import { ComponentTemplate, ComponentType } from '../../types/creator.types'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
 import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
+import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
+import { CreatorWorkspace } from '@/features/creator-3d/components/creator-workspace/CreatorWorkspace'
 
 export function Creator3D() {
   const {
@@ -56,7 +56,7 @@ export function Creator3D() {
 
   // Handle adding component from palette
   const handleAddComponent = useCallback(
-    (type: ComponentType) => {
+    (type: 'straw' | 'connector') => {
       addObject(type, { x: 0, y: 0, z: 0 })
     },
     [addObject]
@@ -64,7 +64,7 @@ export function Creator3D() {
 
   // Handle adding component from workspace drop
   const handleWorkspaceAdd = useCallback(
-    (type: ComponentType, position: { x: number; y: number; z: number }) => {
+    (type: 'straw' | 'connector', position: { x: number; y: number; z: number }) => {
       addObject(type, position)
     },
     [addObject]
@@ -114,8 +114,8 @@ export function Creator3D() {
       {/* Main Workspace */}
       <div className='relative flex-1'>
         <CreatorWorkspace
-          objects={state.scene.objects}
-          selectedObjectId={state.scene.selectedObjectId}
+          objects={state.instances}
+          selectedObjectId={state.selectedId}
           transformMode={state.transformMode}
           showGrid={state.showGrid}
           showAxes={state.showAxes}
@@ -134,14 +134,14 @@ export function Creator3D() {
 
         {/* Scene Stats */}
         <SceneStats
-          objectCount={state.scene.objects.length}
-          strawCount={state.scene.objects.filter((obj) => obj.type === 'straw_green').length}
-          connectorCount={state.scene.objects.filter((obj) => obj.type === 'connector_3leg').length}
+          objectCount={state.instances.length}
+          strawCount={state.instances.filter((inst) => inst.category === 'straw').length}
+          connectorCount={state.instances.filter((inst) => inst.category === 'connector').length}
           selectedObject={selectedObject}
         />
 
         {/* Action Buttons */}
-        <SceneActions onClear={handleClearScene} onExport={handleExport} hasObjects={state.scene.objects.length > 0} />
+        <SceneActions onClear={handleClearScene} onExport={handleExport} hasObjects={state.instances.length > 0} />
       </div>
 
       {/* Object Inspector */}
@@ -175,7 +175,6 @@ export function Creator3D() {
           onClose={() => setShowExportDialog(false)}
           onExport={(metadata) => {
             const exportData = exportAssembly(metadata)
-            // Download JSON file
             const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
