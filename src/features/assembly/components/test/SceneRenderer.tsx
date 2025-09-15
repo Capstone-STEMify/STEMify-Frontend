@@ -411,12 +411,11 @@ export function SceneRenderer({
   )
 
   const getArmPoseForConnector = useCallback(
-    (connectorId: string) => {
-      if (!assembly || !currentActivity || clampedStep < 0) return undefined
+    (connectorId: string): Record<string, number> => {
+      if (!assembly || !currentActivity || clampedStep < 0) return {}
 
-      let finalArmPose = { arm1: 0, arm2: 0 }
+      const finalPose: Record<string, number> = {}
 
-      // Accumulate arm poses from all steps up to current step
       for (let i = 0; i <= clampedStep; i++) {
         const step = currentActivity.steps[i]
         if (!step) continue
@@ -424,41 +423,28 @@ export function SceneRenderer({
         const action = assembly.actions.find((a) => a.id === step.actionId)
         if (!action || action.type !== 'transform_arm') continue
 
-        // Check if this connector is targeted by the action
         if (Array.isArray(action.targets) && action.targets.includes(connectorId)) {
-          // Try connectorArmTransforms first (per-connector specific)
           const connectorArmTransforms = (action as any).connectorArmTransforms
-          if (connectorArmTransforms && connectorArmTransforms[connectorId]) {
-            const transforms = connectorArmTransforms[connectorId]
-            // console.log(`Step ${i+1}: Connector-specific arm transforms for ${connectorId}:`, transforms);
-            finalArmPose = {
-              arm1: transforms.arm_1?.z || finalArmPose.arm1,
-              arm2: transforms.arm_2?.z || finalArmPose.arm2
-            }
-          } else {
-            // Fallback to global armTransforms
-            const armTransforms = (action as any).armTransforms
-            if (armTransforms) {
-              console.log(`Step ${i + 1}: Global arm transforms for ${connectorId}:`, armTransforms)
-              finalArmPose = {
-                arm1: armTransforms.arm_1?.z || finalArmPose.arm1,
-                arm2: armTransforms.arm_2?.z || finalArmPose.arm2
+          const armTransforms = connectorArmTransforms?.[connectorId] || (action as any).armTransforms
+
+          if (armTransforms) {
+            for (const armName of Object.keys(armTransforms)) {
+              const angle = armTransforms[armName]?.z
+              if (typeof angle === 'number') {
+                // Update finalPose
+                finalPose[armName] = angle
               }
             }
           }
         }
       }
 
-      // Only return if there's actually a change from default
-      if (finalArmPose.arm1 !== 0 || finalArmPose.arm2 !== 0) {
-        // console.log(`Final arm pose for ${connectorId}:`, finalArmPose);
-        return finalArmPose
-      }
-
-      return undefined
+      console.log(` [DEBUG] Final arm pose for connector ${connectorId}:`, finalPose)
+      return Object.keys(finalPose).length > 0 ? finalPose : {}
     },
     [assembly, currentActivity, clampedStep]
   )
+
   const getConnectorInstanceById = useCallback(
     (id: string) => visibleInstances.connectors.find((c) => c.id === id),
     [visibleInstances.connectors]
@@ -509,6 +495,7 @@ export function SceneRenderer({
     trail: instantAppear ? 0 : 100,
     config: instantAppear ? { tension: 1, friction: 0 } : { tension: 170, friction: 20 }
   })
+
   return (
     <Canvas
       camera={{
@@ -650,6 +637,7 @@ export function SceneRenderer({
               animate={false}
               showDebug={mode === 'builder'}
               armPose={getArmPoseForConnector(instance.id)}
+              modelUrl={instance.data?.modelUrl || '/models/connector_2legs.glb'}
             />
           </a.group>
         )
