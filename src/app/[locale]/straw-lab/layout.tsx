@@ -12,9 +12,9 @@ export default async function CodeLab({
   children: React.ReactNode
 }>) {
   return (
-    <>
+    <div>
       <Header />
       <div className='bg-light mx-auto mt-18 w-full'>{children}</div>
-    </>
+    </div>
   )
 }
