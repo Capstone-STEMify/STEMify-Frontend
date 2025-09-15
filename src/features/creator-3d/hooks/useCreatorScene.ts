@@ -185,7 +185,7 @@ export function useCreatorScene() {
           name: 'Show All Components',
           description: 'Highlights all components in the scene',
           actionType: 'highlight' as const,
-          targetObjects: state.scene.objects.map((obj) => obj.id),
+          targets: state.scene.objects.map((obj) => obj.id),
           duration: 2.0,
           animation: {
             type: 'appear' as const,

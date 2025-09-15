@@ -239,7 +239,6 @@
       "id": "action_adjust_additional_connector_arms",
       "name": "Adjust Additional Connector Arms",
       "type": "transform_arm",
-      "connectionGroup": "second_third_squares",
       "instantAppear": true,
       "targets": ["connector_3legs_5", "connector_3legs_6", "connector_3legs_7", "connector_3legs_8"],
       "duration": 2.0,
@@ -436,7 +435,7 @@
         }
       },
       "camera": {
-        "position": { "x": 7, "y": 9, "z": 10 },
+        "position": { "x": 12, "y": 15, "z": 18 },
         "target": { "x": 27.5, "y": 0, "z": 8 },
         "fov": 60
       }
