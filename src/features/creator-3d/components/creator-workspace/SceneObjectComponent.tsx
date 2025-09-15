@@ -97,6 +97,8 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
         />
       ) : (
         <Connector3D
+          modelUrl='/models/connector_3legs.glb'
+          armPose={undefined}
           connector={{
             id: object.id,
             name: object.data.name || object.templateId,
