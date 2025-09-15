@@ -6,10 +6,11 @@ import * as THREE from 'three'
 import { Straw } from '@/features/assembly/components/Straw'
 import { Connector3D } from '@/features/assembly/components/Connector'
 import { Assembly, AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
-import { createRef, Ref, RefObject, useCallback, useMemo, useRef, useState } from 'react'
+import { createRef, Dispatch, Ref, RefObject, SetStateAction, useCallback, useMemo, useRef, useState } from 'react'
 import { Group } from 'three'
 import { useTransition } from '@react-spring/three'
 import { composeRot, EULER_ORDER } from '@/features/assembly/components/test/workspace'
+import { ThirdSquareTransformHandle } from './ThirdSquareTransformHandle'
 
 type SceneRendererProps = {
   mode?: 'player' | 'builder'
@@ -36,12 +37,32 @@ type SceneRendererProps = {
       }
     }
   >
+  isShiftPressed: boolean
   orbitControlsRef: RefObject<any>
   transformControlsRef: RefObject<any>
   currentActivity: any
   setIsTransforming: (isTransforming: boolean) => void
-  transformMode: 'translate' | 'rotate' | 'scale'
+  transformMode: 'translate' | 'rotate'
   getComponentElements: (componentId: string) => string[]
+  setRuntimeComponentOverrides: Dispatch<
+    SetStateAction<
+      Record<
+        string,
+        {
+          rotation: {
+            x: number
+            y: number
+            z: number
+          }
+          translation: {
+            x: number
+            y: number
+            z: number
+          }
+        }
+      >
+    >
+  >
 }
 
 export function SceneRenderer({
@@ -50,6 +71,7 @@ export function SceneRenderer({
   maxStep,
   assembly,
   visibleInstances,
+  isShiftPressed,
   currentStep,
   orbitControlsRef,
   currentActivity,
@@ -57,7 +79,8 @@ export function SceneRenderer({
   runtimeComponentOverrides,
   setIsTransforming,
   transformMode,
-  getComponentElements
+  getComponentElements,
+  setRuntimeComponentOverrides
 }: SceneRendererProps) {
   const [disableComponentTransform, setDisableComponentTransform] = useState(false)
   const clampedStep = Math.min(Math.max(stepIndex, 0), Math.max(maxStep - 1, 0))
@@ -643,13 +666,90 @@ export function SceneRenderer({
         )
       })}
 
+      {currentStep?.actionId === 'action_adjust_additional_connector_arms' &&
+        (() => {
+          const comp = assembly.components?.squares?.find((c: any) => c.id === 'square_third')
+          if (!comp) return null
+          const currentT = runtimeComponentOverrides['square_third']?.translation || { x: 0, y: 0, z: 0 }
+          const currentR = runtimeComponentOverrides['square_third']?.rotation || { x: 0, y: 0, z: 0 }
+          return (
+            <>
+              <ThirdSquareTransformHandle
+                componentCenter={comp.center}
+                currentTranslation={currentT}
+                currentRotation={currentR}
+                isShiftPressed={isShiftPressed}
+                transformMode={transformMode}
+                transformControlsRef={transformControlsRef}
+              />
+              <TransformControls
+                ref={transformControlsRef}
+                mode={transformMode}
+                showX={true}
+                showY={true}
+                showZ={true}
+                onMouseDown={() => {
+                  if (isShiftPressed) {
+                    setIsTransforming(true)
+                  }
+                }}
+                onMouseUp={() => {
+                  setIsTransforming(false)
+                }}
+                onObjectChange={() => {
+                  if (!isShiftPressed) return
+                  const obj = transformControlsRef.current?.object
+                  if (!obj) return
+
+                  if (transformMode === 'translate') {
+                    // Calculate new translation relative to component center
+                    const newT = {
+                      x: obj.position.x - comp.center.x,
+                      y: obj.position.y - comp.center.y,
+                      z: obj.position.z - comp.center.z
+                    }
+
+                    console.log(' TransformControls translation update:', {
+                      objectPosition: obj.position,
+                      componentCenter: comp.center,
+                      newTranslation: newT
+                    })
+
+                    setRuntimeComponentOverrides((prev) => ({
+                      ...prev,
+                      square_third: {
+                        rotation: prev.square_third?.rotation || { x: 0, y: 0, z: 0 },
+                        translation: newT
+                      }
+                    }))
+                  } else if (transformMode === 'rotate') {
+                    // Calculate new rotation from object rotation
+                    const newR = {
+                      x: obj.rotation.x,
+                      y: obj.rotation.y,
+                      z: obj.rotation.z
+                    }
+
+                    console.log('TransformControls rotation update:', {
+                      objectRotation: obj.rotation,
+                      newRotation: newR
+                    })
+
+                    setRuntimeComponentOverrides((prev) => ({
+                      ...prev,
+                      square_third: {
+                        rotation: newR,
+                        translation: prev.square_third?.translation || { x: 0, y: 0, z: 0 }
+                      }
+                    }))
+                  }
+                }}
+              />
+            </>
+          )
+        })()}
+
       {/* Transform Controls */}
-      <TransformControls
-        ref={transformControlsRef}
-        mode={transformMode}
-        onMouseDown={() => setIsTransforming(true)}
-        onMouseUp={() => setIsTransforming(false)}
-      />
     </Canvas>
   )
 }
