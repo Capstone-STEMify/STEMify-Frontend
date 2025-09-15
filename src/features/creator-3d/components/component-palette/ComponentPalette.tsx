@@ -50,6 +50,8 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
   const [templates, setTemplates] = useState<ComponentTemplate[]>([])
   const [draggingTemplate, setDraggingTemplate] = useState<ComponentTemplate | null>(null)
 
+  // TODO: Replace with real data fetching logic
+
   useEffect(() => {
     async function loadTemplates() {
       try {
