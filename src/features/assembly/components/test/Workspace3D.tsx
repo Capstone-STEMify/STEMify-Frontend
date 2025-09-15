@@ -192,7 +192,7 @@ export default function Workspace3D({
   if (!assembly) return <div>No assembly loaded</div>
 
   return (
-    <div className='relative h-[600px] w-full'>
+    <div className='relative h-screen w-full'>
       {/* Step Info */}
       {showUI && currentStep && (
         <StepInfoPanel
