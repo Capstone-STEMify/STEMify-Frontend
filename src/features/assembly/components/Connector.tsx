@@ -13,7 +13,7 @@ interface Props {
   modelScale?: [number, number, number] | number
   rotationOffset?: [number, number, number]
   showDebug?: boolean
-  armPose: Record<string, number> // e.g. { Arm_1: 0.5, Arm_2: -0.2 }
+  armPose?: Record<string, number> // e.g. { Arm_1: 0.5, Arm_2: -0.2 }
 }
 
 export const Connector3D = forwardRef<Group, Props>(
