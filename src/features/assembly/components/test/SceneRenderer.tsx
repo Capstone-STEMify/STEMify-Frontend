@@ -637,7 +637,7 @@ export function SceneRenderer({
               animate={false}
               showDebug={mode === 'builder'}
               armPose={getArmPoseForConnector(instance.id)}
-              modelUrl={instance.data?.modelUrl || '/models/connector_2legs.glb'}
+              modelUrl={instance.data?.baseGeometry.modelPath}
             />
           </a.group>
         )
