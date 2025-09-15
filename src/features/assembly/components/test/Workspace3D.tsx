@@ -253,10 +253,12 @@ export default function Workspace3D({
         currentActivity={currentActivity}
         orbitControlsRef={orbitControlsRef}
         visibleInstances={visibleInstances}
+        isShiftPressed={isShiftPressed}
         transformControlsRef={transformControlsRef}
         runtimeComponentOverrides={runtimeComponentOverrides}
         setIsTransforming={setIsTransforming}
         getComponentElements={getComponentElements}
+        setRuntimeComponentOverrides={setRuntimeComponentOverrides}
       />
     </div>
   )
