@@ -20,25 +20,25 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
   }, [onRef])
 
   // Update position and rotation when object changes
-  useEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.position.set(
-        object.transform.position.x,
-        object.transform.position.y,
-        object.transform.position.z
-      )
-      groupRef.current.rotation.set(
-        object.transform.rotation.x,
-        object.transform.rotation.y,
-        object.transform.rotation.z
-      )
-      groupRef.current.scale.set(
-        object.transform.scale?.x ?? 1,
-        object.transform.scale?.y ?? 1,
-        object.transform.scale?.z ?? 1
-      )
-    }
-  }, [object.transform])
+  // useEffect(() => {
+  //   if (groupRef.current) {
+  //     groupRef.current.position.set(
+  //       object.transform.position.x,
+  //       object.transform.position.y,
+  //       object.transform.position.z
+  //     )
+  //     groupRef.current.rotation.set(
+  //       object.transform.rotation.x,
+  //       object.transform.rotation.y,
+  //       object.transform.rotation.z
+  //     )
+  //     groupRef.current.scale.set(
+  //       object.transform.scale?.x ?? 1,
+  //       object.transform.scale?.y ?? 1,
+  //       object.transform.scale?.z ?? 1
+  //     )
+  //   }
+  // }, [object.transform])
 
   const handleClick = useCallback(
     (e: any) => {
@@ -66,38 +66,35 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
 
       {/* Render actual component */}
       {object.category === 'straw' ? (
-        (console.log('start point:', object.data.endpoints.start.localPosition.x),
-        (
-          <Straw
-            straw={{
-              id: object.id,
-              name: object.data.name || object.templateId,
-              geometry: object.data.baseGeometry || object.data.geometry,
-              material: object.data.material,
-              transform: {
-                position: { x: 0, y: 0, z: 0 },
-                rotation: { x: 0, y: 0, z: 0 },
-                scale: { x: 1, y: 1, z: 1 }
+        <Straw
+          straw={{
+            id: object.id,
+            name: object.data.name || object.templateId,
+            geometry: object.data.baseGeometry || object.data.geometry,
+            material: object.data.material,
+            transform: {
+              position: { x: 0, y: 0, z: 0 },
+              rotation: { x: 0, y: 0, z: 0 },
+              scale: { x: 1, y: 1, z: 1 }
+            },
+            endpoints: {
+              start: {
+                id: `${object.id}_start`,
+                localPosition: { x: object.data.endpoints.start.localPosition.x, y: 0, z: 0 },
+                connectionId: null,
+                isAvailable: true
               },
-              endpoints: {
-                start: {
-                  id: `${object.id}_start`,
-                  localPosition: { x: object.data.endpoints.start.localPosition.x, y: 0, z: 0 },
-                  connectionId: null,
-                  isAvailable: true
-                },
-                end: {
-                  id: `${object.id}_end`,
-                  localPosition: { x: object.data.endpoints.end.localPosition.x, y: 0, z: 0 },
-                  connectionId: null,
-                  isAvailable: true
-                }
-              },
-              physics: { mass: 0.3, friction: 0.4, elasticity: 0.2 }
-            }}
-            fade={undefined}
-          />
-        ))
+              end: {
+                id: `${object.id}_end`,
+                localPosition: { x: object.data.endpoints.end.localPosition.x, y: 0, z: 0 },
+                connectionId: null,
+                isAvailable: true
+              }
+            },
+            physics: { mass: 0.3, friction: 0.4, elasticity: 0.2 }
+          }}
+          fade={undefined}
+        />
       ) : (
         <Connector3D
           armPose={undefined}
