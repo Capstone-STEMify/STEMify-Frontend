@@ -57,7 +57,7 @@ export interface StrawEndpoints {
 export interface Straw extends BaseComponent {
   geometry: StrawGeometry
   endpoints: StrawEndpoints
-  physics: Physics
+  physics?: Physics
 }
 
 // Connector interfaces

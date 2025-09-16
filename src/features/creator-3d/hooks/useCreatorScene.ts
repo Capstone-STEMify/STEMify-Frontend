@@ -82,6 +82,7 @@ export function createInstanceFromTemplate(
   if (template.type === 'straw') {
     const strawTemplate = template.defaultProperties as Straw
     const length = strawTemplate.geometry.length
+    console.log('Creating straw of length', length)
 
     data = {
       id,

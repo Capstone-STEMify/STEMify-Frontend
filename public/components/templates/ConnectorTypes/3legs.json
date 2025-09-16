@@ -94,5 +94,6 @@
     "maxStress": 100,
     "compatibleStraws": ["green_11_2", "green_11_7", "blue_15_0"],
     "testingRequired": true
-  }
+  },
+  "imagePreview": "/images/components/connector_3_leg.png"
 }

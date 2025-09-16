@@ -15,15 +15,16 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
     throw new Error(`Failed to load template: ${jsonPath}`)
   }
   const data = await res.json()
-
   const template: ComponentTemplate = {
     id: data.id,
     name: data.name,
     type: data.category === 'straw' ? 'straw' : 'connector',
     category: data.category,
     description: data.description || '',
-    previewImageUrl: `/images/components/${data.id}.png`,
+    previewImageUrl: data.imagePreview || undefined,
     defaultProperties: {
+      id: data.id,
+      name: data.name,
       transform: {
         position: { x: 0, y: 0, z: 0 },
         rotation: { x: 0, y: 0, z: 0 },
@@ -38,11 +39,11 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
         metalness: 0
       },
       geometry: data.baseGeometry,
-      physics: data.physics
+      physics: data.physics,
+      endpoints: data.endpoints
     },
     source: jsonPath
   }
-
   return template
 }
 
