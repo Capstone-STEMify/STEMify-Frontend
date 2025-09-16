@@ -49,36 +49,6 @@ export function createInstanceFromTemplate(
   }
   let data: Straw | Connector
 
-  // Clone default properties từ template
-  // const data: Straw | Connector = {
-  //   id,
-  //   name: template.name,
-  //   transform: baseTransform,
-  //   material: template.defaultProperties.material,
-  //   geometry: template.defaultProperties.geometry,
-  //   ...(template.type === 'straw'
-  //     ? {
-  //         endpoints: {
-  //           start: { id: `${id}_start`, localPosition: { x: -template.defaultProperties., y: 0, z: 0 }, connectionId: null, isAvailable: true },
-  //           end: { id: `${id}_end`, localPosition: { x: 5.6, y: 0, z: 0 }, connectionId: null, isAvailable: true }
-  //         }
-  //       }
-  //     : {
-  //         type: 'cross',
-  //         ports: [
-  //           {
-  //             id: `${id}_port_0`,
-  //             localPosition: { x: 0, y: 0, z: 2 },
-  //             orientation: { x: 0, y: 0, z: 1 },
-  //             connectionId: null,
-  //             isAvailable: true,
-  //             portIndex: 0
-  //           }
-  //         ],
-  //         constraints: { maxConnections: 3, allowedAngles: [] }
-  //       })
-  // } as Straw | Connector
-
   if (template.type === 'straw') {
     const strawTemplate = template.defaultProperties as Straw
     const length = strawTemplate.geometry.length
