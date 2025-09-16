@@ -23,7 +23,7 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
     type: data.category === 'straw' ? 'straw' : 'connector',
     category: data.category,
     description: data.description || '',
-    previewImageUrl: data.imagePreview || undefined,
+    previewImageUrl: data.imagePreviewUrl || undefined,
     defaultProperties: {
       id: data.id,
       name: data.name,
