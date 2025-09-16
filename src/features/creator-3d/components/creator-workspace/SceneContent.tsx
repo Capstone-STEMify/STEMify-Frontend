@@ -8,13 +8,6 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 
 interface SceneContentProps {
-  objects: AssemblyInstance[]
-  selectedObjectId: string | null
-  transformMode: 'translate' | 'rotate' | 'scale'
-  showGrid: boolean
-  showAxes: boolean
-  snapToGrid: boolean
-  gridSize: number
   transformControlsRef: React.RefObject<any>
   orbitControlsRef: React.RefObject<any>
   onObjectSelect: (objectId: string | null) => void
@@ -22,21 +15,20 @@ interface SceneContentProps {
 }
 
 export function SceneContent({
-  objects,
-  selectedObjectId,
-  transformMode,
-  showGrid,
-  showAxes,
-  snapToGrid,
-  gridSize,
   transformControlsRef,
   orbitControlsRef,
   onObjectSelect,
   onObjectUpdate
 }: SceneContentProps) {
-  const { scene } = useThree()
   const objectRefs = useRef<Record<string, THREE.Object3D>>({})
   const cameraStatus = useAppSelector((state) => state.strawLab.cameraStatus)
+  const selectedObjectId = useAppSelector((state) => state.creatorScene.selectedId)
+  const snapToGrid = useAppSelector((state) => state.creatorScene.snapToGrid)
+  const gridSize = useAppSelector((state) => state.creatorScene.gridSize)
+  const showGrid = useAppSelector((state) => state.creatorScene.showGrid)
+  const showAxes = useAppSelector((state) => state.creatorScene.showAxes)
+  const transformMode = useAppSelector((state) => state.creatorScene.transformMode)
+  const objects = useAppSelector((state) => state.creatorScene.instances)
 
   // Update transform controls target when selection changes
   useEffect(() => {

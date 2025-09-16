@@ -1,11 +1,11 @@
 {
   "metadata": {
+    "title": "hehe",
+    "description": "hehe",
+    "author": "hehe",
     "version": "2.0",
-    "created": "2025-09-16T03:44:14.194Z",
-    "lastModified": "2025-09-16T03:44:14.194Z",
-    "author": "test1",
-    "description": "test1",
-    "title": "test1"
+    "created": "2025-09-16T09:48:45.801Z",
+    "lastModified": "2025-09-16T09:48:45.801Z"
   },
   "templates": {
     "materials": [
@@ -29,7 +29,7 @@
       },
       {
         "id": "3leg_red",
-        "source": "/components/templates/ConnectorTypes/3leg_red.json"
+        "source": "/components/templates/ConnectorTypes/3legs.json"
       }
     ]
   },
@@ -39,7 +39,7 @@
         "templateId": "green_11_2",
         "instances": [
           {
-            "id": "straw_1757994237794_32",
+            "id": "straw_1758016110940_313",
             "transform": {
               "position": {
                 "x": 0,
@@ -52,18 +52,23 @@
                 "z": 0
               }
             }
-          },
+          }
+        ]
+      },
+      {
+        "templateId": "yellow_3_8",
+        "instances": [
           {
-            "id": "straw_1757994242110_885",
+            "id": "straw_1758016111875_696",
             "transform": {
               "position": {
                 "x": 0,
-                "y": 0,
+                "y": 9,
                 "z": 0
               },
               "rotation": {
                 "x": 0,
-                "y": 0.9075712110370514,
+                "y": 0,
                 "z": 0
               }
             }
@@ -79,7 +84,7 @@
       "name": "Show All Components",
       "description": "Highlights all components in the scene",
       "actionType": "highlight",
-      "targets": ["straw_1757994237794_32", "straw_1757994242110_885"],
+      "targets": ["straw_1758016110940_313", "straw_1758016111875_696"],
       "duration": 2,
       "type": "highlight",
       "animation": {
@@ -93,8 +98,8 @@
   "activities": [
     {
       "id": "custom_assembly",
-      "name": "test1",
-      "description": "test1",
+      "name": "hehe",
+      "description": "hehe",
       "difficulty": "beginner",
       "estimatedTime": 600,
       "steps": [

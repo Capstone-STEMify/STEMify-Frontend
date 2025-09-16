@@ -9,13 +9,6 @@ import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 
 interface CreatorWorkspaceProps {
-  objects: AssemblyInstance[]
-  selectedObjectId: string | null
-  transformMode: 'translate' | 'rotate' | 'scale'
-  showGrid: boolean
-  showAxes: boolean
-  snapToGrid: boolean
-  gridSize: number
   dragSource: ComponentTemplate | null
   onObjectSelect: (objectId: string | null) => void
   onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
@@ -28,13 +21,6 @@ interface CreatorWorkspaceProps {
 }
 
 export function CreatorWorkspace({
-  objects,
-  selectedObjectId,
-  transformMode,
-  showGrid,
-  showAxes,
-  snapToGrid,
-  gridSize,
   dragSource,
   onObjectSelect,
   onObjectUpdate,
@@ -109,13 +95,6 @@ export function CreatorWorkspace({
         }}
       >
         <SceneContent
-          objects={objects}
-          selectedObjectId={selectedObjectId}
-          transformMode={transformMode}
-          showGrid={showGrid}
-          showAxes={showAxes}
-          snapToGrid={snapToGrid}
-          gridSize={gridSize}
           transformControlsRef={transformControlsRef}
           orbitControlsRef={orbitControlsRef}
           onObjectSelect={onObjectSelect}
@@ -125,10 +104,6 @@ export function CreatorWorkspace({
 
       {/* Toolbar */}
       <CreatorToolbar
-        transformMode={transformMode}
-        showGrid={showGrid}
-        showAxes={showAxes}
-        snapToGrid={snapToGrid}
         onTransformModeChange={onTransformModeChange}
         onToggleGrid={onToggleGrid}
         onToggleAxes={onToggleAxes}

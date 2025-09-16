@@ -29,7 +29,7 @@ export const creatorSceneSlice = createSlice({
       state.instances = action.payload
     },
     addInstance(state, action: PayloadAction<AssemblyInstance>) {
-      state.instances.push(action.payload)
+      state.instances = [...state.instances, action.payload]
       state.selectedId = action.payload.id
     },
     removeInstance(state, action: PayloadAction<string>) {

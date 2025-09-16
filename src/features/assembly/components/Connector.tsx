@@ -13,7 +13,7 @@ interface Props {
   modelScale?: [number, number, number] | number
   rotationOffset?: [number, number, number]
   showDebug?: boolean
-  armPose?: Record<string, number> // e.g. { Arm_1: 0.5, Arm_2: -0.2 }
+  armPose?: Record<string, number>
 }
 
 export const Connector3D = forwardRef<Group, Props>(
@@ -42,6 +42,9 @@ export const Connector3D = forwardRef<Group, Props>(
 
     const hubRef = useRef<THREE.Object3D | null>(null)
     const armsRef = useRef<Record<string, THREE.Object3D>>({})
+    useEffect(() => {
+      console.log('[Connector3D] mount', modelUrl)
+    }, [modelUrl])
 
     const setHinge = useCallback(
       (
@@ -145,6 +148,15 @@ export const Connector3D = forwardRef<Group, Props>(
       }),
       [transform.position, transform.rotation, transform.scale]
     )
+
+    if (!modelUrl) {
+      return (
+        <mesh>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color='red' />
+        </mesh>
+      )
+    }
 
     return (
       <group

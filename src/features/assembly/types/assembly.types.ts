@@ -86,6 +86,7 @@ export interface Connector extends BaseComponent {
   geometry: ConnectorGeometry
   ports: ConnectorPort[]
   constraints: ConnectorConstraints
+  modelUrl?: string
 }
 
 // Joint interfaces
@@ -266,6 +267,7 @@ export interface ComponentTemplate {
   defaultProperties: Straw | Connector
   previewImageUrl?: string
   source?: string
+  modelUrl?: string
 }
 
 export interface ComponentLibrary {

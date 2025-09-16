@@ -19,27 +19,6 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
     return () => onRef(null)
   }, [onRef])
 
-  // Update position and rotation when object changes
-  // useEffect(() => {
-  //   if (groupRef.current) {
-  //     groupRef.current.position.set(
-  //       object.transform.position.x,
-  //       object.transform.position.y,
-  //       object.transform.position.z
-  //     )
-  //     groupRef.current.rotation.set(
-  //       object.transform.rotation.x,
-  //       object.transform.rotation.y,
-  //       object.transform.rotation.z
-  //     )
-  //     groupRef.current.scale.set(
-  //       object.transform.scale?.x ?? 1,
-  //       object.transform.scale?.y ?? 1,
-  //       object.transform.scale?.z ?? 1
-  //     )
-  //   }
-  // }, [object.transform])
-
   const handleClick = useCallback(
     (e: any) => {
       e.stopPropagation()
