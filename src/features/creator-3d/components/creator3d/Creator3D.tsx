@@ -147,6 +147,7 @@ export function Creator3D() {
       {/* Object Inspector */}
       {showRightSidebar && (
         <ObjectInspector
+          key={selectedObject?.id}
           selectedObject={selectedObject}
           onObjectUpdate={handleObjectUpdate}
           onObjectDelete={handleObjectDelete}
