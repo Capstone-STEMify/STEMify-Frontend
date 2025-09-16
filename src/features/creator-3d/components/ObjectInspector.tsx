@@ -16,54 +16,53 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
     scale: { x: string; y: string; z: string }
     name: string
   } | null>(null)
-  console.log('ObjectInspector render', selectedObject?.transform)
+  const [isEditing, setIsEditing] = useState(false)
 
-  // Cập nhật local state khi chọn object mới
-  // useEffect(() => {
-  //   if (!selectedObject) return
-  //   const { position, rotation, scale } = selectedObject.transform
-  //   console.log('position', position)
+  useEffect(() => {
+    if (!selectedObject) return
+    const { position, rotation, scale } = selectedObject.transform
 
-  //   setLocalValues({
-  //     position: {
-  //       x: selectedObject.transform.position.x.toFixed(2),
-  //       y: selectedObject.transform.position.y.toFixed(2),
-  //       z: selectedObject.transform.position.z.toFixed(2)
-  //     },
-  //     rotation: {
-  //       x: ((selectedObject.transform.rotation.x * 180) / Math.PI).toFixed(1),
-  //       y: ((selectedObject.transform.rotation.y * 180) / Math.PI).toFixed(1),
-  //       z: ((selectedObject.transform.rotation.z * 180) / Math.PI).toFixed(1)
-  //     },
-  //     scale: {
-  //       x: (selectedObject.transform.scale?.x ?? 1).toFixed(2),
-  //       y: (selectedObject.transform.scale?.y ?? 1).toFixed(2),
-  //       z: (selectedObject.transform.scale?.z ?? 1).toFixed(2)
-  //     },
-  //     name: selectedObject.data?.name ?? selectedObject.id
-  //   })
-  // }, [selectedObject?.transform])
+    setLocalValues({
+      position: {
+        x: selectedObject.transform.position.x.toFixed(2),
+        y: selectedObject.transform.position.y.toFixed(2),
+        z: selectedObject.transform.position.z.toFixed(2)
+      },
+      rotation: {
+        x: ((selectedObject.transform.rotation.x * 180) / Math.PI).toFixed(1),
+        y: ((selectedObject.transform.rotation.y * 180) / Math.PI).toFixed(1),
+        z: ((selectedObject.transform.rotation.z * 180) / Math.PI).toFixed(1)
+      },
+      scale: {
+        x: (selectedObject.transform.scale?.x ?? 1).toFixed(2),
+        y: (selectedObject.transform.scale?.y ?? 1).toFixed(2),
+        z: (selectedObject.transform.scale?.z ?? 1).toFixed(2)
+      },
+      name: selectedObject.data?.name ?? selectedObject.id
+    })
+  }, [selectedObject, isEditing])
 
   // --- Update helpers ---
   const updatePosition = useCallback(
     (axis: 'x' | 'y' | 'z', value: string) => {
       if (!selectedObject) return
-
+      setIsEditing(true)
       // Cập nhật local UI
       setLocalValues((prev) => (prev ? { ...prev, position: { ...prev.position, [axis]: value } } : null))
-
+      setTimeout(() => setIsEditing(false), 300)
       // Cập nhật scene ngay lập tức
       const numValue = parseFloat(value)
       if (!isNaN(numValue)) {
         onObjectUpdate(selectedObject.id, {
           transform: {
-            ...selectedObject.transform,
+            ...structuredClone(selectedObject.transform),
             position: {
               ...selectedObject.transform.position,
               [axis]: numValue
             }
           }
         })
+        console.log('[DEBUG] updatePosition', axis, numValue)
       }
     },
     [selectedObject, onObjectUpdate]

@@ -173,18 +173,31 @@ export function useCreatorScene() {
 
   const updateObject = useCallback((id: string, updates: Partial<AssemblyInstance>) => {
     setInstances((prev) =>
-      prev.map((inst) =>
-        inst.id === id
-          ? {
-              ...inst,
-              ...updates,
-              transform: {
-                ...inst.transform,
-                ...(updates.transform || {})
-              }
+      prev.map((inst) => {
+        if (inst.id !== id) return inst
+
+        return {
+          ...inst,
+          ...updates,
+          transform: {
+            ...inst.transform,
+            ...(updates.transform ?? {}),
+            position: {
+              ...inst.transform.position,
+              ...(updates.transform?.position ?? {})
+            },
+            rotation: {
+              ...inst.transform.rotation,
+              ...(updates.transform?.rotation ?? {})
+            },
+            scale: {
+              x: updates.transform?.scale?.x ?? inst.transform.scale?.x ?? 1,
+              y: updates.transform?.scale?.y ?? inst.transform.scale?.y ?? 1,
+              z: updates.transform?.scale?.z ?? inst.transform.scale?.z ?? 1
             }
-          : inst
-      )
+          }
+        }
+      })
     )
   }, [])
 

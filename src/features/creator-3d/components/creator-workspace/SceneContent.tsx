@@ -18,7 +18,7 @@ interface SceneContentProps {
   transformControlsRef: React.RefObject<any>
   orbitControlsRef: React.RefObject<any>
   onObjectSelect: (objectId: string | null) => void
-  onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance['transform']>) => void
+  onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
 }
 
 export function SceneContent({
@@ -85,8 +85,12 @@ export function SceneContent({
 
       targetObject.position.set(position.x, position.y, position.z)
     }
-
-    onObjectUpdate(selectedObjectId, { position, rotation })
+    onObjectUpdate(selectedObjectId, {
+      transform: {
+        position,
+        rotation
+      }
+    })
   }, [selectedObjectId, snapToGrid, gridSize, onObjectUpdate])
 
   return (
