@@ -9,6 +9,8 @@ interface ComponentPaletteProps {
   onAddComponent: (template: ComponentTemplate) => void
 }
 
+// Function to load a component template from a JSON file
+// Will be replaced with real data fetching logic later
 export async function loadComponentTemplate(jsonPath: string): Promise<ComponentTemplate> {
   const res = await fetch(jsonPath)
   if (!res.ok) {
@@ -21,7 +23,7 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
     type: data.category === 'straw' ? 'straw' : 'connector',
     category: data.category,
     description: data.description || '',
-    previewImageUrl: data.imagePreview || undefined,
+    previewImageUrl: data.imagePreviewUrl || undefined,
     defaultProperties: {
       id: data.id,
       name: data.name,
