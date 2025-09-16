@@ -58,10 +58,6 @@ export function Creator3D() {
   // Handle adding component from palette
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
-      if (template.category === 'connector' && !(template as any).modelUrl) {
-        console.log('[handleAddComponent] Connector thiếu modelUrl, fallback')
-        ;(template as any).modelUrl = '/models/connector_3legs.glb'
-      }
       addObject(template, { x: 0, y: 0, z: 0 })
     },
     [addObject]

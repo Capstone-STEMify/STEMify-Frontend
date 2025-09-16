@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { ComponentCard } from '@/features/creator-3d/components/component-palette/ComponentCard'
 import { ComponentTemplate, Connector, Straw } from '@/features/assembly/types/assembly.types'
+import { useGLTF } from '@react-three/drei'
 
 interface ComponentPaletteProps {
   onDragStart: (template: ComponentTemplate) => void
@@ -62,8 +63,14 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
         }
       ],
       constraints: data.constraints ?? { maxConnections: 3, allowedAngles: [] },
-      modelUrl: data.modelUrl ?? `/models/connector_3legs.glb`
+      modelUrl: data.modelUrl ?? data.baseGeometry?.modelPath ?? `/models/${data.id}.glb`
     } as Connector
+
+    if (data.modelUrl || data.baseGeometry?.modelPath) {
+      const url = data.modelUrl ?? data.baseGeometry.modelPath
+      useGLTF.preload(url)
+      ;(defaultProperties as Connector).modelUrl = url
+    }
   } else {
     throw new Error(`Unknown component category: ${data.category}`)
   }
@@ -91,10 +98,15 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
       try {
         const straw_green = await loadComponentTemplate('/components/templates/StrawTypes/green_11_2.json')
         const straw_yellow = await loadComponentTemplate('/components/templates/StrawTypes/yellow_3_8.json')
-        const connector = await loadComponentTemplate('/components/templates/ConnectorTypes/3legs.json')
-        console.log('Loaded templates:', { straw_green, straw_yellow, connector })
+        const connector_3leg_red = await loadComponentTemplate('/components/templates/ConnectorTypes/3legs.json')
+        const templateMap: Record<string, ComponentTemplate> = {
+          [straw_green.id]: straw_green,
+          [straw_yellow.id]: straw_yellow,
+          [connector_3leg_red.id]: connector_3leg_red
+        }
 
-        setTemplates([straw_green, straw_yellow, connector])
+        console.log('Loaded templates:', templateMap)
+        setTemplates(Object.values(templateMap))
       } catch (err) {
         console.error('Failed to load templates', err)
       }
@@ -118,11 +130,13 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
     setDraggingTemplate(null)
   }
 
-  const handleDoubleClick = async (template: ComponentTemplate) => {
-    console.log('[ComponentPalette] Double-clicked', template)
-    if (template.category === 'connector' && !(template.defaultProperties as any).modelUrl) {
-      console.warn(`[handleDoubleClick] Connector ${template.id} chưa có modelUrl, load lại...`)
-      return
+  const handleDoubleClick = (template: ComponentTemplate) => {
+    if (template.category === 'connector') {
+      const connectorTemplate = template.defaultProperties as Connector
+      if (!connectorTemplate.modelUrl && !connectorTemplate.geometry?.modelPath) {
+        console.warn(`[handleDoubleClick] Connector ${template.id} chưa có modelUrl`)
+        return
+      }
     }
     onAddComponent(template)
   }

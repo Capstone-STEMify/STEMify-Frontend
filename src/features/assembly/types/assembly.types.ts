@@ -65,6 +65,7 @@ export interface ConnectorGeometry {
   size: Vector3
   portDiameter: number
   shape: 'cylindrical' | 'cubic' | 'spherical' | 'custom'
+  modelPath?: string
 }
 
 export interface ConnectorPort {
