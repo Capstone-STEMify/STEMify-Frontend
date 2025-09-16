@@ -19,45 +19,46 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
 
   // Cập nhật local state khi chọn object mới
   useEffect(() => {
-    if (selectedObject) {
-      const pos = selectedObject.transform.position
-      const rot = selectedObject.transform.rotation
-      const scl = selectedObject.transform.scale ?? { x: 1, y: 1, z: 1 }
+    if (!selectedObject) return
 
-      setLocalValues({
-        position: {
-          x: pos.x.toFixed(2),
-          y: pos.y.toFixed(2),
-          z: pos.z.toFixed(2)
-        },
-        rotation: {
-          x: ((rot.x * 180) / Math.PI).toFixed(1),
-          y: ((rot.y * 180) / Math.PI).toFixed(1),
-          z: ((rot.z * 180) / Math.PI).toFixed(1)
-        },
-        scale: {
-          x: scl.x.toFixed(2),
-          y: scl.y.toFixed(2),
-          z: scl.z.toFixed(2)
-        },
-        name: selectedObject.data?.name ?? selectedObject.id
-      })
-    } else {
-      setLocalValues(null)
-    }
+    setLocalValues({
+      position: {
+        x: selectedObject.transform.position.x.toFixed(2),
+        y: selectedObject.transform.position.y.toFixed(2),
+        z: selectedObject.transform.position.z.toFixed(2)
+      },
+      rotation: {
+        x: ((selectedObject.transform.rotation.x * 180) / Math.PI).toFixed(1),
+        y: ((selectedObject.transform.rotation.y * 180) / Math.PI).toFixed(1),
+        z: ((selectedObject.transform.rotation.z * 180) / Math.PI).toFixed(1)
+      },
+      scale: {
+        x: (selectedObject.transform.scale?.x ?? 1).toFixed(2),
+        y: (selectedObject.transform.scale?.y ?? 1).toFixed(2),
+        z: (selectedObject.transform.scale?.z ?? 1).toFixed(2)
+      },
+      name: selectedObject.data?.name ?? selectedObject.id
+    })
   }, [selectedObject])
 
   // --- Update helpers ---
   const updatePosition = useCallback(
     (axis: 'x' | 'y' | 'z', value: string) => {
       if (!selectedObject) return
+
+      // Cập nhật local UI
       setLocalValues((prev) => (prev ? { ...prev, position: { ...prev.position, [axis]: value } } : null))
+
+      // Cập nhật scene ngay lập tức
       const numValue = parseFloat(value)
       if (!isNaN(numValue)) {
         onObjectUpdate(selectedObject.id, {
           transform: {
             ...selectedObject.transform,
-            position: { ...selectedObject.transform.position, [axis]: numValue }
+            position: {
+              ...selectedObject.transform.position,
+              [axis]: numValue
+            }
           }
         })
       }
@@ -166,7 +167,134 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
         </div>
 
         {/* Position */}
-        {/* tương tự Rotation + Scale, giữ nguyên như code trước */}
+        <div>
+          <label className='mb-2 block text-sm font-medium text-gray-700'>Position</label>
+          <div className='grid grid-cols-3 gap-2'>
+            <div>
+              <label className='mb-1 block text-xs text-gray-500'>X</label>
+              <input
+                type='number'
+                step='0.1'
+                value={localValues.position.x}
+                onChange={(e) => updatePosition('x', e.target.value)}
+                className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+              />
+            </div>
+            <div>
+              <label className='mb-1 block text-xs text-gray-500'>Y</label>
+              <input
+                type='number'
+                step='0.1'
+                value={localValues.position.y}
+                onChange={(e) => updatePosition('y', e.target.value)}
+                className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+              />
+            </div>
+            <div>
+              <label className='mb-1 block text-xs text-gray-500'>Z</label>
+              <input
+                type='number'
+                step='0.1'
+                value={localValues.position.z}
+                onChange={(e) => updatePosition('z', e.target.value)}
+                className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Rotation */}
+        <div>
+          <label className='mb-2 block text-sm font-medium text-gray-700'>Rotation (degrees)</label>
+          <div className='grid grid-cols-3 gap-2'>
+            <div>
+              <label className='mb-1 block text-xs text-gray-500'>X</label>
+              <input
+                type='number'
+                step='1'
+                value={localValues.rotation.x}
+                onChange={(e) => updateRotation('x', e.target.value)}
+                className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+              />
+            </div>
+            <div>
+              <label className='mb-1 block text-xs text-gray-500'>Y</label>
+              <input
+                type='number'
+                step='1'
+                value={localValues.rotation.y}
+                onChange={(e) => updateRotation('y', e.target.value)}
+                className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+              />
+            </div>
+            <div>
+              <label className='mb-1 block text-xs text-gray-500'>Z</label>
+              <input
+                type='number'
+                step='1'
+                value={localValues.rotation.z}
+                onChange={(e) => updateRotation('z', e.target.value)}
+                className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Scale */}
+        <div>
+          <label className='mb-2 block text-sm font-medium text-gray-700'>Scale</label>
+          <div className='grid grid-cols-3 gap-2'>
+            <div>
+              <label className='mb-1 block text-xs text-gray-500'>X</label>
+              <input
+                type='number'
+                step='0.1'
+                min='0.1'
+                value={localValues.scale.x}
+                onChange={(e) => updateScale('x', e.target.value)}
+                className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+              />
+            </div>
+            <div>
+              <label className='mb-1 block text-xs text-gray-500'>Y</label>
+              <input
+                type='number'
+                step='0.1'
+                min='0.1'
+                value={localValues.scale.y}
+                onChange={(e) => updateScale('y', e.target.value)}
+                className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+              />
+            </div>
+            <div>
+              <label className='mb-1 block text-xs text-gray-500'>Z</label>
+              <input
+                type='number'
+                step='0.1'
+                min='0.1'
+                value={localValues.scale.z}
+                onChange={(e) => updateScale('z', e.target.value)}
+                className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Object Info */}
+        <div className='rounded-lg bg-gray-50 p-3'>
+          <h3 className='mb-2 text-sm font-medium text-gray-700'>Object Info</h3>
+          <div className='space-y-1 text-xs text-gray-600'>
+            <div>
+              ID: <span className='font-mono'>{selectedObject.id}</span>
+            </div>
+            <div>
+              Category: <span className='font-mono'>{selectedObject.category}</span>
+            </div>
+            <div>
+              Template: <span className='font-mono'>{selectedObject.templateId}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className='space-y-2 border-t p-4'>

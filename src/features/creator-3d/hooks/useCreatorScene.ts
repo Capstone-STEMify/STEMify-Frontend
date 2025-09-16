@@ -171,9 +171,20 @@ export function useCreatorScene() {
     setSelectedId((prev) => (prev === id ? null : prev))
   }, [])
 
-  const updateObject = useCallback((id: string, updates: Partial<Transform>) => {
+  const updateObject = useCallback((id: string, updates: Partial<AssemblyInstance>) => {
     setInstances((prev) =>
-      prev.map((inst) => (inst.id === id ? { ...inst, transform: { ...inst.transform, ...updates } } : inst))
+      prev.map((inst) =>
+        inst.id === id
+          ? {
+              ...inst,
+              ...updates,
+              transform: {
+                ...inst.transform,
+                ...(updates.transform || {})
+              }
+            }
+          : inst
+      )
     )
   }, [])
 
