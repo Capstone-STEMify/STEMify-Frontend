@@ -1,11 +1,11 @@
 {
   "metadata": {
     "version": "2.0",
-    "created": "2025-09-15T11:40:59.301Z",
-    "lastModified": "2025-09-15T11:40:59.301Z",
-    "author": "test",
-    "description": "test",
-    "title": "test"
+    "created": "2025-09-16T03:44:14.194Z",
+    "lastModified": "2025-09-16T03:44:14.194Z",
+    "author": "test1",
+    "description": "test1",
+    "title": "test1"
   },
   "templates": {
     "materials": [
@@ -24,6 +24,10 @@
         "source": "/components/templates/StrawTypes/green_11_2.json"
       },
       {
+        "id": "yellow_3_8",
+        "source": "/components/templates/StrawTypes/yellow_3_8.json"
+      },
+      {
         "id": "3leg_red",
         "source": "/components/templates/ConnectorTypes/3leg_red.json"
       }
@@ -35,37 +39,22 @@
         "templateId": "green_11_2",
         "instances": [
           {
-            "id": "straw_green_1_1757935650196",
+            "id": "straw_1757994237794_32",
             "transform": {
               "position": {
-                "x": 3.4,
+                "x": 0,
                 "y": 0,
-                "z": 5.8
+                "z": 0
               },
               "rotation": {
                 "x": 0,
-                "y": -2.0943951023931953,
+                "y": 0,
                 "z": 0
               }
             }
           },
           {
-            "id": "straw_green_2_1757935792082",
-            "transform": {
-              "position": {
-                "x": -3.3,
-                "y": 0,
-                "z": 5.8
-              },
-              "rotation": {
-                "x": 0,
-                "y": -1.0471975511965976,
-                "z": 0
-              }
-            }
-          },
-          {
-            "id": "straw_green_3_1757936153685",
+            "id": "straw_1757994242110_885",
             "transform": {
               "position": {
                 "x": 0,
@@ -74,7 +63,7 @@
               },
               "rotation": {
                 "x": 0,
-                "y": 0,
+                "y": 0.9075712110370514,
                 "z": 0
               }
             }
@@ -90,10 +79,10 @@
       "name": "Show All Components",
       "description": "Highlights all components in the scene",
       "actionType": "highlight",
-      "targets": ["straw_green_1_1757935650196", "straw_green_2_1757935792082", "straw_green_3_1757936153685"],
+      "targets": ["straw_1757994237794_32", "straw_1757994242110_885"],
       "duration": 2,
+      "type": "highlight",
       "animation": {
-        "type": "appear",
         "params": {
           "colorHighlight": "#FFD700",
           "pulseEffect": true
@@ -104,8 +93,8 @@
   "activities": [
     {
       "id": "custom_assembly",
-      "name": "test",
-      "description": "test",
+      "name": "test1",
+      "description": "test1",
       "difficulty": "beginner",
       "estimatedTime": 600,
       "steps": [
@@ -148,7 +137,27 @@
           "y": 0,
           "z": 0
         },
-        "fov": 60
+        "fov": 60,
+        "controls": "orbit"
+      }
+    },
+    "workspace": {
+      "bounds": {
+        "min": {
+          "x": -100,
+          "y": -100,
+          "z": -100
+        },
+        "max": {
+          "x": 100,
+          "y": 100,
+          "z": 100
+        }
+      },
+      "grid": {
+        "visible": true,
+        "size": 1,
+        "divisions": 100
       }
     }
   }

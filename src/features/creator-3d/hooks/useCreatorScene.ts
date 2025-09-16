@@ -203,8 +203,50 @@ export function useCreatorScene() {
 
   // Export ra Assembly chuẩn
   const exportAssembly = useCallback(
-    (metadata: { title: string; description: string; author: string }): Assembly => {
+    (metadata: { title: string; description: string; author: string }): any => {
       const now = new Date().toISOString()
+
+      // Lấy danh sách straws và nhóm theo templateId
+      const straws = instances
+        .filter((i) => i.category === 'straw')
+        .reduce<Record<string, any[]>>((acc, item) => {
+          const templateId = item.templateId
+          if (!acc[templateId]) acc[templateId] = []
+          acc[templateId].push({
+            id: item.id,
+            transform: {
+              position: item.transform.position,
+              rotation: item.transform.rotation
+            }
+          })
+          return acc
+        }, {})
+
+      const strawInstances = Object.entries(straws).map(([templateId, instanceList]) => ({
+        templateId,
+        instances: instanceList
+      }))
+
+      // Tương tự nếu có connectors
+      const connectors = instances
+        .filter((i) => i.category === 'connector')
+        .reduce<Record<string, any[]>>((acc, item) => {
+          const templateId = item.templateId
+          if (!acc[templateId]) acc[templateId] = []
+          acc[templateId].push({
+            id: item.id,
+            transform: {
+              position: item.transform.position,
+              rotation: item.transform.rotation
+            }
+          })
+          return acc
+        }, {})
+
+      const connectorInstances = Object.entries(connectors).map(([templateId, instanceList]) => ({
+        templateId,
+        instances: instanceList
+      }))
 
       return {
         metadata: {
@@ -212,13 +254,77 @@ export function useCreatorScene() {
           created: now,
           lastModified: now,
           author: metadata.author,
-          description: metadata.description
+          description: metadata.description,
+          title: metadata.title
         },
-        straws: instances.filter((i) => i.category === 'straw').map((i) => i.data as Straw),
-        connectors: instances.filter((i) => i.category === 'connector').map((i) => i.data as Connector),
-        joints: [],
-        actions: [],
-        activities: [],
+        templates: {
+          materials: [
+            {
+              id: 'plastic_green',
+              source: '/components/templates/MaterialLibrary/plastic_green.json'
+            },
+            {
+              id: 'plastic_red',
+              source: '/components/templates/MaterialLibrary/plastic_red.json'
+            }
+          ],
+          components: [
+            {
+              id: 'green_11_2',
+              source: '/components/templates/StrawTypes/green_11_2.json'
+            },
+            {
+              id: 'yellow_3_8',
+              source: '/components/templates/StrawTypes/yellow_3_8.json'
+            },
+            {
+              id: '3leg_red',
+              source: '/components/templates/ConnectorTypes/3leg_red.json'
+            }
+          ]
+        },
+        instances: {
+          straws: strawInstances,
+          connectors: connectorInstances
+        },
+        actions: [
+          {
+            id: 'action_show_all',
+            name: 'Show All Components',
+            description: 'Highlights all components in the scene',
+            actionType: 'highlight',
+            targets: instances.map((i) => i.id),
+            duration: 2,
+            type: 'highlight',
+            animation: {
+              params: {
+                colorHighlight: '#FFD700',
+                pulseEffect: true
+              }
+            }
+          }
+        ],
+        activities: [
+          {
+            id: 'custom_assembly',
+            name: metadata.title,
+            description: metadata.description,
+            difficulty: 'beginner',
+            estimatedTime: 600,
+            steps: [
+              {
+                actionId: 'action_show_all',
+                title: 'Observe Components',
+                description: 'Study the arrangement of straws and connectors',
+                expectedResult: 'All components are visible and highlighted',
+                hints: [
+                  'Notice the positioning of each component',
+                  'Observe the relationships between straws and connectors'
+                ]
+              }
+            ]
+          }
+        ],
         scene: INITIAL_SCENE
       }
     },
