@@ -134,7 +134,6 @@ export default function LessonListContent() {
 
               <div className='mt-auto flex flex-wrap items-center gap-2'>
                 <Badge className='bg-sky-custom-300'>
-                  <div className='mr-0.5'>{t('tags.ageRange')}:</div>
                   {lesson.ageRangeLabel}
                 </Badge>
                 <Badge className='bg-red-300'>{lesson.duration} mins</Badge>

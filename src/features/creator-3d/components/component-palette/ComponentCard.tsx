@@ -1,4 +1,4 @@
-import { ComponentTemplate } from '@/features/creator-3d/types/creator.types'
+import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 import Image from 'next/image'
 
 interface ComponentCardProps {
@@ -26,7 +26,7 @@ export function ComponentCard({ template, isDragging, onDragStart, onDragEnd, on
       <div className='flex items-center gap-3'>
         <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-md bg-gray-100'>
           <Image
-            src={template.icon}
+            src={template.previewImageUrl || ''}
             alt={template.name}
             width={40}
             height={40}
@@ -40,7 +40,7 @@ export function ComponentCard({ template, isDragging, onDragStart, onDragEnd, on
               fallbackDiv.className = 'w-8 h-8 bg-gray-300 rounded flex items-center justify-center'
               const span = document.createElement('span')
               span.className = 'text-xs text-gray-600'
-              span.textContent = template.type === 'connector_3leg' ? '⚡' : '📏'
+              span.textContent = template.category === 'connector_3leg' ? '⚡' : '📏'
               fallbackDiv.appendChild(span)
               target.parentElement?.appendChild(fallbackDiv)
             }}
@@ -57,10 +57,10 @@ export function ComponentCard({ template, isDragging, onDragStart, onDragEnd, on
       <div className='absolute top-2 right-2'>
         <span
           className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-            template.type === 'connector_3leg' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+            template.category === 'connector_3leg' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
           } `}
         >
-          {template.type === 'connector_3leg' ? 'Connector' : 'Straw'}
+          {template.category === 'connector_3leg' ? 'Connector' : 'Straw'}
         </span>
       </div>
 

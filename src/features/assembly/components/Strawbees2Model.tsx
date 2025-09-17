@@ -10,11 +10,7 @@ interface Strawbees2ModelProps {
   scale?: number
 }
 
-export function Strawbees2Model({
-  position = [0, 0, 0],
-  rotation = [0, 0, 0],
-  scale = 1
-}: Strawbees2ModelProps) {
+export function Strawbees2Model({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1 }: Strawbees2ModelProps) {
   const groupRef = useRef<THREE.Group>(null)
   const [model, setModel] = useState<THREE.Group | null>(null)
   const [armN, setArmN] = useState<THREE.Object3D | null>(null)
@@ -29,7 +25,7 @@ export function Strawbees2Model({
   const [foldAngleW, setFoldAngleW] = useState(0)
 
   // Load the model using useGLTF and clone it for local manipulation
-  const gltf = useGLTF('/models/Strawbees2.glb') as any
+  const gltf = useGLTF('/models/connector_2legs.glb') as any
   const clonedScene = useMemo(() => {
     const root = gltf?.scene ? gltf.scene.clone(true) : null
     if (root) {
@@ -58,11 +54,15 @@ export function Strawbees2Model({
   }, [clonedScene])
 
   // Helper function to set hinge rotation with limits
-  const setHinge = (obj: THREE.Object3D | null, deg: number, options: {
-    min?: number
-    max?: number
-    axis?: 'x' | 'y' | 'z'
-  } = {}) => {
+  const setHinge = (
+    obj: THREE.Object3D | null,
+    deg: number,
+    options: {
+      min?: number
+      max?: number
+      axis?: 'x' | 'y' | 'z'
+    } = {}
+  ) => {
     if (!obj) return
 
     const { min = -60, max = 60, axis = 'y' } = options
@@ -94,9 +94,9 @@ export function Strawbees2Model({
   useEffect(() => {
     const interval = setInterval(() => {
       // Fold arm N up and down
-      setFoldAngleN(prev => prev === 30 ? -20 : 30)
+      setFoldAngleN((prev) => (prev === 30 ? -20 : 30))
       // Fold arm S in opposite direction
-      setFoldAngleS(prev => prev === -20 ? 30 : -20)
+      setFoldAngleS((prev) => (prev === -20 ? 30 : -20))
       // Keep E and W at 0 for now
       setFoldAngleE(0)
       setFoldAngleW(0)
@@ -116,11 +116,11 @@ export function Strawbees2Model({
       {/* Add some helper text or indicators */}
       <mesh position={[0, 2, 0]}>
         <boxGeometry args={[0.1, 0.1, 0.1]} />
-        <meshBasicMaterial color="red" />
+        <meshBasicMaterial color='red' />
       </mesh>
     </group>
   )
 }
 
 // Preload the model
-useGLTF.preload('/models/Strawbees2.glb')
+useGLTF.preload('/models/connector_2legs.glb')

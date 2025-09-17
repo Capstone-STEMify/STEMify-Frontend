@@ -110,7 +110,7 @@ interface Props {
 }
 
 export default function Workspace3D({
-  assemblyUrl = '/assemblies/optimized/octahedron.json',
+  assemblyUrl = '/assemblies/octahedron.json',
   mode = 'player',
   showUI = true,
   onStepComplete
@@ -1238,6 +1238,7 @@ export default function Workspace3D({
           return (
             <a.group key={refKey} scale={style.s} position-y={style.y}>
               <Connector3D
+                modelUrl='player'
                 connector={{
                   id: instance.id,
                   name: instance.data.name || instance.templateId,
@@ -1276,7 +1277,7 @@ export default function Workspace3D({
                 ref={getConnectorRef(refKey)}
                 animate={false}
                 showDebug={mode === 'builder'}
-                armPose={getArmPoseForConnector(instance.id)}
+                armPose={getArmPoseForConnector(instance.id) ?? {}}
               />
             </a.group>
           )

@@ -1,11 +1,11 @@
-import { SceneObject } from '@/features/creator-3d/types/creator.types'
 import { useCallback, useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { Straw } from '@/features/assembly/components/Straw'
 import { Connector3D } from '@/features/assembly/components/Connector'
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 
 interface SceneObjectComponentProps {
-  object: SceneObject
+  object: AssemblyInstance
   isSelected: boolean
   onSelect: () => void
   onRef: (ref: THREE.Object3D | null) => void
@@ -19,15 +19,6 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
     return () => onRef(null)
   }, [onRef])
 
-  // Update position and rotation when object changes
-  useEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.position.set(object.position.x, object.position.y, object.position.z)
-      groupRef.current.rotation.set(object.rotation.x, object.rotation.y, object.rotation.z)
-      groupRef.current.scale.set(object.scale.x, object.scale.y, object.scale.z)
-    }
-  }, [object.position, object.rotation, object.scale])
-
   const handleClick = useCallback(
     (e: any) => {
       e.stopPropagation()
@@ -40,9 +31,9 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
     <group
       ref={groupRef}
       onClick={handleClick}
-      position={[object.position.x, object.position.y, object.position.z]}
-      rotation={[object.rotation.x, object.rotation.y, object.rotation.z]}
-      scale={[object.scale.x, object.scale.y, object.scale.z]}
+      position={[object.transform.position.x, object.transform.position.y, object.transform.position.z]}
+      rotation={[object.transform.rotation.x, object.transform.rotation.y, object.transform.rotation.z]}
+      scale={[object.transform.scale?.x ?? 1, object.transform.scale?.y ?? 1, object.transform.scale?.z ?? 1]}
     >
       {/* Selection Indicator */}
       {isSelected && (
@@ -53,13 +44,13 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
       )}
 
       {/* Render actual component */}
-      {object.type === 'straw_green' ? (
+      {object.category === 'straw' ? (
         <Straw
           straw={{
             id: object.id,
-            name: object.name,
-            geometry: { diameter: 1.6, length: 11.2, wallThickness: 0.1 },
-            material: { color: '#22c55e', opacity: 1, flexibility: 0.1, metalness: 0, roughness: 1, type: 'plastic' },
+            name: object.data.name || object.templateId,
+            geometry: object.data.baseGeometry || object.data.geometry,
+            material: object.data.material,
             transform: {
               position: { x: 0, y: 0, z: 0 },
               rotation: { x: 0, y: 0, z: 0 },
@@ -68,13 +59,13 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
             endpoints: {
               start: {
                 id: `${object.id}_start`,
-                localPosition: { x: -5.6, y: 0, z: 0 },
+                localPosition: { x: object.data.endpoints.start.localPosition.x, y: 0, z: 0 },
                 connectionId: null,
                 isAvailable: true
               },
               end: {
                 id: `${object.id}_end`,
-                localPosition: { x: 5.6, y: 0, z: 0 },
+                localPosition: { x: object.data.endpoints.end.localPosition.x, y: 0, z: 0 },
                 connectionId: null,
                 isAvailable: true
               }
@@ -85,9 +76,10 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
         />
       ) : (
         <Connector3D
+          armPose={undefined}
           connector={{
             id: object.id,
-            name: object.name,
+            name: object.data.name || object.templateId,
             type: 'cross',
             geometry: { portDiameter: 1.6, shape: 'cylindrical', size: { x: 4, y: 4, z: 4 } },
             material: {
@@ -133,6 +125,8 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
           }}
           animate={false}
           showDebug={false}
+          // modelUrl={object.data?.baseGeometry.modelPath}
+          modelUrl='/models/connector_3legs.glb'
         />
       )}
     </group>

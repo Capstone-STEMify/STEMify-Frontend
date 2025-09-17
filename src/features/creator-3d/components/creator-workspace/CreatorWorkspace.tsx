@@ -1,23 +1,18 @@
 'use client'
 
-import { Canvas} from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { useRef, useCallback, useState } from 'react'
-import { SceneObject, ComponentTemplate } from '../../types/creator.types'
 import { CreatorToolbar } from '@/features/creator-3d/components/creator-workspace/CreatorToolbar'
 import { SceneContent } from '@/features/creator-3d/components/creator-workspace/SceneContent'
+import SceneTopRight from '@/features/creator-3d/components/creator-workspace/SceneTopRight'
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 
 interface CreatorWorkspaceProps {
-  objects: SceneObject[]
-  selectedObjectId: string | null
-  transformMode: 'translate' | 'rotate' | 'scale'
-  showGrid: boolean
-  showAxes: boolean
-  snapToGrid: boolean
-  gridSize: number
   dragSource: ComponentTemplate | null
   onObjectSelect: (objectId: string | null) => void
-  onObjectUpdate: (objectId: string, updates: Partial<SceneObject>) => void
-  onObjectAdd: (type: ComponentTemplate['type'], position: { x: number; y: number; z: number }) => void
+  onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
+  onObjectAdd: (template: ComponentTemplate, position: { x: number; y: number; z: number }) => void
   onDragEnd: () => void
   onTransformModeChange: (mode: 'translate' | 'rotate' | 'scale') => void
   onToggleGrid: () => void
@@ -26,13 +21,6 @@ interface CreatorWorkspaceProps {
 }
 
 export function CreatorWorkspace({
-  objects,
-  selectedObjectId,
-  transformMode,
-  showGrid,
-  showAxes,
-  snapToGrid,
-  gridSize,
   dragSource,
   onObjectSelect,
   onObjectUpdate,
@@ -55,11 +43,14 @@ export function CreatorWorkspace({
 
       if (!dragSource) return
 
-      // Calculate drop position (for now, place at origin)
-      // In a more advanced version, we could raycast to get the exact 3D position
+      // Hiện tại: đặt tại origin (0,0,0).
+      // Sau này có thể raycast để lấy vị trí thực trong 3D.
       const position = { x: 0, y: 0, z: 0 }
 
-      onObjectAdd(dragSource.type, position)
+      // category trong AssemblyInstance là 'straw' | 'connector'
+      const category = dragSource.category as 'straw' | 'connector'
+
+      onObjectAdd(dragSource, position)
       onDragEnd()
     },
     [dragSource, onObjectAdd, onDragEnd]
@@ -104,13 +95,6 @@ export function CreatorWorkspace({
         }}
       >
         <SceneContent
-          objects={objects}
-          selectedObjectId={selectedObjectId}
-          transformMode={transformMode}
-          showGrid={showGrid}
-          showAxes={showAxes}
-          snapToGrid={snapToGrid}
-          gridSize={gridSize}
           transformControlsRef={transformControlsRef}
           orbitControlsRef={orbitControlsRef}
           onObjectSelect={onObjectSelect}
@@ -120,17 +104,12 @@ export function CreatorWorkspace({
 
       {/* Toolbar */}
       <CreatorToolbar
-        transformMode={transformMode}
-        showGrid={showGrid}
-        showAxes={showAxes}
-        snapToGrid={snapToGrid}
         onTransformModeChange={onTransformModeChange}
         onToggleGrid={onToggleGrid}
         onToggleAxes={onToggleAxes}
         onToggleSnap={onToggleSnap}
       />
+      <SceneTopRight />
     </div>
   )
 }
-
-

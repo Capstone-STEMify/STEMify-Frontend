@@ -26,7 +26,8 @@ import {
   AlignJustify,
   Subscript as SubIcon,
   Superscript as SuperIcon,
-  Save
+  Save,
+  Boxes
 } from 'lucide-react'
 import { useState, useCallback, useRef, ChangeEvent } from 'react'
 
@@ -231,9 +232,28 @@ export const Toolbar = ({ editor, onSave }: Props) => {
         <Quote className='h-4 w-4' />
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
-      <ToolbarButton onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}>
-        <Eraser className='h-4 w-4' />
+      <ToolbarButton
+        onClick={() => {
+          editor
+            ?.chain()
+            .focus()
+            .insertContent({
+              type: 'stepBlock',
+              attrs: {
+                steps: [
+                  { title: 'Step 1: Start', content: 'Mô tả bước 1...', imageUrl: '' },
+                  { title: 'Step 2: Continue', content: 'Mô tả bước 2...', imageUrl: '' },
+                  { title: 'Step 3: Finish', content: 'Mô tả bước 3...', imageUrl: '' }
+                ],
+                currentStep: 0
+              }
+            })
+            .run()
+        }}
+      >
+        <Boxes className='h-4 w-4' />
       </ToolbarButton>
+
       <div className='flex justify-end'>
         <SToolTip content='Lưu' side='bottom'>
           <Button variant={'ghost'} onClick={onSave}>

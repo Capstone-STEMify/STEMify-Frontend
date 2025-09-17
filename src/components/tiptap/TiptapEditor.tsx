@@ -17,6 +17,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { Toolbar } from './Toolbar'
 import { useEffect } from 'react'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
+import { StepBlock } from '@/components/tiptap/StepBlock'
 
 interface TiptapEditorProps {
   content?: string
@@ -74,7 +75,8 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
         placeholder: 'Bắt đầu viết nội dung ở đây...',
         emptyEditorClass:
           'before:content-[attr(data-placeholder)] before:text-gray-400 before:pointer-events-none before:absolute before:left-20 before:top-6'
-      })
+      }),
+      StepBlock
     ],
     content: content || '',
     onUpdate({ editor }) {

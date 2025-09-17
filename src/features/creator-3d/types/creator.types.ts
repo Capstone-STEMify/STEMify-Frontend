@@ -1,56 +1,27 @@
 import * as THREE from 'three'
+import {
+  Vector3,
+  Transform,
+  Material,
+  Physics,
+  Straw,
+  Connector,
+  Joint,
+  Action,
+  Activity,
+  Scene,
+  Assembly,
+  ComponentTemplate,
+  BuilderState
+} from "@/features/assembly/types/assembly.types"// 👈 import từ file schema chuẩn bạn gửi ở trên
 
-export type ComponentType = 'connector_3leg' | 'straw_green'
+// Loại bỏ SceneObject cũ, CreatorScene cũ
+// Thay bằng các type chuẩn hóa
 
-export interface SceneObject {
-  id: string
-  type: ComponentType
-  name: string
-  position: { x: number; y: number; z: number }
-  rotation: { x: number; y: number; z: number }
-  scale: { x: number; y: number; z: number }
-  templateId: string
-  created: number
-  selected?: boolean
-}
-
-export interface CreatorScene {
-  objects: SceneObject[]
-  selectedObjectId: string | null
-  camera: {
-    position: { x: number; y: number; z: number }
-    target: { x: number; y: number; z: number }
-    fov: number
-  }
-  environment: {
-    background: string
-    lighting: {
-      ambient: string
-      directional: {
-        color: string
-        intensity: number
-        position: { x: number; y: number; z: number }
-      }
-    }
-  }
-}
-
-export interface ComponentTemplate {
-  id: string
-  type: ComponentType
-  name: string
-  description: string
-  icon: string
-  defaultProps: {
-    scale: { x: number; y: number; z: number }
-    material?: any
-    geometry?: any
-  }
-  source?: string // Template source path
-}
-
+// CreatorState: giữ lại nhưng tham chiếu tới Assembly thay vì CreatorScene
 export interface CreatorState {
-  scene: CreatorScene
+  scene: Assembly['scene'] // dùng scene từ Assembly chuẩn
+  currentAssembly: Assembly | null
   isDragging: boolean
   dragSource: ComponentTemplate | null
   transformMode: 'translate' | 'rotate' | 'scale'
@@ -60,6 +31,8 @@ export interface CreatorState {
   showAxes: boolean
 }
 
+// AssemblyStep → đã có trong chuẩn (ActivityStep + Action)
+// Nếu vẫn muốn custom step riêng cho editor:
 export interface AssemblyStep {
   id: string
   name: string
@@ -73,73 +46,5 @@ export interface AssemblyStep {
   }
 }
 
-export interface AssemblyExport {
-  metadata: {
-    version: string
-    created: string
-    lastModified: string
-    author: string
-    description: string
-    title: string
-  }
-  templates: {
-    materials: Array<{ id: string; source: string }>
-    components: Array<{ id: string; source: string }>
-  }
-  instances: {
-    straws: Array<{
-      templateId: string
-      instances: Array<{
-        id: string
-        transform: {
-          position: { x: number; y: number; z: number }
-          rotation: { x: number; y: number; z: number }
-        }
-      }>
-    }>
-    connectors: Array<{
-      templateId: string
-      instances: Array<{
-        id: string
-        transform: {
-          position: { x: number; y: number; z: number }
-          rotation: { x: number; y: number; z: number }
-        }
-      }>
-    }>
-  }
-  actions: AssemblyStep[]
-  activities: Array<{
-    id: string
-    name: string
-    description: string
-    difficulty: string
-    estimatedTime: number
-    steps: Array<{
-      actionId: string
-      title: string
-      description: string
-      expectedResult: string
-      hints: string[]
-    }>
-  }>
-  scene: {
-    environment: {
-      background: string
-      lighting: {
-        ambient: string
-        directional: {
-          color: string
-          intensity: number
-          position: { x: number; y: number; z: number }
-        }
-      }
-      camera: {
-        position: { x: number; y: number; z: number }
-        target: { x: number; y: number; z: number }
-        fov: number
-      }
-    }
-  }
-}
-
+// AssemblyExport bây giờ chính là Assembly chuẩn hóa
+export type AssemblyExport = Assembly

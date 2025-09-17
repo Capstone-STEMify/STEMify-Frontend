@@ -6,9 +6,10 @@ import { StepController } from './StepController'
 import { TransformInstructionPanel } from './TransformInstructionPanel'
 import { RealtimeControlPanel } from './RealtimeControlPanel'
 import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer'
+import { useParams } from 'next/navigation'
 
 export default function Workspace3D({
-  assemblyUrl = '/assemblies/optimized/octahedron.json',
+  assemblyUrl,
   mode = 'player',
   showUI = true,
   onStepComplete
@@ -18,6 +19,7 @@ export default function Workspace3D({
   showUI?: boolean
   onStepComplete?: (stepId: string) => void
 }) {
+  const { id } = useParams()
   const orbitControlsRef = useRef<any>(null)
   const transformControlsRef = useRef<any>(null)
 
@@ -34,6 +36,8 @@ export default function Workspace3D({
 
   // load assembly
   useEffect(() => {
+    assemblyUrl = assemblyUrl || (id ? `/assemblies/${id}.json` : '/assemblies/octahedron.json')
+    console.log('Loading assembly from URL:', assemblyUrl)
     loadAssembly(assemblyUrl)
   }, [assemblyUrl, loadAssembly])
 
@@ -106,6 +110,7 @@ export default function Workspace3D({
         if (Array.isArray(action.targets)) {
           for (const id of action.targets) {
             visibleConnectorIds.add(id)
+            visibleStrawIds.add(id)
           }
         } else if (action.targets === 'all') {
           showAll = true
@@ -187,7 +192,7 @@ export default function Workspace3D({
   if (!assembly) return <div>No assembly loaded</div>
 
   return (
-    <div className='relative h-[600px] w-full'>
+    <div className='relative h-screen w-full'>
       {/* Step Info */}
       {showUI && currentStep && (
         <StepInfoPanel
@@ -248,10 +253,12 @@ export default function Workspace3D({
         currentActivity={currentActivity}
         orbitControlsRef={orbitControlsRef}
         visibleInstances={visibleInstances}
+        isShiftPressed={isShiftPressed}
         transformControlsRef={transformControlsRef}
         runtimeComponentOverrides={runtimeComponentOverrides}
         setIsTransforming={setIsTransforming}
         getComponentElements={getComponentElements}
+        setRuntimeComponentOverrides={setRuntimeComponentOverrides}
       />
     </div>
   )

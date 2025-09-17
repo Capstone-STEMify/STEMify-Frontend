@@ -19,7 +19,7 @@ export type CarouselItem = {
 
 const ITEMS: CarouselItem[] = [
   {
-    id: 'police',
+    id: 'octahedron',
     title: 'Octahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-octahedron-platonic-solid_cover.jpg&w=1920&q=75',
@@ -28,25 +28,25 @@ const ITEMS: CarouselItem[] = [
     isAvailable: true
   },
   {
-    id: 'obstacle',
-    title: ' Tetrahedron Platonic Solid',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    bg: 'bg-rose-400',
-    rating: 4.2,
-    isAvailable: false
-  },
-  {
-    id: 'sweeper',
+    id: 'hexahedron',
     title: 'Hexahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
     bg: 'bg-amber-300',
     rating: 3.1,
-    isAvailable: false
+    isAvailable: true
   },
   {
-    id: 'robotarm',
+    id: 'test_assembly_assembly',
+    title: ' Testing',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
+    bg: 'bg-rose-400',
+    rating: 4.2,
+    isAvailable: true
+  },
+  {
+    id: 'dodecahedron',
     title: 'Dodecahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-dodecahedron-platonic-solid_cover.jpg&w=1920&q=75',
@@ -55,7 +55,7 @@ const ITEMS: CarouselItem[] = [
     isAvailable: false
   },
   {
-    id: 'forklift',
+    id: 'icosahedron',
     title: 'Icosahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
@@ -146,8 +146,8 @@ export default function CarouselShowcase() {
   }
 
   return (
-    <div className='min-h-screen w-full bg-neutral-50'>
-      <div className='max-w-7.5xl mx-auto px-4 py-6 md:py-10'>
+    <div className=''>
+      <div className='mx-auto px-4 py-6 md:py-10'>
         <HeaderBar />
 
         {/* Carousel */}

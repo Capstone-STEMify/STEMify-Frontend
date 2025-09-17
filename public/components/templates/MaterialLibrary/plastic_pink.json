@@ -1,0 +1,43 @@
+{
+  "id": "plastic_pink",
+  "name": "Pink Plastic Material",
+  "version": "1.0",
+  "type": "plastic",
+  "properties": {
+    "color": "#e788c9",
+    "flexibility": 15,
+    "opacity": 1.0,
+    "roughness": 0.3,
+    "metalness": 0.0,
+    "transmission": 0.0,
+    "ior": 1.4,
+    "thickness": 0.1
+  },
+  "physics": {
+    "friction": 0.4,
+    "elasticity": 0.2,
+    "density": 920
+  },
+  "lod": {
+    "high": {
+      "shaderComplexity": "pbr_full",
+      "textureResolution": 1024,
+      "enableSubsurfaceScattering": true
+    },
+    "medium": {
+      "shaderComplexity": "pbr_simplified",
+      "textureResolution": 512,
+      "enableSubsurfaceScattering": false
+    },
+    "low": {
+      "shaderComplexity": "basic",
+      "textureResolution": 256,
+      "enableSubsurfaceScattering": false
+    }
+  },
+  "streaming": {
+    "priority": 1,
+    "chunkSize": "small",
+    "compressionLevel": 7
+  }
+}

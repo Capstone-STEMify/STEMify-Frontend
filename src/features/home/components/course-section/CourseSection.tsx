@@ -69,7 +69,7 @@ export default function ExploreResourcesSection() {
               size='lg'
               key={index}
               imageSrc={resource.imageUrl || ''}
-              infor={<Badge>{resource.topicNames}</Badge>}
+              infor={<Badge>{resource.status}</Badge>}
             >
               <div className='flex min-h-0 flex-1 flex-col'>
                 <p className='text-amber-custom-400 text-xs font-medium'>COURSE</p>
