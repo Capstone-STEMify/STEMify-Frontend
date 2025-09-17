@@ -37,13 +37,13 @@ const ITEMS: CarouselItem[] = [
     isAvailable: true
   },
   {
-    id: 'tetrahedron',
-    title: ' Tetrahedron Platonic Solid',
+    id: 'test_assembly_assembly',
+    title: ' Testing',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
     bg: 'bg-rose-400',
     rating: 4.2,
-    isAvailable: false
+    isAvailable: true
   },
   {
     id: 'dodecahedron',

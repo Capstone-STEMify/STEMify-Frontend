@@ -58,5 +58,6 @@
     "maxStress": 50,
     "maxBendingAngle": 15,
     "compatibleConnectors": ["3leg", "5leg", "2leg"]
-  }
+  },
+  "imagePreviewUrl": "/images/components/straw_yellow.png"
 }

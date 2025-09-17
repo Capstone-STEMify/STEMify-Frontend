@@ -19,7 +19,7 @@
     },
     "end": {
       "localPosition": { "x": 7.5, "y": 0, "z": 0 },
-      "socketType": "standard", 
+      "socketType": "standard",
       "connectionRadius": 0.65
     }
   },
@@ -37,7 +37,7 @@
     },
     "medium": {
       "geometryComplexity": "standard",
-      "segments": 16, 
+      "segments": 16,
       "radialSegments": 6,
       "renderDistance": 100
     },
@@ -58,5 +58,6 @@
     "maxStress": 50,
     "maxBendingAngle": 15,
     "compatibleConnectors": ["3leg", "5leg", "2leg"]
-  }
+  },
+  "imagePreviewUrl": "/images/components/straw_green.png"
 }

@@ -1,8 +1,6 @@
+import { useAppSelector } from '@/hooks/redux-hooks'
+
 interface CreatorToolbarProps {
-  transformMode: 'translate' | 'rotate' | 'scale'
-  showGrid: boolean
-  showAxes: boolean
-  snapToGrid: boolean
   onTransformModeChange: (mode: 'translate' | 'rotate' | 'scale') => void
   onToggleGrid: () => void
   onToggleAxes: () => void
@@ -10,15 +8,15 @@ interface CreatorToolbarProps {
 }
 
 export function CreatorToolbar({
-  transformMode,
-  showGrid,
-  showAxes,
-  snapToGrid,
   onTransformModeChange,
   onToggleGrid,
   onToggleAxes,
   onToggleSnap
 }: CreatorToolbarProps) {
+  const transformMode = useAppSelector((state) => state.creatorScene.transformMode)
+  const showGrid = useAppSelector((state) => state.creatorScene.showGrid)
+  const showAxes = useAppSelector((state) => state.creatorScene.showAxes)
+  const snapToGrid = useAppSelector((state) => state.creatorScene.snapToGrid)
   return (
     <div className='absolute top-4 left-4 rounded-lg border border-gray-200 bg-white p-2 shadow-lg'>
       <div className='flex items-center gap-2'>

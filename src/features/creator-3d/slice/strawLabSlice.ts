@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { boolean, set } from 'zod'
 
 const initialStrawLabState = {
   cameraStatus: false

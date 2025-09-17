@@ -1,63 +1,144 @@
 'use client'
 
-import { useState } from 'react'
-import { ComponentTemplate, ComponentType } from '../../types/creator.types'
-import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { ComponentCard } from '@/features/creator-3d/components/component-palette/ComponentCard'
+import { ComponentTemplate, Connector, Straw } from '@/features/assembly/types/assembly.types'
+import { useGLTF } from '@react-three/drei'
 
 interface ComponentPaletteProps {
   onDragStart: (template: ComponentTemplate) => void
-  onAddComponent: (type: ComponentType) => void
+  onAddComponent: (template: ComponentTemplate) => void
 }
 
-const COMPONENT_TEMPLATES: ComponentTemplate[] = [
-  {
-    id: '3leg_red',
-    type: 'connector_3leg',
-    name: '3-Leg Connector',
-    description: 'Red 3-way connector for joining straws',
-    icon: '/images/components/connector_3_leg.png',
-    defaultProps: {
-      scale: { x: 1, y: 1, z: 1 }
-    },
-    source: '/components/templates/ConnectorTypes/3leg_red.json'
-  },
-  {
-    id: 'green_11_2',
-    type: 'straw_green',
-    name: 'Green Straw',
-    description: 'Green straw segment for building structures',
-    icon: '/images/components/straw_green.png',
-    defaultProps: {
-      scale: { x: 1, y: 1, z: 1 }
-    },
-    source: '/components/templates/StrawTypes/green_11_2.json'
+// Function to load a component template from a JSON file
+// Will be replaced with real data fetching logic later
+export async function loadComponentTemplate(jsonPath: string): Promise<ComponentTemplate> {
+  const res = await fetch(jsonPath)
+  if (!res.ok) throw new Error(`Failed to load template: ${jsonPath}`)
+  const data = await res.json()
+
+  const baseTransform = {
+    position: { x: 0, y: 0, z: 0 },
+    rotation: { x: 0, y: 0, z: 0 },
+    scale: { x: 1, y: 1, z: 1 }
   }
-]
+
+  const baseMaterial = {
+    type: data.materialRef?.includes('plastic') ? 'plastic' : 'metal',
+    color: data.materialRef === 'plastic_green' ? '#c1e500' : '#fff51d',
+    flexibility: 0.1,
+    opacity: 1,
+    roughness: 1,
+    metalness: 0
+  }
+
+  let defaultProperties: Straw | Connector
+
+  if (data.category === 'straw') {
+    defaultProperties = {
+      id: data.id,
+      name: data.name,
+      transform: baseTransform,
+      material: baseMaterial,
+      geometry: data.baseGeometry,
+      physics: data.physics,
+      endpoints: data.endpoints
+    } as Straw
+  } else if (data.category === 'connector') {
+    defaultProperties = {
+      id: data.id,
+      name: data.name,
+      transform: baseTransform,
+      material: baseMaterial,
+      geometry: data.baseGeometry,
+      type: data.type ?? 'connector',
+      ports: data.ports ?? [
+        {
+          id: `${data.id}_port_0`,
+          localPosition: { x: 0, y: 0, z: 2 },
+          orientation: { x: 0, y: 0, z: 1 },
+          connectionId: null,
+          isAvailable: true,
+          portIndex: 0
+        }
+      ],
+      constraints: data.constraints ?? { maxConnections: 3, allowedAngles: [] },
+      modelUrl: data.modelUrl ?? data.baseGeometry?.modelPath ?? `/models/${data.id}.glb`
+    } as Connector
+
+    if (data.modelUrl || data.baseGeometry?.modelPath) {
+      const url = data.modelUrl ?? data.baseGeometry.modelPath
+      useGLTF.preload(url)
+      ;(defaultProperties as Connector).modelUrl = url
+    }
+  } else {
+    throw new Error(`Unknown component category: ${data.category}`)
+  }
+
+  return {
+    id: data.id,
+    name: data.name,
+    type: data.category === 'straw' ? 'straw' : 'connector',
+    category: data.category,
+    description: data.description || '',
+    previewImageUrl: data.imagePreviewUrl || undefined,
+    defaultProperties,
+    source: jsonPath
+  }
+}
 
 export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPaletteProps) {
-  const [draggedTemplate, setDraggedTemplate] = useState<ComponentTemplate | null>(null)
+  const [templates, setTemplates] = useState<ComponentTemplate[]>([])
+  const [draggingTemplate, setDraggingTemplate] = useState<ComponentTemplate | null>(null)
+
+  // TODO: Replace with real data fetching logic
+
+  useEffect(() => {
+    async function loadTemplates() {
+      try {
+        const straw_green = await loadComponentTemplate('/components/templates/StrawTypes/green_11_2.json')
+        const straw_yellow = await loadComponentTemplate('/components/templates/StrawTypes/yellow_3_8.json')
+        const connector_3leg_red = await loadComponentTemplate('/components/templates/ConnectorTypes/3legs.json')
+        const templateMap: Record<string, ComponentTemplate> = {
+          [straw_green.id]: straw_green,
+          [straw_yellow.id]: straw_yellow,
+          [connector_3leg_red.id]: connector_3leg_red
+        }
+
+        console.log('Loaded templates:', templateMap)
+        setTemplates(Object.values(templateMap))
+      } catch (err) {
+        console.error('Failed to load templates', err)
+      }
+    }
+    loadTemplates()
+  }, [])
 
   const handleDragStart = (e: React.DragEvent, template: ComponentTemplate) => {
-    setDraggedTemplate(template)
+    setDraggingTemplate(template)
     onDragStart(template)
 
-    // Set drag effect
     e.dataTransfer.effectAllowed = 'copy'
     e.dataTransfer.setData('text/plain', template.id)
 
-    // Create drag image
     const dragImage = new window.Image()
-    dragImage.src = template.icon
+    dragImage.src = template.previewImageUrl || ''
     e.dataTransfer.setDragImage(dragImage, 25, 25)
   }
 
   const handleDragEnd = () => {
-    setDraggedTemplate(null)
+    setDraggingTemplate(null)
   }
 
   const handleDoubleClick = (template: ComponentTemplate) => {
-    onAddComponent(template.type)
+    if (template.category === 'connector') {
+      const connectorTemplate = template.defaultProperties as Connector
+      if (!connectorTemplate.modelUrl && !connectorTemplate.geometry?.modelPath) {
+        console.warn(`[handleDoubleClick] Connector ${template.id} chưa có modelUrl`)
+        return
+      }
+    }
+    onAddComponent(template)
   }
 
   return (
@@ -71,11 +152,11 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
       {/* Component List */}
       <div className='flex-1 overflow-y-auto p-4'>
         <div className='space-y-3'>
-          {COMPONENT_TEMPLATES.map((template) => (
+          {templates.map((template) => (
             <ComponentCard
               key={template.id}
               template={template}
-              isDragging={draggedTemplate?.id === template.id}
+              isDragging={draggingTemplate?.id === template.id}
               onDragStart={(e) => handleDragStart(e, template)}
               onDragEnd={handleDragEnd}
               onDoubleClick={() => handleDoubleClick(template)}

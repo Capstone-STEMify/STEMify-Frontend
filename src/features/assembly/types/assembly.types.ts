@@ -57,7 +57,7 @@ export interface StrawEndpoints {
 export interface Straw extends BaseComponent {
   geometry: StrawGeometry
   endpoints: StrawEndpoints
-  physics: Physics
+  physics?: Physics
 }
 
 // Connector interfaces
@@ -65,6 +65,7 @@ export interface ConnectorGeometry {
   size: Vector3
   portDiameter: number
   shape: 'cylindrical' | 'cubic' | 'spherical' | 'custom'
+  modelPath?: string
 }
 
 export interface ConnectorPort {
@@ -86,6 +87,7 @@ export interface Connector extends BaseComponent {
   geometry: ConnectorGeometry
   ports: ConnectorPort[]
   constraints: ConnectorConstraints
+  modelUrl?: string
 }
 
 // Joint interfaces
@@ -263,8 +265,10 @@ export interface ComponentTemplate {
   type: 'straw' | 'connector'
   category: string
   description: string
-  defaultProperties: Partial<Straw | Connector>
+  defaultProperties: Straw | Connector
   previewImageUrl?: string
+  source?: string
+  modelUrl?: string
 }
 
 export interface ComponentLibrary {

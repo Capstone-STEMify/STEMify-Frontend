@@ -1,4 +1,3 @@
-import { SceneObject } from '@/features/creator-3d/types/creator.types'
 import { useThree } from '@react-three/fiber'
 import { useCallback, useEffect, useRef } from 'react'
 import * as THREE from 'three'
@@ -6,37 +5,30 @@ import { SceneObjectComponent } from '@/features/creator-3d/components/creator-w
 import { AxesHelper as ThreeAxesHelper } from 'three'
 import { OrbitControls, Grid, TransformControls } from '@react-three/drei'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 
 interface SceneContentProps {
-  objects: SceneObject[]
-  selectedObjectId: string | null
-  transformMode: 'translate' | 'rotate' | 'scale'
-  showGrid: boolean
-  showAxes: boolean
-  snapToGrid: boolean
-  gridSize: number
   transformControlsRef: React.RefObject<any>
   orbitControlsRef: React.RefObject<any>
   onObjectSelect: (objectId: string | null) => void
-  onObjectUpdate: (objectId: string, updates: Partial<SceneObject>) => void
+  onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
 }
 
 export function SceneContent({
-  objects,
-  selectedObjectId,
-  transformMode,
-  showGrid,
-  showAxes,
-  snapToGrid,
-  gridSize,
   transformControlsRef,
   orbitControlsRef,
   onObjectSelect,
   onObjectUpdate
 }: SceneContentProps) {
-  const { scene } = useThree()
   const objectRefs = useRef<Record<string, THREE.Object3D>>({})
   const cameraStatus = useAppSelector((state) => state.strawLab.cameraStatus)
+  const selectedObjectId = useAppSelector((state) => state.creatorScene.selectedId)
+  const snapToGrid = useAppSelector((state) => state.creatorScene.snapToGrid)
+  const gridSize = useAppSelector((state) => state.creatorScene.gridSize)
+  const showGrid = useAppSelector((state) => state.creatorScene.showGrid)
+  const showAxes = useAppSelector((state) => state.creatorScene.showAxes)
+  const transformMode = useAppSelector((state) => state.creatorScene.transformMode)
+  const objects = useAppSelector((state) => state.creatorScene.instances)
 
   // Update transform controls target when selection changes
   useEffect(() => {
@@ -85,8 +77,12 @@ export function SceneContent({
 
       targetObject.position.set(position.x, position.y, position.z)
     }
-
-    onObjectUpdate(selectedObjectId, { position, rotation })
+    onObjectUpdate(selectedObjectId, {
+      transform: {
+        position,
+        rotation
+      }
+    })
   }, [selectedObjectId, snapToGrid, gridSize, onObjectUpdate])
 
   return (
@@ -137,17 +133,17 @@ export function SceneContent({
       {showAxes && <primitive object={new ThreeAxesHelper(10)} />}
 
       {/* Scene Objects */}
-      {objects.map((obj) => (
+      {objects.map((inst) => (
         <SceneObjectComponent
-          key={obj.id}
-          object={obj}
-          isSelected={obj.id === selectedObjectId}
-          onSelect={() => handleObjectClick(obj.id)}
+          key={inst.id}
+          object={inst}
+          isSelected={inst.id === selectedObjectId}
+          onSelect={() => handleObjectClick(inst.id)}
           onRef={(ref) => {
             if (ref) {
-              objectRefs.current[obj.id] = ref
+              objectRefs.current[inst.id] = ref
             } else {
-              delete objectRefs.current[obj.id]
+              delete objectRefs.current[inst.id]
             }
           }}
         />
