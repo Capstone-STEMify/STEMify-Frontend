@@ -1,4 +1,3 @@
-// extensions/StepBlock.tsx
 import StepBlockComponent from '@/components/tiptap/StepBlockComponent'
 import { Node, mergeAttributes } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'

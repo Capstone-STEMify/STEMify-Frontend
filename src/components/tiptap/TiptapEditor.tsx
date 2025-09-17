@@ -97,7 +97,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
   return (
     <div className='min-h-[90vh] rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900'>
       <Toolbar onSave={onSave} editor={editor} />
-      <ScrollArea className='h-[calc(80vh-100px)]'>
+      <ScrollArea className='h-[90vh]'>
         <EditorContent editor={editor} />
       </ScrollArea>
     </div>
