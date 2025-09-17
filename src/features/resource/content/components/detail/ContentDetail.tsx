@@ -41,7 +41,7 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
   return (
     <div>
       {/* temporarily get the first content */}
-      <TiptapViewer content={normalizeMarkdown(contentData?.data.items[0].contentBody)} />
+      <TiptapViewer content={normalizeMarkdown(contentData?.data.items[0].contentBody)} mode='teacher' />
     </div>
   )
 }

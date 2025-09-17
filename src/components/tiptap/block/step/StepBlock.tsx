@@ -1,4 +1,4 @@
-import StepBlockComponent from '@/components/tiptap/StepBlockComponent'
+import StepBlockComponent from '@/components/tiptap/block/step/StepBlockComponent'
 import { Node, mergeAttributes } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 

@@ -12,13 +12,15 @@ import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
-import { StepBlock } from '@/components/tiptap/StepBlock'
+import { StepBlock } from '@/components/tiptap/block/step/StepBlock'
+import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
 
 interface TiptapViewerProps {
   content: string
+  mode?: 'teacher' | 'student'
 }
 
-export default function TiptapViewer({ content }: TiptapViewerProps) {
+export default function TiptapViewer({ content, mode }: TiptapViewerProps) {
   const editor = useEditor({
     editable: false,
     content: content || '<p>No content</p>',
@@ -42,6 +44,7 @@ export default function TiptapViewer({ content }: TiptapViewerProps) {
       TextAlign.configure({
         types: ['heading', 'paragraph']
       }),
+      QuizBlock.configure({ mode }),
       StepBlock
     ],
     editorProps: {

@@ -27,7 +27,8 @@ import {
   Subscript as SubIcon,
   Superscript as SuperIcon,
   Save,
-  Boxes
+  Boxes,
+  HelpCircle
 } from 'lucide-react'
 import { useState, useCallback, useRef, ChangeEvent } from 'react'
 
@@ -225,6 +226,8 @@ export const Toolbar = ({ editor, onSave }: Props) => {
       >
         <ListOrdered className='h-4 w-4' />
       </ToolbarButton>
+      <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
+
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         isActive={editor.isActive('blockquote')}
@@ -252,6 +255,35 @@ export const Toolbar = ({ editor, onSave }: Props) => {
         }}
       >
         <Boxes className='h-4 w-4' />
+      </ToolbarButton>
+      <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
+
+      <ToolbarButton
+        onClick={() => {
+          editor
+            ?.chain()
+            .focus()
+            .insertContent({
+              type: 'quizBlock',
+              attrs: {
+                question: 'What is the main difference between a freshwater biome and a marine biome?',
+                options: [
+                  { id: 'A', text: 'The temperature.', isCorrect: false },
+                  { id: 'B', text: 'Freshwater biomes have more bubbles than marine biomes.', isCorrect: false },
+                  { id: 'C', text: "Freshwater biomes doesn't maintain enough biodiversity.", isCorrect: false },
+                  {
+                    id: 'D',
+                    text: 'Freshwater has less salt than a marine biome.',
+                    isCorrect: true,
+                    explanation: 'Marine biomes have higher salt concentration than freshwater.'
+                  }
+                ]
+              }
+            })
+            .run()
+        }}
+      >
+        <HelpCircle className='h-4 w-4' />
       </ToolbarButton>
 
       <div className='flex justify-end'>

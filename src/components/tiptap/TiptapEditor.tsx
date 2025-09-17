@@ -17,7 +17,8 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { Toolbar } from './Toolbar'
 import { useEffect } from 'react'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
-import { StepBlock } from '@/components/tiptap/StepBlock'
+import { StepBlock } from '@/components/tiptap/block/step/StepBlock'
+import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
 
 interface TiptapEditorProps {
   content?: string
@@ -76,6 +77,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
         emptyEditorClass:
           'before:content-[attr(data-placeholder)] before:text-gray-400 before:pointer-events-none before:absolute before:left-20 before:top-6'
       }),
+      QuizBlock,
       StepBlock
     ],
     content: content || '',

@@ -3,6 +3,7 @@ import { Input } from '@/components/shadcn/input'
 import { Textarea } from '@/components/shadcn/textarea'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react'
+import Image from 'next/image'
 import { useState } from 'react'
 
 export default function StepBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
@@ -126,17 +127,27 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
               <input type='file' accept='image/*' onChange={handleImageUpload} className='mt-2' />
             </div>
           ) : (
-            <>
-              <h3 className='mb-3 text-lg font-bold'>
+            <div className='my-3 space-y-2'>
+              <h3 className='text-lg font-bold'>
                 {active + 1}. {step.title}
               </h3>
               <div className='flex justify-center gap-4'>
-                {(step.images || []).map((img: string, idx: number) => (
-                  <img key={idx} src={img} alt={`${step.title}-${idx}`} className='max-h-60 rounded shadow' />
-                ))}
+                {(step.images || []).map((img: string, idx: number) => {
+                  return (
+                    <Image
+                      key={idx}
+                      src={img}
+                      alt={`${step.title}-${idx}`}
+                      width={400}
+                      height={400}
+                      className='rounded shadow'
+                    />
+                  )
+                })}
+                jj
               </div>
               {step.content && <p className='mt-3 text-gray-700'>{step.content}</p>}
-            </>
+            </div>
           )}
         </div>
       </div>
