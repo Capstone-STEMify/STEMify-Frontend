@@ -30,6 +30,9 @@
         "duration": {
           "label": "Duration (minutes)",
           "placeholder": "e.g., 15"
+        },
+        "isVisibleToStudent": {
+          "label": "Visible to Students"
         }
       }
     }

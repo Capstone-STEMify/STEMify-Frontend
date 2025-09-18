@@ -18,12 +18,14 @@ type SectionFormData = {
   description: string
   duration: number
   lessonId: number
+  isVisibleToStudent: boolean
 }
 
 const defaultSectionData: Omit<SectionFormData, 'lessonId'> = {
   title: '',
   description: '',
-  duration: 0
+  duration: 0,
+  isVisibleToStudent: true
 }
 
 interface UpsertSectionProps {
@@ -49,7 +51,8 @@ export default function UpsertSection({
     title: z.string().min(1, tv('section.title')),
     description: z.string().min(1, tv('section.description')),
     duration: z.number().min(1, tv('section.duration')),
-    lessonId: z.number().positive(tv('section.lessonId'))
+    lessonId: z.number().positive(tv('section.lessonId')),
+    isVisibleToStudent: z.boolean()
   })
 
   const lessonIdRaw = propLessonId ?? params?.lessonId
@@ -71,6 +74,7 @@ export default function UpsertSection({
           title: sectionData.data.title || '',
           description: sectionData.data.description || '',
           duration: sectionData.data.duration || 0,
+          isVisibleToStudent: sectionData.data.isVisibleToStudent || true,
           lessonId: sectionData.data.lessonId || lessonId || 0
         }
       : { ...defaultSectionData, lessonId: lessonId || 0 },
@@ -88,16 +92,18 @@ export default function UpsertSection({
           const updatePayload = {
             title: value.title,
             description: value.description,
-            duration: Number(value.duration)
+            duration: Number(value.duration),
+            isVisibleToStudent: value.isVisibleToStudent
           }
           await updateSection({ id: sectionId, body: updatePayload }).unwrap()
           toast.success(tt('successMessage.update', { title: value.title }))
         } else {
           const createPayload = {
+            lessonId,
             title: value.title,
             description: value.description,
             duration: Number(value.duration),
-            lessonId
+            isVisibleToStudent: value.isVisibleToStudent
           }
           const res = await createSection(createPayload).unwrap()
           toast.success(tt('successMessage.create', { title: res.data.title }))
@@ -117,6 +123,7 @@ export default function UpsertSection({
         title: sectionData.data.title || '',
         description: sectionData.data.description || '',
         duration: sectionData.data.duration || 0,
+        isVisibleToStudent: sectionData.data.isVisibleToStudent || true,
         lessonId: sectionData.data.lessonId || lessonId || 0
       })
     }
@@ -157,17 +164,25 @@ export default function UpsertSection({
             />
           )}
         />
-        <form.AppField
-          name='duration'
-          children={(field) => (
-            <field.TextField
-              type='number'
-              label={t('form.fields.duration.label')}
-              placeholder={t('form.fields.duration.placeholder')}
-              className='rounded-lg border-gray-300'
-            />
-          )}
-        />
+        <div className='grid grid-cols-2 gap-6'>
+          <form.AppField
+            name='duration'
+            children={(field) => (
+              <field.TextField
+                type='number'
+                label={t('form.fields.duration.label')}
+                placeholder={t('form.fields.duration.placeholder')}
+                className='mx-auto rounded-lg border-gray-300'
+              />
+            )}
+          />
+          <form.AppField
+            name='isVisibleToStudent'
+            children={(field) => (
+              <field.SwitchField label={t('form.fields.isVisibleToStudent.label')} className='mt-5' />
+            )}
+          />
+        </div>
         <form.AppField
           name='description'
           children={(field) => (

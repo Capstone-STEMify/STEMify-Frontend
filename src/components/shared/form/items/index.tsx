@@ -10,6 +10,7 @@ import { TextAreaField } from '@/components/shared/form/items/text-area'
 import { TextField } from '@/components/shared/form/items/text-field'
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import MultiImageField from '@/components/shared/form/items/multi-image-field'
+import SwitchField from '@/components/shared/form/items/switch-field'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts()
 
@@ -24,7 +25,8 @@ export const { useAppForm } = createFormHook({
     ImageField,
     FileField,
     MarkdownEditorField,
-    MultiImageField
+    MultiImageField,
+    SwitchField
   },
   formComponents: {
     SubmitButton
