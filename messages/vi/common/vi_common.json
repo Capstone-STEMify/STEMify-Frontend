@@ -48,7 +48,8 @@
       "readBlogs": "Xem Blog",
       "addKit": "Thêm Bộ Kit",
       "publish": "Xuất Bản",
-      "print": "In"
+      "print": "In",
+      "share": "Chia sẻ"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",
