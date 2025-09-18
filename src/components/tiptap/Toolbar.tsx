@@ -29,7 +29,8 @@ import {
   Save,
   Boxes,
   HelpCircle,
-  Notebook
+  Notebook,
+  ExternalLink
 } from 'lucide-react'
 import { useState, useCallback, useRef, ChangeEvent } from 'react'
 
@@ -236,6 +237,25 @@ export const Toolbar = ({ editor, onSave }: Props) => {
         <Quote className='h-4 w-4' />
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
+
+      <ToolbarButton
+        onClick={() => {
+          editor
+            ?.chain()
+            .focus()
+            .insertContent({
+              type: 'linkButtonBlock',
+              attrs: {
+                label: 'EXPLORE NOW',
+                url: ''
+              }
+            })
+            .run()
+        }}
+      >
+        <ExternalLink className='h-4 w-4' />
+      </ToolbarButton>
+
       <ToolbarButton
         onClick={() => {
           editor
