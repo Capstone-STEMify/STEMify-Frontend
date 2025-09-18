@@ -30,6 +30,9 @@
         "duration": {
           "label": "Thời Lượng (phút)",
           "placeholder": "Ví dụ: 15"
+        },
+        "isVisibleToStudent": {
+          "label": "Hiển Thị Cho Học Viên"
         }
       }
     }

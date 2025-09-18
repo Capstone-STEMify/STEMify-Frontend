@@ -2,9 +2,10 @@ import { Section } from '@/features/resource/section/types/section.type'
 import { ProgressStatus, StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 import { cn } from '@/utils/shadcn/utils'
-import { Check, Lock } from 'lucide-react'
+import { Check, GraduationCap, Lock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
+import { UserRole } from '@/types/userRole'
 
 type LessonOutlineProps = {
   sectionData?: Section[]
@@ -31,6 +32,8 @@ export default function LessonOutline({
   )
 
   const isLoggedIn = !!userData
+  const role = userData?.user?.role
+  const isVisibleSection = role === UserRole.TEACHER || role === UserRole.ADMIN || role === UserRole.STAFF
 
   return (
     <div className='px-4'>
@@ -39,6 +42,12 @@ export default function LessonOutline({
         {sectionData
           .slice()
           .sort((a, b) => a.orderIndex - b.orderIndex)
+          .filter((sec) => {
+            if (!sec.isVisibleToStudent && !isVisibleSection) {
+              return false
+            }
+            return true
+          })
           .map((sec) => {
             const isSelected = sec.id === selectedSectionId
             const isCompleted = completedSectionIds.has(sec.id)
@@ -63,6 +72,7 @@ export default function LessonOutline({
                   ) : (
                     isCompleted && <Check size={16} className='text-blue-500' />
                   )}
+                  {isVisibleSection && !sec.isVisibleToStudent && <GraduationCap size={16} className='text-blue-500' />}
                   <div className={!isLoggedIn ? 'text-gray-500' : ''}>{sec.title}</div>
                 </div>
                 <div className={cn('text-muted-foreground', !isLoggedIn && 'text-gray-400')}>{sec.duration} mins</div>

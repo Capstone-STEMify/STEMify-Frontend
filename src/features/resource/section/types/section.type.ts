@@ -12,6 +12,7 @@ export type Section = {
   lessonId: number
   quizIds: number[]
   contentIds: number[]
+  isVisibleToStudent: boolean
 }
 
 export enum SectionStatus {
