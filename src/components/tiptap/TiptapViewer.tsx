@@ -14,6 +14,7 @@ import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
 import { StepBlock } from '@/components/tiptap/block/step/StepBlock'
 import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
+import { NoteBlock } from '@/components/tiptap/block/note/NoteBlock'
 
 interface TiptapViewerProps {
   content: string
@@ -43,6 +44,7 @@ export default function TiptapViewer({ content }: TiptapViewerProps) {
       TextAlign.configure({
         types: ['heading', 'paragraph']
       }),
+      NoteBlock,
       QuizBlock,
       StepBlock
     ],

@@ -28,7 +28,8 @@ import {
   Superscript as SuperIcon,
   Save,
   Boxes,
-  HelpCircle
+  HelpCircle,
+  Notebook
 } from 'lucide-react'
 import { useState, useCallback, useRef, ChangeEvent } from 'react'
 
@@ -256,7 +257,6 @@ export const Toolbar = ({ editor, onSave }: Props) => {
       >
         <Boxes className='h-4 w-4' />
       </ToolbarButton>
-      <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
 
       <ToolbarButton
         onClick={() => {
@@ -285,6 +285,25 @@ export const Toolbar = ({ editor, onSave }: Props) => {
       >
         <HelpCircle className='h-4 w-4' />
       </ToolbarButton>
+
+      <ToolbarButton
+        onClick={() => {
+          editor
+            ?.chain()
+            .focus()
+            .insertContent({
+              type: 'noteBlock',
+              attrs: {
+                title: 'Teacher Note Title',
+                content: 'This is a note for teachers. Students will not see this.'
+              }
+            })
+            .run()
+        }}
+      >
+        <Notebook className='h-4 w-4' />
+      </ToolbarButton>
+      <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
 
       <div className='flex justify-end'>
         <SToolTip content='Lưu' side='bottom'>
