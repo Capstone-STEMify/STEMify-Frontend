@@ -13,6 +13,7 @@ import AnimatedBackground from '@/components/layout/animation/AnimatedBackground
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import CurriculumHeroSection from './CurriculumHeroSection'
 import CurriculumStatsSection from './CurriculumStatSection'
+import LearningObjectives from './CurriculumOutcome'
 
 export default function CurriculumDetail() {
   const { curriculumId } = useParams()
@@ -36,8 +37,12 @@ export default function CurriculumDetail() {
             <CurriculumStatsSection curriculum={curriculumData?.data} />
           </div>
 
+        <div className='mt-30 sm:mt-32'>
+          <LearningObjectives/>
+        </div>
+
         {/* Kit Information Section */}
-        <div className='relative z-10 mt-38 sm:mt-38'>
+        <div className='relative z-10 mt-20 sm:mt-20'>
           <KitInformationSection kits={curriculumData?.data.kits || []} />
         </div>
 
