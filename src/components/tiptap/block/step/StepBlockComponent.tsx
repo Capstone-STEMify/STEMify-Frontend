@@ -1,12 +1,15 @@
-// extensions/StepBlockComponent.tsx
+import { Button } from '@/components/shadcn/button'
+import { Input } from '@/components/shadcn/input'
+import { Textarea } from '@/components/shadcn/textarea'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
-import { useState } from 'react'
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 export default function StepBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
   const { steps, currentStep } = node.attrs
   const stepsArray = Array.isArray(steps) ? steps : []
-  const [active, setActive] = useState(currentStep || 0)
-
+  const [active, setActive] = useState(currentStep ?? 0)
   const editable = editor?.isEditable
   const step = stepsArray[active] || { title: '', content: '', images: [] }
 
@@ -14,6 +17,12 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
     const newSteps = [...stepsArray]
     newSteps[active] = { ...newSteps[active], [field]: value }
     updateAttributes({ steps: newSteps })
+  }
+
+  const addStep = () => {
+    const newSteps = [...stepsArray, { title: `Step ${stepsArray.length + 1}`, content: '', images: [] }]
+    updateAttributes({ steps: newSteps })
+    setActive(newSteps.length - 1)
   }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,50 +53,64 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
     if (editable) updateAttributes({ currentStep: newStep })
   }
 
+  useEffect(() => {
+    setActive(0)
+    updateAttributes({ currentStep: 0 })
+  }, [])
+
   const renderStepNav = () => (
-    <div className='mb-2 flex justify-center gap-2'>
-      {stepsArray.map((_, i) => (
-        <button
-          key={i}
-          onClick={() => {
-            setActive(i)
-            if (editable) updateAttributes({ currentStep: i })
-          }}
-          className={`h-6 w-6 rounded-full text-sm font-bold ${
-            i === active ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-700'
-          }`}
-        >
-          {i + 1}
-        </button>
-      ))}
+    <div className='my-4 flex items-center justify-between gap-4'>
+      <Button onClick={goPrev} variant='secondary'>
+        <ChevronLeft className='link text-gray-600 hover:text-black' />
+      </Button>
+      <div className='flex justify-center gap-2'>
+        {stepsArray.map((_, i) => (
+          <Button
+            key={i}
+            onClick={() => {
+              setActive(i)
+              if (editable) updateAttributes({ currentStep: i })
+            }}
+            size={'icon'}
+            className={`h-6 w-6 rounded-full text-sm font-bold ${i === active ? 'bg-black text-white' : 'bg-white text-black'}`}
+          >
+            {i + 1}
+          </Button>
+        ))}
+        {editable ? (
+          <div>
+            <Button
+              onClick={addStep}
+              size={'icon'}
+              className='h-6 w-6 bg-blue-500 text-sm font-bold text-white hover:bg-blue-600'
+            >
+              <Plus size={3} />
+            </Button>
+          </div>
+        ) : null}
+      </div>
+      <Button onClick={goNext} variant='secondary' className='cursor-pointer'>
+        <ChevronRight className='link text-gray-600 hover:text-black' />
+      </Button>
     </div>
   )
 
   return (
-    <NodeViewWrapper className='my-6 w-full rounded-xl border bg-white p-4 shadow-lg'>
-      {/* Thanh step trên */}
+    <NodeViewWrapper className='bg-sky-custom-100 my-6 w-full rounded-xl p-4 shadow-lg'>
       {renderStepNav()}
 
-      <div className='flex items-center'>
-        {/* Prev */}
-        <button
-          onClick={goPrev}
-          className='rounded-full bg-gray-200 px-3 py-2 font-bold text-gray-700 hover:bg-gray-300'
-        >
-          ◀
-        </button>
-
+      <div className='flex items-center rounded-3xl bg-white'>
         {/* Content */}
         <div className='flex-1 px-6 text-center'>
           {editable ? (
-            <>
-              <input
-                className='mb-2 w-full rounded border px-2 py-1'
+            <div className='my-2 space-y-2'>
+              <Input
+                className='w-full rounded border px-2 py-1'
                 value={step.title}
                 onChange={(e) => updateStep('title', e.target.value)}
                 placeholder='Step title...'
               />
-              <textarea
+              <Textarea
                 className='w-full rounded border px-2 py-1'
                 value={step.content}
                 onChange={(e) => updateStep('content', e.target.value)}
@@ -107,32 +130,32 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                 ))}
               </div>
               <input type='file' accept='image/*' onChange={handleImageUpload} className='mt-2' />
-            </>
+            </div>
           ) : (
-            <>
-              <h3 className='mb-3 text-lg font-bold'>
+            <div className='my-3 space-y-2'>
+              <h3 className='text-lg font-bold'>
                 {active + 1}. {step.title}
               </h3>
               <div className='flex justify-center gap-4'>
-                {(step.images || []).map((img: string, idx: number) => (
-                  <img key={idx} src={img} alt={`${step.title}-${idx}`} className='max-h-60 rounded shadow' />
-                ))}
+                {(step.images || []).map((img: string, idx: number) => {
+                  return (
+                    <Image
+                      key={idx}
+                      src={img}
+                      alt={`${step.title}-${idx}`}
+                      width={400}
+                      height={400}
+                      className='rounded shadow'
+                    />
+                  )
+                })}
               </div>
               {step.content && <p className='mt-3 text-gray-700'>{step.content}</p>}
-            </>
+            </div>
           )}
         </div>
-
-        {/* Next */}
-        <button
-          onClick={goNext}
-          className='rounded-full bg-gray-200 px-3 py-2 font-bold text-gray-700 hover:bg-gray-300'
-        >
-          ▶
-        </button>
       </div>
 
-      {/* Thanh step dưới */}
       {renderStepNav()}
     </NodeViewWrapper>
   )

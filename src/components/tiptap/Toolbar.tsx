@@ -27,7 +27,12 @@ import {
   Subscript as SubIcon,
   Superscript as SuperIcon,
   Save,
-  Boxes
+  Boxes,
+  HelpCircle,
+  Notebook,
+  ExternalLink,
+  NotebookPen,
+  ListChecks
 } from 'lucide-react'
 import { useState, useCallback, useRef, ChangeEvent } from 'react'
 
@@ -40,21 +45,25 @@ const ToolbarButton = ({
   onClick,
   isActive,
   children,
-  disabled
+  disabled,
+  tooltip
 }: {
   onClick: () => void
   isActive?: boolean
   children: React.ReactNode
   disabled?: boolean
+  tooltip: string
 }) => (
-  <button
-    type='button'
-    onClick={onClick}
-    disabled={disabled}
-    className={`rounded-md p-2 transition-colors duration-200 ${isActive ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' : 'text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700'} ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
-  >
-    {children}
-  </button>
+  <SToolTip content={tooltip} side='bottom'>
+    <button
+      type='button'
+      onClick={onClick}
+      disabled={disabled}
+      className={`rounded-md p-2 transition-colors duration-200 ${isActive ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' : 'text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700'} ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
+    >
+      {children}
+    </button>
+  </SToolTip>
 )
 
 export const Toolbar = ({ editor, onSave }: Props) => {
@@ -111,55 +120,79 @@ export const Toolbar = ({ editor, onSave }: Props) => {
   return (
     <div className='flex flex-wrap items-center justify-start gap-1 rounded-t-lg border-b border-gray-200 bg-gray-50 p-1.5 pr-10 dark:border-gray-700 dark:bg-gray-900'>
       <input type='file' ref={fileInputRef} onChange={handleFileChange} className='hidden' accept='image/*' />
-      <ToolbarButton onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()}>
+      <ToolbarButton tooltip='Undo' onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()}>
         <Undo className='h-4 w-4' />
       </ToolbarButton>
-      <ToolbarButton onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()}>
+      <ToolbarButton tooltip='Redo' onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()}>
         <Redo className='h-4 w-4' />
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
       <ToolbarButton
+        tooltip='Heading 1'
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         isActive={editor.isActive('heading', { level: 1 })}
       >
         <Heading1 className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
+        tooltip='Heading 2'
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         isActive={editor.isActive('heading', { level: 2 })}
       >
         <Heading2 className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
+        tooltip='Heading 3'
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         isActive={editor.isActive('heading', { level: 3 })}
       >
         <Heading3 className='h-4 w-4' />
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
-      <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} isActive={editor.isActive('bold')}>
+      <ToolbarButton
+        tooltip='Bold'
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        isActive={editor.isActive('bold')}
+      >
         <Bold className='h-4 w-4' />
       </ToolbarButton>
-      <ToolbarButton onClick={() => editor.chain().focus().toggleItalic().run()} isActive={editor.isActive('italic')}>
+      <ToolbarButton
+        tooltip='Italic'
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        isActive={editor.isActive('italic')}
+      >
         <Italic className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
+        tooltip='Underline'
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         isActive={editor.isActive('underline')}
       >
         <Underline className='h-4 w-4' />
       </ToolbarButton>
-      <ToolbarButton onClick={() => editor.chain().focus().toggleStrike().run()} isActive={editor.isActive('strike')}>
+      <ToolbarButton
+        tooltip='Strikethrough'
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        isActive={editor.isActive('strike')}
+      >
         <Strikethrough className='h-4 w-4' />
       </ToolbarButton>
-      <ToolbarButton onClick={() => editor.chain().focus().toggleCode().run()} isActive={editor.isActive('code')}>
+      <ToolbarButton
+        tooltip='Code'
+        onClick={() => editor.chain().focus().toggleCode().run()}
+        isActive={editor.isActive('code')}
+      >
         <Code className='h-4 w-4' />
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
-      <ToolbarButton onClick={handleImageClick}>
+      <ToolbarButton tooltip='Clear Formatting' onClick={handleImageClick}>
         <Image className='h-4 w-4' />
       </ToolbarButton>
-      <ToolbarButton onClick={() => setShowLinkInput(!showLinkInput)} isActive={editor.isActive('link')}>
+      <ToolbarButton
+        tooltip='Insert Link'
+        onClick={() => setShowLinkInput(!showLinkInput)}
+        isActive={editor.isActive('link')}
+      >
         <LinkIcon className='h-4 w-4' />
       </ToolbarButton>
       {showLinkInput && (
@@ -172,16 +205,20 @@ export const Toolbar = ({ editor, onSave }: Props) => {
             placeholder='https://example.com'
             className='rounded-md border bg-gray-100 px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-700 dark:text-gray-100'
           />
-          <ToolbarButton onClick={setLink}>Lưu</ToolbarButton>
+          <ToolbarButton tooltip='Set Link' onClick={setLink}>
+            Lưu
+          </ToolbarButton>
         </div>
       )}
       <ToolbarButton
+        tooltip='Insert Image'
         onClick={() => editor.chain().focus().toggleSuperscript().run()}
         isActive={editor.isActive('superscript')}
       >
         <SuperIcon className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
+        tooltip='Insert Image/Video'
         onClick={() => editor.chain().focus().toggleSubscript().run()}
         isActive={editor.isActive('subscript')}
       >
@@ -189,24 +226,28 @@ export const Toolbar = ({ editor, onSave }: Props) => {
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
       <ToolbarButton
+        tooltip='Align Left'
         onClick={() => editor.chain().focus().setTextAlign('left').run()}
         isActive={editor.isActive({ textAlign: 'left' })}
       >
         <AlignLeft className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
+        tooltip='Align Center'
         onClick={() => editor.chain().focus().setTextAlign('center').run()}
         isActive={editor.isActive({ textAlign: 'center' })}
       >
         <AlignCenter className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
+        tooltip='Align Right'
         onClick={() => editor.chain().focus().setTextAlign('right').run()}
         isActive={editor.isActive({ textAlign: 'right' })}
       >
         <AlignRight className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
+        tooltip='Justify'
         onClick={() => editor.chain().focus().setTextAlign('justify').run()}
         isActive={editor.isActive({ textAlign: 'justify' })}
       >
@@ -214,25 +255,51 @@ export const Toolbar = ({ editor, onSave }: Props) => {
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
       <ToolbarButton
+        tooltip='Bullet List'
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         isActive={editor.isActive('bulletList')}
       >
         <List className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
+        tooltip='Ordered List'
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         isActive={editor.isActive('orderedList')}
       >
         <ListOrdered className='h-4 w-4' />
       </ToolbarButton>
+      <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
+
       <ToolbarButton
+        tooltip='Blockquote'
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         isActive={editor.isActive('blockquote')}
       >
         <Quote className='h-4 w-4' />
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
+
       <ToolbarButton
+        tooltip='Link Button'
+        onClick={() => {
+          editor
+            ?.chain()
+            .focus()
+            .insertContent({
+              type: 'linkButtonBlock',
+              attrs: {
+                label: 'EXPLORE NOW',
+                url: ''
+              }
+            })
+            .run()
+        }}
+      >
+        <ExternalLink className='h-4 w-4' />
+      </ToolbarButton>
+
+      <ToolbarButton
+        tooltip='Step'
         onClick={() => {
           editor
             ?.chain()
@@ -251,8 +318,57 @@ export const Toolbar = ({ editor, onSave }: Props) => {
             .run()
         }}
       >
-        <Boxes className='h-4 w-4' />
+        <ListChecks className='h-4 w-4' />
       </ToolbarButton>
+
+      <ToolbarButton
+        tooltip='Quiz'
+        onClick={() => {
+          editor
+            ?.chain()
+            .focus()
+            .insertContent({
+              type: 'quizBlock',
+              attrs: {
+                question: 'What is the main difference between a freshwater biome and a marine biome?',
+                options: [
+                  { id: 'A', text: 'The temperature.', isCorrect: false },
+                  { id: 'B', text: 'Freshwater biomes have more bubbles than marine biomes.', isCorrect: false },
+                  { id: 'C', text: "Freshwater biomes doesn't maintain enough biodiversity.", isCorrect: false },
+                  {
+                    id: 'D',
+                    text: 'Freshwater has less salt than a marine biome.',
+                    isCorrect: true,
+                    explanation: 'Marine biomes have higher salt concentration than freshwater.'
+                  }
+                ]
+              }
+            })
+            .run()
+        }}
+      >
+        <HelpCircle className='h-4 w-4' />
+      </ToolbarButton>
+
+      <ToolbarButton
+        tooltip='Teacher Note'
+        onClick={() => {
+          editor
+            ?.chain()
+            .focus()
+            .insertContent({
+              type: 'noteBlock',
+              attrs: {
+                title: 'Teacher Note Title',
+                content: 'This is a note for teachers. Students will not see this.'
+              }
+            })
+            .run()
+        }}
+      >
+        <NotebookPen className='h-4 w-4' />
+      </ToolbarButton>
+      <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
 
       <div className='flex justify-end'>
         <SToolTip content='Lưu' side='bottom'>

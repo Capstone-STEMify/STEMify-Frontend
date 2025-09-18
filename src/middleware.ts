@@ -16,7 +16,7 @@ export default withAuth(
 
     const locale = pathname.split('/')[1] || 'vi'
 
-    if (hasManagementRole && !pathname.startsWith(`/${locale}/admin`)) {
+    if (hasManagementRole && !pathname.startsWith(`/${locale}/admin`) && !pathname.startsWith(`/${locale}/straw-lab`)) {
       return NextResponse.redirect(new URL(`/${locale}/admin/curriculum`, req.url))
     }
 
