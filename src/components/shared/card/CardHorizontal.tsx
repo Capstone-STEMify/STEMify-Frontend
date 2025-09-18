@@ -30,7 +30,7 @@ export default function CardHorizontal({
       content={
         <div className='flex cursor-pointer flex-col items-start gap-4 md:flex-row' onClick={onClick}>
           {/* Image */}
-          <div className='w-full flex-shrink-0 md:w-auto'>
+          <div className='w-full flex-shrink-0 md:w-auto '>
             <Image
               src={imageUrl || '/images/resources/courses.png'}
               alt={title}

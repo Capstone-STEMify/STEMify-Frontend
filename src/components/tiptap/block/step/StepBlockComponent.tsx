@@ -4,13 +4,12 @@ import { Textarea } from '@/components/shadcn/textarea'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function StepBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
   const { steps, currentStep } = node.attrs
   const stepsArray = Array.isArray(steps) ? steps : []
-  const [active, setActive] = useState(currentStep || 0)
-
+  const [active, setActive] = useState(currentStep !== undefined ? currentStep : 0)
   const editable = editor?.isEditable
   const step = stepsArray[active] || { title: '', content: '', images: [] }
 
@@ -54,6 +53,12 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
     if (editable) updateAttributes({ currentStep: newStep })
   }
 
+  useEffect(() => {
+    if (currentStep === undefined) {
+      updateAttributes({ currentStep: 0 })
+    }
+  }, [])
+
   const renderStepNav = () => (
     <div className='my-4 flex items-center justify-between gap-4'>
       <Button onClick={goPrev} variant='secondary'>
@@ -73,15 +78,17 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
             {i + 1}
           </Button>
         ))}
-        <div>
-          <Button
-            onClick={addStep}
-            size={'icon'}
-            className='h-6 w-6 bg-blue-500 text-sm font-bold text-white hover:bg-blue-600'
-          >
-            <Plus size={3} />
-          </Button>
-        </div>
+        {editable ? (
+          <div>
+            <Button
+              onClick={addStep}
+              size={'icon'}
+              className='h-6 w-6 bg-blue-500 text-sm font-bold text-white hover:bg-blue-600'
+            >
+              <Plus size={3} />
+            </Button>
+          </div>
+        ) : null}
       </div>
       <Button onClick={goNext} variant='secondary' className='cursor-pointer'>
         <ChevronRight className='link text-gray-600 hover:text-black' />
@@ -91,7 +98,6 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
 
   return (
     <NodeViewWrapper className='bg-sky-custom-100 my-6 w-full rounded-xl p-4 shadow-lg'>
-      {/* Thanh step trên */}
       {renderStepNav()}
 
       <div className='flex items-center rounded-3xl bg-white'>
@@ -144,7 +150,6 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                     />
                   )
                 })}
-                jj
               </div>
               {step.content && <p className='mt-3 text-gray-700'>{step.content}</p>}
             </div>

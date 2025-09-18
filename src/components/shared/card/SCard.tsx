@@ -30,7 +30,7 @@ export function SCard({
   footer
 }: SCardProps) {
   return (
-    <Card className={className}>
+    <Card className={`py-4 ${className}`}>
       {title && (
         <CardHeader>
           <CardTitle className={titleClassName}>{title}</CardTitle>
