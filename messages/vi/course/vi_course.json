@@ -40,12 +40,14 @@
       "notFound": "Không tìm thấy khóa học",
       "notFoundDescription": "Chúng tôi xin lỗi, nhưng khóa học bạn đang tìm kiếm không tồn tại.",
       "stats": {
+        "course": "Khóa học",
+        "course_description": "Chương trình giảng dạy toàn diện",
         "lesson": "Bài Học",
         "lesson_description": "Chương trình giảng dạy toàn diện",
         "duration": "Thời gian",
         "dur_description": "Học tập theo tiến độ cá nhân",
-        "downloads": "Tải xuống",
-        "down_description": "Tham gia cộng đồng"
+        "ratings": "Đánh giá",
+        "rate_description": "Cảm nhận từ cộng đồng"
       },
       "lesson": {
         "cardTitle": "Bài Học",

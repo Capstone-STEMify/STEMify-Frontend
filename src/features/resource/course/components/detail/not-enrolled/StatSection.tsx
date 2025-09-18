@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { BookOpen, Clock, Users } from 'lucide-react'
+import { BookOpen, Clock, Star, Users } from 'lucide-react'
 import { staggerContainer, staggerItem } from '@/utils/motion'
 import { formatDuration } from '@/utils/index'
 import { Course } from '@/features/resource/course/types/course.type'
@@ -30,12 +30,12 @@ export default function StatsSection({ course }: StatsSectionProps) {
       bgColor: 'bg-purple-100'
     },
     {
-      icon: Users,
+      icon: Star,
       value: 0,
-      title: `${t('details.stats.downloads')}`,
-      subtitle: `${t('details.stats.down_description')}`,
-      iconColor: 'text-red-500',
-      bgColor: 'bg-red-100'
+      title: `${t('details.stats.ratings')}`,
+      subtitle: `${t('details.stats.rate_description')}`,
+      iconColor: 'text-yellow-500',
+      bgColor: 'bg-yellow-100'
     }
   ]
 
