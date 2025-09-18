@@ -1,13 +1,11 @@
 // components/tiptap/block/quiz/QuizBlockComponent.tsx
 import { Button } from '@/components/shadcn/button'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { UserRole } from '@/types/userRole'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
 import { Check, GraduationCap, Pencil } from 'lucide-react'
 
-interface QuizBlockComponentProps extends NodeViewProps {
-  mode?: 'teacher' | 'student'
-}
-
-export default function QuizBlockComponent({ node, updateAttributes, mode = 'student' }: QuizBlockComponentProps) {
+export default function QuizBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
   const { question, options } = node.attrs as {
     question: string
     options: {
@@ -17,9 +15,10 @@ export default function QuizBlockComponent({ node, updateAttributes, mode = 'stu
       explanation?: string
     }[]
   }
+  const role = useAppSelector((state) => state.auth.user?.role)
 
   const handleSelect = (id: string) => {
-    if (mode === 'student') {
+    if (role === UserRole.STUDENT) {
       const opt = options.find((o) => o.id === id)
       if (opt) {
         alert(opt.isCorrect ? '✅ Correct!' : '❌ Wrong!')
@@ -33,7 +32,7 @@ export default function QuizBlockComponent({ node, updateAttributes, mode = 'stu
 
   return (
     <NodeViewWrapper>
-      {mode === 'teacher' ? (
+      {role === UserRole.TEACHER || role === UserRole.STAFF || role === UserRole.ADMIN ? (
         <div>
           <div className='bg-sky-custom-100/50 flex items-center gap-2 rounded-t-3xl p-4'>
             <Pencil size={16} />

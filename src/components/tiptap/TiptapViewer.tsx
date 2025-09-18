@@ -17,10 +17,9 @@ import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
 
 interface TiptapViewerProps {
   content: string
-  mode?: 'teacher' | 'student'
 }
 
-export default function TiptapViewer({ content, mode }: TiptapViewerProps) {
+export default function TiptapViewer({ content }: TiptapViewerProps) {
   const editor = useEditor({
     editable: false,
     content: content || '<p>No content</p>',
@@ -44,7 +43,7 @@ export default function TiptapViewer({ content, mode }: TiptapViewerProps) {
       TextAlign.configure({
         types: ['heading', 'paragraph']
       }),
-      QuizBlock.configure({ mode }),
+      QuizBlock,
       StepBlock
     ],
     editorProps: {

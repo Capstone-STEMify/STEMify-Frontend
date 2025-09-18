@@ -50,8 +50,6 @@ export const QuizBlock = Node.create({
     ]
   },
   addNodeView() {
-    const mode = this.options.mode
-
-    return ReactNodeViewRenderer((props) => <QuizBlockComponent {...props} mode={mode} />)
+    return ReactNodeViewRenderer(QuizBlockComponent)
   }
 })
