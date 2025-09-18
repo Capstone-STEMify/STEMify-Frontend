@@ -1,14 +1,14 @@
 {
-  "id": "3leg_red",
-  "name": "3-Leg Red Connector",
+  "id": "2leg_red",
+  "name": "2-Leg Connector",
   "version": "1.0",
   "category": "connector",
   "baseGeometry": {
     "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
     "portDiameter": 0.65,
     "shape": "custom",
-    "modelPath": "/models/connector_3legs.glb",
-    "meshName": "connector_3legs"
+    "modelPath": "/models/connector_2legs.glb",
+    "meshName": "connector_2legs"
   },
   "materialRef": "plastic_red",
   "arms": [
@@ -34,18 +34,6 @@
         "orientation": { "x": 0, "y": 90, "z": 45 },
         "socketType": "angled",
         "allowedRotation": { "x": 0, "y": 0, "z": 0 }
-      }
-    },
-    {
-      "id": "arm_3",
-      "meshName": "Arm_3",
-      "defaultRotation": { "x": 0, "y": 0, "z": 90 },
-      "portIndex": 2,
-      "port": {
-        "localPosition": { "x": 0, "y": 0, "z": 2.0 },
-        "orientation": { "x": 0, "y": 0, "z": 90 },
-        "socketType": "standard",
-        "allowedRotation": { "x": 0, "y": 0, "z": 360 }
       }
     }
   ],
@@ -94,6 +82,5 @@
     "maxStress": 100,
     "compatibleStraws": ["green_11_2", "green_11_7", "blue_15_0"],
     "testingRequired": true
-  },
-  "imagePreviewUrl": "/images/components/connector_3_leg.png"
+  }
 }

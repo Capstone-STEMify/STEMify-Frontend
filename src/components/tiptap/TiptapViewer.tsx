@@ -12,6 +12,10 @@ import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
+import { StepBlock } from '@/components/tiptap/block/step/StepBlock'
+import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
+import { NoteBlock } from '@/components/tiptap/block/note/NoteBlock'
+import { LinkButtonBlock } from '@/components/tiptap/block/button/link/LinkButtonBlock'
 
 interface TiptapViewerProps {
   content: string
@@ -40,7 +44,11 @@ export default function TiptapViewer({ content }: TiptapViewerProps) {
       Subscript,
       TextAlign.configure({
         types: ['heading', 'paragraph']
-      })
+      }),
+      LinkButtonBlock,
+      NoteBlock,
+      QuizBlock,
+      StepBlock
     ],
     editorProps: {
       attributes: {

@@ -2,31 +2,32 @@
 
 import { useState, useCallback, useMemo } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
-import { CreatorWorkspace } from '../creator-workspace/CreatorWorkspace'
 import { ObjectInspector } from '../ObjectInspector'
-import { useCreatorScene } from '../../hooks/useCreatorScene'
-import { ComponentTemplate, ComponentType } from '../../types/creator.types'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
 import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
+import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
+import { CreatorWorkspace } from '@/features/creator-3d/components/creator-workspace/CreatorWorkspace'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import {
+  clearScene,
+  removeInstance,
+  setSelectedId,
+  setTransformMode,
+  toggleAxes,
+  toggleGrid,
+  toggleSnap,
+  updateInstance
+} from '@/features/creator-3d/slice/creatorSceneSlice'
+import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
 
 export function Creator3D() {
-  const {
-    state,
-    selectedObject,
-    addObject,
-    removeObject,
-    updateObject,
-    selectObject,
-    setTransformMode,
-    toggleGrid,
-    toggleAxes,
-    toggleSnapToGrid,
-    clearScene,
-    exportAssembly
-  } = useCreatorScene()
-
+  const dispatch = useAppDispatch()
+  const instances = useAppSelector((s) => s.creatorScene.instances)
+  const addObject = useAddObject()
+  const selectedObject = useSelectedObject()
+  const exportAssemblyFn = useExportAssembly()
   const [dragSource, setDragSource] = useState<ComponentTemplate | null>(null)
   const [showExportDialog, setShowExportDialog] = useState(false)
   const isMobile = useIsMobile()
@@ -56,16 +57,16 @@ export function Creator3D() {
 
   // Handle adding component from palette
   const handleAddComponent = useCallback(
-    (type: ComponentType) => {
-      addObject(type, { x: 0, y: 0, z: 0 })
+    (template: ComponentTemplate) => {
+      addObject(template, { x: 0, y: 0, z: 0 })
     },
     [addObject]
   )
 
   // Handle adding component from workspace drop
   const handleWorkspaceAdd = useCallback(
-    (type: ComponentType, position: { x: number; y: number; z: number }) => {
-      addObject(type, position)
+    (template: ComponentTemplate, position: { x: number; y: number; z: number }) => {
+      addObject(template, position)
     },
     [addObject]
   )
@@ -73,25 +74,25 @@ export function Creator3D() {
   // Handle object selection
   const handleObjectSelect = useCallback(
     (objectId: string | null) => {
-      selectObject(objectId)
+      dispatch(setSelectedId(objectId))
     },
-    [selectObject]
+    [dispatch]
   )
 
   // Handle object updates
   const handleObjectUpdate = useCallback(
     (objectId: string, updates: any) => {
-      updateObject(objectId, updates)
+      dispatch(updateInstance({ id: objectId, updates }))
     },
-    [updateObject]
+    [dispatch]
   )
 
   // Handle object deletion
   const handleObjectDelete = useCallback(
     (objectId: string) => {
-      removeObject(objectId)
+      dispatch(removeInstance(objectId))
     },
-    [removeObject]
+    [dispatch]
   )
 
   // Handle export
@@ -102,9 +103,9 @@ export function Creator3D() {
   // Handle clear scene
   const handleClearScene = useCallback(() => {
     if (confirm('Are you sure you want to clear the entire scene? This action cannot be undone.')) {
-      clearScene()
+      dispatch(clearScene())
     }
-  }, [clearScene])
+  }, [dispatch])
 
   return (
     <div className='relative flex w-full bg-gray-100'>
@@ -114,39 +115,33 @@ export function Creator3D() {
       {/* Main Workspace */}
       <div className='relative flex-1'>
         <CreatorWorkspace
-          objects={state.scene.objects}
-          selectedObjectId={state.scene.selectedObjectId}
-          transformMode={state.transformMode}
-          showGrid={state.showGrid}
-          showAxes={state.showAxes}
-          snapToGrid={state.snapToGrid}
-          gridSize={state.gridSize}
           dragSource={dragSource}
           onObjectSelect={handleObjectSelect}
           onObjectUpdate={handleObjectUpdate}
           onObjectAdd={handleWorkspaceAdd}
           onDragEnd={handleDragEnd}
-          onTransformModeChange={setTransformMode}
-          onToggleGrid={toggleGrid}
-          onToggleAxes={toggleAxes}
-          onToggleSnap={toggleSnapToGrid}
+          onTransformModeChange={(mode) => dispatch(setTransformMode(mode))}
+          onToggleGrid={() => dispatch(toggleGrid())}
+          onToggleAxes={() => dispatch(toggleAxes())}
+          onToggleSnap={() => dispatch(toggleSnap())}
         />
 
         {/* Scene Stats */}
         <SceneStats
-          objectCount={state.scene.objects.length}
-          strawCount={state.scene.objects.filter((obj) => obj.type === 'straw_green').length}
-          connectorCount={state.scene.objects.filter((obj) => obj.type === 'connector_3leg').length}
+          objectCount={instances.length}
+          strawCount={instances.filter((inst) => inst.category === 'straw').length}
+          connectorCount={instances.filter((inst) => inst.category === 'connector').length}
           selectedObject={selectedObject}
         />
 
         {/* Action Buttons */}
-        <SceneActions onClear={handleClearScene} onExport={handleExport} hasObjects={state.scene.objects.length > 0} />
+        <SceneActions onClear={handleClearScene} onExport={handleExport} hasObjects={instances.length > 0} />
       </div>
 
       {/* Object Inspector */}
       {showRightSidebar && (
         <ObjectInspector
+          key={selectedObject?.id}
           selectedObject={selectedObject}
           onObjectUpdate={handleObjectUpdate}
           onObjectDelete={handleObjectDelete}
@@ -174,8 +169,8 @@ export function Creator3D() {
         <ExportDialog
           onClose={() => setShowExportDialog(false)}
           onExport={(metadata) => {
-            const exportData = exportAssembly(metadata)
-            // Download JSON file
+            const exportData = exportAssemblyFn(metadata)
+
             const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')

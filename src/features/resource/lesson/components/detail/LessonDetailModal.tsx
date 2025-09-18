@@ -6,7 +6,6 @@ import { DialogTitle } from '@radix-ui/react-dialog'
 
 export default function LessonDetailModal({ lessonId }: { lessonId: number }) {
   const { closeModal } = useModal()
-  console.log('LessonDetailModal opened with lessonId:', lessonId)
   return (
     <div>
       <Dialog open onOpenChange={closeModal}>
