@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 export default function StepBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
   const { steps, currentStep } = node.attrs
   const stepsArray = Array.isArray(steps) ? steps : []
-  const [active, setActive] = useState(currentStep !== undefined ? currentStep : 0)
+  const [active, setActive] = useState(currentStep ?? 0)
   const editable = editor?.isEditable
   const step = stepsArray[active] || { title: '', content: '', images: [] }
 
@@ -54,9 +54,8 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
   }
 
   useEffect(() => {
-    if (currentStep === undefined) {
-      updateAttributes({ currentStep: 0 })
-    }
+    setActive(0)
+    updateAttributes({ currentStep: 0 })
   }, [])
 
   const renderStepNav = () => (

@@ -15,7 +15,7 @@ export const StepBlock = Node.create({
           { title: 'Step 2: Next step', content: 'Mô tả chi tiết...', images: [] }
         ]
       },
-      currentStep: { default: 0 }
+      currentStep: { default: 0, parseHTML: () => 0 }
     }
   },
 
