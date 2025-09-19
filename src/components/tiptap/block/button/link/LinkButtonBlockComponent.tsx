@@ -28,17 +28,13 @@ export default function LinkButtonBlockComponent({ node, updateAttributes, edito
             }
             children={
               <div className='space-y-2'>
-                <h3>Button link</h3>
+                <h3>Nút liên kết</h3>
                 <Input
                   value={label}
                   onChange={(e) => updateAttributes({ label: e.target.value })}
-                  placeholder='Button label'
+                  placeholder='Nhãn nút'
                 />
-                <Input
-                  value={url}
-                  onChange={(e) => updateAttributes({ url: e.target.value })}
-                  placeholder='Target URL'
-                />
+                <Input value={url} onChange={(e) => updateAttributes({ url: e.target.value })} placeholder='Nhập URL' />
               </div>
             }
           />

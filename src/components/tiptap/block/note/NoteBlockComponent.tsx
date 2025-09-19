@@ -24,14 +24,14 @@ export default function NoteBlockComponent({ node, updateAttributes, editor }: N
           <div className='flex items-center justify-between rounded-t-md bg-sky-100 px-4 py-2'>
             <div className='flex items-center gap-2 font-semibold text-blue-700'>
               <GraduationCap size={16} />
-              TEACHER NOTES
+              Ghi chú giáo viên
             </div>
             <Button
               className='flex items-center gap-3 text-gray-500 italic hover:text-gray-700'
               onClick={() => setExpanded(!expanded)}
               variant={'ghost'}
             >
-              <span className='text-xs text-gray-500 italic'>Students won't see this note</span>
+              <span className='text-xs text-gray-500 italic'>Học sinh sẽ không thấy ghi chú này</span>
               {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </Button>
           </div>
@@ -43,20 +43,20 @@ export default function NoteBlockComponent({ node, updateAttributes, editor }: N
           >
             <div className='space-y-5 px-6 py-4 text-sm text-gray-700'>
               <div className='space-y-2'>
-                <Label className='text-sm font-semibold'>Title:</Label>
+                <Label className='text-sm font-semibold'>Tiêu đề:</Label>
                 <Textarea
                   value={title}
                   onChange={(e) => updateAttributes({ title: e.target.value })}
-                  placeholder='Note title...'
+                  placeholder='Tiêu đề ghi chú...'
                   className='flex-1'
                 />
               </div>
               <div className='space-y-2'>
-                <Label className='text-sm font-semibold'>Content:</Label>
+                <Label className='text-sm font-semibold'>Nội dung:</Label>
                 <Textarea
                   value={content}
                   onChange={(e) => updateAttributes({ content: e.target.value })}
-                  placeholder='Write teacher note...'
+                  placeholder='Viết ghi chú cho giáo viên...'
                   className='min-h-[120px] w-full'
                 />
               </div>
@@ -69,7 +69,7 @@ export default function NoteBlockComponent({ node, updateAttributes, editor }: N
           <div className='flex items-center justify-between rounded-t-md bg-sky-100 px-4 py-2'>
             <div className='flex items-center gap-2 font-semibold text-blue-700'>
               <GraduationCap size={16} />
-              TEACHER NOTES
+              Ghi chú giáo viên
             </div>
 
             <Button
@@ -77,7 +77,7 @@ export default function NoteBlockComponent({ node, updateAttributes, editor }: N
               onClick={() => setExpanded(!expanded)}
               variant={'ghost'}
             >
-              <span className='text-xs text-gray-500 italic'>Students won't see this note</span>
+              <span className='text-xs text-gray-500 italic'>Học sinh sẽ không thấy ghi chú này</span>
               {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </Button>
           </div>

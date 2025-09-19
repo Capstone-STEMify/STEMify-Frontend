@@ -14,7 +14,7 @@ export default function PacingGuideModal() {
         </DialogHeader>
         <hr />
         <ScrollArea className='h-[650px] max-w-7xl'>
-          <PacingGuide />
+          <PacingGuide isModal={true} />
         </ScrollArea>
       </DialogContent>
     </Dialog>
