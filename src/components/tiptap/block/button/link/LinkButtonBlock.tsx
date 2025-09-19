@@ -9,7 +9,7 @@ export const LinkButtonBlock = Node.create({
 
   addAttributes() {
     return {
-      label: { default: 'CREATE IN MAKECODE' },
+      label: { default: 'EXPLORE NOW' },
       url: { default: '' }
     }
   },
@@ -21,7 +21,7 @@ export const LinkButtonBlock = Node.create({
         getAttrs: (el) => {
           const element = el as HTMLElement
           return {
-            label: element.getAttribute('data-label') || 'CREATE IN MAKECODE',
+            label: element.getAttribute('data-label') || 'EXPLORE NOW',
             url: element.getAttribute('data-url') || ''
           }
         }

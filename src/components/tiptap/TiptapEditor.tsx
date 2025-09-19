@@ -77,7 +77,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
       Placeholder.configure({
         placeholder: 'Bắt đầu viết nội dung ở đây...',
         emptyEditorClass:
-          'before:content-[attr(data-placeholder)] before:text-gray-400 before:pointer-events-none before:absolute before:left-20 before:top-6'
+          'before:content-[attr(data-placeholder)] before:text-gray-400 before:pointer-events-none before:absolute before:left-15 before:top-6'
       }),
       LinkButtonBlock,
       NoteBlock,
@@ -91,7 +91,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert max-w-7xl py-6 pl-20 pr-5 focus:outline-none'
+        class: 'prose dark:prose-invert max-w-7xl py-6 px-15 focus:outline-none'
       }
     }
   })

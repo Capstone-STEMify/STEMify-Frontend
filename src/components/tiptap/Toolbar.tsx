@@ -185,7 +185,7 @@ export const Toolbar = ({ editor, onSave }: Props) => {
         <Code className='h-4 w-4' />
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
-      <ToolbarButton tooltip='Clear Formatting' onClick={handleImageClick}>
+      <ToolbarButton tooltip='Insert Image/Video' onClick={handleImageClick}>
         <Image className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
@@ -211,14 +211,14 @@ export const Toolbar = ({ editor, onSave }: Props) => {
         </div>
       )}
       <ToolbarButton
-        tooltip='Insert Image'
+        tooltip='Superscript'
         onClick={() => editor.chain().focus().toggleSuperscript().run()}
         isActive={editor.isActive('superscript')}
       >
         <SuperIcon className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
-        tooltip='Insert Image/Video'
+        tooltip='Subscript'
         onClick={() => editor.chain().focus().toggleSubscript().run()}
         isActive={editor.isActive('subscript')}
       >
