@@ -14,7 +14,7 @@ export default function UpsertContentModal({ sectionId, contentId }: UpsertConte
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogTitle></DialogTitle>
-      <DialogContent className='w-full max-w-7xl border-0 bg-transparent p-0 shadow-none [&>button]:right-8'>
+      <DialogContent className='w-full max-w-6xl border-0 bg-transparent p-0 shadow-none [&>button]:right-8'>
         <div className='h-full w-full'>
           <UpsertContent sectionId={sectionId!} contentId={contentId!} />
         </div>

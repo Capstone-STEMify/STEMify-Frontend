@@ -1,10 +1,11 @@
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
+import { Label } from '@/components/shadcn/label'
 import { Textarea } from '@/components/shadcn/textarea'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function StepBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
   const { steps, currentStep } = node.attrs
@@ -12,6 +13,7 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
   const [active, setActive] = useState(currentStep ?? 0)
   const editable = editor?.isEditable
   const step = stepsArray[active] || { title: '', content: '', images: [] }
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const updateStep = (field: string, value: any) => {
     const newSteps = [...stepsArray]
@@ -34,6 +36,7 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
       updateStep('images', newImages)
     }
     reader.readAsDataURL(file)
+    e.target.value = ''
   }
 
   const removeImage = (index: number) => {
@@ -103,33 +106,65 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
         {/* Content */}
         <div className='flex-1 px-6 text-center'>
           {editable ? (
-            <div className='my-2 space-y-2'>
-              <Input
-                className='w-full rounded border px-2 py-1'
-                value={step.title}
-                onChange={(e) => updateStep('title', e.target.value)}
-                placeholder='Step title...'
-              />
-              <Textarea
-                className='w-full rounded border px-2 py-1'
-                value={step.content}
-                onChange={(e) => updateStep('content', e.target.value)}
-                placeholder='Step content...'
-              />
-              <div className='mt-3 flex flex-wrap justify-center gap-4'>
-                {(step.images || []).map((img: string, idx: number) => (
-                  <div key={idx} className='relative'>
-                    <img src={img} alt={`${step.title}-${idx}`} className='max-h-40 rounded shadow' />
+            <div className='my-2 space-y-4'>
+              <div className='space-y-2'>
+                <Label htmlFor={`step-${active}-title`} className='text-base'>
+                  Step Title
+                </Label>
+                <Input
+                  value={step.title}
+                  onChange={(e) => updateStep('title', e.target.value)}
+                  placeholder='Step title...'
+                />
+              </div>
+              <div className='space-y-2'>
+                <Label htmlFor={`step-${active}-content`} className='text-base'>
+                  Step Content
+                </Label>
+                <Textarea
+                  value={step.content}
+                  onChange={(e) => updateStep('content', e.target.value)}
+                  placeholder='Step content...'
+                />
+              </div>
+              <div className='space-y-2'>
+                <Label htmlFor={`step-${active}-images`} className='text-left text-base'>
+                  Step Images
+                </Label>
+                <div className='rounded-lg border p-4'>
+                  <div className='mb-3 flex items-center justify-between'>
+                    <p className='text-sm font-medium'>Uploaded Files ({step.images?.length || 0})</p>
                     <button
-                      onClick={() => removeImage(idx)}
-                      className='absolute top-1 right-1 rounded bg-red-600 px-1 text-xs text-white'
+                      type='button'
+                      onClick={() => fileInputRef.current?.click()}
+                      className='flex items-center gap-1 rounded-md border border-neutral-600 px-2 py-1 text-xs hover:bg-neutral-700'
                     >
-                      ✕
+                      ⬆ Add more
                     </button>
                   </div>
-                ))}
+
+                  <div className='grid grid-cols-2 gap-4'>
+                    {(step.images || []).map((img: string, idx: number) => (
+                      <div key={idx} className='relative'>
+                        <Image
+                          src={img}
+                          alt={`${step.title}-${idx}`}
+                          width={200}
+                          height={200}
+                          className='aspect-square rounded-xl object-cover'
+                        />
+                        <button
+                          onClick={() => removeImage(idx)}
+                          className='absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-neutral-800 text-white shadow hover:bg-red-600'
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <input type='file' accept='image/*' onChange={handleImageUpload} className='mt-2' />
+              <input type='file' accept='image/*' ref={fileInputRef} onChange={handleImageUpload} className='hidden' />
             </div>
           ) : (
             <div className='my-3 space-y-2'>
