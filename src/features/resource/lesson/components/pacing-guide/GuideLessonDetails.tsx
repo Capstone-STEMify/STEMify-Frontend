@@ -1,13 +1,9 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { Lesson, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
-import { itemVariants } from '@/utils/motion'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { Button } from '@/components/shadcn/button'
-import Link from 'next/link'
 import { UserRole } from '@/types/userRole'
-import { useRouter } from 'next/navigation'
 import { useDeleteLessonMutation, useUpdateLessonMutation } from '@/features/resource/lesson/api/lessonApi'
 import { toast } from 'sonner'
 import { Clock, SquarePen, Trash2 } from 'lucide-react'
@@ -23,24 +19,15 @@ type GuideLessonDetailsProps = {
 }
 
 export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) {
-  const router = useRouter()
-  const locale = useLocale()
+  const { openModal } = useModal()
   const t = useTranslations('LessonDetails')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const role = useAppSelector((state) => state.auth.user?.role)
-  const { openModal } = useModal()
+  const user = useAppSelector((state) => state.auth.user)
 
   const [updateLesson] = useUpdateLessonMutation()
   const [deleteLesson] = useDeleteLessonMutation()
-
-  const handleNavigateUpdate = (lessonId: number) => {
-    if (role === UserRole.ADMIN) {
-      router.push(`/${locale}/admin/lesson/update/${lessonId}`)
-    } else if (role === UserRole.STAFF) {
-      router.push(`/${locale}/resource/lesson/update/${lessonId}`)
-    }
-  }
 
   const handleUpdateLessonStatus = async (lessonId: number, status: LessonStatus) => {
     try {
@@ -57,7 +44,6 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
     toast.success(`${tt('successMessage.delete', { title: lesson.title })}`)
   }
 
-  const fallback = 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=1200&auto=format&fit=crop'
   return (
     <div>
       <div className='grid grid-cols-1 items-start gap-10 lg:grid-cols-3'>
@@ -129,7 +115,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
 
         <div className='space-y-6'>
           <div className='relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-md'>
-            <Image src={lesson.imageUrl || fallback} alt='Lesson artwork' fill className='object-cover' />
+            <Image src={lesson.imageUrl || '/images/fallback.png'} alt='Lesson artwork' fill className='object-cover' />
           </div>
           <div className='mt-6'>
             <div className='space-y-6'>
@@ -192,22 +178,65 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
           </div>
 
           <div>
-            {(lesson.status === LessonStatus.PENDING || lesson.status === LessonStatus.DRAFT) &&
-              role === UserRole.ADMIN && (
-                <div className='mt-5 mr-2 flex gap-x-2'>
-                  <Button
-                    onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.REJECTED)}
-                    className='w-1/2 border-red-500 text-red-500'
-                    variant={'outline'}
-                  >
-                    {tc('button.reject')}
-                  </Button>
+            {/* review Buttons (only for admin users) */}
+            {user && user.role === UserRole.ADMIN && lesson.status === LessonStatus.PENDING && (
+              <div className='space-y-4'>
+                <Button
+                  onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.PUBLISHED)}
+                  className='text-sky-custom-600 w-full cursor-pointer bg-gray-200 font-semibold shadow'
+                  variant='outline'
+                >
+                  {tc('button.approve')}
+                </Button>
+                <Button
+                  onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.REJECTED)}
+                  variant='outline'
+                  className='w-full border-red-600 text-red-600'
+                >
+                  {tc('button.reject')}
+                </Button>
+              </div>
+            )}
+
+            {/* if admin user is the creator and course is in draft status */}
+            {user &&
+              user.role === UserRole.ADMIN &&
+              user.userId === lesson.createdByUserId &&
+              lesson.status === LessonStatus.DRAFT && (
+                <div className='space-y-4'>
                   <Button
                     onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.PUBLISHED)}
-                    className='w-1/2 bg-green-500 text-white'
+                    className='bg-sky-custom-600 w-full cursor-pointer font-semibold text-white shadow'
+                    variant='outline'
                   >
-                    {tc('button.approve')}
+                    {tc('button.publish')}
                   </Button>
+                </div>
+              )}
+
+            {/* if staff user is the creator and course is in draft status */}
+            {user &&
+              user.role === UserRole.STAFF &&
+              user.userId === lesson.createdByUserId &&
+              lesson.status === LessonStatus.DRAFT && (
+                <div className='space-y-4'>
+                  <Button
+                    onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.PENDING)}
+                    className='bg-sky-custom-600 w-full cursor-pointer font-semibold text-white shadow'
+                    variant='outline'
+                  >
+                    {tc('button.sendRequest')}
+                  </Button>
+                </div>
+              )}
+
+            {/* Pending Review Message */}
+            {user &&
+              user.role === UserRole.STAFF &&
+              user.userId === lesson.createdByUserId &&
+              lesson.status === LessonStatus.PENDING && (
+                <div className='flex w-full items-center gap-3 rounded-md border border-yellow-300 bg-yellow-50 p-2'>
+                  <p className='text-xs font-medium text-yellow-700'>{t('reviewMessage')}</p>
                 </div>
               )}
           </div>

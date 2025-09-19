@@ -4,12 +4,12 @@ import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import BackButton from '@/components/shared/button/BackButton'
 import GuideLessonDetails from '@/features/resource/lesson/components/pacing-guide/GuideLessonDetails'
 import SectionListTable from '@/features/resource/section/components/list/SectionListTable'
 import { useTranslations } from 'next-intl'
+import BackButton from '@/components/shared/button/BackButton'
 
-export default function PacingGuide() {
+export default function PacingGuide({ isModal = false }: { isModal?: boolean }) {
   const t = useTranslations('LessonDetails')
   const { lessonId } = useParams()
   const { data, isLoading } = useGetLessonByIdQuery(Number(lessonId), { skip: !lessonId })
@@ -28,7 +28,7 @@ export default function PacingGuide() {
   return (
     <div className='mx-auto min-h-screen max-w-6xl px-4 pt-2 sm:px-6 lg:px-8'>
       <div className='flex items-center gap-5 pb-5'>
-        {/* <BackButton /> */}
+        {!isModal && <BackButton />}
         <h1>{t('title')}</h1>
       </div>
       <div>
