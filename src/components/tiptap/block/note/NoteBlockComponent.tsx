@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, GraduationCap, GraduationCapIcon, Pencil } from
 import { Button } from '@/components/shadcn/button'
 import { Textarea } from '@/components/shadcn/textarea'
 import { useState } from 'react'
+import { Label } from '@/components/shadcn/label'
 
 export default function NoteBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
   const { title, content } = node.attrs as { title: string; content: string }
@@ -19,22 +20,48 @@ export default function NoteBlockComponent({ node, updateAttributes, editor }: N
   return (
     <NodeViewWrapper>
       {editable && (role === UserRole.STAFF || role === UserRole.ADMIN) ? (
-        <div className='space-y-3 rounded-3xl border p-4'>
-          <div className='flex items-center gap-2'>
-            <GraduationCapIcon size={16} />
-            <Textarea
-              value={title}
-              onChange={(e) => updateAttributes({ title: e.target.value })}
-              placeholder='Note title...'
-              className='flex-1'
-            />
+        <div className='rounded-md border'>
+          <div className='flex items-center justify-between rounded-t-md bg-sky-100 px-4 py-2'>
+            <div className='flex items-center gap-2 font-semibold text-blue-700'>
+              <GraduationCap size={16} />
+              TEACHER NOTES
+            </div>
+            <Button
+              className='flex items-center gap-3 text-gray-500 italic hover:text-gray-700'
+              onClick={() => setExpanded(!expanded)}
+              variant={'ghost'}
+            >
+              <span className='text-xs text-gray-500 italic'>Students won't see this note</span>
+              {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </Button>
           </div>
-          <Textarea
-            value={content}
-            onChange={(e) => updateAttributes({ content: e.target.value })}
-            placeholder='Write teacher note...'
-            className='min-h-[120px] w-full'
-          />
+
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              expanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+            }`}
+          >
+            <div className='space-y-5 px-6 py-4 text-sm text-gray-700'>
+              <div className='space-y-2'>
+                <Label className='text-sm font-semibold'>Title:</Label>
+                <Textarea
+                  value={title}
+                  onChange={(e) => updateAttributes({ title: e.target.value })}
+                  placeholder='Note title...'
+                  className='flex-1'
+                />
+              </div>
+              <div className='space-y-2'>
+                <Label className='text-sm font-semibold'>Content:</Label>
+                <Textarea
+                  value={content}
+                  onChange={(e) => updateAttributes({ content: e.target.value })}
+                  placeholder='Write teacher note...'
+                  className='min-h-[120px] w-full'
+                />
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <div className='rounded-md border bg-yellow-50'>

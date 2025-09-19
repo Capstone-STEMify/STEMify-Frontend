@@ -1,5 +1,6 @@
 import { Button } from '@/components/shadcn/button'
 import { Checkbox } from '@/components/shadcn/checkbox'
+import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Textarea } from '@/components/shadcn/textarea'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
@@ -47,6 +48,7 @@ export default function QuizBlockComponent({ node, updateAttributes, editor }: N
       {/* Edit mode */}
       {editable ? (
         <div className='space-y-4 rounded-3xl border px-4 py-6'>
+          <h1>Quiz</h1>
           <div className='flex items-center gap-2'>
             <Pencil size={16} />
             <Textarea
@@ -57,38 +59,62 @@ export default function QuizBlockComponent({ node, updateAttributes, editor }: N
             />
           </div>
 
-          <div className='space-y-3'>
-            {optionsArray.map((opt) => (
-              <div key={opt.id} className='flex items-start gap-3'>
-                <span className='my-auto cursor-pointer text-red-600' onClick={() => handleDeleteOption(opt.id)}>
-                  <Trash size={16} />
-                </span>
-                <Textarea
-                  value={opt.text}
-                  onChange={(e) => handleOptionChange(opt.id, 'text', e.target.value)}
-                  placeholder={`Option ${opt.id}`}
-                  className='flex-1'
-                />
-                <label className='my-auto flex items-center gap-1 text-sm'>
-                  <Checkbox
-                    checked={opt.isCorrect}
-                    onCheckedChange={(checked) => handleOptionChange(opt.id, 'isCorrect', !!checked)}
-                  />
-                  Correct
-                </label>
-                <Textarea
-                  value={opt.explanation || ''}
-                  onChange={(e) => handleOptionChange(opt.id, 'explanation', e.target.value)}
-                  placeholder='Explanation'
-                  className='flex-1'
-                />
-              </div>
-            ))}
-
-            <Button variant='outline' size='sm' onClick={handleAddOption}>
-              <Plus size={16} className='mr-1' /> Add Option
-            </Button>
+          <div className='rounded-xl border'>
+            <Table className='w-full overflow-hidden rounded-xl shadow-sm'>
+              <TableHeader className='rounded-xl'>
+                <TableRow className='bg-gray-100'>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Option</TableCell>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Text</TableCell>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Explanation</TableCell>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Correct</TableCell>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Actions</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody className='divide-y divide-gray-200'>
+                {optionsArray.map((opt) => (
+                  <TableRow key={opt.id} className='transition-colors odd:bg-white even:bg-gray-50 hover:bg-gray-100'>
+                    <TableCell className='px-4 py-3 text-center font-bold'>{opt.id}</TableCell>
+                    <TableCell className='px-4 py-3'>
+                      <Textarea
+                        value={opt.text}
+                        onChange={(e) => handleOptionChange(opt.id, 'text', e.target.value)}
+                        placeholder={`Option ${opt.id}`}
+                        className='h-8 w-full rounded-lg'
+                      />
+                    </TableCell>
+                    <TableCell className='px-4 py-3'>
+                      <Textarea
+                        value={opt.explanation || ''}
+                        onChange={(e) => handleOptionChange(opt.id, 'explanation', e.target.value)}
+                        placeholder='Explanation'
+                        className='h-8 w-full rounded-lg'
+                      />
+                    </TableCell>
+                    <TableCell className='px-4 py-3 text-center'>
+                      <Checkbox
+                        checked={opt.isCorrect}
+                        onCheckedChange={(checked) => handleOptionChange(opt.id, 'isCorrect', !!checked)}
+                        className={`border transition-colors hover:border-green-400 data-[state=checked]:border-green-500 data-[state=checked]:bg-green-500 data-[state=unchecked]:border-gray-300 data-[state=unchecked]:bg-white`}
+                      />
+                    </TableCell>
+                    <TableCell className='px-4 py-3 text-center'>
+                      <Button
+                        variant='destructive'
+                        size='icon'
+                        onClick={() => handleDeleteOption(opt.id)}
+                        className='rounded-full'
+                      >
+                        <Trash size={16} />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
+          <Button variant='outline' size='sm' onClick={handleAddOption} className='mt-2'>
+            <Plus size={16} className='mr-1' /> Add Option
+          </Button>
         </div>
       ) : role === UserRole.STAFF || role === UserRole.ADMIN || role === UserRole.TEACHER ? (
         <div>

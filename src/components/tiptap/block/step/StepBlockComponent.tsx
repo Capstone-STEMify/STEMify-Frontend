@@ -29,13 +29,20 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return
-    const file = e.target.files[0]
-    const reader = new FileReader()
-    reader.onload = () => {
-      const newImages = [...(step.images || []), reader.result as string]
+    const files = Array.from(e.target.files) // Lấy toàn bộ file
+    const readers = files.map(
+      (file) =>
+        new Promise<string>((resolve) => {
+          const reader = new FileReader()
+          reader.onload = () => resolve(reader.result as string)
+          reader.readAsDataURL(file)
+        })
+    )
+
+    Promise.all(readers).then((results) => {
+      const newImages = [...(step.images || []), ...results]
       updateStep('images', newImages)
-    }
-    reader.readAsDataURL(file)
+    })
     e.target.value = ''
   }
 
@@ -137,7 +144,7 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                       <Upload size={8} /> Add more
                     </Button>
                   </div>
-                  <div className='flex gap-4'>
+                  <div className='flex flex-wrap items-center justify-center gap-7'>
                     {(step.images || []).map((img: string, idx: number) => (
                       <div key={idx} className='group relative h-[200px] w-[200px] overflow-hidden rounded-xl border'>
                         {/* Ảnh */}
@@ -164,14 +171,21 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                   </div>
                 </div>
               </div>
-              <input type='file' accept='image/*' ref={fileInputRef} onChange={handleImageUpload} className='hidden' />
+              <input
+                type='file'
+                multiple
+                accept='image/*'
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                className='hidden'
+              />
             </div>
           ) : (
             <div className='my-3 space-y-2'>
               <h3 className='text-lg font-bold'>
                 {active + 1}. {step.title}
               </h3>
-              <div className='flex justify-center gap-5'>
+              <div className='flex flex-wrap items-center justify-center gap-5'>
                 {(step.images || []).map((img: string, idx: number) => (
                   <Image
                     key={idx}
