@@ -307,11 +307,7 @@ export const Toolbar = ({ editor, onSave }: Props) => {
             .insertContent({
               type: 'stepBlock',
               attrs: {
-                steps: [
-                  { title: 'Step 1: Start', content: 'Mô tả bước 1...', imageUrl: '' },
-                  { title: 'Step 2: Continue', content: 'Mô tả bước 2...', imageUrl: '' },
-                  { title: 'Step 3: Finish', content: 'Mô tả bước 3...', imageUrl: '' }
-                ],
+                steps: [{ title: 'Step 1: Start', content: 'Mô tả bước 1...', imageUrl: '' }],
                 currentStep: 0
               }
             })
@@ -331,17 +327,7 @@ export const Toolbar = ({ editor, onSave }: Props) => {
               type: 'quizBlock',
               attrs: {
                 question: 'What is the main difference between a freshwater biome and a marine biome?',
-                options: [
-                  { id: 'A', text: 'The temperature.', isCorrect: false },
-                  { id: 'B', text: 'Freshwater biomes have more bubbles than marine biomes.', isCorrect: false },
-                  { id: 'C', text: "Freshwater biomes doesn't maintain enough biodiversity.", isCorrect: false },
-                  {
-                    id: 'D',
-                    text: 'Freshwater has less salt than a marine biome.',
-                    isCorrect: true,
-                    explanation: 'Marine biomes have higher salt concentration than freshwater.'
-                  }
-                ]
+                options: [{ id: 'A', text: '', isCorrect: false }]
               }
             })
             .run()
@@ -359,8 +345,8 @@ export const Toolbar = ({ editor, onSave }: Props) => {
             .insertContent({
               type: 'noteBlock',
               attrs: {
-                title: 'Teacher Note Title',
-                content: 'This is a note for teachers. Students will not see this.'
+                title: '',
+                content: ''
               }
             })
             .run()

@@ -5,7 +5,7 @@ import { Textarea } from '@/components/shadcn/textarea'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
-import { Check, GraduationCap, Pencil, Plus, Trash } from 'lucide-react'
+import { Check, GraduationCap, Pencil, Plus, Trash, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 export default function QuizBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
@@ -48,7 +48,7 @@ export default function QuizBlockComponent({ node, updateAttributes, editor }: N
       {/* Edit mode */}
       {editable ? (
         <div className='space-y-4 rounded-3xl border px-4 py-6'>
-          <h1>Quiz</h1>
+          <h1>Câu hỏi</h1>
           <div className='flex items-center gap-2'>
             <Pencil size={16} />
             <Textarea
@@ -63,11 +63,11 @@ export default function QuizBlockComponent({ node, updateAttributes, editor }: N
             <Table className='w-full overflow-hidden rounded-xl shadow-sm'>
               <TableHeader className='rounded-xl'>
                 <TableRow className='bg-gray-100'>
-                  <TableCell className='px-4 py-2 text-center font-semibold'>Option</TableCell>
-                  <TableCell className='px-4 py-2 text-center font-semibold'>Text</TableCell>
-                  <TableCell className='px-4 py-2 text-center font-semibold'>Explanation</TableCell>
-                  <TableCell className='px-4 py-2 text-center font-semibold'>Correct</TableCell>
-                  <TableCell className='px-4 py-2 text-center font-semibold'>Actions</TableCell>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Lựa chọn</TableCell>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Nội dung</TableCell>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Giải thích</TableCell>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Đúng</TableCell>
+                  <TableCell className='px-4 py-2 text-center font-semibold'>Hành động</TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className='divide-y divide-gray-200'>
@@ -98,13 +98,8 @@ export default function QuizBlockComponent({ node, updateAttributes, editor }: N
                       />
                     </TableCell>
                     <TableCell className='px-4 py-3 text-center'>
-                      <Button
-                        variant='destructive'
-                        size='icon'
-                        onClick={() => handleDeleteOption(opt.id)}
-                        className='rounded-full'
-                      >
-                        <Trash size={16} />
+                      <Button variant='ghost' size='icon' onClick={() => handleDeleteOption(opt.id)}>
+                        <Trash2 size={16} />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -113,7 +108,7 @@ export default function QuizBlockComponent({ node, updateAttributes, editor }: N
             </Table>
           </div>
           <Button variant='outline' size='sm' onClick={handleAddOption} className='mt-2'>
-            <Plus size={16} className='mr-1' /> Add Option
+            <Plus size={16} className='mr-1' /> Thêm lựa chọn
           </Button>
         </div>
       ) : role === UserRole.STAFF || role === UserRole.ADMIN || role === UserRole.TEACHER ? (
@@ -126,9 +121,9 @@ export default function QuizBlockComponent({ node, updateAttributes, editor }: N
             <div className='flex justify-between'>
               <div className='flex items-center gap-2 text-lg font-semibold'>
                 <GraduationCap className='text-blue-600' />
-                Answer
+                Câu trả lời
               </div>
-              <div className='text-sm text-gray-400 italic'>Students won't see this answer</div>
+              <div className='text-sm text-gray-400 italic'>Học sinh sẽ không thấy câu trả lời này</div>
             </div>
             {optionsArray.map((opt, index) => (
               <div key={opt.id}>

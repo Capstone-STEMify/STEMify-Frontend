@@ -27,6 +27,14 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
     setActive(newSteps.length - 1)
   }
 
+  const removeStep = (index: number) => {
+    if (stepsArray.length <= 1) return
+    const newSteps = stepsArray.filter((_, i) => i !== index)
+    const newActive = Math.max(0, active - (index <= active ? 1 : 0))
+    updateAttributes({ steps: newSteps, currentStep: newActive })
+    setActive(newActive)
+  }
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return
     const files = Array.from(e.target.files) // Lấy toàn bộ file
@@ -85,13 +93,22 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
           </Button>
         ))}
         {editable && (
-          <Button
-            onClick={addStep}
-            size='icon'
-            className='h-6 w-6 bg-blue-500 text-sm font-bold text-white hover:bg-blue-600'
-          >
-            <Plus size={3} />
-          </Button>
+          <>
+            <Button
+              onClick={addStep}
+              size='icon'
+              className='h-6 w-6 bg-blue-500 text-sm font-bold text-white hover:bg-blue-600'
+            >
+              <Plus size={3} />
+            </Button>
+            <Button
+              onClick={() => removeStep(active)}
+              size='icon'
+              className='h-6 w-6 bg-red-500 text-sm font-bold text-white hover:bg-red-600'
+            >
+              <Trash2 size={14} />
+            </Button>
+          </>
         )}
       </div>
       <Button onClick={goNext} variant='secondary'>
@@ -108,40 +125,39 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
         <div className='flex-1 px-6 text-center'>
           {editable ? (
             <div className='my-2 space-y-4'>
-              {/* Step title */}
               <div className='space-y-2'>
                 <Label htmlFor={`step-${active}-title`} className='text-base'>
-                  Step Title
+                  Tiêu đề
                 </Label>
                 <Input
                   value={step.title}
                   onChange={(e) => updateStep('title', e.target.value)}
-                  placeholder='Step title...'
+                  placeholder='Tiêu đề...'
                 />
               </div>
 
               {/* Step content */}
               <div className='space-y-2'>
                 <Label htmlFor={`step-${active}-content`} className='text-base'>
-                  Step Content
+                  Nội dung
                 </Label>
                 <Textarea
                   value={step.content}
                   onChange={(e) => updateStep('content', e.target.value)}
-                  placeholder='Step content...'
+                  placeholder='Nội dung...'
                 />
               </div>
 
               {/* Step images */}
               <div className='space-y-2'>
                 <Label htmlFor={`step-${active}-images`} className='text-left text-base'>
-                  Step Images
+                  Hình ảnh
                 </Label>
                 <div className='rounded-lg border p-4'>
                   <div className='mb-3 flex items-center justify-between'>
-                    <p className='text-sm font-medium'>Uploaded Images ({step.images?.length || 0})</p>
+                    <p className='text-sm font-medium'>Hình ảnh đã tải lên ({step.images?.length || 0})</p>
                     <Button onClick={() => fileInputRef.current?.click()} variant={'outline'} className=''>
-                      <Upload size={8} /> Add more
+                      <Upload size={8} /> Thêm nữa
                     </Button>
                   </div>
                   <div className='flex flex-wrap items-center justify-center gap-7'>
@@ -163,7 +179,7 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                             size='icon'
                             className='w-fit px-2 text-white shadow-lg'
                           >
-                            <Trash2 size={24} /> Delete Image
+                            <Trash2 size={24} /> Xóa ảnh
                           </Button>
                         </div>
                       </div>
