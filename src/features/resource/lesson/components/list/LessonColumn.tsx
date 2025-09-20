@@ -73,7 +73,9 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
     {
       accessorKey: 'id',
       header: tc('tableHeader.id'),
-      cell: ({ row }) => row.getValue('id')
+      cell: ({ row }) => {
+        return courseId ? row.index + 1 : row.getValue('id')
+      }
     },
     {
       accessorKey: 'imageUrl',
