@@ -13,13 +13,15 @@ import AnimatedBackground from '@/components/layout/animation/AnimatedBackground
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import CurriculumHeroSection from './CurriculumHeroSection'
 import CurriculumStatsSection from './CurriculumStatSection'
-import LearningObjectives from './CurriculumOutcome'
+import LearningObjectives from '../../../../../components/shared/outcome/LearningObjectives'
+import { useSearchLearningOutcomeQuery } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
 
 export default function CurriculumDetail() {
   const { curriculumId } = useParams()
   const { data: curriculumData, error, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId))
+  const {data: LearningOutcome, isLoading: outcomeLoading, isFetching: outcomeFetching} = useSearchLearningOutcomeQuery({curriculumId: Number(curriculumId)})
 
-  if (isLoading) {
+  if (isLoading || outcomeLoading || outcomeFetching) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />
@@ -31,14 +33,14 @@ export default function CurriculumDetail() {
     <div className='relative mx-auto w-full pb-4'>
       <AnimatedBackground />
       <div className='relative'>
-          {/* Content Section */}
-          <div className='relative'>
-            <CurriculumHeroSection curriculum={curriculumData?.data} />
-            <CurriculumStatsSection curriculum={curriculumData?.data} />
-          </div>
+        {/* Content Section */}
+        <div className='relative'>
+          <CurriculumHeroSection curriculum={curriculumData?.data} />
+          <CurriculumStatsSection curriculum={curriculumData?.data} />
+        </div>
 
         <div className='mt-30 sm:mt-32'>
-          <LearningObjectives/>
+          <LearningObjectives title="What you'll learn" outcomes={LearningOutcome?.data.items} />
         </div>
 
         {/* Kit Information Section */}

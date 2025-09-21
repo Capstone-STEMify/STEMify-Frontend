@@ -7,6 +7,8 @@ import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 import ContentSection from '@/features/resource/course/components/detail/not-enrolled/ContentSection'
 import StatsSection from '@/features/resource/course/components/detail/not-enrolled/StatSection'
 import HeroSection from '@/features/resource/course/components/detail/not-enrolled/HeroSection'
+import LearningObjectives from '@/components/shared/outcome/LearningObjectives'
+import { useSearchLearningOutcomeQuery } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
 
 type CourseDetailNotEnrolledProps = {
   courseId?: number
@@ -14,8 +16,9 @@ type CourseDetailNotEnrolledProps = {
 
 export default function CourseDetailNotEnrolled({ courseId }: CourseDetailNotEnrolledProps) {
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
+  const {data: LearningOutcome, isLoading: outcomeLoading, isFetching: outcomeFetching} = useSearchLearningOutcomeQuery({courseId: Number(courseId)})
 
-  if (isLoading)
+  if (isLoading || outcomeLoading || outcomeFetching)
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />
@@ -38,6 +41,9 @@ export default function CourseDetailNotEnrolled({ courseId }: CourseDetailNotEnr
       <div className='relative'>
         <HeroSection course={course.data} />
         <StatsSection course={course.data} />
+      </div>
+      <div className='mt-30 sm:mt-32'>
+        <LearningObjectives title="What you'll learn" outcomes={LearningOutcome?.data.items} />
       </div>
       <ContentSection />
     </div>
