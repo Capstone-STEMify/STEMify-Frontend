@@ -4,6 +4,7 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
 import { Input } from '@/components/shadcn/input'
 import { SPopover } from '@/components/shared/SPopover'
+import Link from 'next/link'
 
 export default function LinkButtonBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
   const { label, url } = node.attrs as { label: string; url: string }
@@ -39,14 +40,14 @@ export default function LinkButtonBlockComponent({ node, updateAttributes, edito
         </div>
       ) : (
         <div className='flex w-full justify-center text-center'>
-          <a
+          <Link
             href={url || '#'}
             target='_blank'
             rel='noopener noreferrer'
             className='bg-amber-custom-400 inline-block rounded-lg px-4 py-2 font-semibold text-black no-underline shadow-md hover:bg-amber-500'
           >
             {label}
-          </a>
+          </Link>
         </div>
       )}
     </NodeViewWrapper>
