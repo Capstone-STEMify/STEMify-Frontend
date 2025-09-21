@@ -31,15 +31,16 @@ export const LinkButtonBlock = Node.create({
 
   renderHTML({ HTMLAttributes }) {
     return [
-      'div',
+      'button',
       {
         'data-type': 'link-button-block',
         'data-label': HTMLAttributes.label,
-        'data-url': HTMLAttributes.url
-      }
+        'data-url': HTMLAttributes.url,
+        class: 'bg-amber-custom-400 font-semibold text-black shadow-md hover:bg-amber-500'
+      },
+      HTMLAttributes.label
     ]
   },
-
   addNodeView() {
     return ReactNodeViewRenderer(LinkButtonBlockComponent)
   }
