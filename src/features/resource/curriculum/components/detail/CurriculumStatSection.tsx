@@ -3,27 +3,31 @@ import { motion } from 'framer-motion'
 import { BookOpen, Clock, Star, Users } from 'lucide-react'
 import { staggerContainer, staggerItem } from '@/utils/motion'
 import { formatDuration } from '@/utils/index'
-import { Course } from '@/features/resource/course/types/course.type'
 import { useTranslations } from 'next-intl'
+import { Curriculum } from '../../types/curriculum.type'
 
 interface StatsSectionProps {
-  course: Course
+  curriculum: Curriculum | undefined
 }
 
-export default function StatsSection({ course }: StatsSectionProps) {
+export default function CurriculumStatsSection({ curriculum }: StatsSectionProps) {
   const t = useTranslations('course')
   const statsData = [
     {
       icon: BookOpen,
-      value: course.lessonIds.length,
-      title: `${t('details.stats.lesson')}`,
-      subtitle: `${t('details.stats.lesson_description')}`,
+      value: curriculum?.courses.length,
+      title: `${t('details.stats.course')}`,
+      subtitle: `${t('details.stats.course_description')}`,
       iconColor: 'text-blue-600',
       bgColor: 'bg-blue-100'
     },
     {
       icon: Clock,
-      value: formatDuration(course.duration),
+      value: formatDuration(
+        curriculum && curriculum.courses
+          ? curriculum.courses.reduce((total, course) => total + course.duration, 0)
+          : 0
+      ),
       title: `${t('details.stats.duration')}`,
       subtitle: `${t('details.stats.dur_description')}`,
       iconColor: 'text-purple-600',
