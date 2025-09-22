@@ -16,6 +16,9 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
   const { data: contentData, isLoading } = useSearchContentQuery({ sectionId })
   const { openModal } = useModal()
 
+  const html = contentData?.data?.items?.[0]?.contentBody || ''
+  console.log('html', html)
+
   const handleCreateContent = () => {
     openModal('upsertContent', { sectionId })
   }

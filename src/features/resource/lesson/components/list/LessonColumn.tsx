@@ -4,11 +4,7 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 import { useParams, useRouter } from 'next/navigation'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
-import {
-  createActionsColumnFromItems,
-  createSelectColumn,
-  DragHandle
-} from '@/components/shared/data-table/columns-helpers'
+import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
 import { Badge } from '@/components/shadcn/badge'
 import { useDeleteLessonMutation, useUpdateLessonMutation } from '../../api/lessonApi'
 import { Lesson, LessonStatus } from '../../types/lesson.type'
