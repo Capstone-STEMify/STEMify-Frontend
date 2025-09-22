@@ -16,6 +16,7 @@ import { StepBlock } from '@/components/tiptap/block/step/StepBlock'
 import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
 import { NoteBlock } from '@/components/tiptap/block/note/NoteBlock'
 import { LinkButtonBlock } from '@/components/tiptap/block/button/link/LinkButtonBlock'
+import { Video } from '@/components/tiptap/block/video/VideoBlock'
 
 interface TiptapViewerProps {
   content: string
@@ -35,6 +36,7 @@ export default function TiptapViewer({ content }: TiptapViewerProps) {
         }
       }),
       Image.configure({ inline: true, allowBase64: true }),
+      Video,
       CodeBlock,
       Blockquote,
       BulletList,

@@ -21,6 +21,7 @@ import { StepBlock } from '@/components/tiptap/block/step/StepBlock'
 import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
 import { NoteBlock } from '@/components/tiptap/block/note/NoteBlock'
 import { LinkButtonBlock } from '@/components/tiptap/block/button/link/LinkButtonBlock'
+import { Video } from '@/components/tiptap/block/video/VideoBlock'
 
 interface TiptapEditorProps {
   content?: string
@@ -48,6 +49,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
         inline: true,
         allowBase64: true
       }),
+      Video,
       CodeBlock.configure({
         HTMLAttributes: {
           class: 'bg-gray-800 text-white p-2 my-2 rounded-md font-mono'

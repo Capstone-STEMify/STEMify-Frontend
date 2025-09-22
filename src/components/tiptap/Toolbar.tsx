@@ -19,7 +19,6 @@ import {
   Image,
   Undo,
   Redo,
-  Eraser,
   AlignLeft,
   AlignCenter,
   AlignRight,
@@ -27,9 +26,7 @@ import {
   Subscript as SubIcon,
   Superscript as SuperIcon,
   Save,
-  Boxes,
   HelpCircle,
-  Notebook,
   ExternalLink,
   NotebookPen,
   ListChecks
@@ -73,26 +70,35 @@ export const Toolbar = ({ editor, onSave }: Props) => {
 
   const handleFileChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      if (!editor || !event.target.files || event.target.files.length === 0) {
-        return
-      }
+      if (!editor || !event.target.files?.length) return
+
       const file = event.target.files[0]
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
-        editor
-          .chain()
-          .focus()
-          .setImage({ src: reader.result as string })
-          .run()
+        if (file.type.startsWith('image/')) {
+          editor
+            .chain()
+            .focus()
+            .setImage({ src: reader.result as string })
+            .run()
+        } else if (file.type.startsWith('video/')) {
+          editor
+            .chain()
+            .focus()
+            .insertContent({
+              type: 'videoBlock',
+              attrs: { src: reader.result as string }
+            })
+            .run()
+        }
       }
-      // Reset the input value to allow uploading the same file again
       event.target.value = ''
     },
     [editor]
   )
 
-  const handleImageClick = useCallback(() => {
+  const handleImageVideoClick = useCallback(() => {
     fileInputRef.current?.click()
   }, [])
 
@@ -119,7 +125,7 @@ export const Toolbar = ({ editor, onSave }: Props) => {
 
   return (
     <div className='flex flex-wrap items-center justify-start gap-1 rounded-t-lg border-b border-gray-200 bg-gray-50 p-1.5 pr-10 dark:border-gray-700 dark:bg-gray-900'>
-      <input type='file' ref={fileInputRef} onChange={handleFileChange} className='hidden' accept='image/*' />
+      <input type='file' ref={fileInputRef} onChange={handleFileChange} className='hidden' accept='/*' />
       <ToolbarButton tooltip='Undo' onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()}>
         <Undo className='h-4 w-4' />
       </ToolbarButton>
@@ -185,7 +191,7 @@ export const Toolbar = ({ editor, onSave }: Props) => {
         <Code className='h-4 w-4' />
       </ToolbarButton>
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
-      <ToolbarButton tooltip='Insert Image/Video' onClick={handleImageClick}>
+      <ToolbarButton tooltip='Insert Image/Video' onClick={handleImageVideoClick}>
         <Image className='h-4 w-4' />
       </ToolbarButton>
       <ToolbarButton
