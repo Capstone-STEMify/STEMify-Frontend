@@ -111,10 +111,10 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
             <p className='text-lg leading-relaxed text-gray-600'>{curriculum?.description}</p>
 
             <div className='space-x-6 text-sm'>
-              <TagGroup label='Grade' items={curGrade} className='bg-red-100 text-red-800' />
+              <TagGroup label='Grade' items={curriculum?.skillNames ?? []} className='bg-red-100 text-red-800' />
               <TagGroup
                 label={t('details.tags.ageRange')}
-                items={ageRange}
+                items={curriculum?.topicNames ?? []}
                 className='bg-emerald-100 text-emerald-700'
               />
               {/* <TagGroup

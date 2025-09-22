@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
-import { School } from 'lucide-react'
+import { BookOpen, School } from 'lucide-react'
 import KitInformationSection from '../../../kit/components/list/KitInformationSection'
 import BackButton from '@/components/shared/button/BackButton'
 import CurriculumCourseSection from '@/features/resource/curriculum/components/detail/CurriculumCourseSection'
@@ -15,6 +15,7 @@ import CurriculumHeroSection from './CurriculumHeroSection'
 import CurriculumStatsSection from './CurriculumStatSection'
 import LearningObjectives from '../../../../../components/shared/outcome/LearningObjectives'
 import { useSearchLearningOutcomeQuery } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
+import SEmpty from '@/components/shared/empty/SEmpty'
 
 export default function CurriculumDetail() {
   const { curriculumId } = useParams()
@@ -29,14 +30,25 @@ export default function CurriculumDetail() {
     )
   }
 
+  if (!curriculumData?.data)
+      return (
+        <div className='flex h-screen items-center justify-center bg-white'>
+          <SEmpty
+            title='Curriculum not found'
+            description='The Curriculum you are looking for does not exist or has been removed.'
+            icon={<BookOpen className='h-12 w-12 text-gray-400' />}
+          />
+        </div>
+      )
+
   return (
     <div className='relative mx-auto w-full pb-4'>
       <AnimatedBackground />
       <div className='relative'>
         {/* Content Section */}
         <div className='relative'>
-          <CurriculumHeroSection curriculum={curriculumData?.data} />
-          <CurriculumStatsSection curriculum={curriculumData?.data} />
+          <CurriculumHeroSection curriculum={curriculumData.data} />
+          <CurriculumStatsSection curriculum={curriculumData.data} />
         </div>
 
         <div className='mt-30 sm:mt-32'>
