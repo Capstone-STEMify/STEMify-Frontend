@@ -9,8 +9,8 @@ export type Curriculum = {
   imageUrl: string
   description: string
   status: CurriculumStatus
-  topicNames: string[]
-  skillNames: string[]
+  topics: string[]
+  skills: string[]
   createdByUserId: string
   createdDate: string
   lastModifiedDate: string
