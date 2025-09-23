@@ -95,58 +95,30 @@ export const Toolbar = ({ editor, onSave }: Props) => {
       if (!editor || !event.target.files?.length) return
       const file = event.target.files[0]
 
-      // URL preview tạm
-      const tempUrl = URL.createObjectURL(file)
+      try {
+        const secureUrl = await uploadToCloudinary(file)
 
-      if (file.type.startsWith('image/')) {
-        // Insert ảnh tạm
-        editor
-          .chain()
-          .focus()
-          .insertContent({
-            type: 'image',
-            attrs: { src: tempUrl, isLoading: true }
-          })
-          .run()
-        try {
-          const secureUrl = await uploadToCloudinary(file)
-          // Update ảnh thật
+        if (file.type.startsWith('image/')) {
           editor
             .chain()
             .focus()
             .insertContent({
               type: 'image',
-              attrs: { src: secureUrl, isLoading: false }
+              attrs: { src: secureUrl }
             })
             .run()
-        } catch (err) {
-          console.error('Upload image failed', err)
-        }
-      } else if (file.type.startsWith('video/')) {
-        // Insert video tạm
-        editor
-          .chain()
-          .focus()
-          .insertContent({
-            type: 'videoBlock',
-            attrs: { src: tempUrl, isLoading: true }
-          })
-          .run()
-
-        try {
-          const secureUrl = await uploadToCloudinary(file)
-          // Update video thật (replace node)
+        } else if (file.type.startsWith('video/')) {
           editor
             .chain()
             .focus()
             .insertContent({
               type: 'videoBlock',
-              attrs: { src: secureUrl, isLoading: false }
+              attrs: { src: secureUrl }
             })
             .run()
-        } catch (err) {
-          console.error('Upload video failed', err)
         }
+      } catch (err) {
+        console.error('Upload failed', err)
       }
 
       event.target.value = ''

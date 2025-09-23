@@ -1,16 +1,22 @@
+import CustomImageNodeView from '@/components/tiptap/block/asset/CustomImageNodeView'
 import Image from '@tiptap/extension-image'
+import { ReactNodeViewRenderer } from '@tiptap/react'
 
 export const CustomImage = Image.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
-      isLoading: { default: false },
-
+      textAlign: {
+        default: 'left',
+        parseHTML: (element) => element.style.textAlign || 'left',
+        renderHTML: (attributes) => {
+          return { style: `text-align:${attributes.textAlign}` }
+        }
+      },
       width: {
         default: 'auto',
         parseHTML: (element) => element.getAttribute('width') || 'auto',
         renderHTML: (attributes) => {
-          if (!attributes.width) return {}
           return { width: attributes.width }
         }
       },
@@ -18,16 +24,23 @@ export const CustomImage = Image.extend({
         default: 'auto',
         parseHTML: (element) => element.getAttribute('height') || 'auto',
         renderHTML: (attributes) => {
-          if (!attributes.height) return {}
           return { height: attributes.height }
         }
       }
     }
   },
+
   renderHTML({ HTMLAttributes }) {
-    if (HTMLAttributes.isLoading) {
-      return ['div', { class: 'animate-pulse bg-gray-200 w-32 h-32 rounded' }]
-    }
-    return ['img', HTMLAttributes]
+    return [
+      'img',
+      {
+        ...HTMLAttributes,
+        class: 'inline-block align-middle m-2 max-w-full h-auto'
+      }
+    ]
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(CustomImageNodeView)
   }
 })
