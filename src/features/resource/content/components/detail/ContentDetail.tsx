@@ -6,6 +6,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { normalizeMarkdown } from '@/utils/index'
 import { FilePlus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 type ContentDetailProps = {
   sectionId: number
@@ -15,12 +16,11 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
   const t = useTranslations('content')
   const { data: contentData, isLoading } = useSearchContentQuery({ sectionId })
   const { openModal } = useModal()
-
-  const html = contentData?.data?.items?.[0]?.contentBody || ''
-  console.log('html', html)
+  const router = useRouter()
 
   const handleCreateContent = () => {
-    openModal('upsertContent', { sectionId })
+    router.push(`/admin/lesson/section/${sectionId}/editor`)
+    // openModal('upsertContent', { sectionId })
   }
 
   if (isLoading)

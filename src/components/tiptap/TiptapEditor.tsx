@@ -95,15 +95,11 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
       }
     }
   })
-  useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content || '')
-    }
-  }, [content, editor])
+
   return (
-    <div className='min-h-[90vh] rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900'>
+    <div className='min-h-[90vh] bg-white'>
       <Toolbar onSave={onSave} editor={editor} />
-      <ScrollArea className='h-[90vh]'>
+      <ScrollArea className='h-[85vh]'>
         <EditorContent editor={editor} />
       </ScrollArea>
     </div>
