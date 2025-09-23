@@ -68,31 +68,87 @@ export const Toolbar = ({ editor, onSave }: Props) => {
   const [url, setUrl] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFileChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      if (!editor || !event.target.files?.length) return
+  const uploadToCloudinary = async (fileOrBase64: File | string): Promise<string> => {
+    const formData = new FormData()
 
+    if (typeof fileOrBase64 === 'string') {
+      formData.append('file', fileOrBase64)
+    } else {
+      formData.append('file', fileOrBase64)
+    }
+
+    formData.append('upload_preset', 'unsigned_preset')
+    formData.append('folder', 'temp')
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL}`, {
+      method: 'POST',
+      body: formData
+    })
+
+    if (!res.ok) throw new Error('Upload failed')
+    const data = await res.json()
+    return data.secure_url
+  }
+
+  const handleFileChange = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      if (!editor || !event.target.files?.length) return
       const file = event.target.files[0]
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => {
-        if (file.type.startsWith('image/')) {
+
+      // URL preview tạm
+      const tempUrl = URL.createObjectURL(file)
+
+      if (file.type.startsWith('image/')) {
+        // Insert ảnh tạm
+        editor
+          .chain()
+          .focus()
+          .insertContent({
+            type: 'image',
+            attrs: { src: tempUrl, isLoading: true }
+          })
+          .run()
+        try {
+          const secureUrl = await uploadToCloudinary(file)
+          // Update ảnh thật
           editor
             .chain()
             .focus()
-            .setImage({ src: reader.result as string })
+            .insertContent({
+              type: 'image',
+              attrs: { src: secureUrl, isLoading: false }
+            })
             .run()
-        } else if (file.type.startsWith('video/')) {
+        } catch (err) {
+          console.error('Upload image failed', err)
+        }
+      } else if (file.type.startsWith('video/')) {
+        // Insert video tạm
+        editor
+          .chain()
+          .focus()
+          .insertContent({
+            type: 'videoBlock',
+            attrs: { src: tempUrl, isLoading: true }
+          })
+          .run()
+
+        try {
+          const secureUrl = await uploadToCloudinary(file)
+          // Update video thật (replace node)
           editor
             .chain()
             .focus()
             .insertContent({
               type: 'videoBlock',
-              attrs: { src: reader.result as string }
+              attrs: { src: secureUrl, isLoading: false }
             })
             .run()
+        } catch (err) {
+          console.error('Upload video failed', err)
         }
       }
+
       event.target.value = ''
     },
     [editor]

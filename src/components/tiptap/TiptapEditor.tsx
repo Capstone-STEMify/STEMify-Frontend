@@ -21,7 +21,8 @@ import { StepBlock } from '@/components/tiptap/block/step/StepBlock'
 import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
 import { NoteBlock } from '@/components/tiptap/block/note/NoteBlock'
 import { LinkButtonBlock } from '@/components/tiptap/block/button/link/LinkButtonBlock'
-import { Video } from '@/components/tiptap/block/video/VideoBlock'
+import { Video } from '@/components/tiptap/block/asset/VideoBlock'
+import { CustomImage } from '@/components/tiptap/block/asset/CustomImage'
 
 interface TiptapEditorProps {
   content?: string
@@ -45,10 +46,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
           class: 'text-blue-500 underline cursor-pointer'
         }
       }),
-      Image.configure({
-        inline: true,
-        allowBase64: true
-      }),
+      CustomImage,
       Video,
       CodeBlock.configure({
         HTMLAttributes: {
