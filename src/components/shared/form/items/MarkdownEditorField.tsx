@@ -10,7 +10,7 @@ export const MarkdownEditorField = ({ onSave }: MarkdownEditorFieldProps) => {
   const field = useFieldContext<string>()
 
   return (
-    <div className='space-y-1'>
+    <div>
       <TiptapEditor content={field.state.value} onChange={(val) => field.handleChange(val || '')} onSave={onSave} />
       <FieldErrors meta={field.state.meta} />
     </div>

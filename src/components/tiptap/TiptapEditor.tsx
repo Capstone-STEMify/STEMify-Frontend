@@ -121,7 +121,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
         <Toolbar onSave={onSave} editor={editor} />
       </div>
 
-      <div className=''>
+      <div>
         <EditorContent editor={editor} />
       </div>
     </div>

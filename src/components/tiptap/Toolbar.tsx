@@ -1,7 +1,10 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
+import BackButton from '@/components/shared/button/BackButton'
 import SToolTip from '@/components/shared/SToolTip'
+import { TextColorDropdown } from '@/components/tiptap/toolbar/TextColorDropdown'
+import { ToolbarButton } from '@/components/tiptap/toolbar/ToolbarButton'
 import { type Editor } from '@tiptap/react'
 import {
   Bold,
@@ -37,31 +40,6 @@ type Props = {
   editor: Editor | null
   onSave: () => void
 }
-
-const ToolbarButton = ({
-  onClick,
-  isActive,
-  children,
-  disabled,
-  tooltip
-}: {
-  onClick: () => void
-  isActive?: boolean
-  children: React.ReactNode
-  disabled?: boolean
-  tooltip: string
-}) => (
-  <SToolTip content={tooltip} side='bottom'>
-    <button
-      type='button'
-      onClick={onClick}
-      disabled={disabled}
-      className={`rounded-md p-2 transition-colors duration-200 ${isActive ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' : 'text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700'} ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
-    >
-      {children}
-    </button>
-  </SToolTip>
-)
 
 export const Toolbar = ({ editor, onSave }: Props) => {
   const [showLinkInput, setShowLinkInput] = useState(false)
@@ -160,18 +138,9 @@ export const Toolbar = ({ editor, onSave }: Props) => {
       <ToolbarButton tooltip='Redo' onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()}>
         <Redo className='h-4 w-4' />
       </ToolbarButton>
-      <div className='flex gap-1'>
-        {['#000000', '#e11d48', '#2563eb', '#16a34a', '#f59e0b'].map((color) => (
-          <button
-            key={color}
-            onClick={() => editor?.chain().focus().setColor(color).run()}
-            className='h-5 w-5 rounded-full border'
-            style={{ backgroundColor: color }}
-          />
-        ))}
-      </div>
-
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
+      <TextColorDropdown editor={editor} />
+
       <ToolbarButton
         tooltip='Heading 1'
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
