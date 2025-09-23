@@ -13,6 +13,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
 import { fileToBase64 } from '@/utils/index'
 import { ContentType } from '@/features/resource/content/types/content.type'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 
 const contentSchema = (tv: ReturnType<typeof useTranslations<'validation'>>) =>
   z.object({
@@ -104,6 +105,13 @@ export default function UpsertContent({ sectionId, contentId }: UpsertContentPro
       }
     }
   })
+  const saveTrigger = useAppSelector((state) => state.editor.saveTrigger)
+
+  useEffect(() => {
+    if (saveTrigger > 0) {
+      form.handleSubmit()
+    }
+  }, [saveTrigger])
 
   useEffect(() => {
     if (contentItem) {
@@ -128,12 +136,10 @@ export default function UpsertContent({ sectionId, contentId }: UpsertContentPro
     <form
       onSubmit={(e) => {
         e.preventDefault()
+        form.handleSubmit()
       }}
     >
-      <form.AppField
-        name='contentBody'
-        children={(field) => <field.MarkdownEditorField onSave={form.handleSubmit} />}
-      />
+      <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
     </form>
   )
 }

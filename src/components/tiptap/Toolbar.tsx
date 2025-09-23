@@ -5,6 +5,8 @@ import BackButton from '@/components/shared/button/BackButton'
 import SToolTip from '@/components/shared/SToolTip'
 import { TextColorDropdown } from '@/components/tiptap/toolbar/TextColorDropdown'
 import { ToolbarButton } from '@/components/tiptap/toolbar/ToolbarButton'
+import { triggerSave } from '@/features/resource/content/slice/editorSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { type Editor } from '@tiptap/react'
 import {
   Bold,
@@ -35,17 +37,18 @@ import {
   ListChecks
 } from 'lucide-react'
 import { useState, useCallback, useRef, ChangeEvent } from 'react'
+import { useDispatch } from 'react-redux'
 
 type Props = {
   editor: Editor | null
-  onSave: () => void
 }
 
-export const Toolbar = ({ editor, onSave }: Props) => {
+export const Toolbar = ({ editor }: Props) => {
   const [showLinkInput, setShowLinkInput] = useState(false)
   const [url, setUrl] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  const dispatch = useDispatch()
   const uploadToCloudinary = async (fileOrBase64: File | string): Promise<string> => {
     const formData = new FormData()
 
@@ -372,7 +375,7 @@ export const Toolbar = ({ editor, onSave }: Props) => {
 
       <div className='flex justify-end'>
         <SToolTip content='Lưu' side='bottom'>
-          <Button variant={'ghost'} onClick={onSave}>
+          <Button variant={'ghost'} onClick={() => dispatch(triggerSave())}>
             <Save className='h-4 w-4' />
           </Button>
         </SToolTip>

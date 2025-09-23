@@ -28,10 +28,9 @@ import { debounce } from 'lodash-es'
 interface TiptapEditorProps {
   content?: string
   onChange: (richText: string) => void
-  onSave: () => void
 }
 
-export default function TiptapEditor({ content, onChange, onSave }: TiptapEditorProps) {
+export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
   const debouncedOnChange = useMemo(
     () =>
       debounce((html: string) => {
@@ -118,7 +117,7 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
     <div className='min-h-[90vh] bg-white'>
       {/* Sticky toolbar */}
       <div className='sticky top-0 z-50 border-b bg-white'>
-        <Toolbar onSave={onSave} editor={editor} />
+        <Toolbar editor={editor} />
       </div>
 
       <div>

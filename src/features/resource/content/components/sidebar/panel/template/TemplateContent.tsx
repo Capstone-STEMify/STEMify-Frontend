@@ -3,7 +3,8 @@ import { ExternalLink, HelpCircle, ListChecks, NotebookPen, Quote } from 'lucide
 import { type Editor } from '@tiptap/react'
 import React from 'react'
 
-export default function TemplateContent({ editor }: { editor: Editor | null }) {
+export default function TemplateContent() {
+  const editor = null as Editor | null
   if (!editor) {
     return (
       <div className='h-[48px] animate-pulse rounded-t-lg border-b border-gray-200 bg-gray-100 p-2 dark:border-gray-700 dark:bg-gray-800'></div>
