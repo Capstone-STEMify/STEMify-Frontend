@@ -3,34 +3,61 @@ import Image from '@tiptap/extension-image'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 
 export const CustomImage = Image.extend({
+  group: 'inline',
+  inline: true,
+  atom: true,
+
   addAttributes() {
     return {
-      ...this.parent?.(),
-      textAlign: {
-        default: 'left',
-        parseHTML: (element) => element.style.textAlign || 'left',
-        renderHTML: (attributes) => {
-          return { style: `text-align:${attributes.textAlign}` }
+      src: {
+        default: null,
+        parseHTML: (element: HTMLElement) => element.getAttribute('src'),
+        renderHTML: (attributes: Record<string, any>) => {
+          if (!attributes.src) return {}
+          return { src: attributes.src }
+        }
+      },
+      alt: {
+        default: null,
+        parseHTML: (element: HTMLElement) => element.getAttribute('alt'),
+        renderHTML: (attributes: Record<string, any>) => {
+          if (!attributes.alt) return {}
+          return { alt: attributes.alt }
+        }
+      },
+      title: {
+        default: null,
+        parseHTML: (element: HTMLElement) => element.getAttribute('title'),
+        renderHTML: (attributes: Record<string, any>) => {
+          if (!attributes.title) return {}
+          return { title: attributes.title }
         }
       },
       width: {
         default: 'auto',
-        parseHTML: (element) => element.getAttribute('width') || 'auto',
-        renderHTML: (attributes) => {
+        parseHTML: (element: HTMLElement) => element.getAttribute('width') || 'auto',
+        renderHTML: (attributes: Record<string, any>) => {
           return { width: attributes.width }
         }
       },
       height: {
         default: 'auto',
-        parseHTML: (element) => element.getAttribute('height') || 'auto',
-        renderHTML: (attributes) => {
+        parseHTML: (element: HTMLElement) => element.getAttribute('height') || 'auto',
+        renderHTML: (attributes: Record<string, any>) => {
           return { height: attributes.height }
+        }
+      },
+      textAlign: {
+        default: 'left',
+        parseHTML: (element: HTMLElement) => element.style.textAlign || 'left',
+        renderHTML: (attributes: Record<string, any>) => {
+          return { style: `text-align:${attributes.textAlign}` }
         }
       }
     }
   },
 
-  renderHTML({ HTMLAttributes }) {
+  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, any> }) {
     return [
       'img',
       {

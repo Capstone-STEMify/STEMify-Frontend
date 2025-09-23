@@ -1,7 +1,7 @@
-import { NodeViewWrapper } from '@tiptap/react'
+import { NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import { Resizable } from 're-resizable'
 
-export default function CustomImageNodeView({ node, updateAttributes }: any) {
+export default function CustomImageNodeView({ node, updateAttributes }: NodeViewProps) {
   const { src, width, height, textAlign } = node.attrs
 
   return (
