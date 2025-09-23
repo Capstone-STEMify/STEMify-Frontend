@@ -3,7 +3,6 @@
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
-import Image from '@tiptap/extension-image'
 import CodeBlock from '@tiptap/extension-code-block'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
@@ -13,16 +12,18 @@ import TextAlign from '@tiptap/extension-text-align'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
 import Placeholder from '@tiptap/extension-placeholder'
-
+import { Highlight } from '@tiptap/extension-highlight'
+import { TextStyle } from '@tiptap/extension-text-style'
+import Color from '@tiptap/extension-color'
 import { Toolbar } from './Toolbar'
-import { useEffect } from 'react'
-import { ScrollArea } from '@/components/shadcn/scroll-area'
+import { useEffect, useMemo } from 'react'
 import { StepBlock } from '@/components/tiptap/block/step/StepBlock'
 import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
 import { NoteBlock } from '@/components/tiptap/block/note/NoteBlock'
 import { LinkButtonBlock } from '@/components/tiptap/block/button/link/LinkButtonBlock'
 import { Video } from '@/components/tiptap/block/asset/VideoBlock'
 import { CustomImage } from '@/components/tiptap/block/asset/CustomImage'
+import { debounce } from 'lodash-es'
 
 interface TiptapEditorProps {
   content?: string
@@ -31,6 +32,14 @@ interface TiptapEditorProps {
 }
 
 export default function TiptapEditor({ content, onChange, onSave }: TiptapEditorProps) {
+  const debouncedOnChange = useMemo(
+    () =>
+      debounce((html: string) => {
+        onChange?.(html)
+      }, 300),
+    [onChange]
+  )
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -71,22 +80,25 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
       Underline,
       Superscript,
       Subscript,
+      TextStyle,
+      Color.configure({ types: ['textStyle'] }),
       TextAlign.configure({
         types: ['heading', 'paragraph']
       }),
       Placeholder.configure({
         placeholder: 'Bắt đầu viết nội dung ở đây...',
         emptyEditorClass:
-          'before:content-[attr(data-placeholder)] before:text-gray-400 before:pointer-events-none before:absolute before:left-15 before:top-6'
+          'before:content-[attr(data-placeholder)] before:text-gray-400 before:pointer-events-none before:absolute '
       }),
       LinkButtonBlock,
       NoteBlock,
       QuizBlock,
+      Highlight,
       StepBlock
     ],
     content: content || '',
     onUpdate({ editor }) {
-      onChange(editor.getHTML())
+      debouncedOnChange(editor.getHTML())
     },
     immediatelyRender: false,
     editorProps: {
@@ -95,13 +107,23 @@ export default function TiptapEditor({ content, onChange, onSave }: TiptapEditor
       }
     }
   })
+  useEffect(() => {
+    return () => {
+      debouncedOnChange.cancel()
+    }
+  }, [debouncedOnChange])
+  if (!editor) return null
 
   return (
     <div className='min-h-[90vh] bg-white'>
-      <Toolbar onSave={onSave} editor={editor} />
-      <ScrollArea className='h-[85vh]'>
+      {/* Sticky toolbar */}
+      <div className='sticky top-0 z-50 border-b bg-white'>
+        <Toolbar onSave={onSave} editor={editor} />
+      </div>
+
+      <div className=''>
         <EditorContent editor={editor} />
-      </ScrollArea>
+      </div>
     </div>
   )
 }

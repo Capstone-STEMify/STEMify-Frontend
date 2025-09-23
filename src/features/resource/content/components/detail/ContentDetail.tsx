@@ -15,12 +15,12 @@ type ContentDetailProps = {
 export default function ContentDetail({ sectionId }: ContentDetailProps) {
   const t = useTranslations('content')
   const { data: contentData, isLoading } = useSearchContentQuery({ sectionId })
-  const { openModal } = useModal()
+  const { openModal, closeModal } = useModal()
   const router = useRouter()
 
   const handleCreateContent = () => {
+    closeModal()
     router.push(`/admin/lesson/section/${sectionId}/editor`)
-    // openModal('upsertContent', { sectionId })
   }
 
   if (isLoading)

@@ -152,7 +152,7 @@ export const Toolbar = ({ editor, onSave }: Props) => {
   }
 
   return (
-    <div className='flex flex-wrap items-center justify-start gap-1 border-b'>
+    <div className='sticky top-0 z-10 flex flex-wrap items-center justify-start gap-1 rounded-t-lg border-b border-gray-200 bg-gray-50 p-2 pr-10 dark:border-gray-700 dark:bg-gray-900'>
       <input type='file' ref={fileInputRef} onChange={handleFileChange} className='hidden' accept='/*' />
       <ToolbarButton tooltip='Undo' onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()}>
         <Undo className='h-4 w-4' />
@@ -160,6 +160,17 @@ export const Toolbar = ({ editor, onSave }: Props) => {
       <ToolbarButton tooltip='Redo' onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()}>
         <Redo className='h-4 w-4' />
       </ToolbarButton>
+      <div className='flex gap-1'>
+        {['#000000', '#e11d48', '#2563eb', '#16a34a', '#f59e0b'].map((color) => (
+          <button
+            key={color}
+            onClick={() => editor?.chain().focus().setColor(color).run()}
+            className='h-5 w-5 rounded-full border'
+            style={{ backgroundColor: color }}
+          />
+        ))}
+      </div>
+
       <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
       <ToolbarButton
         tooltip='Heading 1'
