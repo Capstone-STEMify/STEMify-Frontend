@@ -1,61 +1,16 @@
 'use client'
-import React, { useEffect } from 'react'
-import { z } from 'zod'
-import { toast } from 'sonner'
-import { useAppForm } from '@/components/shared/form/items'
+import React, { useEffect, useState } from 'react'
 import {
   useCreateContentMutation,
   useUpdateContentMutation,
   useGetContentByIdQuery
 } from '@/features/resource/content/api/contentApi'
-import removeMd from 'remove-markdown'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
-import { fileToBase64 } from '@/utils/index'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import TiptapEditor from '@/components/tiptap/TiptapEditor'
 import { ContentType } from '@/features/resource/content/types/content.type'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-
-const contentSchema = (tv: ReturnType<typeof useTranslations<'validation'>>) =>
-  z.object({
-    contentBody: z.string().refine((val) => removeMd(val).replace(/\s/g, '').length >= 50, {
-      message: tv('content.length')
-    }),
-    contentType: z.enum(ContentType),
-    sectionId: z.number().positive({ message: tv('content.sectionId') }),
-    file: z.union([z.instanceof(File), z.null()]).optional(),
-    filePreviewUrl: z.string().optional()
-  })
-
-type ContentFormData = z.infer<ReturnType<typeof contentSchema>>
-
-const defaultContentData: Omit<ContentFormData, 'sectionId'> = {
-  contentBody: '',
-  contentType: ContentType.TEXT,
-  file: null,
-  filePreviewUrl: ''
-}
-
-async function CreateContentJsonPayload(data: ContentFormData) {
-  let fileBase64: string | null = null
-
-  if (data.file && typeof data.file !== 'string') {
-    fileBase64 = await fileToBase64(data.file)
-  }
-
-  return {
-    contentBody: data.contentBody,
-    contentType: data.contentType,
-    sectionId: data.sectionId,
-    file: fileBase64
-  }
-}
-
-async function PatchContentJsonPayload(oldData: ContentFormData, newData: ContentFormData) {
-  const patchData: Record<string, any> = {}
-  if (oldData.contentBody !== newData.contentBody) patchData.contentBody = newData.contentBody
-  if (oldData.contentType !== newData.contentType) patchData.contentType = newData.contentType
-  return patchData
-}
+import { toast } from 'sonner'
 
 type UpsertContentProps = {
   sectionId: number
@@ -70,59 +25,42 @@ export default function UpsertContent({ sectionId, contentId }: UpsertContentPro
   const [updateContent] = useUpdateContentMutation()
 
   const contentItem = data?.data ?? null
+  const [editorValue, setEditorValue] = useState<string>(contentItem?.contentBody ?? '')
 
-  const form = useAppForm({
-    defaultValues: defaultContentData,
-    validators: {
-      // onChange: (value) =>
-      //   parseWithZod(new FormData(Object.entries(value) as any), {
-      //     schema: contentSchema(tv)
-      //   })
-    },
-    onSubmit: async ({ value }) => {
-      try {
-        const isUpdating = !!contentItem?.id
-        if (isUpdating) {
-          const patchJson = await PatchContentJsonPayload(contentItem, {
-            ...value,
-            sectionId,
-            contentType: ContentType.TEXT
-          })
-          const res = await updateContent({ id: contentItem.id, body: patchJson }).unwrap()
-          toast.success(tt('successMessage.update'))
-        } else {
-          const jsonPayload = await CreateContentJsonPayload({
-            ...value,
-            contentType: ContentType.TEXT,
-            sectionId
-          })
-          await createContent(jsonPayload).unwrap()
-          toast.success(tt('successMessage.create'))
-        }
-      } catch (err) {
-        toast.error(tt('errorMessage'))
-        console.error(err)
-      }
-    }
-  })
   const saveTrigger = useAppSelector((state) => state.editor.saveTrigger)
+
+  const handleUpsert = async () => {
+    if (contentId) {
+      await updateContent({
+        id: contentId,
+        body: {
+          contentBody: editorValue,
+          contentType: ContentType.TEXT,
+          sectionId
+        }
+      })
+      toast.success(tt('successMessage.update', { title: contentItem!.id }))
+    } else {
+      await createContent({
+        contentBody: editorValue,
+        contentType: ContentType.TEXT,
+        sectionId: sectionId
+      })
+      toast.success(tt('successMessage.create', { title: contentItem!.id }))
+    }
+  }
 
   useEffect(() => {
     if (saveTrigger > 0) {
-      form.handleSubmit()
+      handleUpsert()
     }
   }, [saveTrigger])
 
   useEffect(() => {
     if (contentItem) {
-      form.reset({
-        contentBody: contentItem?.contentBody || '',
-        contentType: contentItem?.contentType || ContentType.TEXT,
-        file: null,
-        filePreviewUrl: contentItem?.fileUrl || ''
-      })
+      setEditorValue(contentItem.contentBody)
     }
-  }, [contentItem, form])
+  }, [contentItem])
 
   if (isLoading) {
     return (
@@ -133,13 +71,8 @@ export default function UpsertContent({ sectionId, contentId }: UpsertContentPro
   }
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        form.handleSubmit()
-      }}
-    >
-      <form.AppField name='contentBody' children={(field) => <field.MarkdownEditorField />} />
-    </form>
+    <div>
+      <TiptapEditor content={editorValue} onChange={(val) => setEditorValue(val || '')} />
+    </div>
   )
 }

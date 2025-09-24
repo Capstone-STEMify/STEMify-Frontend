@@ -1,12 +1,10 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import BackButton from '@/components/shared/button/BackButton'
 import SToolTip from '@/components/shared/SToolTip'
 import { TextColorDropdown } from '@/components/tiptap/toolbar/TextColorDropdown'
 import { ToolbarButton } from '@/components/tiptap/toolbar/ToolbarButton'
 import { triggerSave } from '@/features/resource/content/slice/editorSlice'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { type Editor } from '@tiptap/react'
 import {
   Bold,

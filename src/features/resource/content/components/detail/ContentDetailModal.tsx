@@ -15,14 +15,13 @@ type ContentDetailModalProps = {
 export default function ContentDetailModal({ sectionId, contentId }: ContentDetailModalProps) {
   const t = useTranslations('content')
   const tc = useTranslations('common')
-  const { openModal, closeModal } = useModal()
+  const { closeModal } = useModal()
   const router = useRouter()
   const locale = useLocale()
 
   const handleEditContent = () => {
-    router.push(`/${locale}/admin/section/${sectionId}/editor/${contentId}`)
-
-    // openModal('upsertContent', { contentId, sectionId })
+    closeModal()
+    router.push(`/${locale}/admin/section/${sectionId}/content/${contentId}`)
   }
 
   return (
