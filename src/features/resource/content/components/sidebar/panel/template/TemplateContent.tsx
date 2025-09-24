@@ -1,103 +1,109 @@
-import { ToolbarButton } from '@/components/tiptap/toolbar/ToolbarButton'
-import { ExternalLink, HelpCircle, ListChecks, NotebookPen, Quote } from 'lucide-react'
-import { type Editor } from '@tiptap/react'
+import { ExternalLink, HelpCircle, ListChecks, NotebookPen } from 'lucide-react'
 import React from 'react'
+import { useEditorCtx } from '@/components/tiptap/EditorContext'
+import { Button } from '@/components/shadcn/button'
 
 export default function TemplateContent() {
-  const editor = null as Editor | null
+  const editor = useEditorCtx()
   if (!editor) {
-    return (
-      <div className='h-[48px] animate-pulse rounded-t-lg border-b border-gray-200 bg-gray-100 p-2 dark:border-gray-700 dark:bg-gray-800'></div>
-    )
+    return <div className='p-4 text-sm text-red-500'>Something wrong, please contact support</div>
   }
+
   return (
     <div>
-      <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
+      <h3 className='mb-3 text-sm font-semibold text-gray-700'>Insert Blocks</h3>
 
-      <ToolbarButton
-        tooltip='Blockquote'
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        isActive={editor.isActive('blockquote')}
-      >
-        <Quote className='h-4 w-4' />
-      </ToolbarButton>
-      <span className='mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600'></span>
+      <div className='grid grid-cols-2 gap-3'>
+        {/* Link Button */}
+        <Button
+          variant='outline'
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertContent({
+                type: 'linkButtonBlock',
+                attrs: { label: 'EXPLORE NOW', url: '' }
+              })
+              .run()
+          }
+          className='p-8'
+        >
+          <div className='flex flex-col items-center gap-1'>
+            <ExternalLink className='h-5 w-5' />
+            <span className='text-[11px]'>Button Link</span>
+          </div>
+        </Button>
 
-      <ToolbarButton
-        tooltip='Link Button'
-        onClick={() => {
-          editor
-            ?.chain()
-            .focus()
-            .insertContent({
-              type: 'linkButtonBlock',
-              attrs: {
-                label: 'EXPLORE NOW',
-                url: ''
-              }
-            })
-            .run()
-        }}
-      >
-        <ExternalLink className='h-4 w-4' />
-      </ToolbarButton>
+        {/* Step */}
+        <Button
+          variant='outline'
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertContent({
+                type: 'stepBlock',
+                attrs: {
+                  steps: [{ title: 'Step 1: Start', content: 'Mô tả bước 1...', imageUrl: '' }],
+                  currentStep: 0
+                }
+              })
+              .run()
+          }
+          className='p-8'
+        >
+          <div className='flex flex-col items-center gap-1'>
+            <ListChecks className='h-5 w-5' />
+            <span className='text-[11px]'>Step</span>
+          </div>
+        </Button>
 
-      <ToolbarButton
-        tooltip='Step'
-        onClick={() => {
-          editor
-            ?.chain()
-            .focus()
-            .insertContent({
-              type: 'stepBlock',
-              attrs: {
-                steps: [{ title: 'Step 1: Start', content: 'Mô tả bước 1...', imageUrl: '' }],
-                currentStep: 0
-              }
-            })
-            .run()
-        }}
-      >
-        <ListChecks className='h-4 w-4' />
-      </ToolbarButton>
+        {/* Quiz */}
+        <Button
+          variant='outline'
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertContent({
+                type: 'quizBlock',
+                attrs: {
+                  question: 'What is the main difference between a freshwater biome and a marine biome?',
+                  options: [{ id: 'A', text: '', isCorrect: false }]
+                }
+              })
+              .run()
+          }
+          className='p-8'
+        >
+          <div className='flex flex-col items-center gap-1'>
+            <HelpCircle className='h-5 w-5' />
+            <span className='text-[11px]'>Quiz</span>
+          </div>
+        </Button>
 
-      <ToolbarButton
-        tooltip='Quiz'
-        onClick={() => {
-          editor
-            ?.chain()
-            .focus()
-            .insertContent({
-              type: 'quizBlock',
-              attrs: {
-                question: 'What is the main difference between a freshwater biome and a marine biome?',
-                options: [{ id: 'A', text: '', isCorrect: false }]
-              }
-            })
-            .run()
-        }}
-      >
-        <HelpCircle className='h-4 w-4' />
-      </ToolbarButton>
-
-      <ToolbarButton
-        tooltip='Teacher Note'
-        onClick={() => {
-          editor
-            ?.chain()
-            .focus()
-            .insertContent({
-              type: 'noteBlock',
-              attrs: {
-                title: '',
-                content: ''
-              }
-            })
-            .run()
-        }}
-      >
-        <NotebookPen className='h-4 w-4' />
-      </ToolbarButton>
+        {/* Teacher Note */}
+        <Button
+          variant='outline'
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertContent({
+                type: 'noteBlock',
+                attrs: { title: '', content: '' }
+              })
+              .run()
+          }
+          className='p-8'
+        >
+          <div className='flex flex-col items-center gap-1'>
+            <NotebookPen className='h-5 w-5' />
+            <span className='text-[11px]'>Note</span>
+          </div>
+        </Button>
+      </div>
     </div>
   )
 }
