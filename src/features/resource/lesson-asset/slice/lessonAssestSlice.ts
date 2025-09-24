@@ -3,7 +3,7 @@ import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: LessonAssetSliceParams = {
   pageNumber: 1,
-  pageSize: 5,
+  pageSize: 10,
   type: LessonAssetType.IMAGE,
   tagId: undefined,
   search: ''

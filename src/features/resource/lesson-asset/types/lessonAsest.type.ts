@@ -4,6 +4,8 @@ export type LessonAssetListResponse = {
   id: number
   name: string
   assetUrl: string
+  width: number
+  height: number
 }
 
 export type LessonAsset = {

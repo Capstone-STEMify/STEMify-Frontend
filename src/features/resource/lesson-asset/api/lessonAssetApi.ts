@@ -1,5 +1,6 @@
 import {
   LessonAsset,
+  LessonAssetListResponse,
   LessonAssetSliceParams,
   PostLessonAssetRequestBody
 } from '@/features/resource/lesson-asset/types/lessonAsest.type'
@@ -10,7 +11,7 @@ export const lessonAssetApi = lessonApi.injectEndpoints({
   endpoints: (builder) => ({
     // GET
     getListLessonAssets: builder.query<
-      ApiSuccessResponse<PaginatedResult<LessonAsset>>,
+      ApiSuccessResponse<PaginatedResult<LessonAssetListResponse>>,
       { lessonId: number; params: LessonAssetSliceParams }
     >({
       query: ({ lessonId, params }) => ({
@@ -18,14 +19,14 @@ export const lessonAssetApi = lessonApi.injectEndpoints({
         method: 'GET',
         params
       }),
-      providesTags: (result, error, { lessonId }) => [{ type: 'LessonAsset' as const, id: lessonId }]
+      providesTags: () => [{ type: 'LessonAsset' as const, id: 'LIST' }]
     }),
     getLessonAssetById: builder.query<ApiSuccessResponse<LessonAsset>, { lessonId: number; assetId: number }>({
       query: ({ lessonId, assetId }) => ({
         url: `/lessons/${lessonId}/lesson-assets/${assetId}`,
         method: 'GET'
       }),
-      providesTags: (result, error, { assetId }) => [{ type: 'LessonAsset' as const, id: assetId }]
+      providesTags: () => [{ type: 'LessonAsset', id: 'LIST' }]
     }),
     // POST
     postLessonAssets: builder.mutation<
@@ -36,7 +37,8 @@ export const lessonAssetApi = lessonApi.injectEndpoints({
         url: `/lessons/${lessonId}/lesson-assets`,
         method: 'POST',
         body
-      })
+      }),
+      invalidatesTags: [{ type: 'LessonAsset', id: 'LIST' }]
     }),
     // DELETE
     deleteListLessonAssets: builder.mutation<ApiSuccessResponse<void>, { lessonId: number; ids: number[] }>({
@@ -44,7 +46,8 @@ export const lessonAssetApi = lessonApi.injectEndpoints({
         url: `/lessons/${lessonId}/lesson-assets`,
         method: 'DELETE',
         body: { ids }
-      })
+      }),
+      invalidatesTags: [{ type: 'LessonAsset', id: 'LIST' }]
     })
   })
 })
