@@ -133,7 +133,7 @@ export const Toolbar = ({ editor }: Props) => {
   }
 
   return (
-    <div className='flex flex-wrap items-center justify-between rounded-t-lg bg-gray-50 p-2'>
+    <div className='flex items-center justify-between rounded-t-lg bg-gray-50 p-2'>
       <input type='file' ref={fileInputRef} onChange={handleFileChange} className='hidden' accept='/*' />
       <div className='flex items-center gap-1'>
         <ToolbarButton

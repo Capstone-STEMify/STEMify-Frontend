@@ -3,7 +3,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const lessonApi = createCrudApi<Lesson, LessonQueryParams>({
   reducerPath: 'lessonApi',
-  tagTypes: ['Lesson', 'Content'],
+  tagTypes: ['Lesson', 'Content', 'LessonAsset'],
   baseUrl: '/lessons'
 }).injectEndpoints({
   endpoints: (builder) => ({

@@ -1,7 +1,7 @@
 import { Button } from '@/components/shadcn/button'
 import SearchBar from '@/components/shared/search/SearchBar'
 import STabs from '@/components/shared/STabs'
-import UploadImageContent from '@/features/resource/content/components/sidebar/panel/upload/UploadImageContent'
+import LessonAssets from '@/features/resource/lesson-asset/components/LessonAssets'
 import { CloudUpload } from 'lucide-react'
 import React from 'react'
 
@@ -19,7 +19,7 @@ export default function UploadContent() {
         className='w-full'
         defaultValue='Images'
         items={[
-          { label: 'Images', value: 'Images', content: <UploadImageContent /> },
+          { label: 'Images', value: 'Images', content: <LessonAssets /> },
           { label: 'Videos', value: 'Videos', content: <div>Videos content</div> },
           { label: 'Documents', value: 'Documents', content: <div>Documents content</div> }
         ]}

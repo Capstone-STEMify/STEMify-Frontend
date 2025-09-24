@@ -5,7 +5,7 @@ import { ScrollArea } from '@/components/shadcn/scroll-area'
 import ContentDetail from '@/features/resource/content/components/detail/ContentDetail'
 import { useModal } from '@/providers/ModalProvider'
 import { useLocale, useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 type ContentDetailModalProps = {
   sectionId: number
@@ -18,10 +18,11 @@ export default function ContentDetailModal({ sectionId, contentId }: ContentDeta
   const { closeModal } = useModal()
   const router = useRouter()
   const locale = useLocale()
+  const { lessonId } = useParams()
 
   const handleEditContent = () => {
     closeModal()
-    router.push(`/${locale}/admin/section/${sectionId}/content/${contentId}`)
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentId}`)
   }
 
   return (
