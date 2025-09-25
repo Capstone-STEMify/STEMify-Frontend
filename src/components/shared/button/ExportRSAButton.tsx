@@ -35,11 +35,7 @@ export default function ExportRSAButton({ courseId }: { courseId: number }) {
   }, [exportData])
 
   return (
-    <Button
-      disabled={isExporting}
-      className='bg-amber-custom-400 w-full text-white'
-      onClick={() => triggerExport({ courseId })}
-    >
+    <Button disabled={isExporting} variant={'outline'} onClick={() => triggerExport({ courseId })}>
       {isExporting ? 'Exporting...' : 'Export to RSA'}
     </Button>
   )
