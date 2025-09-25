@@ -62,7 +62,7 @@ export const CustomImage = Image.extend({
       'img',
       {
         ...HTMLAttributes,
-        class: 'inline-block align-middle m-2 max-w-full h-auto'
+        class: 'inline align-middle max-w-full h-auto'
       }
     ]
   },

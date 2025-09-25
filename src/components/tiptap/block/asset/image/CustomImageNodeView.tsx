@@ -6,7 +6,7 @@ export default function CustomImageNodeView({ node, updateAttributes }: any) {
   console.log('CustomImageNodeView', src)
 
   return (
-    <NodeViewWrapper as='div' className='my-4 flex justify-center'>
+    <NodeViewWrapper as='span' className='flex justify-center'>
       <Resizable
         size={{
           width: width || 'auto',
