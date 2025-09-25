@@ -18,51 +18,14 @@ import { NoteBlock } from '@/components/tiptap/block/note/NoteBlock'
 import { LinkButtonBlock } from '@/components/tiptap/block/button/link/LinkButtonBlock'
 import { Video } from '@/components/tiptap/block/asset/video/VideoBlock'
 import { CustomImage } from '@/components/tiptap/block/asset/image/CustomImage'
+import { useTiptapEditor } from '@/components/tiptap/useTiptapEditor'
 
 interface TiptapViewerProps {
   content: string
 }
 
 export default function TiptapViewer({ content }: TiptapViewerProps) {
-  const editor = useEditor({
-    editable: false,
-    content: content || '<p>No content</p>',
-    extensions: [
-      StarterKit,
-      Link.configure({
-        openOnClick: true,
-        autolink: true,
-        HTMLAttributes: {
-          class: 'text-blue-500 underline'
-        }
-      }),
-      CustomImage.configure({
-        inline: true,
-        allowBase64: true
-      }),
-      Video,
-      CodeBlock,
-      Blockquote,
-      BulletList,
-      OrderedList,
-      Underline,
-      Superscript,
-      Subscript,
-      TextAlign.configure({
-        types: ['heading', 'paragraph']
-      }),
-      LinkButtonBlock,
-      NoteBlock,
-      QuizBlock,
-      StepBlock
-    ],
-    editorProps: {
-      attributes: {
-        class: 'prose dark:prose-invert h-full w-full max-w-full focus:outline-none'
-      }
-    },
-    immediatelyRender: false
-  })
+  const editor = useTiptapEditor({ content })
 
   if (!editor) return null
 
