@@ -133,7 +133,7 @@ export const Toolbar = ({ editor }: Props) => {
   }
 
   return (
-    <div className='flex flex-wrap items-center gap-1 p-2'>
+    <div className='flex w-fit flex-wrap items-center gap-1 p-2'>
       <input type='file' ref={fileInputRef} onChange={handleFileChange} className='hidden' accept='/*' />
       <ToolbarButton tooltip='Undo' onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()}>
         <Undo className='h-4 w-4' />

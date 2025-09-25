@@ -7,21 +7,21 @@ import { IconCategory2, IconTemplate, IconTools, IconUpload } from '@tabler/icon
 export type PanelKey = 'elements' | 'text' | 'upload' | 'template'
 
 export const sidebarItems = [
-  { key: 'elements' as PanelKey, icon: IconCategory2, label: 'Elements' },
-  { key: 'text' as PanelKey, icon: IconTools, label: 'Text' },
+  // { key: 'elements' as PanelKey, icon: IconCategory2, label: 'Elements' },
+  // { key: 'text' as PanelKey, icon: IconTools, label: 'Text' },
   { key: 'upload' as PanelKey, icon: IconUpload, label: 'Upload' },
   { key: 'template' as PanelKey, icon: IconTemplate, label: 'Templates' }
 ]
 export const PanelContent = ({ activePanel }: { activePanel: PanelKey | null }) => {
   switch (activePanel) {
-    case 'elements':
-      return <ElementContent />
-    case 'text':
-      return <TextContent />
+    // case 'elements':
+    //   return <ElementContent />
+    // case 'text':
+    //   return <TextContent />
     case 'upload':
       return <UploadContent />
     case 'template':
-      return <TemplateContent  />
+      return <TemplateContent />
     default:
       return null
   }
