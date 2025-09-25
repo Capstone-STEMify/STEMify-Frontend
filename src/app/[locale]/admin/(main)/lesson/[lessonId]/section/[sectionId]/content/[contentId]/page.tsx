@@ -3,7 +3,7 @@ import UpsertContent from '@/features/resource/content/components/upsert/UpsertC
 import { useParams } from 'next/navigation'
 import React from 'react'
 
-export default function page() {
+export default function Page() {
   const { sectionId, contentId } = useParams()
   const sectionIdNum = Array.isArray(sectionId) ? parseInt(sectionId[0]!) : parseInt(sectionId!)
   const contentIdNum =

@@ -4,7 +4,6 @@ import UpsertCourse from '@/features/resource/course/components/upsert/UpsertCou
 import { useModal } from '@/providers/ModalProvider'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { useTranslations } from 'next-intl'
-import { useParams } from 'next/navigation'
 import React from 'react'
 
 interface UpsertCourseModalProps {
