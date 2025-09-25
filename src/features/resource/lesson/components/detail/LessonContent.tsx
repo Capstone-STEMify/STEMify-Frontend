@@ -37,17 +37,7 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
   // Check if user is not logged in
   const isLoggedIn = !!user
 
-  const {
-    data: content,
-    isLoading: fetchingContent,
-    isError,
-    error
-  } = useSearchContentQuery(
-    { sectionId },
-    {
-      skip: !sectionId
-    }
-  )
+  const { data: content, isLoading: fetchingContent, isError, error } = useSearchContentQuery({ sectionId })
   const [completeSection, { isLoading }] = useUpdateSectionStudentProgressMutation()
 
   if (fetchingContent) {
@@ -76,18 +66,20 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
 
   const currentSectionProgress = sectionStatus?.data.items.find((item) => item.sectionId === sectionId)
 
+  if (!content || content.data.items.length === 0) {
+    return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
+  }
+
   if (content) {
     return (
       <div className='relative flex min-h-[650px] flex-col gap-6 p-6'>
         {/* Content with conditional blur */}
         <div className={`flex-1 ${!isLoggedIn ? 'blur-xs' : ''}`}>
-          {content.data.items.map((c) => (
-            <div key={c.id} className='prose flex-1'>
-              <ScrollArea className='h-[650px]'>
-                <TiptapViewer content={normalizeMarkdown(c.contentBody)} />
-              </ScrollArea>
-            </div>
-          ))}
+          <div key={content.data.items[0].id} className='prose flex-1'>
+            <ScrollArea className='h-[650px]'>
+              <TiptapViewer content={normalizeMarkdown(content.data.items[0].contentBody)} />
+            </ScrollArea>
+          </div>
         </div>
 
         {/* Login overlay when not logged in */}

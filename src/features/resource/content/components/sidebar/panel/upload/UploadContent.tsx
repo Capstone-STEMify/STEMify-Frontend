@@ -42,23 +42,22 @@ export default function UploadContent() {
         }
       })
     )
-    try {
-      await uploadFiles({
-        lessonId: 1,
-        body: { lessonAssets }
-      }).unwrap()
-    } catch (error) {}
+    await uploadFiles({
+      lessonId: Number(lessonId),
+      body: { lessonAssets }
+    })
+    toast.success('Uploaded files successfully')
   }
 
   const handleDeleteFiles = async (ids: number[]) => {
     if (ids.length === 0) return
-    try {
-      await deleteFiles({ lessonId: Number(lessonId), ids })
-      toast.success('Deleted files successfully')
-      dispatch(clearSelection())
-    } catch (error) {
-      toast.error('Failed to delete files')
-    }
+    await deleteFiles({ lessonId: Number(lessonId), ids })
+    toast.success('Deleted files successfully')
+    dispatch(clearSelection())
+  }
+
+  if (isLoading || deletingFiles) {
+    return <div>Processing...</div>
   }
 
   return (
