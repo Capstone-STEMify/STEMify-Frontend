@@ -5,22 +5,24 @@ import { useSearchContentQuery } from '@/features/resource/content/api/contentAp
 import { useModal } from '@/providers/ModalProvider'
 import { normalizeMarkdown } from '@/utils/index'
 import { FilePlus } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useParams, useRouter } from 'next/navigation'
 
 type ContentDetailProps = {
   sectionId: number
 }
 
 export default function ContentDetail({ sectionId }: ContentDetailProps) {
+  const { lessonId } = useParams()
   const t = useTranslations('content')
   const { data: contentData, isLoading } = useSearchContentQuery({ sectionId })
-  const { openModal } = useModal()
-
-  const html = contentData?.data?.items?.[0]?.contentBody || ''
-  console.log('html', html)
+  const { closeModal } = useModal()
+  const router = useRouter()
+  const locale = useLocale()
 
   const handleCreateContent = () => {
-    openModal('upsertContent', { sectionId })
+    closeModal()
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}`)
   }
 
   if (isLoading)

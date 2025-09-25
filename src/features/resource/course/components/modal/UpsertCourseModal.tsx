@@ -4,7 +4,6 @@ import UpsertCourse from '@/features/resource/course/components/upsert/UpsertCou
 import { useModal } from '@/providers/ModalProvider'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { useTranslations } from 'next-intl'
-import { useParams } from 'next/navigation'
 import React from 'react'
 
 interface UpsertCourseModalProps {
@@ -25,9 +24,7 @@ export default function UpsertCourseModal({ courseId, onConfirm }: UpsertCourseM
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent>
-        <DialogTitle>
-          <h1>{courseId ? `${t('form.title.update')}` : `${t('form.title.create')}`}</h1>
-        </DialogTitle>
+        <DialogTitle>{courseId ? `${t('form.title.update')}` : `${t('form.title.create')}`}</DialogTitle>
         <hr />
         <ScrollArea className='h-[500px] w-4xl pr-5'>
           <UpsertCourse courseId={courseId} onSuccess={handleSuccess} />

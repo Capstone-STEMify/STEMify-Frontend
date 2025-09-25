@@ -4,7 +4,8 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import ContentDetail from '@/features/resource/content/components/detail/ContentDetail'
 import { useModal } from '@/providers/ModalProvider'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useParams, useRouter } from 'next/navigation'
 
 type ContentDetailModalProps = {
   sectionId: number
@@ -14,10 +15,14 @@ type ContentDetailModalProps = {
 export default function ContentDetailModal({ sectionId, contentId }: ContentDetailModalProps) {
   const t = useTranslations('content')
   const tc = useTranslations('common')
-  const { openModal, closeModal } = useModal()
+  const { closeModal } = useModal()
+  const router = useRouter()
+  const locale = useLocale()
+  const { lessonId } = useParams()
 
   const handleEditContent = () => {
-    openModal('upsertContent', { contentId, sectionId })
+    closeModal()
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentId}`)
   }
 
   return (

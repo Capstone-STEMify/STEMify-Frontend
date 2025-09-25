@@ -38,9 +38,7 @@ import { useLocale } from 'next-intl'
 import { useSession } from 'next-auth/react'
 import LoadingComponent from '../shared/loading/LoadingComponent'
 import { usePathname } from 'next/navigation'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { stat } from 'fs'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
 
 const data = {
@@ -181,9 +179,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   if (status === 'loading') {
     return (
-      // <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
-      //   <LoadingComponent size={18} textShow={false} />
-      // </div>
       <Sidebar collapsible='offcanvas' {...props}>
         <SidebarHeader>
           <SidebarMenu>
