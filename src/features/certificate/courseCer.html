@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UCI Course Certificate</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Georgia', serif;
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .certificate {
+        width: 900px;
+        height: 650px;
+        background: white;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 10px solid #d0d0d0;
+        overflow: hidden;
+      }
+
+      .certificate::before {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        border: 3px solid #a0a0a0;
+        z-index: -1;
+      }
+
+      .corner-ornament {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #a0a0a0;
+      }
+
+      .corner-ornament.top-left {
+        top: 15px;
+        left: 15px;
+        border-right: none;
+        border-bottom: none;
+      }
+
+      .corner-ornament.top-right {
+        top: 15px;
+        right: 15px;
+        border-left: none;
+        border-bottom: none;
+      }
+
+      .corner-ornament.bottom-left {
+        bottom: 15px;
+        left: 15px;
+        border-right: none;
+        border-top: none;
+      }
+
+      .corner-ornament.bottom-right {
+        bottom: 15px;
+        right: 15px;
+        border-left: none;
+        border-top: none;
+      }
+
+      .header {
+        display: flex;
+        padding: 40px 60px 20px;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .logo-section {
+        flex: 1;
+      }
+
+      .uci-logo {
+        font-size: 48px;
+        font-weight: bold;
+        color: #1e5aa8;
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 5px;
+      }
+
+      .division-text {
+        font-size: 18px;
+        color: #666;
+        font-weight: normal;
+      }
+
+      .certificate-type {
+        padding-top: 58px;
+        text-align: right;
+        font-size: 16px;
+        color: #666;
+        letter-spacing: 3px;
+      }
+
+      .main-content {
+        padding: 0 60px;
+        text-align: left;
+      }
+
+      .date {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 30px;
+      }
+
+      .recipient-name {
+        font-size: 36px;
+        color: #333;
+        margin-bottom: 30px;
+        font-weight: normal;
+      }
+
+      .completion-text {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .course-title {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 30px;
+        font-weight: normal;
+      }
+
+      .course-description {
+        font-size: 12px;
+        color: #666;
+        line-height: 1.4;
+        margin-bottom: 60px;
+        max-width: 400px;
+      }
+
+      .bottom-section {
+        position: relative;
+        height: 200px;
+      }
+
+      .signature-section {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 60px;
+      }
+
+      .signature-line {
+        width: 200px;
+        height: 40px;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40"><path d="M10 30 Q50 10 90 25 Q130 40 170 20" stroke="%23333" stroke-width="2" fill="none"/></svg>')
+          no-repeat;
+        margin-bottom: 10px;
+      }
+
+      .signature-info {
+        font-size: 11px;
+        color: #666;
+        line-height: 1.3;
+      }
+
+      .badge {
+        position: absolute;
+        top: 0;
+        right: 45px;
+        width: 160px;
+        height: 360px;
+        background: linear-gradient(135deg, #e8e8f0 0%, #d0d0e0 100%);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 90%, 0 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 30px 20px 40px 20px;
+      }
+
+      .badge-circle {
+        width: 100px;
+        height: 100px;
+        border: 2px solid #666;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        position: relative;
+      }
+
+      .badge-circle::before {
+        content: '';
+        position: absolute;
+        width: 85px;
+        height: 85px;
+        border: 1px dashed #666;
+        border-radius: 50%;
+      }
+
+      .coursera-text {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .verification-text {
+        position: absolute;
+        bottom: 25px; /* Adjusted for new height */
+        right: 20px;
+        font-size: 9px;
+        color: #666;
+        text-align: right;
+        line-height: 1.3;
+        max-width: 200px;
+      }
+
+      .verification-url {
+        color: #666;
+        text-decoration: none;
+        font-size: 9px;
+      }
+
+      @media print {
+        body {
+          background: white;
+          padding: 0;
+        }
+        .certificate {
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="certificate">
+      <div class="corner-ornament top-left"></div>
+      <div class="corner-ornament top-right"></div>
+      <div class="corner-ornament bottom-left"></div>
+      <div class="corner-ornament bottom-right"></div>
+
+      <div class="header">
+        <div class="logo-section">
+          <div class="uci-logo">UCI</div>
+          <div class="division-text">Division of<br />Continuing Education</div>
+        </div>
+        <div class="badge">
+          <div class="badge-circle">
+            <div class="coursera-text">Stemify</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="date">14-01-2025</div>
+
+        <div class="recipient-name">My Tieu Lam</div>
+
+        <div class="completion-text">has successfully completed</div>
+
+        <div class="course-title">Initiating and Planning Projects</div>
+
+        <div class="course-description">
+          an online non-credit course authorized by University of California, Irvine and offered<br />
+          through Coursera
+        </div>
+      </div>
+
+      <div class="bottom-section">
+        <div class="signature-section">
+          <div>
+            <div class="signature-line"></div>
+            <div class="signature-info">
+              Margaret Melone, MBA, PMP<br />
+              Instructor<br />
+              University of California, Irvine Division of Continuing Education
+            </div>
+          </div>
+          <div class="certificate-type">COURSE<br />CERTIFICATE</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

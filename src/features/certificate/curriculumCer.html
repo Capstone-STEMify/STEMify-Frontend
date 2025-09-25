@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UCI Specialization Certificate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --sidebar-bg: #2c3e50;
+        --main-bg: #ffffff;
+        --primary-color: #676c70;
+        --secondary-color: #003366;
+        --text-dark: #212121;
+        --text-light: #5f5f5f;
+        --text-on-dark: #f0f0f0;
+        --border-color: #e0e0e0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Lato', sans-serif;
+        background-color: #e8e8e8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 40px;
+      }
+
+      .certificate {
+        width: 1100px;
+        height: 850px;
+        background-color: var(--main-bg);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        display: flex;
+        position: relative;
+      }
+
+      /* --- Sidebar --- */
+      .sidebar {
+        width: 260px;
+        background: linear-gradient(to bottom, #505152, #303438);
+        color: var(--text-on-dark);
+        padding: 40px 30px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .coursera-logo {
+        width: 120px;
+        height: 120px;
+        border: 4px solid #ffffff;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 40px auto;
+        background-color: rgba(255, 255, 255, 0.1);
+        text-align: center;
+        font-weight: bold;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        line-height: 1.4;
+      }
+
+      .coursera-logo span {
+        font-size: 20px;
+        font-weight: 700;
+        display: block;
+        letter-spacing: 0;
+        margin-bottom: 5px;
+      }
+
+      .courses-header {
+        background-color: var(--primary-color);
+        color: #fff;
+        text-align: center;
+        padding: 12px;
+        margin-bottom: 25px;
+        font-weight: 700;
+        font-size: 16px;
+      }
+
+      .course-list {
+        list-style: none;
+      }
+
+      .course-list li {
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.5;
+      }
+
+      /* --- Main Content --- */
+      .main-content {
+        flex: 1;
+        padding: 40px 60px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .certificate-body {
+        margin-top: 50px;
+        flex: 1;
+      }
+
+      .date {
+        font-size: 14px;
+        color: var(--text-light);
+        margin-bottom: 20px;
+      }
+
+      .recipient-name {
+        font-family: 'Merriweather', serif;
+        font-size: 42px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 15px;
+      }
+
+      .completion-text {
+        font-size: 16px;
+        color: var(--text-light);
+        margin-bottom: 30px;
+      }
+
+      .specialization-title {
+        font-family: 'Merriweather', serif;
+        font-size: 48px;
+        font-weight: 900;
+        color: var(--secondary-color);
+        line-height: 1.2;
+        margin-bottom: 15px;
+      }
+
+      .specialization-description {
+        font-size: 14px;
+        color: var(--text-light);
+        max-width: 500px;
+      }
+
+      /* --- Footer Section --- */
+      .footer-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .disclaimer {
+        font-size: 9px;
+        color: #999;
+        max-width: 450px;
+        line-height: 1.4;
+      }
+
+      .right-footer {
+        text-align: right;
+      }
+
+      .signature-area {
+        margin-top: 220px;
+      }
+
+      .signature-line {
+        width: 220px;
+        height: 40px;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40"><path d="M10 30 Q50 10 90 25 Q130 40 170 20" stroke="%23333" stroke-width="2" fill="none"/></svg>')
+          no-repeat center bottom;
+        margin-bottom: 5px;
+      }
+
+      .instructor-info {
+        font-size: 12px;
+        color: var(--text-light);
+        line-height: 1.5;
+      }
+
+      .instructor-info b {
+        color: var(--text-dark);
+      }
+
+      .verification {
+        font-size: 11px;
+        color: var(--text-light);
+      }
+
+      .verification a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .verification a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="certificate">
+      <aside class="sidebar">
+        <div class="coursera-logo">
+          <span>Stemify</span>
+        </div>
+        <div class="courses-header">4 Courses</div>
+        <ul class="course-list">
+          <li>Initiating and Planning Projects</li>
+          <li>Budgeting and Scheduling Projects</li>
+          <li>Managing Project Risks and Changes</li>
+          <li>Project Management Project</li>
+        </ul>
+      </aside>
+
+      <main class="main-content">
+        <section class="certificate-body">
+          <p class="date">Jan 15, 2025</p>
+          <h1 class="recipient-name">My Tieu Lam</h1>
+          <p class="completion-text">has successfully completed the online, non-credit Specialization</p>
+          <h2 class="specialization-title">Project Management Principles and Practices</h2>
+          <p class="specialization-description">
+            A 4-course, on-demand Specialization authorized by University of California, Irvine Extension, and offered
+            through Coursera.
+          </p>
+          <div class="signature-area">
+            <div class="signature-line"></div>
+            <div class="instructor-info">
+              <b>Margaret Meloni, MBA, PMP</b><br />
+              Instructor<br />
+              University of California, Irvine Division of Continuing Education
+            </div>
+          </div>
+        </section>
+
+        <footer class="footer-section">
+          <div class="disclaimer">
+            The online specialization named in this certificate may draw on material from courses taught on-campus, but
+            the included courses are not equivalent to on-campus courses. Participation in this online specialization
+            does not confer university credit or degree, and it does not verify the identity of the learner.
+          </div>
+          <div class="right-footer">
+            <div class="verification">
+              Verify this certificate at:<br />
+              <a href="#">stemify.edu/verify/specialization/F76QRW5NXSXX</a>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>

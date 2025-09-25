@@ -55,7 +55,10 @@ export function useTiptapEditor({ content, onChange, isEditable = true }: UseTip
           class: 'text-blue-500 underline cursor-pointer'
         }
       }),
-      CustomImage,
+      CustomImage.configure({
+        allowBase64: true,
+        inline: true
+      }),
       Video,
       CodeBlock.configure({
         HTMLAttributes: {
