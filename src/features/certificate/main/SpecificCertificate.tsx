@@ -2,7 +2,7 @@
 
 import CertificateDetails from "../details/CertificateDetails";
 import CertificateHeader from "../header/CertificateHeader";
-import CourseList from "../list/CourseList";
+import CourseList from "../course-list/CourseList";
 import { certificateData } from "../mockData";
 
 const SpecificCertificatePage = () => {
