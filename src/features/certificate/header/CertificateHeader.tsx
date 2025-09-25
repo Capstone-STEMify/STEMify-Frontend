@@ -29,7 +29,7 @@ const CertificateHeader = ({
           <div className="flex items-start gap-4">
             <div className="relative">
               <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                 {/* Placeholder for avatar */}
+                 <Image src={'/images/Rosie.jpg'} width={64} height={64} alt='User Image' className='rounded-full'></Image>
               </div>
               <CheckCircle className="absolute -bottom-1 -right-1 h-7 w-7 text-white bg-blue-600 rounded-full border-2 border-white" />
             </div>

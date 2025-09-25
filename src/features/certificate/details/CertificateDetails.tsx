@@ -23,7 +23,7 @@ const CertificateDetails = ({
         <section className="bg-white p-6 md:p-8 rounded-lg shadow-md mt-6">
             <div className="flex items-start gap-4">
                 {/* Replace with actual university logo */}
-                <Image src="/uci-logo.svg" alt="UCI Logo" width={60} height={60} />
+                <Image src="/HomeFiles/learning.png" alt="UCI Logo" width={60} height={60} />
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900">{specializationName}</h2>
                     <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">

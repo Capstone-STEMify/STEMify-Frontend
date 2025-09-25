@@ -26,10 +26,11 @@ const SpecificCertificatePage = () => {
           learningOutcomes={certificateData.learningOutcomes}
           skills={certificateData.skills}
         />
-        
+
         <CourseList 
           courses={certificateData.courses}
           university={certificateData.university}
+          studentName={certificateData.studentName}
         />
       </div>
     </main>
