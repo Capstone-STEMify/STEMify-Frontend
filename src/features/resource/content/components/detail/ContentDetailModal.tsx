@@ -2,6 +2,7 @@
 import { Button } from '@/components/shadcn/button'
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
+import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
 import ContentDetail from '@/features/resource/content/components/detail/ContentDetail'
 import { useModal } from '@/providers/ModalProvider'
 import { useLocale, useTranslations } from 'next-intl'
@@ -19,10 +20,15 @@ export default function ContentDetailModal({ sectionId, contentId }: ContentDeta
   const router = useRouter()
   const locale = useLocale()
   const { lessonId } = useParams()
+  const { data: contentData, isLoading } = useSearchContentQuery({ sectionId })
 
   const handleEditContent = () => {
     closeModal()
-    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentId}`)
+    if (!contentData?.data?.items?.length) {
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}`)
+    } else {
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentId}`)
+    }
   }
 
   return (
@@ -32,7 +38,7 @@ export default function ContentDetailModal({ sectionId, contentId }: ContentDeta
           <div>{t('detail.title')}</div>
           <div className='mr-5'>
             <Button variant={'outline'} className='hover:bg-gray-200' onClick={handleEditContent}>
-              {tc('button.update')}
+              {!contentData?.data?.items?.length ? tc('button.create') : tc('button.update')}
             </Button>
           </div>
         </DialogTitle>
