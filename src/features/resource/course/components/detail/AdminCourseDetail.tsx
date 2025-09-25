@@ -23,6 +23,8 @@ import { capitalizeFirst } from '@/utils/index'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { UserRole } from '@/types/userRole'
+import { useLazyExportToRSAQuery } from '@/features/resource/export/api/exportApi'
+import ExportRSAButton from '@/components/shared/button/ExportRSAButton'
 
 export default function AdminCourseDetail() {
   const t = useTranslations('Admin.course_details')
@@ -41,6 +43,7 @@ export default function AdminCourseDetail() {
 
   // Fetch course details
   const { data: course, error, isLoading, refetch } = useGetCourseByIdQuery(Number(courseId))
+  const [triggerExport, { data: exportData, isLoading: isExporting }] = useLazyExportToRSAQuery()
   const [updateCourseStatus] = useUpdateCourseMutation()
   const [deleteCourse] = useDeleteCourseMutation()
 
@@ -67,6 +70,14 @@ export default function AdminCourseDetail() {
         />
       </div>
     )
+
+  if (isExporting) {
+    return (
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
+  }
 
   const createdAt = course.data.createdDate ? new Date(course.data.createdDate).toLocaleString() : 'N/A'
   const updatedAt = course.data.lastModifiedDate ? new Date(course.data.lastModifiedDate).toLocaleString() : 'N/A'
@@ -307,6 +318,8 @@ export default function AdminCourseDetail() {
               <p className='text-xs font-medium text-yellow-700'>{t('reviewMessage')}</p>
             </div>
           )}
+
+        <ExportRSAButton courseId={course.data.id} />
       </div>
       {/* Divider Section before Lesson Table */}
       <div className='col-span-1 pt-5 xl:col-span-3'>
