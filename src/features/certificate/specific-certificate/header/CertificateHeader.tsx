@@ -2,7 +2,7 @@
 import { CheckCircle, Download, Share2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Course } from '../mockData';
+import { Course } from '../../mockData';
 import {
   Dialog,
   DialogContent,

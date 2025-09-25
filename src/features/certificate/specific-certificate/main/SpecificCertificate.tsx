@@ -3,7 +3,7 @@
 import CertificateDetails from "../details/CertificateDetails";
 import CertificateHeader from "../header/CertificateHeader";
 import CourseList from "../course-list/CourseList";
-import { certificateData } from "../mockData";
+import { certificateData } from "../../mockData";
 
 const SpecificCertificatePage = () => {
   return (
@@ -15,7 +15,7 @@ const SpecificCertificatePage = () => {
           studyDuration={certificateData.studyDuration}
           specializationName={certificateData.specialization.name}
           specializationUrl={certificateData.specialization.url}
-          courses={certificateData.courses} // <-- ADDED: Truyền prop courses
+          courses={certificateData.courses} 
         />
 
         <CertificateDetails 
