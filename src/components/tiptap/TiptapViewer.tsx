@@ -9,7 +9,7 @@ interface TiptapViewerProps {
 }
 
 export default function TiptapViewer({ content }: TiptapViewerProps) {
-  const editor = useTiptapEditor({ content })
+  const editor = useTiptapEditor({ content, isEditable: false })
 
   if (!editor) return <div>No editor, please try again</div>
 

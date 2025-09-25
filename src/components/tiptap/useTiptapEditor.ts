@@ -27,9 +27,10 @@ import { debounce } from 'lodash-es'
 interface UseTiptapEditorProps {
   content?: string
   onChange?: (richText: string) => void
+  isEditable?: boolean
 }
 
-export function useTiptapEditor({ content, onChange }: UseTiptapEditorProps) {
+export function useTiptapEditor({ content, onChange, isEditable = true }: UseTiptapEditorProps) {
   const debouncedOnChange = useMemo(
     () =>
       debounce((html: string) => {
@@ -39,6 +40,7 @@ export function useTiptapEditor({ content, onChange }: UseTiptapEditorProps) {
   )
 
   const editor = useEditor({
+    editable: isEditable,
     extensions: [
       StarterKit.configure({
         bulletList: false,

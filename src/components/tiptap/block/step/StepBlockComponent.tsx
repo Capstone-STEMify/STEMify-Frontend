@@ -71,27 +71,52 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
     if (editable) updateAttributes({ currentStep: newStep })
   }
 
+  function getVisibleSteps(current: number, total: number): (number | 'ellipsis')[] {
+    const steps: (number | 'ellipsis')[] = []
+
+    if (total <= 5) {
+      for (let i = 0; i < total; i++) steps.push(i)
+    } else {
+      if (current <= 2) {
+        steps.push(0, 1, 2, 3, 'ellipsis', total - 1)
+      } else if (current >= total - 3) {
+        steps.push(0, 'ellipsis', total - 4, total - 3, total - 2, total - 1)
+      } else {
+        steps.push(0, 'ellipsis', current - 1, current, current + 1, 'ellipsis', total - 1)
+      }
+    }
+
+    return steps
+  }
+
   const renderStepNav = () => (
     <div className='my-4 flex items-center justify-between gap-4'>
       <Button onClick={goPrev} variant='secondary'>
         <ChevronLeft className='text-gray-600 hover:text-black' />
       </Button>
       <div className='flex justify-center gap-2'>
-        {stepsArray.map((_, i) => (
-          <Button
-            key={i}
-            onClick={() => {
-              setActive(i)
-              if (editable) updateAttributes({ currentStep: i })
-            }}
-            size='icon'
-            className={`h-6 w-6 rounded-full text-sm font-bold ${
-              i === active ? 'bg-black text-white' : 'bg-white text-black'
-            }`}
-          >
-            {i + 1}
-          </Button>
-        ))}
+        {getVisibleSteps(active, stepsArray.length).map((item, idx) =>
+          item === 'ellipsis' ? (
+            <span key={`ellipsis-${idx}`} className='px-2'>
+              …
+            </span>
+          ) : (
+            <Button
+              key={item}
+              onClick={() => {
+                setActive(item as number)
+                if (editable) updateAttributes({ currentStep: item })
+              }}
+              size='icon'
+              className={`h-6 w-6 rounded-full text-sm font-bold ${
+                item === active ? 'bg-black text-white' : 'bg-white text-black'
+              }`}
+            >
+              {(item as number) + 1}
+            </Button>
+          )
+        )}
+
         {editable && (
           <>
             <Button
