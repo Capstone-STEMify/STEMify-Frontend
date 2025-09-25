@@ -1,4 +1,4 @@
-import CustomImageNodeView from '@/components/tiptap/block/asset/CustomImageNodeView'
+import CustomImageNodeView from '@/components/tiptap/block/asset/image/CustomImageNodeView'
 import Image from '@tiptap/extension-image'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 

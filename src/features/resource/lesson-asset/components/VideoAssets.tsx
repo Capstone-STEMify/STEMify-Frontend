@@ -1,4 +1,5 @@
 import { SPopover } from '@/components/shared/SPopover'
+import { useEditorCtx } from '@/components/tiptap/EditorContext'
 import {
   useGetListLessonAssetsQuery,
   useDeleteListLessonAssetsMutation
@@ -11,6 +12,7 @@ import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 
 export default function VideoAssets() {
+  const editor = useEditorCtx()
   const { lessonId } = useParams()
   const dispatch = useAppDispatch()
   const selectedIds = useAppSelector((state) => state.lessonAssetSelection.selectedIds)
@@ -46,6 +48,10 @@ export default function VideoAssets() {
     return <div className='text-sm text-gray-500'>No videos uploaded yet</div>
   }
 
+  if (!editor) {
+    return <div className='p-4 text-sm text-red-500'>Something wrong, please contact support</div>
+  }
+
   return (
     <div className='relative h-full'>
       <div className='grid grid-cols-2 gap-4'>
@@ -53,6 +59,16 @@ export default function VideoAssets() {
           <div
             key={asset.id}
             className='relative aspect-video w-full overflow-hidden rounded-lg border bg-black transition hover:shadow-md'
+            onDoubleClick={() => {
+              editor
+                .chain()
+                .focus()
+                .insertContent({
+                  type: 'video',
+                  attrs: { src: asset.assetUrl, title: asset.name }
+                })
+                .run()
+            }}
           >
             {/* Checkbox chọn video */}
             <input

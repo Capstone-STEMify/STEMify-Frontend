@@ -1,16 +1,12 @@
 import { SPopover } from '@/components/shared/SPopover'
-import {
-  useDeleteListLessonAssetsMutation,
-  useGetListLessonAssetsQuery
-} from '@/features/resource/lesson-asset/api/lessonAssetApi'
-import { clearSelection, toggleSelect } from '@/features/resource/lesson-asset/slice/lessonAssetSelectionSliice'
+import { useGetListLessonAssetsQuery } from '@/features/resource/lesson-asset/api/lessonAssetApi'
+import { toggleSelect } from '@/features/resource/lesson-asset/slice/lessonAssetSelectionSliice'
 import { LessonAssetSliceParams, LessonAssetType } from '@/features/resource/lesson-asset/types/lessonAsest.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { EllipsisVertical, Download, Trash2, Info, FileText, FileSpreadsheet, FileArchive, X } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { toast } from 'sonner'
 
-export default function DesignAssets() {
+export default function DocumentAssets() {
   const { lessonId } = useParams()
   const dispatch = useAppDispatch()
   const selectedIds = useAppSelector((state) => state.lessonAssetSelection.selectedIds)
@@ -32,7 +28,7 @@ export default function DesignAssets() {
   })
 
   if (!data) {
-    return <div className='text-sm text-gray-500'>No designs uploaded yet</div>
+    return <div className='text-sm text-gray-500'>No documents uploaded yet</div>
   }
 
   const getFileExtension = (filename: string) => {

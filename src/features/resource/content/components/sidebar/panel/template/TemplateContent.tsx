@@ -21,10 +21,13 @@ export default function TemplateContent() {
             editor
               .chain()
               .focus()
-              .insertContent({
-                type: 'linkButtonBlock',
-                attrs: { label: 'EXPLORE NOW', url: '' }
-              })
+              .insertContent([
+                {
+                  type: 'linkButtonBlock',
+                  attrs: { label: 'EXPLORE NOW', url: '' }
+                },
+                { type: 'paragraph' }
+              ])
               .run()
           }
           className='p-8'
@@ -42,13 +45,16 @@ export default function TemplateContent() {
             editor
               .chain()
               .focus()
-              .insertContent({
-                type: 'stepBlock',
-                attrs: {
-                  steps: [{ title: 'Step 1: Start', content: 'Mô tả bước 1...', imageUrl: '' }],
-                  currentStep: 0
-                }
-              })
+              .insertContent([
+                {
+                  type: 'stepBlock',
+                  attrs: {
+                    steps: [{ title: 'Step 1: Start', content: 'Mô tả bước 1...', imageUrl: '' }],
+                    currentStep: 0
+                  }
+                },
+                { type: 'paragraph' }
+              ])
               .run()
           }
           className='p-8'
@@ -66,13 +72,16 @@ export default function TemplateContent() {
             editor
               .chain()
               .focus()
-              .insertContent({
-                type: 'quizBlock',
-                attrs: {
-                  question: 'What is the main difference between a freshwater biome and a marine biome?',
-                  options: [{ id: 'A', text: '', isCorrect: false }]
-                }
-              })
+              .insertContent([
+                {
+                  type: 'quizBlock',
+                  attrs: {
+                    question: 'What is the main difference between a freshwater biome and a marine biome?',
+                    options: [{ id: 'A', text: '', isCorrect: false }]
+                  }
+                },
+                { type: 'paragraph' }
+              ])
               .run()
           }
           className='p-8'
@@ -90,10 +99,13 @@ export default function TemplateContent() {
             editor
               .chain()
               .focus()
-              .insertContent({
-                type: 'noteBlock',
-                attrs: { title: '', content: '' }
-              })
+              .insertContent([
+                {
+                  type: 'noteBlock',
+                  attrs: { title: '', content: '' }
+                },
+                { type: 'paragraph' }
+              ])
               .run()
           }
           className='p-8'

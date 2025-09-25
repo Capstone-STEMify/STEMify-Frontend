@@ -16,8 +16,8 @@ interface TiptapEditorProps {
 export default function TiptapEditor({ content, onChange, children }: TiptapEditorProps) {
   const editor = useTiptapEditor({ content, onChange })
 
-  useLayoutEffect(() => {
-    if (editor && content !== undefined) {
+  useEffect(() => {
+    if (editor && content !== undefined && content !== editor.getHTML()) {
       editor.commands.setContent(content, { emitUpdate: false })
     }
   }, [content, editor])

@@ -1,5 +1,6 @@
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SPopover } from '@/components/shared/SPopover'
+import { useEditorCtx } from '@/components/tiptap/EditorContext'
 import {
   useDeleteListLessonAssetsMutation,
   useGetListLessonAssetsQuery
@@ -13,6 +14,8 @@ import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 
 export default function ImageAssets() {
+  const editor = useEditorCtx()
+
   const { lessonId } = useParams()
   const dispatch = useAppDispatch()
   const selectedIds = useAppSelector((state) => state.lessonAssetSelection.selectedIds)
@@ -52,6 +55,10 @@ export default function ImageAssets() {
     return <div className='text-sm text-gray-500'>No images uploaded yet</div>
   }
 
+  if (!editor) {
+    return <div className='p-4 text-sm text-red-500'>Something wrong, please contact support</div>
+  }
+
   return (
     <div className='relative h-full'>
       {deletingImages && (
@@ -66,6 +73,9 @@ export default function ImageAssets() {
             key={asset.id}
             className='relative w-full overflow-hidden rounded-md border hover:ring-2 hover:ring-purple-400'
             style={{ aspectRatio: `${asset.width || 1}/${asset.height || 1}` }}
+            onDoubleClick={() => {
+              editor.chain().focus().setImage({ src: asset.assetUrl, alt: asset.name }).run()
+            }}
           >
             {/* Checkbox chọn ảnh */}
             <input
@@ -77,7 +87,7 @@ export default function ImageAssets() {
             />
 
             {/* Preview ảnh */}
-            <Image src={asset.assetUrl} alt={asset.name} fill className='object-contain' />
+            <Image src={asset.assetUrl} alt={asset.name || 'Image'} sizes='200px' fill className='object-contain' />
 
             {/* Popover menu */}
             <SPopover

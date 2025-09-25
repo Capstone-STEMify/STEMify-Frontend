@@ -19,8 +19,8 @@ import { StepBlock } from '@/components/tiptap/block/step/StepBlock'
 import { QuizBlock } from '@/components/tiptap/block/quiz/QuizBlock'
 import { NoteBlock } from '@/components/tiptap/block/note/NoteBlock'
 import { LinkButtonBlock } from '@/components/tiptap/block/button/link/LinkButtonBlock'
-import { Video } from '@/components/tiptap/block/asset/VideoBlock'
-import { CustomImage } from '@/components/tiptap/block/asset/CustomImage'
+import { Video } from '@/components/tiptap/block/asset/video/VideoBlock'
+import { CustomImage } from '@/components/tiptap/block/asset/image/CustomImage'
 import { useMemo } from 'react'
 import { debounce } from 'lodash-es'
 
@@ -100,7 +100,7 @@ export function useTiptapEditor({ content, onChange }: UseTiptapEditorProps) {
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert max-w-7xl py-6 px-15 focus:outline-none'
+        class: 'prose dark:prose-invert max-w-7xl py-6 px-15 focus:outline-none '
       }
     }
   })

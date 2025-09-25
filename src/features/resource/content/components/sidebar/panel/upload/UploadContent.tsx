@@ -5,7 +5,7 @@ import {
   useDeleteListLessonAssetsMutation,
   usePostLessonAssetsMutation
 } from '@/features/resource/lesson-asset/api/lessonAssetApi'
-import DesignAssets from '@/features/resource/lesson-asset/components/DesignAssets'
+import DocumentAssets from '@/features/resource/lesson-asset/components/DocumentAssets'
 import ImageAssets from '@/features/resource/lesson-asset/components/ImageAssets'
 import VideoAssets from '@/features/resource/lesson-asset/components/VideoAssets'
 import { clearSelection } from '@/features/resource/lesson-asset/slice/lessonAssetSelectionSliice'
@@ -86,9 +86,9 @@ export default function UploadContent() {
             content: <VideoAssets />
           },
           {
-            label: 'Designs',
-            value: 'Designs',
-            content: <DesignAssets />
+            label: 'Documents',
+            value: 'Documents',
+            content: <DocumentAssets />
           }
         ]}
       />

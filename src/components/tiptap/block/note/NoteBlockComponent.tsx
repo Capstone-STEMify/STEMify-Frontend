@@ -18,7 +18,7 @@ export default function NoteBlockComponent({ node, updateAttributes, editor }: N
   }
 
   return (
-    <NodeViewWrapper>
+    <NodeViewWrapper as='div' className='my-4'>
       {editable && (role === UserRole.STAFF || role === UserRole.ADMIN) ? (
         <div className='rounded-md border'>
           <div className='flex items-center justify-between rounded-t-md bg-sky-100 px-4 py-2'>
