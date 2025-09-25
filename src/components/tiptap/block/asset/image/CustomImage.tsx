@@ -34,15 +34,15 @@ export const CustomImage = Image.extend({
         }
       },
       width: {
-        default: 'auto',
-        parseHTML: (element: HTMLElement) => element.getAttribute('width') || 'auto',
+        default: '480px',
+        parseHTML: (element: HTMLElement) => element.getAttribute('width') || '480px',
         renderHTML: (attributes: Record<string, any>) => {
           return { width: attributes.width }
         }
       },
       height: {
-        default: 'auto',
-        parseHTML: (element: HTMLElement) => element.getAttribute('height') || 'auto',
+        default: '270px',
+        parseHTML: (element: HTMLElement) => element.getAttribute('height') || '270px',
         renderHTML: (attributes: Record<string, any>) => {
           return { height: attributes.height }
         }
