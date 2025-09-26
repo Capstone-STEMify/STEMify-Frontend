@@ -39,14 +39,14 @@ export default function UpsertContent({ sectionId, contentId }: UpsertContentPro
           sectionId
         }
       })
-      toast.success(tt('successMessage.update', { title: contentItem!.id }))
+      toast.success(tt('successMessage.update'))
     } else {
       await createContent({
         contentBody: editorValue,
         contentType: ContentType.TEXT,
         sectionId: sectionId
       })
-      toast.success(tt('successMessage.create', { title: contentItem!.id }))
+      toast.success(tt('successMessage.create'))
     }
   }
 

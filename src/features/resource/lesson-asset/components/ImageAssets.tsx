@@ -59,8 +59,10 @@ export default function ImageAssets() {
     return <div className='p-4 text-sm text-red-500'>Something wrong, please contact support</div>
   }
 
+
+
   return (
-    <div className='relative h-full'>
+    <div className='relative h-full px-1'>
       {deletingImages && (
         <div className='absolute inset-0 z-10 flex items-center justify-center bg-white/70'>
           <LoadingComponent textShow text='Deleting images...' />

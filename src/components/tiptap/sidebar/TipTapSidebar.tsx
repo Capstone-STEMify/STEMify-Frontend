@@ -28,15 +28,15 @@ export default function TipTapSidebar() {
       <aside
         className={`hidden h-full transition-all duration-300 ease-in-out md:flex ${
           activePanel ? 'w-96' : 'w-18'
-        } border-r bg-gray-50 dark:bg-gray-900`}
+        } border-r`}
       >
         {/* Cột icon */}
-        <ul className='flex flex-col items-center gap-2 border-r p-2'>
+        <ul className='flex flex-col items-center gap-2 border-r bg-gradient-to-b from-sky-50 to-emerald-50 p-2'>
           {sidebarItems.map(({ key, icon: Icon, label }) => (
             <li key={key}>
               <button
-                className={`flex w-14 flex-col items-center gap-1 rounded p-2 hover:bg-gray-200 ${
-                  activePanel === key ? 'bg-gray-300' : ''
+                className={`flex w-14 flex-col items-center gap-1 rounded p-2 hover:bg-blue-100 ${
+                  activePanel === key ? 'text-sky-custom-600' : ''
                 }`}
                 onClick={() => togglePanel(key)}
               >
@@ -80,8 +80,10 @@ export default function TipTapSidebar() {
             </ul>
 
             {activePanel && (
-              <div className='mt-4 overflow-auto'>
-                <PanelContent activePanel={activePanel} />
+              <div className='flex flex-1 flex-col bg-white'>
+                <div className='flex-1 overflow-auto p-4'>
+                  <PanelContent activePanel={activePanel} />
+                </div>
               </div>
             )}
           </div>

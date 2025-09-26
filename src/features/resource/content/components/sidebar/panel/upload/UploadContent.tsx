@@ -1,4 +1,5 @@
 import { Button } from '@/components/shadcn/button'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SearchBar from '@/components/shared/search/SearchBar'
 import STabs from '@/components/shared/STabs'
 import {
@@ -14,7 +15,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { fileToBase64 } from '@/utils/index'
 import { CloudUpload, Download, Trash2, X } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import React, { useRef } from 'react'
+import React, { JSX, useRef } from 'react'
 import { toast } from 'sonner'
 
 export default function UploadContent() {
@@ -56,48 +57,44 @@ export default function UploadContent() {
     dispatch(clearSelection())
   }
 
-  if (isLoading || deletingFiles) {
-    return <div>Processing...</div>
-  }
+  const renderContent = (Component: JSX.Element) =>
+    isLoading || deletingFiles ? (
+      <div className='flex h-40 items-center justify-center'>
+        <LoadingComponent text='Processing...' />
+      </div>
+    ) : (
+      Component
+    )
 
   return (
-    <div className='relative flex h-full flex-col space-y-4'>
-      <SearchBar />
-      <input type='file' multiple ref={fileInputRef} className='hidden' onChange={handleUploadFiles} />
-      <Button variant={'outline'} className='w-full' onClick={handleSelectFiles}>
-        <CloudUpload /> Upload files
-      </Button>
-      <STabs
-        customStyle={{
-          list: 'w-full'
-        }}
-        className='w-full'
-        defaultValue='Images'
-        items={[
-          {
-            label: 'Images',
-            value: 'Images',
-            content: <ImageAssets />
-          },
-          {
-            label: 'Videos',
-            value: 'Videos',
-            content: <VideoAssets />
-          },
-          {
-            label: 'Documents',
-            value: 'Documents',
-            content: <DocumentAssets />
-          }
-        ]}
-      />
+    <div className='flex h-full flex-col space-y-2'>
+      {/* Header cố định */}
+      <div className='space-y-4'>
+        <SearchBar />
+        <input type='file' multiple ref={fileInputRef} className='hidden' onChange={handleUploadFiles} />
+        <Button variant='outline' className='w-full' onClick={handleSelectFiles}>
+          <CloudUpload /> Upload files
+        </Button>
+      </div>
+
+      {/* Vùng content scroll */}
+      <div className='flex-1 overflow-y-auto'>
+        <STabs
+          customStyle={{ list: 'w-full' }}
+          className='w-full'
+          defaultValue='Images'
+          items={[
+            { label: 'Images', value: 'Images', content: renderContent(<ImageAssets />) },
+            { label: 'Videos', value: 'Videos', content: renderContent(<VideoAssets />) },
+            { label: 'Documents', value: 'Documents', content: renderContent(<DocumentAssets />) }
+          ]}
+        />
+      </div>
+
+      {/* Action bar luôn ở cuối */}
       {selectedIds.length > 0 && (
-        <div
-          className={`absolute right-0 bottom-0 left-0 transform border-t bg-white shadow-md transition-transform duration-300 ${
-            selectedIds.length > 0 ? 'translate-y-0' : 'translate-y-full'
-          }`}
-        >
-          <div className='flex items-center justify-between px-4 py-3'>
+        <div className='sticky bottom-0 z-10 rounded-full border bg-white shadow-md'>
+          <div className='flex items-center justify-between px-4 py-2'>
             <span className='text-sm font-medium'>{selectedIds.length} selected</span>
             <div className='flex items-center gap-4'>
               <button className='rounded p-2 hover:bg-gray-100'>
