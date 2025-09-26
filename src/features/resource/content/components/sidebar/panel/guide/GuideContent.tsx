@@ -17,6 +17,7 @@ import {
   Code,
   Highlighter
 } from 'lucide-react'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
 
 const smilieMap: [string, string][] = [
   [':-)', '🙂'],
@@ -35,10 +36,10 @@ const smilieMap: [string, string][] = [
 
 export default function GuideContent() {
   return (
-    <div className=''>
+    <ScrollArea className='my-2 h-[610px] px-4'>
       <h3 className='text-center text-lg font-bold'>Hướng dẫn sử dụng Editor</h3>
 
-      <ol className='list-decimal space-y-6 pl-2'>
+      <ol className='list-decimal space-y-6'>
         {/* Định dạng */}
         <li>
           <strong>Định dạng văn bản</strong>
@@ -173,6 +174,6 @@ export default function GuideContent() {
       <p className='mt-4 text-sm text-gray-500'>
         💡 Mẹo: Bạn có thể kết hợp nhiều định dạng cùng lúc (ví dụ chữ vừa in đậm vừa gạch chân).
       </p>
-    </div>
+    </ScrollArea>
   )
 }

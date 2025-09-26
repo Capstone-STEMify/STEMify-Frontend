@@ -3,12 +3,15 @@
 import { useState } from 'react'
 import { PanelContent, PanelKey, sidebarItems } from '@/features/resource/content/components/sidebar/panel/PanelContent'
 import BackButton from '@/components/shared/button/BackButton'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setActivePanel } from '@/components/tiptap/slice/tiptapSlice'
 
 export default function TipTapSidebar() {
-  const [activePanel, setActivePanel] = useState<PanelKey | null>(null)
+  const dispatch = useAppDispatch()
+  const activePanel = useAppSelector((state) => state.tiptap.activePanel)
 
   const togglePanel = (key: PanelKey) => {
-    setActivePanel(activePanel === key ? null : key)
+    dispatch(setActivePanel(activePanel === key ? null : key))
   }
 
   return (
@@ -19,25 +22,27 @@ export default function TipTapSidebar() {
           <BackButton className='border' />
         </div>
         <ul>
-          {sidebarItems.map(({ key, icon: Icon, label }) => (
-            <li key={key}>
-              <button
-                className={`flex w-14 flex-col items-center gap-1 rounded p-2 hover:bg-blue-100 ${
-                  activePanel === key ? 'text-sky-custom-600' : ''
-                }`}
-                onClick={() => togglePanel(key)}
-              >
-                <Icon size={20} />
-                <span className='text-[10px]'>{label}</span>
-              </button>
-            </li>
-          ))}
+          {sidebarItems
+            .filter((item) => item.key !== 'imageAssetDetail')
+            .map(({ key, icon: Icon, label }) => (
+              <li key={key}>
+                <button
+                  className={`flex w-14 flex-col items-center gap-1 rounded p-2 hover:bg-blue-100 ${
+                    activePanel === key ? 'text-sky-custom-600' : ''
+                  }`}
+                  onClick={() => togglePanel(key)}
+                >
+                  <Icon size={20} />
+                  <span className='text-[10px]'>{label}</span>
+                </button>
+              </li>
+            ))}
         </ul>
       </div>
       {/* Panel content: chiếm phần còn lại */}
       {activePanel && (
-        <div className='flex-1 overflow-auto p-4'>
-          <PanelContent activePanel={activePanel} />
+        <div className='flex-1 overflow-auto'>
+          <PanelContent />
         </div>
       )}
     </aside>
