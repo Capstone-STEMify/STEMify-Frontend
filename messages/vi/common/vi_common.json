@@ -49,7 +49,9 @@
       "addKit": "Thêm Bộ Kit",
       "publish": "Xuất Bản",
       "print": "In",
-      "share": "Chia sẻ"
+      "share": "Chia sẻ",
+      "start": "Bắt Đầu Ngay",
+      "look": "Tìm hiểu thêm"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",
@@ -60,7 +62,8 @@
       "curriculumCreateError": "Đã xảy ra lỗi khi tạo chương trình học. Vui lòng thử lại.",
       "curriculumUpdateError": "Đã xảy ra lỗi khi cập nhật chương trình học. Vui lòng thử lại.",
       "curriculumDeleteError": "Đã xảy ra lỗi khi xóa chương trình học. Vui lòng thử lại.",
-      "printPreview": "BẢN XEM TRƯỚC"
+      "printPreview": "BẢN XEM TRƯỚC",
+      "learnTitle": "Những gì học được"
     },
     "tableHeader": {
       "id": "ID",

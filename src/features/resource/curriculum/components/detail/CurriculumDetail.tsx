@@ -16,11 +16,13 @@ import CurriculumStatsSection from './CurriculumStatSection'
 import LearningObjectives from '../../../../../components/shared/outcome/LearningObjectives'
 import { useSearchLearningOutcomeQuery } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import { useTranslations } from 'next-intl'
 
 export default function CurriculumDetail() {
   const { curriculumId } = useParams()
   const { data: curriculumData, error, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId))
   const {data: LearningOutcome, isLoading: outcomeLoading, isFetching: outcomeFetching} = useSearchLearningOutcomeQuery({curriculumId: Number(curriculumId)})
+  const tc = useTranslations('common.message')
 
   if (isLoading || outcomeLoading || outcomeFetching) {
     return (
@@ -52,7 +54,7 @@ export default function CurriculumDetail() {
         </div>
 
         <div className='mt-30 sm:mt-32'>
-          <LearningObjectives title="What you'll learn" outcomes={LearningOutcome?.data.items} />
+          <LearningObjectives title={tc('learnTitle')} outcomes={LearningOutcome?.data.items} />
         </div>
 
         {/* Kit Information Section */}
