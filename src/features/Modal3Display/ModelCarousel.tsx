@@ -15,7 +15,7 @@ export default function ModelCarousel() {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true },
+    { loop: true, duration: 70 },
     [Autoplay({ delay: 3000, stopOnInteraction: false })]
   );
 
