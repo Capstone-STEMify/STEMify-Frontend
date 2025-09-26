@@ -1,34 +1,52 @@
-// components/ModelViewer.tsx
 'use client'
 
-import { Suspense } from 'react'
-import { Canvas } from '@react-three/fiber'
-// Import thêm <Environment>
+import { Suspense, useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useGLTF, Environment } from '@react-three/drei'
+import * as THREE from 'three'
+import { GLTF } from 'three-stdlib'
 
-function Model() {
-  const { scene } = useGLTF('/models/stemify.glb')
-  return <primitive object={scene} scale={1.5} />
+type GLTFResult = GLTF & {
+  nodes: any
+  materials: any
 }
 
-export default function ModelViewer() {
-  return (
-    <div style={{ width: '100%', height: '100vh' }}>
-      <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
-        <Suspense fallback={null}>
-          {/* XÓA các đèn cũ đi nếu bạn dùng Environment */}
-          {/* <ambientLight intensity={0.5} /> */}
-          {/* <directionalLight position={[10, 10, 5]} intensity={1} /> */}
-          
-          <Model />
-          
-          {/* THÊM Environment vào đây! */}
-          {/* "city", "dawn", "lobby", "sunset" là các preset có sẵn */}
-          <Environment preset="city" /> 
+interface ModelData {
+  url: string
+  scale: number
+}
 
-          <OrbitControls />
-        </Suspense>
-      </Canvas>
-    </div>
+interface ModelViewerProps {
+  model: ModelData
+}
+
+function Model({ url, scale }: ModelData) {
+  const { scene } = useGLTF(url) as GLTFResult
+  const modelRef = useRef<THREE.Group>(null)
+
+  useFrame(() => {
+    if (modelRef.current) {
+      modelRef.current.rotation.y += 0.005
+    }
+  })
+
+  return (
+    <group ref={modelRef}>
+      <primitive object={scene.clone()} scale={scale} />
+    </group>
+  )
+}
+
+export default function ModelViewer({ model }: ModelViewerProps) {
+  useGLTF.preload(model.url)
+
+  return (
+    <Canvas key={model.url} camera={{ position: [0, 1, 8], fov: 50 }}>
+      <Suspense fallback={null}>
+        <Environment preset="city" />
+        <Model url={model.url} scale={model.scale} />
+        <OrbitControls />
+      </Suspense>
+    </Canvas>
   )
 }
