@@ -48,7 +48,7 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "@react-spring/core": "^10.0.1",
     "@react-spring/three": "^10.0.1",
-    "@react-three/drei": "^10.6.1",
+    "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.3.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@tabler/icons-react": "^3.34.1",

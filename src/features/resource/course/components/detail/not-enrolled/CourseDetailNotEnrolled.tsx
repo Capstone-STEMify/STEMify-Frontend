@@ -9,6 +9,7 @@ import StatsSection from '@/features/resource/course/components/detail/not-enrol
 import HeroSection from '@/features/resource/course/components/detail/not-enrolled/HeroSection'
 import LearningObjectives from '@/components/shared/outcome/LearningObjectives'
 import { useSearchLearningOutcomeQuery } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
+import { useTranslations } from 'next-intl'
 
 type CourseDetailNotEnrolledProps = {
   courseId?: number
@@ -17,6 +18,7 @@ type CourseDetailNotEnrolledProps = {
 export default function CourseDetailNotEnrolled({ courseId }: CourseDetailNotEnrolledProps) {
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const {data: LearningOutcome, isLoading: outcomeLoading, isFetching: outcomeFetching} = useSearchLearningOutcomeQuery({courseId: Number(courseId)})
+  const tc = useTranslations('common.message')
 
   if (isLoading || outcomeLoading || outcomeFetching)
     return (
@@ -43,7 +45,7 @@ export default function CourseDetailNotEnrolled({ courseId }: CourseDetailNotEnr
         <StatsSection course={course.data} />
       </div>
       <div className='mt-30 sm:mt-32'>
-        <LearningObjectives title="What you'll learn" outcomes={LearningOutcome?.data.items} />
+        <LearningObjectives title={tc('learnTitle')} outcomes={LearningOutcome?.data.items} />
       </div>
       <ContentSection />
     </div>
