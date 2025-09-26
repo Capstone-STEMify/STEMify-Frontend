@@ -76,6 +76,10 @@ export default function ImageAssets() {
             onDoubleClick={() => {
               editor.chain().focus().setImage({ src: asset.assetUrl, alt: asset.name }).run()
             }}
+            draggable
+            onDragStart={(e) => {
+              e.dataTransfer.setData('text/plain', asset.assetUrl)
+            }}
           >
             {/* Checkbox chọn ảnh */}
             <input

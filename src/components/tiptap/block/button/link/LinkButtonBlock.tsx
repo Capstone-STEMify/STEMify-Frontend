@@ -34,7 +34,7 @@ export const LinkButtonBlock = Node.create({
     return [
       'div',
       {
-        class: 'w-full text-center',
+        class: 'w-full text-center my-6',
         'data-type': 'link-button-block',
         'data-label': HTMLAttributes.label,
         'data-url': HTMLAttributes.url

@@ -30,7 +30,7 @@ export const lessonAssetApi = lessonApi.injectEndpoints({
     }),
     // POST
     postLessonAssets: builder.mutation<
-      ApiSuccessResponse<void>,
+      ApiSuccessResponse<{ id: number; assetUrl: string }[]>,
       { lessonId: number; body: PostLessonAssetRequestBody }
     >({
       query: ({ lessonId, body }) => ({
