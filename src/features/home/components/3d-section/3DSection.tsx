@@ -10,13 +10,11 @@ export default function ThreeDSection() {
     <section className="relative overflow-hidden bg-white">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-blue-100/40 animate-pulse blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-orange-100/40 animate-pulse blur-3xl animation-delay-1000" />
-        <div className="absolute top-1/2 left-1/4 h-64 w-64 rounded-full bg-gray-100/30 animate-pulse blur-2xl animation-delay-2000" />
+        <div className='animate-float-delayed absolute right-0 bottom-60 h-40 w-40 rounded-full bg-gradient-to-tl from-blue-300 to-cyan-300 opacity-20'></div>
         
         {/* Floating Geometric Shapes */}
         <div className="absolute top-20 right-20 h-6 w-6 bg-blue-200/30 rotate-45 animate-bounce animation-delay-500" />
-        <div className="absolute bottom-32 left-16 h-4 w-4 bg-orange-200/40 rounded-full animate-ping animation-delay-1500" />
+        <div className="absolute bottom-32 left-16 h-14 w-14 bg-orange-200/40 rounded-full animate-ping animation-delay-1500" />
         <div className="absolute top-1/3 left-20 h-8 w-8 bg-gradient-to-tl from-purple-500 to-pink-500 opacity-45 rotate-12 animate-spin slow-spin" />
       </div>
 

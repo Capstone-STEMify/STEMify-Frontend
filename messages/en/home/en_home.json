@@ -27,6 +27,9 @@
     "badge": "🚀 STEM Innovation",
     "title": "Craft Your Own",
     "description": {
+      "part1": "Turn ideas into reality with our comprehensive STEM course. ",
+      "part2": "From the first components to the finished smart product, ",
+      "part3": "you will be the creator."
     },
     "project": "Project",
     "support": "Support",

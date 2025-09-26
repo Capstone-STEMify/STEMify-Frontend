@@ -7,8 +7,9 @@ import Autoplay from 'embla-carousel-autoplay'
 
 const models = [
   { id: 0, name: 'Stemify', url: '/models/stemify.glb', scale: 5 },
-  { id: 1, name: 'Robot', url: '/models/stemifrog.glb', scale: 4 },
-  { id: 2, name: 'Rocket', url: '/models/stemicrocodile.glb', scale: 8 },
+  { id: 1, name: 'Frog', url: '/models/stemifrog.glb', scale: 4 },
+  { id: 2, name: 'Croco', url: '/models/stemicrocodile.glb', scale: 8 },
+  { id: 2, name: 'Buffalo', url: '/models/stemibuffalo.glb', scale: 5 },
 ]
 
 export default function ModelCarousel() {
