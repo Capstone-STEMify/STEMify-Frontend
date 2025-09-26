@@ -57,10 +57,10 @@ export const lessonAssetApi = lessonApi.injectEndpoints({
     // =================================================
     getLessonAssetTagList: builder.query<
       ApiSuccessResponse<PaginatedResult<LessonAssetTag>>,
-      { lessonId: number; assetId: number; params: SliceQueryParams }
+      { params: { search: string; pageNumber: number; pageSize: number } }
     >({
-      query: ({ lessonId, assetId, params }) => ({
-        url: `/lessons/${lessonId}/lesson-assets/${assetId}/tags`,
+      query: ({ params }) => ({
+        url: `/tags`,
         method: 'GET',
         params
       }),

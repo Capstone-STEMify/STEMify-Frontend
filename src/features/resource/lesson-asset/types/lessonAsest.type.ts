@@ -43,6 +43,6 @@ export type PostLessonAssetRequestBody = {
 
 // Lesson Asset Tag
 export type LessonAssetTag = {
-  id: number
-  name: string
+  id: number[]
+  name: string[]
 }
