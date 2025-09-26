@@ -48,19 +48,8 @@ export default function UploadContent() {
     toast.success('Uploaded files successfully')
   }
 
-
-
-  // const renderContent = (Component: JSX.Element) =>
-  //   isLoading || deletingFiles ? (
-  //     <div className='flex h-40 items-center justify-center'>
-  //       <LoadingComponent text='Processing...' />
-  //     </div>
-  //   ) : (
-  //     Component
-  //   )
-
   return (
-    <div className='flex h-full flex-col space-y-2 px-2'>
+    <div className='flex h-full flex-col space-y-2 px-2 pt-2'>
       {/* Header cố định */}
       <div className='flex-shrink-0 space-y-4'>
         <SearchBar />
@@ -94,7 +83,6 @@ export default function UploadContent() {
           ]}
         />
       </div>
-
     </div>
   )
 }

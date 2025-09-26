@@ -58,7 +58,7 @@ export default function ImageAssets() {
   }
   return (
     <div className='flex h-full flex-col'>
-      <ScrollArea className='h-[430px] pb-2'>
+      <ScrollArea className='h-[470px] pb-2'>
         {deletingImages && (
           <div className='absolute inset-0 z-10 flex items-center justify-center bg-white/70'>
             <LoadingComponent textShow text='Deleting images...' />
@@ -132,35 +132,34 @@ export default function ImageAssets() {
             </div>
           ))}
         </div>
-      </ScrollArea>
 
-      {/* Action bar đặt ngoài scroll */}
-      {selectedIds.length > 0 && (
-        <div className='sticky bottom-3 z-10 flex-shrink-0 rounded-4xl border bg-white shadow-md'>
-          <div className='flex items-center justify-between px-4 py-2'>
-            <span className='text-sm font-medium'>{selectedIds.length} selected</span>
-            <div className='flex items-center gap-4'>
-              <button className='rounded p-2 hover:bg-gray-100'>
-                <Download size={18} />
-              </button>
-              <button
-                className='rounded p-2 text-red-500 hover:bg-red-50'
-                onClick={() =>
-                  openModal('confirm', {
-                    message: 'Are you sure you want to delete these files?',
-                    onConfirm: () => handleDeleteFiles(selectedIds)
-                  })
-                }
-              >
-                <Trash2 size={18} />
-              </button>
-              <button onClick={() => dispatch(clearSelection())} className='rounded p-2 hover:bg-gray-100'>
-                <X size={18} />
-              </button>
+        {selectedIds.length > 0 && (
+          <div className='sticky bottom-1 z-10 rounded-4xl border bg-white shadow-md'>
+            <div className='flex items-center justify-between px-4 py-2'>
+              <span className='text-sm font-medium'>{selectedIds.length} selected</span>
+              <div className='flex items-center gap-4'>
+                <button className='rounded p-2 hover:bg-gray-100'>
+                  <Download size={18} />
+                </button>
+                <button
+                  className='rounded p-2 text-red-500 hover:bg-red-50'
+                  onClick={() =>
+                    openModal('confirm', {
+                      message: 'Are you sure you want to delete these files?',
+                      onConfirm: () => handleDeleteFiles(selectedIds)
+                    })
+                  }
+                >
+                  <Trash2 size={18} />
+                </button>
+                <button onClick={() => dispatch(clearSelection())} className='rounded p-2 hover:bg-gray-100'>
+                  <X size={18} />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </ScrollArea>
     </div>
   )
 }
