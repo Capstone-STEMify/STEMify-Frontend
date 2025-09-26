@@ -25,7 +25,7 @@ function getClientId() {
     }
   }
   // fallback cho SSR hoặc không match
-  return process.env.NEXT_PUBLIC_CLIENT_ID!
+  return process.env.NEXT_PUBLIC_CLIENT_ID_ROBOTS!
 }
 
 const oidcProvider: OAuthConfig<OIDCProfile> = {
@@ -41,7 +41,7 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
   authorization: {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/authorize`,
     params: {
-      scope: 'stemify_api openid profile email roles',
+      scope: process.env.NEXT_PUBLIC_SCOPES,
       prompt: 'login'
     }
   },
