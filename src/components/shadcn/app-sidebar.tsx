@@ -6,7 +6,6 @@ import {
   IconBox,
   IconCamera,
   IconChalkboard,
-  IconChartBar,
   IconDatabase,
   IconFileAi,
   IconFileDescription,

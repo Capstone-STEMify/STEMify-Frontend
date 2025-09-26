@@ -40,7 +40,7 @@ export default function TiptapEditor({ content, onChange, children }: TiptapEdit
           <div className='sticky top-0 z-50 border-b bg-white'>
             <Toolbar editor={editor} />
           </div>
-          <ScrollArea className='h-[400px]'>
+          <ScrollArea className='h-[540px]'>
             <EditorContent editor={editor} className='h-full w-full' />
             {children}
           </ScrollArea>

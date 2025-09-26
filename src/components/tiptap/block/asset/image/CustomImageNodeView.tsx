@@ -3,7 +3,6 @@ import { Resizable } from 're-resizable'
 
 export default function CustomImageNodeView({ node, updateAttributes }: any) {
   const { src, width, height, alt } = node.attrs
-  console.log('CustomImageNodeView', src)
 
   return (
     <NodeViewWrapper as='span' className='flex justify-center'>
