@@ -2,9 +2,11 @@ import {
   LessonAsset,
   LessonAssetListResponse,
   LessonAssetSliceParams,
+  LessonAssetTag,
   PostLessonAssetRequestBody
 } from '@/features/resource/lesson-asset/types/lessonAsest.type'
 import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
+import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
 export const lessonAssetApi = lessonApi.injectEndpoints({
@@ -30,7 +32,7 @@ export const lessonAssetApi = lessonApi.injectEndpoints({
     }),
     // POST
     postLessonAssets: builder.mutation<
-      ApiSuccessResponse<void>,
+      ApiSuccessResponse<{ id: number; assetUrl: string }[]>,
       { lessonId: number; body: PostLessonAssetRequestBody }
     >({
       query: ({ lessonId, body }) => ({
@@ -48,6 +50,40 @@ export const lessonAssetApi = lessonApi.injectEndpoints({
         body: { ids }
       }),
       invalidatesTags: [{ type: 'LessonAsset', id: 'LIST' }]
+    }),
+
+    // =================================================
+    // TAGS
+    // =================================================
+    getLessonAssetTagList: builder.query<
+      ApiSuccessResponse<PaginatedResult<LessonAssetTag>>,
+      { lessonId: number; assetId: number; params: SliceQueryParams }
+    >({
+      query: ({ lessonId, assetId, params }) => ({
+        url: `/lessons/${lessonId}/lesson-assets/${assetId}/tags`,
+        method: 'GET',
+        params
+      }),
+      providesTags: () => [{ type: 'LessonAssetTag', id: 'LIST' }]
+    }),
+
+    // POST
+    createLessonAssetTag: builder.mutation<void, { lessonId: number; assetId: number; body: Partial<LessonAssetTag> }>({
+      query: ({ lessonId, assetId, body }) => ({
+        url: `/lessons/${lessonId}/lesson-assets/${assetId}/tags`,
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: [{ type: 'LessonAssetTag', id: 'LIST' }]
+    }),
+
+    // DELETE
+    deleteLessonAssetTag: builder.mutation<void, { lessonId: number; assetId: number; tagId: number }>({
+      query: ({ lessonId, assetId, tagId }) => ({
+        url: `/lessons/${lessonId}/lesson-assets/${assetId}/tags/${tagId}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: [{ type: 'LessonAssetTag', id: 'LIST' }]
     })
   })
 })
@@ -56,5 +92,9 @@ export const {
   useGetListLessonAssetsQuery,
   useGetLessonAssetByIdQuery,
   usePostLessonAssetsMutation,
-  useDeleteListLessonAssetsMutation
+  useDeleteListLessonAssetsMutation,
+
+  useGetLessonAssetTagListQuery,
+  useCreateLessonAssetTagMutation,
+  useDeleteLessonAssetTagMutation
 } = lessonAssetApi

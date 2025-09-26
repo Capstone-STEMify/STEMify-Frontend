@@ -6,6 +6,7 @@ import { useTiptapEditor } from '@/components/tiptap/useTiptapEditor'
 import { EditorProvider } from '@/components/tiptap/EditorContext'
 import { Toolbar } from './toolbar/Toolbar'
 import TipTapSidebar from '@/components/tiptap/sidebar/TipTapSidebar'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
 
 interface TiptapEditorProps {
   content?: string
@@ -32,17 +33,19 @@ export default function TiptapEditor({ content, onChange, children }: TiptapEdit
 
   return (
     <EditorProvider editor={editor}>
-      <div className='relative flex h-[90vh] w-full flex-row bg-white'>
-        <TipTapSidebar />
-
+      <div className='relative flex h-full w-full bg-white'>
+        <div className=''>
+          <TipTapSidebar />
+        </div>
         <div className='flex flex-1 flex-col'>
-          <div className='sticky top-0 z-50 border-b bg-white'>
+          {/* Toolbar giống header */}
+          <div className='w-full border-b'>
             <Toolbar editor={editor} />
           </div>
-          <div className='flex-1 overflow-auto'>
-            <EditorContent editor={editor} className='h-full w-full' />
-            {children}
-          </div>
+
+          <ScrollArea className='h-[83.1vh] overflow-hidden'>
+            <EditorContent editor={editor} className='h-full w-full p-4 outline-none' />
+          </ScrollArea>
         </div>
       </div>
     </EditorProvider>

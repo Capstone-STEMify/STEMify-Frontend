@@ -26,7 +26,7 @@ export default async function AdminLayout({
         <SiteHeader />
         <div className='flex flex-1 flex-col'>
           <div className='@container/main flex flex-1 flex-col gap-2'>
-            <div>{children}</div>
+            <div className='h-full flex-1'>{children}</div>
           </div>
         </div>
       </SidebarInset>

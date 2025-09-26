@@ -12,6 +12,11 @@ import TextAlign from '@tiptap/extension-text-align'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
 import Placeholder from '@tiptap/extension-placeholder'
+import { Typography } from '@tiptap/extension-typography'
+import Code from '@tiptap/extension-code'
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
 import { Highlight } from '@tiptap/extension-highlight'
 import { TextStyle } from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
@@ -23,6 +28,8 @@ import { Video } from '@/components/tiptap/block/asset/video/VideoBlock'
 import { CustomImage } from '@/components/tiptap/block/asset/image/CustomImage'
 import { useMemo } from 'react'
 import { debounce } from 'lodash-es'
+import { ColorHighlighter } from '@/components/tiptap/extension/colorHighlighter'
+import { SmilieReplacer } from '@/components/tiptap/extension/smilieReplacer'
 
 interface UseTiptapEditorProps {
   content?: string
@@ -43,6 +50,12 @@ export function useTiptapEditor({ content, onChange, isEditable = true }: UseTip
     editable: isEditable,
     extensions: [
       StarterKit.configure({
+        link: false,
+        code: false,
+        paragraph: false,
+        document: false,
+        text: false,
+        underline: false,
         bulletList: false,
         orderedList: false,
         blockquote: false,
@@ -80,8 +93,15 @@ export function useTiptapEditor({ content, onChange, isEditable = true }: UseTip
           class: 'border-l-4 border-gray-300 pl-4 italic my-4'
         }
       }),
+      Document,
+      Paragraph,
+      Text,
+      Code,
+      ColorHighlighter,
+      SmilieReplacer,
       Underline,
       Superscript,
+      Typography,
       Subscript,
       TextStyle,
       Color.configure({ types: ['textStyle'] }),
