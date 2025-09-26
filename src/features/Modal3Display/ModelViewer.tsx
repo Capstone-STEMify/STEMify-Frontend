@@ -45,7 +45,7 @@ export default function ModelViewer({ model }: ModelViewerProps) {
       <Suspense fallback={null}>
         <Environment preset="city" />
         <Model url={model.url} scale={model.scale} />
-        <OrbitControls />
+        <OrbitControls enableZoom={false}/>
       </Suspense>
     </Canvas>
   )
