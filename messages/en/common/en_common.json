@@ -47,7 +47,9 @@
       "exploreCurriculums": "Explore Curriculums",
       "readBlogs": "Read Blogs",
       "addKit": "Add Kit",
-      "print": "Print"
+      "print": "Print",
+      "start": "Start Right Now",
+      "look": "Find Out More"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

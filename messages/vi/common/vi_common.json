@@ -49,7 +49,9 @@
       "addKit": "Thêm Bộ Kit",
       "publish": "Xuất Bản",
       "print": "In",
-      "share": "Chia sẻ"
+      "share": "Chia sẻ",
+      "start": "Bắt Đầu Ngay",
+      "look": "Tìm hiểu thêm"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",
