@@ -14,13 +14,27 @@ interface OIDCProfile extends Profile {
   'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'?: string
 }
 
+function getClientId() {
+  if (typeof window !== 'undefined') {
+    const host = window.location.host
+    if (host.includes('robotsteam.com.vn')) {
+      return process.env.NEXT_PUBLIC_CLIENT_ID_ROBOTS!
+    }
+    if (host.includes('stemifi.com')) {
+      return process.env.NEXT_PUBLIC_CLIENT_ID!
+    }
+  }
+  // fallback cho SSR hoặc không match
+  return process.env.NEXT_PUBLIC_CLIENT_ID!
+}
+
 const oidcProvider: OAuthConfig<OIDCProfile> = {
   id: 'oidc',
   name: 'OpenID Connect',
   type: 'oauth',
   version: '2.0',
   // clientSecret: process.env.CLIENT_SECRET,
-  clientId: `${process.env.NEXT_PUBLIC_CLIENT_ID}`,
+  clientId: getClientId(),
   idToken: true,
   issuer: process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL,
   wellKnown: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/.well-known/openid-configuration`,
