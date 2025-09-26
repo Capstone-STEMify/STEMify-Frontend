@@ -71,7 +71,7 @@ export default function UpsertContent({ sectionId, contentId }: UpsertContentPro
   }
 
   return (
-    <div>
+    <div className='h-full w-full'>
       <TiptapEditor content={editorValue} onChange={(val) => setEditorValue(val || '')} />
     </div>
   )

@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import { SPopover } from '@/components/shared/SPopover'
 import { useMarkActive, useNodeActive } from '@/components/tiptap/extension/tiptapHelper'
 import { AlignDropdown } from '@/components/tiptap/toolbar/dropdown/AlignDropdown'
 import { ListDropdown } from '@/components/tiptap/toolbar/dropdown/ListDropDown'
@@ -16,18 +15,12 @@ import {
   Code,
   Underline,
   Link as LinkIcon,
-  List,
-  ListOrdered,
   Heading1,
   Heading2,
   Heading3,
   Quote,
   Undo,
   Redo,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
   Subscript as SubIcon,
   Superscript as SuperIcon,
   Save,
