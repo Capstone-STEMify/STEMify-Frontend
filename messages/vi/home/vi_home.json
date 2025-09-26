@@ -22,6 +22,19 @@
     "benefit2": "Tăng khả năng phản biện tri thức",
     "benefit3": "Tự tin ứng phó khi gặp tình huống khó"
   },
+  "ThreeDSection": {
+    "badge": "🚀 STEM Innovation",
+    "title": "Chế Tác Của Riêng Bạn",
+    "description": {
+      "part1": "Biến ý tưởng thành hiện thực với khóa học STEM toàn diện của chúng tôi. ",
+      "part2": "Từ những linh kiện đầu tiên đến sản phẩm thông minh hoàn chỉnh, ",
+      "part3": "chính bạn sẽ là người kiến tạo."
+    },
+    "project": "Dự án",
+    "support": "Hỗ trợ",
+    "creative": "Sáng tạo"
+
+  },
   "StatsSection": {
     "freeResources": "Tài nguyên miễn phí",
     "engagedStudents": "Học sinh tham gia",

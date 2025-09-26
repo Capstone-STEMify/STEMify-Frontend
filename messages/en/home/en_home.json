@@ -23,6 +23,15 @@
     "benefit2": "The ability to criticize knowledge increases",
     "benefit3": "Respond confidently when encountering difficult situations"
   },
+  "ThreeDSection": {
+    "badge": "🚀 STEM Innovation",
+    "title": "Craft Your Own",
+    "description": {
+    },
+    "project": "Project",
+    "support": "Support",
+    "creative": "Creative"
+  },
   "StatsSection": {
     "freeResources": "Free Resources",
     "engagedStudents": "Engaged Students",
