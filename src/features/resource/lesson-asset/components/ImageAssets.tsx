@@ -104,7 +104,7 @@ export default function ImageAssets() {
                 <div className='flex flex-col text-sm'>
                   <div
                     className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-gray-100'
-                    onClick={() => dispatch(setActivePanel('imageAssetDetail'))}
+                    onClick={() => dispatch(setActivePanel({ panel: 'imageAssetDetail', assetId: asset.id }))}
                   >
                     <Info size={14} /> Details
                   </div>

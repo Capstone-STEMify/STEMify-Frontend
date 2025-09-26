@@ -11,7 +11,11 @@ export default function TipTapSidebar() {
   const activePanel = useAppSelector((state) => state.tiptap.activePanel)
 
   const togglePanel = (key: PanelKey) => {
-    dispatch(setActivePanel(activePanel === key ? null : key))
+    if (activePanel === key) {
+      dispatch(setActivePanel({ panel: null as any }))
+    } else {
+      dispatch(setActivePanel({ panel: key }))
+    }
   }
 
   return (
