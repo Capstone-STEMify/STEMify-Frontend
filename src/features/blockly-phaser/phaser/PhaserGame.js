@@ -5,9 +5,7 @@ const PhaserGame = ({ code }) => {
   const gameInstanceRef = useRef(null);
   const gameSceneRef = useRef(null);
 
-  // useEffect 1: KHỞI TẠO GAME (không thay đổi)
   useEffect(() => {
-    // ... (Toàn bộ phần này không thay đổi)
     const STEP_UNIT_SIZE = 50;
     const config = {
       type: Phaser.AUTO,
@@ -40,7 +38,6 @@ const PhaserGame = ({ code }) => {
         }
       }, null, this);
 
-      // ... (Phần code tạo màn chơi ngẫu nhiên không thay đổi)
       let lastObstacleX = 150;
       const numberOfObstacles = 4;
       for (let i = 0; i < numberOfObstacles; i++) {
@@ -67,19 +64,15 @@ const PhaserGame = ({ code }) => {
         return new Promise(resolve => {
           if (this.hasFailed) return resolve();
           
-          // ✨ --- BẮT ĐẦU THAY ĐỔI --- ✨
-          // Tạo một vùng đệm an toàn để tránh va chạm không mong muốn
           const SAFETY_MARGIN = 3; // 3 pixels
           const effectiveDistance = Math.abs(pixelDistance) > SAFETY_MARGIN
             ? Math.abs(pixelDistance) - SAFETY_MARGIN
             : 0;
-          // ✨ --- KẾT THÚC THAY ĐỔI --- ✨
 
           const speed = 250;
           if (effectiveDistance === 0) return resolve();
 
           const velocityX = pixelDistance > 0 ? speed : -speed;
-          // Tính toán thời gian di chuyển dựa trên quãng đường đã được giảm bớt
           const duration = (effectiveDistance / speed) * 1000;
 
           this.player.setVelocityX(velocityX);
@@ -107,7 +100,6 @@ const PhaserGame = ({ code }) => {
     };
   }, []);
 
-  // useEffect 2: BỘ THỰC THI CODE (không thay đổi)
   useEffect(() => {
     if (!code || !gameSceneRef.current) return;
     const scene = gameSceneRef.current;

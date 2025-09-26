@@ -21,7 +21,6 @@ const BlocklyEditor = ({ onWorkspaceReady }) => {
   }
 
   const defineBlocks = () => {
-    // ✨ Vấn đề 1: Thay đổi mã JS để gọi hàm di chuyển mượt mà
     Blockly.Blocks['move_right'] = {
       init: function () {
         this.appendDummyInput()
@@ -36,7 +35,6 @@ const BlocklyEditor = ({ onWorkspaceReady }) => {
     javascriptGenerator.forBlock['move_right'] = (block) => {
       const distance = block.getFieldValue('DISTANCE');
       const pixelDistance = Number(distance) * STEP_UNIT_SIZE;
-      // Gọi hàm movePlayer trên scene và `await` để chờ nó hoàn thành
       return `await scene.movePlayer(${pixelDistance});\n`;
     };
     
@@ -54,11 +52,9 @@ const BlocklyEditor = ({ onWorkspaceReady }) => {
     javascriptGenerator.forBlock['move_left'] = (block) => {
       const distance = block.getFieldValue('DISTANCE');
       const pixelDistance = Number(distance) * STEP_UNIT_SIZE;
-      // Giá trị âm để đi sang trái
       return `await scene.movePlayer(-${pixelDistance});\n`;
     };
 
-    // ✨ Vấn đề 2: Tăng hệ số nhân của lực nhảy
     Blockly.Blocks['jump'] = {
       init: function () {
         this.appendDummyInput()
@@ -71,11 +67,9 @@ const BlocklyEditor = ({ onWorkspaceReady }) => {
     }
     javascriptGenerator.forBlock['jump'] = (block) => {
       const height = block.getFieldValue('HEIGHT');
-      // Tăng hệ số từ 60 lên 80
-      return `player.setVelocityY(-${Number(height) * 80});\n`;
+      return `player.setVelocityY(-${Number(height) * 130});\n`;
     }
 
-    // --- Các khối còn lại không đổi ---
     Blockly.Blocks['shoot'] = {
       init: function () { this.appendDummyInput().appendField('Bắn đạn'); this.setPreviousStatement(true, null); this.setNextStatement(true, null); this.setColour(60) }
     }
