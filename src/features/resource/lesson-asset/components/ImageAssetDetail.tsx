@@ -1,30 +1,19 @@
 'use client'
 
 import { Badge } from '@/components/shadcn/badge'
-import { Input } from '@/components/shadcn/input'
 import { setActivePanel } from '@/components/tiptap/slice/tiptapSlice'
 import { useGetLessonAssetByIdQuery } from '@/features/resource/lesson-asset/api/lessonAssetApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { ArrowLeft, Download, Pencil, Trash2, Tag, Plus } from 'lucide-react'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React from 'react'
+import { toast } from 'sonner'
 
 export default function ImageAssetDetail() {
   const { lessonId } = useParams()
   const assetId = useAppSelector((state) => state.tiptap.assetId)
   const dispatch = useAppDispatch()
-  const [tags, setTags] = useState<string[]>(['webp', 'lesson'])
-  const [editing, setEditing] = useState(false)
-  const [newTag, setNewTag] = useState('')
-
-  const handleAddTag = () => {
-    if (newTag.trim()) {
-      setTags([...tags, newTag.trim()])
-      setNewTag('')
-    }
-    setEditing(false)
-  }
 
   const { data, isLoading } = useGetLessonAssetByIdQuery(
     { lessonId: Number(lessonId), assetId: assetId! },
@@ -56,7 +45,7 @@ export default function ImageAssetDetail() {
           <ArrowLeft size={15} />
         </button>
         <div className='flex flex-1 items-center gap-2'>
-          <h4 className='text-sm font-medium break-words'>{imageAsset.name}</h4>
+          <h4 className='truncate text-sm font-medium'>{imageAsset.name}</h4>
           <button className='hover:text-sky-custom-600 font-semibold'>
             <Pencil size={15} />
           </button>
@@ -107,24 +96,9 @@ export default function ImageAssetDetail() {
               {imageAsset.tags.length === 0 && <span className='text-gray-500'>No tags</span>}
               {imageAsset.tags.map((tag: string, i: number) => (
                 <Badge key={i} variant={'outline'}>
-                  <Tag size={10} /> {tag}
+                  {tag}
                 </Badge>
               ))}
-              {editing ? (
-                <Input
-                  autoFocus
-                  value={newTag}
-                  onChange={(e) => setNewTag(e.target.value)}
-                  onBlur={handleAddTag}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddTag()}
-                  className='h-6 w-20 px-1 py-0.5 text-xs leading-tight placeholder:text-xs'
-                  placeholder='New tag'
-                />
-              ) : (
-                <Badge variant='outline' className='cursor-pointer' onClick={() => setEditing(true)}>
-                  <Plus size={14} className='mr-1' /> Add Tag
-                </Badge>
-              )}
             </div>
           </div>
         </div>
