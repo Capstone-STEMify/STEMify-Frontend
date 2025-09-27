@@ -19,11 +19,18 @@ type SBreadcrumbProps = {
 } & VariantProps<typeof textVariants>
 
 function resolveHref(href: string): string {
-  const map: Record<string, string> = {
-    '/resource/course': '/resource/courses',
-    '/resource/lesson': '/resource/lessons'
+  const parts = href.split('/').filter(Boolean)
+  const locale = parts[0]
+  const path = '/' + parts.slice(1).join('/')
+
+  if (path.startsWith('/resource/lesson')) {
+    return `/${locale}/resource/lessons`
   }
-  return map[href] || href
+  if (path.startsWith('/resource/course')) {
+    return `/${locale}/resource/courses`
+  }
+
+  return href
 }
 
 export default function SBreadcrumb({ title, size = 'md', color, weight }: SBreadcrumbProps) {

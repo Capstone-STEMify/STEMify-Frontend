@@ -1,6 +1,6 @@
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
-import { metadata } from 'app/[locale]/layout' 
+import { metadata } from 'app/[locale]/layout'
 
 metadata.title = 'Resource'
 export default async function ResourceLayout({
@@ -11,7 +11,7 @@ export default async function ResourceLayout({
   return (
     <div>
       <Header />
-      <main className='mt-24'>{children}</main>
+      <main className='mt-20'>{children}</main>
       <Footer />
     </div>
   )

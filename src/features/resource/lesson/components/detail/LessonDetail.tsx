@@ -66,7 +66,7 @@ export default function LessonDetail({ id }: { id?: number }) {
         <div className='mx-8'>
           <div className='flex items-center gap-5'>
             <BackButton />
-            <SBreadcrumb title='Intro: Wetlands Biome' size={'md'} color={'yellow'} weight={'semibold'} />
+            <SBreadcrumb title={lessonData?.data.title} size={'md'} color={'yellow'} weight={'semibold'} />
           </div>
 
           <ResizablePanelGroup direction='horizontal' className='shadow-6 mt-6 h-screen rounded-lg bg-white'>

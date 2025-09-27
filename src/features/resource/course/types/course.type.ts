@@ -58,6 +58,7 @@ export type CourseQueryParams = {
 
 // Slice
 export type CourseSliceParams = {
+  title?: string
   courseId?: number
   createdByUserId?: string
   SkillId?: number
