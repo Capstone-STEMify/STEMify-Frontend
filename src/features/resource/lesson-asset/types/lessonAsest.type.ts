@@ -41,6 +41,11 @@ export type PostLessonAssetRequestBody = {
   }[]
 }
 
+export type PostLessonResponseBody = {
+  id: number
+  assetUrl: string
+}
+
 // Lesson Asset Tag
 export type LessonAssetTag = {
   id: number[]
