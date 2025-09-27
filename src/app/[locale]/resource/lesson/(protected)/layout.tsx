@@ -20,7 +20,6 @@ export default async function LessonStaffLayout({
             <BackButton />
             <SBreadcrumb />
           </div>
-          {/* <ResourceManageHeader /> */}
           <div className='flex flex-1'>
             {/* <ResourceManageSidebar role={role} /> */}
             <SidebarInset>{children}</SidebarInset>
