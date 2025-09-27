@@ -14,10 +14,6 @@ import {
   clearScene,
   removeInstance,
   setSelectedId,
-  setTransformMode,
-  toggleAxes,
-  toggleGrid,
-  toggleSnap,
   updateInstance
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
@@ -120,10 +116,6 @@ export function Creator3D() {
           onObjectUpdate={handleObjectUpdate}
           onObjectAdd={handleWorkspaceAdd}
           onDragEnd={handleDragEnd}
-          onTransformModeChange={(mode) => dispatch(setTransformMode(mode))}
-          onToggleGrid={() => dispatch(toggleGrid())}
-          onToggleAxes={() => dispatch(toggleAxes())}
-          onToggleSnap={() => dispatch(toggleSnap())}
         />
 
         {/* Scene Stats */}

@@ -14,10 +14,6 @@ interface CreatorWorkspaceProps {
   onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
   onObjectAdd: (template: ComponentTemplate, position: { x: number; y: number; z: number }) => void
   onDragEnd: () => void
-  onTransformModeChange: (mode: 'translate' | 'rotate' | 'scale') => void
-  onToggleGrid: () => void
-  onToggleAxes: () => void
-  onToggleSnap: () => void
 }
 
 export function CreatorWorkspace({
@@ -25,11 +21,7 @@ export function CreatorWorkspace({
   onObjectSelect,
   onObjectUpdate,
   onObjectAdd,
-  onDragEnd,
-  onTransformModeChange,
-  onToggleGrid,
-  onToggleAxes,
-  onToggleSnap
+  onDragEnd
 }: CreatorWorkspaceProps) {
   const [isDragOver, setIsDragOver] = useState(false)
   const transformControlsRef = useRef<any>(null)
@@ -103,12 +95,7 @@ export function CreatorWorkspace({
       </Canvas>
 
       {/* Toolbar */}
-      <CreatorToolbar
-        onTransformModeChange={onTransformModeChange}
-        onToggleGrid={onToggleGrid}
-        onToggleAxes={onToggleAxes}
-        onToggleSnap={onToggleSnap}
-      />
+      <CreatorToolbar />
       <SceneTopRight />
     </div>
   )
