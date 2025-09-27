@@ -30,7 +30,7 @@ export default function ThreeDSection() {
         <div className="flex mx-auto w-full max-w-7xl flex-col items-center gap-12 lg:flex-row lg:gap-16">
           
           {/* Enhanced Text Section */}
-          <div className="w-full lg:w-1/3 space-y-6">
+          <div className="w-full lg:w-1/2 space-y-6">
             {/* Animated Badge */}
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-300 to-amber-400 text-white text-sm font-medium shadow-md transform hover:scale-105 transition-all duration-300 animate-fade-in-up">
               {t('badge')}
@@ -86,7 +86,7 @@ export default function ThreeDSection() {
           </div>
 
           {/* Enhanced 3D Model Section */}
-          <div className="w-full lg:w-2/3">
+          <div className="w-full lg:w-1/2">
             <div className="relative">
               {/* Glowing Border Effect */}
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-200 via-orange-200 to-gray-200 rounded-2xl blur opacity-20" />

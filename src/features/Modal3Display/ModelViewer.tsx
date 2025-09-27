@@ -31,7 +31,7 @@ function Model({ url, scale }: ModelData) {
   })
 
   return (
-    <group ref={modelRef}>
+    <group ref={modelRef} rotation={[0, Math.PI, 0]}>
       <primitive object={scene.clone()} scale={scale} />
     </group>
   )
