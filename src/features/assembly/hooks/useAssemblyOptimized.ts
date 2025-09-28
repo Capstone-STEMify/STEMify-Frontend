@@ -324,9 +324,10 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
             templateId: strawGroup.templateId,
             transform: instance.transform
           })
+          console.log('Instance created:', instanceData)
 
           const material = instanceData.material || resolveMaterial(instanceData.materialRef)
-
+          console.log('Yellow straw material:', material)
           allInstances.push({
             id: instance.id,
             templateId: strawGroup.templateId,

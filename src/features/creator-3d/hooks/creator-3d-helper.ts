@@ -77,9 +77,6 @@ export function createInstanceFromTemplate(
       numArms
     } as Connector
   }
-  console.log('11111111111111111', {
-    arms
-  })
 
   return {
     id,

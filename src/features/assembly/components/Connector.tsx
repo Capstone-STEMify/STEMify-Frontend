@@ -42,9 +42,6 @@ export const Connector3D = forwardRef<Group, Props>(
 
     const hubRef = useRef<THREE.Object3D | null>(null)
     const armsRef = useRef<Record<string, THREE.Object3D>>({})
-    useEffect(() => {
-      console.log('[Connector3D] mount', modelUrl)
-    }, [modelUrl])
 
     const setHinge = useCallback(
       (
