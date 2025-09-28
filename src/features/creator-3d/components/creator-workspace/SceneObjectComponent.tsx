@@ -76,7 +76,7 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
         />
       ) : (
         <Connector3D
-          armPose={undefined}
+          armPose={object.arms}
           connector={{
             id: object.id,
             name: object.data.name || object.templateId,

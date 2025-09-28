@@ -18,6 +18,7 @@ export function createInstanceFromTemplate(
     scale: { x: 1, y: 1, z: 1 }
   }
   let data: Straw | Connector
+  let arms: Record<string, { x: number; y: number; z: number }> | undefined = undefined
 
   if (template.type === 'straw') {
     const strawTemplate = template.defaultProperties as Straw
@@ -47,7 +48,12 @@ export function createInstanceFromTemplate(
     }
   } else {
     const connectorTemplate = template.defaultProperties as Connector
+    const numArms = connectorTemplate.numArms ?? 3
 
+    arms = {}
+    for (let i = 0; i < numArms; i++) {
+      arms[`arm_${i + 1}`] = { x: 0, y: 0, z: 0 }
+    }
     data = {
       id,
       name: template.name,
@@ -66,7 +72,8 @@ export function createInstanceFromTemplate(
         }
       ],
       constraints: connectorTemplate.constraints ?? { maxConnections: 3, allowedAngles: [] },
-      modelUrl: connectorTemplate.modelUrl ?? `/models/connector_3legs.glb`
+      modelUrl: connectorTemplate.modelUrl ?? `/models/connector_3legs.glb`,
+      numArms
     } as Connector
   }
 
@@ -75,6 +82,7 @@ export function createInstanceFromTemplate(
     templateId: template.id,
     category: template.type,
     data,
+    arms,
     transform: baseTransform,
     isVisible: true,
     distanceToCamera: 0

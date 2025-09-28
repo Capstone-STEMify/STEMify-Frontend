@@ -15,8 +15,11 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
     rotation: { x: string; y: string; z: string }
     scale: { x: string; y: string; z: string }
     name: string
+    arms?: Record<string, { x?: string; y?: string; z?: string }>
   } | null>(null)
   const [isEditing, setIsEditing] = useState(false)
+
+  console.log('localValues?.arms', localValues?.arms)
 
   useEffect(() => {
     if (!selectedObject) return
@@ -24,23 +27,67 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
 
     setLocalValues({
       position: {
-        x: selectedObject.transform.position.x.toFixed(2),
-        y: selectedObject.transform.position.y.toFixed(2),
-        z: selectedObject.transform.position.z.toFixed(2)
+        x: position.x.toFixed(2),
+        y: position.y.toFixed(2),
+        z: position.z.toFixed(2)
       },
       rotation: {
-        x: ((selectedObject.transform.rotation.x * 180) / Math.PI).toFixed(1),
-        y: ((selectedObject.transform.rotation.y * 180) / Math.PI).toFixed(1),
-        z: ((selectedObject.transform.rotation.z * 180) / Math.PI).toFixed(1)
+        x: ((rotation.x * 180) / Math.PI).toFixed(1),
+        y: ((rotation.y * 180) / Math.PI).toFixed(1),
+        z: ((rotation.z * 180) / Math.PI).toFixed(1)
       },
       scale: {
-        x: (selectedObject.transform.scale?.x ?? 1).toFixed(2),
-        y: (selectedObject.transform.scale?.y ?? 1).toFixed(2),
-        z: (selectedObject.transform.scale?.z ?? 1).toFixed(2)
+        x: (scale?.x ?? 1).toFixed(2),
+        y: (scale?.y ?? 1).toFixed(2),
+        z: (scale?.z ?? 1).toFixed(2)
       },
-      name: selectedObject.data?.name ?? selectedObject.id
+      name: selectedObject.data?.name ?? selectedObject.id,
+      arms: selectedObject.arms
+        ? Object.fromEntries(
+            Object.entries(selectedObject.arms).map(([armId, pose]) => {
+              const converted: Record<string, string> = {}
+              for (const axis of ['x', 'y', 'z'] as const) {
+                if (pose[axis] !== undefined) {
+                  converted[axis] = ((pose[axis]! * 180) / Math.PI).toFixed(1)
+                }
+              }
+              return [armId, converted]
+            })
+          )
+        : undefined
     })
   }, [selectedObject, isEditing])
+
+  const updateArm = useCallback(
+    (armId: string, axis: 'x' | 'y' | 'z', value: string) => {
+      if (!selectedObject) return
+
+      // Update UI local
+      setLocalValues((prev) =>
+        prev
+          ? {
+              ...prev,
+              arms: {
+                ...prev.arms,
+                [armId]: { ...(prev.arms?.[armId] ?? {}), [axis]: value }
+              }
+            }
+          : null
+      )
+
+      // Convert sang radian và update scene
+      const rad = (parseFloat(value) * Math.PI) / 180
+      if (!isNaN(rad)) {
+        onObjectUpdate(selectedObject.id, {
+          arms: {
+            ...(selectedObject.arms ?? {}),
+            [armId]: { ...(selectedObject.arms?.[armId] ?? {}), [axis]: rad }
+          }
+        })
+      }
+    },
+    [selectedObject, onObjectUpdate]
+  )
 
   // --- Update helpers ---
   const updatePosition = useCallback(
@@ -281,6 +328,32 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
             </div>
           </div>
         </div>
+
+        {/* Arms (for connector only) */}
+        {selectedObject.category === 'connector' && localValues?.arms && (
+          <div>
+            <label className='mb-2 block text-sm font-medium text-gray-700'>Connector Arms (degrees)</label>
+            {Object.entries(localValues.arms).map(([armId, axes]) => (
+              <div key={armId} className='mb-4'>
+                <div className='mb-1 text-xs font-semibold text-gray-500'>{armId}</div>
+                <div className='grid grid-cols-3 gap-2'>
+                  {(['x', 'y', 'z'] as const).map((axis) => (
+                    <div key={axis}>
+                      <label className='mb-1 block text-xs text-gray-400 uppercase'>{axis}</label>
+                      <input
+                        type='number'
+                        step='1'
+                        value={axes[axis] ?? ''}
+                        onChange={(e) => updateArm(armId, axis, e.target.value)}
+                        className='w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none'
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Object Info */}
         <div className='rounded-lg bg-gray-50 p-3'>
