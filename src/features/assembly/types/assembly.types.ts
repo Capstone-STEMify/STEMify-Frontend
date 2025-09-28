@@ -12,13 +12,44 @@ export interface Transform {
   scale: Vector3
 }
 
-export interface Material {
-  type: 'plastic' | 'rubber' | 'metal' | 'wood' | 'tpu'
-  color: string // Hex color #RRGGBB
+export interface MaterialProperties {
+  color: string // #RRGGBB
   flexibility: number // 0-100
   opacity: number // 0-1
   roughness: number // 0-1
   metalness: number // 0-1
+  transmission?: number // 0-1 (glass-like)
+  ior?: number // Index of refraction
+  thickness?: number // thickness for transmission
+}
+
+export interface MaterialPhysics {
+  friction: number
+  elasticity: number
+  density?: number
+}
+
+export interface MaterialLOD {
+  high?: Record<string, any>
+  medium?: Record<string, any>
+  low?: Record<string, any>
+}
+
+export interface MaterialStreaming {
+  priority: number
+  chunkSize: 'small' | 'medium' | 'large'
+  compressionLevel: number
+}
+
+export interface Material {
+  id?: string
+  name?: string
+  version?: string
+  type: 'plastic' | 'rubber' | 'metal' | 'wood' | 'tpu'
+  properties: MaterialProperties
+  physics?: MaterialPhysics
+  lod?: MaterialLOD
+  streaming?: MaterialStreaming
 }
 
 export interface Physics {
@@ -88,7 +119,6 @@ export interface Connector extends BaseComponent {
   ports: ConnectorPort[]
   constraints: ConnectorConstraints
   modelUrl?: string
-  numArms?: number
 }
 
 // Joint interfaces

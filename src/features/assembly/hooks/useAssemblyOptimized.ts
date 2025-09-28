@@ -15,7 +15,7 @@ export interface Assembly {
     compressionRatio?: string
   }
   templates: {
-    materials: Array<{ id: string; source: string }>
+    materials: Array<{ id: string; source: string; data?: any }>
     components: Array<{ id: string; source: string }>
   }
   components?: {
@@ -187,6 +187,26 @@ export interface UseAssemblyReturn {
   resetOptimizations: () => void
 }
 
+// resolveAssemblyMaterials.ts (helper)
+async function resolveMaterial(assembly: Assembly, materialRef?: string) {
+  if (!materialRef) return null
+  const mat = assembly.templates.materials.find((m) => m.id === materialRef)
+  if (!mat) return null
+
+  // Nếu templateManager đã load sẵn material
+  if (templateManager.isTemplateLoaded(mat.id)) {
+    return templateManager.getTemplateInfo(mat.id)
+  }
+
+  // Nếu chưa thì fetch file JSON của material
+  const res = await fetch(mat.source)
+  if (!res.ok) {
+    console.warn(`Failed to load material: ${mat.source}`)
+    return null
+  }
+  return await res.json()
+}
+
 export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn {
   const {
     enableLOD = true,
@@ -256,7 +276,25 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
       const assemblyData: Assembly = await response.json()
       setLoadingProgress(20)
 
-      // Initialize template library
+      // Preload all materials (fetch JSON and attach to template)
+      await Promise.all(
+        (assemblyData.templates.materials || []).map(async (m) => {
+          try {
+            const res = await fetch(m.source)
+            if (res.ok) {
+              const data = await res.json()
+              m.data = data
+            } else {
+              console.warn(`Failed to load material file: ${m.source}`)
+            }
+          } catch (err) {
+            console.warn(`Error loading material: ${m.source}`, err)
+          }
+        })
+      )
+      setLoadingProgress(30)
+
+      // Initialize template library (for components, straws, connectors)
       await templateManager.initializeLibrary(assemblyData.templates)
       setLoadingProgress(40)
 
@@ -265,14 +303,20 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
         ...assemblyData.instances.straws.map((s) => s.templateId),
         ...assemblyData.instances.connectors.map((c) => c.templateId)
       ]
-
       await Promise.all(criticalTemplates.map((id) => templateManager.loadTemplate(id)))
       setLoadingProgress(70)
+
+      // Helper resolve material
+      const resolveMaterial = (materialRef?: string) => {
+        if (!materialRef) return null
+        const mat = assemblyData.templates.materials.find((m) => m.id === materialRef)
+        return mat?.data || null
+      }
 
       // Create instances
       const allInstances: AssemblyInstance[] = []
 
-      // Create straw instances
+      // Straws
       for (const strawGroup of assemblyData.instances.straws) {
         for (const instance of strawGroup.instances) {
           const instanceData = templateManager.createInstance({
@@ -281,11 +325,13 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
             transform: instance.transform
           })
 
+          const material = instanceData.material || resolveMaterial(instanceData.materialRef)
+
           allInstances.push({
             id: instance.id,
             templateId: strawGroup.templateId,
             category: 'straw',
-            data: instanceData,
+            data: { ...instanceData, material },
             transform: instance.transform,
             isVisible: true,
             distanceToCamera: 0
@@ -293,7 +339,7 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
         }
       }
 
-      // Create connector instances
+      // Connectors
       for (const connectorGroup of assemblyData.instances.connectors) {
         for (const instance of connectorGroup.instances) {
           const instanceData = templateManager.createInstance({
@@ -302,11 +348,13 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
             transform: instance.transform
           })
 
+          const material = instanceData.material || resolveMaterial(instanceData.materialRef)
+
           allInstances.push({
             id: instance.id,
             templateId: connectorGroup.templateId,
             category: 'connector',
-            data: instanceData,
+            data: { ...instanceData, material },
             transform: instance.transform,
             isVisible: true,
             distanceToCamera: 0
@@ -316,6 +364,17 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
 
       setInstances(allInstances)
       setLoadingProgress(90)
+
+      // ✅ Test log
+      const yellowStraw = allInstances.find((inst) => inst.templateId === 'yellow_3_8')
+      if (yellowStraw) {
+        console.log('[TEST] Yellow straw material =', yellowStraw.data.material)
+      }
+
+      const redConnector = allInstances.find((inst) => inst.templateId === '3leg_red')
+      if (redConnector) {
+        console.log('[TEST] Red connector material =', redConnector.data.material)
+      }
 
       // Set assembly and activity
       setAssembly(assemblyData)

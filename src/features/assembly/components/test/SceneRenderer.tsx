@@ -465,7 +465,6 @@ export function SceneRenderer({
         }
       }
 
-      console.log(`[DEBUG] Final arm pose for connector ${connectorId}:`, finalPose)
       return finalPose
     },
     [assembly, currentActivity, clampedStep]
@@ -504,6 +503,8 @@ export function SceneRenderer({
     return action?.instantAppear === true
   }, [assembly, currentStep])
 
+  console.log('Rendering SceneRenderer: visibleInstances=', visibleInstances)
+
   const transitions = useTransition(visibleInstances.straws, {
     keys: (inst) => inst.id,
     from: instantAppear ? { s: 1.0, y: 0.0, o: 1 } : { s: 0.9, y: 0.2, o: 0 },
@@ -522,6 +523,44 @@ export function SceneRenderer({
     config: instantAppear ? { tension: 1, friction: 0 } : { tension: 170, friction: 20 }
   })
 
+  
+  function resolveAssemblyMaterials(assembly: any) {
+    if (!assembly?.templates?.materials) return assembly
+
+    const materialMap: Record<string, any> = {}
+    for (const mat of assembly.templates.materials) {
+      if (mat.data) {
+        materialMap[mat.id] = mat.data
+      }
+    }
+
+    // Helper đệ quy cho mọi instance
+    const resolveInstance = (instance: any) => {
+      if (instance.data?.materialRef && !instance.data.material) {
+        const refId = instance.data.materialRef
+        if (materialMap[refId]) {
+          instance.data.material = { ...materialMap[refId] }
+        }
+      }
+      return instance
+    }
+
+    // Resolve cho straws
+    if (assembly.instances?.straws) {
+      for (const strawGroup of assembly.instances.straws) {
+        strawGroup.instances = strawGroup.instances.map((inst: any) => resolveInstance(inst))
+      }
+    }
+
+    // Resolve cho connectors
+    if (assembly.instances?.connectors) {
+      for (const connGroup of assembly.instances.connectors) {
+        connGroup.instances = connGroup.instances.map((inst: any) => resolveInstance(inst))
+      }
+    }
+
+    return assembly
+  }
   return (
     <Canvas
       camera={{

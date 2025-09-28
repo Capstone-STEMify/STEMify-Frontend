@@ -7,6 +7,7 @@ interface StrawProps {
   straw: StrawType
   fade?: SpringValue<number>
 }
+
 export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade }, ref) {
   const { geometry, material, transform, endpoints } = straw
 
@@ -19,22 +20,9 @@ export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade 
     const B_local = new Vector3(end.x, end.y, end.z)
 
     // local → world: scale → rotate → translate
-    const scl = new Vector3(
-      transform.scale?.x ?? 1,
-      transform.scale?.y ?? 1,
-      transform.scale?.z ?? 1
-    )
-    const rotEuler = new Euler(
-      transform.rotation.x,
-      transform.rotation.y,
-      transform.rotation.z,
-      'XYZ'
-    )
-    const trn = new Vector3(
-      transform.position.x,
-      transform.position.y,
-      transform.position.z
-    )
+    const scl = new Vector3(transform.scale?.x ?? 1, transform.scale?.y ?? 1, transform.scale?.z ?? 1)
+    const rotEuler = new Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z, 'XYZ')
+    const trn = new Vector3(transform.position.x, transform.position.y, transform.position.z)
 
     const A = A_local.clone().multiply(scl).applyEuler(rotEuler).add(trn)
     const B = B_local.clone().multiply(scl).applyEuler(rotEuler).add(trn)
@@ -47,18 +35,40 @@ export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade 
     const eul = new Euler().setFromQuaternion(quat, 'XYZ')
 
     return { pos: mid, rot: eul, len: lengthWorld }
-  }, [geometry.length, endpoints?.start?.localPosition, endpoints?.end?.localPosition, transform.position, transform.rotation, transform.scale])
+  }, [
+    geometry.length,
+    endpoints?.start?.localPosition,
+    endpoints?.end?.localPosition,
+    transform.position,
+    transform.rotation,
+    transform.scale
+  ])
+
+  const color = material?.properties?.color || '#cccccc'
+  const opacity = material?.properties?.opacity ?? 1
+  const roughness = material?.properties?.roughness ?? 0.5
+  const metalness = material?.properties?.metalness ?? 0
+  const transmission = material?.properties?.transmission ?? 0
+  const ior = material?.properties?.ior ?? 1.4
+  const thickness = material?.properties?.thickness ?? 0.05
 
   return (
     <group ref={ref} position={[pos.x, pos.y, pos.z]} rotation={[rot.x, rot.y, rot.z]} scale={[1, 1, 1]}>
       <mesh position={[0, 0, 0]}>
         <cylinderGeometry args={[geometry.diameter / 2, geometry.diameter / 2, len, 64]} />
-        <meshPhysicalMaterial 
-          color={material?.color || '#c1e500'} 
-          roughness={0.3} 
-          emissive={material?.color || '#c1e500'} 
-          emissiveIntensity={0.5} 
-          clearcoat={1} 
+        <meshPhysicalMaterial
+          key={straw.id}
+          color={color}
+          opacity={opacity}
+          roughness={roughness}
+          metalness={metalness}
+          transmission={transmission}
+          ior={ior}
+          thickness={thickness}
+          transparent={opacity < 1 || transmission > 0}
+          emissive={color}
+          emissiveIntensity={0.3}
+          clearcoat={1}
         />
       </mesh>
     </group>

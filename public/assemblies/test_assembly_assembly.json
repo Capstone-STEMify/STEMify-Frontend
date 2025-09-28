@@ -1,17 +1,21 @@
 {
   "metadata": {
-    "title": "aaaaaaaaa",
-    "description": "aaaaaaaaa",
-    "author": "aaaaaaaaa",
+    "title": "aaaaaaaaaa",
+    "description": "aaaaaaaaaa",
+    "author": "aaaaaaaaaa",
     "version": "2.0",
-    "created": "2025-09-28T05:28:36.264Z",
-    "lastModified": "2025-09-28T05:28:36.264Z"
+    "created": "2025-09-28T06:28:42.899Z",
+    "lastModified": "2025-09-28T06:28:42.899Z"
   },
   "templates": {
     "materials": [
       {
         "id": "plastic_green",
         "source": "/components/templates/MaterialLibrary/plastic_green.json"
+      },
+      {
+        "id": "plastic_yellow",
+        "source": "/components/templates/MaterialLibrary/plastic_yellow.json"
       },
       {
         "id": "plastic_red",
@@ -34,13 +38,12 @@
     ]
   },
   "instances": {
-    "straws": [],
-    "connectors": [
+    "straws": [
       {
-        "templateId": "3leg_red",
+        "templateId": "green_11_2",
         "instances": [
           {
-            "id": "connector_1759035676295_971",
+            "id": "straw_1759039658652_956",
             "transform": {
               "position": {
                 "x": 0,
@@ -52,6 +55,72 @@
                 "y": 0,
                 "z": 0
               }
+            },
+            "material": {
+              "type": "plastic",
+              "color": "#c1e500",
+              "flexibility": 0.1,
+              "opacity": 1,
+              "roughness": 1,
+              "metalness": 0
+            }
+          }
+        ]
+      },
+      {
+        "templateId": "yellow_3_8",
+        "instances": [
+          {
+            "id": "straw_1759039659562_766",
+            "transform": {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "material": {
+              "type": "plastic",
+              "color": "#fff51d",
+              "flexibility": 0.1,
+              "opacity": 1,
+              "roughness": 1,
+              "metalness": 0
+            }
+          }
+        ]
+      }
+    ],
+    "connectors": [
+      {
+        "templateId": "3leg_red",
+        "instances": [
+          {
+            "id": "connector_1759039670064_991",
+            "transform": {
+              "position": {
+                "x": 0,
+                "y": 3,
+                "z": 3
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "material": {
+              "type": "plastic",
+              "color": "#fff51d",
+              "flexibility": 0.1,
+              "opacity": 1,
+              "roughness": 1,
+              "metalness": 0
             }
           }
         ]
@@ -64,7 +133,7 @@
       "name": "Show All Components",
       "description": "Highlights all components in the scene",
       "type": "highlight",
-      "targets": ["connector_1759035676295_971"],
+      "targets": ["straw_1759039658652_956", "straw_1759039659562_766", "connector_1759039670064_991"],
       "duration": 2,
       "animation": {
         "params": {
@@ -74,26 +143,26 @@
       }
     },
     {
-      "id": "action_transform_connector_1759035676295_971",
-      "name": "Adjust Arms of connector_1759035676295_971",
+      "id": "action_transform_connector_1759039670064_991",
+      "name": "Adjust Arms of connector_1759039670064_991",
       "type": "transform_arm",
-      "targets": ["connector_1759035676295_971"],
+      "targets": ["connector_1759039670064_991"],
       "duration": 2,
       "connectorArmTransforms": {
-        "connector_1759035676295_971": {
+        "connector_1759039670064_991": {
           "arm_1": {
-            "x": 0,
-            "y": 1.4660765716752369,
+            "x": 0.8552113334772214,
+            "y": 0,
             "z": 0
           },
           "arm_2": {
-            "x": 0,
+            "x": 0.7853981633974483,
             "y": 0,
-            "z": 0.5585053606381855
+            "z": 0
           },
           "arm_3": {
-            "x": -0.29670597283903605,
-            "y": 0,
+            "x": -1.2566370614359172,
+            "y": -0.12217304763960307,
             "z": 0
           }
         }
@@ -104,8 +173,8 @@
   "activities": [
     {
       "id": "custom_assembly",
-      "name": "aaaaaaaaa",
-      "description": "aaaaaaaaa",
+      "name": "aaaaaaaaaa",
+      "description": "aaaaaaaaaa",
       "difficulty": "beginner",
       "estimatedTime": 600,
       "steps": [
@@ -120,8 +189,8 @@
           ]
         },
         {
-          "actionId": "action_transform_connector_1759035676295_971",
-          "title": "Adjust Arms of connector_1759035676295_971",
+          "actionId": "action_transform_connector_1759039670064_991",
+          "title": "Adjust Arms of connector_1759039670064_991",
           "description": "Connector arms should rotate as exported",
           "expectedResult": "Arms are rotated according to saved values",
           "hints": ["Check arm_1, arm_2... rotations"]

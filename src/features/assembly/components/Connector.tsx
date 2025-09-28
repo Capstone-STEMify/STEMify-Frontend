@@ -107,7 +107,6 @@ export const Connector3D = forwardRef<Group, Props>(
           if (pose[axis] !== undefined) {
             try {
               setHinge(armObj, pose[axis]!, axis)
-              console.log(`[${componentId.current}] Applied pose: ${armName}.${axis} → ${pose[axis]}`)
             } catch (err) {
               console.warn(`[${componentId.current}] Failed to apply pose for ${armName}.${axis}:`, err)
             }
