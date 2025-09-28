@@ -19,8 +19,6 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
   } | null>(null)
   const [isEditing, setIsEditing] = useState(false)
 
-  console.log('localValues?.arms', localValues?.arms)
-
   useEffect(() => {
     if (!selectedObject) return
     const { position, rotation, scale } = selectedObject.transform

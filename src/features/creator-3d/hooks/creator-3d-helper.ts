@@ -77,6 +77,9 @@ export function createInstanceFromTemplate(
       numArms
     } as Connector
   }
+  console.log('11111111111111111', {
+    arms
+  })
 
   return {
     id,
@@ -232,7 +235,11 @@ export function exportAssembly(state: RootState, metadata: { title: string; desc
     templates: {
       materials: [
         { id: 'plastic_green', source: '/components/templates/MaterialLibrary/plastic_green.json' },
-        { id: 'plastic_red', source: '/components/templates/MaterialLibrary/plastic_red.json' }
+        { id: 'plastic_red', source: '/components/templates/MaterialLibrary/plastic_red.json' },
+        { id: 'plastic_blue', source: '/components/templates/MaterialLibrary/plastic_blue.json' },
+        { id: 'plastic_yellow', source: '/components/templates/MaterialLibrary/plastic_yellow.json' },
+        { id: 'plastic_orange', source: '/components/templates/MaterialLibrary/plastic_orange.json' },
+        { id: 'plastic_pink', source: '/components/templates/MaterialLibrary/plastic_pink.json' }
       ],
       components: [
         { id: 'green_11_2', source: '/components/templates/StrawTypes/green_11_2.json' },

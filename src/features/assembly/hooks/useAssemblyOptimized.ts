@@ -365,17 +365,6 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
       setInstances(allInstances)
       setLoadingProgress(90)
 
-      // ✅ Test log
-      const yellowStraw = allInstances.find((inst) => inst.templateId === 'yellow_3_8')
-      if (yellowStraw) {
-        console.log('[TEST] Yellow straw material =', yellowStraw.data.material)
-      }
-
-      const redConnector = allInstances.find((inst) => inst.templateId === '3leg_red')
-      if (redConnector) {
-        console.log('[TEST] Red connector material =', redConnector.data.material)
-      }
-
       // Set assembly and activity
       setAssembly(assemblyData)
       if (assemblyData.activities.length > 0) {

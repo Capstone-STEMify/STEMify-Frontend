@@ -119,6 +119,7 @@ export interface Connector extends BaseComponent {
   ports: ConnectorPort[]
   constraints: ConnectorConstraints
   modelUrl?: string
+  numArms?: number
 }
 
 // Joint interfaces
