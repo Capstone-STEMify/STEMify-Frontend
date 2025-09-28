@@ -59,6 +59,10 @@ export const creatorSceneSlice = createSlice({
               y: action.payload.updates.transform?.scale?.y ?? prev.transform.scale?.y ?? 1,
               z: action.payload.updates.transform?.scale?.z ?? prev.transform.scale?.z ?? 1
             }
+          },
+          arms: {
+            ...prev.arms,
+            ...(action.payload.updates.arms ?? {})
           }
         }
       }

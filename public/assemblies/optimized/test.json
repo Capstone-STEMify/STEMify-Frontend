@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "aaaaaaaaa",
-    "description": "aaaaaaaaa",
-    "author": "aaaaaaaaa",
+    "title": "123123123",
+    "description": "123123123",
+    "author": "123123123",
     "version": "2.0",
-    "created": "2025-09-28T05:28:36.264Z",
-    "lastModified": "2025-09-28T05:28:36.264Z"
+    "created": "2025-09-28T05:19:10.556Z",
+    "lastModified": "2025-09-28T05:19:10.556Z"
   },
   "templates": {
     "materials": [
@@ -60,20 +60,6 @@
   },
   "actions": [
     {
-      "id": "action_show_all",
-      "name": "Show All Components",
-      "description": "Highlights all components in the scene",
-      "type": "highlight",
-      "targets": ["connector_1759035676295_971"],
-      "duration": 2,
-      "animation": {
-        "params": {
-          "colorHighlight": "#FFD700",
-          "pulseEffect": true
-        }
-      }
-    },
-    {
       "id": "action_transform_connector_1759035676295_971",
       "name": "Adjust Arms of connector_1759035676295_971",
       "type": "transform_arm",
@@ -104,21 +90,11 @@
   "activities": [
     {
       "id": "custom_assembly",
-      "name": "aaaaaaaaa",
-      "description": "aaaaaaaaa",
+      "name": "123123123",
+      "description": "123123123",
       "difficulty": "beginner",
       "estimatedTime": 600,
       "steps": [
-        {
-          "actionId": "action_show_all",
-          "title": "Observe Components",
-          "description": "Study the arrangement of straws and connectors",
-          "expectedResult": "All components are visible and highlighted",
-          "hints": [
-            "Notice the positioning of each component",
-            "Observe the relationships between straws and connectors"
-          ]
-        },
         {
           "actionId": "action_transform_connector_1759035676295_971",
           "title": "Adjust Arms of connector_1759035676295_971",

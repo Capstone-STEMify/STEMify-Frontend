@@ -434,10 +434,10 @@ export function SceneRenderer({
   )
 
   const getArmPoseForConnector = useCallback(
-    (connectorId: string): Record<string, number> => {
+    (connectorId: string): Record<string, { x: number; y: number; z: number }> => {
       if (!assembly || !currentActivity || clampedStep < 0) return {}
 
-      const finalPose: Record<string, number> = {}
+      const finalPose: Record<string, { x: number; y: number; z: number }> = {}
 
       for (let i = 0; i <= clampedStep; i++) {
         const step = currentActivity.steps[i]
@@ -452,18 +452,21 @@ export function SceneRenderer({
 
           if (armTransforms) {
             for (const armName of Object.keys(armTransforms)) {
-              const angle = armTransforms[armName]?.z
-              if (typeof angle === 'number') {
-                // Update finalPose
-                finalPose[armName] = angle
+              const t = armTransforms[armName]
+              if (t) {
+                finalPose[armName] = {
+                  x: t.x ?? finalPose[armName]?.x ?? 0,
+                  y: t.y ?? finalPose[armName]?.y ?? 0,
+                  z: t.z ?? finalPose[armName]?.z ?? 0
+                }
               }
             }
           }
         }
       }
 
-      console.log(` [DEBUG] Final arm pose for connector ${connectorId}:`, finalPose)
-      return Object.keys(finalPose).length > 0 ? finalPose : {}
+      console.log(`[DEBUG] Final arm pose for connector ${connectorId}:`, finalPose)
+      return finalPose
     },
     [assembly, currentActivity, clampedStep]
   )
