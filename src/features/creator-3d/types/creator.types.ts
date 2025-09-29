@@ -1,19 +1,4 @@
-import * as THREE from 'three'
-import {
-  Vector3,
-  Transform,
-  Material,
-  Physics,
-  Straw,
-  Connector,
-  Joint,
-  Action,
-  Activity,
-  Scene,
-  Assembly,
-  ComponentTemplate,
-  BuilderState
-} from "@/features/assembly/types/assembly.types"// 👈 import từ file schema chuẩn bạn gửi ở trên
+import { Assembly, ComponentTemplate } from '@/features/assembly/types/assembly.types' // 👈 import từ file schema chuẩn bạn gửi ở trên
 
 // Loại bỏ SceneObject cũ, CreatorScene cũ
 // Thay bằng các type chuẩn hóa

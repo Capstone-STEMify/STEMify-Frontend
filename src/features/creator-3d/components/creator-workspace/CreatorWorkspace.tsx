@@ -7,26 +7,25 @@ import { SceneContent } from '@/features/creator-3d/components/creator-workspace
 import SceneTopRight from '@/features/creator-3d/components/creator-workspace/SceneTopRight'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setDraggingTemplate } from '@/features/creator-3d/slice/creatorSceneSlice'
 
 interface CreatorWorkspaceProps {
-  dragSource: ComponentTemplate | null
   onObjectSelect: (objectId: string | null) => void
   onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
   onObjectAdd: (template: ComponentTemplate, position: { x: number; y: number; z: number }) => void
-  onDragEnd: () => void
 }
 
-export function CreatorWorkspace({
-  dragSource,
-  onObjectSelect,
-  onObjectUpdate,
-  onObjectAdd,
-  onDragEnd
-}: CreatorWorkspaceProps) {
+export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }: CreatorWorkspaceProps) {
+  const dragSource = useAppSelector((s) => s.creatorScene.draggingTemplate)
+  const dispatch = useAppDispatch()
+
   const [isDragOver, setIsDragOver] = useState(false)
   const transformControlsRef = useRef<any>(null)
   const orbitControlsRef = useRef<any>(null)
-
+  const handleDragEnd = () => {
+    dispatch(setDraggingTemplate(null))
+  }
   // Handle drop from palette
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -43,9 +42,9 @@ export function CreatorWorkspace({
       const category = dragSource.category as 'straw' | 'connector'
 
       onObjectAdd(dragSource, position)
-      onDragEnd()
+      handleDragEnd()
     },
-    [dragSource, onObjectAdd, onDragEnd]
+    [dragSource, onObjectAdd, handleDragEnd]
   )
 
   const handleDragOver = useCallback((e: React.DragEvent) => {

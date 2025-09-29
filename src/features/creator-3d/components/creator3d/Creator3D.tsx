@@ -24,7 +24,6 @@ export function Creator3D() {
   const addObject = useAddObject()
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
-  const [dragSource, setDragSource] = useState<ComponentTemplate | null>(null)
   const [showExportDialog, setShowExportDialog] = useState(false)
   const isMobile = useIsMobile()
 
@@ -42,14 +41,6 @@ export function Creator3D() {
   }, [isMobile])
 
   // Handle drag start from palette
-  const handleDragStart = useCallback((template: ComponentTemplate) => {
-    setDragSource(template)
-  }, [])
-
-  // Handle drag end
-  const handleDragEnd = useCallback(() => {
-    setDragSource(null)
-  }, [])
 
   // Handle adding component from palette
   const handleAddComponent = useCallback(
@@ -106,16 +97,14 @@ export function Creator3D() {
   return (
     <div className='relative flex w-full bg-gray-100'>
       {/* Component Palette */}
-      {showLeftSidebar && <ComponentPalette onDragStart={handleDragStart} onAddComponent={handleAddComponent} />}
+      {showLeftSidebar && <ComponentPalette onAddComponent={handleAddComponent} />}
 
       {/* Main Workspace */}
       <div className='relative flex-1'>
         <CreatorWorkspace
-          dragSource={dragSource}
           onObjectSelect={handleObjectSelect}
           onObjectUpdate={handleObjectUpdate}
           onObjectAdd={handleWorkspaceAdd}
-          onDragEnd={handleDragEnd}
         />
 
         {/* Scene Stats */}
