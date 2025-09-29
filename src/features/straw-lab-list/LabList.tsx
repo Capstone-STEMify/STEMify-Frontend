@@ -1,154 +1,111 @@
 'use client'
 import React, { useState } from 'react'
 import { Card, CardContent } from '@/components/shadcn/card'
-import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Heart, Star, Play, Settings, Bot, Car, Radar, Award, Music, Eye, Cpu, Wrench, Zap } from 'lucide-react'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import { Badge } from '@/components/shadcn/badge'
 
 interface ModelItem {
-  id: number
+  id: string
   name: string
   category: string
   description: string
-  bgColor: string
+  image: string
   icon: React.ReactNode
   isFavorite?: boolean
   rating?: number
+  isAvailable: boolean
 }
 
+// write name and description in vietnamese and a bit longer
 const models: ModelItem[] = [
   {
-    id: 1,
-    name: 'Race Against Time',
-    category: 'Racing',
-    description: 'Chiếc xe đua tốc độ với cảm biến thời gian',
-    bgColor: 'bg-gradient-to-br from-pink-400 via-red-400 to-pink-500',
+    id: 'octahedron',
+    name: 'Octahedron Platonic Solid',
+    category: 'Hình học',
+    description: 'Mô hình đa diện bát diện với các tính chất hình học đặc biệt',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-octahedron-platonic-solid_cover.jpg&w=1920&q=75',
     icon: <Car className='h-8 w-8' />,
-    rating: 4.8
+    rating: 4.8,
+    isAvailable: true
   },
   {
-    id: 2,
-    name: 'Bus Assistant',
-    category: 'Transport',
-    description: 'Trợ lý thông minh cho xe buýt',
-    bgColor: 'bg-gradient-to-br from-yellow-400 via-orange-400 to-yellow-500',
+    id: 'hexahedron',
+    name: 'Hexahedron Platonic Solid',
+    category: 'Hình học',
+    description: 'Mô hình đa diện lập phương với các tính chất hình học đặc biệt',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
     icon: <Bot className='h-8 w-8' />,
-    rating: 4.6
+    rating: 4.6,
+    isAvailable: true
   },
   {
-    id: 3,
-    name: 'Sonar Radar',
-    category: 'Sensor',
-    description: 'Hệ thống radar siêu âm thông minh',
-    bgColor: 'bg-gradient-to-br from-green-400 via-emerald-400 to-green-500',
+    id: 'tetrahedron',
+    name: 'Tetrahedron Platonic Solid',
+    category: 'Hình học',
+    description: 'Mô hình đa diện tứ diện với các tính chất hình học đặc biệt',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
     icon: <Radar className='h-8 w-8' />,
-    rating: 4.9
+    rating: 4.9,
+    isAvailable: false
   },
   {
-    id: 4,
-    name: 'Big Prize Wheel',
-    category: 'Game',
-    description: 'Bánh xe may mắn với nhiều giải thưởng',
-    bgColor: 'bg-gradient-to-br from-blue-400 via-cyan-400 to-blue-500',
+    id: 'dodecahedron',
+    name: 'Dodecahedron Platonic Solid',
+    category: 'Hình học',
+    description: 'Mô hình đa diện mười hai mặt với các tính chất hình học đặc biệt',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-dodecahedron-platonic-solid_cover.jpg&w=1920&q=75',
     icon: <Award className='h-8 w-8' />,
-    rating: 4.7
+    rating: 4.7,
+    isAvailable: false
   },
   {
-    id: 5,
-    name: 'Air Guitar',
-    category: 'Music',
-    description: 'Đàn guitar không dây công nghệ cao',
-    bgColor: 'bg-gradient-to-br from-purple-400 via-indigo-400 to-purple-500',
+    id: 'icosahedron',
+    name: 'Icosahedron Platonic Solid',
+    category: 'Hình học',
+    description: 'Mô hình đa diện hai mươi mặt với các tính chất hình học đặc biệt',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
     icon: <Music className='h-8 w-8' />,
-    rating: 4.5
+    rating: 4.5,
+    isAvailable: false
   },
   {
-    id: 6,
-    name: 'AGV Car',
-    category: 'Autonomous',
-    description: 'Xe tự hành thông minh AGV',
-    bgColor: 'bg-gradient-to-br from-red-400 via-pink-400 to-red-500',
-    icon: <Car className='h-8 w-8' />,
-    rating: 4.8
-  },
-  {
-    id: 7,
-    name: 'AGV Car - Line Patrol System',
-    category: 'Autonomous',
-    description: 'Hệ thống tuần tra theo đường kẻ',
-    bgColor: 'bg-gradient-to-br from-yellow-400 via-amber-400 to-yellow-500',
-    icon: <Settings className='h-8 w-8' />,
-    rating: 4.6
-  },
-  {
-    id: 8,
-    name: 'Robotic Arms',
-    category: 'Robotics',
-    description: 'Cánh tay robot đa năng',
-    bgColor: 'bg-gradient-to-br from-green-400 via-teal-400 to-green-500',
-    icon: <Wrench className='h-8 w-8' />,
-    rating: 4.9
-  },
-  {
-    id: 9,
-    name: 'Transforming Robot',
-    category: 'Robotics',
-    description: 'Robot biến hình đa chức năng',
-    bgColor: 'bg-gradient-to-br from-blue-400 via-sky-400 to-blue-500',
-    icon: <Zap className='h-8 w-8' />,
-    rating: 4.8
-  },
-  {
-    id: 10,
-    name: 'uKit Explore Box',
-    category: 'Educational',
-    description: 'Hộp khám phá công nghệ uKit',
-    bgColor: 'bg-gradient-to-br from-indigo-400 via-purple-400 to-indigo-500',
-    icon: <Cpu className='h-8 w-8' />,
-    rating: 4.7
-  },
-  {
-    id: 11,
-    name: 'Air Electric Guitar',
-    category: 'Music',
-    description: 'Guitar điện tử không dây cao cấp',
-    bgColor: 'bg-gradient-to-br from-pink-400 via-rose-400 to-pink-500',
+    id: 'test_assembly_assembly',
+    name: 'Testing',
+    category: 'Hình học',
+    description: 'Testing',
+    image:
+      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
     icon: <Music className='h-8 w-8' />,
-    rating: 4.6
-  },
-  {
-    id: 12,
-    name: 'Eye See You',
-    category: 'Vision',
-    description: 'Hệ thống nhận dạng thị giác AI',
-    bgColor: 'bg-gradient-to-br from-yellow-400 via-orange-400 to-yellow-500',
-    icon: <Eye className='h-8 w-8' />,
-    rating: 4.9
+    rating: 4.5,
+    isAvailable: true
   }
 ]
 
-const categories = [
-  'Tất cả',
-  'Racing',
-  'Transport',
-  'Sensor',
-  'Game',
-  'Music',
-  'Autonomous',
-  'Robotics',
-  'Educational',
-  'Vision'
-]
+const categories = ['Tất cả', 'Hình học', 'Cảm biến', 'Robot', 'Phương tiện', 'Chơi game', 'Âm nhạc']
 
 export default function StrawLabList() {
+  const locale = useLocale()
   const [selectedCategory, setSelectedCategory] = useState('Tất cả')
-  const [favorites, setFavorites] = useState<Set<number>>(new Set())
-
+  const [favorites, setFavorites] = useState<Set<string>>(new Set())
+  const router = useRouter()
   const filteredModels =
     selectedCategory === 'Tất cả' ? models : models.filter((model) => model.category === selectedCategory)
 
-  const toggleFavorite = (id: number) => {
+  const handleNavigate = (id: string) => {
+    router.push(`/${locale}/admin/design/straw-lab/${id}`)
+  }
+
+  const toggleFavorite = (id: string) => {
     const newFavorites = new Set(favorites)
     if (newFavorites.has(id)) {
       newFavorites.delete(id)
@@ -161,16 +118,14 @@ export default function StrawLabList() {
   return (
     <div>
       {/* Main Content with rounded background */}
-      <main className='container mx-auto px-4'>
+      <main className='container mx-auto p-4'>
         <div className='bg-white'>
           {/* Tab Navigation */}
           <div className='mb-6'>
             <div className='mb-4 flex items-center space-x-1'>
               <span className='text-sm text-gray-600'>Models</span>
               <div className='ml-4 flex items-center space-x-1'>
-                <Button size='sm' className='rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-4'>
-                  uKit Advanced Builds
-                </Button>
+                <Badge className='rounded-full px-4 text-sm'>uKit Advanced Builds</Badge>
               </div>
             </div>
 
@@ -198,37 +153,44 @@ export default function StrawLabList() {
             {filteredModels.map((model) => (
               <Card
                 key={model.id}
-                className='group transform border-0 bg-white p-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-blue-200'
+                className='group transform cursor-pointer overflow-hidden border-0 bg-white p-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-blue-200'
+                onClick={() => model.isAvailable && handleNavigate(model.id)}
               >
                 <CardContent className='p-0'>
-                  {/* Model Image/Icon Area */}
-                  <div
-                    className={`${model.bgColor} relative flex h-32 items-center justify-center overflow-hidden rounded-t-lg`}
-                  >
-                    {/* Favorite Button */}
+                  <div className='relative aspect-[4/3] w-full overflow-hidden rounded-t-lg'>
                     <button
                       onClick={() => toggleFavorite(model.id)}
-                      className='absolute top-2 right-2 rounded-full bg-white/20 p-1 backdrop-blur-sm transition-colors hover:bg-white/30'
+                      className='absolute top-2 right-2 z-10 rounded-full bg-white/20 p-1 backdrop-blur-sm transition-colors hover:bg-white/30'
                     >
                       <Heart
-                        className={`h-3 w-3 ${favorites.has(model.id) ? 'fill-red-500 text-red-500' : 'text-white'}`}
+                        className={`h-4 w-4 ${favorites.has(model.id) ? 'fill-red-500 text-red-500' : 'text-white'}`}
                       />
                     </button>
 
+                    {/* Image */}
+                    <Image
+                      src={model.image}
+                      alt={model.name}
+                      fill
+                      className='object-cover transition-transform duration-300'
+                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
+                    />
+
                     {/* Rating */}
                     {model.rating && (
-                      <div className='absolute right-2 bottom-2 flex items-center space-x-1 rounded-full bg-black/20 px-2 py-1 backdrop-blur-sm'>
-                        <Star className='h-2 w-2 fill-yellow-400 text-yellow-400' />
-                        <span className='text-xs font-medium text-white'>{model.rating}</span>
+                      <div className='absolute right-2 bottom-2 z-10 flex items-center space-x-1 rounded-full bg-black/40 px-2 py-1 text-white backdrop-blur-sm'>
+                        <Star className='h-3 w-3 fill-yellow-400 text-yellow-400' />
+                        <span className='text-xs font-medium'>{model.rating}</span>
                       </div>
                     )}
                   </div>
 
-                  {/* Model Info */}
-                  <div className='p-5'>
+                  {/* Content */}
+                  <div className='p-4'>
                     <h3 className='text-center text-sm font-medium text-gray-800 transition-colors group-hover:text-blue-600'>
                       {model.name}
                     </h3>
+                    <p className='mt-1 line-clamp-2 text-center text-xs text-gray-500'>{model.description}</p>
                   </div>
                 </CardContent>
               </Card>

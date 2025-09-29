@@ -83,20 +83,15 @@ const data = {
     {
       title: 'side_bar.straw_labs',
       icon: IconFileAi,
-      url: '/admin/straw-lab'
+      url: '/admin/design/straw-lab'
     },
     {
       title: 'side_bar.straw_labs_creator',
       icon: IconFileAi,
-      url: '/admin/straw-lab/create'
+      url: '/admin/design/straw-lab/create'
     }
   ],
   navSecondary: [
-    {
-      title: 'side_bar.strawlabs_creator',
-      url: '#',
-      icon: IconSettings
-    },
     {
       title: 'side_bar.help',
       url: '#',

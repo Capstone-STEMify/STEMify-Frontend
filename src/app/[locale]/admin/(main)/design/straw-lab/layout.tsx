@@ -1,4 +1,3 @@
-import { ModalProvider } from '@/providers/ModalProvider'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -12,7 +11,7 @@ export default async function CodeLab({
 }>) {
   return (
     <>
-      <div className='bg-light'>{children}</div>
+      <div className='bg-light -m-4'>{children}</div>
     </>
   )
 }
