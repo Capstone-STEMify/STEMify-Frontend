@@ -1,0 +1,34 @@
+'use client'
+
+import React, { useState } from 'react';
+import HeroSection from './hero/ProductHero';
+import FilterSection from './filter/ProductFilter';
+import ProductsGrid from './grid/ProductGrid';
+import { products } from './mockData';
+import StatsSection from './stats/ProductStats';
+
+const ProductList: React.FC = () => {
+  const [activeCategory, setActiveCategory] = useState('All');
+  
+  const categories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
+  
+  const filteredProducts = activeCategory === 'All' 
+    ? products 
+    : products.filter(p => p.category === activeCategory);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <HeroSection />
+        <FilterSection 
+          categories={categories}
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+        />
+        <ProductsGrid products={filteredProducts} />
+      </div>
+    </div>
+  );
+};
+
+export default ProductList;
