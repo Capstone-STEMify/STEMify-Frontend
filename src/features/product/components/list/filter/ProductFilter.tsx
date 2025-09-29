@@ -11,7 +11,7 @@ const FilterSection: React.FC<{
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 0.6 }}
-      className="mb-12"
+      className="mb-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
     >
       <div className="flex flex-wrap gap-3">
         {categories.map((category, index) => (
