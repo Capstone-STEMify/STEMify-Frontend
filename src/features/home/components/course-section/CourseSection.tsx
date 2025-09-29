@@ -1,15 +1,12 @@
 'use client'
 import { Badge } from '@/components/shadcn/badge'
-import CardCarousel from '@/components/shared/card/CardCarousel'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
-import { setPageSize } from '@/features/resource/course/slice/courseSlice'
 import { CourseStatus } from '@/features/resource/course/types/course.type'
-import { useAppDispatch } from '@/hooks/redux-hooks'
 import { formatDuration } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 export default function ExploreResourcesSection() {
   const t = useTranslations('ExploreResourcesSection')
@@ -37,48 +34,24 @@ export default function ExploreResourcesSection() {
         </h2>
         <p className='mx-auto mb-12 max-w-4xl text-center text-lg text-gray-700'>{t('description')}</p>
 
-        {/* --- Mobile Carousel --- */}
-        <div className='md:hidden'>
-          <div className='no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 py-2'>
-            {CourseData.data.items.map((resource, index) => (
-              <div key={index} className='w-[88vw] shrink-0 snap-center'>
-                <CardCarousel
-                  size='lg'
-                  className='w-full'
-                  imageSrc={resource.imageUrl || ''}
-                  infor={<Badge>{resource.topicNames}</Badge>}
-                >
-                  <div className='flex min-h-0 flex-1 flex-col'>
-                    <h3 className='text-lg font-semibold'>{resource.title}</h3>
-                    <p className='text-sm text-gray-600'>{truncateText(resource.description)}</p>
-                    <div className='mt-auto flex items-center gap-2'>
-                      <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
-                      <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
-                    </div>
-                  </div>
-                </CardCarousel>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* --- Desktop (giữ nguyên) --- */}
-        <div className='mx-auto hidden max-w-7xl justify-around gap-6 md:flex'>
+        <div className='mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
           {CourseData.data.items.map((resource, index) => (
             <CardLayout
-              size='lg'
+              imageRatio='aspect-3/2'
               key={index}
               imageSrc={resource.imageUrl || ''}
               infor={<Badge>{resource.status}</Badge>}
+              footer={
+                <div>
+                  <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
+                  <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
+                </div>
+              }
             >
               <div className='flex min-h-0 flex-1 flex-col'>
                 <p className='text-amber-custom-400 text-xs font-medium'>COURSE</p>
                 <h3 className='my-1 line-clamp-2 text-lg font-semibold'>{resource.title}</h3>
-                <p className='line-clamp-4 text-sm text-gray-600'>{resource.description}</p>
-                <div className='mt-auto flex items-center gap-2'>
-                  <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
-                  <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
-                </div>
+                <p className='line-clamp-4 text-sm text-gray-600'>{truncateText(resource.description)}</p>
               </div>
             </CardLayout>
           ))}

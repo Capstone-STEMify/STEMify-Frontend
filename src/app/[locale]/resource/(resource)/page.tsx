@@ -16,9 +16,20 @@ export default function LibraryPage() {
         </div>
 
         {/* Main Content */}
-        <div className='grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+        <div className='grid grid-cols-1 gap-10 lg:grid-cols-2 xl:grid-cols-3'>
           {/* Curriculum */}
-          <CardLayout imageSrc='/images/resources/teacher-support.png' size='lg' href='/resource/curriculums'>
+          <CardLayout
+            imageClassName='object-fit'
+            
+            imageSrc='/images/resources/teacher-support.png'
+            href='/resource/curriculums'
+            footer={
+              <Button className='group bg-blue-500'>
+                <span>{tc('button.exploreCurriculums')}</span>
+                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
+              </Button>
+            }
+          >
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -32,16 +43,20 @@ export default function LibraryPage() {
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>{t('curriculum.description')}</p>
               </div>
-
-              <Button className='group bg-blue-500'>
-                <span>{tc('button.exploreCurriculums')}</span>
-                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
-              </Button>
             </div>
           </CardLayout>
           {/* Courses */}
 
-          <CardLayout imageSrc='/images/resources/courses.png' size='lg' href='/resource/courses'>
+          <CardLayout
+            imageSrc='/images/resources/courses.png'
+            href='/resource/courses'
+            footer={
+              <Button className='group bg-blue-500'>
+                <span>{tc('button.exploreCourses')}</span>
+                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
+              </Button>
+            }
+          >
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -55,15 +70,19 @@ export default function LibraryPage() {
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>{t('courses.description')}</p>
               </div>
-
-              <Button className='group bg-blue-500'>
-                <span>{tc('button.exploreCourses')}</span>
-                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
-              </Button>
             </div>
           </CardLayout>
 
-          <CardLayout imageSrc='/images/resources/lessons.png' size='lg' href='/resource/lessons'>
+          <CardLayout
+            imageSrc='/images/resources/lessons.png'
+            href='/resource/lessons'
+            footer={
+              <Button className='group bg-blue-500'>
+                <span>{tc('button.exploreLessons')}</span>
+                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
+              </Button>
+            }
+          >
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -77,15 +96,19 @@ export default function LibraryPage() {
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>{t('lessons.description')}</p>
               </div>
-
-              <Button className='group bg-blue-500'>
-                <span>{tc('button.exploreLessons')}</span>
-                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
-              </Button>
             </div>
           </CardLayout>
 
-          <CardLayout imageSrc='/images/resources/activities.png' size='lg' href='/resource/activities'>
+          <CardLayout
+            imageSrc='/images/resources/activities.png'
+            href='/resource/activities'
+            footer={
+              <Button className='group bg-blue-500'>
+                <span>{tc('button.exploreActivities')}</span>
+                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
+              </Button>
+            }
+          >
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -99,15 +122,19 @@ export default function LibraryPage() {
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>{t('activities.description')}</p>
               </div>
-
-              <Button className='group bg-blue-500'>
-                <span>{tc('button.exploreActivities')}</span>
-                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
-              </Button>
             </div>
           </CardLayout>
 
-          <CardLayout imageSrc='/images/resources/news.png' size='lg' href='/resource/news'>
+          <CardLayout
+            imageSrc='/images/resources/news.png'
+            href='/resource/news'
+            footer={
+              <Button className='group bg-blue-500'>
+                <span>{tc('button.readBlogs')}</span>
+                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
+              </Button>
+            }
+          >
             <div className='my-1 flex h-full flex-col justify-between px-2'>
               <div className='space-y-3'>
                 {/* Header with icon */}
@@ -121,11 +148,6 @@ export default function LibraryPage() {
                 {/* Description */}
                 <p className='text-sm leading-relaxed text-gray-600'>{t('news.description')}</p>
               </div>
-
-              <Button className='group bg-blue-500'>
-                <span>{tc('button.readBlogs')}</span>
-                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
-              </Button>
             </div>
           </CardLayout>
         </div>

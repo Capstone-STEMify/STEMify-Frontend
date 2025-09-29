@@ -84,7 +84,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
 
   return (
     <ScrollArea className='h-[600px] px-5 select-none'>
-      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
+      <div className='mt-5 grid h-fit grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 md:grid-cols-3'>
         {lessonData.data.items.map((lesson) => (
           <div key={lesson.id} className='relative flex gap-1'>
             <Link
@@ -94,22 +94,22 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
             >
               <CardLayout
                 imageSrc={lesson.imageUrl || '/images/fallback.png'}
-                size='sm'
                 badge={
                   progressMap?.[lesson.id] && (
                     <Badge className='bg-gray-50/80 text-gray-800 backdrop-blur-md'>{progressMap[lesson.id]}</Badge>
                   )
+                }
+                footer={
+                  <div>
+                    <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
+                    <Badge className='bg-red-300'>{formatDuration(lesson.duration)}</Badge>
+                  </div>
                 }
               >
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>{t('details.lesson.cardTitle')}</p>
                   <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
-                </div>
-
-                <div className='mt-auto flex flex-wrap items-center gap-2'>
-                  <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
-                  <Badge className='bg-red-300'>{formatDuration(lesson.duration)}</Badge>
                 </div>
               </CardLayout>
             </Link>

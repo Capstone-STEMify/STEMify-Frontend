@@ -90,29 +90,23 @@ export default function CourseListContent() {
 
   return (
     <div className='px-5 select-none'>
-      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6'>
-        {/* {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? null : (
-          <div
-            className='shadow-6 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-9.5 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-            onClick={() => handleNavigate()}
-          >
-            <PlusCircle size={70} className='text-gray-500' />
-            <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.createCourse')}</p>
-          </div>
-        )} */}
+      <div className='grid h-fit grid-cols-1 justify-items-center gap-10 py-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {courseData.data.items.map((course) => (
           <div key={course.id} className='relative flex min-w-0 gap-1'>
             <Link href={`/resource/course/${course.id}`} className='flex w-fit flex-col justify-between'>
-              <CardLayout imageSrc={course.imageUrl || '/images/fallback.png'} size='sm'>
+              <CardLayout
+                imageSrc={course.imageUrl || '/images/fallback.png'}
+                footer={
+                  <div className='flex items-center gap-2'>
+                    <Badge className='bg-sky-custom-300'>{course.ageRangeLabel}</Badge>
+                    <Badge className={getLevelBadgeClass(course.level)}>{capitalizeFirst(course.level)}</Badge>
+                  </div>
+                }
+              >
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
                   <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{course.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{course.description}</p>
-                </div>
-
-                <div className='mt-auto flex flex-wrap items-center gap-2'>
-                  <Badge className='bg-sky-custom-300'>{course.ageRangeLabel}</Badge>
-                  <Badge className={getLevelBadgeClass(course.level)}>{capitalizeFirst(course.level)}</Badge>
                 </div>
               </CardLayout>
             </Link>

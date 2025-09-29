@@ -45,7 +45,7 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
     return (
       <SEmpty
         title={t('noEnrollments')}
-        description= {t('noCourses')}
+        description={t('noCourses')}
         icon={<BookOpen className='h-12 w-12 text-gray-400' />}
       />
     )
@@ -61,7 +61,7 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
       </div>
       <div className='space-y-6'>
         {/* Course Grid */}
-        <div className='grid grid-cols-1 place-items-center sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6'>
+        <div className='grid grid-cols-1 place-items-center gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3'>
           {enroll.data.items.map((e) => (
             <Link
               href={`/resource/course/${e.courseId}`}
@@ -69,18 +69,20 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
               onClick={() => dispatch(setSelectedEnrollmentId(e.id))}
             >
               <CardLayout
-                size='lg'
-                imageSrc={e.coverImageUrl}
-                badge={<Badge className='bg-gray-50/80 text-gray-800 backdrop-blur-md'>{e.status}</Badge>}
-              >
-                <div className='flex min-h-0 flex-1 flex-col'>
-                  <h3 className='text-lg font-semibold'>{e.courseTitle}</h3>
-                  <p className='line-clamp-4 text-sm text-gray-600'>{e.description}</p>
-                  {/* footer */}
-                  <div className='mt-auto flex items-center gap-2'>
+                footer={
+                  <div className='flex flex-wrap items-center gap-2'>
                     <Badge className='bg-green-100 text-green-800'>{formatDuration(e.duration)}</Badge>
                     <Badge className='bg-blue-100 text-blue-800'>{e.ageRangeLabel} ages</Badge>
                   </div>
+                }
+                imageRatio='aspect-3/2'
+                imageSrc={e.coverImageUrl}
+                badge={<Badge className='bg-gray-50/80 text-gray-800 backdrop-blur-md'>{e.status}</Badge>}
+              >
+                <div>
+                  <h3 className='text-lg font-semibold'>{e.courseTitle}</h3>
+                  <p className='line-clamp-4 text-sm text-gray-600'>{e.description}</p>
+                  {/* footer */}
                 </div>
               </CardLayout>
             </Link>

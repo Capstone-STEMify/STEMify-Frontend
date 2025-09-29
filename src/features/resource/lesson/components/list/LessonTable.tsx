@@ -54,7 +54,7 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
     dispatch(resetParams())
     if (courseId) {
       dispatch(setPageSize(50))
-    } else dispatch(setPageSize(10))
+    } else dispatch(setPageSize(8))
   }, [dispatch])
 
   const { data } = useSearchLessonQuery(queryParams)
@@ -142,36 +142,36 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
             label: <LayoutGrid className='h-4 w-4' />,
             content: (
               <div className='px-2'>
-                <div className='grid grid-cols-1 justify-items-center-safe gap-y-10 py-6 sm:grid-cols-2 xl:grid-cols-4'>
+                <div className='grid grid-cols-1 justify-items-center-safe gap-10 py-6 sm:grid-cols-2 xl:grid-cols-4'>
                   {rows.map((lesson: Lesson) => (
                     <Link key={lesson.id} href={`/${locale}/admin/lesson/${lesson.id}/pacing-guide`} className='w-full'>
                       <CardLayout
                         imageSrc={lesson.imageUrl}
-                        size='sm'
                         badge={
                           <Badge className={`${getStatusBadgeClass(lesson.status)}`}>
                             {capitalizeFirst(lesson.status)}
                           </Badge>
                         }
+                        footer={
+                          <div className='flex items-center gap-2'>
+                            {lesson.ageRangeLabel && (
+                              <Badge className='bg-sky-custom-300'>
+                                <span className='mr-0.5'> {t('card.age')}</span>
+                                {lesson.ageRangeLabel}
+                              </Badge>
+                            )}
+                            {lesson.duration > 0 && (
+                              <Badge className={`bg-red-300`}>
+                                <Clock className='mr-0.5' />
+                                {formatDuration(lesson.duration)}
+                              </Badge>
+                            )}
+                          </div>
+                        }
                       >
                         <div>
                           <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
                           <p className='line-clamp-3 text-xs text-gray-600'>{lesson.description}</p>
-                        </div>
-
-                        <div className='mt-auto flex flex-wrap items-center gap-2'>
-                          {lesson.ageRangeLabel && (
-                            <Badge className='bg-sky-custom-300'>
-                              <span className='mr-0.5'> {t('card.age')}</span>
-                              {lesson.ageRangeLabel}
-                            </Badge>
-                          )}
-                          {lesson.duration > 0 && (
-                            <Badge className={`bg-red-300`}>
-                              <Clock className='mr-0.5' />
-                              {formatDuration(lesson.duration)}
-                            </Badge>
-                          )}
                         </div>
                       </CardLayout>
                     </Link>
