@@ -49,8 +49,7 @@ export default function CardLayout({
   const cardContent = (
     <div
       className={clsx(
-        `hover:shadow-6 relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md transition-all duration-300`,
-        isScale && 'hover:scale-[1.02]',
+        `hover:shadow-6 relative flex transform cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md transition-all duration-300 hover:-translate-y-1`,
         width,
         height
       )}

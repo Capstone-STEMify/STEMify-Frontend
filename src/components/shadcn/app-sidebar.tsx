@@ -39,6 +39,7 @@ import LoadingComponent from '../shared/loading/LoadingComponent'
 import { usePathname } from 'next/navigation'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
+import { NavDesign } from '@/components/shadcn/nav-design'
 
 const data = {
   user: {
@@ -68,57 +69,31 @@ const data = {
       icon: IconBox
     }
   ],
-  navClouds: [
+  navDesign: [
     {
-      title: 'Capture',
+      title: 'side_bar.makecode',
       icon: IconCamera,
-      isActive: true,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#'
-        },
-        {
-          title: 'Archived',
-          url: '#'
-        }
-      ]
+      url: '#'
     },
     {
-      title: 'Proposal',
+      title: 'side_bar.makecode_creator',
       icon: IconFileDescription,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#'
-        },
-        {
-          title: 'Archived',
-          url: '#'
-        }
-      ]
+      url: '#'
     },
     {
-      title: 'Prompts',
+      title: 'side_bar.straw_labs',
       icon: IconFileAi,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#'
-        },
-        {
-          title: 'Archived',
-          url: '#'
-        }
-      ]
+      url: '/admin/straw-lab'
+    },
+    {
+      title: 'side_bar.straw_labs_creator',
+      icon: IconFileAi,
+      url: '/admin/straw-lab/create'
     }
   ],
   navSecondary: [
     {
-      title: 'side_bar.setting',
+      title: 'side_bar.strawlabs_creator',
       url: '#',
       icon: IconSettings
     },
@@ -169,6 +144,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     isActive: pathname === `/${locale}${item.url}`
   }))
 
+  const navDesignWithLocale = data.navDesign.map((item) => ({
+    ...item,
+    url: `/${locale}${item.url}`,
+    isActive: pathname === `/${locale}${item.url}`
+  }))
+
   const documentsWithLocale = data.documents.map((item) => ({
     ...item,
     url: `/${locale}${item.url}`,
@@ -193,6 +174,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarHeader>
         <SidebarContent>
           <NavMain items={navMainWithLocale} />
+          <NavDesign items={navDesignWithLocale} />
           <NavDocuments items={documentsWithLocale} />
           <NavSecondary items={data.navSecondary} className='mt-auto' />
         </SidebarContent>
@@ -221,6 +203,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMainWithLocale} />
+        <NavDesign items={navDesignWithLocale} />
         {userRole && userRole === UserRole.ADMIN && <NavDocuments items={documentsWithLocale} />}
         {/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}
       </SidebarContent>

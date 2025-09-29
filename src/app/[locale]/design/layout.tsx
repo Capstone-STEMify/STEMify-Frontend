@@ -1,9 +1,8 @@
-import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import { metadata } from '../layout'
 
-metadata.title = 'Profile'
-export default async function ProfileLayout({
+metadata.title = 'My Project'
+export default async function MyProjectLayout({
   children
 }: Readonly<{
   children: React.ReactNode
@@ -11,8 +10,7 @@ export default async function ProfileLayout({
   return (
     <div>
       <Header />
-      <main className='mt-24'>{children}</main>
-      <Footer />
+      <main className='mt-20'>{children}</main>
     </div>
   )
 }

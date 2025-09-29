@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Heart, Star, Play, Settings, Bot, Car, Radar, Award, Music, Eye, Cpu, Wrench, Zap } from 'lucide-react'
+import SEmpty from '@/components/shared/empty/SEmpty'
 
 interface ModelItem {
   id: number
@@ -193,22 +194,17 @@ export default function StrawLabList() {
           </div>
 
           {/* Models Grid */}
-          <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6'>
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
             {filteredModels.map((model) => (
               <Card
                 key={model.id}
-                className='group transform overflow-hidden border-0 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md'
+                className='group transform border-0 bg-white p-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-blue-200'
               >
                 <CardContent className='p-0'>
                   {/* Model Image/Icon Area */}
                   <div
                     className={`${model.bgColor} relative flex h-32 items-center justify-center overflow-hidden rounded-t-lg`}
                   >
-                    {/* Decorative elements */}
-                    <div className='absolute top-2 right-2 h-6 w-6 animate-pulse rounded-full bg-white/20'></div>
-                    <div className='absolute bottom-3 left-3 h-4 w-4 animate-pulse rounded-full bg-white/30 delay-300'></div>
-                    <div className='absolute top-1/2 left-2 h-3 w-3 animate-pulse rounded-full bg-white/25 delay-700'></div>
-
                     {/* Favorite Button */}
                     <button
                       onClick={() => toggleFavorite(model.id)}
@@ -241,13 +237,11 @@ export default function StrawLabList() {
 
           {/* Empty State */}
           {filteredModels.length === 0 && (
-            <div className='py-16 text-center'>
-              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600'>
-                <Bot className='h-8 w-8 text-white' />
-              </div>
-              <h3 className='mb-2 text-lg font-semibold text-gray-800'>Không tìm thấy model nào</h3>
-              <p className='text-gray-600'>Thử chọn danh mục khác hoặc quay lại xem tất cả models</p>
-            </div>
+            <SEmpty
+              title='Không tìm thấy model nào'
+              description='Hãy liên hệ hỗ trợ'
+              icon={<Bot className='h-8 w-8 text-white' />}
+            />
           )}
         </div>
       </main>
