@@ -7,24 +7,24 @@ import { TransformInstructionPanel } from './TransformInstructionPanel'
 import { RealtimeControlPanel } from './RealtimeControlPanel'
 import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer'
 import { useParams } from 'next/navigation'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setIsShiftPressed } from '@/features/assembly/slice/assemblySlice'
 
 export default function Workspace3D({
   assemblyUrl,
-  mode = 'player',
   showUI = true,
   onStepComplete
 }: {
   assemblyUrl?: string
-  mode?: 'player' | 'builder'
   showUI?: boolean
   onStepComplete?: (stepId: string) => void
 }) {
   const { id } = useParams()
   const orbitControlsRef = useRef<any>(null)
   const transformControlsRef = useRef<any>(null)
+  const dispatch = useAppDispatch()
+  const isTransforming = useAppSelector((state) => state.assembly.isTransforming)
 
-  const [isShiftPressed, setIsShiftPressed] = useState(false)
-  const [isTransforming, setIsTransforming] = useState(false)
   const [transformMode, setTransformMode] = useState<'translate' | 'rotate'>('translate')
   const [stepIndex, setStepIndex] = useState(0)
   const [runtimeComponentOverrides, setRuntimeComponentOverrides] = useState<
@@ -52,14 +52,14 @@ export default function Workspace3D({
   // hotkey shift / transform mode
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Shift') setIsShiftPressed(true)
+      if (e.key === 'Shift') dispatch(setIsShiftPressed(true))
       if (currentStep?.actionId === 'action_adjust_additional_connector_arms') {
         if (e.key.toLowerCase() === 't') setTransformMode('translate')
         if (e.key.toLowerCase() === 'r') setTransformMode('rotate')
       }
     }
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'Shift') setIsShiftPressed(false)
+      if (e.key === 'Shift') dispatch(setIsShiftPressed(false))
     }
     window.addEventListener('keydown', handleKeyDown)
     window.addEventListener('keyup', handleKeyUp)
@@ -192,7 +192,7 @@ export default function Workspace3D({
   if (!assembly) return <div>No assembly loaded</div>
 
   return (
-    <div className='relative h-screen w-full'>
+    <div className='relative h-[89.5vh] w-full'>
       {/* Step Info */}
       {showUI && currentStep && (
         <StepInfoPanel
@@ -225,7 +225,6 @@ export default function Workspace3D({
       {showUI && currentStep?.actionId === 'action_adjust_additional_connector_arms' && (
         <TransformInstructionPanel
           transformMode={transformMode}
-          isShiftPressed={isShiftPressed}
           isTransforming={isTransforming}
           onModeChange={setTransformMode}
         />
@@ -244,7 +243,6 @@ export default function Workspace3D({
 
       {/* Canvas */}
       <SceneRenderer
-        mode={mode}
         maxStep={maxStep}
         assembly={assembly}
         stepIndex={stepIndex}
@@ -253,10 +251,8 @@ export default function Workspace3D({
         currentActivity={currentActivity}
         orbitControlsRef={orbitControlsRef}
         visibleInstances={visibleInstances}
-        isShiftPressed={isShiftPressed}
         transformControlsRef={transformControlsRef}
         runtimeComponentOverrides={runtimeComponentOverrides}
-        setIsTransforming={setIsTransforming}
         getComponentElements={getComponentElements}
         setRuntimeComponentOverrides={setRuntimeComponentOverrides}
       />

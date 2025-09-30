@@ -11,9 +11,11 @@ import { Group } from 'three'
 import { useTransition } from '@react-spring/three'
 import { composeRot, EULER_ORDER } from '@/features/assembly/components/test/workspace'
 import { ThirdSquareTransformHandle } from './ThirdSquareTransformHandle'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setIsTransforming } from '@/features/assembly/slice/assemblySlice'
+import { use } from 'matter'
 
 type SceneRendererProps = {
-  mode?: 'player' | 'builder'
   stepIndex: number
   maxStep: number
   assembly: Assembly
@@ -37,11 +39,9 @@ type SceneRendererProps = {
       }
     }
   >
-  isShiftPressed: boolean
   orbitControlsRef: RefObject<any>
   transformControlsRef: RefObject<any>
   currentActivity: any
-  setIsTransforming: (isTransforming: boolean) => void
   transformMode: 'translate' | 'rotate'
   getComponentElements: (componentId: string) => string[]
   setRuntimeComponentOverrides: Dispatch<
@@ -66,27 +66,26 @@ type SceneRendererProps = {
 }
 
 export function SceneRenderer({
-  mode = 'player',
   stepIndex,
   maxStep,
   assembly,
   visibleInstances,
-  isShiftPressed,
   currentStep,
   orbitControlsRef,
   currentActivity,
   transformControlsRef,
   runtimeComponentOverrides,
-  setIsTransforming,
   transformMode,
   getComponentElements,
   setRuntimeComponentOverrides
 }: SceneRendererProps) {
+  const mode = useAppSelector((state) => state.assembly.mode)
   const [disableComponentTransform, setDisableComponentTransform] = useState(false)
   const clampedStep = Math.min(Math.max(stepIndex, 0), Math.max(maxStep - 1, 0))
   const strawRefs = useRef<Record<string, React.Ref<Group>>>({})
   const connectorRefs = useRef<Record<string, React.Ref<Group>>>({})
-
+  const isShiftPressed = useAppSelector((state) => state.assembly.isShiftPressed)
+  const dispatch = useAppDispatch()
   const getStrawRef = (key: string): React.Ref<Group> => (strawRefs.current[key] ??= createRef<Group>())
   const getConnectorRef = (key: string): React.Ref<Group> => (connectorRefs.current[key] ??= createRef<Group>())
   const [componentAnimT, setComponentAnimT] = useState(1)
@@ -503,8 +502,6 @@ export function SceneRenderer({
     return action?.instantAppear === true
   }, [assembly, currentStep])
 
-  console.log('Rendering SceneRenderer: visibleInstances=', visibleInstances)
-
   const transitions = useTransition(visibleInstances.straws, {
     keys: (inst) => inst.id,
     from: instantAppear ? { s: 1.0, y: 0.0, o: 1 } : { s: 0.9, y: 0.2, o: 0 },
@@ -523,44 +520,6 @@ export function SceneRenderer({
     config: instantAppear ? { tension: 1, friction: 0 } : { tension: 170, friction: 20 }
   })
 
-  
-  function resolveAssemblyMaterials(assembly: any) {
-    if (!assembly?.templates?.materials) return assembly
-
-    const materialMap: Record<string, any> = {}
-    for (const mat of assembly.templates.materials) {
-      if (mat.data) {
-        materialMap[mat.id] = mat.data
-      }
-    }
-
-    // Helper đệ quy cho mọi instance
-    const resolveInstance = (instance: any) => {
-      if (instance.data?.materialRef && !instance.data.material) {
-        const refId = instance.data.materialRef
-        if (materialMap[refId]) {
-          instance.data.material = { ...materialMap[refId] }
-        }
-      }
-      return instance
-    }
-
-    // Resolve cho straws
-    if (assembly.instances?.straws) {
-      for (const strawGroup of assembly.instances.straws) {
-        strawGroup.instances = strawGroup.instances.map((inst: any) => resolveInstance(inst))
-      }
-    }
-
-    // Resolve cho connectors
-    if (assembly.instances?.connectors) {
-      for (const connGroup of assembly.instances.connectors) {
-        connGroup.instances = connGroup.instances.map((inst: any) => resolveInstance(inst))
-      }
-    }
-
-    return assembly
-  }
   return (
     <Canvas
       camera={{
@@ -720,7 +679,6 @@ export function SceneRenderer({
                 componentCenter={comp.center}
                 currentTranslation={currentT}
                 currentRotation={currentR}
-                isShiftPressed={isShiftPressed}
                 transformMode={transformMode}
                 transformControlsRef={transformControlsRef}
               />
@@ -732,11 +690,11 @@ export function SceneRenderer({
                 showZ={true}
                 onMouseDown={() => {
                   if (isShiftPressed) {
-                    setIsTransforming(true)
+                    dispatch(setIsTransforming(true))
                   }
                 }}
                 onMouseUp={() => {
-                  setIsTransforming(false)
+                  dispatch(setIsTransforming(false))
                 }}
                 onObjectChange={() => {
                   if (!isShiftPressed) return

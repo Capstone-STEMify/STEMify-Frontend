@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { useFrame } from '@react-three/fiber'
 import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
@@ -5,18 +6,17 @@ export function ThirdSquareTransformHandle({
   componentCenter,
   currentTranslation,
   currentRotation,
-  isShiftPressed,
   transformMode,
   transformControlsRef
 }: {
   componentCenter: { x: number; y: number; z: number }
   currentTranslation: { x: number; y: number; z: number }
   currentRotation: { x: number; y: number; z: number }
-  isShiftPressed: boolean
   transformMode: 'translate' | 'rotate'
   transformControlsRef: React.RefObject<any>
 }) {
   const meshRef = useRef<THREE.Mesh>(null)
+  const isShiftPressed = useAppSelector((state) => state.assembly.isShiftPressed)
 
   // Calculate target position
   const targetPos = useMemo(
@@ -54,15 +54,6 @@ export function ThirdSquareTransformHandle({
       transformControlsRef.current.attach(meshRef.current)
     }
   }, [transformControlsRef])
-
-  console.log(' ThirdSquareTransformHandle render:', {
-    componentCenter,
-    currentTranslation,
-    currentRotation,
-    transformMode,
-    targetPos: { x: targetPos.x, y: targetPos.y, z: targetPos.z },
-    isShiftPressed
-  })
 
   // Different visual based on transform mode
   const handleColor = isShiftPressed ? (transformMode === 'translate' ? '#22c55e' : '#a855f7') : '#9ca3af'
