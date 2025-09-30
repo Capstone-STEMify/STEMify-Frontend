@@ -310,7 +310,7 @@ const ProductInfo: React.FC = () => {
 
         <div className="bg-gray-50 p-4 rounded-xl">
           <div className="flex items-center justify-between mb-3">
-            <span className="font-bold text-gray-900">Safe & Secure Checkout</span>
+            <span className="font-semibold text-gray-900">Safe & Secure Checkout</span>
             <div className="flex gap-2">
               <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-5" />
               <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-5" />
@@ -327,7 +327,7 @@ const ProductInfo: React.FC = () => {
         <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-xl">
           <div className="flex items-center gap-2 mb-2">
             <Truck className="w-5 h-5 text-yellow-600" />
-            <span className="font-bold text-gray-900">Ship in 2 Business Days</span>
+            <span className="font-semibold text-gray-900">Ship in 2 Business Days</span>
           </div>
           <p className="text-sm text-gray-700 mb-3">with Trusted Delivery</p>
           <div className="flex gap-2">

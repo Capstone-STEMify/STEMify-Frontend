@@ -68,6 +68,83 @@ const ProductGallery: React.FC = () => {
           ))}
         </div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="border-t border-gray-200 mt-8 pt-4"
+      >
+        <div className="grid grid-cols-4 gap-4 mb-4">
+          {[
+            { 
+              icon: (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <rect x="3" y="6" width="18" height="12" rx="2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="3" y1="10" x2="21" y2="10" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              ), 
+              text: 'Secure Payment' 
+            },
+            { 
+              icon: (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              ), 
+              text: '12-month Warranty' 
+            },
+            { 
+              icon: (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <rect x="1" y="3" width="15" height="13" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M16 8a4 4 0 0 1 8 0v8h-8V8z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="5.5" cy="18.5" r="2.5" strokeWidth="1.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5" strokeWidth="1.5"/>
+                </svg>
+              ), 
+              text: 'Free Shipping' 
+            },
+            { 
+              icon: (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" strokeWidth="1.5"/>
+                  <path d="M12 6v6l4 2" strokeWidth="1.5" strokeLinecap="round"/>
+                  <path d="M16.24 7.76l-1.41 1.41M7.76 16.24l1.41-1.41" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              ), 
+              text: '30-day Return & Refund' 
+            }
+          ].map((feature, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9 + idx * 0.1 }}
+              className="flex flex-col items-center text-center"
+            >
+              <div className="text-gray-400 mb-3">
+                {feature.icon}
+              </div>
+              <span className="text-sm font-semibold text-gray-700 leading-tight">{feature.text}</span>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.3 }}
+          className="pt-6 border-t border-gray-200 flex items-center justify-center gap-2 text-blue-500 hover:text-blue-600 cursor-pointer transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          <span className="text-sm font-medium">
+            Questions about products? Contact us for support.
+          </span>
+        </motion.div>
+      </motion.div>
     </motion.div>
   );
 };
