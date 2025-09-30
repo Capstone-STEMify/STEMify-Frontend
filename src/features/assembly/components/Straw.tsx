@@ -12,7 +12,6 @@ export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade 
   const { geometry, material, transform, endpoints } = straw
 
   const { pos, rot, len } = useMemo(() => {
-    // Use template endpoints if available, otherwise calculate from geometry.length
     const start = endpoints?.start?.localPosition || { x: -geometry.length / 2, y: 0, z: 0 }
     const end = endpoints?.end?.localPosition || { x: geometry.length / 2, y: 0, z: 0 }
 

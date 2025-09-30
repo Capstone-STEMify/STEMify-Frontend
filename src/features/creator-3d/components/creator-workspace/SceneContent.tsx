@@ -6,6 +6,7 @@ import { AxesHelper as ThreeAxesHelper } from 'three'
 import { OrbitControls, Grid, TransformControls } from '@react-three/drei'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
+import debounce from 'lodash/debounce'
 
 interface SceneContentProps {
   transformControlsRef: React.RefObject<any>
@@ -49,41 +50,50 @@ export function SceneContent({
     },
     [onObjectSelect]
   )
+  const debouncedUpdate = useRef(
+    debounce((id, updates) => {
+      onObjectUpdate(id, updates)
+    }, 100)
+  ).current
 
   // Handle transform changes
   const handleTransformChange = useCallback(() => {
     if (!selectedObjectId || !transformControlsRef.current) return
-
     const targetObject = objectRefs.current[selectedObjectId]
     if (!targetObject) return
 
-    const position = {
+    const newPos = {
       x: targetObject.position.x,
       y: targetObject.position.y,
       z: targetObject.position.z
     }
-
-    const rotation = {
+    const newRot = {
       x: targetObject.rotation.x,
       y: targetObject.rotation.y,
       z: targetObject.rotation.z
     }
 
-    // Apply grid snapping if enabled
-    if (snapToGrid) {
-      position.x = Math.round(position.x / gridSize) * gridSize
-      position.y = Math.round(position.y / gridSize) * gridSize
-      position.z = Math.round(position.z / gridSize) * gridSize
+    // Lấy object cũ từ store (instances)
+    const current = objects.find((o) => o.id === selectedObjectId)
+    if (!current) return
 
-      targetObject.position.set(position.x, position.y, position.z)
+    // Chỉ dispatch khi khác
+    if (
+      current.transform.position.x !== newPos.x ||
+      current.transform.position.y !== newPos.y ||
+      current.transform.position.z !== newPos.z ||
+      current.transform.rotation.x !== newRot.x ||
+      current.transform.rotation.y !== newRot.y ||
+      current.transform.rotation.z !== newRot.z
+    ) {
+      debouncedUpdate(selectedObjectId, {
+        transform: {
+          position: targetObject.position.toArray(),
+          rotation: targetObject.rotation.toArray()
+        }
+      })
     }
-    onObjectUpdate(selectedObjectId, {
-      transform: {
-        position,
-        rotation
-      }
-    })
-  }, [selectedObjectId, snapToGrid, gridSize, onObjectUpdate])
+  }, [selectedObjectId, objects, onObjectUpdate])
 
   return (
     <>
@@ -112,6 +122,7 @@ export function SceneContent({
         ref={transformControlsRef}
         mode={transformMode}
         onObjectChange={handleTransformChange}
+        onMouseUp={handleTransformChange}
         showX={true}
         showY={true}
         showZ={true}

@@ -107,7 +107,6 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
             }
           }
         })
-        console.log('[DEBUG] updatePosition', axis, numValue)
       }
     },
     [selectedObject, onObjectUpdate]

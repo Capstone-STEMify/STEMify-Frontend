@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
 import { ObjectInspector } from '../ObjectInspector'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -32,12 +32,11 @@ export function Creator3D() {
   const [showRightSidebar, setShowRightSidebar] = useState<boolean>(true)
 
   // Ensure initial state respects mobile once mounted
-  useMemo(() => {
+  useEffect(() => {
     if (isMobile) {
       setShowLeftSidebar(false)
       setShowRightSidebar(false)
     }
-    return undefined
   }, [isMobile])
 
   // Handle drag start from palette

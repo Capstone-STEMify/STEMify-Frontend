@@ -68,14 +68,6 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
       rotation={[object.transform.rotation.x, object.transform.rotation.y, object.transform.rotation.z]}
       scale={[object.transform.scale?.x ?? 1, object.transform.scale?.y ?? 1, object.transform.scale?.z ?? 1]}
     >
-      {/* Selection Indicator */}
-      {isSelected && (
-        <mesh>
-          <boxGeometry args={boxSize} />
-          <meshBasicMaterial color='#00ff00' wireframe transparent opacity={0.3} />
-        </mesh>
-      )}
-
       {/* Render actual component */}
       {object.category === 'straw' ? (
         <Straw
