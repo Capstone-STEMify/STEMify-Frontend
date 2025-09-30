@@ -114,6 +114,7 @@
     "remove-markdown": "^0.6.2",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.0",
+    "tailwind-scrollbar-hide": "^4.0.0",
     "three": "^0.179.1",
     "tiptap-extension-resize-image": "^1.2.2",
     "unified": "^11.0.5",

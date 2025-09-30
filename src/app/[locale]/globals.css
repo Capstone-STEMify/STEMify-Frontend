@@ -139,6 +139,14 @@ sky-gradient: right, #7dd3fc, #eff6ff
   .shadow-6 {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hidden {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
 }
 /*
 ---break---

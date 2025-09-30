@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { javascriptGenerator } from "blockly/javascript";
 import BlocklyEditor from "@/features/blockly-phaser/blockly/BlocklyEditor";
-import { pushAssistantMessage } from "@/features/Modal3Display/Assistant3D";
+import { pushAssistantMessage } from "@/features/modal3Display/Assistant3D";
 
 // Import PhaserGame bằng dynamic
 const PhaserGame = dynamic(() => import("@/features/blockly-phaser/phaser/PhaserGame"), {
   ssr: false,
 });
 
-const Assistant = dynamic(() => import('@/features/Modal3Display/Assistant3D'), { ssr: false })
+const Assistant = dynamic(() => import('@/features/modal3Display/Assistant3D'), { ssr: false })
 
 export default function HomePage() {
   const [workspace, setWorkspace] = useState(null);
