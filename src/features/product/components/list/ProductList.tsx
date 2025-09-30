@@ -6,6 +6,7 @@ import FilterSection from './filter/ProductFilter'
 import ProductsGrid from './grid/ProductGrid'
 import { products } from './mockData'
 import StatsSection from './stats/ProductStats'
+import RichResources from './link-resource/LinkingResource'
 
 const ProductList: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All')
@@ -20,6 +21,7 @@ const ProductList: React.FC = () => {
         <HeroSection />
         <FilterSection categories={categories} activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
         <ProductsGrid products={filteredProducts} />
+        {/* <RichResources /> */}
       </div>
     </div>
   )
