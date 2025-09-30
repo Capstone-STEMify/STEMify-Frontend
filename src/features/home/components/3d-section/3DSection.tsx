@@ -1,5 +1,5 @@
 'use client'
-import ModelCarousel from "@/features/Modal3Display/ModelCarousel";
+import ModelCarousel from "@/features/modal3Display/ModelCarousel";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
