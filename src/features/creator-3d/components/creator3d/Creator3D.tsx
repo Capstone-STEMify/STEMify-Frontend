@@ -25,23 +25,7 @@ export function Creator3D() {
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
   const [showExportDialog, setShowExportDialog] = useState(false)
-  const isMobile = useIsMobile()
 
-  // Sidebar visibility (collapse on mobile by default)
-  const [showLeftSidebar, setShowLeftSidebar] = useState<boolean>(true)
-  const [showRightSidebar, setShowRightSidebar] = useState<boolean>(true)
-
-  // Ensure initial state respects mobile once mounted
-  useEffect(() => {
-    if (isMobile) {
-      setShowLeftSidebar(false)
-      setShowRightSidebar(false)
-    }
-  }, [isMobile])
-
-  // Handle drag start from palette
-
-  // Handle adding component from palette
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
       addObject(template, { x: 0, y: 0, z: 0 })
@@ -96,10 +80,12 @@ export function Creator3D() {
   return (
     <div className='relative flex w-full bg-gray-100'>
       {/* Component Palette */}
-      {showLeftSidebar && <ComponentPalette onAddComponent={handleAddComponent} />}
+      <div className='w-64 flex-1 bg-white'>
+        <ComponentPalette onAddComponent={handleAddComponent} />
+      </div>
 
       {/* Main Workspace */}
-      <div className='relative flex-1'>
+      <div className='relative w-full'>
         <CreatorWorkspace
           onObjectSelect={handleObjectSelect}
           onObjectUpdate={handleObjectUpdate}
@@ -119,30 +105,17 @@ export function Creator3D() {
       </div>
 
       {/* Object Inspector */}
-      {showRightSidebar && (
-        <ObjectInspector
-          key={selectedObject?.id}
-          selectedObject={selectedObject}
-          onObjectUpdate={handleObjectUpdate}
-          onObjectDelete={handleObjectDelete}
-        />
-      )}
-
-      {/* Sidebar Toggles */}
-      <button
-        onClick={() => setShowLeftSidebar((s) => !s)}
-        className='absolute top-1/2 left-2 z-40 -translate-y-1/2 rounded-md border bg-white px-2 py-1 text-xs shadow'
-        aria-label='Toggle components panel'
-      >
-        {showLeftSidebar ? '⟨' : '⟩'}
-      </button>
-      <button
-        onClick={() => setShowRightSidebar((s) => !s)}
-        className='absolute top-1/2 right-2 z-40 -translate-y-1/2 rounded-md border bg-white px-2 py-1 text-xs shadow'
-        aria-label='Toggle properties panel'
-      >
-        {showRightSidebar ? '⟩' : '⟨'}
-      </button>
+      <div className='flex h-screen w-80 flex-col border-l bg-gray-50'>
+        <div className=''>sssssssssssssssssss</div>
+        <div className='flex h-full w-80 flex-col'>
+          <ObjectInspector
+            key={selectedObject?.id}
+            selectedObject={selectedObject}
+            onObjectUpdate={handleObjectUpdate}
+            onObjectDelete={handleObjectDelete}
+          />
+        </div>
+      </div>
 
       {/* Export Dialog */}
       {showExportDialog && (

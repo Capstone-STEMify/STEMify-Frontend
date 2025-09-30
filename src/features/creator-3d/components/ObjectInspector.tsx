@@ -180,7 +180,7 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
 
   if (!selectedObject || !localValues) {
     return (
-      <div className='flex w-80 flex-col border-l border-gray-200 bg-white'>
+      <div className='flex h-full w-80 flex-col border-l border-gray-200 bg-white'>
         <div className='border-b border-gray-200 p-4'>
           <h2 className='font-semibold text-gray-900'>Properties</h2>
         </div>
@@ -192,8 +192,8 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
   }
 
   return (
-    <div className='flex w-80 flex-col border-l border-gray-200 bg-white'>
-      <div className='border-b border-gray-200 p-4'>
+    <div>
+      <div className='border-b border-gray-200'>
         <h2 className='font-semibold text-gray-900'>Properties</h2>
         <span className='text-sm text-gray-600'>
           {selectedObject.category === 'connector' ? '🔴 Connector' : '🟢 Straw'}
