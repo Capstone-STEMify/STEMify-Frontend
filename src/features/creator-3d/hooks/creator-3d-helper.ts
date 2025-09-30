@@ -3,7 +3,6 @@ import { Assembly, ComponentTemplate, Connector, Straw, Transform } from '@/feat
 import { addInstance, setSelectedId } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
-import { a } from '@react-spring/three'
 import { useCallback } from 'react'
 
 export function createInstanceFromTemplate(

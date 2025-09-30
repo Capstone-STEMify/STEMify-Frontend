@@ -187,26 +187,6 @@ export interface UseAssemblyReturn {
   resetOptimizations: () => void
 }
 
-// resolveAssemblyMaterials.ts (helper)
-async function resolveMaterial(assembly: Assembly, materialRef?: string) {
-  if (!materialRef) return null
-  const mat = assembly.templates.materials.find((m) => m.id === materialRef)
-  if (!mat) return null
-
-  // Nếu templateManager đã load sẵn material
-  if (templateManager.isTemplateLoaded(mat.id)) {
-    return templateManager.getTemplateInfo(mat.id)
-  }
-
-  // Nếu chưa thì fetch file JSON của material
-  const res = await fetch(mat.source)
-  if (!res.ok) {
-    console.warn(`Failed to load material: ${mat.source}`)
-    return null
-  }
-  return await res.json()
-}
-
 export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn {
   const {
     enableLOD = true,
