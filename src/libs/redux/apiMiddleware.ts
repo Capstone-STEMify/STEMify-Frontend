@@ -15,6 +15,7 @@ import { userApi } from '@/features/user/api/userApi'
 import { Middleware } from '@reduxjs/toolkit'
 import { kitApi } from '@/features/resource/kit/api/kitApi'
 import { courseLearningOutcomeApi } from '@/features/resource/learning-outcome/api/courseLearningOutcomeApi'
+import { planApi } from '@/features/plan/api/planApi'
 
 export const apiMiddlewares: Middleware[] = [
   courseApi.middleware,
@@ -32,7 +33,8 @@ export const apiMiddlewares: Middleware[] = [
   curriculumApi.middleware,
   learningOutcomeApi.middleware,
   courseLearningOutcomeApi.middleware,
-  kitApi.middleware
+  kitApi.middleware,
+  planApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]

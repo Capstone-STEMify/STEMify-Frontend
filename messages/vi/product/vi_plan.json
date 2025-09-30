@@ -1,0 +1,16 @@
+{
+  "plan": {
+    "list": {
+      "title": "Nâng cấp gói của bạn",
+      "description": "Chọn gói phù hợp nhất với nhu cầu của bạn và mở khóa toàn bộ tiềm năng của Stemify cho hành trình chinh phục STEM của bạn.",
+      "selectButton": "Chọn gói",
+      "loading": "Đang tải các gói...",
+      "error": "Đã xảy ra lỗi khi lấy các gói. Vui lòng thử lại.",
+      "noData": "Không tìm thấy gói nào.",
+      "currentPlan": "Gói hiện tại",
+      "recommended": "ĐỀ XUẤT",
+      "choosePlanBtn": "Chọn gói",
+      "month": "Tháng"
+    }
+  }
+}
