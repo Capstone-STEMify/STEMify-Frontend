@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
-import { ObjectInspector } from '../ObjectInspector'
+import { ObjectInspector } from '../right-sidebar/ObjectInspector'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
@@ -17,6 +17,7 @@ import {
   updateInstance
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
+import Component from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()
@@ -105,9 +106,11 @@ export function Creator3D() {
       </div>
 
       {/* Object Inspector */}
-      <div className='flex h-screen w-80 flex-col border-l bg-gray-50'>
-        <div className=''>sssssssssssssssssss</div>
-        <div className='flex h-full w-80 flex-col'>
+      <div className='my-2 flex w-80 flex-col gap-4'>
+        <div className='rounded-2xl bg-white p-4 shadow'>
+          <Component />
+        </div>
+        <div className='flex h-full w-80 flex-col overflow-hidden rounded-2xl bg-white'>
           <ObjectInspector
             key={selectedObject?.id}
             selectedObject={selectedObject}
