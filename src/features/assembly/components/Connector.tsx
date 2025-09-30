@@ -13,7 +13,7 @@ interface Props {
   modelScale?: [number, number, number] | number
   rotationOffset?: [number, number, number]
   showDebug?: boolean
-  armPose?: Record<string, number>
+  armPose?: Record<string, { x?: number; y?: number; z?: number }>
 }
 
 export const Connector3D = forwardRef<Group, Props>(
@@ -42,9 +42,6 @@ export const Connector3D = forwardRef<Group, Props>(
 
     const hubRef = useRef<THREE.Object3D | null>(null)
     const armsRef = useRef<Record<string, THREE.Object3D>>({})
-    useEffect(() => {
-      console.log('[Connector3D] mount', modelUrl)
-    }, [modelUrl])
 
     const setHinge = useCallback(
       (
@@ -71,8 +68,6 @@ export const Connector3D = forwardRef<Group, Props>(
       if (!scene || isInitialized.current) return
 
       try {
-        console.log(`[${componentId.current}] Setting up model...`)
-
         isInitialized.current = true
 
         // Tìm Hub
@@ -101,14 +96,18 @@ export const Connector3D = forwardRef<Group, Props>(
     useEffect(() => {
       if (!isInitialized.current || !armsRef.current) return
 
-      // Apply tất cả các pose đã được truyền vào armPose
       Object.entries(armsRef.current).forEach(([armName, armObj]) => {
-        const angle = armPose?.[armName] ?? 0
-        try {
-          setHinge(armObj, angle, 'z')
-          console.log(`[${componentId.current}] Applied pose: ${armName} → ${angle}`)
-        } catch (err) {
-          console.warn(`[${componentId.current}] Failed to apply pose for ${armName}:`, err)
+        const pose = armPose?.[armName]
+        if (!pose) return
+
+        for (const axis of ['x', 'y', 'z'] as const) {
+          if (pose[axis] !== undefined) {
+            try {
+              setHinge(armObj, pose[axis]!, axis)
+            } catch (err) {
+              console.warn(`[${componentId.current}] Failed to apply pose for ${armName}.${axis}:`, err)
+            }
+          }
         }
       })
     }, [armPose, setHinge])

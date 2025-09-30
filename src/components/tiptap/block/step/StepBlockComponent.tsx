@@ -2,12 +2,18 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { Textarea } from '@/components/shadcn/textarea'
+import { usePostLessonAssetsMutation } from '@/features/resource/lesson-asset/api/lessonAssetApi'
+import { PostLessonResponseBody } from '@/features/resource/lesson-asset/types/lessonAsest.type'
+import { fileToBase64 } from '@/utils/index'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
 import { ChevronLeft, ChevronRight, Plus, Trash2, Upload, X } from 'lucide-react'
 import Image from 'next/image'
+import { useParams } from 'next/navigation'
 import { useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 export default function StepBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
+  const { lessonId } = useParams()
   const { steps, currentStep } = node.attrs
   const stepsArray = Array.isArray(steps) ? steps : []
   const [active, setActive] = useState(currentStep ?? 0)
@@ -35,23 +41,58 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
     setActive(newActive)
   }
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.length) return
-    const files = Array.from(e.target.files) // Lấy toàn bộ file
-    const readers = files.map(
-      (file) =>
-        new Promise<string>((resolve) => {
-          const reader = new FileReader()
-          reader.onload = () => resolve(reader.result as string)
-          reader.readAsDataURL(file)
-        })
+  const [uploadFiles, { isLoading }] = usePostLessonAssetsMutation()
+  // 1. Tách riêng hàm xử lý upload
+  const uploadLessonFiles = async (files: File[]) => {
+    if (!files.length) return []
+
+    const lessonAssets = await Promise.all(
+      files.map(async (file) => {
+        const base64 = await fileToBase64(file)
+        return { name: file.name, assetBytes: base64 }
+      })
     )
 
-    Promise.all(readers).then((results) => {
-      const newImages = [...(step.images || []), ...results]
-      updateStep('images', newImages)
-    })
-    e.target.value = ''
+    const res = await uploadFiles({
+      lessonId: Number(lessonId),
+      body: { lessonAssets }
+    }).unwrap()
+
+    return res.data.assets.map((a: PostLessonResponseBody) => a.assetUrl)
+  }
+
+  // 2. Sử dụng trong handleUploadFiles
+  const handleUploadFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files?.length) return
+
+    const files = Array.from(event.target.files)
+    const uploaded = await uploadLessonFiles(files)
+
+    updateStep('images', [...(step.images || []), ...uploaded])
+
+    toast.success('Uploaded files successfully')
+    event.target.value = ''
+  }
+
+  // 3. Sử dụng trong onDrop
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+
+    // Nếu kéo từ sidebar (URL text/plain)
+    const url = e.dataTransfer.getData('text/plain')
+    if (url) {
+      updateStep('images', [...(step.images || []), url])
+      return
+    }
+
+    // Nếu kéo từ máy tính (File)
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const files = Array.from(e.dataTransfer.files)
+      const uploaded = await uploadLessonFiles(files)
+
+      updateStep('images', [...(step.images || []), ...uploaded])
+      toast.success('Uploaded files successfully')
+    }
   }
 
   const removeImage = (index: number) => {
@@ -173,53 +214,56 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                 />
               </div>
 
-              {/* Step images */}
-              <div className='space-y-2'>
+              <div className='mb-5 space-y-2'>
                 <Label htmlFor={`step-${active}-images`} className='text-left text-base'>
                   Hình ảnh
                 </Label>
-                <div className='rounded-lg border p-4'>
-                  <div className='mb-3 flex items-center justify-between'>
-                    <p className='text-sm font-medium'>Hình ảnh đã tải lên ({step.images?.length || 0})</p>
-                    <Button onClick={() => fileInputRef.current?.click()} variant={'outline'} className=''>
-                      <Upload size={8} /> Thêm nữa
-                    </Button>
-                  </div>
-                  <div className='flex flex-wrap items-center justify-center gap-7'>
-                    {(step.images || []).map((img: string, idx: number) => (
-                      <div key={idx} className='group relative h-[200px] w-[200px] overflow-hidden rounded-xl border'>
-                        {/* Ảnh */}
-                        <Image
-                          src={img}
-                          alt={`${step.title}-${idx}`}
-                          width={200}
-                          height={200}
-                          className='h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-60'
-                        />
+                <div className='flex flex-wrap items-center justify-center gap-7'>
+                  {(step.images || []).map((img: string, idx: number) => (
+                    <div key={idx} className='group relative h-[200px] w-[200px] overflow-hidden rounded-xl border'>
+                      <Image
+                        src={img}
+                        alt={`${step.title}-${idx}`}
+                        width={200}
+                        height={200}
+                        className='h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-60'
+                      />
 
-                        <div className='absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-                          <Button
-                            onClick={() => removeImage(idx)}
-                            variant='destructive'
-                            size='icon'
-                            className='w-fit px-2 text-white shadow-lg'
-                          >
-                            <Trash2 size={24} /> Xóa ảnh
-                          </Button>
-                        </div>
+                      <div className='absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+                        <Button
+                          onClick={() => removeImage(idx)}
+                          variant='destructive'
+                          size='icon'
+                          className='w-fit px-2 text-white shadow-lg'
+                        >
+                          <Trash2 size={24} /> Xóa ảnh
+                        </Button>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
+
+                  {editable && (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={handleDrop}
+                      className='flex h-[200px] w-[200px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-400 text-gray-500 hover:border-purple-500 hover:text-purple-500'
+                    >
+                      <Upload size={32} />
+                      <span className='ml-2 text-sm'>Tải ảnh lên</span>
+                    </div>
+                  )}
                 </div>
+
+                <input
+                  type='file'
+                  multiple
+                  accept='image/*'
+                  ref={fileInputRef}
+                  onChange={handleUploadFiles}
+                  className='hidden'
+                />
               </div>
-              <input
-                type='file'
-                multiple
-                accept='image/*'
-                ref={fileInputRef}
-                onChange={handleImageUpload}
-                className='hidden'
-              />
             </div>
           ) : (
             <div className='my-3 space-y-2'>

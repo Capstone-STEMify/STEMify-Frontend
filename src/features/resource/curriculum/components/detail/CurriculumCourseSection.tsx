@@ -14,23 +14,22 @@ export default function CurriculumCourseSection({ courses }: CurriculumCourseSec
   const router = useRouter()
   return (
     <div className='relative space-y-0 py-10'>
-      {/* Section nền vàng xéo */}
       <div className='clip-slant relative h-[400px] bg-[#fec708] py-16 text-center'>
         <h1 className='text-5xl'>{t('custom.courseListTitle')}</h1>
         <p className='mx-auto w-180 py-5'>{t('custom.courseListDescription')}</p>
       </div>
 
-      {/* Carousel chồng lên */}
-      <div className='relative z-10 mx-auto -mt-30 max-w-7xl'>
+      <div className='relative z-10 mx-auto -mt-30 max-w-6xl'>
         <SCarousel
           variant='spacing'
           autoplayDelay={2000}
           items={Array.from({ length: courses.length }).map((_, i) => (
             <div className='p-1' key={i}>
               <CardLayout
+                imageRatio='aspect-3/2'
+                imageClassName='object-cover'
                 onClick={() => router.push(`/resource/course/${courses[i].id}`)}
                 imageSrc={courses[i].imageUrl || 'images/fallback.png'}
-                size='lg'
               >
                 <div>
                   <h4 className='text-amber-custom-400 text-xs font-semibold'>

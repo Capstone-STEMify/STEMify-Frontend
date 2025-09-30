@@ -8,7 +8,14 @@ const intlMiddleware = createMiddleware(routing)
 
 export default withAuth(
   (req) => {
-    const { pathname } = req.nextUrl
+    const { pathname, origin, host } = req.nextUrl
+
+    // --- chọn NEXTAUTH_URL động theo domain ---
+    if (host.includes('robotsteam.com.vn')) {
+      process.env.NEXTAUTH_URL = 'https://robotsteam.com.vn'
+    } else if (host.includes('stemifi.com')) {
+      process.env.NEXTAUTH_URL = 'https://www.stemifi.com'
+    }
 
     const res = intlMiddleware(req)
     const role = req.nextauth.token?.role

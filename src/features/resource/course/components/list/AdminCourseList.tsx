@@ -1,18 +1,18 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useSearchCourseQuery } from '../../api/courseApi'
 import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { CourseQueryParams, CourseStatus } from '@/features/resource/course/types/course.type'
+import { CourseQueryParams } from '@/features/resource/course/types/course.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setPageIndex, setPageSize, setParam } from '@/features/resource/course/slice/courseSlice'
+import { setPageIndex, setPageSize } from '@/features/resource/course/slice/courseSlice'
 import { IconPlus } from '@tabler/icons-react'
 import Link from 'next/link'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
-import { capitalizeFirst, formatDuration } from '@/utils/index'
+import { capitalizeFirst } from '@/utils/index'
 import { SPagination } from '@/components/shared/SPagination'
 import { LayoutGrid, TableIcon } from 'lucide-react'
 import { getCourseStatusBadgeClass, getLevelBadgeClass } from '@/utils/badgeColor'
@@ -104,28 +104,30 @@ export default function AdminCourseList() {
             label: <LayoutGrid className='h-4 w-4' />,
             content: (
               <div className='px-2'>
-                <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
+                <div className='grid h-fit grid-cols-1 justify-items-center gap-10 py-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
                   {rows.map((course: any) => (
                     <Link key={course.id} href={`/${locale}/admin/course/${course.id}`}>
                       <CardLayout
                         imageSrc={course.imageUrl}
-                        size='sm'
                         badge={
                           <Badge className={`${getCourseStatusBadgeClass(course.status)}`}>
                             {capitalizeFirst(course.status)}
                           </Badge>
+                        }
+                        footer={
+                          <div>
+                            {course.duration > 0 && (
+                              <Badge className={getLevelBadgeClass(course.level)}>
+                                {capitalizeFirst(course.level)}
+                              </Badge>
+                            )}
+                          </div>
                         }
                       >
                         <div>
                           <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
                           <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{course.title}</h3>
                           <p className='line-clamp-2 text-xs text-gray-600'>{course.description}</p>
-                        </div>
-
-                        <div className='mt-auto flex flex-wrap items-center gap-2'>
-                          {course.duration > 0 && (
-                            <Badge className={getLevelBadgeClass(course.level)}>{capitalizeFirst(course.level)}</Badge>
-                          )}
                         </div>
                       </CardLayout>
                     </Link>

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 
 interface CreatorSceneState {
   instances: AssemblyInstance[]
@@ -9,6 +10,7 @@ interface CreatorSceneState {
   showAxes: boolean
   snapToGrid: boolean
   gridSize: number
+  draggingTemplate: ComponentTemplate | null
 }
 
 const initialState: CreatorSceneState = {
@@ -18,7 +20,8 @@ const initialState: CreatorSceneState = {
   showGrid: true,
   showAxes: true,
   snapToGrid: true,
-  gridSize: 1
+  gridSize: 1,
+  draggingTemplate: null
 }
 
 export const creatorSceneSlice = createSlice({
@@ -59,6 +62,10 @@ export const creatorSceneSlice = createSlice({
               y: action.payload.updates.transform?.scale?.y ?? prev.transform.scale?.y ?? 1,
               z: action.payload.updates.transform?.scale?.z ?? prev.transform.scale?.z ?? 1
             }
+          },
+          arms: {
+            ...prev.arms,
+            ...(action.payload.updates.arms ?? {})
           }
         }
       }
@@ -81,9 +88,13 @@ export const creatorSceneSlice = createSlice({
     setGridSize(state, action: PayloadAction<number>) {
       state.gridSize = action.payload
     },
+    setDraggingTemplate(state, action: PayloadAction<ComponentTemplate | null>) {
+      state.draggingTemplate = action.payload
+    },
     clearScene(state) {
       state.instances = []
       state.selectedId = null
+      state.draggingTemplate = null
     }
   }
 })
@@ -99,6 +110,7 @@ export const {
   toggleAxes,
   toggleSnap,
   setGridSize,
+  setDraggingTemplate,
   clearScene
 } = creatorSceneSlice.actions
 

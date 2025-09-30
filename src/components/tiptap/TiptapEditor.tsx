@@ -33,16 +33,20 @@ export default function TiptapEditor({ content, onChange, children }: TiptapEdit
 
   return (
     <EditorProvider editor={editor}>
-      <div className='relative flex h-[86vh] w-full flex-row bg-white'>
-        <TipTapSidebar />
-
-        <div className='flex flex-col'>
-          <div className='sticky top-0 z-50 border-b bg-white'>
+      <div className='flex h-full w-full bg-white'>
+        <div className=''>
+          <TipTapSidebar />
+        </div>
+        <div className='flex flex-1 flex-col'>
+          {/* Toolbar giống header */}
+          <div className='w-full border-b'>
             <Toolbar editor={editor} />
           </div>
-          <ScrollArea className='h-[400px]'>
-            <EditorContent editor={editor} className='h-full w-full' />
-            {children}
+
+          <ScrollArea className='h-[83.1vh] w-full overflow-hidden lg:h-[calc(100vh-9.9rem)] xl:h-[calc(100vh-7.3rem)]'>
+            <div className='mx-auto w-full max-w-7xl'>
+              <EditorContent editor={editor} className='h-full w-full outline-none' />
+            </div>
           </ScrollArea>
         </div>
       </div>

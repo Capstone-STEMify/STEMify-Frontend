@@ -22,7 +22,6 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const [localCourses, setLocalCourses] = React.useState<Course[]>(courses || [])
-  console.log('localCourses', localCourses)
 
   const dispatch = useAppDispatch()
   const { openModal } = useModal()

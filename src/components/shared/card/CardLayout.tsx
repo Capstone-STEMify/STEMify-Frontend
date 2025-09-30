@@ -1,77 +1,67 @@
+'use client'
+
+import { Card, CardContent, CardFooter } from '@/components/shadcn/card'
 import Image from 'next/image'
-import clsx from 'clsx'
-import { Size } from '@/types/general'
 import Link from 'next/link'
+import clsx from 'clsx'
 
 interface CardLayoutProps {
   imageSrc?: string
   alt?: string
-  size?: Size
   badge?: React.ReactNode
   infor?: React.ReactNode
-  children?: React.ReactNode
   action?: React.ReactNode
   href?: string
-  isScale?: boolean
   onClick?: () => void
-}
-
-const sizeClasses: Record<Size, { width: string; height: string; imageHeight: string }> = {
-  sm: { width: 'w-[200px]', height: 'h-[280px]', imageHeight: 'h-[140px]' },
-  md: { width: 'w-[264px]', height: 'h-[350px]', imageHeight: 'h-[180px]' },
-  lg: { width: 'w-[320px]', height: 'h-[400px]', imageHeight: 'h-[200px]' },
-  xl: { width: 'w-[400px]', height: 'h-[500px]', imageHeight: 'h-[260px]' }
-}
-
-// Map sizes to pixel values for image rendering
-const sizeToSizes: Record<Size, string> = {
-  sm: '200px',
-  md: '264px',
-  lg: '320px',
-  xl: '400px'
+  children?: React.ReactNode
+  imageRatio?: string
+  className?: string
+  footer?: React.ReactNode
+  imageClassName?: string
 }
 
 export default function CardLayout({
   imageSrc,
   alt = 'card image',
-  size = 'md',
   badge,
   infor,
-  children,
   action,
   href,
-  isScale = true,
-  onClick
+  onClick,
+  children,
+  imageRatio = 'aspect-[4/3]',
+  className,
+  footer,
+  imageClassName = 'object-cover'
 }: CardLayoutProps) {
-  const { width, height, imageHeight } = sizeClasses[size]
-  const sizes = sizeToSizes[size]
-
   const cardContent = (
-    <div
+    <Card
       className={clsx(
-        `hover:shadow-6 relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md transition-all duration-300`,
-        isScale && 'hover:scale-[1.02]',
-        width,
-        height
+        'flex h-full flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md',
+        className
       )}
       onClick={href ? undefined : onClick}
     >
-      {/* Image */}
-      <div className={clsx('relative w-full', imageHeight)}>
-        {imageSrc === '' ? (
-          <Image src={'/images/fallback.png'} alt={alt} fill className='object-cover' priority sizes={sizes} />
-        ) : (
-          <Image src={imageSrc || 'No image'} alt={alt} fill className='object-cover' sizes={sizes} />
-        )}
+      {/* Image section */}
+      <div className={clsx('relative w-full', imageRatio)}>
+        <Image
+          src={imageSrc || '/images/fallback.png'}
+          alt={alt}
+          fill
+          className={imageClassName}
+          sizes='(max-width: 768px) 100vw, 33vw'
+        />
         {badge && <div className='absolute top-2 left-2'>{badge}</div>}
         {infor && <div className='absolute bottom-2 left-2'>{infor}</div>}
+        {action && <div className='absolute top-2 right-2'>{action}</div>}
       </div>
 
-      {/* Flexible Content */}
-      <div className='flex min-h-0 flex-1 flex-col p-3'>{children}</div>
-      {/* Action (edit button, etc.) */}
-      {action && <div className='absolute top-2 right-2'>{action}</div>}
-    </div>
+      {/* Content */}
+      <CardContent className='flex-1 p-4'>{children}</CardContent>
+
+      {/* Footer */}
+      {footer && <CardFooter className='px-4 pt-0 pb-4'>{footer}</CardFooter>}
+    </Card>
   )
 
   return href ? (

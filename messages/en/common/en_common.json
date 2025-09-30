@@ -47,7 +47,9 @@
       "exploreCurriculums": "Explore Curriculums",
       "readBlogs": "Read Blogs",
       "addKit": "Add Kit",
-      "print": "Print"
+      "print": "Print",
+      "start": "Start Right Now",
+      "look": "Find Out More"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -58,7 +60,8 @@
       "curriculumCreateError": "An error occurred while creating the curriculum. Please try again.",
       "curriculumUpdateError": "An error occurred while updating the curriculum. Please try again.",
       "curriculumDeleteError": "An error occurred while deleting the curriculum. Please try again.",
-      "printPreview": "PRINT PREVIEW"
+      "printPreview": "PRINT PREVIEW",
+      "learnTitle": "What you'll learn"
     },
     "tableHeader": {
       "id": "ID",

@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "hehe",
-    "description": "hehe",
-    "author": "hehe",
+    "title": "aaaaaaaaaaaaa",
+    "description": "aaaaaaaaaaaaa",
+    "author": "aaaaaaaaaaaaa",
     "version": "2.0",
-    "created": "2025-09-16T09:48:45.801Z",
-    "lastModified": "2025-09-16T09:48:45.801Z"
+    "created": "2025-09-29T01:58:20.162Z",
+    "lastModified": "2025-09-29T01:58:20.162Z"
   },
   "templates": {
     "materials": [
@@ -16,6 +16,22 @@
       {
         "id": "plastic_red",
         "source": "/components/templates/MaterialLibrary/plastic_red.json"
+      },
+      {
+        "id": "plastic_blue",
+        "source": "/components/templates/MaterialLibrary/plastic_blue.json"
+      },
+      {
+        "id": "plastic_yellow",
+        "source": "/components/templates/MaterialLibrary/plastic_yellow.json"
+      },
+      {
+        "id": "plastic_orange",
+        "source": "/components/templates/MaterialLibrary/plastic_orange.json"
+      },
+      {
+        "id": "plastic_pink",
+        "source": "/components/templates/MaterialLibrary/plastic_pink.json"
       }
     ],
     "components": [
@@ -39,31 +55,11 @@
         "templateId": "green_11_2",
         "instances": [
           {
-            "id": "straw_1758016110940_313",
+            "id": "straw_1759110998303_537",
             "transform": {
               "position": {
                 "x": 0,
                 "y": 0,
-                "z": 0
-              },
-              "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          }
-        ]
-      },
-      {
-        "templateId": "yellow_3_8",
-        "instances": [
-          {
-            "id": "straw_1758016111875_696",
-            "transform": {
-              "position": {
-                "x": 0,
-                "y": 9,
                 "z": 0
               },
               "rotation": {
@@ -76,30 +72,77 @@
         ]
       }
     ],
-    "connectors": []
+    "connectors": [
+      {
+        "templateId": "3leg_red",
+        "instances": [
+          {
+            "id": "connector_1759111003852_23",
+            "transform": {
+              "position": {
+                "x": 8,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0.21770540785489562,
+                "y": -0.9936436492014886,
+                "z": -0.08148763664255551
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   "actions": [
     {
       "id": "action_show_all",
       "name": "Show All Components",
       "description": "Highlights all components in the scene",
-      "actionType": "highlight",
-      "targets": ["straw_1758016110940_313", "straw_1758016111875_696"],
-      "duration": 2,
       "type": "highlight",
+      "targets": ["straw_1759110998303_537", "connector_1759111003852_23"],
+      "duration": 2,
       "animation": {
         "params": {
           "colorHighlight": "#FFD700",
           "pulseEffect": true
         }
       }
+    },
+    {
+      "id": "action_transform_connector_1759111003852_23",
+      "name": "Adjust Arms of connector_1759111003852_23",
+      "type": "transform_arm",
+      "targets": ["connector_1759111003852_23"],
+      "duration": 2,
+      "connectorArmTransforms": {
+        "connector_1759111003852_23": {
+          "arm_1": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "arm_2": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "arm_3": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      },
+      "interpolation": "easeInOut"
     }
   ],
   "activities": [
     {
       "id": "custom_assembly",
-      "name": "hehe",
-      "description": "hehe",
+      "name": "aaaaaaaaaaaaa",
+      "description": "aaaaaaaaaaaaa",
       "difficulty": "beginner",
       "estimatedTime": 600,
       "steps": [
@@ -112,6 +155,13 @@
             "Notice the positioning of each component",
             "Observe the relationships between straws and connectors"
           ]
+        },
+        {
+          "actionId": "action_transform_connector_1759111003852_23",
+          "title": "Adjust Arms of connector_1759111003852_23",
+          "description": "Connector arms should rotate as exported",
+          "expectedResult": "Arms are rotated according to saved values",
+          "hints": ["Check arm_1, arm_2... rotations"]
         }
       ]
     }

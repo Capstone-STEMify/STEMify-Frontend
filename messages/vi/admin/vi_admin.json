@@ -13,7 +13,12 @@
       "standard": "Tiêu chuẩn",
       "setting": "Cài đặt",
       "help": "Trợ giúp",
-      "search": "Tìm kiếm"
+      "search": "Tìm kiếm",
+      "design": "Thiết kế",
+      "straw_labs": "Straw Labs",
+      "straw_labs_creator": "Trình tạo Straw Labs",
+      "makecode": "Make Code",
+      "makecode_creator": "Trình tạo Make Code"
     },
     "course_management": {
       "title": "Quản lý tài nguyên",

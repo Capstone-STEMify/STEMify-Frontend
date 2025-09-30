@@ -36,7 +36,7 @@ export const NoteBlock = Node.create({
         'data-type': 'note-block',
         'data-title': HTMLAttributes.title || '',
         'data-content': HTMLAttributes.content || '',
-        class: 'rounded-md border bg-yellow-50'
+        class: 'rounded-md my-6 border bg-yellow-50'
       },
       [
         'div',

@@ -47,7 +47,8 @@ export const QuizBlock = Node.create({
       {
         'data-type': 'quiz-block',
         'data-question': HTMLAttributes.question || '',
-        'data-options': JSON.stringify(options)
+        'data-options': JSON.stringify(options),
+        class: 'my-6'
       },
       [
         'div',

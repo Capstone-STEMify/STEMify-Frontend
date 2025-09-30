@@ -64,7 +64,6 @@ export default function CurriculumKitList({ kits }: KitListProps) {
         kits.map((kit) => (
           <div key={kit.id} className='relative flex max-w-xl min-w-0 gap-1'>
             <CardHorizontal
-              key={kit.id}
               imageUrl={
                 kit.images?.[0]?.imageUrl ||
                 'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'

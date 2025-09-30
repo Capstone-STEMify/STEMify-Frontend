@@ -20,14 +20,14 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
   type: 'oauth',
   version: '2.0',
   // clientSecret: process.env.CLIENT_SECRET,
-  clientId: `${process.env.NEXT_PUBLIC_CLIENT_ID}`,
+  clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
   idToken: true,
   issuer: process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL,
   wellKnown: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/.well-known/openid-configuration`,
   authorization: {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/authorize`,
     params: {
-      scope: 'stemify_api openid profile email roles',
+      scope: process.env.NEXT_PUBLIC_SCOPES,
       prompt: 'login'
     }
   },

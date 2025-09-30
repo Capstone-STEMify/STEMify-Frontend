@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 export default function NotificationHeader() {
   const t = useTranslations('Header')
   return (
-    <div>
+    <div className='p-4'>
       <h2 className='mb-1 text-base font-medium text-gray-900 dark:text-gray-100'>{t('notifications.title')}</h2>
       <STabs
         customStyle={{

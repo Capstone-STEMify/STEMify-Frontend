@@ -10,7 +10,7 @@ export default function TemplateContent() {
   }
 
   return (
-    <div>
+    <div className='my-2 px-4'>
       <h3 className='mb-3 text-sm font-semibold text-gray-700'>Insert Blocks</h3>
 
       <div className='grid grid-cols-2 gap-3'>

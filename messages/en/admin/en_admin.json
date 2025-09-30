@@ -13,7 +13,12 @@
       "standard": "Standard",
       "setting": "Setting",
       "help": "Get Help",
-      "search": "Search"
+      "search": "Search",
+      "design": "Design",
+      "straw_labs": "Straw Labs",
+      "straw_labs_creator": "Straw Labs Creator",
+      "makecode": "Make Code",
+      "makecode_creator": "Make Code Creator"
     },
     "course_management": {
       "title": "Resource Management"

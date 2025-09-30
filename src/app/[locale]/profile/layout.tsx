@@ -1,6 +1,6 @@
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
-import { metadata } from '../layout' 
+import { metadata } from '../layout'
 
 metadata.title = 'Profile'
 export default async function ProfileLayout({

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
 import { ObjectInspector } from '../ObjectInspector'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -14,10 +14,6 @@ import {
   clearScene,
   removeInstance,
   setSelectedId,
-  setTransformMode,
-  toggleAxes,
-  toggleGrid,
-  toggleSnap,
   updateInstance
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
@@ -28,7 +24,6 @@ export function Creator3D() {
   const addObject = useAddObject()
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
-  const [dragSource, setDragSource] = useState<ComponentTemplate | null>(null)
   const [showExportDialog, setShowExportDialog] = useState(false)
   const isMobile = useIsMobile()
 
@@ -37,23 +32,14 @@ export function Creator3D() {
   const [showRightSidebar, setShowRightSidebar] = useState<boolean>(true)
 
   // Ensure initial state respects mobile once mounted
-  useMemo(() => {
+  useEffect(() => {
     if (isMobile) {
       setShowLeftSidebar(false)
       setShowRightSidebar(false)
     }
-    return undefined
   }, [isMobile])
 
   // Handle drag start from palette
-  const handleDragStart = useCallback((template: ComponentTemplate) => {
-    setDragSource(template)
-  }, [])
-
-  // Handle drag end
-  const handleDragEnd = useCallback(() => {
-    setDragSource(null)
-  }, [])
 
   // Handle adding component from palette
   const handleAddComponent = useCallback(
@@ -110,20 +96,14 @@ export function Creator3D() {
   return (
     <div className='relative flex w-full bg-gray-100'>
       {/* Component Palette */}
-      {showLeftSidebar && <ComponentPalette onDragStart={handleDragStart} onAddComponent={handleAddComponent} />}
+      {showLeftSidebar && <ComponentPalette onAddComponent={handleAddComponent} />}
 
       {/* Main Workspace */}
       <div className='relative flex-1'>
         <CreatorWorkspace
-          dragSource={dragSource}
           onObjectSelect={handleObjectSelect}
           onObjectUpdate={handleObjectUpdate}
           onObjectAdd={handleWorkspaceAdd}
-          onDragEnd={handleDragEnd}
-          onTransformModeChange={(mode) => dispatch(setTransformMode(mode))}
-          onToggleGrid={() => dispatch(toggleGrid())}
-          onToggleAxes={() => dispatch(toggleAxes())}
-          onToggleSnap={() => dispatch(toggleSnap())}
         />
 
         {/* Scene Stats */}
