@@ -52,7 +52,7 @@ const items: Record<string, Item> = {
 
 const indent = 20
 
-export default function Component() {
+export default function WorkspaceTree() {
   // Store the initial expanded items to reset when search is cleared
   const initialExpandedItems = ['engineering', 'frontend', 'design-system']
   const [state, setState] = useState<Partial<TreeState<Item>>>({})
@@ -75,42 +75,9 @@ export default function Component() {
   })
 
   return (
-    <div className='flex h-full flex-col gap-2 *:nth-2:grow'>
+    <div className=''>
       <div className='relative'>
-        <Input
-          className='peer ps-9'
-          {...{
-            ...tree.getSearchInputElementProps(),
-            onChange: (e) => {
-              // First call the original onChange handler from getSearchInputElementProps
-              const originalProps = tree.getSearchInputElementProps()
-              if (originalProps.onChange) {
-                originalProps.onChange(e)
-              }
-
-              // Then handle our custom logic
-              const value = e.target.value
-
-              if (value.length > 0) {
-                // If input has at least one character, expand all items
-                tree.expandAll()
-              } else {
-                // If input is cleared, reset to initial expanded state
-                setState((prevState) => {
-                  return {
-                    ...prevState,
-                    expandedItems: initialExpandedItems
-                  }
-                })
-              }
-            }
-          }}
-          type='search'
-          placeholder='Quick search...'
-        />
-        <div className='text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50'>
-          <SearchIcon className='size-4' aria-hidden='true' />
-        </div>
+        <h2 className='mb-2 text-lg font-medium'>Workspace tree</h2>
       </div>
 
       <Tree indent={indent} tree={tree}>

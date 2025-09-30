@@ -63,17 +63,6 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
     >
-      {/* Drop Zone Overlay */}
-      {isDragOver && dragSource && (
-        <div className='bg-opacity-10 absolute inset-0 z-10 flex items-center justify-center border-4 border-dashed border-blue-400 bg-blue-500'>
-          <div className='rounded-lg bg-white p-6 text-center shadow-lg'>
-            <div className='mb-2 text-2xl'>📦</div>
-            <p className='font-medium text-gray-900'>Drop to add {dragSource.name}</p>
-            <p className='text-sm text-gray-600'>Will be placed at scene origin</p>
-          </div>
-        </div>
-      )}
-
       {/* 3D Canvas */}
       <Canvas
         camera={{
@@ -90,6 +79,12 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
           orbitControlsRef={orbitControlsRef}
           onObjectSelect={onObjectSelect}
           onObjectUpdate={onObjectUpdate}
+          onDropObject={(pos) => {
+            if (dragSource) {
+              onObjectAdd(dragSource, pos)
+              handleDragEnd()
+            }
+          }}
         />
       </Canvas>
 
