@@ -1,19 +1,19 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from 'react'
+import { motion } from 'framer-motion'
 
-const FilterSection: React.FC<{ 
-  categories: string[]; 
-  activeCategory: string; 
-  onCategoryChange: (cat: string) => void;
+const FilterSection: React.FC<{
+  categories: string[]
+  activeCategory: string
+  onCategoryChange: (cat: string) => void
 }> = ({ categories, activeCategory, onCategoryChange }) => {
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 0.6 }}
-      className="mb-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+      className='mx-auto mb-12 max-w-7xl px-4 sm:px-6 lg:px-8'
     >
-      <div className="flex flex-wrap gap-3">
+      <div className='flex flex-wrap gap-3'>
         {categories.map((category, index) => (
           <motion.button
             key={category}
@@ -34,7 +34,7 @@ const FilterSection: React.FC<{
         ))}
       </div>
     </motion.section>
-  );
-};
+  )
+}
 
-export default FilterSection;
+export default FilterSection
