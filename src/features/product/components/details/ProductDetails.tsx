@@ -4,10 +4,12 @@ import ProductGallery from './gallery/ProductGallery '
 import ProductInfo from './info/ProductInfo'
 import SoftwareSupport from './support/ProductSupport'
 import WhatsIncluded from './constituent/ProductConstituent'
+import BackButton from '@/components/shared/button/BackButton'
 
 const ProductDetails: React.FC = () => {
   return (
     <div className='min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50'>
+      <BackButton className='m-4' />
       <div className='px-4 py-12 sm:px-6 lg:px-8'>
         <div className='mx-auto mb-16 grid max-w-7xl gap-12 lg:grid-cols-2'>
           <ProductGallery />

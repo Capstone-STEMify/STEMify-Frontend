@@ -13,7 +13,7 @@ const ProductsGrid: React.FC<{ products: ProductData[] }> = ({ products }) => {
     >
       <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
         {products.map((product, index) => (
-          <Link href={`/stemify-kit/${product.id}`} key={product.id}>
+          <Link href={`/shop/${product.id}`} key={product.id}>
             <ProductCard key={product.id} product={product} index={index} />
           </Link>
         ))}
