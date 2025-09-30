@@ -1,6 +1,7 @@
 import { ProductData } from "../mockData";
 import { motion } from 'framer-motion'
 import ProductCard from "../card/ProductCard";
+import Link from "next/link";
 
 const ProductsGrid: React.FC<{ products: ProductData[] }> = ({ products }) => {
   return (
@@ -12,7 +13,9 @@ const ProductsGrid: React.FC<{ products: ProductData[] }> = ({ products }) => {
     >
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product, index) => (
-          <ProductCard key={product.id} product={product} index={index} />
+          <Link href={`/stemify-kit/${product.id}`} key={product.id}>
+            <ProductCard key={product.id} product={product} index={index} />
+          </Link>
         ))}
       </div>
     </motion.section>
