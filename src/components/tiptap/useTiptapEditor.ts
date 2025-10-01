@@ -116,7 +116,10 @@ export function useTiptapEditor({ content, onChange, isEditable = true }: UseTip
       NoteBlock,
       QuizBlock,
       Highlight,
-      StepBlock
+      StepBlock.configure({
+        allowBase64: true,
+        inline: true
+      })
     ],
     content: content || '',
     onUpdate({ editor }) {
