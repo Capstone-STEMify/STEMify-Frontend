@@ -10,11 +10,7 @@ const SoftwareSupport: React.FC = () => {
       transition={{ duration: 0.6 }}
       className='relative mx-auto max-w-7xl overflow-hidden rounded-3xl p-10'
     >
-      <h2 className='mb-12 text-center text-4xl font-semibold text-gray-900'>
-        Supporting You All the Way with
-        <br />
-        Easy-to-Use Softwares
-      </h2>
+      <h2 className='mb-12 text-center text-4xl font-semibold text-gray-900'>Take your STEM Class to the Next Level</h2>
       <div className='relative z-10 grid grid-cols-1 gap-6 md:grid-cols-2'>
         <div className='relative overflow-hidden rounded-3xl px-4 py-8 md:row-span-2'>
           <motion.div

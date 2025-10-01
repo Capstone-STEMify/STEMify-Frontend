@@ -17,6 +17,8 @@ export type Kit = {
   isPreOrder?: boolean
   weight: number // in grams
   dimensions?: string // e.g., "10x5x3 cm"
+  totalComponents: number
+  components: Component[] // List of component names
 }
 
 export type KitImage = {
@@ -36,4 +38,11 @@ export enum KitProductStatus {
   DRAFT = 'Draft',
   PUBLISHED = 'Published',
   ARCHIVED = 'Archived'
+}
+
+export type Component = {
+  id: number
+  name: string
+  imageUrl?: string
+  quantity: number
 }

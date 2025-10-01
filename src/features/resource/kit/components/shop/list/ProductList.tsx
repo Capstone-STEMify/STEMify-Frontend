@@ -18,7 +18,7 @@ const ProductList: React.FC = () => {
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 to-white'>
-      <div className='pb-24'>
+      <div className='pb-32'>
         <HeroSection />
 
         <div className='mx-auto mt-12 w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
@@ -35,7 +35,7 @@ const ProductList: React.FC = () => {
                 activeCategory={activeCategory}
                 onCategoryChange={setActiveCategory}
               /> */}
-              <div className='overflow-auto'>
+              <div className='scrollbar-hidden lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto'>
                 <ProductsGrid products={filteredProducts} />
               </div>
               {/* <RichResources /> */}

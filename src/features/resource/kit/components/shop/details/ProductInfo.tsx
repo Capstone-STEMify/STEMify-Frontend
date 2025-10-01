@@ -2,56 +2,13 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown, HandCoins, RotateCcw, Shield, ShoppingCart, Star, Truck } from 'lucide-react'
 import Image from 'next/image'
+import { Kit } from '@/features/resource/kit/types/kit.type'
+export interface ProductInfoProps {
+  kit: Kit
+}
 
-const ProductInfo: React.FC = () => {
+const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
   const [quantity, setQuantity] = useState(1)
-  const [selectedProduct, setSelectedProduct] = useState('mBot2')
-  const [selectedBundle, setSelectedBundle] = useState('1-robot')
-  const [showMore, setShowMore] = useState(false)
-
-  const products = [
-    { id: 'mBot2', name: 'mBot2' },
-    { id: 'rover', name: 'mBot2 Rover Kit' },
-    { id: 'smart', name: 'mBot2 Smart World Bundle' },
-    { id: 'competition', name: 'mBot2 Competition Bundle' },
-    { id: 'coding', name: 'mBot2 Coding Bundle' }
-  ]
-
-  const bundles = [
-    {
-      id: '1-robot',
-      name: '1 Robot',
-      price: 149.99,
-      originalPrice: 177.99,
-      description: 'Contains 1 Makeblock mBot2 Coding Robot Pack and Free Gift',
-      gift: 'Free Gift: mBot2 Standard Coding Box x1 ($19.99)',
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop'
-    },
-    {
-      id: '3-robots',
-      name: '3 Robots',
-      price: 449.99,
-      originalPrice: 533.99,
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop'
-    },
-    {
-      id: '6-robots',
-      name: '1 mBot2 Classroom Pack (6 Robots)',
-      price: 1199.99,
-      originalPrice: 1444.99,
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop'
-    },
-    {
-      id: '12-robots',
-      name: '2 mBot2 Classroom Packs (12 Robots)',
-      price: 2399.99,
-      originalPrice: 2889.99,
-      badge: 'New release! Perfect for classroom teaching',
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop'
-    }
-  ]
-
-  const selectedBundleData = bundles.find((b) => b.id === selectedBundle)
 
   return (
     <motion.div
@@ -68,7 +25,7 @@ const ProductInfo: React.FC = () => {
           transition={{ delay: 0.3 }}
           className='mb-3 text-3xl leading-tight font-semibold text-gray-900 lg:text-4xl'
         >
-          Makeblock mBot2: STEM Education Coding Robot Kit for AI Learning
+          {kit.name}
         </motion.h1>
 
         <motion.div
@@ -91,28 +48,20 @@ const ProductInfo: React.FC = () => {
           transition={{ delay: 0.5 }}
           className='mb-4 flex items-center gap-3'
         >
-          <span className='text-4xl font-semibold text-red-600'>${selectedBundleData?.price}</span>
-          <span className='text-xl text-gray-400 line-through'>${selectedBundleData?.originalPrice}</span>
-          <span className='flex items-center gap-1 rounded-full bg-orange-500 px-3 py-1 text-xs font-semibold text-white'>
-            Final: $139.99
+          <span className='text-4xl font-semibold text-red-600'>
+            {new Intl.NumberFormat('vi-VN').format(kit?.price ?? 0)} ₫
           </span>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className='mb-6 flex items-center gap-2 rounded-xl bg-gray-50 p-3'
-        >
-          <HandCoins className='h-5 w-5 text-blue-600' />
-          <span className='text-sm text-gray-700'>
-            Earn up to 10% cash back. <span className='cursor-pointer font-semibold text-blue-600'>Join Now.</span>
+          <span className='text-xl text-gray-400 line-through'>
+            {new Intl.NumberFormat('vi-VN').format((kit?.price ?? 0) * 1.1)} ₫
+          </span>
+          <span className='flex items-center gap-1 rounded-full bg-orange-500 px-3 py-1 text-xs font-semibold text-white'>
+            Best Seller
           </span>
         </motion.div>
       </div>
 
       {/* Buy More Save More */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
@@ -158,89 +107,46 @@ const ProductInfo: React.FC = () => {
         <p className='mt-3 text-center text-xs text-gray-600'>
           Get $10 off automatically—buy more to save even more for back-to-school essentials!
         </p>
-      </motion.div>
+      </motion.div> */}
 
       {/* Product Features */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
-        <ul className='space-y-2 text-sm text-gray-700'>
-          <li className='flex items-start gap-2'>
-            <span className='font-bold text-blue-500'>•</span>
-            <span>Aluminum robot perfect for long-term use in classrooms and homeschooling.</span>
-          </li>
-          <li className='flex items-start gap-2'>
-            <span className='font-bold text-blue-500'>•</span>
-            <span>Use a smartphone, gamepad or auto-program to control. (Support Bluetooth & Wifi)</span>
-          </li>
-        </ul>
-        <button
-          onClick={() => setShowMore(!showMore)}
-          className='mt-3 flex items-center gap-1 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700'
-        >
-          View More <ChevronDown className={`h-4 w-4 transition-transform ${showMore ? 'rotate-180' : ''}`} />
-        </button>
+        <span>{kit.description}</span>
       </motion.div>
 
       {/* Select Product */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
-        <h3 className='mb-3 text-lg font-bold text-gray-900'>Select the Product:</h3>
-        <div className='grid grid-cols-2 gap-3 lg:grid-cols-3'>
-          {products.map((product) => (
-            <motion.button
-              key={product.id}
-              onClick={() => setSelectedProduct(product.id)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`rounded-xl border-1 p-4 text-sm font-medium transition-all ${
-                selectedProduct === product.id
-                  ? 'border-blue-500 bg-blue-50 text-blue-700'
-                  : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              {product.name}
-            </motion.button>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Classroom Bundle Options */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }}>
-        <h3 className='mb-3 text-lg font-bold text-gray-900'>Classroom Bundle Options:</h3>
+        <h3 className='mb-3 text-lg font-bold text-gray-900'>Select Your Product:</h3>
         <div className='space-y-3'>
-          {bundles.map((bundle) => (
-            <motion.button
-              key={bundle.id}
-              onClick={() => setSelectedBundle(bundle.id)}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              className={`w-full rounded-xl border-1 p-4 text-left transition-all ${
-                selectedBundle === bundle.id
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 bg-white hover:border-gray-300'
-              }`}
-            >
-              {bundle.badge && (
-                <div className='mb-2'>
-                  <span className='rounded-full bg-blue-500 px-3 py-1 text-xs font-bold text-white'>
-                    {bundle.badge}
-                  </span>
-                </div>
-              )}
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center gap-3'>
-                  <Image src={bundle.image} alt='pro-img' width={60} height={60} className='rounded-lg' />
-                  <div>
-                    <div className='font-bold text-gray-900'>{bundle.name}</div>
-                    {bundle.description && <div className='mt-1 text-xs text-gray-600'>{bundle.description}</div>}
-                    {bundle.gift && <div className='mt-1 text-xs text-green-600'>• {bundle.gift}</div>}
-                  </div>
-                </div>
-                <div className='text-right'>
-                  <div className='text-lg font-bold text-gray-900'>${bundle.price}</div>
-                  <div className='text-sm text-gray-400 line-through'>${bundle.originalPrice}</div>
+          <motion.button
+            key={kit.id}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            className={'w-full rounded-xl border-1 border-blue-500 bg-white p-4 text-left transition-all'}
+          >
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-3'>
+                <Image
+                  src={kit.images[0]?.imageUrl ?? ''}
+                  alt='pro-img'
+                  width={60}
+                  height={60}
+                  className='rounded-lg'
+                />
+                <div>
+                  <div className='font-bold text-gray-900'>{kit.name}</div>
                 </div>
               </div>
-            </motion.button>
-          ))}
+              <div className='text-right'>
+                <div className='text-lg font-bold text-gray-900'>
+                  {new Intl.NumberFormat('vi-VN').format(kit?.price ?? 0)} ₫
+                </div>
+                <div className='text-sm text-gray-400 line-through'>
+                  {new Intl.NumberFormat('vi-VN').format((kit?.price ?? 0) * 1.1)} ₫
+                </div>
+              </div>
+            </div>
+          </motion.button>
         </div>
       </motion.div>
 
@@ -271,16 +177,11 @@ const ProductInfo: React.FC = () => {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className='flex-1 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 py-4 text-lg font-bold text-white shadow-xl shadow-blue-200 transition-all hover:shadow-2xl'
+            className='flex-1 rounded-full bg-gradient-to-r from-sky-300 to-sky-500 py-4 text-lg font-bold text-white shadow-xl shadow-blue-200 transition-all hover:shadow-2xl'
           >
             ADD TO CART
           </motion.button>
         </div>
-
-        <p className='text-center text-xs text-gray-600'>
-          Click <span className='cursor-pointer text-blue-600 underline'>here</span> to learn more about using a
-          Purchase Order (PO).
-        </p>
       </motion.div>
 
       {/* Delivery Info */}
@@ -334,17 +235,6 @@ const ProductInfo: React.FC = () => {
             <img src='https://www.fedex.com/content/dam/fedex-com/logos/logo.png' alt='FedEx' className='h-6' />
             <img src='https://www.ups.com/assets/resources/webcontent/images/ups-logo.svg' alt='UPS' className='h-6' />
           </div>
-        </div>
-
-        <div className='rounded-xl border border-red-200 bg-red-50 p-4'>
-          <p className='mb-2 text-sm text-gray-700'>
-            <span className='font-bold'>We are currently only able to deliver products to the contiguous VietNam.</span>
-          </p>
-          <p className='mb-2 text-xs text-gray-600'>
-            If you want to purchase products and deliver outside of the VN, we will forward your order to distributors
-            to serve you.
-          </p>
-          <button className='text-xs font-semibold text-blue-600 underline'>Please leave your details.</button>
         </div>
       </motion.div>
     </motion.div>
