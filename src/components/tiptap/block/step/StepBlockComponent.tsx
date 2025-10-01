@@ -6,7 +6,7 @@ import { usePostLessonAssetsMutation } from '@/features/resource/lesson-asset/ap
 import { PostLessonResponseBody } from '@/features/resource/lesson-asset/types/lessonAsest.type'
 import { fileToBase64 } from '@/utils/index'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
-import { ChevronLeft, ChevronRight, Plus, Trash2, Upload, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2, Plus, Trash2, Upload, X } from 'lucide-react'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useRef, useState } from 'react'
@@ -249,8 +249,17 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                       onDrop={handleDrop}
                       className='flex h-[200px] w-[200px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-400 text-gray-500 hover:border-purple-500 hover:text-purple-500'
                     >
-                      <Upload size={32} />
-                      <span className='ml-2 text-sm'>Tải ảnh lên</span>
+                      {isLoading ? (
+                        <div className='flex flex-col items-center'>
+                          <Loader2 className='h-8 w-8 animate-spin text-purple-500' />
+                          <span className='mt-2 text-sm text-gray-600'>Đang tải...</span>
+                        </div>
+                      ) : (
+                        <>
+                          <Upload size={32} />
+                          <span className='ml-2 text-sm'>Tải ảnh lên</span>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
