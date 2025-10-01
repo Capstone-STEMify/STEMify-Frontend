@@ -21,7 +21,7 @@ const SoftwareSupport: React.FC = () => {
             transition={{ delay: 0.2 }}
           >
             <motion.img
-              src='https://cdn.shopify.com/s/files/1/0070/5901/3716/files/Gamified_Coding.jpg?v=1731390857&width=2048'
+              src='https://stemfinity.com/cdn/shop/products/6_Maker_Kit_Strawbees_description1.jpg?v=1680691949&width=1080'
               alt='Gamified Coding Interface'
               className='h-auto w-full object-cover'
               whileHover={{ scale: 1.05 }}
@@ -46,7 +46,7 @@ const SoftwareSupport: React.FC = () => {
             transition={{ delay: 0.3 }}
           >
             <motion.img
-              src='https://cdn.shopify.com/s/files/1/0070/5901/3716/files/Fun-filled_Playing_0d96b89c-2c97-467c-85ed-f0d947faec8c.jpg?v=1731390857&width=2048'
+              src='https://strawbees.com/hs-fs/hubfs/LP_project.jpg?width=1920&height=1080&name=LP_project.jpg'
               alt='Fun-filled Playing Interface'
               className='h-auto w-full object-cover'
               whileHover={{ scale: 1.05 }}
@@ -71,7 +71,7 @@ const SoftwareSupport: React.FC = () => {
             transition={{ delay: 0.4 }}
           >
             <motion.img
-              src='https://cdn.shopify.com/s/files/1/0070/5901/3716/files/Easy_Building.jpg?v=1731390864&width=2048'
+              src='https://d3t0tbmlie281e.cloudfront.net/igi/browndoggadgets/R1XlRBKJMxKhYn1G.full'
               alt='Easy Building Interface'
               className='h-auto w-full object-cover'
               whileHover={{ scale: 1.05 }}
