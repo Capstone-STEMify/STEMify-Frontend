@@ -20,7 +20,7 @@ interface TiptapEditorProps {
 
 export default function TiptapEditor({ content, onChange, children }: TiptapEditorProps) {
   const { lessonId } = useParams()
-  const editor = useTiptapEditor({ content, onChange })
+  const editor = useTiptapEditor({ content, onChange, isEditable: true })
   const [uploadFiles, { isLoading }] = usePostLessonAssetsMutation()
 
   useEffect(() => {
