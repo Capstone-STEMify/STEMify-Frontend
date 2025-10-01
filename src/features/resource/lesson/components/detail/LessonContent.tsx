@@ -75,7 +75,7 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
       <div className='relative flex min-h-[650px] flex-col gap-6 p-6'>
         {/* Content with conditional blur */}
         <div className={`flex-1 ${!isLoggedIn ? 'blur-xs' : ''}`}>
-          <div key={content.data.items[0].id} className='prose flex-1'>
+          <div key={content.data.items[0].id} className='prose mx-auto w-full flex-1'>
             <ScrollArea className='h-[650px]'>
               <TiptapViewer content={normalizeMarkdown(content.data.items[0].contentBody)} />
             </ScrollArea>
