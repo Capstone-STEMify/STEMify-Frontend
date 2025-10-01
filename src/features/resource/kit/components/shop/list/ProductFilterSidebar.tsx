@@ -7,35 +7,50 @@ import { Label } from '@/components/shadcn/label'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { Slider } from '@/components/shadcn/slider'
+import { resetParams, setMultipleParams, setParam, setSearchTerm } from '@/features/resource/kit/slice/kitProductSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import useDebounce from '@/hooks/useDebounce'
 import { useTranslations } from 'next-intl'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function ProductFilterSidebar() {
   const t = useTranslations('kits.list')
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000])
+  const dispatch = useAppDispatch()
+  const filters = useAppSelector((state) => state.kit)
   const [search, setSearch] = useState('')
-  const [status, setStatus] = useState<string[]>([])
-  const [age, setAge] = useState<string>('all')
+  const debouncedSearch = useDebounce(search, 500)
+
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000000])
+  const debouncedPrice = useDebounce(priceRange, 500)
+
+  useEffect(() => {
+    dispatch(setSearchTerm(debouncedSearch))
+  }, [debouncedSearch, dispatch])
+
+  useEffect(() => {
+    dispatch(setMultipleParams({ minPrice: debouncedPrice[0], maxPrice: debouncedPrice[1] }))
+  }, [debouncedPrice, dispatch])
 
   const handleClear = () => {
-    setPriceRange([0, 2000])
-    setSearch('')
-    setStatus([])
-    setAge('all')
+    dispatch(resetParams())
   }
 
-  const toggleStatus = (value: string) => {
-    setStatus((prev) => (prev.includes(value) ? prev.filter((s) => s !== value) : [...prev, value]))
+  const handleSearchChange = (value: string) => {
+    setSearch(value)
+  }
+
+  const handlePriceChange = (range: [number, number]) => {
+    setPriceRange(range)
   }
 
   return (
-    <aside className='border-grey-300 w-full space-y-6 rounded-xl border-1 bg-white px-6 py-8 shadow-md'>
+    <aside className='border-grey-300 w-full space-y-6 rounded-xl border bg-white px-6 py-8 shadow-md'>
       <div className='flex items-center justify-between'>
         <h2 className='text-2xl font-semibold tracking-tight text-gray-800'>{t('Filters')}</h2>
         <Button
           size='sm'
           onClick={handleClear}
-          className='rounded-xl border-1 border-red-500 bg-white text-xs text-red-500 hover:bg-red-50 hover:text-red-600'
+          className='rounded-xl border border-red-500 bg-white text-xs text-red-500 hover:bg-red-50 hover:text-red-600'
         >
           {t('clear')}
         </Button>
@@ -67,8 +82,8 @@ export default function ProductFilterSidebar() {
           onValueChange={(v) => setPriceRange(v as [number, number])}
         />
         <div className='text-muted-foreground flex justify-between text-sm'>
-          <span>{priceRange[0].toLocaleString('vi-VN')} VND</span>
-          <span>{priceRange[1].toLocaleString('vi-VN')} VND</span>
+          <span>{(filters.minPrice ?? 0).toLocaleString('vi-VN')} VND</span>
+          <span>{(filters.maxPrice ?? 5000000).toLocaleString('vi-VN')} VND</span>
         </div>
       </div>
       <hr className='mb-4' />
@@ -76,7 +91,10 @@ export default function ProductFilterSidebar() {
       {/* Sort */}
       <div className='flex items-center gap-3 space-y-2'>
         <Label className='text-sm font-medium text-gray-600'>{t('sort')}</Label>
-        <Select defaultValue='newest'>
+        <Select
+          value={filters.orderBy ?? 'newest'}
+          onValueChange={(value) => dispatch(setParam({ key: 'orderBy', value }))}
+        >
           <SelectTrigger className='h-10 rounded-lg'>
             <SelectValue />
           </SelectTrigger>
@@ -96,16 +114,20 @@ export default function ProductFilterSidebar() {
           <div className='flex items-center space-x-2'>
             <Checkbox
               id='available'
-              checked={status.includes('available')}
-              onCheckedChange={() => toggleStatus('available')}
+              checked={filters.isPreOrder}
+              onCheckedChange={() =>
+                dispatch(setParam({ key: 'isPreOrder', value: filters.isPreOrder ? undefined : true }))
+              }
             />
             <Label htmlFor='available'>{t('statusOptions.available')}</Label>
           </div>
           <div className='flex items-center space-x-2'>
             <Checkbox
               id='preorder'
-              checked={status.includes('preorder')}
-              onCheckedChange={() => toggleStatus('preorder')}
+              checked={filters.isPreOrder === true}
+              onCheckedChange={() =>
+                dispatch(setParam({ key: 'isPreOrder', value: filters.isPreOrder ? undefined : true }))
+              }
             />
             <Label htmlFor='preorder'>{t('statusOptions.preOrder')}</Label>
           </div>
@@ -116,7 +138,11 @@ export default function ProductFilterSidebar() {
       {/* Age (Radio) */}
       <div className='space-y-2'>
         <Label className='text-sm font-medium text-gray-600'>Age</Label>
-        <RadioGroup value={age} onValueChange={setAge} className='mt-1 space-y-2 pl-1'>
+        <RadioGroup
+          value={filters.age ?? 'all'}
+          onValueChange={(value) => dispatch(setParam({ key: 'age', value }))}
+          className='mt-1 space-y-2 pl-1'
+        >
           <div className='flex items-center space-x-2'>
             <RadioGroupItem value='all' id='age-all' />
             <Label htmlFor='age-all'>{t('ageOptions.all')}</Label>

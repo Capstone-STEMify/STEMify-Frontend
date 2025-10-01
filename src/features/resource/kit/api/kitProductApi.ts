@@ -1,8 +1,8 @@
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { Kit, KitSliceParams } from '@/features/resource/kit/types/kit.type'
 
-export const kitApi = createCrudApi<Kit, KitSliceParams>({
-  reducerPath: 'kitApi',
+export const kitProductApi = createCrudApi<Kit, KitSliceParams>({
+  reducerPath: 'kitproductApi',
   tagTypes: ['Kit'],
   baseUrl: '/kit-products'
 })
@@ -19,4 +19,4 @@ export const {
   useLazySearchQuery: useLazySearchKitQuery,
   useLazyGetAllQuery: useLazyGetAllKitQuery,
   useLazyGetByIdQuery: useLazyGetKitByIdQuery
-} = kitApi
+} = kitProductApi

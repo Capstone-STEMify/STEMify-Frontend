@@ -27,8 +27,8 @@ import { userSlice } from '@/features/user/slice/userSlice'
 import { curriculumApi } from '@/features/resource/curriculum/api/curriculumApi'
 import { learningOutcomeApi } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
 import { curriculumSlice } from '@/features/resource/curriculum/slice/curriculumSlice'
-import { kitApi } from '@/features/resource/kit/api/kitApi'
-import { kitSlice } from '@/features/resource/kit/slice/kitSlice'
+import { kitProductApi } from '@/features/resource/kit/api/kitProductApi'
+import { kitProductSlice } from '@/features/resource/kit/slice/kitProductSlice'
 import { strawLabSlice } from '@/features/creator-3d/slice/strawLabSlice'
 import { creatorSceneSlice } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { courseLearningOutcomeApi } from '@/features/resource/learning-outcome/api/courseLearningOutcomeApi'
@@ -56,7 +56,7 @@ export const rootReducer = combineReducers({
   notificationRealtime: notificationRealtimeSlice.reducer,
   user: userSlice.reducer,
   curriculum: curriculumSlice.reducer,
-  kit: kitSlice.reducer,
+  kit: kitProductSlice.reducer,
   strawLab: strawLabSlice.reducer,
   creatorScene: creatorSceneSlice.reducer,
   editor: editorSlice.reducer,
@@ -82,6 +82,6 @@ export const rootReducer = combineReducers({
   [curriculumApi.reducerPath]: curriculumApi.reducer,
   [learningOutcomeApi.reducerPath]: learningOutcomeApi.reducer,
   [courseLearningOutcomeApi.reducerPath]: courseLearningOutcomeApi.reducer,
-  [kitApi.reducerPath]: kitApi.reducer,
+  [kitProductApi.reducerPath]: kitProductApi.reducer,
   [planApi.reducerPath]: planApi.reducer
 })

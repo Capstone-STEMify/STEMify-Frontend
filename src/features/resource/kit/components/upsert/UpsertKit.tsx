@@ -1,7 +1,11 @@
 import { Button } from '@/components/shadcn/button'
 import { useAppForm } from '@/components/shared/form/items'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { useCreateKitMutation, useGetKitByIdQuery, useUpdateKitMutation } from '@/features/resource/kit/api/kitApi'
+import {
+  useCreateKitMutation,
+  useGetKitByIdQuery,
+  useUpdateKitMutation
+} from '@/features/resource/kit/api/kitProductApi'
 import { KitFormData } from '@/features/resource/kit/components/form/kitForm.schema'
 import { Kit } from '@/features/resource/kit/types/kit.type'
 import { useModal } from '@/providers/ModalProvider'

@@ -29,6 +29,7 @@ export type KitSliceParams = {
   minPrice?: number
   maxPrice?: number
   ageRangeId?: number
+  isPreOrder?: boolean
 } & SliceQueryParams
 
 export enum KitProductStatus {

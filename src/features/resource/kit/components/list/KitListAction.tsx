@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import React from 'react'
 import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
-import { setSearchTerm } from '@/features/resource/kit/slice/kitSlice'
+import { setSearchTerm } from '@/features/resource/kit/slice/kitProductSlice'
 
 export default function KitAction() {
   // Translations
