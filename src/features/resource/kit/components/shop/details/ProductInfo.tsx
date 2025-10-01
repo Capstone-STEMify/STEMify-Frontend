@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronDown, HandCoins, RotateCcw, Shield, ShoppingCart, Star, Truck } from 'lucide-react'
+import { ChevronDown, HandCoins, RotateCcw, Shield, ShoppingCart, Star, Truck, Wallet } from 'lucide-react'
 import Image from 'next/image'
 import { Kit } from '@/features/resource/kit/types/kit.type'
 export interface ProductInfoProps {
@@ -196,44 +196,41 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
           <span className='font-semibold'>Buy with Prime for a Faster Delivery</span>
         </div>
 
-        <div className='rounded-xl bg-gray-50 p-4'>
+        <div className='rounded-xl bg-white p-4 shadow-sm'>
           <div className='mb-3 flex items-center justify-between'>
-            <span className='font-semibold text-gray-900'>Safe & Secure Checkout</span>
+            <div className='flex items-center gap-2'>
+              <Wallet className='h-5 w-5 text-green-600'></Wallet>
+              <span className='font-semibold text-gray-900'>Safe & Secure Checkout</span>
+            </div>
+
             <div className='flex gap-2'>
               <img src='https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg' alt='PayPal' className='h-5' />
               <img
-                src='https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg'
+                src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc_b7cYDTEaXxYsRDAdsVXYknigIr16CNbZQ&s'
                 alt='Visa'
                 className='h-5'
               />
               <img
-                src='https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg'
+                src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSutP9weqAPNNrV0V616bloZn2fwAdAOHqnFQ&s'
                 alt='Mastercard'
                 className='h-5'
               />
             </div>
           </div>
-          <div className='flex flex-wrap gap-2'>
-            <span className='rounded bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700'>Paypal</span>
-            <span className='rounded bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700'>Visa</span>
-            <span className='rounded bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700'>Momo</span>
-          </div>
         </div>
 
-        <div className='rounded-xl border border-yellow-200 bg-yellow-50 p-4'>
+        <div className='flex justify-between rounded-xl border border-yellow-200 bg-yellow-50 p-4 shadow-sm'>
           <div className='mb-2 flex items-center gap-2'>
             <Truck className='h-5 w-5 text-yellow-600' />
             <span className='font-semibold text-gray-900'>Ship in 2 Business Days</span>
           </div>
-          <p className='mb-3 text-sm text-gray-700'>with Trusted Delivery</p>
           <div className='flex gap-2'>
             <img
-              src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/320px-Amazon_logo.svg.png'
+              src='https://product.hstatic.net/1000405368/product/giao_hang_nhanh_toan_quoc_color.b7d18fe5_39425b03ee544ab2966d465756a00f89.png'
               alt='Amazon'
-              className='h-6'
+              className='h-10'
             />
-            <img src='https://www.fedex.com/content/dam/fedex-com/logos/logo.png' alt='FedEx' className='h-6' />
-            <img src='https://www.ups.com/assets/resources/webcontent/images/ups-logo.svg' alt='UPS' className='h-6' />
+            <img src='https://cdn.tgdd.vn/2020/03/GameApp/image-200x200-1.png' alt='FedEx' className='h-10' />
           </div>
         </div>
       </motion.div>
