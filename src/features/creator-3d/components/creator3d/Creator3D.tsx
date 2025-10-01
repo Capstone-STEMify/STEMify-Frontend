@@ -2,8 +2,7 @@
 
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
-import { ObjectInspector } from '../ObjectInspector'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { ObjectInspector } from '../right-sidebar/ObjectInspector'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
 import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
@@ -17,6 +16,7 @@ import {
   updateInstance
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
+import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()
@@ -25,23 +25,7 @@ export function Creator3D() {
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
   const [showExportDialog, setShowExportDialog] = useState(false)
-  const isMobile = useIsMobile()
 
-  // Sidebar visibility (collapse on mobile by default)
-  const [showLeftSidebar, setShowLeftSidebar] = useState<boolean>(true)
-  const [showRightSidebar, setShowRightSidebar] = useState<boolean>(true)
-
-  // Ensure initial state respects mobile once mounted
-  useEffect(() => {
-    if (isMobile) {
-      setShowLeftSidebar(false)
-      setShowRightSidebar(false)
-    }
-  }, [isMobile])
-
-  // Handle drag start from palette
-
-  // Handle adding component from palette
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
       addObject(template, { x: 0, y: 0, z: 0 })
@@ -96,10 +80,12 @@ export function Creator3D() {
   return (
     <div className='relative flex w-full bg-gray-100'>
       {/* Component Palette */}
-      {showLeftSidebar && <ComponentPalette onAddComponent={handleAddComponent} />}
+      <div className='w-64 flex-1 bg-white'>
+        <ComponentPalette onAddComponent={handleAddComponent} />
+      </div>
 
       {/* Main Workspace */}
-      <div className='relative flex-1'>
+      <div className='relative w-full'>
         <CreatorWorkspace
           onObjectSelect={handleObjectSelect}
           onObjectUpdate={handleObjectUpdate}
@@ -119,30 +105,19 @@ export function Creator3D() {
       </div>
 
       {/* Object Inspector */}
-      {showRightSidebar && (
-        <ObjectInspector
-          key={selectedObject?.id}
-          selectedObject={selectedObject}
-          onObjectUpdate={handleObjectUpdate}
-          onObjectDelete={handleObjectDelete}
-        />
-      )}
-
-      {/* Sidebar Toggles */}
-      <button
-        onClick={() => setShowLeftSidebar((s) => !s)}
-        className='absolute top-1/2 left-2 z-40 -translate-y-1/2 rounded-md border bg-white px-2 py-1 text-xs shadow'
-        aria-label='Toggle components panel'
-      >
-        {showLeftSidebar ? '⟨' : '⟩'}
-      </button>
-      <button
-        onClick={() => setShowRightSidebar((s) => !s)}
-        className='absolute top-1/2 right-2 z-40 -translate-y-1/2 rounded-md border bg-white px-2 py-1 text-xs shadow'
-        aria-label='Toggle properties panel'
-      >
-        {showRightSidebar ? '⟩' : '⟨'}
-      </button>
+      <div className='m-2 flex w-80 flex-col gap-4'>
+        <div className='rounded-2xl bg-white p-4 shadow'>
+          <WorkspaceTree />
+        </div>
+        <div className='flex h-full w-80 flex-col overflow-hidden rounded-2xl bg-white'>
+          <ObjectInspector
+            key={selectedObject?.id}
+            selectedObject={selectedObject}
+            onObjectUpdate={handleObjectUpdate}
+            onObjectDelete={handleObjectDelete}
+          />
+        </div>
+      </div>
 
       {/* Export Dialog */}
       {showExportDialog && (

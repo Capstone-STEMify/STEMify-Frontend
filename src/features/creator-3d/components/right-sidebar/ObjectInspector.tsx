@@ -180,7 +180,7 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
 
   if (!selectedObject || !localValues) {
     return (
-      <div className='flex w-80 flex-col border-l border-gray-200 bg-white'>
+      <div className='flex h-full w-80 flex-col border-gray-200 bg-white'>
         <div className='border-b border-gray-200 p-4'>
           <h2 className='font-semibold text-gray-900'>Properties</h2>
         </div>
@@ -192,12 +192,10 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
   }
 
   return (
-    <div className='flex w-80 flex-col border-l border-gray-200 bg-white'>
+    <div className='flex h-full w-80 flex-col border-gray-200 bg-white'>
       <div className='border-b border-gray-200 p-4'>
         <h2 className='font-semibold text-gray-900'>Properties</h2>
-        <span className='text-sm text-gray-600'>
-          {selectedObject.category === 'connector' ? '🔴 Connector' : '🟢 Straw'}
-        </span>
+        <span className='text-sm text-gray-600'>{selectedObject.data?.name ?? selectedObject.id}</span>
       </div>
 
       <div className='flex-1 space-y-6 overflow-y-auto p-4'>

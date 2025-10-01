@@ -82,10 +82,6 @@ export const Connector3D = forwardRef<Group, Props>(
         })
 
         armsRef.current = foundArms
-
-        // console.log(`[${componentId.current}] Found arms:`, Object.keys(armsRef.current))
-        // console.log(`[${componentId.current}] Total scene children:`, scene.children.length)
-        // console.log(`[${componentId.current}] Model setup completed`)
       } catch (error) {
         console.error(`[${componentId.current}] Error in model setup:`, error)
         errorCount.current++

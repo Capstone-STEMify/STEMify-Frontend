@@ -13,13 +13,15 @@ interface SceneContentProps {
   orbitControlsRef: React.RefObject<any>
   onObjectSelect: (objectId: string | null) => void
   onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
+  onDropObject: (position: { x: number; y: number; z: number }) => void
 }
 
 export function SceneContent({
   transformControlsRef,
   orbitControlsRef,
   onObjectSelect,
-  onObjectUpdate
+  onObjectUpdate,
+  onDropObject
 }: SceneContentProps) {
   const objectRefs = useRef<Record<string, THREE.Object3D>>({})
   const cameraStatus = useAppSelector((state) => state.strawLab.cameraStatus)
@@ -30,6 +32,28 @@ export function SceneContent({
   const showAxes = useAppSelector((state) => state.creatorScene.showAxes)
   const transformMode = useAppSelector((state) => state.creatorScene.transformMode)
   const objects = useAppSelector((state) => state.creatorScene.instances)
+  const { camera, gl } = useThree()
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      const rect = gl.domElement.getBoundingClientRect()
+      const ndc = new THREE.Vector2(
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        -((e.clientY - rect.top) / rect.height) * 2 + 1
+      )
+
+      const raycaster = new THREE.Raycaster()
+      raycaster.setFromCamera(ndc, camera)
+
+      const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+      const point = new THREE.Vector3()
+      raycaster.ray.intersectPlane(plane, point)
+
+      if (point) {
+        onDropObject({ x: point.x, y: point.y, z: point.z })
+      }
+    },
+    [camera, gl, onDropObject]
+  )
 
   // Update transform controls target when selection changes
   useEffect(() => {
@@ -94,6 +118,16 @@ export function SceneContent({
       })
     }
   }, [selectedObjectId, objects, onObjectUpdate])
+
+  useEffect(() => {
+    const dom = gl.domElement
+    dom.addEventListener('drop', handleDrop)
+    dom.addEventListener('dragover', (e) => e.preventDefault())
+
+    return () => {
+      dom.removeEventListener('drop', handleDrop)
+    }
+  }, [handleDrop, gl])
 
   return (
     <>

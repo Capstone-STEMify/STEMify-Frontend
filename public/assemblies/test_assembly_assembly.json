@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "aaaaaaaaaaaaa",
-    "description": "aaaaaaaaaaaaa",
-    "author": "aaaaaaaaaaaaa",
+    "title": "aaaaaaaaaa",
+    "description": "aaaaaaaaaa",
+    "author": "aaaaaaaaaa",
     "version": "2.0",
-    "created": "2025-09-29T01:58:20.162Z",
-    "lastModified": "2025-09-29T01:58:20.162Z"
+    "created": "2025-09-30T15:37:11.491Z",
+    "lastModified": "2025-09-30T15:37:11.491Z"
   },
   "templates": {
     "materials": [
@@ -52,15 +52,80 @@
   "instances": {
     "straws": [
       {
-        "templateId": "green_11_2",
+        "templateId": "yellow_3_8",
         "instances": [
           {
-            "id": "straw_1759110998303_537",
+            "id": "straw_1759246620938_327",
             "transform": {
               "position": {
+                "x": 0.7142013861070726,
+                "y": 0,
+                "z": 12.087572684294607
+              },
+              "rotation": {
                 "x": 0,
                 "y": 0,
                 "z": 0
+              }
+            }
+          },
+          {
+            "id": "straw_1759246622131_984",
+            "transform": {
+              "position": {
+                "x": 29.595172452611493,
+                "y": 0,
+                "z": -11.067764748699275
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "id": "straw_1759246624290_462",
+            "transform": {
+              "position": {
+                "x": -26.15743232754295,
+                "y": 0,
+                "z": 11.856746551431321
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "templateId": "green_11_2",
+        "instances": [
+          {
+            "id": "straw_1759246623188_996",
+            "transform": {
+              "position": {
+                "x": -8.750068186145704,
+                "y": 0,
+                "z": -35.682976213274365
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "id": "straw_1759246626198_258",
+            "transform": {
+              "position": {
+                "x": -1.2757060054373817,
+                "y": 0,
+                "z": 26.07543235230776
               },
               "rotation": {
                 "x": 0,
@@ -77,17 +142,32 @@
         "templateId": "3leg_red",
         "instances": [
           {
-            "id": "connector_1759111003852_23",
+            "id": "connector_1759246620214_720",
             "transform": {
               "position": {
-                "x": 8,
+                "x": -18.767905454979022,
                 "y": 0,
-                "z": 0
+                "z": -4.205230154454846
               },
               "rotation": {
-                "x": 0.21770540785489562,
-                "y": -0.9936436492014886,
-                "z": -0.08148763664255551
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "id": "connector_1759246625198_901",
+            "transform": {
+              "position": {
+                "x": -12.979457396485593,
+                "y": 0,
+                "z": 21.469145496189327
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
               }
             }
           }
@@ -101,7 +181,15 @@
       "name": "Show All Components",
       "description": "Highlights all components in the scene",
       "type": "highlight",
-      "targets": ["straw_1759110998303_537", "connector_1759111003852_23"],
+      "targets": [
+        "connector_1759246620214_720",
+        "straw_1759246620938_327",
+        "straw_1759246622131_984",
+        "straw_1759246623188_996",
+        "straw_1759246624290_462",
+        "connector_1759246625198_901",
+        "straw_1759246626198_258"
+      ],
       "duration": 2,
       "animation": {
         "params": {
@@ -111,13 +199,40 @@
       }
     },
     {
-      "id": "action_transform_connector_1759111003852_23",
-      "name": "Adjust Arms of connector_1759111003852_23",
+      "id": "action_transform_connector_1759246620214_720",
+      "name": "Adjust Arms of connector_1759246620214_720",
       "type": "transform_arm",
-      "targets": ["connector_1759111003852_23"],
+      "targets": ["connector_1759246620214_720"],
       "duration": 2,
       "connectorArmTransforms": {
-        "connector_1759111003852_23": {
+        "connector_1759246620214_720": {
+          "arm_1": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "arm_2": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "arm_3": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      },
+      "interpolation": "easeInOut"
+    },
+    {
+      "id": "action_transform_connector_1759246625198_901",
+      "name": "Adjust Arms of connector_1759246625198_901",
+      "type": "transform_arm",
+      "targets": ["connector_1759246625198_901"],
+      "duration": 2,
+      "connectorArmTransforms": {
+        "connector_1759246625198_901": {
           "arm_1": {
             "x": 0,
             "y": 0,
@@ -141,8 +256,8 @@
   "activities": [
     {
       "id": "custom_assembly",
-      "name": "aaaaaaaaaaaaa",
-      "description": "aaaaaaaaaaaaa",
+      "name": "aaaaaaaaaa",
+      "description": "aaaaaaaaaa",
       "difficulty": "beginner",
       "estimatedTime": 600,
       "steps": [
@@ -157,8 +272,15 @@
           ]
         },
         {
-          "actionId": "action_transform_connector_1759111003852_23",
-          "title": "Adjust Arms of connector_1759111003852_23",
+          "actionId": "action_transform_connector_1759246620214_720",
+          "title": "Adjust Arms of connector_1759246620214_720",
+          "description": "Connector arms should rotate as exported",
+          "expectedResult": "Arms are rotated according to saved values",
+          "hints": ["Check arm_1, arm_2... rotations"]
+        },
+        {
+          "actionId": "action_transform_connector_1759246625198_901",
+          "title": "Adjust Arms of connector_1759246625198_901",
           "description": "Connector arms should rotate as exported",
           "expectedResult": "Arms are rotated according to saved values",
           "hints": ["Check arm_1, arm_2... rotations"]

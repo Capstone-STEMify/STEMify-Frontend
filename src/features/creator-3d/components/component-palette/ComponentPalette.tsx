@@ -136,16 +136,15 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
     }
     onAddComponent(template)
   }
-
   return (
-    <div className='flex w-64 flex-col border-r border-gray-200 bg-white'>
+    <div className='flex h-full flex-col'>
       {/* Header */}
       <div className='border-b border-gray-200 p-4'>
         <h2 className='font-semibold text-gray-900'>Components</h2>
         <p className='mt-1 text-xs text-gray-500'>Drag to add, double-click to place</p>
       </div>
 
-      {/* Component List */}
+      {/* Component List chiếm hết phần còn lại */}
       <div className='flex-1 overflow-y-auto p-4'>
         <div className='space-y-3'>
           {templates.map((template) => (
@@ -160,7 +159,7 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
         </div>
       </div>
 
-      {/* Instructions */}
+      {/* Instructions nằm cuối, cao theo nội dung */}
       <div className='border-t border-gray-200 bg-gray-50 p-4'>
         <div className='space-y-1 text-xs text-gray-600'>
           <div className='flex items-center gap-2'>
