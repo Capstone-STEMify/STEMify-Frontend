@@ -31,6 +31,12 @@ export default function ProductFilterSidebar() {
     dispatch(setMultipleParams({ minPrice: debouncedPrice[0], maxPrice: debouncedPrice[1] }))
   }, [debouncedPrice, dispatch])
 
+  const sortOptions = [
+    { value: 'createdDateDesc', orderBy: 'createdDate', sortDirection: 'Desc', label: t('sortOptions.newest') },
+    { value: 'priceAsc', orderBy: 'price', sortDirection: 'Asc', label: t('sortOptions.priceLowToHigh') },
+    { value: 'priceDesc', orderBy: 'price', sortDirection: 'Desc', label: t('sortOptions.priceHighToLow') }
+  ]
+
   const handleClear = () => {
     dispatch(resetParams())
   }
@@ -92,16 +98,27 @@ export default function ProductFilterSidebar() {
       <div className='flex items-center gap-3 space-y-2'>
         <Label className='text-sm font-medium text-gray-600'>{t('sort')}</Label>
         <Select
-          value={filters.orderBy ?? 'newest'}
-          onValueChange={(value) => dispatch(setParam({ key: 'orderBy', value }))}
+          value={
+            sortOptions.find((opt) => opt.orderBy === filters.orderBy && opt.sortDirection === filters.sortDirection)
+              ?.value ?? 'createdDateDesc'
+          }
+          onValueChange={(value) => {
+            const selected = sortOptions.find((opt) => opt.value === value)
+            if (selected) {
+              dispatch(setParam({ key: 'orderBy', value: selected.orderBy }))
+              dispatch(setParam({ key: 'sortDirection', value: selected.sortDirection }))
+            }
+          }}
         >
           <SelectTrigger className='h-10 rounded-lg'>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='newest'>{t('sortOptions.newest')}</SelectItem>
-            <SelectItem value='price-asc'>{t('sortOptions.priceLowToHigh')}</SelectItem>
-            <SelectItem value='price-desc'>{t('sortOptions.priceHighToLow')}</SelectItem>
+            {sortOptions.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -111,26 +128,30 @@ export default function ProductFilterSidebar() {
       <div className='space-y-2'>
         <Label className='text-sm font-medium text-gray-600'>{t('status')}</Label>
         <div className='space-y-2 pl-1'>
-          <div className='flex items-center space-x-2'>
-            <Checkbox
-              id='available'
-              checked={filters.isPreOrder}
-              onCheckedChange={() =>
-                dispatch(setParam({ key: 'isPreOrder', value: filters.isPreOrder ? undefined : true }))
-              }
-            />
-            <Label htmlFor='available'>{t('statusOptions.available')}</Label>
-          </div>
-          <div className='flex items-center space-x-2'>
-            <Checkbox
-              id='preorder'
-              checked={filters.isPreOrder === true}
-              onCheckedChange={() =>
-                dispatch(setParam({ key: 'isPreOrder', value: filters.isPreOrder ? undefined : true }))
-              }
-            />
-            <Label htmlFor='preorder'>{t('statusOptions.preOrder')}</Label>
-          </div>
+          <RadioGroup
+            value={filters.isPreOrder === true ? 'preorder' : filters.isPreOrder === false ? 'available' : 'all'}
+            onValueChange={(value) => {
+              let newValue: boolean | undefined
+              if (value === 'preorder') newValue = true
+              else if (value === 'available') newValue = false
+              else newValue = undefined // all
+              dispatch(setParam({ key: 'isPreOrder', value: newValue }))
+            }}
+            className='space-y-2 pl-1'
+          >
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='all' id='allStatus' />
+              <Label htmlFor='allStatus'>{t('statusOptions.all')}</Label>
+            </div>
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='available' id='available' />
+              <Label htmlFor='available'>{t('statusOptions.available')}</Label>
+            </div>
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='preorder' id='preorder' />
+              <Label htmlFor='preorder'>{t('statusOptions.preOrder')}</Label>
+            </div>
+          </RadioGroup>
         </div>
       </div>
       <hr className='mb-4' />

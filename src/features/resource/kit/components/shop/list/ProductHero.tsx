@@ -23,17 +23,12 @@ const SLIDES: Slide[] = [
     id: 'sale-2',
     src: 'https://stem-supplies.com/media/catalog/product/s/-/s-36509-strawbeesstarterkits-8.jpg?optimize=low&bg-color=255,255,255&fit=bounds&height=&width=&canvas=:',
     alt: 'STEM kits'
-  },
-  {
-    id: 'sale-3',
-    src: 'https://cdn.schoolspecialty.com/1682c7ca-d120-4aea-a994-b0f100b85cf9/2103924_A_JPG%20Output.jpg?width=700&height=700&fit=bounds&canvas=700,700&bg-color=ffffff',
-    alt: 'Coding lab'
-  },
-  {
-    id: 'sale-4',
-    src: 'https://stem-supplies.com/media/catalog/product/s/-/s-36509-strawbeesstarterkits-79.jpg?optimize=low&bg-color=255,255,255&fit=bounds&height=744&width=744&canvas=744:744',
-    alt: 'Makerspace'
   }
+  // {
+  //   id: 'sale-4',
+  //   src: 'https://stem-supplies.com/media/catalog/product/s/-/s-36509-strawbeesstarterkits-79.jpg?optimize=low&bg-color=255,255,255&fit=bounds&height=744&width=744&canvas=744:744',
+  //   alt: 'Makerspace'
+  // }
 ]
 
 export default function HeroSection() {

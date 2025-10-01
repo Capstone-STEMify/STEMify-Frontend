@@ -3,11 +3,11 @@ import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: KitSliceParams = {
   pageNumber: 1,
-  pageSize: 8,
+  pageSize: 6,
   search: undefined,
-  orderBy: undefined,
+  orderBy: 'createdDate',
   status: undefined,
-  sortDirection: 'Asc',
+  sortDirection: 'Desc',
   minPrice: undefined,
   maxPrice: undefined,
   ageRangeId: undefined
