@@ -1,9 +1,9 @@
 'use client'
 import React from 'react'
-import ProductGallery from './gallery/ProductGallery '
-import ProductInfo from './info/ProductInfo'
-import SoftwareSupport from './support/ProductSupport'
-import WhatsIncluded from './constituent/ProductConstituent'
+import ProductGallery from './ProductGallery '
+import ProductInfo from './ProductInfo'
+import SoftwareSupport from './ProductSupport'
+import WhatsIncluded from './ProductConstituent'
 import BackButton from '@/components/shared/button/BackButton'
 
 const ProductDetails: React.FC = () => {

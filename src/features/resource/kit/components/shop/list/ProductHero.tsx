@@ -16,22 +16,22 @@ type Slide = {
 const SLIDES: Slide[] = [
   {
     id: 'sale-1',
-    src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2000&auto=format&fit=crop',
+    src: 'https://strawbees.com/hubfs/2024_home_classroom_features_4-1-1.jpg',
     alt: 'Robotics back to school'
   },
   {
     id: 'sale-2',
-    src: 'https://cdn.shopify.com/s/files/1/0070/5901/3716/files/PC_US_47efac92-8850-4c9f-b2f9-b11cd286cdbe.png?v=1754650791',
+    src: 'https://stem-supplies.com/media/catalog/product/s/-/s-36509-strawbeesstarterkits-8.jpg?optimize=low&bg-color=255,255,255&fit=bounds&height=&width=&canvas=:',
     alt: 'STEM kits'
   },
   {
     id: 'sale-3',
-    src: 'https://cdn.shopify.com/s/files/1/0070/5901/3716/files/mBot2_7c8e01e3-188d-488c-a3ca-411420be4fdd.jpg?v=1745475642',
+    src: 'https://cdn.schoolspecialty.com/1682c7ca-d120-4aea-a994-b0f100b85cf9/2103924_A_JPG%20Output.jpg?width=700&height=700&fit=bounds&canvas=700,700&bg-color=ffffff',
     alt: 'Coding lab'
   },
   {
     id: 'sale-4',
-    src: 'https://cdn.shopify.com/s/files/1/0070/5901/3716/files/banner_f911a697-7f1c-47d0-adbe-79a2dff7064f.png?v=1757055291',
+    src: 'https://stem-supplies.com/media/catalog/product/s/-/s-36509-strawbeesstarterkits-79.jpg?optimize=low&bg-color=255,255,255&fit=bounds&height=744&width=744&canvas=744:744',
     alt: 'Makerspace'
   }
 ]
@@ -85,8 +85,13 @@ export default function HeroSection() {
         <div className='embla__viewport overflow-hidden' ref={emblaRef}>
           <div className='embla__container flex touch-pan-y'>
             {SLIDES.map((s) => (
-              <div key={s.id} className='embla__slide relative h-[60vh] min-w-full flex-[0_0_100%]'>
-                <img src={s.src} alt={s.alt ?? 'slide'} className='h-full w-full object-cover' draggable={false} />
+              <div key={s.id} className='embla__slide relative aspect-video h-[60vh] min-w-full flex-[0_0_100%]'>
+                <img
+                  src={s.src}
+                  alt={s.alt ?? 'slide'}
+                  className='h-full w-full bg-black object-cover'
+                  draggable={false}
+                />
 
                 <div className='pointer-events-none absolute inset-0' />
               </div>

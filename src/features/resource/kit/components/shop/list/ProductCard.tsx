@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ProductData } from '@/features/product/components/list/mockData'
+import { Kit } from '@/features/resource/kit/types/kit.type'
+import { useTranslations } from 'next-intl'
 
-const ProductCard: React.FC<{ product: ProductData; index: number }> = ({ product, index }) => {
+const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index }) => {
+  const t = useTranslations('kits')
   const [isHovered, setIsHovered] = useState(false)
 
   const StarRating = ({ rating }: { rating: number }) => {
@@ -40,9 +42,9 @@ const ProductCard: React.FC<{ product: ProductData; index: number }> = ({ produc
       <div className='relative aspect-square overflow-hidden bg-gray-100'>
         {/* Image */}
         <motion.img
-          src={product.image}
+          src={product.imageUrl || '/images/fallback.png'}
           alt={product.name}
-          className='h-full w-full object-cover'
+          className='aspect-square w-full rounded-t-2xl object-cover'
           animate={{ opacity: isHovered ? 0 : 1 }}
           transition={{ duration: 0.3 }}
         />
@@ -56,7 +58,7 @@ const ProductCard: React.FC<{ product: ProductData; index: number }> = ({ produc
         >
           {isHovered && (
             <video autoPlay loop muted playsInline className='h-full w-full object-cover'>
-              <source src={product.video} type='video/mp4' />
+              <source src='https://res.cloudinary.com/dtjgueyp2/video/upload/intro_jmad2e.mp4' type='video/mp4' />
             </video>
           )}
         </motion.div>
@@ -70,8 +72,8 @@ const ProductCard: React.FC<{ product: ProductData; index: number }> = ({ produc
 
         {/* Category Badge */}
         <div className='absolute top-4 left-4'>
-          <span className='rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-gray-800 backdrop-blur-sm'>
-            {product.category}
+          <span className='text-orange-custom-500 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold backdrop-blur-sm'>
+            {t('list.bestSeller')}
           </span>
         </div>
 
@@ -88,25 +90,25 @@ const ProductCard: React.FC<{ product: ProductData; index: number }> = ({ produc
 
       {/* Product Info */}
       <div className='p-6'>
-        <h3 className='mb-2 text-xl font-bold text-gray-900'>{product.name}</h3>
-        <p className='mb-4 text-sm text-gray-600'>{product.description}</p>
+        <h3 className='mb-1 text-xl font-bold text-gray-900'>{product.name}</h3>
+        {/* <p className='mb-4 text-sm text-gray-600'>{product.description}</p> */}
         <div className='mb-3 flex items-center gap-2'>
-          <StarRating rating={product.rating} />
+          <StarRating rating={5} />
           <span className='text-sm font-medium text-gray-400 drop-shadow-md'>
-            {product.rating} ({product.reviews})
+            {5} ({10})
           </span>
         </div>
         <div className='flex items-center justify-between'>
-          <span className='text-2xl font-bold text-gray-900'>${product.price}</span>
+          <span className='text-xl font-bold text-red-600'>{product.price.toLocaleString('en-US')} VND</span>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className='flex items-center gap-2 rounded-full border-2 border-blue-600 bg-white px-5 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50'
+            className='flex items-center gap-2 rounded-full border-2 border-blue-600 bg-white px-3 py-1 text-sm font-semibold text-blue-600 transition hover:bg-blue-50'
           >
-            Add to Cart/Quote
-            <svg className='h-4 w-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            {t('list.addToCart')}
+            {/* <svg className='h-4 w-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
               <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-            </svg>
+            </svg> */}
           </motion.button>
         </div>
       </div>

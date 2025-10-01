@@ -4,7 +4,29 @@
       "title": "Danh sách bộ kit",
       "description": "Quản lý và tổ chức các bộ kit cho nền tảng giáo dục của bạn.",
       "noData": "Không có bộ kit nào.",
-      "searchPlaceholder": "Tìm kiếm bộ kit ở đây..."
+      "noDataDescription": "Hiện tại không có bộ kit nào. Vui lòng quay lại sau.",
+      "searchPlaceholder": "Tìm kiếm bộ kit ở đây...",
+      "addToCart": "Thêm vào giỏ hàng",
+      "bestSeller": "Bán chạy",
+      "Filters": "Bộ lọc",
+      "clear": "Xóa tất cả",
+      "priceRange": "Khoảng giá",
+      "age": "Độ tuổi",
+      "sort": "Sắp xếp",
+      "sortOptions": {
+        "newest": "Mới nhất",
+        "priceLowToHigh": "Giá: Từ thấp đến cao",
+        "priceHighToLow": "Giá: Từ cao đến thấp"
+      },
+      "status": "Trạng thái",
+      "statusOptions": {
+        "preOrder": "Đặt trước",
+        "available": "Có sẵn"
+      },
+      "ageOptions": {
+        "all": "Tất cả"
+      },
+      "search": "Tìm kiếm"
     },
     "detail": {
       "title": "Chi tiết bộ kit",

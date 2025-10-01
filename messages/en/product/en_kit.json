@@ -4,7 +4,29 @@
       "title": "Kits List",
       "description": "Manage and organize kits for your educational platform.",
       "noData": "No kits available.",
-      "searchPlaceholder": "Search kits here..."
+      "noDataDescription": "There are currently no kits. Please check back later.",
+      "searchPlaceholder": "Search kits here...",
+      "addToCart": "Add to Cart",
+      "bestSeller": "Best Seller",
+      "Filters": "Filters",
+      "clear": "Clear All",
+      "priceRange": "Price Range",
+      "age": "Age",
+      "sort": "Sort",
+      "sortOptions": {
+        "newest": "Newest",
+        "priceLowToHigh": "Price: Low to High",
+        "priceHighToLow": "Price: High to Low"
+      },
+      "status": "Status",
+      "statusOptions": {
+        "preOrder": "Pre-order",
+        "available": "Available"
+      },
+      "ageOptions": {
+        "all": "All"
+      },
+      "search": "Search"
     },
     "detail": {
       "title": "Kit Details",

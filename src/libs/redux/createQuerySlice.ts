@@ -8,6 +8,7 @@ export interface SliceQueryParams {
   orderBy?: BaseOrderBy
   status?: string
   [key: string]: any
+  sortDirection?: 'Asc' | 'Desc'
 }
 
 export function createQuerySlice<T extends SliceQueryParams>(name: string, initialState: T) {
@@ -37,6 +38,9 @@ export function createQuerySlice<T extends SliceQueryParams>(name: string, initi
           draft[key as keyof T] = value as T[keyof T]
         })
         state.pageNumber = 1
+      },
+      setSortDirection(state, action: PayloadAction<'Asc' | 'Desc'>) {
+        state.sortDirection = action.payload
       },
       resetParams() {
         return initialState
