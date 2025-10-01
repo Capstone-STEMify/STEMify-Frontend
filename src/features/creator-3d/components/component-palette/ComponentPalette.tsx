@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react'
 import { ComponentCard } from '@/features/creator-3d/components/component-palette/ComponentCard'
 import { ComponentTemplate, Connector, Straw } from '@/features/assembly/types/assembly.types'
 import { useGLTF } from '@react-three/drei'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setDraggingTemplate } from '@/features/creator-3d/slice/creatorSceneSlice'
 
 interface ComponentPaletteProps {
-  onDragStart: (template: ComponentTemplate) => void
   onAddComponent: (template: ComponentTemplate) => void
 }
 
@@ -25,11 +26,13 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
 
   const baseMaterial = {
     type: data.materialRef?.includes('plastic') ? 'plastic' : 'metal',
-    color: data.materialRef === 'plastic_green' ? '#c1e500' : '#fff51d',
-    flexibility: 0.1,
-    opacity: 1,
-    roughness: 1,
-    metalness: 0
+    properties: {
+      color: data.materialRef === 'plastic_green' ? '#c1e500' : '#fff51d',
+      flexibility: 0.1,
+      opacity: 1,
+      roughness: 1,
+      metalness: 0
+    }
   }
 
   let defaultProperties: Straw | Connector
@@ -87,11 +90,10 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
   }
 }
 
-export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPaletteProps) {
+export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
   const [templates, setTemplates] = useState<ComponentTemplate[]>([])
-  const [draggingTemplate, setDraggingTemplate] = useState<ComponentTemplate | null>(null)
-
-  // TODO: Replace with real data fetching logic
+  const dispatch = useAppDispatch()
+  const draggingTemplate = useAppSelector((s) => s.creatorScene.draggingTemplate)
 
   useEffect(() => {
     async function loadTemplates() {
@@ -105,7 +107,6 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
           [connector_3leg_red.id]: connector_3leg_red
         }
 
-        console.log('Loaded templates:', templateMap)
         setTemplates(Object.values(templateMap))
       } catch (err) {
         console.error('Failed to load templates', err)
@@ -115,8 +116,7 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
   }, [])
 
   const handleDragStart = (e: React.DragEvent, template: ComponentTemplate) => {
-    setDraggingTemplate(template)
-    onDragStart(template)
+    dispatch(setDraggingTemplate(template))
 
     e.dataTransfer.effectAllowed = 'copy'
     e.dataTransfer.setData('text/plain', template.id)
@@ -124,10 +124,6 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
     const dragImage = new window.Image()
     dragImage.src = template.previewImageUrl || ''
     e.dataTransfer.setDragImage(dragImage, 25, 25)
-  }
-
-  const handleDragEnd = () => {
-    setDraggingTemplate(null)
   }
 
   const handleDoubleClick = (template: ComponentTemplate) => {
@@ -140,16 +136,15 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
     }
     onAddComponent(template)
   }
-
   return (
-    <div className='flex w-64 flex-col border-r border-gray-200 bg-white'>
+    <div className='flex h-full flex-col'>
       {/* Header */}
       <div className='border-b border-gray-200 p-4'>
         <h2 className='font-semibold text-gray-900'>Components</h2>
         <p className='mt-1 text-xs text-gray-500'>Drag to add, double-click to place</p>
       </div>
 
-      {/* Component List */}
+      {/* Component List chiếm hết phần còn lại */}
       <div className='flex-1 overflow-y-auto p-4'>
         <div className='space-y-3'>
           {templates.map((template) => (
@@ -158,14 +153,13 @@ export function ComponentPalette({ onDragStart, onAddComponent }: ComponentPalet
               template={template}
               isDragging={draggingTemplate?.id === template.id}
               onDragStart={(e) => handleDragStart(e, template)}
-              onDragEnd={handleDragEnd}
               onDoubleClick={() => handleDoubleClick(template)}
             />
           ))}
         </div>
       </div>
 
-      {/* Instructions */}
+      {/* Instructions nằm cuối, cao theo nội dung */}
       <div className='border-t border-gray-200 bg-gray-50 p-4'>
         <div className='space-y-1 text-xs text-gray-600'>
           <div className='flex items-center gap-2'>

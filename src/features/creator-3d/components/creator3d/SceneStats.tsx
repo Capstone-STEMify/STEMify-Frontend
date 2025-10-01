@@ -1,8 +1,10 @@
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
+
 interface SceneStatsProps {
   objectCount: number
   strawCount: number
   connectorCount: number
-  selectedObject: any
+  selectedObject: AssemblyInstance | null
 }
 
 export function SceneStats({ objectCount, strawCount, connectorCount, selectedObject }: SceneStatsProps) {
@@ -17,7 +19,7 @@ export function SceneStats({ objectCount, strawCount, connectorCount, selectedOb
         </div>
         {selectedObject && (
           <div className='border-t border-gray-200 pt-1'>
-            <div className='font-medium'>Selected: {selectedObject.name}</div>
+            <div className='font-medium'>Selected: {selectedObject.data.name}</div>
           </div>
         )}
       </div>

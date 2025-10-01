@@ -1,0 +1,158 @@
+{
+  "metadata": {
+    "title": "123123123",
+    "description": "123123123",
+    "author": "123123123",
+    "version": "2.0",
+    "created": "2025-09-28T05:19:10.556Z",
+    "lastModified": "2025-09-28T05:19:10.556Z"
+  },
+  "templates": {
+    "materials": [
+      {
+        "id": "plastic_green",
+        "source": "/components/templates/MaterialLibrary/plastic_green.json"
+      },
+      {
+        "id": "plastic_red",
+        "source": "/components/templates/MaterialLibrary/plastic_red.json"
+      }
+    ],
+    "components": [
+      {
+        "id": "green_11_2",
+        "source": "/components/templates/StrawTypes/green_11_2.json"
+      },
+      {
+        "id": "yellow_3_8",
+        "source": "/components/templates/StrawTypes/yellow_3_8.json"
+      },
+      {
+        "id": "3leg_red",
+        "source": "/components/templates/ConnectorTypes/3legs.json"
+      }
+    ]
+  },
+  "instances": {
+    "straws": [],
+    "connectors": [
+      {
+        "templateId": "3leg_red",
+        "instances": [
+          {
+            "id": "connector_1759035676295_971",
+            "transform": {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "actions": [
+    {
+      "id": "action_transform_connector_1759035676295_971",
+      "name": "Adjust Arms of connector_1759035676295_971",
+      "type": "transform_arm",
+      "targets": ["connector_1759035676295_971"],
+      "duration": 2,
+      "connectorArmTransforms": {
+        "connector_1759035676295_971": {
+          "arm_1": {
+            "x": 0,
+            "y": 1.4660765716752369,
+            "z": 0
+          },
+          "arm_2": {
+            "x": 0,
+            "y": 0,
+            "z": 0.5585053606381855
+          },
+          "arm_3": {
+            "x": -0.29670597283903605,
+            "y": 0,
+            "z": 0
+          }
+        }
+      },
+      "interpolation": "easeInOut"
+    }
+  ],
+  "activities": [
+    {
+      "id": "custom_assembly",
+      "name": "123123123",
+      "description": "123123123",
+      "difficulty": "beginner",
+      "estimatedTime": 600,
+      "steps": [
+        {
+          "actionId": "action_transform_connector_1759035676295_971",
+          "title": "Adjust Arms of connector_1759035676295_971",
+          "description": "Connector arms should rotate as exported",
+          "expectedResult": "Arms are rotated according to saved values",
+          "hints": ["Check arm_1, arm_2... rotations"]
+        }
+      ]
+    }
+  ],
+  "scene": {
+    "environment": {
+      "background": "#f5f5f5",
+      "lighting": {
+        "ambient": "#404040",
+        "directional": {
+          "color": "#FFFFFF",
+          "intensity": 1.2,
+          "position": {
+            "x": 10,
+            "y": 15,
+            "z": 8
+          }
+        }
+      },
+      "camera": {
+        "position": {
+          "x": 30,
+          "y": 20,
+          "z": 30
+        },
+        "target": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "fov": 60,
+        "controls": "orbit"
+      }
+    },
+    "workspace": {
+      "bounds": {
+        "min": {
+          "x": -100,
+          "y": -100,
+          "z": -100
+        },
+        "max": {
+          "x": 100,
+          "y": 100,
+          "z": 100
+        }
+      },
+      "grid": {
+        "visible": true,
+        "size": 1,
+        "divisions": 100
+      }
+    }
+  }
+}

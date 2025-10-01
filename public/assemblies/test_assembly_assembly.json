@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "hehe",
-    "description": "hehe",
-    "author": "hehe",
+    "title": "aaaaaaaaaa",
+    "description": "aaaaaaaaaa",
+    "author": "aaaaaaaaaa",
     "version": "2.0",
-    "created": "2025-09-16T09:48:45.801Z",
-    "lastModified": "2025-09-16T09:48:45.801Z"
+    "created": "2025-09-30T15:37:11.491Z",
+    "lastModified": "2025-09-30T15:37:11.491Z"
   },
   "templates": {
     "materials": [
@@ -16,6 +16,22 @@
       {
         "id": "plastic_red",
         "source": "/components/templates/MaterialLibrary/plastic_red.json"
+      },
+      {
+        "id": "plastic_blue",
+        "source": "/components/templates/MaterialLibrary/plastic_blue.json"
+      },
+      {
+        "id": "plastic_yellow",
+        "source": "/components/templates/MaterialLibrary/plastic_yellow.json"
+      },
+      {
+        "id": "plastic_orange",
+        "source": "/components/templates/MaterialLibrary/plastic_orange.json"
+      },
+      {
+        "id": "plastic_pink",
+        "source": "/components/templates/MaterialLibrary/plastic_pink.json"
       }
     ],
     "components": [
@@ -36,15 +52,45 @@
   "instances": {
     "straws": [
       {
-        "templateId": "green_11_2",
+        "templateId": "yellow_3_8",
         "instances": [
           {
-            "id": "straw_1758016110940_313",
+            "id": "straw_1759246620938_327",
             "transform": {
               "position": {
+                "x": 0.7142013861070726,
+                "y": 0,
+                "z": 12.087572684294607
+              },
+              "rotation": {
                 "x": 0,
                 "y": 0,
                 "z": 0
+              }
+            }
+          },
+          {
+            "id": "straw_1759246622131_984",
+            "transform": {
+              "position": {
+                "x": 29.595172452611493,
+                "y": 0,
+                "z": -11.067764748699275
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "id": "straw_1759246624290_462",
+            "transform": {
+              "position": {
+                "x": -26.15743232754295,
+                "y": 0,
+                "z": 11.856746551431321
               },
               "rotation": {
                 "x": 0,
@@ -56,15 +102,30 @@
         ]
       },
       {
-        "templateId": "yellow_3_8",
+        "templateId": "green_11_2",
         "instances": [
           {
-            "id": "straw_1758016111875_696",
+            "id": "straw_1759246623188_996",
             "transform": {
               "position": {
+                "x": -8.750068186145704,
+                "y": 0,
+                "z": -35.682976213274365
+              },
+              "rotation": {
                 "x": 0,
-                "y": 9,
+                "y": 0,
                 "z": 0
+              }
+            }
+          },
+          {
+            "id": "straw_1759246626198_258",
+            "transform": {
+              "position": {
+                "x": -1.2757060054373817,
+                "y": 0,
+                "z": 26.07543235230776
               },
               "rotation": {
                 "x": 0,
@@ -76,30 +137,127 @@
         ]
       }
     ],
-    "connectors": []
+    "connectors": [
+      {
+        "templateId": "3leg_red",
+        "instances": [
+          {
+            "id": "connector_1759246620214_720",
+            "transform": {
+              "position": {
+                "x": -18.767905454979022,
+                "y": 0,
+                "z": -4.205230154454846
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "id": "connector_1759246625198_901",
+            "transform": {
+              "position": {
+                "x": -12.979457396485593,
+                "y": 0,
+                "z": 21.469145496189327
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   "actions": [
     {
       "id": "action_show_all",
       "name": "Show All Components",
       "description": "Highlights all components in the scene",
-      "actionType": "highlight",
-      "targets": ["straw_1758016110940_313", "straw_1758016111875_696"],
-      "duration": 2,
       "type": "highlight",
+      "targets": [
+        "connector_1759246620214_720",
+        "straw_1759246620938_327",
+        "straw_1759246622131_984",
+        "straw_1759246623188_996",
+        "straw_1759246624290_462",
+        "connector_1759246625198_901",
+        "straw_1759246626198_258"
+      ],
+      "duration": 2,
       "animation": {
         "params": {
           "colorHighlight": "#FFD700",
           "pulseEffect": true
         }
       }
+    },
+    {
+      "id": "action_transform_connector_1759246620214_720",
+      "name": "Adjust Arms of connector_1759246620214_720",
+      "type": "transform_arm",
+      "targets": ["connector_1759246620214_720"],
+      "duration": 2,
+      "connectorArmTransforms": {
+        "connector_1759246620214_720": {
+          "arm_1": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "arm_2": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "arm_3": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      },
+      "interpolation": "easeInOut"
+    },
+    {
+      "id": "action_transform_connector_1759246625198_901",
+      "name": "Adjust Arms of connector_1759246625198_901",
+      "type": "transform_arm",
+      "targets": ["connector_1759246625198_901"],
+      "duration": 2,
+      "connectorArmTransforms": {
+        "connector_1759246625198_901": {
+          "arm_1": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "arm_2": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "arm_3": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      },
+      "interpolation": "easeInOut"
     }
   ],
   "activities": [
     {
       "id": "custom_assembly",
-      "name": "hehe",
-      "description": "hehe",
+      "name": "aaaaaaaaaa",
+      "description": "aaaaaaaaaa",
       "difficulty": "beginner",
       "estimatedTime": 600,
       "steps": [
@@ -112,6 +270,20 @@
             "Notice the positioning of each component",
             "Observe the relationships between straws and connectors"
           ]
+        },
+        {
+          "actionId": "action_transform_connector_1759246620214_720",
+          "title": "Adjust Arms of connector_1759246620214_720",
+          "description": "Connector arms should rotate as exported",
+          "expectedResult": "Arms are rotated according to saved values",
+          "hints": ["Check arm_1, arm_2... rotations"]
+        },
+        {
+          "actionId": "action_transform_connector_1759246625198_901",
+          "title": "Adjust Arms of connector_1759246625198_901",
+          "description": "Connector arms should rotate as exported",
+          "expectedResult": "Arms are rotated according to saved values",
+          "hints": ["Check arm_1, arm_2... rotations"]
         }
       ]
     }

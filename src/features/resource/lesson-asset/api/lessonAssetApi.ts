@@ -3,7 +3,8 @@ import {
   LessonAssetListResponse,
   LessonAssetSliceParams,
   LessonAssetTag,
-  PostLessonAssetRequestBody
+  PostLessonAssetRequestBody,
+  PostLessonResponseBody
 } from '@/features/resource/lesson-asset/types/lessonAsest.type'
 import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
@@ -32,7 +33,7 @@ export const lessonAssetApi = lessonApi.injectEndpoints({
     }),
     // POST
     postLessonAssets: builder.mutation<
-      ApiSuccessResponse<{ id: number; assetUrl: string }[]>,
+      ApiSuccessResponse<{ assets: PostLessonResponseBody[] }>,
       { lessonId: number; body: PostLessonAssetRequestBody }
     >({
       query: ({ lessonId, body }) => ({

@@ -15,7 +15,7 @@ export interface Assembly {
     compressionRatio?: string
   }
   templates: {
-    materials: Array<{ id: string; source: string }>
+    materials: Array<{ id: string; source: string; data?: any }>
     components: Array<{ id: string; source: string }>
   }
   components?: {
@@ -40,19 +40,22 @@ export interface Assembly {
       }
     }>
   }
-  assemblies?: Record<string, {
-    id: string
-    name: string
-    description: string
-    components: string[]
-    subAssemblies?: string[]
-    assemblyMatrix: {
-      position: { x: number; y: number; z: number }
-      rotation: { x: number; y: number; z: number }
-      scale: { x: number; y: number; z: number }
+  assemblies?: Record<
+    string,
+    {
+      id: string
+      name: string
+      description: string
+      components: string[]
+      subAssemblies?: string[]
+      assemblyMatrix: {
+        position: { x: number; y: number; z: number }
+        rotation: { x: number; y: number; z: number }
+        scale: { x: number; y: number; z: number }
+      }
+      state: string
     }
-    state: string
-  }>
+  >
   instances: {
     straws: Array<{
       templateId: string
@@ -77,12 +80,15 @@ export interface Assembly {
       }>
     }>
   }
-  connections: Record<string, Array<{
-    strawId: string
-    endpoint: 'start' | 'end'
-    connectorId: string
-    port: number
-  }>>
+  connections: Record<
+    string,
+    Array<{
+      strawId: string
+      endpoint: 'start' | 'end'
+      connectorId: string
+      port: number
+    }>
+  >
   actions: Array<{
     id: string
     name: string
@@ -132,6 +138,7 @@ export interface AssemblyInstance {
     rotation: { x: number; y: number; z: number }
     scale?: { x: number; y: number; z: number }
   }
+  arms?: Record<string, { x?: number; y?: number; z?: number }>
   lodLevel?: 'high' | 'medium' | 'low'
   isVisible: boolean
   distanceToCamera: number
@@ -151,38 +158,36 @@ export interface UseAssemblyReturn {
   instances: AssemblyInstance[]
   currentActivity: any
   currentStep: any
-  
+
   // Performance
   lodManager: LODManager | null
   profiler: PerformanceProfiler | null
   performanceStats: any
-  
+
   // State
   isLoading: boolean
   loadingProgress: number
   error: string | null
   isOptimized: boolean
-  
+
   // Actions
   loadAssembly: (url: string) => Promise<void>
   updateCameraPosition: (position: { x: number; y: number; z: number }) => void
   setCurrentActivity: (activityId: string) => void
   nextStep: () => void
   previousStep: () => void
-  
+
   // Performance actions
   recordFrame: (frameTime: number, drawCalls: number, triangles: number) => void
   enableLOD: (enabled: boolean) => void
   getPerformanceReport: () => any
-  
+
   // Optimization
   optimizeForPerformance: () => void
   resetOptimizations: () => void
 }
 
-export function useAssembly(
-  options: UseAssemblyOptions = {}
-): UseAssemblyReturn {
+export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn {
   const {
     enableLOD = true,
     enableStreaming = true,
@@ -203,12 +208,8 @@ export function useAssembly(
   const [cameraPosition, setCameraPosition] = useState({ x: 25, y: 15, z: 25 })
 
   // Performance systems
-  const [lodManager] = useState(() => 
-    enableLOD ? new LODManager(defaultLODConfig) : null
-  )
-  const [profiler] = useState(() => 
-    enableProfiling ? new PerformanceProfiler(defaultPerformanceConfig) : null
-  )
+  const [lodManager] = useState(() => (enableLOD ? new LODManager(defaultLODConfig) : null))
+  const [profiler] = useState(() => (enableProfiling ? new PerformanceProfiler(defaultPerformanceConfig) : null))
   const [performanceStats, setPerformanceStats] = useState<any>(null)
 
   // Performance alerts handler
@@ -217,14 +218,14 @@ export function useAssembly(
 
     const handleAlert = (alert: PerformanceAlert) => {
       console.warn(`Performance Alert: ${alert.message}`)
-      
+
       if (autoOptimize && alert.type === 'critical') {
         optimizeForPerformance()
       }
     }
 
     profiler.onAlert(handleAlert)
-    
+
     // Update stats periodically
     const statsInterval = setInterval(() => {
       setPerformanceStats(profiler.getCurrentStats())
@@ -255,23 +256,47 @@ export function useAssembly(
       const assemblyData: Assembly = await response.json()
       setLoadingProgress(20)
 
-      // Initialize template library
+      // Preload all materials (fetch JSON and attach to template)
+      await Promise.all(
+        (assemblyData.templates.materials || []).map(async (m) => {
+          try {
+            const res = await fetch(m.source)
+            if (res.ok) {
+              const data = await res.json()
+              m.data = data
+            } else {
+              console.warn(`Failed to load material file: ${m.source}`)
+            }
+          } catch (err) {
+            console.warn(`Error loading material: ${m.source}`, err)
+          }
+        })
+      )
+      setLoadingProgress(30)
+
+      // Initialize template library (for components, straws, connectors)
       await templateManager.initializeLibrary(assemblyData.templates)
       setLoadingProgress(40)
 
       // Preload critical templates
       const criticalTemplates = [
-        ...assemblyData.instances.straws.map(s => s.templateId),
-        ...assemblyData.instances.connectors.map(c => c.templateId)
+        ...assemblyData.instances.straws.map((s) => s.templateId),
+        ...assemblyData.instances.connectors.map((c) => c.templateId)
       ]
-      
-      await Promise.all(criticalTemplates.map(id => templateManager.loadTemplate(id)))
+      await Promise.all(criticalTemplates.map((id) => templateManager.loadTemplate(id)))
       setLoadingProgress(70)
+
+      // Helper resolve material
+      const resolveMaterial = (materialRef?: string) => {
+        if (!materialRef) return null
+        const mat = assemblyData.templates.materials.find((m) => m.id === materialRef)
+        return mat?.data || null
+      }
 
       // Create instances
       const allInstances: AssemblyInstance[] = []
 
-      // Create straw instances
+      // Straws
       for (const strawGroup of assemblyData.instances.straws) {
         for (const instance of strawGroup.instances) {
           const instanceData = templateManager.createInstance({
@@ -279,12 +304,15 @@ export function useAssembly(
             templateId: strawGroup.templateId,
             transform: instance.transform
           })
+          console.log('Instance created:', instanceData)
 
+          const material = instanceData.material || resolveMaterial(instanceData.materialRef)
+          console.log('Yellow straw material:', material)
           allInstances.push({
             id: instance.id,
             templateId: strawGroup.templateId,
             category: 'straw',
-            data: instanceData,
+            data: { ...instanceData, material },
             transform: instance.transform,
             isVisible: true,
             distanceToCamera: 0
@@ -292,7 +320,7 @@ export function useAssembly(
         }
       }
 
-      // Create connector instances
+      // Connectors
       for (const connectorGroup of assemblyData.instances.connectors) {
         for (const instance of connectorGroup.instances) {
           const instanceData = templateManager.createInstance({
@@ -301,11 +329,13 @@ export function useAssembly(
             transform: instance.transform
           })
 
+          const material = instanceData.material || resolveMaterial(instanceData.materialRef)
+
           allInstances.push({
             id: instance.id,
             templateId: connectorGroup.templateId,
             category: 'connector',
-            data: instanceData,
+            data: { ...instanceData, material },
             transform: instance.transform,
             isVisible: true,
             distanceToCamera: 0
@@ -330,7 +360,6 @@ export function useAssembly(
 
       console.log(`Assembly loaded: ${allInstances.length} instances created`)
       console.log(`Compression ratio: ${assemblyData.metadata.compressionRatio || 'N/A'}`)
-
     } catch (err) {
       console.error('Failed to load assembly:', err)
       setError(err instanceof Error ? err.message : 'Unknown error')
@@ -342,57 +371,66 @@ export function useAssembly(
   /**
    * Update camera position and trigger LOD updates
    */
-  const updateCameraPosition = useCallback((position: { x: number; y: number; z: number }) => {
-    setCameraPosition(position)
+  const updateCameraPosition = useCallback(
+    (position: { x: number; y: number; z: number }) => {
+      setCameraPosition(position)
 
-    if (lodManager && instances.length > 0) {
-      // Update LOD levels
-      const components = instances.map(inst => ({
-        id: inst.id,
-        position: inst.transform.position,
-        template: templateManager.isTemplateLoaded(inst.templateId) 
-          ? templateManager.getTemplateInfo(inst.templateId) 
-          : null
-      }))
-
-      const fps = performanceStats?.currentFPS || 60
-      const updatedLODs = lodManager.updateLODs(position, components, fps)
-
-      // Update instance LOD levels
-      setInstances(prevInstances => 
-        prevInstances.map(inst => ({
-          ...inst,
-          lodLevel: updatedLODs.get(inst.id)?.name,
-          distanceToCamera: calculateDistance(position, inst.transform.position)
+      if (lodManager && instances.length > 0) {
+        // Update LOD levels
+        const components = instances.map((inst) => ({
+          id: inst.id,
+          position: inst.transform.position,
+          template: templateManager.isTemplateLoaded(inst.templateId)
+            ? templateManager.getTemplateInfo(inst.templateId)
+            : null
         }))
-      )
-    }
-  }, [lodManager, instances, performanceStats])
+
+        const fps = performanceStats?.currentFPS || 60
+        const updatedLODs = lodManager.updateLODs(position, components, fps)
+
+        // Update instance LOD levels
+        setInstances((prevInstances) =>
+          prevInstances.map((inst) => ({
+            ...inst,
+            lodLevel: updatedLODs.get(inst.id)?.name,
+            distanceToCamera: calculateDistance(position, inst.transform.position)
+          }))
+        )
+      }
+    },
+    [lodManager, instances, performanceStats]
+  )
 
   /**
    * Record frame performance metrics
    */
-  const recordFrame = useCallback((frameTime: number, drawCalls: number, triangles: number) => {
-    if (profiler) {
-      profiler.recordFrame(frameTime, drawCalls, triangles)
-    }
-  }, [profiler])
+  const recordFrame = useCallback(
+    (frameTime: number, drawCalls: number, triangles: number) => {
+      if (profiler) {
+        profiler.recordFrame(frameTime, drawCalls, triangles)
+      }
+    },
+    [profiler]
+  )
 
   /**
    * Enable/disable LOD system
    */
-  const enableLODSystem = useCallback((enabled: boolean) => {
-    if (lodManager) {
-      lodManager.updateConfig({ enabled })
-    }
-  }, [lodManager])
+  const enableLODSystem = useCallback(
+    (enabled: boolean) => {
+      if (lodManager) {
+        lodManager.updateConfig({ enabled })
+      }
+    },
+    [lodManager]
+  )
 
   /**
    * Get performance report
    */
   const getPerformanceReport = useCallback(() => {
     if (!profiler) return null
-    
+
     return {
       stats: profiler.getCurrentStats(),
       exported: profiler.exportData(),
@@ -419,8 +457,8 @@ export function useAssembly(
     }
 
     // Hide distant objects
-    setInstances(prevInstances =>
-      prevInstances.map(inst => ({
+    setInstances((prevInstances) =>
+      prevInstances.map((inst) => ({
         ...inst,
         isVisible: inst.distanceToCamera < 150
       }))
@@ -439,8 +477,8 @@ export function useAssembly(
       lodManager.updateConfig(defaultLODConfig)
     }
 
-    setInstances(prevInstances =>
-      prevInstances.map(inst => ({
+    setInstances((prevInstances) =>
+      prevInstances.map((inst) => ({
         ...inst,
         isVisible: true,
         lodLevel: 'high'
@@ -453,17 +491,20 @@ export function useAssembly(
   /**
    * Set current activity
    */
-  const setCurrentActivityById = useCallback((activityId: string) => {
-    if (!assembly) return
+  const setCurrentActivityById = useCallback(
+    (activityId: string) => {
+      if (!assembly) return
 
-    const activity = assembly.activities.find(a => a.id === activityId)
-    if (activity) {
-      setCurrentActivity(activity)
-      if (activity.steps.length > 0) {
-        setCurrentStep(activity.steps[0])
+      const activity = assembly.activities.find((a) => a.id === activityId)
+      if (activity) {
+        setCurrentActivity(activity)
+        if (activity.steps.length > 0) {
+          setCurrentStep(activity.steps[0])
+        }
       }
-    }
-  }, [assembly])
+    },
+    [assembly]
+  )
 
   /**
    * Navigate steps
@@ -505,30 +546,30 @@ export function useAssembly(
     instances,
     currentActivity,
     currentStep,
-    
+
     // Performance
     lodManager,
     profiler,
     performanceStats,
-    
+
     // State
     isLoading,
     loadingProgress,
     error,
     isOptimized,
-    
+
     // Actions
     loadAssembly,
     updateCameraPosition,
     setCurrentActivity: setCurrentActivityById,
     nextStep,
     previousStep,
-    
+
     // Performance actions
     recordFrame,
     enableLOD: enableLODSystem,
     getPerformanceReport,
-    
+
     // Optimization
     optimizeForPerformance,
     resetOptimizations

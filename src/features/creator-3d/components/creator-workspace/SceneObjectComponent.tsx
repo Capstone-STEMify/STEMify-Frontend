@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { Straw } from '@/features/assembly/components/Straw'
 import { Connector3D } from '@/features/assembly/components/Connector'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { Material } from '@/features/assembly/types/assembly.types'
 
 interface SceneObjectComponentProps {
   object: AssemblyInstance
@@ -13,6 +14,16 @@ interface SceneObjectComponentProps {
 
 export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: SceneObjectComponentProps) {
   const groupRef = useRef<THREE.Group>(null)
+  const [boxSize, setBoxSize] = useState<[number, number, number]>([1, 1, 1])
+
+  useEffect(() => {
+    if (groupRef.current) {
+      const box = new THREE.Box3().setFromObject(groupRef.current)
+      const size = new THREE.Vector3()
+      box.getSize(size)
+      setBoxSize([size.x, size.y, size.z])
+    }
+  }, [object])
 
   useEffect(() => {
     onRef(groupRef.current)
@@ -27,6 +38,28 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
     [onSelect]
   )
 
+  function normalizeMaterial(raw: any): Material {
+    return {
+      id: raw?.id,
+      name: raw?.name,
+      version: raw?.version,
+      type: raw?.type || 'plastic',
+      properties: {
+        color: raw?.properties?.color || raw?.color || '#cccccc',
+        flexibility: raw?.properties?.flexibility ?? raw?.flexibility ?? 0,
+        opacity: raw?.properties?.opacity ?? raw?.opacity ?? 1,
+        roughness: raw?.properties?.roughness ?? raw?.roughness ?? 0.5,
+        metalness: raw?.properties?.metalness ?? raw?.metalness ?? 0,
+        transmission: raw?.properties?.transmission ?? raw?.transmission ?? 0,
+        ior: raw?.properties?.ior ?? raw?.ior ?? 1.4,
+        thickness: raw?.properties?.thickness ?? raw?.thickness ?? 0.05
+      },
+      physics: raw?.physics,
+      lod: raw?.lod,
+      streaming: raw?.streaming
+    }
+  }
+
   return (
     <group
       ref={groupRef}
@@ -35,14 +68,6 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
       rotation={[object.transform.rotation.x, object.transform.rotation.y, object.transform.rotation.z]}
       scale={[object.transform.scale?.x ?? 1, object.transform.scale?.y ?? 1, object.transform.scale?.z ?? 1]}
     >
-      {/* Selection Indicator */}
-      {isSelected && (
-        <mesh>
-          <boxGeometry args={[12, 12, 12]} />
-          <meshBasicMaterial color='#00ff00' wireframe transparent opacity={0.3} />
-        </mesh>
-      )}
-
       {/* Render actual component */}
       {object.category === 'straw' ? (
         <Straw
@@ -50,7 +75,7 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
             id: object.id,
             name: object.data.name || object.templateId,
             geometry: object.data.baseGeometry || object.data.geometry,
-            material: object.data.material,
+            material: normalizeMaterial(object.data.material),
             transform: {
               position: { x: 0, y: 0, z: 0 },
               rotation: { x: 0, y: 0, z: 0 },
@@ -76,19 +101,15 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
         />
       ) : (
         <Connector3D
-          armPose={undefined}
+          armPose={object.arms}
           connector={{
             id: object.id,
             name: object.data.name || object.templateId,
             type: 'cross',
             geometry: { portDiameter: 1.6, shape: 'cylindrical', size: { x: 4, y: 4, z: 4 } },
             material: {
-              color: '#dc2626',
               type: 'plastic',
-              flexibility: 0,
-              opacity: 1,
-              roughness: 1,
-              metalness: 0
+              properties: { color: '#dc2626', flexibility: 0, opacity: 1, roughness: 1, metalness: 0 }
             },
             transform: {
               position: { x: 0, y: 0, z: 0 },

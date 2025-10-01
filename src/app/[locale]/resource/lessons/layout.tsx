@@ -1,4 +1,3 @@
-import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 
 export default async function LessonLayout({
@@ -9,7 +8,7 @@ export default async function LessonLayout({
   return (
     <div>
       <Header />
-      <main className='mt-24'>{children}</main>
+      <main className='mt-20'>{children}</main>
     </div>
   )
 }

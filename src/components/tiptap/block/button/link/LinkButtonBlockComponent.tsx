@@ -10,7 +10,6 @@ export default function LinkButtonBlockComponent({ node, updateAttributes, edito
   const { label, url } = node.attrs as { label: string; url: string }
   const role = useAppSelector((state) => state.auth.user?.role)
   const editable = editor?.isEditable
-  console.log('url url', url)
 
   return (
     <NodeViewWrapper className='block w-full text-center'>

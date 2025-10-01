@@ -34,7 +34,6 @@ export default function LessonListContent() {
   const tt = useTranslations('toast')
   const tm = useTranslations('message')
   const role = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
-  const userId = useAppSelector((state) => state.auth.user?.id)
 
   const PUBLIC_ROLES = UserRole.STUDENT || UserRole.GUEST || UserRole.TEACHER
 
@@ -117,29 +116,25 @@ export default function LessonListContent() {
 
   const content = isReadOnly ? (
     <div className='px-5 select-none'>
-      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+      <div className='grid h-fit grid-cols-1 justify-items-center gap-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
         {lessonData.data.items.map((lesson) => (
-          <div key={lesson.id} className='relative flex gap-1'>
-            <CardLayout
-              imageSrc={lesson.imageUrl}
-              size='sm'
-              isScale={false}
-              onClick={() => router.push(`/${locale}/resource/lesson/${lesson.id}`)}
-            >
-              <div>
-                <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
-                <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
-                <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
-              </div>
-
-              <div className='mt-auto flex flex-wrap items-center gap-2'>
-                <Badge className='bg-sky-custom-300'>
-                  {lesson.ageRangeLabel}
-                </Badge>
+          <CardLayout
+            key={lesson.id}
+            imageSrc={lesson.imageUrl}
+            onClick={() => router.push(`/${locale}/resource/lesson/${lesson.id}`)}
+            footer={
+              <div className='flex items-center gap-2'>
+                <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
                 <Badge className='bg-red-300'>{lesson.duration} mins</Badge>
               </div>
-            </CardLayout>
-          </div>
+            }
+          >
+            <div>
+              <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
+              <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+              <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
+            </div>
+          </CardLayout>
         ))}
       </div>
 
@@ -148,65 +143,56 @@ export default function LessonListContent() {
           pageNumber={lessonParams.pageNumber}
           totalPages={lessonData.data.totalPages}
           onPageChanged={handlePageChange}
-          className='pb-10'
+          className='pb-5'
         />
       )}
     </div>
   ) : (
     <div className='px-5 select-none'>
-      <div className='grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+      <div className='grid h-fit grid-cols-1 justify-items-center gap-10 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
         {lessonData.data.items.map((lesson) => (
-          <div key={lesson.id} className='relative flex gap-1'>
-            <Link href={`/resource/lesson/${lesson.id}`}>
-              <CardLayout
-                imageSrc={lesson.imageUrl}
-                size='sm'
-                isScale={false}
-                badge={
-                  <Badge className={`${getStatusBadgeClass(lesson.status)}`}>{capitalizeFirst(lesson.status)}</Badge>
-                }
-              >
-                <div
-                  key={lesson.id}
-                  className='absolute top-2 right-2 flex rounded-sm bg-gray-500/70 px-1 pb-1 text-white backdrop:blur-sm'
-                >
-                  <SDropDown
-                    trigger={<EllipsisVertical className='mt-1 h-5 w-5 text-white' />}
-                    items={[
-                      <Link
-                        href={`/resource/lesson/update/${lesson.id}`}
-                        key={`update-${lesson.id}`}
-                        className='text-sm'
-                      >
-                        <p>{tc('button.update')}</p>
-                      </Link>,
-                      <button
-                        key={`delete-${lesson.id}`}
-                        className='text-sm'
-                        onClick={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          handleDelete(e, lesson.id)
-                        }}
-                      >
-                        {tc('button.delete')}
-                      </button>
-                    ]}
-                  />
-                </div>
-                <div>
-                  <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
-                  <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
-                  <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
-                </div>
-
-                <div className='mt-auto flex flex-wrap items-center gap-2'>
-                  <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
-                  <Badge className='bg-red-300'>{lesson.duration} mins</Badge>
-                </div>
-              </CardLayout>
-            </Link>
-          </div>
+          <CardLayout
+            key={lesson.id}
+            imageSrc={lesson.imageUrl}
+            badge={<Badge className={`${getStatusBadgeClass(lesson.status)}`}>{capitalizeFirst(lesson.status)}</Badge>}
+            footer={
+              <div className='flex items-center gap-2'>
+                <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
+                <Badge className='bg-red-300'>{lesson.duration} mins</Badge>
+              </div>
+            }
+            href={`/resource/lesson/${lesson.id}`}
+          >
+            <div
+              key={lesson.id}
+              className='absolute top-2 right-2 flex rounded-sm bg-gray-500/70 px-1 pb-1 text-white backdrop:blur-sm'
+            >
+              <SDropDown
+                trigger={<EllipsisVertical className='mt-1 h-5 w-5 text-white' />}
+                items={[
+                  <Link href={`/resource/lesson/update/${lesson.id}`} key={`update-${lesson.id}`} className='text-sm'>
+                    <p>{tc('button.update')}</p>
+                  </Link>,
+                  <button
+                    key={`delete-${lesson.id}`}
+                    className='text-sm'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      handleDelete(e, lesson.id)
+                    }}
+                  >
+                    {tc('button.delete')}
+                  </button>
+                ]}
+              />
+            </div>
+            <div>
+              <p className='text-muted-foreground text-xs font-medium'>{t('lesson')}</p>
+              <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+              <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
+            </div>
+          </CardLayout>
         ))}
       </div>
 
@@ -215,7 +201,7 @@ export default function LessonListContent() {
           pageNumber={lessonParams.pageNumber}
           totalPages={lessonData.data.totalPages}
           onPageChanged={handlePageChange}
-          className='pb-10'
+          className='pb-5'
         />
       )}
     </div>

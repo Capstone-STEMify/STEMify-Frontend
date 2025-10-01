@@ -6,19 +6,22 @@ import { AxesHelper as ThreeAxesHelper } from 'three'
 import { OrbitControls, Grid, TransformControls } from '@react-three/drei'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
+import debounce from 'lodash/debounce'
 
 interface SceneContentProps {
   transformControlsRef: React.RefObject<any>
   orbitControlsRef: React.RefObject<any>
   onObjectSelect: (objectId: string | null) => void
   onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
+  onDropObject: (position: { x: number; y: number; z: number }) => void
 }
 
 export function SceneContent({
   transformControlsRef,
   orbitControlsRef,
   onObjectSelect,
-  onObjectUpdate
+  onObjectUpdate,
+  onDropObject
 }: SceneContentProps) {
   const objectRefs = useRef<Record<string, THREE.Object3D>>({})
   const cameraStatus = useAppSelector((state) => state.strawLab.cameraStatus)
@@ -29,6 +32,28 @@ export function SceneContent({
   const showAxes = useAppSelector((state) => state.creatorScene.showAxes)
   const transformMode = useAppSelector((state) => state.creatorScene.transformMode)
   const objects = useAppSelector((state) => state.creatorScene.instances)
+  const { camera, gl } = useThree()
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      const rect = gl.domElement.getBoundingClientRect()
+      const ndc = new THREE.Vector2(
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        -((e.clientY - rect.top) / rect.height) * 2 + 1
+      )
+
+      const raycaster = new THREE.Raycaster()
+      raycaster.setFromCamera(ndc, camera)
+
+      const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+      const point = new THREE.Vector3()
+      raycaster.ray.intersectPlane(plane, point)
+
+      if (point) {
+        onDropObject({ x: point.x, y: point.y, z: point.z })
+      }
+    },
+    [camera, gl, onDropObject]
+  )
 
   // Update transform controls target when selection changes
   useEffect(() => {
@@ -49,41 +74,60 @@ export function SceneContent({
     },
     [onObjectSelect]
   )
+  const debouncedUpdate = useRef(
+    debounce((id, updates) => {
+      onObjectUpdate(id, updates)
+    }, 100)
+  ).current
 
   // Handle transform changes
   const handleTransformChange = useCallback(() => {
     if (!selectedObjectId || !transformControlsRef.current) return
-
     const targetObject = objectRefs.current[selectedObjectId]
     if (!targetObject) return
 
-    const position = {
+    const newPos = {
       x: targetObject.position.x,
       y: targetObject.position.y,
       z: targetObject.position.z
     }
-
-    const rotation = {
+    const newRot = {
       x: targetObject.rotation.x,
       y: targetObject.rotation.y,
       z: targetObject.rotation.z
     }
 
-    // Apply grid snapping if enabled
-    if (snapToGrid) {
-      position.x = Math.round(position.x / gridSize) * gridSize
-      position.y = Math.round(position.y / gridSize) * gridSize
-      position.z = Math.round(position.z / gridSize) * gridSize
+    // Lấy object cũ từ store (instances)
+    const current = objects.find((o) => o.id === selectedObjectId)
+    if (!current) return
 
-      targetObject.position.set(position.x, position.y, position.z)
+    // Chỉ dispatch khi khác
+    if (
+      current.transform.position.x !== newPos.x ||
+      current.transform.position.y !== newPos.y ||
+      current.transform.position.z !== newPos.z ||
+      current.transform.rotation.x !== newRot.x ||
+      current.transform.rotation.y !== newRot.y ||
+      current.transform.rotation.z !== newRot.z
+    ) {
+      debouncedUpdate(selectedObjectId, {
+        transform: {
+          position: targetObject.position.toArray(),
+          rotation: targetObject.rotation.toArray()
+        }
+      })
     }
-    onObjectUpdate(selectedObjectId, {
-      transform: {
-        position,
-        rotation
-      }
-    })
-  }, [selectedObjectId, snapToGrid, gridSize, onObjectUpdate])
+  }, [selectedObjectId, objects, onObjectUpdate])
+
+  useEffect(() => {
+    const dom = gl.domElement
+    dom.addEventListener('drop', handleDrop)
+    dom.addEventListener('dragover', (e) => e.preventDefault())
+
+    return () => {
+      dom.removeEventListener('drop', handleDrop)
+    }
+  }, [handleDrop, gl])
 
   return (
     <>
@@ -112,6 +156,7 @@ export function SceneContent({
         ref={transformControlsRef}
         mode={transformMode}
         onObjectChange={handleTransformChange}
+        onMouseUp={handleTransformChange}
         showX={true}
         showY={true}
         showZ={true}

@@ -25,7 +25,7 @@ export default function UpsertAgeRangeModal({ id, onConfirm }: UpsertAgeRangeMod
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className='w-[95%] rounded-xl p-4 sm:max-w-md sm:p-6 md:max-w-lg lg:max-w-xl'>
         <DialogTitle>
-          <h1>{id ? `${t('editTitle')}` : `${t('createTitle')}`}</h1>
+          <p>{id ? `${t('editTitle')}` : `${t('createTitle')}`}</p>
         </DialogTitle>
         <hr />
 

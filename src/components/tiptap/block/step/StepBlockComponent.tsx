@@ -3,9 +3,10 @@ import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { Textarea } from '@/components/shadcn/textarea'
 import { usePostLessonAssetsMutation } from '@/features/resource/lesson-asset/api/lessonAssetApi'
+import { PostLessonResponseBody } from '@/features/resource/lesson-asset/types/lessonAsest.type'
 import { fileToBase64 } from '@/utils/index'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
-import { ChevronLeft, ChevronRight, Plus, Trash2, Upload, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2, Plus, Trash2, Upload, X } from 'lucide-react'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useRef, useState } from 'react'
@@ -41,18 +42,14 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
   }
 
   const [uploadFiles, { isLoading }] = usePostLessonAssetsMutation()
-  const handleUploadFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files?.length) return
-
-    const files = Array.from(event.target.files)
+  // 1. Tách riêng hàm xử lý upload
+  const uploadLessonFiles = async (files: File[]) => {
+    if (!files.length) return []
 
     const lessonAssets = await Promise.all(
       files.map(async (file) => {
-        const base64 = await fileToBase64(file) // convert sang base64
-        return {
-          name: file.name,
-          assetBytes: base64
-        }
+        const base64 = await fileToBase64(file)
+        return { name: file.name, assetBytes: base64 }
       })
     )
 
@@ -61,12 +58,41 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
       body: { lessonAssets }
     }).unwrap()
 
-    const uploaded = res.data.map((a: any) => a.assetUrl)
+    return res.data.assets.map((a: PostLessonResponseBody) => a.assetUrl)
+  }
+
+  // 2. Sử dụng trong handleUploadFiles
+  const handleUploadFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files?.length) return
+
+    const files = Array.from(event.target.files)
+    const uploaded = await uploadLessonFiles(files)
 
     updateStep('images', [...(step.images || []), ...uploaded])
 
     toast.success('Uploaded files successfully')
     event.target.value = ''
+  }
+
+  // 3. Sử dụng trong onDrop
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+
+    // Nếu kéo từ sidebar (URL text/plain)
+    const url = e.dataTransfer.getData('text/plain')
+    if (url) {
+      updateStep('images', [...(step.images || []), url])
+      return
+    }
+
+    // Nếu kéo từ máy tính (File)
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const files = Array.from(e.dataTransfer.files)
+      const uploaded = await uploadLessonFiles(files)
+
+      updateStep('images', [...(step.images || []), ...uploaded])
+      toast.success('Uploaded files successfully')
+    }
   }
 
   const removeImage = (index: number) => {
@@ -220,41 +246,20 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                     <div
                       onClick={() => fileInputRef.current?.click()}
                       onDragOver={(e) => e.preventDefault()}
-                      onDrop={async (e) => {
-                        e.preventDefault()
-
-                        // 1. Nếu kéo từ sidebar (URL có sẵn)
-                        const url = e.dataTransfer.getData('text/plain')
-                        if (url) {
-                          updateStep('images', [...(step.images || []), url])
-                          return
-                        }
-
-                        // 2. Nếu kéo từ máy tính / tab khác (File)
-                        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                          const files = Array.from(e.dataTransfer.files)
-
-                          const lessonAssets = await Promise.all(
-                            files.map(async (file) => {
-                              const base64 = await fileToBase64(file)
-                              return { name: file.name, assetBytes: base64 }
-                            })
-                          )
-
-                          const res = await uploadFiles({
-                            lessonId: Number(lessonId),
-                            body: { lessonAssets }
-                          }).unwrap()
-
-                          const uploaded = res.data.map((a: any) => a.assetUrl)
-                          updateStep('images', [...(step.images || []), ...uploaded])
-                          e.dataTransfer.clearData()
-                        }
-                      }}
+                      onDrop={handleDrop}
                       className='flex h-[200px] w-[200px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-400 text-gray-500 hover:border-purple-500 hover:text-purple-500'
                     >
-                      <Upload size={32} />
-                      <span className='ml-2 text-sm'>Tải ảnh lên</span>
+                      {isLoading ? (
+                        <div className='flex flex-col items-center'>
+                          <Loader2 className='h-8 w-8 animate-spin text-purple-500' />
+                          <span className='mt-2 text-sm text-gray-600'>Đang tải...</span>
+                        </div>
+                      ) : (
+                        <>
+                          <Upload size={32} />
+                          <span className='ml-2 text-sm'>Tải ảnh lên</span>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>

@@ -1,16 +1,17 @@
+import { useAppSelector } from '@/hooks/redux-hooks'
+
 interface TransformInstructionPanelProps {
-  isShiftPressed: boolean
   isTransforming: boolean
   transformMode: 'translate' | 'rotate'
   onModeChange: (mode: 'translate' | 'rotate') => void
 }
 
 export function TransformInstructionPanel({
-  isShiftPressed,
   isTransforming,
   transformMode,
   onModeChange
 }: TransformInstructionPanelProps) {
+  const isShiftPressed = useAppSelector((state) => state.assembly.isShiftPressed)
   return (
     <div className='absolute top-4 right-4 z-10 w-80 rounded-xl border bg-blue-50/95 p-3 shadow'>
       <div className='mb-2 font-semibold text-blue-800'>Third Square Transform Controls</div>

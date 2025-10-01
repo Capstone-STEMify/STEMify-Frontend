@@ -7,34 +7,25 @@ import { SceneContent } from '@/features/creator-3d/components/creator-workspace
 import SceneTopRight from '@/features/creator-3d/components/creator-workspace/SceneTopRight'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setDraggingTemplate } from '@/features/creator-3d/slice/creatorSceneSlice'
 
 interface CreatorWorkspaceProps {
-  dragSource: ComponentTemplate | null
   onObjectSelect: (objectId: string | null) => void
   onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
   onObjectAdd: (template: ComponentTemplate, position: { x: number; y: number; z: number }) => void
-  onDragEnd: () => void
-  onTransformModeChange: (mode: 'translate' | 'rotate' | 'scale') => void
-  onToggleGrid: () => void
-  onToggleAxes: () => void
-  onToggleSnap: () => void
 }
 
-export function CreatorWorkspace({
-  dragSource,
-  onObjectSelect,
-  onObjectUpdate,
-  onObjectAdd,
-  onDragEnd,
-  onTransformModeChange,
-  onToggleGrid,
-  onToggleAxes,
-  onToggleSnap
-}: CreatorWorkspaceProps) {
+export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }: CreatorWorkspaceProps) {
+  const dragSource = useAppSelector((s) => s.creatorScene.draggingTemplate)
+  const dispatch = useAppDispatch()
+
   const [isDragOver, setIsDragOver] = useState(false)
   const transformControlsRef = useRef<any>(null)
   const orbitControlsRef = useRef<any>(null)
-
+  const handleDragEnd = () => {
+    dispatch(setDraggingTemplate(null))
+  }
   // Handle drop from palette
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -51,9 +42,9 @@ export function CreatorWorkspace({
       const category = dragSource.category as 'straw' | 'connector'
 
       onObjectAdd(dragSource, position)
-      onDragEnd()
+      handleDragEnd()
     },
-    [dragSource, onObjectAdd, onDragEnd]
+    [dragSource, onObjectAdd, handleDragEnd]
   )
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -72,17 +63,6 @@ export function CreatorWorkspace({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
     >
-      {/* Drop Zone Overlay */}
-      {isDragOver && dragSource && (
-        <div className='bg-opacity-10 absolute inset-0 z-10 flex items-center justify-center border-4 border-dashed border-blue-400 bg-blue-500'>
-          <div className='rounded-lg bg-white p-6 text-center shadow-lg'>
-            <div className='mb-2 text-2xl'>📦</div>
-            <p className='font-medium text-gray-900'>Drop to add {dragSource.name}</p>
-            <p className='text-sm text-gray-600'>Will be placed at scene origin</p>
-          </div>
-        </div>
-      )}
-
       {/* 3D Canvas */}
       <Canvas
         camera={{
@@ -99,16 +79,17 @@ export function CreatorWorkspace({
           orbitControlsRef={orbitControlsRef}
           onObjectSelect={onObjectSelect}
           onObjectUpdate={onObjectUpdate}
+          onDropObject={(pos) => {
+            if (dragSource) {
+              onObjectAdd(dragSource, pos)
+              handleDragEnd()
+            }
+          }}
         />
       </Canvas>
 
       {/* Toolbar */}
-      <CreatorToolbar
-        onTransformModeChange={onTransformModeChange}
-        onToggleGrid={onToggleGrid}
-        onToggleAxes={onToggleAxes}
-        onToggleSnap={onToggleSnap}
-      />
+      <CreatorToolbar />
       <SceneTopRight />
     </div>
   )

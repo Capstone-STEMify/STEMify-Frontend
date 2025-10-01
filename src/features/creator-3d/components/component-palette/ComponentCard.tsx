@@ -1,15 +1,21 @@
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
+import { setDraggingTemplate } from '@/features/creator-3d/slice/creatorSceneSlice'
+import { useAppDispatch } from '@/hooks/redux-hooks'
 import Image from 'next/image'
 
 interface ComponentCardProps {
   template: ComponentTemplate
   isDragging: boolean
   onDragStart: (e: React.DragEvent) => void
-  onDragEnd: () => void
   onDoubleClick: () => void
 }
 
-export function ComponentCard({ template, isDragging, onDragStart, onDragEnd, onDoubleClick }: ComponentCardProps) {
+export function ComponentCard({ template, isDragging, onDragStart, onDoubleClick }: ComponentCardProps) {
+  const dispatch = useAppDispatch()
+  const handleDragEnd = () => {
+    dispatch(setDraggingTemplate(null))
+  }
+
   return (
     <div
       className={`relative cursor-pointer rounded-lg border p-3 transition-all duration-200 ${
@@ -19,7 +25,7 @@ export function ComponentCard({ template, isDragging, onDragStart, onDragEnd, on
       } `}
       draggable
       onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
+      onDragEnd={handleDragEnd}
       onDoubleClick={onDoubleClick}
     >
       {/* Component Icon */}
@@ -52,7 +58,6 @@ export function ComponentCard({ template, isDragging, onDragStart, onDragEnd, on
           <p className='mt-1 line-clamp-2 text-xs text-gray-500'>{template.description}</p>
         </div>
       </div>
-
       {/* Type Badge */}
       <div className='absolute top-2 right-2'>
         <span
@@ -63,11 +68,6 @@ export function ComponentCard({ template, isDragging, onDragStart, onDragEnd, on
           {template.category === 'connector_3leg' ? 'Connector' : 'Straw'}
         </span>
       </div>
-
-      {/* Drag Overlay */}
-      {isDragging && (
-        <div className='bg-opacity-20 absolute inset-0 rounded-lg border-2 border-dashed border-blue-400 bg-blue-500' />
-      )}
     </div>
   )
 }

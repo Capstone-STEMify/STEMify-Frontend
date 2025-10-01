@@ -36,6 +36,7 @@ import { editorSlice } from '@/features/resource/content/slice/editorSlice'
 import { lessonAssetSlice } from '@/features/resource/lesson-asset/slice/lessonAssestSlice'
 import { lessonAssetSelectionSlice } from '@/features/resource/lesson-asset/slice/lessonAssetSelectionSliice'
 import { tiptapSlice } from '@/components/tiptap/slice/tiptapSlice'
+import { assemblySlice } from '@/features/assembly/slice/assemblySlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -60,6 +61,7 @@ export const rootReducer = combineReducers({
   lessonAsset: lessonAssetSlice.reducer,
   lessonAssetSelection: lessonAssetSelectionSlice.reducer,
   tiptap: tiptapSlice.reducer,
+  assembly: assemblySlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
