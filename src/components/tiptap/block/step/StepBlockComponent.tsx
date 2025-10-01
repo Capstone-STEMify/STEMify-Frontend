@@ -77,6 +77,7 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
   // 3. Sử dụng trong onDrop
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
+    e.stopPropagation() // Ngăn editor xử lý drop mặc định
 
     // Nếu kéo từ sidebar (URL text/plain)
     const url = e.dataTransfer.getData('text/plain')
@@ -245,7 +246,10 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                   {editable && (
                     <div
                       onClick={() => fileInputRef.current?.click()}
-                      onDragOver={(e) => e.preventDefault()}
+                      onDragOver={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                      }}
                       onDrop={handleDrop}
                       className='flex h-[200px] w-[200px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-400 text-gray-500 hover:border-purple-500 hover:text-purple-500'
                     >

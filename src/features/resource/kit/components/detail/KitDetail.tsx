@@ -3,7 +3,11 @@ import BackButton from '@/components/shared/button/BackButton'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCarousel } from '@/components/shared/SCarousel'
-import { useDeleteKitMutation, useGetKitByIdQuery, useUpdateKitMutation } from '@/features/resource/kit/api/kitApi'
+import {
+  useDeleteKitMutation,
+  useGetKitByIdQuery,
+  useUpdateKitMutation
+} from '@/features/resource/kit/api/kitProductApi'
 import { useModal } from '@/providers/ModalProvider'
 import { SquarePen, Trash2 } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'

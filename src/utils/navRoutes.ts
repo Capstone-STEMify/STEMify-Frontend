@@ -9,12 +9,14 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   [UserRole.STUDENT]: [
     { name: 'home', path: '/' },
     { name: 'resources', path: '/resource' },
+    { name: 'shop', path: '/shop' },
     { name: 'myLearning', path: '/my-learning' },
     { name: 'strawLab', path: '/straw-lab' }
   ],
   [UserRole.TEACHER]: [
     { name: 'home', path: '/' },
     { name: 'resources', path: '/resource' },
+    { name: 'shop', path: '/shop' },
     { name: 'myLearning', path: '/my-learning' },
     { name: 'strawLab', path: '/straw-lab' }
   ],
@@ -26,6 +28,7 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   [UserRole.GUEST]: [
     { name: 'home', path: '/' },
     { name: 'resources', path: '/resource' },
+    { name: 'shop', path: '/shop' },
     { name: 'myLearning', path: '/my-learning' },
     { name: 'strawLab', path: '/straw-lab' }
   ]
