@@ -295,7 +295,7 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                   />
                 ))}
               </div>
-              {step.content && <p className='mt-3 text-gray-700'>{step.content}</p>}
+              {step.content && <p className='mt-3 whitespace-pre-line text-gray-700'>{step.content}</p>}
             </div>
           )}
         </div>

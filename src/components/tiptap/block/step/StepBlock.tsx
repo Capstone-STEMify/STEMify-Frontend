@@ -28,7 +28,7 @@ export const StepBlock = Node.create({
           const stepsAttr = element.getAttribute('data-steps')
           let steps = []
           try {
-            steps = stepsAttr ? JSON.parse(stepsAttr) : []
+            steps = stepsAttr ? JSON.parse(decodeURIComponent(stepsAttr)) : []
           } catch {
             steps = []
           }
@@ -40,7 +40,6 @@ export const StepBlock = Node.create({
       }
     ]
   },
-
   renderHTML({ HTMLAttributes }) {
     const steps = Array.isArray(HTMLAttributes.steps) ? HTMLAttributes.steps : []
     const currentStep = HTMLAttributes.currentStep ?? 0
@@ -71,7 +70,7 @@ export const StepBlock = Node.create({
       'div',
       {
         'data-type': 'step-block',
-        'data-steps': JSON.stringify(steps),
+        'data-steps': encodeURIComponent(JSON.stringify(steps)),
         'data-current-step': currentStep,
         class: 'bg-sky-custom-100 my-6 w-full rounded-xl p-4 shadow-lg'
       },
@@ -80,6 +79,8 @@ export const StepBlock = Node.create({
         'div',
         { class: 'step-container my-3 space-y-2' },
         ['h3', { class: 'text-lg font-bold' }, `${currentStep + 1}. ${step.title || ''}`],
+
+        // render images nếu có
         step.images?.length
           ? [
               'div',
@@ -94,6 +95,8 @@ export const StepBlock = Node.create({
               ])
             ]
           : '',
+
+        // ✅ hiển thị content có xuống dòng
         step.content ? ['p', { class: 'mt-3 text-gray-700 whitespace-pre-line' }, step.content] : ''
       ],
       renderStepNav(steps, currentStep)

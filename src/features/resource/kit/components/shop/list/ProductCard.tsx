@@ -82,7 +82,7 @@ const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 20 }}
           transition={{ duration: 0.3 }}
-          className='absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white px-6 py-2 text-sm font-semibold text-gray-900 shadow-lg transition hover:bg-gray-100'
+          className='absolute bottom-4 left-1/2 -translate-x-1/2 cursor-pointer rounded-full bg-white px-6 py-2 text-sm font-semibold text-gray-900 shadow-lg transition hover:bg-gray-100'
         >
           Quick View
         </motion.button>
@@ -90,7 +90,7 @@ const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index
 
       {/* Product Info */}
       <div className='p-6'>
-        <h3 className='mb-1 text-xl font-bold text-gray-900'>{product.name}</h3>
+        <h3 className='text-md mb-1 font-bold text-gray-900'>{product.name}</h3>
         {/* <p className='mb-4 text-sm text-gray-600'>{product.description}</p> */}
         <div className='mb-3 flex items-center gap-2'>
           <StarRating rating={5} />
@@ -98,12 +98,19 @@ const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index
             {5} ({10})
           </span>
         </div>
-        <div className='flex items-center justify-between'>
-          <span className='text-xl font-bold text-red-600'>{product.price.toLocaleString('en-US')} VND</span>
+        <div className='flex flex-col items-start gap-3'>
+          {product.isPreOrder ? (
+            <span className='rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-600'>
+              {t('list.statusOptions.preOrder')}
+            </span>
+          ) : (
+            <span className='text-xl font-bold text-red-600'>{product.price.toLocaleString('en-US')} VND</span>
+          )}
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className='flex items-center gap-2 rounded-full border-2 border-blue-600 bg-white px-3 py-1 text-sm font-semibold text-blue-600 transition hover:bg-blue-50'
+            className='flex cursor-pointer items-center gap-2 rounded-full border-1 border-blue-600 bg-white px-3 py-1 text-sm font-semibold text-blue-600 transition hover:bg-blue-50'
           >
             {t('list.addToCart')}
             {/* <svg className='h-4 w-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>

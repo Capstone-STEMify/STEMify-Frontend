@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 type EditorState = {
-  saveTrigger: number
+  saveTrigger: number | null
 }
 
 const initialState: EditorState = {
-  saveTrigger: 0
+  saveTrigger: null
 }
 
 export const editorSlice = createSlice({
@@ -13,7 +13,7 @@ export const editorSlice = createSlice({
   initialState,
   reducers: {
     triggerSave(state) {
-      state.saveTrigger += 1
+      state.saveTrigger = Date.now()
     }
   }
 })

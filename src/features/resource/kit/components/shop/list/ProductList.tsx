@@ -17,20 +17,27 @@ const ProductList: React.FC = () => {
   const filteredProducts = activeCategory === 'All' ? products : products.filter((p) => p.category === activeCategory)
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100'>
-      <div className='pb-12'>
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 to-white'>
+      <div className='pb-24'>
         <HeroSection />
-        <div className='mx-auto mt-15 w-full px-20'>
-          <div className='flex gap-2'>
+
+        <div className='mx-auto mt-12 w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
+          <div className='flex flex-col gap-8 md:flex-row'>
             {/* Sidebar filter */}
-            <div className='w-85 shrink-0'>
+            <div className='w-full shrink-0 md:w-72'>
               <ProductFilterSidebar />
             </div>
 
             {/* Products grid */}
             <div className='flex-1'>
-              {/* <FilterSection categories={categories} activeCategory={activeCategory} onCategoryChange={setActiveCategory} /> */}
-              <ProductsGrid products={filteredProducts} />
+              {/* <FilterSection
+                categories={categories}
+                activeCategory={activeCategory}
+                onCategoryChange={setActiveCategory}
+              /> */}
+              <div className='overflow-auto'>
+                <ProductsGrid products={filteredProducts} />
+              </div>
               {/* <RichResources /> */}
             </div>
           </div>

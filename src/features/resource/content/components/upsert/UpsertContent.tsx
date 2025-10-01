@@ -7,7 +7,7 @@ import {
 } from '@/features/resource/content/api/contentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useTranslations } from 'next-intl'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import TiptapEditor from '@/components/tiptap/TiptapEditor'
 import { ContentType } from '@/features/resource/content/types/content.type'
 import { toast } from 'sonner'
@@ -20,6 +20,7 @@ type UpsertContentProps = {
 export default function UpsertContent({ sectionId, contentId }: UpsertContentProps) {
   const tt = useTranslations('toast')
   const { data, isLoading } = useGetContentByIdQuery(contentId!, { skip: !contentId })
+  const dispatch = useAppDispatch()
 
   const [createContent] = useCreateContentMutation()
   const [updateContent] = useUpdateContentMutation()
@@ -51,7 +52,7 @@ export default function UpsertContent({ sectionId, contentId }: UpsertContentPro
   }
 
   useEffect(() => {
-    if (saveTrigger > 0) {
+    if (saveTrigger) {
       handleUpsert()
     }
   }, [saveTrigger])
