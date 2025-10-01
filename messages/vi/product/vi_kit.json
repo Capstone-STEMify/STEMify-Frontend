@@ -16,10 +16,13 @@
       "sortOptions": {
         "newest": "Mới nhất",
         "priceLowToHigh": "Giá: Từ thấp đến cao",
-        "priceHighToLow": "Giá: Từ cao đến thấp"
+        "priceHighToLow": "Giá: Từ cao đến thấp",
+        "nameAToZ": "Tên: A → Z",
+        "nameZToA": "Tên: Z → A"
       },
       "status": "Trạng thái",
       "statusOptions": {
+        "all": "Tất cả",
         "preOrder": "Đặt trước",
         "available": "Có sẵn"
       },

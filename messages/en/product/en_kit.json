@@ -16,10 +16,13 @@
       "sortOptions": {
         "newest": "Newest",
         "priceLowToHigh": "Price: Low to High",
-        "priceHighToLow": "Price: High to Low"
+        "priceHighToLow": "Price: High to Low",
+        "nameAToZ": "Name: A → Z",
+        "nameZToA": "Name: Z → A"
       },
       "status": "Status",
       "statusOptions": {
+        "all": "All",
         "preOrder": "Pre-order",
         "available": "Available"
       },

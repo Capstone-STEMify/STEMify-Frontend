@@ -5,9 +5,9 @@ const initialState: KitSliceParams = {
   pageNumber: 1,
   pageSize: 8,
   search: undefined,
-  orderBy: undefined,
+  orderBy: 'createdDate',
   status: undefined,
-  sortDirection: 'Asc',
+  sortDirection: 'Desc',
   minPrice: undefined,
   maxPrice: undefined,
   ageRangeId: undefined

@@ -90,7 +90,7 @@ const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index
 
       {/* Product Info */}
       <div className='p-6'>
-        <h3 className='mb-1 text-xl font-bold text-gray-900'>{product.name}</h3>
+        <h3 className='text-md mb-1 font-bold text-gray-900'>{product.name}</h3>
         {/* <p className='mb-4 text-sm text-gray-600'>{product.description}</p> */}
         <div className='mb-3 flex items-center gap-2'>
           <StarRating rating={5} />
