@@ -1,13 +1,8 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { javascriptGenerator } from 'blockly/javascript'
 import BlocklyEditor from '@/features/blockly-phaser/blockly/BlocklyEditor'
-"use client";
-import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { javascriptGenerator } from "blockly/javascript";
-import BlocklyEditor from "@/features/blockly-phaser/blockly/BlocklyEditor";
 import { pushAssistantMessage } from "@/features/modal3Display/Assistant3D";
 
 const PhaserGame = dynamic(() => import('@/features/blockly-phaser/phaser/PhaserGame'), {
