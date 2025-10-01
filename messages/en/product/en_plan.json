@@ -1,0 +1,16 @@
+{
+  "plan": {
+    "list": {
+      "title": "Upgrade your plan",
+      "description": "Choose the plan that best fits your needs and unlock the full potential of Stemify for your educational journey.",
+      "selectButton": "Choose Plan",
+      "loading": "Loading plans...",
+      "error": "An error occurred while fetching plans. Please try again.",
+      "noData": "No plans found.",
+      "currentPlan": "Current Plan",
+      "recommended": "RECOMMENDED",
+      "choosePlanBtn": "Choose Plan",
+      "month": "Month"
+    }
+  }
+}

@@ -7,6 +7,16 @@ export type Kit = {
   images: KitImage[]
   kitImages?: KitImage[] // for backward compatibility
   imageUrl?: string // for backward compatibility
+  price: number
+  stockQuantity: number
+  Sku: string
+  ageRangeId?: number
+  status: KitProductStatus
+  createdAt: string
+  updatedAt: string
+  isPreOrder?: boolean
+  weight: number // in grams
+  dimensions?: string // e.g., "10x5x3 cm"
 }
 
 export type KitImage = {
@@ -15,4 +25,15 @@ export type KitImage = {
 }
 
 // slice
-export type KitSliceParams = {} & SliceQueryParams
+export type KitSliceParams = {
+  minPrice?: number
+  maxPrice?: number
+  ageRangeId?: number
+  isPreOrder?: boolean
+} & SliceQueryParams
+
+export enum KitProductStatus {
+  DRAFT = 'Draft',
+  PUBLISHED = 'Published',
+  ARCHIVED = 'Archived'
+}
