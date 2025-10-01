@@ -12,7 +12,6 @@ import {
 import { useTree } from '@headless-tree/react'
 import { FolderIcon, FolderOpenIcon, SearchIcon } from 'lucide-react'
 
-import { Input } from 'components/shadcn/input'
 import { Tree, TreeItem, TreeItemLabel } from 'components/shadcn/tree'
 
 interface Item {

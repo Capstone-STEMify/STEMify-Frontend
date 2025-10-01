@@ -198,7 +198,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMainWithLocale} />
-        <NavDesign items={navDesignWithLocale} />
+        {/* <NavDesign items={navDesignWithLocale} /> */}
         {userRole && userRole === UserRole.ADMIN && <NavDocuments items={documentsWithLocale} />}
         {/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}
       </SidebarContent>

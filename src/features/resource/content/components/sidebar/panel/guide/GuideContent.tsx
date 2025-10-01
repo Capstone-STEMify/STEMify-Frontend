@@ -39,6 +39,30 @@ export default function GuideContent() {
     <ScrollArea className='my-2 h-[610px] px-4'>
       <h3 className='text-center text-lg font-bold'>Hướng dẫn sử dụng Editor</h3>
 
+      <div className='my-3 rounded-md border-l-4 border-yellow-400 bg-yellow-50 py-2 text-sm text-gray-700'>
+        <h4 className='mb-2 font-semibold text-yellow-700'>📌 Lưu ý khi chèn hình ảnh & video</h4>
+        <ul className='list-disc space-y-1 pl-5'>
+          <li>
+            <strong>Hình ảnh:</strong> Có thể chèn bằng nhiều cách:
+            <ul className='list-[circle] pl-5'>
+              <li>
+                Kéo & thả (drag & drop) trực tiếp vào editor <em>(lưu ý: phải thả đúng chỗ có dấu nháy)</em>.
+              </li>
+              <li>Copy & paste từ clipboard.</li>
+              <li>
+                Kéo từ <strong>Upload Sidebar</strong> vào editor.
+              </li>
+              <li>
+                Double-click vào ảnh trong <strong>Upload Sidebar</strong> để chèn nhanh.
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong>Video:</strong> Chỉ có thể chèn bằng cách <em>double-click trong Upload Sidebar</em>.
+          </li>
+        </ul>
+      </div>
+
       <ol className='list-decimal space-y-6'>
         {/* Định dạng */}
         <li>
@@ -105,6 +129,12 @@ export default function GuideContent() {
               <VideoIcon className='h-4 w-4' /> Video
             </span>
           </div>
+
+          {/* Phần chú thích */}
+          <p className='mt-2 text-sm text-gray-600'>
+            💡 Bạn có thể thêm <em>chú thích (caption)</em> cho hình ảnh hoặc video để mô tả nội dung, ghi nguồn, hoặc
+            đưa thêm ngữ cảnh. Điều này giúp người xem có trải nghiệm tốt hơn và dễ hiểu hơn.
+          </p>
         </li>
 
         {/* Khối đặc biệt */}
