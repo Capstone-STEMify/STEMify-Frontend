@@ -7,85 +7,50 @@ import { Label } from '@/components/shadcn/label'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { Slider } from '@/components/shadcn/slider'
-import SSelect from '@/components/shared/SSelect'
-import { resetParams, setPageSize, setParam, setSearchTerm } from '@/features/resource/kit/slice/kitSlice'
-import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
+import { resetParams, setMultipleParams, setParam, setSearchTerm } from '@/features/resource/kit/slice/kitProductSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import useDebounce from '@/hooks/useDebounce'
-import { getLabel } from '@/utils/index'
-import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function ProductFilterSidebar() {
   const t = useTranslations('kits.list')
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000])
-
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.kit)
-  const debouncedSearchQuery = useDebounce(filters.search || '', 500)
+  const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce(search, 500)
 
-  // Clear all filters and reset page size
-  const clearAll = () => {
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000000])
+  const debouncedPrice = useDebounce(priceRange, 500)
+
+  useEffect(() => {
+    dispatch(setSearchTerm(debouncedSearch))
+  }, [debouncedSearch, dispatch])
+
+  useEffect(() => {
+    dispatch(setMultipleParams({ minPrice: debouncedPrice[0], maxPrice: debouncedPrice[1] }))
+  }, [debouncedPrice, dispatch])
+
+  const handleClear = () => {
     dispatch(resetParams())
-    dispatch(setPageSize(6))
   }
 
-  const hasFilters = Boolean(debouncedSearchQuery || filters.ageRangeId || filters.status)
+  const handleSearchChange = (value: string) => {
+    setSearch(value)
+  }
 
-  // Function to render filter tags
-  const renderFilterTag = (
-    key: keyof typeof filters,
-    label: string,
-    color: string,
-    options?: { value: string; label: string }[]
-  ) =>
-    filters[key] && (
-      <span className={`inline-flex items-center gap-1 rounded-full ${color} px-3 py-1 text-sm`}>
-        {label}: {getLabel(filters[key], options ?? [])}
-        <X className='h-3 w-3 cursor-pointer' onClick={() => dispatch(setParam({ key, value: '' }))} />
-      </span>
-    )
+  const handlePriceChange = (range: [number, number]) => {
+    setPriceRange(range)
+  }
 
-  // Options for selects
-  //   const ageRangeOptions = getOptions(ageRanges?.data.items, 'ageRangeLabel')
-  const statusOptions = Object.entries(KitProductStatus)
-    .filter(([key]) => key.toLowerCase() !== 'deleted')
-    .map(([key, value]) => ({
-      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-      value: value
-    }))
-
-  const sortOptions = [
-    {
-      label: t('sortOptions.newest'),
-      value: JSON.stringify({ orderBy: 'createdDate', sortOrder: 'DESC' })
-    },
-    {
-      label: t('sortOptions.priceLowToHigh'),
-      value: JSON.stringify({ orderBy: 'price', sortOrder: 'ASC' })
-    },
-    {
-      label: t('sortOptions.priceHighToLow'),
-      value: JSON.stringify({ orderBy: 'price', sortOrder: 'DESC' })
-    },
-    {
-      label: t('sortOptions.nameAToZ'),
-      value: JSON.stringify({ orderBy: 'name', sortOrder: 'ASC' })
-    },
-    {
-      label: t('sortOptions.nameZToA'),
-      value: JSON.stringify({ orderBy: 'name', sortOrder: 'DESC' })
-    }
-  ]
   return (
-    <aside className='border-grey-300 w-full space-y-6 rounded-xl border-1 bg-white px-6 py-8 shadow-md'>
+    <aside className='border-grey-300 w-full space-y-6 rounded-xl border bg-white px-6 py-8 shadow-md'>
       <div className='flex items-center justify-between'>
         <h2 className='text-2xl font-semibold tracking-tight text-gray-800'>{t('Filters')}</h2>
         <Button
           size='sm'
-          onClick={clearAll}
-          className='rounded-xl border-1 border-red-500 bg-white text-xs text-red-500 hover:bg-red-50 hover:text-red-600'
+          onClick={handleClear}
+          className='rounded-xl border border-red-500 bg-white text-xs text-red-500 hover:bg-red-50 hover:text-red-600'
         >
           {t('clear')}
         </Button>
@@ -117,8 +82,8 @@ export default function ProductFilterSidebar() {
           onValueChange={(v) => setPriceRange(v as [number, number])}
         />
         <div className='text-muted-foreground flex justify-between text-sm'>
-          <span>{priceRange[0].toLocaleString('vi-VN')} VND</span>
-          <span>{priceRange[1].toLocaleString('vi-VN')} VND</span>
+          <span>{(filters.minPrice ?? 0).toLocaleString('vi-VN')} VND</span>
+          <span>{(filters.maxPrice ?? 5000000).toLocaleString('vi-VN')} VND</span>
         </div>
       </div>
       <hr className='mb-4' />
@@ -126,20 +91,19 @@ export default function ProductFilterSidebar() {
       {/* Sort */}
       <div className='flex items-center gap-1 space-y-2'>
         <Label className='text-sm font-medium text-gray-600'>{t('sort')}</Label>
-        <SSelect
-          placeholder={t('list.placeholder.sort')}
-          value={
-            filters.orderBy && filters.sortOrder
-              ? JSON.stringify({ orderBy: filters.orderBy, sortOrder: filters.sortOrder })
-              : JSON.stringify({ orderBy: 'createdDate', sortOrder: 'DESC' })
-          }
-          onChange={(val) => {
-            const option = JSON.parse(val)
-            dispatch(setParam({ key: 'orderBy', value: option.orderBy }))
-            dispatch(setParam({ key: 'sortOrder', value: option.sortOrder }))
-          }}
-          options={sortOptions}
-        />
+        <Select
+          value={filters.orderBy ?? 'newest'}
+          onValueChange={(value) => dispatch(setParam({ key: 'orderBy', value }))}
+        >
+          <SelectTrigger className='h-10 rounded-lg'>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='newest'>{t('sortOptions.newest')}</SelectItem>
+            <SelectItem value='price-asc'>{t('sortOptions.priceLowToHigh')}</SelectItem>
+            <SelectItem value='price-desc'>{t('sortOptions.priceHighToLow')}</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Sort */}
@@ -166,12 +130,24 @@ export default function ProductFilterSidebar() {
           className='mt-1 space-y-2 pl-1'
         >
           <div className='flex items-center space-x-2'>
-            <RadioGroupItem value='allStatus' id='allStatus' />
-            <Label htmlFor='allStatus'>{t('statusOptions.all')}</Label>
+            <Checkbox
+              id='available'
+              checked={filters.isPreOrder}
+              onCheckedChange={() =>
+                dispatch(setParam({ key: 'isPreOrder', value: filters.isPreOrder ? undefined : true }))
+              }
+            />
+            <Label htmlFor='available'>{t('statusOptions.available')}</Label>
           </div>
           <div className='flex items-center space-x-2'>
-            <RadioGroupItem value='isPreorder' id='isPreorder' />
-            <Label htmlFor='isPreorder'>{t('statusOptions.preOrder')}</Label>
+            <Checkbox
+              id='preorder'
+              checked={filters.isPreOrder === true}
+              onCheckedChange={() =>
+                dispatch(setParam({ key: 'isPreOrder', value: filters.isPreOrder ? undefined : true }))
+              }
+            />
+            <Label htmlFor='preorder'>{t('statusOptions.preOrder')}</Label>
           </div>
           <div className='flex items-center space-x-2'>
             <RadioGroupItem value='isAvailable' id='isAvailable' />
@@ -186,8 +162,8 @@ export default function ProductFilterSidebar() {
       {/* <div className='space-y-2'>
         <Label className='text-sm font-medium text-gray-600'>Age</Label>
         <RadioGroup
-          value={filters.ageRangeId ? filters.ageRangeId.toString() : ''}
-          onValueChange={() => dispatch(setParam({ key: 'ageRangeId', value: age }))}
+          value={filters.age ?? 'all'}
+          onValueChange={(value) => dispatch(setParam({ key: 'age', value }))}
           className='mt-1 space-y-2 pl-1'
         >
           <div className='flex items-center space-x-2'>

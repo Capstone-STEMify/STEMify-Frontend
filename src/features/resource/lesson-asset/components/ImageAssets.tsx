@@ -76,7 +76,13 @@ export default function ImageAssets() {
               }}
               draggable
               onDragStart={(e) => {
+                e.dataTransfer.clearData()
+                e.dataTransfer.setData('text/uri-list', asset.assetUrl)
                 e.dataTransfer.setData('text/plain', asset.assetUrl)
+
+                const img = new window.Image()
+                img.src = asset.assetUrl
+                e.dataTransfer.setDragImage(img, 0, 0)
               }}
             >
               {/* Checkbox chọn ảnh */}

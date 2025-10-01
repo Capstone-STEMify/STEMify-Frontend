@@ -2,10 +2,10 @@
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
-import { useSearchKitQuery } from '@/features/resource/kit/api/kitApi'
+import { useSearchKitQuery } from '@/features/resource/kit/api/kitProductApi'
 import { ProductData } from '@/features/resource/kit/components/shop/list/mockData'
 import ProductCard from '@/features/resource/kit/components/shop/list/ProductCard'
-import { setPageIndex } from '@/features/resource/kit/slice/kitSlice'
+import { setPageIndex } from '@/features/resource/kit/slice/kitProductSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
@@ -16,6 +16,8 @@ const ProductsGrid: React.FC<{ products: ProductData[] }> = ({ products }) => {
   const dispatch = useAppDispatch()
 
   const kitParams = useAppSelector((state) => state.kit)
+
+  // const kitQuery: kitParams = {}
   const { data: kitData, isLoading } = useSearchKitQuery(kitParams)
 
   const handlePageChange = (newPage: number) => {

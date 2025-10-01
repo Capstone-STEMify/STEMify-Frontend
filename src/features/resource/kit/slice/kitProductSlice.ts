@@ -13,7 +13,7 @@ const initialState: KitSliceParams = {
   ageRangeId: undefined
 }
 
-export const kitSlice = createQuerySlice('kitSlice', initialState)
+export const kitProductSlice = createQuerySlice('kitProductSlice', initialState)
 
 export const { setPageIndex, setPageSize, setSearchTerm, setParam, setMultipleParams, resetParams, setSortDirection } =
-  kitSlice.actions
+  kitProductSlice.actions
