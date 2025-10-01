@@ -2,10 +2,10 @@
 
 import React, { useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import Assistant3D, { pushAssistantMessage } from "@/features/modal3Display/Assistant3D";
+import Assistant3D, { pushAssistantMessage } from '@/features/Modal3Display_tmp/Assistant3D'
 
 // Canvas/R3F chỉ chạy client → dynamic nếu bạn muốn tách bundle:
-const Assistant = dynamic(() => import('@/features/modal3Display/Assistant3D'), { ssr: false })
+const Assistant = dynamic(() => import('@/features/Modal3Display_tmp/Assistant3D'), { ssr: false })
 
 export default function CodePage() {
   // Ví dụ đẩy message sau khi user mở trang 2s
@@ -18,7 +18,7 @@ export default function CodePage() {
 
   return (
     <div style={{ minHeight: '100vh', padding: 24 }}>
-      <h1 className="text-2xl font-semibold">Code Playground</h1>
+      <h1 className='text-2xl font-semibold'>Code Playground</h1>
       {/* ... editor / UI của bạn ... */}
 
       <Assistant
