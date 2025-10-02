@@ -18,17 +18,22 @@ export default function CategoryTable() {
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const columns = useGetCategoryAction()
+  const [search, setSearch] = useState<string>('')
 
   const categoryParams = useAppSelector((state) => state.category)
   // Ensure debouncedSearchQuery is always a string
-  const debouncedSearchQuery = useDebounce(categoryParams.search ?? '', 500)
+  const debouncedSearchQuery = useDebounce(search, 500)
 
   const queryParams: CategoryQueryParams = {
     pageNumber: categoryParams.pageNumber,
     pageSize: categoryParams.pageSize,
-    search: debouncedSearchQuery,
+    search,
     status: categoryParams.status
   }
+
+  useEffect(() => {
+    dispatch(setSearchTerm(debouncedSearchQuery))
+  }, [debouncedSearchQuery, dispatch])
 
   const { data } = useSearchCategoryQuery(queryParams)
 
@@ -47,8 +52,8 @@ export default function CategoryTable() {
       <div className='flex items-center justify-between py-4'>
         <Input
           placeholder={t('topicSearch')}
-          value={queryParams.search}
-          onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           className='max-w-sm'
         />
         <Button size={'icon'} className='bg-amber-custom-400 rounded-full' onClick={handleCreate}>

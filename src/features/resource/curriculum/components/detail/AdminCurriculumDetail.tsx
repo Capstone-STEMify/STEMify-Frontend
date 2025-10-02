@@ -27,12 +27,11 @@ export default function AdminCurriculumDetail() {
 
   return (
     <div>
-      <div className='flex items-center gap-5 pb-5'>
-        <BackButton />
-        <h1>{t('details.title')}</h1>
-      </div>
-
       <div className='mx-auto min-h-screen max-w-6xl px-4 pb-8 sm:px-6 lg:px-8'>
+        <div className='flex items-center gap-5 pb-5'>
+          <BackButton />
+          <h1>{t('details.title')}</h1>
+        </div>
         <AdminCurriculumInformationSection curriculumId={Number(curriculumId)} curriculum={data?.data} />
 
         {curriculumId && (

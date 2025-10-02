@@ -1,15 +1,22 @@
 import { SPopover } from '@/components/shared/SPopover'
-import { useGetListLessonAssetsQuery } from '@/features/resource/lesson-asset/api/lessonAssetApi'
-import { toggleSelect } from '@/features/resource/lesson-asset/slice/lessonAssetSelectionSliice'
+import {
+  useDeleteListLessonAssetsMutation,
+  useGetListLessonAssetsQuery
+} from '@/features/resource/lesson-asset/api/lessonAssetApi'
+import { clearSelection, toggleSelect } from '@/features/resource/lesson-asset/slice/lessonAssetSelectionSliice'
 import { LessonAssetSliceParams, LessonAssetType } from '@/features/resource/lesson-asset/types/lessonAsest.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { useModal } from '@/providers/ModalProvider'
 import { EllipsisVertical, Download, Trash2, Info, FileText, FileSpreadsheet, FileArchive, X } from 'lucide-react'
 import { useParams } from 'next/navigation'
+import { toast } from 'sonner'
 
 export default function DocumentAssets() {
   const { lessonId } = useParams()
+  const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const selectedIds = useAppSelector((state) => state.lessonAssetSelection.selectedIds)
+  const [deleteFiles, { isLoading: deletingFiles }] = useDeleteListLessonAssetsMutation()
 
   const handleToggle = (id: number) => {
     dispatch(toggleSelect(id))
@@ -26,6 +33,13 @@ export default function DocumentAssets() {
     lessonId: Number(lessonId),
     params: queryParams
   })
+
+  const handleDeleteFiles = async (ids: number[]) => {
+    if (ids.length === 0) return
+    await deleteFiles({ lessonId: Number(lessonId), ids })
+    toast.success('Deleted files successfully')
+    dispatch(clearSelection())
+  }
 
   if (!data) {
     return <div className='text-sm text-gray-500'>No documents uploaded yet</div>
@@ -59,7 +73,7 @@ export default function DocumentAssets() {
 
   return (
     <div className='relative h-full'>
-      <div className='grid grid-cols-2 gap-4'>
+      <div className='mb-10 grid grid-cols-2 gap-4'>
         {data.data.items.map((asset) => {
           const ext = getFileExtension(asset.name || asset.assetUrl)
 
@@ -99,7 +113,15 @@ export default function DocumentAssets() {
                       <Download size={14} />
                       <span>Download</span>
                     </a>
-                    <div className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-gray-100'>
+                    <div
+                      className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-gray-100'
+                      onClick={() =>
+                        openModal('confirm', {
+                          message: 'Are you sure you want to delete this file?',
+                          onConfirm: () => handleDeleteFiles([asset.id])
+                        })
+                      }
+                    >
                       <Trash2 size={14} /> Delete
                     </div>
                   </div>
@@ -112,6 +134,33 @@ export default function DocumentAssets() {
           )
         })}
       </div>
+
+      {selectedIds.length > 0 && (
+        <div className='sticky bottom-1 z-10 rounded-4xl border bg-white shadow-md'>
+          <div className='flex items-center justify-between px-4 py-2'>
+            <span className='text-sm font-medium'>{selectedIds.length} selected</span>
+            <div className='flex items-center gap-4'>
+              <button className='rounded p-2 hover:bg-gray-100'>
+                <Download size={18} />
+              </button>
+              <button
+                className='rounded p-2 text-red-500 hover:bg-red-50'
+                onClick={() =>
+                  openModal('confirm', {
+                    message: 'Are you sure you want to delete these files?',
+                    onConfirm: () => handleDeleteFiles(selectedIds)
+                  })
+                }
+              >
+                <Trash2 size={18} />
+              </button>
+              <button onClick={() => dispatch(clearSelection())} className='rounded p-2 hover:bg-gray-100'>
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

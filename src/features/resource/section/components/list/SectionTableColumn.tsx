@@ -16,7 +16,6 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
   const tt = useTranslations('toast')
   const t = useTranslations('section')
   const { openModal } = useModal()
-  const { lessonId } = useParams()
   const userRole = useAppSelector((state) => state.auth.user?.role)
 
   const [deleteSection] = useDeleteSectionMutation()
@@ -43,7 +42,7 @@ export default function useGetSectionTableColumn(): ColumnDef<Section>[] {
               <div
                 className='line-clamp-5 w-32 cursor-pointer whitespace-pre-wrap text-blue-500 italic underline'
                 onClick={() => {
-                  openModal('contentDetail', { sectionId: row.original.id, contentId: row.original.contentIds[0] })
+                  openModal('contentDetail', { sectionId: row.original.id })
                 }}
               >
                 {row.getValue('title')}

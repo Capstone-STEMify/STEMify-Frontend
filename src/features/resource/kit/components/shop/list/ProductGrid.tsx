@@ -62,7 +62,6 @@ const ProductsGrid: React.FC<{ products: ProductData[] }> = ({ products }) => {
           pageNumber={kitParams.pageNumber}
           totalPages={kitData.data.totalPages}
           onPageChanged={handlePageChange}
-          className='pb-10'
         />
       )}
     </div>

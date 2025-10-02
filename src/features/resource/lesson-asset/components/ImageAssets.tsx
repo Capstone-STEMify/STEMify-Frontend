@@ -36,8 +36,6 @@ export default function ImageAssets() {
     params: queryParams
   })
 
-  const [deleteImage, { isLoading: deletingImages }] = useDeleteListLessonAssetsMutation()
-
   const handleDeleteFiles = async (ids: number[]) => {
     if (ids.length === 0) return
     await deleteFiles({ lessonId: Number(lessonId), ids })
@@ -59,12 +57,6 @@ export default function ImageAssets() {
   return (
     <div className='flex h-full flex-col'>
       <ScrollArea className='h-[470px] pb-2'>
-        {deletingImages && (
-          <div className='absolute inset-0 z-10 flex items-center justify-center bg-white/70'>
-            <LoadingComponent textShow text='Deleting images...' />
-          </div>
-        )}
-
         <div className='grid grid-cols-2 gap-2 p-2 px-4'>
           {data.data.items.map((asset) => (
             <div
