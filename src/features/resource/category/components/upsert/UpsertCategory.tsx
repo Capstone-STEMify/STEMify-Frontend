@@ -51,10 +51,7 @@ export default function UpsertCategory({ id, onSuccess }: UpsertCategoryProps) {
   const form = useAppForm({
     defaultValues: defaultCategoryData,
     validators: {
-      // nếu useAppForm accept zod:
-      // onChange: categorySchema
-      // nếu cần StandardSchema (conform):
-      onChange: (value) => parseWithZod(new FormData(Object.entries(value) as any), { schema: categorySchema })
+      onChange: categorySchema
     },
     onSubmit: async ({ value }) => {
       try {
