@@ -13,7 +13,11 @@ import useDebounce from '@/hooks/useDebounce'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useState } from 'react'
 
-export default function ProductFilterSidebar() {
+export interface ProductFilterSidebarProps {
+  className?: string
+}
+
+export default function ProductFilterSidebar({ className }: ProductFilterSidebarProps) {
   const t = useTranslations('kits.list')
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.kit)
@@ -50,7 +54,7 @@ export default function ProductFilterSidebar() {
   }
 
   return (
-    <aside className='border-grey-300 w-full space-y-6 rounded-xl border bg-white px-6 py-8 shadow-md'>
+    <aside className={`w-full space-y-6 bg-white px-6 py-8 ${className}`}>
       <div className='flex items-center justify-between'>
         <h2 className='text-2xl font-semibold tracking-tight text-gray-800'>{t('Filters')}</h2>
         <Button

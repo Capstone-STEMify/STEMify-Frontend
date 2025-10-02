@@ -55,7 +55,7 @@ export default function KitList() {
 
   return (
     <div className='select-none'>
-      <div className='mt-4 grid grid-cols-1 gap-10 lg:grid-cols-2'>
+      <div className='mx-4 mb-10 space-y-6'>
         {kitData.data.items.map((kit) => (
           <CardHorizontal
             onClick={() => router.push(`/${locale}/admin/kit/${kit.id}`)}
@@ -63,8 +63,13 @@ export default function KitList() {
             imageUrl={kit.imageUrl || '/images/resources/activities.png'}
             title={kit.name}
             description={kit.description || ''}
-            className='max-w-3xl'
-            height={100}
+            price={kit.price}
+            sku={kit.sku ?? 'SKU123'}
+            availability={kit.stockQuantity > 0 ? t('list.available') : t('list.outOfStock')}
+            badge={kit.status}
+            rating={5}
+            reviews={10}
+            stockQuantity={kit.stockQuantity ?? 0}
           />
         ))}
       </div>
@@ -74,7 +79,6 @@ export default function KitList() {
           pageNumber={kitData.data.pageNumber}
           totalPages={kitData.data.totalPages}
           onPageChanged={handlePageChange}
-          className='pb-10'
         />
       )}
     </div>

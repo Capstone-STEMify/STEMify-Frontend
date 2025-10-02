@@ -126,7 +126,10 @@ sky-gradient: right, #7dd3fc, #eff6ff
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
-
+::selection {
+  background-color: #d2e6ff; /* bg-blue-200 */
+  color: #000; /* text-black */
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;

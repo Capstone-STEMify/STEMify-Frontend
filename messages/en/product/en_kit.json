@@ -29,7 +29,13 @@
       "ageOptions": {
         "all": "All"
       },
-      "search": "Search"
+      "search": "Search",
+      "sku": "SKU",
+      "availability": "Availability",
+      "available": "Available",
+      "outOfStock": "Out of Stock",
+      "items": "Items",
+      "reviews": "Reviews"
     },
     "detail": {
       "title": "Kit Details",
@@ -50,7 +56,33 @@
           "placeholder": "Enter kit description"
         },
         "imageUrl": {
-          "label": "Image URL"
+          "label": "Image URL (up to 5 images)"
+        },
+        "price": {
+          "label": "Price",
+          "placeholder": "Enter kit price"
+        },
+        "ageRange": {
+          "label": "Age"
+        },
+        "isPreorder": {
+          "label": "Pre-order"
+        },
+        "sku": {
+          "label": "SKU",
+          "placeholder": "e.g: ABC123"
+        },
+        "weight": {
+          "label": "Weight (grams)",
+          "placeholder": "e.g: 500"
+        },
+        "dimensions": {
+          "label": "Dimensions (cm)",
+          "placeholder": "e.g., 30 x 20 x 10 cm"
+        },
+        "stockQuantity": {
+          "label": "Stock Quantity",
+          "placeholder": "e.g: 100"
         }
       }
     }
