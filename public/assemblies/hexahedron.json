@@ -412,6 +412,12 @@
               "connected": true
             }
           }
+        },
+        {
+          "actionId": "action_final_highlight",
+          "title": "Form Top Square",
+          "description": "Assemble the top square component from the adjusted connectors and straws",
+          "expectedResult": "A complete top square is formed with proper connections"
         }
       ],
       "playbackControls": {
