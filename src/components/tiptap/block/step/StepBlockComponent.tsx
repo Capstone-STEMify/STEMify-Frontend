@@ -221,51 +221,55 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                 </Label>
                 <div className='flex flex-wrap items-center justify-center gap-7'>
                   {(step.images || []).map((img: string, idx: number) => (
-                    <div key={idx} className='group relative h-[200px] w-[200px] overflow-hidden rounded-xl border'>
+                    <div
+                      key={idx}
+                      className='group relative flex items-center justify-center rounded-xl border bg-white p-2'
+                    >
                       <Image
                         src={img}
                         alt={`${step.title}-${idx}`}
-                        width={200}
-                        height={200}
-                        className='h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-60'
+                        width={0}
+                        height={0}
+                        sizes='100vw'
+                        className='h-auto max-h-[200px] w-auto max-w-full object-contain transition-opacity duration-300 group-hover:opacity-60'
                       />
 
-                      <div className='absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-                        <Button
-                          onClick={() => removeImage(idx)}
-                          variant='destructive'
-                          size='icon'
-                          className='w-fit px-2 text-white shadow-lg'
-                        >
-                          <Trash2 size={24} /> Xóa ảnh
-                        </Button>
-                      </div>
+                      {editable && (
+                        <div className='absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+                          <Button
+                            onClick={() => removeImage(idx)}
+                            variant='destructive'
+                            size='icon'
+                            className='w-fit px-2 text-white shadow-lg'
+                          >
+                            <Trash2 size={20} /> Xóa ảnh
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   ))}
 
-                  {editable && (
-                    <div
-                      onClick={() => fileInputRef.current?.click()}
-                      onDragOver={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                      }}
-                      onDrop={handleDrop}
-                      className='flex h-[200px] w-[200px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-400 text-gray-500 hover:border-purple-500 hover:text-purple-500'
-                    >
-                      {isLoading ? (
-                        <div className='flex flex-col items-center'>
-                          <Loader2 className='h-8 w-8 animate-spin text-purple-500' />
-                          <span className='mt-2 text-sm text-gray-600'>Đang tải...</span>
-                        </div>
-                      ) : (
-                        <>
-                          <Upload size={32} />
-                          <span className='ml-2 text-sm'>Tải ảnh lên</span>
-                        </>
-                      )}
-                    </div>
-                  )}
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    onDragOver={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }}
+                    onDrop={handleDrop}
+                    className='flex h-[200px] w-[200px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-400 text-gray-500 hover:border-purple-500 hover:text-purple-500'
+                  >
+                    {isLoading ? (
+                      <div className='flex flex-col items-center'>
+                        <Loader2 className='h-8 w-8 animate-spin text-purple-500' />
+                        <span className='mt-2 text-sm text-gray-600'>Đang tải...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload size={32} />
+                        <span className='ml-2 text-sm'>Tải ảnh lên</span>
+                      </>
+                    )}
+                  </div>
                 </div>
 
                 <input
@@ -289,9 +293,10 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                     key={idx}
                     src={img}
                     alt={`${step.title}-${idx}`}
-                    width={200}
-                    height={200}
-                    className='aspect-square rounded-2xl border object-cover'
+                    width={0}
+                    height={0}
+                    sizes='100vw'
+                    className='h-auto max-h-[200px] w-auto max-w-full object-contain transition-opacity duration-300 group-hover:opacity-60'
                   />
                 ))}
               </div>

@@ -80,23 +80,28 @@ export const StepBlock = Node.create({
         { class: 'step-container my-3 space-y-2' },
         ['h3', { class: 'text-lg font-bold' }, `${currentStep + 1}. ${step.title || ''}`],
 
-        // render images nếu có
         step.images?.length
           ? [
               'div',
               { class: 'flex flex-wrap items-center justify-center gap-5' },
               ...step.images.map((img: string, idx: number) => [
-                'img',
+                'div',
                 {
-                  src: img,
-                  alt: `${step.title || 'step'}-${idx}`,
-                  class: 'aspect-square w-[200px] h-[200px] rounded-2xl border object-cover'
-                }
+                  class:
+                    'relative p-2 border rounded-xl bg-white max-h-[200px] max-w-[200px] flex items-center justify-center overflow-hidden'
+                },
+                [
+                  'img',
+                  {
+                    src: img,
+                    alt: `${step.title || 'step'}-${idx}`,
+                    class: 'h-auto w-auto max-h-full max-w-full object-contain'
+                  }
+                ]
               ])
             ]
           : '',
 
-        // ✅ hiển thị content có xuống dòng
         step.content ? ['p', { class: 'mt-3 text-gray-700 whitespace-pre-line' }, step.content] : ''
       ],
       renderStepNav(steps, currentStep)
