@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 interface PaymentSummaryProps {
@@ -7,22 +8,20 @@ interface PaymentSummaryProps {
   onRemoveAll: () => void;
 }
 
-type PaymentMethod = 'vnpay' | 'momo' | 'paypal' | 'balance';
+type PaymentMethod = 'stripe' | 'payos'
 
 export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
   total,
-  currency = 'đ',
+  currency = '£',
   onCheckout,
   onRemoveAll,
 }) => {
-  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>('vnpay');
+  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>('stripe');
   const [discountCode, setDiscountCode] = useState('');
 
   const paymentMethods = [
-    { id: 'vnpay' as PaymentMethod, name: 'VnPay', logo: '🇻🇳' },
-    { id: 'momo' as PaymentMethod, name: 'MoMo', logo: '💳' },
-    { id: 'paypal' as PaymentMethod, name: 'PayPal', logo: '💙' },
-    { id: 'balance' as PaymentMethod, name: 'Balance', logo: '💰' },
+    { id: 'stripe' as PaymentMethod, name: 'Stripe', logo: '/images/logo/stripe.jpg' },
+    { id: 'payos' as PaymentMethod, name: 'PayOs', logo: '/images/logo/payos.png' },
   ];
 
   return (
@@ -40,7 +39,7 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
 
       {/* Payment Methods */}
       <div className="mb-6">
-        <h3 className="text-gray-900 font-bold text-lg mb-4">Payment Method</h3>
+        <h3 className="text-gray-900 font-semibold text-lg mb-4">Payment Method</h3>
         <div className="grid grid-cols-2 gap-3">
           {paymentMethods.map((method) => (
             <button
@@ -53,10 +52,10 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
               }`}
             >
               <div className="flex flex-col items-center gap-2">
-                <span className="text-3xl">{method.logo}</span>
-                <span className="text-sm font-medium text-gray-700">
+                <Image src={method.logo} alt='payment-icon' width={64} height={64} />
+                {/* <span className="text-sm font-medium text-gray-700">
                   {method.name}
-                </span>
+                </span> */}
               </div>
             </button>
           ))}

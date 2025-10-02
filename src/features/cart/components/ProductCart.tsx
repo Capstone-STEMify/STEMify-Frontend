@@ -24,7 +24,7 @@ export default function ProductCart() {
       name: 'Hamleys® Paddington Bear Non Woven bag',
       price: 8.00,
       quantity: 1,
-      image: '/api/placeholder/200/200',
+      image: 'https://eduall.vn/wp-content/uploads/2024/06/stem-kit-yolo-starter-kit-3-500x500-1.png',
       hasDelivery: true,
       hasCollection: true,
     },
@@ -34,7 +34,7 @@ export default function ProductCart() {
       name: 'Hamleys Medium Corgi Tote Bag',
       price: 8.00,
       quantity: 1,
-      image: '/api/placeholder/200/200',
+      image: 'https://eduall.vn/wp-content/uploads/2024/06/stem-kit-yolo-starter-kit-3-500x500-1.png',
       hasDelivery: true,
       hasCollection: true,
     },
@@ -94,10 +94,10 @@ export default function ProductCart() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Left Column - Cart Items */}
             <div className="lg:col-span-2">
-              <DeliveryProgress
+              {/* <DeliveryProgress
                 currentAmount={totalAmount}
                 targetAmount={FREE_DELIVERY_THRESHOLD}
-              />
+              /> */}
 
               <div className="space-y-4">
                 {cartItems.map((item) => (
@@ -111,7 +111,7 @@ export default function ProductCart() {
               </div>
 
               {/* Continue Shopping Button (Mobile) */}
-              <button className="w-full mt-6 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all lg:hidden">
+              <button className="w-full mt-6 px-6 py-3 border-2 border-blue-500 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all lg:hidden">
                 ← Continue Shopping
               </button>
             </div>
@@ -119,8 +119,8 @@ export default function ProductCart() {
             {/* Right Column - Payment Summary */}
             <div className="lg:col-span-1">
               <PaymentSummary
-                total={totalAmount * 50000} // Convert to VND (example rate)
-                currency="đ"
+                total={totalAmount}
+                currency="£"
                 onCheckout={handleCheckout}
                 onRemoveAll={handleRemoveAll}
               />
@@ -130,7 +130,7 @@ export default function ProductCart() {
 
         {/* Continue Shopping Button (Desktop) */}
         {cartItems.length > 0 && (
-          <button className="hidden lg:block mt-8 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all">
+          <button className="hidden lg:block mt-8 px-6 py-3 border-2 border-blue-400 text-gray-700 font-semibold rounded-lg hover:bg-blue-50 transition-all">
             ← Continue Shopping
           </button>
         )}

@@ -87,7 +87,7 @@ export const CartItem: React.FC<CartItemProps> = ({
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <label className="text-gray-700 font-medium text-sm md:text-base">
-                Qty
+                Quantity
               </label>
               <div className="relative inline-block">
                 <select
