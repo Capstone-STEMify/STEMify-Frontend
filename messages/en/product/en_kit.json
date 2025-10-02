@@ -39,7 +39,13 @@
     },
     "detail": {
       "title": "Kit Details",
-      "description": "View and edit details of the selected kit."
+      "description": "View and edit details of the selected kit.",
+      "descriptionLabel": "Description",
+      "price": "Price",
+      "age": "Age",
+      "preOrder": "Pre-order",
+      "weight": "Weight",
+      "dimensions": "Dimensions"
     },
     "form": {
       "title": {

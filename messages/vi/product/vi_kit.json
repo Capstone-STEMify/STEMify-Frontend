@@ -39,7 +39,13 @@
     },
     "detail": {
       "title": "Chi tiết bộ kit",
-      "description": "Xem và chỉnh sửa chi tiết của bộ kit đã chọn."
+      "description": "Xem và chỉnh sửa chi tiết của bộ kit đã chọn.",
+      "descriptionLabel": "Mô tả",
+      "price": "Giá",
+      "age": "Độ tuổi",
+      "preOrder": "Đặt trước",
+      "weight": "Trọng lượng",
+      "dimensions": "Kích thước"
     },
     "form": {
       "title": {

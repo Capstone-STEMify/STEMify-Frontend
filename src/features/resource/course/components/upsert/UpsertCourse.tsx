@@ -145,7 +145,7 @@ export default function UpsertCourse({ courseId, onSuccess }: UpsertCourseProps)
             action: {
               label: 'View Course',
               onClick: () => {
-                router.push(`/${locale}/resource/course/${res.data.id}`)
+                router.push(`/${locale}/admin/course/${res.data.id}`)
               }
             }
           })
@@ -154,7 +154,7 @@ export default function UpsertCourse({ courseId, onSuccess }: UpsertCourseProps)
           const res = await createCourse(jsonPayload).unwrap()
           toast.success(tt('successMessage.create', { title: res.data.title }))
           onSuccess?.()
-          router.push(`/${locale}/resource/course/${res.data.id}`)
+          router.push(`/${locale}/admin/course/${res.data.id}`)
         }
       } catch (err) {
         toast.error(tt('errorMessage'))

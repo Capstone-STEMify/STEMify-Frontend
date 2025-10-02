@@ -1,4 +1,6 @@
 'use client'
+import { Badge } from '@/components/shadcn/badge'
+import { Button } from '@/components/shadcn/button'
 import BackButton from '@/components/shared/button/BackButton'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
@@ -8,8 +10,10 @@ import {
   useGetKitByIdQuery,
   useUpdateKitMutation
 } from '@/features/resource/kit/api/kitProductApi'
+import WhatsIncluded from '@/features/resource/kit/components/shop/details/ProductConstituent'
 import { useModal } from '@/providers/ModalProvider'
-import { SquarePen, Trash2 } from 'lucide-react'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { Plus, SquarePen, Star, Trash2 } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
@@ -32,8 +36,22 @@ export default function KitDetail() {
   const handleDelete = async () => {
     await deleteKit(Number(kitId)).unwrap()
     toast.success(`${tt('successMessage.delete', { title: kitData?.data.name || '' })}`)
-    router.push(`${locale}/admin/kit`)
+    router.push(`/${locale}/admin/kit`)
   }
+
+  const addComponentButton = (
+    <Button
+      onClick={() => {
+        // openModal('addComponent', { kitId: kitData.data.id })
+        openModal('information', {
+          message: 'This feature is coming soon! Please come back later!'
+        })
+      }}
+      className='bg-sky-custom-300 mt-4 rounded-full px-4 text-white'
+    >
+      <Plus className='h-4 w-4' />
+    </Button>
+  )
 
   if (isLoading) {
     return (
@@ -56,7 +74,7 @@ export default function KitDetail() {
         <section className='grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
           {/* Left Section */}
           <div className='flex flex-col'>
-            <div className='mb-4 flex items-center gap-2'>
+            <div className='mb-2 flex items-center gap-2'>
               <h2 className='text-4xl font-bold tracking-tight'>{kitData.data.name}</h2>
               <span className='cursor-pointer text-blue-500'>
                 <SquarePen
@@ -76,9 +94,53 @@ export default function KitDetail() {
                 />
               </span>
             </div>
+            <div className='flex items-center gap-1 text-yellow-500'>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} size={16} fill='currentColor' stroke='none' />
+              ))}
+              <span className='ml-2 text-gray-700'>
+                {10} {t('list.reviews')}
+              </span>
+              <span className='mx-2'>
+                <Badge className={getStatusBadgeClass(kitData.data.status)}>{kitData.data.status}</Badge>
+              </span>
+            </div>
             <hr className='mx-auto my-4 w-full border-gray-300' />
+            <p>
+              <span className='font-medium'>{t('list.sku')}:</span> {kitData.data.sku}
+            </p>
+            <p>
+              <span className='font-medium'>{t('list.availability')}:</span>{' '}
+              {kitData.data.stockQuantity > 0 ? t('list.available') : t('list.outOfStock')}
+              <span className='ml-2 text-gray-500'>
+                ( {kitData.data.stockQuantity} {t('list.items')})
+              </span>
+            </p>
 
-            <p className='mb-4 leading-relaxed text-gray-700'>{kitData.data.description}</p>
+            <p>
+              <span className='font-medium'>{t('detail.weight')}:</span> {kitData.data.weight} grams
+            </p>
+            <p>
+              <span className='font-medium'>{t('detail.dimensions')}:</span> {kitData.data.dimensions}
+            </p>
+            <p className='mt-2 font-medium'>{t('detail.descriptionLabel')}:</p>
+            <p className='leading-relaxed text-gray-700'>{kitData.data.description}</p>
+
+            <div className='mt-2 flex items-center gap-3'>
+              <span className='text-xl font-bold text-red-600'>
+                {t('detail.price')}:{' '}
+                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(kitData.data.price)}
+              </span>
+            </div>
+
+            <Button
+              className='bg-amber-custom-400 mt-2 w-fit px-10 text-white'
+              onClick={() =>
+                openModal('information', { message: 'This feature is coming soon! Please come back later!' })
+              }
+            >
+              Publish
+            </Button>
           </div>
 
           {/* Right Section */}
@@ -103,6 +165,9 @@ export default function KitDetail() {
           </div>
         </section>
       </div>
+      <hr className='mx-auto my-4 w-full max-w-6xl border-gray-300' />
+      {/* Components list */}
+      <WhatsIncluded components={kitData.data.components} addBtn={addComponentButton} />
     </div>
   )
 }

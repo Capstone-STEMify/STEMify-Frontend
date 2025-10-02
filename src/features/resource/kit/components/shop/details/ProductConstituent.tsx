@@ -5,9 +5,10 @@ import { Component } from '@/features/resource/kit/types/kit.type'
 
 export type WhatsIncludedProps = {
   components: Component[]
-  name: string
+  name?: string
+  addBtn?: React.ReactNode
 }
-const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name }) => {
+const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn }) => {
   const [isExpanded, setIsExpanded] = useState(true)
 
   return (
@@ -18,10 +19,13 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name }) => {
       transition={{ duration: 0.6 }}
       className='rounded-3xl bg-white p-10 shadow-xl'
     >
-      <div className='mb-8 flex cursor-pointer items-center justify-between' onClick={() => setIsExpanded(!isExpanded)}>
-        <h2 className='text-4xl font-semibold text-gray-900'>What's Included</h2>
+      <div className='mb-8 flex cursor-pointer items-center justify-between'>
+        <div className='flex items-center gap-4'>
+          <h2 className='text-4xl font-semibold text-gray-900'>What's Included</h2>
+          {addBtn && <div>{addBtn}</div>}
+        </div>
         <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.3 }}>
-          <ChevronDown className='h-8 w-8 text-gray-600' />
+          <ChevronDown className='h-8 w-8 text-gray-600' onClick={() => setIsExpanded(!isExpanded)} />
         </motion.div>
       </div>
 
@@ -32,7 +36,7 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name }) => {
         className='overflow-hidden'
       >
         <div className='mb-6 border-b border-gray-200 pb-6'>
-          <h3 className='text-2xl font-semibold text-gray-900'>{name}</h3>
+          {name && <h3 className='text-2xl font-semibold text-gray-900'>{name}</h3>}
         </div>
 
         <div className='grid grid-cols-4 gap-4 md:grid-cols-6 lg:grid-cols-8'>

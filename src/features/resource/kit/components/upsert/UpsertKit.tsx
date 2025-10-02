@@ -171,7 +171,11 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
         <form.AppField
           name='sku'
           children={(field) => (
-            <field.TextField label={t('form.fields.sku.label')} placeholder={t('form.fields.sku.placeholder')} />
+            <field.TextField
+              disabled={!!kitId}
+              label={t('form.fields.sku.label')}
+              placeholder={t('form.fields.sku.placeholder')}
+            />
           )}
         />
       </div>
@@ -222,7 +226,7 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
             />
           )}
         />
-        <form.AppField
+        {/* <form.AppField
           name='isPreorder'
           children={(field) => (
             <field.SwitchField
@@ -230,20 +234,19 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
               className='mt-5 data-[state=checked]:bg-blue-500'
             />
           )}
+        /> */}
+        <form.AppField
+          name='price'
+          children={(field) => (
+            <field.TextField
+              type='number'
+              min={1000}
+              label={t('form.fields.price.label')}
+              placeholder={t('form.fields.price.placeholder')}
+            />
+          )}
         />
       </div>
-
-      <form.AppField
-        name='price'
-        children={(field) => (
-          <field.TextField
-            type='number'
-            min={1000}
-            label={t('form.fields.price.label')}
-            placeholder={t('form.fields.price.placeholder')}
-          />
-        )}
-      />
 
       <Label className='text-base font-semibold'>{t('form.fields.ageRange.label')}</Label>
       <form.AppField
