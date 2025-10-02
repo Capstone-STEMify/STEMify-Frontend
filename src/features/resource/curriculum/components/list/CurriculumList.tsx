@@ -8,6 +8,7 @@ import { setPageIndex, setPageSize, setParam } from '@/features/resource/curricu
 import { CurriculumSliceParams, CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
@@ -44,15 +45,21 @@ export default function CurriculumList() {
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
         {curriculumData.data.items.map((curriculum) => (
           <CardLayout
-            className='border-none bg-transparent shadow-none hover:shadow-none'
+            className='rounded-2xl border-none bg-transparent shadow-none hover:shadow-none'
             key={curriculum.id}
             imageSrc={curriculum.imageUrl || '/images/fallback.png'}
             onClick={() => router.push(`/resource/curriculum/${curriculum.id}`)}
           >
-            <div className='-m-4 mt-1'>
+            <div className='m-2 mt-1'>
               <h2 className='line-clamp-1 text-lg font-semibold'>{curriculum.title}</h2>
               <p className='line-clamp-4 text-sm text-gray-600'>{curriculum.description}</p>
               <div className='mt-auto flex items-center gap-2'></div>
+              <Link
+                href={`/resource/curriculum/${curriculum.id}`}
+                className='mt-4 flex items-center text-sm font-medium text-sky-500 hover:underline'
+              >
+                {t('list.viewDetails')} &gt;
+              </Link>
             </div>
           </CardLayout>
         ))}

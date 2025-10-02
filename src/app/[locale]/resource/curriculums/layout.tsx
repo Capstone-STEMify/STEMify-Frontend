@@ -1,3 +1,4 @@
+import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import { metadata } from 'app/[locale]/layout'
 
@@ -11,6 +12,7 @@ export default async function PublicCurriculumLayout({
     <div className='bg-light min-h-screen'>
       <Header />
       <main className='mt-20'>{children}</main>
+      <Footer />
     </div>
   )
 }

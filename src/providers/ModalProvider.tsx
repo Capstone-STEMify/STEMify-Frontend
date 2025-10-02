@@ -25,6 +25,7 @@ import UpsertContentModal from '@/features/resource/content/components/upsert/Up
 import UpsertKitModal from '@/features/resource/kit/components/upsert/UpsertKitModal'
 import PacingGuideModal from '@/features/resource/lesson/components/modal/PacingGuideModal'
 import KitListTableModal from '@/features/resource/kit/components/list/KitListTableModal'
+import InformationModal from '@/components/shared/modals/InformationModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -57,6 +58,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'image' && <PhotoUploadModal {...modalProps} />}
       {modalType === 'enroll' && <EnrollModal {...modalProps} />}
       {modalType === 'editImage' && <EditImageModal {...modalProps} />}
+      {modalType === 'information' && <InformationModal {...modalProps} />}
 
       {/* upsert */}
       {modalType === 'upsertLesson' && <UpsertLessonModal {...modalProps} />}

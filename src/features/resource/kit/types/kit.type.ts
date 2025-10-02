@@ -9,7 +9,7 @@ export type Kit = {
   imageUrl?: string // for backward compatibility
   price: number
   stockQuantity: number
-  Sku: string
+  sku: string
   ageRangeId?: number
   status: KitProductStatus
   createdAt: string

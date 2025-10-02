@@ -15,6 +15,8 @@ import { CurriculumSliceParams } from '@/features/resource/curriculum/types/curr
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
+import CardLayout from '@/components/shared/card/CardLayout'
+import Link from 'next/link'
 
 export default function AdminCurriculumList() {
   const t = useTranslations('curriculum')
@@ -68,22 +70,27 @@ export default function AdminCurriculumList() {
   }
 
   return (
-    <div>
-      <div className='mt-4 grid grid-cols-1 gap-10 lg:grid-cols-2'>
-        {rows.map((curriculum) => (
-          <CardHorizontal
-            badge={
-              <Badge className={`${getStatusBadgeClass(curriculum.status)}`}>
-                {capitalizeFirst(curriculum.status)}
-              </Badge>
-            }
+    <div className='mx-auto mt-5 mb-20 max-w-7xl'>
+      <div className='grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4'>
+        {curriculumData.data.items.map((curriculum) => (
+          <CardLayout
+            className='cursor-pointer rounded-2xl border-none bg-transparent'
             key={curriculum.id}
-            imageUrl={curriculum.imageUrl}
-            title={curriculum.title}
-            description={curriculum.description}
-            className='max-w-3xl'
+            imageSrc={curriculum.imageUrl || '/images/fallback.png'}
             onClick={() => router.push(`/${locale}/admin/curriculum/${curriculum.id}`)}
-          />
+          >
+            <div className='m-2 mt-1'>
+              <h2 className='line-clamp-1 text-lg font-semibold'>{curriculum.title}</h2>
+              <p className='line-clamp-4 flex-1 text-sm text-gray-600'>{curriculum.description}</p>
+              <div className='mt-auto flex items-center gap-2'></div>
+              <Link
+                href={`/${locale}/admin/curriculum/${curriculum.id}`}
+                className='mt-4 flex items-center text-sm font-medium text-sky-500 hover:underline'
+              >
+                {t('list.viewDetails')} &gt;
+              </Link>
+            </div>
+          </CardLayout>
         ))}
       </div>
 
