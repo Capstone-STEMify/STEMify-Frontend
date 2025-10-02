@@ -7,6 +7,7 @@ import { Label } from '@/components/shadcn/label'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { Slider } from '@/components/shadcn/slider'
+import { useGetAllAgeRangeQuery } from '@/features/resource/age-range/api/ageRangeApi'
 import { resetParams, setMultipleParams, setParam, setSearchTerm } from '@/features/resource/kit/slice/kitProductSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import useDebounce from '@/hooks/useDebounce'
@@ -26,6 +27,7 @@ export default function ProductFilterSidebar({ className }: ProductFilterSidebar
 
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000000])
   const debouncedPrice = useDebounce(priceRange, 500)
+  const { data: ageRanges } = useGetAllAgeRangeQuery()
 
   useEffect(() => {
     dispatch(setSearchTerm(debouncedSearch))
@@ -162,27 +164,23 @@ export default function ProductFilterSidebar({ className }: ProductFilterSidebar
 
       {/* Age (Radio) */}
       <div className='space-y-2'>
-        <Label className='text-sm font-medium text-gray-600'>Age</Label>
+        <Label className='text-sm font-medium text-gray-600'>{t('age')}</Label>
         <RadioGroup
           value={filters.age ?? 'all'}
           onValueChange={(value) => dispatch(setParam({ key: 'age', value }))}
           className='mt-1 space-y-2 pl-1'
         >
-          <div className='flex items-center space-x-2'>
-            <RadioGroupItem value='all' id='age-all' />
-            <Label htmlFor='age-all'>{t('ageOptions.all')}</Label>
-          </div>
-          <div className='flex items-center space-x-2'>
-            <RadioGroupItem value='4+' id='age-4' />
-            <Label htmlFor='age-4'>4+</Label>
-          </div>
-          <div className='flex items-center space-x-2'>
-            <RadioGroupItem value='6+' id='age-6' />
-            <Label htmlFor='age-6'>6+</Label>
-          </div>
-          <div className='flex items-center space-x-2'>
-            <RadioGroupItem value='8+' id='age-8' />
-            <Label htmlFor='age-8'>8+</Label>
+          <div className='space-y-2 pl-1'>
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='all' id='age-all' />
+              <Label htmlFor='age-all'>{t('ageOptions.all')}</Label>
+            </div>
+            {ageRanges?.data.items.map((ageRange) => (
+              <div className='flex items-center space-x-2' key={ageRange.id}>
+                <RadioGroupItem value={ageRange.ageRangeLabel} id={`age-${ageRange.ageRangeLabel}`} />
+                <Label htmlFor={`age-${ageRange.ageRangeLabel}`}>{ageRange.ageRangeLabel}</Label>
+              </div>
+            ))}
           </div>
         </RadioGroup>
       </div>
