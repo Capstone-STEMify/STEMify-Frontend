@@ -40,7 +40,7 @@ export default function GuideContent() {
       <h3 className='text-center text-lg font-bold'>Hướng dẫn sử dụng Editor</h3>
 
       <p className='mt-2 text-sm text-gray-600'>
-        Lưu ý là sau khi soạn thảo xong hãy đợi ít nhất 1 giây để lưu lại <br />
+        Lưu ý là sau khi soạn thảo xong hãy đợi ít nhất 1 giây trước khi lưu lại <br />
       </p>
 
       <div className='my-3 rounded-md border-l-4 border-yellow-400 bg-yellow-50 py-2 text-sm text-gray-700'>
