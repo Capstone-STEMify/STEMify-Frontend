@@ -12,7 +12,8 @@
       "noDataDetail": "Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm khung chương trình phù hợp.",
       "loading": "Đang tải khung chương trình...",
       "error": "Đã xảy ra lỗi trong quá trình lấy khung chương trình. Vui lòng thử lại.",
-      "courseListTitle": "Danh Sách Các Khóa Học"
+      "courseListTitle": "Danh Sách Các Khóa Học",
+      "viewDetails": "Xem Chi Tiết"
     },
     "details": {
       "title": "Chi Tiết Khung Chương Trình",

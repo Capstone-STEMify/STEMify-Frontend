@@ -51,7 +51,7 @@ export default function UpgradePlanPage() {
             <Card
               key={plan.id}
               className={clsx(
-                'h-full min-h-[28rem] rounded-3xl border p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg',
+                'h-full min-h-[28rem] rounded-3xl border p-6 shadow-lg transition-all hover:-translate-y-1 hover:shadow-2xl',
                 plan.id == 1 &&
                   'border-sky-custom-400 ring-sky-custom-300 bg-gradient-to-br from-white via-sky-50/5 to-sky-50 ring-2'
               )}
