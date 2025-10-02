@@ -39,6 +39,10 @@ export default function GuideContent() {
     <ScrollArea className='my-2 h-[610px] px-4'>
       <h3 className='text-center text-lg font-bold'>Hướng dẫn sử dụng Editor</h3>
 
+      <p className='mt-2 text-sm text-gray-600'>
+        Lưu ý là sau khi soạn thảo xong hãy đợi ít nhất 1 giây để lưu lại <br />
+      </p>
+
       <div className='my-3 rounded-md border-l-4 border-yellow-400 bg-yellow-50 py-2 text-sm text-gray-700'>
         <h4 className='mb-2 font-semibold text-yellow-700'>📌 Lưu ý khi chèn hình ảnh & video</h4>
         <ul className='list-disc space-y-1 pl-5'>
