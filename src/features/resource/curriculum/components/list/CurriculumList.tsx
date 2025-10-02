@@ -50,7 +50,7 @@ export default function CurriculumList() {
             imageSrc={curriculum.imageUrl || '/images/fallback.png'}
             onClick={() => router.push(`/resource/curriculum/${curriculum.id}`)}
           >
-            <div className='m-4 mt-1'>
+            <div className='m-2 mt-1'>
               <h2 className='line-clamp-1 text-lg font-semibold'>{curriculum.title}</h2>
               <p className='line-clamp-4 text-sm text-gray-600'>{curriculum.description}</p>
               <div className='mt-auto flex items-center gap-2'></div>

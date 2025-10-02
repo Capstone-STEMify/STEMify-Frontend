@@ -65,13 +65,12 @@ export default function KitDetail() {
 
   return (
     <div>
-      <div className='flex items-center gap-5 pb-5'>
-        <BackButton />
-        <h1>{t('detail.title')}</h1>
-      </div>
-
-      <div className='mx-auto min-h-screen max-w-6xl px-4 pb-8 sm:px-6 lg:px-8'>
-        <section className='grid grid-cols-1 gap-12 py-5 md:grid-cols-2'>
+      <div className='mx-auto min-h-screen max-w-7xl px-4 pb-8 sm:px-6'>
+        <div className='flex items-center gap-5 pb-5'>
+          <BackButton />
+          <h1>{t('detail.title')}</h1>
+        </div>
+        <section className='grid grid-cols-1 gap-12 py-5 lg:grid-cols-2'>
           {/* Left Section */}
           <div className='flex flex-col'>
             <div className='mb-2 flex items-center gap-2'>
@@ -158,16 +157,16 @@ export default function KitDetail() {
                     width={500}
                     height={500}
                     key={i}
-                    className='aspect-square w-full max-w-xl rounded-3xl object-cover shadow-xs'
+                    className='aspect-square w-full rounded-3xl object-cover shadow-xs'
                   />
                 ))}
             />
           </div>
         </section>
+        <hr className='mx-auto my-10 w-full max-w-6xl border-gray-300' />
+        {/* Components list */}
+        <WhatsIncluded components={kitData.data.components} addBtn={addComponentButton} />
       </div>
-      <hr className='mx-auto my-4 w-full max-w-6xl border-gray-300' />
-      {/* Components list */}
-      <WhatsIncluded components={kitData.data.components} addBtn={addComponentButton} />
     </div>
   )
 }

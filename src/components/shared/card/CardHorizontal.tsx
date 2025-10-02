@@ -14,7 +14,7 @@ type CardProductProps = {
   productType?: string
   vendor?: string
   description?: string
-  price: number
+  price?: number
   oldPrice?: number
   badge?: string
   stockQuantity?: number
@@ -102,11 +102,13 @@ export default function CardHorizontal({
         {description && <p className='mt-3 line-clamp-2 text-xs text-gray-500'>{description}</p>}
 
         {/* Price */}
-        <div className='mt-2 flex items-center gap-3'>
-          <span className='text-xl font-bold text-red-600'>
-            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}
-          </span>
-        </div>
+        {price && (
+          <div className='mt-2 flex items-center gap-3'>
+            <span className='text-xl font-bold text-red-600'>
+              {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)}
+            </span>
+          </div>
+        )}
 
         {/* CTA button */}
         {/* <Button variant='outline' className='mt-4 w-fit border-blue-600 text-blue-600 hover:bg-blue-50'>

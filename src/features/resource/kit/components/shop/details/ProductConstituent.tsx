@@ -52,8 +52,8 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn 
               <div className='mb-2 flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-gray-50 p-2'>
                 <img src={item.imageUrl} alt={item.name} className='h-full w-full object-contain' />
               </div>
-              <h4 className='mb-1 text-center text-sm leading-tight font-medium text-gray-900'>{item.name}</h4>
-              <p className='text-xs text-gray-500'>x{item.quantity}</p>
+              <h4 className='mb-1 text-center leading-tight font-medium text-gray-900'>{item.name}</h4>
+              <p className='text-sm text-gray-500'>x{item.quantity}</p>
             </motion.div>
           ))}
         </div>
