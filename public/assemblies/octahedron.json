@@ -18,6 +18,17 @@
     ]
   },
 
+  "_matrixHierarchyDoc": {
+    "description": "Component Matrix Transformation Hierarchy",
+    "levels": {
+      "componentMatrix": "Initial/default state of the component when first created",
+      "actionMatrix": "Transformation delta applied by actions (relative to componentMatrix)",
+      "assemblyMatrix": "Final cumulative state after all transformations applied"
+    },
+    "transformOrder": "componentMatrix → apply actions → assemblyMatrix",
+    "note": "Components use 'transformAsUnit' to ensure all child elements move together maintaining structural integrity"
+  },
+
   "components": {
     "squares": [
       {
@@ -37,7 +48,8 @@
         "componentMatrix": {
           "position": { "x": 0, "y": 0, "z": 0 },
           "rotation": { "x": 0, "y": 0, "z": 0 },
-          "scale": { "x": 1, "y": 1, "z": 1 }
+          "scale": { "x": 1, "y": 1, "z": 1 },
+          "_comment": "Initial state - no transformation applied"
         }
       },
       {
@@ -303,7 +315,14 @@
       "duration": 2.0,
       "animation": {
         "colorHighlight": "#FFD700",
-        "pulseEffect": true
+        "pulseEffect": true,
+        "curve": "easeInOutQuad",
+        "keyframes": [
+          { "time": 0, "opacity": 0, "scale": 0.8 },
+          { "time": 0.3, "opacity": 1, "scale": 1.1 },
+          { "time": 0.6, "opacity": 0.7, "scale": 1.0 },
+          { "time": 1.0, "opacity": 1, "scale": 1.0 }
+        ]
       }
     },
     {
@@ -312,7 +331,12 @@
       "type": "connect",
       "connectionGroup": "base_square",
       "duration": 3.0,
-      "sequenceDelay": 0.5
+      "sequenceDelay": 0.5,
+      "animation": {
+        "curve": "easeOutCubic",
+        "strawAnimation": "slideIn",
+        "connectorAnimation": "snapRotate"
+      }
     },
     {
       "id": "action_build_second_square",
@@ -340,10 +364,11 @@
     },
     {
       "id": "action_adjust_additional_connector_arms",
-      "name": "Adjust Additional Connector Arms",
+      "name": "Show Second & Third Squares with Adjusted Arms",
       "type": "transform_arm",
       "connectionGroup": "second_third_squares",
       "instantAppear": true,
+      "showRealtimeControls": false,
       "targets": [
         "connector_2leg_5",
         "connector_2leg_6",
@@ -389,14 +414,20 @@
           "arm_2": { "x": 0, "y": 0, "z": -0.7854 }
         }
       },
-      "interpolation": "easeInOut"
+      "interpolation": "easeInOut",
+      "_comment": "This action shows both second and third squares with connection groups and adjusts all connector arms. instantAppear ensures immediate visibility."
     },
     {
       "id": "action_rotate_base_square",
       "name": "Rotate Base Square 45°",
       "type": "component_assembly",
       "assemblyId": "diamond_assembly",
+      "showRealtimeControls": false,
       "duration": 1.2,
+      "animation": {
+        "curve": "easeInOutCubic",
+        "rotationInterpolation": "slerp"
+      },
       "componentTransforms": {
         "square_base": {
           "type": "matrix_transform",
@@ -421,6 +452,7 @@
       "name": "Position Second Square to Base",
       "type": "component_assembly",
       "assemblyId": "diamond_assembly",
+      "showRealtimeControls": false,
       "duration": 1,
       "componentTransforms": {
         "square_second": {
@@ -446,6 +478,7 @@
       "name": "Position Third Square to Top/Front",
       "type": "component_assembly",
       "assemblyId": "octahedron_assembly",
+      "showRealtimeControls": false,
       "duration": 1.4,
       "componentTransforms": {
         "square_third": {
@@ -473,6 +506,12 @@
       "assemblyId": "diamond_assembly",
       "showRealtimeControls": true,
       "duration": 3.0,
+      "animation": {
+        "curve": "easeInOutQuart",
+        "rotationInterpolation": "slerp",
+        "positionInterpolation": "lerp",
+        "simultaneousTransform": true
+      },
       "componentTransforms": {
         "square_second": {
           "type": "matrix_transform",
@@ -491,38 +530,6 @@
       },
       "assemblyState": "assembled",
       "description": "Component-assembly approach: Transform square_second as a complete unit around component center - all elements move together maintaining structural integrity"
-    },
-    {
-      "id": "action_add_verticals",
-      "name": "Add Vertical Straws",
-      "type": "connect",
-      "connectionGroup": "vertical_up",
-      "duration": 2.5
-    },
-    {
-      "id": "action_add_bottom_verticals",
-      "name": "Add Bottom Verticals",
-      "type": "connect",
-      "connectionGroup": "vertical_down",
-      "duration": 2.5
-    },
-    {
-      "id": "action_adjust_connector_arms",
-      "name": "Adjust Top Connector Arms",
-      "type": "transform_arm",
-      "targets": ["connector_5leg_top", "connector_5leg_bottom"],
-      "duration": 2.0,
-      "connectorArmTransforms": {
-        "connector_5leg_top": {
-          "arm_1": { "x": 0, "y": 0, "z": -30 },
-          "arm_2": { "x": 0, "y": 0, "z": 30 }
-        },
-        "connector_5leg_bottom": {
-          "arm_1": { "x": 0, "y": 0, "z": 45 },
-          "arm_2": { "x": 0, "y": 0, "z": -45 }
-        }
-      },
-      "interpolation": "easeInOut"
     },
     {
       "id": "action_adjust_base_connector_arms",
@@ -577,18 +584,37 @@
         {
           "actionId": "action_prepare_connectors",
           "title": "Prepare Base Connectors",
-          "description": "Identify and position the four 3-leg connectors that will form the base square of the octahedron",
-          "expectedResult": "4 three-leg connectors are visible and highlighted",
+          "description": "Identify and position the four 2-leg connectors that will form the base square of the octahedron",
+          "expectedResult": "4 two-leg connectors are visible and highlighted with golden color",
           "hints": [
-            "Each connector has 3 ports for straw connections",
-            "Notice the red color indicating connector type",
-            "Observe the spatial arrangement forming square corners"
+            {
+              "level": 1,
+              "text": "Each connector has 2 arm ports for straw connections",
+              "visual": "Connectors are highlighted in gold color"
+            },
+            {
+              "level": 2,
+              "text": "Notice the spatial arrangement forming square corners",
+              "commonMistake": "Don't confuse port numbers - ports start from 0"
+            },
+            {
+              "level": 3,
+              "text": "Next step preview: You'll connect these 4 connectors with straws",
+              "tip": "Pay attention to the connector orientation - arms should point outward"
+            }
           ],
           "validation": {
             "type": "structure",
             "criteria": {
               "requiredConnectors": ["connector_2leg_1", "connector_2leg_2", "connector_2leg_3", "connector_2leg_4"],
               "visibility": true
+            },
+            "onValidationFail": {
+              "showHint": true,
+              "hintLevel": 2,
+              "allowRetry": true,
+              "autoCorrect": false,
+              "errorMessage": "Base connectors are not visible. Check if all 4 connectors are loaded."
             }
           }
         },
@@ -613,27 +639,48 @@
           "description": "Connect the 4 connectors with straws to create the square foundation of the octahedron",
           "expectedResult": "A complete square base is formed with proper connections",
           "hints": [
-            "Each side of the square uses one straw",
-            "Straws should fit snugly into connector ports",
-            "Verify all connections are properly aligned"
+            {
+              "level": 1,
+              "text": "Each side of the square uses one green straw (11.2cm length)",
+              "visual": "Straws will slide in from their positions and snap into connectors"
+            },
+            {
+              "level": 2,
+              "text": "Straws connect via endpoints: start → port 0, end → port 2",
+              "commonMistake": "If connection fails, check that arms are at correct angles (±45°)"
+            },
+            {
+              "level": 3,
+              "text": "Next step preview: Second and third squares will appear instantly",
+              "tip": "Watch the sequential connection animation - connections form clockwise"
+            }
           ],
           "validation": {
             "type": "connection",
             "criteria": {
               "requiredConnectionsGroup": "base_square",
               "connected": true
+            },
+            "onValidationFail": {
+              "showHint": true,
+              "hintLevel": 2,
+              "allowRetry": true,
+              "autoCorrect": false,
+              "errorMessage": "Base square connections are incomplete. Verify all 4 straws are connected to their respective ports.",
+              "suggestedAction": "Check connection group 'base_square' - should have 8 connections (4 straws × 2 endpoints)"
             }
           }
         },
         {
           "actionId": "action_adjust_additional_connector_arms",
-          "title": "Form Second and Third Squares & Adjust Arms",
-          "description": "Create the second and third squares together and immediately adjust additional connector arm angles",
-          "expectedResult": "Both second and third squares are formed and the additional connector arms are set to the specified angles",
+          "title": "Show Second & Third Squares with Adjusted Arms",
+          "description": "Display both second and third squares instantly with all connector arms pre-adjusted to optimal angles for the octahedron structure",
+          "expectedResult": "Both second and third squares appear with connector arms already positioned at ±45° angles",
           "hints": [
-            "The second square is positioned to the right of the base square",
-            "Use the same connection pattern as the base square for both",
-            "After connecting, the arm angles are adjusted automatically"
+            "These squares appear instantly (no animation) to save time",
+            "All connector arms are automatically adjusted to ±0.7854 radians (±45°)",
+            "The second square uses connectors 5-8, third square uses connectors 9-12",
+            "Arms alternate between outward (+45°) and inward (-45°) for optimal geometry"
           ],
           "validation": {
             "type": "arm_transform",
@@ -644,17 +691,41 @@
                   "armValidations": [
                     {
                       "armId": "arm_1",
-                      "expectedRotation": { "x": 0, "y": 0, "z": 0 },
-                      "tolerance": 5
+                      "expectedRotation": { "x": 0, "y": 0, "z": -0.7854 },
+                      "tolerance": 0.1
                     },
                     {
                       "armId": "arm_2",
-                      "expectedRotation": { "x": 0, "y": 0, "z": 0 },
-                      "tolerance": 5
+                      "expectedRotation": { "x": 0, "y": 0, "z": 0.7854 },
+                      "tolerance": 0.1
+                    }
+                  ]
+                },
+                {
+                  "connectorId": "connector_2leg_6",
+                  "armValidations": [
+                    {
+                      "armId": "arm_1",
+                      "expectedRotation": { "x": 0, "y": 0, "z": -0.7854 },
+                      "tolerance": 0.1
+                    },
+                    {
+                      "armId": "arm_2",
+                      "expectedRotation": { "x": 0, "y": 0, "z": 0.7854 },
+                      "tolerance": 0.1
                     }
                   ]
                 }
               ]
+            },
+            "onValidationFail": {
+              "showHint": true,
+              "hintLevel": 3,
+              "allowRetry": true,
+              "autoCorrect": true,
+              "errorMessage": "Connector arms are not at the expected angles (±45°).",
+              "suggestedAction": "Auto-correct will adjust all connector arms to optimal angles. Click 'Retry' to apply.",
+              "autoCorrectAction": "Apply connectorArmTransforms from action definition"
             }
           }
         },
@@ -664,9 +735,21 @@
           "description": "Rotate the base square component by 45° around its center to match the diagonal orientation.",
           "expectedResult": "Base square straws and connectors align at the target diagonal positions.",
           "hints": [
-            "The base rotates as a whole, not individual parts",
-            "Rotation happens around the component center",
-            "No translation is applied in this step"
+            {
+              "level": 1,
+              "text": "The entire base square rotates as one unit (transformAsUnit: true)",
+              "visual": "Watch all 4 straws and 4 connectors rotate together smoothly"
+            },
+            {
+              "level": 2,
+              "text": "Rotation axis: Y-axis (vertical), angle: 45° (0.7854 radians)",
+              "commonMistake": "Component rotation is NOT additive - it's absolute matrix transformation"
+            },
+            {
+              "level": 3,
+              "text": "Next step: Second square will be positioned above this rotated base",
+              "tip": "The rotation prepares alignment for the diamond assembly"
+            }
           ],
           "validation": {
             "type": "assembly_state",
@@ -679,6 +762,14 @@
                   "tolerance": 0.05
                 }
               }
+            },
+            "onValidationFail": {
+              "showHint": true,
+              "hintLevel": 2,
+              "allowRetry": true,
+              "autoCorrect": false,
+              "errorMessage": "Base square rotation is incorrect. Expected Y-rotation: 45° (0.7854 rad).",
+              "suggestedAction": "Replay this step to see the correct rotation animation"
             }
           }
         },

@@ -416,3 +416,27 @@ export interface ConnectionVisualizerProps {
   visible?: boolean
   animated?: boolean
 }
+
+// ============== Exported assembly format ==============
+export interface ExportedInstance {
+  id: string
+  transform: {
+    position: { x: number; y: number; z: number }
+    rotation: { x: number; y: number; z: number }
+  }
+}
+
+export interface ExportedAssembly {
+  metadata: AssemblyMetadata
+  templates: {
+    materials: { id: string; source: string }[]
+    components: { id: string; source: string }[]
+  }
+  instances: {
+    straws: { templateId: string; instances: ExportedInstance[] }[]
+    connectors: { templateId: string; instances: ExportedInstance[] }[]
+  }
+  actions: any[]
+  activities: any[]
+  scene: Scene
+}

@@ -1,5 +1,12 @@
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
-import { Assembly, ComponentTemplate, Connector, Straw, Transform } from '@/features/assembly/types/assembly.types'
+import {
+  Assembly,
+  ComponentTemplate,
+  Connector,
+  ExportedAssembly,
+  Straw,
+  Transform
+} from '@/features/assembly/types/assembly.types'
 import { addInstance, setSelectedId } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
@@ -142,7 +149,10 @@ const INITIAL_SCENE: Assembly['scene'] = {
   }
 }
 
-export function exportAssembly(state: RootState, metadata: { title: string; description: string; author: string }) {
+export function exportAssembly(
+  state: RootState,
+  metadata: { title: string; description: string; author: string }
+): ExportedAssembly {
   const instances = state.creatorScene.instances
   const now = new Date().toISOString()
 
@@ -266,7 +276,6 @@ export function exportAssembly(state: RootState, metadata: { title: string; desc
               'Observe the relationships between straws and connectors'
             ]
           },
-          // 👉 thêm step cho mỗi connector có arms
           ...instances
             .filter((i) => i.category === 'connector' && i.arms && Object.keys(i.arms).length > 0)
             .map((i) => ({

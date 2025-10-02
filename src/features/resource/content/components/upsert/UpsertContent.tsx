@@ -6,21 +6,26 @@ import {
   useGetContentByIdQuery
 } from '@/features/resource/content/api/contentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import TiptapEditor from '@/components/tiptap/TiptapEditor'
 import { ContentType } from '@/features/resource/content/types/content.type'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { resetSaveTrigger } from '@/features/resource/content/slice/editorSlice'
 
 type UpsertContentProps = {
+  lessonId?: number
   sectionId: number
   contentId?: number
 }
 
-export default function UpsertContent({ sectionId, contentId }: UpsertContentProps) {
+export default function UpsertContent({ lessonId, sectionId, contentId }: UpsertContentProps) {
   const tt = useTranslations('toast')
   const { data, isLoading } = useGetContentByIdQuery(contentId!, { skip: !contentId })
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const locale = useLocale()
 
   const [createContent] = useCreateContentMutation()
   const [updateContent] = useUpdateContentMutation()
@@ -42,18 +47,21 @@ export default function UpsertContent({ sectionId, contentId }: UpsertContentPro
       })
       toast.success(tt('successMessage.update'))
     } else {
-      await createContent({
+      const res = await createContent({
         contentBody: editorValue,
         contentType: ContentType.TEXT,
         sectionId: sectionId
       })
       toast.success(tt('successMessage.create'))
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${res.data?.data.id}`)
     }
   }
 
   useEffect(() => {
     if (saveTrigger) {
-      handleUpsert()
+      handleUpsert().finally(() => {
+        dispatch(resetSaveTrigger())
+      })
     }
   }, [saveTrigger])
 
