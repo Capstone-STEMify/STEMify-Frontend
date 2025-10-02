@@ -5,10 +5,14 @@ import { PanelContent, PanelKey, sidebarItems } from '@/features/resource/conten
 import BackButton from '@/components/shared/button/BackButton'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setActivePanel } from '@/components/tiptap/slice/tiptapSlice'
+import { useLocale } from 'next-intl'
+import { useParams } from 'next/navigation'
 
 export default function TipTapSidebar() {
   const dispatch = useAppDispatch()
   const activePanel = useAppSelector((state) => state.tiptap.activePanel)
+  const locale = useLocale()
+  const { lessonId, sectionId, contentId } = useParams()
 
   const togglePanel = (key: PanelKey) => {
     if (activePanel === key) {
@@ -23,7 +27,7 @@ export default function TipTapSidebar() {
       {/* Cột icon: chỉ chiếm không gian cần thiết */}
       <div className='flex flex-shrink-0 flex-col items-center gap-2 border-r bg-gradient-to-b from-sky-50 to-emerald-50 p-2'>
         <div>
-          <BackButton className='border' />
+          <BackButton className='border' url={`/${locale}/admin/lesson/${lessonId}/pacing-guide`} />
         </div>
         <ul>
           {sidebarItems

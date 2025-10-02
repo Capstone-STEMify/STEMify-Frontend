@@ -14,9 +14,12 @@ export const editorSlice = createSlice({
   reducers: {
     triggerSave(state) {
       state.saveTrigger = Date.now()
+    },
+    resetSaveTrigger(state) {
+      state.saveTrigger = null
     }
   }
 })
 
-export const { triggerSave } = editorSlice.actions
+export const { triggerSave, resetSaveTrigger } = editorSlice.actions
 export default editorSlice.reducer

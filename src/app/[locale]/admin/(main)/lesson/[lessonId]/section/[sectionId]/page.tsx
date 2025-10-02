@@ -4,9 +4,9 @@ import { useParams } from 'next/navigation'
 import React from 'react'
 
 export default function Page() {
-  const { sectionId, contentId } = useParams()
+  const { lessonId, sectionId, contentId } = useParams()
   const sectionIdNum = Array.isArray(sectionId) ? parseInt(sectionId[0]!) : parseInt(sectionId!)
   const contentIdNum =
     contentId !== undefined ? (Array.isArray(contentId) ? parseInt(contentId[0]!) : parseInt(contentId!)) : undefined
-  return <UpsertContent sectionId={sectionIdNum} contentId={contentIdNum} />
+  return <UpsertContent lessonId={Number(lessonId)} sectionId={sectionIdNum} contentId={contentIdNum} />
 }
