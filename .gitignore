@@ -44,3 +44,8 @@ next-env.d.ts
 /.wrangler
 
 certificates
+
+
+#Ignore cursor AI rules
+.cursor\rules\codacy.mdc
+/.cursor
