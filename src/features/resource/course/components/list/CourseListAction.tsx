@@ -23,7 +23,7 @@ export default function CourseListAction() {
   const t = useTranslations('course')
   const tc = useTranslations('common')
   const [statusActive, setStatusActive] = useState(false)
-
+  const [search, setSearch] = useState<string>('')
   const { status } = useSession()
   const role = useAppSelector((state) => state.auth.user?.role)
 
@@ -38,13 +38,17 @@ export default function CourseListAction() {
   // Redux hooks
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.course)
-  const debouncedSearchQuery = useDebounce(filters.search || '', 500)
+  const debouncedSearchQuery = useDebounce(search, 500)
 
   // Lazy queries
   const [getCategory, { data: categories }] = useLazyGetAllCategoryQuery()
   const [getSkill, { data: skills }] = useLazyGetAllSkillQuery()
   const [getAgeRange, { data: ageRanges }] = useLazyGetAllAgeRangeQuery()
   const [getStandard, { data: standards }] = useLazyGetAllStandardQuery()
+
+  useEffect(() => {
+    dispatch(setSearchTerm(debouncedSearchQuery))
+  }, [debouncedSearchQuery, dispatch])
 
   if (status === 'loading') {
     return (
@@ -61,12 +65,7 @@ export default function CourseListAction() {
   }
 
   const hasFilters = Boolean(
-    debouncedSearchQuery ||
-      filters.categoryId ||
-      filters.ageRangeId ||
-      filters.skillId ||
-      filters.standardId ||
-      filters.status
+    search || filters.categoryId || filters.ageRangeId || filters.skillId || filters.standardId || filters.status
   )
 
   // Function to render filter tags
@@ -125,8 +124,8 @@ export default function CourseListAction() {
             <Input
               type='text'
               placeholder={t('list.placeholder.search')}
-              value={filters.search}
-              onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
             />
             <Search className='absolute top-3 left-3 h-4 w-4 text-gray-400' />

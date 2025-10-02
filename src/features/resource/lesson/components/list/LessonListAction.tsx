@@ -16,10 +16,13 @@ import { LessonStatus } from '../../types/lesson.type'
 import { useSession } from 'next-auth/react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { UserRole } from '@/types/userRole'
+import { useEffect, useState } from 'react'
+import useDebounce from '@/hooks/useDebounce'
 
 export default function LessonListAction() {
   const t = useTranslations('LessonList')
   const tc = useTranslations('common')
+  const [search, setSearch] = useState<string>('')
 
   const { status } = useSession()
   const role = useAppSelector((state) => state.auth.user?.role)
@@ -29,6 +32,7 @@ export default function LessonListAction() {
   // Redux
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.lesson)
+  const debouncedSearchQuery = useDebounce(search, 500)
 
   // Lazy queries (hooks must always run)
   const [getCategory, { data: categories }] = useLazyGetAllCategoryQuery()
@@ -43,12 +47,7 @@ export default function LessonListAction() {
   }
 
   const hasFilters = Boolean(
-    filters.search ||
-      filters.categoryId ||
-      filters.ageRangeId ||
-      filters.skillId ||
-      filters.standardId ||
-      filters.status
+    search || filters.categoryId || filters.ageRangeId || filters.skillId || filters.standardId || filters.status
   )
 
   // Options
@@ -75,6 +74,9 @@ export default function LessonListAction() {
         <X className='h-3 w-3 cursor-pointer' onClick={() => dispatch(setParam({ key, value: '' }))} />
       </span>
     )
+  useEffect(() => {
+    dispatch(setSearchTerm(debouncedSearchQuery))
+  }, [debouncedSearchQuery, dispatch])
 
   return (
     <div className='border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50'>
@@ -113,8 +115,8 @@ export default function LessonListAction() {
                 <Input
                   type='text'
                   placeholder={t('placeHolder.search') ?? ''}
-                  value={filters.search}
-                  onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
                 />
                 <Search className='absolute top-3 left-3 h-4 w-4 text-gray-400' />
