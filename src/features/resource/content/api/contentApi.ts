@@ -3,7 +3,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const contentApi = createCrudApi<Content, ContentQueryParams>({
   reducerPath: 'contentApi',
-  tagTypes: ['Content', 'Lesson'],
+  tagTypes: ['Content', 'Lesson', 'Section'],
   baseUrl: '/contents'
 })
 
