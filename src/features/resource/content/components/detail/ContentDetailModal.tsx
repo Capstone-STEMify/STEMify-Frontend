@@ -10,10 +10,9 @@ import { useParams, useRouter } from 'next/navigation'
 
 type ContentDetailModalProps = {
   sectionId: number
-  contentId?: number
 }
 
-export default function ContentDetailModal({ sectionId, contentId }: ContentDetailModalProps) {
+export default function ContentDetailModal({ sectionId }: ContentDetailModalProps) {
   const t = useTranslations('content')
   const tc = useTranslations('common')
   const { closeModal } = useModal()
@@ -27,7 +26,7 @@ export default function ContentDetailModal({ sectionId, contentId }: ContentDeta
     if (!contentData?.data?.items?.length) {
       router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}`)
     } else {
-      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentId}`)
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentData.data.items[0].id}`)
     }
   }
 
