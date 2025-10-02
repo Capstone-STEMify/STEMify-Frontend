@@ -25,7 +25,7 @@ const ProductList: React.FC = () => {
           <div className='flex flex-col gap-8 md:flex-row'>
             {/* Sidebar filter */}
             <div className='w-full shrink-0 md:w-72'>
-              <ProductFilterSidebar />
+              <ProductFilterSidebar className='hidden rounded-xl border border-gray-300 shadow-md md:block' />
             </div>
 
             {/* Products grid */}
@@ -35,7 +35,7 @@ const ProductList: React.FC = () => {
                 activeCategory={activeCategory}
                 onCategoryChange={setActiveCategory}
               /> */}
-              <div className='scrollbar-hidden lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto'>
+              <div className='scrollbar-hidden lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto'>
                 <ProductsGrid products={filteredProducts} />
               </div>
               {/* <RichResources /> */}

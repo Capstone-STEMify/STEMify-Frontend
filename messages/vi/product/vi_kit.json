@@ -29,11 +29,23 @@
       "ageOptions": {
         "all": "Tất cả"
       },
-      "search": "Tìm kiếm"
+      "search": "Tìm kiếm",
+      "sku": "SKU",
+      "availability": "Trạng thái",
+      "available": "Còn hàng",
+      "outOfStock": "Hết hàng",
+      "items": "Sản phẩm",
+      "reviews": "Đánh giá"
     },
     "detail": {
       "title": "Chi tiết bộ kit",
-      "description": "Xem và chỉnh sửa chi tiết của bộ kit đã chọn."
+      "description": "Xem và chỉnh sửa chi tiết của bộ kit đã chọn.",
+      "descriptionLabel": "Mô tả",
+      "price": "Giá",
+      "age": "Độ tuổi",
+      "preOrder": "Đặt trước",
+      "weight": "Trọng lượng",
+      "dimensions": "Kích thước"
     },
     "form": {
       "title": {
@@ -50,7 +62,33 @@
           "placeholder": "Nhập mô tả bộ kit"
         },
         "imageUrl": {
-          "label": "Hình ảnh"
+          "label": "Hình ảnh (tối đa 5 hình)"
+        },
+        "price": {
+          "label": "Giá (VND)",
+          "placeholder": "e.g: 100,000"
+        },
+        "ageRange": {
+          "label": "Độ tuổi"
+        },
+        "isPreorder": {
+          "label": "Hàng đặt trước"
+        },
+        "sku": {
+          "label": "SKU",
+          "placeholder": "e.g: ABC123"
+        },
+        "weight": {
+          "label": "Trọng lượng (grams)",
+          "placeholder": "e.g: 500"
+        },
+        "dimensions": {
+          "label": "Kích thước (cm)",
+          "placeholder": "e.g., 30 x 20 x 10 cm"
+        },
+        "stockQuantity": {
+          "label": "Số lượng",
+          "placeholder": "e.g: 100"
         }
       }
     }

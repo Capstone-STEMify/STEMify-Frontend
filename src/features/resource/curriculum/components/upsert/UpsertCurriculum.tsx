@@ -108,7 +108,7 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
             action: {
               label: 'View Curriculum',
               onClick: () => {
-                router.push(`/${locale}/resource/curriculum/${res.data.id}`)
+                router.push(`/${locale}/admin/curriculum/${res.data.id}`)
               }
             }
           })
