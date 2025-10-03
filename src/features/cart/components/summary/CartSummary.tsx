@@ -24,16 +24,49 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
     { id: 'payos' as PaymentMethod, name: 'PayOs', logo: '/images/logo/payos.png' },
   ];
 
+  const productTotal = total * 0.95; // 95% of total
+  const productTax = total * 0.05; // 5% tax
+  const shipping = 0;
+  const shippingTax = 0;
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 sticky top-6">
       {/* Total */}
       <div className="mb-6">
         <h3 className="text-gray-600 text-sm mb-2">Total:</h3>
-        <div className="flex items-baseline gap-2">
+        <div className="flex items-baseline gap-2 mb-4">
           <span className="text-4xl md:text-5xl font-bold text-gray-900">
             {total.toLocaleString()}
           </span>
           <span className="text-2xl font-medium text-gray-600">{currency}</span>
+        </div>
+
+        {/* Breakdown */}
+        <div className="space-y-2 text-sm border-t pt-4">
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-gray-900">Product Total:</span>
+            <span className="font-bold text-gray-900">
+              {currency === '£' ? '£' : ''}{productTotal.toLocaleString()}{currency === 'đ' ? ' đ' : ''}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">- of which Tax:</span>
+            <span className="text-gray-900">
+              {currency === '£' ? '£' : ''}{productTax.toLocaleString()}{currency === 'đ' ? ' đ' : ''}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-gray-900">Shipping (from):</span>
+            <span className="font-bold text-gray-900">
+              {currency === '£' ? '£' : ''}{shipping.toFixed(2)}{currency === 'đ' ? ' đ' : ''}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">- of which Tax:</span>
+            <span className="text-gray-900">
+              {currency === '£' ? '£' : ''}{shippingTax.toFixed(2)}{currency === 'đ' ? ' đ' : ''}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -66,13 +99,13 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
       <div className="space-y-3 mb-6">
         <button
           onClick={onCheckout}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-lg transition-all hover:shadow-lg active:scale-98"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-all hover:shadow-lg active:scale-98"
         >
           Checkout
         </button>
         <button
           onClick={onRemoveAll}
-          className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-4 rounded-lg transition-all hover:shadow-lg active:scale-98"
+          className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-lg transition-all hover:shadow-lg active:scale-98"
         >
           Remove All
         </button>

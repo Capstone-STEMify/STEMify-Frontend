@@ -42,13 +42,13 @@ export const RelatedProductsCarousel: React.FC<RelatedProductsCarouselProps> = (
           <motion.h2
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-3xl md:text-4xl font-bold text-gray-900"
+            className="text-3xl md:text-4xl font-semibold text-gray-900"
           >
             {title}
           </motion.h2>
 
           {/* Navigation Buttons */}
-          <div className="flex gap-3">
+          {/* <div className="flex gap-3">
             <button
               onClick={scrollPrev}
               className="w-12 h-12 rounded-full bg-white shadow-lg hover:shadow-xl transition-all hover:scale-110 active:scale-95 flex items-center justify-center group"
@@ -77,12 +77,12 @@ export const RelatedProductsCarousel: React.FC<RelatedProductsCarouselProps> = (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Carousel */}
         <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-6">
+          <div className="flex gap-6 py-8 px-4">
             {products.map((product, index) => (
               <div
                 key={product.id || index}
@@ -95,16 +95,16 @@ export const RelatedProductsCarousel: React.FC<RelatedProductsCarouselProps> = (
         </div>
 
         {/* View All Button */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="mt-10 text-center"
         >
-          <button className="px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95">
+          <button className="px-6 py-3 bg-white border-2 border-amber-400 hover:bg-amber-400 hover:text-white text-amber-400 font-semibold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95">
             View All Products
           </button>
-        </motion.div>
+        </motion.div> */}
       </div>
     </div>
   );

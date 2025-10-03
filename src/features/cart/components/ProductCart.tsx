@@ -148,7 +148,7 @@ export default function ProductCart() {
 
         {/* Continue Shopping Button (Desktop) */}
         {cartItems.length > 0 && (
-          <button className="hidden lg:block mt-8 px-6 py-3 border-2 border-blue-400 text-gray-700 font-semibold rounded-lg hover:bg-blue-50 transition-all">
+          <button className="hidden lg:block px-6 py-3 border-2 border-blue-400 text-gray-700 font-semibold rounded-lg hover:bg-blue-50 transition-all">
             ← Continue Shopping
           </button>
         )}
