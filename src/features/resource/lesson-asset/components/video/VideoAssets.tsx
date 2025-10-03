@@ -1,5 +1,6 @@
 import { SPopover } from '@/components/shared/SPopover'
 import { useEditorCtx } from '@/components/tiptap/EditorContext'
+import { setActivePanel } from '@/components/tiptap/slice/tiptapSlice'
 import {
   useGetListLessonAssetsQuery,
   useDeleteListLessonAssetsMutation
@@ -97,7 +98,10 @@ export default function VideoAssets() {
               align='start'
             >
               <div className='flex flex-col text-sm'>
-                <div className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-gray-100'>
+                <div
+                  className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-gray-100'
+                  onClick={() => dispatch(setActivePanel({ panel: 'assetDetail', assetId: asset.id }))}
+                >
                   <Info size={14} /> Details
                 </div>
                 <a

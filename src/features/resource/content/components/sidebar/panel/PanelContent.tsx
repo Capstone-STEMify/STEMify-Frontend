@@ -1,13 +1,11 @@
 import GuideContent from '@/features/resource/content/components/sidebar/panel/guide/GuideContent'
 import TemplateContent from '@/features/resource/content/components/sidebar/panel/template/TemplateContent'
 import UploadContent from '@/features/resource/content/components/sidebar/panel/upload/UploadContent'
-import DocumentAssetsDetail from '@/features/resource/lesson-asset/components/document/DocumentAssetsDetail'
-import ImageAssetDetail from '@/features/resource/lesson-asset/components/image/ImageAssetDetail'
-import VideoAssetsDetail from '@/features/resource/lesson-asset/components/video/VideoAssetsDetail'
+import AssetDetail from '@/features/resource/lesson-asset/components/document/AssetDetail'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { IconHelpSquareRounded, IconTemplate, IconUpload } from '@tabler/icons-react'
 
-export type PanelKey = 'guide' | 'upload' | 'template' | 'imageAssetDetail' | 'documentAssetDetail' | 'videoAssetDetail'
+export type PanelKey = 'guide' | 'upload' | 'template' | 'assetDetail'
 
 export const sidebarItems = [
   { key: 'guide' as PanelKey, icon: IconHelpSquareRounded, label: 'Guide' },
@@ -23,12 +21,8 @@ export const PanelContent = () => {
       return <UploadContent />
     case 'template':
       return <TemplateContent />
-    case 'imageAssetDetail':
-      return <ImageAssetDetail />
-    case 'documentAssetDetail':
-      return <DocumentAssetsDetail />
-    case 'videoAssetDetail':
-      return <VideoAssetsDetail />
+    case 'assetDetail':
+      return <AssetDetail />
     default:
       return null
   }
