@@ -8,6 +8,7 @@ import {
   Transform
 } from '@/features/assembly/types/assembly.types'
 import { addInstance, setSelectedId } from '@/features/creator-3d/slice/creatorSceneSlice'
+import { syncInstancesToTargets } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
 import { useCallback } from 'react'
@@ -98,6 +99,7 @@ export function createInstanceFromTemplate(
 // useAddObject.ts
 export function useAddObject() {
   const dispatch = useAppDispatch()
+  const instances = useAppSelector((s) => s.creatorScene.instances)
 
   const generateId = useCallback((prefix: string) => {
     return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 1000)}`
@@ -107,6 +109,9 @@ export function useAddObject() {
     const instance = createInstanceFromTemplate(template, position, generateId)
     dispatch(addInstance(instance))
     dispatch(setSelectedId(instance.id))
+    const allIds = [...instances.map((i) => i.id), instance.id]
+
+    dispatch(syncInstancesToTargets(allIds))
     return instance.id
   }
 }

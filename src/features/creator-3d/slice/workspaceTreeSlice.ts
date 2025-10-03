@@ -47,7 +47,15 @@ interface WorkspaceTreeState {
 }
 
 const initialState: WorkspaceTreeState = {
-  actions: []
+  actions: [
+    {
+      id: 'action-1',
+      name: 'Default Action',
+      type: 'highlight',
+      targets: [],
+      duration: 2
+    }
+  ]
 }
 
 export const workspaceTreeSlice = createSlice({
@@ -119,11 +127,30 @@ export const workspaceTreeSlice = createSlice({
       }
     },
 
-    resetActions: () => initialState
+    resetActions: () => initialState,
+    syncInstancesToTargets: (state, action: PayloadAction<string[]>) => {
+      // action.payload = danh sách tất cả instance id hiện tại
+      state.actions = state.actions.map((act) => {
+        if (act.type === 'highlight' || act.type === 'transform_arm' || act.type === 'rotate_highlight') {
+          return {
+            ...act,
+            targets: action.payload // đồng bộ targets luôn bằng toàn bộ instances
+          }
+        }
+        return act
+      })
+    }
   }
 })
 
-export const { addAction, removeAction, addTargetToAction, updateConnectorArms, updateAction, resetActions } =
-  workspaceTreeSlice.actions
+export const {
+  addAction,
+  removeAction,
+  addTargetToAction,
+  updateConnectorArms,
+  updateAction,
+  resetActions,
+  syncInstancesToTargets
+} = workspaceTreeSlice.actions
 
 export default workspaceTreeSlice.reducer

@@ -1,17 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
+import { useTree } from '@headless-tree/react'
 import {
   expandAllFeature,
-  hotkeysCoreFeature,
   searchFeature,
   selectionFeature,
   syncDataLoaderFeature,
   TreeState
 } from '@headless-tree/core'
-import { useTree } from '@headless-tree/react'
 import { FolderIcon, FolderOpenIcon } from 'lucide-react'
 import { Tree, TreeItem, TreeItemLabel } from '@/components/shadcn/tree'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { RootState } from '@/libs/redux/store'
+import { addAction, removeAction } from '@/features/creator-3d/slice/workspaceTreeSlice'
 
 interface WorkspaceItem {
   id: string
@@ -21,25 +23,71 @@ interface WorkspaceItem {
 }
 
 export default function WorkspaceTree() {
-  const [items, setItems] = useState<Record<string, WorkspaceItem>>({
-    workspace: {
-      id: 'workspace',
-      type: 'workspace',
-      name: 'Workspace',
-      children: ['action-1']
-    },
-    'action-1': {
-      id: 'action-1',
+  const dispatch = useAppDispatch()
+  const actions = useAppSelector((s: RootState) => s.workspaceTree.actions)
+  const instances = useAppSelector((s: RootState) => s.creatorScene.instances)
+
+  const items: Record<string, WorkspaceItem> = {
+    workspace: { id: 'workspace', type: 'workspace', name: 'Workspace', children: actions.map((a) => a.id) }
+  }
+
+  const handleExport = () => {
+    // JSON gồm workspace + actions từ slice
+    const exportData = {
+      workspace: {
+        id: 'workspace',
+        type: 'workspace',
+        name: 'Workspace',
+        actions: actions.map((a) => ({
+          id: a.id,
+          name: a.name,
+          type: a.type,
+          targets: a.targets,
+          duration: a.duration,
+          ...(a.type === 'highlight' && { animation: a.animation }),
+          ...(a.type === 'transform_arm' && {
+            connectorArmTransforms: a.connectorArmTransforms,
+            interpolation: a.interpolation,
+            instantAppear: a.instantAppear
+          }),
+          ...(a.type === 'rotate_highlight' && { rotationSpeed: a.rotationSpeed })
+        }))
+      }
+    }
+
+    console.log('Workspace JSON:', JSON.stringify(exportData, null, 2))
+    alert('Workspace JSON has been logged in the console!')
+  }
+
+  actions.forEach((a) => {
+    items[a.id] = {
+      id: a.id,
       type: 'action',
-      name: 'Action 1',
-      children: ['straw-1', 'connector-1']
-    },
-    'straw-1': { id: 'straw-1', type: 'component', name: 'Straw 1' },
-    'connector-1': { id: 'connector-1', type: 'component', name: 'Connector 1' }
+      name: a.name,
+      children: Array.isArray(a.targets) ? a.targets : instances.map((i) => i.id)
+    }
+
+    if (Array.isArray(a.targets)) {
+      a.targets.forEach((t) => {
+        items[t] = {
+          id: t,
+          type: 'component',
+          name: instances.find((i) => i.id === t)?.data?.name ?? t
+        }
+      })
+    } else {
+      // trường hợp "all" → tạo tất cả instance thành component
+      instances.forEach((inst) => {
+        items[inst.id] = {
+          id: inst.id,
+          type: 'component',
+          name: inst.data?.name ?? inst.id
+        }
+      })
+    }
   })
 
-  const [state, setState] = useState<Partial<TreeState<WorkspaceItem>>>({})
-
+  const [state, setState] = React.useState<Partial<TreeState<any>>>({})
   const indent = 20
 
   const tree = useTree<WorkspaceItem>({
@@ -49,90 +97,37 @@ export default function WorkspaceTree() {
     indent,
     rootItemId: 'workspace',
     getItemName: (item) => item.getItemData().name,
-    isItemFolder: (item) => item.getItemData()?.type === 'workspace' || item.getItemData()?.type === 'action',
+    isItemFolder: (item) => ['workspace', 'action'].includes(item.getItemData()?.type),
     dataLoader: {
-      getItem: (itemId) => items[itemId],
-      getChildren: (itemId) => items[itemId].children ?? []
+      getItem: (id) => items[id],
+      getChildren: (id) => items[id]?.children ?? []
     },
-    features: [syncDataLoaderFeature, hotkeysCoreFeature, selectionFeature, searchFeature, expandAllFeature]
+    features: [syncDataLoaderFeature, searchFeature, selectionFeature, expandAllFeature]
   })
 
-  // Thêm action mới
   const handleAddAction = () => {
     const newId = `action-${Date.now()}`
-    const newAction: WorkspaceItem = {
-      id: newId,
-      type: 'action',
-      name: `New Action`,
-      children: []
-    }
+    dispatch(addAction({ id: newId, name: 'New Action', type: 'highlight' }))
+  }
 
-    setItems((prev) => ({
-      ...prev,
-      [newId]: newAction,
-      workspace: {
-        ...prev['workspace'],
-        children: [...(prev['workspace'].children ?? []), newId]
-      }
-    }))
-
+  React.useEffect(() => {
     setState((prev) => ({
       ...prev,
-      expandedItems: [...(prev.expandedItems ?? []), 'workspace']
+      expandedItems: [...(prev.expandedItems ?? []), 'workspace', ...actions.map((a) => a.id)]
     }))
-  }
-
-  // Thêm component vào action
-  const handleAddComponent = (actionId: string) => {
-    const newId = `component-${Date.now()}`
-    const newComponent: WorkspaceItem = {
-      id: newId,
-      type: 'component',
-      name: `New Component`
-    }
-
-    setItems((prev) => ({
-      ...prev,
-      [newId]: newComponent,
-      [actionId]: {
-        ...prev[actionId],
-        children: [...(prev[actionId].children ?? []), newId]
-      }
-    }))
-
-    setState((prev) => ({
-      ...prev,
-      expandedItems: [...(prev.expandedItems ?? []), actionId]
-    }))
-  }
-
-  // Export JSON
-  const handleExport = () => {
-    console.log('Workspace JSON:', JSON.stringify(items, null, 2))
-    alert('Workspace JSON has been logged in the console!')
-  }
+  }, [instances, actions])
 
   return (
     <div>
-      <div className='relative mb-2 flex items-center justify-between gap-2'>
-        <h2 className='text-lg font-medium'>Workspace tree</h2>
+      <div className='mb-2 flex items-center justify-between'>
+        <h2 className='text-lg font-medium'>Workspace Tree</h2>
         <div className='flex gap-2'>
-          <span
-            role='button'
-            tabIndex={0}
-            onClick={handleAddAction}
-            className='cursor-pointer rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'
-          >
-            + Add action
-          </span>
-          <span
-            role='button'
-            tabIndex={0}
-            onClick={handleExport}
-            className='cursor-pointer rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'
-          >
+          <button onClick={handleAddAction} className='rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'>
+            + Add Action
+          </button>
+          <button onClick={handleExport} className='rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'>
             Export JSON
-          </span>
+          </button>
         </div>
       </div>
 
@@ -142,14 +137,10 @@ export default function WorkspaceTree() {
           return (
             <TreeItem key={item.getId()} item={item}>
               <TreeItemLabel>
-                <span className='flex w-full items-center justify-between gap-2'>
+                <span className='flex w-full items-center justify-between'>
                   <span className='flex items-center gap-2'>
                     {item.isFolder() &&
-                      (item.isExpanded() ? (
-                        <FolderOpenIcon className='text-muted-foreground size-4' />
-                      ) : (
-                        <FolderIcon className='text-muted-foreground size-4' />
-                      ))}
+                      (item.isExpanded() ? <FolderOpenIcon className='size-4' /> : <FolderIcon className='size-4' />)}
                     {item.getItemName()}
                   </span>
 
@@ -157,13 +148,10 @@ export default function WorkspaceTree() {
                     <span
                       role='button'
                       tabIndex={0}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleAddComponent(item.getId())
-                      }}
-                      className='cursor-pointer rounded bg-gray-100 px-2 py-1 text-xs select-none hover:bg-gray-200'
+                      onClick={() => dispatch(removeAction(data.id))}
+                      className='rounded bg-red-100 px-2 py-1 text-xs hover:bg-red-200'
                     >
-                      + Add component
+                      Delete
                     </span>
                   )}
                 </span>
