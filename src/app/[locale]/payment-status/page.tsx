@@ -1,4 +1,4 @@
-import PaymentStatus from '@/features/payment/PaymentStatus'
+import PaymentStatus from '@/features/payment/status/PaymentStatus'
 import React from 'react'
 
 export default function PaymentStatusPage() {
