@@ -9,7 +9,7 @@ import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import React from 'react'
 
-export default function VideoAssetDetail() {
+export default function DocumentAssetDetail() {
   const { lessonId } = useParams()
   const assetId = useAppSelector((state) => state.tiptap.assetId)
   const dispatch = useAppDispatch()
@@ -19,14 +19,14 @@ export default function VideoAssetDetail() {
     { skip: !assetId }
   )
 
-  const videoAsset = data?.data
+  const documentAsset = data?.data
 
   if (isLoading) {
     return <div className='p-4 text-sm font-semibold'>Loading asset...</div>
   }
 
-  if (!videoAsset) {
-    return <div className='p-4 text-sm font-semibold'>No video selected</div>
+  if (!documentAsset) {
+    return <div className='p-4 text-sm font-semibold'>No document selected</div>
   }
 
   // format file size
@@ -44,7 +44,7 @@ export default function VideoAssetDetail() {
           <ArrowLeft size={15} />
         </button>
         <div className='flex flex-1 items-center gap-2'>
-          <h4 className='truncate text-sm font-medium'>{videoAsset.name}</h4>
+          <h4 className='truncate text-sm font-medium'>{documentAsset.name}</h4>
           <button className='hover:text-sky-custom-600 font-semibold'>
             <Pencil size={15} />
           </button>
@@ -56,7 +56,13 @@ export default function VideoAssetDetail() {
         {/* Preview */}
         <div className='flex justify-center'>
           <div className='relative max-h-[400px] w-full'>
-            <video src={videoAsset.assetUrl} controls className='rounded object-contain'  />
+            <Image
+              src={documentAsset.assetUrl}
+              alt={documentAsset.name}
+              width={400}
+              height={400}
+              className='rounded object-contain'
+            />
           </div>
         </div>
 
@@ -64,21 +70,21 @@ export default function VideoAssetDetail() {
         <div className='space-y-2 px-4 text-sm'>
           <div className='flex justify-between'>
             <span className='font-semibold'>Format</span>
-            <span className='text-gray-500 uppercase'>{videoAsset.format}</span>
+            <span className='text-gray-500 uppercase'>{documentAsset.format}</span>
           </div>
           <div className='flex justify-between'>
             <span className='font-semibold'>Size</span>
-            <span className='text-gray-500'>{formatSize(videoAsset.size)}</span>
+            <span className='text-gray-500'>{formatSize(documentAsset.size)}</span>
           </div>
           <div className='flex justify-between'>
             <span className='font-semibold'>Resolution</span>
             <span className='text-gray-500'>
-              {videoAsset.width} × {videoAsset.height}
+              {documentAsset.width} × {documentAsset.height}
             </span>
           </div>
           <div className='flex justify-between'>
             <span className='font-semibold'>Created at</span>
-            <span className='text-gray-500'>{new Date(videoAsset.createdAt).toLocaleString()}</span>
+            <span className='text-gray-500'>{new Date(documentAsset.createdAt).toLocaleString()}</span>
           </div>
 
           <div>
@@ -86,8 +92,8 @@ export default function VideoAssetDetail() {
               <span className='font-semibold'>Tags</span>
             </div>
             <div className='mt-2 flex flex-wrap items-center gap-2'>
-              {videoAsset.tags.length === 0 && <span className='text-gray-500'>No tags</span>}
-              {videoAsset.tags.map((tag: string, i: number) => (
+              {documentAsset.tags.length === 0 && <span className='text-gray-500'>No tags</span>}
+              {documentAsset.tags.map((tag: string, i: number) => (
                 <Badge key={i} variant={'outline'}>
                   {tag}
                 </Badge>
