@@ -1,0 +1,113 @@
+'use client';
+
+import React, { useState } from 'react';
+
+type Props = {
+  email?: string;
+  onGuestContinue: (email: string) => void;
+  onGoLogin: () => void;
+  onGoRegister: () => void;
+};
+
+type Section = 'guest' | 'signin' | 'create' | null;
+
+export function Step1StartCheckout({
+  email = '',
+  onGuestContinue,
+  onGoLogin,
+  onGoRegister,
+}: Props) {
+  const [active, setActive] = useState<Section>(null);
+  const [guestEmail, setGuestEmail] = useState(email);
+
+  const SectionCard: React.FC<{
+    title: string;
+    subtitle: string;
+    isOpen: boolean;
+    onToggle: () => void;
+    children?: React.ReactNode;
+  }> = ({ title, subtitle, isOpen, onToggle, children }) => (
+    <div
+      className={[
+        'rounded-xl border border-gray-200 bg-gray-50 transition',
+        isOpen ? 'ring-1 ring-red-200' : '',
+      ].join(' ')}
+    >
+      <button
+        type="button"
+        className="w-full rounded-xl px-6 py-5 text-left"
+        onClick={onToggle}
+      >
+        <div className="text-lg font-semibold text-gray-900">{title}</div>
+        <div className="mt-1 text-sm text-gray-600">{subtitle}</div>
+      </button>
+      {isOpen && <div className="px-6 pb-6">{children}</div>}
+    </div>
+  );
+
+  return (
+    <div className="mx-auto max-w-3xl">
+      <h1 className="text-2xl font-bold text-gray-900">Start Checkout</h1>
+
+      <div className="mt-6 space-y-4">
+        {/* Checkout as a guest */}
+        <SectionCard
+          title="Checkout as a guest"
+          subtitle="Checkout now - You can create an account once you’ve completed your order."
+          isOpen={active === 'guest'}
+          onToggle={() => setActive((a) => (a === 'guest' ? null : 'guest'))}
+        >
+          <label className="block text-sm font-medium text-gray-900">
+            Email Address <span className="text-red-600">*</span>
+          </label>
+          <input
+            type="email"
+            value={guestEmail}
+            onChange={(e) => setGuestEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="mt-2 w-full rounded-md border border-gray-300 bg-white px-3 py-2 outline-none focus:border-red-500"
+          />
+          <p className="mt-2 text-xs text-gray-600">
+            ▲ You can create an account after checkout.
+          </p>
+          <button
+            onClick={() => onGuestContinue(guestEmail)}
+            className="mt-4 w-full rounded-full bg-red-600 px-6 py-3 text-white hover:bg-red-700"
+          >
+            Continue as a guest
+          </button>
+        </SectionCard>
+
+        {/* Sign-in and checkout */}
+        <SectionCard
+          title="Sign-in and checkout"
+          subtitle="Have an account? Log in here"
+          isOpen={active === 'signin'}
+          onToggle={() => setActive((a) => (a === 'signin' ? null : 'signin'))}
+        >
+          <button
+            onClick={onGoLogin}
+            className="rounded-full bg-gray-900 px-5 py-2.5 text-sm text-white hover:bg-black"
+          >
+            Go to Login
+          </button>
+        </SectionCard>
+
+        {/* Create an account */}
+        <SectionCard
+          title="Create an account"
+          subtitle="Sign up for a faster checkout experience"
+          isOpen={active === 'create'}
+          onToggle={() => setActive((a) => (a === 'create' ? null : 'create'))}
+        >
+          <button
+            onClick={onGoRegister}
+            className="rounded-full bg-gray-900 px-5 py-2.5 text-sm text-white hover:bg-black"
+          >
+            Go to Register
+          </button>
+        </SectionCard>
+      </div>
+    </div>
+  );
+}
