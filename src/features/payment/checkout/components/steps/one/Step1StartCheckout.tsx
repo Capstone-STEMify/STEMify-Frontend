@@ -40,10 +40,9 @@ export function Step1StartCheckout({
     <div
       className={[
         'rounded-xl border border-gray-200 bg-gray-50 transition',
-        isOpen ? 'ring-1 ring-red-200' : '',
+        isOpen ? 'ring-1 ring-amber-200' : '',
       ].join(' ')}
     >
-      {/* Không để header cướp focus khi đang gõ */}
       <button
         type="button"
         className="w-full rounded-xl px-6 py-5 text-left"
@@ -54,7 +53,6 @@ export function Step1StartCheckout({
         <div className="mt-1 text-sm text-gray-600">{subtitle}</div>
       </button>
 
-      {/* Luôn mount, chỉ ẩn/hiện bằng CSS. Chặn bubbling để không toggle khi click vào trong */}
       <div
         className={`px-6 pb-6 ${isOpen ? 'block' : 'hidden'}`}
         onMouseDown={(e) => e.stopPropagation()}
@@ -87,7 +85,7 @@ export function Step1StartCheckout({
             value={guestEmail}
             onChange={(e) => setGuestEmail(e.target.value)}
             placeholder="you@example.com"
-            className="mt-2 w-full rounded-md border border-gray-300 bg-white px-3 py-2 outline-none focus:border-red-500"
+            className="mt-2 w-full rounded-md border border-gray-300 bg-white px-3 py-2 outline-none focus:border-amber-500"
             onKeyDownCapture={(e) => e.stopPropagation()}
           />
           <p className="mt-2 text-xs text-gray-600">
@@ -95,7 +93,7 @@ export function Step1StartCheckout({
           </p>
           <button
             onClick={() => onGuestContinue(guestEmail)}
-            className="mt-4 w-full rounded-full bg-red-600 px-6 py-3 text-white hover:bg-red-700"
+            className="mt-4 w-full rounded-full bg-amber-400 px-6 py-3 text-white hover:bg-amber-500"
           >
             Continue as a guest
           </button>

@@ -20,7 +20,7 @@ export function Stepper({ current }: { current: 1 | 2 | 3 }) {
           }}
         />
         <div
-          className="absolute rounded bg-red-600 origin-left transition-transform"
+          className="absolute rounded bg-amber-300 origin-left transition-transform"
           style={{
             left: DOT / 2,
             width: `calc(100% - ${DOT}px)`,
@@ -70,7 +70,7 @@ function Dot({
   return (
     <div
       className={`absolute z-10 rounded-full border ${
-        done ? 'bg-red-600 border-red-600' : 'bg-white border-gray-400'
+        done ? 'bg-amber-400 border-amber-400' : 'bg-white border-gray-400'
       }`}
       style={{ width: size, height: size, ...style }}
       aria-hidden

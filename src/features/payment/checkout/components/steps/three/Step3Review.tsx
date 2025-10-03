@@ -107,7 +107,7 @@ export function Step3Review({
             </button>
             <button
               onClick={onPlaceOrder}
-              className="flex-1 rounded-md bg-red-600 px-6 py-3 text-white hover:bg-red-700"
+              className="flex-1 rounded-md bg-amber-400 px-6 py-3 text-white hover:bg-amber-500"
             >
               Confirm & Pay
             </button>

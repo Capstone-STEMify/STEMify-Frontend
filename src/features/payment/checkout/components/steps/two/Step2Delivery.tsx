@@ -60,7 +60,7 @@ export function Step2Delivery({
         <div className="pt-1">
           <button
             onClick={onContinue}
-            className="w-full rounded-md bg-red-600 px-6 py-3 text-white hover:bg-red-700"
+            className="w-full rounded-md bg-amber-400 px-6 py-3 text-white hover:bg-amber-500"
           >
             Go to payment
           </button>

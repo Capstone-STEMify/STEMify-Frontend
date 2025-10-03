@@ -24,7 +24,7 @@ export function DeliveryMethod({
     <label
       className={[
         'flex cursor-pointer items-start justify-between gap-4 rounded-md border p-3',
-        selected === id ? 'border-red-600 bg-red-50' : 'border-gray-300 bg-white',
+        selected === id ? 'border-amber-600 bg-amber-50' : 'border-gray-300 bg-white',
         disabled ? 'opacity-60' : '',
       ].join(' ')}
     >
@@ -32,7 +32,7 @@ export function DeliveryMethod({
         <input
           type="radio"
           name="deliveryMethod"
-          className="mr-2 align-middle accent-red-600"
+          className="mr-2 align-middle accent-amber-600"
           checked={selected === id}
           onChange={() => onChange(id)}
           disabled={disabled}
