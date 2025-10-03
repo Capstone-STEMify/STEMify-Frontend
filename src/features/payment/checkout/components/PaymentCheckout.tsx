@@ -23,7 +23,7 @@ const demoCart: CartItem[] = [
     id: 'hamleys-shopper',
     title: "HAMLEY'S® Hamleys London Shopper",
     imageUrl:
-      'https://images.unsplash.com/photo-1593032457862-9a4a3b1a498d?q=80&w=800&auto=format&fit=crop',
+      'https://eduall.vn/wp-content/uploads/2024/06/stem-kit-yolo-starter-kit-3-500x500-1.png',
     qty: 1,
     price: 6.0,
   },

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
   email?: string;
@@ -17,8 +17,18 @@ export function Step1StartCheckout({
   onGoLogin,
   onGoRegister,
 }: Props) {
-  const [active, setActive] = useState<Section>(null);
+  const [active, setActive] = useState<Section>('guest');
   const [guestEmail, setGuestEmail] = useState(email);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Nếu vì lý do nào đó input bị blur khi đang gõ, ta refocus lại rất nhẹ.
+  useEffect(() => {
+    if (active === 'guest' && inputRef.current) {
+      if (document.activeElement !== inputRef.current) {
+        inputRef.current.focus({ preventScroll: true });
+      }
+    }
+  }, [guestEmail, active]);
 
   const SectionCard: React.FC<{
     title: string;
@@ -33,15 +43,25 @@ export function Step1StartCheckout({
         isOpen ? 'ring-1 ring-red-200' : '',
       ].join(' ')}
     >
+      {/* Không để header cướp focus khi đang gõ */}
       <button
         type="button"
         className="w-full rounded-xl px-6 py-5 text-left"
         onClick={onToggle}
+        onMouseDown={(e) => e.preventDefault()}
       >
         <div className="text-lg font-semibold text-gray-900">{title}</div>
         <div className="mt-1 text-sm text-gray-600">{subtitle}</div>
       </button>
-      {isOpen && <div className="px-6 pb-6">{children}</div>}
+
+      {/* Luôn mount, chỉ ẩn/hiện bằng CSS. Chặn bubbling để không toggle khi click vào trong */}
+      <div
+        className={`px-6 pb-6 ${isOpen ? 'block' : 'hidden'}`}
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {children}
+      </div>
     </div>
   );
 
@@ -57,15 +77,18 @@ export function Step1StartCheckout({
           isOpen={active === 'guest'}
           onToggle={() => setActive((a) => (a === 'guest' ? null : 'guest'))}
         >
-          <label className="block text-sm font-medium text-gray-900">
+          <label htmlFor="guest-email" className="block text-sm font-medium text-gray-900">
             Email Address <span className="text-red-600">*</span>
           </label>
           <input
+            id="guest-email"
+            ref={inputRef}
             type="email"
             value={guestEmail}
             onChange={(e) => setGuestEmail(e.target.value)}
             placeholder="you@example.com"
             className="mt-2 w-full rounded-md border border-gray-300 bg-white px-3 py-2 outline-none focus:border-red-500"
+            onKeyDownCapture={(e) => e.stopPropagation()}
           />
           <p className="mt-2 text-xs text-gray-600">
             ▲ You can create an account after checkout.
