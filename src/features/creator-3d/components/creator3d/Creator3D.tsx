@@ -17,6 +17,7 @@ import {
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
 import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
+import { resetActions } from '@/features/creator-3d/slice/workspaceTreeSlice'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()
@@ -74,6 +75,7 @@ export function Creator3D() {
   const handleClearScene = useCallback(() => {
     if (confirm('Are you sure you want to clear the entire scene? This action cannot be undone.')) {
       dispatch(clearScene())
+      dispatch(resetActions())
     }
   }, [dispatch])
 

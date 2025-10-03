@@ -27,9 +27,32 @@ export default function WorkspaceTree() {
   const actions = useAppSelector((s: RootState) => s.workspaceTree.actions)
   const instances = useAppSelector((s: RootState) => s.creatorScene.instances)
 
-  const items: Record<string, WorkspaceItem> = {
-    workspace: { id: 'workspace', type: 'workspace', name: 'Workspace', children: actions.map((a) => a.id) }
-  }
+  const items = React.useMemo<Record<string, WorkspaceItem>>(() => {
+    const base: Record<string, WorkspaceItem> = {
+      workspace: { id: 'workspace', type: 'workspace', name: 'Workspace', children: actions.map((a) => a.id) }
+    }
+
+    actions.forEach((a) => {
+      const children = Array.isArray(a.targets) ? a.targets : instances.map((i) => i.id)
+      base[a.id] = {
+        id: a.id,
+        type: 'action',
+        name: a.name,
+        children
+      }
+
+      children.forEach((t) => {
+        const inst = instances.find((i) => i.id === t)
+        base[t] = {
+          id: t,
+          type: 'component',
+          name: inst?.data?.name ?? t
+        }
+      })
+    })
+
+    return base
+  }, [actions, instances])
 
   const handleExport = () => {
     // JSON gồm workspace + actions từ slice
@@ -59,34 +82,6 @@ export default function WorkspaceTree() {
     alert('Workspace JSON has been logged in the console!')
   }
 
-  actions.forEach((a) => {
-    items[a.id] = {
-      id: a.id,
-      type: 'action',
-      name: a.name,
-      children: Array.isArray(a.targets) ? a.targets : instances.map((i) => i.id)
-    }
-
-    if (Array.isArray(a.targets)) {
-      a.targets.forEach((t) => {
-        items[t] = {
-          id: t,
-          type: 'component',
-          name: instances.find((i) => i.id === t)?.data?.name ?? t
-        }
-      })
-    } else {
-      // trường hợp "all" → tạo tất cả instance thành component
-      instances.forEach((inst) => {
-        items[inst.id] = {
-          id: inst.id,
-          type: 'component',
-          name: inst.data?.name ?? inst.id
-        }
-      })
-    }
-  })
-
   const [state, setState] = React.useState<Partial<TreeState<any>>>({})
   const indent = 20
 
@@ -99,7 +94,7 @@ export default function WorkspaceTree() {
     getItemName: (item) => item.getItemData().name,
     isItemFolder: (item) => ['workspace', 'action'].includes(item.getItemData()?.type),
     dataLoader: {
-      getItem: (id) => items[id],
+      getItem: (id) => items[id] ?? { id, type: 'component', name: id, children: [] },
       getChildren: (id) => items[id]?.children ?? []
     },
     features: [syncDataLoaderFeature, searchFeature, selectionFeature, expandAllFeature]
