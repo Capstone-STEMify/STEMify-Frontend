@@ -8,7 +8,6 @@ import { ArrowLeft, Download, Pencil, Trash2, Tag, Plus } from 'lucide-react'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import React from 'react'
-import { toast } from 'sonner'
 
 export default function ImageAssetDetail() {
   const { lessonId } = useParams()

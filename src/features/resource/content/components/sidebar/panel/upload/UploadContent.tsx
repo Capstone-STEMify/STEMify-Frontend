@@ -6,10 +6,9 @@ import {
   useDeleteListLessonAssetsMutation,
   usePostLessonAssetsMutation
 } from '@/features/resource/lesson-asset/api/lessonAssetApi'
-import DocumentAssets from '@/features/resource/lesson-asset/components/DocumentAssets'
-import ImageAssets from '@/features/resource/lesson-asset/components/ImageAssets'
-import VideoAssets from '@/features/resource/lesson-asset/components/VideoAssets'
-import { clearSelection } from '@/features/resource/lesson-asset/slice/lessonAssetSelectionSliice'
+import DocumentAssets from '@/features/resource/lesson-asset/components/document/DocumentAssets'
+import ImageAssets from '@/features/resource/lesson-asset/components/image/ImageAssets'
+import VideoAssets from '@/features/resource/lesson-asset/components/video/VideoAssets'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { fileToBase64 } from '@/utils/index'
