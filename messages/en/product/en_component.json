@@ -1,0 +1,12 @@
+{
+  "components": {
+    "list": {
+      "title": "Component List",
+      "noData": "No components found",
+      "noDataDescription": "There are no components available. Please add new components to see them listed here.",
+      "placeholder": {
+        "search": "Search components here..."
+      }
+    }
+  }
+}

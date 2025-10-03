@@ -1,0 +1,12 @@
+{
+  "components": {
+    "list": {
+      "title": "Danh sách các thành phần",
+      "noData": "Không tìm thấy thành phần nào",
+      "noDataDescription": "Không có thành phần nào khả dụng. Vui lòng thêm các thành phần mới để xem chúng được liệt kê ở đây.",
+      "placeholder": {
+        "search": "Tìm kiếm các thành phần ở đây..."
+      }
+    }
+  }
+}

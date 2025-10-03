@@ -48,10 +48,10 @@ export default function ComponentList() {
 
   return (
     <div className='pt-4 select-none'>
-      <div className='relative flex w-full max-w-[700px] items-center justify-start gap-4 py-4 md:flex-row'>
+      <div className='relative flex w-full max-w-[700px] items-center justify-start gap-4 pt-4 pb-10 md:flex-row'>
         <Input
           type='text'
-          placeholder={t('placeholder.search')}
+          placeholder={t('list.placeholder.search')}
           value={filters.search}
           onChange={(e) => dispatch(setSearchTerm(e.target.value))}
           className='flex-1 border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
