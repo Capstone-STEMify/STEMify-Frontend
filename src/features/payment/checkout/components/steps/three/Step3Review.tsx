@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import type { CheckoutState } from '../../../types/types';
+import Image from 'next/image';
 
 type Props = {
   state: CheckoutState;
@@ -13,6 +14,8 @@ type Props = {
   onPlaceOrder: () => void;
 };
 
+type PaymentMethod = 'stripe' | 'payos'
+
 export function Step3Review({
   state,
   currencyFmt,
@@ -22,7 +25,15 @@ export function Step3Review({
   onBack,
   onPlaceOrder,
 }: Props) {
+
+  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>('stripe');
+
   const subtotal = state.cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+  const paymentMethods = [
+    { id: 'stripe' as PaymentMethod, name: 'Stripe', logo: '/images/logo/stripe.jpg' },
+    { id: 'payos' as PaymentMethod, name: 'PayOs', logo: '/images/logo/payos.png' },
+  ];
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -62,14 +73,30 @@ export function Step3Review({
         </section>
 
         <section className="rounded-lg border border-gray-200 p-4">
-          <h3 className="mb-3 text-sm font-semibold text-gray-900">Payment</h3>
+          <h3 className="mb-3 text-sm font-semibold text-gray-900">Payment Method</h3>
           {/* Đây chỉ là mock UI để review. Tích hợp cổng thanh toán thật bạn có thể thay khối này */}
-          <div className="space-y-2 text-sm text-gray-600">
-            <p>
-              This is a review page. Replace this block with your real payment
-              form (Stripe/PayPal/etc.) when you’re ready.
-            </p>
-          </div>
+          <div className="mb-6">
+        <div className="grid grid-cols-2 gap-3">
+          {paymentMethods.map((method) => (
+            <button
+              key={method.id}
+              onClick={() => setSelectedPayment(method.id)}
+              className={`p-4 rounded-lg border-2 transition-all hover:scale-105 ${
+                selectedPayment === method.id
+                  ? 'border-blue-500 bg-blue-50 shadow-md'
+                  : 'border-gray-200 bg-white hover:border-gray-300'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-2">
+                <Image src={method.logo} alt='payment-icon' width={64} height={64} />
+                {/* <span className="text-sm font-medium text-gray-700">
+                  {method.name}
+                </span> */}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
 
           <div className="mt-4 flex items-center gap-3">
             <button
@@ -116,10 +143,7 @@ export function Step3Review({
             />
             <Field
               label="Delivery"
-              value={
-                state.deliveryOption === 'collection'
-                  ? 'Collection'
-                  : `Home Delivery (${state.deliveryMethod})`
+              value={ `Home Delivery (${state.deliveryMethod})`
               }
             />
           </div>

@@ -56,8 +56,8 @@ export default function NewsletterBanner() {
 
         {/* Privacy Notice */}
         <p className="text-sm mb-8 px-4">
-          *By submitting your email address, you agree to receive marketing emails from Hamleys.
-          <br className="md:hidden" />
+          *By submitting your email address, you agree to receive marketing emails from Stemify.
+          <br/>
           Click here to read our{' '}
           <a href="#" className="underline hover:text-blue-500 transition-colors hover:text-semibold">
             privacy policy
