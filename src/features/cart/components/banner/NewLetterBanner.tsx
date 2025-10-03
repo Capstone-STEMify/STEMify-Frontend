@@ -13,7 +13,7 @@ export default function NewsletterBanner() {
   };
 
   return (
-    <div className="w-full bg-yellow-50 p-4">
+    <div className="w-full bg-yellow-50 p-8">
       <div className="max-w-4xl mx-auto text-center">
         {/* Logo */}
         <div className="mb-6 flex justify-center items-center">
@@ -40,7 +40,7 @@ export default function NewsletterBanner() {
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-full transition-all hover:scale-110 active:scale-95"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-yellow-500 hover:bg-yellow-600 hover:rotate-90 text-white p-3 rounded-full transition-all hover:scale-110 active:scale-95"
               aria-label="Submit"
             >
               <svg 

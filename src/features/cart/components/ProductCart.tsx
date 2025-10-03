@@ -10,6 +10,7 @@ import { useSearchKitQuery } from '@/features/resource/kit/api/kitProductApi';
 import SEmpty from '@/components/shared/empty/SEmpty';
 import { useTranslations } from 'next-intl';
 import { RelatedProductsCarousel } from './related-product/RelatedProduct';
+import { useRouter } from 'next/navigation';
 
 interface CartItemData {
   id: string;
@@ -26,6 +27,7 @@ export default function ProductCart() {
 
   const t = useTranslations('kits')
   const kitParams = useAppSelector((state) => state.kit)
+  const router = useRouter()
   
   const { data: kitData, isLoading } = useSearchKitQuery(kitParams)
 
@@ -79,6 +81,7 @@ export default function ProductCart() {
 
   const handleCheckout = () => {
     alert('Proceeding to checkout...');
+    router.push('/payment-status')
   };
 
   if (!kitData || kitData.data.items.length === 0) {
