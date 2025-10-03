@@ -2,6 +2,7 @@
 import CardHorizontal from '@/components/shared/card/CardHorizontal'
 
 import SEmpty from '@/components/shared/empty/SEmpty'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SPagination } from '@/components/shared/SPagination'
 import { useDeleteKitMutation, useSearchKitQuery } from '@/features/resource/kit/api/kitProductApi'
 import { setPageIndex } from '@/features/resource/kit/slice/kitProductSlice'
@@ -47,7 +48,11 @@ export default function KitList() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
   }
   if (!kitData || kitData.data.items.length === 0) {
     return <SEmpty title={t('list.noData')} />
