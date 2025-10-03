@@ -82,7 +82,7 @@ export function useGetComponentColumn({ isPopup }: { isPopup?: boolean }): Colum
       {
         label: tc('button.update'),
         onClick: ({ original }) => {
-          //   openModal('upsertComponent', { componentId: original.id })
+          openModal('upsertComponent', { componentId: original.id })
         }
       },
       {

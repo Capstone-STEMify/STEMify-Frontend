@@ -1,5 +1,12 @@
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 
+export type ComponentFormData = {
+  name: string
+  description?: string
+  image: File | null
+  imagePreviewUrl?: string
+}
+
 export type Component = {
   id: number
   name: string

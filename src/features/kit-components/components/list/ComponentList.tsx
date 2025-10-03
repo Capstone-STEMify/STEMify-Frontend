@@ -61,7 +61,7 @@ export default function ComponentList() {
         <Button
           className='bg-amber-custom-400 cursor-pointer'
           onClick={() => {
-            openModal('upsertCurriculum')
+            openModal('upsertComponent')
           }}
         >
           <Plus className='mr-1 h-4 w-4' />

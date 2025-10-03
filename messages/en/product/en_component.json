@@ -7,6 +7,17 @@
       "placeholder": {
         "search": "Search components here..."
       }
+    },
+    "form": {
+      "title": {
+        "create": "Create New Component",
+        "edit": "Edit Component"
+      },
+      "fields": {
+        "name": "Component Name",
+        "description": "Description",
+        "image": "Component Image"
+      }
     }
   }
 }

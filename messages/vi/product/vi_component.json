@@ -7,6 +7,17 @@
       "placeholder": {
         "search": "Tìm kiếm các thành phần ở đây..."
       }
+    },
+    "form": {
+      "title": {
+        "create": "Tạo thành phần mới",
+        "edit": "Chỉnh sửa thành phần"
+      },
+      "fields": {
+        "name": "Tên",
+        "description": "Mô tả",
+        "image": "Hình ảnh"
+      }
     }
   }
 }
