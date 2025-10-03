@@ -4,6 +4,12 @@ import React, { useState } from 'react';
 import { DeliveryProgress } from './delivery/DeliveryProgess';
 import { CartItem } from './items/CartItems';
 import { PaymentSummary } from './summary/CartSummary';
+import NewsletterBanner from './banner/NewLetterBanner';
+import { useAppSelector } from '@/hooks/redux-hooks';
+import { useSearchKitQuery } from '@/features/resource/kit/api/kitProductApi';
+import SEmpty from '@/components/shared/empty/SEmpty';
+import { useTranslations } from 'next-intl';
+import { RelatedProductsCarousel } from './related-product/RelatedProduct';
 
 interface CartItemData {
   id: string;
@@ -17,6 +23,12 @@ interface CartItemData {
 }
 
 export default function ProductCart() {
+
+  const t = useTranslations('kits')
+  const kitParams = useAppSelector((state) => state.kit)
+  
+  const { data: kitData, isLoading } = useSearchKitQuery(kitParams)
+
   const [cartItems, setCartItems] = useState<CartItemData[]>([
     {
       id: '1',
@@ -69,10 +81,15 @@ export default function ProductCart() {
     alert('Proceeding to checkout...');
   };
 
+  if (!kitData || kitData.data.items.length === 0) {
+      return <SEmpty title={t('list.noData')} description={t('list.noDataDescription')} />
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
+      <div className="py-8 md:py-12">
         {/* Header */}
+        <div className='max-w-7xl mx-auto px-4 mb-20'>
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             Shopping Cart
@@ -125,6 +142,7 @@ export default function ProductCart() {
                 onRemoveAll={handleRemoveAll}
               />
             </div>
+
           </div>
         )}
 
@@ -134,6 +152,11 @@ export default function ProductCart() {
             ← Continue Shopping
           </button>
         )}
+        </div>
+        
+        <NewsletterBanner />
+
+        <RelatedProductsCarousel title='You May Also Like' products={kitData.data.items}/>
       </div>
     </div>
   );
