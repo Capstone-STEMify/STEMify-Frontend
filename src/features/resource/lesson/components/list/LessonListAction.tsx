@@ -62,18 +62,6 @@ export default function LessonListAction() {
       value
     }))
 
-  const renderFilterTag = (
-    key: keyof typeof filters,
-    label: string,
-    color: string,
-    options?: { value: string; label: string }[]
-  ) =>
-    filters[key] && (
-      <span className={`inline-flex items-center gap-1 rounded-full ${color} px-3 py-1 text-sm`}>
-        {label}: {getLabel(filters[key], options ?? [])}
-        <X className='h-3 w-3 cursor-pointer' onClick={() => dispatch(setParam({ key, value: '' }))} />
-      </span>
-    )
   useEffect(() => {
     dispatch(setSearchTerm(debouncedSearchQuery))
   }, [debouncedSearchQuery, dispatch])
@@ -176,24 +164,6 @@ export default function LessonListAction() {
                 />
               )}
             </div>
-
-            {/* Active Filters */}
-            {hasFilters && (
-              <div className='mt-4 flex flex-wrap gap-2'>
-                <span className='text-sm font-medium text-gray-600'>Active filters:</span>
-                {renderFilterTag('search', `${t('tags.search')}`, 'bg-blue-100 text-blue-800')}
-                {renderFilterTag('categoryId', `${t('tags.category')}`, 'bg-green-100 text-green-800', categoryOptions)}
-                {renderFilterTag(
-                  'ageRangeId',
-                  `${t('tags.ageRange')}`,
-                  'bg-purple-100 text-purple-800',
-                  ageRangeOptions
-                )}
-                {renderFilterTag('skillId', `${t('tags.skill')}`, 'bg-yellow-100 text-yellow-800', skillOptions)}
-                {renderFilterTag('standardId', `${t('tags.standard')}`, 'bg-red-100 text-red-800', standardOptions)}
-                {renderFilterTag('status', `${t('tags.status')}`, 'bg-gray-100 text-gray-800', statusOptions)}
-              </div>
-            )}
           </>
         )}
       </div>
