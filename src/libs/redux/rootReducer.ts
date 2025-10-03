@@ -39,6 +39,7 @@ import { tiptapSlice } from '@/components/tiptap/slice/tiptapSlice'
 import { assemblySlice } from '@/features/assembly/slice/assemblySlice'
 import { planApi } from '@/features/plan/api/planApi'
 import { planProductSlice } from '@/features/plan/slice/planProductSlice'
+import { workspaceTreeSlice } from '@/features/creator-3d/slice/workspaceTreeSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -65,6 +66,7 @@ export const rootReducer = combineReducers({
   tiptap: tiptapSlice.reducer,
   assembly: assemblySlice.reducer,
   planProduct: planProductSlice.reducer,
+  workspaceTree: workspaceTreeSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
