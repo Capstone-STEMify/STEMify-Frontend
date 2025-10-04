@@ -18,6 +18,9 @@
         "description": "Mô tả",
         "image": "Hình ảnh"
       }
+    },
+    "custom": {
+      "selectComponentTitle": "Chọn thành phần cho bộ dụng cụ"
     }
   }
 }

@@ -14,7 +14,12 @@ export type Component = {
   imageUrl?: string
 }
 
-export type KitComponent = Component & {
+export type KitComponent = {
+  id: number
+  componentId: number
+  name: string
+  description?: string
+  imageUrl?: string
   quantity: number
   isMainComponent: boolean
 }

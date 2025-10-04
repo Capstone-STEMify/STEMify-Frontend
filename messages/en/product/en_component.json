@@ -18,6 +18,9 @@
         "description": "Description",
         "image": "Component Image"
       }
+    },
+    "custom": {
+      "selectComponentTitle": "Select Components for Kit"
     }
   }
 }

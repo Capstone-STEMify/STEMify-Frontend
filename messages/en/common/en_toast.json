@@ -13,7 +13,8 @@
       "removeCourseFromCurriculum": "Successfully removed course from this curriculum!",
       "lessonStart": "Lesson Started!",
       "lessonStatus": "Lesson status updated to {status}!",
-      "sectionComplete": "Section Completed!"
+      "sectionComplete": "Section Completed!",
+      "addComponentToKit": "Successfully added components to kit!"
     },
     "errorMessage": "An error occurred. Please try again. ",
     "errorSpecific": {
