@@ -107,6 +107,9 @@
     "unit": {
       "minute": "minute",
       "age": "age"
+    },
+    "badge": {
+      "selected": "Selected"
     }
   }
 }

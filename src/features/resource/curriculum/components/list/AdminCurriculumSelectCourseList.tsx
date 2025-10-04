@@ -16,11 +16,13 @@ import { toast } from 'sonner'
 type AdminCurriculumSelectCourseListProps = {
   curriculumId: number
   onSuccess?: () => void
+  courseIds?: number[]
 }
 
 export default function AdminCurriculumSelectCourseList({
   curriculumId,
-  onSuccess
+  onSuccess,
+  courseIds
 }: AdminCurriculumSelectCourseListProps) {
   const t = useTranslations('curriculum')
   const tc = useTranslations('common')
@@ -32,6 +34,24 @@ export default function AdminCurriculumSelectCourseList({
   const filteredColumns = columns.filter((col) =>
     'accessorKey' in col ? visibleKeys.includes(col.accessorKey as string) : visibleKeys.includes(col.id ?? '')
   )
+  const extendedColumns = [
+    ...filteredColumns,
+    {
+      id: 'selectedStatus',
+      header: '',
+      cell: ({ row }: any) => {
+        const id = row.original.id
+        if (courseIds?.includes(id)) {
+          return (
+            <span className='rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-600'>
+              {tc('badge.selected')}
+            </span>
+          )
+        }
+        return null
+      }
+    }
+  ]
 
   const [selectedIds, setSelectedIds] = React.useState<number[]>([])
   const courseParams = useAppSelector((state) => state.course)
@@ -95,7 +115,7 @@ export default function AdminCurriculumSelectCourseList({
       </div>
       <DataTable
         data={rows}
-        columns={filteredColumns}
+        columns={extendedColumns}
         enableRowSelection
         pagingData={data}
         pagingParams={queryParams}
@@ -104,6 +124,7 @@ export default function AdminCurriculumSelectCourseList({
         onSelectionChange={(ids) => {
           setSelectedIds(ids)
         }}
+        disabledRowIds={courseIds}
       />
     </div>
   )

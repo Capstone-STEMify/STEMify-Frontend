@@ -1,3 +1,4 @@
+import { Kit } from '@/features/resource/kit/types/kit.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 // models
@@ -26,6 +27,7 @@ export type Course = {
   skillNames: string[]
   standardNames: string[]
   courseOrderIndex?: number
+  kitId?: number
 }
 
 export enum CourseStatus {

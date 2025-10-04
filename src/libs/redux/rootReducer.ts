@@ -40,6 +40,8 @@ import { assemblySlice } from '@/features/assembly/slice/assemblySlice'
 import { planApi } from '@/features/plan/api/planApi'
 import { planProductSlice } from '@/features/plan/slice/planProductSlice'
 import { workspaceTreeSlice } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import { componentSlice } from '@/features/kit-components/slice/componentSlice'
+import { componentApi } from '@/features/kit-components/api/kitComponentApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -67,6 +69,7 @@ export const rootReducer = combineReducers({
   assembly: assemblySlice.reducer,
   planProduct: planProductSlice.reducer,
   workspaceTree: workspaceTreeSlice.reducer,
+  component: componentSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -85,5 +88,6 @@ export const rootReducer = combineReducers({
   [learningOutcomeApi.reducerPath]: learningOutcomeApi.reducer,
   [courseLearningOutcomeApi.reducerPath]: courseLearningOutcomeApi.reducer,
   [kitProductApi.reducerPath]: kitProductApi.reducer,
-  [planApi.reducerPath]: planApi.reducer
+  [planApi.reducerPath]: planApi.reducer,
+  [componentApi.reducerPath]: componentApi.reducer
 })

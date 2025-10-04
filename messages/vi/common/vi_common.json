@@ -107,6 +107,9 @@
     "unit": {
       "minute": "phút",
       "age": "tuổi"
+    },
+    "badge": {
+      "selected": "Đã Chọn"
     }
   }
 }

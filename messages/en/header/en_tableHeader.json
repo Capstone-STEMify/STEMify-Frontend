@@ -26,6 +26,7 @@
     "ageRangeLabel": "Label",
     "minAge": "Min Age",
     "maxAge": "Max Age",
+    "quantity": "Quantity",
     "PLO": {
       "name": "Name",
       "description": "Description"

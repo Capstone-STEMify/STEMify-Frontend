@@ -22,6 +22,7 @@ export async function loadMessages(locale: string) {
   const kitMessages = (await import(`../../messages/${locale}/product/${locale}_kit.json`)).default
   const contentMessages = (await import(`../../messages/${locale}/lesson/${locale}_content.json`)).default
   const planMessages = (await import(`../../messages/${locale}/product/${locale}_plan.json`)).default
+  const componentMessages = (await import(`../../messages/${locale}/product/${locale}_component.json`)).default
 
   return {
     ...commonMessages,
@@ -44,6 +45,7 @@ export async function loadMessages(locale: string) {
     ...sectionMessages,
     ...kitMessages,
     ...contentMessages,
-    ...planMessages
+    ...planMessages,
+    ...componentMessages
   }
 }

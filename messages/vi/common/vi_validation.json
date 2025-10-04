@@ -1,5 +1,6 @@
 {
   "validation": {
+    "required": "Thông tin này là bắt buộc",
     "user": {
       "name": "Tên phải bắt đầu bằng chữ cái in hoa",
       "nameLength": "Tên phải có ít nhất {length} ký tự",
