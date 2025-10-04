@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Trash2, X } from 'lucide-react'
 import { Component } from '@/features/resource/kit/types/kit.type'
+import { useModal } from '@/providers/ModalProvider'
+import { useDeleteKitComponentsMutation } from '@/features/kit-components/api/kitComponentApi'
+import { Badge } from '@/components/shadcn/badge'
+import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 
 export type WhatsIncludedProps = {
   components: Component[]
@@ -9,7 +14,21 @@ export type WhatsIncludedProps = {
   addBtn?: React.ReactNode
 }
 const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn }) => {
+  const tt = useTranslations('toast')
   const [isExpanded, setIsExpanded] = useState(true)
+  const { openModal } = useModal()
+
+  const [deleteComponentFromKit] = useDeleteKitComponentsMutation()
+
+  const handleDelete = (id: number) => {
+    openModal('confirm', {
+      message: tt('confirmMessage.removeComponent'),
+      onConfirm: () => {
+        deleteComponentFromKit({ ids: [id] }).unwrap()
+        toast.success(tt('successMessage.removeComponent'))
+      }
+    })
+  }
 
   return (
     <motion.div
@@ -49,8 +68,16 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn 
               transition={{ delay: idx * 0.05 }}
               className='flex flex-col items-center'
             >
-              <div className='mb-2 flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-gray-50 p-2'>
+              <div className='relative mb-2 flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-gray-50 p-2'>
                 <img src={item.imageUrl} alt={item.name} className='h-full w-full object-contain' />
+
+                {/* button delete */}
+                <Badge
+                  onClick={() => handleDelete(item.id as number)}
+                  className='absolute top-1 right-1 cursor-pointer rounded-full bg-red-50 p-1 text-red-500 hover:text-red-600'
+                >
+                  <Trash2 size={14} />
+                </Badge>
               </div>
               <h4 className='mb-1 text-center leading-tight font-medium text-gray-900'>{item.name}</h4>
               <p className='text-sm text-gray-500'>x{item.quantity}</p>
