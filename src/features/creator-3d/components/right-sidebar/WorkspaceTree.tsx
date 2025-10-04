@@ -9,11 +9,19 @@ import {
   syncDataLoaderFeature,
   TreeState
 } from '@headless-tree/core'
-import { FolderIcon, FolderOpenIcon } from 'lucide-react'
+import { FolderIcon, FolderOpenIcon, Trash2 } from 'lucide-react'
 import { Tree, TreeItem, TreeItemLabel } from '@/components/shadcn/tree'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
-import { addAction, removeAction, setSelectedAction } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import {
+  addAction,
+  removeAction,
+  removeTargetFromAllActions,
+  setSelectedAction,
+  updateActionName
+} from '@/features/creator-3d/slice/workspaceTreeSlice'
+import { removeInstance, setSelectedId } from '@/features/creator-3d/slice/creatorSceneSlice'
+import { useModal } from '@/providers/ModalProvider'
 
 interface WorkspaceItem {
   id: string
@@ -22,10 +30,17 @@ interface WorkspaceItem {
   children?: string[]
 }
 
-export default function WorkspaceTree() {
+type WorkspaceTreeProps = {
+  selectedObjectId?: string | null
+}
+
+export default function WorkspaceTree({ selectedObjectId }: WorkspaceTreeProps) {
   const dispatch = useAppDispatch()
+  const { openModal } = useModal()
   const actions = useAppSelector((s: RootState) => s.workspaceTree.actions)
   const instances = useAppSelector((s: RootState) => s.creatorScene.instances)
+
+  const nextActionNumber = actions.length + 1
 
   const items = React.useMemo<Record<string, WorkspaceItem>>(() => {
     const base: Record<string, WorkspaceItem> = {
@@ -83,8 +98,22 @@ export default function WorkspaceTree() {
     alert('Workspace JSON has been logged in the console!')
   }
 
+  const handleDeleteComponent = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
+    e.stopPropagation()
+    openModal('confirm', {
+      message: 'Are you sure you want to delete this component?',
+      onConfirm: () => {
+        dispatch(removeInstance(id))
+        dispatch(removeTargetFromAllActions(id))
+      }
+    })
+  }
+  const [editingActionId, setEditingActionId] = React.useState<string | null>(null)
+
   const [state, setState] = React.useState<Partial<TreeState<any>>>({})
   const indent = 20
+  const selectedId = useAppSelector((s: RootState) => s.creatorScene.selectedId)
+  const selectedActionId = useAppSelector((s: RootState) => s.workspaceTree.selectedActionId)
 
   const tree = useTree<WorkspaceItem>({
     state,
@@ -102,16 +131,20 @@ export default function WorkspaceTree() {
   })
 
   const handleAddAction = () => {
-    const newId = `action-${Date.now()}`
+    const newId = `action_${nextActionNumber}`
     dispatch(addAction({ id: newId, name: 'New Action', type: 'highlight' }))
+    dispatch(setSelectedAction(newId))
   }
 
   React.useEffect(() => {
+    const selected = selectedActionId || selectedId
+
     setState((prev) => ({
       ...prev,
-      expandedItems: [...(prev.expandedItems ?? []), 'workspace', ...actions.map((a) => a.id)]
+      expandedItems: [...(prev.expandedItems ?? []), 'workspace', ...actions.map((a) => a.id)],
+      selectedItems: selected ? [selected] : []
     }))
-  }, [instances, actions])
+  }, [instances, actions, selectedId, selectedActionId])
 
   return (
     <div>
@@ -133,9 +166,17 @@ export default function WorkspaceTree() {
           return (
             <TreeItem key={item.getId()} item={item}>
               <TreeItemLabel
+                onDoubleClick={() => {
+                  if (data.type === 'action') {
+                    setEditingActionId(data.id) // double click để edit
+                  }
+                }}
                 onClick={() => {
                   if (data.type === 'action') {
                     dispatch(setSelectedAction(data.id))
+                  }
+                  if (data.type === 'component') {
+                    dispatch(setSelectedId(data.id))
                   }
                 }}
               >
@@ -143,7 +184,38 @@ export default function WorkspaceTree() {
                   <span className='flex items-center gap-2'>
                     {item.isFolder() &&
                       (item.isExpanded() ? <FolderOpenIcon className='size-4' /> : <FolderIcon className='size-4' />)}
-                    {item.getItemName()}
+
+                    {editingActionId === data.id ? (
+                      <input
+                        type='text'
+                        autoFocus
+                        defaultValue={data.name}
+                        className='rounded border px-1 text-xs'
+                        onBlur={(e) => {
+                          const newName = e.target.value.trim()
+                          if (newName) {
+                            dispatch(updateActionName({ id: data.id, newName }))
+                          }
+                          setEditingActionId(null)
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            const target = e.target as HTMLInputElement
+                            const newName = target.value.trim()
+                            if (newName) {
+                              dispatch(updateActionName({ id: data.id, newName }))
+                            }
+                            setEditingActionId(null)
+                          }
+                          if (e.key === 'Escape') {
+                            setEditingActionId(null)
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      <span>{item.getItemName()}</span>
+                    )}
                   </span>
 
                   {data.type === 'action' && (
@@ -155,6 +227,12 @@ export default function WorkspaceTree() {
                     >
                       Delete
                     </span>
+                  )}
+
+                  {data.type === 'component' && (
+                    <div onClick={(e) => handleDeleteComponent(e, data.id)}>
+                      <Trash2 className='size-4 cursor-pointer text-red-500 hover:text-red-700' />
+                    </div>
                   )}
                 </span>
               </TreeItemLabel>

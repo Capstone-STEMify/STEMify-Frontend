@@ -11,7 +11,7 @@ import { addInstance, setSelectedId } from '@/features/creator-3d/slice/creatorS
 import { addTargetToAction } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 import { toast } from 'sonner'
 
 export function createInstanceFromTemplate(
@@ -102,8 +102,14 @@ export function useAddObject() {
   const dispatch = useAppDispatch()
   const selectedActionId = useAppSelector((s) => s.workspaceTree.selectedActionId)
 
+  const counters = useRef<{ [key: string]: number }>({
+    straw: 0,
+    connector: 0
+  })
+
   const generateId = useCallback((prefix: string) => {
-    return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 1000)}`
+    counters.current[prefix] = (counters.current[prefix] ?? 0) + 1
+    return `${prefix}_${counters.current[prefix]}`
   }, [])
 
   return (template: ComponentTemplate, position: { x: number; y: number; z: number }) => {

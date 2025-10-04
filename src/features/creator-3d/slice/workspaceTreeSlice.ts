@@ -50,14 +50,14 @@ interface WorkspaceTreeState {
 const initialState: WorkspaceTreeState = {
   actions: [
     {
-      id: 'action-1',
+      id: 'action_1',
       name: 'Default Action',
       type: 'highlight',
       targets: [],
       duration: 2
     }
   ],
-  selectedActionId: null
+  selectedActionId: 'action_1'
 }
 
 export const workspaceTreeSlice = createSlice({
@@ -145,6 +145,32 @@ export const workspaceTreeSlice = createSlice({
       state.selectedActionId = action.payload
     },
 
+    removeTargetFromAllActions: (state, action: PayloadAction<string>) => {
+      const targetId = action.payload
+      state.actions.forEach((act) => {
+        if (act.type === 'highlight' || act.type === 'transform_arm') {
+          act.targets = act.targets.filter((t) => t !== targetId)
+        }
+        // nếu transform_arm có connectorArmTransforms thì cũng xóa key liên quan
+        if (act.type === 'transform_arm' && act.connectorArmTransforms[targetId]) {
+          delete act.connectorArmTransforms[targetId]
+        }
+      })
+    },
+
+    updateActionName: (state, action: PayloadAction<{ id: string; newName: string }>) => {
+      const act = state.actions.find((a) => a.id === action.payload.id)
+      if (!act) return
+
+      // cập nhật name
+      act.name = action.payload.newName
+
+      // cập nhật id theo rule: lowercase + replace space = _
+      const newId = action.payload.newName.toLowerCase().replace(/\s+/g, '_')
+
+      // đổi id của action
+      act.id = newId
+    },
     resetActions: () => initialState
   }
 })
@@ -156,7 +182,9 @@ export const {
   updateConnectorArms,
   updateAction,
   resetActions,
-  setSelectedAction
+  setSelectedAction,
+  removeTargetFromAllActions,
+  updateActionName
 } = workspaceTreeSlice.actions
 
 export default workspaceTreeSlice.reducer

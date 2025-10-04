@@ -17,7 +17,7 @@ import {
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
 import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
-import { resetActions } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import { removeTargetFromAllActions, resetActions } from '@/features/creator-3d/slice/workspaceTreeSlice'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()
@@ -62,6 +62,7 @@ export function Creator3D() {
   const handleObjectDelete = useCallback(
     (objectId: string) => {
       dispatch(removeInstance(objectId))
+      dispatch(removeTargetFromAllActions(objectId))
     },
     [dispatch]
   )
@@ -109,7 +110,7 @@ export function Creator3D() {
       {/* Object Inspector */}
       <div className='m-2 flex w-80 flex-col gap-4'>
         <div className='rounded-2xl bg-white p-4 shadow'>
-          <WorkspaceTree />
+          <WorkspaceTree selectedObjectId={selectedObject?.id} />
         </div>
         <div className='flex h-full w-80 flex-col overflow-hidden rounded-2xl bg-white'>
           <ObjectInspector
