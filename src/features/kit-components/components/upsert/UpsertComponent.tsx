@@ -67,8 +67,8 @@ function mapComponentToFormData(component: Component): ComponentFormData {
   return {
     name: component.name ?? '',
     description: component.description ?? '',
-    image: null as any
-    // imagePreviewUrl: component.imagePreviewUrl ?? undefined
+    image: null as any,
+    imagePreviewUrl: component.imageUrl ?? undefined
   }
 }
 
@@ -162,7 +162,7 @@ export default function UpsertComponent({ componentId, onSuccess }: UpsertCompon
       <form.AppField name='name' children={(field) => <field.TextField label={t('form.fields.name')} />} />
       <form.AppField
         name='description'
-        children={(field) => <field.TextAreaField disabled={!!componentId} label={t('form.fields.description')} />}
+        children={(field) => <field.TextAreaField label={t('form.fields.description')} />}
       />
       <div className='mb-3 flex justify-end gap-3'>
         <Button type='button' variant='outline' onClick={closeModal}>

@@ -13,6 +13,7 @@ import {
   IconHelp,
   IconInnerShadowTop,
   IconListDetails,
+  IconPuzzle,
   IconReport,
   IconSearch,
   IconSettings
@@ -67,6 +68,11 @@ const data = {
       title: 'side_bar.kit',
       url: '/admin/kit',
       icon: IconBox
+    },
+    {
+      title: 'side_bar.component',
+      url: '/admin/component',
+      icon: IconPuzzle
     }
   ],
   navDesign: [

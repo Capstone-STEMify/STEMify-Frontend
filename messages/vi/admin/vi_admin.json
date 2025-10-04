@@ -18,7 +18,8 @@
       "straw_labs": "Straw Labs",
       "straw_labs_creator": "Trình tạo Straw Labs",
       "makecode": "Make Code",
-      "makecode_creator": "Trình tạo Make Code"
+      "makecode_creator": "Trình tạo Make Code",
+      "component": "Thành phần kit"
     },
     "course_management": {
       "title": "Quản lý tài nguyên",
