@@ -101,6 +101,7 @@ export function createInstanceFromTemplate(
 export function useAddObject() {
   const dispatch = useAppDispatch()
   const selectedActionId = useAppSelector((s) => s.workspaceTree.selectedActionId)
+  const actions = useAppSelector((s) => s.workspaceTree.actions)
 
   const counters = useRef<{ [key: string]: number }>({
     straw: 0,
@@ -114,7 +115,7 @@ export function useAddObject() {
 
   return (template: ComponentTemplate, position: { x: number; y: number; z: number }) => {
     const instance = createInstanceFromTemplate(template, position, generateId)
-    if (selectedActionId) {
+    if (selectedActionId && actions.find((a) => a.id === selectedActionId)) {
       dispatch(addInstance(instance))
       dispatch(setSelectedId(instance.id))
       dispatch(addTargetToAction({ actionId: selectedActionId, targetId: instance.id }))
@@ -169,6 +170,7 @@ export function exportAssembly(
 ): ExportedAssembly {
   const instances = state.creatorScene.instances
   const now = new Date().toISOString()
+  const actions = state.workspaceTree.actions
 
   // Straws
   const straws = instances
@@ -212,38 +214,53 @@ export function exportAssembly(
     instances: instanceList
   }))
 
-  // Actions
-  const actions: any[] = []
+  // // Actions
+  // const actions: any[] = []
 
-  // Highlight tất cả
-  actions.push({
-    id: 'action_show_all',
-    name: 'Show All Components',
-    description: 'Highlights all components in the scene',
-    type: 'highlight',
-    targets: instances.map((i) => i.id),
-    duration: 2,
-    animation: {
-      params: { colorHighlight: '#FFD700', pulseEffect: true }
-    }
-  })
+  // // Highlight tất cả
+  // actions.push({
+  //   id: 'action_show_all',
+  //   name: 'Show All Components',
+  //   description: 'Highlights all components in the scene',
+  //   type: 'highlight',
+  //   targets: instances.map((i) => i.id),
+  //   duration: 2,
+  //   animation: {
+  //     params: { colorHighlight: '#FFD700', pulseEffect: true }
+  //   }
+  // })
 
-  // ✅ Xuất transform_arm dựa trên arms đã lưu trong state (nếu có)
-  instances.forEach((inst) => {
-    if (inst.category === 'connector' && inst.arms && Object.keys(inst.arms).length > 0) {
-      actions.push({
-        id: `action_transform_${inst.id}`,
-        name: `Adjust Arms of ${inst.id}`,
-        type: 'transform_arm',
-        targets: [inst.id],
-        duration: 2,
-        connectorArmTransforms: {
-          [inst.id]: inst.arms
-        },
-        interpolation: 'easeInOut'
-      })
-    }
-  })
+  // // ✅ Xuất transform_arm dựa trên arms đã lưu trong state (nếu có)
+  // instances.forEach((inst) => {
+  //   if (inst.category === 'connector' && inst.arms && Object.keys(inst.arms).length > 0) {
+  //     actions.push({
+  //       id: `action_transform_${inst.id}`,
+  //       name: `Adjust Arms of ${inst.id}`,
+  //       type: 'transform_arm',
+  //       targets: [inst.id],
+  //       duration: 2,
+  //       connectorArmTransforms: {
+  //         [inst.id]: inst.arms
+  //       },
+  //       interpolation: 'easeInOut'
+  //     })
+  //   }
+  // })
+
+  const exportedActions = actions.map((a) => ({
+    id: a.id,
+    name: a.name,
+    type: a.type,
+    targets: a.targets,
+    duration: a.duration,
+    ...(a.type === 'highlight' && { animation: a.animation }),
+    ...(a.type === 'transform_arm' && {
+      connectorArmTransforms: a.connectorArmTransforms,
+      interpolation: a.interpolation,
+      instantAppear: a.instantAppear
+    }),
+    ...(a.type === 'rotate_highlight' && { rotationSpeed: a.rotationSpeed })
+  }))
 
   return {
     metadata: {
@@ -271,7 +288,7 @@ export function exportAssembly(
       straws: strawInstances,
       connectors: connectorInstances
     },
-    actions,
+    actions: exportedActions,
     activities: [
       {
         id: 'custom_assembly',
@@ -307,8 +324,9 @@ export function exportAssembly(
 }
 
 export function useExportAssembly() {
-  const state = useAppSelector((s) => s.creatorScene)
+  const creatorScene = useAppSelector((s) => s.creatorScene)
+  const workspaceTree = useAppSelector((s) => s.workspaceTree)
   return (metadata: { title: string; description: string; author: string }) => {
-    return exportAssembly({ creatorScene: state } as RootState, metadata)
+    return exportAssembly({ creatorScene, workspaceTree } as RootState, metadata)
   }
 }

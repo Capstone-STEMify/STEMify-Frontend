@@ -1,3 +1,5 @@
+import { removeInstance } from '@/features/creator-3d/slice/creatorSceneSlice'
+import { AppThunk } from '@/libs/redux/store'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface Animation {
@@ -100,8 +102,11 @@ export const workspaceTreeSlice = createSlice({
 
     removeAction: (state, action: PayloadAction<string>) => {
       state.actions = state.actions.filter((a) => a.id !== action.payload)
-    },
 
+      if (state.selectedActionId === action.payload) {
+        state.selectedActionId = state.actions.length > 0 ? state.actions[0].id : null
+      }
+    },
     addTargetToAction: (state, action: PayloadAction<{ actionId: string; targetId: string }>) => {
       const act = state.actions.find((a) => a.id === action.payload.actionId)
       if (!act) return
@@ -188,3 +193,23 @@ export const {
 } = workspaceTreeSlice.actions
 
 export default workspaceTreeSlice.reducer
+
+export const removeActionWithInstances =
+  (actionId: string): AppThunk =>
+  (dispatch, getState) => {
+    const { workspaceTree } = getState()
+    const act = workspaceTree.actions.find((a) => a.id === actionId)
+    if (!act) return
+
+    const targets = act.type === 'highlight' || act.type === 'transform_arm' ? [...act.targets] : []
+
+    dispatch(removeAction(actionId))
+
+    // reset selectedActionId nếu xoá xong thì hết action
+    const { workspaceTree: after } = getState()
+    if (!after.actions.find((a) => a.id === after.selectedActionId)) {
+      dispatch(setSelectedAction(after.actions.length > 0 ? after.actions[0].id : null))
+    }
+
+    targets.forEach((t) => dispatch(removeInstance(t)))
+  }

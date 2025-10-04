@@ -16,6 +16,7 @@ import { RootState } from '@/libs/redux/store'
 import {
   addAction,
   removeAction,
+  removeActionWithInstances,
   removeTargetFromAllActions,
   setSelectedAction,
   updateActionName
@@ -168,7 +169,7 @@ export default function WorkspaceTree({ selectedObjectId }: WorkspaceTreeProps) 
               <TreeItemLabel
                 onDoubleClick={() => {
                   if (data.type === 'action') {
-                    setEditingActionId(data.id) // double click để edit
+                    setEditingActionId(data.id)
                   }
                 }}
                 onClick={() => {
@@ -222,7 +223,7 @@ export default function WorkspaceTree({ selectedObjectId }: WorkspaceTreeProps) 
                     <span
                       role='button'
                       tabIndex={0}
-                      onClick={() => dispatch(removeAction(data.id))}
+                      onClick={() => dispatch(removeActionWithInstances(data.id))}
                       className='rounded bg-red-100 px-2 py-1 text-xs hover:bg-red-200'
                     >
                       Delete
