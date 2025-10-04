@@ -1,12 +1,11 @@
-import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import SearchBar from '@/components/shared/search/SearchBar'
 import { useCreateKitComponentsMutation, useSearchComponentQuery } from '@/features/kit-components/api/kitComponentApi'
 import { useGetComponentColumn } from '@/features/kit-components/components/list/ComponentColumn'
+import { setPageIndex, setPageSize, setSearchTerm } from '@/features/kit-components/slice/componentSlice'
 import { ComponentSliceParams, KitComponent } from '@/features/kit-components/types/kit-component.type'
-import { setPageIndex, setPageSize, setSearchTerm } from '@/features/resource/course/slice/courseSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
@@ -16,9 +15,10 @@ import { toast } from 'sonner'
 type SelectComponentListModalProps = {
   kitId: number
   onSuccess?: () => void
+  componentIds?: number[]
 }
 
-export default function SelectComponentList({ kitId, onSuccess }: SelectComponentListModalProps) {
+export default function SelectComponentList({ kitId, onSuccess, componentIds }: SelectComponentListModalProps) {
   const t = useTranslations('components')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
@@ -54,6 +54,21 @@ export default function SelectComponentList({ kitId, onSuccess }: SelectComponen
             }}
           />
         )
+      }
+    },
+    {
+      id: 'selectedStatus',
+      header: '',
+      cell: ({ row }: any) => {
+        const id = row.original.id
+        if (componentIds?.includes(id)) {
+          return (
+            <span className='rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-600'>
+              {tc('badge.selected')}
+            </span>
+          )
+        }
+        return null
       }
     }
   ]
@@ -123,6 +138,7 @@ export default function SelectComponentList({ kitId, onSuccess }: SelectComponen
             })
           setSelectedComponents(newSelected)
         }}
+        disabledRowIds={componentIds}
       />
     </div>
   )

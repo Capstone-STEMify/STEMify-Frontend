@@ -15,6 +15,7 @@ export type WhatsIncludedProps = {
 }
 const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn }) => {
   const tt = useTranslations('toast')
+  const t = useTranslations('kits')
   const [isExpanded, setIsExpanded] = useState(true)
   const { openModal } = useModal()
 
@@ -40,7 +41,7 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn 
     >
       <div className='mb-8 flex cursor-pointer items-center justify-between'>
         <div className='flex items-center gap-4'>
-          <h2 className='text-4xl font-semibold text-gray-900'>What's Included</h2>
+          <h2 className='text-4xl font-semibold text-gray-900'>{t('detail.whatsIncluded')}</h2>
           {addBtn && <div>{addBtn}</div>}
         </div>
         <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.3 }}>

@@ -99,7 +99,7 @@ export default function KitListSection(props: KitListProps) {
                 openModal('confirm', {
                   message: tt('confirmMessage.addAnotherKit'),
                   onConfirm: () => {
-                    openModal('kitListTableModal', { kitIds: finalKits.map((kit) => kit.id) })
+                    openModal('kitListTableModal', { kitId: props.kitId })
                   }
                 })
               } else {

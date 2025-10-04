@@ -46,6 +46,7 @@ export type DataTableProps<TData extends { id: string | number }, TValue> = {
   handlePageChange?: (page: number) => void
   enableDnd?: boolean
   onReorder?: (newData: TData[]) => void
+  disabledRowIds?: (string | number)[]
 }
 
 function DraggableRow<TData extends { id: string | number }>({ row }: { row: Row<TData> }) {
@@ -85,7 +86,8 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   onSelectionChange,
   handlePageChange,
   enableDnd,
-  onReorder
+  onReorder,
+  disabledRowIds
 }: DataTableProps<TData, TValue>) {
   const tc = useTranslations('common')
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -186,13 +188,20 @@ export function DataTable<TData extends { id: string | number }, TValue>({
             </TableHeader>
             <TableBody>
               {table.getRowModel().rows.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                    ))}
-                  </TableRow>
-                ))
+                table.getRowModel().rows.map((row) => {
+                  const isDisabled = disabledRowIds?.includes(row.original.id)
+                  return (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                      className={isDisabled ? 'pointer-events-none bg-blue-50 opacity-60' : ''}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                      ))}
+                    </TableRow>
+                  )
+                })
               ) : (
                 <TableRow>
                   <TableCell colSpan={table.getAllLeafColumns().length} className='h-24 text-center'>

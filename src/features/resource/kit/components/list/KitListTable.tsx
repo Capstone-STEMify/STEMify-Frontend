@@ -28,7 +28,24 @@ export default function KitListTable({ onSuccess, kitId }: KitListTableProps) {
   const { closeModal } = useModal()
   const dispatch = useAppDispatch()
   const [selectedId, setSelectedId] = React.useState<number | undefined>(kitId)
-  const columns = useGetKitColumn()
+  const columns = [
+    ...useGetKitColumn(),
+    {
+      id: 'selectedStatus',
+      header: '',
+      cell: ({ row }: any) => {
+        const id = row.original.id
+        if (id === kitId) {
+          return (
+            <span className='rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-600'>
+              {tc('badge.selected')}
+            </span>
+          )
+        }
+        return null
+      }
+    }
+  ]
 
   const queryParams: KitSliceParams = useAppSelector((state) => state.kit)
   const { data: kitData, isLoading } = useSearchKitQuery(queryParams)
@@ -89,6 +106,7 @@ export default function KitListTable({ onSuccess, kitId }: KitListTableProps) {
           const firstId = Array.from(ids)[0]
           setSelectedId(firstId ?? undefined)
         }}
+        disabledRowIds={kitId ? [kitId] : undefined}
       />
     </div>
   )

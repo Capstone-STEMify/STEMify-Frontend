@@ -7,9 +7,10 @@ import SelectComponentList from '@/features/kit-components/components/list/Selec
 interface SelectComponentListModalProps {
   kitId: number
   onConfirm?: () => void
+  componentIds?: number[]
 }
 
-export default function SelectComponentListModal({ kitId, onConfirm }: SelectComponentListModalProps) {
+export default function SelectComponentListModal({ kitId, onConfirm, componentIds }: SelectComponentListModalProps) {
   const t = useTranslations('components')
   const { closeModal } = useModal()
 
@@ -25,7 +26,7 @@ export default function SelectComponentListModal({ kitId, onConfirm }: SelectCom
       <DialogContent className='h-fit w-full max-w-4xl'>
         <DialogTitle>{t('custom.selectComponentTitle')}</DialogTitle>
 
-        <SelectComponentList kitId={kitId} onSuccess={handleSuccess} />
+        <SelectComponentList kitId={kitId} onSuccess={handleSuccess} componentIds={componentIds} />
       </DialogContent>
     </Dialog>
   )

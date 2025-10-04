@@ -46,7 +46,8 @@
       "age": "Age",
       "preOrder": "Pre-order",
       "weight": "Weight",
-      "dimensions": "Dimensions"
+      "dimensions": "Dimensions",
+      "whatsIncluded": "What's Included"
     },
     "form": {
       "title": {

@@ -46,7 +46,8 @@
       "age": "Độ tuổi",
       "preOrder": "Đặt trước",
       "weight": "Trọng lượng",
-      "dimensions": "Kích thước"
+      "dimensions": "Kích thước",
+      "whatsIncluded": "Bao gồm các thành phần"
     },
     "form": {
       "title": {

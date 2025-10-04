@@ -42,6 +42,7 @@ export enum KitProductStatus {
 
 export type Component = {
   id: number
+  componentId: number
   name: string
   imageUrl?: string
   quantity: number
