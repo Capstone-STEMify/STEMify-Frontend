@@ -15,7 +15,8 @@
       "lessonStatus": "Lesson status updated to {status}!",
       "sectionComplete": "Section Completed!",
       "addComponentToKit": "Successfully added components to kit!",
-      "removeComponent": "Successfully removed components from kit!"
+      "removeComponent": "Successfully removed components from kit!",
+      "updateComponentInKit": "Successfully updated kit components!"
     },
     "errorMessage": "An error occurred. Please try again. ",
     "errorSpecific": {

@@ -3,14 +3,19 @@ import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 import { useTranslations } from 'next-intl'
 import SelectComponentList from '@/features/kit-components/components/list/SelectComponentList'
+import { KitComponent } from '@/features/kit-components/types/kit-component.type'
 
 interface SelectComponentListModalProps {
   kitId: number
   onConfirm?: () => void
-  componentIds?: number[]
+  existedComponents?: KitComponent[]
 }
 
-export default function SelectComponentListModal({ kitId, onConfirm, componentIds }: SelectComponentListModalProps) {
+export default function SelectComponentListModal({
+  kitId,
+  onConfirm,
+  existedComponents
+}: SelectComponentListModalProps) {
   const t = useTranslations('components')
   const { closeModal } = useModal()
 
@@ -26,7 +31,7 @@ export default function SelectComponentListModal({ kitId, onConfirm, componentId
       <DialogContent className='h-fit w-full max-w-4xl'>
         <DialogTitle>{t('custom.selectComponentTitle')}</DialogTitle>
 
-        <SelectComponentList kitId={kitId} onSuccess={handleSuccess} componentIds={componentIds} />
+        <SelectComponentList kitId={kitId} onSuccess={handleSuccess} existedComponents={existedComponents} />
       </DialogContent>
     </Dialog>
   )

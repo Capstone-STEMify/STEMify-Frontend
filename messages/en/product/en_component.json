@@ -6,7 +6,9 @@
       "noDataDescription": "There are no components available. Please add new components to see them listed here.",
       "placeholder": {
         "search": "Search components here..."
-      }
+      },
+      "existedComponents": "Added Components",
+      "availableComponents": "Available Components"
     },
     "form": {
       "title": {

@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown, Trash2, X } from 'lucide-react'
-import { Component } from '@/features/resource/kit/types/kit.type'
 import { useModal } from '@/providers/ModalProvider'
 import { useDeleteKitComponentsMutation } from '@/features/kit-components/api/kitComponentApi'
 import { Badge } from '@/components/shadcn/badge'
 import { toast } from 'sonner'
 import { useTranslations } from 'next-intl'
+import { Component, KitComponent } from '@/features/kit-components/types/kit-component.type'
 
 export type WhatsIncludedProps = {
-  components: Component[]
+  components: KitComponent[]
   name?: string
   addBtn?: React.ReactNode
 }

@@ -6,11 +6,13 @@
       "noDataDescription": "Không có thành phần nào khả dụng. Vui lòng thêm các thành phần mới để xem chúng được liệt kê ở đây.",
       "placeholder": {
         "search": "Tìm kiếm các thành phần ở đây..."
-      }
+      },
+      "existedComponents": "Đã có trong bộ kit",
+      "availableComponents": "Chưa thêm vào bộ kit"
     },
     "form": {
       "title": {
-        "create": "Tạo thành phần mới",
+        "create": "Đã có trong bộ kit",
         "edit": "Chỉnh sửa thành phần"
       },
       "fields": {
