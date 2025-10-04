@@ -43,7 +43,7 @@ export function useGetComponentColumn({ isPopup }: { isPopup?: boolean }): Colum
       cell: ({ row }) => {
         const src = row.getValue<string>('imageUrl')
         return (
-          <div className='flex h-16 justify-center overflow-hidden rounded'>
+          <div className='flex h-16 w-36 justify-center overflow-hidden rounded'>
             {src ? (
               <Image src={src} alt='preview' className='aspect-square object-contain' width={65} height={65} />
             ) : (

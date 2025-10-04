@@ -89,9 +89,9 @@ const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index
       </div>
 
       {/* Product Info */}
-      <div className='p-6'>
-        <h3 className='text-md mb-1 font-bold text-gray-900'>{product.name}</h3>
-        <p className='mb-4 line-clamp-2 text-sm text-gray-600'>{product.description}</p>
+      <div className='p-6 pt-4'>
+        <h3 className='text-md mb-1 line-clamp-2 min-h-[3rem] font-bold text-gray-900'>{product.name}</h3>
+        <p className='mb-1 line-clamp-2 text-sm text-gray-600'>{product.description}</p>
         <div className='mb-3 flex items-center gap-2'>
           <StarRating rating={5} />
           <span className='text-sm font-medium text-gray-400 drop-shadow-md'>
