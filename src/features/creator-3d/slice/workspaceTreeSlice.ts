@@ -44,6 +44,7 @@ export type WorkspaceAction =
 
 interface WorkspaceTreeState {
   actions: WorkspaceAction[]
+  selectedActionId?: string | null
 }
 
 const initialState: WorkspaceTreeState = {
@@ -55,7 +56,8 @@ const initialState: WorkspaceTreeState = {
       targets: [],
       duration: 2
     }
-  ]
+  ],
+  selectedActionId: null
 }
 
 export const workspaceTreeSlice = createSlice({
@@ -72,13 +74,17 @@ export const workspaceTreeSlice = createSlice({
           duration: 2
         })
       } else if (action.payload.type === 'transform_arm') {
+        const prevHighlight = [...state.actions].reverse().find((a) => a.type === 'highlight')
+
         state.actions.push({
           id: action.payload.id,
           name: action.payload.name,
           type: 'transform_arm',
-          targets: [],
+          targets: prevHighlight ? prevHighlight.targets : [],
           duration: 2,
-          connectorArmTransforms: {}
+          connectorArmTransforms: {},
+          instantAppear: true,
+          interpolation: 'easeInOut'
         })
       } else if (action.payload.type === 'rotate_highlight') {
         state.actions.push({
@@ -99,13 +105,21 @@ export const workspaceTreeSlice = createSlice({
     addTargetToAction: (state, action: PayloadAction<{ actionId: string; targetId: string }>) => {
       const act = state.actions.find((a) => a.id === action.payload.actionId)
       if (!act) return
-      if (act.type === 'highlight' || act.type === 'transform_arm') {
+
+      if (act.type === 'highlight') {
+        // highlight → cho phép add nhiều target khác nhau
         if (!act.targets.includes(action.payload.targetId)) {
           act.targets.push(action.payload.targetId)
         }
       }
-    },
 
+      if (act.type === 'transform_arm') {
+        // transform_arm → targets phải giống highlight gần nhất
+        const idx = state.actions.findIndex((a) => a.id === action.payload.actionId)
+        const prevHighlight = [...state.actions.slice(0, idx)].reverse().find((a) => a.type === 'highlight')
+        act.targets = prevHighlight ? [...prevHighlight.targets] : []
+      }
+    },
     updateConnectorArms: (
       state,
       action: PayloadAction<{
@@ -127,19 +141,11 @@ export const workspaceTreeSlice = createSlice({
       }
     },
 
-    resetActions: () => initialState,
-    syncInstancesToTargets: (state, action: PayloadAction<string[]>) => {
-      // action.payload = danh sách tất cả instance id hiện tại
-      state.actions = state.actions.map((act) => {
-        if (act.type === 'highlight' || act.type === 'transform_arm' || act.type === 'rotate_highlight') {
-          return {
-            ...act,
-            targets: action.payload // đồng bộ targets luôn bằng toàn bộ instances
-          }
-        }
-        return act
-      })
-    }
+    setSelectedAction: (state, action: PayloadAction<string | null>) => {
+      state.selectedActionId = action.payload
+    },
+
+    resetActions: () => initialState
   }
 })
 
@@ -150,7 +156,7 @@ export const {
   updateConnectorArms,
   updateAction,
   resetActions,
-  syncInstancesToTargets
+  setSelectedAction
 } = workspaceTreeSlice.actions
 
 export default workspaceTreeSlice.reducer

@@ -13,7 +13,7 @@ import { FolderIcon, FolderOpenIcon } from 'lucide-react'
 import { Tree, TreeItem, TreeItemLabel } from '@/components/shadcn/tree'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
-import { addAction, removeAction } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import { addAction, removeAction, setSelectedAction } from '@/features/creator-3d/slice/workspaceTreeSlice'
 
 interface WorkspaceItem {
   id: string
@@ -33,7 +33,8 @@ export default function WorkspaceTree() {
     }
 
     actions.forEach((a) => {
-      const children = Array.isArray(a.targets) ? a.targets : instances.map((i) => i.id)
+      const children = Array.isArray(a.targets) ? a.targets : []
+
       base[a.id] = {
         id: a.id,
         type: 'action',
@@ -131,7 +132,13 @@ export default function WorkspaceTree() {
           const data = item.getItemData()
           return (
             <TreeItem key={item.getId()} item={item}>
-              <TreeItemLabel>
+              <TreeItemLabel
+                onClick={() => {
+                  if (data.type === 'action') {
+                    dispatch(setSelectedAction(data.id))
+                  }
+                }}
+              >
                 <span className='flex w-full items-center justify-between'>
                   <span className='flex items-center gap-2'>
                     {item.isFolder() &&

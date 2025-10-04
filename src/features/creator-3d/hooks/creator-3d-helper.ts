@@ -8,10 +8,11 @@ import {
   Transform
 } from '@/features/assembly/types/assembly.types'
 import { addInstance, setSelectedId } from '@/features/creator-3d/slice/creatorSceneSlice'
-import { syncInstancesToTargets } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import { addTargetToAction } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
 import { useCallback } from 'react'
+import { toast } from 'sonner'
 
 export function createInstanceFromTemplate(
   template: ComponentTemplate,
@@ -99,7 +100,7 @@ export function createInstanceFromTemplate(
 // useAddObject.ts
 export function useAddObject() {
   const dispatch = useAppDispatch()
-  const instances = useAppSelector((s) => s.creatorScene.instances)
+  const selectedActionId = useAppSelector((s) => s.workspaceTree.selectedActionId)
 
   const generateId = useCallback((prefix: string) => {
     return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 1000)}`
@@ -107,11 +108,13 @@ export function useAddObject() {
 
   return (template: ComponentTemplate, position: { x: number; y: number; z: number }) => {
     const instance = createInstanceFromTemplate(template, position, generateId)
-    dispatch(addInstance(instance))
-    dispatch(setSelectedId(instance.id))
-    const allIds = [...instances.map((i) => i.id), instance.id]
-
-    dispatch(syncInstancesToTargets(allIds))
+    if (selectedActionId) {
+      dispatch(addInstance(instance))
+      dispatch(setSelectedId(instance.id))
+      dispatch(addTargetToAction({ actionId: selectedActionId, targetId: instance.id }))
+    } else {
+      toast.error('⚠️ Please select an Action in Workspace Tree before adding a component.')
+    }
     return instance.id
   }
 }
