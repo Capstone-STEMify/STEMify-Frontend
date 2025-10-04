@@ -2,6 +2,7 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import { DataTable } from '@/components/shared/data-table/data-table'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SearchBar from '@/components/shared/search/SearchBar'
 import {
   useCreateKitComponentsMutation,
@@ -13,6 +14,7 @@ import { setPageIndex, setPageSize, setSearchTerm } from '@/features/kit-compone
 import { ComponentSliceParams, KitComponent } from '@/features/kit-components/types/kit-component.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
+import Loading from 'app/[locale]/loading'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -53,7 +55,7 @@ export default function SelectComponentList({ kitId, onSuccess, existedComponent
     dispatch(setPageSize(6))
   }, [dispatch])
 
-  const { data } = useSearchComponentQuery(queryParams)
+  const { data, isLoading } = useSearchComponentQuery(queryParams)
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
   const [addComponentsToKit] = useCreateKitComponentsMutation()
@@ -111,8 +113,7 @@ export default function SelectComponentList({ kitId, onSuccess, existedComponent
       }
     }
   ]
-
-  if (!data) return null
+  if (isLoading) return <LoadingComponent />
 
   return (
     <div className='space-y-3'>
@@ -190,7 +191,6 @@ export default function SelectComponentList({ kitId, onSuccess, existedComponent
             }))}
             columns={extendedColumns}
             enableRowSelection={false}
-            placeholder={t('list.noExistedComponents')}
           />
         </TabsContent>
       </Tabs>
