@@ -4,6 +4,7 @@
       "title": "Danh sách các thành phần",
       "noData": "Không tìm thấy thành phần nào",
       "noDataDescription": "Không có thành phần nào khả dụng. Vui lòng thay đổi từ khóa tìm kiếm hoặc thêm các thành phần mới.",
+      "noAvailableComponents": "Không có thành phần nào khả dụng. Nhấn <link>vào đây</link> để tạo thành phần mới.",
       "placeholder": {
         "search": "Tìm kiếm các thành phần ở đây..."
       },

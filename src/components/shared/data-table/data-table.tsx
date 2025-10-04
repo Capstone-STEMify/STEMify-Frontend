@@ -35,7 +35,7 @@ export type DataTableProps<TData extends { id: string | number }, TValue> = {
   data: TData[]
   columns: ColumnDef<TData, TValue>[]
   filterColumnId?: string
-  placeholder?: string
+  placeholder?: string | React.ReactNode
   enableRowSelection?: boolean
   className?: string
   toolbarRight?: React.ReactNode
