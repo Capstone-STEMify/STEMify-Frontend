@@ -35,7 +35,8 @@
       "available": "Available",
       "outOfStock": "Out of Stock",
       "items": "Items",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "singleCourseNote": "Only one kit can be associated with a course"
     },
     "detail": {
       "title": "Kit Details",

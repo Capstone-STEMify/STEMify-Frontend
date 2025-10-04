@@ -87,6 +87,9 @@ export default function KitListSection(props: KitListProps) {
       <div className='mb-3 flex items-center justify-between'>
         <h2 className='text-2xl font-semibold'>
           {t('list.title')} <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{finalKits.length}</span>
+          {isCourse && (
+            <span className='text-sm font-normal text-gray-500 italic'> (*{t('list.singleCourseNote')})</span>
+          )}
         </h2>
         {isCourse && (
           <Button
