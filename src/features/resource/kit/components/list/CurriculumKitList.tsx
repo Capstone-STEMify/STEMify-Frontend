@@ -1,76 +1,127 @@
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
 import CardHorizontal from '@/components/shared/card/CardHorizontal'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SDropDown } from '@/components/shared/SDropDown'
-import { useUpdateCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
+import { useUpdateCourseMutation } from '@/features/resource/course/api/courseApi'
+import { useGetKitByIdQuery, useLazyGetKitByIdQuery } from '@/features/resource/kit/api/kitProductApi'
 import { Kit } from '@/features/resource/kit/types/kit.type'
 import { useModal } from '@/providers/ModalProvider'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { EllipsisVertical, Plus } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { useParams } from 'next/navigation'
-import React from 'react'
+import { useLocale, useTranslations } from 'next-intl'
+import { useParams, useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-type KitListProps = {
-  kits: Kit[]
-}
-export default function CurriculumKitList({ kits }: KitListProps) {
+type KitListProps = { context: 'course'; kitId?: number } | { context: 'curriculum'; kitIds: number[] }
+
+export default function KitListSection(props: KitListProps) {
   const t = useTranslations('kits')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
-  const { openModal } = useModal()
-  const { curriculumId } = useParams()
+  const { openModal, closeModal } = useModal()
+  const { courseId } = useParams()
+  const router = useRouter()
+  const locale = useLocale()
 
-  const [updateCurriculumkit] = useUpdateCurriculumMutation()
+  const isCourse = props.context === 'course'
+  const isCurriculum = props.context === 'curriculum'
+
+  const [kits, setKits] = useState<Kit[]>([])
+  const [loadingKits, setLoadingKits] = useState(false)
+
+  const { data: kitData, isLoading: loadingKit } = useGetKitByIdQuery(
+    props.context === 'course' && props.kitId ? props.kitId : skipToken
+  )
+  const [triggerGetKitById] = useLazyGetKitByIdQuery()
+  const [updateCourseKit] = useUpdateCourseMutation()
+
+  // curriculum: fetch từng kitId
+  useEffect(() => {
+    const fetchKits = async () => {
+      if (props.context === 'curriculum' && props.kitIds.length > 0) {
+        setLoadingKits(true)
+        try {
+          const results = await Promise.all(props.kitIds.map((id) => triggerGetKitById(id).unwrap()))
+          setKits(results.map((res) => res.data))
+        } catch (error) {
+          console.error('Error fetching kits:', error)
+        } finally {
+          setLoadingKits(false)
+        }
+      }
+    }
+
+    fetchKits()
+  }, [props.context === 'curriculum' ? props.kitIds : []])
+
+  const finalKits = isCourse ? (kitData?.data ? [kitData.data] : []) : kits
+
+  const isLoading = isCourse ? loadingKit : loadingKits
 
   const handleDelete = async (e: React.MouseEvent, kitId: number, kitName: string) => {
     e.stopPropagation()
     e.preventDefault()
-    try {
-      console.log('Deleting kit with ID:', kitId)
-      openModal('confirm', {
-        message: tt('confirmMessage.removeKit', { title: kitName }),
-        onConfirm: async () => {
-          await updateCurriculumkit({
-            id: Number(curriculumId),
-            body: { kitIds: { values: kits.filter((kit) => kit.id !== kitId).map((kit) => kit.id) } }
+
+    openModal('confirm', {
+      message: tt('confirmMessage.removeKit', { title: kitName }),
+      onConfirm: async () => {
+        try {
+          await updateCourseKit({
+            id: Number(courseId),
+            body: { kitId: -1 }
           }).unwrap()
           toast.success(tt('successMessage.delete'))
+        } catch (error) {
+          toast.error(tt('errorMessage.general'))
         }
-      })
-    } catch (error) {
-      toast.error(tt('errorMessage'))
-    }
+      }
+    })
   }
+
+  if (isLoading) return <LoadingComponent />
 
   return (
     <div className='mt-4 gap-10'>
       <div className='mb-3 flex items-center justify-between'>
         <h2 className='text-2xl font-semibold'>
-          {t('list.title')} <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{kits.length}</span>
+          {t('list.title')} <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{finalKits.length}</span>
         </h2>
-        {/* <Button
-          className='bg-amber-custom-400'
-          onClick={() => {
-            openModal('kitListTableModal', { kitIds: kits.map((kit) => kit.id) })
-          }}
-        >
-          <Plus className='mr-1 h-4 w-4' />
-          {tc('button.addKit')}
-        </Button> */}
+        {isCourse && (
+          <Button
+            className='bg-amber-custom-400'
+            onClick={() => {
+              if (props.kitId !== undefined) {
+                openModal('confirm', {
+                  message: tt('confirmMessage.addAnotherKit'),
+                  onConfirm: () => {
+                    openModal('kitListTableModal', { kitIds: finalKits.map((kit) => kit.id) })
+                  }
+                })
+              } else {
+                openModal('kitListTableModal', { kitIds: [] })
+              }
+            }}
+          >
+            <Plus className='mr-1 h-4 w-4' />
+            {tc('button.addKit')}
+          </Button>
+        )}
       </div>
 
-      {kits.length > 0 ? (
-        kits.map((kit) => (
+      {finalKits.length > 0 ? (
+        finalKits.map((kit) => (
           <div key={kit.id} className='relative flex max-w-xl min-w-0 gap-1'>
             <CardHorizontal
+              onClick={() => router.push(`/${locale}/admin/kit/${kit.id}`)}
               imageUrl={
                 kit.images?.[0]?.imageUrl ||
                 'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
               }
               title={kit.name}
+              sku={kit.sku ?? 'SKU123'}
               description={kit.description || ''}
-              
             />
 
             <div key={kit.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>

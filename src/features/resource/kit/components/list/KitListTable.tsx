@@ -1,9 +1,8 @@
-import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SearchBar from '@/components/shared/search/SearchBar'
-import { useUpdateCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
+import { useUpdateCourseMutation } from '@/features/resource/course/api/courseApi'
 import { useSearchKitQuery } from '@/features/resource/kit/api/kitProductApi'
 import { useGetKitColumn } from '@/features/resource/kit/components/list/KitColumn'
 import { setPageIndex, setSearchTerm } from '@/features/resource/kit/slice/kitProductSlice'
@@ -17,37 +16,42 @@ import { toast } from 'sonner'
 
 type KitListTableProps = {
   onSuccess?: () => void
-  kitIds?: number[]
+  kitId?: number
 }
 
-export default function KitListTable({ onSuccess, kitIds }: KitListTableProps) {
+export default function KitListTable({ onSuccess, kitId }: KitListTableProps) {
   const t = useTranslations('curriculum')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
 
-  const { curriculumId } = useParams()
+  const { courseId } = useParams()
   const { closeModal } = useModal()
   const dispatch = useAppDispatch()
-  const [selectedIds, setSelectedIds] = React.useState<number[]>([...(kitIds ?? [])])
+  const [selectedId, setSelectedId] = React.useState<number | undefined>(kitId)
   const columns = useGetKitColumn()
 
   const queryParams: KitSliceParams = useAppSelector((state) => state.kit)
   const { data: kitData, isLoading } = useSearchKitQuery(queryParams)
   const rows = React.useMemo(() => kitData?.data.items ?? [], [kitData])
 
-  const [addKitsToCurriculum] = useUpdateCurriculumMutation()
+  const [addKitsToCourse, { isLoading: isSaving }] = useUpdateCourseMutation()
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
 
-  const handleAddKitsToCurriculum = async (newKitIds: number[]) => {
-    await addKitsToCurriculum({
-      id: Number(curriculumId),
-      body: { kitIds: { values: newKitIds } }
-    }).unwrap()
-    toast.success(tt('successMessage.addToCurriculum'))
-    onSuccess?.()
+  const handleAddKitCourse = async () => {
+    if (!selectedId || !courseId) return
+    try {
+      await addKitsToCourse({
+        id: Number(courseId),
+        body: { kitId: selectedId }
+      }).unwrap()
+      toast.success(tt('successMessage.addToCourse'))
+      onSuccess?.()
+    } catch (error) {
+      toast.error(tt('errorMessage.general'))
+    }
   }
 
   if (isLoading) {
@@ -64,19 +68,15 @@ export default function KitListTable({ onSuccess, kitIds }: KitListTableProps) {
         />
 
         <div className='flex items-center gap-2'>
-          <Badge variant={'outline'} className='bg-sky-100 text-blue-500'>
-            {t('custom.selectedKits')}: {selectedIds.length}
-          </Badge>
-          <div className='space-x-2'>
-            <Button type='button' variant='outline' onClick={closeModal}>
-              {tc('button.cancel')}
-            </Button>
-            <Button className='bg-amber-custom-400' onClick={() => handleAddKitsToCurriculum(selectedIds)}>
-              {tc('button.save')}
-            </Button>
-          </div>
+          <Button type='button' variant='outline' onClick={closeModal}>
+            {tc('button.cancel')}
+          </Button>
+          <Button className='bg-amber-custom-400' onClick={handleAddKitCourse} disabled={!selectedId || isSaving}>
+            {tc('button.save')}
+          </Button>
         </div>
       </div>
+
       <DataTable
         data={rows}
         columns={columns}
@@ -84,9 +84,10 @@ export default function KitListTable({ onSuccess, kitIds }: KitListTableProps) {
         pagingData={kitData}
         pagingParams={queryParams}
         handlePageChange={handlePageChange}
-        rowSelection={selectedIds}
+        rowSelection={selectedId !== undefined ? [selectedId] : []}
         onSelectionChange={(ids) => {
-          setSelectedIds((prev) => Array.from(new Set([...prev, ...ids])))
+          const firstId = Array.from(ids)[0]
+          setSelectedId(firstId ?? undefined)
         }}
       />
     </div>

@@ -25,6 +25,8 @@ import { resetParams, setPageIndex, setPageSize } from '@/features/resource/less
 import { UserRole } from '@/types/userRole'
 import { useLazyExportToRSAQuery } from '@/features/resource/export/api/exportApi'
 import ExportRSAButton from '@/components/shared/button/ExportRSAButton'
+import CurriculumKitList from '@/features/resource/kit/components/list/CurriculumKitList'
+import KitListSection from '@/features/resource/kit/components/list/CurriculumKitList'
 
 export default function AdminCourseDetail() {
   const t = useTranslations('Admin.course_details')
@@ -320,6 +322,11 @@ export default function AdminCourseDetail() {
           )}
 
         <ExportRSAButton courseId={course.data.id} />
+      </div>
+      {/* Kit Section */}
+      <div className='xl:col-span-3'>
+        <hr className='mb-5 border-gray-300' />
+        <KitListSection context='course' kitId={course.data.kitId} />
       </div>
       {/* Divider Section before Lesson Table */}
       <div className='col-span-1 pt-5 xl:col-span-3'>
