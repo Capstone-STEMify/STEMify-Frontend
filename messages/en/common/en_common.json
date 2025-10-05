@@ -95,7 +95,8 @@
       "empty": "No results found.",
       "content": "Content",
       "publish": "Publish",
-      "share": "Share"
+      "share": "Share",
+      "addToCart": "Add to Cart"
     },
     "paging": {
       "previous": "Previous",

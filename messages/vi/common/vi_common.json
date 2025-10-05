@@ -51,7 +51,8 @@
       "print": "In",
       "share": "Chia sẻ",
       "start": "Bắt Đầu Ngay",
-      "look": "Tìm hiểu thêm"
+      "look": "Tìm hiểu thêm",
+      "addToCart": "Thêm Vào Giỏ Hàng"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",
