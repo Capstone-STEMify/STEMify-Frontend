@@ -8,13 +8,16 @@ import React from 'react'
 import AdminCurriculumInformationSection from './AdminCurriculumInformationSection'
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import CurriculumKitList from '@/features/resource/kit/components/list/CurriculumKitList'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import KitListSection from '@/features/resource/kit/components/list/KitListSection'
 
 export default function AdminCurriculumDetail() {
   const { curriculumId } = useParams()
   const t = useTranslations('curriculum')
-  const { data, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId), { skip: !Number(curriculumId) })
+  const { data, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId), {
+    skip: !Number(curriculumId),
+    refetchOnMountOrArgChange: true
+  })
 
   if (isLoading) {
     return (
@@ -39,7 +42,7 @@ export default function AdminCurriculumDetail() {
             <hr className='my-10' />
             <LearningOutcomeTable curriculumId={Number(curriculumId)} />
             <hr className='my-10' />
-            <CurriculumKitList context='curriculum' kitIds={data?.data?.kitIds || []} />
+            <KitListSection context='curriculum' kitIds={data?.data?.kitIds || []} />
             <hr className='my-10' />
             <AdminCurriculumCourseList curriculumId={Number(curriculumId)} courses={data?.data?.courses} />
           </>

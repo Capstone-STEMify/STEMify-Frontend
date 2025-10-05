@@ -25,8 +25,8 @@ import { resetParams, setPageIndex, setPageSize } from '@/features/resource/less
 import { UserRole } from '@/types/userRole'
 import { useLazyExportToRSAQuery } from '@/features/resource/export/api/exportApi'
 import ExportRSAButton from '@/components/shared/button/ExportRSAButton'
-import CurriculumKitList from '@/features/resource/kit/components/list/CurriculumKitList'
-import KitListSection from '@/features/resource/kit/components/list/CurriculumKitList'
+import CurriculumKitList from '@/features/resource/kit/components/list/KitListSection'
+import KitListSection from '@/features/resource/kit/components/list/KitListSection'
 import { Card } from '@/components/shadcn/card'
 
 export default function AdminCourseDetail() {

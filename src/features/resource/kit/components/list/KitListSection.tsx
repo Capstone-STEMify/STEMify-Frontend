@@ -11,61 +11,60 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { EllipsisVertical, Plus } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-type KitListProps = { context: 'course'; kitId?: number } | { context: 'curriculum'; kitIds: number[] }
+type KitListSectionProps = {
+  context: 'course' | 'curriculum'
+  kitId?: number
+  kitIds?: number[]
+}
 
-export default function KitListSection(props: KitListProps) {
+export default function KitListSection({ context, kitId, kitIds = [] }: KitListSectionProps) {
   const t = useTranslations('kits')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
-  const { openModal, closeModal } = useModal()
+  const { openModal } = useModal()
   const { courseId } = useParams()
   const router = useRouter()
   const locale = useLocale()
 
-  const isCourse = props.context === 'course'
-  const isCurriculum = props.context === 'curriculum'
+  const isCourse = context === 'course'
+  const isCurriculum = context === 'curriculum'
 
   const [kits, setKits] = useState<Kit[]>([])
   const [loadingKits, setLoadingKits] = useState(false)
 
-  const { data: kitData, isLoading: loadingKit } = useGetKitByIdQuery(
-    props.context === 'course' && props.kitId ? props.kitId : skipToken
-  )
+  const { data: kitData, isLoading: loadingKit } = useGetKitByIdQuery(isCourse && kitId ? kitId : skipToken)
   const [triggerGetKitById] = useLazyGetKitByIdQuery()
   const [updateCourseKit] = useUpdateCourseMutation()
 
-  // curriculum: fetch từng kitId
-  useEffect(() => {
-    const fetchKits = async () => {
-      if (props.context === 'curriculum' && props.kitIds.length > 0) {
-        setLoadingKits(true)
-        const kits: any[] = []
-
-        for (const id of props.kitIds) {
-          try {
-            const result = await triggerGetKitById(id).unwrap()
-            kits.push(result.data)
-          } catch (err: any) {
-            if (err?.status === 404) {
-              console.warn(`Kit ${id} not found (404), skipping.`)
-            } else {
-              console.error(`Error loading kit ${id}:`, err)
-            }
+  const fetchKits = useCallback(async () => {
+    if (isCurriculum && kitIds.length > 0) {
+      setLoadingKits(true)
+      const kits: Kit[] = []
+      for (const id of kitIds) {
+        try {
+          const result = await triggerGetKitById(id).unwrap()
+          kits.push(result.data)
+        } catch (err: any) {
+          if (err?.status === 404) {
+            console.warn(`Kit ${id} not found (404), skipping.`)
+          } else {
+            console.error(`Error loading kit ${id}:`, err)
           }
         }
-        setKits(kits)
-        setLoadingKits(false)
       }
+      setKits(kits)
+      setLoadingKits(false)
     }
+  }, [isCurriculum, kitIds])
 
+  useEffect(() => {
     fetchKits()
-  }, [props.context === 'curriculum' ? props.kitIds.join(',') : ''])
+  }, [fetchKits])
 
   const finalKits = isCourse ? (kitData?.data ? [kitData.data] : []) : kits
-  console.log('finalKits', finalKits)
   const isLoading = isCourse ? loadingKit : loadingKits
 
   const handleDelete = async (e: React.MouseEvent, kitId: number, kitName: string) => {
@@ -103,11 +102,11 @@ export default function KitListSection(props: KitListProps) {
           <Button
             className='bg-amber-custom-400'
             onClick={() => {
-              if (props.kitId !== undefined) {
+              if (kitId !== undefined) {
                 openModal('confirm', {
                   message: tt('confirmMessage.addAnotherKit'),
                   onConfirm: () => {
-                    openModal('kitListTableModal', { kitId: props.kitId })
+                    openModal('kitListTableModal', { kitId })
                   }
                 })
               } else {
@@ -143,7 +142,7 @@ export default function KitListSection(props: KitListProps) {
                 <h3 className='line-clamp-2 text-sm font-semibold text-gray-800'>{kit.name}</h3>
               </CardContent>
 
-              {props.context === 'course' && (
+              {isCourse && (
                 <div className='absolute top-2 right-2 z-10'>
                   <SDropDown
                     trigger={<EllipsisVertical className='h-5 w-5 cursor-pointer text-yellow-400 hover:scale-110' />}
