@@ -21,7 +21,11 @@ import { useTranslations } from 'next-intl'
 export default function CurriculumDetail() {
   const { curriculumId } = useParams()
   const { data: curriculumData, error, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId))
-  const {data: LearningOutcome, isLoading: outcomeLoading, isFetching: outcomeFetching} = useSearchLearningOutcomeQuery({curriculumId: Number(curriculumId)})
+  const {
+    data: LearningOutcome,
+    isLoading: outcomeLoading,
+    isFetching: outcomeFetching
+  } = useSearchLearningOutcomeQuery({ curriculumId: Number(curriculumId) })
   const tc = useTranslations('common.message')
 
   if (isLoading || outcomeLoading || outcomeFetching) {
@@ -33,18 +37,18 @@ export default function CurriculumDetail() {
   }
 
   if (!curriculumData?.data)
-      return (
-        <div className='flex h-screen items-center justify-center bg-white'>
-          <SEmpty
-            title='Curriculum not found'
-            description='The Curriculum you are looking for does not exist or has been removed.'
-            icon={<BookOpen className='h-12 w-12 text-gray-400' />}
-          />
-        </div>
-      )
+    return (
+      <div className='flex h-screen items-center justify-center bg-white'>
+        <SEmpty
+          title='Curriculum not found'
+          description='The Curriculum you are looking for does not exist or has been removed.'
+          icon={<BookOpen className='h-12 w-12 text-gray-400' />}
+        />
+      </div>
+    )
 
   return (
-    <div className='relative mx-auto w-full pb-4'>
+    <div className='relative mx-auto w-full pb-20'>
       <AnimatedBackground />
       <div className='relative'>
         {/* Content Section */}
@@ -56,15 +60,13 @@ export default function CurriculumDetail() {
         <div className='mt-30 sm:mt-32'>
           <LearningObjectives title={tc('learnTitle')} outcomes={LearningOutcome?.data.items} />
         </div>
-
-        {/* Kit Information Section */}
-        <div className='relative z-10 mt-20 sm:mt-20'>
-          <KitInformationSection kits={curriculumData?.data.kits || []} />
-        </div>
-
         {/* Course Section Carousel */}
         <div className='relative z-10 mt-8 sm:mt-12'>
           <CurriculumCourseSection courses={curriculumData?.data.courses || []} />
+        </div>
+        {/* Kit Information Section */}
+        <div className='relative z-10 mt-20 sm:mt-20'>
+          <KitInformationSection kitIds={curriculumData?.data.kitIds || []} />
         </div>
       </div>
     </div>
