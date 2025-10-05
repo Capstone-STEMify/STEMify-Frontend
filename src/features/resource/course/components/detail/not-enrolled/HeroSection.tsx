@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion, time } from 'framer-motion'
-import { CalendarFold, Edit, Heart } from 'lucide-react'
+import { CalendarFold, Edit, Heart, ShoppingCart, ShoppingCartIcon } from 'lucide-react'
 import { TbDoorExit } from 'react-icons/tb'
 import { fadeInUp } from '@/utils/motion'
 import { Course, CourseStatus } from '../../../types/course.type'
@@ -16,10 +16,13 @@ import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useUpdateCourseMutation } from '@/features/resource/course/api/courseApi'
 import { useTranslations } from 'next-intl'
+import { EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
 
 interface HeroSectionProps {
   course: Course
   token?: string
+  enrollmentStatus?: string
+  enrollmentId?: number
 }
 
 type TagGroupProps = {
@@ -41,7 +44,7 @@ const TagGroup = ({ label, items, className }: TagGroupProps) => (
   </div>
 )
 
-export default function HeroSection({ course, token }: HeroSectionProps) {
+export default function HeroSection({ course, token, enrollmentStatus, enrollmentId }: HeroSectionProps) {
   const t = useTranslations('course')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
@@ -61,7 +64,7 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
       createEnroll({ courseId: course.id, studentId: auth?.user?.userId })
     }
     toast.success(tt('successMessage.enroll'), {
-      description: `${tt('successMessage.enrollDes', {title: enroll?.data.courseTitle || '', time: enroll?.data.enrolledAt || ''})}`,
+      description: `${tt('successMessage.enrollDes', { title: enroll?.data.courseTitle || '', time: enroll?.data.enrolledAt || '' })}`,
       action: {
         label: 'View Enrollment',
         onClick: () => {
@@ -71,23 +74,23 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
     })
   }
 
-  const handleUpdate = () => {
-    router.push(`/resource/course/update/${course.id}`)
-  }
-
-  const handleSubmitToReview = async () => {
-    try {
-      toast.info(tt('successMessage.review'))
-
-      await updateCourseStatus({
-        id: course.id,
-        body: {
-          status: CourseStatus.PENDING
-        }
-      }).unwrap()
-    } catch (error) {
-      console.error('Failed to update course status:', error)
+  const handleAddToCart = () => {
+    if (!auth.user?.userId) {
+      signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
+      return
     }
+    if (course.id) {
+      // TODO: Logic to add to cart can be implemented here
+    }
+    toast.success(tt('successMessage.addToCart'), {
+      description: `${tt('successMessage.addToCartDes', { title: enroll?.data.courseTitle || '' })}`,
+      action: {
+        label: 'View Cart',
+        onClick: () => {
+          console.log('Navigate to cart details:', enroll)
+        }
+      }
+    })
   }
 
   return (
@@ -120,40 +123,49 @@ export default function HeroSection({ course, token }: HeroSectionProps) {
                 items={course.standardNames}
                 className='text-orange-custom-500 bg-yellow-custom-50'
               />
+
+              <div className='mt-2 flex items-center gap-3'>
+                <span className='text-2xl font-bold text-red-600'>
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(course.price)}
+                </span>
+              </div>
             </div>
 
-            {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? (
+            {userRole === UserRole.TEACHER || enrollmentStatus === 'inProgress' ? (
+              <div className='flex flex-col gap-4 sm:flex-row'>
+                <Button
+                  onClick={() => {
+                    router.push(`/resource/course/${course.id}/learn?enrollmentId=${enrollmentId}`)
+                  }}
+                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-3xl py-6 text-lg text-white'
+                >
+                  <TbDoorExit className='h-5 w-5' />
+                  {tc('button.goToCourse')}
+                </Button>
+              </div>
+            ) : userRole === UserRole.STUDENT && enrollmentStatus === 'notStarted' ? (
               <div className='flex flex-col gap-4 sm:flex-row'>
                 <Button
                   onClick={handleEnroll}
-                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
+                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-3xl py-6 text-lg text-white'
                 >
-                  <TbDoorExit className='h-5 w-5' />
-                  {tc('button.enroll')}
-                </Button>
-                <Button className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-4xl border bg-white py-6 text-lg'>
-                  <Heart className='h-5 w-5' />
-                  {tc('button.wishlist')}
+                  <ShoppingCartIcon className='h-5 w-5' />
+                  {tc('button.startLearning')}
                 </Button>
               </div>
             ) : (
-              <div className='flex gap-5'>
+              <div className='flex flex-col gap-4 sm:flex-row'>
                 <Button
-                  onClick={handleUpdate}
-                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
+                  onClick={handleAddToCart}
+                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-3xl py-6 text-lg text-white'
                 >
-                  <Edit className='h-5 w-5' />
-                  {tc('button.updateCourse')}
+                  <ShoppingCartIcon className='h-5 w-5' />
+                  {tc('button.addToCart')}
                 </Button>
-                {course.status === CourseStatus.DRAFT && (
-                  <Button
-                    onClick={handleSubmitToReview}
-                    className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-4xl border bg-white py-6 text-lg'
-                  >
-                    <Edit className='h-5 w-5' />
-                    {tc('button.review')}
-                  </Button>
-                )}
+                <Button className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-3xl border bg-white py-6 text-lg'>
+                  <Heart className='h-5 w-5' />
+                  {tc('button.wishlist')}
+                </Button>
               </div>
             )}
           </div>

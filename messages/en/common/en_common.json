@@ -97,7 +97,8 @@
       "publish": "Publish",
       "share": "Share",
       "addToCart": "Add to Cart",
-      "quickView": "Quick View"
+      "quickView": "Quick View",
+      "goToCourse": "Go to Course"
     },
     "paging": {
       "previous": "Previous",

@@ -53,7 +53,8 @@
       "start": "Bắt Đầu Ngay",
       "look": "Tìm hiểu thêm",
       "addToCart": "Thêm Vào Giỏ Hàng",
-      "quickView": "Xem Nhanh"
+      "quickView": "Xem Nhanh",
+      "goToCourse": "Đi đến Khóa học"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",
