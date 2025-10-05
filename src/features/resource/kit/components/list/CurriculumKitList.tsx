@@ -65,7 +65,7 @@ export default function KitListSection(props: KitListProps) {
   }, [props.context === 'curriculum' ? props.kitIds.join(',') : ''])
 
   const finalKits = isCourse ? (kitData?.data ? [kitData.data] : []) : kits
-
+  console.log('finalKits', finalKits)
   const isLoading = isCourse ? loadingKit : loadingKits
 
   const handleDelete = async (e: React.MouseEvent, kitId: number, kitName: string) => {

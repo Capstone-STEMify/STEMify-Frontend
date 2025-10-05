@@ -31,7 +31,7 @@ export default function KitDetail() {
   const { openModal } = useModal()
   const { kitId } = useParams()
 
-  const { data: kitData, isLoading, isError } = useGetKitByIdQuery(Number(kitId), { skip: !Number(kitId) })
+  const { data: kitData, isLoading, isError, refetch } = useGetKitByIdQuery(Number(kitId), { skip: !Number(kitId) })
   const [deleteKit] = useDeleteKitMutation()
   const [updateKitStatus] = useUpdateKitMutation()
 
@@ -53,7 +53,8 @@ export default function KitDetail() {
         openModal('selectComponentListModal', {
           kitId: kitData?.data.id,
           componentIds: kitData?.data.components?.map((c) => c.componentId),
-          existedComponents: kitData?.data.components || []
+          existedComponents: kitData?.data.components || [],
+          refetch: refetch
         })
       }}
       className='bg-sky-custom-300 mt-4 rounded-full px-4 text-white'
@@ -174,7 +175,7 @@ export default function KitDetail() {
         </section>
         <hr className='mx-auto my-10 w-full max-w-6xl border-gray-300' />
         {/* Components list */}
-        <WhatsIncluded components={kitData.data.components} addBtn={addComponentButton} />
+        <WhatsIncluded components={kitData.data.components} addBtn={addComponentButton} refetch={refetch} />
       </div>
     </div>
   )

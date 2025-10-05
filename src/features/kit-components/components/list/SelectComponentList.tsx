@@ -24,9 +24,15 @@ type SelectComponentListProps = {
   kitId: number
   onSuccess?: () => void
   existedComponents?: KitComponent[]
+  refetch?: () => void
 }
 
-export default function SelectComponentList({ kitId, onSuccess, existedComponents = [] }: SelectComponentListProps) {
+export default function SelectComponentList({
+  kitId,
+  onSuccess,
+  existedComponents = [],
+  refetch
+}: SelectComponentListProps) {
   const t = useTranslations('components')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
@@ -69,12 +75,14 @@ export default function SelectComponentList({ kitId, onSuccess, existedComponent
 
   const handleAddComponentsToKit = async (components: Partial<KitComponent>[]) => {
     await addComponentsToKit({ kitId, components })
+    refetch?.()
     toast.success(tt('successMessage.addComponentToKit'))
     onSuccess?.()
   }
 
   const handleUpdateKitComponents = async (components: Partial<KitComponent>[]) => {
     await updateKitComponents({ components })
+    refetch?.()
     toast.success(tt('successMessage.updateComponentInKit'))
     onSuccess?.()
   }

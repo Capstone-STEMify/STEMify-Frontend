@@ -12,8 +12,9 @@ export type WhatsIncludedProps = {
   components: KitComponent[]
   name?: string
   addBtn?: React.ReactNode
+  refetch?: () => void
 }
-const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn }) => {
+const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn, refetch }) => {
   const tt = useTranslations('toast')
   const t = useTranslations('kits')
   const [isExpanded, setIsExpanded] = useState(true)
@@ -24,9 +25,10 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn 
   const handleDelete = (id: number) => {
     openModal('confirm', {
       message: tt('confirmMessage.removeComponent'),
-      onConfirm: () => {
-        deleteComponentFromKit({ ids: [id] }).unwrap()
+      onConfirm: async () => {
+        await deleteComponentFromKit({ ids: [id] }).unwrap()
         toast.success(tt('successMessage.removeComponent'))
+        refetch?.()
       }
     })
   }
@@ -61,14 +63,7 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn 
 
         <div className='grid grid-cols-4 gap-4 md:grid-cols-6 lg:grid-cols-8'>
           {components.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.05 }}
-              className='flex flex-col items-center'
-            >
+            <div key={item.id} className='flex flex-col items-center'>
               <div className='relative mb-2 flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-gray-50 p-2'>
                 <img src={item.imageUrl} alt={item.name} className='h-full w-full object-contain' />
 
@@ -82,7 +77,7 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn 
               </div>
               <h4 className='mb-1 text-center leading-tight font-medium text-gray-900'>{item.name}</h4>
               <p className='text-sm text-gray-500'>x{item.quantity}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </motion.div>

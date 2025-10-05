@@ -9,12 +9,14 @@ interface SelectComponentListModalProps {
   kitId: number
   onConfirm?: () => void
   existedComponents?: KitComponent[]
+  refetch?: () => void
 }
 
 export default function SelectComponentListModal({
   kitId,
   onConfirm,
-  existedComponents
+  existedComponents,
+  refetch
 }: SelectComponentListModalProps) {
   const t = useTranslations('components')
   const { closeModal } = useModal()
@@ -31,7 +33,7 @@ export default function SelectComponentListModal({
       <DialogContent className='h-fit w-full max-w-4xl'>
         <DialogTitle>{t('custom.selectComponentTitle')}</DialogTitle>
 
-        <SelectComponentList kitId={kitId} onSuccess={handleSuccess} existedComponents={existedComponents} />
+        <SelectComponentList kitId={kitId} onSuccess={handleSuccess} refetch={refetch} existedComponents={existedComponents} />
       </DialogContent>
     </Dialog>
   )
