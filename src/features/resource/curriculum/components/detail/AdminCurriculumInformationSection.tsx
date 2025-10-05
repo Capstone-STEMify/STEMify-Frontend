@@ -48,7 +48,7 @@ export default function AdminCurriculumInformationSection({
   const handleUpdateCurriculumStatus = async (status: CurriculumStatus) => {
     try {
       await updateCurriculumStatus({ id: curriculumId, body: { status } }).unwrap()
-      toast.success(`${tt('successMessage.update')}`)
+      toast.success(`${tt('successMessage.action', { title: curriculum.title || '', action: status })}`)
     } catch (error) {
       toast.error(tt('errorMessage'))
     }

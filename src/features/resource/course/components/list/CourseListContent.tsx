@@ -90,7 +90,7 @@ export default function CourseListContent() {
 
   return (
     <div className='px-5 select-none'>
-      <div className='grid h-fit grid-cols-1 justify-items-center gap-10 py-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+      <div className='grid h-fit grid-cols-1 justify-items-center gap-10 py-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {courseData.data.items.map((course) => (
           <div key={course.id} className='relative flex min-w-0 gap-1'>
             <Link href={`/resource/course/${course.id}`} className='flex w-fit flex-col justify-between'>
@@ -107,7 +107,7 @@ export default function CourseListContent() {
                   <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
                   <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{course.title}</h3>
                   <p className='line-clamp-2 text-xs text-gray-600'>{course.description}</p>
-                  <p className='mt-1 text-lg font-bold text-sky-500'>
+                  <p className='text-md mt-1 font-semibold text-sky-500'>
                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(course.price)}
                   </p>
                 </div>

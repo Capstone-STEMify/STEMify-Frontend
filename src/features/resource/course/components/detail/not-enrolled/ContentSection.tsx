@@ -96,7 +96,7 @@ export default function ContentSection() {
               <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
                 <div className='flex min-h-0 flex-1 flex-col'>
                   <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
-                  <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
+                  <p className='mb-2 line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
                   <div className='mt-auto flex items-center gap-2'>
                     <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
                     <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>

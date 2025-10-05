@@ -46,7 +46,7 @@ export default function CurriculumList() {
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
         {curriculumData.data.items.map((curriculum) => (
           <CardLayout
-            className='rounded-2xl border-none bg-transparent shadow-none hover:shadow-none'
+            className='rounded-2xl border-none shadow-xl'
             key={curriculum.id}
             imageSrc={curriculum.imageUrl || '/images/fallback.png'}
             onClick={() => router.push(`/resource/curriculum/${curriculum.id}`)}
