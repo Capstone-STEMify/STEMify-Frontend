@@ -95,7 +95,11 @@
       "empty": "No results found.",
       "content": "Content",
       "publish": "Publish",
-      "share": "Share"
+      "share": "Share",
+      "addToCart": "Add to Cart",
+      "quickView": "Quick View",
+      "goToCourse": "Go to Course",
+      "shop": "SHOP NOW"
     },
     "paging": {
       "previous": "Previous",

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 
 const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index }) => {
   const t = useTranslations('kits')
+  const tc = useTranslations('common')
   const [isHovered, setIsHovered] = useState(false)
 
   const StarRating = ({ rating }: { rating: number }) => {
@@ -84,7 +85,7 @@ const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index
           transition={{ duration: 0.3 }}
           className='absolute bottom-4 left-1/2 -translate-x-1/2 cursor-pointer rounded-full bg-white px-6 py-2 text-sm font-semibold text-gray-900 shadow-lg transition hover:bg-gray-100'
         >
-          Quick View
+          {tc('button.quickView')}
         </motion.button>
       </div>
 

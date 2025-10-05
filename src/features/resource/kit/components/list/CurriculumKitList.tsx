@@ -1,5 +1,5 @@
 import { Button } from '@/components/shadcn/button'
-import { Card } from '@/components/shadcn/card'
+import { Card, CardContent } from '@/components/shadcn/card'
 import CardHorizontal from '@/components/shared/card/CardHorizontal'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SDropDown } from '@/components/shared/SDropDown'
@@ -42,19 +42,27 @@ export default function KitListSection(props: KitListProps) {
     const fetchKits = async () => {
       if (props.context === 'curriculum' && props.kitIds.length > 0) {
         setLoadingKits(true)
-        try {
-          const results = await Promise.all(props.kitIds.map((id) => triggerGetKitById(id).unwrap()))
-          setKits(results.map((res) => res.data))
-        } catch (error) {
-          console.error('Error fetching kits:', error)
-        } finally {
-          setLoadingKits(false)
+        const kits: any[] = []
+
+        for (const id of props.kitIds) {
+          try {
+            const result = await triggerGetKitById(id).unwrap()
+            kits.push(result.data)
+          } catch (err: any) {
+            if (err?.status === 404) {
+              console.warn(`Kit ${id} not found (404), skipping.`)
+            } else {
+              console.error(`Error loading kit ${id}:`, err)
+            }
+          }
         }
+        setKits(kits)
+        setLoadingKits(false)
       }
     }
 
     fetchKits()
-  }, [props.context === 'curriculum' ? props.kitIds : []])
+  }, [props.context === 'curriculum' ? props.kitIds.join(',') : ''])
 
   const finalKits = isCourse ? (kitData?.data ? [kitData.data] : []) : kits
   console.log('finalKits', finalKits)
@@ -113,36 +121,47 @@ export default function KitListSection(props: KitListProps) {
         )}
       </div>
 
-      {isCourse && props.kitId && props.kitId > 0 ? (
-        finalKits.map((kit) => (
-          <div key={kit.id} className='relative flex max-w-xl min-w-0 gap-1'>
-            <CardHorizontal
+      {finalKits.length > 0 ? (
+        <div className='grid grid-cols-2 gap-6 pt-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
+          {finalKits.map((kit) => (
+            <Card
+              key={kit.id}
               onClick={() => router.push(`/${locale}/admin/kit/${kit.id}`)}
-              imageUrl={
-                kit.images?.[0]?.imageUrl ||
-                'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
-              }
-              title={kit.name}
-              sku={kit.sku ?? 'SKU123'}
-              description={kit.description || ''}
-            />
+              className='group relative cursor-pointer overflow-hidden rounded-xl border p-2 shadow-lg transition hover:shadow-md'
+            >
+              <div className='aspect-square w-full overflow-hidden rounded-2xl bg-gray-100'>
+                <img
+                  src={
+                    kit.images?.[0]?.imageUrl ||
+                    'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
+                  }
+                  alt={kit.name}
+                  className='h-full w-full rounded-3xl object-cover transition group-hover:scale-105'
+                />
+              </div>
+              <CardContent className='pt-2 text-center'>
+                <h3 className='line-clamp-2 text-sm font-semibold text-gray-800'>{kit.name}</h3>
+              </CardContent>
 
-            <div key={kit.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
-              <SDropDown
-                trigger={<EllipsisVertical className='mt-2 h-5 w-5 cursor-pointer text-yellow-400 hover:scale-[1.1]' />}
-                items={[
-                  <button
-                    key={`delete-${kit.id}`}
-                    className='cursor-pointer text-sm text-red-500'
-                    onClick={(e) => handleDelete(e, kit.id, kit.name)}
-                  >
-                    {tc('button.remove')}
-                  </button>
-                ].filter(Boolean)}
-              />
-            </div>
-          </div>
-        ))
+              {props.context === 'course' && (
+                <div className='absolute top-2 right-2 z-10'>
+                  <SDropDown
+                    trigger={<EllipsisVertical className='h-5 w-5 cursor-pointer text-yellow-400 hover:scale-110' />}
+                    items={[
+                      <button
+                        key={`delete-${kit.id}`}
+                        className='cursor-pointer text-sm text-red-500'
+                        onClick={(e) => handleDelete(e, kit.id, kit.name)}
+                      >
+                        {tc('button.remove')}
+                      </button>
+                    ]}
+                  />
+                </div>
+              )}
+            </Card>
+          ))}
+        </div>
       ) : (
         <Card className='border-2 border-dashed border-gray-300 py-10 text-center text-sm text-gray-500'>
           <p className='text-gray-500'>{t('list.noData')}</p>

@@ -105,6 +105,7 @@
       "skill": "Kỹ năng",
       "standard": "Tiêu chuẩn",
       "code": "Mã",
+      "price": "Giá",
       "button": {
         "update": "Cập nhật Khóa học",
         "delete": "Xóa Khóa Học",

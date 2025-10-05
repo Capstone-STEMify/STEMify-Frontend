@@ -29,7 +29,8 @@ const defaultCourseData: CourseFormData = {
   prerequisites: '',
   studentTasks: '',
   level: CourseLevel.BEGINNER,
-  imageUrl: null as any
+  imageUrl: null as any,
+  price: 1000
 }
 
 async function CreateCourseJsonPayload(data: CourseFormData, userId: string) {
@@ -49,7 +50,8 @@ async function CreateCourseJsonPayload(data: CourseFormData, userId: string) {
     studentTasks: data.studentTasks,
     prerequisites: data.prerequisites,
     level: data.level,
-    image: imageBase64
+    image: imageBase64,
+    price: data.price
   }
 }
 
@@ -66,6 +68,7 @@ async function PatchCourseJsonPayload(oldData: CourseFormData, newData: CourseFo
   if (oldData.code !== newData.code) patchData.code = newData.code
   if (oldData.prerequisites !== newData.prerequisites) patchData.prerequisites = newData.prerequisites
   if (oldData.level !== newData.level) patchData.level = newData.level
+  if (oldData.price !== newData.price) patchData.price = newData.price
 
   if (newData.imageUrl && typeof newData.imageUrl !== 'string') {
     const base64 = await fileToBase64(newData.imageUrl)
@@ -98,7 +101,8 @@ function mapCourseToFormData(course: ApiSuccessResponse<Course>): CourseFormData
     prerequisites: course.data.prerequisites ?? '',
     ageRangeId: course.data.ageRangeId?.toString() ?? '',
     imageUrl: null as any,
-    imagePreviewUrl: course.data.imageUrl ?? undefined
+    imagePreviewUrl: course.data.imageUrl ?? undefined,
+    price: course.data.price ?? 0
   }
 }
 
@@ -206,19 +210,30 @@ export default function UpsertCourse({ courseId, onSuccess }: UpsertCourseProps)
               />
             )}
           />
-
           <form.AppField
-            name='title'
+            name='price'
             children={(field) => (
               <field.TextField
-                label={t('form.fields.title.label')}
-                placeholder={t('form.fields.title.placeholder')}
+                type='number'
+                min={1000}
+                defaultValue={1000}
+                label={t('form.fields.price.label')}
+                placeholder={t('form.fields.price.placeholder')}
                 className='rounded-lg border-gray-300'
               />
             )}
           />
         </div>
-
+        <form.AppField
+          name='title'
+          children={(field) => (
+            <field.TextField
+              label={t('form.fields.title.label')}
+              placeholder={t('form.fields.title.placeholder')}
+              className='rounded-lg border-gray-300'
+            />
+          )}
+        />
         <form.AppField
           name='description'
           children={(field: any) => (

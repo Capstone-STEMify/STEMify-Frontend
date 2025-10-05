@@ -28,6 +28,7 @@ export type Course = {
   standardNames: string[]
   courseOrderIndex?: number
   kitId?: number
+  price: number
 }
 
 export enum CourseStatus {

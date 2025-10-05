@@ -16,7 +16,8 @@
       "sectionComplete": "Section Completed!",
       "addComponentToKit": "Successfully added components to kit!",
       "removeComponent": "Successfully removed components from kit!",
-      "updateComponentInKit": "Successfully updated kit components!"
+      "updateComponentInKit": "Successfully updated kit components!",
+      "addToCurriculum": "Successfully added to curriculum!"
     },
     "errorMessage": "An error occurred. Please try again. ",
     "errorSpecific": {
