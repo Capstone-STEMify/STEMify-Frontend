@@ -82,7 +82,7 @@ export default function CourseListContent() {
   }
 
   if (!courseData || courseData.data.items.length === 0) {
-    return <SEmpty title={t('list.noData')} description={t('list.noDataDescription')} />
+    return <SEmpty title={t('list.noData')} description={t('list.noDataDetail')} />
   }
 
   return (
