@@ -11,6 +11,7 @@ import {
   useUpdateKitMutation
 } from '@/features/resource/kit/api/kitProductApi'
 import WhatsIncluded from '@/features/resource/kit/components/shop/details/ProductConstituent'
+import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
 import { useModal } from '@/providers/ModalProvider'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { Plus, SquarePen, Star, Trash2 } from 'lucide-react'
@@ -23,6 +24,7 @@ import { toast } from 'sonner'
 export default function KitDetail() {
   const t = useTranslations('kits')
   const tt = useTranslations('toast')
+  const tc = useTranslations('common')
   const router = useRouter()
   const locale = useLocale()
 
@@ -31,12 +33,17 @@ export default function KitDetail() {
 
   const { data: kitData, isLoading, isError } = useGetKitByIdQuery(Number(kitId), { skip: !Number(kitId) })
   const [deleteKit] = useDeleteKitMutation()
-  const [updateKit] = useUpdateKitMutation()
+  const [updateKitStatus] = useUpdateKitMutation()
 
   const handleDelete = async () => {
     await deleteKit(Number(kitId)).unwrap()
     toast.success(`${tt('successMessage.delete', { title: kitData?.data.name || '' })}`)
     router.push(`/${locale}/admin/kit`)
+  }
+
+  const handleUpdateKitStatus = async (status: KitProductStatus) => {
+    await updateKitStatus({ id: Number(kitId), body: { status } }).unwrap()
+    toast.success(`${tt('successMessage.action', { action: status, title: kitData?.data.name || '' })}`)
   }
 
   const addComponentButton = (
@@ -134,14 +141,14 @@ export default function KitDetail() {
               </span>
             </div>
 
-            <Button
-              className='bg-amber-custom-400 mt-2 w-fit px-10 text-white'
-              onClick={() =>
-                openModal('information', { message: 'This feature is coming soon! Please come back later!' })
-              }
-            >
-              Publish
-            </Button>
+            {kitData.data.status === KitProductStatus.DRAFT && (
+              <Button
+                className='bg-amber-custom-400 mt-2 w-fit px-10 text-white'
+                onClick={() => handleUpdateKitStatus(KitProductStatus.PUBLISHED)}
+              >
+                {tc('button.publish')}
+              </Button>
+            )}
           </div>
 
           {/* Right Section */}
