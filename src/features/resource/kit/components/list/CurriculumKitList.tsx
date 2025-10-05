@@ -57,7 +57,7 @@ export default function KitListSection(props: KitListProps) {
   }, [props.context === 'curriculum' ? props.kitIds : []])
 
   const finalKits = isCourse ? (kitData?.data ? [kitData.data] : []) : kits
-
+  console.log('finalKits', finalKits)
   const isLoading = isCourse ? loadingKit : loadingKits
 
   const handleDelete = async (e: React.MouseEvent, kitId: number, kitName: string) => {
@@ -113,7 +113,7 @@ export default function KitListSection(props: KitListProps) {
         )}
       </div>
 
-      {finalKits.length > 0 ? (
+      {isCourse && props.kitId && props.kitId > 0 ? (
         finalKits.map((kit) => (
           <div key={kit.id} className='relative flex max-w-xl min-w-0 gap-1'>
             <CardHorizontal
