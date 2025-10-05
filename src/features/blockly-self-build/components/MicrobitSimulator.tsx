@@ -19,7 +19,7 @@ export default function MicrobitSimulator({ matrix }: MicrobitSimulatorProps) {
           const isLit = brightness > 0;
           
           // Đèn tắt sẽ có màu đỏ sẫm, đèn sáng có màu đỏ tươi
-          const ledColor = isLit ? `rgba(255, 85, 85, ${brightness / 9})` : '#440000';
+          const ledColor = isLit ? `#ff5633` : '#440000';
           const boxShadow = isLit ? '0 0 10px #FF5555' : 'none';
 
           return (

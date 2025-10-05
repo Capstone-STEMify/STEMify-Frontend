@@ -24,14 +24,20 @@ export default function Home() {
     }
   };
 
-  const handleRunSimulator = () => {
-    const newMatrix = parseCodeForDisplay(jsCode);
-    if (newMatrix) {
-      setLedMatrix(newMatrix);
-    } else {
-      setLedMatrix(defaultMatrix());
-    }
-  };
+//   const handleRunSimulator = () => {
+//     const newMatrix = parseCodeForDisplay(jsCode);
+//     if (newMatrix) {
+//       setLedMatrix(newMatrix);
+//     } else {
+//       setLedMatrix(defaultMatrix());
+//     }
+//   };
+
+const handleRunSimulator = () => {
+  parseCodeForDisplay(jsCode, (frame) => {
+    setLedMatrix(frame);
+  });
+}
 
   return (
     <div className="flex h-screen bg-gray-100 font-sans">

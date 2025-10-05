@@ -7,7 +7,7 @@ const microbitDisplayShowHeart = {
   message0: "hiển thị hình trái tim",
   previousStatement: null,
   nextStatement: null,
-  colour: 230,
+  colour: 200,
   tooltip: "Hiển thị biểu tượng trái tim trên màn hình LED của Micro:bit.",
   helpUrl: "",
 };
