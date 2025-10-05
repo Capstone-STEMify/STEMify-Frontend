@@ -96,7 +96,8 @@
       "content": "Content",
       "publish": "Publish",
       "share": "Share",
-      "addToCart": "Add to Cart"
+      "addToCart": "Add to Cart",
+      "quickView": "Quick View"
     },
     "paging": {
       "previous": "Previous",
