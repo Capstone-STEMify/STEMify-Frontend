@@ -114,7 +114,23 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
 
       {/* Product Features */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
-        <span>{kit.description}</span>
+        <span className='mb-2'>{kit.description}</span>
+        <p>
+          <span className='font-medium'>{t('list.sku')}:</span> {kit.sku}
+        </p>
+        <p>
+          <span className='font-medium'>{t('list.availability')}:</span>{' '}
+          {kit.stockQuantity > 0 ? t('list.available') : t('list.outOfStock')}
+          <span className='ml-2 text-gray-500'>
+            ( {kit.stockQuantity} {t('list.items')})
+          </span>
+        </p>
+        <p>
+          <span className='font-medium'>{t('detail.weight')}:</span> {kit.weight} grams
+        </p>
+        <p>
+          <span className='font-medium'>{t('detail.dimensions')}:</span> {kit.dimensions}
+        </p>
       </motion.div>
 
       {/* Select Product */}
