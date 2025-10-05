@@ -42,9 +42,11 @@ export default function KitDetail() {
   const addComponentButton = (
     <Button
       onClick={() => {
-        // openModal('addComponent', { kitId: kitData.data.id })
-        openModal('information', {
-          message: 'This feature is coming soon! Please come back later!'
+        console.log(kitData?.data.components)
+        openModal('selectComponentListModal', {
+          kitId: kitData?.data.id,
+          componentIds: kitData?.data.components?.map((c) => c.componentId),
+          existedComponents: kitData?.data.components || []
         })
       }}
       className='bg-sky-custom-300 mt-4 rounded-full px-4 text-white'

@@ -6,10 +6,10 @@ import KitListTable from '@/features/resource/kit/components/list/KitListTable'
 
 interface CourseListModalProps {
   onConfirm?: () => void
-  kitIds?: number[]
+  kitId?: number
 }
 
-export default function KitListTableModal({ onConfirm, kitIds }: CourseListModalProps) {
+export default function KitListTableModal({ onConfirm, kitId }: CourseListModalProps) {
   const t = useTranslations('curriculum')
   const { closeModal } = useModal()
 
@@ -24,7 +24,7 @@ export default function KitListTableModal({ onConfirm, kitIds }: CourseListModal
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className='h-fit w-full max-w-3xl'>
         <DialogTitle>{t('custom.selectKitTitle')}</DialogTitle>
-        <KitListTable onSuccess={handleSuccess} kitIds={kitIds} />
+        <KitListTable onSuccess={handleSuccess} kitId={kitId} />
       </DialogContent>
     </Dialog>
   )

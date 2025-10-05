@@ -1,13 +1,10 @@
 'use client'
 import React from 'react'
 import { useTranslations } from 'next-intl'
-import { ColumnDef, Row } from '@tanstack/react-table'
-import { useParams, useRouter } from 'next/navigation'
-import { useModal } from '@/providers/ModalProvider'
+import { ColumnDef } from '@tanstack/react-table'
 import { createSelectColumn } from '@/components/shared/data-table/columns-helpers'
 import z from 'zod'
 import Image from 'next/image'
-import { useLocale } from 'next-intl'
 import { Kit } from '@/features/resource/kit/types/kit.type'
 
 export const kitTableSchema = z.object({
@@ -16,12 +13,6 @@ export const kitTableSchema = z.object({
 
 export function useGetKitColumn(): ColumnDef<Kit>[] {
   const tc = useTranslations('common')
-  const tt = useTranslations('toast')
-  const tm = useTranslations('message')
-
-  const router = useRouter()
-  const locale = useLocale()
-  const { curriculumId } = useParams()
 
   return [
     createSelectColumn<Kit>(),

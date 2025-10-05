@@ -35,7 +35,8 @@
       "available": "Còn hàng",
       "outOfStock": "Hết hàng",
       "items": "Sản phẩm",
-      "reviews": "Đánh giá"
+      "reviews": "Đánh giá",
+      "singleCourseNote": "Một khóa học chỉ có thể gắn với duy nhất một bộ kit."
     },
     "detail": {
       "title": "Chi tiết bộ kit",
@@ -45,7 +46,8 @@
       "age": "Độ tuổi",
       "preOrder": "Đặt trước",
       "weight": "Trọng lượng",
-      "dimensions": "Kích thước"
+      "dimensions": "Kích thước",
+      "whatsIncluded": "Bao gồm các thành phần"
     },
     "form": {
       "title": {

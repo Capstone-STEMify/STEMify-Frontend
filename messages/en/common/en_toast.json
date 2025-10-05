@@ -9,11 +9,14 @@
       "saveOrder": "Successfully saved the order!",
       "enroll": "Enrollment request submitted successfully!. Please wait for approval",
       "enrollDes": "You have enroll to {title} at {time}",
-      "addToCurriculum": "Successfully added to curriculum!",
+      "addToCourse": "Successfully added to course!",
       "removeCourseFromCurriculum": "Successfully removed course from this curriculum!",
       "lessonStart": "Lesson Started!",
       "lessonStatus": "Lesson status updated to {status}!",
-      "sectionComplete": "Section Completed!"
+      "sectionComplete": "Section Completed!",
+      "addComponentToKit": "Successfully added components to kit!",
+      "removeComponent": "Successfully removed components from kit!",
+      "updateComponentInKit": "Successfully updated kit components!"
     },
     "errorMessage": "An error occurred. Please try again. ",
     "errorSpecific": {
@@ -25,11 +28,13 @@
       "confirmLabel": "Are you sure?",
       "delete": "Are you sure you want to delete \"{title}\"?",
       "removeCourse": "Are you sure you want to remove \"{title}\" from this curriculum?",
-      "removeKit": "Are you sure you want to remove \"{title}\" from this curriculum?",
+      "removeKit": "Are you sure you want to remove \"{title}\" from this course?",
+      "removeComponent": "Are you sure you want to remove component from this kit?",
       "discard": "Are you sure you want to discard your changes?",
       "ask": "Are you sure to make ",
       "askStatus": "Are you sure to {action} \"{title}\"?",
-      "sendRequest": "Are you sure you want to send approval request for \"{title}\"?"
+      "sendRequest": "Are you sure you want to send approval request for \"{title}\"?",
+      "addAnotherKit": "The course already has a kit. Do you want to replace it with a new one?"
     }
   }
 }

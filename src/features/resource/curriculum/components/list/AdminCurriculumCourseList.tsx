@@ -79,7 +79,10 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
           <Button
             className='bg-amber-custom-400'
             onClick={() => {
-              openModal('curriculumSelectCourseListModal', { curriculumId })
+              openModal('curriculumSelectCourseListModal', {
+                curriculumId,
+                courseIds: courses?.map((course) => course.id) || []
+              })
             }}
           >
             <Plus className='mr-1 h-4 w-4' />

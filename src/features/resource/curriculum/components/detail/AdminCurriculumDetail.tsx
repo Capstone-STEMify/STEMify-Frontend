@@ -39,7 +39,7 @@ export default function AdminCurriculumDetail() {
             <hr className='my-10' />
             <LearningOutcomeTable curriculumId={Number(curriculumId)} />
             <hr className='my-10' />
-            <CurriculumKitList kits={data?.data?.kits || []} />
+            <CurriculumKitList context='curriculum' kitIds={data?.data?.kitIds || []} />
             <hr className='my-10' />
             <AdminCurriculumCourseList curriculumId={Number(curriculumId)} courses={data?.data?.courses} />
           </>

@@ -1,5 +1,6 @@
 {
   "validation": {
+    "required": "This field is required",
     "user": {
       "name": "Name must start with a capital letter",
       "nameLength": "Name must be at least {length} characters long",

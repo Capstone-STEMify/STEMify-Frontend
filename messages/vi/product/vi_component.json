@@ -1,0 +1,29 @@
+{
+  "components": {
+    "list": {
+      "title": "Danh sách các thành phần",
+      "noData": "Không tìm thấy thành phần nào",
+      "noDataDescription": "Không có thành phần nào khả dụng. Vui lòng thay đổi từ khóa tìm kiếm hoặc thêm các thành phần mới.",
+      "noAvailableComponents": "Không có thành phần nào khả dụng. Nhấn <link>vào đây</link> để tạo thành phần mới.",
+      "placeholder": {
+        "search": "Tìm kiếm các thành phần ở đây..."
+      },
+      "existedComponents": "Đã có trong bộ kit",
+      "availableComponents": "Chưa thêm vào bộ kit"
+    },
+    "form": {
+      "title": {
+        "create": "Đã có trong bộ kit",
+        "edit": "Chỉnh sửa thành phần"
+      },
+      "fields": {
+        "name": "Tên",
+        "description": "Mô tả",
+        "image": "Hình ảnh"
+      }
+    },
+    "custom": {
+      "selectComponentTitle": "Chọn thành phần cho bộ dụng cụ"
+    }
+  }
+}

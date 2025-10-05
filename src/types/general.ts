@@ -32,6 +32,7 @@ export type ModalType =
   | 'upsertCurriculum'
   | 'upsertContent'
   | 'upsertKit'
+  | 'upsertComponent'
 
   // detail
   | 'lessonDetail'
@@ -41,6 +42,7 @@ export type ModalType =
   | 'pacingGuide'
   | 'curriculumSelectCourseListModal'
   | 'kitListTableModal'
+  | 'selectComponentListModal'
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void

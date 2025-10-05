@@ -1,0 +1,29 @@
+{
+  "components": {
+    "list": {
+      "title": "Component List",
+      "noData": "No components found",
+      "noDataDescription": "There are no components available. Please change the search keyword or add new components.",
+      "noAvailableComponents": "No available components. Click <link>here</link> to create new component.",
+      "placeholder": {
+        "search": "Search components here..."
+      },
+      "existedComponents": "Added Components",
+      "availableComponents": "Available Components"
+    },
+    "form": {
+      "title": {
+        "create": "Create New Component",
+        "edit": "Edit Component"
+      },
+      "fields": {
+        "name": "Component Name",
+        "description": "Description",
+        "image": "Component Image"
+      }
+    },
+    "custom": {
+      "selectComponentTitle": "Select Components for Kit"
+    }
+  }
+}

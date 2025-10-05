@@ -26,6 +26,7 @@
     "ageRangeLabel": "Nhãn độ tuổi",
     "minAge": "Tuổi tối thiểu",
     "maxAge": "Tuổi tối đa",
+    "quantity": "Số lượng",
     "PLO": {
       "name": "Tên",
       "description": "Mô tả"

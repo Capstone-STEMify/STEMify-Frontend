@@ -18,7 +18,7 @@ import LessonDetailModal from '@/features/resource/lesson/components/detail/Less
 import UpsertUserModal from '@/components/shared/modals/UpsertUserModal'
 import UpsertLearningOutcomeModal from '@/features/resource/learning-outcome/components/upsert/UpsertLearningOutcomeModal'
 import UpsertCurriculumModal from '@/features/resource/curriculum/components/upsert/UpsertCurriculumModal'
-import CurriculumSelectCourseListModal from '@/components/shared/modals/CurriculumSelectCourseListModal'
+import CurriculumSelectCourseListModal from '@/features/resource/curriculum/components/list/CurriculumSelectCourseListModal'
 import UpsertCourseModal from '@/features/resource/course/components/modal/UpsertCourseModal'
 import ContentDetailModal from '@/features/resource/content/components/detail/ContentDetailModal'
 import UpsertContentModal from '@/features/resource/content/components/upsert/UpsertContentModal'
@@ -26,6 +26,8 @@ import UpsertKitModal from '@/features/resource/kit/components/upsert/UpsertKitM
 import PacingGuideModal from '@/features/resource/lesson/components/modal/PacingGuideModal'
 import KitListTableModal from '@/features/resource/kit/components/list/KitListTableModal'
 import InformationModal from '@/components/shared/modals/InformationModal'
+import UpsertComponentModal from '@/features/kit-components/components/upsert/UpsertComponentModal'
+import SelectComponentListModal from '@/features/kit-components/components/list/SelectComponentListModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -73,6 +75,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertCourse' && <UpsertCourseModal {...modalProps} />}
       {modalType === 'upsertContent' && <UpsertContentModal {...modalProps} />}
       {modalType === 'upsertKit' && <UpsertKitModal {...modalProps} />}
+      {modalType === 'upsertComponent' && <UpsertComponentModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}
@@ -82,6 +85,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'pacingGuide' && <PacingGuideModal {...modalProps} />}
       {modalType === 'curriculumSelectCourseListModal' && <CurriculumSelectCourseListModal {...modalProps} />}
       {modalType === 'kitListTableModal' && <KitListTableModal {...modalProps} />}
+      {modalType === 'selectComponentListModal' && <SelectComponentListModal {...modalProps} />}
     </ModalContext.Provider>
   )
 }
