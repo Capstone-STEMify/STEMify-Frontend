@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion, time } from 'framer-motion'
-import { CalendarFold, Edit, Heart } from 'lucide-react'
+import { CalendarFold, Edit, Heart, ShoppingCartIcon } from 'lucide-react'
 import { TbDoorExit } from 'react-icons/tb'
 import { fadeInUp } from '@/utils/motion'
 import { Button } from '@/components/shadcn/button'
@@ -28,9 +28,7 @@ type TagGroupProps = {
   className?: string
 }
 
-const curGrade = [
-  'K-8', 'K-12', '1-5', '6-8', '9-12'
-]
+const curGrade = ['K-8', 'K-12', '1-5', '6-8', '9-12']
 
 const ageRange = ['6-8', '9-11', '12-14']
 
@@ -116,7 +114,11 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
                 items={curriculum?.topics ?? []}
                 className='bg-emerald-100 text-emerald-700'
               />
-              <TagGroup label={t('details.tags.skill')} items={curriculum?.skills ?? []} className='bg-red-100 text-red-800' />
+              <TagGroup
+                label={t('details.tags.skill')}
+                items={curriculum?.skills ?? []}
+                className='bg-red-100 text-red-800'
+              />
               {/* <TagGroup
                 label={t('details.tags.standard')}
                 items={course.standardNames}
@@ -125,18 +127,27 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
             </div>
 
             {userRole === UserRole.STUDENT || userRole === UserRole.GUEST ? (
-              <div className='flex flex-col gap-4 sm:flex-row'>
-                <Button
-                  onClick={handleEnroll}
-                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
-                >
-                  <TbDoorExit className='h-5 w-5' />
-                  {tc('button.enroll')}
-                </Button>
-                <Button className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-4xl border bg-white py-6 text-lg'>
-                  <Heart className='h-5 w-5' />
-                  {tc('button.wishlist')}
-                </Button>
+              <div>
+                <div className='mt-2 flex items-center gap-3'>
+                  <span className='text-2xl font-bold text-gray-700'>
+                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+                      curriculum?.price ?? 0
+                    )}
+                  </span>
+                </div>
+                <div className='mt-6 flex flex-col gap-4 sm:flex-row'>
+                  <Button
+                    onClick={handleEnroll}
+                    className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
+                  >
+                    <ShoppingCartIcon className='h-5 w-5' />
+                    {tc('button.addToCart')}
+                  </Button>
+                  <Button className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-4xl border bg-white py-6 text-lg'>
+                    <Heart className='h-5 w-5' />
+                    {tc('button.wishlist')}
+                  </Button>
+                </div>
               </div>
             ) : (
               <div className='flex gap-5'>
@@ -162,7 +173,10 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
 
           <div className='mb-5 w-full flex-1'>
             <Image
-              src={curriculum?.imageUrl || 'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'}
+              src={
+                curriculum?.imageUrl ||
+                'https://6234779.fs1.hubspotusercontent-na1.net/hub/6234779/hubfs/product_imagination-kit_02.jpg?width=1920&name=product_imagination-kit_02.jpg'
+              }
               width={400}
               height={250}
               alt={curriculum?.title ?? ''}

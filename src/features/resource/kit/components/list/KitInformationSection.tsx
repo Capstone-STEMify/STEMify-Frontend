@@ -1,10 +1,12 @@
 'use client'
+import { Button } from '@/components/shadcn/button'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SCarousel } from '@/components/shared/SCarousel'
 import { useLazyGetKitByIdQuery } from '@/features/resource/kit/api/kitProductApi'
 import { Kit } from '@/features/resource/kit/types/kit.type'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 type KitInformationSectionProps = {
@@ -13,8 +15,11 @@ type KitInformationSectionProps = {
 
 export default function KitInformationSection({ kitIds }: KitInformationSectionProps) {
   const t = useTranslations('curriculum')
+  const tc = useTranslations('common')
   const [kits, setKits] = useState<Kit[]>([])
   const [loadingKits, setLoadingKits] = useState(false)
+  const router = useRouter()
+  const locale = useLocale()
 
   const [triggerGetKitById] = useLazyGetKitByIdQuery()
   // curriculum: fetch từng kitId
@@ -59,6 +64,12 @@ export default function KitInformationSection({ kitIds }: KitInformationSectionP
           <div className={`max-w-2xl ${i % 2 === 1 ? 'md:order-2' : ''}`}>
             <h2 className='mb-4 text-4xl font-bold tracking-tight'>{kit.name}</h2>
             <p className='mb-4 leading-relaxed text-gray-700'>{kit.description || 'No description available.'}</p>
+            <Button
+              className='bg-gradient-to-r from-amber-300 to-amber-400 px-8 py-6 text-xl text-gray-800'
+              onClick={() => router.push(`/${locale}/shop/${kit.id}` || '#')}
+            >
+              {tc('button.shop')}
+            </Button>
           </div>
 
           {/* Right Section (carousel) */}
@@ -75,7 +86,7 @@ export default function KitInformationSection({ kitIds }: KitInformationSectionP
                       alt='Kit Image'
                       width={500}
                       height={500}
-                      className='aspect-square rounded-3xl object-cover shadow-xs'
+                      className='aspect-square rounded-3xl object-cover shadow-md transition-transform duration-300 group-hover:scale-105'
                     />
                   </div>
                 ))}

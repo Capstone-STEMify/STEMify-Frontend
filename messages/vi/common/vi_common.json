@@ -54,7 +54,8 @@
       "look": "Tìm hiểu thêm",
       "addToCart": "Thêm Vào Giỏ Hàng",
       "quickView": "Xem Nhanh",
-      "goToCourse": "Đi đến Khóa học"
+      "goToCourse": "Đi đến Khóa học",
+      "shop": "MUA NGAY"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",
@@ -66,7 +67,7 @@
       "curriculumUpdateError": "Đã xảy ra lỗi khi cập nhật chương trình học. Vui lòng thử lại.",
       "curriculumDeleteError": "Đã xảy ra lỗi khi xóa chương trình học. Vui lòng thử lại.",
       "printPreview": "BẢN XEM TRƯỚC",
-      "learnTitle": "Những gì học được"
+      "learnTitle": "Sau khi hoàn thành khóa học, bạn sẽ: "
     },
     "tableHeader": {
       "id": "ID",

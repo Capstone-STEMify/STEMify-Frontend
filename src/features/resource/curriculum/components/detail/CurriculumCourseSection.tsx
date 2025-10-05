@@ -24,15 +24,16 @@ export default function CurriculumCourseSection({ courses }: CurriculumCourseSec
           variant='spacing'
           autoplayDelay={2000}
           items={courses.map((course, i) => (
-            <div className='p-1' key={course.id}>
+            <div className='group cursor-pointer p-2.5' key={course.id}>
               <CardLayout
                 imageRatio='aspect-3/2'
-                imageClassName='object-cover'
+                imageClassName='object-cover transition-transform duration-300 group-hover:scale-110'
                 onClick={() => router.push(`/resource/course/${course.id}`)}
                 imageSrc={course.imageUrl || 'images/fallback.png'}
+                className='rounded-3xl'
               >
                 <div className='flex h-full flex-col justify-between p-2'>
-                  <div className='min-h-[120px]'>
+                  <div className='mb-6 min-h-[130px]'>
                     <h4 className='text-amber-custom-400 text-sm font-semibold'>
                       {t('custom.courseTag').toLocaleUpperCase()}
                     </h4>

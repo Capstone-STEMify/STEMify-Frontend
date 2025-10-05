@@ -48,7 +48,7 @@ export default function CurriculumDetail() {
     )
 
   return (
-    <div className='relative mx-auto w-full pb-20'>
+    <div className='relative mx-auto w-full pb-40'>
       <AnimatedBackground />
       <div className='relative'>
         {/* Content Section */}
