@@ -1,3 +1,4 @@
+'use client'
 import CourseDetailEnrolled from '@/features/resource/course/components/detail/enrolled/CourseDetailEnrolled'
 import { useParams, useSearchParams } from 'next/navigation'
 import React from 'react'

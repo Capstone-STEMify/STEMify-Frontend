@@ -3,7 +3,6 @@ import { fadeInUp } from '@/utils/motion'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
 import { formatDuration } from '@/utils/index'
-import { GripVertical } from 'lucide-react'
 import { useSearchLessonQuery, useUpdateLessonMutation } from '@/features/resource/lesson/api/lessonApi'
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
@@ -12,8 +11,6 @@ import { useEffect, useState } from 'react'
 import { UserRole } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 import { Lesson } from '@/features/resource/lesson/types/lesson.type'
 import Link from 'next/link'
 import SEmpty from '@/components/shared/empty/SEmpty'
@@ -88,22 +85,22 @@ export default function ContentSection() {
 
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
           {items.map((lesson) => (
-            <Link
-              href={`/resource/lesson/${lesson.id}`}
-              className='flex w-fit flex-col justify-between'
-              key={lesson.id}
-            >
-              <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
-                <div className='flex min-h-0 flex-1 flex-col'>
-                  <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
-                  <p className='mb-2 line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
-                  <div className='mt-auto flex items-center gap-2'>
-                    <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
-                    <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
-                  </div>
+            // <Link
+            //   href={isTeacher ? `/resource/lesson/${lesson.id}` : '#'}
+            //   className='flex w-fit flex-col justify-between'
+            //   key={lesson.id}
+            // >
+            <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
+              <div className='flex min-h-0 flex-1 flex-col'>
+                <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
+                <p className='mb-2 line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
+                <div className='mt-auto flex items-center gap-2'>
+                  <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
+                  <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
                 </div>
-              </CardLayout>
-            </Link>
+              </div>
+            </CardLayout>
+            // </Link>
           ))}
         </div>
 

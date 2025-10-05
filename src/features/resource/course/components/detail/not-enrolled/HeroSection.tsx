@@ -123,14 +123,16 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
                 items={course.standardNames}
                 className='text-orange-custom-500 bg-yellow-custom-50'
               />
-              {userRole === UserRole.GUEST ||
-                (userRole === UserRole.STUDENT && !enrollmentStatus && (
-                  <div className='mt-2 flex items-center gap-3'>
-                    <span className='text-2xl font-bold text-red-600'>
-                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(course.price)}
-                    </span>
-                  </div>
-                ))}
+              {(userRole === UserRole.GUEST || (userRole === UserRole.STUDENT && !enrollmentStatus)) && (
+                <div className='mt-2 flex items-center gap-3'>
+                  <span className='text-2xl font-bold text-gray-600'>
+                    {new Intl.NumberFormat('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND'
+                    }).format(course.price)}
+                  </span>
+                </div>
+              )}
             </div>
 
             {userRole === UserRole.TEACHER || enrollmentStatus === 'inProgress' ? (

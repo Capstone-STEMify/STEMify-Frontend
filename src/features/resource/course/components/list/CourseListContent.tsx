@@ -3,14 +3,12 @@
 import { Badge } from '@/components/shadcn/badge'
 import CardLayout from '@/components/shared/card/CardLayout'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { SDropDown } from '@/components/shared/SDropDown'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
-import { useDeleteCourseMutation, useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
+import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { CourseQueryParams, CourseStatus } from '@/features/resource/course/types/course.type'
 import { setPageIndex, setPageSize } from '@/features/resource/course/slice/courseSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { EllipsisVertical, PlusCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { UserRole } from '@/types/userRole'
@@ -18,7 +16,6 @@ import { useRouter } from 'next/navigation'
 import { capitalizeFirst } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import { getLevelBadgeClass } from '@/utils/badgeColor'
-import { toast } from 'sonner'
 import { useModal } from '@/providers/ModalProvider'
 
 export default function CourseListContent() {
@@ -95,6 +92,7 @@ export default function CourseListContent() {
           <div key={course.id} className='relative flex min-w-0 gap-1'>
             <Link href={`/resource/course/${course.id}`} className='flex w-fit flex-col justify-between'>
               <CardLayout
+                className='rounded-2xl border-none shadow-lg'
                 imageSrc={course.imageUrl || '/images/fallback.png'}
                 footer={
                   <div className='flex items-center gap-2'>
@@ -104,9 +102,9 @@ export default function CourseListContent() {
                 }
               >
                 <div>
-                  <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
-                  <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{course.title}</h3>
-                  <p className='line-clamp-2 text-xs text-gray-600'>{course.description}</p>
+                  <p className='text-muted-foreground text-sm font-medium'>{course.code}</p>
+                  <h3 className='text-md line-clamp-1 font-semibold text-gray-900'>{course.title}</h3>
+                  <p className='line-clamp-2 text-sm text-gray-600'>{course.description}</p>
                   <p className='text-md mt-1 font-semibold text-sky-500'>
                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(course.price)}
                   </p>
