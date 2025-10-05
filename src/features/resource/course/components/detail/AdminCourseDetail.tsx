@@ -27,6 +27,7 @@ import { useLazyExportToRSAQuery } from '@/features/resource/export/api/exportAp
 import ExportRSAButton from '@/components/shared/button/ExportRSAButton'
 import CurriculumKitList from '@/features/resource/kit/components/list/CurriculumKitList'
 import KitListSection from '@/features/resource/kit/components/list/CurriculumKitList'
+import { Card } from '@/components/shadcn/card'
 
 export default function AdminCourseDetail() {
   const t = useTranslations('Admin.course_details')
@@ -196,6 +197,15 @@ export default function AdminCourseDetail() {
             fill
             className='object-cover'
           />
+        </div>
+        <div className='flex items-center justify-center gap-2'>
+          <span className='text-2xl font-bold text-red-600 italic'>{t('price')}:</span>
+          <span className='text-2xl font-bold text-red-600 italic'>
+            {new Intl.NumberFormat('vi-VN', {
+              style: 'currency',
+              currency: 'VND'
+            }).format(course.data.price)}
+          </span>
         </div>
 
         {/* Metadata */}

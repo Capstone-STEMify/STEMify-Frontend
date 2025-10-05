@@ -18,6 +18,7 @@ export type Curriculum = {
   courseCount: number
   courses: Course[]
   kitIds?: number[]
+  price: number
 }
 
 export type CurriculumSliceParams = {

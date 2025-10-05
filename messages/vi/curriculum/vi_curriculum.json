@@ -17,7 +17,8 @@
     },
     "details": {
       "title": "Chi Tiết Khung Chương Trình",
-      "addCourse": "Thêm Khóa Học"
+      "addCourse": "Thêm Khóa Học",
+      "price": "Giá"
     },
 
     "form": {
@@ -40,6 +41,11 @@
           "label": "Mã",
           "note": "Mã định danh duy nhất cho khung chương trình",
           "placeholder": "ví dụ: SU001"
+        },
+        "price": {
+          "label": "Giá",
+          "note": "Giá cho khung chương trình (tối thiểu 1000)",
+          "placeholder": "ví dụ 499.000"
         }
       }
     },

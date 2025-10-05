@@ -122,6 +122,10 @@
             "advanced": "Nâng cao"
           }
         },
+        "price": {
+          "label": "Giá (VND)",
+          "placeholder": "e.g: 100.000"
+        },
         "image": {
           "label": "Ảnh Bìa",
           "note": "Tải lên ảnh bìa",

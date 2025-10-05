@@ -17,7 +17,8 @@
     },
     "details": {
       "title": "Curriculum Details",
-      "addCourse": "Add Course"
+      "addCourse": "Add Course",
+      "price": "Price"
     },
 
     "form": {
@@ -40,6 +41,11 @@
           "label": "Code",
           "note": "Unique identifier for the curriculum",
           "placeholder": "e.g SU001"
+        },
+        "price": {
+          "label": "Price",
+          "note": "Price for the curriculum (minimum 1000)",
+          "placeholder": "e.g 499.000"
         }
       }
     },

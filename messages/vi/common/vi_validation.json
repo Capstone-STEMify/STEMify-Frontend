@@ -35,7 +35,8 @@
       "description": "Ít nhất {length} ký tự",
       "ageRangeId": "Độ tuổi phù hợp với khóa học (bắt buộc)",
       "image": "Ảnh bìa là bắt buộc",
-      "imgSize": "Tối đa {size}MB được phép"
+      "imgSize": "Tối đa {size}MB được phép",
+      "priceMin": "Giá khóa học ít nhất {min} VND"
     },
     "curriculum": {
       "code": "Mã khóa học, ít nhất {length} ký tự, dùng để nhận dạng khóa học",
