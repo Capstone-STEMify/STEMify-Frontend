@@ -42,19 +42,27 @@ export default function KitListSection(props: KitListProps) {
     const fetchKits = async () => {
       if (props.context === 'curriculum' && props.kitIds.length > 0) {
         setLoadingKits(true)
-        try {
-          const results = await Promise.all(props.kitIds.map((id) => triggerGetKitById(id).unwrap()))
-          setKits(results.map((res) => res.data))
-        } catch (error) {
-          console.error('Error fetching kits:', error)
-        } finally {
-          setLoadingKits(false)
+        const kits: any[] = []
+
+        for (const id of props.kitIds) {
+          try {
+            const result = await triggerGetKitById(id).unwrap()
+            kits.push(result.data)
+          } catch (err: any) {
+            if (err?.status === 404) {
+              console.warn(`Kit ${id} not found (404), skipping.`)
+            } else {
+              console.error(`Error loading kit ${id}:`, err)
+            }
+          }
         }
+        setKits(kits)
+        setLoadingKits(false)
       }
     }
 
     fetchKits()
-  }, [props.context === 'curriculum' ? props.kitIds : []])
+  }, [props.context === 'curriculum' ? props.kitIds.join(',') : ''])
 
   const finalKits = isCourse ? (kitData?.data ? [kitData.data] : []) : kits
 
