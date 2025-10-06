@@ -29,6 +29,7 @@ export type CourseEnrollment = {
   enrolledAt: string
   completedAt: any
   status: string
+  certificateImageUrl?: string
 }
 
 export type CurriculumEnrollment = {
@@ -42,6 +43,8 @@ export type CurriculumEnrollment = {
   enrolledAt: string
   completedAt: any
   status: string
+  certificateImageUrl?: string
+  courseEnrollments: CourseEnrollment[]
 }
 
 // Query

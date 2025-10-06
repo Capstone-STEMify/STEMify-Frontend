@@ -1,11 +1,12 @@
-// app/accomplishments/components/CourseCard.tsx
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
-import { FileText } from 'lucide-react'
-import { Course } from '../../api/mockData'
+import { FileText, MoreHorizontal } from 'lucide-react'
+import { CourseEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
+import Image from 'next/image'
+import { Progress } from '@/components/shadcn/progress'
 
 interface CourseCardProps {
-  course: Course
+  course: CourseEnrollment
 }
 
 export const CourseCard = ({ course }: CourseCardProps) => {
@@ -13,18 +14,34 @@ export const CourseCard = ({ course }: CourseCardProps) => {
     <Card>
       <CardContent className='flex items-center justify-between'>
         <div className='flex items-center gap-4 py-4'>
-          <div className='rounded-md bg-gray-100 p-3'>
-            <FileText className='h-6 w-6 text-gray-600' />
+          <div>
+            <Image
+              className='aspect-square rounded-sm border bg-white object-contain shadow-sm'
+              src={course.coverImageUrl}
+              width={84}
+              height={84}
+              alt='Specialization'
+            ></Image>
           </div>
           <div>
-            <h3 className='text-base font-bold text-gray-900'>{course.title}</h3>
-            <p className='text-sm text-gray-600'>{course.university}</p>
-            <p className='mt-1 text-sm text-gray-600'>
-              Grade Achieved: <span className='font-semibold'>{course.grade}%</span>
-            </p>
+            <h3 className='text-base font-bold text-gray-900'>{course.courseTitle}</h3>
+            <p className='mt-1 text-sm text-gray-600'>{course.status}</p>
+            <Progress value={50} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
+            <span className='text-sm font-medium text-gray-700'>45%</span>
+            {course.status === EnrollmentStatus.COMPLETED && (
+              <p className='mt-1 text-sm text-gray-600'>
+                {/* fix later */}
+                Grade Achieved: <span className='font-semibold'>95.01%</span>
+                <span>Completed At: {course.completedAt}</span>
+              </p>
+            )}
           </div>
         </div>
-        <Button className='ml-4 flex-shrink-0 bg-blue-500'>Add to LinkedIn</Button>
+        {course.status === EnrollmentStatus.COMPLETED ? (
+          <Button className='ml-4 flex-shrink-0 bg-blue-500'>View Certificate</Button>
+        ) : (
+          <MoreHorizontal className='ml-4 h-5 w-5 flex-shrink-0 cursor-pointer text-gray-500' />
+        )}
       </CardContent>
     </Card>
   )
