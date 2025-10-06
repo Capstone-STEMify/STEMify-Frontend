@@ -43,7 +43,7 @@ export default function CardLayout({
       onClick={href ? undefined : onClick}
     >
       {/* Image section */}
-      <div className={clsx('relative w-full', imageRatio)}>
+      <div className={clsx('relative w-full overflow-hidden', imageRatio)}>
         <Image
           src={imageSrc || '/images/fallback.png'}
           alt={alt}

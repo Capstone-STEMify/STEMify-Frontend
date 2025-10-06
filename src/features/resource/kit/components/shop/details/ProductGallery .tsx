@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Heart } from 'lucide-react'
-import { useParams } from 'next/navigation'
-import { useGetKitByIdQuery, useSearchKitQuery } from '@/features/resource/kit/api/kitProductApi'
-import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useTranslations } from 'next-intl'
 export interface ProductGalleryProps {
   kitImages: string[]
 }
 
 const ProductGallery: React.FC<ProductGalleryProps> = ({ kitImages }) => {
+  const t = useTranslations('kits')
   const [currentImage, setCurrentImage] = useState(0)
 
   const nextImage = () => setCurrentImage((prev) => (prev + 1) % kitImages.length)
@@ -93,7 +92,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ kitImages }) => {
                   <line x1='3' y1='10' x2='21' y2='10' strokeWidth='1.5' strokeLinecap='round' />
                 </svg>
               ),
-              text: 'Secure Payment'
+              text: t('detail.securePayment')
             },
             {
               icon: (
@@ -106,7 +105,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ kitImages }) => {
                   />
                 </svg>
               ),
-              text: '12-month Warranty'
+              text: t('detail.warranty')
             },
             {
               icon: (
@@ -130,7 +129,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ kitImages }) => {
                   <circle cx='18.5' cy='18.5' r='2.5' strokeWidth='1.5' />
                 </svg>
               ),
-              text: 'Free Shipping'
+              text: t('detail.freeShipping')
             },
             {
               icon: (
@@ -140,7 +139,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ kitImages }) => {
                   <path d='M16.24 7.76l-1.41 1.41M7.76 16.24l1.41-1.41' strokeWidth='1.5' strokeLinecap='round' />
                 </svg>
               ),
-              text: '30-day Return & Refund'
+              text: t('detail.returnRefund')
             }
           ].map((feature, idx) => (
             <motion.div
@@ -170,7 +169,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ kitImages }) => {
               d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
             />
           </svg>
-          <span className='text-sm font-medium'>Questions about products? Contact us for support.</span>
+          <span className='text-sm font-medium'>{t('detail.productQuestions')}</span>
         </motion.div>
       </motion.div>
     </motion.div>

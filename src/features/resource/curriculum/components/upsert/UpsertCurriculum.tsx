@@ -24,7 +24,8 @@ const defaultCurriculum: CurriculumFormData = {
   title: '',
   description: '',
   imageUrl: undefined,
-  imagePreviewUrl: ''
+  imagePreviewUrl: '',
+  price: 1000
 }
 async function CreateCurriculumJsonPayload(data: CurriculumFormData, userId: string) {
   let imageBase64: string | null = null
@@ -38,7 +39,8 @@ async function CreateCurriculumJsonPayload(data: CurriculumFormData, userId: str
     title: data.title,
     description: data.description,
     createdByUserId: userId,
-    image: imageBase64
+    image: imageBase64,
+    price: data.price
   }
 }
 
@@ -54,6 +56,7 @@ async function PatchCurriculumJsonPayload(
   if (oldData.title !== newData.title) patchData.title = newData.title
   if (oldData.description !== newData.description) patchData.description = newData.description
   if (oldData.code !== newData.code) patchData.code = newData.code
+  if (oldData.price !== newData.price) patchData.price = newData.price
 
   if (newData.imageUrl && typeof newData.imageUrl !== 'string') {
     const base64 = await fileToBase64(newData.imageUrl)
@@ -69,7 +72,8 @@ function mapCurriculumToFormData(curriculum: ApiSuccessResponse<Curriculum>): Cu
     title: curriculum.data.title ?? '',
     description: curriculum.data.description ?? '',
     imageUrl: null as any,
-    imagePreviewUrl: curriculum.data.imageUrl ?? undefined
+    imagePreviewUrl: curriculum.data.imageUrl ?? undefined,
+    price: curriculum.data.price ?? 1000
   }
 }
 
@@ -157,18 +161,32 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
             return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
           }}
         />
-        <form.AppField
-          name='code'
-          children={(field) => (
-            <field.TextField
-              label={t('form.fields.code.label')}
-              placeholder={t('form.fields.code.placeholder')}
-              className='rounded-lg border-gray-300'
-              disabled={!!curriculumId}
-            />
-          )}
-        />
-
+        <div className='grid grid-cols-2 gap-5'>
+          <form.AppField
+            name='code'
+            children={(field) => (
+              <field.TextField
+                label={t('form.fields.code.label')}
+                placeholder={t('form.fields.code.placeholder')}
+                className='rounded-lg border-gray-300'
+                disabled={!!curriculumId}
+              />
+            )}
+          />
+          <form.AppField
+            name='price'
+            children={(field) => (
+              <field.TextField
+                type='number'
+                min={1000}
+                defaultValue={1000}
+                label={t('form.fields.price.label')}
+                placeholder={t('form.fields.price.placeholder')}
+                className='rounded-lg border-gray-300'
+              />
+            )}
+          />
+        </div>
         <form.AppField
           name='title'
           children={(field) => (

@@ -104,6 +104,7 @@
       "skill": "Skills",
       "standard": "Standards",
       "code": "Code",
+      "price": "Price",
       "button": {
         "update": "Update Course",
         "delete": "Delete Course",

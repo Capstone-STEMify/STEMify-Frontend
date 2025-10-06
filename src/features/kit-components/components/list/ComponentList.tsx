@@ -42,10 +42,6 @@ export default function ComponentList() {
       </div>
     )
   }
-  if (!componentData || componentData.data.items.length === 0) {
-    return <SEmpty title={t('list.noData')} description={t('list.noDataDetail')} />
-  }
-
   return (
     <div className='pt-4 select-none'>
       <div className='relative flex w-full max-w-[700px] items-center justify-start gap-4 pt-4 pb-10 md:flex-row'>
@@ -69,14 +65,18 @@ export default function ComponentList() {
         </Button>
       </div>
 
-      <DataTable
-        data={rows}
-        columns={columns}
-        enableRowSelection
-        pagingData={componentData?.data}
-        pagingParams={queryParams}
-        handlePageChange={handlePageChange}
-      />
+      {!componentData || componentData.data.items.length === 0 ? (
+        <SEmpty title={t('list.noData')} description={t('list.noDataDescription')} />
+      ) : (
+        <DataTable
+          data={rows}
+          columns={columns}
+          enableRowSelection
+          pagingData={componentData?.data}
+          pagingParams={queryParams}
+          handlePageChange={handlePageChange}
+        />
+      )}
     </div>
   )
 }

@@ -3,7 +3,8 @@
     "list": {
       "title": "Component List",
       "noData": "No components found",
-      "noDataDescription": "There are no components available. Please add new components to see them listed here.",
+      "noDataDescription": "There are no components available. Please change the search keyword or add new components.",
+      "noAvailableComponents": "No available components. Click <link>here</link> to create new component.",
       "placeholder": {
         "search": "Search components here..."
       },

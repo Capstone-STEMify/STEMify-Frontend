@@ -10,17 +10,32 @@ import HeroSection from '@/features/resource/course/components/detail/not-enroll
 import LearningObjectives from '@/components/shared/outcome/LearningObjectives'
 import { useSearchLearningOutcomeQuery } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
 import { useTranslations } from 'next-intl'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { UserRole } from '@/types/userRole'
+import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
+import { useParams } from 'next/navigation'
 
-type CourseDetailNotEnrolledProps = {
-  courseId?: number
-}
+export default function CourseDetailNotEnrolled() {
+  const auth = useAppSelector((state) => state.auth)
+  const studentId = auth?.user?.userId
+  const userRole = auth?.user?.role || UserRole.GUEST
 
-export default function CourseDetailNotEnrolled({ courseId }: CourseDetailNotEnrolledProps) {
+  const { courseId } = useParams()
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
-  const {data: LearningOutcome, isLoading: outcomeLoading, isFetching: outcomeFetching} = useSearchLearningOutcomeQuery({courseId: Number(courseId)})
+  const {
+    data: LearningOutcome,
+    isLoading: outcomeLoading,
+    isFetching: outcomeFetching
+  } = useSearchLearningOutcomeQuery({ courseId: Number(courseId) })
   const tc = useTranslations('common.message')
 
-  if (isLoading || outcomeLoading || outcomeFetching)
+  const {
+    data: enrollmentData,
+    isLoading: enrollmentLoading,
+    error: enrollmentError
+  } = useSearchEnrollmentQuery({ courseId: Number(courseId), studentId }, { skip: !studentId })
+
+  if (isLoading || outcomeLoading || outcomeFetching || enrollmentLoading)
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />
@@ -41,7 +56,7 @@ export default function CourseDetailNotEnrolled({ courseId }: CourseDetailNotEnr
   return (
     <div className='min-h-screen bg-white'>
       <div className='relative'>
-        <HeroSection course={course.data} />
+        <HeroSection course={course.data} enrollmentStatus={enrollmentData?.data.items[0].status} />
         <StatsSection course={course.data} />
       </div>
       <div className='mt-30 sm:mt-32'>

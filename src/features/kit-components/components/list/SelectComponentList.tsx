@@ -15,7 +15,8 @@ import { ComponentSliceParams, KitComponent } from '@/features/kit-components/ty
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import Loading from 'app/[locale]/loading'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -23,15 +24,22 @@ type SelectComponentListProps = {
   kitId: number
   onSuccess?: () => void
   existedComponents?: KitComponent[]
+  refetch?: () => void
 }
 
-export default function SelectComponentList({ kitId, onSuccess, existedComponents = [] }: SelectComponentListProps) {
+export default function SelectComponentList({
+  kitId,
+  onSuccess,
+  existedComponents = [],
+  refetch
+}: SelectComponentListProps) {
   const t = useTranslations('components')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const tb = useTranslations('tableHeader')
   const dispatch = useAppDispatch()
   const { closeModal } = useModal()
+  const locale = useLocale()
 
   const columns = useGetComponentColumn({ isPopup: true })
   const visibleKeys = ['imageUrl', 'name', 'select']
@@ -67,12 +75,14 @@ export default function SelectComponentList({ kitId, onSuccess, existedComponent
 
   const handleAddComponentsToKit = async (components: Partial<KitComponent>[]) => {
     await addComponentsToKit({ kitId, components })
+    refetch?.()
     toast.success(tt('successMessage.addComponentToKit'))
     onSuccess?.()
   }
 
   const handleUpdateKitComponents = async (components: Partial<KitComponent>[]) => {
     await updateKitComponents({ components })
+    refetch?.()
     toast.success(tt('successMessage.updateComponentInKit'))
     onSuccess?.()
   }
@@ -179,6 +189,17 @@ export default function SelectComponentList({ kitId, onSuccess, existedComponent
                 })
               setSelectedComponents(newSelected)
             }}
+            placeholder={t.rich('list.noAvailableComponents', {
+              link: (chunks) => (
+                <Link
+                  href={`/${locale}/admin/component`}
+                  target='_blank'
+                  className='text-sky-500 underline hover:text-sky-600'
+                >
+                  {chunks}
+                </Link>
+              )
+            })}
           />
         </TabsContent>
 

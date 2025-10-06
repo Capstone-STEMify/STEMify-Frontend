@@ -3,11 +3,14 @@ import { motion } from 'framer-motion'
 import { ChevronDown, HandCoins, RotateCcw, Shield, ShoppingCart, Star, Truck, Wallet } from 'lucide-react'
 import Image from 'next/image'
 import { Kit } from '@/features/resource/kit/types/kit.type'
+import { useTranslations } from 'next-intl'
 export interface ProductInfoProps {
   kit: Kit
 }
 
 const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
+  const t = useTranslations('kits')
+  const tc = useTranslations('common')
   const [quantity, setQuantity] = useState(1)
 
   return (
@@ -111,12 +114,28 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
 
       {/* Product Features */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
-        <span>{kit.description}</span>
+        <span className='mb-2'>{kit.description}</span>
+        <p>
+          <span className='font-medium'>{t('list.sku')}:</span> {kit.sku}
+        </p>
+        <p>
+          <span className='font-medium'>{t('list.availability')}:</span>{' '}
+          {kit.stockQuantity > 0 ? t('list.available') : t('list.outOfStock')}
+          <span className='ml-2 text-gray-500'>
+            ( {kit.stockQuantity} {t('list.items')})
+          </span>
+        </p>
+        <p>
+          <span className='font-medium'>{t('detail.weight')}:</span> {kit.weight} grams
+        </p>
+        <p>
+          <span className='font-medium'>{t('detail.dimensions')}:</span> {kit.dimensions}
+        </p>
       </motion.div>
 
       {/* Select Product */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
-        <h3 className='mb-3 text-lg font-bold text-gray-900'>Select Your Product:</h3>
+        <h3 className='mb-3 text-lg font-bold text-gray-900'>{t('detail.selectYourProduct')}</h3>
         <div className='space-y-3'>
           <motion.button
             key={kit.id}
@@ -179,7 +198,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
             whileTap={{ scale: 0.98 }}
             className='flex-1 rounded-full bg-gradient-to-r from-sky-300 to-sky-500 py-4 text-lg font-bold text-white shadow-xl shadow-blue-200 transition-all hover:shadow-2xl'
           >
-            ADD TO CART
+            {tc('button.addToCart')}
           </motion.button>
         </div>
       </motion.div>
@@ -193,14 +212,14 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
       >
         <div className='flex items-center gap-2 text-sm text-gray-700'>
           <Truck className='h-5 w-5 text-blue-600' />
-          <span className='font-semibold'>Buy with Prime for a Faster Delivery</span>
+          <span className='font-semibold'>{t('detail.primeDelivery')}</span>
         </div>
 
         <div className='rounded-xl bg-white p-4 shadow-sm'>
           <div className='mb-3 flex items-center justify-between'>
             <div className='flex items-center gap-2'>
               <Wallet className='h-5 w-5 text-green-600'></Wallet>
-              <span className='font-semibold text-gray-900'>Safe & Secure Checkout</span>
+              <span className='font-semibold text-gray-900'>{t('detail.safeCheckout')}</span>
             </div>
 
             <div className='flex gap-2'>
@@ -222,7 +241,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
         <div className='flex justify-between rounded-xl border border-yellow-200 bg-yellow-50 p-4 shadow-sm'>
           <div className='mb-2 flex items-center gap-2'>
             <Truck className='h-5 w-5 text-yellow-600' />
-            <span className='font-semibold text-gray-900'>Ship in 2 Business Days</span>
+            <span className='font-semibold text-gray-900'>{t('detail.shipTime')}</span>
           </div>
           <div className='flex gap-2'>
             <img

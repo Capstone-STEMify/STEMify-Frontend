@@ -122,6 +122,10 @@
             "advanced": "Advanced"
           }
         },
+        "price": {
+          "label": "Price (VND)",
+          "placeholder": "e.g: 100.000"
+        },
         "image": {
           "label": "Cover Image",
           "note": "Upload cover image",

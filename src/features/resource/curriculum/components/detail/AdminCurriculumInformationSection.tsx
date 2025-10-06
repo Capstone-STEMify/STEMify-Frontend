@@ -48,7 +48,7 @@ export default function AdminCurriculumInformationSection({
   const handleUpdateCurriculumStatus = async (status: CurriculumStatus) => {
     try {
       await updateCurriculumStatus({ id: curriculumId, body: { status } }).unwrap()
-      toast.success(`${tt('successMessage.update')}`)
+      toast.success(`${tt('successMessage.action', { title: curriculum.title || '', action: status })}`)
     } catch (error) {
       toast.error(tt('errorMessage'))
     }
@@ -167,13 +167,24 @@ export default function AdminCurriculumInformationSection({
       </div>
 
       {/* Image Section */}
-      <div className='relative aspect-[4/4] w-full overflow-hidden rounded-2xl shadow-md'>
-        <Image
-          src={curriculum.imageUrl || '/images/fallback.png'}
-          alt='STEAM Starter Curriculum'
-          fill
-          className='object-cover'
-        />
+      <div>
+        <div className='relative aspect-[4/4] w-full overflow-hidden rounded-2xl shadow-md'>
+          <Image
+            src={curriculum.imageUrl || '/images/fallback.png'}
+            alt='STEAM Starter Curriculum'
+            fill
+            className='object-cover'
+          />
+        </div>
+        <div className='flex items-center justify-center gap-2 pt-4'>
+          <span className='text-2xl font-bold text-red-600 italic'>{t('details.price')}:</span>
+          <span className='text-2xl font-bold text-red-600 italic'>
+            {new Intl.NumberFormat('vi-VN', {
+              style: 'currency',
+              currency: 'VND'
+            }).format(curriculum.price)}
+          </span>
+        </div>
       </div>
     </div>
   )

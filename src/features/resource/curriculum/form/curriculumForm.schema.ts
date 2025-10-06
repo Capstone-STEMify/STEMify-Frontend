@@ -13,7 +13,8 @@ export const buildCurriculumSchema = (tv: (key: string, values?: any) => string)
       .refine((file) => file.size > 0, tv('curriculum.imageUrl'))
       .refine((file) => file.size < 5 * 1024 * 1024, tv('curriculum.imageSize', { size: 5 }))
       .optional(),
-    imagePreviewUrl: z.string().optional()
+    imagePreviewUrl: z.string().optional(),
+    price: z.number().min(1000, tv('curriculum.price', { min: 1000 }))
   })
 
 /**

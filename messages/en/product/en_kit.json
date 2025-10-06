@@ -47,7 +47,17 @@
       "preOrder": "Pre-order",
       "weight": "Weight",
       "dimensions": "Dimensions",
-      "whatsIncluded": "What's Included"
+      "whatsIncluded": "What's Included",
+      "selectYourProduct": "Select Your Product",
+      "securePayment": "Secure Payment",
+      "warranty": "12-month Warranty",
+      "freeShipping": "Free Shipping",
+      "returnRefund": "30-day Return & Refund",
+      "shipTime": "Ship in 2 Business Days",
+      "primeDelivery": "Buy with Prime for a Faster Delivery",
+      "safeCheckout": "Safe & Secure Checkout",
+      "productQuestions": "Questions about products? Contact us for support.",
+      "headlineStem": "Make Your STEM Learning to the Next Level"
     },
     "form": {
       "title": {

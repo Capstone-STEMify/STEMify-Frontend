@@ -1,9 +1,9 @@
-import { Curriculum, CurriculumSliceParams } from '@/features/resource/curriculum/types/curriculum.type';
+import { Curriculum, CurriculumSliceParams } from '@/features/resource/curriculum/types/curriculum.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const curriculumApi = createCrudApi<Curriculum, CurriculumSliceParams>({
   reducerPath: 'curriculumApi',
-  tagTypes: ['Curriculum', 'Course'],
+  tagTypes: ['Curriculum', 'Course', 'Product'],
   baseUrl: '/curriculums'
 }).injectEndpoints({
   endpoints: (builder) => ({

@@ -4,9 +4,10 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 // models
 export enum EnrollmentStatus {
   ALL = 'ALL',
-  ACTIVE = 'Active', // Currently enrolled
-  PENDING = 'Pending', // Waiting for approval
-  WITHDRAWN = 'Withdrawn' // Student left the class
+  IN_PROGRESS = 'In Progress',
+  COMPLETED = 'Completed',
+  DROPPED = 'Dropped',
+  NOT_STARTED = 'Not Started'
 }
 
 export enum EnrollmentOrderBy {

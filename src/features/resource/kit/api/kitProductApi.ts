@@ -3,7 +3,7 @@ import { Kit, KitSliceParams } from '@/features/resource/kit/types/kit.type'
 
 export const kitProductApi = createCrudApi<Kit, KitSliceParams>({
   reducerPath: 'kitproductApi',
-  tagTypes: ['Kit', 'Component'],
+  tagTypes: ['Product', 'Kit', 'Component', 'Course'],
   baseUrl: '/kit-products'
 })
 

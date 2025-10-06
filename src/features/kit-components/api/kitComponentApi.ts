@@ -1,10 +1,9 @@
 import { Component, ComponentSliceParams, KitComponent } from '@/features/kit-components/types/kit-component.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
-import { ta } from 'zod/v4/locales'
 
 export const componentApi = createCrudApi<Component, ComponentSliceParams>({
   reducerPath: 'componentApi',
-  tagTypes: ['Component', 'Kit'],
+  tagTypes: ['Product', 'Component', 'Kit'],
   baseUrl: '/components'
 }).injectEndpoints({
   endpoints: (builder) => ({
@@ -12,25 +11,25 @@ export const componentApi = createCrudApi<Component, ComponentSliceParams>({
       query: ({ kitId, components }) => ({
         url: `/kit-components`,
         method: 'POST',
-        body: { kitId, components },
-        tags: ['Kit', 'Component']
-      })
+        body: { kitId, components }
+      }),
+      invalidatesTags: ['Product', 'Component', 'Kit']
     }),
     updateKitComponents: builder.mutation<void, { components: Partial<KitComponent>[] }>({
       query: ({ components }) => ({
         url: `/kit-components`,
         method: 'PATCH',
-        body: { components },
-        tags: ['Kit', 'Component']
-      })
+        body: { components }
+      }),
+      invalidatesTags: ['Product', 'Component', 'Kit']
     }),
     deleteKitComponents: builder.mutation<void, { ids: number[] }>({
       query: ({ ids }) => ({
         url: `/kit-components`,
         method: 'DELETE',
-        body: { ids },
-        tags: ['Kit', 'Component']
-      })
+        body: { ids }
+      }),
+      invalidatesTags: ['Product', 'Component', 'Kit']
     })
   })
 })
