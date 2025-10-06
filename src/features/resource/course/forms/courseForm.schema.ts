@@ -14,7 +14,8 @@ export function useCourseSchemas() {
     slug: z.string().optional(),
     description: z.string().min(50, tv('course.description', { length: 50 })),
     ageRangeId: z.string().min(1, tv('course.ageRangeId')),
-    imagePreviewUrl: z.string().optional()
+    imagePreviewUrl: z.string().optional(),
+    price: z.number().min(1000, tv('course.priceMin', { min: 1000 }))
   })
 
   const createCourseSchema = baseCourseSchema.extend({

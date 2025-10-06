@@ -85,7 +85,7 @@ export default function LessonListContent() {
 
   if (isLoading) {
     return (
-      <div className='my-5 grid h-screen grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6'>
+      <div className='my-5 grid h-screen grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5'>
         <SkeletonCard size='sm' />
         <SkeletonCard size='sm' />
         <SkeletonCard size='sm' />
