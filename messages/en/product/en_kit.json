@@ -35,7 +35,8 @@
       "available": "Available",
       "outOfStock": "Out of Stock",
       "items": "Items",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "singleCourseNote": "Only one kit can be associated with a course"
     },
     "detail": {
       "title": "Kit Details",
@@ -45,7 +46,18 @@
       "age": "Age",
       "preOrder": "Pre-order",
       "weight": "Weight",
-      "dimensions": "Dimensions"
+      "dimensions": "Dimensions",
+      "whatsIncluded": "What's Included",
+      "selectYourProduct": "Select Your Product",
+      "securePayment": "Secure Payment",
+      "warranty": "12-month Warranty",
+      "freeShipping": "Free Shipping",
+      "returnRefund": "30-day Return & Refund",
+      "shipTime": "Ship in 2 Business Days",
+      "primeDelivery": "Buy with Prime for a Faster Delivery",
+      "safeCheckout": "Safe & Secure Checkout",
+      "productQuestions": "Questions about products? Contact us for support.",
+      "headlineStem": "Make Your STEM Learning to the Next Level"
     },
     "form": {
       "title": {

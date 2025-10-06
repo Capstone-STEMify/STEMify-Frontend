@@ -1,16 +1,16 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
-import { useAppDispatch } from '@/hooks/redux-hooks'
 import AdminCurriculumSelectCourseList from '@/features/resource/curriculum/components/list/AdminCurriculumSelectCourseList'
 import { useTranslations } from 'next-intl'
 
 interface CourseListModalProps {
   curriculumId: number
   onConfirm?: () => void
+  courseIds?: number[]
 }
 
-export default function CurriculumSelectCourseListModal({ curriculumId, onConfirm }: CourseListModalProps) {
+export default function CurriculumSelectCourseListModal({ curriculumId, onConfirm, courseIds }: CourseListModalProps) {
   const t = useTranslations('curriculum')
   const { closeModal } = useModal()
 
@@ -26,7 +26,7 @@ export default function CurriculumSelectCourseListModal({ curriculumId, onConfir
       <DialogContent className='h-fit w-full max-w-4xl'>
         <DialogTitle>{t('custom.selectCourseTitle')}</DialogTitle>
 
-        <AdminCurriculumSelectCourseList curriculumId={curriculumId} onSuccess={handleSuccess} />
+        <AdminCurriculumSelectCourseList curriculumId={curriculumId} onSuccess={handleSuccess} courseIds={courseIds} />
       </DialogContent>
     </Dialog>
   )

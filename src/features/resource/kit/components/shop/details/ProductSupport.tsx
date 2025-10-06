@@ -1,7 +1,9 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 
 const SoftwareSupport: React.FC = () => {
+  const t = useTranslations('kits')
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -10,7 +12,7 @@ const SoftwareSupport: React.FC = () => {
       transition={{ duration: 0.6 }}
       className='relative mx-auto max-w-7xl overflow-hidden rounded-3xl p-10'
     >
-      <h2 className='mb-12 text-center text-4xl font-semibold text-gray-900'>Take your STEM Class to the Next Level</h2>
+      <h2 className='mb-12 text-center text-4xl font-semibold text-gray-900'>{t('detail.headlineStem')}</h2>
       <div className='relative z-10 grid grid-cols-1 gap-6 md:grid-cols-2'>
         <div className='relative overflow-hidden rounded-3xl px-4 py-8 md:row-span-2'>
           <motion.div

@@ -16,8 +16,8 @@ export default function ConfirmModal({ message, onConfirm }: ConfirmModalProps) 
   const { closeModal } = useModal()
 
   const handleConfirm = () => {
-    onConfirm()
     closeModal()
+    onConfirm()
   }
 
   return (

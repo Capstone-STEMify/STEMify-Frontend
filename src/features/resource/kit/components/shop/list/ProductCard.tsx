@@ -5,11 +5,12 @@ import { useTranslations } from 'next-intl'
 
 const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index }) => {
   const t = useTranslations('kits')
+  const tc = useTranslations('common')
   const [isHovered, setIsHovered] = useState(false)
 
   const StarRating = ({ rating }: { rating: number }) => {
     return (
-      <div className='flex items-center gap-1'>
+      <div className='flex items-center'>
         {[1, 2, 3, 4, 5].map((star) => (
           <svg
             key={star}
@@ -37,7 +38,7 @@ const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index
       whileHover={{ y: -8 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className='group relative overflow-hidden rounded-2xl bg-white shadow-lg transition-shadow duration-300 hover:shadow-2xl'
+      className='group relative overflow-hidden rounded-2xl bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl'
     >
       <div className='relative aspect-square overflow-hidden bg-gray-100'>
         {/* Image */}
@@ -84,14 +85,14 @@ const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index
           transition={{ duration: 0.3 }}
           className='absolute bottom-4 left-1/2 -translate-x-1/2 cursor-pointer rounded-full bg-white px-6 py-2 text-sm font-semibold text-gray-900 shadow-lg transition hover:bg-gray-100'
         >
-          Quick View
+          {tc('button.quickView')}
         </motion.button>
       </div>
 
       {/* Product Info */}
-      <div className='p-6'>
-        <h3 className='text-md mb-1 font-bold text-gray-900'>{product.name}</h3>
-        {/* <p className='mb-4 text-sm text-gray-600'>{product.description}</p> */}
+      <div className='p-6 pt-4'>
+        <h3 className='text-md mb-1 line-clamp-2 min-h-[3rem] font-bold text-gray-900'>{product.name}</h3>
+        <p className='mb-1 line-clamp-2 text-sm text-gray-600'>{product.description}</p>
         <div className='mb-3 flex items-center gap-2'>
           <StarRating rating={5} />
           <span className='text-sm font-medium text-gray-400 drop-shadow-md'>

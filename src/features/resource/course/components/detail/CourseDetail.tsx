@@ -41,5 +41,5 @@ export default function CourseDetail() {
     return <CourseDetailEnrolled courseId={Number(courseId)} enrollmentId={firstEnrollment} />
   }
 
-  return <CourseDetailNotEnrolled courseId={Number(courseId)} />
+  return <CourseDetailNotEnrolled />
 }

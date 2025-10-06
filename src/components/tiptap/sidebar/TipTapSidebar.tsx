@@ -31,7 +31,7 @@ export default function TipTapSidebar() {
         </div>
         <ul>
           {sidebarItems
-            .filter((item) => item.key !== 'imageAssetDetail')
+            .filter((item) => item.key !== 'assetDetail')
             .map(({ key, icon: Icon, label }) => (
               <li key={key}>
                 <button

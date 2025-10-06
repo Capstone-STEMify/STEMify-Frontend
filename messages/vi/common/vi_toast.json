@@ -9,11 +9,15 @@
       "saveOrder": "Đã lưu thứ tự thành công!",
       "enroll": "Yêu cầu đăng ký đã được gửi thành công!. Vui lòng chờ phê duyệt",
       "enrollDes": "Bạn đã đăng ký khóa học {title} vào lúc {time}",
-      "addToCurriculum": "Đã thêm vào chương trình học thành công!",
+      "addToCourse": "Đã thêm vào khóa học thành công!",
       "removeCourseFromCurriculum": "Đã xóa khóa học khỏi chương trình học thành công!",
       "lessonStart": "Bài học đã bắt đầu!",
       "lessonStatus": "Trạng thái bài học đã được cập nhật thành {status}!",
-      "sectionComplete": "Phần đã hoàn thành!"
+      "sectionComplete": "Phần đã hoàn thành!",
+      "addComponentToKit": "Đã thêm thành phần vào bộ dụng cụ thành công!",
+      "removeComponent": "Đã xóa thành phần khỏi bộ dụng cụ thành công!",
+      "updateComponentInKit": "Đã cập nhật thành phần bộ dụng cụ thành công!",
+      "addToCurriculum": "Đã thêm vào chương trình học thành công!"
     },
     "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "errorSpecific": {
@@ -25,11 +29,13 @@
       "confirmLabel": "Bạn có chắc chắn?",
       "delete": "Bạn có chắc chắn muốn xóa \"{title}\" không?",
       "removeCourse": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi chương trình học này không?",
-      "removeKit": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi chương trình học này không?",
+      "removeKit": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi khóa học này không?",
+      "removeComponent": "Bạn có chắc chắn muốn xóa thành phần khỏi bộ dụng cụ này không?",
       "discard": "Bạn có chắc chắn muốn hủy bỏ các thay đổi của mình không?",
       "ask": "Bạn có chắc chắn muốn thực hiện ",
       "askStatus": "Bạn có chắc chắn muốn {action} \"{title}\" không?",
-      "sendRequest": "Bạn có chắc chắn muốn gửi yêu cầu phê duyệt cho \"{title}\" không?"
+      "sendRequest": "Bạn có chắc chắn muốn gửi yêu cầu phê duyệt cho \"{title}\" không?",
+      "addAnotherKit": "Khóa học đã có bộ kit. Bạn có muốn thay thế bằng bộ mới?"
     }
   }
 }

@@ -13,11 +13,13 @@
       "loading": "Đang tải khung chương trình...",
       "error": "Đã xảy ra lỗi trong quá trình lấy khung chương trình. Vui lòng thử lại.",
       "courseListTitle": "Danh Sách Các Khóa Học",
-      "viewDetails": "Xem Chi Tiết"
+      "viewDetails": "Xem Chi Tiết",
+      "reviews": "đánh giá"
     },
     "details": {
       "title": "Chi Tiết Khung Chương Trình",
-      "addCourse": "Thêm Khóa Học"
+      "addCourse": "Thêm Khóa Học",
+      "price": "Giá"
     },
 
     "form": {
@@ -40,6 +42,11 @@
           "label": "Mã",
           "note": "Mã định danh duy nhất cho khung chương trình",
           "placeholder": "ví dụ: SU001"
+        },
+        "price": {
+          "label": "Giá",
+          "note": "Giá cho khung chương trình (tối thiểu 1000)",
+          "placeholder": "ví dụ 499.000"
         }
       }
     },

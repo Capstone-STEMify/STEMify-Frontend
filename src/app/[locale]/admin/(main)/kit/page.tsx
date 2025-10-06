@@ -1,7 +1,6 @@
 'use client'
 import KitList from '@/features/resource/kit/components/list/KitList'
-import KitAction from '@/features/resource/kit/components/list/KitListAction'
-import { Filter, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import ProductFilterSidebar from '@/features/resource/kit/components/shop/list/ProductFilterSidebar'
 import { useTranslations } from 'next-intl'
 import React from 'react'

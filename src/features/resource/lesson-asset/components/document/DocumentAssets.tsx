@@ -1,4 +1,5 @@
 import { SPopover } from '@/components/shared/SPopover'
+import { setActivePanel } from '@/components/tiptap/slice/tiptapSlice'
 import {
   useDeleteListLessonAssetsMutation,
   useGetListLessonAssetsQuery
@@ -10,6 +11,28 @@ import { useModal } from '@/providers/ModalProvider'
 import { EllipsisVertical, Download, Trash2, Info, FileText, FileSpreadsheet, FileArchive, X } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
+
+export const getFileIcon = (format: string, size?: number) => {
+  size = size || 40
+  switch (format) {
+    case 'pdf':
+      return <FileText className='text-red-500' size={size} />
+    case 'doc':
+    case 'docx':
+      return <FileText className='text-blue-500' size={size} />
+    case 'xls':
+    case 'xlsx':
+      return <FileSpreadsheet className='text-green-500' size={size} />
+    case 'ppt':
+    case 'pptx':
+      return <FileText className='text-orange-500' size={size} />
+    case 'zip':
+    case 'rar':
+      return <FileArchive className='text-yellow-500' size={size} />
+    default:
+      return <FileText className='text-gray-500' size={size} />
+  }
+}
 
 export default function DocumentAssets() {
   const { lessonId } = useParams()
@@ -50,27 +73,6 @@ export default function DocumentAssets() {
     return parts.length > 1 ? parts.pop()?.toLowerCase() : ''
   }
 
-  const getFileIcon = (format: string) => {
-    switch (format) {
-      case 'pdf':
-        return <FileText className='text-red-500' size={40} />
-      case 'doc':
-      case 'docx':
-        return <FileText className='text-blue-500' size={40} />
-      case 'xls':
-      case 'xlsx':
-        return <FileSpreadsheet className='text-green-500' size={40} />
-      case 'ppt':
-      case 'pptx':
-        return <FileText className='text-orange-500' size={40} />
-      case 'zip':
-      case 'rar':
-        return <FileArchive className='text-yellow-500' size={40} />
-      default:
-        return <FileText className='text-gray-500' size={40} />
-    }
-  }
-
   return (
     <div className='relative h-full'>
       <div className='mb-10 grid grid-cols-2 gap-4'>
@@ -102,7 +104,10 @@ export default function DocumentAssets() {
                   align='start'
                 >
                   <div className='flex flex-col text-sm'>
-                    <div className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-gray-100'>
+                    <div
+                      className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-gray-100'
+                      onClick={() => dispatch(setActivePanel({ panel: 'assetDetail', assetId: asset.id }))}
+                    >
                       <Info size={14} /> Details
                     </div>
                     <a

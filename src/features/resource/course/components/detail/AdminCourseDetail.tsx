@@ -25,6 +25,9 @@ import { resetParams, setPageIndex, setPageSize } from '@/features/resource/less
 import { UserRole } from '@/types/userRole'
 import { useLazyExportToRSAQuery } from '@/features/resource/export/api/exportApi'
 import ExportRSAButton from '@/components/shared/button/ExportRSAButton'
+import CurriculumKitList from '@/features/resource/kit/components/list/KitListSection'
+import KitListSection from '@/features/resource/kit/components/list/KitListSection'
+import { Card } from '@/components/shadcn/card'
 
 export default function AdminCourseDetail() {
   const t = useTranslations('Admin.course_details')
@@ -195,6 +198,15 @@ export default function AdminCourseDetail() {
             className='object-cover'
           />
         </div>
+        <div className='flex items-center justify-center gap-2'>
+          <span className='text-2xl font-bold text-red-600 italic'>{t('price')}:</span>
+          <span className='text-2xl font-bold text-red-600 italic'>
+            {new Intl.NumberFormat('vi-VN', {
+              style: 'currency',
+              currency: 'VND'
+            }).format(course.data.price)}
+          </span>
+        </div>
 
         {/* Metadata */}
         <SCard
@@ -320,6 +332,11 @@ export default function AdminCourseDetail() {
           )}
 
         <ExportRSAButton courseId={course.data.id} />
+      </div>
+      {/* Kit Section */}
+      <div className='xl:col-span-3'>
+        <hr className='mb-5 border-gray-300' />
+        <KitListSection context='course' kitId={course.data.kitId} />
       </div>
       {/* Divider Section before Lesson Table */}
       <div className='col-span-1 pt-5 xl:col-span-3'>

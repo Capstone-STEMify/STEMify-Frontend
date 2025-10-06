@@ -10,7 +10,7 @@ import SSelect from '@/components/shared/SSelect'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setPageSize, setParam, setSearchTerm } from '@/features/resource/course/slice/courseSlice'
-import { getLabel, getOptions } from '@/utils/index'
+import { getOptions } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import { CourseStatus } from '../../types/course.type'
 import { useSession } from 'next-auth/react'
@@ -23,7 +23,7 @@ export default function CourseListAction() {
   const t = useTranslations('course')
   const tc = useTranslations('common')
   const [statusActive, setStatusActive] = useState(false)
-
+  const [search, setSearch] = useState<string>('')
   const { status } = useSession()
   const role = useAppSelector((state) => state.auth.user?.role)
 
@@ -38,13 +38,17 @@ export default function CourseListAction() {
   // Redux hooks
   const dispatch = useAppDispatch()
   const filters = useAppSelector((state) => state.course)
-  const debouncedSearchQuery = useDebounce(filters.search || '', 500)
+  const debouncedSearchQuery = useDebounce(search, 500)
 
   // Lazy queries
   const [getCategory, { data: categories }] = useLazyGetAllCategoryQuery()
   const [getSkill, { data: skills }] = useLazyGetAllSkillQuery()
   const [getAgeRange, { data: ageRanges }] = useLazyGetAllAgeRangeQuery()
   const [getStandard, { data: standards }] = useLazyGetAllStandardQuery()
+
+  useEffect(() => {
+    dispatch(setSearchTerm(debouncedSearchQuery))
+  }, [debouncedSearchQuery, dispatch])
 
   if (status === 'loading') {
     return (
@@ -61,27 +65,8 @@ export default function CourseListAction() {
   }
 
   const hasFilters = Boolean(
-    debouncedSearchQuery ||
-      filters.categoryId ||
-      filters.ageRangeId ||
-      filters.skillId ||
-      filters.standardId ||
-      filters.status
+    search || filters.categoryId || filters.ageRangeId || filters.skillId || filters.standardId || filters.status
   )
-
-  // Function to render filter tags
-  const renderFilterTag = (
-    key: keyof typeof filters,
-    label: string,
-    color: string,
-    options?: { value: string; label: string }[]
-  ) =>
-    filters[key] && (
-      <span className={`inline-flex items-center gap-1 rounded-full ${color} px-3 py-1 text-sm`}>
-        {label}: {getLabel(filters[key], options ?? [])}
-        <X className='h-3 w-3 cursor-pointer' onClick={() => dispatch(setParam({ key, value: '' }))} />
-      </span>
-    )
 
   // Options for selects
   const categoryOptions = getOptions(categories?.data.items, 'name')
@@ -102,15 +87,6 @@ export default function CourseListAction() {
           <h2 className='text-lg font-semibold text-gray-800'>{t('list.filter.title')}</h2>
           {hasFilters && (
             <div className='flex items-center gap-8'>
-              {/* Search Button */}
-              {/* <Button
-                onClick={() => console.log('Search clicked')}
-                className='border border-blue-200 bg-blue-50 px-4 text-blue-600 hover:bg-blue-100'
-              >
-                <Search className='h-4 w-4' />
-                {t('actions.searchBtn')}
-              </Button> */}
-              {/* Clear All Button */}
               <Button onClick={clearAll} className='border border-red-200 bg-red-50 px-4 text-red-600 hover:bg-red-100'>
                 <X className='h-4 w-4' />
                 {tc('button.clear')}
@@ -125,8 +101,8 @@ export default function CourseListAction() {
             <Input
               type='text'
               placeholder={t('list.placeholder.search')}
-              value={filters.search}
-              onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
             />
             <Search className='absolute top-3 left-3 h-4 w-4 text-gray-400' />
@@ -189,29 +165,6 @@ export default function CourseListAction() {
             />
           )}
         </div>
-
-        {/* Active Filters */}
-        {hasFilters && (
-          <div className='mt-4 flex flex-wrap gap-2'>
-            <span className='text-sm font-medium text-gray-600'>Active filters:</span>
-            {renderFilterTag('search', `${t('list.tags.search')}`, 'bg-blue-100 text-blue-800')}
-            {renderFilterTag(
-              'categoryId',
-              `${t('list.tags.category')}`,
-              'bg-green-100 text-green-800',
-              categoryOptions
-            )}
-            {renderFilterTag(
-              'ageRangeId',
-              `${t('list.tags.ageRange')}`,
-              'bg-purple-100 text-purple-800',
-              ageRangeOptions
-            )}
-            {renderFilterTag('skillId', `${t('list.tags.skill')}`, 'bg-yellow-100 text-yellow-800', skillOptions)}
-            {renderFilterTag('standardId', `${t('list.tags.standard')}`, 'bg-red-100 text-red-800', standardOptions)}
-            {renderFilterTag('status', `${t('list.tags.status')}`, 'bg-gray-100 text-gray-800', statusOptions)}
-          </div>
-        )}
       </div>
     </div>
   )

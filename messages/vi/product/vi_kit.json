@@ -35,7 +35,8 @@
       "available": "Còn hàng",
       "outOfStock": "Hết hàng",
       "items": "Sản phẩm",
-      "reviews": "Đánh giá"
+      "reviews": "Đánh giá",
+      "singleCourseNote": "Một khóa học chỉ có thể gắn với duy nhất một bộ kit."
     },
     "detail": {
       "title": "Chi tiết bộ kit",
@@ -45,7 +46,18 @@
       "age": "Độ tuổi",
       "preOrder": "Đặt trước",
       "weight": "Trọng lượng",
-      "dimensions": "Kích thước"
+      "dimensions": "Kích thước",
+      "whatsIncluded": "Bao gồm các thành phần",
+      "selectYourProduct": "Chọn sản phẩm của bạn",
+      "securePayment": "Thanh toán an toàn",
+      "warranty": "Bảo hành 12 tháng",
+      "freeShipping": "Miễn phí vận chuyển",
+      "returnRefund": "Đổi trả trong 30 ngày",
+      "shipTime": "Giao hàng trong 2 ngày làm việc",
+      "primeDelivery": "Mua với Prime để giao hàng nhanh hơn",
+      "safeCheckout": "Thanh toán an toàn & bảo mật",
+      "productQuestions": "Có thắc mắc về sản phẩm? Liên hệ với chúng tôi để được hỗ trợ.",
+      "headlineStem": "Nâng tầm trải nghiệm học STEM của bạn"
     },
     "form": {
       "title": {

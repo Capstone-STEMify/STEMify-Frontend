@@ -2,69 +2,18 @@ import { motion } from 'framer-motion'
 import { fadeInUp } from '@/utils/motion'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
-import { capitalizeFirst, formatDuration } from '@/utils/index'
-import { EllipsisVertical, GripVertical, PlusCircle } from 'lucide-react'
-import {
-  useDeleteLessonMutation,
-  useSearchLessonQuery,
-  useUpdateLessonMutation
-} from '@/features/resource/lesson/api/lessonApi'
+import { formatDuration } from '@/utils/index'
+import { useSearchLessonQuery, useUpdateLessonMutation } from '@/features/resource/lesson/api/lessonApi'
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
-import { useEffect, useMemo, useState } from 'react'
-import { SDropDown } from '@/components/shared/SDropDown'
+import { useEffect, useState } from 'react'
 import { UserRole } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
-import { toast } from 'sonner'
 import { useTranslations } from 'next-intl'
-import { DndContext, PointerSensor, useSensor, useSensors, DragEndEvent, closestCenter } from '@dnd-kit/core'
-import { SortableContext, rectSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { Lesson, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
-import { Button } from '@/components/shadcn/button'
-import { useUpdateLessonOrderMutation } from '@/features/resource/course/api/courseApi'
+import { Lesson } from '@/features/resource/lesson/types/lesson.type'
 import Link from 'next/link'
-import { getStatusBadgeClass } from '@/utils/badgeColor'
-
-function SortableLessonCard({
-  lesson,
-  children,
-  disabled
-}: {
-  lesson: Lesson
-  children: React.ReactNode
-  disabled?: boolean
-}) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: lesson.id,
-    disabled
-  })
-
-  const style: React.CSSProperties = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.8 : 1,
-    zIndex: isDragging ? 1 : undefined
-  }
-
-  return (
-    <div ref={setNodeRef} style={style} className='relative'>
-      {/* Drag handle only shown when enabled */}
-      {!disabled && (
-        <button
-          aria-label='Drag to reorder'
-          className='absolute top-2 left-2 z-50 inline-flex items-center justify-center rounded-md bg-black/40 p-1 text-white hover:bg-black/60'
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical className='h-4 w-4' />
-        </button>
-      )}
-      {children}
-    </div>
-  )
-}
+import SEmpty from '@/components/shared/empty/SEmpty'
 
 export default function ContentSection() {
   const t = useTranslations('course')
@@ -90,8 +39,6 @@ export default function ContentSection() {
     orderBy: 'orderindex',
     sortDirection: 'Asc'
   })
-  const [deleteLesson] = useDeleteLessonMutation()
-  const [updateCourseLessonOrder] = useUpdateLessonOrderMutation()
   const [sendLessonRequest] = useUpdateLessonMutation()
 
   const [items, setItems] = useState<Lesson[]>([])
@@ -100,105 +47,22 @@ export default function ContentSection() {
     if (lessons?.data?.items) setItems(lessons.data.items)
   }, [lessons?.data?.items])
 
-  const isReadOnly = userRole === UserRole.STUDENT || userRole === UserRole.GUEST
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 }
-    })
-  )
-
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
-  }
-  const handleNavigateUpsertLesson = (lessonId?: number) => {
-    if (lessonId) {
-      router.push(`/resource/lesson/update/${lessonId}`)
-    } else {
-      router.push(`/resource/lesson/create?courseId=${courseId}`)
-    }
-  }
-
-  const handleSendLessonRequest = async (lessonId: number) => {
-    try {
-      await sendLessonRequest({
-        id: lessonId,
-        body: { courseId: Number(courseId), status: LessonStatus.PENDING }
-      }).unwrap()
-      toast.success(tt('successMessage.review'))
-    } catch (error) {
-      toast.error(tt('errorSpecific.review'))
-      console.error('Send lesson request error:', error)
-    }
-  }
-
-  const handleDeleteLesson = async (lessonId: number) => {
-    try {
-      await deleteLesson(lessonId).unwrap()
-      toast.success(tt('successMessage.delete'))
-    } catch (error) {
-      toast.error(tt('errorMessage'))
-      console.error('Delete lesson error:', error)
-    }
-  }
-
-  const onDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event
-    if (!over || active.id === over.id) return
-
-    const oldIndex = items.findIndex((i) => i.id === active.id)
-    const newIndex = items.findIndex((i) => i.id === over.id)
-    const newItems = arrayMove(items, oldIndex, newIndex)
-    setItems(newItems)
-  }
-
-  const handleSaveOrder = async () => {
-    try {
-      const orderedLessonIds = items.map((item) => item.id)
-      await updateCourseLessonOrder({
-        id: Number(courseId),
-        orderedLessonIds
-      }).unwrap()
-      toast.success(tt('successMessage.saveOrder'))
-    } catch (e) {
-      toast.error(tt('errorMessage'))
-    }
   }
 
   if (!lessons?.data || lessons.data.items.length === 0) {
     return (
-      <>
-        {isReadOnly ? (
-          <div className='bg-white py-12'>
-            <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-              <div className='text-center'>
-                <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-                  {t('details.lesson.noData')}
-                </h2>
-                <p className='text-lg text-gray-600'>{t('details.lesson.noDataDescription')}</p>
-              </div>
-            </div>
+      <div className='bg-white py-12'>
+        <h2 className='text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+          {t('details.lesson.title')}
+        </h2>
+        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+          <div className='text-center'>
+            <SEmpty title={t('details.lesson.noData')} description={t('details.lesson.noDataDescription')} />
           </div>
-        ) : (
-          <div className='mx-auto mt-24 max-w-7xl px-4 sm:px-6 lg:px-8'>
-            <div className='mt-30 mb-12 text-center'>
-              <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-                {t('details.lesson.title')}
-              </h2>
-              <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
-            </div>
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-              <div
-                className='shadow-6 mx-auto mb-30 flex h-[350px] w-[264px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 px-4 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-                onClick={() => router.push(`/resource/lesson/create?courseId=${courseId}`)}
-              >
-                <PlusCircle size={70} className='text-gray-500' />
-                <p className='mt-4 text-sm font-medium text-gray-500'>{tc('button.createLesson')}</p>
-              </div>
-            </div>
-          </div>
-        )}
-      </>
+        </div>
+      </div>
     )
   }
 
@@ -218,132 +82,27 @@ export default function ContentSection() {
           </h2>
           <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
         </div>
-        {!isReadOnly && (
-          <div className='mb-4 flex justify-end gap-2 px-4 lg:px-8'>
-            <Button variant={'ghost'} onClick={() => setItems(lessons?.data?.items || [])}>
-              {tc('button.cancel')}
-            </Button>
-            <Button className='bg-amber-custom-400' onClick={handleSaveOrder}>
-              {tc('button.order')}
-            </Button>
-          </div>
-        )}
 
-        {isReadOnly ? (
-          <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-            {items.map((lesson) => (
-              <Link
-                href={`/resource/lesson/${lesson.id}`}
-                className='flex w-fit flex-col justify-between'
-                key={lesson.id}
-              >
-                <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
-                  <div className='flex min-h-0 flex-1 flex-col'>
-                    <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
-                    <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
-                    <div className='mt-auto flex items-center gap-2'>
-                      <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
-                      <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
-                    </div>
-                  </div>
-                </CardLayout>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div>
-            {/* Create card */}
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-              <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
-                <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-                  <div
-                    className='shadow-6 mr-5 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 transition hover:scale-102 hover:border-blue-400 hover:bg-blue-50'
-                    onClick={() => {
-                      router.push(`/resource/lesson/create?courseId=${courseId}`)
-                    }}
-                  >
-                    <PlusCircle size={70} className='mt-20 text-gray-500' />
-                    <p className='mt-4 mb-20 text-sm font-medium text-gray-500'>{tc('button.createLesson')}</p>
-                  </div>
-                  {items.map((lesson) => (
-                    <SortableLessonCard key={lesson.id} lesson={lesson} disabled={false}>
-                      <Link href={`/resource/lesson/${lesson.id}`}>
-                        <CardLayout
-                          imageSrc={lesson.imageUrl || '/images/fallback.png'}
-                          infor={
-                            <Badge className={`${getStatusBadgeClass(lesson.status)}`}>
-                              {capitalizeFirst(lesson.status)}
-                            </Badge>
-                          }
-                        >
-                          <div className='flex min-h-0 flex-1 flex-col'>
-                            <div className='absolute top-2 right-2 text-white'>
-                              <SDropDown
-                                trigger={<EllipsisVertical className='h-6.5 w-5 rounded-sm bg-gray-400 text-white' />}
-                                items={[
-                                  <p
-                                    key={`view-detail-${lesson.id}`}
-                                    className='text-sm'
-                                    onClick={() => router.push(`/resource/lesson/${lesson.id}`)}
-                                  >
-                                    {tc('button.view')}
-                                  </p>,
-                                  <p
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      handleNavigateUpsertLesson(lesson.id)
-                                    }}
-                                    key='update'
-                                    className='text-sm'
-                                  >
-                                    {tc('button.updateLesson')}
-                                  </p>,
-                                  lesson.status === LessonStatus.DRAFT ? (
-                                    <p
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleSendLessonRequest(lesson.id)
-                                      }}
-                                      key={`send-request-${lesson.id}`}
-                                      className='text-sm'
-                                    >
-                                      {tc('button.sendRequest')}
-                                    </p>
-                                  ) : null,
-                                  lesson.status === LessonStatus.DRAFT ? (
-                                    <p
-                                      key={`delete-lesson-${lesson.id}`}
-                                      className='text-sm'
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        openModal('confirm', {
-                                          message: `${tc('confirmMessage.delete', { lessonTitle: lesson.title })}`,
-                                          onConfirm: () => handleDeleteLesson(lesson.id)
-                                        })
-                                      }}
-                                    >
-                                      {tc('button.deleteLesson')}
-                                    </p>
-                                  ) : null
-                                ].filter(Boolean)}
-                              />
-                            </div>
-                            <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
-                            <p className='line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
-                            <div className='mt-auto flex items-center gap-2'>
-                              <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
-                              <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
-                            </div>
-                          </div>
-                        </CardLayout>
-                      </Link>
-                    </SortableLessonCard>
-                  ))}
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
+          {items.map((lesson) => (
+            // <Link
+            //   href={isTeacher ? `/resource/lesson/${lesson.id}` : '#'}
+            //   className='flex w-fit flex-col justify-between'
+            //   key={lesson.id}
+            // >
+            <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
+              <div className='flex min-h-0 flex-1 flex-col'>
+                <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
+                <p className='mb-2 line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
+                <div className='mt-auto flex items-center gap-2'>
+                  <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
+                  <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
                 </div>
-              </SortableContext>
-            </DndContext>
-          </div>
-        )}
+              </div>
+            </CardLayout>
+            // </Link>
+          ))}
+        </div>
 
         {/* {lessons.data.totalPages > 1 && (
           <SPagination

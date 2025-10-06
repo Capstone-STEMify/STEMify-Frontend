@@ -1,5 +1,6 @@
 {
   "validation": {
+    "required": "This field is required",
     "user": {
       "name": "Name must start with a capital letter",
       "nameLength": "Name must be at least {length} characters long",
@@ -34,7 +35,8 @@
       "description": "At least {length} characters long",
       "ageRangeId": "Age range suitable for the course (required)",
       "image": "Cover Image is required",
-      "imgSize": "Max {size}MB allowed"
+      "imgSize": "Max {size}MB allowed",
+      "priceMin": "Price must be at least {min} VND"
     },
     "curriculum": {
       "code": "Course code, at least {length} characters long, used to identify the course",

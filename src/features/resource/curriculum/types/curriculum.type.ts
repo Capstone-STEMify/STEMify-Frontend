@@ -16,11 +16,9 @@ export type Curriculum = {
   lastModifiedDate: string
   createdByUserName: string
   courseCount: number
-  kits: any[]
   courses: Course[]
-  kitIds?: {
-    values: number[]
-  }
+  kitIds?: number[]
+  price: number
 }
 
 export type CurriculumSliceParams = {

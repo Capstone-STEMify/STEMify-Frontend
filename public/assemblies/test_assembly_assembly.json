@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "aaaaaaaaaa",
-    "description": "aaaaaaaaaa",
-    "author": "aaaaaaaaaa",
+    "title": "aaaaaaaaa",
+    "description": "aaaaaaaaa",
+    "author": "aaaaaaaaa",
     "version": "2.0",
-    "created": "2025-09-30T15:37:11.491Z",
-    "lastModified": "2025-09-30T15:37:11.491Z"
+    "created": "2025-10-06T04:29:05.662Z",
+    "lastModified": "2025-10-06T04:29:05.662Z"
   },
   "templates": {
     "materials": [
@@ -55,12 +55,12 @@
         "templateId": "yellow_3_8",
         "instances": [
           {
-            "id": "straw_1759246620938_327",
+            "id": "straw_1",
             "transform": {
               "position": {
-                "x": 0.7142013861070726,
+                "x": -12.891137120882824,
                 "y": 0,
-                "z": 12.087572684294607
+                "z": -8.454845382772763
               },
               "rotation": {
                 "x": 0,
@@ -70,27 +70,12 @@
             }
           },
           {
-            "id": "straw_1759246622131_984",
+            "id": "straw_3",
             "transform": {
               "position": {
-                "x": 29.595172452611493,
+                "x": -18.07469838346941,
                 "y": 0,
-                "z": -11.067764748699275
-              },
-              "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          },
-          {
-            "id": "straw_1759246624290_462",
-            "transform": {
-              "position": {
-                "x": -26.15743232754295,
-                "y": 0,
-                "z": 11.856746551431321
+                "z": 2.5494958654243405
               },
               "rotation": {
                 "x": 0,
@@ -105,12 +90,12 @@
         "templateId": "green_11_2",
         "instances": [
           {
-            "id": "straw_1759246623188_996",
+            "id": "straw_2",
             "transform": {
               "position": {
-                "x": -8.750068186145704,
+                "x": -31.48348792632794,
                 "y": 0,
-                "z": -35.682976213274365
+                "z": -18.6831420023417
               },
               "rotation": {
                 "x": 0,
@@ -120,12 +105,12 @@
             }
           },
           {
-            "id": "straw_1759246626198_258",
+            "id": "straw_4",
             "transform": {
               "position": {
-                "x": -1.2757060054373817,
+                "x": -12.644843561466445,
                 "y": 0,
-                "z": 26.07543235230776
+                "z": -4.267408741470003
               },
               "rotation": {
                 "x": 0,
@@ -142,12 +127,12 @@
         "templateId": "3leg_red",
         "instances": [
           {
-            "id": "connector_1759246620214_720",
+            "id": "connector_1",
             "transform": {
               "position": {
-                "x": -18.767905454979022,
+                "x": 2.951173382979963,
                 "y": 0,
-                "z": -4.205230154454846
+                "z": 8.755282647510196
               },
               "rotation": {
                 "x": 0,
@@ -157,12 +142,27 @@
             }
           },
           {
-            "id": "connector_1759246625198_901",
+            "id": "connector_2",
             "transform": {
               "position": {
-                "x": -12.979457396485593,
+                "x": 6.863737433407795,
+                "y": 2.8,
+                "z": 5.006510134688529
+              },
+              "rotation": {
+                "x": 0,
                 "y": 0,
-                "z": 21.469145496189327
+                "z": 0
+              }
+            }
+          },
+          {
+            "id": "connector_3",
+            "transform": {
+              "position": {
+                "x": -0.881312563350054,
+                "y": 0,
+                "z": 14.187420074596123
               },
               "rotation": {
                 "x": 0,
@@ -177,42 +177,44 @@
   },
   "actions": [
     {
-      "id": "action_show_all",
-      "name": "Show All Components",
-      "description": "Highlights all components in the scene",
+      "id": "action_1",
+      "name": "Highlight Action 1",
       "type": "highlight",
-      "targets": [
-        "connector_1759246620214_720",
-        "straw_1759246620938_327",
-        "straw_1759246622131_984",
-        "straw_1759246623188_996",
-        "straw_1759246624290_462",
-        "connector_1759246625198_901",
-        "straw_1759246626198_258"
-      ],
-      "duration": 2,
-      "animation": {
-        "params": {
-          "colorHighlight": "#FFD700",
-          "pulseEffect": true
-        }
-      }
+      "targets": ["straw_1", "straw_2", "straw_3", "straw_4"],
+      "duration": 2
     },
     {
-      "id": "action_transform_connector_1759246620214_720",
-      "name": "Adjust Arms of connector_1759246620214_720",
+      "id": "action_2",
+      "name": "Transform Action 2",
       "type": "transform_arm",
-      "targets": ["connector_1759246620214_720"],
+      "targets": ["connector_1", "connector_2", "connector_3"],
       "duration": 2,
       "connectorArmTransforms": {
-        "connector_1759246620214_720": {
+        "connector_3": {
+          "arm_1": {
+            "x": 0,
+            "y": 0,
+            "z": 1.1344640137963142
+          },
+          "arm_2": {
+            "x": -1.117010721276371,
+            "y": -0.19198621771937624,
+            "z": 0.6806784082777885
+          },
+          "arm_3": {
+            "x": 0,
+            "y": 0.5934119456780721,
+            "z": 0
+          }
+        },
+        "connector_2": {
           "arm_1": {
             "x": 0,
             "y": 0,
             "z": 0
           },
           "arm_2": {
-            "x": 0,
+            "x": -0.767944870877505,
             "y": 0,
             "z": 0
           },
@@ -221,69 +223,50 @@
             "y": 0,
             "z": 0
           }
-        }
-      },
-      "interpolation": "easeInOut"
-    },
-    {
-      "id": "action_transform_connector_1759246625198_901",
-      "name": "Adjust Arms of connector_1759246625198_901",
-      "type": "transform_arm",
-      "targets": ["connector_1759246625198_901"],
-      "duration": 2,
-      "connectorArmTransforms": {
-        "connector_1759246625198_901": {
+        },
+        "connector_1": {
           "arm_1": {
             "x": 0,
             "y": 0,
-            "z": 0
+            "z": 0.6981317007977318
           },
           "arm_2": {
             "x": 0,
-            "y": 0,
+            "y": -0.7853981633974483,
             "z": 0
           },
           "arm_3": {
-            "x": 0,
+            "x": 0.7504915783575616,
             "y": 0,
             "z": 0
           }
         }
       },
-      "interpolation": "easeInOut"
+      "interpolation": "easeInOut",
+      "instantAppear": true
     }
   ],
   "activities": [
     {
       "id": "custom_assembly",
-      "name": "aaaaaaaaaa",
-      "description": "aaaaaaaaaa",
+      "name": "aaaaaaaaa",
+      "description": "aaaaaaaaa",
       "difficulty": "beginner",
       "estimatedTime": 600,
       "steps": [
         {
-          "actionId": "action_show_all",
-          "title": "Observe Components",
-          "description": "Study the arrangement of straws and connectors",
-          "expectedResult": "All components are visible and highlighted",
-          "hints": [
-            "Notice the positioning of each component",
-            "Observe the relationships between straws and connectors"
-          ]
+          "actionId": "action_1",
+          "title": "Highlight: Highlight Action 1",
+          "description": "Highlights targets: straw_1, straw_2, straw_3, straw_4",
+          "expectedResult": "Targets are highlighted",
+          "hints": ["Notice the highlighted components"]
         },
         {
-          "actionId": "action_transform_connector_1759246620214_720",
-          "title": "Adjust Arms of connector_1759246620214_720",
+          "actionId": "action_2",
+          "title": "Adjust Arms: Transform Action 2",
           "description": "Connector arms should rotate as exported",
           "expectedResult": "Arms are rotated according to saved values",
-          "hints": ["Check arm_1, arm_2... rotations"]
-        },
-        {
-          "actionId": "action_transform_connector_1759246625198_901",
-          "title": "Adjust Arms of connector_1759246625198_901",
-          "description": "Connector arms should rotate as exported",
-          "expectedResult": "Arms are rotated according to saved values",
-          "hints": ["Check arm_1, arm_2... rotations"]
+          "hints": ["Check connector arms rotations"]
         }
       ]
     }
