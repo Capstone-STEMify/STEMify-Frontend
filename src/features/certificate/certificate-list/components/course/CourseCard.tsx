@@ -12,8 +12,8 @@ export const CourseCard = ({ course }: CourseCardProps) => {
   return (
     <Card>
       <CardContent className='flex items-center justify-between'>
-        <div className='flex items-start gap-4'>
-          <div className='mt-1 rounded-md bg-gray-100 p-3'>
+        <div className='flex items-center gap-4 py-4'>
+          <div className='rounded-md bg-gray-100 p-3'>
             <FileText className='h-6 w-6 text-gray-600' />
           </div>
           <div>
