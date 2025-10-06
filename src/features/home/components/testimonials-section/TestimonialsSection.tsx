@@ -9,33 +9,33 @@ import { UserRole } from '@/types/userRole'
 export const feedbackData = [
   {
     src: 'https://images.unsplash.com/photo-1549068106-b024baf5062d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-    name: 'Jane Doe',
+    name: 'Le Nhan',
     date: 'July 15, 2024',
     role: UserRole.STUDENT,
-    title: 'Engaging & Comprehensive',
+    title: 'Hấp dẫn và toàn diện',
     rating: 5,
     description:
-      'The "City Building" course was fantastic! The instructors were very knowledgeable, and the hands-on projects made the complex concepts easy to understand. I highly recommend this platform to anyone interested in STEM.'
+      'Khóa học "Xây dựng Thành phố" thật tuyệt vời! Các giảng viên rất am hiểu, và các dự án thực hành đã giúp những khái niệm phức tạp trở nên dễ hiểu. Tôi thực sự khuyên dùng nền tảng này cho bất kỳ ai quan tâm đến STEM.'
   },
   {
     src: 'https://images.unsplash.com/photo-1599566150163-29194d2c88b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-    name: 'Robert Smith',
+    name: 'My Lam',
     date: 'August 2, 2024',
     role: UserRole.GUEST,
-    title: 'Excellent Value!',
+    title: 'Giá trị tuyệt vời!',
     rating: 4,
     description:
-      'My daughter loved the "City Building" course. The material was well-structured, and the live sessions were a great way for her to ask questions. The support team was also very responsive. A great investment in her future.'
+      'Con gái tôi rất thích khóa học "Xây dựng Thành phố". Tài liệu được thiết kế tốt, và các buổi học trực tiếp là cách tuyệt vời để con bé đặt câu hỏi. Đội ngũ hỗ trợ cũng rất nhiệt tình. Một khoản đầu tư tuyệt vời cho tương lai của con bé.'
   },
   {
     src: 'https://github.com/evilrabbit.png',
-    name: 'Sarah Chen',
+    name: 'Dat Tran',
     date: 'August 20, 2024',
     role: UserRole.TEACHER,
-    title: 'Highly Recommended for Classrooms',
+    title: 'Khuyến khích cho lớp học',
     rating: 5,
     description:
-      'As a teacher, I found the "City Building" curriculum to be incredibly well-designed. It aligns perfectly with educational standards and provides excellent resources. I plan to use these courses as a supplement for my classes.'
+      'Là một giáo viên, tôi thấy chương trình giảng dạy "Xây dựng Thành phố" được thiết kế rất tốt. Nó hoàn toàn phù hợp với các tiêu chuẩn giáo dục và cung cấp nguồn tài liệu tuyệt vời. Tôi dự định sử dụng các khóa học này như một khóa học bổ sung cho các lớp học của mình.'
   }
 ]
 

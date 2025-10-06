@@ -1,3 +1,5 @@
+import { removeInstance } from '@/features/creator-3d/slice/creatorSceneSlice'
+import { AppThunk } from '@/libs/redux/store'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface Animation {
@@ -44,10 +46,20 @@ export type WorkspaceAction =
 
 interface WorkspaceTreeState {
   actions: WorkspaceAction[]
+  selectedActionId?: string | null
 }
 
 const initialState: WorkspaceTreeState = {
-  actions: []
+  actions: [
+    {
+      id: 'action_1',
+      name: 'Default Action',
+      type: 'highlight',
+      targets: [],
+      duration: 2
+    }
+  ],
+  selectedActionId: 'action_1'
 }
 
 export const workspaceTreeSlice = createSlice({
@@ -70,7 +82,9 @@ export const workspaceTreeSlice = createSlice({
           type: 'transform_arm',
           targets: [],
           duration: 2,
-          connectorArmTransforms: {}
+          connectorArmTransforms: {},
+          instantAppear: true,
+          interpolation: 'easeInOut'
         })
       } else if (action.payload.type === 'rotate_highlight') {
         state.actions.push({
@@ -86,18 +100,30 @@ export const workspaceTreeSlice = createSlice({
 
     removeAction: (state, action: PayloadAction<string>) => {
       state.actions = state.actions.filter((a) => a.id !== action.payload)
-    },
 
+      if (state.selectedActionId === action.payload) {
+        state.selectedActionId = state.actions.length > 0 ? state.actions[0].id : null
+      }
+    },
     addTargetToAction: (state, action: PayloadAction<{ actionId: string; targetId: string }>) => {
       const act = state.actions.find((a) => a.id === action.payload.actionId)
       if (!act) return
-      if (act.type === 'highlight' || act.type === 'transform_arm') {
+
+      if (act.type === 'highlight') {
         if (!act.targets.includes(action.payload.targetId)) {
           act.targets.push(action.payload.targetId)
         }
       }
-    },
 
+      if (act.type === 'transform_arm') {
+        if (action.payload.targetId.startsWith('connector_')) {
+          if (!act.targets.includes(action.payload.targetId)) {
+            act.targets.push(action.payload.targetId)
+            
+          }
+        }
+      }
+    },
     updateConnectorArms: (
       state,
       action: PayloadAction<{
@@ -119,11 +145,70 @@ export const workspaceTreeSlice = createSlice({
       }
     },
 
+    setSelectedAction: (state, action: PayloadAction<string | null>) => {
+      state.selectedActionId = action.payload
+    },
+
+    removeTargetFromAllActions: (state, action: PayloadAction<string>) => {
+      const targetId = action.payload
+      state.actions.forEach((act) => {
+        if (act.type === 'highlight' || act.type === 'transform_arm') {
+          act.targets = act.targets.filter((t) => t !== targetId)
+        }
+        // nếu transform_arm có connectorArmTransforms thì cũng xóa key liên quan
+        if (act.type === 'transform_arm' && act.connectorArmTransforms[targetId]) {
+          delete act.connectorArmTransforms[targetId]
+        }
+      })
+    },
+
+    updateActionName: (state, action: PayloadAction<{ id: string; newName: string }>) => {
+      const act = state.actions.find((a) => a.id === action.payload.id)
+      if (!act) return
+
+      // cập nhật name
+      act.name = action.payload.newName
+
+      // cập nhật id theo rule: lowercase + replace space = _
+      const newId = action.payload.newName.toLowerCase().replace(/\s+/g, '_')
+
+      // đổi id của action
+      act.id = newId
+    },
     resetActions: () => initialState
   }
 })
 
-export const { addAction, removeAction, addTargetToAction, updateConnectorArms, updateAction, resetActions } =
-  workspaceTreeSlice.actions
+export const {
+  addAction,
+  removeAction,
+  addTargetToAction,
+  updateConnectorArms,
+  updateAction,
+  resetActions,
+  setSelectedAction,
+  removeTargetFromAllActions,
+  updateActionName
+} = workspaceTreeSlice.actions
 
 export default workspaceTreeSlice.reducer
+
+export const removeActionWithInstances =
+  (actionId: string): AppThunk =>
+  (dispatch, getState) => {
+    const { workspaceTree } = getState()
+    const act = workspaceTree.actions.find((a) => a.id === actionId)
+    if (!act) return
+
+    const targets = act.type === 'highlight' || act.type === 'transform_arm' ? [...act.targets] : []
+
+    dispatch(removeAction(actionId))
+
+    // reset selectedActionId nếu xoá xong thì hết action
+    const { workspaceTree: after } = getState()
+    if (!after.actions.find((a) => a.id === after.selectedActionId)) {
+      dispatch(setSelectedAction(after.actions.length > 0 ? after.actions[0].id : null))
+    }
+
+    targets.forEach((t) => dispatch(removeInstance(t)))
+  }

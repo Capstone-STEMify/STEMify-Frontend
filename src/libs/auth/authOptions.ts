@@ -20,7 +20,7 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
   type: 'oauth',
   version: '2.0',
   // clientSecret: process.env.CLIENT_SECRET,
-  clientId: process.env.NEXT_PUBLIC_CLIENT_ID_ROBOTS,
+  clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
   idToken: true,
   issuer: process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL,
   wellKnown: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/.well-known/openid-configuration`,
@@ -35,7 +35,7 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/token`,
     params: {
       grant_type: 'authorization_code',
-      client_id: process.env.NEXT_PUBLIC_CLIENT_ID_ROBOTS
+      client_id: process.env.NEXT_PUBLIC_CLIENT_ID
       // redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI
     }
   },
