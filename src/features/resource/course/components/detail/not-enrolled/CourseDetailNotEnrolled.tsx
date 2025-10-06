@@ -12,28 +12,32 @@ import { useSearchLearningOutcomeQuery } from '@/features/resource/learning-outc
 import { useTranslations } from 'next-intl'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
-import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useParams } from 'next/navigation'
+import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 
 export default function CourseDetailNotEnrolled() {
   const auth = useAppSelector((state) => state.auth)
   const studentId = auth?.user?.userId
   const userRole = auth?.user?.role || UserRole.GUEST
+  const tc = useTranslations('common.message')
 
   const { courseId } = useParams()
+  const params = useAppSelector((state) => state.courseEnrollment)
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const {
     data: LearningOutcome,
     isLoading: outcomeLoading,
     isFetching: outcomeFetching
   } = useSearchLearningOutcomeQuery({ courseId: Number(courseId) })
-  const tc = useTranslations('common.message')
 
   const {
     data: enrollmentData,
     isLoading: enrollmentLoading,
     error: enrollmentError
-  } = useSearchEnrollmentQuery({ courseId: Number(courseId), studentId }, { skip: !studentId })
+  } = useSearchCourseEnrollmentQuery(
+    { courseId: Number(courseId), studentId, pageNumber: params.pageNumber, pageSize: params.pageSize },
+    { skip: !studentId }
+  )
 
   if (isLoading || outcomeLoading || outcomeFetching || enrollmentLoading)
     return (
@@ -56,7 +60,11 @@ export default function CourseDetailNotEnrolled() {
   return (
     <div className='min-h-screen bg-white'>
       <div className='relative'>
-        <HeroSection course={course.data} enrollmentStatus={enrollmentData?.data.items[0].status} />
+        <HeroSection
+          course={course.data}
+          enrollmentStatus={enrollmentData?.data.items[0]?.status}
+          enrollmentId={enrollmentData?.data.items[0]?.id}
+        />
         <StatsSection course={course.data} />
       </div>
       <div className='mt-30 sm:mt-32'>

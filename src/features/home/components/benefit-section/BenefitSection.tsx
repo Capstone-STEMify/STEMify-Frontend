@@ -1,15 +1,18 @@
 'use client'
+import { Button } from '@/components/shadcn/button'
 import { Star } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 export default function BenefitsSection() {
   const t = useTranslations('BenefitSection')
+  const tc = useTranslations('common')
 
   const benefits = [t('benefit1'), t('benefit2'), t('benefit3')]
+  const benefitsDesc = [t('benefit1Desc'), t('benefit2Desc'), t('benefit3Desc')]
 
   return (
-    <section className='relative overflow-hidden bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8'>
+    <section className='relative min-h-[130vh] overflow-hidden bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8'>
       <div className='absolute top-0 right-0 h-32 w-32 animate-pulse rounded-full bg-gradient-to-bl from-orange-200 to-yellow-200 opacity-20 sm:h-40 sm:w-40 lg:h-48 lg:w-48'></div>
       <div className='animate-float absolute bottom-0 left-0 h-24 w-24 rounded-full bg-gradient-to-tr from-blue-200 to-cyan-200 opacity-30 sm:h-28 sm:w-28 lg:h-32 lg:w-32'></div>
       <div className='absolute top-1/2 left-4 h-4 w-4 animate-ping rounded-full bg-yellow-400 opacity-50 sm:left-6 sm:h-5 sm:w-5 lg:left-10 lg:h-6 lg:w-6'></div>
@@ -25,7 +28,7 @@ export default function BenefitsSection() {
                 height={300}
                 src='/HomeFiles/learning.png'
                 alt='Students collaborating'
-                className='w-full transform rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105'
+                className='w-full transform rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105'
               />
               <div className='absolute -top-2 -left-2 -z-10 h-full w-full rounded-lg bg-gradient-to-br from-blue-300 to-purple-300 opacity-20 transition-opacity duration-300 group-hover:opacity-30 sm:-top-3 sm:-left-3 lg:-top-4 lg:-left-4'></div>
               <div className='absolute -right-2 -bottom-2 -z-20 h-full w-full rounded-lg bg-gradient-to-tl from-yellow-300 to-orange-300 opacity-15 transition-opacity duration-300 group-hover:opacity-25 sm:-right-3 sm:-bottom-3 lg:-right-4 lg:-bottom-4'></div>
@@ -45,50 +48,42 @@ export default function BenefitsSection() {
               </div>
 
               {/* Title */}
-              <h2 className='relative mb-6 text-2xl font-bold text-gray-900 sm:text-3xl lg:mb-8 lg:text-4xl'>
-                {t.rich('title', {
-                  orange: (chunks) => (
-                    <span className='relative text-orange-500'>
-                      {chunks}
-                      <div className='absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-gradient-to-r from-orange-400 to-yellow-400 opacity-60 sm:h-1'></div>
-                    </span>
-                  )
-                })}
-              </h2>
+              <h1 className='relative mb-6 text-5xl font-extrabold text-blue-800'>{t('title')}</h1>
 
               {/* Benefits list */}
-              <ul className='space-y-3 sm:space-y-4'>
+              <div className='space-y-6'>
                 {benefits.map((benefit, index) => (
-                  <li key={index} className='group flex items-start justify-center space-x-3 lg:justify-start'>
-                    <div className='relative mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500 transition-transform duration-300 group-hover:scale-110 sm:h-6 sm:w-6'>
-                      <span className='text-xs text-white sm:text-sm'>✓</span>
-                      <div className='absolute -top-1 -right-1 h-2 w-2 animate-ping rounded-full bg-blue-300 opacity-60 group-hover:animate-pulse sm:h-3 sm:w-3'></div>
+                  <div
+                    key={index}
+                    className='flex items-start rounded-xl bg-white p-4 shadow-md transition hover:shadow-lg sm:p-6'
+                  >
+                    {/* Icon */}
+                    <div className='flex-shrink-0'>
+                      {/* Bạn có thể thay bằng icon động (lucide-react, heroicons) */}
+                      <div className='flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600'>
+                        <Star className='h-6 w-6' />
+                      </div>
                     </div>
-                    <span className='text-sm text-gray-700 transition-colors duration-300 group-hover:text-gray-900 sm:text-base lg:text-left'>
-                      {benefit}
-                    </span>
-                  </li>
+
+                    {/* Text content */}
+                    <div className='ml-4'>
+                      <h3 className='text-base font-semibold text-gray-900 sm:text-lg'>{benefit}</h3>
+                      <p className='mt-1 text-sm text-gray-600 sm:text-base'>{benefitsDesc[index]}</p>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-20px);
-          }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-      `}</style>
+      <div
+        className='absolute inset-0 mt-100 bg-cover bg-center'
+        style={{
+          backgroundImage: "url('https://strawbees.com/hubfs/2024_home_classroom_features_4-1-1.jpg')",
+          clipPath: 'polygon(0 45%, 100% 0, 100% 100%, 0% 100%)'
+        }}
+      ></div>
     </section>
   )
 }

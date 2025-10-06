@@ -1,5 +1,4 @@
 import { contentApi } from '@/features/resource/content/api/contentApi'
-import { enrollmentApi } from '@/features/enrollment/api/enrollmentApi'
 import { notificationApi } from '@/features/notification/api/notificationApi'
 import { ageRangeApi } from '@/features/resource/age-range/api/ageRangeApi'
 import { categoryApi } from '@/features/resource/category/api/categoryApi'
@@ -17,12 +16,15 @@ import { kitProductApi } from '@/features/resource/kit/api/kitProductApi'
 import { courseLearningOutcomeApi } from '@/features/resource/learning-outcome/api/courseLearningOutcomeApi'
 import { planApi } from '@/features/plan/api/planApi'
 import { componentApi } from '@/features/kit-components/api/kitComponentApi'
+import { courseEnrollmentApi } from '@/features/enrollment/api/courseEnrollmentApi'
+import { curriculumEnrollmentApi } from '@/features/enrollment/api/curriculumEnrollmentApi'
 
 export const apiMiddlewares: Middleware[] = [
   courseApi.middleware,
   lessonApi.middleware,
   sectionApi.middleware,
-  enrollmentApi.middleware,
+  courseEnrollmentApi.middleware,
+  curriculumEnrollmentApi.middleware,
   ageRangeApi.middleware,
   skillApi.middleware,
   categoryApi.middleware,

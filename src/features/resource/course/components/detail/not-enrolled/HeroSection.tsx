@@ -1,22 +1,24 @@
 import React from 'react'
 import { motion, time } from 'framer-motion'
-import { CalendarFold, Edit, Heart, ShoppingCart, ShoppingCartIcon } from 'lucide-react'
+import { BookOpenText, CalendarFold, Heart, ShoppingCartIcon } from 'lucide-react'
 import { TbDoorExit } from 'react-icons/tb'
 import { fadeInUp } from '@/utils/motion'
 import { Course, CourseStatus } from '../../../types/course.type'
 import { Button } from '@/components/shadcn/button'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
-import { useCreateEnrollmentMutaion } from '@/features/enrollment/api/enrollmentApi'
 import { toast } from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import BackButton from '@/components/shared/button/BackButton'
 import { UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { useUpdateCourseMutation } from '@/features/resource/course/api/courseApi'
 import { useTranslations } from 'next-intl'
 import { EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
+import {
+  useCreateCourseEnrollmentMutation,
+  useUpdateCourseEnrollmentMutation
+} from '@/features/enrollment/api/courseEnrollmentApi'
 
 interface HeroSectionProps {
   course: Course
@@ -52,26 +54,22 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
   const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
   const userRole = auth.user?.role || UserRole.GUEST
-  const [createEnroll, { data: enroll }] = useCreateEnrollmentMutaion()
-  const [updateCourseStatus] = useUpdateCourseMutation()
+  const [createEnrollment, { data: enroll }] = useCreateCourseEnrollmentMutation()
+  const [updateEnrollment] = useUpdateCourseEnrollmentMutation()
 
   const handleEnroll = () => {
     if (!auth.user?.userId) {
       signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
       return
     }
-    if (course.id) {
-      createEnroll({ courseId: course.id, studentId: auth?.user?.userId })
+    if (course.id && enrollmentId && enrollmentStatus === EnrollmentStatus.NOT_STARTED) {
+      updateEnrollment({ id: enrollmentId, body: { status: EnrollmentStatus.IN_PROGRESS } })
+      router.push(`/resource/course/${course.id}/learn`)
+
+      toast.success(tt('successMessage.enroll'), {
+        description: `${tt('successMessage.enrollDes', { title: enroll?.data.courseTitle || '' })}`
+      })
     }
-    toast.success(tt('successMessage.enroll'), {
-      description: `${tt('successMessage.enrollDes', { title: enroll?.data.courseTitle || '', time: enroll?.data.enrolledAt || '' })}`,
-      action: {
-        label: 'View Enrollment',
-        onClick: () => {
-          console.log('Navigate to enrollment details:', enroll)
-        }
-      }
-    })
   }
 
   const handleAddToCart = () => {
@@ -80,7 +78,9 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
       return
     }
     if (course.id) {
-      // TODO: Logic to add to cart can be implemented here
+      // TODO: add to cart functionality, after payment success, system will auto create enrollment with NOT_STARTED status
+      //  For now, we just create enrollment with NOT_STARTED status when user click "Add to Cart" button
+      createEnrollment({ courseId: course.id, studentId: auth?.user?.userId })
     }
     toast.success(tt('successMessage.addToCart'), {
       description: `${tt('successMessage.addToCartDes', { title: enroll?.data.courseTitle || '' })}`,
@@ -135,7 +135,7 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
               )}
             </div>
 
-            {userRole === UserRole.TEACHER || enrollmentStatus === 'inProgress' ? (
+            {userRole === UserRole.TEACHER || enrollmentStatus === EnrollmentStatus.IN_PROGRESS ? (
               <div className='flex flex-col gap-4 sm:flex-row'>
                 <Button
                   onClick={() => {
@@ -147,14 +147,14 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
                   {tc('button.goToCourse')}
                 </Button>
               </div>
-            ) : userRole === UserRole.STUDENT && enrollmentStatus === 'notStarted' ? (
+            ) : userRole === UserRole.STUDENT && enrollmentStatus === EnrollmentStatus.NOT_STARTED ? (
               <div className='flex flex-col gap-4 sm:flex-row'>
                 <Button
                   onClick={handleEnroll}
                   className='bg-sky-custom-600 w-fit cursor-pointer rounded-3xl py-6 text-lg text-white'
                 >
-                  <ShoppingCartIcon className='h-5 w-5' />
-                  {tc('button.startLearning')}
+                  <BookOpenText className='h-5 w-5' />
+                  {tc('button.enroll')}
                 </Button>
               </div>
             ) : (

@@ -1,13 +1,12 @@
 import { Button } from '@/components/shadcn/button'
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
-import { useCreateEnrollmentMutaion } from '@/features/enrollment/api/enrollmentApi'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function EnrollModal() {
   const { closeModal } = useModal()
-  const [createEnroll] = useCreateEnrollmentMutaion()
+  // const [createEnroll] = useCreateEnrollmentMutaion()
 
   const handleEnroll = async () => {
     try {
