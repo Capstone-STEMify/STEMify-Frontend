@@ -4,10 +4,10 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 // models
 export enum EnrollmentStatus {
   ALL = 'ALL',
-  IN_PROGRESS = 'In Progress',
+  IN_PROGRESS = 'InProgress',
   COMPLETED = 'Completed',
   DROPPED = 'Dropped',
-  NOT_STARTED = 'Not Started'
+  NOT_STARTED = 'NotStarted'
 }
 
 export enum EnrollmentOrderBy {
@@ -17,7 +17,7 @@ export enum EnrollmentOrderBy {
   ENROLLDATE_DESC = 'enrolledDateDesc'
 }
 
-export type Enrollment = {
+export type CourseEnrollment = {
   id: number
   studentId: string
   courseId: number
@@ -31,14 +31,34 @@ export type Enrollment = {
   status: string
 }
 
+export type CurriculumEnrollment = {
+  id: number
+  studentId: string
+  curriculumId: number
+  curriculumTitle: string
+  coverImageUrl: string
+  description: string
+  duration: number
+  enrolledAt: string
+  completedAt: any
+  status: string
+}
+
 // Query
-export type EnrollmentQueryParams = {
+export type CourseEnrollmentQueryParams = {
   studentId?: string
   courseId?: number
 } & SearchPaginatedRequestParams
 
 // Slice
-export type EnrollmentSliceParams = {
+export type CourseEnrollmentSliceParams = {
   studentId?: string
   courseId?: number
 } & SliceQueryParams
+
+export type CurriculumEnrollmentSliceParams = {
+  studentId?: string
+  curriculumId?: number
+} & SliceQueryParams
+
+export type Enrollment = CourseEnrollment | CurriculumEnrollment

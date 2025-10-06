@@ -11,11 +11,11 @@ import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
 import LessonDescription from '@/features/resource/lesson/components/detail/LessonDescription'
 import LessonOutline from '@/features/resource/lesson/components/detail/LessonOutline'
 import LessonContent from '@/features/resource/lesson/components/detail/LessonContent'
-import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useGetSectionStudentProgressQuery } from '@/features/student-progress/api/studentProgressApi'
 import { useTranslations } from 'next-intl'
 import PrintPreviewModal from '@/components/shared/modals/PrintPreviewModal'
 import LessonPrintableContent from './LessonPrintableContent'
+import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 
 export default function LessonDetail({ id }: { id?: number }) {
   const t = useTranslations('LessonDetails')
@@ -34,8 +34,8 @@ export default function LessonDetail({ id }: { id?: number }) {
 
   const sectionData = sections?.data?.items ?? []
 
-  const { data: enrollment } = useSearchEnrollmentQuery(
-    { studentId: userId, courseId },
+  const { data: enrollment } = useSearchCourseEnrollmentQuery(
+    { studentId: userId, courseId, pageNumber: 1, pageSize: 10 },
     {
       skip: !userId || !courseId
     }

@@ -9,11 +9,11 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { SPagination } from '@/components/shared/SPagination'
 import { formatDuration } from '@/utils/index'
-import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setPageIndex, setPageSize } from '@/features/enrollment/slice/enrollmentSlice'
+import { setPageIndex, setPageSize } from '@/features/enrollment/slice/courseEnrollmentSlice'
 import { setSelectedEnrollmentId } from '@/features/student-progress/slice/studentProgressSlice'
 import { useTranslations } from 'next-intl'
+import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 
 type MyLearningListProps = {
   studentId?: string
@@ -23,8 +23,13 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
   const t = useTranslations('MyLearning')
 
   const dispatch = useAppDispatch()
-  const enrollParams = useAppSelector((state) => state.enrollment)
-  const { data: enroll, isLoading } = useSearchEnrollmentQuery({ studentId, ...enrollParams }, { skip: !studentId })
+  const courseEnrollParams = useAppSelector((state) => state.courseEnrollment)
+
+  const { data: enroll, isLoading } = useSearchCourseEnrollmentQuery(
+    { studentId, ...courseEnrollParams },
+    { skip: !studentId }
+  )
+
   useEffect(() => {
     dispatch(setPageSize(6))
   }, [dispatch])
@@ -64,7 +69,7 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
         <div className='grid grid-cols-1 place-items-center gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3'>
           {enroll.data.items.map((e) => (
             <Link
-              href={`/resource/course/${e.courseId}`}
+              href={`/resource/course/${e.courseId}/learn`}
               key={e.id}
               onClick={() => dispatch(setSelectedEnrollmentId(e.id))}
             >

@@ -1,7 +1,7 @@
 'use client'
 
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
+import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 import CourseDetailEnrolled from '@/features/resource/course/components/detail/enrolled/CourseDetailEnrolled'
 import CourseDetailNotEnrolled from '@/features/resource/course/components/detail/not-enrolled/CourseDetailNotEnrolled'
 import { useAppSelector } from '@/hooks/redux-hooks'
@@ -17,7 +17,10 @@ export default function CourseDetail() {
   const studentId = auth?.user?.userId
   const userRole = auth?.user?.role || UserRole.GUEST
 
-  const { data, isLoading, error } = useSearchEnrollmentQuery({ courseId, studentId }, { skip: !studentId })
+  const { data, isLoading, error } = useSearchCourseEnrollmentQuery(
+    { pageNumber: 1, pageSize: 10, courseId, studentId },
+    { skip: !studentId }
+  )
 
   if (isLoading) {
     return (

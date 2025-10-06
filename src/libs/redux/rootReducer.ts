@@ -1,11 +1,10 @@
-import { enrollmentApi } from '@/features/enrollment/api/enrollmentApi'
 import { ageRangeApi } from '@/features/resource/age-range/api/ageRangeApi'
 import { ageRangeSlice } from '@/features/resource/age-range/slice/ageRangeSlice'
 import { categoryApi } from '@/features/resource/category/api/categoryApi'
 import { categorySlice } from '@/features/resource/category/slice/categorySlice'
 import { courseApi } from '@/features/resource/course/api/courseApi'
 import { courseSlice } from '@/features/resource/course/slice/courseSlice'
-import { enrollmentSlice } from '@/features/enrollment/slice/enrollmentSlice'
+import { courseEnrollmentSlice } from '@/features/enrollment/slice/courseEnrollmentSlice'
 import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
 import { lessonSlice } from '@/features/resource/lesson/slice/lessonSlice'
 import { sectionApi } from '@/features/resource/section/api/sectionApi'
@@ -42,6 +41,9 @@ import { planProductSlice } from '@/features/plan/slice/planProductSlice'
 import { workspaceTreeSlice } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { componentSlice } from '@/features/kit-components/slice/componentSlice'
 import { componentApi } from '@/features/kit-components/api/kitComponentApi'
+import { courseEnrollmentApi } from '@/features/enrollment/api/courseEnrollmentApi'
+import { curriculumEnrollmentApi } from '@/features/enrollment/api/curriculumEnrollmentApi'
+import { curriculumEnrollmentSlice } from '@/features/enrollment/slice/curriculumEnrollmentSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -53,7 +55,8 @@ export const rootReducer = combineReducers({
   category: categorySlice.reducer,
   skill: skillSlice.reducer,
   standard: standardSlice.reducer,
-  enrollment: enrollmentSlice.reducer,
+  courseEnrollment: courseEnrollmentSlice.reducer,
+  curriculumEnrollment: curriculumEnrollmentSlice.reducer,
   notification: notificationSlice.reducer,
   studentProgress: studentProgressSlice.reducer,
   notificationRealtime: notificationRealtimeSlice.reducer,
@@ -75,7 +78,8 @@ export const rootReducer = combineReducers({
   [courseApi.reducerPath]: courseApi.reducer,
   [lessonApi.reducerPath]: lessonApi.reducer,
   [sectionApi.reducerPath]: sectionApi.reducer,
-  [enrollmentApi.reducerPath]: enrollmentApi.reducer,
+  [courseEnrollmentApi.reducerPath]: courseEnrollmentApi.reducer,
+  [curriculumEnrollmentApi.reducerPath]: curriculumEnrollmentApi.reducer,
   [ageRangeApi.reducerPath]: ageRangeApi.reducer,
   [skillApi.reducerPath]: skillApi.reducer,
   [standardApi.reducerPath]: standardApi.reducer,
