@@ -80,9 +80,15 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href='#' className='transition-colors hover:text-blue-100'>
-                    Contact us
-                  </Link>
+                  {/* <Link href='#' className='transition-colors hover:text-blue-100'> */}
+                  Contact us:{' '}
+                  <a
+                    href='https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=new'
+                    className='transition-colors hover:text-blue-500 underline'
+                  >
+                    stemify30062025@gmail.com
+                  </a>
+                  {/* </Link> */}
                 </li>
               </ul>
             </div>
@@ -90,9 +96,9 @@ const Footer = () => {
 
           <div className='border-opacity-20 flex flex-col items-center justify-between border-t border-white pt-8 sm:flex-row'>
             <div className='mb-4 text-sm opacity-90 sm:mb-0'>
-              <span>© 2025 STEMH. </span>
-              <Link href='#' className='transition-colors hover:text-blue-100'>
-                Website Development
+              <span>© 2025 STEMIFY. </span>
+              <Link href='#' className='transition-colors hover:text-blue-500 hover:underline'>
+                11 Đ. T12, Long Bình, Thủ Đức, Hồ Chí Minh, Việt Nam
               </Link>
               <span className='mx-2'>-</span>
               <Link href='#' className='text-yellow-300 transition-colors hover:text-yellow-200'>
