@@ -97,7 +97,8 @@ export function createInstanceFromTemplate(
     distanceToCamera: 0
   }
 }
-// useAddObject.ts
+
+// =============== ADD OBJECT ===============
 export function useAddObject() {
   const dispatch = useAppDispatch()
   const selectedActionId = useAppSelector((s) => s.workspaceTree.selectedActionId)
@@ -115,16 +116,29 @@ export function useAddObject() {
 
   return (template: ComponentTemplate, position: { x: number; y: number; z: number }) => {
     const instance = createInstanceFromTemplate(template, position, generateId)
-    if (selectedActionId && actions.find((a) => a.id === selectedActionId)) {
-      dispatch(addInstance(instance))
-      dispatch(setSelectedId(instance.id))
-      dispatch(addTargetToAction({ actionId: selectedActionId, targetId: instance.id }))
-    } else {
+    if (!selectedActionId) {
       toast.error('⚠️ Please select an Action in Workspace Tree before adding a component.')
+      return null
     }
+
+    const act = actions.find((a) => a.id === selectedActionId)
+    if (!act) {
+      toast.error('⚠️ Please select an Action in Workspace Tree before adding a component.')
+      return null
+    }
+
+    if (act.type === 'transform_arm' && template.type !== 'connector') {
+      toast.error('⚠️ Transform Arm Action chỉ chấp nhận Connector.')
+      return null
+    }
+    dispatch(addInstance(instance))
+    dispatch(setSelectedId(instance.id))
+    dispatch(addTargetToAction({ actionId: selectedActionId, targetId: instance.id }))
+
     return instance.id
   }
 }
+// ===========================================
 
 export function useSelectedObject() {
   return useAppSelector((state) => {

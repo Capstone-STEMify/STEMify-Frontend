@@ -1,12 +1,22 @@
 'use client'
 
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { updateConnectorArms } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useState, useCallback, useEffect } from 'react'
 
 interface ObjectInspectorProps {
   selectedObject: AssemblyInstance | null
   onObjectUpdate: (objectId: string, updates: Partial<AssemblyInstance>) => void
   onObjectDelete: (objectId: string) => void
+}
+
+function normalizePose(pose?: Partial<{ x: number; y: number; z: number }>): { x: number; y: number; z: number } {
+  return {
+    x: pose?.x ?? 0,
+    y: pose?.y ?? 0,
+    z: pose?.z ?? 0
+  }
 }
 
 export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete }: ObjectInspectorProps) {
@@ -18,6 +28,8 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
     arms?: Record<string, { x?: string; y?: string; z?: string }>
   } | null>(null)
   const [isEditing, setIsEditing] = useState(false)
+  const dispatch = useAppDispatch()
+  const selectedActionId = useAppSelector((s) => s.workspaceTree.selectedActionId)
 
   useEffect(() => {
     if (!selectedObject) return
@@ -76,12 +88,31 @@ export function ObjectInspector({ selectedObject, onObjectUpdate, onObjectDelete
       // Convert sang radian và update scene
       const rad = (parseFloat(value) * Math.PI) / 180
       if (!isNaN(rad)) {
-        onObjectUpdate(selectedObject.id, {
-          arms: {
-            ...(selectedObject.arms ?? {}),
-            [armId]: { ...(selectedObject.arms?.[armId] ?? {}), [axis]: rad }
+        const prevArms = selectedObject.arms ?? {}
+        const prevPose = normalizePose(prevArms[armId])
+
+        const newArms: Record<string, { x: number; y: number; z: number }> = {
+          ...Object.fromEntries(Object.entries(prevArms).map(([id, pose]) => [id, normalizePose(pose)])),
+          [armId]: {
+            x: axis === 'x' ? rad : prevPose.x,
+            y: axis === 'y' ? rad : prevPose.y,
+            z: axis === 'z' ? rad : prevPose.z
           }
-        })
+        }
+
+        // Update instance trong scene
+        onObjectUpdate(selectedObject.id, { arms: newArms })
+
+        // Update workspaceTree
+        if (selectedActionId) {
+          dispatch(
+            updateConnectorArms({
+              actionId: selectedActionId,
+              connectorId: selectedObject.id,
+              arms: newArms
+            })
+          )
+        }
       }
     },
     [selectedObject, onObjectUpdate]

@@ -19,7 +19,8 @@ import {
   removeActionWithInstances,
   removeTargetFromAllActions,
   setSelectedAction,
-  updateActionName
+  updateActionName,
+  WorkspaceAction
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { removeInstance, setSelectedId } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useModal } from '@/providers/ModalProvider'
@@ -131,10 +132,16 @@ export default function WorkspaceTree({ selectedObjectId }: WorkspaceTreeProps) 
     features: [syncDataLoaderFeature, searchFeature, selectionFeature, expandAllFeature]
   })
 
-  const handleAddAction = () => {
+  const handleAddAction = (type: WorkspaceAction['type']) => {
     const newId = `action_${nextActionNumber}`
-    dispatch(addAction({ id: newId, name: 'New Action', type: 'highlight' }))
-    dispatch(setSelectedAction(newId))
+    if (type === 'highlight') {
+      dispatch(addAction({ id: newId, name: `Highlight Action ${nextActionNumber}`, type }))
+      dispatch(setSelectedAction(newId))
+    }
+    if (type === 'transform_arm') {
+      dispatch(addAction({ id: newId, name: `Transform Action ${nextActionNumber}`, type }))
+      dispatch(setSelectedAction(newId))
+    }
   }
 
   React.useEffect(() => {
@@ -149,98 +156,108 @@ export default function WorkspaceTree({ selectedObjectId }: WorkspaceTreeProps) 
 
   return (
     <div>
-      <div className='mb-2 flex items-center justify-between'>
+      <div className='mb-2'>
         <h2 className='text-lg font-medium'>Workspace Tree</h2>
         <div className='flex gap-2'>
-          <button onClick={handleAddAction} className='rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'>
-            + Add Action
+          <button
+            onClick={() => handleAddAction('highlight')}
+            className='rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'
+          >
+            (highlight)
+          </button>
+          <button
+            onClick={() => handleAddAction('transform_arm')}
+            className='rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'
+          >
+            (transform_arm)
           </button>
           <button onClick={handleExport} className='rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'>
             Export JSON
           </button>
         </div>
       </div>
+      <div className='max-h-[200px] flex-1 overflow-y-auto'>
+        <Tree indent={indent} tree={tree}>
+          {tree.getItems().map((item) => {
+            const data = item.getItemData()
+            return (
+              <TreeItem key={item.getId()} item={item}>
+                <TreeItemLabel
+                  onDoubleClick={() => {
+                    if (data.type === 'action') {
+                      setEditingActionId(data.id)
+                    }
+                  }}
+                  onClick={() => {
+                    if (data.type === 'action') {
+                      dispatch(setSelectedAction(data.id))
+                    }
+                    if (data.type === 'component') {
+                      dispatch(setSelectedId(data.id))
+                    }
+                  }}
+                >
+                  <span className='flex w-full items-center justify-between'>
+                    <span className='flex items-center gap-2'>
+                      {item.isFolder() &&
+                        (item.isExpanded() ? <FolderOpenIcon className='size-4' /> : <FolderIcon className='size-4' />)}
 
-      <Tree indent={indent} tree={tree}>
-        {tree.getItems().map((item) => {
-          const data = item.getItemData()
-          return (
-            <TreeItem key={item.getId()} item={item}>
-              <TreeItemLabel
-                onDoubleClick={() => {
-                  if (data.type === 'action') {
-                    setEditingActionId(data.id)
-                  }
-                }}
-                onClick={() => {
-                  if (data.type === 'action') {
-                    dispatch(setSelectedAction(data.id))
-                  }
-                  if (data.type === 'component') {
-                    dispatch(setSelectedId(data.id))
-                  }
-                }}
-              >
-                <span className='flex w-full items-center justify-between'>
-                  <span className='flex items-center gap-2'>
-                    {item.isFolder() &&
-                      (item.isExpanded() ? <FolderOpenIcon className='size-4' /> : <FolderIcon className='size-4' />)}
-
-                    {editingActionId === data.id ? (
-                      <input
-                        type='text'
-                        autoFocus
-                        defaultValue={data.name}
-                        className='rounded border px-1 text-xs'
-                        onBlur={(e) => {
-                          const newName = e.target.value.trim()
-                          if (newName) {
-                            dispatch(updateActionName({ id: data.id, newName }))
-                          }
-                          setEditingActionId(null)
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            const target = e.target as HTMLInputElement
-                            const newName = target.value.trim()
+                      {editingActionId === data.id ? (
+                        <input
+                          type='text'
+                          autoFocus
+                          defaultValue={data.name}
+                          className='rounded border px-1 text-xs'
+                          onBlur={(e) => {
+                            const newName = e.target.value.trim()
                             if (newName) {
                               dispatch(updateActionName({ id: data.id, newName }))
                             }
                             setEditingActionId(null)
-                          }
-                          if (e.key === 'Escape') {
-                            setEditingActionId(null)
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    ) : (
-                      <span>{item.getItemName()}</span>
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const target = e.target as HTMLInputElement
+                              const newName = target.value.trim()
+                              if (newName) {
+                                dispatch(updateActionName({ id: data.id, newName }))
+                              }
+                              setEditingActionId(null)
+                            }
+                            if (e.key === 'Escape') {
+                              setEditingActionId(null)
+                            }
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      ) : (
+                        <span>{item.getItemName()}</span>
+                      )}
+                    </span>
+
+                    {data.type === 'action' && (
+                      <span
+                        role='button'
+                        tabIndex={0}
+                        onClick={() => dispatch(removeActionWithInstances(data.id))}
+                        className='rounded bg-red-100 px-2 py-1 text-xs hover:bg-red-200'
+                      >
+                        Delete
+                      </span>
+                    )}
+
+                    {data.type === 'component' && (
+                      <div onClick={(e) => handleDeleteComponent(e, data.id)}>
+                        <Trash2 className='size-4 cursor-pointer text-red-500 hover:text-red-700' />
+                      </div>
                     )}
                   </span>
-
-                  {data.type === 'action' && (
-                    <span
-                      role='button'
-                      tabIndex={0}
-                      onClick={() => dispatch(removeActionWithInstances(data.id))}
-                      className='rounded bg-red-100 px-2 py-1 text-xs hover:bg-red-200'
-                    >
-                      Delete
-                    </span>
-                  )}
-
-                  {data.type === 'component' && (
-                    <div onClick={(e) => handleDeleteComponent(e, data.id)}>
-                      <Trash2 className='size-4 cursor-pointer text-red-500 hover:text-red-700' />
-                    </div>
-                  )}
-                </span>
-              </TreeItemLabel>
-            </TreeItem>
-          )
-        })}
-      </Tree>
+                </TreeItemLabel>
+              </TreeItem>
+            )
+          })}
+        </Tree>
+      </div>
     </div>
   )
 }

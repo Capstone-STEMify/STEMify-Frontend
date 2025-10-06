@@ -17,7 +17,11 @@ import {
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
 import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
-import { removeTargetFromAllActions, resetActions } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import {
+  removeTargetFromAllActions,
+  resetActions,
+  updateConnectorArms
+} from '@/features/creator-3d/slice/workspaceTreeSlice'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()

@@ -76,13 +76,11 @@ export const workspaceTreeSlice = createSlice({
           duration: 2
         })
       } else if (action.payload.type === 'transform_arm') {
-        const prevHighlight = [...state.actions].reverse().find((a) => a.type === 'highlight')
-
         state.actions.push({
           id: action.payload.id,
           name: action.payload.name,
           type: 'transform_arm',
-          targets: prevHighlight ? prevHighlight.targets : [],
+          targets: [],
           duration: 2,
           connectorArmTransforms: {},
           instantAppear: true,
@@ -112,17 +110,18 @@ export const workspaceTreeSlice = createSlice({
       if (!act) return
 
       if (act.type === 'highlight') {
-        // highlight → cho phép add nhiều target khác nhau
         if (!act.targets.includes(action.payload.targetId)) {
           act.targets.push(action.payload.targetId)
         }
       }
 
       if (act.type === 'transform_arm') {
-        // transform_arm → targets phải giống highlight gần nhất
-        const idx = state.actions.findIndex((a) => a.id === action.payload.actionId)
-        const prevHighlight = [...state.actions.slice(0, idx)].reverse().find((a) => a.type === 'highlight')
-        act.targets = prevHighlight ? [...prevHighlight.targets] : []
+        if (action.payload.targetId.startsWith('connector_')) {
+          if (!act.targets.includes(action.payload.targetId)) {
+            act.targets.push(action.payload.targetId)
+            
+          }
+        }
       }
     },
     updateConnectorArms: (
