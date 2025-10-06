@@ -62,15 +62,6 @@ export function Creator3D() {
     [dispatch]
   )
 
-  // Handle object deletion
-  const handleObjectDelete = useCallback(
-    (objectId: string) => {
-      dispatch(removeInstance(objectId))
-      dispatch(removeTargetFromAllActions(objectId))
-    },
-    [dispatch]
-  )
-
   // Handle export
   const handleExport = useCallback(() => {
     setShowExportDialog(true)
@@ -117,12 +108,7 @@ export function Creator3D() {
           <WorkspaceTree selectedObjectId={selectedObject?.id} />
         </div>
         <div className='flex h-full w-80 flex-col overflow-hidden rounded-2xl bg-white'>
-          <ObjectInspector
-            key={selectedObject?.id}
-            selectedObject={selectedObject}
-            onObjectUpdate={handleObjectUpdate}
-            onObjectDelete={handleObjectDelete}
-          />
+          <ObjectInspector key={selectedObject?.id} />
         </div>
       </div>
 
