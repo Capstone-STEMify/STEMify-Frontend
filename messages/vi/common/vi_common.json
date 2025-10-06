@@ -55,7 +55,8 @@
       "addToCart": "Thêm Vào Giỏ Hàng",
       "quickView": "Xem Nhanh",
       "goToCourse": "Đi đến Khóa học",
-      "shop": "MUA NGAY"
+      "shop": "MUA NGAY",
+      "signUpFree": "Đăng Ký Miễn Phí"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",

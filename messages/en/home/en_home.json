@@ -17,11 +17,14 @@
     "description": "STEMIFY Education’s solutions are ideal for classrooms, virtual learning environments, makerspaces, and other STEM programs. Our StemifyKits and easy-to-implement curriculum are designed to grow with students grades 3-12 and educators. Our solutions prepare all learners for success in STEM classrooms and careers."
   },
   "BenefitSection": {
-    "status": "Growing and online",
-    "title": "What will your child get after studying at <orange>STEMify</orange>?",
-    "benefit1": "Master fundamental knowledge at school",
-    "benefit2": "The ability to criticize knowledge increases",
-    "benefit3": "Respond confidently when encountering difficult situations"
+    "status": "A World of STEAM at Your Fingertips!",
+    "title": "Stemify Resources",
+    "benefit1": "Save Time",
+    "benefit2": "Aligned with Your Curriculum Standards",
+    "benefit3": "Hands-on Learning",
+    "benefit1Desc": "Less prep work for you, more fun for everyone.",
+    "benefit2Desc": "No more struggling to integrate STEAM and STEM into your lesson planning.",
+    "benefit3Desc": "Make STEAM and STEM subjects accessible and increase long-term retention."
   },
   "ThreeDSection": {
     "badge": "🚀 STEM Innovation",

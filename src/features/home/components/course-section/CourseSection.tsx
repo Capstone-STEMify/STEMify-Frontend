@@ -4,6 +4,7 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { CourseStatus } from '@/features/resource/course/types/course.type'
 import { formatDuration } from '@/utils/index'
+import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import React from 'react'
@@ -14,10 +15,10 @@ export default function ExploreResourcesSection() {
 
   const { data: CourseData } = useSearchCourseQuery({ status: CourseStatus.PUBLISHED, pageSize: 3 })
 
-  const truncateText = (text: string, maxLength = 80) => {
-    if (text.length <= maxLength) return text
-    return text.substring(0, maxLength).trim() + '...'
-  }
+  // const truncateText = (text: string, maxLength = 80) => {
+  //   if (text.length <= maxLength) return text
+  //   return text.substring(0, maxLength).trim() + '...'
+  // }
 
   if (!CourseData) return null
 
@@ -34,24 +35,26 @@ export default function ExploreResourcesSection() {
         </h2>
         <p className='mx-auto mb-12 max-w-4xl text-center text-lg text-gray-700'>{t('description')}</p>
 
-        <div className='mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+        <div className='mx-auto grid max-w-7xl grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
           {CourseData.data.items.map((resource, index) => (
             <CardLayout
+              className='rounded-3xl shadow-lg hover:shadow-2xl'
               imageRatio='aspect-3/2'
               key={index}
               imageSrc={resource.imageUrl || ''}
-              infor={<Badge>{resource.status}</Badge>}
               footer={
                 <div>
-                  <Badge className='bg-blue-100 text-blue-800'>{resource.ageRangeLabel}</Badge>
-                  <Badge className='bg-green-100 text-green-800'>{formatDuration(resource.duration)}</Badge>
+                  <Badge className='mr-2 bg-blue-100 text-blue-800'>{resource.ageRangeLabel} +</Badge>
+                  <Badge className='bg-green-100 text-green-800'>
+                    <Clock /> {formatDuration(resource.duration)}
+                  </Badge>
                 </div>
               }
             >
               <div className='flex min-h-0 flex-1 flex-col'>
-                <p className='text-amber-custom-400 text-xs font-medium'>COURSE</p>
-                <h3 className='my-1 line-clamp-2 text-lg font-semibold'>{resource.title}</h3>
-                <p className='line-clamp-4 text-sm text-gray-600'>{truncateText(resource.description)}</p>
+                <p className='text-amber-custom-400 text-sm font-medium'>COURSE</p>
+                <h3 className='my-2 line-clamp-2 text-xl font-semibold'>{resource.title}</h3>
+                <p className='text-md line-clamp-4 text-gray-600'>{resource.description}</p>
               </div>
             </CardLayout>
           ))}
@@ -59,8 +62,8 @@ export default function ExploreResourcesSection() {
 
         <div className='mt-12 text-center'>
           <Link href='/resource'>
-            <button className='relative transform rounded-full bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
-              {tc('button.exploreArrow')}
+            <button className='relative transform rounded-full bg-amber-400 px-14 py-3 text-xl font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
+              {tc('button.exploreArrow').toUpperCase()}
               <div className='absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full bg-pink-400 opacity-60'></div>
             </button>
           </Link>

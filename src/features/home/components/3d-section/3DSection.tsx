@@ -8,6 +8,7 @@ export default function ThreeDSection() {
   const tc = useTranslations('common')
   return (
     <section className='relative overflow-hidden bg-white'>
+      <div className='clip-slant bg-sky-custom-300 absolute inset-0 h-[350px]'></div>
       {/* Animated Background Elements */}
       <div className='absolute inset-0'>
         <div className='animate-float-delayed absolute right-0 bottom-60 h-40 w-40 rounded-full bg-gradient-to-tl from-blue-300 to-cyan-300 opacity-20'></div>
