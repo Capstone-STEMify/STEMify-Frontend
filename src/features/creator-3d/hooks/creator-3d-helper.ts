@@ -228,39 +228,6 @@ export function exportAssembly(
     instances: instanceList
   }))
 
-  // // Actions
-  // const actions: any[] = []
-
-  // // Highlight tất cả
-  // actions.push({
-  //   id: 'action_show_all',
-  //   name: 'Show All Components',
-  //   description: 'Highlights all components in the scene',
-  //   type: 'highlight',
-  //   targets: instances.map((i) => i.id),
-  //   duration: 2,
-  //   animation: {
-  //     params: { colorHighlight: '#FFD700', pulseEffect: true }
-  //   }
-  // })
-
-  // // ✅ Xuất transform_arm dựa trên arms đã lưu trong state (nếu có)
-  // instances.forEach((inst) => {
-  //   if (inst.category === 'connector' && inst.arms && Object.keys(inst.arms).length > 0) {
-  //     actions.push({
-  //       id: `action_transform_${inst.id}`,
-  //       name: `Adjust Arms of ${inst.id}`,
-  //       type: 'transform_arm',
-  //       targets: [inst.id],
-  //       duration: 2,
-  //       connectorArmTransforms: {
-  //         [inst.id]: inst.arms
-  //       },
-  //       interpolation: 'easeInOut'
-  //     })
-  //   }
-  // })
-
   const exportedActions = actions.map((a) => ({
     id: a.id,
     name: a.name,
@@ -275,6 +242,59 @@ export function exportAssembly(
     }),
     ...(a.type === 'rotate_highlight' && { rotationSpeed: a.rotationSpeed })
   }))
+
+  const steps = exportedActions.map((a) => {
+    if (a.type === 'highlight') {
+      return {
+        actionId: a.id,
+        title: `Highlight: ${a.name}`,
+        description: `Highlights targets: ${
+          Array.isArray(a.targets) ? a.targets.join(', ') : a.targets === 'all' ? 'all' : ''
+        }`,
+        expectedResult: 'Targets are highlighted',
+        hints: ['Notice the highlighted components']
+      }
+    }
+
+    if (a.type === 'transform_arm') {
+      return {
+        actionId: a.id,
+        title: `Adjust Arms: ${a.name}`,
+        description: 'Connector arms should rotate as exported',
+        expectedResult: 'Arms are rotated according to saved values',
+        hints: ['Check connector arms rotations']
+      }
+    }
+
+    if (a.type === 'rotate_highlight') {
+      return {
+        actionId: a.id,
+        title: `Rotate Highlight: ${a.name}`,
+        description: 'Rotates while highlighting',
+        expectedResult: 'Rotation + highlight effect works',
+        hints: ['Observe the spinning highlight']
+      }
+    }
+
+    return {
+      actionId: a.id,
+      title: a.name,
+      description: 'Run this action',
+      expectedResult: 'Effect is applied',
+      hints: []
+    }
+  })
+
+  const activities = [
+    {
+      id: 'custom_assembly',
+      name: metadata.title,
+      description: metadata.description,
+      difficulty: 'beginner',
+      estimatedTime: 600,
+      steps
+    }
+  ]
 
   return {
     metadata: {
@@ -303,36 +323,7 @@ export function exportAssembly(
       connectors: connectorInstances
     },
     actions: exportedActions,
-    activities: [
-      {
-        id: 'custom_assembly',
-        name: metadata.title,
-        description: metadata.description,
-        difficulty: 'beginner',
-        estimatedTime: 600,
-        steps: [
-          {
-            actionId: 'action_show_all',
-            title: 'Observe Components',
-            description: 'Study the arrangement of straws and connectors',
-            expectedResult: 'All components are visible and highlighted',
-            hints: [
-              'Notice the positioning of each component',
-              'Observe the relationships between straws and connectors'
-            ]
-          },
-          ...instances
-            .filter((i) => i.category === 'connector' && i.arms && Object.keys(i.arms).length > 0)
-            .map((i) => ({
-              actionId: `action_transform_${i.id}`,
-              title: `Adjust Arms of ${i.id}`,
-              description: 'Connector arms should rotate as exported',
-              expectedResult: 'Arms are rotated according to saved values',
-              hints: ['Check arm_1, arm_2... rotations']
-            }))
-        ]
-      }
-    ],
+    activities,
     scene: INITIAL_SCENE
   }
 }
