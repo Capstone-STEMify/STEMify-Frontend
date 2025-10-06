@@ -35,7 +35,7 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/token`,
     params: {
       grant_type: 'authorization_code',
-      client_id: process.env.NEXT_PUBLIC_CLIENT_ID_ROBOTS
+      client_id: process.env.NEXT_PUBLIC_CLIENT_ID
       // redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI
     }
   },
