@@ -1,37 +1,32 @@
 'use client'
 
-import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { ComponentInspector } from '@/features/creator-3d/components/right-sidebar/ComponentInspector'
-import { useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
-import { removeInstance, updateInstance } from '@/features/creator-3d/slice/creatorSceneSlice'
-import {
-  removeTargetFromAllActions,
-  updateActionName,
-  updateConnectorArms
-} from '@/features/creator-3d/slice/workspaceTreeSlice'
+import { updateActionName } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { useState, useCallback, useEffect } from 'react'
-
-function normalizePose(pose?: Partial<{ x: number; y: number; z: number }>): { x: number; y: number; z: number } {
-  return {
-    x: pose?.x ?? 0,
-    y: pose?.y ?? 0,
-    z: pose?.z ?? 0
-  }
-}
 
 export function ObjectInspector() {
   const dispatch = useAppDispatch()
-  const { selectedActionId, actions } = useAppSelector((s) => s.workspaceTree)
-  const selectedAction = actions.find((a) => a.id === selectedActionId)
-  const selectedObject = useSelectedObject()
-  // TODO: DETECT IF CONNECTOR AND SHOW CONNECTOR PROPS
+  const { actions } = useAppSelector((s) => s.workspaceTree)
+  const selection = useAppSelector((s) => s.selectObject)
 
-  if (selectedObject) {
+  if (selection.type === 'component') {
     return <ComponentInspector />
   }
 
-  if (selectedAction) {
+  if (selection.type === 'action') {
+    const selectedAction = actions.find((a) => a.id === selection.id)
+    if (!selectedAction) {
+      return (
+        <div className='flex h-full w-80 flex-col border-gray-200 bg-white'>
+          <div className='border-b border-gray-200 p-4'>
+            <h2 className='font-semibold text-gray-900'>Properties</h2>
+          </div>
+          <div className='flex flex-1 items-center justify-center p-8'>
+            <p className='text-sm text-gray-500'>Select an object or action to edit properties</p>
+          </div>
+        </div>
+      )
+    }
     return (
       <div className='flex h-full w-80 flex-col border-gray-200 bg-white'>
         <div className='border-b border-gray-200 p-4'>

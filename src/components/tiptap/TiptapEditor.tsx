@@ -81,6 +81,7 @@ export default function TiptapEditor({ content, onChange, children }: TiptapEdit
       }
     }
     if (files.length > 0) {
+      event.preventDefault()
       await uploadAndInsert(files, editor, Number(lessonId))
     }
   }
