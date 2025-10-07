@@ -8,15 +8,10 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'STEMify Education',
-  icons: {
-    icon: '/favicon.ico'
-  }
+  icons: { icon: '/favicon.ico' }
 }
 
-export default async function RootLayout({
-  children,
-  params
-}: Readonly<{ children: React.ReactNode; params: { locale: string } }>) {
+export default async function RootLayout({ children, params }: { children: React.ReactNode; params: any }) {
   const { locale } = params
 
   if (!hasLocale(routing.locales, locale)) {
@@ -25,8 +20,8 @@ export default async function RootLayout({
 
   let messages
   try {
-    messages = loadMessages(locale)
-  } catch (error) {
+    messages = await loadMessages(locale)
+  } catch {
     notFound()
   }
 
