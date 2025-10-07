@@ -16,11 +16,14 @@
     "description": "Giải pháp của STEMIFY Education phù hợp cho nhiều môi trường khác nhau như lớp học, học trực tuyến, makerspace hay các chương trình STEM. Bộ StemifyKits cùng giáo trình dễ triển khai được thiết kế để đồng hành và phát triển cùng học sinh từ lớp 3–8 cũng như hỗ trợ giáo viên. Các giải pháp này giúp người học tự tin hơn và sẵn sàng thành công trong học tập cũng như sự nghiệp liên quan đến STEM. Với các công cụ dễ tiếp cận và tài nguyên kỹ thuật số và ngoại tuyến miễn phí, học sinh ở mọi khả năng có thể khám phá và phát triển các kỹ năng cần thiết cho tương lai."
   },
   "BenefitSection": {
-    "status": "Phát triển và trực tuyến",
-    "title": "Con bạn sẽ nhận được gì sau khi học tại <orange>STEMify</orange>?",
-    "benefit1": "Nắm vững kiến thức nền tảng ở trường học",
-    "benefit2": "Tăng khả năng phản biện tri thức",
-    "benefit3": "Tự tin ứng phó khi gặp tình huống khó"
+    "status": "Thế giới STEAM trong tầm tay bạn",
+    "title": "Tài nguyên từ Stemify",
+    "benefit1": "Tiết kiệm thời gian",
+    "benefit2": "Phù hợp với mỗi cá nhân",
+    "benefit3": "Học tập qua thực hành",
+    "benefit1Desc": "Giảm bớt thời gian chuẩn bị tài liệu",
+    "benefit2Desc": "Không còn khó khăn trong việc tích hợp STEAM và STEM vào kế hoạch bài giảng của bạn.",
+    "benefit3Desc": "Giúp các môn STEAM và STEM trở nên dễ tiếp cận và tăng khả năng ghi nhớ lâu dài."
   },
   "ThreeDSection": {
     "badge": "🚀 STEM Innovation",
@@ -33,7 +36,6 @@
     "project": "Dự án",
     "support": "Hỗ trợ",
     "creative": "Sáng tạo"
-
   },
   "StatsSection": {
     "freeResources": "Tài nguyên miễn phí",

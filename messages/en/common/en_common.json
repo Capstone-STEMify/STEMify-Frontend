@@ -55,7 +55,8 @@
       "share": "Share",
       "quickView": "Quick View",
       "goToCourse": "Go to Course",
-      "addToCart": "Add To Cart"
+      "addToCart": "Add To Cart",
+      "signUpFree": "Sign Up For Free"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

@@ -44,7 +44,7 @@ export default function LessonAction({ lessonId, onPrintClick }: { lessonId: num
           // }}
           onClick={onPrintClick}
         >
-          Pacing guide
+          DOWNLOAD AND PRINT
         </Button>
       )}
 

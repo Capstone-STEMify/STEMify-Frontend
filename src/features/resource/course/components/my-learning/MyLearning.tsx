@@ -2,23 +2,26 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { MyLearningHero } from '@/features/resource/course/components/my-learning/MyLearningHero'
 import { MyLearningList } from '@/features/resource/course/components/my-learning/MyLearningList'
+import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 
 export function MyLearning() {
   const auth = useAppSelector((state) => state.auth)
-  const { data } = useSearchEnrollmentQuery({ studentId: auth.user?.userId }, { skip: !auth.token })
+  const { data } = useSearchCourseEnrollmentQuery(
+    { studentId: auth.user?.userId, pageNumber: 1, pageSize: 10 },
+    { skip: !auth.token }
+  )
   const course = data?.data
   const studentId = auth.user?.userId
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }} className='bg-gray-50'>
-      <MyLearningHero course={course} studentId={studentId}/>
+      <MyLearningHero course={course} studentId={studentId} />
 
       {/* Course Content Section */}
-      <section className='bg-sky-50 py-12'>
+      <section className='bg-slate-50 py-12'>
         <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

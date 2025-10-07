@@ -5,8 +5,8 @@ import { motion } from 'framer-motion'
 import { PaginatedResult } from '@/types/baseModel'
 import { Enrollment } from '@/features/enrollment/types/enrollment.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { useSearchEnrollmentQuery } from '@/features/enrollment/api/enrollmentApi'
 import { useTranslations } from 'next-intl'
+import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 
 type MyLearningHeroProps = {
   course?: PaginatedResult<Enrollment>
@@ -14,22 +14,22 @@ type MyLearningHeroProps = {
 }
 
 export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
-
   const t = useTranslations('MyLearning')
 
   const auth = useAppSelector((state) => state.auth)
-  const { data } = useSearchEnrollmentQuery({ studentId: studentId }, { skip: !auth.token })
-  
-  const items = data?.data?.items || [];
-  
-  const totalCourses = course?.items.length || 0
-  const inProgressCourses = items.filter(course => course.status === "InProgress").length;
-  const completedCourses = items.filter(course => course.status === "Completed").length;
-  const cancelledCourses = items.filter(course => course.status === "Dropped").length;
+  const { data } = useSearchCourseEnrollmentQuery(
+    { studentId: studentId, pageNumber: 1, pageSize: 10 },
+    { skip: !auth.token }
+  )
 
-  const averageProgress = totalCourses > 0 
-    ? Math.round((completedCourses / totalCourses) * 100) 
-    : 0;
+  const items = data?.data?.items || []
+
+  const totalCourses = course?.items.length || 0
+  const inProgressCourses = items.filter((course) => course.status === 'InProgress').length
+  const completedCourses = items.filter((course) => course.status === 'Completed').length
+  const cancelledCourses = items.filter((course) => course.status === 'Dropped').length
+
+  const averageProgress = totalCourses > 0 ? Math.round((completedCourses / totalCourses) * 100) : 0
 
   const stats = [
     { label: `${t('total')}`, value: totalCourses },

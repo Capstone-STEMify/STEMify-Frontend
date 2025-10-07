@@ -22,6 +22,7 @@ import {
   resetActions,
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()
@@ -62,15 +63,6 @@ export function Creator3D() {
     [dispatch]
   )
 
-  // Handle object deletion
-  const handleObjectDelete = useCallback(
-    (objectId: string) => {
-      dispatch(removeInstance(objectId))
-      dispatch(removeTargetFromAllActions(objectId))
-    },
-    [dispatch]
-  )
-
   // Handle export
   const handleExport = useCallback(() => {
     setShowExportDialog(true)
@@ -87,12 +79,12 @@ export function Creator3D() {
   return (
     <div className='relative flex w-full bg-gray-100'>
       {/* Component Palette */}
-      <div className='w-64 flex-1 bg-white'>
+      <div className='w-64 bg-white'>
         <ComponentPalette onAddComponent={handleAddComponent} />
       </div>
 
       {/* Main Workspace */}
-      <div className='relative w-full'>
+      <div className='relative w-[60%]'>
         <CreatorWorkspace
           onObjectSelect={handleObjectSelect}
           onObjectUpdate={handleObjectUpdate}
@@ -112,18 +104,8 @@ export function Creator3D() {
       </div>
 
       {/* Object Inspector */}
-      <div className='m-2 flex w-80 flex-col gap-4'>
-        <div className='rounded-2xl bg-white p-4 shadow'>
-          <WorkspaceTree selectedObjectId={selectedObject?.id} />
-        </div>
-        <div className='flex h-full w-80 flex-col overflow-hidden rounded-2xl bg-white'>
-          <ObjectInspector
-            key={selectedObject?.id}
-            selectedObject={selectedObject}
-            onObjectUpdate={handleObjectUpdate}
-            onObjectDelete={handleObjectDelete}
-          />
-        </div>
+      <div className='my-2 mr-2 w-85 gap-4'>
+        <WorkspacePanel />
       </div>
 
       {/* Export Dialog */}
