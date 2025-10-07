@@ -44,6 +44,7 @@ import { componentApi } from '@/features/kit-components/api/kitComponentApi'
 import { courseEnrollmentApi } from '@/features/enrollment/api/courseEnrollmentApi'
 import { curriculumEnrollmentApi } from '@/features/enrollment/api/curriculumEnrollmentApi'
 import { curriculumEnrollmentSlice } from '@/features/enrollment/slice/curriculumEnrollmentSlice'
+import { selectionObjectSlice } from '@/features/creator-3d/slice/selectionObjectSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -73,6 +74,7 @@ export const rootReducer = combineReducers({
   planProduct: planProductSlice.reducer,
   workspaceTree: workspaceTreeSlice.reducer,
   component: componentSlice.reducer,
+  selectObject: selectionObjectSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
