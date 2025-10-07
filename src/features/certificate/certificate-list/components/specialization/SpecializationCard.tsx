@@ -1,81 +1,138 @@
 'use client'
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/shadcn/accordion";
-import { Button } from "@/components/shadcn/button";
-import { Card } from "@/components/shadcn/card";
-import { BookOpenCheck, CheckCircle, FileText, MoreHorizontal } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { Specialization } from "../../api/mockData";
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion'
+import { Button } from '@/components/shadcn/button'
+import { Card } from '@/components/shadcn/card'
+import { BookOpenCheck, CheckCircle, FileText, MoreHorizontal } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { CurriculumEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
+import { Progress } from '@/components/shadcn/progress'
+import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 interface SpecializationCardProps {
-  specialization: Specialization;
-  itemValue: string;
+  curriculum: CurriculumEnrollment
+  itemValue: string
 }
 
-export const SpecializationCard = ({ specialization, itemValue }: SpecializationCardProps) => {
+export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCardProps) => {
+  const locale = useLocale()
+  const router = useRouter()
+
   return (
-    <AccordionItem value={itemValue} className="border-b-0">
-      <Card className="overflow-hidden shadow-sm transition-all hover:shadow-md">
-        <AccordionTrigger className="p-4 text-left hover:no-underline [&_svg]:hidden">
-          <div className="flex items-center justify-between w-full px-4">
-            <div className="flex items-start gap-4">
+    <AccordionItem value={itemValue} className='border-b-0'>
+      <Card className='overflow-hidden shadow-sm transition-all hover:shadow-md'>
+        <AccordionTrigger className='p-4 text-left hover:no-underline [&_svg]:hidden'>
+          <div className='flex w-full items-center justify-between px-4'>
+            <div className='flex items-start gap-4'>
               <div>
-                <Image src={'/images/cert-specialization.png'} width={64} height={64} alt="Specialization"></Image>
+                <Image
+                  className='aspect-square rounded-sm border bg-white object-contain shadow-sm'
+                  src={curriculum.coverImageUrl}
+                  width={120}
+                  height={120}
+                  alt='Specialization'
+                ></Image>
               </div>
               <div>
-                <h3 className="font-bold text-base text-gray-900">{specialization.title}</h3>
-                <p className="text-sm text-gray-600">{specialization.university}</p>
+                <h3
+                  className='cursor-pointer text-lg font-bold text-gray-900 hover:underline'
+                  onClick={() => {
+                    router.push(`/${locale}/resource/curriculum/${curriculum.curriculumId}`)
+                  }}
+                >
+                  {curriculum.curriculumTitle}
+                </h3>
+                <p className='text-sm text-gray-500'>{curriculum.status}</p>
+                <Progress value={10} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
+                <span className='text-sm font-medium text-gray-700'>45%</span>
               </div>
             </div>
-            <Button className="ml-4 flex-shrink-0 bg-blue-500" onClick={(e) => e.stopPropagation()}>Add to LinkedIn</Button>
+            {curriculum.status === EnrollmentStatus.COMPLETED ? (
+              <Button
+                className='ml-4 flex-shrink-0 bg-sky-500'
+                onClick={(e) => {
+                  e.stopPropagation()
+                  router.push(`${locale}/certificate/${curriculum.id}`)
+                }}
+              >
+                View Certificate
+              </Button>
+            ) : (
+              <MoreHorizontal className='ml-4 h-5 w-5 flex-shrink-0 cursor-pointer text-gray-500' />
+            )}
           </div>
         </AccordionTrigger>
 
         <AccordionContent>
-          <div className="bg-blue-50/70 p-16 flex flex-col sm:flex-row items-center gap-6">
-            <div className="sm:w-2/5 lg:w-2/3">
-              <Image src={specialization.logoUrl} alt="University Logo" width={40} height={40} className="mb-4" />
-              <h4 className="text-4xl font-semibold text-gray-900">
-                Congratulations on earning your {specialization.title} Specialization Certificate!
-              </h4>
-              <div className="mt-4 flex gap-3">
-                <Button className="border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white" variant="outline">View career certificate</Button>
+          {curriculum.certificateImageUrl && (
+            <div className='flex flex-col items-center gap-6 bg-blue-50/70 p-16 sm:flex-row'>
+              <div className='sm:w-2/5 lg:w-2/3'>
+                <Image src={curriculum.coverImageUrl} alt='University Logo' width={40} height={40} className='mb-4' />
+                <h4 className='text-4xl font-semibold text-gray-900'>
+                  Congratulations on earning your {curriculum.curriculumTitle} Specialization Certificate!
+                </h4>
+                <div className='mt-4 flex gap-3'>
+                  <Button className='bg-sky-500 hover:bg-blue-500 hover:text-white' variant='outline'>
+                    Share certificate
+                  </Button>
+                </div>
+              </div>
+              <div className='flex justify-center sm:w-2/5 sm:justify-end lg:w-2/5'>
+                <Image
+                  src={curriculum.certificateImageUrl}
+                  alt='Certificate'
+                  width={280}
+                  height={200}
+                  className='rounded-md border bg-white p-1 shadow-md'
+                />
               </div>
             </div>
-            <div className="sm:w-2/5 lg:w-2/5 flex justify-center sm:justify-end">
-              <Image 
-                src={specialization.certificateImageUrl} 
-                alt="Certificate" 
-                width={280}
-                height={200}
-                className="rounded-md border bg-white p-1 shadow-md" 
-              />
-            </div>
-          </div>
-          <div className="bg-white">
-            {specialization.courses.map((course, index) => (
-              <div key={index} className="border-t p-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
+          )}
+
+          <div className='bg-white pl-12'>
+            {curriculum.courseEnrollments.map((course, index) => (
+              <div key={index} className='flex items-center justify-between border-t p-4'>
+                <div className='flex items-center gap-4'>
+                  <Image
+                    className='aspect-square rounded-sm object-contain'
+                    src={course.coverImageUrl}
+                    width={64}
+                    height={64}
+                    alt='Specialization'
+                  ></Image>
                   <div>
-                    <p className="font-semibold">{course.title}</p>
-                    <p className="text-sm text-gray-500">{course.status}</p>
-                    <div>
-                      <Button className="text-blue-500 bg-white outline-none shadow-none hover:underline">Add to LinkedIn</Button>
-                      <Button className="text-blue-500 bg-white outline-none shadow-none hover:underline">View Certificate</Button>
-                    </div>
+                    <p className='font-semibold'>{course.courseTitle}</p>
+                    <p className='text-sm text-gray-500'>
+                      Course 1 of 4 · <span>{course.status}</span>
+                    </p>
+                    <Progress value={50} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
+                    <span className='text-sm font-medium text-gray-700'>45%</span>
+                    {course.status === EnrollmentStatus.COMPLETED && (
+                      <p className='mt-1 text-sm text-gray-600'>
+                        {/* fix later */}
+                        Grade Achieved: <span className='font-semibold'>95.01%</span>
+                        Completed At: <span className='font-semibold'>{course.completedAt}</span>
+                      </p>
+                    )}
+                    {course.certificateImageUrl && (
+                      <div>
+                        <Button
+                          className='bg-white text-blue-500 shadow-none outline-none hover:underline'
+                          onClick={() => router.push(`${locale}/certificate/${course.id}`)}
+                        >
+                          View Certificate
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
-                <MoreHorizontal className="h-5 w-5 text-gray-500 cursor-pointer" />
+                <MoreHorizontal className='h-5 w-5 cursor-pointer text-gray-500' />
               </div>
             ))}
           </div>
         </AccordionContent>
       </Card>
     </AccordionItem>
-  );
-};
+  )
+}

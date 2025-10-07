@@ -19,7 +19,8 @@
     "details": {
       "title": "Chi Tiết Khung Chương Trình",
       "addCourse": "Thêm Khóa Học",
-      "price": "Giá"
+      "price": "Giá",
+      "alreadyEnrolled": "Đã Đăng Ký"
     },
 
     "form": {

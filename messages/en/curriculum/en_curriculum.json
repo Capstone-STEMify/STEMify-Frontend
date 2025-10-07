@@ -19,7 +19,8 @@
     "details": {
       "title": "Curriculum Details",
       "addCourse": "Add Course",
-      "price": "Price"
+      "price": "Price",
+      "alrealyEnrolled": "Already Enrolled"
     },
 
     "form": {
