@@ -119,7 +119,6 @@ export const workspaceTreeSlice = createSlice({
         if (action.payload.targetId.startsWith('connector_')) {
           if (!act.targets.includes(action.payload.targetId)) {
             act.targets.push(action.payload.targetId)
-            
           }
         }
       }
@@ -165,15 +164,7 @@ export const workspaceTreeSlice = createSlice({
     updateActionName: (state, action: PayloadAction<{ id: string; newName: string }>) => {
       const act = state.actions.find((a) => a.id === action.payload.id)
       if (!act) return
-
-      // cập nhật name
       act.name = action.payload.newName
-
-      // cập nhật id theo rule: lowercase + replace space = _
-      const newId = action.payload.newName.toLowerCase().replace(/\s+/g, '_')
-
-      // đổi id của action
-      act.id = newId
     },
     resetActions: () => initialState
   }
