@@ -7,6 +7,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { CurriculumEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
 import { Progress } from '@/components/shadcn/progress'
+import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 interface SpecializationCardProps {
   curriculum: CurriculumEnrollment
@@ -14,6 +16,9 @@ interface SpecializationCardProps {
 }
 
 export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCardProps) => {
+  const locale = useLocale()
+  const router = useRouter()
+
   return (
     <AccordionItem value={itemValue} className='border-b-0'>
       <Card className='overflow-hidden shadow-sm transition-all hover:shadow-md'>
@@ -30,14 +35,27 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                 ></Image>
               </div>
               <div>
-                <h3 className='text-lg font-bold text-gray-900'>{curriculum.curriculumTitle}</h3>
+                <h3
+                  className='cursor-pointer text-lg font-bold text-gray-900 hover:underline'
+                  onClick={() => {
+                    router.push(`/${locale}/resource/curriculum/${curriculum.curriculumId}`)
+                  }}
+                >
+                  {curriculum.curriculumTitle}
+                </h3>
                 <p className='text-sm text-gray-500'>{curriculum.status}</p>
                 <Progress value={10} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
                 <span className='text-sm font-medium text-gray-700'>45%</span>
               </div>
             </div>
             {curriculum.status === EnrollmentStatus.COMPLETED ? (
-              <Button className='ml-4 flex-shrink-0 bg-sky-500' onClick={(e) => e.stopPropagation()}>
+              <Button
+                className='ml-4 flex-shrink-0 bg-sky-500'
+                onClick={(e) => {
+                  e.stopPropagation()
+                  router.push(`${locale}/certificate/${curriculum.id}`)
+                }}
+              >
                 View Certificate
               </Button>
             ) : (
@@ -99,7 +117,10 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                     )}
                     {course.certificateImageUrl && (
                       <div>
-                        <Button className='bg-white text-blue-500 shadow-none outline-none hover:underline'>
+                        <Button
+                          className='bg-white text-blue-500 shadow-none outline-none hover:underline'
+                          onClick={() => router.push(`${locale}/certificate/${course.id}`)}
+                        >
                           View Certificate
                         </Button>
                       </div>

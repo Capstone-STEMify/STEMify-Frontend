@@ -17,12 +17,7 @@ export const CourseCard = ({ course }: CourseCardProps) => {
   const router = useRouter()
   return (
     <Card>
-      <CardContent
-        className='flex cursor-pointer items-center justify-between'
-        onClick={() => {
-          router.push(`/${locale}/resource/course/${course.courseId}/learn?enrollmentId=${course.id}`)
-        }}
-      >
+      <CardContent className='flex items-center justify-between'>
         <div className='flex items-center gap-4 py-4'>
           <div>
             <Image
@@ -34,7 +29,14 @@ export const CourseCard = ({ course }: CourseCardProps) => {
             ></Image>
           </div>
           <div>
-            <h3 className='text-base font-bold text-gray-900 hover:underline'>{course.courseTitle}</h3>
+            <h3
+              className='cursor-pointer text-base font-bold text-gray-900 hover:underline'
+              onClick={() => {
+                router.push(`/${locale}/resource/course/${course.courseId}/learn?enrollmentId=${course.id}`)
+              }}
+            >
+              {course.courseTitle}
+            </h3>
             <p className='mt-1 text-sm text-gray-600'>{course.status}</p>
             <Progress value={50} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
             <span className='text-sm font-medium text-gray-700'>45%</span>
@@ -48,7 +50,12 @@ export const CourseCard = ({ course }: CourseCardProps) => {
           </div>
         </div>
         {course.status === EnrollmentStatus.COMPLETED ? (
-          <Button className='ml-4 flex-shrink-0 bg-blue-500'>View Certificate</Button>
+          <Button
+            className='ml-4 flex-shrink-0 bg-blue-500'
+            onClick={() => router.push(`/${locale}/certificate/${course.id}`)}
+          >
+            View Certificate
+          </Button>
         ) : (
           <MoreHorizontal className='ml-4 h-5 w-5 flex-shrink-0 cursor-pointer text-gray-500' />
         )}
