@@ -24,13 +24,13 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                 <Image
                   className='aspect-square rounded-sm border bg-white object-contain shadow-sm'
                   src={curriculum.coverImageUrl}
-                  width={84}
-                  height={84}
+                  width={120}
+                  height={120}
                   alt='Specialization'
                 ></Image>
               </div>
               <div>
-                <h3 className='text-base font-bold text-gray-900'>{curriculum.curriculumTitle}</h3>
+                <h3 className='text-lg font-bold text-gray-900'>{curriculum.curriculumTitle}</h3>
                 <p className='text-sm text-gray-500'>{curriculum.status}</p>
                 <Progress value={10} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
                 <span className='text-sm font-medium text-gray-700'>45%</span>
@@ -72,7 +72,7 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
             </div>
           )}
 
-          <div className='bg-slate-50 pl-12'>
+          <div className='bg-white pl-12'>
             {curriculum.courseEnrollments.map((course, index) => (
               <div key={index} className='flex items-center justify-between border-t p-4'>
                 <div className='flex items-center gap-4'>
@@ -85,7 +85,9 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                   ></Image>
                   <div>
                     <p className='font-semibold'>{course.courseTitle}</p>
-                    <p className='text-sm text-gray-500'>{course.status}</p>
+                    <p className='text-sm text-gray-500'>
+                      Course 1 of 4 · <span>{course.status}</span>
+                    </p>
                     <Progress value={50} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
                     <span className='text-sm font-medium text-gray-700'>45%</span>
                     {course.status === EnrollmentStatus.COMPLETED && (

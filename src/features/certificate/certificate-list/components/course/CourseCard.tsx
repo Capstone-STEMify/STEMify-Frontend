@@ -1,18 +1,28 @@
+'use client'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { FileText, MoreHorizontal } from 'lucide-react'
 import { CourseEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
 import Image from 'next/image'
 import { Progress } from '@/components/shadcn/progress'
+import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 interface CourseCardProps {
   course: CourseEnrollment
 }
 
 export const CourseCard = ({ course }: CourseCardProps) => {
+  const locale = useLocale()
+  const router = useRouter()
   return (
     <Card>
-      <CardContent className='flex items-center justify-between'>
+      <CardContent
+        className='flex cursor-pointer items-center justify-between'
+        onClick={() => {
+          router.push(`/${locale}/resource/course/${course.courseId}/learn?enrollmentId=${course.id}`)
+        }}
+      >
         <div className='flex items-center gap-4 py-4'>
           <div>
             <Image
@@ -24,7 +34,7 @@ export const CourseCard = ({ course }: CourseCardProps) => {
             ></Image>
           </div>
           <div>
-            <h3 className='text-base font-bold text-gray-900'>{course.courseTitle}</h3>
+            <h3 className='text-base font-bold text-gray-900 hover:underline'>{course.courseTitle}</h3>
             <p className='mt-1 text-sm text-gray-600'>{course.status}</p>
             <Progress value={50} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
             <span className='text-sm font-medium text-gray-700'>45%</span>

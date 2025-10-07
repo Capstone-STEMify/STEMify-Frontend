@@ -9,6 +9,8 @@
     "cancelled": "Đã Hủy",
     "overallProgress": "Tiến Độ Chung",
     "noEnrollments": "Chưa Đăng Ký Khóa Học Nào.",
-    "noCourses": "Bạn chưa đăng ký bất kỳ khóa học nào. Hãy khám phá danh mục của chúng tôi để tìm các khóa học bạn quan tâm."
+    "noCourses": "Bạn chưa đăng ký bất kỳ khóa học nào. Hãy khám phá danh mục của chúng tôi để tìm các khóa học bạn quan tâm.",
+    "myCurriculums": "Chương Trình Học Của Tôi",
+    "myCourses": "Khóa Học Của Tôi"
   }
 }
