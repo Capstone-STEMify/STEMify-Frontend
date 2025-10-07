@@ -20,6 +20,8 @@
     ],
     "baseUrl": "src/",
     "paths": {
+      "react/jsx-runtime.js": ["./node_modules/@types/react/jsx-runtime.d.ts"],
+      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime.d.ts"],
       "@/components/*": ["components/*"],
       "@/ui/*": ["components/shadcn/*"],
       "@/features/*": ["features/*"],

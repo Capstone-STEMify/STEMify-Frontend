@@ -9,7 +9,7 @@ import {
   initMicrobitBlocks,
   registerMicrobitGenerators,
   microbitToolbox,
-} from "../libs/microbit-blocks";
+} from "../libs/microbit-blocks"; // Sửa lại đường dẫn cho nhất quán
 
 interface BlocklyComponentProps {
   onCodeChange: (code: string) => void;
@@ -18,12 +18,16 @@ interface BlocklyComponentProps {
 export default function BlocklyComponent({ onCodeChange }: BlocklyComponentProps) {
   const blocklyDivRef = useRef<HTMLDivElement>(null);
 
+  // Sử dụng useEffect để khởi tạo và dọn dẹp workspace một cách an toàn
   useEffect(() => {
+    // Chỉ thực thi trên client-side và khi div đã được render
     if (!blocklyDivRef.current) return;
 
+    // Khởi tạo các khối và generator
     initMicrobitBlocks();
     registerMicrobitGenerators();
 
+    // Gắn workspace vào div
     const workspace = Blockly.inject(blocklyDivRef.current, {
       toolbox: microbitToolbox,
       grid: {
@@ -32,17 +36,23 @@ export default function BlocklyComponent({ onCodeChange }: BlocklyComponentProps
         colour: "#ccc",
         snap: true,
       },
+      trashcan: true, // Thêm thùng rác
     });
-    console.log("Workspace injected:", workspace);
 
-    const handleChange = () => {
-  const code = javascriptGenerator.workspaceToCode(workspace as any);
-  console.log("Generated JS code:", code);
-  onCodeChange(code);
-};
+    // Hàm xử lý khi có thay đổi
+    const handleChange = (event: Blockly.Events.Abstract) => {
+      // Chỉ tạo code khi người dùng thực sự thay đổi cấu trúc khối (không phải chỉ click)
+      if (event.type === Blockly.Events.UI || event.isUiEvent) {
+        return;
+      }
+      const code = javascriptGenerator.workspaceToCode(workspace);
+      onCodeChange(code);
+    };
 
+    // Thêm listener
     workspace.addChangeListener(handleChange);
 
+    // Hàm dọn dẹp sẽ được gọi khi component unmount
     return () => {
       workspace.removeChangeListener(handleChange);
       workspace.dispose();
@@ -51,3 +61,4 @@ export default function BlocklyComponent({ onCodeChange }: BlocklyComponentProps
 
   return <div ref={blocklyDivRef} className="w-full h-full" />;
 }
+

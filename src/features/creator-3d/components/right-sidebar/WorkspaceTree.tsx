@@ -32,11 +32,7 @@ interface WorkspaceItem {
   children?: string[]
 }
 
-type WorkspaceTreeProps = {
-  selectedObjectId?: string | null
-}
-
-export default function WorkspaceTree({ selectedObjectId }: WorkspaceTreeProps) {
+export default function WorkspaceTree() {
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
   const actions = useAppSelector((s: RootState) => s.workspaceTree.actions)
@@ -158,7 +154,7 @@ export default function WorkspaceTree({ selectedObjectId }: WorkspaceTreeProps) 
     <div>
       <div className='mb-2'>
         <h2 className='text-lg font-medium'>Workspace Tree</h2>
-        <div className='flex gap-2'>
+        <div className='flex flex-wrap gap-2'>
           <button
             onClick={() => handleAddAction('highlight')}
             className='rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'
@@ -176,7 +172,7 @@ export default function WorkspaceTree({ selectedObjectId }: WorkspaceTreeProps) 
           </button>
         </div>
       </div>
-      <div className='max-h-[200px] flex-1 overflow-y-auto'>
+      <div>
         <Tree indent={indent} tree={tree}>
           {tree.getItems().map((item) => {
             const data = item.getItemData()
@@ -191,9 +187,11 @@ export default function WorkspaceTree({ selectedObjectId }: WorkspaceTreeProps) 
                   onClick={() => {
                     if (data.type === 'action') {
                       dispatch(setSelectedAction(data.id))
+                      dispatch(setSelectedId(null))
                     }
                     if (data.type === 'component') {
                       dispatch(setSelectedId(data.id))
+                      dispatch(setSelectedAction(null))
                     }
                   }}
                 >

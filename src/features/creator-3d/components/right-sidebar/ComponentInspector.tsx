@@ -25,7 +25,6 @@ export function ComponentInspector() {
   const [isEditing, setIsEditing] = useState(false)
   const dispatch = useAppDispatch()
   const { selectedActionId, actions } = useAppSelector((s) => s.workspaceTree)
-  const selectedAction = actions.find((a) => a.id === selectedActionId)
   const selectedObject = useSelectedObject()
 
   const onObjectUpdate = useCallback(
@@ -235,14 +234,10 @@ export function ComponentInspector() {
   }
 
   return (
-    <div className='flex h-full w-80 flex-col border-gray-200 bg-white'>
-      <div className='border-b border-gray-200 p-4'>
-        <h2 className='font-semibold text-gray-900'>Properties</h2>
-        <span className='text-sm text-gray-600'>{selectedObject.data?.name ?? selectedObject.id}</span>
-      </div>
+    <div>
+      <h2 className='font-semibold text-gray-900'>{selectedObject.data?.name ?? selectedObject.id}</h2>
 
       <div className='flex-1 space-y-6 overflow-y-auto p-4'>
-        {/* Name */}
         <div>
           <label className='text-sm font-medium'>Name</label>
           <input
