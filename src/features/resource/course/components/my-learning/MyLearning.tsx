@@ -21,7 +21,7 @@ export function MyLearning() {
       <MyLearningHero course={course} studentId={studentId} />
 
       {/* Course Content Section */}
-      <section className='bg-sky-50 py-12'>
+      <section className='bg-slate-50 py-12'>
         <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

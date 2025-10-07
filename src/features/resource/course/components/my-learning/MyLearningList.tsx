@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { BookOpen } from 'lucide-react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
@@ -31,6 +31,18 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
     { skip: !studentId }
   )
 
+  const filteredCourseEnrollment = useMemo(() => {
+    if (!courseEnrollment || !curriculumEnrollment) return courseEnrollment?.data.items ?? []
+
+    // Tập hợp tất cả courseId nằm trong curriculumEnrollment
+    const curriculumCourseIds = new Set(
+      curriculumEnrollment.data.items.flatMap((c) => c.courseEnrollments?.map((ce) => ce.courseId) ?? [])
+    )
+
+    // Lọc những courseEnrollment không thuộc curriculum
+    return courseEnrollment.data.items.filter((ce) => !curriculumCourseIds.has(ce.courseId))
+  }, [courseEnrollment, curriculumEnrollment])
+
   if (isLoadingCourseEnrollment || isLoadingCurriculumEnrollment) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
@@ -58,7 +70,7 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
         <div className='mx-auto max-w-7xl space-y-10'>
           {curriculumEnrollment && (
             <section>
-              <h2 className='mb-4 text-2xl font-semibold text-gray-600'>My Curriculums</h2>
+              <h2 className='mb-4 text-2xl font-semibold text-gray-600'>{t('myCurriculums')}</h2>
               <Accordion type='single' collapsible className='w-full space-y-3'>
                 {curriculumEnrollment.data.items.map((curriculum, index) => (
                   <SpecializationCard key={index} itemValue={`item-${index}`} curriculum={curriculum} />
@@ -67,11 +79,11 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
             </section>
           )}
 
-          {courseEnrollment && (
+          {filteredCourseEnrollment && filteredCourseEnrollment.length > 0 && (
             <section>
-              <h2 className='mb-4 text-2xl font-semibold text-gray-600'>My Courses</h2>
+              <h2 className='mb-4 text-2xl font-semibold text-gray-600'>{t('myCourses')}</h2>
               <div className='space-y-3'>
-                {courseEnrollment.data.items.map((course, index) => (
+                {filteredCourseEnrollment.map((course, index) => (
                   <CourseCard key={index} course={course} />
                 ))}
               </div>
