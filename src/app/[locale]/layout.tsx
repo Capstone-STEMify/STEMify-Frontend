@@ -17,7 +17,7 @@ export default async function RootLayout({
   children,
   params
 }: Readonly<{ children: React.ReactNode; params: { locale: string } }>) {
-  const { locale } = await params
+  const { locale } = params
 
   if (!hasLocale(routing.locales, locale)) {
     notFound()
@@ -25,7 +25,7 @@ export default async function RootLayout({
 
   let messages
   try {
-    messages = await loadMessages(locale)
+    messages = loadMessages(locale)
   } catch (error) {
     notFound()
   }
