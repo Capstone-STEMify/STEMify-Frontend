@@ -7,7 +7,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import { SPagination } from '@/components/shared/SPagination'
-import { useLazySearchEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
+import { useLazySearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 import { useDeleteLessonMutation, useSearchLessonQuery } from '@/features/resource/lesson/api/lessonApi'
 import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { LessonQueryParams, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
@@ -59,7 +59,7 @@ export default function LessonListContent() {
 
   const { data: lessonData, isLoading } = useSearchLessonQuery(queryParams)
   const [deleteLesson] = useDeleteLessonMutation()
-  const [fetchEnrollment] = useLazySearchEnrollmentQuery()
+  const [fetchEnrollment] = useLazySearchCourseEnrollmentQuery()
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
