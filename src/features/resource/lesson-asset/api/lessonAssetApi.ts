@@ -7,7 +7,6 @@ import {
   PostLessonResponseBody
 } from '@/features/resource/lesson-asset/types/lessonAsest.type'
 import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
-import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
 export const lessonAssetApi = lessonApi.injectEndpoints({
