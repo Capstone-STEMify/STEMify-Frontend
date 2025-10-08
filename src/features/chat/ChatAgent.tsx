@@ -1,5 +1,5 @@
 'use client'
-import { MessageCircle, X } from 'lucide-react'
+import { Loader2, MessageCircle, X } from 'lucide-react'
 import { motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
 import { AiFillMessage, AiOutlineSend } from 'react-icons/ai'
@@ -22,8 +22,8 @@ export default function ChatAgent() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
-  // const [isLoading, setIsLoading] = useState(false)
-  const [postMessage, { isLoading: messageLoading }] = useGetChatAiMutation()
+  const [isLoading, setIsLoading] = useState(false)
+  // const [postMessage, { isLoading: messageLoading }] = useGetChatAiMutation()
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -42,8 +42,8 @@ export default function ChatAgent() {
   //          MESSAGE LOGIC
   //=====================================
   const handleSend = async () => {
-    if (!input.trim()) return
-    if (messageLoading) return
+    if (!input.trim() || isLoading) return
+    // if (messageLoading) return
     const userMessage: Message = {
       user_message: input,
       isUser: true
@@ -55,14 +55,21 @@ export default function ChatAgent() {
   }
 
   async function handleGenerateResponse(userMessage: string) {
+    setIsLoading(true)
     try {
       setMessages((prev) => [...prev, { user_message: '...', isUser: false }])
 
-      const response = await postMessage({ user_message: userMessage }).unwrap()
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage })
+      })
+
+      const data = await res.json()
       setMessages((prev) => {
         const updatedMessages = [...prev]
         updatedMessages[updatedMessages.length - 1] = {
-          user_message: response.response || 'Sorry, I cannot understand that',
+          user_message: data.reply || 'Xin lỗi, tôi chưa hiểu ý bạn.',
           isUser: false
           // timestamp: new Date()
         }
@@ -72,12 +79,14 @@ export default function ChatAgent() {
       setMessages((prev) => {
         const updatedMessages = [...prev]
         updatedMessages[updatedMessages.length - 1] = {
-          user_message: 'Sorry, something went wrong. Please try again.',
+          user_message: 'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại.',
           isUser: false
           // timestamp: new Date()
         }
         return updatedMessages
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -144,15 +153,11 @@ export default function ChatAgent() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder='Type your message...'
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                  disabled={messageLoading}
+                  disabled={isLoading}
                 />
               </div>
-              <Button
-                className='bg-gradient-to-r from-blue-500 to-sky-400'
-                onClick={handleSend}
-                // isLoading={messageLoading}
-              >
-                {messageLoading ? '' : <AiOutlineSend className='h-5 w-5' />}
+              <Button className='bg-gradient-to-r from-blue-500 to-sky-400' onClick={handleSend} disabled={isLoading}>
+                {isLoading ? <Loader2 className='h-5 w-5 animate-spin' /> : <AiOutlineSend className='h-5 w-5' />}
               </Button>
             </div>
           </div>
