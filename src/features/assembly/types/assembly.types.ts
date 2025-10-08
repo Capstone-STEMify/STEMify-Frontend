@@ -294,6 +294,7 @@ export interface Assembly {
 export interface ComponentTemplate {
   id: string
   name: string
+  shortName: string
   type: 'straw' | 'connector'
   category: string
   description: string

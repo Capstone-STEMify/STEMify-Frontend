@@ -81,6 +81,7 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
   return {
     id: data.id,
     name: data.name,
+    shortName: data.shortName || data.name,
     type: data.category === 'straw' ? 'straw' : 'connector',
     category: data.category,
     description: data.description || '',
@@ -146,16 +147,38 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
 
       {/* Component List chiếm hết phần còn lại */}
       <div className='flex-1 overflow-y-auto p-4'>
-        <div className='space-y-3'>
-          {templates.map((template) => (
-            <ComponentCard
-              key={template.id}
-              template={template}
-              isDragging={draggingTemplate?.id === template.id}
-              onDragStart={(e) => handleDragStart(e, template)}
-              onDoubleClick={() => handleDoubleClick(template)}
-            />
-          ))}
+        <div>
+          <p className='font-semibold text-gray-900'>Straw</p>
+          <div className='grid grid-cols-2 gap-4'>
+            {templates
+              .filter((template) => template.category === 'straw')
+              .map((template) => (
+                <ComponentCard
+                  key={template.id}
+                  template={template}
+                  isDragging={draggingTemplate?.id === template.id}
+                  onDragStart={(e) => handleDragStart(e, template)}
+                  onDoubleClick={() => handleDoubleClick(template)}
+                />
+              ))}
+          </div>
+        </div>
+
+        <div className='mt-6'>
+          <p className='font-semibold text-gray-900'>Connector</p>
+          <div className='grid grid-cols-2 gap-4'>
+            {templates
+              .filter((template) => template.category === 'connector')
+              .map((template) => (
+                <ComponentCard
+                  key={template.id}
+                  template={template}
+                  isDragging={draggingTemplate?.id === template.id}
+                  onDragStart={(e) => handleDragStart(e, template)}
+                  onDoubleClick={() => handleDoubleClick(template)}
+                />
+              ))}
+          </div>
         </div>
       </div>
 
