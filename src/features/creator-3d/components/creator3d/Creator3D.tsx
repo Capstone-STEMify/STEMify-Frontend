@@ -23,6 +23,8 @@ import {
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
+import { supabase } from '@/libs/supabase/supabase'
+import { toast } from 'sonner'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()
@@ -110,21 +112,49 @@ export function Creator3D() {
 
       {/* Export Dialog */}
       {showExportDialog && (
+        // <ExportDialog
+        //   onClose={() => setShowExportDialog(false)}
+        //   onExport={(metadata) => {
+        //     const exportData = exportAssemblyFn(metadata)
+
+        //     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
+        //     const url = URL.createObjectURL(blob)
+        //     const a = document.createElement('a')
+        //     a.href = url
+        //     a.download = `${metadata.title.replace(/\s+/g, '_').toLowerCase()}_assembly.json`
+        //     document.body.appendChild(a)
+        //     a.click()
+        //     document.body.removeChild(a)
+        //     URL.revokeObjectURL(url)
+        //     setShowExportDialog(false)
+        //   }}
+        // />
         <ExportDialog
           onClose={() => setShowExportDialog(false)}
-          onExport={(metadata) => {
-            const exportData = exportAssemblyFn(metadata)
+          onExport={async (metadata) => {
+            try {
+              const exportData = exportAssemblyFn(metadata) // lấy JSON object từ state
+              const { error } = await supabase.from('assembly_data').insert([
+                {
+                  name: metadata.title,
+                  description: metadata.description,
+                  author: metadata.author,
+                  data: exportData
+                }
+              ])
 
-            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `${metadata.title.replace(/\s+/g, '_').toLowerCase()}_assembly.json`
-            document.body.appendChild(a)
-            a.click()
-            document.body.removeChild(a)
-            URL.revokeObjectURL(url)
-            setShowExportDialog(false)
+              if (error) {
+                console.error('Supabase insert error:', error)
+                toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
+              } else {
+                toast.success('✅ Đã lưu assembly vào Supabase!')
+              }
+
+              setShowExportDialog(false)
+            } catch (err) {
+              console.error(err)
+              toast.error('Lỗi không xác định khi lưu dữ liệu.')
+            }
           }}
         />
       )}

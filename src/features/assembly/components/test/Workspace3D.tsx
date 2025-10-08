@@ -35,11 +35,14 @@ export default function Workspace3D({
     useAssembly()
 
   // load assembly
+  // useEffect(() => {
+  //   assemblyUrl = assemblyUrl || (id ? `/assemblies/${id}.json` : '/assemblies/octahedron.json')
+  //   console.log('Loading assembly from URL:', assemblyUrl)
+  //   loadAssembly(assemblyUrl)
+  // }, [assemblyUrl, loadAssembly])
   useEffect(() => {
-    assemblyUrl = assemblyUrl || (id ? `/assemblies/${id}.json` : '/assemblies/octahedron.json')
-    console.log('Loading assembly from URL:', assemblyUrl)
-    loadAssembly(assemblyUrl)
-  }, [assemblyUrl, loadAssembly])
+    loadAssembly(`/api/assemblies/${id}`)
+  }, [])
 
   // sync step
   useEffect(() => {

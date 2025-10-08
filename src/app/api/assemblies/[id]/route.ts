@@ -1,0 +1,7 @@
+import { supabase } from '@/libs/supabase/supabase'
+
+export async function GET(req: Request, { params }: { params: { id: string } }) {
+  const { data, error } = await supabase.from('assembly_data').select('data').eq('id', params.id).single()
+  if (error || !data) return new Response('Not found', { status: 404 })
+  return new Response(JSON.stringify(data.data), { headers: { 'Content-Type': 'application/json' } })
+}
