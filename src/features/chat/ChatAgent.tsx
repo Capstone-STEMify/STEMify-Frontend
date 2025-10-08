@@ -6,13 +6,22 @@ import { AiFillMessage, AiOutlineSend } from 'react-icons/ai'
 import { FaSpinner } from 'react-icons/fa'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
-import { useGetChatAiMutation } from '@/features/chat/api/chatAgentApi'
+import { useGetCourseRecommendedAiMutation, useGetGeneralChatAiMutation } from '@/features/chat/api/chatAgentApi'
 import { formatAgentResponse } from '@/utils/formatAgentResponse'
+import SSelect from '@/components/shared/SSelect'
 
 type Message = {
-  user_message: string
+  content: string
   isUser: boolean
-  // timestamp: Date
+  timestamp: Date
+}
+
+// INITIAL_MESSAGES viết bằng tiếng việt
+const INITIAL_MESSAGES = {
+  'course-recommendations':
+    'Chào bạn! Tôi là trợ lý AI của STEMify. Tôi có thể giúp bạn tìm các khóa học phù hợp dựa trên sở thích và mục tiêu học tập của bạn. Hãy cho tôi biết bạn quan tâm đến lĩnh vực nào hoặc mục tiêu học tập cụ thể của bạn nhé!',
+  'general-question':
+    'Chào bạn! Tôi là trợ lý AI của STEMify. Tôi có thể giúp bạn với bất kỳ câu hỏi nào về nền tảng STEMify, các khóa học hoặc bất kỳ câu hỏi nào khác mà bạn có trong đầu.'
 }
 
 export default function ChatAgent() {
@@ -22,14 +31,20 @@ export default function ChatAgent() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  // const [postMessage, { isLoading: messageLoading }] = useGetChatAiMutation()
+  const [mode, setMode] = useState<string>('general-question')
+  const [postCourseMessage, { isLoading: messageCourseLoading }] = useGetCourseRecommendedAiMutation()
+  const [postGeneralMessage, { isLoading: messageGeneralLoading }] = useGetGeneralChatAiMutation()
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
+
+  const modeOptions = [
+    { value: 'course-recommendations', label: 'Gợi ý khóa học' },
+    { value: 'general-question', label: 'Câu hỏi chung' }
+  ]
 
   //=====================================
   //        RENDER
@@ -38,56 +53,58 @@ export default function ChatAgent() {
     scrollToBottom()
   }, [messages])
 
+  useEffect(() => {
+    setMessages([
+      {
+        content: INITIAL_MESSAGES[mode as keyof typeof INITIAL_MESSAGES],
+        isUser: false,
+        timestamp: new Date()
+      }
+    ])
+  }, [mode])
+
   //=====================================
   //          MESSAGE LOGIC
   //=====================================
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return
-    // if (messageLoading) return
+    if (!input.trim()) return
     const userMessage: Message = {
-      user_message: input,
-      isUser: true
-      // timestamp: new Date()
+      content: input,
+      isUser: true,
+      timestamp: new Date()
     }
     setMessages((prev) => [...prev, userMessage])
+    const loadingMessage: Message = {
+      content: '...',
+      isUser: false,
+      timestamp: new Date()
+    }
+    setMessages((prev) => [...prev, loadingMessage])
     setInput('')
     await handleGenerateResponse(input)
   }
 
   async function handleGenerateResponse(userMessage: string) {
-    setIsLoading(true)
-    try {
-      setMessages((prev) => [...prev, { user_message: '...', isUser: false }])
+    let response: any
 
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage })
-      })
-
-      const data = await res.json()
-      setMessages((prev) => {
-        const updatedMessages = [...prev]
-        updatedMessages[updatedMessages.length - 1] = {
-          user_message: data.reply || 'Xin lỗi, tôi chưa hiểu ý bạn.',
-          isUser: false
-          // timestamp: new Date()
-        }
-        return updatedMessages
-      })
-    } catch (error) {
-      setMessages((prev) => {
-        const updatedMessages = [...prev]
-        updatedMessages[updatedMessages.length - 1] = {
-          user_message: 'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại.',
-          isUser: false
-          // timestamp: new Date()
-        }
-        return updatedMessages
-      })
-    } finally {
-      setIsLoading(false)
+    switch (mode) {
+      case 'course-recommendations':
+        response = await postCourseMessage({ userPrompt: userMessage }).unwrap()
+        break
+      case 'general-question':
+        response = await postGeneralMessage({ userPrompt: userMessage }).unwrap()
+        break
     }
+
+    setMessages((prev) => {
+      const updatedMessages = [...prev]
+      updatedMessages[updatedMessages.length - 1] = {
+        content: response?.data?.message || 'Xin lỗi, tôi chưa hiểu ý bạn.',
+        isUser: false,
+        timestamp: new Date()
+      }
+      return updatedMessages
+    })
   }
 
   return (
@@ -103,7 +120,7 @@ export default function ChatAgent() {
             <div className='flex items-center justify-between bg-gradient-to-r from-blue-500 to-sky-400 p-4 text-white'>
               <div className='flex items-center space-x-3'>
                 <MessageCircle className='h-6 w-6' />
-                <h1 className='text-lg font-bold'>STEMify Agent</h1>
+                <h1 className='text-lg font-bold'>Trợ lý STEMify</h1>
               </div>
               <Button
                 size='sm'
@@ -112,6 +129,17 @@ export default function ChatAgent() {
               >
                 <X className='h-5 w-5' />
               </Button>
+            </div>
+
+            {/* Mode Selector */}
+            <div className='border-b p-2'>
+              <SSelect
+                options={modeOptions}
+                value={mode}
+                onChange={(value) => setMode(value)}
+                className='w-full'
+                placeholder='Select Mode'
+              />
             </div>
 
             {/* Messages */}
@@ -125,15 +153,15 @@ export default function ChatAgent() {
                         : 'bg-gray-100 text-gray-900'
                     }`}
                   >
-                    {message.user_message === '...' ? (
+                    {message.content === '...' ? (
                       <div className='flex flex-row'>
                         <FaSpinner size={20} className='me-2 animate-spin' />
-                        <div>Assistant is thinking...</div>
+                        <div>Stemify đang suy nghĩ...</div>
                       </div>
                     ) : (
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: formatAgentResponse(message.user_message)
+                          __html: formatAgentResponse(message.content)
                         }}
                         className={`prose prose-sm max-w-none ${message.isUser ? 'text-white' : ''}`}
                       />
@@ -153,23 +181,31 @@ export default function ChatAgent() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder='Type your message...'
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                  disabled={isLoading}
+                  disabled={messageCourseLoading || messageGeneralLoading}
                 />
               </div>
-              <Button className='bg-gradient-to-r from-blue-500 to-sky-400' onClick={handleSend} disabled={isLoading}>
-                {isLoading ? <Loader2 className='h-5 w-5 animate-spin' /> : <AiOutlineSend className='h-5 w-5' />}
+              <Button
+                className='bg-gradient-to-r from-blue-500 to-sky-400'
+                onClick={handleSend}
+                disabled={messageCourseLoading || messageGeneralLoading}
+              >
+                {messageCourseLoading || messageGeneralLoading ? (
+                  <Loader2 className='h-5 w-5 animate-spin' />
+                ) : (
+                  <AiOutlineSend className='h-5 w-5' />
+                )}
               </Button>
             </div>
           </div>
         )}
       </motion.div>
       {!isOpen && (
-        <div
-          className='flex h-17 w-22 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-sky-400 text-white shadow-2xl'
+        <button
+          className='flex cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-sky-400 px-4 py-2 text-white shadow-2xl'
           onClick={() => setIsOpen(true)}
         >
-          <AiFillMessage size={35} />
-        </div>
+          <AiFillMessage size={25}  />
+        </button>
       )}
     </div>
   )
