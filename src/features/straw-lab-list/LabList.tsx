@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Button } from '@/components/shadcn/button'
 import { Heart, Star, Play, Settings, Bot, Car, Radar, Award, Music, Eye, Cpu, Wrench, Zap } from 'lucide-react'
@@ -8,113 +8,136 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { Badge } from '@/components/shadcn/badge'
+import { supabase } from '@/libs/supabase/supabase'
 
 interface ModelItem {
-  id: string
+  id: number
   name: string
   category: string
   description: string
-  image: string
-  icon: React.ReactNode
-  isFavorite?: boolean
+  image_url: string
   rating?: number
-  isAvailable: boolean
+  is_available: boolean
 }
 
-// write name and description in vietnamese and a bit longer
-const models: ModelItem[] = [
-  {
-    id: 'octahedron',
-    name: 'Octahedron Platonic Solid',
-    category: 'Hình học',
-    description: 'Mô hình đa diện bát diện với các tính chất hình học đặc biệt',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-octahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    icon: <Car className='h-8 w-8' />,
-    rating: 4.8,
-    isAvailable: true
-  },
-  {
-    id: 'hexahedron',
-    name: 'Hexahedron Platonic Solid',
-    category: 'Hình học',
-    description: 'Mô hình đa diện lập phương với các tính chất hình học đặc biệt',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    icon: <Bot className='h-8 w-8' />,
-    rating: 4.6,
-    isAvailable: true
-  },
-  {
-    id: 'tetrahedron',
-    name: 'Tetrahedron Platonic Solid',
-    category: 'Hình học',
-    description: 'Mô hình đa diện tứ diện với các tính chất hình học đặc biệt',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    icon: <Radar className='h-8 w-8' />,
-    rating: 4.9,
-    isAvailable: false
-  },
-  {
-    id: 'dodecahedron',
-    name: 'Dodecahedron Platonic Solid',
-    category: 'Hình học',
-    description: 'Mô hình đa diện mười hai mặt với các tính chất hình học đặc biệt',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-dodecahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    icon: <Award className='h-8 w-8' />,
-    rating: 4.7,
-    isAvailable: false
-  },
-  {
-    id: 'icosahedron',
-    name: 'Icosahedron Platonic Solid',
-    category: 'Hình học',
-    description: 'Mô hình đa diện hai mươi mặt với các tính chất hình học đặc biệt',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    icon: <Music className='h-8 w-8' />,
-    rating: 4.5,
-    isAvailable: false
-  },
-  {
-    id: 'test_assembly_assembly',
-    name: 'Testing',
-    category: 'Hình học',
-    description: 'Testing',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    icon: <Music className='h-8 w-8' />,
-    rating: 4.5,
-    isAvailable: true
-  }
-]
+// const models: ModelItem[] = [
+//   {
+//     id: '1',
+//     name: 'Octahedron Platonic Solid',
+//     category: 'Hình học',
+//     description: 'Mô hình đa diện bát diện với các tính chất hình học đặc biệt',
+//     image:
+//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-octahedron-platonic-solid_cover.jpg&w=1920&q=75',
+//     icon: <Car className='h-8 w-8' />,
+//     rating: 4.8,
+//     isAvailable: true
+//   },
+//   {
+//     id: '2',
+//     name: 'Hexahedron Platonic Solid',
+//     category: 'Hình học',
+//     description: 'Mô hình đa diện lập phương với các tính chất hình học đặc biệt',
+//     image:
+//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
+//     icon: <Bot className='h-8 w-8' />,
+//     rating: 4.6,
+//     isAvailable: true
+//   },
+//   {
+//     id: '3',
+//     name: 'Tetrahedron Platonic Solid',
+//     category: 'Hình học',
+//     description: 'Mô hình đa diện tứ diện với các tính chất hình học đặc biệt',
+//     image:
+//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
+//     icon: <Radar className='h-8 w-8' />,
+//     rating: 4.9,
+//     isAvailable: false
+//   },
+//   {
+//     id: '4',
+//     name: 'Dodecahedron Platonic Solid',
+//     category: 'Hình học',
+//     description: 'Mô hình đa diện mười hai mặt với các tính chất hình học đặc biệt',
+//     image:
+//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-dodecahedron-platonic-solid_cover.jpg&w=1920&q=75',
+//     icon: <Award className='h-8 w-8' />,
+//     rating: 4.7,
+//     isAvailable: false
+//   },
+//   {
+//     id: '5',
+//     name: 'Icosahedron Platonic Solid',
+//     category: 'Hình học',
+//     description: 'Mô hình đa diện hai mươi mặt với các tính chất hình học đặc biệt',
+//     image:
+//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
+//     icon: <Music className='h-8 w-8' />,
+//     rating: 4.5,
+//     isAvailable: false
+//   },
+//   {
+//     id: '6',
+//     name: 'Testing',
+//     category: 'Hình học',
+//     description: 'Testing',
+//     image:
+//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
+//     icon: <Music className='h-8 w-8' />,
+//     rating: 4.5,
+//     isAvailable: true
+//   }
+// ]
 
 const categories = ['Tất cả', 'Hình học', 'Cảm biến', 'Robot', 'Phương tiện', 'Chơi game', 'Âm nhạc']
 
 export default function StrawLabList() {
   const locale = useLocale()
   const [selectedCategory, setSelectedCategory] = useState('Tất cả')
-  const [favorites, setFavorites] = useState<Set<string>>(new Set())
+  const [favorites, setFavorites] = useState<Set<number>>(new Set())
   const router = useRouter()
+  const [models, setModels] = useState<ModelItem[]>([])
+
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchModels = async () => {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('assembly_data')
+        .select('id, name, description, category, image_url, rating, is_available')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error fetching models:', error)
+        setLoading(false)
+        return
+      }
+
+      setModels(data || [])
+      setLoading(false)
+    }
+
+    fetchModels()
+  }, [])
+
   const filteredModels =
     selectedCategory === 'Tất cả' ? models : models.filter((model) => model.category === selectedCategory)
 
-  const handleNavigate = (id: string) => {
-    router.push(`/${locale}/admin/design/straw-lab/${id}`)
-  }
+  // const handleNavigate = (id: string) => {
+  //   router.push(`/${locale}/admin/design/straw-lab/${id}`)
+  // }
 
-  const toggleFavorite = (id: string) => {
+  const handleNavigate = (id: number) => {
+    router.push(`/${locale}/straw-lab/${id}`)
+  }
+  const toggleFavorite = (id: number) => {
     const newFavorites = new Set(favorites)
-    if (newFavorites.has(id)) {
-      newFavorites.delete(id)
-    } else {
-      newFavorites.add(id)
-    }
+    newFavorites.has(id) ? newFavorites.delete(id) : newFavorites.add(id)
     setFavorites(newFavorites)
   }
 
+  if (loading) return <div className='py-10 text-center text-gray-500'>Đang tải danh sách mô hình...</div>
   return (
     <div>
       {/* Main Content with rounded background */}
@@ -154,7 +177,7 @@ export default function StrawLabList() {
               <Card
                 key={model.id}
                 className='group transform cursor-pointer overflow-hidden border-0 bg-white p-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-blue-200'
-                onClick={() => model.isAvailable && handleNavigate(model.id)}
+                onClick={() => model.is_available && handleNavigate(model.id)}
               >
                 <CardContent className='p-0'>
                   <div className='relative aspect-[4/3] w-full overflow-hidden rounded-t-lg'>
@@ -169,7 +192,7 @@ export default function StrawLabList() {
 
                     {/* Image */}
                     <Image
-                      src={model.image}
+                      src={model.image_url}
                       alt={model.name}
                       fill
                       className='object-cover transition-transform duration-300'
