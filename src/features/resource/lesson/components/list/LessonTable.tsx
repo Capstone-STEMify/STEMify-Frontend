@@ -49,6 +49,7 @@ export default function LessonTable({ courseIdSelected }: { courseIdSelected?: n
     orderBy: courseIdSelected ? 'orderindex' : 'createdDate',
     sortDirection: courseIdSelected ? 'Asc' : 'Desc'
   }
+  console.log('Lesson query params:', queryParams)
 
   useEffect(() => {
     dispatch(resetParams())

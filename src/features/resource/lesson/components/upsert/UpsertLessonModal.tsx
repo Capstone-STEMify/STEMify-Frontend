@@ -26,9 +26,7 @@ export default function UpsertLessonModal({ onConfirm }: UpsertLessonModalProps)
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent>
-        <DialogTitle>
-          <h1>{lessonId ? `${t('form.title.update')}` : `${t('form.title.create')}`}</h1>
-        </DialogTitle>
+        <DialogTitle>{lessonId ? `${t('form.title.update')}` : `${t('form.title.create')}`}</DialogTitle>
         <hr />
         <ScrollArea className='h-[500px] w-4xl pr-5'>
           <UpsertLesson onSuccess={handleSuccess} />

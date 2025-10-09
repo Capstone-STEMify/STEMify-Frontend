@@ -20,75 +20,6 @@ interface ModelItem {
   is_available: boolean
 }
 
-// const models: ModelItem[] = [
-//   {
-//     id: '1',
-//     name: 'Octahedron Platonic Solid',
-//     category: 'Hình học',
-//     description: 'Mô hình đa diện bát diện với các tính chất hình học đặc biệt',
-//     image:
-//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-octahedron-platonic-solid_cover.jpg&w=1920&q=75',
-//     icon: <Car className='h-8 w-8' />,
-//     rating: 4.8,
-//     isAvailable: true
-//   },
-//   {
-//     id: '2',
-//     name: 'Hexahedron Platonic Solid',
-//     category: 'Hình học',
-//     description: 'Mô hình đa diện lập phương với các tính chất hình học đặc biệt',
-//     image:
-//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
-//     icon: <Bot className='h-8 w-8' />,
-//     rating: 4.6,
-//     isAvailable: true
-//   },
-//   {
-//     id: '3',
-//     name: 'Tetrahedron Platonic Solid',
-//     category: 'Hình học',
-//     description: 'Mô hình đa diện tứ diện với các tính chất hình học đặc biệt',
-//     image:
-//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
-//     icon: <Radar className='h-8 w-8' />,
-//     rating: 4.9,
-//     isAvailable: false
-//   },
-//   {
-//     id: '4',
-//     name: 'Dodecahedron Platonic Solid',
-//     category: 'Hình học',
-//     description: 'Mô hình đa diện mười hai mặt với các tính chất hình học đặc biệt',
-//     image:
-//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-dodecahedron-platonic-solid_cover.jpg&w=1920&q=75',
-//     icon: <Award className='h-8 w-8' />,
-//     rating: 4.7,
-//     isAvailable: false
-//   },
-//   {
-//     id: '5',
-//     name: 'Icosahedron Platonic Solid',
-//     category: 'Hình học',
-//     description: 'Mô hình đa diện hai mươi mặt với các tính chất hình học đặc biệt',
-//     image:
-//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
-//     icon: <Music className='h-8 w-8' />,
-//     rating: 4.5,
-//     isAvailable: false
-//   },
-//   {
-//     id: '6',
-//     name: 'Testing',
-//     category: 'Hình học',
-//     description: 'Testing',
-//     image:
-//       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
-//     icon: <Music className='h-8 w-8' />,
-//     rating: 4.5,
-//     isAvailable: true
-//   }
-// ]
-
 const categories = ['Tất cả', 'Hình học', 'Cảm biến', 'Robot', 'Phương tiện', 'Chơi game', 'Âm nhạc']
 
 export default function StrawLabList() {
@@ -148,14 +79,7 @@ export default function StrawLabList() {
       <main className='container mx-auto p-4'>
         <div className='bg-white'>
           {/* Tab Navigation */}
-          <div className='mb-6'>
-            <div className='mb-4 flex items-center space-x-1'>
-              <span className='text-sm text-gray-600'>Models</span>
-              <div className='ml-4 flex items-center space-x-1'>
-                <Badge className='rounded-full px-4 text-sm'>uKit Advanced Builds</Badge>
-              </div>
-            </div>
-
+          {/* <div className='mb-6'>
             <div className='flex flex-wrap gap-2'>
               {categories.map((category) => (
                 <Button
@@ -173,7 +97,7 @@ export default function StrawLabList() {
                 </Button>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Models Grid */}
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
@@ -198,7 +122,7 @@ export default function StrawLabList() {
 
                     {/* Image */}
                     <Image
-                      src={model.image_url}
+                      src={model.image_url || '/images/shape.png'}
                       alt={model.name}
                       fill
                       className='object-cover transition-transform duration-300'
