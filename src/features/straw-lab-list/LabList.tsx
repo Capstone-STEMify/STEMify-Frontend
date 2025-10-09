@@ -133,7 +133,11 @@ export default function StrawLabList() {
   }
   const toggleFavorite = (id: number) => {
     const newFavorites = new Set(favorites)
-    newFavorites.has(id) ? newFavorites.delete(id) : newFavorites.add(id)
+    if (newFavorites.has(id)) {
+      newFavorites.delete(id)
+    } else {
+      newFavorites.add(id)
+    }
     setFavorites(newFavorites)
   }
 
