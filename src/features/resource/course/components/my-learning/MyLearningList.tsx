@@ -8,9 +8,9 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import { useTranslations } from 'next-intl'
 import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 import { Accordion } from '@/components/shadcn/accordion'
-import { SpecializationCard } from '@/features/certificate/certificate-list/components/specialization/SpecializationCard'
+import { SpecializationCard } from '@/features/certificate/components/list/SpecializationCard'
 import { useSearchCurriculumEnrollmentQuery } from '@/features/enrollment/api/curriculumEnrollmentApi'
-import { CourseCard } from '@/features/certificate/certificate-list/components/course/CourseCard'
+import { CourseCard } from '@/features/certificate/components/list/CourseCard'
 
 type MyLearningListProps = {
   studentId?: string

@@ -53,7 +53,7 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                 className='ml-4 flex-shrink-0 bg-sky-500'
                 onClick={(e) => {
                   e.stopPropagation()
-                  router.push(`${locale}/certificate/${curriculum.id}`)
+                  router.push(`${locale}/certificate/${curriculum.certificateId}`)
                 }}
               >
                 View Certificate
@@ -65,7 +65,7 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
         </AccordionTrigger>
 
         <AccordionContent>
-          {curriculum.certificateImageUrl && (
+          {curriculum.certificateUrl && (
             <div className='flex flex-col items-center gap-6 bg-blue-50/70 p-16 sm:flex-row'>
               <div className='sm:w-2/5 lg:w-2/3'>
                 <Image src={curriculum.coverImageUrl} alt='University Logo' width={40} height={40} className='mb-4' />
@@ -80,7 +80,7 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
               </div>
               <div className='flex justify-center sm:w-2/5 sm:justify-end lg:w-2/5'>
                 <Image
-                  src={curriculum.certificateImageUrl}
+                  src={curriculum.certificateUrl}
                   alt='Certificate'
                   width={280}
                   height={200}
@@ -102,7 +102,14 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                     alt='Specialization'
                   ></Image>
                   <div>
-                    <p className='font-semibold'>{course.courseTitle}</p>
+                    <p
+                      className='cursor-pointer font-semibold text-gray-900 hover:underline'
+                      onClick={() => {
+                        router.push(`/${locale}/resource/course/${course.courseId}/learn?enrollmentId=${course.id}`)
+                      }}
+                    >
+                      {course.courseTitle}
+                    </p>
                     <p className='text-sm text-gray-500'>
                       Course 1 of 4 · <span>{course.status}</span>
                     </p>
@@ -115,11 +122,11 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                         Completed At: <span className='font-semibold'>{course.completedAt}</span>
                       </p>
                     )}
-                    {course.certificateImageUrl && (
+                    {course.certificateUrl && (
                       <div>
                         <Button
                           className='bg-white text-blue-500 shadow-none outline-none hover:underline'
-                          onClick={() => router.push(`${locale}/certificate/${course.id}`)}
+                          onClick={() => router.push(`${locale}/certificate/${course.certificateId}`)}
                         >
                           View Certificate
                         </Button>
