@@ -177,7 +177,9 @@ export default function StrawLabList() {
               <Card
                 key={model.id}
                 className='group transform cursor-pointer overflow-hidden border-0 bg-white p-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-blue-200'
-                onClick={() => model.is_available && handleNavigate(model.id)}
+                onClick={() => {
+                  if (model.is_available) handleNavigate(model.id)
+                }}
               >
                 <CardContent className='p-0'>
                   <div className='relative aspect-[4/3] w-full overflow-hidden rounded-t-lg'>
