@@ -22,6 +22,9 @@ import {
   resetActions,
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
+import { supabase } from '@/libs/supabase/supabase'
+import { toast } from 'sonner'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()
@@ -78,12 +81,12 @@ export function Creator3D() {
   return (
     <div className='relative flex w-full bg-gray-100'>
       {/* Component Palette */}
-      <div className='w-64 flex-1 bg-white'>
+      <div className='w-64 bg-white'>
         <ComponentPalette onAddComponent={handleAddComponent} />
       </div>
 
       {/* Main Workspace */}
-      <div className='relative w-full'>
+      <div className='relative w-[60%]'>
         <CreatorWorkspace
           onObjectSelect={handleObjectSelect}
           onObjectUpdate={handleObjectUpdate}
@@ -103,32 +106,55 @@ export function Creator3D() {
       </div>
 
       {/* Object Inspector */}
-      <div className='m-2 flex w-80 flex-col gap-4'>
-        <div className='rounded-2xl bg-white p-4 shadow'>
-          <WorkspaceTree selectedObjectId={selectedObject?.id} />
-        </div>
-        <div className='flex h-full w-80 flex-col overflow-hidden rounded-2xl bg-white'>
-          <ObjectInspector key={selectedObject?.id} />
-        </div>
+      <div className='my-2 mr-2 w-85 gap-4'>
+        <WorkspacePanel />
       </div>
 
       {/* Export Dialog */}
       {showExportDialog && (
+        // <ExportDialog
+        //   onClose={() => setShowExportDialog(false)}
+        //   onExport={(metadata) => {
+        //     const exportData = exportAssemblyFn(metadata)
+
+        //     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
+        //     const url = URL.createObjectURL(blob)
+        //     const a = document.createElement('a')
+        //     a.href = url
+        //     a.download = `${metadata.title.replace(/\s+/g, '_').toLowerCase()}_assembly.json`
+        //     document.body.appendChild(a)
+        //     a.click()
+        //     document.body.removeChild(a)
+        //     URL.revokeObjectURL(url)
+        //     setShowExportDialog(false)
+        //   }}
+        // />
         <ExportDialog
           onClose={() => setShowExportDialog(false)}
-          onExport={(metadata) => {
-            const exportData = exportAssemblyFn(metadata)
+          onExport={async (metadata) => {
+            try {
+              const exportData = exportAssemblyFn(metadata) // lấy JSON object từ state
+              const { error } = await supabase.from('assembly_data').insert([
+                {
+                  name: metadata.title,
+                  description: metadata.description,
+                  author: metadata.author,
+                  data: exportData
+                }
+              ])
 
-            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `${metadata.title.replace(/\s+/g, '_').toLowerCase()}_assembly.json`
-            document.body.appendChild(a)
-            a.click()
-            document.body.removeChild(a)
-            URL.revokeObjectURL(url)
-            setShowExportDialog(false)
+              if (error) {
+                console.error('Supabase insert error:', error)
+                toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
+              } else {
+                toast.success('✅ Đã lưu assembly vào Supabase!')
+              }
+
+              setShowExportDialog(false)
+            } catch (err) {
+              console.error(err)
+              toast.error('Lỗi không xác định khi lưu dữ liệu.')
+            }
           }}
         />
       )}
