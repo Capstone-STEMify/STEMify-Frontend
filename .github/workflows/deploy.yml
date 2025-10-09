@@ -37,8 +37,8 @@ jobs:
     needs: type-check
     if: success()
     env:
-      NEXT_SUPABASE_ANON_KEY: ${{ secrets.NEXT_SUPABASE_ANON_KEY }}
-      NEXT_SUPABASE_URL: ${{ secrets.NEXT_SUPABASE_URL }}
+      NEXT_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
       NEXT_CLIENT_SECRET: ${{ secrets.NEXT_CLIENT_SECRET }}
       NEXT_PUBLIC_CLIENT_ID: ${{ vars.NEXT_PUBLIC_CLIENT_ID }}
@@ -69,8 +69,8 @@ jobs:
     needs: type-check
     if: success()
     env:
-      NEXT_SUPABASE_ANON_KEY: ${{ secrets.NEXT_SUPABASE_ANON_KEY }}
-      NEXT_SUPABASE_URL: ${{ secrets.NEXT_SUPABASE_URL }}
+      NEXT_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
       NEXT_CLIENT_SECRET: ${{ secrets.NEXT_CLIENT_SECRET }}
       NEXT_PUBLIC_CLIENT_ID: ${{ vars.NEXT_PUBLIC_CLIENT_ID }}
