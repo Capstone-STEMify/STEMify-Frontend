@@ -1,8 +1,9 @@
 {
   "id": "green_11_7",
+  "shortName": "Green Straw",
   "name": "Green Straw 11.7cm",
   "version": "1.0",
-  "category": "straw", 
+  "category": "straw",
   "baseGeometry": {
     "length": 11.7,
     "diameter": 0.6,

@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { templateManager } from '../utils/templateManager'
 import { LODManager, defaultLODConfig } from '../utils/lodManager'
 import { PerformanceProfiler, defaultPerformanceConfig, PerformanceAlert } from '../utils/performanceProfiler'
+import { supabase } from '@/libs/supabase/supabase'
 
 export interface Assembly {
   metadata: {
@@ -239,24 +240,166 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
   /**
    * Load assembly from URL
    */
-  const loadAssembly = useCallback(async (url: string) => {
+  // const loadAssembly = useCallback(async (url: string) => {
+  //   setIsLoading(true)
+  //   setError(null)
+  //   setLoadingProgress(0)
+
+  //   try {
+  //     console.log(`Loading assembly: ${url}`)
+
+  //     // Load assembly definition
+  //     const response = await fetch(url)
+  //     if (!response.ok) {
+  //       throw new Error(`Failed to load assembly: ${response.statusText}`)
+  //     }
+
+  //     const assemblyData: Assembly = await response.json()
+  //     setLoadingProgress(20)
+
+  //     // Preload all materials (fetch JSON and attach to template)
+  //     await Promise.all(
+  //       (assemblyData.templates.materials || []).map(async (m) => {
+  //         try {
+  //           const res = await fetch(m.source)
+  //           if (res.ok) {
+  //             const data = await res.json()
+  //             m.data = data
+  //           } else {
+  //             console.warn(`Failed to load material file: ${m.source}`)
+  //           }
+  //         } catch (err) {
+  //           console.warn(`Error loading material: ${m.source}`, err)
+  //         }
+  //       })
+  //     )
+  //     setLoadingProgress(30)
+
+  //     // Initialize template library (for components, straws, connectors)
+  //     await templateManager.initializeLibrary(assemblyData.templates)
+  //     setLoadingProgress(40)
+
+  //     // Preload critical templates
+  //     const criticalTemplates = [
+  //       ...assemblyData.instances.straws.map((s) => s.templateId),
+  //       ...assemblyData.instances.connectors.map((c) => c.templateId)
+  //     ]
+  //     await Promise.all(criticalTemplates.map((id) => templateManager.loadTemplate(id)))
+  //     setLoadingProgress(70)
+
+  //     // Helper resolve material
+  //     const resolveMaterial = (materialRef?: string) => {
+  //       if (!materialRef) return null
+  //       const mat = assemblyData.templates.materials.find((m) => m.id === materialRef)
+  //       return mat?.data || null
+  //     }
+
+  //     // Create instances
+  //     const allInstances: AssemblyInstance[] = []
+
+  //     // Straws
+  //     for (const strawGroup of assemblyData.instances.straws) {
+  //       for (const instance of strawGroup.instances) {
+  //         const instanceData = templateManager.createInstance({
+  //           id: instance.id,
+  //           templateId: strawGroup.templateId,
+  //           transform: instance.transform
+  //         })
+  //         console.log('Instance created:', instanceData)
+
+  //         const material = instanceData.material || resolveMaterial(instanceData.materialRef)
+  //         console.log('Yellow straw material:', material)
+  //         allInstances.push({
+  //           id: instance.id,
+  //           templateId: strawGroup.templateId,
+  //           category: 'straw',
+  //           data: { ...instanceData, material },
+  //           transform: instance.transform,
+  //           isVisible: true,
+  //           distanceToCamera: 0
+  //         })
+  //       }
+  //     }
+
+  //     // Connectors
+  //     for (const connectorGroup of assemblyData.instances.connectors) {
+  //       for (const instance of connectorGroup.instances) {
+  //         const instanceData = templateManager.createInstance({
+  //           id: instance.id,
+  //           templateId: connectorGroup.templateId,
+  //           transform: instance.transform
+  //         })
+
+  //         const material = instanceData.material || resolveMaterial(instanceData.materialRef)
+
+  //         allInstances.push({
+  //           id: instance.id,
+  //           templateId: connectorGroup.templateId,
+  //           category: 'connector',
+  //           data: { ...instanceData, material },
+  //           transform: instance.transform,
+  //           isVisible: true,
+  //           distanceToCamera: 0
+  //         })
+  //       }
+  //     }
+
+  //     setInstances(allInstances)
+  //     setLoadingProgress(90)
+
+  //     // Set assembly and activity
+  //     setAssembly(assemblyData)
+  //     if (assemblyData.activities.length > 0) {
+  //       setCurrentActivity(assemblyData.activities[0])
+  //       if (assemblyData.activities[0].steps.length > 0) {
+  //         setCurrentStep(assemblyData.activities[0].steps[0])
+  //       }
+  //     }
+
+  //     setLoadingProgress(100)
+  //     setIsOptimized(true)
+
+  //     console.log(`Assembly loaded: ${allInstances.length} instances created`)
+  //     console.log(`Compression ratio: ${assemblyData.metadata.compressionRatio || 'N/A'}`)
+  //   } catch (err) {
+  //     console.error('Failed to load assembly:', err)
+  //     setError(err instanceof Error ? err.message : 'Unknown error')
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }, [])
+  const loadAssembly = useCallback(async (source: string) => {
     setIsLoading(true)
     setError(null)
     setLoadingProgress(0)
 
     try {
-      console.log(`Loading assembly: ${url}`)
+      console.log(`Loading assembly: ${source}`)
 
-      // Load assembly definition
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw new Error(`Failed to load assembly: ${response.statusText}`)
+      let assemblyData: Assembly | null = null
+
+      // 🔹 Nếu là URL Supabase ID (vd: supabase:uuid hoặc supabase?id=...)
+      if (source.startsWith('supabase:')) {
+        const id = source.replace('supabase:', '').trim()
+        const { data, error } = await supabase.from('assembly_data').select('data').eq('id', id).single()
+
+        if (error || !data) throw new Error('Không tìm thấy assembly trong Supabase')
+        assemblyData = data.data // 👈 JSON gốc trong cột jsonb
+        console.log('Loaded from Supabase:', assemblyData)
+      }
+      // 🔹 Nếu là file trong public như trước
+      else {
+        const response = await fetch(source)
+        if (!response.ok) throw new Error(`Failed to load assembly: ${response.statusText}`)
+        assemblyData = await response.json()
       }
 
-      const assemblyData: Assembly = await response.json()
+      // 👉 Đảm bảo assemblyData tồn tại
+      if (!assemblyData) throw new Error('Empty assembly data')
+
+      // Giữ nguyên phần xử lý phía dưới:
       setLoadingProgress(20)
 
-      // Preload all materials (fetch JSON and attach to template)
       await Promise.all(
         (assemblyData.templates.materials || []).map(async (m) => {
           try {
@@ -264,21 +407,17 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
             if (res.ok) {
               const data = await res.json()
               m.data = data
-            } else {
-              console.warn(`Failed to load material file: ${m.source}`)
             }
           } catch (err) {
             console.warn(`Error loading material: ${m.source}`, err)
           }
         })
       )
-      setLoadingProgress(30)
 
-      // Initialize template library (for components, straws, connectors)
+      setLoadingProgress(30)
       await templateManager.initializeLibrary(assemblyData.templates)
       setLoadingProgress(40)
 
-      // Preload critical templates
       const criticalTemplates = [
         ...assemblyData.instances.straws.map((s) => s.templateId),
         ...assemblyData.instances.connectors.map((c) => c.templateId)
@@ -286,14 +425,12 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
       await Promise.all(criticalTemplates.map((id) => templateManager.loadTemplate(id)))
       setLoadingProgress(70)
 
-      // Helper resolve material
       const resolveMaterial = (materialRef?: string) => {
         if (!materialRef) return null
-        const mat = assemblyData.templates.materials.find((m) => m.id === materialRef)
+        const mat = assemblyData!.templates.materials.find((m) => m.id === materialRef)
         return mat?.data || null
       }
 
-      // Create instances
       const allInstances: AssemblyInstance[] = []
 
       // Straws
@@ -345,9 +482,8 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
 
       setInstances(allInstances)
       setLoadingProgress(90)
-
-      // Set assembly and activity
       setAssembly(assemblyData)
+
       if (assemblyData.activities.length > 0) {
         setCurrentActivity(assemblyData.activities[0])
         if (assemblyData.activities[0].steps.length > 0) {
@@ -357,9 +493,6 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
 
       setLoadingProgress(100)
       setIsOptimized(true)
-
-      console.log(`Assembly loaded: ${allInstances.length} instances created`)
-      console.log(`Compression ratio: ${assemblyData.metadata.compressionRatio || 'N/A'}`)
     } catch (err) {
       console.error('Failed to load assembly:', err)
       setError(err instanceof Error ? err.message : 'Unknown error')

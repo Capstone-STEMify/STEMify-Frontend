@@ -18,6 +18,7 @@ import { planApi } from '@/features/plan/api/planApi'
 import { componentApi } from '@/features/kit-components/api/kitComponentApi'
 import { courseEnrollmentApi } from '@/features/enrollment/api/courseEnrollmentApi'
 import { curriculumEnrollmentApi } from '@/features/enrollment/api/curriculumEnrollmentApi'
+import { chatAgentApi } from '@/features/chat/api/chatAgentApi'
 
 export const apiMiddlewares: Middleware[] = [
   courseApi.middleware,
@@ -38,7 +39,8 @@ export const apiMiddlewares: Middleware[] = [
   courseLearningOutcomeApi.middleware,
   kitProductApi.middleware,
   planApi.middleware,
-  componentApi.middleware
+  componentApi.middleware,
+  chatAgentApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]

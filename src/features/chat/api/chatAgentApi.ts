@@ -1,14 +1,22 @@
+import { ApiSuccessResponse } from '@/types/baseModel'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const chatAngentApi = createApi({
+export const chatAgentApi = createApi({
   reducerPath: 'chatAngentApi',
   // baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_AI_URL }),
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://ai-readdb.azurewebsites.net' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:6001/api' }),
   tagTypes: ['ChatAgent'],
   endpoints: (builder) => ({
-    getChatAi: builder.mutation<{ response: string }, { user_message: string }>({
+    getCourseRecommendedAi: builder.mutation<ApiSuccessResponse<{ message: string }>, { userPrompt: string }>({
       query: (body) => ({
-        url: '/ask',
+        url: '/course-recommendations',
+        method: 'POST',
+        body
+      })
+    }),
+    getGeneralChatAi: builder.mutation<ApiSuccessResponse<{ message: string }>, { userPrompt: string }>({
+      query: (body) => ({
+        url: '/general-question',
         method: 'POST',
         body
       })
@@ -16,4 +24,4 @@ export const chatAngentApi = createApi({
   })
 })
 
-export const { useGetChatAiMutation } = chatAngentApi
+export const { useGetCourseRecommendedAiMutation, useGetGeneralChatAiMutation } = chatAgentApi

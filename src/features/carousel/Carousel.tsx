@@ -19,7 +19,7 @@ export type CarouselItem = {
 
 const ITEMS: CarouselItem[] = [
   {
-    id: 'octahedron',
+    id: '1',
     title: 'Octahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-octahedron-platonic-solid_cover.jpg&w=1920&q=75',
@@ -28,7 +28,7 @@ const ITEMS: CarouselItem[] = [
     isAvailable: true
   },
   {
-    id: 'hexahedron',
+    id: '2',
     title: 'Hexahedron Platonic Solid',
     image:
       'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
