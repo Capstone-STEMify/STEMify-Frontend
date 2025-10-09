@@ -41,8 +41,7 @@ export const apiMiddlewares: Middleware[] = [
   kitProductApi.middleware,
   planApi.middleware,
   componentApi.middleware,
-  chatAgentApi.middleware
-  componentApi.middleware,
+  chatAgentApi.middleware,
   certificateApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
