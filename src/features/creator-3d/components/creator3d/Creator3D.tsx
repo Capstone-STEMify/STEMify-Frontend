@@ -21,6 +21,7 @@ import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/Worksp
 import {
   addAction,
   addTargetToAction,
+  clearAction,
   removeTargetFromAllActions,
   resetActions,
   updateConnectorArms
@@ -28,7 +29,7 @@ import {
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
 import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
-import { useAssembly } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { AssemblyInstance, useAssembly } from '@/features/assembly/hooks/useAssemblyOptimized'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()
@@ -97,55 +98,156 @@ export function Creator3D() {
         console.log('🧩 Imported Assembly JSON:', data)
 
         dispatch(clearScene())
-        dispatch(resetActions())
+        dispatch(clearAction())
 
-        // if (Array.isArray(data.instances)) {
-        //   dispatch(setInstances(data.instances))
-        // } else {
-        //   console.warn('⚠ Không tìm thấy instances trong dữ liệu')
-        // }
+        // ========== 🔹 Restore Instances ==========
+        if (data.instances) {
+          const allInstances: AssemblyInstance[] = []
 
-        // // 4️⃣ Restore actions (workspace actions)
-        // if (Array.isArray(data.actions)) {
-        //   for (const act of data.actions) {
-        //     // Thêm action cơ bản
-        //     dispatch(
-        //       addAction({
-        //         id: act.id,
-        //         name: act.name,
-        //         type: act.type
-        //       })
-        //     )
+          // 1️⃣ Lặp qua straws
+          if (Array.isArray(data.instances.straws)) {
+            data.instances.straws.forEach((group: any) => {
+              group.instances.forEach((inst: any) => {
+                allInstances.push({
+                  id: inst.id,
+                  templateId: group.templateId,
+                  category: 'straw',
+                  transform: inst.transform,
+                  isVisible: true,
+                  distanceToCamera: 0,
+                  data: {
+                    id: inst.id,
+                    name: group.templateId,
+                    transform: inst.transform,
+                    material: {
+                      type: 'plastic',
+                      properties: {
+                        color: '#00aaff',
+                        flexibility: 50,
+                        opacity: 1,
+                        roughness: 0.4,
+                        metalness: 0
+                      }
+                    },
+                    geometry: { length: 16, diameter: 0.8, wallThickness: 0.1 },
+                    endpoints: {
+                      start: {
+                        id: `${inst.id}_start`,
+                        localPosition: { x: -8, y: 0, z: 0 },
+                        connectionId: null,
+                        isAvailable: true
+                      },
+                      end: {
+                        id: `${inst.id}_end`,
+                        localPosition: { x: 8, y: 0, z: 0 },
+                        connectionId: null,
+                        isAvailable: true
+                      }
+                    }
+                  },
+                  arms: undefined
+                })
+              })
+            })
+          }
 
-        //     // Nếu có targets → gán vào action
-        //     if (Array.isArray(act.targets)) {
-        //       for (const targetId of act.targets) {
-        //         dispatch(
-        //           addTargetToAction({
-        //             actionId: act.id,
-        //             targetId
-        //           })
-        //         )
-        //       }
-        //     }
+          // 2️⃣ Lặp qua connectors
+          if (Array.isArray(data.instances.connectors)) {
+            data.instances.connectors.forEach((group: any) => {
+              group.instances.forEach((inst: any) => {
+                allInstances.push({
+                  id: inst.id,
+                  templateId: group.templateId,
+                  category: 'connector',
+                  transform: inst.transform,
+                  isVisible: true,
+                  distanceToCamera: 0,
+                  data: {
+                    id: inst.id,
+                    name: group.templateId,
+                    transform: inst.transform,
+                    material: {
+                      type: 'plastic',
+                      properties: {
+                        color: '#ff4444',
+                        flexibility: 50,
+                        opacity: 1,
+                        roughness: 0.5,
+                        metalness: 0
+                      }
+                    },
+                    geometry: {
+                      size: { x: 2, y: 2, z: 2 },
+                      portDiameter: 0.8,
+                      shape: 'cylindrical'
+                    },
+                    type: 'straight',
+                    ports: [
+                      {
+                        id: `${inst.id}_port_0`,
+                        localPosition: { x: 0, y: 0, z: 1 },
+                        orientation: { x: 0, y: 0, z: 1 },
+                        connectionId: null,
+                        isAvailable: true,
+                        portIndex: 0
+                      }
+                    ],
+                    constraints: { maxConnections: 3, allowedAngles: [] },
+                    numArms: 1,
+                    modelUrl: `/models/connector_1leg.glb`
+                  },
+                  arms: {}
+                })
+              })
+            })
+          }
 
-        //     // Nếu có connectorArmTransforms (cho transform_arm)
-        //     if (act.type === 'transform_arm' && act.connectorArmTransforms) {
-        //       Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
-        //         // Ensure arms is of the correct type
-        //         dispatch(
-        //           updateConnectorArms({
-        //             actionId: act.id,
-        //             connectorId,
-        //             arms: arms as Record<string, { x: number; y: number; z: number }>
-        //           })
-        //         )
-        //       })
-        //     }
-        //   }
-        // } else {
-        //   console.warn('⚠ Không tìm thấy actions trong dữ liệu')
-        // }
+          console.log('🧱 Flattened Instances:', allInstances)
+          dispatch(setInstances(allInstances))
+        } else {
+          console.warn('⚠ Không tìm thấy instances trong dữ liệu')
+        }
+
+        // Restore actions (workspace actions)
+        if (Array.isArray(data.actions)) {
+          for (const act of data.actions) {
+            // Thêm action cơ bản
+            dispatch(
+              addAction({
+                id: act.id,
+                name: act.name,
+                type: act.type
+              })
+            )
+
+            if (Array.isArray(act.targets)) {
+              for (const targetId of act.targets) {
+                dispatch(
+                  addTargetToAction({
+                    actionId: act.id,
+                    targetId
+                  })
+                )
+              }
+            }
+
+            // Nếu có connectorArmTransforms (cho transform_arm)
+            if (act.type === 'transform_arm' && act.connectorArmTransforms) {
+              Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
+                // Ensure arms is of the correct type
+                dispatch(
+                  updateConnectorArms({
+                    actionId: act.id,
+                    connectorId,
+                    arms: arms as Record<string, { x: number; y: number; z: number }>
+                  })
+                )
+              })
+            }
+          }
+        } else {
+          console.warn('⚠ Không tìm thấy actions trong dữ liệu')
+        }
 
         toast.success('✅ Đã import thành công Assembly!')
       } catch (err: any) {

@@ -166,7 +166,11 @@ export const workspaceTreeSlice = createSlice({
       if (!act) return
       act.name = action.payload.newName
     },
-    resetActions: () => initialState
+    resetActions: () => initialState,
+    clearAction: (state) => {
+      state.actions = []
+      state.selectedActionId = null
+    }
   }
 })
 
@@ -177,6 +181,7 @@ export const {
   updateConnectorArms,
   updateAction,
   resetActions,
+  clearAction,
   setSelectedAction,
   removeTargetFromAllActions,
   updateActionName
