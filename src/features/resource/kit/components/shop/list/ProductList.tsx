@@ -35,7 +35,7 @@ const ProductList: React.FC = () => {
                 activeCategory={activeCategory}
                 onCategoryChange={setActiveCategory}
               /> */}
-              <div className='scrollbar-hidden lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto'>
+              <div className='lg:overflow-y-auto'>
                 <ProductsGrid products={filteredProducts} />
               </div>
               {/* <RichResources /> */}
