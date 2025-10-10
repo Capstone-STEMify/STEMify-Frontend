@@ -48,6 +48,8 @@ export async function loadMessages(locale: string) {
     ...kitMessages,
     ...contentMessages,
     ...planMessages,
-    ...componentMessages
+    ...componentMessages,
+    ...creator3DMessages,
+    ...workspace3DMessages
   }
 }

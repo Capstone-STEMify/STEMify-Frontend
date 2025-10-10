@@ -30,8 +30,10 @@ import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/Creat
 import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
 import { AssemblyInstance, useAssembly } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { useTranslations } from 'next-intl'
 
 export function Creator3D() {
+  const t3d = useTranslations('creator3D')
   const dispatch = useAppDispatch()
   const instances = useAppSelector((s) => s.creatorScene.instances)
   const addObject = useAddObject()
@@ -303,28 +305,11 @@ export function Creator3D() {
 
       {/* Export Dialog */}
       {showExportDialog && (
-        // <ExportDialog
-        //   onClose={() => setShowExportDialog(false)}
-        //   onExport={(metadata) => {
-        //     const exportData = exportAssemblyFn(metadata)
-
-        //     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
-        //     const url = URL.createObjectURL(blob)
-        //     const a = document.createElement('a')
-        //     a.href = url
-        //     a.download = `${metadata.title.replace(/\s+/g, '_').toLowerCase()}_assembly.json`
-        //     document.body.appendChild(a)
-        //     a.click()
-        //     document.body.removeChild(a)
-        //     URL.revokeObjectURL(url)
-        //     setShowExportDialog(false)
-        //   }}
-        // />
         <ExportDialog
           onClose={() => setShowExportDialog(false)}
           onExport={async (metadata) => {
             try {
-              const exportData = exportAssemblyFn(metadata) // lấy JSON object từ state
+              const exportData = exportAssemblyFn(metadata)
               const { error } = await supabase.from('assembly_data').insert([
                 {
                   name: metadata.title,

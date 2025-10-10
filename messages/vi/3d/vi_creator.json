@@ -1,25 +1,67 @@
 {
-  "header": {
-    "title": "Trình tạo lắp ráp 3D",
-    "subtitle": "Tạo các bài học lắp ráp 3D tương tác cho học sinh"
-  },
-  "mainContent": {
-    "welcomeMessage": "Chào mừng bạn đến với Trình tạo 3D! Hãy bắt đầu bằng cách thêm và tùy chỉnh các hình khối.",
-    "instructions": "Sử dụng các công cụ ở bên trái để thao tác đối tượng 3D. Điều chỉnh các thuộc tính ở bảng bên phải."
-  },
-  "leftPanel": {
-    "title": "Công cụ",
-    "select": "Chọn",
-    "move": "Di chuyển",
-    "rotate": "Xoay",
-    "scale": "Tỉ lệ",
-    "addShape": "Thêm hình khối",
-    "delete": "Xóa"
-  },
-  "rightPanel": {
-    "title": "Thuộc tính",
-    "position": "Vị trí",
-    "rotation": "Góc xoay",
-    "scale": "Tỉ lệ"
+  "creator3D": {
+    "header": {
+      "title": "Trình tạo lắp ráp 3D",
+      "subtitle": "Tạo các bài học lắp ráp 3D tương tác cho học sinh",
+      "preview": "Xem trước mô hình 3D",
+      "save": "Lưu mô hình"
+    },
+    "main_content": {
+      "move": "Di Chuyển",
+      "rotate": "Xoay",
+      "scale": "Tỉ lệ",
+      "grid": "Lưới",
+      "axes": "Trục",
+      "snap": "Chụp lưới",
+      "unlock_camera": "Mở khóa camera",
+      "lock_camera": "Khóa camera",
+      "scene_stats": "Thành phần trong cảnh",
+      "objects": "Vật thể",
+      "straws": "Ống hút",
+      "connectors": "Đầu nối",
+      "selected": "Đang chọn",
+      "clear_scene": "Xóa cảnh",
+      "export_assembly": "Xuất mô hình",
+      "export_success": "Xuất mô hình thành công!",
+      "export_error": "Lỗi khi xuất mô hình.",
+      "confirm_clear": "Bạn có chắc chắn muốn xóa toàn bộ cảnh không? Hành động này không thể hoàn tác.",
+      "yes_clear": "Có, xóa cảnh",
+      "no_cancel": "Không, hủy bỏ",
+      "import_assembly": "Nhập mô hình"
+    },
+    "left_panel": {
+      "title": "Công cụ",
+      "subtitle": "Kéo và thả các công cụ để xây dựng mô hình của bạn",
+      "straw": "Ống hút",
+      "connector": "Đầu nối",
+      "drag_guide": "Kéo để thêm vào cảnh",
+      "double_click_guide": "Nhấp đúp để đặt tại gốc tọa độ",
+      "select_guide": "Chọn & sử dụng gizmo để biến đổi"
+    },
+    "right_panel": {
+      "workspace_tree": "Cấu trúc mô hình",
+      "properties": "Thuộc tính",
+      "delete_component": "Bạn có muốn xóa thành phần này không?",
+      "select_object_or_action": "Chọn một vật thể hoặc hành động để chỉnh sửa thuộc tính",
+      "action_properties": {
+        "title": "Thuộc tính hành động",
+        "name": "Tên",
+        "type": "Loại"
+      },
+      "component_properties": {
+        "select_object_or_action": "Chọn một vật thể hoặc hành động để chỉnh sửa thuộc tính",
+        "name": "Tên",
+        "position": "Vị trí",
+        "rotation": "Xoay (radian)",
+        "scale": "Tỉ lệ",
+        "connector_arm": "Cánh của đầu nối (radian)",
+        "object_info": "Thông tin vật thể",
+        "id": "ID",
+        "category": "Loại",
+        "template": "Mẫu",
+        "reset_transform": "Đặt lại",
+        "delete": "Xóa"
+      }
+    }
   }
 }
