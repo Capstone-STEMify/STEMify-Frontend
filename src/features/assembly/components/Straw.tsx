@@ -50,6 +50,7 @@ export const Straw = forwardRef<Group, StrawProps>(function Straw({ straw, fade 
   const transmission = material?.properties?.transmission ?? 0
   const ior = material?.properties?.ior ?? 1.4
   const thickness = material?.properties?.thickness ?? 0.05
+  console.log('color', color)
 
   return (
     <group ref={ref} position={[pos.x, pos.y, pos.z]} rotation={[rot.x, rot.y, rot.z]} scale={[1, 1, 1]}>

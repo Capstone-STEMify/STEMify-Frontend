@@ -1,14 +1,14 @@
 {
-  "id": "2leg_red",
-  "name": "2-Leg Connector",
+  "id": "1leg_red",
+  "name": "1-Leg Red Connector",
   "version": "1.0",
   "category": "connector",
   "baseGeometry": {
     "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
     "portDiameter": 0.65,
     "shape": "custom",
-    "modelPath": "/models/connector_2legs.glb",
-    "meshName": "connector_2legs"
+    "modelPath": "/models/connector_1leg.glb",
+    "meshName": "connector_1leg"
   },
   "materialRef": "plastic_red",
   "arms": [
@@ -23,65 +23,53 @@
         "socketType": "standard",
         "allowedRotation": { "x": 0, "y": 0, "z": 360 }
       }
-    },
-    {
-      "id": "arm_2",
-      "meshName": "Arm_2",
-      "defaultRotation": { "x": 0, "y": 90, "z": 45 },
-      "portIndex": 1,
-      "port": {
-        "localPosition": { "x": 1.0, "y": 2.0, "z": 1.0 },
-        "orientation": { "x": 0, "y": 90, "z": 45 },
-        "socketType": "angled",
-        "allowedRotation": { "x": 0, "y": 0, "z": 0 }
-      }
     }
   ],
   "physics": {
-    "mass": 1.2,
-    "centerOfMass": { "x": 0.66, "y": 0.66, "z": 0.66 },
-    "momentOfInertia": { "x": 0.5, "y": 0.5, "z": 0.5 }
+    "mass": 0.8,
+    "centerOfMass": { "x": 0.5, "y": 0.5, "z": 0.5 },
+    "momentOfInertia": { "x": 0.3, "y": 0.3, "z": 0.3 }
   },
   "constraints": {
-    "maxConnections": 2,
-    "allowedAngles": [0, 45, 90, 135, 180, 225, 270, 315],
+    "maxConnections": 1,
+    "allowedAngles": [0, 90, 180, 270],
     "minStrawLength": 5.0,
     "maxStrawLength": 20.0
   },
   "lod": {
     "high": {
       "geometryComplexity": "detailed",
-      "polyCount": 2048,
+      "polyCount": 1024,
       "textureResolution": 1024,
       "renderDistance": 50,
       "enableAnimations": true
     },
     "medium": {
       "geometryComplexity": "standard",
-      "polyCount": 512,
+      "polyCount": 256,
       "textureResolution": 512,
       "renderDistance": 100,
       "enableAnimations": false
     },
     "low": {
       "geometryComplexity": "basic",
-      "polyCount": 128,
+      "polyCount": 64,
       "textureResolution": 256,
       "renderDistance": 200,
       "enableAnimations": false
     }
   },
   "streaming": {
-    "priority": 3,
-    "chunkSize": "large",
-    "compressionLevel": 5,
-    "preloadDistance": 30
+    "priority": 2,
+    "chunkSize": "medium",
+    "compressionLevel": 4,
+    "preloadDistance": 20
   },
   "validation": {
-    "structuralIntegrity": 95,
-    "maxStress": 100,
-    "compatibleStraws": ["green_16_2", "blue_15_0"],
-    "testingRequired": true
+    "structuralIntegrity": 90,
+    "maxStress": 80,
+    "compatibleStraws": ["green_16_2", "yellow_3_8"],
+    "testingRequired": false
   },
-  "imagePreviewUrl": "/images/components/connector_2_leg.png"
+  "imagePreviewUrl": "/images/components/connector_1_leg.png"
 }
