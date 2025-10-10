@@ -115,7 +115,16 @@ export function DataTable<TData extends { id: string | number }, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setInternalRowSelection,
-    state: { sorting, columnFilters, columnVisibility, rowSelection: internalRowSelection },
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection: internalRowSelection,
+      pagination: {
+        pageIndex: 0,
+        pageSize: pagingParams?.pageSize || 50
+      }
+    },
     enableRowSelection
   })
 

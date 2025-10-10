@@ -43,7 +43,7 @@ export default function ChatAgent() {
 
   const modeOptions = [
     { value: 'course-recommendations', label: 'Gợi ý khóa học' },
-    { value: 'general-question', label: 'Câu hỏi chung' }
+    { value: 'general-question', label: 'Câu hỏi về lĩnh vực STEM' }
   ]
 
   //=====================================
@@ -204,7 +204,7 @@ export default function ChatAgent() {
           className='flex cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-sky-400 px-4 py-2 text-white shadow-2xl'
           onClick={() => setIsOpen(true)}
         >
-          <AiFillMessage size={25}  />
+          <AiFillMessage size={25} />
         </button>
       )}
     </div>

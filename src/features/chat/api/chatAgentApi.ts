@@ -9,14 +9,14 @@ export const chatAgentApi = createApi({
   endpoints: (builder) => ({
     getCourseRecommendedAi: builder.mutation<ApiSuccessResponse<{ message: string }>, { userPrompt: string }>({
       query: (body) => ({
-        url: '/course-recommendations',
+        url: '/ai/course-recommendations',
         method: 'POST',
         body
       })
     }),
     getGeneralChatAi: builder.mutation<ApiSuccessResponse<{ message: string }>, { userPrompt: string }>({
       query: (body) => ({
-        url: '/general-question',
+        url: '/ai/general-question',
         method: 'POST',
         body
       })

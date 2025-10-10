@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { templateManager } from '../utils/templateManager'
 import { LODManager, defaultLODConfig } from '../utils/lodManager'
 import { PerformanceProfiler, defaultPerformanceConfig, PerformanceAlert } from '../utils/performanceProfiler'
-import { supabase } from '@/libs/supabase/supabase'
+import { supabase } from '@/libs/supabase/client'
 
 export interface Assembly {
   metadata: {

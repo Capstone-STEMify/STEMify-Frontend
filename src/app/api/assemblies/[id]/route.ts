@@ -1,7 +1,8 @@
-import { supabase } from '@/libs/supabase/supabase'
+import { supabase } from '@/libs/supabase/server'
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+
   const { data, error } = await supabase.from('assembly_data').select('data').eq('id', id).single()
 
   if (error || !data) {
