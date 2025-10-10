@@ -132,7 +132,7 @@ function NiceSelect({ label, value, onChange, options, placeholder = 'Select…'
   )
 }
 
-const AGES = Array.from({ length: 5 }, (_, i) => i + 6)
+const AGES = Array.from({ length: 15 }, (_, i) => i + 4)
 
 interface UpsertAgeRangeProps {
   id?: number
@@ -149,8 +149,8 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
 
   const ageRangeSchema = z
     .object({
-      minAge: z.number().min(6, tv('ageRange.min')),
-      maxAge: z.number().min(6, tv('ageRange.max'))
+      minAge: z.number().min(4, tv('ageRange.min')),
+      maxAge: z.number().min(4, tv('ageRange.max'))
     })
     .refine((d) => d.maxAge > d.minAge, {
       message: tv('ageRange.maxMin'),
@@ -163,8 +163,8 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
   const [createAgeRange, { isLoading: isCreating }] = useCreateAgeRangeMutation()
   const [updateAgeRange, { isLoading: isUpdating }] = useUpdateAgeRangeMutation()
 
-  const [minAge, setMinAge] = React.useState<number | undefined>(isEditing ? undefined : 6)
-  const [maxAge, setMaxAge] = React.useState<number | undefined>(isEditing ? undefined : 7)
+  const [minAge, setMinAge] = React.useState<number | undefined>(isEditing ? undefined : 4)
+  const [maxAge, setMaxAge] = React.useState<number | undefined>(isEditing ? undefined : 5)
   const [isReady, setIsReady] = React.useState(!isEditing)
 
   React.useEffect(() => {
@@ -228,7 +228,7 @@ export default function UpsertAgeRangePlain({ id, onSuccess }: UpsertAgeRangePro
             }
           }}
           options={minOptions}
-          placeholder={t('mini_placeholder')}
+          placeholder={t('min_placeholder')}
         />
 
         <NiceSelect

@@ -21,7 +21,7 @@ export function ExportDialog({ onClose, onExport }: ExportDialogProps) {
     <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black'>
       <div className='mx-4 w-full max-w-md rounded-lg bg-white shadow-xl'>
         <div className='p-6'>
-          <h2 className='mb-4 text-lg font-semibold text-gray-900'>Export Assembly</h2>
+          <h2 className='mb-4 text-lg font-semibold text-gray-900'>Save Assembly</h2>
 
           <form onSubmit={handleSubmit} className='space-y-4'>
             <div>

@@ -23,7 +23,7 @@ import {
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
-import { supabase } from '@/libs/supabase/supabase'
+import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
 
 export function Creator3D() {
