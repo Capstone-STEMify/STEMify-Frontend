@@ -5,8 +5,6 @@ import useEmblaCarousel from 'embla-carousel-react'
 import type { EmblaCarouselType } from 'embla-carousel'
 import AutoScroll from 'embla-carousel-auto-scroll'
 import { motion, useAnimationControls } from 'framer-motion'
-import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
 
 // --- Types ---
 export type CardModel = {
@@ -28,31 +26,31 @@ const imagePaths = [
 ]
 const DEMO_DECK: CardModel[] = imagePaths.map((src, i) => ({
   id: `card-${i + 1}`,
-  frontSrc: src,
+  frontSrc: `/images/assembly-lits/lab1.png`, //${i + 1}
   label: `Card ${i + 1}`
 }))
 
 // --- Card Back ---
 const CardBack: React.FC = () => (
-  <div className='relative h-full w-full rounded-3xl bg-gradient-to-br from-purple-600 via-fuchsia-500 to-amber-500 p-[3px] shadow-2xl'>
-    <div className='relative grid h-full w-full place-items-center overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 backdrop-blur-sm'>
+  <div className='relative h-full w-full rounded-3xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-600 p-[3px] shadow-2xl'>
+    <div className='relative grid h-full w-full place-items-center overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 backdrop-blur-sm'>
       {/* Animated gradient overlay */}
-      <div className='absolute inset-0 bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 opacity-50' />
+      <div className='absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 opacity-50' />
 
       {/* Center ornament */}
       <div className='relative z-10'>
-        <div className='grid h-16 w-16 animate-pulse place-items-center rounded-full border-2 border-purple-300/40'>
-          <div className='grid h-10 w-10 place-items-center rounded-full border-2 border-fuchsia-300/60'>
-            <div className='h-4 w-4 rounded-full bg-gradient-to-br from-purple-400 to-fuchsia-400 shadow-lg shadow-fuchsia-500/50' />
+        <div className='grid h-16 w-16 animate-pulse place-items-center rounded-full border-2 border-cyan-300/40'>
+          <div className='grid h-10 w-10 place-items-center rounded-full border-2 border-blue-300/60'>
+            <div className='h-4 w-4 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 shadow-lg shadow-blue-500/50' />
           </div>
         </div>
       </div>
 
       {/* Decorative corners */}
-      <div className='absolute top-4 left-4 h-8 w-8 rounded-tl-lg border-t-2 border-l-2 border-purple-400/30' />
-      <div className='absolute top-4 right-4 h-8 w-8 rounded-tr-lg border-t-2 border-r-2 border-fuchsia-400/30' />
-      <div className='absolute bottom-4 left-4 h-8 w-8 rounded-bl-lg border-b-2 border-l-2 border-amber-400/30' />
-      <div className='absolute right-4 bottom-4 h-8 w-8 rounded-br-lg border-r-2 border-b-2 border-purple-400/30' />
+      <div className='absolute top-4 left-4 h-8 w-8 rounded-tl-lg border-t-2 border-l-2 border-cyan-400/30' />
+      <div className='absolute top-4 right-4 h-8 w-8 rounded-tr-lg border-t-2 border-r-2 border-blue-400/30' />
+      <div className='absolute bottom-4 left-4 h-8 w-8 rounded-bl-lg border-b-2 border-l-2 border-indigo-400/30' />
+      <div className='absolute right-4 bottom-4 h-8 w-8 rounded-br-lg border-r-2 border-b-2 border-cyan-400/30' />
     </div>
   </div>
 )
@@ -163,20 +161,14 @@ const FlipCard: React.FC<{
 // --- Main Game Component ---
 export default function CardRandomGame(): JSX.Element {
   // ✅ Use AutoScroll plugin for continuous movement
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: 'center', dragFree: true }, // dragFree giúp mượt mà hơn
-    [
-      AutoScroll({
-        speed: 2.2, // tốc độ cuộn (càng lớn càng nhanh)
-        playOnInit: true,
-        stopOnMouseEnter: false, // không dừng khi hover
-        stopOnInteraction: false // không dừng khi kéo tay
-      })
-    ]
-  )
-
-  const router = useRouter()
-  const locale = useLocale()
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center', dragFree: true }, [
+    AutoScroll({
+      speed: 2.2,
+      playOnInit: true,
+      stopOnMouseEnter: false, // non stop when hover
+      stopOnInteraction: false // non stop when scrolling
+    })
+  ])
 
   const [deck] = useState<CardModel[]>(DEMO_DECK)
   const [revealedMap, setRevealedMap] = useState<Record<string, boolean>>({})
@@ -186,7 +178,7 @@ export default function CardRandomGame(): JSX.Element {
   const slideWidth = 240
   const slideHeight = 340
 
-  // ✅ Helper lấy plugin autoScroll
+  // ✅ Helper get plugin autoScroll
   const getAutoScroll = useCallback(() => (emblaApi ? (emblaApi.plugins() as any)?.autoScroll : undefined), [emblaApi])
 
   const resetGame = useCallback(() => {
@@ -210,7 +202,6 @@ export default function CardRandomGame(): JSX.Element {
       const card = deck[index]
       if (!card) return
       if (spinningId || revealedMap[card.id]) return
-      // tạm dừng auto scroll khi chuẩn bị spin
       getAutoScroll()?.stop?.()
       setCelebrateId(null)
       setSpinningId(card.id)
@@ -224,7 +215,6 @@ export default function CardRandomGame(): JSX.Element {
     setRevealedMap((prev) => ({ ...prev, [spinningId]: true }))
     setCelebrateId(spinningId)
     setSpinningId(null)
-    // vẫn tạm dừng trong lúc overlay hiển thị, resume sau
     setTimeout(() => getAutoScroll()?.play?.(), 1900)
   }, [spinningId, getAutoScroll])
 
@@ -236,16 +226,16 @@ export default function CardRandomGame(): JSX.Element {
   // }, [celebrateId]);
 
   return (
-    <div className='relative min-h-[100svh] w-full overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white'>
+    <div className='relative min-h-[100svh] w-full overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white'>
       {/* Animated background blobs */}
       <div className='pointer-events-none absolute inset-0 overflow-hidden'>
-        <div className='absolute top-20 left-10 h-72 w-72 animate-pulse rounded-full bg-purple-500/20 blur-[100px]' />
+        <div className='absolute top-20 left-10 h-72 w-72 animate-pulse rounded-full bg-cyan-500/20 blur-[100px]' />
         <div
-          className='absolute right-10 bottom-20 h-96 w-96 animate-pulse rounded-full bg-fuchsia-500/20 blur-[120px]'
+          className='absolute right-10 bottom-20 h-96 w-96 animate-pulse rounded-full bg-blue-500/20 blur-[120px]'
           style={{ animationDelay: '1s' }}
         />
         <div
-          className='absolute top-1/2 left-1/2 h-64 w-64 animate-pulse rounded-full bg-amber-500/10 blur-[100px]'
+          className='absolute top-1/2 left-1/2 h-64 w-64 animate-pulse rounded-full bg-indigo-500/15 blur-[100px]'
           style={{ animationDelay: '2s' }}
         />
       </div>
@@ -254,8 +244,8 @@ export default function CardRandomGame(): JSX.Element {
       <div className='relative z-10 px-4 pt-12'>
         <div className='flex flex-wrap items-center justify-between gap-4'>
           <div>
-            <h1 className='bg-gradient-to-r from-purple-400 via-fuchsia-400 to-amber-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent md:text-6xl'>
-              Bánh xe ý tưởng
+            <h1 className='bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent md:text-6xl'>
+              Random Card Game
             </h1>
           </div>
           <div className='flex items-center gap-3'>
@@ -263,16 +253,14 @@ export default function CardRandomGame(): JSX.Element {
               onClick={() => {
                 const api = emblaApi
                 if (!api) return
-                // pick ngẫu nhiên gần vị trí hiện tại
                 const slidesInView = (api as any).internalEngine().slideRegistry // optional
-                // fallback: chọn index bất kỳ
                 const idx = Math.floor(Math.random() * deck.length)
                 pickCard(idx)
               }}
-              className='group relative rounded-2xl bg-gradient-to-r from-purple-600 to-fuchsia-600 px-6 py-3 font-semibold shadow-lg shadow-purple-500/50 transition-all hover:from-purple-500 hover:to-fuchsia-500 hover:shadow-xl hover:shadow-purple-500/60 active:scale-[0.97]'
+              className='group relative rounded-2xl bg-gradient-to-r from-cyan-600 to-blue-600 px-6 py-3 font-semibold shadow-lg shadow-blue-500/50 transition-all hover:from-cyan-500 hover:to-blue-500 hover:shadow-xl hover:shadow-blue-500/60 active:scale-[0.97]'
             >
-              <span className='relative z-10'>Bắt đầu thử thách</span>
-              <div className='absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-400 to-fuchsia-400 opacity-0 blur transition group-hover:opacity-20' />
+              <span className='relative z-10'>Pick Random</span>
+              <div className='absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-400 to-blue-400 opacity-0 blur transition group-hover:opacity-20' />
             </button>
             <button
               onClick={resetGame}
@@ -286,13 +274,13 @@ export default function CardRandomGame(): JSX.Element {
 
       {/* Carousel */}
       <div className='relative z-10 mt-12'>
-        <div ref={emblaRef} className='overflow-hidden py-25'>
+        <div ref={emblaRef} className='overflow-hidden py-30'>
           <div className='flex items-center gap-8 px-8 md:gap-12'>
             {DEMO_DECK.map((card) => (
               <div key={card.id} className='shrink-0' style={{ width: slideWidth }}>
                 <div className='group relative'>
                   {/* Floor shadow */}
-                  <div className='pointer-events-none absolute inset-x-6 -bottom-4 h-8 rounded-full bg-purple-500/30 blur-2xl transition-all duration-300 group-hover:bg-fuchsia-500/40' />
+                  <div className='pointer-events-none absolute inset-x-6 -bottom-4 h-8 rounded-full bg-cyan-500/20 blur-2xl transition-all duration-300 group-hover:bg-blue-500/30' />
 
                   <button
                     onClick={() => {
@@ -304,7 +292,7 @@ export default function CardRandomGame(): JSX.Element {
                     aria-label={`Pick ${card.label}`}
                   >
                     <div
-                      className='relative [transform:translateZ(0)] rounded-3xl bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 shadow-2xl ring-1 ring-purple-400/30 backdrop-blur-md transition-all duration-300 group-hover:-translate-y-3 group-hover:shadow-[0_0_40px_rgba(217,70,239,0.4)] group-hover:ring-2 group-hover:ring-fuchsia-400/50 group-active:translate-y-0'
+                      className='relative [transform:translateZ(0)] overflow-hidden rounded-3xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 shadow-2xl ring-1 ring-cyan-400/30 backdrop-blur-md transition-all duration-300 group-hover:-translate-y-3 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] group-hover:ring-2 group-hover:ring-blue-400/50 group-active:translate-y-0'
                       style={{ width: slideWidth, height: slideHeight }}
                     >
                       <FlipCard
@@ -315,9 +303,21 @@ export default function CardRandomGame(): JSX.Element {
                         isActiveSpin={spinningId === card.id}
                         onSpinDone={onSpinDone}
                       />
-
                       {/* Glow */}
-                      <div className='pointer-events-none absolute -inset-2 rounded-3xl bg-gradient-to-r from-purple-400/30 via-fuchsia-400/30 to-amber-400/30 opacity-0 blur-2xl transition-all duration-300 group-hover:opacity-100' />
+                      <div className='pointer-events-none absolute -inset-2 rounded-3xl bg-gradient-to-r from-cyan-400/20 via-blue-400/20 to-indigo-400/20 opacity-0 blur-xl transition-all duration-300 group-hover:opacity-60' />
+
+                      {/* Sparkle effect on hover */}
+                      <div className='pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity group-hover:opacity-100'>
+                        <div className='absolute top-4 right-4 h-2 w-2 animate-ping rounded-full bg-cyan-300' />
+                        <div
+                          className='absolute bottom-6 left-6 h-1.5 w-1.5 animate-ping rounded-full bg-blue-300'
+                          style={{ animationDelay: '0.3s' }}
+                        />
+                        <div
+                          className='absolute top-1/2 left-4 h-1 w-1 animate-ping rounded-full bg-indigo-300'
+                          style={{ animationDelay: '0.6s' }}
+                        />
+                      </div>
                     </div>
                   </button>
 
@@ -327,7 +327,7 @@ export default function CardRandomGame(): JSX.Element {
                         {revealedMap[card.id] ? (
                           <span className='text-amber-300'>✨ {card.label}</span>
                         ) : (
-                          <span className='text-purple-200'>Dừng</span>
+                          <span className='text-blue-200'>Hidden</span>
                         )}
                       </span>
                     </div>
@@ -349,43 +349,42 @@ export default function CardRandomGame(): JSX.Element {
             transition={{ type: 'spring', stiffness: 200, damping: 25 }}
             className='relative'
           >
-            {/* Glow rings */}
+            {/* Outer glow rings */}
             <div className='absolute inset-0 -m-8'>
-              <div className='absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-purple-500/20 to-fuchsia-500/20 blur-3xl' />
+              <div className='absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-3xl' />
               <div
-                className='absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-amber-500/20 to-purple-500/20 blur-3xl'
+                className='absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 blur-3xl'
                 style={{ animationDelay: '0.5s' }}
               />
             </div>
 
-            {/* Big card */}
-            <div className='relative rounded-[32px] bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 p-1 shadow-2xl ring-2 ring-purple-400/50 backdrop-blur-sm'>
+            {/* Big card front with enhanced styling */}
+            <div className='relative rounded-[32px] bg-gradient-to-br from-cyan-500/20 to-blue-500/20 p-1 shadow-2xl ring-2 ring-cyan-400/50 backdrop-blur-sm'>
               <div style={{ width: 360, height: 520 }} className='overflow-hidden rounded-[28px] ring-1 ring-white/10'>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={DEMO_DECK.find((d) => d.id === celebrateId)?.frontSrc || ''}
+                  src={deck.find((d) => d.id === celebrateId)?.frontSrc || ''}
                   alt='selected card'
                   className='h-full w-full object-cover'
                 />
               </div>
             </div>
-
             {/* Fireworks */}
             <Fireworks className='pointer-events-none absolute inset-0' shots={32} size={12} life={1400} />
 
             {/* Small CTA under the selected card */}
             <div className='mt-3 flex justify-center gap-3'>
               <button
-                onClick={() => router.push(`/${locale}/create-3d`)}
+                onClick={() => console.log('Build now for:', celebrateId)}
                 className='rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs backdrop-blur-sm hover:bg-white/20'
               >
-                Bắt đầu ngay
+                Build now
               </button>
               <button
                 onClick={resetGame}
                 className='rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm backdrop-blur-sm hover:bg-white/20'
               >
-                Đặt lại
+                Reset
               </button>
             </div>
           </motion.div>

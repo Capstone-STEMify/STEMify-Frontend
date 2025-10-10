@@ -1,11 +1,11 @@
 {
-  "id": "green_11_7",
+  "id": "green_16_2",
   "shortName": "Green Straw",
-  "name": "Green Straw 11.7cm",
+  "name": "Green Straw 16.2cm",
   "version": "1.0",
   "category": "straw",
   "baseGeometry": {
-    "length": 11.7,
+    "length": 16.2,
     "diameter": 0.6,
     "wallThickness": 0.1,
     "segments": 32,
@@ -14,20 +14,20 @@
   "materialRef": "plastic_green",
   "endpointTemplate": {
     "start": {
-      "localPosition": { "x": -5.85, "y": 0, "z": 0 },
+      "localPosition": { "x": -8.1, "y": 0, "z": 0 },
       "socketType": "standard",
       "connectionRadius": 0.65
     },
     "end": {
-      "localPosition": { "x": 5.85, "y": 0, "z": 0 },
+      "localPosition": { "x": 8.1, "y": 0, "z": 0 },
       "socketType": "standard",
       "connectionRadius": 0.65
     }
   },
   "physics": {
-    "mass": 0.32,
+    "mass": 0.44,
     "centerOfMass": { "x": 0, "y": 0, "z": 0 },
-    "momentOfInertia": { "x": 0.012, "y": 0.012, "z": 0.001 }
+    "momentOfInertia": { "x": 0.017, "y": 0.017, "z": 0.0014 }
   },
   "lod": {
     "high": {
@@ -58,6 +58,7 @@
   "validation": {
     "maxStress": 50,
     "maxBendingAngle": 15,
-    "compatibleConnectors": ["3leg", "5leg", "2leg"]
-  }
+    "compatibleConnectors": ["1leg", "2leg", "3leg", "5leg"]
+  },
+  "imagePreviewUrl": "/images/components/straw_green.png"
 }

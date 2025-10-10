@@ -24,12 +24,12 @@ export function CreatorToolbar() {
           >
             Rotate
           </button>
-          <button
+          {/* <button
             className={`rounded px-3 py-1 text-xs ${transformMode === 'scale' ? 'bg-white shadow' : ''}`}
             onClick={() => dispatch(setTransformMode('scale'))}
           >
             Scale
-          </button>
+          </button> */}
         </div>
 
         <div className='h-6 w-px bg-gray-300' />

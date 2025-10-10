@@ -146,8 +146,7 @@ export function SceneObjectComponent({ object, isSelected, onSelect, onRef }: Sc
           }}
           animate={false}
           showDebug={false}
-          // modelUrl={object.data?.baseGeometry.modelPath}
-          modelUrl='/models/connector_3legs.glb'
+          modelUrl={object.data?.modelUrl}
         />
       )}
     </group>

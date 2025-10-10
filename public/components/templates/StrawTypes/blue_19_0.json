@@ -1,0 +1,64 @@
+{
+  "id": "blue_19_0",
+  "shortName": "Blue Straw",
+  "name": "Blue Straw 19.0cm",
+  "version": "1.0",
+  "category": "straw",
+  "baseGeometry": {
+    "length": 19.0,
+    "diameter": 0.6,
+    "wallThickness": 0.1,
+    "segments": 36,
+    "radialSegments": 8
+  },
+  "materialRef": "plastic_blue",
+  "endpointTemplate": {
+    "start": {
+      "localPosition": { "x": -9.5, "y": 0, "z": 0 },
+      "socketType": "standard",
+      "connectionRadius": 0.65
+    },
+    "end": {
+      "localPosition": { "x": 9.5, "y": 0, "z": 0 },
+      "socketType": "standard",
+      "connectionRadius": 0.65
+    }
+  },
+  "physics": {
+    "mass": 0.52,
+    "centerOfMass": { "x": 0, "y": 0, "z": 0 },
+    "momentOfInertia": { "x": 0.021, "y": 0.021, "z": 0.0017 }
+  },
+  "lod": {
+    "high": {
+      "geometryComplexity": "detailed",
+      "segments": 36,
+      "radialSegments": 8,
+      "renderDistance": 60
+    },
+    "medium": {
+      "geometryComplexity": "standard",
+      "segments": 18,
+      "radialSegments": 6,
+      "renderDistance": 120
+    },
+    "low": {
+      "geometryComplexity": "basic",
+      "segments": 9,
+      "radialSegments": 4,
+      "renderDistance": 200
+    }
+  },
+  "streaming": {
+    "priority": 3,
+    "chunkSize": "medium",
+    "compressionLevel": 6,
+    "preloadDistance": 30
+  },
+  "validation": {
+    "maxStress": 55,
+    "maxBendingAngle": 12,
+    "compatibleConnectors": ["1leg", "2leg", "3leg", "5leg"]
+  },
+  "imagePreviewUrl": "/images/components/straw_blue.png"
+}

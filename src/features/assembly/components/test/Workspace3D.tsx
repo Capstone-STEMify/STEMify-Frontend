@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAssembly } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { StepInfoPanel } from './StepInfoPanel'
 import { StepController } from './StepController'
-import { TransformInstructionPanel } from './TransformInstructionPanel'
 import { RealtimeControlPanel } from './RealtimeControlPanel'
 import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer'
 import { useParams } from 'next/navigation'
@@ -225,13 +224,7 @@ export default function Workspace3D({
       )}
 
       {/* Transform Instruction */}
-      {showUI && currentStep?.actionId === 'action_adjust_additional_connector_arms' && (
-        <TransformInstructionPanel
-          transformMode={transformMode}
-          isTransforming={isTransforming}
-          onModeChange={setTransformMode}
-        />
-      )}
+      {/* {showUI && currentStep?.actionId === 'action_adjust_additional_connector_arms' && ( */}
 
       {/* Realtime Control */}
       {showUI && (
