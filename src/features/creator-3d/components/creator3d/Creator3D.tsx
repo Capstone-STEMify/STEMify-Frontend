@@ -12,12 +12,15 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import {
   clearScene,
   removeInstance,
+  setInstances,
   setSelectedId,
   updateInstance
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
 import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
 import {
+  addAction,
+  addTargetToAction,
   removeTargetFromAllActions,
   resetActions,
   updateConnectorArms
@@ -34,7 +37,6 @@ export function Creator3D() {
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
   const [showExportDialog, setShowExportDialog] = useState(false)
-  const { loadAssembly } = useAssembly()
 
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
@@ -83,16 +85,75 @@ export function Creator3D() {
   const handleImportAssembly = useCallback(
     async (id: string) => {
       try {
-        const url = `/api/assemblies/${id}`
         toast.info('⏳ Đang tải Assembly từ Supabase...')
-        await loadAssembly(url)
+
+        // 1️⃣ Fetch JSON từ Supabase API
+        const res = await fetch(`/api/assemblies/${id}`)
+        if (!res.ok) throw new Error('Không thể tải dữ liệu từ Supabase')
+
+        const data = await res.json()
+        if (!data) throw new Error('Dữ liệu assembly không hợp lệ')
+
+        console.log('🧩 Imported Assembly JSON:', data)
+
+        dispatch(clearScene())
+        dispatch(resetActions())
+
+        // if (Array.isArray(data.instances)) {
+        //   dispatch(setInstances(data.instances))
+        // } else {
+        //   console.warn('⚠ Không tìm thấy instances trong dữ liệu')
+        // }
+
+        // // 4️⃣ Restore actions (workspace actions)
+        // if (Array.isArray(data.actions)) {
+        //   for (const act of data.actions) {
+        //     // Thêm action cơ bản
+        //     dispatch(
+        //       addAction({
+        //         id: act.id,
+        //         name: act.name,
+        //         type: act.type
+        //       })
+        //     )
+
+        //     // Nếu có targets → gán vào action
+        //     if (Array.isArray(act.targets)) {
+        //       for (const targetId of act.targets) {
+        //         dispatch(
+        //           addTargetToAction({
+        //             actionId: act.id,
+        //             targetId
+        //           })
+        //         )
+        //       }
+        //     }
+
+        //     // Nếu có connectorArmTransforms (cho transform_arm)
+        //     if (act.type === 'transform_arm' && act.connectorArmTransforms) {
+        //       Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
+        //         // Ensure arms is of the correct type
+        //         dispatch(
+        //           updateConnectorArms({
+        //             actionId: act.id,
+        //             connectorId,
+        //             arms: arms as Record<string, { x: number; y: number; z: number }>
+        //           })
+        //         )
+        //       })
+        //     }
+        //   }
+        // } else {
+        //   console.warn('⚠ Không tìm thấy actions trong dữ liệu')
+        // }
+
         toast.success('✅ Đã import thành công Assembly!')
       } catch (err: any) {
-        console.error('Import error:', err)
-        toast.error('❌ Không thể load Assembly.')
+        console.error('❌ Import error:', err)
+        toast.error(err.message || 'Lỗi khi load Assembly.')
       }
     },
-    [loadAssembly]
+    [dispatch]
   )
 
   return (
