@@ -248,7 +248,7 @@ export default function CardRandomGame(): JSX.Element {
       <div className='relative z-10 px-4 pt-12'>
         <div className='flex flex-wrap items-center justify-between gap-4'>
           <div>
-            <h1 className='bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent md:text-6xl'>
+            <h1 className='mx-6 bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent md:text-6xl'>
               Bánh xe ý tưởng
             </h1>
           </div>
@@ -277,7 +277,7 @@ export default function CardRandomGame(): JSX.Element {
       </div>
 
       {/* Carousel */}
-      <div className='relative z-10 mt-12'>
+      <div className='relative z-10 mt-6'>
         <div ref={emblaRef} className='overflow-hidden py-30'>
           <div className='flex items-center gap-8 px-8 md:gap-12'>
             {DEMO_DECK.map((card) => (
