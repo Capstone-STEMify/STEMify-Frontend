@@ -262,14 +262,14 @@ export function Creator3D() {
   )
 
   return (
-    <div className='relative flex w-full bg-gray-100'>
+    <div className='relative flex h-full w-full overflow-hidden bg-gray-100'>
       {/* Component Palette */}
-      <div className='w-64 bg-white'>
+      <div className='h-full w-64 flex-shrink-0 border-r bg-white'>
         <ComponentPalette onAddComponent={handleAddComponent} />
       </div>
 
       {/* Main Workspace */}
-      <div className='relative w-[60%]'>
+      <div className='relative flex h-full flex-1 flex-col'>
         <CreatorWorkspace
           onObjectSelect={handleObjectSelect}
           onObjectUpdate={handleObjectUpdate}
@@ -297,7 +297,7 @@ export function Creator3D() {
       </div>
 
       {/* Object Inspector */}
-      <div className='my-2 mr-2 w-85 gap-4'>
+      <div className='h-full w-80 flex-shrink-0 border-l bg-white'>
         <WorkspacePanel />
       </div>
 

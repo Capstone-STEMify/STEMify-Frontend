@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "3D Creator",
+    "subtitle": "Create and customize your own 3D models"
+  },
+  "mainContent": {
+    "welcomeMessage": "Welcome to the 3D Creator! Start by adding shapes and customizing them.",
+    "instructions": "Use the tools on the left to manipulate your 3D objects. Adjust properties on the right panel."
+  },
+  "leftPanel": {
+    "title": "Tools",
+    "select": "Select",
+    "move": "Move",
+    "rotate": "Rotate",
+    "scale": "Scale",
+    "addShape": "Add Shape",
+    "delete": "Delete"
+  },
+  "rightPanel": {
+    "title": "Properties",
+    "position": "Position",
+    "rotation": "Rotation",
+    "scale": "Scale"
+  }
+}

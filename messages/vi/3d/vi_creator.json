@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Trình tạo lắp ráp 3D",
+    "subtitle": "Tạo các bài học lắp ráp 3D tương tác cho học sinh"
+  },
+  "mainContent": {
+    "welcomeMessage": "Chào mừng bạn đến với Trình tạo 3D! Hãy bắt đầu bằng cách thêm và tùy chỉnh các hình khối.",
+    "instructions": "Sử dụng các công cụ ở bên trái để thao tác đối tượng 3D. Điều chỉnh các thuộc tính ở bảng bên phải."
+  },
+  "leftPanel": {
+    "title": "Công cụ",
+    "select": "Chọn",
+    "move": "Di chuyển",
+    "rotate": "Xoay",
+    "scale": "Tỉ lệ",
+    "addShape": "Thêm hình khối",
+    "delete": "Xóa"
+  },
+  "rightPanel": {
+    "title": "Thuộc tính",
+    "position": "Vị trí",
+    "rotation": "Góc xoay",
+    "scale": "Tỉ lệ"
+  }
+}
