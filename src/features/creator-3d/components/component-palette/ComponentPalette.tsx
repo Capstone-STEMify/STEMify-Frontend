@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { ComponentCard } from '@/features/creator-3d/components/component-palette/ComponentCard'
-import { ComponentTemplate, Connector, Straw } from '@/features/assembly/types/assembly.types'
+import { ComponentTemplate, Connector, Material, Straw } from '@/features/assembly/types/assembly.types'
 import { useGLTF } from '@react-three/drei'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setDraggingTemplate } from '@/features/creator-3d/slice/creatorSceneSlice'
@@ -11,12 +11,56 @@ interface ComponentPaletteProps {
   onAddComponent: (template: ComponentTemplate) => void
 }
 
-// Function to load a component template from a JSON file
-// Will be replaced with real data fetching logic later
+async function loadMaterialByRef(materialRef?: string): Promise<Material> {
+  // Fallback tối thiểu nếu thiếu materialRef hoặc lỗi fetch
+  const fallback: Material = {
+    id: 'default_plastic',
+    name: 'Default Plastic',
+    type: 'plastic',
+    properties: {
+      color: '#ffffff',
+      flexibility: 0.1,
+      opacity: 1,
+      roughness: 1,
+      metalness: 0
+    }
+  }
+
+  if (!materialRef) return fallback
+
+  const materialPath = `/components/templates/MaterialLibrary/${materialRef}.json`
+  try {
+    const res = await fetch(materialPath)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const m = await res.json()
+
+    return {
+      id: m.id ?? materialRef,
+      name: m.name,
+      type: m.type ?? 'plastic',
+      properties: {
+        color: m.properties?.color ?? '#000000',
+        flexibility: m.properties?.flexibility,
+        opacity: m.properties?.opacity ?? 1,
+        roughness: m.properties?.roughness ?? 1,
+        metalness: m.properties?.metalness ?? 0,
+        transmission: m.properties?.transmission ?? 0,
+        ior: m.properties?.ior ?? 1.5,
+        thickness: m.properties?.thickness ?? 0.1
+      },
+      physics: m.physics
+    }
+  } catch (e) {
+    console.warn(`[material] Failed to load ${materialPath}`, e)
+    return fallback
+  }
+}
+
 export async function loadComponentTemplate(jsonPath: string): Promise<ComponentTemplate> {
   const res = await fetch(jsonPath)
   if (!res.ok) throw new Error(`Failed to load template: ${jsonPath}`)
   const data = await res.json()
+  const loadedMaterial = await loadMaterialByRef(data.materialRef)
 
   const baseTransform = {
     position: { x: 0, y: 0, z: 0 },
@@ -24,16 +68,16 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
     scale: { x: 1, y: 1, z: 1 }
   }
 
-  const baseMaterial = {
-    type: data.materialRef?.includes('plastic') ? 'plastic' : 'metal',
-    properties: {
-      color: data.materialRef === 'plastic_green' ? '#c1e500' : '#fff51d',
-      flexibility: 0.1,
-      opacity: 1,
-      roughness: 1,
-      metalness: 0
-    }
-  }
+  // const baseMaterial = {
+  //   type: data.materialRef?.includes('plastic') ? 'plastic' : 'metal',
+  //   properties: {
+  //     color: data.materialRef === 'plastic_green' ? '#c1e500' : '#fff51d',
+  //     flexibility: 0.1,
+  //     opacity: 1,
+  //     roughness: 1,
+  //     metalness: 0
+  //   }
+  // }
 
   let defaultProperties: Straw | Connector
 
@@ -42,7 +86,7 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
       id: data.id,
       name: data.name,
       transform: baseTransform,
-      material: baseMaterial,
+      material: loadedMaterial,
       geometry: data.baseGeometry,
       physics: data.physics,
       endpoints: data.endpoints
@@ -52,7 +96,7 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
       id: data.id,
       name: data.name,
       transform: baseTransform,
-      material: baseMaterial,
+      material: loadedMaterial,
       geometry: data.baseGeometry,
       type: data.type ?? 'connector',
       ports: data.ports ?? [
@@ -65,7 +109,10 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
           portIndex: 0
         }
       ],
-      constraints: data.constraints ?? { maxConnections: 3, allowedAngles: [] },
+      constraints: data.constraints ?? {
+        maxConnections: data.ports ? data.ports.length : 1,
+        allowedAngles: []
+      },
       modelUrl: data.modelUrl ?? data.baseGeometry?.modelPath ?? `/models/${data.id}.glb`
     } as Connector
 
@@ -99,13 +146,32 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
   useEffect(() => {
     async function loadTemplates() {
       try {
-        const straw_green = await loadComponentTemplate('/components/templates/StrawTypes/green_11_2.json')
+        // STRAWS
+        const straw_blue = await loadComponentTemplate('/components/templates/StrawTypes/blue_19_0.json')
+        const straw_green = await loadComponentTemplate('/components/templates/StrawTypes/green_16_2.json')
+        const straw_pink = await loadComponentTemplate('/components/templates/StrawTypes/pink_8_9.json')
+        const straw_orange = await loadComponentTemplate('/components/templates/StrawTypes/orange_6_3.json')
         const straw_yellow = await loadComponentTemplate('/components/templates/StrawTypes/yellow_3_8.json')
+
+        // CONNECTORS
+        const connector_1leg_red = await loadComponentTemplate('/components/templates/ConnectorTypes/1leg.json')
+        const connector_2leg_blue = await loadComponentTemplate('/components/templates/ConnectorTypes/2legs.json')
         const connector_3leg_red = await loadComponentTemplate('/components/templates/ConnectorTypes/3legs.json')
+        const connector_5leg_red = await loadComponentTemplate('/components/templates/ConnectorTypes/5legs.json')
+
         const templateMap: Record<string, ComponentTemplate> = {
+          // Straws
+          [straw_blue.id]: straw_blue,
           [straw_green.id]: straw_green,
+          [straw_pink.id]: straw_pink,
+          [straw_orange.id]: straw_orange,
           [straw_yellow.id]: straw_yellow,
-          [connector_3leg_red.id]: connector_3leg_red
+
+          // Connectors
+          [connector_1leg_red.id]: connector_1leg_red,
+          [connector_2leg_blue.id]: connector_2leg_blue,
+          [connector_3leg_red.id]: connector_3leg_red,
+          [connector_5leg_red.id]: connector_5leg_red
         }
 
         setTemplates(Object.values(templateMap))

@@ -52,7 +52,7 @@ export const CourseCard = ({ course }: CourseCardProps) => {
         {course.status === EnrollmentStatus.COMPLETED ? (
           <Button
             className='ml-4 flex-shrink-0 bg-blue-500'
-            onClick={() => router.push(`/${locale}/certificate/${course.id}`)}
+            onClick={() => router.push(`/${locale}/certificate/${course.certificateId}`)}
           >
             View Certificate
           </Button>

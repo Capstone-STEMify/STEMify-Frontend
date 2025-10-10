@@ -3,7 +3,7 @@
 import ActionInspector from '@/features/creator-3d/components/right-sidebar/ActionInspector'
 import { ComponentInspector } from '@/features/creator-3d/components/right-sidebar/ComponentInspector'
 import { useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 export function ObjectInspector() {
   const { actions, selectedActionId } = useAppSelector((s) => s.workspaceTree)

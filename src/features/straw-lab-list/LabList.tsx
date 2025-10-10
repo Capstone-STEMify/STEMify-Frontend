@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { Badge } from '@/components/shadcn/badge'
-import { supabase } from '@/libs/supabase/supabase'
+import { supabase } from '@/libs/supabase/client'
 
 interface ModelItem {
   id: number

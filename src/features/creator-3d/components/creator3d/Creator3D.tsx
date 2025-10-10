@@ -23,8 +23,9 @@ import {
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
-import { supabase } from '@/libs/supabase/supabase'
+import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
+import { useAssembly } from '@/features/assembly/hooks/useAssemblyOptimized'
 
 export function Creator3D() {
   const dispatch = useAppDispatch()
@@ -33,6 +34,7 @@ export function Creator3D() {
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
   const [showExportDialog, setShowExportDialog] = useState(false)
+  const { loadAssembly } = useAssembly()
 
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
@@ -78,6 +80,21 @@ export function Creator3D() {
     }
   }, [dispatch])
 
+  const handleImportAssembly = useCallback(
+    async (id: string) => {
+      try {
+        const url = `/api/assemblies/${id}`
+        toast.info('⏳ Đang tải Assembly từ Supabase...')
+        await loadAssembly(url)
+        toast.success('✅ Đã import thành công Assembly!')
+      } catch (err: any) {
+        console.error('Import error:', err)
+        toast.error('❌ Không thể load Assembly.')
+      }
+    },
+    [loadAssembly]
+  )
+
   return (
     <div className='relative flex w-full bg-gray-100'>
       {/* Component Palette */}
@@ -102,7 +119,15 @@ export function Creator3D() {
         />
 
         {/* Action Buttons */}
-        <SceneActions onClear={handleClearScene} onExport={handleExport} hasObjects={instances.length > 0} />
+        <SceneActions
+          onImport={() => {
+            const id = prompt('Nhập ID Assembly muốn import:')
+            if (id) handleImportAssembly(id)
+          }}
+          onClear={handleClearScene}
+          onExport={handleExport}
+          hasObjects={instances.length > 0}
+        />
       </div>
 
       {/* Object Inspector */}

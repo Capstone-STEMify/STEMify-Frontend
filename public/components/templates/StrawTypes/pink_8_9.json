@@ -1,0 +1,64 @@
+{
+  "id": "pink_8_9",
+  "shortName": "Pink Straw",
+  "name": "Pink Straw 8.9cm",
+  "version": "1.0",
+  "category": "straw",
+  "baseGeometry": {
+    "length": 8.9,
+    "diameter": 0.6,
+    "wallThickness": 0.1,
+    "segments": 28,
+    "radialSegments": 8
+  },
+  "materialRef": "plastic_pink",
+  "endpointTemplate": {
+    "start": {
+      "localPosition": { "x": -4.45, "y": 0, "z": 0 },
+      "socketType": "standard",
+      "connectionRadius": 0.65
+    },
+    "end": {
+      "localPosition": { "x": 4.45, "y": 0, "z": 0 },
+      "socketType": "standard",
+      "connectionRadius": 0.65
+    }
+  },
+  "physics": {
+    "mass": 0.26,
+    "centerOfMass": { "x": 0, "y": 0, "z": 0 },
+    "momentOfInertia": { "x": 0.009, "y": 0.009, "z": 0.0008 }
+  },
+  "lod": {
+    "high": {
+      "geometryComplexity": "detailed",
+      "segments": 28,
+      "radialSegments": 8,
+      "renderDistance": 40
+    },
+    "medium": {
+      "geometryComplexity": "standard",
+      "segments": 14,
+      "radialSegments": 6,
+      "renderDistance": 80
+    },
+    "low": {
+      "geometryComplexity": "basic",
+      "segments": 7,
+      "radialSegments": 4,
+      "renderDistance": 150
+    }
+  },
+  "streaming": {
+    "priority": 1,
+    "chunkSize": "small",
+    "compressionLevel": 6,
+    "preloadDistance": 20
+  },
+  "validation": {
+    "maxStress": 45,
+    "maxBendingAngle": 18,
+    "compatibleConnectors": ["1leg", "2leg", "3leg", "5leg"]
+  },
+  "imagePreviewUrl": "/images/components/straw_pink.png"
+}

@@ -225,7 +225,8 @@ export default function Workspace3D({
       )}
 
       {/* Transform Instruction */}
-      {showUI && currentStep?.actionId === 'action_adjust_additional_connector_arms' && (
+      {/* {showUI && currentStep?.actionId === 'action_adjust_additional_connector_arms' && ( */}
+      {showUI && (
         <TransformInstructionPanel
           transformMode={transformMode}
           isTransforming={isTransforming}

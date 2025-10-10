@@ -112,8 +112,21 @@ export function SceneContent({
     ) {
       debouncedUpdate(selectedObjectId, {
         transform: {
-          position: targetObject.position.toArray(),
-          rotation: targetObject.rotation.toArray()
+          position: {
+            x: targetObject.position.x,
+            y: targetObject.position.y,
+            z: targetObject.position.z
+          },
+          rotation: {
+            x: targetObject.rotation.x,
+            y: targetObject.rotation.y,
+            z: targetObject.rotation.z
+          },
+          scale: {
+            x: targetObject.scale.x,
+            y: targetObject.scale.y,
+            z: targetObject.scale.z
+          }
         }
       })
     }

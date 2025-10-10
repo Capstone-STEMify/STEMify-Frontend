@@ -2,7 +2,6 @@
 import { CheckCircle, Download, Share2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Course } from '../mockData'
 import {
   Dialog,
   DialogContent,
@@ -14,6 +13,7 @@ import {
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { useState } from 'react'
+import { Course } from '@/features/resource/course/types/course.type'
 
 interface CertificateHeaderProps {
   studentName: string
@@ -21,7 +21,7 @@ interface CertificateHeaderProps {
   studyDuration: string
   specializationName: string
   specializationUrl: string
-  courses: Course[]
+  // courses: Course[]
 }
 
 const LinkedInIcon = () => (
@@ -114,8 +114,8 @@ const CertificateHeader = ({
   completionDate,
   studyDuration,
   specializationName,
-  specializationUrl,
-  courses
+  specializationUrl
+  // courses
 }: CertificateHeaderProps) => {
   const [copyButtonText, setCopyButtonText] = useState('COPY')
 
@@ -195,11 +195,11 @@ const CertificateHeader = ({
             </p>
             <div className='mt-6'>
               <h3 className='font-bold text-gray-800'>Course Certificates Completed</h3>
-              <div className='mt-2 space-y-1 text-gray-700'>
+              {/* <div className='mt-2 space-y-1 text-gray-700'>
                 {courses.map((course) => (
                   <p key={course.title}>{course.title}</p>
                 ))}
-              </div>
+              </div> */}
             </div>
           </div>
 

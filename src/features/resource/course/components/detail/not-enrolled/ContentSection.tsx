@@ -12,8 +12,8 @@ import { UserRole } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
 import { Lesson } from '@/features/resource/lesson/types/lesson.type'
-import Link from 'next/link'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import { SPagination } from '@/components/shared/SPagination'
 
 export default function ContentSection() {
   const t = useTranslations('course')
@@ -28,7 +28,7 @@ export default function ContentSection() {
 
   const lessonsQuery = useAppSelector((state) => state.lesson)
   useEffect(() => {
-    dispatch(setPageSize(50))
+    dispatch(setPageSize(8))
   }, [dispatch])
 
   const { courseId } = useParams()
@@ -104,14 +104,14 @@ export default function ContentSection() {
           ))}
         </div>
 
-        {/* {lessons.data.totalPages > 1 && (
+        {lessons.data.totalPages > 1 && (
           <SPagination
             pageNumber={lessons.data.pageNumber}
             totalPages={lessons.data.totalPages}
             onPageChanged={handlePageChange}
             className='mt-10'
           />
-        )} */}
+        )}
       </div>
     </motion.section>
   )

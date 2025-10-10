@@ -313,8 +313,12 @@ export function exportAssembly(
         { id: 'plastic_pink', source: '/components/templates/MaterialLibrary/plastic_pink.json' }
       ],
       components: [
-        { id: 'green_11_2', source: '/components/templates/StrawTypes/green_11_2.json' },
+        { id: 'blue_19_0', source: '/components/templates/StrawTypes/blue_19_0.json' },
+        { id: 'green_16_2', source: '/components/templates/StrawTypes/green_16_2.json' },
+        { id: 'pink_8_9', source: '/components/templates/StrawTypes/pink_8_9.json' },
+        { id: 'orange_6_3', source: '/components/templates/StrawTypes/orange_6_3.json' },
         { id: 'yellow_3_8', source: '/components/templates/StrawTypes/yellow_3_8.json' },
+        { id: '1leg_red', source: '/components/templates/ConnectorTypes/1leg.json' },
         { id: '3leg_red', source: '/components/templates/ConnectorTypes/3legs.json' }
       ]
     },

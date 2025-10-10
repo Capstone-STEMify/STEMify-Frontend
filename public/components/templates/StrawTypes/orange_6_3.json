@@ -1,0 +1,64 @@
+{
+  "id": "orange_6_3",
+  "shortName": "Orange Straw",
+  "name": "Orange Straw 6.3cm",
+  "version": "1.0",
+  "category": "straw",
+  "baseGeometry": {
+    "length": 6.3,
+    "diameter": 0.6,
+    "wallThickness": 0.1,
+    "segments": 24,
+    "radialSegments": 8
+  },
+  "materialRef": "plastic_orange",
+  "endpointTemplate": {
+    "start": {
+      "localPosition": { "x": -3.15, "y": 0, "z": 0 },
+      "socketType": "standard",
+      "connectionRadius": 0.65
+    },
+    "end": {
+      "localPosition": { "x": 3.15, "y": 0, "z": 0 },
+      "socketType": "standard",
+      "connectionRadius": 0.65
+    }
+  },
+  "physics": {
+    "mass": 0.19,
+    "centerOfMass": { "x": 0, "y": 0, "z": 0 },
+    "momentOfInertia": { "x": 0.006, "y": 0.006, "z": 0.0005 }
+  },
+  "lod": {
+    "high": {
+      "geometryComplexity": "detailed",
+      "segments": 24,
+      "radialSegments": 8,
+      "renderDistance": 35
+    },
+    "medium": {
+      "geometryComplexity": "standard",
+      "segments": 12,
+      "radialSegments": 6,
+      "renderDistance": 70
+    },
+    "low": {
+      "geometryComplexity": "basic",
+      "segments": 6,
+      "radialSegments": 4,
+      "renderDistance": 140
+    }
+  },
+  "streaming": {
+    "priority": 1,
+    "chunkSize": "small",
+    "compressionLevel": 6,
+    "preloadDistance": 20
+  },
+  "validation": {
+    "maxStress": 40,
+    "maxBendingAngle": 20,
+    "compatibleConnectors": ["1leg", "2leg", "3leg", "5leg"]
+  },
+  "imagePreviewUrl": "/images/components/straw_orange.png"
+}

@@ -171,25 +171,25 @@ export function ComponentInspector() {
     [selectedObject, onObjectUpdate]
   )
 
-  const updateScale = useCallback(
-    (axis: 'x' | 'y' | 'z', value: string) => {
-      if (!selectedObject) return
-      setLocalValues((prev) => (prev ? { ...prev, scale: { ...prev.scale, [axis]: value } } : null))
-      const numValue = parseFloat(value)
-      if (!isNaN(numValue) && numValue > 0) {
-        onObjectUpdate(selectedObject.id, {
-          transform: {
-            ...selectedObject.transform,
-            scale: {
-              ...(selectedObject.transform.scale ?? { x: 1, y: 1, z: 1 }),
-              [axis]: numValue
-            }
-          }
-        })
-      }
-    },
-    [selectedObject, onObjectUpdate]
-  )
+  // const updateScale = useCallback(
+  //   (axis: 'x' | 'y' | 'z', value: string) => {
+  //     if (!selectedObject) return
+  //     setLocalValues((prev) => (prev ? { ...prev, scale: { ...prev.scale, [axis]: value } } : null))
+  //     const numValue = parseFloat(value)
+  //     if (!isNaN(numValue) && numValue > 0) {
+  //       onObjectUpdate(selectedObject.id, {
+  //         transform: {
+  //           ...selectedObject.transform,
+  //           scale: {
+  //             ...(selectedObject.transform.scale ?? { x: 1, y: 1, z: 1 }),
+  //             [axis]: numValue
+  //           }
+  //         }
+  //       })
+  //     }
+  //   },
+  //   [selectedObject, onObjectUpdate]
+  // )
 
   const updateName = useCallback(
     (name: string) => {
@@ -323,7 +323,7 @@ export function ComponentInspector() {
         </div>
 
         {/* Scale */}
-        <div>
+        {/* <div>
           <label className='mb-2 block text-sm font-medium text-gray-700'>Scale</label>
           <div className='grid grid-cols-3 gap-2'>
             <div>
@@ -360,7 +360,7 @@ export function ComponentInspector() {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Arms (for connector only) */}
         {selectedObject.category === 'connector' && localValues?.arms && (
