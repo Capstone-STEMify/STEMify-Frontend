@@ -5,6 +5,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 import type { EmblaCarouselType } from 'embla-carousel'
 import AutoScroll from 'embla-carousel-auto-scroll'
 import { motion, useAnimationControls } from 'framer-motion'
+import { useLocale } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 // --- Types ---
 export type CardModel = {
@@ -17,7 +19,6 @@ export type CardModel = {
 const imagePaths = [
   'https://res.cloudinary.com/dgdi9wvpz/image/upload/v1760092619/res_les_harnessing-wind-energy_cover_djs81j.webp',
   'https://res.cloudinary.com/dgdi9wvpz/image/upload/v1760092619/res_les_intro-dodecahedron-platonic-solid_cover_hhxrvi.webp',
-  'https://res.cloudinary.com/dgdi9wvpz/image/upload/v1760092619/res_les_marble-run-part-1-foundation_cover_1_audbtg.webp',
   'https://res.cloudinary.com/dgdi9wvpz/image/upload/v1760092618/res_act_little-friend_cover_qgcgss.webp',
   'https://res.cloudinary.com/dgdi9wvpz/image/upload/v1760092618/res_les_crane-automation_cover_1_u3yo9z.webp',
   'https://res.cloudinary.com/dgdi9wvpz/image/upload/v1760092618/res_act_construct-a-drawbridge-with-microbit_cover_wwxzds.webp',
@@ -26,7 +27,7 @@ const imagePaths = [
 ]
 const DEMO_DECK: CardModel[] = imagePaths.map((src, i) => ({
   id: `card-${i + 1}`,
-  frontSrc: `/images/assembly-lits/lab1.png`, //${i + 1}
+  frontSrc: src,
   label: `Card ${i + 1}`
 }))
 
@@ -170,6 +171,9 @@ export default function CardRandomGame(): JSX.Element {
     })
   ])
 
+  const router = useRouter()
+  const locale = useLocale()
+
   const [deck] = useState<CardModel[]>(DEMO_DECK)
   const [revealedMap, setRevealedMap] = useState<Record<string, boolean>>({})
   const [spinningId, setSpinningId] = useState<string | null>(null)
@@ -245,7 +249,7 @@ export default function CardRandomGame(): JSX.Element {
         <div className='flex flex-wrap items-center justify-between gap-4'>
           <div>
             <h1 className='bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent md:text-6xl'>
-              Random Card Game
+              Bánh xe ý tưởng
             </h1>
           </div>
           <div className='flex items-center gap-3'>
@@ -259,7 +263,7 @@ export default function CardRandomGame(): JSX.Element {
               }}
               className='group relative rounded-2xl bg-gradient-to-r from-cyan-600 to-blue-600 px-6 py-3 font-semibold shadow-lg shadow-blue-500/50 transition-all hover:from-cyan-500 hover:to-blue-500 hover:shadow-xl hover:shadow-blue-500/60 active:scale-[0.97]'
             >
-              <span className='relative z-10'>Pick Random</span>
+              <span className='relative z-10'>Bắt đầu thử thách</span>
               <div className='absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-400 to-blue-400 opacity-0 blur transition group-hover:opacity-20' />
             </button>
             <button
@@ -327,7 +331,7 @@ export default function CardRandomGame(): JSX.Element {
                         {revealedMap[card.id] ? (
                           <span className='text-amber-300'>✨ {card.label}</span>
                         ) : (
-                          <span className='text-blue-200'>Hidden</span>
+                          <span className='text-blue-200'>Dừng</span>
                         )}
                       </span>
                     </div>
@@ -375,16 +379,16 @@ export default function CardRandomGame(): JSX.Element {
             {/* Small CTA under the selected card */}
             <div className='mt-3 flex justify-center gap-3'>
               <button
-                onClick={() => console.log('Build now for:', celebrateId)}
+                onClick={() => router.push(`/${locale}/create-3d`)}
                 className='rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs backdrop-blur-sm hover:bg-white/20'
               >
-                Build now
+                Bắt đầu ngay
               </button>
               <button
                 onClick={resetGame}
                 className='rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm backdrop-blur-sm hover:bg-white/20'
               >
-                Reset
+                Đặt lại
               </button>
             </div>
           </motion.div>
