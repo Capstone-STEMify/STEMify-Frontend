@@ -70,6 +70,54 @@ export default function Creator3D() {
     setShowExportDialog(true)
   }, [])
 
+  const handleSaveAssembly = useCallback(async () => {
+    if (!workspaceId) {
+      toast.error('⚠️ Không có workspaceId — không thể lưu.')
+      return
+    }
+
+    try {
+      toast.info('💾 Đang lưu thay đổi vào Supabase...')
+
+      const { data: existing, error: fetchError } = await supabase
+        .from('assembly_data')
+        .select('id, name, description, author')
+        .eq('id', workspaceId)
+        .single()
+
+      if (fetchError || !existing) {
+        toast.error('Không tìm thấy assembly để lưu.')
+        return
+      }
+
+      // ⚙️ Export lại dữ liệu mới (scene + actions + instances)
+      const exportData = exportAssemblyFn({
+        title: existing.name,
+        description: existing.description,
+        author: existing.author
+      })
+
+      // ⚙️ Cập nhật bản ghi
+      const { error: updateError } = await supabase
+        .from('assembly_data')
+        .update({
+          data: exportData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', workspaceId)
+
+      if (updateError) {
+        console.error('Supabase update error:', updateError)
+        toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
+      } else {
+        toast.success('✅ Đã lưu thay đổi vào Supabase!')
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error('Lỗi không xác định khi lưu dữ liệu.')
+    }
+  }, [workspaceId, exportAssemblyFn])
+
   // Handle clear scene
   const handleClearScene = useCallback(() => {
     if (confirm('Are you sure you want to clear the entire scene? This action cannot be undone.')) {
@@ -294,6 +342,7 @@ export default function Creator3D() {
               if (id) handleImportAssembly(id)
             }
           }}
+          onSave={handleSaveAssembly}
           onClear={handleClearScene}
           onExport={handleExport}
           hasObjects={instances.length > 0}

@@ -1,3 +1,4 @@
+import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
 import { Button } from '@/components/shadcn/button'
 import BackButton from '@/components/shared/button/BackButton'
 import { useLocale, useTranslations } from 'next-intl'
@@ -18,7 +19,7 @@ export default function Creator3DHeader() {
           </div>
         </div>
         <div className='flex items-center gap-3'>
-          <Button variant={'outline'}>{t3d('header.preview')}</Button>
+          <LanguageSwitcher />
           <Button className='bg-blue-600 hover:bg-blue-700'>{t3d('header.save')}</Button>
         </div>
       </div>
