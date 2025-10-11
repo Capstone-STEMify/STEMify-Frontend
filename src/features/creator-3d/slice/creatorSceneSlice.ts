@@ -5,6 +5,8 @@ import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 interface CreatorSceneState {
   instances: AssemblyInstance[]
   selectedId: string | null
+  history: AssemblyInstance[][]
+  historyIndex: number
   transformMode: 'translate' | 'rotate' | 'scale'
   showGrid: boolean
   showAxes: boolean
@@ -16,6 +18,8 @@ interface CreatorSceneState {
 const initialState: CreatorSceneState = {
   instances: [],
   selectedId: null,
+  history: [],
+  historyIndex: -1,
   transformMode: 'translate',
   showGrid: true,
   showAxes: true,
@@ -34,10 +38,18 @@ export const creatorSceneSlice = createSlice({
     addInstance(state, action: PayloadAction<AssemblyInstance>) {
       state.instances = [...state.instances, action.payload]
       state.selectedId = action.payload.id
+      const snapshot = JSON.parse(JSON.stringify(state.instances))
+      state.history = state.history.slice(0, state.historyIndex + 1)
+      state.history.push(snapshot)
+      state.historyIndex = state.history.length - 1
     },
     removeInstance(state, action: PayloadAction<string>) {
       state.instances = state.instances.filter((i) => i.id !== action.payload)
       if (state.selectedId === action.payload) state.selectedId = null
+      const snapshot = JSON.parse(JSON.stringify(state.instances))
+      state.history = state.history.slice(0, state.historyIndex + 1)
+      state.history.push(snapshot)
+      state.historyIndex = state.history.length - 1
     },
     updateInstance(state, action: PayloadAction<{ id: string; updates: Partial<AssemblyInstance> }>) {
       const idx = state.instances.findIndex((i) => i.id === action.payload.id)
@@ -68,6 +80,10 @@ export const creatorSceneSlice = createSlice({
             ...(action.payload.updates.arms ?? {})
           }
         }
+        const snapshot = JSON.parse(JSON.stringify(state.instances))
+        state.history = state.history.slice(0, state.historyIndex + 1)
+        state.history.push(snapshot)
+        state.historyIndex = state.history.length - 1
       }
     },
     setSelectedId(state, action: PayloadAction<string | null>) {
@@ -95,6 +111,24 @@ export const creatorSceneSlice = createSlice({
       state.instances = []
       state.selectedId = null
       state.draggingTemplate = null
+    },
+    undo(state) {
+      if (state.historyIndex > 0) {
+        state.historyIndex--
+        state.instances = JSON.parse(JSON.stringify(state.history[state.historyIndex]))
+      }
+    },
+    redo(state) {
+      if (state.historyIndex < state.history.length - 1) {
+        state.historyIndex++
+        state.instances = JSON.parse(JSON.stringify(state.history[state.historyIndex]))
+      }
+    },
+    pushHistory(state) {
+      const snapshot = JSON.parse(JSON.stringify(state.instances))
+      state.history = state.history.slice(0, state.historyIndex + 1)
+      state.history.push(snapshot)
+      state.historyIndex = state.history.length - 1
     }
   }
 })
@@ -111,7 +145,10 @@ export const {
   toggleSnap,
   setGridSize,
   setDraggingTemplate,
-  clearScene
+  clearScene,
+  undo,
+  redo,
+  pushHistory
 } = creatorSceneSlice.actions
 
 export default creatorSceneSlice.reducer

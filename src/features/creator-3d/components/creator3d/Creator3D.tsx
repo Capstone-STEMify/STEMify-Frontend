@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
@@ -14,6 +14,7 @@ import {
   addAction,
   addTargetToAction,
   clearAction,
+  removeTargetFromAllActions,
   resetActions,
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
@@ -32,7 +33,8 @@ export default function Creator3D() {
   const addObject = useAddObject()
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
-
+  const actions = useAppSelector((s) => s.workspaceTree.actions)
+  const prevInstanceIds = useRef<string[]>([])
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
       addObject(template, { x: 0, y: 0, z: 0 })
@@ -63,6 +65,19 @@ export default function Creator3D() {
     },
     [dispatch]
   )
+
+  useEffect(() => {
+    const currentIds = instances.map((i) => i.id)
+    const deletedIds = prevInstanceIds.current.filter((id) => !currentIds.includes(id))
+
+    if (deletedIds.length > 0) {
+      deletedIds.forEach((id) => {
+        dispatch(removeTargetFromAllActions(id))
+      })
+    }
+
+    prevInstanceIds.current = currentIds
+  }, [instances, dispatch])
 
   const handleSaveAssembly = useCallback(async () => {
     if (!workspaceId) {
@@ -333,37 +348,6 @@ export default function Creator3D() {
       <div className='h-full w-80 flex-shrink-0 border-l bg-white'>
         <WorkspacePanel />
       </div>
-
-      {/* {showExportDialog && (
-        <ExportDialog
-          onClose={() => setShowExportDialog(false)}
-          onExport={async (metadata) => {
-            try {
-              const exportData = exportAssemblyFn(metadata)
-              const { error } = await supabase.from('assembly_data').insert([
-                {
-                  name: metadata.title,
-                  description: metadata.description,
-                  author: metadata.author,
-                  data: exportData
-                }
-              ])
-
-              if (error) {
-                console.error('Supabase insert error:', error)
-                toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
-              } else {
-                toast.success('✅ Đã lưu assembly vào Supabase!')
-              }
-
-              setShowExportDialog(false)
-            } catch (err) {
-              console.error(err)
-              toast.error('Lỗi không xác định khi lưu dữ liệu.')
-            }
-          }}
-        />
-      )} */}
     </div>
   )
 }
