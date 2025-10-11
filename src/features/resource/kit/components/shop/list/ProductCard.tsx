@@ -59,7 +59,7 @@ const ProductCard: React.FC<{ product: Kit; index: number }> = ({ product, index
         >
           {isHovered && (
             <video autoPlay loop muted playsInline className='h-full w-full object-cover'>
-              <source src='https://res.cloudinary.com/dtjgueyp2/video/upload/intro_jmad2e.mp4' type='video/mp4' />
+              <source src='https://res.cloudinary.com/dgdi9wvpz/video/upload/1009_1_yfgzqp.mp4' type='video/mp4' />
             </video>
           )}
         </motion.div>

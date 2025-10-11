@@ -6,6 +6,7 @@ import { ComponentTemplate, Connector, Material, Straw } from '@/features/assemb
 import { useGLTF } from '@react-three/drei'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setDraggingTemplate } from '@/features/creator-3d/slice/creatorSceneSlice'
+import { useTranslations } from 'next-intl'
 
 interface ComponentPaletteProps {
   onAddComponent: (template: ComponentTemplate) => void
@@ -139,6 +140,7 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
 }
 
 export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
+  const t3d = useTranslations('creator3D.left_panel')
   const [templates, setTemplates] = useState<ComponentTemplate[]>([])
   const dispatch = useAppDispatch()
   const draggingTemplate = useAppSelector((s) => s.creatorScene.draggingTemplate)
@@ -207,14 +209,14 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
     <div className='flex h-full flex-col'>
       {/* Header */}
       <div className='border-b border-gray-200 p-4'>
-        <h2 className='font-semibold text-gray-900'>Components</h2>
-        <p className='mt-1 text-xs text-gray-500'>Drag to add, double-click to place</p>
+        <h2 className='font-semibold text-gray-900'>{t3d('title')}</h2>
+        <p className='mt-1 text-xs text-gray-500'>{t3d('subtitle')}</p>
       </div>
 
       {/* Component List chiếm hết phần còn lại */}
       <div className='flex-1 overflow-y-auto p-4'>
         <div>
-          <p className='font-semibold text-gray-900'>Straw</p>
+          <p className='font-semibold text-gray-900'>{t3d('straw')}</p>
           <div className='grid grid-cols-2 gap-4'>
             {templates
               .filter((template) => template.category === 'straw')
@@ -231,7 +233,7 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
         </div>
 
         <div className='mt-6'>
-          <p className='font-semibold text-gray-900'>Connector</p>
+          <p className='font-semibold text-gray-900'>{t3d('connector')}</p>
           <div className='grid grid-cols-2 gap-4'>
             {templates
               .filter((template) => template.category === 'connector')
@@ -253,15 +255,15 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
         <div className='space-y-1 text-xs text-gray-600'>
           <div className='flex items-center gap-2'>
             <div className='h-2 w-2 rounded-full bg-blue-500'></div>
-            <span>Drag to add to scene</span>
+            <span>{t3d('drag_guide')}</span>
           </div>
           <div className='flex items-center gap-2'>
             <div className='h-2 w-2 rounded-full bg-green-500'></div>
-            <span>Double-click to place at origin</span>
+            <span>{t3d('double_click_guide')}</span>
           </div>
           <div className='flex items-center gap-2'>
             <div className='h-2 w-2 rounded-full bg-purple-500'></div>
-            <span>Select & use gizmo to transform</span>
+            <span>{t3d('select_guide')}</span>
           </div>
         </div>
       </div>

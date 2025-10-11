@@ -1,0 +1,67 @@
+{
+  "creator3D": {
+    "header": {
+      "title": "3D Creator",
+      "subtitle": "Create and customize your own 3D models",
+      "preview": "Preview 3D Model",
+      "save": "Save Model"
+    },
+    "mainContent": {
+      "move": "Move",
+      "rotate": "Rotate",
+      "scale": "Scale",
+      "grid": "Grid",
+      "axes": "Axes",
+      "snap": "Snap to Grid",
+      "unlock_camera": "Unlock Camera",
+      "lock_camera": "Lock Camera",
+      "scene_stats": "Scene Components",
+      "objects": "Objects",
+      "straws": "Straws",
+      "connectors": "Connectors",
+      "selected": "Selected",
+      "clear_scene": "Clear Scene",
+      "export_assembly": "Export Model",
+      "export_success": "Model exported successfully!",
+      "export_error": "Error exporting model.",
+      "confirm_clear": "Are you sure you want to clear the entire scene? This action cannot be undone.",
+      "yes_clear": "Yes, clear scene",
+      "no_cancel": "No, cancel",
+      "import_assembly": "Import Model"
+    },
+    "leftPanel": {
+      "title": "Components",
+      "subtitle": "Drag and drop components to build your model",
+      "straw": "Straw",
+      "connector": "Connector",
+      "drag_guide": "Drag to add to scene",
+      "double_click_guide": "Double-click to place at origin",
+      "select_guide": "Select & use gizmo to transform"
+    },
+    "rightPanel": {
+      "workspace_tree": "Workspace Tree",
+      "properties": "Properties",
+      "delete_component": "Do you want to delete this component?",
+      "select_object_or_action": "Select an object or action to edit properties",
+      "action_properties": {
+        "title": "Action Properties",
+        "name": "Name",
+        "type": "Type"
+      },
+      "component_properties": {
+        "select_object_or_action": "Select an object or action to edit properties",
+        "name": "Name",
+        "position": "Position",
+        "rotation": "Rotation (radian)",
+        "scale": "Scale",
+        "connector_arm": "Connector Arm (radian)",
+        "object_info": "Object Info",
+        "id": "ID",
+        "category": "Category",
+        "template": "template",
+        "reset_transform": "Reset Transform",
+        "delete": "Delete"
+      }
+    }
+  }
+}

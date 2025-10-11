@@ -4,6 +4,7 @@ import { useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper
 import { removeInstance, updateInstance } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { removeTargetFromAllActions, updateConnectorArms } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { useTranslations } from 'next-intl'
 import { useState, useCallback, useEffect } from 'react'
 
 function normalizePose(pose?: Partial<{ x: number; y: number; z: number }>): { x: number; y: number; z: number } {
@@ -15,6 +16,7 @@ function normalizePose(pose?: Partial<{ x: number; y: number; z: number }>): { x
 }
 
 export function ComponentInspector() {
+  const t3d = useTranslations('creator3D.right_panel')
   const [localValues, setLocalValues] = useState<{
     position: { x: string; y: string; z: string }
     rotation: { x: string; y: string; z: string }
@@ -171,25 +173,25 @@ export function ComponentInspector() {
     [selectedObject, onObjectUpdate]
   )
 
-  // const updateScale = useCallback(
-  //   (axis: 'x' | 'y' | 'z', value: string) => {
-  //     if (!selectedObject) return
-  //     setLocalValues((prev) => (prev ? { ...prev, scale: { ...prev.scale, [axis]: value } } : null))
-  //     const numValue = parseFloat(value)
-  //     if (!isNaN(numValue) && numValue > 0) {
-  //       onObjectUpdate(selectedObject.id, {
-  //         transform: {
-  //           ...selectedObject.transform,
-  //           scale: {
-  //             ...(selectedObject.transform.scale ?? { x: 1, y: 1, z: 1 }),
-  //             [axis]: numValue
-  //           }
-  //         }
-  //       })
-  //     }
-  //   },
-  //   [selectedObject, onObjectUpdate]
-  // )
+  const updateScale = useCallback(
+    (axis: 'x' | 'y' | 'z', value: string) => {
+      if (!selectedObject) return
+      setLocalValues((prev) => (prev ? { ...prev, scale: { ...prev.scale, [axis]: value } } : null))
+      const numValue = parseFloat(value)
+      if (!isNaN(numValue) && numValue > 0) {
+        onObjectUpdate(selectedObject.id, {
+          transform: {
+            ...selectedObject.transform,
+            scale: {
+              ...(selectedObject.transform.scale ?? { x: 1, y: 1, z: 1 }),
+              [axis]: numValue
+            }
+          }
+        })
+      }
+    },
+    [selectedObject, onObjectUpdate]
+  )
 
   const updateName = useCallback(
     (name: string) => {
@@ -224,10 +226,10 @@ export function ComponentInspector() {
     return (
       <div className='flex h-full w-80 flex-col border-gray-200 bg-white'>
         <div className='border-b border-gray-200 p-4'>
-          <h2 className='font-semibold text-gray-900'>Properties</h2>
+          <h2 className='font-semibold text-gray-900'>{t3d('properties')}</h2>
         </div>
         <div className='flex flex-1 items-center justify-center p-8'>
-          <p className='text-sm text-gray-500'>Select an object to edit properties</p>
+          <p className='text-sm text-gray-500'>{t3d('select_object_or_action')}</p>
         </div>
       </div>
     )
@@ -237,9 +239,9 @@ export function ComponentInspector() {
     <div>
       <h2 className='font-semibold text-gray-900'>{selectedObject.data?.name ?? selectedObject.id}</h2>
 
-      <div className='flex-1 space-y-6 overflow-y-auto p-4'>
+      <div className='flex-1 space-y-3 overflow-y-auto'>
         <div>
-          <label className='text-sm font-medium'>Name</label>
+          <label className='text-sm font-medium'>{t3d('component_properties.name')}</label>
           <input
             type='text'
             value={localValues.name}
@@ -250,7 +252,7 @@ export function ComponentInspector() {
 
         {/* Position */}
         <div>
-          <label className='mb-2 block text-sm font-medium text-gray-700'>Position</label>
+          <label className='mb-2 block text-sm font-medium text-gray-700'>{t3d('component_properties.position')}</label>
           <div className='grid grid-cols-3 gap-2'>
             <div>
               <label className='mb-1 block text-xs text-gray-500'>X</label>
@@ -287,7 +289,7 @@ export function ComponentInspector() {
 
         {/* Rotation */}
         <div>
-          <label className='mb-2 block text-sm font-medium text-gray-700'>Rotation (degrees)</label>
+          <label className='mb-2 block text-sm font-medium text-gray-700'>{t3d('component_properties.rotation')}</label>
           <div className='grid grid-cols-3 gap-2'>
             <div>
               <label className='mb-1 block text-xs text-gray-500'>X</label>
@@ -323,8 +325,8 @@ export function ComponentInspector() {
         </div>
 
         {/* Scale */}
-        {/* <div>
-          <label className='mb-2 block text-sm font-medium text-gray-700'>Scale</label>
+        <div>
+          <label className='mb-2 block text-sm font-medium text-gray-700'>{t3d('component_properties.scale')}</label>
           <div className='grid grid-cols-3 gap-2'>
             <div>
               <label className='mb-1 block text-xs text-gray-500'>X</label>
@@ -360,12 +362,14 @@ export function ComponentInspector() {
               />
             </div>
           </div>
-        </div> */}
+        </div>
 
         {/* Arms (for connector only) */}
         {selectedObject.category === 'connector' && localValues?.arms && (
           <div>
-            <label className='mb-2 block text-sm font-medium text-gray-700'>Connector Arms (degrees)</label>
+            <label className='mb-2 block text-sm font-medium text-gray-700'>
+              {t3d('component_properties.connector_arm')}
+            </label>
             {Object.entries(localValues.arms).map(([armId, axes]) => (
               <div key={armId} className='mb-4'>
                 <div className='mb-1 text-xs font-semibold text-gray-500'>{armId}</div>
@@ -390,16 +394,16 @@ export function ComponentInspector() {
 
         {/* Object Info */}
         <div className='rounded-lg bg-gray-50 p-3'>
-          <h3 className='mb-2 text-sm font-medium text-gray-700'>Object Info</h3>
+          <h3 className='mb-2 text-sm font-medium text-gray-700'>{t3d('component_properties.object_info')}</h3>
           <div className='space-y-1 text-xs text-gray-600'>
             <div>
-              ID: <span className='font-mono'>{selectedObject.id}</span>
+              {t3d('component_properties.id')}: <span className='font-mono'>{selectedObject.id}</span>
             </div>
             <div>
-              Category: <span className='font-mono'>{selectedObject.category}</span>
+              {t3d('component_properties.category')}: <span className='font-mono'>{selectedObject.category}</span>
             </div>
             <div>
-              Template: <span className='font-mono'>{selectedObject.templateId}</span>
+              {t3d('component_properties.template')}: <span className='font-mono'>{selectedObject.templateId}</span>
             </div>
           </div>
         </div>
@@ -407,10 +411,10 @@ export function ComponentInspector() {
 
       <div className='space-y-2 border-t p-4'>
         <button onClick={resetTransform} className='w-full rounded border px-3 py-2 text-sm'>
-          Reset Transform
+          {t3d('component_properties.reset_transform')}
         </button>
         <button onClick={handleDelete} className='w-full rounded bg-red-600 px-3 py-2 text-sm text-white'>
-          Delete
+          {t3d('component_properties.delete')}
         </button>
       </div>
     </div>
