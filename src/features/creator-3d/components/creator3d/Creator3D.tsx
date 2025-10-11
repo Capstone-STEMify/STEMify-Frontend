@@ -2,37 +2,30 @@
 
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
-import { ObjectInspector } from '../right-sidebar/ObjectInspector'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
 import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 import { CreatorWorkspace } from '@/features/creator-3d/components/creator-workspace/CreatorWorkspace'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import {
-  clearScene,
-  removeInstance,
-  setInstances,
-  setSelectedId,
-  updateInstance
-} from '@/features/creator-3d/slice/creatorSceneSlice'
+import { clearScene, setInstances, setSelectedId, updateInstance } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
-import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
 import {
   addAction,
   addTargetToAction,
   clearAction,
-  removeTargetFromAllActions,
   resetActions,
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
 import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
-import { AssemblyInstance, useAssembly } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 
-export function Creator3D() {
+export default function Creator3D() {
+  const { workspaceId } = useParams() as { workspaceId: string }
   const t3d = useTranslations('creator3D')
   const dispatch = useAppDispatch()
   const instances = useAppSelector((s) => s.creatorScene.instances)
@@ -289,8 +282,12 @@ export function Creator3D() {
         {/* Action Buttons */}
         <SceneActions
           onImport={() => {
-            const id = prompt('Nhập ID Assembly muốn import:')
-            if (id) handleImportAssembly(id)
+            if (workspaceId) {
+              handleImportAssembly(workspaceId)
+            } else {
+              const id = prompt('Nhập ID Assembly muốn import:')
+              if (id) handleImportAssembly(id)
+            }
           }}
           onClear={handleClearScene}
           onExport={handleExport}

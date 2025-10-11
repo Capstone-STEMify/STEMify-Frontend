@@ -11,7 +11,7 @@ export default function Creator3DHeader() {
     <div className='flex-shrink-0 border-b bg-white px-6 py-4 shadow-sm'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-4'>
-          <BackButton url={`/${locale}/design`} />
+          <BackButton url={`/${locale}/workspace-3d`} />
           <div>
             <h1 className='text-2xl font-bold text-gray-900'>{t3d('header.title')}</h1>
             <p className='text-sm text-gray-600'>{t3d('header.subtitle')}</p>
