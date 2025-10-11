@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const chatAgentApi = createApi({
   reducerPath: 'chatAngentApi',
   // baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_AI_URL }),
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:6001/api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
   tagTypes: ['ChatAgent'],
   endpoints: (builder) => ({
     getCourseRecommendedAi: builder.mutation<ApiSuccessResponse<{ message: string }>, { userPrompt: string }>({
