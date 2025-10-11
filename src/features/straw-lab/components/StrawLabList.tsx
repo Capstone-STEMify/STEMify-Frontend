@@ -55,10 +55,6 @@ export default function StrawLabList() {
   const filteredModels =
     selectedCategory === 'Tất cả' ? models : models.filter((model) => model.category === selectedCategory)
 
-  // const handleNavigate = (id: string) => {
-  //   router.push(`/${locale}/admin/design/straw-lab/${id}`)
-  // }
-
   const handleNavigate = (id: number) => {
     router.push(`/${locale}/workspace-3d/${id}`)
   }
@@ -79,7 +75,7 @@ export default function StrawLabList() {
       <main className='container mx-auto p-4'>
         <div className='bg-white'>
           {/* Tab Navigation */}
-          {/* <div className='mb-6'>
+          <div className='mb-6'>
             <div className='flex flex-wrap gap-2'>
               {categories.map((category) => (
                 <Button
@@ -97,7 +93,7 @@ export default function StrawLabList() {
                 </Button>
               ))}
             </div>
-          </div> */}
+          </div>
 
           {/* Models Grid */}
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
