@@ -1,69 +1,27 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import type { EmblaCarouselType } from 'embla-carousel'
-import { Settings, ChevronUp, Star, Cpu, FolderKanban } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { Star, Settings, ChevronUp, Cpu, FolderKanban } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import Link from 'next/link'
 import { FaVectorSquare } from 'react-icons/fa'
+import { supabase } from '@/libs/supabase/client'
+import { toast } from 'sonner'
 
-export type CarouselItem = {
-  id: string
-  title: string
-  image: string
-  bg: string
+// 🧩 Interface cho model
+interface CarouselItem {
+  id: number
+  name: string
+  description: string
+  category: string
+  image_url: string
   rating?: number
-  isAvailable?: boolean
+  is_available: boolean
 }
-
-const ITEMS: CarouselItem[] = [
-  {
-    id: '1',
-    title: 'Octahedron Platonic Solid',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-octahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    bg: 'bg-indigo-400',
-    rating: 3.5,
-    isAvailable: true
-  },
-  {
-    id: '2',
-    title: 'Hexahedron Platonic Solid',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-hexahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    bg: 'bg-amber-300',
-    rating: 3.1,
-    isAvailable: true
-  },
-  {
-    id: 'test_assembly_assembly',
-    title: ' Testing',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-tetrahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    bg: 'bg-rose-400',
-    rating: 4.2,
-    isAvailable: true
-  },
-  {
-    id: 'dodecahedron',
-    title: 'Dodecahedron Platonic Solid',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-dodecahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    bg: 'bg-green-400',
-    rating: 4.6,
-    isAvailable: false
-  },
-  {
-    id: 'icosahedron',
-    title: 'Icosahedron Platonic Solid',
-    image:
-      'https://classroom.strawbees.com/_next/image?url=%2Fmedia%2Fres_les_intro-icosahedron-platonic-solid_cover.jpg&w=1920&q=75',
-    bg: 'bg-sky-400',
-    rating: 3.8,
-    isAvailable: false
-  }
-]
 
 function RatingStars({ value = 0 }: { value?: number }) {
   const full = Math.floor(value)
@@ -76,32 +34,32 @@ function RatingStars({ value = 0 }: { value?: number }) {
 }
 
 function HeaderBar() {
+  const locale = useLocale()
   return (
     <div className='flex items-center justify-between gap-2 pb-5 md:gap-6'>
-      {/* Left badge */}
-      <div className='inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 shadow-sm backdrop-blur'>
-        <FaVectorSquare className='h-5 w-5' />
-        <span className='text-lg font-semibold'>Straw Assembly</span>
-      </div>
-
-      {/* Center tabs */}
+      <Link href={`/${locale}/straw-lab`}>
+        <div className='inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 shadow-sm backdrop-blur'>
+          <FaVectorSquare className='h-5 w-5' />
+          <span className='text-lg font-semibold'>Straw Assembly</span>
+        </div>
+      </Link>
       <nav className='hidden items-center gap-10 md:flex'>
-        <button className='group inline-flex flex-col items-center text-zinc-700 hover:text-zinc-900'>
+        <div className='inline-flex flex-col items-center text-zinc-700 hover:text-zinc-900'>
           <div className='flex items-center gap-2'>
             <Cpu className='h-6 w-6' />
             <span className='text-lg font-semibold'>Micro:bit</span>
           </div>
           <ChevronUp className='mt-1 hidden h-4 w-4 text-zinc-900 group-hover:block' />
-        </button>
-        <button className='inline-flex flex-col items-center text-zinc-500 hover:text-zinc-900'>
-          <div className='flex items-center gap-2'>
-            <FolderKanban className='h-6 w-6' />
-            <span className='text-lg font-medium'>My Project</span>
-          </div>
-        </button>
+        </div>
+        <Link href={`/${locale}/workspace-3d`} className='group'>
+          <button className='inline-flex flex-col items-center text-zinc-500 hover:text-zinc-900'>
+            <div className='flex items-center gap-2'>
+              <FolderKanban className='h-6 w-6' />
+              <span className='text-lg font-medium'>My Project</span>
+            </div>
+          </button>
+        </Link>
       </nav>
-
-      {/* Settings */}
       <button className='ml-auto inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white/80 p-2 shadow-sm hover:bg-white'>
         <Settings className='h-5 w-5' />
       </button>
@@ -109,21 +67,44 @@ function HeaderBar() {
   )
 }
 
-export default function CarouselShowcase() {
+export default function StrawLabShowcase() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'center',
     dragFree: false,
     loop: true,
-    containScroll: 'trimSnaps' // ⚙️ mượt ở seam
+    containScroll: 'trimSnaps'
   })
   const [selected, setSelected] = useState(0)
   const [progress, setProgress] = useState(0)
+  const [items, setItems] = useState<CarouselItem[]>([])
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const locale = useLocale()
 
-  const onSelect = useCallback((api: EmblaCarouselType) => {
-    setSelected(api.selectedScrollSnap())
+  // 🧭 Fetch từ Supabase
+  useEffect(() => {
+    const fetchModels = async () => {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('assembly_data')
+        .select('id, name, description, category, image_url, rating, is_available')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error fetching models:', error)
+        toast.error('Không thể tải danh sách mô hình!')
+        setLoading(false)
+        return
+      }
+
+      setItems(data || [])
+      setLoading(false)
+    }
+
+    fetchModels()
   }, [])
 
+  const onSelect = useCallback((api: EmblaCarouselType) => setSelected(api.selectedScrollSnap()), [])
   const onScroll = useCallback((api: EmblaCarouselType) => {
     const p = Math.max(0, Math.min(1, api.scrollProgress()))
     setProgress(p)
@@ -141,8 +122,22 @@ export default function CarouselShowcase() {
 
   const scrollTo = (i: number) => emblaApi?.scrollTo(i)
 
-  const handleNavigate = (id: string) => {
-    router.push(`/straw-lab/${id}`)
+  const handleNavigate = (id: number) => {
+    router.push(`/${locale}/workspace-3d/${id}`)
+  }
+
+  // 🌀 Loading state
+  if (loading) {
+    return <div className='flex h-[70vh] w-full items-center justify-center text-gray-500'>Đang tải mô hình...</div>
+  }
+
+  // ❌ Empty state
+  if (!items.length) {
+    return (
+      <div className='flex h-[70vh] w-full flex-col items-center justify-center text-gray-500'>
+        <p>Không có mô hình nào trong cơ sở dữ liệu.</p>
+      </div>
+    )
   }
 
   return (
@@ -153,32 +148,30 @@ export default function CarouselShowcase() {
         {/* Carousel */}
         <div className='overflow-x-hidden overflow-y-visible py-8' ref={emblaRef}>
           <div className='flex touch-pan-y gap-10 md:gap-12'>
-            {ITEMS.map((item, i) => {
+            {items.map((item, i) => {
               const active = i === selected
               return (
                 <article
                   key={item.id}
-                  onClick={() => item.isAvailable && handleNavigate(item.id)}
+                  onClick={() => item.is_available && handleNavigate(item.id)}
                   className={`relative min-w-0 shrink-0 grow-0 basis-[85%] px-2 sm:basis-[55%] md:basis-[42%] md:px-4 lg:basis-[33%] ${
-                    item.isAvailable ? 'cursor-pointer' : 'pointer-events-none'
+                    item.is_available ? 'cursor-pointer' : 'pointer-events-none'
                   }`}
                 >
-                  {/* Single circle container — scale ở đây để không bị cắt */}
                   <div
-                    className={`group relative mx-auto aspect-square w-[74vw] max-w-[28rem] overflow-hidden rounded-full ${item.bg} transform-gpu ring-1 ring-black/5 transition-transform duration-300 ease-out sm:w-[60vw] md:w-[28rem] ${
+                    className={`group relative mx-auto aspect-square w-[74vw] max-w-[28rem] transform-gpu overflow-hidden rounded-full bg-gradient-to-br from-indigo-400 via-blue-400 to-sky-400 ring-1 ring-black/5 transition-transform duration-300 ease-out sm:w-[60vw] md:w-[28rem] ${
                       active ? 'z-20 scale-105 shadow-2xl md:scale-110' : 'scale-95 opacity-95 shadow'
                     }`}
                   >
                     <Image
-                      src={item.image}
-                      alt={item.title}
+                      src={item.image_url || '/images/shape.png'}
+                      alt={item.name}
                       fill
                       className='object-cover'
                       sizes='(max-width: 640px) 74vw, (max-width: 768px) 60vw, 28rem'
                       priority={i === 0}
                     />
-                    {/* Overlay khi chưa mở */}
-                    {!item.isAvailable && (
+                    {!item.is_available && (
                       <div className='absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
                         <span className='text-2xl font-semibold text-white drop-shadow-md'>Coming Soon</span>
                       </div>
@@ -186,7 +179,8 @@ export default function CarouselShowcase() {
                   </div>
 
                   <div className='mt-12 text-center'>
-                    <h3 className='text-xl font-semibold text-zinc-900'>{item.title}</h3>
+                    <h3 className='text-xl font-semibold text-zinc-900'>{item.name}</h3>
+                    <p className='mt-1 line-clamp-2 text-sm text-zinc-500'>{item.description}</p>
                     <div className='mt-2 flex items-center justify-center gap-2'>
                       <RatingStars value={item.rating ?? 0} />
                       <span className='text-sm text-zinc-500'>{(item.rating ?? 0).toFixed(1)}</span>
@@ -200,7 +194,7 @@ export default function CarouselShowcase() {
 
         {/* Numbered pagination */}
         <div className='mt-8 flex items-center justify-center gap-2 md:gap-3'>
-          {ITEMS.map((_, i) => (
+          {items.map((_, i) => (
             <button
               key={i}
               onClick={() => scrollTo(i)}

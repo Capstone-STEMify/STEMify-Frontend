@@ -1,0 +1,123 @@
+{
+  "id": "5leg_red",
+  "name": "5-Leg Red Connector",
+  "version": "1.0",
+  "category": "connector",
+  "baseGeometry": {
+    "size": { "x": 2.0, "y": 2.0, "z": 2.0 },
+    "portDiameter": 0.65,
+    "shape": "custom",
+    "modelPath": "/models/connector_5legs.glb",
+    "meshName": "connector_5legs"
+  },
+  "materialRef": "plastic_red",
+  "arms": [
+    {
+      "id": "arm_1",
+      "meshName": "Arm_1",
+      "defaultRotation": { "x": 0, "y": 0, "z": 0 },
+      "portIndex": 0,
+      "port": {
+        "localPosition": { "x": 2.0, "y": 0, "z": 0 },
+        "orientation": { "x": 0, "y": 0, "z": 0 },
+        "socketType": "standard",
+        "allowedRotation": { "x": 0, "y": 0, "z": 360 }
+      }
+    },
+    {
+      "id": "arm_2",
+      "meshName": "Arm_2",
+      "defaultRotation": { "x": 0, "y": 72, "z": 0 },
+      "portIndex": 1,
+      "port": {
+        "localPosition": { "x": 1.9, "y": 0, "z": 0.6 },
+        "orientation": { "x": 0, "y": 72, "z": 0 },
+        "socketType": "standard",
+        "allowedRotation": { "x": 0, "y": 0, "z": 360 }
+      }
+    },
+    {
+      "id": "arm_3",
+      "meshName": "Arm_3",
+      "defaultRotation": { "x": 0, "y": 144, "z": 0 },
+      "portIndex": 2,
+      "port": {
+        "localPosition": { "x": 1.6, "y": 0, "z": 1.1 },
+        "orientation": { "x": 0, "y": 144, "z": 0 },
+        "socketType": "standard",
+        "allowedRotation": { "x": 0, "y": 0, "z": 360 }
+      }
+    },
+    {
+      "id": "arm_4",
+      "meshName": "Arm_4",
+      "defaultRotation": { "x": 0, "y": 216, "z": 0 },
+      "portIndex": 3,
+      "port": {
+        "localPosition": { "x": 1.0, "y": 0, "z": 1.6 },
+        "orientation": { "x": 0, "y": 216, "z": 0 },
+        "socketType": "standard",
+        "allowedRotation": { "x": 0, "y": 0, "z": 360 }
+      }
+    },
+    {
+      "id": "arm_5",
+      "meshName": "Arm_5",
+      "defaultRotation": { "x": 0, "y": 288, "z": 0 },
+      "portIndex": 4,
+      "port": {
+        "localPosition": { "x": 1.7, "y": 0, "z": -1.2 },
+        "orientation": { "x": 0, "y": 288, "z": 0 },
+        "socketType": "standard",
+        "allowedRotation": { "x": 0, "y": 0, "z": 360 }
+      }
+    }
+  ],
+  "physics": {
+    "mass": 1.8,
+    "centerOfMass": { "x": 0.66, "y": 0.66, "z": 0.66 },
+    "momentOfInertia": { "x": 0.6, "y": 0.6, "z": 0.6 }
+  },
+  "constraints": {
+    "maxConnections": 5,
+    "allowedAngles": [0, 72, 144, 216, 288],
+    "minStrawLength": 5.0,
+    "maxStrawLength": 20.0
+  },
+  "lod": {
+    "high": {
+      "geometryComplexity": "detailed",
+      "polyCount": 4096,
+      "textureResolution": 1024,
+      "renderDistance": 50,
+      "enableAnimations": true
+    },
+    "medium": {
+      "geometryComplexity": "standard",
+      "polyCount": 1024,
+      "textureResolution": 512,
+      "renderDistance": 100,
+      "enableAnimations": false
+    },
+    "low": {
+      "geometryComplexity": "basic",
+      "polyCount": 256,
+      "textureResolution": 256,
+      "renderDistance": 200,
+      "enableAnimations": false
+    }
+  },
+  "streaming": {
+    "priority": 4,
+    "chunkSize": "large",
+    "compressionLevel": 5,
+    "preloadDistance": 30
+  },
+  "validation": {
+    "structuralIntegrity": 95,
+    "maxStress": 100,
+    "compatibleStraws": ["green_16_2", "blue_15_0", "yellow_3_8"],
+    "testingRequired": true
+  },
+  "imagePreviewUrl": "/images/components/connector_5_leg.png"
+}

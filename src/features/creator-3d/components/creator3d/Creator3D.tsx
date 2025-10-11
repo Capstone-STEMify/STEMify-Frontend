@@ -2,31 +2,31 @@
 
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
-import { ObjectInspector } from '../right-sidebar/ObjectInspector'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
 import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 import { CreatorWorkspace } from '@/features/creator-3d/components/creator-workspace/CreatorWorkspace'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import {
-  clearScene,
-  removeInstance,
-  setSelectedId,
-  updateInstance
-} from '@/features/creator-3d/slice/creatorSceneSlice'
+import { clearScene, setInstances, setSelectedId, updateInstance } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
-import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
 import {
-  removeTargetFromAllActions,
+  addAction,
+  addTargetToAction,
+  clearAction,
   resetActions,
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
 import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 
-export function Creator3D() {
+export default function Creator3D() {
+  const { workspaceId } = useParams() as { workspaceId: string }
+  const t3d = useTranslations('creator3D.main_content')
   const dispatch = useAppDispatch()
   const instances = useAppSelector((s) => s.creatorScene.instances)
   const addObject = useAddObject()
@@ -70,6 +70,54 @@ export function Creator3D() {
     setShowExportDialog(true)
   }, [])
 
+  const handleSaveAssembly = useCallback(async () => {
+    if (!workspaceId) {
+      toast.error('⚠️ Không có workspaceId — không thể lưu.')
+      return
+    }
+
+    try {
+      toast.info('💾 Đang lưu thay đổi vào Supabase...')
+
+      const { data: existing, error: fetchError } = await supabase
+        .from('assembly_data')
+        .select('id, name, description, author')
+        .eq('id', workspaceId)
+        .single()
+
+      if (fetchError || !existing) {
+        toast.error('Không tìm thấy assembly để lưu.')
+        return
+      }
+
+      // ⚙️ Export lại dữ liệu mới (scene + actions + instances)
+      const exportData = exportAssemblyFn({
+        title: existing.name,
+        description: existing.description,
+        author: existing.author
+      })
+
+      // ⚙️ Cập nhật bản ghi
+      const { error: updateError } = await supabase
+        .from('assembly_data')
+        .update({
+          data: exportData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', workspaceId)
+
+      if (updateError) {
+        console.error('Supabase update error:', updateError)
+        toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
+      } else {
+        toast.success('✅ Đã lưu thay đổi vào Supabase!')
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error('Lỗi không xác định khi lưu dữ liệu.')
+    }
+  }, [workspaceId, exportAssemblyFn])
+
   // Handle clear scene
   const handleClearScene = useCallback(() => {
     if (confirm('Are you sure you want to clear the entire scene? This action cannot be undone.')) {
@@ -78,15 +126,198 @@ export function Creator3D() {
     }
   }, [dispatch])
 
+  const handleImportAssembly = useCallback(
+    async (id: string) => {
+      try {
+        toast.info(t3d('importing_assembly'))
+
+        const res = await fetch(`/api/assemblies/${id}`)
+        if (!res.ok) throw new Error('Không thể tải dữ liệu từ Supabase')
+        const data = await res.json()
+        if (!data) throw new Error('Dữ liệu assembly không hợp lệ')
+
+        console.log('🧩 Imported Assembly JSON:', data)
+
+        dispatch(clearScene())
+        dispatch(clearAction())
+
+        const allInstances: AssemblyInstance[] = []
+
+        // ================================
+        // 🔹 Helper: Load Template by ID
+        // ================================
+        const loadTemplateById = async (templateId: string) => {
+          const template = data.templates.components.find((t: any) => t.id === templateId)
+          if (!template) throw new Error(`Không tìm thấy templateId: ${templateId}`)
+          const res = await fetch(template.source)
+          if (!res.ok) throw new Error(`Không tải được file template: ${template.source}`)
+          return await res.json()
+        }
+
+        // 🔹 Helper: Resolve material from materialRef
+        const resolveMaterial = async (materialRef: string) => {
+          const matDef = data.templates.materials.find((m: any) => m.id === materialRef)
+          if (!matDef) return null
+          const res = await fetch(matDef.source)
+          if (!res.ok) return null
+          return await res.json()
+        }
+
+        // ================================
+        // 1️⃣ Restore Straws
+        // ================================
+        if (Array.isArray(data.instances.straws)) {
+          for (const group of data.instances.straws) {
+            const templateData = await loadTemplateById(group.templateId)
+
+            // lấy geometry & materialRef từ file JSON template
+            const baseGeo = templateData.baseGeometry
+            const endpoints = templateData.endpointTemplate || {
+              start: { localPosition: { x: -baseGeo.length / 2, y: 0, z: 0 } },
+              end: { localPosition: { x: baseGeo.length / 2, y: 0, z: 0 } }
+            }
+
+            const matData = await resolveMaterial(templateData.materialRef)
+
+            for (const inst of group.instances) {
+              allInstances.push({
+                id: inst.id,
+                templateId: group.templateId,
+                category: 'straw',
+                transform: inst.transform,
+                isVisible: true,
+                distanceToCamera: 0,
+                data: {
+                  id: inst.id,
+                  name: templateData.name,
+                  transform: inst.transform,
+                  geometry: baseGeo,
+                  endpoints,
+                  material: matData || {
+                    type: 'plastic',
+                    properties: {
+                      color: '#00aaff',
+                      flexibility: 50,
+                      opacity: 1,
+                      roughness: 0.4,
+                      metalness: 0
+                    }
+                  },
+                  physics: templateData.physics
+                },
+                arms: undefined
+              })
+            }
+          }
+        }
+
+        // ================================
+        // 2️⃣ Restore Connectors
+        // ================================
+        if (Array.isArray(data.instances.connectors)) {
+          for (const group of data.instances.connectors) {
+            const templateData = await loadTemplateById(group.templateId)
+            const matData = await resolveMaterial(templateData.materialRef)
+            console.log('templateData', templateData, 'matData', matData)
+
+            for (const inst of group.instances) {
+              allInstances.push({
+                id: inst.id,
+                templateId: group.templateId,
+                category: 'connector',
+                transform: inst.transform,
+                isVisible: true,
+                distanceToCamera: 0,
+                data: {
+                  id: inst.id,
+                  name: templateData.name,
+                  transform: inst.transform,
+                  material: matData || {
+                    type: 'plastic',
+                    properties: {
+                      color: '#ff4444',
+                      flexibility: 50,
+                      opacity: 1,
+                      roughness: 0.5,
+                      metalness: 0
+                    }
+                  },
+                  geometry: templateData.baseGeometry || {
+                    size: { x: 2, y: 2, z: 2 },
+                    portDiameter: 0.8,
+                    shape: 'cylindrical'
+                  },
+                  ports: templateData.ports || [
+                    {
+                      id: `${inst.id}_port_0`,
+                      localPosition: { x: 0, y: 0, z: 1 },
+                      orientation: { x: 0, y: 0, z: 1 },
+                      connectionId: null,
+                      isAvailable: true,
+                      portIndex: 0
+                    }
+                  ],
+                  constraints: templateData.constraints || { maxConnections: 3, allowedAngles: [] },
+                  modelUrl: templateData.baseGeometry.modelPath
+                },
+                arms: {}
+              })
+            }
+          }
+        }
+
+        // ================================
+        // ✅ Cập nhật Redux Scene
+        // ================================
+        dispatch(setInstances(allInstances))
+        console.log('🧱 Flattened Instances:', allInstances)
+
+        // ================================
+        // 🔹 Restore Actions
+        // ================================
+        if (Array.isArray(data.actions)) {
+          for (const act of data.actions) {
+            dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
+            if (Array.isArray(act.targets)) {
+              act.targets.forEach((targetId: string) => dispatch(addTargetToAction({ actionId: act.id, targetId })))
+            }
+            if (act.type === 'transform_arm' && act.connectorArmTransforms) {
+              Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
+                dispatch(
+                  updateConnectorArms({
+                    actionId: act.id,
+                    connectorId,
+                    arms: arms as Record<string, { x: number; y: number; z: number }>
+                  })
+                )
+              })
+            }
+          }
+        }
+
+        toast.success(t3d('export_success'))
+      } catch (err: any) {
+        toast.error(err.message || t3d('export_error'))
+      }
+    },
+    [dispatch]
+  )
+
+  useEffect(() => {
+    if (workspaceId) {
+      handleImportAssembly(workspaceId)
+    }
+  }, [workspaceId, handleImportAssembly])
+
   return (
-    <div className='relative flex w-full bg-gray-100'>
+    <div className='relative flex h-full w-full overflow-hidden bg-gray-100'>
       {/* Component Palette */}
-      <div className='w-64 bg-white'>
+      <div className='h-full w-64 flex-shrink-0 border-r bg-white'>
         <ComponentPalette onAddComponent={handleAddComponent} />
       </div>
 
       {/* Main Workspace */}
-      <div className='relative w-[60%]'>
+      <div className='relative flex h-full flex-1 flex-col'>
         <CreatorWorkspace
           onObjectSelect={handleObjectSelect}
           onObjectUpdate={handleObjectUpdate}
@@ -102,38 +333,34 @@ export function Creator3D() {
         />
 
         {/* Action Buttons */}
-        <SceneActions onClear={handleClearScene} onExport={handleExport} hasObjects={instances.length > 0} />
+        <SceneActions
+          onImport={() => {
+            if (workspaceId) {
+              handleImportAssembly(workspaceId)
+            } else {
+              const id = prompt('Nhập ID Assembly muốn import:')
+              if (id) handleImportAssembly(id)
+            }
+          }}
+          onSave={handleSaveAssembly}
+          onClear={handleClearScene}
+          onExport={handleExport}
+          hasObjects={instances.length > 0}
+        />
       </div>
 
       {/* Object Inspector */}
-      <div className='my-2 mr-2 w-85 gap-4'>
+      <div className='h-full w-80 flex-shrink-0 border-l bg-white'>
         <WorkspacePanel />
       </div>
 
       {/* Export Dialog */}
       {showExportDialog && (
-        // <ExportDialog
-        //   onClose={() => setShowExportDialog(false)}
-        //   onExport={(metadata) => {
-        //     const exportData = exportAssemblyFn(metadata)
-
-        //     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
-        //     const url = URL.createObjectURL(blob)
-        //     const a = document.createElement('a')
-        //     a.href = url
-        //     a.download = `${metadata.title.replace(/\s+/g, '_').toLowerCase()}_assembly.json`
-        //     document.body.appendChild(a)
-        //     a.click()
-        //     document.body.removeChild(a)
-        //     URL.revokeObjectURL(url)
-        //     setShowExportDialog(false)
-        //   }}
-        // />
         <ExportDialog
           onClose={() => setShowExportDialog(false)}
           onExport={async (metadata) => {
             try {
-              const exportData = exportAssemblyFn(metadata) // lấy JSON object từ state
+              const exportData = exportAssemblyFn(metadata)
               const { error } = await supabase.from('assembly_data').insert([
                 {
                   name: metadata.title,

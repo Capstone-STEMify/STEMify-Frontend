@@ -24,6 +24,7 @@ import {
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { removeInstance, setSelectedId } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useModal } from '@/providers/ModalProvider'
+import { useTranslations } from 'next-intl'
 
 interface WorkspaceItem {
   id: string
@@ -33,6 +34,8 @@ interface WorkspaceItem {
 }
 
 export default function WorkspaceTree() {
+  const tc = useTranslations('common')
+  const t3d = useTranslations('creator3D.right_panel')
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
   const actions = useAppSelector((s: RootState) => s.workspaceTree.actions)
@@ -99,7 +102,7 @@ export default function WorkspaceTree() {
   const handleDeleteComponent = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
     e.stopPropagation()
     openModal('confirm', {
-      message: 'Are you sure you want to delete this component?',
+      message: t3d('delete_component'),
       onConfirm: () => {
         dispatch(removeInstance(id))
         dispatch(removeTargetFromAllActions(id))
@@ -153,7 +156,7 @@ export default function WorkspaceTree() {
   return (
     <div>
       <div className='mb-2'>
-        <h2 className='text-lg font-medium'>Workspace Tree</h2>
+        <h2 className='text-lg font-medium'>{t3d('workspace_tree')}</h2>
         <div className='flex flex-wrap gap-2'>
           <button
             onClick={() => handleAddAction('highlight')}
@@ -167,9 +170,9 @@ export default function WorkspaceTree() {
           >
             (transform_arm)
           </button>
-          <button onClick={handleExport} className='rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'>
+          {/* <button onClick={handleExport} className='rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'>
             Export JSON
-          </button>
+          </button> */}
         </div>
       </div>
       <div>
@@ -240,7 +243,7 @@ export default function WorkspaceTree() {
                         onClick={() => dispatch(removeActionWithInstances(data.id))}
                         className='rounded bg-red-100 px-2 py-1 text-xs hover:bg-red-200'
                       >
-                        Delete
+                        {tc('button.delete')}
                       </span>
                     )}
 

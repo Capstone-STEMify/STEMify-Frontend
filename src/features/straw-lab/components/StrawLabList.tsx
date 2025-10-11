@@ -60,7 +60,7 @@ export default function StrawLabList() {
   // }
 
   const handleNavigate = (id: number) => {
-    router.push(`/${locale}/straw-lab/${id}`)
+    router.push(`/${locale}/workspace-3d/${id}`)
   }
   const toggleFavorite = (id: number) => {
     const newFavorites = new Set(favorites)

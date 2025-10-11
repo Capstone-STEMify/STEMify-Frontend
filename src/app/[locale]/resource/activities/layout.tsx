@@ -1,16 +1,16 @@
 import Header from '@/components/layout/Header'
-import { metadata } from '../layout'
+import { metadata } from 'app/[locale]/layout'
 
-metadata.title = 'My Project'
-export default async function MyProjectLayout({
+metadata.title = 'Activity'
+export default async function PublicActivityLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <div>
+    <>
       <Header />
       <main className='mt-20'>{children}</main>
-    </div>
+    </>
   )
 }

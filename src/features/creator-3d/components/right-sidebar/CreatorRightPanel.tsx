@@ -4,15 +4,17 @@ import * as React from 'react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/shadcn/tabs'
 import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
 import { ObjectInspector } from '@/features/creator-3d/components/right-sidebar/ObjectInspector'
+import { useTranslations } from 'next-intl'
 
 export default function CreatorRightPanel() {
+  const t3d = useTranslations('creator3D.right_panel')
   return (
     <div className='flex h-full rounded-lg border bg-white shadow'>
       {/* Tabs Header */}
       <Tabs defaultValue='tree' className='flex flex-1 flex-col'>
         <TabsList className='mx-auto mt-2 grid w-[90%] grid-cols-2'>
-          <TabsTrigger value='tree'>Workspace Tree</TabsTrigger>
-          <TabsTrigger value='properties'>Properties</TabsTrigger>
+          <TabsTrigger value='tree'>{t3d('workspace_tree')}</TabsTrigger>
+          <TabsTrigger value='properties'>{t3d('properties')}</TabsTrigger>
         </TabsList>
 
         {/* Tree Panel */}

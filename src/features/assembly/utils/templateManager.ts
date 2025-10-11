@@ -62,7 +62,7 @@ export class TemplateManager {
       })
     }
 
-    // Register component templates  
+    // Register component templates
     for (const component of library.components) {
       chunks.push({
         id: component.id,
@@ -152,9 +152,7 @@ export class TemplateManager {
     this.dependencyGraph.set(templateId, new Set(dependencies))
 
     // Load all dependencies in parallel
-    await Promise.all(
-      dependencies.map(depId => this.loadTemplate(depId))
-    )
+    await Promise.all(dependencies.map((depId) => this.loadTemplate(depId)))
   }
 
   /**
@@ -209,18 +207,16 @@ export class TemplateManager {
    * Create multiple instances from template
    */
   createInstances(templateId: string, instances: TemplateInstance[]): any[] {
-    return instances.map(instance => this.createInstance(instance))
+    return instances.map((instance) => this.createInstance(instance))
   }
 
   /**
    * Preload templates for given instances
    */
   async preloadTemplates(instances: TemplateInstance[]): Promise<void> {
-    const templateIds = [...new Set(instances.map(inst => inst.templateId))]
-    
-    await Promise.all(
-      templateIds.map(templateId => this.loadTemplate(templateId))
-    )
+    const templateIds = [...new Set(instances.map((inst) => inst.templateId))]
+
+    await Promise.all(templateIds.map((templateId) => this.loadTemplate(templateId)))
   }
 
   /**
