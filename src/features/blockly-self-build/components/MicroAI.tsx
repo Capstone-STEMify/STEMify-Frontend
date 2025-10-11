@@ -173,7 +173,7 @@ export default function MicroAI() {
       {/* Header */}
       <section className="mx-auto max-w-6xl px-6 pt-10">
         <div className="flex flex-col items-center text-center">
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
             Cầu Nâng Tự Động
           </h1>
           <p
@@ -196,24 +196,24 @@ export default function MicroAI() {
             {status === 'idle' && (
               <button
                 onClick={init}
-                className="rounded-full bg-indigo-600 px-6 py-3 text-white shadow-lg transition hover:bg-indigo-700"
+                className="rounded-full bg-amber-400 px-6 py-3 text-white shadow-lg transition hover:bg-amber-500"
               >
-                🚀 Bắt đầu
+                Bắt đầu
               </button>
             )}
             {isConnected ? (
               <button
                 onClick={disconnectMicrobit}
-                className="rounded-full bg-rose-600 px-6 py-3 text-white shadow-lg transition hover:bg-rose-700"
+                className="rounded-full bg-red-600 px-6 py-3 text-white shadow-lg transition hover:bg-red-700"
               >
-                🔌 Ngắt kết nối: {deviceName ?? 'Micro:bit'}
+                Ngắt kết nối: {deviceName ?? 'Micro:bit'}
               </button>
             ) : (
               <button
                 onClick={connectMicrobit}
-                className="rounded-full bg-sky-600 px-6 py-3 text-white shadow-lg transition hover:bg-sky-700"
+                className="rounded-full bg-sky-400 px-6 py-3 text-white shadow-lg transition hover:bg-sky-500"
               >
-                🔗 Kết nối Micro:bit
+                Kết nối Micro:bit
               </button>
             )}
           </div>
