@@ -36,7 +36,7 @@ export default function ToolsSection() {
 
           <div className='relative z-20 mb-8 flex justify-center'>
             <MacCard>
-              <video autoPlay loop playsInline className='h-full w-full object-cover'>
+              <video autoPlay loop muted playsInline className='h-full w-full object-cover'>
                 <source src='https://res.cloudinary.com/dgdi9wvpz/video/upload/1009_1_yfgzqp.mp4' type='video/mp4' />
               </video>
             </MacCard>
