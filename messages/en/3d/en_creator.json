@@ -27,7 +27,10 @@
       "confirm_clear": "Are you sure you want to clear the entire scene? This action cannot be undone.",
       "yes_clear": "Yes, clear scene",
       "no_cancel": "No, cancel",
-      "import_assembly": "Import Model"
+      "import_assembly": "Import Model",
+      "importing_assembly": "Importing model...",
+      "import_success": "Model imported successfully!",
+      "import_error": "Error importing model. Please check the workspace ID and try again."
     },
     "leftPanel": {
       "title": "Components",

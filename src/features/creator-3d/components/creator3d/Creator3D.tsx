@@ -26,7 +26,7 @@ import { useParams } from 'next/navigation'
 
 export default function Creator3D() {
   const { workspaceId } = useParams() as { workspaceId: string }
-  const t3d = useTranslations('creator3D')
+  const t3d = useTranslations('creator3D.main_content')
   const dispatch = useAppDispatch()
   const instances = useAppSelector((s) => s.creatorScene.instances)
   const addObject = useAddObject()
@@ -81,7 +81,7 @@ export default function Creator3D() {
   const handleImportAssembly = useCallback(
     async (id: string) => {
       try {
-        toast.info('⏳ Đang tải Assembly từ Supabase...')
+        toast.info(t3d('importing_assembly'))
 
         const res = await fetch(`/api/assemblies/${id}`)
         if (!res.ok) throw new Error('Không thể tải dữ liệu từ Supabase')
@@ -247,14 +247,19 @@ export default function Creator3D() {
           }
         }
 
-        toast.success('✅ Đã import thành công Assembly!')
+        toast.success(t3d('export_success'))
       } catch (err: any) {
-        console.error('❌ Import error:', err)
-        toast.error(err.message || 'Lỗi khi load Assembly.')
+        toast.error(err.message || t3d('export_error'))
       }
     },
     [dispatch]
   )
+
+  useEffect(() => {
+    if (workspaceId) {
+      handleImportAssembly(workspaceId)
+    }
+  }, [workspaceId, handleImportAssembly])
 
   return (
     <div className='relative flex h-full w-full overflow-hidden bg-gray-100'>
