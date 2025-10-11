@@ -1,3 +1,4 @@
+'use client'
 import { supabase } from '@/libs/supabase/client'
 import { EmblaCarouselType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'

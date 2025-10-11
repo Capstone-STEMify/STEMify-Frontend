@@ -1,14 +1,14 @@
 'use client'
 
 import { Canvas } from '@react-three/fiber'
-import { useRef, useCallback, useState } from 'react'
+import { useRef, useCallback, useState, useEffect } from 'react'
 import { CreatorToolbar } from '@/features/creator-3d/components/creator-workspace/CreatorToolbar'
 import { SceneContent } from '@/features/creator-3d/components/creator-workspace/SceneContent'
 import SceneTopRight from '@/features/creator-3d/components/creator-workspace/SceneTopRight'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setDraggingTemplate } from '@/features/creator-3d/slice/creatorSceneSlice'
+import { addInstance, redo, setDraggingTemplate, setSelectedId, undo } from '@/features/creator-3d/slice/creatorSceneSlice'
 
 interface CreatorWorkspaceProps {
   onObjectSelect: (objectId: string | null) => void
@@ -17,6 +17,9 @@ interface CreatorWorkspaceProps {
 }
 
 export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }: CreatorWorkspaceProps) {
+  const selectedId = useAppSelector((s) => s.creatorScene.selectedId)
+  const instances = useAppSelector((s) => s.creatorScene.instances)
+  const clipboardRef = useRef<AssemblyInstance | null>(null)
   const dragSource = useAppSelector((s) => s.creatorScene.draggingTemplate)
   const dispatch = useAppDispatch()
 
@@ -55,6 +58,58 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
   const handleDragLeave = useCallback(() => {
     setIsDragOver(false)
   }, [])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // ⌨️ Ctrl + Z → Undo
+      if (e.ctrlKey && e.key.toLowerCase() === 'z') {
+        e.preventDefault()
+        dispatch(undo())
+        return
+      }
+
+      // ⌨️ Ctrl + Y → Redo
+      if (e.ctrlKey && e.key.toLowerCase() === 'y') {
+        e.preventDefault()
+        dispatch(redo())
+        return
+      }
+
+      // ⌨️ Ctrl + C → Copy
+      if (e.ctrlKey && e.key.toLowerCase() === 'c' && selectedId) {
+        e.preventDefault()
+        const copied = instances.find((i) => i.id === selectedId)
+        clipboardRef.current = copied ? JSON.parse(JSON.stringify(copied)) : null
+        console.log('📋 Copied object:', clipboardRef.current?.id)
+        return
+      }
+
+      // ⌨️ Ctrl + V → Paste
+      if (e.ctrlKey && e.key.toLowerCase() === 'v' && clipboardRef.current) {
+        e.preventDefault()
+        const base = clipboardRef.current
+        const newCopy: AssemblyInstance = {
+          ...base,
+          id: `${base.id}_copy_${Date.now()}`,
+          transform: {
+            ...base.transform,
+            position: {
+              x: base.transform.position.x + 1,
+              y: base.transform.position.y,
+              z: base.transform.position.z + 1
+            }
+          }
+        }
+        dispatch(addInstance(newCopy))
+        dispatch(setSelectedId(newCopy.id))
+        console.log('📎 Pasted object:', newCopy.id)
+        return
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [dispatch, selectedId, instances])
 
   return (
     <div

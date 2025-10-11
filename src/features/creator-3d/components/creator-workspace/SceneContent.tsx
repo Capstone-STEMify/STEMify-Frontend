@@ -55,17 +55,17 @@ export function SceneContent({
     [camera, gl, onDropObject]
   )
 
-  // Update transform controls target when selection changes
   useEffect(() => {
-    if (transformControlsRef.current && selectedObjectId) {
-      const targetObject = objectRefs.current[selectedObjectId]
-      if (targetObject) {
-        transformControlsRef.current.attach(targetObject)
-      }
-    } else if (transformControlsRef.current) {
-      transformControlsRef.current.detach()
+    const transform = transformControlsRef.current
+    const targetObject = selectedObjectId ? objectRefs.current[selectedObjectId] : null
+
+    if (!targetObject || !targetObject.parent) {
+      transform?.detach()
+      return
     }
-  }, [selectedObjectId])
+
+    transform.attach(targetObject)
+  }, [selectedObjectId, objects])
 
   // Handle object click selection
   const handleObjectClick = useCallback(
@@ -84,7 +84,7 @@ export function SceneContent({
   const handleTransformChange = useCallback(() => {
     if (!selectedObjectId || !transformControlsRef.current) return
     const targetObject = objectRefs.current[selectedObjectId]
-    if (!targetObject) return
+    if (!targetObject || !targetObject.parent) return
 
     const newPos = {
       x: targetObject.position.x,
