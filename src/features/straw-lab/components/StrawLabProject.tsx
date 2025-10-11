@@ -2,13 +2,16 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Button } from '@/components/shadcn/button'
-import { Heart, Star, Play, Settings, Bot, Car, Radar, Award, Music, Eye, Cpu, Wrench, Zap } from 'lucide-react'
+import { Heart, Star, Bot } from 'lucide-react'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { Badge } from '@/components/shadcn/badge'
 import { supabase } from '@/libs/supabase/client'
+import { useExportAssembly } from '@/features/creator-3d/hooks/creator-3d-helper'
+import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
+import { toast } from 'sonner'
 
 interface ModelItem {
   id: number
@@ -22,7 +25,10 @@ interface ModelItem {
 
 const categories = ['Tất cả', 'Hình học', 'Cảm biến', 'Robot', 'Phương tiện', 'Chơi game', 'Âm nhạc']
 
-export default function StrawLabList() {
+export default function StrawLabProject() {
+  const exportAssemblyFn = useExportAssembly()
+  const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [creating, setCreating] = useState(false)
   const locale = useLocale()
   const [selectedCategory, setSelectedCategory] = useState('Tất cả')
   const [favorites, setFavorites] = useState<Set<number>>(new Set())
@@ -55,12 +61,8 @@ export default function StrawLabList() {
   const filteredModels =
     selectedCategory === 'Tất cả' ? models : models.filter((model) => model.category === selectedCategory)
 
-  // const handleNavigate = (id: string) => {
-  //   router.push(`/${locale}/admin/design/straw-lab/${id}`)
-  // }
-
   const handleNavigate = (id: number) => {
-    router.push(`/${locale}/straw-lab/${id}`)
+    router.push(`/${locale}/workspace-3d/${id}`)
   }
   const toggleFavorite = (id: number) => {
     const newFavorites = new Set(favorites)
@@ -76,28 +78,35 @@ export default function StrawLabList() {
   return (
     <div>
       {/* Main Content with rounded background */}
-      <main className='container mx-auto p-4'>
-        <div className='bg-white'>
+      <main className='bg-light container mx-auto p-4'>
+        <div>
           {/* Tab Navigation */}
-          {/* <div className='mb-6'>
-            <div className='flex flex-wrap gap-2'>
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? 'default' : 'outline'}
-                  size='sm'
-                  onClick={() => setSelectedCategory(category)}
-                  className={
-                    selectedCategory === category
-                      ? 'scale-105 transform rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                      : 'rounded-full border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }
-                >
-                  {category}
+          <div className='mb-6'>
+            <div className='flex justify-between'>
+              <div className='space-x-2'>
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? 'default' : 'outline'}
+                    size='sm'
+                    onClick={() => setSelectedCategory(category)}
+                    className={
+                      selectedCategory === category
+                        ? 'scale-105 transform rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                        : 'rounded-full border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+              <div>
+                <Button variant='outline' size='sm' onClick={() => setShowCreateDialog(true)}>
+                  Create new
                 </Button>
-              ))}
+              </div>
             </div>
-          </div> */}
+          </div>
 
           {/* Models Grid */}
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
@@ -128,14 +137,6 @@ export default function StrawLabList() {
                       className='object-cover transition-transform duration-300'
                       sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
                     />
-
-                    {/* Rating */}
-                    {model.rating && (
-                      <div className='absolute right-2 bottom-2 z-10 flex items-center space-x-1 rounded-full bg-black/40 px-2 py-1 text-white backdrop-blur-sm'>
-                        <Star className='h-3 w-3 fill-yellow-400 text-yellow-400' />
-                        <span className='text-xs font-medium'>{model.rating}</span>
-                      </div>
-                    )}
                   </div>
 
                   {/* Content */}
@@ -159,6 +160,50 @@ export default function StrawLabList() {
             />
           )}
         </div>
+
+        {showCreateDialog && (
+          <ExportDialog
+            onClose={() => setShowCreateDialog(false)}
+            onExport={async (metadata) => {
+              try {
+                setCreating(true)
+                toast.info('⏳ Đang tạo workspace mới...')
+
+                // 🧱 export dữ liệu rỗng
+                const emptyData = exportAssemblyFn(metadata)
+
+                // 🗄️ Insert vào Supabase
+                const { data, error } = await supabase
+                  .from('assembly_data')
+                  .insert([
+                    {
+                      name: metadata.title,
+                      description: metadata.description,
+                      author: metadata.author,
+                      category: metadata.category,
+                      image_url: '/images/shape.png',
+                      is_available: true,
+                      data: emptyData
+                    }
+                  ])
+                  .select('id')
+                  .single()
+
+                if (error) throw error
+
+                toast.success('✅ Đã tạo workspace mới!')
+                setShowCreateDialog(false)
+
+                router.push(`/${locale}/workspace-3d/${data.id}`)
+              } catch (err: any) {
+                console.error('❌ Create new workspace error:', err)
+                toast.error(err.message || 'Lỗi khi tạo workspace mới.')
+              } finally {
+                setCreating(false)
+              }
+            }}
+          />
+        )}
       </main>
     </div>
   )

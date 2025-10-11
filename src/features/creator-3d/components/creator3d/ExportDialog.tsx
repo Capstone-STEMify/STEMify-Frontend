@@ -2,18 +2,24 @@ import { useState } from 'react'
 
 interface ExportDialogProps {
   onClose: () => void
-  onExport: (metadata: { title: string; description: string; author: string }) => void
+  onExport: (metadata: { title: string; description: string; author: string; category: string }) => void
 }
 
 export function ExportDialog({ onClose, onExport }: ExportDialogProps) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [author, setAuthor] = useState('')
+  const [category, setCategory] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (title.trim() && description.trim() && author.trim()) {
-      onExport({ title: title.trim(), description: description.trim(), author: author.trim() })
+    if (title.trim() && description.trim() && author.trim() && category.trim()) {
+      onExport({
+        title: title.trim(),
+        description: description.trim(),
+        author: author.trim(),
+        category: category.trim()
+      })
     }
   }
 
@@ -30,6 +36,18 @@ export function ExportDialog({ onClose, onExport }: ExportDialogProps) {
                 type='text'
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                className='w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none'
+                placeholder='My Custom Assembly'
+                required
+              />
+            </div>
+
+            <div>
+              <label className='mb-1 block text-sm font-medium text-gray-700'>Category</label>
+              <input
+                type='text'
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
                 className='w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none'
                 placeholder='My Custom Assembly'
                 required

@@ -156,7 +156,7 @@ export default function WorkspaceTree() {
   return (
     <div>
       <div className='mb-2'>
-        <h2 className='text-lg font-medium'>Workspace Tree</h2>
+        <h2 className='text-lg font-medium'>{t3d('workspace_tree')}</h2>
         <div className='flex flex-wrap gap-2'>
           <button
             onClick={() => handleAddAction('highlight')}
@@ -170,9 +170,9 @@ export default function WorkspaceTree() {
           >
             (transform_arm)
           </button>
-          <button onClick={handleExport} className='rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'>
+          {/* <button onClick={handleExport} className='rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'>
             Export JSON
-          </button>
+          </button> */}
         </div>
       </div>
       <div>

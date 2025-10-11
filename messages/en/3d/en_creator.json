@@ -6,7 +6,7 @@
       "preview": "Preview 3D Model",
       "save": "Save Model"
     },
-    "mainContent": {
+    "main_content": {
       "move": "Move",
       "rotate": "Rotate",
       "scale": "Scale",
@@ -27,9 +27,13 @@
       "confirm_clear": "Are you sure you want to clear the entire scene? This action cannot be undone.",
       "yes_clear": "Yes, clear scene",
       "no_cancel": "No, cancel",
-      "import_assembly": "Import Model"
+      "import_assembly": "Import Model",
+      "importing_assembly": "Importing model...",
+      "import_success": "Model imported successfully!",
+      "import_error": "Error importing model. Please check the workspace ID and try again.",
+      "save_assembly": "Save Model"
     },
-    "leftPanel": {
+    "left_panel": {
       "title": "Components",
       "subtitle": "Drag and drop components to build your model",
       "straw": "Straw",
@@ -38,7 +42,7 @@
       "double_click_guide": "Double-click to place at origin",
       "select_guide": "Select & use gizmo to transform"
     },
-    "rightPanel": {
+    "right_panel": {
       "workspace_tree": "Workspace Tree",
       "properties": "Properties",
       "delete_component": "Do you want to delete this component?",

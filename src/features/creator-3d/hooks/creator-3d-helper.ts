@@ -319,7 +319,9 @@ export function exportAssembly(
         { id: 'orange_6_3', source: '/components/templates/StrawTypes/orange_6_3.json' },
         { id: 'yellow_3_8', source: '/components/templates/StrawTypes/yellow_3_8.json' },
         { id: '1leg_red', source: '/components/templates/ConnectorTypes/1leg.json' },
-        { id: '3leg_red', source: '/components/templates/ConnectorTypes/3legs.json' }
+        { id: '2leg_red', source: '/components/templates/ConnectorTypes/2legs.json' },
+        { id: '3leg_red', source: '/components/templates/ConnectorTypes/3legs.json' },
+        { id: '5leg_red', source: '/components/templates/ConnectorTypes/5legs.json' }
       ]
     },
     instances: {

@@ -43,6 +43,7 @@ export type ModalType =
   | 'curriculumSelectCourseListModal'
   | 'kitListTableModal'
   | 'selectComponentListModal'
+  | 'upsertAssembly'
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void

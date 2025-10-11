@@ -1,23 +1,15 @@
 'use client'
 
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
-import { ObjectInspector } from '../right-sidebar/ObjectInspector'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
 import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 import { CreatorWorkspace } from '@/features/creator-3d/components/creator-workspace/CreatorWorkspace'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import {
-  clearScene,
-  removeInstance,
-  setInstances,
-  setSelectedId,
-  updateInstance
-} from '@/features/creator-3d/slice/creatorSceneSlice'
+import { clearScene, setInstances, setSelectedId, updateInstance } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
-import WorkspaceTree from '@/features/creator-3d/components/right-sidebar/WorkspaceTree'
 import {
   addAction,
   addTargetToAction,
@@ -29,18 +21,20 @@ import {
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
 import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
-import { AssemblyInstance, useAssembly } from '@/features/assembly/hooks/useAssemblyOptimized'
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 
-export function Creator3D() {
-  const t3d = useTranslations('creator3D')
+export default function Creator3D() {
+  const { workspaceId } = useParams() as { workspaceId: string }
+  const t3d = useTranslations('creator3D.main_content')
   const dispatch = useAppDispatch()
   const instances = useAppSelector((s) => s.creatorScene.instances)
   const addObject = useAddObject()
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
-  const [showExportDialog, setShowExportDialog] = useState(false)
-
+  const actions = useAppSelector((s) => s.workspaceTree.actions)
+  const prevInstanceIds = useRef<string[]>([])
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
       addObject(template, { x: 0, y: 0, z: 0 })
@@ -72,10 +66,66 @@ export function Creator3D() {
     [dispatch]
   )
 
-  // Handle export
-  const handleExport = useCallback(() => {
-    setShowExportDialog(true)
-  }, [])
+  useEffect(() => {
+    const currentIds = instances.map((i) => i.id)
+    const deletedIds = prevInstanceIds.current.filter((id) => !currentIds.includes(id))
+
+    if (deletedIds.length > 0) {
+      deletedIds.forEach((id) => {
+        dispatch(removeTargetFromAllActions(id))
+      })
+    }
+
+    prevInstanceIds.current = currentIds
+  }, [instances, dispatch])
+
+  const handleSaveAssembly = useCallback(async () => {
+    if (!workspaceId) {
+      toast.error('⚠️ Không có workspaceId — không thể lưu.')
+      return
+    }
+
+    try {
+      toast.info('💾 Đang lưu thay đổi vào Supabase...')
+
+      const { data: existing, error: fetchError } = await supabase
+        .from('assembly_data')
+        .select('id, name, description, author')
+        .eq('id', workspaceId)
+        .single()
+
+      if (fetchError || !existing) {
+        toast.error('Không tìm thấy assembly để lưu.')
+        return
+      }
+
+      // ⚙️ Export lại dữ liệu mới (scene + actions + instances)
+      const exportData = exportAssemblyFn({
+        title: existing.name,
+        description: existing.description,
+        author: existing.author
+      })
+
+      // ⚙️ Cập nhật bản ghi
+      const { error: updateError } = await supabase
+        .from('assembly_data')
+        .update({
+          data: exportData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', workspaceId)
+
+      if (updateError) {
+        console.error('Supabase update error:', updateError)
+        toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
+      } else {
+        toast.success('✅ Đã lưu thay đổi vào Supabase!')
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error('Lỗi không xác định khi lưu dữ liệu.')
+    }
+  }, [workspaceId, exportAssemblyFn])
 
   // Handle clear scene
   const handleClearScene = useCallback(() => {
@@ -88,7 +138,7 @@ export function Creator3D() {
   const handleImportAssembly = useCallback(
     async (id: string) => {
       try {
-        toast.info('⏳ Đang tải Assembly từ Supabase...')
+        toast.info(t3d('importing_assembly'))
 
         const res = await fetch(`/api/assemblies/${id}`)
         if (!res.ok) throw new Error('Không thể tải dữ liệu từ Supabase')
@@ -229,7 +279,6 @@ export function Creator3D() {
         // ✅ Cập nhật Redux Scene
         // ================================
         dispatch(setInstances(allInstances))
-        console.log('🧱 Flattened Instances:', allInstances)
 
         // ================================
         // 🔹 Restore Actions
@@ -254,14 +303,19 @@ export function Creator3D() {
           }
         }
 
-        toast.success('✅ Đã import thành công Assembly!')
+        toast.success(t3d('export_success'))
       } catch (err: any) {
-        console.error('❌ Import error:', err)
-        toast.error(err.message || 'Lỗi khi load Assembly.')
+        toast.error(err.message || t3d('export_error'))
       }
     },
     [dispatch]
   )
+
+  useEffect(() => {
+    if (workspaceId) {
+      handleImportAssembly(workspaceId)
+    }
+  }, [workspaceId, handleImportAssembly])
 
   return (
     <div className='relative flex h-full w-full overflow-hidden bg-gray-100'>
@@ -287,53 +341,13 @@ export function Creator3D() {
         />
 
         {/* Action Buttons */}
-        <SceneActions
-          onImport={() => {
-            const id = prompt('Nhập ID Assembly muốn import:')
-            if (id) handleImportAssembly(id)
-          }}
-          onClear={handleClearScene}
-          onExport={handleExport}
-          hasObjects={instances.length > 0}
-        />
+        <SceneActions onSave={handleSaveAssembly} onClear={handleClearScene} hasObjects={instances.length > 0} />
       </div>
 
       {/* Object Inspector */}
       <div className='h-full w-80 flex-shrink-0 border-l bg-white'>
         <WorkspacePanel />
       </div>
-
-      {/* Export Dialog */}
-      {showExportDialog && (
-        <ExportDialog
-          onClose={() => setShowExportDialog(false)}
-          onExport={async (metadata) => {
-            try {
-              const exportData = exportAssemblyFn(metadata)
-              const { error } = await supabase.from('assembly_data').insert([
-                {
-                  name: metadata.title,
-                  description: metadata.description,
-                  author: metadata.author,
-                  data: exportData
-                }
-              ])
-
-              if (error) {
-                console.error('Supabase insert error:', error)
-                toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
-              } else {
-                toast.success('✅ Đã lưu assembly vào Supabase!')
-              }
-
-              setShowExportDialog(false)
-            } catch (err) {
-              console.error(err)
-              toast.error('Lỗi không xác định khi lưu dữ liệu.')
-            }
-          }}
-        />
-      )}
     </div>
   )
 }

@@ -27,7 +27,11 @@
       "confirm_clear": "Bạn có chắc chắn muốn xóa toàn bộ cảnh không? Hành động này không thể hoàn tác.",
       "yes_clear": "Có, xóa cảnh",
       "no_cancel": "Không, hủy bỏ",
-      "import_assembly": "Nhập mô hình"
+      "import_assembly": "Nhập mô hình",
+      "importing_assembly": "Đang tải mô hình...",
+      "import_success": "Nhập mô hình thành công!",
+      "import_error": "Lỗi khi nhập mô hình. Vui lòng kiểm tra ID workspace và thử lại.",
+      "save_assembly": "Lưu mô hình"
     },
     "left_panel": {
       "title": "Công cụ",

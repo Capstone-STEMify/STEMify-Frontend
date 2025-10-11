@@ -1,8 +1,8 @@
 'use client'
 
 import { Suspense } from 'react'
-import { Creator3D } from '@/features/creator-3d/components/creator3d/Creator3D'
 import Creator3DHeader from '@/features/creator-3d/components/creator3d/Creator3DHeader'
+import Creator3D from '@/features/creator-3d/components/creator3d/Creator3D'
 
 export default function Create3DPage() {
   return (
