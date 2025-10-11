@@ -7,6 +7,8 @@ import { Settings, ChevronUp, Star, Cpu, FolderKanban } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { FaVectorSquare } from 'react-icons/fa'
+import Link from 'next/link'
+import { useLocale } from 'next-intl'
 
 export type CarouselItem = {
   id: string
@@ -76,29 +78,35 @@ function RatingStars({ value = 0 }: { value?: number }) {
 }
 
 function HeaderBar() {
+  const locale = useLocale()
   return (
     <div className='flex items-center justify-between gap-2 pb-5 md:gap-6'>
       {/* Left badge */}
-      <div className='inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 shadow-sm backdrop-blur'>
-        <FaVectorSquare className='h-5 w-5' />
-        <span className='text-lg font-semibold'>Straw Assembly</span>
-      </div>
-
+      <Link href={`/${locale}/straw-lab`} className=''>
+        <div className='inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 shadow-sm backdrop-blur'>
+          <FaVectorSquare className='h-5 w-5' />
+          <span className='text-lg font-semibold'>Straw Assembly</span>
+        </div>
+      </Link>
       {/* Center tabs */}
       <nav className='hidden items-center gap-10 md:flex'>
-        <button className='group inline-flex flex-col items-center text-zinc-700 hover:text-zinc-900'>
+        {/* <Link href={`/${locale}/microbit`} className='group'> */}
+        <div className='inline-flex flex-col items-center text-zinc-700 hover:text-zinc-900'>
           <div className='flex items-center gap-2'>
             <Cpu className='h-6 w-6' />
             <span className='text-lg font-semibold'>Micro:bit</span>
           </div>
           <ChevronUp className='mt-1 hidden h-4 w-4 text-zinc-900 group-hover:block' />
-        </button>
-        <button className='inline-flex flex-col items-center text-zinc-500 hover:text-zinc-900'>
-          <div className='flex items-center gap-2'>
-            <FolderKanban className='h-6 w-6' />
-            <span className='text-lg font-medium'>My Project</span>
-          </div>
-        </button>
+        </div>
+        {/* </Link> */}
+        <Link href={`/${locale}/workspace-3d`} className='group'>
+          <button className='inline-flex flex-col items-center text-zinc-500 hover:text-zinc-900'>
+            <div className='flex items-center gap-2'>
+              <FolderKanban className='h-6 w-6' />
+              <span className='text-lg font-medium'>My Project</span>
+            </div>
+          </button>
+        </Link>
       </nav>
 
       {/* Settings */}
@@ -109,7 +117,7 @@ function HeaderBar() {
   )
 }
 
-export default function CarouselShowcase() {
+export default function StrawLabShowcase() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'center',
     dragFree: false,
