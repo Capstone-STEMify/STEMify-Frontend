@@ -13,7 +13,7 @@ export default function Home() {
 
   const handleConnect = async () => {
     const device = await connectToMicrobit()
-    setConnectedDevice(device)
+    //setConnectedDevice(device)
   }
 
   const handleFlash = () => {
