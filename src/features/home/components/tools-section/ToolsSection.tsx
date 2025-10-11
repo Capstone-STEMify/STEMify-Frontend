@@ -36,10 +36,17 @@ export default function ToolsSection() {
 
           <div className='relative z-20 mb-8 flex justify-center'>
             <MacCard>
-              {/* <video autoPlay loop muted playsInline className='h-full w-full object-cover'>
-                <source src='https://res.cloudinary.com/dgdi9wvpz/video/upload/1009_1_yfgzqp.mp4' type='video/mp4' />
-              </video> */}
-              <div></div>
+              <video
+                key='main-video'
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload='auto'
+                className='h-full w-full rounded-lg object-cover'
+              >
+                <source src='https://res.cloudinary.com/dgdi9wvpz/video/upload/Main_2_mc5d1w.mp4' type='video/mp4' />
+              </video>
             </MacCard>
             <div className='absolute -top-2 -left-2 -z-10 h-full w-full rounded-lg bg-gradient-to-br from-yellow-300 to-orange-300 opacity-30'></div>
           </div>

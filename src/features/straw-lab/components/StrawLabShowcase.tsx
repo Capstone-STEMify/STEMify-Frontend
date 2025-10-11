@@ -1,11 +1,15 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ChevronUp, Cpu, FolderKanban } from 'lucide-react'
+import { Bot, ChevronUp, Cpu, FolderKanban } from 'lucide-react'
 import { FaVectorSquare } from 'react-icons/fa'
 import STabs from '@/components/shared/STabs'
 import StrawLabList from '@/features/straw-lab/components/StrawLabList'
 import StrawLabProject from '@/features/straw-lab/components/StrawLabProject'
+import dynamic from 'next/dynamic'
+import MicroAI from '@/features/blockly-self-build/components/MicroAI'
+
+const MakeCodeEditor = dynamic(() => import('@/components/microbit/MakeCodeEmbed'), { ssr: false })
 
 export default function StrawLabShowcase() {
   return (
@@ -35,7 +39,21 @@ export default function StrawLabShowcase() {
                 </div>
               ),
               value: 'micro-bit',
-              content: <div>micro:bit</div>
+              content: <div><MakeCodeEditor /></div>
+            },
+            {
+              label: (
+                <div className='flex items-center gap-2'>
+                  <Bot className='h-6 w-6' />
+                  <span className='font-medium'>AI Interaction</span>
+                </div>
+              ),
+              value: 'microbit-ai',
+              content: (
+                <div>
+                  <MicroAI />
+                </div>
+              )
             },
             {
               label: (
