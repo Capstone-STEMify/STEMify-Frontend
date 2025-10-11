@@ -9,6 +9,9 @@ import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { Badge } from '@/components/shadcn/badge'
 import { supabase } from '@/libs/supabase/client'
+import { useExportAssembly } from '@/features/creator-3d/hooks/creator-3d-helper'
+import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
+import { toast } from 'sonner'
 
 interface ModelItem {
   id: number
@@ -23,6 +26,9 @@ interface ModelItem {
 const categories = ['Tất cả', 'Hình học', 'Cảm biến', 'Robot', 'Phương tiện', 'Chơi game', 'Âm nhạc']
 
 export default function StrawLabList() {
+  const exportAssemblyFn = useExportAssembly()
+  const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [creating, setCreating] = useState(false)
   const locale = useLocale()
   const [selectedCategory, setSelectedCategory] = useState('Tất cả')
   const [favorites, setFavorites] = useState<Set<number>>(new Set())
@@ -68,6 +74,44 @@ export default function StrawLabList() {
     setFavorites(newFavorites)
   }
 
+  const handleCreateNew = async () => {
+    try {
+      // 🧱 Xuất workspace trống
+      const emptyData = exportAssemblyFn({
+        title: 'Untitled Project',
+        description: 'New empty workspace',
+        author: 'System'
+      })
+
+      // 🗄️ Lưu lên Supabase
+      const { data, error } = await supabase
+        .from('assembly_data')
+        .insert([
+          {
+            name: 'Untitled Project',
+            description: 'New empty workspace',
+            category: 'Tự tạo',
+            image_url: '/images/shape.png',
+            is_available: true,
+            data: emptyData
+          }
+        ])
+        .select('id')
+        .single()
+
+      if (error) {
+        console.error('❌ Error creating new workspace:', error)
+        alert('Không thể tạo workspace mới.')
+        return
+      }
+
+      router.push(`/${locale}/workspace-3d/${data.id}`)
+    } catch (err) {
+      console.error('Error:', err)
+      alert('Đã xảy ra lỗi khi tạo workspace mới.')
+    }
+  }
+
   if (loading) return <div className='py-10 text-center text-gray-500'>Đang tải danh sách mô hình...</div>
   return (
     <div>
@@ -76,22 +120,29 @@ export default function StrawLabList() {
         <div className='bg-white'>
           {/* Tab Navigation */}
           <div className='mb-6'>
-            <div className='flex flex-wrap gap-2'>
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? 'default' : 'outline'}
-                  size='sm'
-                  onClick={() => setSelectedCategory(category)}
-                  className={
-                    selectedCategory === category
-                      ? 'scale-105 transform rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                      : 'rounded-full border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }
-                >
-                  {category}
+            <div className='flex justify-between'>
+              <div className='space-x-2'>
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? 'default' : 'outline'}
+                    size='sm'
+                    onClick={() => setSelectedCategory(category)}
+                    className={
+                      selectedCategory === category
+                        ? 'scale-105 transform rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                        : 'rounded-full border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+              <div>
+                <Button variant='outline' size='sm' onClick={() => setShowCreateDialog(true)}>
+                  Create new
                 </Button>
-              ))}
+              </div>
             </div>
           </div>
 
@@ -155,6 +206,50 @@ export default function StrawLabList() {
             />
           )}
         </div>
+
+        {showCreateDialog && (
+          <ExportDialog
+            onClose={() => setShowCreateDialog(false)}
+            onExport={async (metadata) => {
+              try {
+                setCreating(true)
+                toast.info('⏳ Đang tạo workspace mới...')
+
+                // 🧱 export dữ liệu rỗng
+                const emptyData = exportAssemblyFn(metadata)
+
+                // 🗄️ Insert vào Supabase
+                const { data, error } = await supabase
+                  .from('assembly_data')
+                  .insert([
+                    {
+                      name: metadata.title,
+                      description: metadata.description,
+                      author: metadata.author,
+                      category: metadata.category,
+                      image_url: '/images/shape.png',
+                      is_available: true,
+                      data: emptyData
+                    }
+                  ])
+                  .select('id')
+                  .single()
+
+                if (error) throw error
+
+                toast.success('✅ Đã tạo workspace mới!')
+                setShowCreateDialog(false)
+
+                router.push(`/${locale}/workspace-3d/${data.id}`)
+              } catch (err: any) {
+                console.error('❌ Create new workspace error:', err)
+                toast.error(err.message || 'Lỗi khi tạo workspace mới.')
+              } finally {
+                setCreating(false)
+              }
+            }}
+          />
+        )}
       </main>
     </div>
   )

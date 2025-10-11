@@ -86,6 +86,8 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'curriculumSelectCourseListModal' && <CurriculumSelectCourseListModal {...modalProps} />}
       {modalType === 'kitListTableModal' && <KitListTableModal {...modalProps} />}
       {modalType === 'selectComponentListModal' && <SelectComponentListModal {...modalProps} />}
+      
+
     </ModalContext.Provider>
   )
 }

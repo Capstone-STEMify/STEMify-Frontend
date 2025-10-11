@@ -32,7 +32,6 @@ export default function Creator3D() {
   const addObject = useAddObject()
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
-  const [showExportDialog, setShowExportDialog] = useState(false)
 
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
@@ -64,11 +63,6 @@ export default function Creator3D() {
     },
     [dispatch]
   )
-
-  // Handle export
-  const handleExport = useCallback(() => {
-    setShowExportDialog(true)
-  }, [])
 
   const handleSaveAssembly = useCallback(async () => {
     if (!workspaceId) {
@@ -270,7 +264,6 @@ export default function Creator3D() {
         // ✅ Cập nhật Redux Scene
         // ================================
         dispatch(setInstances(allInstances))
-        console.log('🧱 Flattened Instances:', allInstances)
 
         // ================================
         // 🔹 Restore Actions
@@ -333,20 +326,7 @@ export default function Creator3D() {
         />
 
         {/* Action Buttons */}
-        <SceneActions
-          onImport={() => {
-            if (workspaceId) {
-              handleImportAssembly(workspaceId)
-            } else {
-              const id = prompt('Nhập ID Assembly muốn import:')
-              if (id) handleImportAssembly(id)
-            }
-          }}
-          onSave={handleSaveAssembly}
-          onClear={handleClearScene}
-          onExport={handleExport}
-          hasObjects={instances.length > 0}
-        />
+        <SceneActions onSave={handleSaveAssembly} onClear={handleClearScene} hasObjects={instances.length > 0} />
       </div>
 
       {/* Object Inspector */}
@@ -354,8 +334,7 @@ export default function Creator3D() {
         <WorkspacePanel />
       </div>
 
-      {/* Export Dialog */}
-      {showExportDialog && (
+      {/* {showExportDialog && (
         <ExportDialog
           onClose={() => setShowExportDialog(false)}
           onExport={async (metadata) => {
@@ -384,7 +363,7 @@ export default function Creator3D() {
             }
           }}
         />
-      )}
+      )} */}
     </div>
   )
 }
