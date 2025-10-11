@@ -58,36 +58,36 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
 
   return (
     <div
-      className={`relative h-screen flex-1 ${isDragOver ? 'bg-blue-50' : 'bg-gray-100'}`}
+      className={`relative h-full flex-1 overflow-hidden ${isDragOver ? 'bg-blue-50' : 'bg-gray-100'}`}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
     >
-      {/* 3D Canvas */}
-      <Canvas
-        camera={{
-          position: [30, 20, 30],
-          fov: 60
-        }}
-        gl={{
-          antialias: true,
-          alpha: false
-        }}
-      >
-        <SceneContent
-          transformControlsRef={transformControlsRef}
-          orbitControlsRef={orbitControlsRef}
-          onObjectSelect={onObjectSelect}
-          onObjectUpdate={onObjectUpdate}
-          onDropObject={(pos) => {
-            if (dragSource) {
-              onObjectAdd(dragSource, pos)
-              handleDragEnd()
-            }
+      <div className='absolute inset-0'>
+        <Canvas
+          camera={{
+            position: [30, 20, 30],
+            fov: 60
           }}
-        />
-      </Canvas>
-
+          gl={{
+            antialias: true,
+            alpha: false
+          }}
+        >
+          <SceneContent
+            transformControlsRef={transformControlsRef}
+            orbitControlsRef={orbitControlsRef}
+            onObjectSelect={onObjectSelect}
+            onObjectUpdate={onObjectUpdate}
+            onDropObject={(pos) => {
+              if (dragSource) {
+                onObjectAdd(dragSource, pos)
+                handleDragEnd()
+              }
+            }}
+          />
+        </Canvas>
+      </div>
       {/* Toolbar */}
       <CreatorToolbar />
       <SceneTopRight />
