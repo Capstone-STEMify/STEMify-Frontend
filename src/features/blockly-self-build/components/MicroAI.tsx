@@ -52,7 +52,7 @@ export default function MicroAI() {
 
           if (prediction && prediction.length > 0) {
             const best = prediction.reduce((max, p) => p.probability > max.probability ? p : max, prediction[0]);
-            if (best && best.probability >= 0.95) {
+            if (best && best.probability >= 0.8) {
               const command = best.className;
               const now = Date.now();
               if (command !== lastCommandRef.current || now > cooldownRef.current) {
