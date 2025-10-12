@@ -52,7 +52,7 @@ export default function MicroAI() {
 
           if (prediction && prediction.length > 0) {
             const best = prediction.reduce((max, p) => p.probability > max.probability ? p : max, prediction[0]);
-            if (best && best.probability >= 0.95) {
+            if (best && best.probability >= 0.8) {
               const command = best.className;
               const now = Date.now();
               if (command !== lastCommandRef.current || now > cooldownRef.current) {
@@ -60,9 +60,9 @@ export default function MicroAI() {
                   sendCommandToMicrobit('Boat');
                   lastCommandRef.current = 'Boat';
                   cooldownRef.current = now + 2000;
-                } else if (command === 'bridge') {
-                  sendCommandToMicrobit('bridge');
-                  lastCommandRef.current = 'bridge';
+                } else if (command === 'No boat') {
+                  sendCommandToMicrobit('No boat');
+                  lastCommandRef.current = 'No boat';
                   cooldownRef.current = now + 2000;
                 }
               }
@@ -94,9 +94,9 @@ export default function MicroAI() {
                 sendCommandToMicrobit('Boat');
                 lastCommandRef.current = 'Boat';
                 cooldownRef.current = now + 2000;
-              } else if (command === 'bridge') {
-                sendCommandToMicrobit('bridge');
-                lastCommandRef.current = 'bridge';
+              } else if (command === 'No boat') {
+                sendCommandToMicrobit('No boat');
+                lastCommandRef.current = 'No boat';
                 cooldownRef.current = now + 2000;
               }
             }
