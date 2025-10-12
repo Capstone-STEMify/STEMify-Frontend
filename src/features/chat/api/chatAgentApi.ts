@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const chatAgentApi = createApi({
   reducerPath: 'chatAgentApi',
   // baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_AI_URL }),
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://stemify.hopto.org/resource' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://stemify.hopto.org/resource/api' }),
   tagTypes: ['ChatAgent'],
   endpoints: (builder) => ({
     getCourseRecommendedAi: builder.mutation<ApiSuccessResponse<{ message: string }>, { userPrompt: string }>({
