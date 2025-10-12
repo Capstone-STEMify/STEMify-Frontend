@@ -60,9 +60,9 @@ export default function MicroAI() {
                   sendCommandToMicrobit('Boat');
                   lastCommandRef.current = 'Boat';
                   cooldownRef.current = now + 2000;
-                } else if (command === 'bridge') {
-                  sendCommandToMicrobit('bridge');
-                  lastCommandRef.current = 'bridge';
+                } else if (command === 'No boat') {
+                  sendCommandToMicrobit('No boat');
+                  lastCommandRef.current = 'No boat';
                   cooldownRef.current = now + 2000;
                 }
               }
@@ -94,9 +94,9 @@ export default function MicroAI() {
                 sendCommandToMicrobit('Boat');
                 lastCommandRef.current = 'Boat';
                 cooldownRef.current = now + 2000;
-              } else if (command === 'bridge') {
-                sendCommandToMicrobit('bridge');
-                lastCommandRef.current = 'bridge';
+              } else if (command === 'No boat') {
+                sendCommandToMicrobit('No boat');
+                lastCommandRef.current = 'No boat';
                 cooldownRef.current = now + 2000;
               }
             }
