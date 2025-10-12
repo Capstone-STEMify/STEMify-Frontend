@@ -16,6 +16,7 @@ export default function ToolsSection() {
     { icon: '/HomeFiles/tools/paint.png' },
     { icon: '/HomeFiles/tools/note.jpg' }
   ]
+  const [loading, setLoading] = useState(true)
 
   return (
     <section className='relative overflow-hidden bg-gray-50 px-6 py-16'>
@@ -36,18 +37,32 @@ export default function ToolsSection() {
 
           <div className='relative z-20 mb-8 flex justify-center'>
             <MacCard>
-              <video
-                key='main-video'
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload='auto'
-                className='h-full w-full rounded-lg object-cover'
-              >
-                <source src='https://res.cloudinary.com/dgdi9wvpz/video/upload/Main_2_mc5d1w.mp4' type='video/mp4' />
-              </video>
+              <div className='relative h-full w-full'>
+                {loading && (
+                  <div className='absolute inset-0 z-10 flex items-center justify-center bg-black/20'>
+                    <div className='h-10 w-10 animate-spin rounded-full border-4 border-white border-t-transparent'></div>
+                  </div>
+                )}
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload='auto'
+                  className='h-full w-full object-cover'
+                  onLoadedData={() => setLoading(false)}
+                  onCanPlay={() => setLoading(false)}
+                  onPlaying={() => setLoading(false)}
+                  onWaiting={() => setLoading(true)}
+                >
+                  <source
+                    src='https://res.cloudinary.com/dgdi9wvpz/video/upload/f_auto,q_auto/Main_2_mc5d1w.mp4'
+                    type='video/mp4'
+                  />
+                </video>
+              </div>
             </MacCard>
+
             <div className='absolute -top-2 -left-2 -z-10 h-full w-full rounded-lg bg-gradient-to-br from-yellow-300 to-orange-300 opacity-30'></div>
           </div>
 
