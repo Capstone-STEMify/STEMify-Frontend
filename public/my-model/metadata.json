@@ -1,1 +1,1 @@
-{"tfjsVersion":"1.7.4","tmVersion":"2.4.10","packageVersion":"0.8.4-alpha2","packageName":"@teachablemachine/image","timeStamp":"2025-10-11T08:30:14.269Z","userMetadata":{},"modelName":"tm-my-image-model","labels":["Boat","bridge"],"imageSize":224}
+{"tfjsVersion":"1.7.4","tmVersion":"2.4.10","packageVersion":"0.8.4-alpha2","packageName":"@teachablemachine/image","timeStamp":"2025-10-12T04:04:18.856Z","userMetadata":{},"modelName":"tm-my-image-model","labels":["Boat","No boat"],"imageSize":224}
