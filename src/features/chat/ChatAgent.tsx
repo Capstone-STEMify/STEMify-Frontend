@@ -107,6 +107,13 @@ export default function ChatAgent() {
     })
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSend()
+    }
+  }
+
   return (
     <div className='fixed right-6 bottom-6 z-50'>
       <motion.div
@@ -180,7 +187,7 @@ export default function ChatAgent() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder='Type your message...'
-                  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                  onKeyDown={handleKeyDown}
                   disabled={messageCourseLoading || messageGeneralLoading}
                 />
               </div>
