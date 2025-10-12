@@ -1,9 +1,10 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
 import { Search, Sparkles } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 interface HeroSectionProps {
   onAnimationComplete: (complete: boolean) => void
@@ -20,7 +21,8 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
   const searchRef = useRef(null)
   const blob1Ref = useRef(null)
   const blob2Ref = useRef(null)
-
+  const router = useRouter()
+  const locale = useLocale()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedType, setSelectedType] = useState('Course')
 
@@ -224,7 +226,12 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
               className='flex-1 border-none bg-transparent px-6 py-3 text-lg text-gray-700 placeholder-gray-500 outline-none'
             />
 
-            <button className='flex transform items-center space-x-2 rounded-xl bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'>
+            <button
+              className='flex transform items-center space-x-2 rounded-xl bg-amber-400 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-amber-500 hover:shadow-xl'
+              onClick={() => {
+                router.push(`/${locale}/resource/courses`)
+              }}
+            >
               <Search className='h-5 w-5' />
               <span className='hidden sm:inline'>{tc('button.explore')}</span>
             </button>
