@@ -128,8 +128,8 @@ export default function ProductCart() {
                 </div>
 
                 {/* Continue Shopping Button (Mobile) */}
-                <Button className='mt-6 w-full rounded-lg border-2 border-blue-500 px-6 py-3 font-semibold text-gray-700 transition-all hover:bg-gray-50 lg:hidden'>
-                  ← Continue Shopping
+                <Button className='border-sky-custom-600 text-sky-custom-600 bg-sky-custom-50 mt-6 w-full rounded-lg border-2 px-6 py-3 font-semibold transition-all hover:bg-gray-50 lg:hidden'>
+                  {t('list.continueShopping')}
                 </Button>
               </div>
 
