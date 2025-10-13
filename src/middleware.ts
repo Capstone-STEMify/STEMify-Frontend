@@ -44,7 +44,7 @@ export default withAuth(
 
         const PUBLIC_PATHS = ['/', '/unauthorized', '/api/auth/signin']
 
-        const isPublic = PUBLIC_PATHS.includes(pathNoLocale) || !pathname.startsWith('/admin')
+        const isPublic = PUBLIC_PATHS.includes(pathNoLocale) || !pathNoLocale.startsWith('/admin')
 
         return isPublic ? true : !!token
       }
