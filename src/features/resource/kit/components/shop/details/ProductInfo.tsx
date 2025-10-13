@@ -4,6 +4,9 @@ import { ChevronDown, HandCoins, RotateCcw, Shield, ShoppingCart, Star, Truck, W
 import Image from 'next/image'
 import { Kit } from '@/features/resource/kit/types/kit.type'
 import { useTranslations } from 'next-intl'
+import { useUpdateCartItemsMutation } from '@/features/cart/api/cartApi'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { toast } from 'sonner'
 export interface ProductInfoProps {
   kit: Kit
 }
@@ -11,7 +14,17 @@ export interface ProductInfoProps {
 const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
   const t = useTranslations('kits')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const [quantity, setQuantity] = useState(1)
+
+  const user = useAppSelector((state) => state.auth?.user)
+
+  const [updateCartItem] = useUpdateCartItemsMutation()
+
+  const handleAddToCart = (productId: number, newQuantity: number) => {
+    updateCartItem({ userId: user?.userId || '', productId, quantity: newQuantity }).unwrap()
+    toast.success(tt('successMessage.addToCart'))
+  }
 
   return (
     <motion.div
@@ -180,14 +193,14 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
           <div className='flex items-center gap-2 rounded-full border border-gray-400 bg-white px-6 py-2'>
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className='h-10 w-10 rounded-full bg-gray-100 text-xl font-bold shadow-sm transition-all hover:shadow-md'
+              className='h-10 w-10 cursor-pointer rounded-full bg-gray-100 text-xl font-bold shadow-sm transition-all hover:shadow-md'
             >
               -
             </button>
             <span className='w-12 text-center text-xl font-semibold'>{quantity}</span>
             <button
               onClick={() => setQuantity(quantity + 1)}
-              className='h-10 w-10 rounded-full bg-gray-100 text-xl font-bold shadow-sm transition-all hover:shadow-md'
+              className='h-10 w-10 cursor-pointer rounded-full bg-gray-100 text-xl font-bold shadow-sm transition-all hover:shadow-md'
             >
               +
             </button>
@@ -196,7 +209,8 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ kit }) => {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className='flex-1 rounded-full bg-gradient-to-r from-sky-300 to-sky-500 py-4 text-lg font-bold text-white shadow-xl shadow-blue-200 transition-all hover:shadow-2xl'
+            className='flex-1 cursor-pointer rounded-full bg-gradient-to-r from-sky-300 to-sky-500 py-4 text-lg font-bold text-white shadow-xl shadow-blue-200 transition-all hover:shadow-2xl'
+            onClick={() => handleAddToCart(kit.id, quantity)}
           >
             {tc('button.addToCart')}
           </motion.button>

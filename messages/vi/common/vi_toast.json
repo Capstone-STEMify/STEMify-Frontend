@@ -17,7 +17,10 @@
       "addComponentToKit": "Đã thêm thành phần vào bộ dụng cụ thành công!",
       "removeComponent": "Đã xóa thành phần khỏi bộ dụng cụ thành công!",
       "updateComponentInKit": "Đã cập nhật thành phần bộ dụng cụ thành công!",
-      "addToCurriculum": "Đã thêm vào chương trình học thành công!"
+      "addToCurriculum": "Đã thêm vào chương trình học thành công!",
+      "removeItemFromCart": "Đã xóa sản phẩm khỏi giỏ hàng!",
+      "clearCart": "Đã xóa giỏ hàng!",
+      "addToCart": "Đã thêm sản phẩm vào giỏ hàng!"
     },
     "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "errorSpecific": {
@@ -35,7 +38,9 @@
       "ask": "Bạn có chắc chắn muốn thực hiện ",
       "askStatus": "Bạn có chắc chắn muốn {action} \"{title}\" không?",
       "sendRequest": "Bạn có chắc chắn muốn gửi yêu cầu phê duyệt cho \"{title}\" không?",
-      "addAnotherKit": "Khóa học đã có bộ kit. Bạn có muốn thay thế bằng bộ mới?"
+      "addAnotherKit": "Khóa học đã có bộ kit. Bạn có muốn thay thế bằng bộ mới?",
+      "removeItemFromCart": "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?",
+      "clearCart": "Bạn có chắc chắn muốn xóa giỏ hàng không?"
     }
   }
 }

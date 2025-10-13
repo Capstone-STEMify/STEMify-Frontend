@@ -17,7 +17,10 @@
       "addComponentToKit": "Successfully added components to kit!",
       "removeComponent": "Successfully removed components from kit!",
       "updateComponentInKit": "Successfully updated kit components!",
-      "addToCurriculum": "Successfully added to curriculum!"
+      "addToCurriculum": "Successfully added to curriculum!",
+      "removeItemFromCart": "Item removed from cart!",
+      "clearCart": "Cart cleared!",
+      "addToCart": "Item added to cart!"
     },
     "errorMessage": "An error occurred. Please try again. ",
     "errorSpecific": {
@@ -35,7 +38,9 @@
       "ask": "Are you sure to make ",
       "askStatus": "Are you sure to {action} \"{title}\"?",
       "sendRequest": "Are you sure you want to send approval request for \"{title}\"?",
-      "addAnotherKit": "The course already has a kit. Do you want to replace it with a new one?"
+      "addAnotherKit": "The course already has a kit. Do you want to replace it with a new one?",
+      "removeItemFromCart": "Are you sure you want to remove this item from the cart?",
+      "clearCart": "Are you sure you want to clear the cart?"
     }
   }
 }

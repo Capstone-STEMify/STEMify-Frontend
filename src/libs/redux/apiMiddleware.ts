@@ -20,6 +20,7 @@ import { courseEnrollmentApi } from '@/features/enrollment/api/courseEnrollmentA
 import { curriculumEnrollmentApi } from '@/features/enrollment/api/curriculumEnrollmentApi'
 import { chatAgentApi } from '@/features/chat/api/chatAgentApi'
 import { certificateApi } from '@/features/certificate/api/certificateApi'
+import { cartApi } from '@/features/cart/api/cartApi'
 
 export const apiMiddlewares: Middleware[] = [
   courseApi.middleware,
@@ -42,7 +43,8 @@ export const apiMiddlewares: Middleware[] = [
   planApi.middleware,
   componentApi.middleware,
   chatAgentApi.middleware,
-  certificateApi.middleware
+  certificateApi.middleware,
+  cartApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]

@@ -47,6 +47,7 @@ import { curriculumEnrollmentSlice } from '@/features/enrollment/slice/curriculu
 import { selectionObjectSlice } from '@/features/creator-3d/slice/selectionObjectSlice'
 import { chatAgentApi } from '@/features/chat/api/chatAgentApi'
 import { certificateApi } from '@/features/certificate/api/certificateApi'
+import { cartApi } from '@/features/cart/api/cartApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -99,5 +100,6 @@ export const rootReducer = combineReducers({
   [planApi.reducerPath]: planApi.reducer,
   [componentApi.reducerPath]: componentApi.reducer,
   [chatAgentApi.reducerPath]: chatAgentApi.reducer,
-  [certificateApi.reducerPath]: certificateApi.reducer
+  [certificateApi.reducerPath]: certificateApi.reducer,
+  [cartApi.reducerPath]: cartApi.reducer
 })
