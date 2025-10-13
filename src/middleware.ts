@@ -44,7 +44,18 @@ export default withAuth(
 
         const PUBLIC_PATHS = ['/', '/unauthorized', '/api/auth/signin']
 
-        const isPublic = PUBLIC_PATHS.includes(pathNoLocale) || !pathname.startsWith('/admin')
+        // const isPublic = PUBLIC_PATHS.includes(pathNoLocale) || !pathname.startsWith('/admin')
+
+        // sử dụng khi gần ra hội đồng
+        // const isPublic =
+        //   PUBLIC_PATHS.includes(pathNoLocale) ||
+        //   (pathNoLocale.startsWith('/resource') && !pathNoLocale.startsWith('/resource/lesson/')) ||
+        //   pathNoLocale.startsWith('/shop') ||
+        //   pathNoLocale.startsWith('/plan') ||
+        //   pathNoLocale.startsWith('/shopping-basket')
+
+        // development
+        const isPublic = PUBLIC_PATHS.includes(pathNoLocale)
 
         return isPublic ? true : !!token
       }
