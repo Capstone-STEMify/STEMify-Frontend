@@ -5,19 +5,16 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 
 interface PaymentSummaryProps {
-  total: number
+  productTotal: number
   onCheckout: () => void
   onRemoveAll: () => void
 }
 
-export const PaymentSummary: React.FC<PaymentSummaryProps> = ({ total, onCheckout, onRemoveAll }) => {
+export const PaymentSummary: React.FC<PaymentSummaryProps> = ({ productTotal, onCheckout, onRemoveAll }) => {
   const [discountCode, setDiscountCode] = useState('')
   const t = useTranslations('cart')
 
-  const productTotal = total * 0.95 // 95% of total
-  const productTax = total * 0.05 // 5% tax
-  const shipping = 0
-  const shippingTax = 0
+  const total = productTotal // + shipping - discount
 
   return (
     <div className='sticky top-6 rounded-xl bg-white p-6 shadow-lg'>
@@ -39,9 +36,9 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({ total, onCheckou
           </div>
           <div className='flex items-center justify-between'>
             {/* <span className='text-gray-600'>- {t('summary.ofWhichTax')}:</span> */}
-            <span className='text-gray-900'>
+            {/* <span className='text-gray-900'>
               {productTax.toLocaleString()} {'₫'}
-            </span>
+            </span> */}
           </div>
           <div className='flex items-center justify-between'>
             <span className='font-semibold text-gray-900'>{t('list.shipping')}:</span>

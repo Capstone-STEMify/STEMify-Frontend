@@ -136,7 +136,7 @@ export default function ProductCart() {
               {/* Right Column - Payment Summary */}
               <div className='lg:col-span-1'>
                 <PaymentSummary
-                  total={cartData.data.totalPrice}
+                  productTotal={cartData.data.totalPrice}
                   onCheckout={handleCheckout}
                   onRemoveAll={handleRemoveAll}
                 />
