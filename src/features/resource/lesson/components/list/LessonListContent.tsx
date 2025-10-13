@@ -121,7 +121,7 @@ export default function LessonListContent() {
           <CardLayout
             key={lesson.id}
             imageSrc={lesson.imageUrl}
-            onClick={() => router.push(`/${locale}/resource/lesson/${lesson.id}`)}
+            // onClick={() => router.push(`/${locale}/resource/lesson/${lesson.id}`)}
             footer={
               <div className='flex items-center gap-2'>
                 <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
@@ -161,7 +161,7 @@ export default function LessonListContent() {
                 <Badge className='bg-red-300'>{lesson.duration} mins</Badge>
               </div>
             }
-            href={`/resource/lesson/${lesson.id}`}
+            // href={`/resource/lesson/${lesson.id}`}
           >
             <div
               key={lesson.id}
