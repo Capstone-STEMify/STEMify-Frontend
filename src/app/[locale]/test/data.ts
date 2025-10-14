@@ -51,6 +51,7 @@ const sampleTree: Record<string, DemoItem> = {
   beer: { name: 'Beer' },
   wine: { name: 'Wine' }
 }
+
 const wait = (ms: number) =>
   new Promise((resolve) => {
     setTimeout(resolve, ms)

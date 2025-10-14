@@ -75,6 +75,55 @@ export default function FancyTree() {
     ]
   })
 
+  const buildTreeJson = (rootId: string) => {
+    const rootItem = data[rootId]
+    if (!rootItem) return null
+
+    // Cấu trúc workspace
+    const workspace: any = {
+      id: rootId,
+      type: 'root',
+      name: rootItem.name,
+      actions: []
+    }
+
+    if (rootItem.children?.length) {
+      workspace.actions = rootItem.children.map((childId) => {
+        const child = data[childId]
+        return {
+          id: childId,
+          name: child.name,
+          type: 'highlight',
+          targets: child.children ?? [],
+          duration: 2
+        }
+      })
+    }
+
+    return workspace
+  }
+  const newItemIdRef = React.useRef(0)
+
+  const insertNewFolder = (parentId: string, folderName: string) => {
+    const newId = `folder-${newItemIdRef.current++}`
+    data[newId] = {
+      name: folderName,
+      children: []
+    }
+
+    const parentItem = tree.getItemInstance(parentId)
+    const target: DragTarget<DemoItem> = { item: parentItem }
+
+    insertItemsAtTarget([newId], target, (item, newChildrenIds) => {
+      data[item.getId()].children = newChildrenIds
+    })
+
+    tree.setState((prev) => ({
+      ...prev,
+      expandedItems: [...prev.expandedItems, parentId]
+    }))
+  }
+
   return (
     <div className='flex flex-col gap-3 rounded-2xl bg-gradient-to-b from-gray-50 to-gray-100 p-4 shadow-inner'>
       {tree.isSearchOpen() && (
@@ -167,11 +216,28 @@ export default function FancyTree() {
 
         <div className='flex gap-2'>
           <button
+            onClick={() => {
+              const treeJson = buildTreeJson('root')
+              console.log(JSON.stringify(treeJson, null, 2))
+            }}
+            className='flex items-center gap-1 rounded-lg bg-emerald-100 px-3 py-1.5 text-sm transition-all hover:bg-emerald-200'
+          >
+            Export JSON
+          </button>
+
+          <button
             onClick={() => tree.openSearch()}
             className='rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white transition-all hover:bg-blue-700'
           >
             Search
           </button>
+          <button
+            onClick={() => insertNewFolder('root', `New Folder ${newItemIdRef.current}`)}
+            className='flex items-center gap-1 rounded-lg bg-yellow-100 px-3 py-1.5 text-sm transition-all hover:bg-yellow-200'
+          >
+            + Add Folder
+          </button>
+
           <button
             onClick={() => tree.getItemInstance('fruit').startRenaming()}
             className='flex items-center gap-1 rounded-lg bg-gray-200 px-3 py-1.5 text-sm transition-all hover:bg-gray-300'

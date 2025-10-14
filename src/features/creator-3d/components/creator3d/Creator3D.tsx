@@ -226,7 +226,6 @@ export default function Creator3D() {
           for (const group of data.instances.connectors) {
             const templateData = await loadTemplateById(group.templateId)
             const matData = await resolveMaterial(templateData.materialRef)
-            console.log('templateData', templateData, 'matData', matData)
 
             for (const inst of group.instances) {
               allInstances.push({
@@ -310,7 +309,6 @@ export default function Creator3D() {
             if (Array.isArray(activity.steps)) {
               for (const step of activity.steps) {
                 // 1️⃣ Thêm step vào activity
-                console.log('Dispatching addStepToActivity for step:', step)
                 dispatch(addStepToActivity({ activityId: activity.id, step }))
 
                 // 2️⃣ Nếu step có actions, thêm các action đó
