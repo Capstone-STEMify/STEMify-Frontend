@@ -12,6 +12,7 @@ import { clearScene, setInstances, setSelectedId, updateInstance } from '@/featu
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
 import {
   addAction,
+  addStepToActivity,
   addTargetToAction,
   clearAction,
   removeTargetFromAllActions,
@@ -144,8 +145,6 @@ export default function Creator3D() {
         if (!res.ok) throw new Error('Không thể tải dữ liệu từ Supabase')
         const data = await res.json()
         if (!data) throw new Error('Dữ liệu assembly không hợp lệ')
-
-        console.log('🧩 Imported Assembly JSON:', data)
 
         dispatch(clearScene())
         dispatch(clearAction())
@@ -299,6 +298,49 @@ export default function Creator3D() {
                   })
                 )
               })
+            }
+          }
+        }
+
+        // ================================
+        // 🔹 Restore Activities + Steps
+        // ================================
+        if (Array.isArray(data.activities)) {
+          for (const activity of data.activities) {
+            if (Array.isArray(activity.steps)) {
+              for (const step of activity.steps) {
+                // 1️⃣ Thêm step vào activity
+                console.log('Dispatching addStepToActivity for step:', step)
+                dispatch(addStepToActivity({ activityId: activity.id, step }))
+
+                // 2️⃣ Nếu step có actions, thêm các action đó
+                if (Array.isArray(step.actions)) {
+                  for (const act of step.actions) {
+                    // Thêm action
+                    dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
+
+                    // Gắn các target (nếu có)
+                    if (Array.isArray(act.targets)) {
+                      act.targets.forEach((targetId: string) =>
+                        dispatch(addTargetToAction({ actionId: act.id, targetId }))
+                      )
+                    }
+
+                    // Restore arms nếu có
+                    if (act.type === 'transform_arm' && act.connectorArmTransforms) {
+                      Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
+                        dispatch(
+                          updateConnectorArms({
+                            actionId: act.id,
+                            connectorId,
+                            arms: arms as Record<string, { x: number; y: number; z: number }>
+                          })
+                        )
+                      })
+                    }
+                  }
+                }
+              }
             }
           }
         }

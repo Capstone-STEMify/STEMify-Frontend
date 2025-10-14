@@ -44,8 +44,26 @@ export type WorkspaceAction =
       rotationSpeed: number
     }
 
+export type WorkspaceActivity = {
+  id: string
+  name: string
+  steps: Step[]
+  difficulty: string
+  description: string
+  estimatedTime: number
+}
+
+export type Step = {
+  hints: string[]
+  title: string
+  actionId: string
+  description: string
+  expectedResult: string
+}
+
 interface WorkspaceTreeState {
   actions: WorkspaceAction[]
+  activities: WorkspaceActivity[]
   selectedActionId?: string | null
 }
 
@@ -57,6 +75,16 @@ const initialState: WorkspaceTreeState = {
       type: 'highlight',
       targets: [],
       duration: 2
+    }
+  ],
+  activities: [
+    {
+      id: 'activity_1',
+      name: 'Default Activity',
+      steps: [],
+      difficulty: 'easy',
+      description: 'This is a default activity',
+      estimatedTime: 10
     }
   ],
   selectedActionId: 'action_1'
@@ -166,6 +194,20 @@ export const workspaceTreeSlice = createSlice({
       if (!act) return
       act.name = action.payload.newName
     },
+    addStepToActivity: (state, action: PayloadAction<{ activityId: string; step: Step }>) => {
+      const activity = state.activities.find((a) => a.id === action.payload.activityId)
+      if (activity) activity.steps.push(action.payload.step)
+    },
+
+    updateStep: (state, action: PayloadAction<{ activityId: string; stepIndex: number; patch: Partial<Step> }>) => {
+      const activity = state.activities.find((a) => a.id === action.payload.activityId)
+      if (activity?.steps[action.payload.stepIndex]) {
+        activity.steps[action.payload.stepIndex] = {
+          ...activity.steps[action.payload.stepIndex],
+          ...action.payload.patch
+        }
+      }
+    },
     resetActions: () => initialState,
     clearAction: (state) => {
       state.actions = []
@@ -183,6 +225,8 @@ export const {
   resetActions,
   clearAction,
   setSelectedAction,
+  addStepToActivity,
+  updateStep,
   removeTargetFromAllActions,
   updateActionName
 } = workspaceTreeSlice.actions
