@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl'
 export default function CreatorRightPanel() {
   const t3d = useTranslations('creator3D.right_panel')
   return (
-    <div className='flex h-full rounded-lg border bg-white shadow'>
+    <div className='flex h-full border-l bg-white shadow'>
       {/* Tabs Header */}
       <Tabs defaultValue='tree' className='flex flex-1 flex-col'>
         <TabsList className='mx-auto mt-2 grid w-[90%] grid-cols-2'>

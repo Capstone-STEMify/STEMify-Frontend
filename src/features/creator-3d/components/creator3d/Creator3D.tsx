@@ -387,7 +387,7 @@ export default function Creator3D() {
       </div>
 
       {/* Object Inspector */}
-      <div className='h-full w-80 flex-shrink-0 border-l bg-white'>
+      <div className='h-full w-80 flex-shrink-0 bg-white'>
         <WorkspacePanel />
       </div>
     </div>
