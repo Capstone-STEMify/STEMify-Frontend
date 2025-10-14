@@ -42,7 +42,7 @@ export default function BenefitsSection() {
               <div className='mb-4 flex items-center justify-center space-x-2 lg:mb-6 lg:justify-start'>
                 <div className='relative'>
                   <Star className='h-4 w-4 fill-current text-yellow-400 sm:h-5 sm:w-5' />
-                  <div className='absolute -top-1 -right-1 h-2 w-2 animate-ping rounded-full bg-orange-400'></div>
+                  <div className='absolute -top-1 -right-1 h-2 w-2 rounded-full bg-orange-400'></div>
                 </div>
                 <span className='text-xs text-gray-600 sm:text-sm'>{t('status')}</span>
               </div>
