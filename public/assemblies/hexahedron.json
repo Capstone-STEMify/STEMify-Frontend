@@ -39,6 +39,44 @@
           "rotation": { "x": 0, "y": 0, "z": 0 },
           "scale": { "x": 1, "y": 1, "z": 1 }
         }
+      },
+      {
+        "id": "top_square",
+        "name": "Top Square",
+        "center": { "x": 2.15, "y": 4, "z": 2.15 },
+        "elements": {
+          "straws": ["straw_yellow_5", "straw_yellow_6", "straw_yellow_7", "straw_yellow_8"],
+          "connectors": ["connector_3legs_5", "connector_3legs_6", "connector_3legs_7", "connector_3legs_8"]
+        }
+      },
+      {
+        "id": "vertical_straws",
+        "name": "Vertical Straws",
+        "elements": {
+          "straws": ["straw_yellow_9", "straw_yellow_10", "straw_yellow_11", "straw_yellow_12"],
+          "connections": [
+            ["connector_3legs_1", "connector_3legs_5"],
+            ["connector_3legs_2", "connector_3legs_6"],
+            ["connector_3legs_3", "connector_3legs_7"],
+            ["connector_3legs_4", "connector_3legs_8"]
+          ]
+        }
+      },
+      {
+        "id": "top_connector",
+        "name": "Top Connector",
+        "elements": {
+          "connectors": ["connector_3legs_top"],
+          "straws": ["straw_yellow_13", "straw_yellow_14", "straw_yellow_15", "straw_yellow_16"]
+        }
+      },
+      {
+        "id": "bottom_connector",
+        "name": "Bottom Connector",
+        "elements": {
+          "connectors": ["connector_3legs_bottom"],
+          "straws": ["straw_yellow_17", "straw_yellow_18", "straw_yellow_19", "straw_yellow_20"]
+        }
       }
     ]
   },
@@ -170,8 +208,32 @@
     ]
   },
 
-  "connections": {},
-
+  "connections": {
+    "base_square": [
+      ["connector_3legs_1", "straw_yellow_1", "connector_3legs_2"],
+      ["connector_3legs_2", "straw_yellow_3", "connector_3legs_3"],
+      ["connector_3legs_3", "straw_yellow_4", "connector_3legs_4"],
+      ["connector_3legs_4", "straw_yellow_2", "connector_3legs_1"]
+    ],
+    "bottom_square_4_vertical_straws": [
+      ["connector_3legs_1", "straw_yellow_9", "connector_3legs_5"],
+      ["connector_3legs_2", "straw_yellow_10", "connector_3legs_6"],
+      ["connector_3legs_3", "straw_yellow_11", "connector_3legs_7"],
+      ["connector_3legs_4", "straw_yellow_12", "connector_3legs_8"]
+    ],
+    "4_vertical_straws_4_top_connectors": [
+      ["connector_3legs_5", "straw_yellow_5", "connector_3legs_6"],
+      ["connector_3legs_6", "straw_yellow_6", "connector_3legs_7"],
+      ["connector_3legs_7", "straw_yellow_7", "connector_3legs_8"],
+      ["connector_3legs_8", "straw_yellow_8", "connector_3legs_5"]
+    ],
+    "top_square": [
+      ["connector_3legs_5", "straw_yellow_13", "connector_3legs_6"],
+      ["connector_3legs_6", "straw_yellow_14", "connector_3legs_7"],
+      ["connector_3legs_7", "straw_yellow_15", "connector_3legs_8"],
+      ["connector_3legs_8", "straw_yellow_16", "connector_3legs_5"]
+    ]
+  },
   "actions": [
     {
       "id": "action_prepare_connectors",
