@@ -2,11 +2,13 @@ import { en } from 'zod/v4/locales'
 
 export type OrganizationSubscription = {
   id: number
+  organizationId: number
   plan: string
   status: SubscriptionStatus
   price: number
   totalCurriculums: number
   totalSeats: number
+  usedSeats: number
   StartDate: string
   EndDate: string
   billingCycle: BillingCycle

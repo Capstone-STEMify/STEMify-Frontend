@@ -1,12 +1,20 @@
 import { ContactRequestStatus } from '@/features/contact/types/contact.type'
 import { SubscriptionStatus } from '@/features/organization-package/types/subscription.type'
+import { OrganizationStatus } from '@/features/organization/types/organization.type'
 import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
 import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
 import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 
 export const getStatusBadgeClass = (
-  status: LessonStatus | CurriculumStatus | CourseStatus | KitProductStatus | SubscriptionStatus | ContactRequestStatus
+  status:
+    | LessonStatus
+    | CurriculumStatus
+    | CourseStatus
+    | KitProductStatus
+    | SubscriptionStatus
+    | ContactRequestStatus
+    | OrganizationStatus
 ) => {
   switch (status) {
     case LessonStatus.DRAFT || CurriculumStatus.DRAFT || CourseStatus.DRAFT || KitProductStatus.DRAFT:
@@ -21,7 +29,8 @@ export const getStatusBadgeClass = (
       CurriculumStatus.ARCHIVED ||
       CourseStatus.ARCHIVED ||
       KitProductStatus.ARCHIVED ||
-      SubscriptionStatus.EXPIRED:
+      SubscriptionStatus.EXPIRED ||
+      OrganizationStatus.INACTIVE:
       return 'bg-gray-100 text-gray-800 border border-gray-300'
     case LessonStatus.DELETED || CurriculumStatus.DELETED || CourseStatus.DELETED:
       return 'bg-red-100 text-red-800 border border-red-300'
@@ -33,7 +42,8 @@ export const getStatusBadgeClass = (
       CurriculumStatus.APPROVED ||
       CourseStatus.APPROVED ||
       SubscriptionStatus.ACTIVE ||
-      ContactRequestStatus.RESOLVED:
+      ContactRequestStatus.RESOLVED ||
+      OrganizationStatus.ACTIVE:
       return 'bg-green-200 text-green-900 border border-green-400'
     default:
       return 'bg-gray-100 text-gray-800 border border-gray-300'
