@@ -1,26 +1,22 @@
+import { BillingCycle } from '@/features/plan/types/plan.type'
+
 export type OrganizationSubscription = {
   id: number
   organizationId: number
   plan: string
   status: SubscriptionStatus
-  price: number
+  pricePerSeat: number
   totalCurriculums: number
   totalSeats: number
-  usedSeats: number
-  StartDate: string
-  EndDate: string
+  totalUsers: number
+  startDate: string
+  endDate: string
   billingCycle: BillingCycle
-}
-
-export type Organization = {
-  id: number
-  name: string
-  description?: string
-  imageUrl?: string
+  organizationName: string
+  organizationDescription?: string
+  organizationImageUrl?: string
   organizationType: string
-  createdAt: string
-  updatedAt: string
-  status: OrganizationStatus
+  organizationStatus: OrganizationStatus
 }
 
 export type AdminOrganization = {
@@ -38,9 +34,4 @@ export enum OrganizationStatus {
 export enum SubscriptionStatus {
   ACTIVE = 'Active',
   EXPIRED = 'Expired'
-}
-
-export enum BillingCycle {
-  YEARLY = '12 Months',
-  SEMIANNUAL = '6 Months'
 }

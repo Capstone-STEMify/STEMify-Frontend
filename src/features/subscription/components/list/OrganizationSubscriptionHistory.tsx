@@ -1,48 +1,46 @@
 'use client'
 import { DataTable } from '@/components/shared/data-table/data-table'
-import { useGetOrganizationSubscriptionColumns } from '@/features/organization-package/components/list/OrganizationSubscriptionColumnTable'
-import {
-  BillingCycle,
-  OrganizationSubscription,
-  SubscriptionStatus
-} from '@/features/organization-package/types/subscription.type'
+import { BillingCycle } from '@/features/plan/types/plan.type'
+import { useGetOrganizationSubscriptionColumns } from '@/features/subscription/components/list/OrganizationSubscriptionColumnTable'
+import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+
 import React from 'react'
 
 export default function OrganizationSubscriptionHistory() {
   const columns = useGetOrganizationSubscriptionColumns()
-  const data: OrganizationSubscription[] = [
+  const data: Partial<OrganizationSubscription>[] = [
     {
       id: 1,
       plan: 'STEMIFY Basic',
       status: SubscriptionStatus.ACTIVE,
-      price: 120,
+      pricePerSeat: 120,
       totalCurriculums: 5,
       totalSeats: 500,
-      StartDate: '2025-01-01',
-      EndDate: '2026-01-01',
-      billingCycle: BillingCycle.YEARLY
+      startDate: '2025-01-01',
+      endDate: '2026-01-01',
+      billingCycle: BillingCycle.TWELVEMONTHS
     },
     {
       id: 2,
       plan: 'STEMIFY Plus',
       status: SubscriptionStatus.EXPIRED,
-      price: 200,
+      pricePerSeat: 200,
       totalCurriculums: 3,
       totalSeats: 200,
-      StartDate: '2024-05-01',
-      EndDate: '2024-11-01',
-      billingCycle: BillingCycle.SEMIANNUAL
+      startDate: '2024-05-01',
+      endDate: '2024-11-01',
+      billingCycle: BillingCycle.SIXMONTHS
     },
     {
       id: 3,
       plan: 'STEMIFY Premium',
       status: SubscriptionStatus.EXPIRED,
-      price: 350,
+      pricePerSeat: 350,
       totalCurriculums: 2,
       totalSeats: 100,
-      StartDate: '2025-07-01',
-      EndDate: '2025-12-31',
-      billingCycle: BillingCycle.SEMIANNUAL
+      startDate: '2025-07-01',
+      endDate: '2025-12-31',
+      billingCycle: BillingCycle.SIXMONTHS
     }
   ]
   const rows = React.useMemo(() => data ?? [], [data])

@@ -23,6 +23,6 @@ export type PlanPricingTier = {
 export type PlanSliceParams = {} & SliceQueryParams
 
 export enum BillingCycle {
-  SIXMONTHS = 6,
-  TWELVEMONTHS = 12
+  SIXMONTHS = 'Biannual',
+  TWELVEMONTHS = 'Annual'
 }

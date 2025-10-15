@@ -1,8 +1,9 @@
 {
   "organization": {
     "list": {
-      "title": "Danh sách tổ chức",
-      "searchPlaceholder": "Tìm kiếm tổ chức theo tên..."
+      "organizationTitle": "Danh sách tổ chức",
+      "searchPlaceholder": "Tìm kiếm tổ chức theo tên...",
+      "subscriptionTitle": "Danh sách gói đăng ký"
     },
     "detail": {
       "title": "Thông tin tổ chức",
