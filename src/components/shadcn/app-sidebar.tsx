@@ -16,12 +16,10 @@ import {
   IconPuzzle,
   IconReport,
   IconSearch,
-  IconSettings
 } from '@tabler/icons-react'
 
 import { NavDocuments } from 'components/shadcn/nav-documents'
 import { NavMain } from 'components/shadcn/nav-main'
-import { NavSecondary } from 'components/shadcn/nav-secondary'
 import { NavUser } from 'components/shadcn/nav-user'
 import {
   Sidebar,
@@ -34,14 +32,11 @@ import {
 } from 'components/shadcn/sidebar'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
-
-import { useSession } from 'next-auth/react'
-import LoadingComponent from '../shared/loading/LoadingComponent'
 import { usePathname } from 'next/navigation'
-import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
-import { NavDesign } from '@/components/shadcn/nav-design'
 
+
+// thay /admin thành /organization
 const data = {
   user: {
     name: 'shadcn',
@@ -133,11 +128,23 @@ const data = {
   ]
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  user: {
+    username?: string | undefined
+    role?: string | undefined
+    userId?: string | undefined
+  } & {
+    name?: string | null | undefined
+    email?: string | null | undefined
+    image?: string | null | undefined
+  }
+}
+
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const locale = useLocale()
   const pathname = usePathname()
 
-  const userRole = useAppSelector((state) => state?.auth?.user?.role)
+  // const userRole = useAppSelector((state) => state?.auth?.user?.role)
 
   const navMainWithLocale = data.navMain.map((item) => ({
     ...item,
@@ -156,37 +163,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     url: `/${locale}${item.url}`,
     isActive: pathname === `/${locale}${item.url}`
   }))
-  const { data: session, status } = useSession()
-
-  if (status === 'loading') {
-    return (
-      <Sidebar collapsible='offcanvas' {...props}>
-        <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
-                <Link href='#'>
-                  <IconInnerShadowTop className='!size-5' />
-                  <span className='text-base font-semibold'>Stemify</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarHeader>
-        <SidebarContent>
-          <NavMain items={navMainWithLocale} />
-          <NavDesign items={navDesignWithLocale} />
-          <NavDocuments items={documentsWithLocale} />
-          <NavSecondary items={data.navSecondary} className='mt-auto' />
-        </SidebarContent>
-        <SidebarFooter>
-          <div>
-            <LoadingComponent size={18} textShow={false} />
-          </div>
-        </SidebarFooter>
-      </Sidebar>
-    )
-  }
 
   return (
     <Sidebar collapsible='offcanvas' {...props}>
@@ -205,11 +181,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={navMainWithLocale} />
         {/* <NavDesign items={navDesignWithLocale} /> */}
-        {userRole && userRole === UserRole.ADMIN && <NavDocuments items={documentsWithLocale} />}
+        {user.role && user.role === UserRole.ADMIN && <NavDocuments items={documentsWithLocale} />}
         {/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={session?.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )

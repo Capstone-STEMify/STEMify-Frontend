@@ -15,11 +15,10 @@ export default async function AdminLayout({
   children: React.ReactNode
 }>) {
   const session = await getServerSession(authOptions)
-  const preloadedState = {
-    auth: { user: session?.user ?? null }
+  if (!session) {
+    return <div className='p-4'>Access Denied</div>
   }
-  console.log('preloadedState', preloadedState)
-  console.log('session', session)
+
   return (
     <SidebarProvider
       style={
@@ -29,7 +28,7 @@ export default async function AdminLayout({
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant='inset' />
+      <AppSidebar variant='inset' user={session.user} />
       <SidebarInset>
         <SiteHeader />
         <div className='flex flex-1 flex-col'>
