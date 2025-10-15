@@ -16,7 +16,7 @@ import { useTranslations } from 'next-intl'
 import React from 'react'
 
 export default function OrganizationList() {
-  const t = useTranslations('Admin.placeholder')
+  const t = useTranslations('subscription')
   const tc = useTranslations('common')
   const tList = useTranslations('curriculum.list')
 
@@ -78,9 +78,10 @@ export default function OrganizationList() {
 
   return (
     <div className='mx-auto max-w-6xl p-4'>
-      <div className='flex items-center gap-4 pt-4 pb-8'>
+      <h1 className='mt-4 mb-4 text-3xl font-bold'>{t('list.organizationTitle')}</h1>
+      <div className='flex items-center gap-4 pt-2 pb-8'>
         <Input
-          placeholder={t('userSearch')}
+          placeholder={t('list.searchPlaceholder')}
           //   value={searchQuery}
           //   onChange={(e) => setSearchQuery(e.target.value)}
           className='max-w-sm'
