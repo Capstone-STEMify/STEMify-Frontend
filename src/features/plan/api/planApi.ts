@@ -1,22 +1,22 @@
-import { PlanProduct, PlanProductSliceParams } from '@/features/plan/types/plan.type'
+import { Plan, PlanSliceParams } from '@/features/plan/types/plan.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
-export const planApi = createCrudApi<PlanProduct, PlanProductSliceParams>({
-  reducerPath: 'planProductApi',
-  tagTypes: ['PlanProduct'],
+export const planApi = createCrudApi<Plan, PlanSliceParams>({
+  reducerPath: 'planApi',
+  tagTypes: ['Plan'],
   baseUrl: '/plan-products'
 })
 
 export const {
-  useSearchQuery: useSearchPlanProductQuery,
-  useGetByIdQuery: useGetPlanProductByIdQuery,
-  useGetAllQuery: useGetAllPlanProductQuery,
-  useCreateMutation: useCreatePlanProductMutation,
-  useUpdateMutation: useUpdatePlanProductMutation,
-  useDeleteMutation: useDeletePlanProductMutation,
+  useSearchQuery: useSearchPlanQuery,
+  useGetByIdQuery: useGetPlanByIdQuery,
+  useGetAllQuery: useGetAllPlanQuery,
+  useCreateMutation: useCreatePlanMutation,
+  useUpdateMutation: useUpdatePlanMutation,
+  useDeleteMutation: useDeletePlanMutation,
 
   // lazy
-  useLazySearchQuery: useLazySearchPlanProductQuery,
-  useLazyGetAllQuery: useLazyGetAllPlanProductQuery,
-  useLazyGetByIdQuery: useLazyGetPlanProductByIdQuery
+  useLazySearchQuery: useLazySearchPlanQuery,
+  useLazyGetAllQuery: useLazyGetAllPlanQuery,
+  useLazyGetByIdQuery: useLazyGetPlanByIdQuery
 } = planApi

@@ -1,43 +1,28 @@
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 
-export type PlanProduct = {
-  id: number
+export type Plan = {
+  id: string
   name: string
   description: string
-  imageUrl?: string
-  price: number
-  durationInDays: number
+  accessSupportDetail: string
+  curriculumCount: number
   createdAt: string
-  updatedAt?: string
-  status: PlanProductStatus
-  audienceType: AudienceType
+  updatedAt: string
+}
+
+export type PlanPricingTier = {
+  id: string
+  planId: string
   billingCycle: BillingCycle
-  createdByUserId: string
-  minSeats: number
-  maxSeats: number
   pricePerSeat: number
-  autoRenew: boolean
-  freeTrialDays?: number
+  minSeat: number
+  maxSeat: number
 }
+
 // Slice
-export type PlanProductSliceParams = {
-  audienceType?: AudienceType
-} & SliceQueryParams
-
-export enum AudienceType {
-  INDIVIDUAL = 'Individual',
-  BUSINESS = 'Business',
-  ENTERPRISE = 'Enterprise'
-}
-
-export enum PlanProductStatus {
-  DRAFT = 'Draft',
-  PUBLISHED = 'Published',
-  ARCHIVED = 'Archived'
-}
+export type PlanSliceParams = {} & SliceQueryParams
 
 export enum BillingCycle {
-  MONTHLY = 'Monthly',
-  QUARTERLY = 'Quarterly',
-  YEARLY = 'Yearly'
+  SIXMONTHS = 6,
+  TWELVEMONTHS = 12
 }
