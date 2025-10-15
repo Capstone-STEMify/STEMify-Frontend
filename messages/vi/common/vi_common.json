@@ -106,7 +106,12 @@
       "endDate": "Ngày Kết Thúc",
       "price": "Giá",
       "totalSeats": "Tổng Số Seat",
-      "totalCurriculums": "Tổng Số Khung Chương Trình"
+      "totalCurriculums": "Tổng Số Khung Chương Trình",
+      "phoneNumber": "Số Điện Thoại",
+      "organizationName": "Tên Tổ Chức",
+      "organizationType": "Loại Tổ Chức",
+      "createdAt": "Ngày Tạo",
+      "jobRole": "Vai Trò Công Việc"
     },
     "paging": {
       "previous": "Trước",
