@@ -1,8 +1,10 @@
+'use client'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
+import PricingTierUpsert from '@/features/plan/components/list/PricingTierUpsert'
 import { BillingCycle, Plan, PlanPricingTier } from '@/features/plan/types/plan.type'
-import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import React from 'react'
 
 type AdminPricingTierTableProps = {
@@ -17,13 +19,7 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
   }
   return (
     <div className='p-6'>
-      <div className='mb-4 flex items-center justify-between'>
-        <h4 className='text-foreground text-sm font-semibold'>Pricing Tiers</h4>
-        <Button variant='outline' size='sm' className='gap-2 bg-transparent'>
-          <Plus className='h-3 w-3' />
-          Add Pricing Tier
-        </Button>
-      </div>
+      <PricingTierUpsert />
       <div className='bg-card overflow-hidden rounded-lg border shadow-sm'>
         <Table>
           <TableHeader className='border-b'>
