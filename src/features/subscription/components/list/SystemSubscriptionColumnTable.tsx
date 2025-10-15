@@ -5,10 +5,10 @@ import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { Organization, OrganizationStatus } from '@/features/organization/types/organization.type'
 import Image from 'next/image'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { Organization, OrganizationStatus } from '@/features/subscription/types/subscription.type'
 
 export function useGetOrganizationColumnTable(): ColumnDef<Organization>[] {
   const { openModal } = useModal()
