@@ -533,7 +533,14 @@ export function SceneRenderer({
     >
       <ambientLight intensity={0.5} />
       <OrbitControls ref={orbitControlsRef} />
-      <Grid args={[100, 100]} />
+      <Grid
+        args={[100, 100, 10]}
+        position={[0, 0, 0]}
+        cellSize={1}
+        sectionSize={1 * 10}
+        cellColor='#888888'
+        sectionColor='#444444'
+      />
 
       {/* Straws */}
       {transitions((style, instance, _, i) => {

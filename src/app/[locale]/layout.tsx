@@ -26,8 +26,8 @@ export default async function RootLayout({ children, params }: { children: React
   }
 
   return (
-    <html lang={locale}>
-      <body>
+    <html lang={locale} suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
             <main>{children}</main>
