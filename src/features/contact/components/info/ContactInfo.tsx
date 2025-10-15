@@ -19,9 +19,9 @@ const ContactInfo = () => {
     };
 
   const contactDetails = [
-      {icon: <FiMapPin/>, text: "545 Mavis Island, IL 99191"},
+      {icon: <FiMapPin/>, text: "11 Đ. T12, Long Bình, Thủ Đức, Hồ Chí Minh, Việt Nam"},
       {icon: <FiPhone/>, text: "+2034 4040 3030"},
-      {icon: <FiMail/>, text: "hello@gmail.com"},
+      {icon: <FiMail/>, text: "stemify30062025@gmail.com"},
   ]
 
   return (
@@ -31,7 +31,7 @@ const ContactInfo = () => {
       initial="hidden"
       animate="visible"
     >
-      <div className="relative w-full max-w-sm">
+      <div className="relative w-full max-w-md">
         <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -40,8 +40,8 @@ const ContactInfo = () => {
             <Image
                 src="/images/contact-image.jpg"
                 alt="Contact Us Illustration"
-                width={500}
-                height={500}
+                width={700}
+                height={700}
                 className="rounded-lg"
                 priority
             />

@@ -4,8 +4,8 @@ import ContactInfo from "./info/ContactInfo";
 
 const ContactUs = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <main className="w-full max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl flex flex-col lg:flex-row overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <main className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row overflow-hidden">
         <ContactForm />
         <ContactInfo />
       </main>
