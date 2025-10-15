@@ -4,9 +4,9 @@ import { useTranslations } from 'next-intl'
 import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { OrganizationSubscription, SubscriptionStatus } from '@/features/organization-package/types/subscription.type'
-import { Badge } from 'lucide-react'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { BillingCycle } from '@/features/plan/types/plan.type'
+import { Badge } from '@/components/shadcn/badge'
 
 export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationSubscription>[] {
   const { openModal } = useModal()
@@ -67,6 +67,12 @@ export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationS
         const date = raw ? new Date(raw).toLocaleDateString('vi-VN') : 'N/A'
         return <div>{date}</div>
       }
+    },
+    {
+      accessorKey: 'billingCycle',
+      enableHiding: true,
+      header: '',
+      cell: () => null
     }
   ]
 }

@@ -6,7 +6,6 @@ import {
   OrganizationSubscription,
   SubscriptionStatus
 } from '@/features/organization-package/types/subscription.type'
-import { Sub } from '@radix-ui/react-dropdown-menu'
 import React from 'react'
 
 export default function OrganizationSubscriptionHistory() {
