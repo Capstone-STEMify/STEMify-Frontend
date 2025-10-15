@@ -83,7 +83,7 @@ export function PricingPlanItem({
             : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
         }`}
       >
-        Choose plan
+        Contact Us
       </motion.button>
     </motion.div>
   );
