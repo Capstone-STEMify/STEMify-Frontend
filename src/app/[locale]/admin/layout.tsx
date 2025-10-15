@@ -1,7 +1,10 @@
 import { AppSidebar } from '@/components/shadcn/app-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import { SiteHeader } from '@/components/shadcn/site-header'
+import { authOptions } from '@/libs/auth/authOptions'
+import { UserRole } from '@/types/userRole'
 import type { Metadata } from 'next'
+import { getServerSession } from 'next-auth'
 
 export const metadata: Metadata = {
   title: 'Admin'
@@ -12,6 +15,10 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await getServerSession(authOptions)
+  if (session?.user.role !== UserRole.ADMIN) {
+    return <div className='p-4'>Access Denied</div>
+  }
   return (
     <SidebarProvider
       style={
@@ -21,7 +28,7 @@ export default async function AdminLayout({
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant='inset' />
+      <AppSidebar variant='inset' user={session.user} />
       <SidebarInset>
         <SiteHeader />
         <div className='flex flex-1 flex-col'>
