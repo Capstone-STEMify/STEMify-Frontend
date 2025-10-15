@@ -1,8 +1,8 @@
 import Header from '@/components/layout/Header'
 import { metadata } from 'app/[locale]/layout'
 
-metadata.title = 'Plan'
-export default async function PublicPlanLayout({
+metadata.title = 'Contact'
+export default async function ContactLayout({
   children
 }: Readonly<{
   children: React.ReactNode
