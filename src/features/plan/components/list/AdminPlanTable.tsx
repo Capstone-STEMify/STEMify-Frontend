@@ -8,6 +8,8 @@ import { Plus, Pencil, Trash2, ChevronDown, ChevronRight } from 'lucide-react'
 import { BillingCycle, Plan, PlanPricingTier } from '@/features/plan/types/plan.type'
 import { formatDate } from '@/utils/index'
 import AdminPricingTierTable from '@/features/plan/components/list/AdminPricingTierTable'
+import SSheet from '@/components/shared/SSheet'
+import CreateSubscriptionPlanSheet from '@/features/plan/components/list/CreateSubscriptionPlanSheet'
 
 const plans: (Plan & { pricingTiers: PlanPricingTier[] })[] = [
   {
@@ -79,10 +81,7 @@ export default function AdminPlanTable() {
             <h1 className='text-foreground text-3xl font-bold'>Plan Management</h1>
             <p className='text-muted-foreground mt-1'>Manage subscription plans and pricing tiers</p>
           </div>
-          <Button className='gap-2 bg-blue-500'>
-            <Plus className='h-4 w-4' />
-            Add New Plan
-          </Button>
+          <CreateSubscriptionPlanSheet />
         </div>
 
         <div className='border-border overflow-hidden rounded-lg border'>
