@@ -14,7 +14,7 @@ const ContactForm = () => {
 
   return (
     <motion.div
-      className="w-full lg:w-1/2 px-24 py-8 flex flex-col"
+      className="w-full lg:w-1/2 px-24 flex flex-col"
       variants={formVariants}
       initial="hidden"
       animate="visible"
@@ -53,7 +53,7 @@ const ContactForm = () => {
           whileHover={{ scale: 1.05, boxShadow: "0px 0px 12px rgb(160,32,240)" }}
           whileTap={{ scale: 0.95 }}
           type="submit"
-          className="w-full bg-sky-400 text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 transition-all duration-300 mt-auto"
+          className="w-full bg-sky-400 text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 transition-all duration-300 mt-auto mb-10 md:mb-0"
         >
           Submit
         </motion.button>

@@ -26,7 +26,7 @@ const ContactInfo = () => {
 
   return (
     <motion.div
-      className="w-full lg:w-1/2 p-8 flex flex-col items-center justify-center"
+      className="w-full lg:w-1/2 px-8 flex flex-col items-center justify-center"
       variants={infoVariants}
       initial="hidden"
       animate="visible"

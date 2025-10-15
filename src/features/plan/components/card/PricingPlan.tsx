@@ -59,7 +59,7 @@ export function PricingPlanItem({
         >
           <span className="text-5xl font-bold">${displayPrice}</span>
           <span className={`text-base ${isSelected ? 'text-gray-400' : 'text-gray-500'}`}>
-            /month
+            {isYearly ? '/ 12 months' : '/ 6 months'}
           </span>
         </motion.div>
         <h3 className="text-xl font-semibold mb-2">{title}</h3>
