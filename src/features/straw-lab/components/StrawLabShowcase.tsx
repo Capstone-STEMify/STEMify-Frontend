@@ -39,7 +39,11 @@ export default function StrawLabShowcase() {
                 </div>
               ),
               value: 'micro-bit',
-              content: <div><MakeCodeEditor /></div>
+              content: (
+                <div>
+                  <MakeCodeEditor />
+                </div>
+              )
             },
             {
               label: (
@@ -71,8 +75,6 @@ export default function StrawLabShowcase() {
             }
           ]}
         />
-
-        {/* Carousel */}
       </div>
     </div>
   )

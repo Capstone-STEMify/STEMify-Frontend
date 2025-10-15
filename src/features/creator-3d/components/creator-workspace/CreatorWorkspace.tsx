@@ -8,7 +8,14 @@ import SceneTopRight from '@/features/creator-3d/components/creator-workspace/Sc
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { addInstance, redo, setDraggingTemplate, setSelectedId, undo } from '@/features/creator-3d/slice/creatorSceneSlice'
+import {
+  addInstance,
+  redo,
+  removeInstance,
+  setDraggingTemplate,
+  setSelectedId,
+  undo
+} from '@/features/creator-3d/slice/creatorSceneSlice'
 
 interface CreatorWorkspaceProps {
   onObjectSelect: (objectId: string | null) => void
@@ -103,6 +110,13 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
         dispatch(addInstance(newCopy))
         dispatch(setSelectedId(newCopy.id))
         console.log('📎 Pasted object:', newCopy.id)
+        return
+      }
+
+      if ((e.key === 'Delete' || e.key === 'Backspace') && selectedId) {
+        e.preventDefault()
+        dispatch(removeInstance(selectedId))
+        console.log('🗑️ Deleted object:', selectedId)
         return
       }
     }

@@ -1,6 +1,7 @@
 import { removeInstance } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { AppThunk } from '@/libs/redux/store'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { toast } from 'sonner'
 
 export interface Animation {
   colorHighlight?: string
@@ -136,19 +137,22 @@ export const workspaceTreeSlice = createSlice({
     addTargetToAction: (state, action: PayloadAction<{ actionId: string; targetId: string }>) => {
       const act = state.actions.find((a) => a.id === action.payload.actionId)
       if (!act) return
+      const { targetId } = action.payload
 
       if (act.type === 'highlight') {
-        if (!act.targets.includes(action.payload.targetId)) {
-          act.targets.push(action.payload.targetId)
+        if (!act.targets.includes(targetId)) {
+          act.targets.push(targetId)
         }
+        return
       }
 
       if (act.type === 'transform_arm') {
-        if (action.payload.targetId.startsWith('connector_')) {
-          if (!act.targets.includes(action.payload.targetId)) {
-            act.targets.push(action.payload.targetId)
+        if (targetId.startsWith('connector_')) {
+          if (!act.targets.includes(targetId)) {
+            act.targets.push(targetId)
           }
         }
+        return
       }
     },
     updateConnectorArms: (
@@ -198,7 +202,12 @@ export const workspaceTreeSlice = createSlice({
       const activity = state.activities.find((a) => a.id === action.payload.activityId)
       if (activity) activity.steps.push(action.payload.step)
     },
-
+    updateTargetOrderInAction: (state, action: PayloadAction<{ actionId: string; newTargets: string[] }>) => {
+      const act = state.actions.find((a) => a.id === action.payload.actionId)
+      if (act && (act.type === 'highlight' || act.type === 'transform_arm')) {
+        act.targets = [...action.payload.newTargets]
+      }
+    },
     updateStep: (state, action: PayloadAction<{ activityId: string; stepIndex: number; patch: Partial<Step> }>) => {
       const activity = state.activities.find((a) => a.id === action.payload.activityId)
       if (activity?.steps[action.payload.stepIndex]) {
@@ -208,6 +217,13 @@ export const workspaceTreeSlice = createSlice({
         }
       }
     },
+    addActivity: (state, action: PayloadAction<WorkspaceActivity>) => {
+      const exists = state.activities.find((a) => a.id === action.payload.id)
+      if (!exists) {
+        state.activities.push(action.payload)
+      }
+    },
+
     resetActions: () => initialState,
     clearAction: (state) => {
       state.actions = []
@@ -217,6 +233,7 @@ export const workspaceTreeSlice = createSlice({
 })
 
 export const {
+  addActivity,
   addAction,
   removeAction,
   addTargetToAction,
@@ -228,7 +245,8 @@ export const {
   addStepToActivity,
   updateStep,
   removeTargetFromAllActions,
-  updateActionName
+  updateActionName,
+  updateTargetOrderInAction
 } = workspaceTreeSlice.actions
 
 export default workspaceTreeSlice.reducer
@@ -251,4 +269,27 @@ export const removeActionWithInstances =
     }
 
     targets.forEach((t) => dispatch(removeInstance(t)))
+  }
+
+export const moveTargetToAction =
+  (targetId: string, newActionId: string): AppThunk =>
+  (dispatch, getState) => {
+    const { workspaceTree } = getState()
+    const act = workspaceTree.actions.find((a) => a.id === newActionId)
+    if (!act) return
+
+    // validate
+    if (act.type === 'transform_arm' && !targetId.startsWith('connector_')) {
+      toast.error(`❌ '${targetId}' không thể thêm vào action '${act.name}'`)
+      return
+    }
+
+    if (act.type === 'rotate_highlight') {
+      toast.error(`❌ Action '${act.name}' không thể thêm target`)
+      return
+    }
+
+    // hợp lệ → chuyển
+    dispatch(removeTargetFromAllActions(targetId))
+    dispatch(addTargetToAction({ actionId: newActionId, targetId }))
   }

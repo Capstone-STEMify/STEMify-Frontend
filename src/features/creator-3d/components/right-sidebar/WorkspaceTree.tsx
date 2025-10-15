@@ -3,19 +3,24 @@
 import React from 'react'
 import { useTree } from '@headless-tree/react'
 import {
+  createOnDropHandler,
+  dragAndDropFeature,
+  DragTarget,
   expandAllFeature,
+  ItemInstance,
+  keyboardDragAndDropFeature,
   searchFeature,
   selectionFeature,
   syncDataLoaderFeature,
   TreeState
 } from '@headless-tree/core'
 import { FolderIcon, FolderOpenIcon, Trash2 } from 'lucide-react'
-import { Tree, TreeItem, TreeItemLabel } from '@/components/shadcn/tree'
+import { Tree, TreeDragLine, TreeItem, TreeItemLabel } from '@/components/shadcn/tree'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
 import {
   addAction,
-  removeAction,
+  moveTargetToAction,
   removeActionWithInstances,
   removeTargetFromAllActions,
   setSelectedAction,
@@ -68,8 +73,8 @@ export default function WorkspaceTree() {
       })
     })
 
-    return base
-  }, [actions, instances])
+    return { ...base }
+  }, [JSON.stringify(actions), JSON.stringify(instances)])
 
   const handleExport = () => {
     // JSON gồm workspace + actions từ slice
@@ -125,10 +130,47 @@ export default function WorkspaceTree() {
     getItemName: (item) => item.getItemData().name,
     isItemFolder: (item) => ['workspace', 'action'].includes(item.getItemData()?.type),
     dataLoader: {
-      getItem: (id) => items[id] ?? { id, type: 'component', name: id, children: [] },
+      getItem: (id) => {
+        const item = items[id]
+        if (item) return item
+
+        // fallback nhưng vẫn đảm bảo đầy đủ field
+        return { id, type: 'component', name: id, children: [] }
+      },
       getChildren: (id) => items[id]?.children ?? []
     },
-    features: [syncDataLoaderFeature, searchFeature, selectionFeature, expandAllFeature]
+    onDrop: async (draggedItems, target) => {
+      if (!target?.item) return
+
+      const targetId = target.item.getId()
+      const targetData = items[targetId]
+
+      for (const dragged of draggedItems) {
+        const draggedId = dragged.getId()
+        const draggedData = items[draggedId]
+
+        if (draggedData?.type === 'component' && targetData?.type === 'action') {
+          await dispatch(moveTargetToAction(draggedId, targetId))
+
+          // ⚡ ép tree cập nhật lại UI và đảm bảo folder target mở
+          requestAnimationFrame(() => {
+            setState((prev) => ({
+              ...prev,
+              expandedItems: Array.from(new Set([...(prev.expandedItems ?? []), targetId])), // mở folder mới
+              refreshKey: Math.random() // trigger re-render "ảo"
+            }))
+          })
+        }
+      }
+    },
+    features: [
+      syncDataLoaderFeature,
+      searchFeature,
+      selectionFeature,
+      expandAllFeature,
+      dragAndDropFeature,
+      keyboardDragAndDropFeature
+    ]
   })
 
   const handleAddAction = (type: WorkspaceAction['type']) => {
@@ -143,15 +185,22 @@ export default function WorkspaceTree() {
     }
   }
 
+  // 1️⃣ expand chỉ khi actions thay đổi
   React.useEffect(() => {
-    const selected = selectedActionId || selectedId
-
     setState((prev) => ({
       ...prev,
-      expandedItems: [...(prev.expandedItems ?? []), 'workspace', ...actions.map((a) => a.id)],
+      expandedItems: Array.from(new Set(['workspace', ...(prev.expandedItems ?? []), ...actions.map((a) => a.id)]))
+    }))
+  }, [actions])
+
+  // 2️⃣ chọn item khi click
+  React.useEffect(() => {
+    const selected = selectedActionId || selectedId
+    setState((prev) => ({
+      ...prev,
       selectedItems: selected ? [selected] : []
     }))
-  }, [instances, actions, selectedId, selectedActionId])
+  }, [selectedActionId, selectedId])
 
   return (
     <div>
@@ -170,9 +219,9 @@ export default function WorkspaceTree() {
           >
             (transform_arm)
           </button>
-          {/* <button onClick={handleExport} className='rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'>
+          <button onClick={handleExport} className='rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'>
             Export JSON
-          </button> */}
+          </button>
         </div>
       </div>
       <div>
@@ -257,6 +306,7 @@ export default function WorkspaceTree() {
               </TreeItem>
             )
           })}
+          <TreeDragLine />
         </Tree>
       </div>
     </div>
