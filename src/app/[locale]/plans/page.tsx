@@ -1,10 +1,10 @@
-import UpgradePlanPage from '@/features/plan/components/PlanProductList'
+import SubscriptionPlan from '@/features/plan/components/SubscriptionPlan'
 import React from 'react'
 
 export default function PlanProductListPage() {
   return (
     <div>
-      <UpgradePlanPage />
+      <SubscriptionPlan />
     </div>
   )
 }
