@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 
 interface FeatureItemProps {
   text: string;
@@ -8,10 +7,10 @@ interface FeatureItemProps {
 
 export function FeatureItem({ text, isSelected }: FeatureItemProps) {
   return (
-    <div className="flex items-start gap-2 mb-2">
+    <div className="flex items-start gap-3">
       <svg 
         className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-          isSelected ? 'text-white' : 'text-purple-400'
+          isSelected ? 'text-white' : 'text-purple-500'
         }`}
         fill="currentColor" 
         viewBox="0 0 20 20"
@@ -22,7 +21,9 @@ export function FeatureItem({ text, isSelected }: FeatureItemProps) {
           clipRule="evenodd" 
         />
       </svg>
-      <span className={`text-sm ${isSelected ? 'text-white' : 'text-gray-600'}`}>
+      <span className={`text-sm ${
+        isSelected ? 'text-slate-200' : 'text-gray-600'
+      }`}>
         {text}
       </span>
     </div>

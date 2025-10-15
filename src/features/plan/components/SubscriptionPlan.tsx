@@ -7,7 +7,7 @@ import { PricingPlanItem } from './card/PricingPlan';
 
 export default function SubscriptionPlan() {
   const [isYearly, setIsYearly] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState(2); // Company is selected by default
+  const [selectedPlan, setSelectedPlan] = useState(2); 
 
   const plans = [
     {
@@ -47,24 +47,21 @@ export default function SubscriptionPlan() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-purple-50 py-16 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Left side - Header and Toggle */}
-          <div className="md:w-1/3">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-fuchsia-50 py-5 px-4 flex items-center justify-center">
+      <div className="max-w-5xl mx-auto w-full">
+        <div>
+          <div className="flex justify-between">
             <SubscriptionHeader />
             <BillingToggle isYearly={isYearly} onToggle={setIsYearly} />
           </div>
 
-          {/* Right side - Pricing Cards Container */}
           <motion.div 
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="md:w-2/3"
           >
-            <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-              <div className="flex flex-col md:flex-row">
+            <div className="bg-white rounded-3xl shadow-2xl px-15 py-5">
+              <div className="flex flex-col md:flex-row gap-10 md:gap-0">
                 {plans.map((plan, index) => (
                   <PricingPlanItem
                     key={index}
