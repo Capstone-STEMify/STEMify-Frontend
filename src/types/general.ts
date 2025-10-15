@@ -38,6 +38,9 @@ export type ModalType =
   | 'lessonDetail'
   | 'contentDetail'
 
+  // organization
+  | 'uploadCSV'
+
   // orther
   | 'pacingGuide'
   | 'curriculumSelectCourseListModal'

@@ -1,3 +1,4 @@
+'use client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
@@ -5,8 +6,10 @@ import { CheckCircle, Loader2 } from 'lucide-react'
 import { Progress } from '@/components/shadcn/progress'
 import CardLayout from '@/components/shared/card/CardLayout'
 import SearchBar from '@/components/shared/search/SearchBar'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function OrganizationSubscriptionDetail() {
+  const { openModal } = useModal()
   return (
     <div className='space-y-6 p-6'>
       {/* Current Plan Card */}
@@ -89,7 +92,7 @@ export default function OrganizationSubscriptionDetail() {
       {/* Tabs */}
       <div className='flex justify-between'>
         <SearchBar placeholder='Search users...' className='w-1/2' />
-        <Button variant='outline' size='sm'>
+        <Button variant='outline' size='sm' onClick={() => openModal('uploadCSV')}>
           + Invite Users
         </Button>
       </div>
