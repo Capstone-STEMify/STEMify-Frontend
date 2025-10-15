@@ -14,6 +14,7 @@ import {
   SubscriptionStatus
 } from '@/features/subscription/types/subscription.type'
 import { BillingCycle } from '@/features/plan/types/plan.type'
+import { ArrowDown, ChevronDown } from 'lucide-react'
 
 export function useGetOrganizationColumnTable(): ColumnDef<OrganizationSubscription>[] {
   const { openModal } = useModal()
@@ -138,6 +139,13 @@ export function useGetOrganizationColumnTable(): ColumnDef<OrganizationSubscript
           openModal('upsertOrganization', { id: original.id })
         }
       }
-    ])
+    ]),
+    {
+      accessorKey: 'id',
+      header: '',
+      cell: ({ row }) => {
+        return <ChevronDown className='cursor-pointer text-gray-700' size={16} />
+      }
+    }
   ]
 }
