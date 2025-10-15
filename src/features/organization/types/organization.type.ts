@@ -9,6 +9,13 @@ export type Organization = {
   status: OrganizationStatus
 }
 
+export type AdminOrganization = {
+  firstName: string
+  lastName: string
+  email: string
+  phoneNumber: string
+}
+
 export enum OrganizationStatus {
   ACTIVE = 'Active',
   INACTIVE = 'Inactive'

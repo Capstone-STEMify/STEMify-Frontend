@@ -1,6 +1,6 @@
 'use client'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/shadcn/badge'
@@ -8,13 +8,15 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { Organization, OrganizationStatus } from '@/features/organization/types/organization.type'
 import Image from 'next/image'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 export function useGetOrganizationColumnTable(): ColumnDef<Organization>[] {
   const { openModal } = useModal()
   const tm = useTranslations('message')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
-
+  const router = useRouter()
+  const locale = useLocale()
   const handleDelete = async (id: number) => {
     try {
       //   await deleteAgeRange(id).unwrap()
@@ -73,6 +75,7 @@ export function useGetOrganizationColumnTable(): ColumnDef<Organization>[] {
       {
         label: tc('button.view'),
         onClick: ({ original }) => {
+          router.push(`/${locale}/admin/organizations/${original.id}`)
           //   openModal('organizationDetail', { id: original.id })
         }
       },
