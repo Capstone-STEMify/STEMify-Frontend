@@ -10,7 +10,7 @@ export function FeatureItem({ text, isSelected }: FeatureItemProps) {
     <div className="flex items-start gap-3">
       <svg 
         className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-          isSelected ? 'text-white' : 'text-purple-500'
+          isSelected ? 'text-white' : 'text-sky-500'
         }`}
         fill="currentColor" 
         viewBox="0 0 20 20"

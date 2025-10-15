@@ -1,3 +1,5 @@
+// file: BillingToggle.tsx
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -7,33 +9,45 @@ interface BillingToggleProps {
 }
 
 export function BillingToggle({ isYearly, onToggle }: BillingToggleProps) {
+  const spring = {
+    type: "spring",
+    stiffness: 500,
+    damping: 30
+  } as const;
+
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.2, duration: 0.6 }}
-      className="flex gap-1 mb-12 p-1 rounded-full bg-white w-fit shadow-sm border"
-    >
+    <div className="flex items-center p-1 rounded-full bg-white w-fit shadow-lg border">
       <button
         onClick={() => onToggle(false)}
-        className={`px-6 py-2 rounded-full text-sm font-semibold transition-all ${
-          !isYearly 
-            ? 'bg-purple-600 text-white shadow' 
-            : 'bg-transparent text-slate-500'
+        className={`relative w-24 py-2 text-sm font-semibold text-center transition-colors duration-300 ${
+          !isYearly ? 'text-white' : 'text-slate-500'
         }`}
       >
-        MONTHLY
+        {!isYearly && (
+          <motion.span
+            layoutId="pill"
+            className="absolute inset-0 z-0 bg-sky-400 rounded-full"
+            transition={spring}
+          />
+        )}
+        <span className="relative z-10">SEMESTERLY</span>
       </button>
+
       <button
         onClick={() => onToggle(true)}
-        className={`px-6 py-2 rounded-full text-sm font-semibold transition-all ${
-          isYearly 
-            ? 'bg-purple-600 text-white shadow' 
-            : 'bg-transparent text-slate-500'
+        className={`relative w-24 py-2 text-sm font-semibold text-center transition-colors duration-300 ${
+          isYearly ? 'text-white' : 'text-slate-500'
         }`}
       >
-        YEARLY
+        {isYearly && (
+          <motion.span
+            layoutId="pill"
+            className="absolute inset-0 z-0 bg-sky-400 rounded-full"
+            transition={spring}
+          />
+        )}
+        <span className="relative z-10">YEARLY</span>
       </button>
-    </motion.div>
+    </div>
   );
 }

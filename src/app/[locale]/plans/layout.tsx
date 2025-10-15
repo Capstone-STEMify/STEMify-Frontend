@@ -10,7 +10,7 @@ export default async function PublicPlanLayout({
   return (
     <div className='min-h-screen bg-white'>
       <Header />
-      <main className='mt-20'>{children}</main>
+      <main>{children}</main>
     </div>
   )
 }

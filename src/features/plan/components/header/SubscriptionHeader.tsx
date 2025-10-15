@@ -7,9 +7,8 @@ export function SubscriptionHeader() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="mb-12"
     >
-      <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+      <h1 className="text-4xl md:text-5xl font-semibold text-gray-800 mb-4">
         Plans & Pricing
       </h1>
       <p className="text-gray-500 text-base max-w-md">

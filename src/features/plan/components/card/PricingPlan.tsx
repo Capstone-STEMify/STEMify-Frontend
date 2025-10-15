@@ -42,8 +42,8 @@ export function PricingPlanItem({
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
     >
       {isPopular && (
-        <div >
-          <span className="bg-slate-700 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+        <div className="flex justify-end">
+          <span className="bg-slate-700 text-sky-400 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
             Most Popular
           </span>
         </div>
@@ -62,7 +62,7 @@ export function PricingPlanItem({
             /month
           </span>
         </motion.div>
-        <h3 className="text-xl font-bold mb-2">{title}</h3>
+        <h3 className="text-xl font-semibold mb-2">{title}</h3>
         <p className={`text-sm h-10 ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>
           {description}
         </p>
@@ -79,7 +79,7 @@ export function PricingPlanItem({
         whileTap={{ scale: 0.95 }}
         className={`w-full py-3 rounded-full text-sm font-semibold transition-all ${
           isSelected
-            ? 'bg-slate-700 text-white hover:bg-slate-600'
+            ? 'bg-sky-400 text-white hover:bg-slate-600'
             : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
         }`}
       >

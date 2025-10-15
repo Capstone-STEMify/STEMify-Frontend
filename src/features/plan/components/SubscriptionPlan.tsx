@@ -50,7 +50,7 @@ export default function SubscriptionPlan() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-fuchsia-50 py-5 px-4 flex items-center justify-center">
       <div className="max-w-5xl mx-auto w-full">
         <div>
-          <div className="flex justify-between">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-12">
             <SubscriptionHeader />
             <BillingToggle isYearly={isYearly} onToggle={setIsYearly} />
           </div>
