@@ -2,21 +2,21 @@ import { BillingCycle } from '@/features/plan/types/plan.type'
 
 export type OrganizationSubscription = {
   id: number
-  organizationId: number
+  organizationId?: number
   plan: string
   status: SubscriptionStatus
   pricePerSeat: number
   totalCurriculums: number
   totalSeats: number
-  totalUsers: number
+  totalUsers?: number
   startDate: string
   endDate: string
-  billingCycle: BillingCycle
-  organizationName: string
+  billingCycle?: BillingCycle
+  organizationName?: string
   organizationDescription?: string
   organizationImageUrl?: string
-  organizationType: string
-  organizationStatus: OrganizationStatus
+  organizationType?: string
+  organizationStatus?: OrganizationStatus
 }
 
 export type AdminOrganization = {

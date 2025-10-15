@@ -8,7 +8,7 @@ import React from 'react'
 
 export default function OrganizationSubscriptionHistory() {
   const columns = useGetOrganizationSubscriptionColumns()
-  const data: Partial<OrganizationSubscription>[] = [
+  const data: OrganizationSubscription[] = [
     {
       id: 1,
       plan: 'STEMIFY Basic',
