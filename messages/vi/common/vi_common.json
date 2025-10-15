@@ -100,7 +100,13 @@
       "actions": "Hành Động",
       "duration": "Thời Lượng",
       "empty": "Không tìm thấy kết quả.",
-      "content": "Nội dung"
+      "content": "Nội dung",
+      "plan": "Gói",
+      "startDate": "Ngày Bắt Đầu",
+      "endDate": "Ngày Kết Thúc",
+      "price": "Giá",
+      "totalSeats": "Tổng Số Seat",
+      "totalCurriculums": "Tổng Số Khung Chương Trình"
     },
     "paging": {
       "previous": "Trước",

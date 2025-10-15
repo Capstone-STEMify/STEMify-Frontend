@@ -100,7 +100,13 @@
       "actions": "Actions",
       "duration": "Duration",
       "empty": "No results found.",
-      "content": "Content"
+      "content": "Content",
+      "plan": "Plan",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "price": "Price",
+      "totalSeats": "Total Seats",
+      "totalCurriculums": "Total Curriculums"
     },
     "paging": {
       "previous": "Previous",

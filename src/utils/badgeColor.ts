@@ -1,23 +1,30 @@
+import { SubscriptionStatus } from '@/features/organization-package/types/subscription.type'
 import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
 import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
 import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 
-export const getStatusBadgeClass = (status: LessonStatus | CurriculumStatus | CourseStatus | KitProductStatus) => {
+export const getStatusBadgeClass = (
+  status: LessonStatus | CurriculumStatus | CourseStatus | KitProductStatus | SubscriptionStatus
+) => {
   switch (status) {
     case LessonStatus.DRAFT || CurriculumStatus.DRAFT || CourseStatus.DRAFT || KitProductStatus.DRAFT:
       return 'bg-gray-100 text-gray-800 border border-gray-300'
     case LessonStatus.PUBLISHED || CurriculumStatus.PUBLISHED || CourseStatus.PUBLISHED || KitProductStatus.PUBLISHED:
       return 'bg-blue-100 text-blue-800 border border-blue-300'
-    case LessonStatus.ARCHIVED || CurriculumStatus.ARCHIVED || CourseStatus.ARCHIVED || KitProductStatus.ARCHIVED:
-      return 'bg-green-100 text-green-800 border border-green-300'
+    case LessonStatus.ARCHIVED ||
+      CurriculumStatus.ARCHIVED ||
+      CourseStatus.ARCHIVED ||
+      KitProductStatus.ARCHIVED ||
+      SubscriptionStatus.EXPIRED:
+      return 'bg-gray-100 text-gray-800 border border-gray-300'
     case LessonStatus.DELETED || CurriculumStatus.DELETED || CourseStatus.DELETED:
       return 'bg-red-100 text-red-800 border border-red-300'
     case LessonStatus.PENDING || CurriculumStatus.PENDING || CourseStatus.PENDING:
       return 'bg-yellow-100 text-yellow-800 border border-yellow-300'
     case LessonStatus.REJECTED || CurriculumStatus.REJECTED || CourseStatus.REJECTED:
       return 'bg-red-200 text-red-900 border border-red-400'
-    case LessonStatus.APPROVED || CurriculumStatus.APPROVED || CourseStatus.APPROVED:
+    case LessonStatus.APPROVED || CurriculumStatus.APPROVED || CourseStatus.APPROVED || SubscriptionStatus.ACTIVE:
       return 'bg-green-200 text-green-900 border border-green-400'
     default:
       return 'bg-gray-100 text-gray-800 border border-gray-300'

@@ -3,10 +3,9 @@ import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { CheckCircle, Loader2 } from 'lucide-react'
 import { Progress } from '@/components/shadcn/progress'
-import { SCard } from '@/components/shared/card/SCard'
 import CardLayout from '@/components/shared/card/CardLayout'
 
-export default function OrganizationPackageDetail() {
+export default function OrganizationSubscriptionDetail() {
   return (
     <div className='space-y-6 p-6'>
       {/* Current Plan Card */}
@@ -21,7 +20,7 @@ export default function OrganizationPackageDetail() {
             <div className='mt-2 grid grid-cols-1 gap-4 md:grid-cols-2'>
               <div className='space-y-1'>
                 <p className='text-muted-foreground text-md'>Basic Package</p>
-                <p className='text-lg font-semibold'>100K/Seat/Month</p>
+                <p className='text-lg font-semibold'>100K đ/Seat/6 Months</p>
               </div>
               <div className='space-y-1'>
                 <p className='text-muted-foreground text-md'>Expired at</p>
@@ -30,6 +29,9 @@ export default function OrganizationPackageDetail() {
             </div>
           </div>
           <div className='flex items-end gap-2'>
+            <Button variant='outline' size='sm'>
+              Send Renewal Request
+            </Button>
             <Button variant='outline' size='sm'>
               Cancel Subscription
             </Button>
@@ -40,6 +42,10 @@ export default function OrganizationPackageDetail() {
         </div>
         <div className='mt-4'>
           <Progress value={50} className='h-2 bg-gray-100 [&>div]:!bg-green-500' />
+          <div className='text-muted-foreground flex flex-row justify-between text-sm'>
+            <p>01/06/2025</p>
+            <p>01/12/2025</p>
+          </div>
         </div>
       </Card>
       {/* Metrics Summary */}
@@ -81,8 +87,8 @@ export default function OrganizationPackageDetail() {
 
       {/* Tabs */}
       <div className='space-x-2'>
-        <Badge variant='default'>Student</Badge>
-        <Badge variant='secondary'>Teacher</Badge>
+        <Badge variant='default'>Users</Badge>
+        <Badge variant='secondary'>Pending Invites</Badge>
       </div>
 
       {/* Table */}
