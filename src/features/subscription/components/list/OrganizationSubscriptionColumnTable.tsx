@@ -3,10 +3,10 @@ import { createSelectColumn } from '@/components/shared/data-table/columns-helpe
 import { useTranslations } from 'next-intl'
 import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
-import { OrganizationSubscription, SubscriptionStatus } from '@/features/organization-package/types/subscription.type'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { Badge } from '@/components/shadcn/badge'
+import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
 
 export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationSubscription>[] {
   const { openModal } = useModal()
@@ -39,7 +39,7 @@ export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationS
       }
     },
     {
-      accessorKey: 'price',
+      accessorKey: 'pricePerSeat',
       header: tc('tableHeader.price')
     },
     {

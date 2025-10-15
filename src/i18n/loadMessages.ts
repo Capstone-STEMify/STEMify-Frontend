@@ -26,7 +26,7 @@ export async function loadMessages(locale: string) {
   const creator3DMessages = (await import(`../../messages/${locale}/3d/${locale}_creator.json`)).default
   const workspace3DMessages = (await import(`../../messages/${locale}/3d/${locale}_workspace.json`)).default
   const cartMessages = (await import(`../../messages/${locale}/product/${locale}_cart.json`)).default
-  const organizationMessages = (await import(`../../messages/${locale}/organization/${locale}_organization.json`))
+  const subscriptionMessages = (await import(`../../messages/${locale}/subscription/${locale}_subscription.json`))
     .default
 
   return {
@@ -55,6 +55,6 @@ export async function loadMessages(locale: string) {
     ...creator3DMessages,
     ...workspace3DMessages,
     ...cartMessages,
-    ...organizationMessages
+    ...subscriptionMessages
   }
 }

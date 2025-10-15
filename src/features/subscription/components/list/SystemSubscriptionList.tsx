@@ -3,8 +3,13 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import SSelect from '@/components/shared/SSelect'
+import { BillingCycle } from '@/features/plan/types/plan.type'
 import { useGetOrganizationColumnTable } from '@/features/subscription/components/list/SystemSubscriptionColumnTable'
-import { Organization, OrganizationStatus } from '@/features/subscription/types/subscription.type'
+import {
+  OrganizationStatus,
+  OrganizationSubscription,
+  SubscriptionStatus
+} from '@/features/subscription/types/subscription.type'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
@@ -19,36 +24,44 @@ export default function OrganizationList() {
   const { openModal } = useModal()
 
   const columns = useGetOrganizationColumnTable()
-  const data: Organization[] = [
+  const data: OrganizationSubscription[] = [
     {
       id: 1,
-      name: 'Example Corp',
-      description: 'A sample organization',
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGXT3A_mrlYfgBBKN5Qh7yXzDjEIPT34SUPQ&s',
+      organizationId: 1,
+      organizationName: 'Example Corp',
+      organizationDescription: 'A sample organization',
+      organizationImageUrl:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGXT3A_mrlYfgBBKN5Qh7yXzDjEIPT34SUPQ&s',
       organizationType: 'Technology',
-      createdAt: '2023-10-01',
-      updatedAt: '2023-10-05',
-      status: OrganizationStatus.ACTIVE
+      startDate: '2023-10-01',
+      endDate: '2024-10-01',
+      billingCycle: BillingCycle.TWELVEMONTHS,
+      status: SubscriptionStatus.ACTIVE,
+      totalCurriculums: 10,
+      totalSeats: 100,
+      totalUsers: 45,
+      pricePerSeat: 999.99,
+      organizationStatus: OrganizationStatus.ACTIVE,
+      plan: 'Stemify Pro'
     },
     {
       id: 2,
-      name: 'Example Corp',
-      description: 'A sample organization',
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGXT3A_mrlYfgBBKN5Qh7yXzDjEIPT34SUPQ&s',
+      organizationId: 2,
+      organizationName: 'Example Corp',
+      organizationDescription: 'A sample organization',
+      organizationImageUrl:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGXT3A_mrlYfgBBKN5Qh7yXzDjEIPT34SUPQ&s',
       organizationType: 'Technology',
-      createdAt: '2023-10-01',
-      updatedAt: '2023-10-05',
-      status: OrganizationStatus.ACTIVE
-    },
-    {
-      id: 3,
-      name: 'Example Corp',
-      description: 'A sample organization',
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGXT3A_mrlYfgBBKN5Qh7yXzDjEIPT34SUPQ&s',
-      organizationType: 'Technology',
-      createdAt: '2023-10-01',
-      updatedAt: '2023-10-05',
-      status: OrganizationStatus.ACTIVE
+      startDate: '2023-10-01',
+      endDate: '2024-10-01',
+      billingCycle: BillingCycle.TWELVEMONTHS,
+      status: SubscriptionStatus.ACTIVE,
+      totalCurriculums: 10,
+      totalSeats: 100,
+      totalUsers: 45,
+      pricePerSeat: 999.99,
+      organizationStatus: OrganizationStatus.ACTIVE,
+      plan: 'Stemify Pro'
     }
   ]
   const rows = React.useMemo(() => data ?? [], [data])
@@ -65,7 +78,7 @@ export default function OrganizationList() {
 
   return (
     <div className='mx-auto max-w-6xl p-4'>
-      <div className='flex items-center gap-4 py-4'>
+      <div className='flex items-center gap-4 pt-4 pb-8'>
         <Input
           placeholder={t('userSearch')}
           //   value={searchQuery}

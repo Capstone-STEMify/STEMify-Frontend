@@ -105,13 +105,15 @@
       "startDate": "Ngày Bắt Đầu",
       "endDate": "Ngày Kết Thúc",
       "price": "Giá",
-      "totalSeats": "Tổng Số Seat",
-      "totalCurriculums": "Tổng Số Khung Chương Trình",
       "phoneNumber": "Số Điện Thoại",
       "organizationName": "Tên Tổ Chức",
       "organizationType": "Loại Tổ Chức",
       "createdAt": "Ngày Tạo",
-      "jobRole": "Vai Trò Công Việc"
+      "jobRole": "Vai Trò Công Việc",
+      "users": "Người Dùng",
+      "seats": "Ghế",
+      "pricePlan": "Gói",
+      "expiredDate": "Ngày Hết Hạn"
     },
     "paging": {
       "previous": "Trước",

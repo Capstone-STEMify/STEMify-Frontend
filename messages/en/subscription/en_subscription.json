@@ -1,8 +1,9 @@
 {
-  "organization": {
+  "subscription": {
     "list": {
-      "title": "Organization List",
-      "searchPlaceholder": "Search organizations by name..."
+      "organizationTitle": "Organization List",
+      "searchPlaceholder": "Search organizations by name...",
+      "subscriptionTitle": "Subscription List"
     },
     "detail": {
       "title": "Organization Details",

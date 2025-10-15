@@ -8,9 +8,14 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import Image from 'next/image'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import { Organization, OrganizationStatus } from '@/features/subscription/types/subscription.type'
+import {
+  OrganizationStatus,
+  OrganizationSubscription,
+  SubscriptionStatus
+} from '@/features/subscription/types/subscription.type'
+import { BillingCycle } from '@/features/plan/types/plan.type'
 
-export function useGetOrganizationColumnTable(): ColumnDef<Organization>[] {
+export function useGetOrganizationColumnTable(): ColumnDef<OrganizationSubscription>[] {
   const { openModal } = useModal()
   const tm = useTranslations('message')
   const tc = useTranslations('common')
@@ -27,12 +32,12 @@ export function useGetOrganizationColumnTable(): ColumnDef<Organization>[] {
   }
 
   return [
-    createSelectColumn<Organization>(),
+    createSelectColumn<OrganizationSubscription>(),
     {
-      accessorKey: 'imageUrl',
+      accessorKey: 'organizationImageUrl',
       header: tc('tableHeader.image'),
       cell: ({ row }) => {
-        const src = row.getValue<string>('imageUrl')
+        const src = row.getValue<string>('organizationImageUrl')
         return (
           <div className='h-14 w-14 overflow-hidden rounded-full'>
             {src ? (
@@ -51,48 +56,86 @@ export function useGetOrganizationColumnTable(): ColumnDef<Organization>[] {
       }
     },
     {
-      accessorKey: 'name',
-      header: tc('tableHeader.name')
+      accessorKey: 'organizationName',
+      header: tc('tableHeader.organizationName'),
+      cell: ({ row }) => {
+        const organizationName = row.getValue<string>('organizationName')
+        const organizationId = row.getValue<string>('organizationId')
+        return (
+          <div>
+            <p className='font-semibold'>{organizationName}</p>
+            <p className='text-muted-foreground text-sm'>ID: {organizationId}</p>
+          </div>
+        )
+      }
     },
     {
-      accessorKey: 'organizationType',
-      header: tc('tableHeader.organizationType')
+      accessorKey: 'totalUsers',
+      header: tc('tableHeader.users')
     },
     {
-      accessorKey: 'createdAt',
-      header: tc('tableHeader.createdAt')
+      accessorKey: 'totalSeats',
+      header: tc('tableHeader.seats')
+    },
+    {
+      accessorKey: 'plan',
+      header: tc('tableHeader.pricePlan'),
+      cell: ({ row }) => {
+        const plan = row.getValue<string>('plan')
+        const billingCycle = row.getValue<BillingCycle>('billingCycle')
+        const pricePerSeat = row.getValue<number>('pricePerSeat')
+        return (
+          <div>
+            <p className='font-semibold'>
+              {plan} - {billingCycle}
+            </p>
+            <p className='text-muted-foreground text-sm'>đ{pricePerSeat} per seat</p>
+          </div>
+        )
+      }
+    },
+    {
+      accessorKey: 'billingCycle',
+      enableHiding: true,
+      header: '',
+      cell: () => null
+    },
+    {
+      accessorKey: 'pricePerSeat',
+      enableHiding: true,
+      header: '',
+      cell: () => null
+    },
+    {
+      accessorKey: 'organizationId',
+      enableHiding: true,
+      header: '',
+      cell: () => null
     },
     {
       accessorKey: 'status',
       header: tc('tableHeader.status'),
       cell: ({ row }) => {
-        const value = row.getValue<OrganizationStatus>('status')
-        const badgeValue = value.toLocaleUpperCase() as OrganizationStatus
+        const value = row.getValue<SubscriptionStatus>('status')
+        const badgeValue = value.toLocaleUpperCase() as SubscriptionStatus
         return <Badge className={`${getStatusBadgeClass(badgeValue)}`}>{value}</Badge>
       }
     },
-    createActionsColumnFromItems<Organization>([
+    {
+      accessorKey: 'endDate',
+      header: tc('tableHeader.expiredDate')
+    },
+    createActionsColumnFromItems<OrganizationSubscription>([
       {
         label: tc('button.view'),
         onClick: ({ original }) => {
-          router.push(`/${locale}/admin/organizations/${original.id}`)
-          //   openModal('organizationDetail', { id: original.id })
+          router.push(`/${locale}/admin/subscriptions/${original.id}`)
         }
       },
       {
         label: tc('button.update'),
         onClick: ({ original }) => {
           openModal('upsertOrganization', { id: original.id })
-        }
-      },
-      {
-        label: tc('button.delete'),
-        danger: true,
-        onClick: async ({ original }) => {
-          openModal('confirm', {
-            message: `${tt('confirmMessage.delete', { title: original.name })}`,
-            onConfirm: () => handleDelete(original.id)
-          })
         }
       }
     ])
