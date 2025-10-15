@@ -4,12 +4,13 @@ import { Button } from '@/components/shadcn/button'
 import { CheckCircle, Loader2 } from 'lucide-react'
 import { Progress } from '@/components/shadcn/progress'
 import CardLayout from '@/components/shared/card/CardLayout'
+import SearchBar from '@/components/shared/search/SearchBar'
 
 export default function OrganizationSubscriptionDetail() {
   return (
     <div className='space-y-6 p-6'>
       {/* Current Plan Card */}
-      <Card className='p-4 shadow-md'>
+      <Card className='bg-gradient-to-r from-sky-50 to-sky-100 p-4 shadow-md'>
         <div className='flex items-start justify-between'>
           <div>
             <div className='flex items-center gap-2'>
@@ -29,14 +30,14 @@ export default function OrganizationSubscriptionDetail() {
             </div>
           </div>
           <div className='flex items-end gap-2'>
-            <Button variant='outline' size='sm'>
+            <Button className='bg-gradient-to-r from-amber-400 to-amber-500' size='sm'>
               Send Renewal Request
             </Button>
-            <Button variant='outline' size='sm'>
-              Cancel Subscription
-            </Button>
-            <Button variant='outline' size='sm'>
+            <Button className='bg-gradient-to-r from-sky-400 to-sky-600' size='sm'>
               Change plan
+            </Button>
+            <Button className='bg-gray-100 text-black' size='sm'>
+              Cancel Subscription
             </Button>
           </div>
         </div>
@@ -50,7 +51,7 @@ export default function OrganizationSubscriptionDetail() {
       </Card>
       {/* Metrics Summary */}
       <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-        <Card className='py-4 shadow-md'>
+        <Card className='bg-green-50 py-4 shadow-md'>
           <CardHeader>
             <CardTitle className='text-muted-foreground text-sm'>Assigned Licenses</CardTitle>
             <p className='text-2xl font-bold'>80 of 100</p>
@@ -60,7 +61,7 @@ export default function OrganizationSubscriptionDetail() {
             <p className='text-muted-foreground mt-1 text-xs'>20 licenses remaining</p>
           </CardContent>
         </Card>
-        <Card className='py-4 shadow-md'>
+        <Card className='bg-green-50 py-4 shadow-md'>
           <CardHeader>
             <CardTitle className='text-muted-foreground text-sm'>Total Students</CardTitle>
             <p className='text-2xl font-bold'>60</p>
@@ -68,7 +69,7 @@ export default function OrganizationSubscriptionDetail() {
           </CardHeader>
           <CardContent className='text-sm text-red-600'>-20%</CardContent>
         </Card>
-        <Card className='py-4 shadow-md'>
+        <Card className='bg-green-50 py-4 shadow-md'>
           <CardHeader>
             <CardTitle className='text-muted-foreground text-sm'>Total Teachers</CardTitle>
             <p className='text-2xl font-bold'>10</p>
@@ -76,7 +77,7 @@ export default function OrganizationSubscriptionDetail() {
           </CardHeader>
           <CardContent className='text-sm text-green-600'>+12.5%</CardContent>
         </Card>
-        <Card className='py-4 shadow-md'>
+        <Card className='bg-green-50 py-4 shadow-md'>
           <CardHeader>
             <CardTitle className='text-muted-foreground text-sm'>Total Curricula</CardTitle>
             <p className='text-2xl font-bold'>2</p>
@@ -86,6 +87,12 @@ export default function OrganizationSubscriptionDetail() {
       </div>
 
       {/* Tabs */}
+      <div className='flex justify-between'>
+        <SearchBar placeholder='Search users...' className='w-1/2' />
+        <Button variant='outline' size='sm'>
+          + Invite Users
+        </Button>
+      </div>
       <div className='space-x-2'>
         <Badge variant='default'>Users</Badge>
         <Badge variant='secondary'>Pending Invites</Badge>
