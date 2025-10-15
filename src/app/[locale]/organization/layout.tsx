@@ -1,7 +1,9 @@
 import { AppSidebar } from '@/components/shadcn/app-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import { SiteHeader } from '@/components/shadcn/site-header'
+import { authOptions } from '@/libs/auth/authOptions'
 import type { Metadata } from 'next'
+import { getServerSession } from 'next-auth'
 
 export const metadata: Metadata = {
   title: 'Admin'
@@ -12,6 +14,12 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await getServerSession(authOptions)
+  const preloadedState = {
+    auth: { user: session?.user ?? null }
+  }
+  console.log('preloadedState', preloadedState)
+  console.log('session', session)
   return (
     <SidebarProvider
       style={
