@@ -51,7 +51,7 @@ export default function OrganizationSubscriptionDetail() {
       </Card>
       {/* Metrics Summary */}
       <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-        <Card className='bg-green-50 py-4 shadow-md'>
+        <Card className='py-4 shadow-md'>
           <CardHeader>
             <CardTitle className='text-muted-foreground text-sm'>Assigned Licenses</CardTitle>
             <p className='text-2xl font-bold'>80 of 100</p>
@@ -61,7 +61,7 @@ export default function OrganizationSubscriptionDetail() {
             <p className='text-muted-foreground mt-1 text-xs'>20 licenses remaining</p>
           </CardContent>
         </Card>
-        <Card className='bg-green-50 py-4 shadow-md'>
+        <Card className='py-4 shadow-md'>
           <CardHeader>
             <CardTitle className='text-muted-foreground text-sm'>Total Students</CardTitle>
             <p className='text-2xl font-bold'>60</p>
@@ -69,7 +69,7 @@ export default function OrganizationSubscriptionDetail() {
           </CardHeader>
           <CardContent className='text-sm text-red-600'>-20%</CardContent>
         </Card>
-        <Card className='bg-green-50 py-4 shadow-md'>
+        <Card className='py-4 shadow-md'>
           <CardHeader>
             <CardTitle className='text-muted-foreground text-sm'>Total Teachers</CardTitle>
             <p className='text-2xl font-bold'>10</p>
@@ -77,7 +77,7 @@ export default function OrganizationSubscriptionDetail() {
           </CardHeader>
           <CardContent className='text-sm text-green-600'>+12.5%</CardContent>
         </Card>
-        <Card className='bg-green-50 py-4 shadow-md'>
+        <Card className='py-4 shadow-md'>
           <CardHeader>
             <CardTitle className='text-muted-foreground text-sm'>Total Curricula</CardTitle>
             <p className='text-2xl font-bold'>2</p>
