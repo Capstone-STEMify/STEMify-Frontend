@@ -1,0 +1,22 @@
+{
+  "organization": {
+    "list": {
+      "title": "Organization List",
+      "searchPlaceholder": "Search organizations by name..."
+    },
+    "detail": {
+      "title": "Organization Details",
+      "currentPlan": "Current Plan",
+      "StartDate": "Start Date",
+      "ExpiredDate": "Expired Date",
+      "totalSeats": "Total Seats",
+      "usedSeats": "Used Seats"
+    },
+    "form": {
+      "title": {
+        "create": "Create Organization",
+        "edit": "Edit Organization"
+      }
+    }
+  }
+}
