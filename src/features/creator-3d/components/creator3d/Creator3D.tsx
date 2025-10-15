@@ -12,6 +12,7 @@ import { clearScene, setInstances, setSelectedId, updateInstance } from '@/featu
 import { useAddObject, useExportAssembly, useSelectedObject } from '@/features/creator-3d/hooks/creator-3d-helper'
 import {
   addAction,
+  addActivity,
   addStepToActivity,
   addTargetToAction,
   clearAction,
@@ -306,18 +307,30 @@ export default function Creator3D() {
         // ================================
         if (Array.isArray(data.activities)) {
           for (const activity of data.activities) {
+            // ✅ 1️⃣ Thêm activity trước (nếu chưa có)
+            dispatch(
+              addActivity({
+                id: activity.id,
+                name: activity.name,
+                steps: [],
+                difficulty: activity.difficulty ?? 'medium',
+                description: activity.description ?? '',
+                estimatedTime: activity.estimatedTime ?? 10
+              })
+            )
+
+            // ✅ 2️⃣ Thêm các step của activity
             if (Array.isArray(activity.steps)) {
               for (const step of activity.steps) {
-                // 1️⃣ Thêm step vào activity
                 dispatch(addStepToActivity({ activityId: activity.id, step }))
 
-                // 2️⃣ Nếu step có actions, thêm các action đó
+                // ✅ 3️⃣ Nếu step có actions thì xử lý tiếp
                 if (Array.isArray(step.actions)) {
                   for (const act of step.actions) {
                     // Thêm action
                     dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
 
-                    // Gắn các target (nếu có)
+                    // Gắn các target
                     if (Array.isArray(act.targets)) {
                       act.targets.forEach((targetId: string) =>
                         dispatch(addTargetToAction({ actionId: act.id, targetId }))
