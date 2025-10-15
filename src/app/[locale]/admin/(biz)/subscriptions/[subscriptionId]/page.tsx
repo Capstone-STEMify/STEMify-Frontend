@@ -1,4 +1,4 @@
-import OrganizationDetail from '@/features/organization/components/details/OrganizationDetail'
+import OrganizationDetail from '@/features/subscription/components/detail/SystemSubscriptionDetail'
 import React from 'react'
 
 export default function OrganizationDetailPage() {
