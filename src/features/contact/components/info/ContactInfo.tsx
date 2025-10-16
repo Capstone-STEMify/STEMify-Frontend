@@ -26,7 +26,7 @@ const ContactInfo = () => {
 
   return (
     <motion.div
-      className='flex w-full flex-col items-center justify-center px-8 lg:w-1/2'
+      className='flex w-full flex-col items-center justify-center px-8'
       variants={infoVariants}
       initial='hidden'
       animate='visible'
@@ -48,7 +48,7 @@ const ContactInfo = () => {
         </motion.div>
       </div>
 
-      <div className='mt-12 w-full max-w-sm space-y-6 text-left'>
+      <div className='mt-12 w-full space-y-6 text-left'>
         {contactDetails.map((detail, index) => (
           <motion.div
             key={index}
