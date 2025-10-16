@@ -7,8 +7,6 @@ import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useSearchPlanQuery } from '@/features/plan/api/planApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { clsx } from 'clsx'
-import { CheckCircle2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export default function UpgradePlanPage() {
@@ -104,7 +102,7 @@ export default function UpgradePlanPage() {
             //     </div>
             //   </CardContent>
             // </Card>
-            <div></div>
+            <div key={plan.id}></div>
           )
         })}
       </div>

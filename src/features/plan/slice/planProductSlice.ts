@@ -1,7 +1,7 @@
-import { PlanProductSliceParams } from '@/features/plan/types/plan.type'
+import { PlanSliceParams } from '@/features/plan/types/plan.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
-const initialState: PlanProductSliceParams = {
+const initialState: PlanSliceParams = {
   pageNumber: 1,
   pageSize: 5,
   search: '',

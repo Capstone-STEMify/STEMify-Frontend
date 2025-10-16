@@ -44,10 +44,6 @@ export default function AgeRangeTable() {
     status: ageRangeParams.status
   }
 
-  useEffect(() => {
-    dispatch(setPageSize(2))
-  }, [dispatch])
-
   const { data, isLoading } = useSearchAgeRangeQuery({
     search: debouncedSearchQuery
   })
