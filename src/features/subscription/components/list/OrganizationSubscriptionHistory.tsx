@@ -3,10 +3,12 @@ import { DataTable } from '@/components/shared/data-table/data-table'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { useGetOrganizationSubscriptionColumns } from '@/features/subscription/components/list/OrganizationSubscriptionColumnTable'
 import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+import { useTranslations } from 'next-intl'
 
 import React from 'react'
 
 export default function OrganizationSubscriptionHistory() {
+  const t = useTranslations('subscription')
   const columns = useGetOrganizationSubscriptionColumns()
   const data: OrganizationSubscription[] = [
     {
@@ -49,6 +51,7 @@ export default function OrganizationSubscriptionHistory() {
   const rows = React.useMemo(() => data ?? [], [data])
   return (
     <div className='mx-auto flex max-w-6xl flex-col gap-6 p-4'>
+      <h1 className='mt-4 mb-4 text-3xl font-bold'>{t('list.subscriptionHistoryTitle')}</h1>
       <DataTable columns={columns} data={rows} pagingData={data} enableRowSelection={false} />
     </div>
   )

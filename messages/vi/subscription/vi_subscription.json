@@ -3,7 +3,8 @@
     "list": {
       "organizationTitle": "Danh sách tổ chức",
       "searchPlaceholder": "Tìm kiếm tổ chức theo tên...",
-      "subscriptionTitle": "Danh sách gói đăng ký"
+      "subscriptionTitle": "Danh sách gói đăng ký",
+      "subscriptionHistoryTitle": "Lịch sử đăng ký"
     },
     "detail": {
       "title": "Thông tin tổ chức",

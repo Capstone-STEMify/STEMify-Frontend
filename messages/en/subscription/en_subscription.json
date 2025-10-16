@@ -3,7 +3,8 @@
     "list": {
       "organizationTitle": "Organization List",
       "searchPlaceholder": "Search organizations by name...",
-      "subscriptionTitle": "Subscription List"
+      "subscriptionTitle": "Subscription List",
+      "subscriptionHistoryTitle": "Subscription History"
     },
     "detail": {
       "title": "Organization Details",
