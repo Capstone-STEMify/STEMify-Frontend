@@ -40,15 +40,23 @@ export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationS
     },
     {
       accessorKey: 'pricePerSeat',
-      header: tc('tableHeader.price')
+      header: tc('tableHeader.price'),
+      cell: ({ row }) => {
+        const raw = row.getValue<string>('pricePerSeat')
+        return <div>{raw} đ / seat</div>
+      }
     },
     {
       accessorKey: 'totalCurriculums',
-      header: tc('tableHeader.totalCurriculums')
+      header: tc('tableHeader.curriculums')
+    },
+    {
+      accessorKey: 'totalUsers',
+      header: tc('tableHeader.users')
     },
     {
       accessorKey: 'totalSeats',
-      header: tc('tableHeader.totalSeats')
+      header: tc('tableHeader.seats')
     },
     {
       accessorKey: 'startDate',

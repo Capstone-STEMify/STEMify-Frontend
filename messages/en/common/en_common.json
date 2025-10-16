@@ -115,7 +115,8 @@
       "users": "Users",
       "seats": "Seats",
       "pricePlan": "Price Plan",
-      "expiredDate": "Expired Date"
+      "expiredDate": "Expired Date",
+      "curriculums": "Curriculums"
     },
     "paging": {
       "previous": "Previous",

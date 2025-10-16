@@ -113,7 +113,8 @@
       "users": "Người Dùng",
       "seats": "Ghế",
       "pricePlan": "Gói",
-      "expiredDate": "Ngày Hết Hạn"
+      "expiredDate": "Ngày Hết Hạn",
+      "curriculums": "Chương Trình Học"
     },
     "paging": {
       "previous": "Trước",
