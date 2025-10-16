@@ -28,10 +28,18 @@ export default function OrganizationSubscriptionDetail() {
             <h1 className='text-foreground text-3xl font-bold tracking-tight'>Subscription Overview</h1>
             <p className='text-muted-foreground mt-1'>Manage your organization's subscription and users</p>
           </div>
+          {/* Action Buttons */}
+          <div className='flex gap-3 lg:items-end'>
+            <Button className='bg-amber-400 text-white shadow-lg'>Send Renewal Request</Button>
+            <Button className='bg-sky-400 shadow-lg'>Change Plan</Button>
+            <Button variant='outline' className='shadow-lg'>
+              Cancel Subscription
+            </Button>
+          </div>
         </div>
 
         {/* Current Plan Card - Enhanced */}
-        <Card className='overflow-hidden bg-gradient-to-br shadow-xl'>
+        <Card className='overflow-hidden bg-gradient-to-br from-sky-100 to-sky-300 shadow-xl'>
           <CardContent className='p-8'>
             <div className='flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between'>
               <div className='flex-1 space-y-6'>
@@ -51,12 +59,12 @@ export default function OrganizationSubscriptionDetail() {
                 </div>
 
                 <div className='grid gap-6 sm:grid-cols-2'>
-                  <div className='rounded-xl bg-white/10 p-4 backdrop-blur-sm'>
+                  <div className='rounded-xl bg-sky-100/90 p-4 backdrop-blur-sm'>
                     <p className='text-sm font-medium'>Package Details</p>
                     <p className='mt-1 text-2xl font-bold'>Basic Package</p>
                     <p className='mt-1 text-sm'>100K đ/Seat/6 Months</p>
                   </div>
-                  <div className='rounded-xl bg-white/10 p-4 backdrop-blur-sm'>
+                  <div className='rounded-xl bg-sky-100/90 p-4 backdrop-blur-sm'>
                     <div className='flex items-center gap-2'>
                       <Calendar className='h-4 w-4' />
                       <p className='text-sm font-medium'>Expires On</p>
@@ -81,15 +89,6 @@ export default function OrganizationSubscriptionDetail() {
                     <span>Oct 26, 2025</span>
                   </div>
                 </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className='flex flex-col gap-3 lg:items-end'>
-                <Button className='bg-white text-blue-700 shadow-lg hover:bg-blue-50'>Send Renewal Request</Button>
-                <Button className='bg-blue-500/50 backdrop-blur-sm hover:bg-blue-500/70'>Change Plan</Button>
-                <Button variant='ghost' className='hover:bg-white/10'>
-                  Cancel Subscription
-                </Button>
               </div>
             </div>
           </CardContent>
@@ -280,7 +279,7 @@ export default function OrganizationSubscriptionDetail() {
         <Card className='py-4 shadow-lg'>
           <CardHeader>
             <CardTitle className='text-xl'>Included Curricula</CardTitle>
-            <p className='text-muted-foreground mt-1 text-sm'>
+            <p className='text-muted-foreground mt-1 mb-4 text-sm'>
               Courses and learning materials available in your subscription
             </p>
           </CardHeader>
