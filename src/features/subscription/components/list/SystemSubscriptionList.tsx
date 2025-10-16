@@ -12,58 +12,59 @@ import {
 } from '@/features/subscription/types/subscription.type'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import React from 'react'
-
+const data: OrganizationSubscription[] = [
+  {
+    id: 1,
+    organizationId: 1,
+    organizationName: 'Example Corp',
+    organizationDescription: 'A sample organization',
+    organizationImageUrl:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGXT3A_mrlYfgBBKN5Qh7yXzDjEIPT34SUPQ&s',
+    organizationType: 'Technology',
+    startDate: '2023-10-01',
+    endDate: '2024-10-01',
+    billingCycle: BillingCycle.TWELVEMONTHS,
+    status: SubscriptionStatus.ACTIVE,
+    totalCurriculums: 10,
+    totalSeats: 100,
+    totalUsers: 45,
+    pricePerSeat: 999.99,
+    organizationStatus: OrganizationStatus.ACTIVE,
+    plan: 'Stemify Pro'
+  },
+  {
+    id: 2,
+    organizationId: 2,
+    organizationName: 'Example Corp',
+    organizationDescription: 'A sample organization',
+    organizationImageUrl:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGXT3A_mrlYfgBBKN5Qh7yXzDjEIPT34SUPQ&s',
+    organizationType: 'Technology',
+    startDate: '2023-10-01',
+    endDate: '2024-10-01',
+    billingCycle: BillingCycle.TWELVEMONTHS,
+    status: SubscriptionStatus.ACTIVE,
+    totalCurriculums: 10,
+    totalSeats: 100,
+    totalUsers: 45,
+    pricePerSeat: 999.99,
+    organizationStatus: OrganizationStatus.ACTIVE,
+    plan: 'Stemify Pro'
+  }
+]
 export default function OrganizationList() {
   const t = useTranslations('subscription')
   const tc = useTranslations('common')
   const tList = useTranslations('curriculum.list')
-
+  const router = useRouter()
   const dispatch = useAppDispatch()
-  const { openModal } = useModal()
+  const locale = useLocale()
 
   const columns = useGetOrganizationColumnTable()
-  const data: OrganizationSubscription[] = [
-    {
-      id: 1,
-      organizationId: 1,
-      organizationName: 'Example Corp',
-      organizationDescription: 'A sample organization',
-      organizationImageUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGXT3A_mrlYfgBBKN5Qh7yXzDjEIPT34SUPQ&s',
-      organizationType: 'Technology',
-      startDate: '2023-10-01',
-      endDate: '2024-10-01',
-      billingCycle: BillingCycle.TWELVEMONTHS,
-      status: SubscriptionStatus.ACTIVE,
-      totalCurriculums: 10,
-      totalSeats: 100,
-      totalUsers: 45,
-      pricePerSeat: 999.99,
-      organizationStatus: OrganizationStatus.ACTIVE,
-      plan: 'Stemify Pro'
-    },
-    {
-      id: 2,
-      organizationId: 2,
-      organizationName: 'Example Corp',
-      organizationDescription: 'A sample organization',
-      organizationImageUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGXT3A_mrlYfgBBKN5Qh7yXzDjEIPT34SUPQ&s',
-      organizationType: 'Technology',
-      startDate: '2023-10-01',
-      endDate: '2024-10-01',
-      billingCycle: BillingCycle.TWELVEMONTHS,
-      status: SubscriptionStatus.ACTIVE,
-      totalCurriculums: 10,
-      totalSeats: 100,
-      totalUsers: 45,
-      pricePerSeat: 999.99,
-      organizationStatus: OrganizationStatus.ACTIVE,
-      plan: 'Stemify Pro'
-    }
-  ]
+
   const rows = React.useMemo(() => data ?? [], [data])
 
   // Options for selects
@@ -98,7 +99,7 @@ export default function OrganizationList() {
             // No action needed; statusOptions is static
           }}
         />
-        <Button className='bg-sky-500' onClick={() => openModal('upsertOrganization')}>
+        <Button className='bg-sky-500' onClick={() => router.push(`/${locale}/admin/subscriptions/create`)}>
           + {tc('button.create')}
         </Button>
       </div>
