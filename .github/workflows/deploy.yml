@@ -17,8 +17,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - name: Run ESLint
-        run: npm run lint || echo "Lint warnings ignored"
+      - run: npm run lint
 
   type-check:
     name: TypeScript Check
