@@ -8,7 +8,7 @@ export default async function ContactLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className='min-h-screen bg-white'>
+    <div className='bg-white'>
       <Header />
       <main>{children}</main>
     </div>
