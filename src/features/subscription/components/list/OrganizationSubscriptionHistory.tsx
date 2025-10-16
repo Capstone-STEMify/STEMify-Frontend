@@ -15,6 +15,7 @@ export default function OrganizationSubscriptionHistory() {
       status: SubscriptionStatus.ACTIVE,
       pricePerSeat: 120,
       totalCurriculums: 5,
+      totalUsers: 300,
       totalSeats: 500,
       startDate: '2025-01-01',
       endDate: '2026-01-01',
@@ -27,6 +28,7 @@ export default function OrganizationSubscriptionHistory() {
       pricePerSeat: 200,
       totalCurriculums: 3,
       totalSeats: 200,
+      totalUsers: 150,
       startDate: '2024-05-01',
       endDate: '2024-11-01',
       billingCycle: BillingCycle.SIXMONTHS
@@ -38,6 +40,7 @@ export default function OrganizationSubscriptionHistory() {
       pricePerSeat: 350,
       totalCurriculums: 2,
       totalSeats: 100,
+      totalUsers: 50,
       startDate: '2025-07-01',
       endDate: '2025-12-31',
       billingCycle: BillingCycle.SIXMONTHS
