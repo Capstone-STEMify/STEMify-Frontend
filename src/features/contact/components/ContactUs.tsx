@@ -8,7 +8,7 @@ import Footer from '@/components/layout/Footer'
 const ContactUs = () => {
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   return (
-    <div className='flex min-h-screen items-center justify-center lg:p-4'>
+    <div className='flex min-h-screen items-center justify-center p-8 lg:p-16'>
       <main className='mx-auto flex w-full max-w-7xl flex-col overflow-hidden pt-15 lg:flex-row'>
         <ContactForm />
 
