@@ -17,8 +17,10 @@ import {
   Calendar,
   CreditCard
 } from 'lucide-react'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function OrganizationSubscriptionDetail() {
+  const { openModal } = useModal()
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-6'>
       <div className='mx-auto max-w-7xl space-y-8'>
@@ -183,7 +185,7 @@ export default function OrganizationSubscriptionDetail() {
                 <CardTitle className='text-xl'>User Management</CardTitle>
                 <p className='text-muted-foreground mt-1 text-sm'>Manage users and pending invitations</p>
               </div>
-              <Button className='bg-blue-600 hover:bg-blue-700'>
+              <Button className='bg-blue-600 hover:bg-blue-700' onClick={() => openModal('uploadCSV')}>
                 <UserPlus className='mr-2 h-4 w-4' />
                 Invite Users
               </Button>

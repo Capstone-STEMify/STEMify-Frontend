@@ -75,13 +75,13 @@ export default function CreateSubscriptionPlanSheet() {
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
                 <Label htmlFor='minSeats' className='text-muted-foreground text-sm font-normal'>
-                  Min N of Seats
+                  Max Teacher Seats
                 </Label>
                 <Input id='minSeats' type='number' defaultValue='5' className='h-9' />
               </div>
               <div className='space-y-2'>
                 <Label htmlFor='maxSeats' className='text-muted-foreground text-sm font-normal'>
-                  Max N of Seats
+                  Max Student Seats
                 </Label>
                 <Input id='maxSeats' type='number' defaultValue='250' className='h-9' />
               </div>
