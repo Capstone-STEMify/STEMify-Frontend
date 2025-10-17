@@ -28,7 +28,7 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
               <TableHead className='text-foreground font-semibold'>Seat Range</TableHead>
               <TableHead className='text-foreground font-semibold'>Min Seats</TableHead>
               <TableHead className='text-foreground font-semibold'>Max Seats</TableHead>
-              <TableHead className='text-foreground text-right font-semibold'>Price per Seat</TableHead>
+              <TableHead className='text-foreground text-right font-semibold'>Price</TableHead>
               <TableHead className='text-foreground text-right font-semibold'>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -72,7 +72,7 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
                     <TableCell className='text-sm font-medium'>{tier.maxSeat}</TableCell>
                     <TableCell className='text-right'>
                       <span className='text-foreground text-2xl font-bold tracking-tight'>${tier.pricePerSeat}</span>
-                      <span className='text-muted-foreground ml-1 text-xs'>/seat</span>
+                      <span className='text-muted-foreground ml-1 text-xs'></span>
                     </TableCell>
                     <TableCell className='text-right'>
                       <div className='flex items-center justify-end gap-1'>
