@@ -1,7 +1,9 @@
-import { issue } from '@uiw/react-md-editor'
+import { CourseEnrollment } from '@/features/enrollment/types/enrollment.type'
 
 export type Certificate = {
   CertificateType: CertificateType
+  curriculumId?: number
+  courseId?: number
   id: number
   userId: string
   userName: string
@@ -12,6 +14,8 @@ export type Certificate = {
   verificationCode: string
   courseTitle?: string
   curriculumTitle?: string
+  courseEnrollments?: CourseEnrollment[]
+
 }
 
 export enum CertificateType {

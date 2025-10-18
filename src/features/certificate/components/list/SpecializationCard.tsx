@@ -44,8 +44,8 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                   {curriculum.curriculumTitle}
                 </h3>
                 <p className='text-sm text-gray-500'>{curriculum.status}</p>
-                <Progress value={10} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
-                <span className='text-sm font-medium text-gray-700'>45%</span>
+                <Progress value={curriculum.progressPercentage} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
+                <span className='text-sm font-medium text-gray-700'>{curriculum.progressPercentage ?? 0}%</span>
               </div>
             </div>
             {curriculum.status === EnrollmentStatus.COMPLETED ? (
@@ -111,10 +111,10 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                       {course.courseTitle}
                     </p>
                     <p className='text-sm text-gray-500'>
-                      Course 1 of 4 · <span>{course.status}</span>
+                      Course {index + 1} of {curriculum.courseEnrollments.length} · <span>{course.status}</span>
                     </p>
-                    <Progress value={50} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
-                    <span className='text-sm font-medium text-gray-700'>45%</span>
+                    <Progress value={course.progressPercentage} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
+                    <span className='text-sm font-medium text-gray-700'>{course.progressPercentage ?? 0}%</span>
                     {course.status === EnrollmentStatus.COMPLETED && (
                       <p className='mt-1 text-sm text-gray-600'>
                         {/* fix later */}

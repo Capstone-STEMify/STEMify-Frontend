@@ -38,8 +38,8 @@ export const CourseCard = ({ course }: CourseCardProps) => {
               {course.courseTitle}
             </h3>
             <p className='mt-1 text-sm text-gray-600'>{course.status}</p>
-            <Progress value={50} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
-            <span className='text-sm font-medium text-gray-700'>45%</span>
+            <Progress value={course.progressPercentage} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
+            <span className='text-sm font-medium text-gray-700'>{course.progressPercentage ?? 0}%</span>
             {course.status === EnrollmentStatus.COMPLETED && (
               <p className='mt-1 text-sm text-gray-600'>
                 {/* fix later */}

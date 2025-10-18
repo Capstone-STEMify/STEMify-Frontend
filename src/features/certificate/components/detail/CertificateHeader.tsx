@@ -13,15 +13,10 @@ import {
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { useState } from 'react'
-import { Course } from '@/features/resource/course/types/course.type'
+import { Certificate } from '@/features/certificate/types/certificate.type'
 
 interface CertificateHeaderProps {
-  studentName: string
-  completionDate: string
-  studyDuration: string
-  specializationName: string
-  specializationUrl: string
-  // courses: Course[]
+  certificate: Certificate
 }
 
 const LinkedInIcon = () => (
@@ -109,21 +104,13 @@ const XIcon = () => (
   </svg>
 )
 
-const CertificateHeader = ({
-  studentName,
-  completionDate,
-  studyDuration,
-  specializationName,
-  specializationUrl
-  // courses
-}: CertificateHeaderProps) => {
+const CertificateHeader = ({ certificate }: CertificateHeaderProps) => {
   const [copyButtonText, setCopyButtonText] = useState('COPY')
 
-  const shareUrl = 'https://coursera.org/share/36284ba25812eb1d4203c'
-  const shareText = `I just completed the ${specializationName} specialization on Coursera!`
+  const shareText = `I just completed the ${certificate.curriculumTitle} specialization on Stemify!`
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(shareUrl).then(() => {
+    navigator.clipboard.writeText(certificate.certificateUrl).then(() => {
       setCopyButtonText('COPIED!')
       setTimeout(() => {
         setCopyButtonText('COPY')
@@ -135,27 +122,27 @@ const CertificateHeader = ({
     {
       name: 'LinkedIn',
       icon: <LinkedInIcon />,
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(certificate.certificateUrl)}`
     },
     {
       name: 'Email',
       icon: <EmailIcon />,
-      url: `mailto:?subject=Check out my Coursera Certificate&body=${encodeURIComponent(shareText + ' ' + shareUrl)}`
+      url: `mailto:?subject=Check out my Stemify Certificate&body=${encodeURIComponent(shareText + ' ' + certificate.certificateUrl)}`
     },
     {
       name: 'WhatsApp',
       icon: <WhatsAppIcon />,
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + certificate.certificateUrl)}`
     },
     {
       name: 'Facebook',
       icon: <FacebookIcon />,
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(certificate.certificateUrl)}`
     },
     {
       name: 'X',
       icon: <XIcon />,
-      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`
+      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(certificate.certificateUrl)}&text=${encodeURIComponent(shareText)}`
     }
   ]
 
@@ -179,27 +166,26 @@ const CertificateHeader = ({
               </div>
               <div className='pt-1'>
                 <p className='text-lg text-gray-700'>
-                  Completed by <span className='font-bold text-gray-900'>{studentName}</span>
+                  Completed by <span className='font-bold text-gray-900'>{certificate.userName}</span>
                 </p>
-                <h1 className='mt-1 text-3xl font-bold text-gray-900'>{completionDate}</h1>
+                <h1 className='mt-1 text-3xl font-bold text-gray-900'>{certificate.issuedDate}</h1>
               </div>
             </div>
-            <p className='mt-3 ml-20 text-sm text-gray-500'>{studyDuration}</p>
             <p className='mt-6 text-base text-gray-700'>
-              {studentName}'s account is verified. Coursera certifies their successful completion of University of
-              California, Irvine{' '}
-              <Link href={specializationUrl} className='font-semibold text-blue-600 hover:underline'>
-                {specializationName}
+              {certificate.userName}'s account is verified. Stemify certifies their successful completion of{' '}
+              {certificate.curriculumTitle}{' '}
+              <Link href={certificate.certificateUrl ?? '#'} className='font-semibold text-blue-600 hover:underline'>
+                {certificate.curriculumTitle}
               </Link>{' '}
               Specialization.
             </p>
             <div className='mt-6'>
               <h3 className='font-bold text-gray-800'>Course Certificates Completed</h3>
-              {/* <div className='mt-2 space-y-1 text-gray-700'>
-                {courses.map((course) => (
-                  <p key={course.title}>{course.title}</p>
+              <div className='mt-2 space-y-1 text-gray-700'>
+                {certificate.courseEnrollments?.map((courseEnrollment) => (
+                  <p key={courseEnrollment.id}>{courseEnrollment.courseTitle}</p>
                 ))}
-              </div> */}
+              </div>
             </div>
           </div>
 
@@ -253,7 +239,7 @@ const CertificateHeader = ({
           ))}
         </div>
         <div className='flex items-center space-x-2'>
-          <Input id='link' defaultValue={shareUrl} readOnly />
+          <Input id='link' defaultValue={certificate.certificateUrl} readOnly />
           <Button type='submit' size='sm' className='bg-blue-500 px-3' onClick={handleCopy}>
             <span className='sr-only'>Copy</span>
             {copyButtonText}
