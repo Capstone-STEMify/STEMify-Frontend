@@ -1,29 +1,11 @@
 'use client'
 
-import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setUserAnswer } from '@/features/resource/quiz/context/quiz-player-slice'
+import { setUserAnswer } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { Question } from '@/features/resource/quiz/types/quiz.type'
 
-interface Question {
-  id: number
-  quizId: number
-  questionTypeId: number
-  name: string
-  fileUrl?: string
-  description?: string
-  answerExplanation?: string
-  point: number
-  orderIndex: number
-  answers: Array<{
-    id: number
-    questionId: number
-    content: string
-    isCorrect: boolean
-  }>
-}
-
-interface TrueFalseQuestionProps {
+type TrueFalseQuestionProps = {
   question: Question
 }
 

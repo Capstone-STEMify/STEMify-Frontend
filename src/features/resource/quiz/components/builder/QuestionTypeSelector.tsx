@@ -1,11 +1,10 @@
 'use client'
 
-import { useDispatch, useSelector } from 'react-redux'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { CheckCircle2 } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { mockQuestionTypes } from '@/libs/mock-data'
-import { updateQuestion } from '@/features/resource/quiz/context/quiz-builder-slice'
+import { mockQuestionTypes } from '@/features/resource/quiz/data/mock-data'
+import { updateQuestion } from '@/features/resource/quiz/slice/quiz-builder-slice'
 
 interface QuestionTypeSelectorProps {
   questionId: number

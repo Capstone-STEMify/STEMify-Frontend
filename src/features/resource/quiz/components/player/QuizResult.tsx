@@ -1,6 +1,5 @@
 'use client'
 
-import { useSelector } from 'react-redux'
 import { CheckCircle, XCircle } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'

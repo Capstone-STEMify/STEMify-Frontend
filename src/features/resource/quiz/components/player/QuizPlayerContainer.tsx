@@ -1,6 +1,5 @@
 'use client'
 
-import { useSelector } from 'react-redux'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import QuizResult from '@/features/resource/quiz/components/player/QuizResult'

@@ -1,7 +1,7 @@
 'use client'
 
 import { Input } from '@/components/shadcn/input'
-import { setUserAnswer } from '@/features/resource/quiz/context/quiz-player-slice'
+import { setUserAnswer } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import type React from 'react'
 

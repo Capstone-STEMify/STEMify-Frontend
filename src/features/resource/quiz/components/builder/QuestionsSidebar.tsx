@@ -1,13 +1,12 @@
 'use client'
 
-import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
 import { Plus, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/shadcn/badge'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { mockQuestionTypes } from '@/libs/mock-data'
-import { addQuestion, deleteQuestion, setCurrentQuestionId } from '@/features/resource/quiz/context/quiz-builder-slice'
+import { mockQuestionTypes } from '@/features/resource/quiz/data/mock-data'
+import { addQuestion, deleteQuestion, setCurrentQuestionId } from '@/features/resource/quiz/slice/quiz-builder-slice'
 
 interface QuestionsSidebarProps {
   onClose?: () => void

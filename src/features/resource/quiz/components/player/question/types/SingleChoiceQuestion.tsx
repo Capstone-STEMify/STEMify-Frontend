@@ -1,29 +1,11 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import { setUserAnswer } from '@/features/resource/quiz/context/quiz-player-slice'
+import { setUserAnswer } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { Question } from '@/features/resource/quiz/types/quiz.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { useDispatch, useSelector } from 'react-redux'
 
-interface Question {
-  id: number
-  quizId: number
-  questionTypeId: number
-  name: string
-  fileUrl?: string
-  description?: string
-  answerExplanation?: string
-  point: number
-  orderIndex: number
-  answers: Array<{
-    id: number
-    questionId: number
-    content: string
-    isCorrect: boolean
-  }>
-}
-
-interface SingleChoiceQuestionProps {
+type SingleChoiceQuestionProps = {
   question: Question
 }
 

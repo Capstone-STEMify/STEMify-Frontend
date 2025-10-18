@@ -1,11 +1,10 @@
 'use client'
 
-import { useSelector, useDispatch } from 'react-redux'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { ChevronLeft, ChevronRight, Send } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { goToNextQuestion, goToPreviousQuestion, submitQuiz } from '@/features/resource/quiz/context/quiz-player-slice'
+import { goToNextQuestion, goToPreviousQuestion, submitQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
 
 export default function NavigationButtons() {
   const { questions, currentQuestionIndex } = useAppSelector((state) => state.quizPlayer)

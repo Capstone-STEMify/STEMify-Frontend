@@ -47,8 +47,8 @@ import { curriculumEnrollmentSlice } from '@/features/enrollment/slice/curriculu
 import { chatAgentApi } from '@/features/chat/api/chatAgentApi'
 import { certificateApi } from '@/features/certificate/api/certificateApi'
 import { cartApi } from '@/features/cart/api/cartApi'
-import { quizBuilderSlice } from '@/features/resource/quiz/context/quiz-builder-slice'
-import { quizPlayerSlice } from '@/features/resource/quiz/context/quiz-player-slice'
+import { quizBuilderSlice } from '@/features/resource/quiz/slice/quiz-builder-slice'
+import { quizPlayerSlice } from '@/features/resource/quiz/slice/quiz-player-slice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here

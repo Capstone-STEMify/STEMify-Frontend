@@ -1,12 +1,11 @@
 'use client'
 
-import { useSelector, useDispatch } from 'react-redux'
 import { Clock, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { Card } from '@/components/shadcn/card'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setCurrentQuestionIndex } from '@/features/resource/quiz/context/quiz-player-slice'
+import { setCurrentQuestionIndex } from '@/features/resource/quiz/slice/quiz-player-slice'
 
 export default function QuizMobileSidebar() {
   const { questions, currentQuestionIndex, timeRemaining } = useAppSelector((state) => state.quizPlayer)

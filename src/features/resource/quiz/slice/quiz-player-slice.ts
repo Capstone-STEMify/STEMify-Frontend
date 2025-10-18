@@ -1,23 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { mockQuiz } from '@/libs/mock-data'
-
-interface Question {
-  id: number
-  quizId: number
-  questionTypeId: number
-  name: string
-  fileUrl?: string
-  description?: string
-  answerExplanation?: string
-  point: number
-  orderIndex: number
-  answers: Array<{
-    id: number
-    questionId: number
-    content: string
-    isCorrect: boolean
-  }>
-}
+import { mockQuiz } from '@/features/resource/quiz/data/mock-data'
+import { Question } from '@/features/resource/quiz/types/quiz.type'
 
 interface QuizPlayerState {
   questions: Question[]

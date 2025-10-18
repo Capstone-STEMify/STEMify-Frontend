@@ -1,14 +1,13 @@
 'use client'
 
-import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Trash2, Plus, GripVertical } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { mockQuestionTypes } from '@/libs/mock-data'
-import { addAnswer, deleteAnswer, updateAnswer } from '@/features/resource/quiz/context/quiz-builder-slice'
+import { mockQuestionTypes } from '@/features/resource/quiz/data/mock-data'
+import { addAnswer, deleteAnswer, updateAnswer } from '@/features/resource/quiz/slice/quiz-builder-slice'
 
 interface AnswerOptionsManagerProps {
   questionId: number

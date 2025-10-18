@@ -1,13 +1,12 @@
 'use client'
 
-import { useDispatch, useSelector } from 'react-redux'
 import { Card } from '@/components/shadcn/card'
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { Shuffle } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { updateQuestion } from '@/features/resource/quiz/context/quiz-builder-slice'
+import { updateQuestion } from '@/features/resource/quiz/slice/quiz-builder-slice'
 
 interface QuizSettingsProps {
   questionId: number
