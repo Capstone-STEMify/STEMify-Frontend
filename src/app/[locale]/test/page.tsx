@@ -16,8 +16,8 @@ export default function CreateQuizPage() {
   if (!mounted) return null
 
   return (
-    <QuizPlayerProvider>
-      <QuizContainer />
-    </QuizPlayerProvider>
+    <QuizBuilderProvider>
+      <QuizBuilderContainer />
+    </QuizBuilderProvider>
   )
 }
