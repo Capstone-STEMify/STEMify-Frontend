@@ -1,16 +1,19 @@
 'use client'
 
+import { useDispatch, useSelector } from 'react-redux'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { CheckCircle2 } from 'lucide-react'
-import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
-import { mockQuestionTypes } from '@/features/resource/quiz/context/mock-date'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { mockQuestionTypes } from '@/libs/mock-data'
+import { updateQuestion } from '@/features/resource/quiz/context/quiz-builder-slice'
 
 interface QuestionTypeSelectorProps {
   questionId: number
 }
 
 export default function QuestionTypeSelector({ questionId }: QuestionTypeSelectorProps) {
-  const { quiz, updateQuestion } = useQuizBuilder()
+  const { quiz } = useAppSelector((state) => state.quizBuilder)
+  const dispatch = useAppDispatch()
   const question = quiz.questions.find((q) => q.id === questionId)
 
   if (!question) return null
@@ -34,7 +37,7 @@ export default function QuestionTypeSelector({ questionId }: QuestionTypeSelecto
         value={currentTypeName}
         onValueChange={(value) => {
           const typeId = mockQuestionTypes.find((t) => t.name === value)?.id || 1
-          updateQuestion(questionId, { questionTypeId: typeId })
+          dispatch(updateQuestion({ id: questionId, updates: { questionTypeId: typeId } }))
         }}
       >
         <SelectTrigger className='w-48'>

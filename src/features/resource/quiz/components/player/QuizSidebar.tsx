@@ -1,12 +1,15 @@
 'use client'
 
-import { Button } from '@/components/shadcn/button'
-import { Card } from '@/components/shadcn/card'
-import { useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
+import { useSelector, useDispatch } from 'react-redux'
 import { Clock } from 'lucide-react'
+import { Card } from '@/components/shadcn/card'
+import { Button } from '@/components/shadcn/button'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { setCurrentQuestionIndex } from '@/features/resource/quiz/context/quiz-player-slice'
 
-export default function QuizSidebar() {
-  const { questions, currentQuestionIndex, timeRemaining, setCurrentQuestionIndex } = useQuizPlayer()
+export default function Sidebar() {
+  const { questions, currentQuestionIndex, timeRemaining } = useAppSelector((state) => state.quizPlayer)
+  const dispatch = useDispatch()
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -23,8 +26,8 @@ export default function QuizSidebar() {
       </div>
 
       {/* Timer */}
-      <Card className='bg-primary/10 border-primary/20 rounded-lg p-4'>
-        <div className='flex gap-2'>
+      <Card className='bg-primary/10 border-primary/20 p-4'>
+        <div className='mb-2 flex items-center gap-2'>
           <Clock className='text-primary h-5 w-5' />
           <span className='text-sidebar-foreground text-sm font-medium'>Thời gian còn lại</span>
         </div>
@@ -44,7 +47,7 @@ export default function QuizSidebar() {
           {questions.map((_, index) => (
             <Button
               key={index}
-              onClick={() => setCurrentQuestionIndex(index)}
+              onClick={() => dispatch(setCurrentQuestionIndex(index))}
               variant={index === currentQuestionIndex ? 'default' : 'outline'}
               size='sm'
               className={`aspect-square text-sm font-semibold transition-all ${

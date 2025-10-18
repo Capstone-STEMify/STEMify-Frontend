@@ -1,12 +1,13 @@
 'use client'
 
+import { useSelector } from 'react-redux'
+import { CheckCircle, XCircle } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
-import { useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
-import { CheckCircle, XCircle } from 'lucide-react'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
-export default function QuizResult() {
-  const { questions } = useQuizPlayer()
+export default function ResultsScreen() {
+  const { questions } = useAppSelector((state) => state.quizPlayer)
 
   // Calculate score (mock calculation)
   const correctAnswers = Math.floor(questions.length * 0.7)
@@ -46,7 +47,7 @@ export default function QuizResult() {
               </div>
               <div className='flex-1'>
                 <p className='text-foreground mb-1 font-medium'>Câu {index + 1}</p>
-                <p className='text-foreground/60 text-sm'>{question.question}</p>
+                <p className='text-foreground/60 text-sm'>{question.name}</p>
               </div>
             </Card>
           ))}

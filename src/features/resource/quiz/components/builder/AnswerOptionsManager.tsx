@@ -1,19 +1,22 @@
 'use client'
 
+import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Trash2, Plus, GripVertical } from 'lucide-react'
-import { mockQuestionTypes } from '@/features/resource/quiz/context/mock-date'
-import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { mockQuestionTypes } from '@/libs/mock-data'
+import { addAnswer, deleteAnswer, updateAnswer } from '@/features/resource/quiz/context/quiz-builder-slice'
 
 interface AnswerOptionsManagerProps {
   questionId: number
 }
 
 export default function AnswerOptionsManager({ questionId }: AnswerOptionsManagerProps) {
-  const { quiz, addAnswer, deleteAnswer, updateAnswer } = useQuizBuilder()
+  const { quiz } = useAppSelector((state) => state.quizBuilder)
+  const dispatch = useAppDispatch()
   const question = quiz.questions.find((q) => q.id === questionId)
 
   if (!question) return null
@@ -38,9 +41,15 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
                 onValueChange={(value) => {
                   question.answers.forEach((answer) => {
                     if (answer.content === option.content) {
-                      updateAnswer(questionId, answer.id, { isCorrect: value === answer.id.toString() })
+                      dispatch(
+                        updateAnswer({
+                          questionId,
+                          answerId: answer.id,
+                          updates: { isCorrect: value === answer.id.toString() }
+                        })
+                      )
                     } else {
-                      updateAnswer(questionId, answer.id, { isCorrect: false })
+                      dispatch(updateAnswer({ questionId, answerId: answer.id, updates: { isCorrect: false } }))
                     }
                   })
                 }}
@@ -70,11 +79,17 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
               <GripVertical className='text-muted-foreground h-4 w-4 cursor-grab' />
               <Input
                 value={answer.content}
-                onChange={(e) => updateAnswer(questionId, answer.id, { content: e.target.value })}
+                onChange={(e) =>
+                  dispatch(updateAnswer({ questionId, answerId: answer.id, updates: { content: e.target.value } }))
+                }
                 placeholder={`Correct answer ${index + 1}`}
                 className='flex-1'
               />
-              <Button variant='ghost' size='icon' onClick={() => deleteAnswer(questionId, answer.id)}>
+              <Button
+                variant='ghost'
+                size='icon'
+                onClick={() => dispatch(deleteAnswer({ questionId, answerId: answer.id }))}
+              >
                 <Trash2 className='text-destructive h-4 w-4' />
               </Button>
             </div>
@@ -85,12 +100,17 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
           variant='outline'
           className='w-full bg-transparent'
           onClick={() =>
-            addAnswer(questionId, {
-              id: Math.max(...question.answers.map((a) => a.id), 0) + 1,
-              questionId: question.id,
-              content: '',
-              isCorrect: true
-            })
+            dispatch(
+              addAnswer({
+                questionId,
+                answer: {
+                  id: Math.max(...question.answers.map((a) => a.id), 0) + 1,
+                  questionId: question.id,
+                  content: '',
+                  isCorrect: true
+                }
+              })
+            )
           }
         >
           <Plus className='mr-2 h-4 w-4' />
@@ -128,15 +148,23 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
             {isMultipleChoice ? (
               <Checkbox
                 checked={answer.isCorrect}
-                onCheckedChange={(checked) => updateAnswer(questionId, answer.id, { isCorrect: checked as boolean })}
+                onCheckedChange={(checked) =>
+                  dispatch(
+                    updateAnswer({ questionId, answerId: answer.id, updates: { isCorrect: checked as boolean } })
+                  )
+                }
               />
             ) : (
               <RadioGroup
                 value={answer.isCorrect ? answer.id.toString() : ''}
                 onValueChange={(value) =>
-                  updateAnswer(questionId, answer.id, {
-                    isCorrect: value === answer.id.toString()
-                  })
+                  dispatch(
+                    updateAnswer({
+                      questionId,
+                      answerId: answer.id,
+                      updates: { isCorrect: value === answer.id.toString() }
+                    })
+                  )
                 }
               >
                 <RadioGroupItem value={answer.id.toString()} id={`answer-${answer.id}`} />
@@ -145,11 +173,17 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
 
             <Input
               value={answer.content}
-              onChange={(e) => updateAnswer(questionId, answer.id, { content: e.target.value })}
+              onChange={(e) =>
+                dispatch(updateAnswer({ questionId, answerId: answer.id, updates: { content: e.target.value } }))
+              }
               placeholder={`Option ${index + 1}`}
               className='flex-1'
             />
-            <Button variant='ghost' size='icon' onClick={() => deleteAnswer(questionId, answer.id)}>
+            <Button
+              variant='ghost'
+              size='icon'
+              onClick={() => dispatch(deleteAnswer({ questionId, answerId: answer.id }))}
+            >
               <Trash2 className='text-destructive h-4 w-4' />
             </Button>
           </div>
@@ -160,12 +194,17 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
         variant='outline'
         className='w-full bg-transparent'
         onClick={() =>
-          addAnswer(questionId, {
-            id: Math.max(...question.answers.map((a) => a.id), 0) + 1,
-            questionId: question.id,
-            content: '',
-            isCorrect: false
-          })
+          dispatch(
+            addAnswer({
+              questionId,
+              answer: {
+                id: Math.max(...question.answers.map((a) => a.id), 0) + 1,
+                questionId: question.id,
+                content: '',
+                isCorrect: false
+              }
+            })
+          )
         }
       >
         <Plus className='mr-2 h-4 w-4' />

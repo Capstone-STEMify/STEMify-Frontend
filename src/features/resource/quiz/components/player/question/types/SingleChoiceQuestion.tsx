@@ -1,22 +1,44 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import { Question, useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
+import { setUserAnswer } from '@/features/resource/quiz/context/quiz-player-slice'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { useDispatch, useSelector } from 'react-redux'
+
+interface Question {
+  id: number
+  quizId: number
+  questionTypeId: number
+  name: string
+  fileUrl?: string
+  description?: string
+  answerExplanation?: string
+  point: number
+  orderIndex: number
+  answers: Array<{
+    id: number
+    questionId: number
+    content: string
+    isCorrect: boolean
+  }>
+}
 
 interface SingleChoiceQuestionProps {
   question: Question
 }
 
 export default function SingleChoiceQuestion({ question }: SingleChoiceQuestionProps) {
-  const { setUserAnswer } = useQuizPlayer()
+  const dispatch = useAppDispatch()
+  const { userAnswers } = useAppSelector((state) => state.quizPlayer)
+  const currentAnswer = userAnswers[question.id]
 
   return (
     <div className='space-y-3'>
       {question.answers.map((answer, index) => (
         <Button
           key={answer.id}
-          onClick={() => setUserAnswer(answer.id)}
-          variant='outline'
+          onClick={() => dispatch(setUserAnswer({ questionId: question.id, answer: answer.id }))}
+          variant={currentAnswer === answer.id ? 'default' : 'outline'}
           className='hover:border-primary hover:bg-primary/5 h-auto w-full justify-start border-2 p-4 text-left font-medium'
         >
           <span className='bg-primary/20 text-primary mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full font-semibold'>
