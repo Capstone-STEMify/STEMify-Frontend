@@ -4,33 +4,20 @@ import Image from 'next/image'
 
 interface CertificateDetailsProps {
   specializationName: string
-  rating: number
-  ratingCount: string
-  enrollmentCount: string
   learningOutcomes: string[]
   skills: string[]
+  imageUrl?: string
 }
 
-const CertificateDetails = ({
-  specializationName,
-  rating,
-  ratingCount,
-  enrollmentCount,
-  learningOutcomes,
-  skills
-}: CertificateDetailsProps) => {
+const CertificateDetails = ({ specializationName, learningOutcomes, skills, imageUrl }: CertificateDetailsProps) => {
   return (
     <section className='mt-6 rounded-lg bg-white p-6 shadow-md md:p-8'>
       <div className='flex items-start gap-4'>
         {/* Replace with actual university logo */}
-        <Image src='/HomeFiles/learning.png' alt='UCI Logo' width={60} height={60} />
+        <Image src={imageUrl ?? '/HomeFiles/learning.png'} alt='UCI Logo' width={60} height={60} />
         <div>
           <h2 className='text-2xl font-bold text-gray-900'>{specializationName}</h2>
-          <div className='mt-1 flex items-center gap-2 text-sm text-gray-600'>
-            <span>⭐ {rating}</span>
-            <span>({ratingCount} ratings)</span>
-            <span>{enrollmentCount} already enrolled</span>
-          </div>
+          <div className='mt-1 flex items-center gap-2 text-sm text-gray-600'></div>
         </div>
       </div>
 

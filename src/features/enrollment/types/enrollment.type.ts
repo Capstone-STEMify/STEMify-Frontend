@@ -31,6 +31,7 @@ export type CourseEnrollment = {
   status: string
   certificateUrl?: string
   certificateId?: number
+  progressPercentage: number
 }
 
 export type CurriculumEnrollment = {
@@ -46,6 +47,7 @@ export type CurriculumEnrollment = {
   status: string
   certificateUrl?: string
   certificateId?: number
+  progressPercentage: number
   courseEnrollments: CourseEnrollment[]
 }
 

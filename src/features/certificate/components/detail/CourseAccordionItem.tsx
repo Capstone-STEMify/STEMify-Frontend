@@ -7,13 +7,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 interface CourseAccordionItemProps {
-  course: CourseEnrollment
-  university: string
+  courseEnrollment: CourseEnrollment
   studentName: string
   itemValue: string
 }
 
-export const CourseAccordionItem = ({ course, university, studentName, itemValue }: CourseAccordionItemProps) => {
+export const CourseAccordionItem = ({ courseEnrollment, studentName, itemValue }: CourseAccordionItemProps) => {
   return (
     <AccordionItem value={itemValue} className='border-b-0'>
       <Card className='overflow-hidden shadow-sm transition-all hover:shadow-md'>
@@ -29,7 +28,7 @@ export const CourseAccordionItem = ({ course, university, studentName, itemValue
                 className='hidden sm:block'
               />
               <div>
-                <h4 className='font-bold text-gray-900'>{course.courseTitle}</h4>
+                <h4 className='font-bold text-gray-900'>{courseEnrollment.courseTitle}</h4>
                 <p className='text-sm text-gray-500'>Course • Grade: 95%</p>
               </div>
             </div>
@@ -47,12 +46,12 @@ export const CourseAccordionItem = ({ course, university, studentName, itemValue
 
         <AccordionContent>
           <div className='border-t bg-gray-50/50 px-6 pt-6'>
-            <h3 className='mb-4 text-2xl text-blue-700'>{course.courseTitle}</h3>
+            <h3 className='mb-4 text-2xl text-blue-700'>{courseEnrollment.courseTitle}</h3>
             <p className='mt-2 text-sm text-gray-700'>Stemify</p>
 
             <div className='mt-4 space-y-1 text-sm text-gray-800'>
               <p>
-                Completed by {studentName} by <span className='font-semibold'>{course.completedAt}</span>
+                Completed by {studentName} by <span className='font-semibold'>{courseEnrollment.completedAt}</span>
               </p>
               <p>
                 Grade Achieved: <span className='font-semibold'>95%</span>
