@@ -1,7 +1,7 @@
 'use client'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
-import { useQuizBuilder } from '@/features/resource/section/components/quiz/context/quiz-builder-context'
+import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
 import { CheckCircle2 } from 'lucide-react'
 
 interface QuestionTypeSelectorProps {

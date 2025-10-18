@@ -1,6 +1,7 @@
-import NavigationButtons from '@/features/resource/section/components/quiz/components/player/NavigationButton'
-import QuestionCard from '@/features/resource/section/components/quiz/components/player/question/card/QuestionCard'
-import { useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
+
+import NavigationButtons from '@/features/resource/quiz/components/player/NavigationButton'
+import QuestionCard from '@/features/resource/quiz/components/player/question/card/QuestionCard'
+import { useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
 import { useIsMobile } from '@/hooks/use-mobile'
 import React from 'react'
 

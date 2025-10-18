@@ -4,7 +4,7 @@ import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
 import { Plus, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/shadcn/badge'
-import { useQuizBuilder } from '@/features/resource/section/components/quiz/context/quiz-builder-context'
+import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
 
 interface QuestionsSidebarProps {
   onClose?: () => void

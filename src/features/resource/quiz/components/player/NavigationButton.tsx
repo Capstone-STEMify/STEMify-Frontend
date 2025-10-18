@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import { useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
+import { useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { ChevronLeft, ChevronRight, Send } from 'lucide-react'
 

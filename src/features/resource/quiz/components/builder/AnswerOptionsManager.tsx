@@ -5,7 +5,7 @@ import { Input } from '@/components/shadcn/input'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Trash2, Plus, GripVertical } from 'lucide-react'
-import { useQuizBuilder } from '@/features/resource/section/components/quiz/context/quiz-builder-context'
+import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
 
 interface AnswerOptionsManagerProps {
   questionId: string

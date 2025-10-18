@@ -4,8 +4,8 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
-import QuestionsSidebar from '@/features/resource/section/components/quiz/components/builder/QuestionsSidebar'
-import QuestionEditor from '@/features/resource/section/components/quiz/components/builder/QuestionEditor'
+import QuestionsSidebar from '@/features/resource/quiz/components/builder/QuestionsSidebar'
+import QuestionEditor from '@/features/resource/quiz/components/builder/QuestionEditor'
 
 export default function QuizBuilderContainer() {
   const isMobile = useIsMobile()

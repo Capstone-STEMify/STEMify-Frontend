@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
-import { useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
+import { useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
 import { Clock, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 

@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
-import { useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
+import { useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
 import { CheckCircle, XCircle } from 'lucide-react'
 
 export default function QuizResult() {

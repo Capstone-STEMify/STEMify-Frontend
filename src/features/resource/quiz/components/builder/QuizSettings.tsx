@@ -4,7 +4,7 @@ import { Card } from '@/components/shadcn/card'
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
-import { useQuizBuilder } from '@/features/resource/section/components/quiz/context/quiz-builder-context'
+import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
 import { Shuffle } from 'lucide-react'
 
 interface QuizSettingsProps {

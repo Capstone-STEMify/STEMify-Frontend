@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import { Question } from '@/features/resource/quiz/context/quiz-player-context'
+import { Question, useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
 import { useState } from 'react'
 
 type MultipleChoiceQuestionProps = {

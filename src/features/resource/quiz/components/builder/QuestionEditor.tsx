@@ -7,10 +7,10 @@ import { Badge } from "@/components/shadcn/badge"
 import { Textarea } from "@/components/shadcn/textarea"
 import { Search, Settings } from "lucide-react"
 import { useState } from "react"
-import { useQuizBuilder } from '@/features/resource/section/components/quiz/context/quiz-builder-context'
-import QuestionTypeSelector from '@/features/resource/section/components/quiz/components/builder/QuestionTypeSelector'
-import AnswerOptionsManager from '@/features/resource/section/components/quiz/components/builder/AnswerOptionsManager'
-import QuizSettings from '@/features/resource/section/components/quiz/components/builder/QuizSettings'
+import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
+import QuestionTypeSelector from '@/features/resource/quiz/components/builder/QuestionTypeSelector'
+import AnswerOptionsManager from '@/features/resource/quiz/components/builder/AnswerOptionsManager'
+import QuizSettings from '@/features/resource/quiz/components/builder/QuizSettings'
 
 export default function QuestionEditor() {
   const { quiz, currentQuestionId, updateQuiz, updateQuestion } = useQuizBuilder()

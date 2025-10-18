@@ -1,7 +1,7 @@
 'use client'
 
 import { Input } from '@/components/shadcn/input'
-import { Question, useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
+import { Question, useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
 import type React from 'react'
 
 import { useState } from 'react'
