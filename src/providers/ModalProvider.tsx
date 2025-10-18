@@ -29,6 +29,7 @@ import InformationModal from '@/components/shared/modals/InformationModal'
 import UpsertComponentModal from '@/features/kit-components/components/upsert/UpsertComponentModal'
 import SelectComponentListModal from '@/features/kit-components/components/list/SelectComponentListModal'
 import UploadCSVModal from '@/features/subscription/components/modal/UploadCSVModal'
+import QuizAIModal from '@/features/resource/quiz/components/modal/QuizAIModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -90,6 +91,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'curriculumSelectCourseListModal' && <CurriculumSelectCourseListModal {...modalProps} />}
       {modalType === 'kitListTableModal' && <KitListTableModal {...modalProps} />}
       {modalType === 'selectComponentListModal' && <SelectComponentListModal {...modalProps} />}
+      {modalType === 'quizAI' && <QuizAIModal {...modalProps} />}
     </ModalContext.Provider>
   )
 }

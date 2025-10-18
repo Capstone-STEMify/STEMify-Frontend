@@ -48,6 +48,7 @@ export type ModalType =
   | 'kitListTableModal'
   | 'selectComponentListModal'
   | 'upsertAssembly'
+  | 'quizAI'
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void
