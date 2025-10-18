@@ -13,7 +13,7 @@ export default function HeaderEvent() {
   const locale = useLocale()
   const { token, user } = useAppSelector((state) => state.auth)
   const { data } = useSearchNotificationQuery({ userId: user?.userId }, { skip: !token })
-  const { data: cartData } = useGetCartByUserIdQuery({ userId: user?.userId || '' }, { skip: !token })
+  // const { data: cartData } = useGetCartByUserIdQuery({ userId: user?.userId || '' }, { skip: !token })
   // highlight-next-line
   const t = useTranslations('Header')
 
@@ -48,7 +48,7 @@ export default function HeaderEvent() {
       </Popover>
 
       {/* highlight-next-line */}
-      <Link
+      {/* <Link
         href={`/${locale}/shop/cart`}
         className={`group relative flex h-10 w-10 items-center justify-center rounded-full text-blue-500 transition-all duration-200 ease-in-out hover:bg-blue-200 hover:shadow-md`}
       >
@@ -58,7 +58,7 @@ export default function HeaderEvent() {
             {cartData.data.items.length > 9 ? '9+' : cartData.data.items.length}
           </span>
         )}
-      </Link>
+      </Link> */}
     </>
   )
 }

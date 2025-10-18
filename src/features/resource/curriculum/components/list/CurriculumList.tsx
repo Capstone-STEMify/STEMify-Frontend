@@ -66,9 +66,6 @@ export default function CurriculumList() {
 
               <p className='line-clamp-4 text-sm text-gray-600'>{curriculum.description}</p>
               <div className='mt-auto flex items-center gap-2'></div>
-              <p className='mt-1 text-lg font-bold text-sky-500'>
-                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(curriculum.price)}
-              </p>
               <Link
                 href={`/resource/curriculum/${curriculum.id}`}
                 className='mt-4 flex items-center text-sm font-medium text-sky-500 hover:underline'

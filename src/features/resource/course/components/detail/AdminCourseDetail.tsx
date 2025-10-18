@@ -198,15 +198,6 @@ export default function AdminCourseDetail() {
             className='object-cover'
           />
         </div>
-        <div className='flex items-center justify-center gap-2'>
-          <span className='text-2xl font-bold text-red-600 italic'>{t('price')}:</span>
-          <span className='text-2xl font-bold text-red-600 italic'>
-            {new Intl.NumberFormat('vi-VN', {
-              style: 'currency',
-              currency: 'VND'
-            }).format(course.data.price)}
-          </span>
-        </div>
 
         {/* Metadata */}
         <SCard

@@ -62,35 +62,14 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
       signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
       return
     }
-    if (course.id && enrollmentId && enrollmentStatus === EnrollmentStatus.NOT_STARTED) {
-      updateEnrollment({ id: enrollmentId, body: { status: EnrollmentStatus.IN_PROGRESS } })
+    if (course.id) {
+      createEnrollment({ courseId: course.id, studentId: auth?.user?.userId, status: EnrollmentStatus.IN_PROGRESS })
       router.push(`/resource/course/${course.id}/learn`)
 
       toast.success(tt('successMessage.enroll'), {
         description: `${tt('successMessage.enrollDes', { title: enroll?.data.courseTitle || '' })}`
       })
     }
-  }
-
-  const handleAddToCart = () => {
-    if (!auth.user?.userId) {
-      signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
-      return
-    }
-    if (course.id) {
-      // TODO: add to cart functionality, after payment success, system will auto create enrollment with NOT_STARTED status
-      //  For now, we just create enrollment with NOT_STARTED status when user click "Add to Cart" button
-      createEnrollment({ courseId: course.id, studentId: auth?.user?.userId })
-    }
-    toast.success(tt('successMessage.addToCart'), {
-      description: `${tt('successMessage.addToCartDes', { title: enroll?.data.courseTitle || '' })}`,
-      action: {
-        label: 'View Cart',
-        onClick: () => {
-          console.log('Navigate to cart details:', enroll)
-        }
-      }
-    })
   }
 
   return (
@@ -123,16 +102,6 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
                 items={course.standardNames}
                 className='text-orange-custom-500 bg-yellow-custom-50'
               />
-              {(userRole === UserRole.GUEST || (userRole === UserRole.STUDENT && !enrollmentStatus)) && (
-                <div className='mt-2 flex items-center gap-3'>
-                  <span className='text-2xl font-bold text-gray-600'>
-                    {new Intl.NumberFormat('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND'
-                    }).format(course.price)}
-                  </span>
-                </div>
-              )}
             </div>
 
             {userRole === UserRole.TEACHER || enrollmentStatus === EnrollmentStatus.IN_PROGRESS ? (
@@ -147,7 +116,7 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
                   {tc('button.goToCourse')}
                 </Button>
               </div>
-            ) : userRole === UserRole.STUDENT && enrollmentStatus === EnrollmentStatus.NOT_STARTED ? (
+            ) : (
               <div className='flex flex-col gap-4 sm:flex-row'>
                 <Button
                   onClick={handleEnroll}
@@ -155,16 +124,6 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
                 >
                   <BookOpenText className='h-5 w-5' />
                   {tc('button.enroll')}
-                </Button>
-              </div>
-            ) : (
-              <div className='flex flex-col gap-4 sm:flex-row'>
-                <Button
-                  onClick={handleAddToCart}
-                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-3xl py-6 text-lg text-white'
-                >
-                  <ShoppingCartIcon className='h-5 w-5' />
-                  {tc('button.addToCart')}
                 </Button>
                 <Button className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-3xl border bg-white py-6 text-lg'>
                   <Heart className='h-5 w-5' />

@@ -176,15 +176,6 @@ export default function AdminCurriculumInformationSection({
             className='object-cover'
           />
         </div>
-        <div className='flex items-center justify-center gap-2 pt-4'>
-          <span className='text-2xl font-bold text-red-600 italic'>{t('details.price')}:</span>
-          <span className='text-2xl font-bold text-red-600 italic'>
-            {new Intl.NumberFormat('vi-VN', {
-              style: 'currency',
-              currency: 'VND'
-            }).format(curriculum.price)}
-          </span>
-        </div>
       </div>
     </div>
   )
