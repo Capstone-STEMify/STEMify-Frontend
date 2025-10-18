@@ -1,21 +1,23 @@
 'use client'
 
-import { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
-import { Question, useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setUserAnswer } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { Question } from '@/features/resource/quiz/types/quiz.type'
 
-interface MultipleChoiceQuestionProps {
+type MultipleChoiceQuestionProps = {
   question: Question
 }
 
 export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuestionProps) {
-  const { setUserAnswer } = useQuizPlayer()
-  const [selected, setSelected] = useState<number[]>([])
+  const dispatch = useAppDispatch()
+  const { userAnswers } = useAppSelector((state) => state.quizPlayer)
+  const currentAnswer = userAnswers[question.id] as unknown as number[] | undefined
+  const selected = Array.isArray(currentAnswer) ? currentAnswer : []
 
   const handleToggle = (answerId: number) => {
     const newSelected = selected.includes(answerId) ? selected.filter((id) => id !== answerId) : [...selected, answerId]
-    setSelected(newSelected)
-    setUserAnswer(JSON.stringify(newSelected))
+    dispatch(setUserAnswer({ questionId: question.id, answer: newSelected as unknown as string | number }))
   }
 
   return (

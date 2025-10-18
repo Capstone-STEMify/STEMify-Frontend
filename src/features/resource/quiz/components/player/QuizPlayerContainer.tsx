@@ -1,15 +1,14 @@
 'use client'
 
-
-import QuizMainContent from '@/features/resource/quiz/components/player/QuizMainContent'
-import QuizMobileSidebar from '@/features/resource/quiz/components/player/QuizMobileSidebar'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import QuizResult from '@/features/resource/quiz/components/player/QuizResult'
 import QuizSidebar from '@/features/resource/quiz/components/player/QuizSidebar'
-import { useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
-import { useIsMobile } from '@/hooks/use-mobile'
+import QuizMobileSidebar from '@/features/resource/quiz/components/player/QuizMobileSidebar'
+import QuizMainContent from '@/features/resource/quiz/components/player/QuizMainContent'
 
 export default function QuizPlayerContainer() {
-  const { isSubmitted } = useQuizPlayer()
+  const { isSubmitted } = useAppSelector((state) => state.quizPlayer)
   const isMobile = useIsMobile()
 
   if (isSubmitted) {

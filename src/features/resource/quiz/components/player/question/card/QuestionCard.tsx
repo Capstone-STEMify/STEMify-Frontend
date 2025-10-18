@@ -3,15 +3,14 @@
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Badge } from '@/components/shadcn/badge'
 import { Card } from '@/components/shadcn/card'
-
-import { Question } from '@/features/resource/quiz/context/quiz-player-context'
-import { mockQuestionTypes } from '@/features/resource/quiz/context/mock-date'
+import { mockQuestionTypes } from '@/features/resource/quiz/data/mock-data'
 import TrueFalseQuestion from '@/features/resource/quiz/components/player/question/types/TrueFalseQuestion'
 import SingleChoiceQuestion from '@/features/resource/quiz/components/player/question/types/SingleChoiceQuestion'
 import MultipleChoiceQuestion from '@/features/resource/quiz/components/player/question/types/MultipleChoiceQuestion'
 import ShortAnswerQuestion from '@/features/resource/quiz/components/player/question/types/ShortAnswerQuestion'
+import { Question } from '@/features/resource/quiz/types/quiz.type'
 
-interface QuestionCardProps {
+type QuestionCardProps = {
   question: Question
 }
 

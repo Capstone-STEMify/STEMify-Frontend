@@ -1,13 +1,15 @@
 'use client'
 
-import { Button } from '@/components/shadcn/button'
-import { Card } from '@/components/shadcn/card'
-import { useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
 import { Clock, Menu, X } from 'lucide-react'
 import { useState } from 'react'
+import { Card } from '@/components/shadcn/card'
+import { Button } from '@/components/shadcn/button'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setCurrentQuestionIndex } from '@/features/resource/quiz/slice/quiz-player-slice'
 
 export default function QuizMobileSidebar() {
-  const { questions, currentQuestionIndex, timeRemaining, setCurrentQuestionIndex } = useQuizPlayer()
+  const { questions, currentQuestionIndex, timeRemaining } = useAppSelector((state) => state.quizPlayer)
+  const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
 
   const formatTime = (seconds: number) => {
@@ -33,9 +35,15 @@ export default function QuizMobileSidebar() {
         </Button>
       </div>
 
-      {/* Mobile Drawer */}
-      {isOpen && <div className='fixed inset-0 z-30 bg-black/50 md:hidden' onClick={() => setIsOpen(false)} />}
+      {/* Mobile Drawer Backdrop */}
+      {isOpen && (
+        <div
+          className='pointer-events-auto fixed inset-0 z-40 bg-black/50 md:hidden'
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
+      {/* Mobile Sidebar */}
       <aside
         className={`bg-sidebar border-sidebar-border fixed inset-0 top-16 z-40 flex w-72 flex-col gap-6 overflow-y-auto border-r p-6 transition-transform duration-300 md:hidden ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
@@ -61,7 +69,7 @@ export default function QuizMobileSidebar() {
               <Button
                 key={index}
                 onClick={() => {
-                  setCurrentQuestionIndex(index)
+                  dispatch(setCurrentQuestionIndex(index))
                   setIsOpen(false)
                 }}
                 variant={index === currentQuestionIndex ? 'default' : 'outline'}

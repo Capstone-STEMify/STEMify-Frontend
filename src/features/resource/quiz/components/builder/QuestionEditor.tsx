@@ -7,14 +7,16 @@ import { Badge } from '@/components/shadcn/badge'
 import { Textarea } from '@/components/shadcn/textarea'
 import { Search, Settings } from 'lucide-react'
 import { useState } from 'react'
-import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
-import { mockQuestionTypes } from '@/features/resource/quiz/context/mock-date'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { mockQuestionTypes } from '@/features/resource/quiz/data/mock-data'
+import { updateQuestion, updateQuiz } from '@/features/resource/quiz/slice/quiz-builder-slice'
 import QuestionTypeSelector from '@/features/resource/quiz/components/builder/QuestionTypeSelector'
 import AnswerOptionsManager from '@/features/resource/quiz/components/builder/AnswerOptionsManager'
 import QuizSettings from '@/features/resource/quiz/components/builder/QuizSettings'
 
 export default function QuestionEditor() {
-  const { quiz, currentQuestionId, updateQuiz, updateQuestion } = useQuizBuilder()
+  const { quiz, currentQuestionId } = useAppSelector((state) => state.quizBuilder)
+  const dispatch = useAppDispatch()
   const [showSettings, setShowSettings] = useState(false)
 
   const currentQuestion = quiz.questions.find((q) => q.id === currentQuestionId)
@@ -46,7 +48,7 @@ export default function QuestionEditor() {
           <Input
             placeholder='Quiz Title'
             value={quiz.title}
-            onChange={(e) => updateQuiz({ title: e.target.value })}
+            onChange={(e) => dispatch(updateQuiz({ title: e.target.value }))}
             className='text-xl font-semibold'
           />
         </div>
@@ -81,7 +83,7 @@ export default function QuestionEditor() {
           <Textarea
             placeholder='Enter your question here...'
             value={currentQuestion.name}
-            onChange={(e) => updateQuestion(currentQuestion.id, { name: e.target.value })}
+            onChange={(e) => dispatch(updateQuestion({ id: currentQuestion.id, updates: { name: e.target.value } }))}
             className='min-h-24'
           />
         </div>

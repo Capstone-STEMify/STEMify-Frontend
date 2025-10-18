@@ -4,15 +4,17 @@ import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
 import { Plus, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/shadcn/badge'
-import { mockQuestionTypes } from '@/features/resource/quiz/context/mock-date'
-import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { mockQuestionTypes } from '@/features/resource/quiz/data/mock-data'
+import { addQuestion, deleteQuestion, setCurrentQuestionId } from '@/features/resource/quiz/slice/quiz-builder-slice'
 
 interface QuestionsSidebarProps {
   onClose?: () => void
 }
 
 export default function QuestionsSidebar({ onClose }: QuestionsSidebarProps) {
-  const { quiz, currentQuestionId, setCurrentQuestionId, addQuestion, deleteQuestion } = useQuizBuilder()
+  const { quiz, currentQuestionId } = useAppSelector((state) => state.quizBuilder)
+  const dispatch = useAppDispatch()
 
   const getQuestionTypeName = (questionTypeId: number) => {
     const type = mockQuestionTypes.find((t) => t.id === questionTypeId)
@@ -34,7 +36,7 @@ export default function QuestionsSidebar({ onClose }: QuestionsSidebarProps) {
     <div className='space-y-4 p-4'>
       <div>
         <h2 className='text-muted-foreground mb-3 text-sm font-semibold'>QUESTIONS ({quiz.questions.length})</h2>
-        <Button onClick={addQuestion} variant='outline' size='sm' className='w-full bg-transparent'>
+        <Button onClick={() => dispatch(addQuestion())} variant='outline' size='sm' className='w-full bg-transparent'>
           <Plus className='mr-2 h-4 w-4' />
           Add Question
         </Button>
@@ -48,7 +50,7 @@ export default function QuestionsSidebar({ onClose }: QuestionsSidebarProps) {
               currentQuestionId === question.id ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
             }`}
             onClick={() => {
-              setCurrentQuestionId(question.id)
+              dispatch(setCurrentQuestionId(question.id))
               onClose?.()
             }}
           >
@@ -66,7 +68,7 @@ export default function QuestionsSidebar({ onClose }: QuestionsSidebarProps) {
                 className='h-8 w-8 flex-shrink-0'
                 onClick={(e) => {
                   e.stopPropagation()
-                  deleteQuestion(question.id)
+                  dispatch(deleteQuestion(question.id))
                 }}
               >
                 <Trash2 className='h-4 w-4' />
