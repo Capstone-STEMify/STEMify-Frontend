@@ -2,12 +2,12 @@
 
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
-import { useQuiz } from '@/features/resource/section/components/quiz/components/quiz-context'
+import { useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
 import { Clock, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 export default function QuizMobileSidebar() {
-  const { questions, currentQuestionIndex, timeRemaining, setCurrentQuestionIndex } = useQuiz()
+  const { questions, currentQuestionIndex, timeRemaining, setCurrentQuestionIndex } = useQuizPlayer()
   const [isOpen, setIsOpen] = useState(false)
 
   const formatTime = (seconds: number) => {

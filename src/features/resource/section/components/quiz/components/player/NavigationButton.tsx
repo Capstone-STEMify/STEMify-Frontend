@@ -1,12 +1,12 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import { useQuiz } from '@/features/resource/section/components/quiz/components/quiz-context'
+import { useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { ChevronLeft, ChevronRight, Send } from 'lucide-react'
 
 export default function NavigationButtons() {
-  const { questions, currentQuestionIndex, goToNextQuestion, goToPreviousQuestion, submitQuiz } = useQuiz()
+  const { questions, currentQuestionIndex, goToNextQuestion, goToPreviousQuestion, submitQuiz } = useQuizPlayer()
   const isMobile = useIsMobile()
 
   const isFirstQuestion = currentQuestionIndex === 0

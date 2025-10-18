@@ -2,11 +2,12 @@
 
 import { Badge } from '@/components/shadcn/badge'
 import { Card } from '@/components/shadcn/card'
-import MultipleChoiceQuestion from '@/features/resource/section/components/quiz/components/question/types/MultipleChoiceQuestion'
-import ShortAnswerQuestion from '@/features/resource/section/components/quiz/components/question/types/ShortAnswerQuestion'
-import SingleChoiceQuestion from '@/features/resource/section/components/quiz/components/question/types/SingleChoiceQuestion'
-import TrueFalseQuestion from '@/features/resource/section/components/quiz/components/question/types/TrueFalseQuestion'
-import { Question } from '@/features/resource/section/components/quiz/components/quiz-context'
+import MultipleChoiceQuestion from '@/features/resource/section/components/quiz/components/player/question/types/MultipleChoiceQuestion'
+import ShortAnswerQuestion from '@/features/resource/section/components/quiz/components/player/question/types/ShortAnswerQuestion'
+import SingleChoiceQuestion from '@/features/resource/section/components/quiz/components/player/question/types/SingleChoiceQuestion'
+import TrueFalseQuestion from '@/features/resource/section/components/quiz/components/player/question/types/TrueFalseQuestion'
+
+import { Question } from '@/features/resource/section/components/quiz/context/quiz-player-context'
 
 type QuestionCardProps = {
   question: Question

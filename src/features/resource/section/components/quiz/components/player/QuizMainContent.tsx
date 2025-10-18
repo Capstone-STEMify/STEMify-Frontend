@@ -1,11 +1,11 @@
-import NavigationButtons from '@/features/resource/section/components/quiz/components/NavigationButton'
-import QuestionCard from '@/features/resource/section/components/quiz/components/question/card/QuestionCard'
-import { useQuiz } from '@/features/resource/section/components/quiz/components/quiz-context'
+import NavigationButtons from '@/features/resource/section/components/quiz/components/player/NavigationButton'
+import QuestionCard from '@/features/resource/section/components/quiz/components/player/question/card/QuestionCard'
+import { useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
 import { useIsMobile } from '@/hooks/use-mobile'
 import React from 'react'
 
 export default function QuizMainContent() {
-  const { questions, currentQuestionIndex } = useQuiz()
+  const { questions, currentQuestionIndex } = useQuizPlayer()
   const isMobile = useIsMobile()
   const currentQuestion = questions[currentQuestionIndex]
 

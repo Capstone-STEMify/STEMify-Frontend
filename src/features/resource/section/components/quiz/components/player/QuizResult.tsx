@@ -2,11 +2,11 @@
 
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
-import { useQuiz } from '@/features/resource/section/components/quiz/components/quiz-context'
+import { useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
 import { CheckCircle, XCircle } from 'lucide-react'
 
 export default function QuizResult() {
-  const { questions } = useQuiz()
+  const { questions } = useQuizPlayer()
 
   // Calculate score (mock calculation)
   const correctAnswers = Math.floor(questions.length * 0.7)

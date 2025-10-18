@@ -28,9 +28,9 @@ interface QuizContextType {
   isSubmitted: boolean
 }
 
-const QuizContext = createContext<QuizContextType | undefined>(undefined)
+const QuizPlayerContext = createContext<QuizContextType | undefined>(undefined)
 
-export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const QuizPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [questions] = useState<Question[]>([
     {
       id: 1,
@@ -122,7 +122,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [])
 
   return (
-    <QuizContext.Provider
+    <QuizPlayerContext.Provider
       value={{
         questions,
         currentQuestionIndex,
@@ -136,12 +136,12 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }}
     >
       {children}
-    </QuizContext.Provider>
+    </QuizPlayerContext.Provider>
   )
 }
 
-export const useQuiz = () => {
-  const context = useContext(QuizContext)
+export const useQuizPlayer = () => {
+  const context = useContext(QuizPlayerContext)
   if (!context) {
     throw new Error('useQuiz must be used within QuizProvider')
   }
