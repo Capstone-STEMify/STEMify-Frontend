@@ -4,6 +4,7 @@ import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
 import { Plus, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/shadcn/badge'
+import { mockQuestionTypes } from '@/features/resource/quiz/context/mock-date'
 import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
 
 interface QuestionsSidebarProps {
@@ -12,6 +13,22 @@ interface QuestionsSidebarProps {
 
 export default function QuestionsSidebar({ onClose }: QuestionsSidebarProps) {
   const { quiz, currentQuestionId, setCurrentQuestionId, addQuestion, deleteQuestion } = useQuizBuilder()
+
+  const getQuestionTypeName = (questionTypeId: number) => {
+    const type = mockQuestionTypes.find((t) => t.id === questionTypeId)
+    return type?.name || 'Unknown'
+  }
+
+  const getQuestionTypeLabel = (questionTypeId: number) => {
+    const typeName = getQuestionTypeName(questionTypeId)
+    const labels: Record<string, string> = {
+      'multiple-choice': 'Multiple choice',
+      'single-choice': 'Single choice',
+      'true-false': 'True/False',
+      'short-answer': 'Short answer'
+    }
+    return labels[typeName] || typeName
+  }
 
   return (
     <div className='space-y-4 p-4'>
@@ -37,16 +54,10 @@ export default function QuestionsSidebar({ onClose }: QuestionsSidebarProps) {
           >
             <div className='flex items-start justify-between gap-2'>
               <div className='min-w-0 flex-1'>
-                <p className='text-sm font-semibold'>{question.number}</p>
-                <p className='truncate text-xs opacity-75'>{question.text || 'Untitled question'}</p>
+                <p className='text-sm font-semibold'>{question.orderIndex}</p>
+                <p className='truncate text-xs opacity-75'>{question.name || 'Untitled question'}</p>
                 <Badge variant='secondary' className='mt-2 text-xs'>
-                  {question.type === 'multiple-choice'
-                    ? 'Multiple choice'
-                    : question.type === 'single-choice'
-                      ? 'Single choice'
-                      : question.type === 'true-false'
-                        ? 'True/False'
-                        : 'Short answer'}
+                  {getQuestionTypeLabel(question.questionTypeId)}
                 </Badge>
               </div>
               <Button

@@ -5,10 +5,11 @@ import { Input } from '@/components/shadcn/input'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Trash2, Plus, GripVertical } from 'lucide-react'
+import { mockQuestionTypes } from '@/features/resource/quiz/context/mock-date'
 import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-context'
 
 interface AnswerOptionsManagerProps {
-  questionId: string
+  questionId: number
 }
 
 export default function AnswerOptionsManager({ questionId }: AnswerOptionsManagerProps) {
@@ -17,7 +18,9 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
 
   if (!question) return null
 
-  if (question.type === 'true-false') {
+  const typeName = mockQuestionTypes.find((t) => t.id === question.questionTypeId)?.name || ''
+
+  if (typeName === 'true-false') {
     return (
       <div className='space-y-4'>
         <div className='flex items-center gap-2'>
@@ -26,26 +29,26 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
 
         <div className='space-y-2'>
           {[
-            { id: 'true', text: 'True' },
-            { id: 'false', text: 'False' }
+            { id: 1, content: 'True' },
+            { id: 2, content: 'False' }
           ].map((option) => (
             <div key={option.id} className='bg-muted flex items-center gap-3 rounded-lg p-3'>
               <RadioGroup
-                value={question.answers.find((a) => a.text === option.text && a.isCorrect)?.id || ''}
+                value={question.answers.find((a) => a.content === option.content && a.isCorrect)?.id.toString() || ''}
                 onValueChange={(value) => {
                   question.answers.forEach((answer) => {
-                    if (answer.text === option.text) {
-                      updateAnswer(questionId, answer.id, { isCorrect: value === answer.id })
+                    if (answer.content === option.content) {
+                      updateAnswer(questionId, answer.id, { isCorrect: value === answer.id.toString() })
                     } else {
                       updateAnswer(questionId, answer.id, { isCorrect: false })
                     }
                   })
                 }}
               >
-                <RadioGroupItem value={option.id} id={option.id} />
+                <RadioGroupItem value={option.id.toString()} id={`option-${option.id}`} />
               </RadioGroup>
-              <label htmlFor={option.id} className='flex-1 cursor-pointer font-medium'>
-                {option.text}
+              <label htmlFor={`option-${option.id}`} className='flex-1 cursor-pointer font-medium'>
+                {option.content}
               </label>
             </div>
           ))}
@@ -54,7 +57,7 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
     )
   }
 
-  if (question.type === 'short-answer') {
+  if (typeName === 'short-answer') {
     return (
       <div className='space-y-4'>
         <div className='flex items-center gap-2'>
@@ -66,8 +69,8 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
             <div key={answer.id} className='bg-muted flex items-center gap-3 rounded-lg p-3'>
               <GripVertical className='text-muted-foreground h-4 w-4 cursor-grab' />
               <Input
-                value={answer.text}
-                onChange={(e) => updateAnswer(questionId, answer.id, { text: e.target.value })}
+                value={answer.content}
+                onChange={(e) => updateAnswer(questionId, answer.id, { content: e.target.value })}
                 placeholder={`Correct answer ${index + 1}`}
                 className='flex-1'
               />
@@ -83,8 +86,9 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
           className='w-full bg-transparent'
           onClick={() =>
             addAnswer(questionId, {
-              id: `a${Date.now()}`,
-              text: '',
+              id: Math.max(...question.answers.map((a) => a.id), 0) + 1,
+              questionId: question.id,
+              content: '',
               isCorrect: true
             })
           }
@@ -96,7 +100,7 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
     )
   }
 
-  const isMultipleChoice = question.type === 'multiple-choice'
+  const isMultipleChoice = typeName === 'multiple-choice'
 
   return (
     <div className='space-y-4'>
@@ -128,20 +132,20 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
               />
             ) : (
               <RadioGroup
-                value={answer.isCorrect ? answer.id : ''}
+                value={answer.isCorrect ? answer.id.toString() : ''}
                 onValueChange={(value) =>
                   updateAnswer(questionId, answer.id, {
-                    isCorrect: value === answer.id
+                    isCorrect: value === answer.id.toString()
                   })
                 }
               >
-                <RadioGroupItem value={answer.id} id={answer.id} />
+                <RadioGroupItem value={answer.id.toString()} id={`answer-${answer.id}`} />
               </RadioGroup>
             )}
 
             <Input
-              value={answer.text}
-              onChange={(e) => updateAnswer(questionId, answer.id, { text: e.target.value })}
+              value={answer.content}
+              onChange={(e) => updateAnswer(questionId, answer.id, { content: e.target.value })}
               placeholder={`Option ${index + 1}`}
               className='flex-1'
             />
@@ -157,8 +161,9 @@ export default function AnswerOptionsManager({ questionId }: AnswerOptionsManage
         className='w-full bg-transparent'
         onClick={() =>
           addAnswer(questionId, {
-            id: `a${Date.now()}`,
-            text: '',
+            id: Math.max(...question.answers.map((a) => a.id), 0) + 1,
+            questionId: question.id,
+            content: '',
             isCorrect: false
           })
         }

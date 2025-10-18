@@ -8,7 +8,7 @@ import QuizSidebar from '@/features/resource/quiz/components/player/QuizSidebar'
 import { useQuizPlayer } from '@/features/resource/quiz/context/quiz-player-context'
 import { useIsMobile } from '@/hooks/use-mobile'
 
-export default function QuizContainer() {
+export default function QuizPlayerContainer() {
   const { isSubmitted } = useQuizPlayer()
   const isMobile = useIsMobile()
 

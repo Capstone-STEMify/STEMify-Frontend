@@ -8,7 +8,7 @@ import { useQuizBuilder } from '@/features/resource/quiz/context/quiz-builder-co
 import { Shuffle } from 'lucide-react'
 
 interface QuizSettingsProps {
-  questionId: string
+  questionId: number
 }
 
 export default function QuizSettings({ questionId }: QuizSettingsProps) {
@@ -26,7 +26,7 @@ export default function QuizSettings({ questionId }: QuizSettingsProps) {
             <Shuffle className='h-4 w-4' />
             Randomize Order
           </Label>
-          <Select
+          {/* <Select
             value={question.randomizeOrder ? 'yes' : 'no'}
             onValueChange={(value) => updateQuestion(questionId, { randomizeOrder: value === 'yes' })}
           >
@@ -37,14 +37,14 @@ export default function QuizSettings({ questionId }: QuizSettingsProps) {
               <SelectItem value='yes'>Keep choices in current order</SelectItem>
               <SelectItem value='no'>Randomize</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
 
         {/* Estimation Time */}
         <div className='space-y-2'>
           <Label className='text-sm font-semibold'>Estimation time</Label>
           <div className='flex items-center gap-2'>
-            <Input
+            {/* <Input
               type='number'
               value={question.estimationTime}
               onChange={(e) =>
@@ -53,7 +53,7 @@ export default function QuizSettings({ questionId }: QuizSettingsProps) {
                 })
               }
               className='w-20'
-            />
+            /> */}
             <span className='text-muted-foreground text-sm'>Mins</span>
           </div>
         </div>
@@ -62,12 +62,12 @@ export default function QuizSettings({ questionId }: QuizSettingsProps) {
         <div className='space-y-2'>
           <Label className='text-sm font-semibold'>Mark as point</Label>
           <div className='flex items-center gap-2'>
-            <Input
+            {/* <Input
               type='number'
               value={question.points}
               onChange={(e) => updateQuestion(questionId, { points: Number.parseInt(e.target.value) || 0 })}
               className='w-20'
-            />
+            /> */}
             <span className='text-muted-foreground text-sm'>Points</span>
           </div>
         </div>

@@ -1,97 +1,81 @@
 'use client'
 
+import { mockQuiz } from '@/features/resource/quiz/context/mock-date'
 import type React from 'react'
 import { createContext, useContext, useState } from 'react'
 
-export interface Answer {
-  id: string
-  text: string
+interface Answer {
+  id: number
+  questionId: number
+  content: string
   isCorrect: boolean
-  image?: string
 }
 
-export interface Question {
-  id: string
-  number: number
-  text: string
-  type: 'multiple-choice' | 'single-choice' | 'true-false' | 'short-answer'
+interface Question {
+  id: number
+  quizId: number
+  questionTypeId: number
+  name: string
+  fileUrl?: string
+  description?: string
+  answerExplanation?: string
+  point: number
+  orderIndex: number
   answers: Answer[]
-  image?: string
-  estimationTime: number
-  points: number
-  randomizeOrder: boolean
-  required: boolean
 }
 
-export interface Quiz {
-  id: string
+interface Quiz {
+  id: number
+  sectionId?: number
   title: string
-  description: string
+  description?: string
+  duration: number
+  createdBy: string
+  createdAt: string
+  updatedAt: string
+  status: 'draft' | 'published' | 'archived'
+  passingScore: number
   questions: Question[]
 }
 
 interface QuizBuilderContextType {
   quiz: Quiz
-  currentQuestionId: string | null
-  setCurrentQuestionId: (id: string) => void
+  currentQuestionId: number | null
+  setCurrentQuestionId: (id: number) => void
   addQuestion: () => void
-  deleteQuestion: (id: string) => void
-  updateQuestion: (id: string, updates: Partial<Question>) => void
+  deleteQuestion: (id: number) => void
+  updateQuestion: (id: number, updates: Partial<Question>) => void
   updateQuiz: (updates: Partial<Quiz>) => void
-  addAnswer: (questionId: string, answer: Answer) => void
-  deleteAnswer: (questionId: string, answerId: string) => void
-  updateAnswer: (questionId: string, answerId: string, updates: Partial<Answer>) => void
+  addAnswer: (questionId: number, answer: Answer) => void
+  deleteAnswer: (questionId: number, answerId: number) => void
+  updateAnswer: (questionId: number, answerId: number, updates: Partial<Answer>) => void
 }
 
 const QuizBuilderContext = createContext<QuizBuilderContextType | undefined>(undefined)
 
 export function QuizBuilderProvider({ children }: { children: React.ReactNode }) {
-  const [quiz, setQuiz] = useState<Quiz>({
-    id: '1',
-    title: 'UI Design Fundamentals & Best Practice',
-    description: '',
-    questions: [
-      {
-        id: 'q1',
-        number: 1,
-        text: 'What does UI stand for in the context of design?',
-        type: 'multiple-choice',
-        answers: [
-          { id: 'a1', text: 'User Integration', isCorrect: false },
-          { id: 'a2', text: 'User Interface', isCorrect: true },
-          { id: 'a3', text: 'Universal Interaction', isCorrect: false },
-          { id: 'a4', text: 'User Involvement', isCorrect: false }
-        ],
-        estimationTime: 2,
-        points: 1,
-        randomizeOrder: false,
-        required: true
-      }
-    ]
-  })
-
-  const [currentQuestionId, setCurrentQuestionId] = useState<string | null>('q1')
+  const [quiz, setQuiz] = useState<Quiz>(mockQuiz)
+  const [currentQuestionId, setCurrentQuestionId] = useState<number | null>(mockQuiz.questions[0]?.id || null)
 
   const addQuestion = () => {
+    const newId = Math.max(...quiz.questions.map((q) => q.id), 0) + 1
     const newQuestion: Question = {
-      id: `q${Date.now()}`,
-      number: quiz.questions.length + 1,
-      text: '',
-      type: 'multiple-choice',
-      answers: [],
-      estimationTime: 2,
-      points: 1,
-      randomizeOrder: false,
-      required: true
+      id: newId,
+      quizId: quiz.id,
+      questionTypeId: 2, // single-choice by default
+      name: '',
+      point: 1,
+      orderIndex: quiz.questions.length + 1,
+      answers: []
     }
     setQuiz((prev) => ({
       ...prev,
       questions: [...prev.questions, newQuestion]
     }))
-    setCurrentQuestionId(newQuestion.id)
+    setCurrentQuestionId(newId)
   }
 
-  const deleteQuestion = (id: string) => {
+  const deleteQuestion = (id: number) => {
     setQuiz((prev) => ({
       ...prev,
       questions: prev.questions.filter((q) => q.id !== id)
@@ -101,7 +85,7 @@ export function QuizBuilderProvider({ children }: { children: React.ReactNode })
     }
   }
 
-  const updateQuestion = (id: string, updates: Partial<Question>) => {
+  const updateQuestion = (id: number, updates: Partial<Question>) => {
     setQuiz((prev) => ({
       ...prev,
       questions: prev.questions.map((q) => (q.id === id ? { ...q, ...updates } : q))
@@ -112,19 +96,19 @@ export function QuizBuilderProvider({ children }: { children: React.ReactNode })
     setQuiz((prev) => ({ ...prev, ...updates }))
   }
 
-  const addAnswer = (questionId: string, answer: Answer) => {
+  const addAnswer = (questionId: number, answer: Answer) => {
     updateQuestion(questionId, {
       answers: [...quiz.questions.find((q) => q.id === questionId)!.answers, answer]
     })
   }
 
-  const deleteAnswer = (questionId: string, answerId: string) => {
+  const deleteAnswer = (questionId: number, answerId: number) => {
     updateQuestion(questionId, {
       answers: quiz.questions.find((q) => q.id === questionId)!.answers.filter((a) => a.id !== answerId)
     })
   }
 
-  const updateAnswer = (questionId: string, answerId: string, updates: Partial<Answer>) => {
+  const updateAnswer = (questionId: number, answerId: number, updates: Partial<Answer>) => {
     updateQuestion(questionId, {
       answers: quiz.questions
         .find((q) => q.id === questionId)!
