@@ -1,14 +1,14 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import { Question, useQuiz } from '@/features/resource/section/components/quiz/context/quiz-player-context'
+import { Question, useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
 
 type TrueFalseQuestionProps = {
   question: Question
 }
 
 export default function TrueFalseQuestion({ question }: TrueFalseQuestionProps) {
-  const { setUserAnswer } = useQuiz()
+  const { setUserAnswer } = useQuizPlayer()
 
   return (
     <div className='flex gap-4'>

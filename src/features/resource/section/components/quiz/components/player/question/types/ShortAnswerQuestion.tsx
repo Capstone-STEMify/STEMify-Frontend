@@ -1,7 +1,7 @@
 'use client'
 
 import { Input } from '@/components/shadcn/input'
-import { Question, useQuiz } from '@/features/resource/section/components/quiz/context/quiz-player-context'
+import { Question, useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
 import type React from 'react'
 
 import { useState } from 'react'
@@ -11,7 +11,7 @@ type ShortAnswerQuestionProps = {
 }
 
 export default function ShortAnswerQuestion({ question }: ShortAnswerQuestionProps) {
-  const { setUserAnswer } = useQuiz()
+  const { setUserAnswer } = useQuizPlayer()
   const [answer, setAnswer] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

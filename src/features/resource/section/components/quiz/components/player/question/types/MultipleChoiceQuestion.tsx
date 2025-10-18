@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import { Question, useQuiz } from '@/features/resource/section/components/quiz/context/quiz-player-context'
+import { Question, useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
 import { useState } from 'react'
 
 type MultipleChoiceQuestionProps = {
@@ -9,7 +9,7 @@ type MultipleChoiceQuestionProps = {
 }
 
 export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuestionProps) {
-  const { setUserAnswer } = useQuiz()
+  const { setUserAnswer } = useQuizPlayer()
   const [selected, setSelected] = useState<number[]>([])
 
   const handleToggle = (index: number) => {

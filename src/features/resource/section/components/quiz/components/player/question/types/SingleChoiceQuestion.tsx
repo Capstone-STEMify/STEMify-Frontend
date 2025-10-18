@@ -1,14 +1,14 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
-import { Question, useQuiz } from '@/features/resource/section/components/quiz/context/quiz-player-context'
+import { Question, useQuizPlayer } from '@/features/resource/section/components/quiz/context/quiz-player-context'
 
 type SingleChoiceQuestionProps = {
   question: Question
 }
 
 export default function SingleChoiceQuestion({ question }: SingleChoiceQuestionProps) {
-  const { setUserAnswer } = useQuiz()
+  const { setUserAnswer } = useQuizPlayer()
 
   return (
     <div className='space-y-3'>
