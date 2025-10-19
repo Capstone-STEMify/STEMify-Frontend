@@ -187,7 +187,7 @@ const CertificateHeader = ({
             </div>
             <p className='mt-6 text-base text-gray-700'>
               {userName}'s account is verified. Stemify certifies their successful completion of {title}{' '}
-              <Link href={certificateUrl ?? '#'} className='font-semibold text-blue-600 hover:underline'>
+              <Link href={'#'} className='font-semibold text-blue-600 hover:underline'>
                 {title}
               </Link>{' '}
               Specialization.
