@@ -13,10 +13,14 @@ import {
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { useState } from 'react'
-import { Certificate } from '@/features/certificate/types/certificate.type'
+import { CourseEnrollment } from '@/features/enrollment/types/enrollment.type'
 
 interface CertificateHeaderProps {
-  certificate: Certificate
+  certificateUrl: string
+  userName: string
+  issuedDate: string
+  title: string
+  courseEnrollments: CourseEnrollment[]
 }
 
 const LinkedInIcon = () => (
@@ -104,13 +108,19 @@ const XIcon = () => (
   </svg>
 )
 
-const CertificateHeader = ({ certificate }: CertificateHeaderProps) => {
+const CertificateHeader = ({
+  certificateUrl,
+  userName,
+  issuedDate,
+  title,
+  courseEnrollments
+}: CertificateHeaderProps) => {
   const [copyButtonText, setCopyButtonText] = useState('COPY')
 
-  const shareText = `I just completed the ${certificate.curriculumTitle} specialization on Stemify!`
+  const shareText = `I just completed the ${title} specialization on Stemify!`
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(certificate.certificateUrl).then(() => {
+    navigator.clipboard.writeText(certificateUrl).then(() => {
       setCopyButtonText('COPIED!')
       setTimeout(() => {
         setCopyButtonText('COPY')
@@ -122,27 +132,27 @@ const CertificateHeader = ({ certificate }: CertificateHeaderProps) => {
     {
       name: 'LinkedIn',
       icon: <LinkedInIcon />,
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(certificate.certificateUrl)}`
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(certificateUrl)}`
     },
     {
       name: 'Email',
       icon: <EmailIcon />,
-      url: `mailto:?subject=Check out my Stemify Certificate&body=${encodeURIComponent(shareText + ' ' + certificate.certificateUrl)}`
+      url: `mailto:?subject=Check out my Stemify Certificate&body=${encodeURIComponent(shareText + ' ' + certificateUrl)}`
     },
     {
       name: 'WhatsApp',
       icon: <WhatsAppIcon />,
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + certificate.certificateUrl)}`
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + certificateUrl)}`
     },
     {
       name: 'Facebook',
       icon: <FacebookIcon />,
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(certificate.certificateUrl)}`
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(certificateUrl)}`
     },
     {
       name: 'X',
       icon: <XIcon />,
-      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(certificate.certificateUrl)}&text=${encodeURIComponent(shareText)}`
+      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(certificateUrl)}&text=${encodeURIComponent(shareText)}`
     }
   ]
 
@@ -166,23 +176,22 @@ const CertificateHeader = ({ certificate }: CertificateHeaderProps) => {
               </div>
               <div className='pt-1'>
                 <p className='text-lg text-gray-700'>
-                  Completed by <span className='font-bold text-gray-900'>{certificate.userName}</span>
+                  Completed by <span className='font-bold text-gray-900'>{userName}</span>
                 </p>
-                <h1 className='mt-1 text-3xl font-bold text-gray-900'>{certificate.issuedDate}</h1>
+                <h1 className='mt-1 text-3xl font-bold text-gray-900'>{issuedDate}</h1>
               </div>
             </div>
             <p className='mt-6 text-base text-gray-700'>
-              {certificate.userName}'s account is verified. Stemify certifies their successful completion of{' '}
-              {certificate.curriculumTitle}{' '}
-              <Link href={certificate.certificateUrl ?? '#'} className='font-semibold text-blue-600 hover:underline'>
-                {certificate.curriculumTitle}
+              {userName}'s account is verified. Stemify certifies their successful completion of {title}{' '}
+              <Link href={certificateUrl ?? '#'} className='font-semibold text-blue-600 hover:underline'>
+                {title}
               </Link>{' '}
               Specialization.
             </p>
             <div className='mt-6'>
               <h3 className='font-bold text-gray-800'>Course Certificates Completed</h3>
               <div className='mt-2 space-y-1 text-gray-700'>
-                {certificate.courseEnrollments?.map((courseEnrollment) => (
+                {courseEnrollments?.map((courseEnrollment) => (
                   <p key={courseEnrollment.id}>{courseEnrollment.courseTitle}</p>
                 ))}
               </div>
@@ -239,7 +248,7 @@ const CertificateHeader = ({ certificate }: CertificateHeaderProps) => {
           ))}
         </div>
         <div className='flex items-center space-x-2'>
-          <Input id='link' defaultValue={certificate.certificateUrl} readOnly />
+          <Input id='link' defaultValue={certificateUrl} readOnly />
           <Button type='submit' size='sm' className='bg-blue-500 px-3' onClick={handleCopy}>
             <span className='sr-only'>Copy</span>
             {copyButtonText}
