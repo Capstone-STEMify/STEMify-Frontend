@@ -29,10 +29,12 @@ export type CourseEnrollment = {
   ageRangeLabel: string
   enrolledAt: string
   completedAt: any
+  finalScore?: number
   status: string
   certificateUrl?: string
   certificateId?: number
   progressPercentage: number
+  verificationCode?: string
 }
 
 export type CurriculumEnrollment = {
@@ -53,6 +55,7 @@ export type CurriculumEnrollment = {
   issuedDate?: string
   progressPercentage: number
   courseEnrollments: CourseEnrollment[]
+  verificationCode?: string
 }
 
 // Query
@@ -71,6 +74,7 @@ export type CurriculumEnrollmentSliceParams = {
   studentId?: string
   curriculumId?: number
   certificateId?: number
+  verificationCode?: string
 } & SliceQueryParams
 
 export type Enrollment = CourseEnrollment | CurriculumEnrollment

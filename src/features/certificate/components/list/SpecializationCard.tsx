@@ -51,45 +51,33 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                 <span className='text-sm font-medium text-gray-700'>{curriculum.progressPercentage ?? 0}%</span>
               </div>
             </div>
-            {curriculum.status === EnrollmentStatus.COMPLETED ? (
-              <Button
-                className='ml-4 flex-shrink-0 bg-sky-500'
-                onClick={(e) => {
-                  e.stopPropagation()
-                  router.push(`${locale}/certificate/${curriculum.certificateId}`)
-                }}
-              >
-                View Certificate
-              </Button>
-            ) : (
-              <MoreHorizontal className='ml-4 h-5 w-5 flex-shrink-0 cursor-pointer text-gray-500' />
-            )}
+            <MoreHorizontal className='ml-4 h-5 w-5 flex-shrink-0 cursor-pointer text-gray-500' />
           </div>
         </AccordionTrigger>
 
         <AccordionContent>
-          {curriculum.certificateUrl && (
+          {curriculum.status == EnrollmentStatus.COMPLETED && (
             <div className='flex flex-col items-center gap-6 bg-blue-50/70 p-16 sm:flex-row'>
               <div className='sm:w-2/5 lg:w-2/3'>
-                <Image
-                  src={curriculum.coverImageUrl ?? ''}
-                  alt='University Logo'
-                  width={40}
-                  height={40}
-                  className='mb-4'
-                />
                 <h4 className='text-4xl font-semibold text-gray-900'>
                   Congratulations on earning your {curriculum.curriculumTitle} Specialization Certificate!
                 </h4>
                 <div className='mt-4 flex gap-3'>
-                  <Button className='bg-sky-500 hover:bg-blue-500 hover:text-white' variant='outline'>
-                    Share certificate
+                  <Button
+                    className='bg-sky-500 text-white'
+                    variant='outline'
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      router.push(`/${locale}/certificate/${curriculum.verificationCode}`)
+                    }}
+                  >
+                    View Certificate
                   </Button>
                 </div>
               </div>
               <div className='flex justify-center sm:w-2/5 sm:justify-end lg:w-2/5'>
                 <Image
-                  src={curriculum.certificateUrl}
+                  src={curriculum.certificateUrl ?? ''}
                   alt='Certificate'
                   width={280}
                   height={200}
@@ -125,17 +113,17 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                     <Progress value={course.progressPercentage} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
                     <span className='text-sm font-medium text-gray-700'>{course.progressPercentage ?? 0}%</span>
                     {course.status === EnrollmentStatus.COMPLETED && (
-                      <p className='mt-1 text-sm text-gray-600'>
+                      <div className='mt-1 text-sm text-gray-600'>
                         {/* fix later */}
-                        Grade Achieved: <span className='font-semibold'>95.01%</span>
-                        Completed At: <span className='font-semibold'>{course.completedAt}</span>
-                      </p>
+                        Grade Achieved: <span className='font-semibold'>{course.finalScore ?? 0}%</span>
+                        <p>Completed At: {new Date(course.completedAt).toLocaleDateString()}</p>
+                      </div>
                     )}
                     {course.certificateUrl && (
                       <div>
                         <Button
                           className='bg-white text-blue-500 shadow-none outline-none hover:underline'
-                          onClick={() => router.push(`${locale}/certificate/${course.certificateId}`)}
+                          onClick={() => router.push(`/${locale}/certificate/${course.certificateId}`)}
                         >
                           View Certificate
                         </Button>

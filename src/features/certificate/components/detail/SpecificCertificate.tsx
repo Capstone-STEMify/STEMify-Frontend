@@ -11,12 +11,13 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import SEmpty from '@/components/shared/empty/SEmpty'
 
 const SpecificCertificatePage = () => {
-  const { certificateId } = useParams()
+  const { verificationCode } = useParams()
+  const code = Array.isArray(verificationCode) ? verificationCode[0] : verificationCode
   const curriculumEnrollParams = useAppSelector((state) => state.curriculumEnrollment)
   const user = useAppSelector((state) => state.auth.user)
 
   const { data: curriculumEnrollment, isLoading: isLoadingCurriculumEnrollment } = useSearchCurriculumEnrollmentQuery(
-    { studentId: user?.userId, certificateId: Number(certificateId), ...curriculumEnrollParams },
+    { studentId: user?.userId, verificationCode: code ?? '', ...curriculumEnrollParams },
     { skip: !user?.userId }
   )
   const { data: curriculumData } = useGetCurriculumByIdQuery(
