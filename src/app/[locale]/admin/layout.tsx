@@ -16,7 +16,8 @@ export default async function AdminLayout({
   children: React.ReactNode
 }>) {
   const session = await getServerSession(authOptions)
-  if (session?.user.role !== UserRole.ADMIN) {
+
+  if (session?.user.role !== UserRole.ADMIN && session?.user.role !== UserRole.STAFF) {
     return <div className='p-4'>Access Denied</div>
   }
   return (

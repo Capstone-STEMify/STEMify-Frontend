@@ -1,6 +1,7 @@
 'use client'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
+import { DataTable } from '@/components/shared/data-table/data-table'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
@@ -12,14 +13,14 @@ import { useTranslations } from 'next-intl'
 import { setPageIndex } from '../../slice/userSlice'
 import useDebounce from '@/hooks/useDebounce'
 import { useSession } from 'next-auth/react'
-import { DataTable } from '@/components/shared/data-table/data-table'
 
 export default function UserTable() {
   const t = useTranslations('Admin.placeholder')
   const { openModal } = useModal()
   const columns = useGetUserAction()
   const dispatch = useAppDispatch()
-  const { status } = useSession()
+  const { status, data: session } = useSession()
+  console.log('UserTable session', session)
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
@@ -34,7 +35,14 @@ export default function UserTable() {
 
   const { data } = useSearchUserQuery(queryParams, { skip: status !== 'authenticated' })
 
-  const rows = React.useMemo(() => data?.data.items ?? [], [data])
+  const rows = React.useMemo(
+    () =>
+      (data?.data.items ?? []).map((item, idx) => ({
+        id: item.userId,
+        ...item
+      })),
+    [data]
+  )
 
   const handleCreate = () => {
     openModal('upsertUser')
@@ -58,7 +66,7 @@ export default function UserTable() {
         </Button>
       </div>
       <DataTable
-        data={rows.map((u) => ({ ...u, id: u.userId }))}
+        data={rows}
         columns={columns as any}
         enableRowSelection
         pagingData={data}

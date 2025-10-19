@@ -5,15 +5,17 @@ import AuthSessionSync from '@/providers/AuthSessionSync'
 import { Toaster } from 'sonner'
 import StoreProvider from '@/providers/StoreProvider'
 import { ModalProvider } from '@/providers/ModalProvider'
-import ChatAgent from '@/features/chat/ChatAgent'
+import { Session } from 'next-auth'
 
 export default function Providers({
-  children
+  children,
+  session
 }: Readonly<{
   children: React.ReactNode
+  session: Session | null
 }>) {
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <StoreProvider>
         <AuthSessionSync />
         <ModalProvider>

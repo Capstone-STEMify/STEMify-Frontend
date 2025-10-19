@@ -4,10 +4,14 @@ declare module 'next-auth' {
   interface Session {
     accessToken: string
     user: {
+      name?: string
+      email?: string
+      sub?: string
       username?: string
       role?: string
       userId?: string
     } & DefaultSession['user']
+    exp?: number
   }
 
   interface User {
@@ -30,5 +34,6 @@ declare module 'next-auth/jwt' {
     userId?: string
     accessToken?: string
     idToken?: string
+    exp?: number
   }
 }

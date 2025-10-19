@@ -1,5 +1,4 @@
 import { jwtDecode } from 'jwt-decode'
-
 import type { NextAuthOptions } from 'next-auth'
 import type { OAuthConfig } from 'next-auth/providers/oauth'
 import NextAuth, { type Profile } from 'next-auth'
@@ -34,8 +33,8 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
   token: {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/token`,
     params: {
-      grant_type: 'authorization_code',
-      client_id: process.env.NEXT_PUBLIC_CLIENT_ID
+      grant_type: 'authorization_code'
+      // client_id: process.env.NEXT_PUBLIC_CLIENT_ID
       // redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI
     }
   },
@@ -64,24 +63,11 @@ export const authOptions: NextAuthOptions = {
   providers: [oidcProvider],
   secret: process.env.AUTH_SECRET,
   callbacks: {
-    async signIn({ user, account, profile, credentials, email }) {
-      console.log('SignIn Callback:', { user, account, profile, credentials, email })
-      if (user && (user as any).role === UserRole.ADMIN) {
-        return '/admin'
-      }
-      return true
-    },
-
     async jwt({ token, account, profile }) {
+      console.log('JWT callback', { token, account, profile })
       if (account?.access_token) {
         token.accessToken = account.access_token
         token.idToken = account.id_token
-
-        if (profile) {
-          token.username = profile.username
-          token.userId = profile.userId
-          token.role = profile.role
-        }
 
         try {
           const decoded: any = jwtDecode(account.access_token)
@@ -95,13 +81,14 @@ export const authOptions: NextAuthOptions = {
 
       return token
     },
-
     async session({ session, token }) {
       if (token) {
         session.accessToken = token.accessToken!
         session.user.role = token.role!
         session.user.username = token.username!
         session.user.userId = token.userId!
+        session.user.role = token.role!
+        session.exp = token.exp!
       }
       return session
     }
