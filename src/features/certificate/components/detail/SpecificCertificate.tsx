@@ -44,6 +44,7 @@ const SpecificCertificatePage = () => {
         <CertificateHeader
           certificateUrl={curriculumEnrollment.data.items[0].certificateUrl ?? ''}
           userName={curriculumEnrollment.data.items[0].studentName ?? ''}
+          userImageUrl={curriculumEnrollment.data.items[0].studentImageUrl ?? ''}
           issuedDate={curriculumEnrollment.data.items[0].issuedDate ?? ''}
           title={curriculumEnrollment.data.items[0].curriculumTitle}
           courseEnrollments={curriculumEnrollment.data.items[0].courseEnrollments}

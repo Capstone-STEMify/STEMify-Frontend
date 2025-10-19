@@ -39,6 +39,7 @@ export type CurriculumEnrollment = {
   id: number
   studentId: string
   studentName?: string
+  studentImageUrl?: string
   curriculumId: number
   curriculumTitle: string
   coverImageUrl?: string
@@ -68,7 +69,7 @@ export type CourseEnrollmentSliceParams = {
 
 export type CurriculumEnrollmentSliceParams = {
   studentId?: string
-  curriculumId?: number,
+  curriculumId?: number
   certificateId?: number
 } & SliceQueryParams
 

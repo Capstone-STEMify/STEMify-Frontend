@@ -105,7 +105,7 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                 <div className='flex items-center gap-4'>
                   <Image
                     className='aspect-square rounded-sm object-contain'
-                    src={course.coverImageUrl}
+                    src={course.coverImageUrl ?? ''}
                     width={64}
                     height={64}
                     alt='Specialization'

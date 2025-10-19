@@ -20,6 +20,7 @@ interface CertificateHeaderProps {
   userName: string
   issuedDate: string
   title: string
+  userImageUrl?: string
   courseEnrollments: CourseEnrollment[]
 }
 
@@ -113,6 +114,7 @@ const CertificateHeader = ({
   userName,
   issuedDate,
   title,
+  userImageUrl,
   courseEnrollments
 }: CertificateHeaderProps) => {
   const [copyButtonText, setCopyButtonText] = useState('COPY')
@@ -165,7 +167,7 @@ const CertificateHeader = ({
               <div className='relative'>
                 <div className='flex h-16 w-16 items-center justify-center rounded-full bg-gray-200'>
                   <Image
-                    src={'/images/Rosie.jpg'}
+                    src={userImageUrl ?? ''}
                     width={64}
                     height={64}
                     alt='User Image'
@@ -201,7 +203,7 @@ const CertificateHeader = ({
           <div className='flex w-full flex-col items-center lg:w-auto lg:max-w-md lg:items-end'>
             <div className='w-full rounded-md border bg-gray-50 p-2 shadow-sm'>
               <Image
-                src='/certificate-placeholder.png'
+                src={certificateUrl ?? ''}
                 alt='Certificate Thumbnail'
                 width={500}
                 height={350}
@@ -231,7 +233,7 @@ const CertificateHeader = ({
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
           <DialogTitle className='text-2xl font-bold'>Share this page</DialogTitle>
-          <DialogDescription>Show your friends what they can learn on Coursera</DialogDescription>
+          <DialogDescription>Show your friends what they can learn on Stemify</DialogDescription>
         </DialogHeader>
         <div className='flex items-center justify-around py-4'>
           {socialPlatforms.map((platform) => (
