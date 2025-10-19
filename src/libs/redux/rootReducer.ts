@@ -51,6 +51,8 @@ import { quizBuilderSlice } from '@/features/resource/quiz/slice/quiz-builder-sl
 import { quizPlayerSlice } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { contactSlice } from '@/features/contact/slice/contactSlice'
 import { contactApi } from '@/features/contact/api/contactApi'
+import { contractSlice } from '@/features/contract/slice/contractSlice'
+import { contractApi } from '@/features/contract/api/contractApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -83,6 +85,7 @@ export const rootReducer = combineReducers({
   quizBuilder: quizBuilderSlice.reducer,
   quizPlayer: quizPlayerSlice.reducer,
   contactSlice: contactSlice.reducer,
+  contractSlice: contractSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -107,5 +110,6 @@ export const rootReducer = combineReducers({
   [chatAgentApi.reducerPath]: chatAgentApi.reducer,
   [certificateApi.reducerPath]: certificateApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
-  [contactApi.reducerPath]: contactApi.reducer
+  [contactApi.reducerPath]: contactApi.reducer,
+  [contractApi.reducerPath]: contractApi.reducer
 })
