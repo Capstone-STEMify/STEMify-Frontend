@@ -1,7 +1,6 @@
 'use client'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
-import { DataTable } from '@/components/shared/data-table/data-table'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
@@ -13,6 +12,7 @@ import { useTranslations } from 'next-intl'
 import { setPageIndex } from '../../slice/userSlice'
 import useDebounce from '@/hooks/useDebounce'
 import { useSession } from 'next-auth/react'
+import { DataTable } from '@/components/shared/data-table/data-table'
 
 export default function UserTable() {
   const t = useTranslations('Admin.placeholder')
@@ -57,14 +57,14 @@ export default function UserTable() {
           <Plus />
         </Button>
       </div>
-      {/* <DataTable
-        data={rows}
-        columns={columns}
+      <DataTable
+        data={rows.map((u) => ({ ...u, id: u.userId }))}
+        columns={columns as any}
         enableRowSelection
         pagingData={data}
         pagingParams={queryParams}
         handlePageChange={handlePageChange}
-      /> */}
+      />
     </div>
   )
 }

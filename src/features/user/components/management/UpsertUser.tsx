@@ -4,16 +4,16 @@ import { z } from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { toast } from 'sonner'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { Role, ROLES } from '../../types/user.type'
 import { useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } from '../../api/userApi'
 import { useTranslations } from 'next-intl'
 import { parseWithZod } from '@conform-to/zod/v4'
+import { UserRole } from '@/types/userRole'
 
 const defaultUserData = {
   email: '',
   userName: '',
   password: '',
-  role: 'STUDENT' as Role,
+  role: UserRole.STUDENT,
   firstName: '',
   lastName: ''
 }
@@ -44,7 +44,7 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
     email: z.string().email(tv('user.email')),
     userName: z.string().min(3, tv('user.userName', { length: 3 })),
     password: z.string().min(6, tv('user.password', { length: 6 })),
-    role: z.enum(ROLES),
+    role: z.enum(UserRole),
     firstName: z.string().min(1, tv('user.firstName')),
     lastName: z.string().min(1, tv('user.lastName'))
   })
@@ -66,10 +66,7 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
   const form = useAppForm({
     defaultValues: defaultUserData,
     validators: {
-      onChange: (value) =>
-        parseWithZod(objectToFormData(value), {
-          schema: isEditing ? updateUserSchema : createUserSchema
-        })
+      onChange: createUserSchema
     },
     onSubmit: async ({ value }) => {
       try {
@@ -109,7 +106,7 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
     return <LoadingComponent />
   }
 
-  const roleOptions = ROLES.map((role) => ({ value: role, label: role }))
+  const roleOptions = Object.values(UserRole).map((role) => ({ value: role, label: role }))
 
   return (
     <form

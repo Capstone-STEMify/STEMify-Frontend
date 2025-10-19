@@ -19,8 +19,8 @@ export const SelectField = ({ label, options, placeholder }: SelectFieldProps) =
 
   return (
     <div className='space-y-2'>
-      <div className='space-y-1'>
-        <Label htmlFor={field.name} className='text-lg font-bold'>
+      <div className='space-y-2'>
+        <Label htmlFor={field.name} className='text-base'>
           {label}
         </Label>
         <Select value={field.state.value} onValueChange={(value) => field.handleChange(value)}>
