@@ -14,6 +14,7 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { useState } from 'react'
 import { CourseEnrollment } from '@/features/enrollment/types/enrollment.type'
+import { usePathname } from 'next/navigation'
 
 interface CertificateHeaderProps {
   certificateUrl: string
@@ -120,9 +121,10 @@ const CertificateHeader = ({
   const [copyButtonText, setCopyButtonText] = useState('COPY')
 
   const shareText = `I just completed the ${title} specialization on Stemify!`
+  const fullUrl = typeof window !== 'undefined' ? window.location.href : ''
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(certificateUrl).then(() => {
+    navigator.clipboard.writeText(fullUrl).then(() => {
       setCopyButtonText('COPIED!')
       setTimeout(() => {
         setCopyButtonText('COPY')
@@ -134,27 +136,27 @@ const CertificateHeader = ({
     {
       name: 'LinkedIn',
       icon: <LinkedInIcon />,
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(certificateUrl)}`
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(fullUrl)}`
     },
     {
       name: 'Email',
       icon: <EmailIcon />,
-      url: `mailto:?subject=Check out my Stemify Certificate&body=${encodeURIComponent(shareText + ' ' + certificateUrl)}`
+      url: `mailto:?subject=Check out my Stemify Certificate&body=${encodeURIComponent(shareText + ' ' + fullUrl)}`
     },
     {
       name: 'WhatsApp',
       icon: <WhatsAppIcon />,
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + certificateUrl)}`
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + fullUrl)}`
     },
     {
       name: 'Facebook',
       icon: <FacebookIcon />,
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(certificateUrl)}`
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`
     },
     {
       name: 'X',
       icon: <XIcon />,
-      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(certificateUrl)}&text=${encodeURIComponent(shareText)}`
+      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(fullUrl)}&text=${encodeURIComponent(shareText)}`
     }
   ]
 
@@ -250,7 +252,7 @@ const CertificateHeader = ({
           ))}
         </div>
         <div className='flex items-center space-x-2'>
-          <Input id='link' defaultValue={certificateUrl} readOnly />
+          <Input id='link' defaultValue={fullUrl} readOnly />
           <Button type='submit' size='sm' className='bg-blue-500 px-3' onClick={handleCopy}>
             <span className='sr-only'>Copy</span>
             {copyButtonText}

@@ -21,8 +21,8 @@ export const CourseAccordionItem = ({ courseEnrollment, studentName, itemValue }
             <div className='flex items-center gap-4'>
               <CheckCircle2 className='h-6 w-6 flex-shrink-0 text-green-600' />
               <Image
-                src='/HomeFiles/window.png'
-                alt='University Logo'
+                src={courseEnrollment.coverImageUrl ?? ''}
+                alt='Course Logo'
                 width={64}
                 height={64}
                 className='hidden sm:block'
@@ -49,7 +49,7 @@ export const CourseAccordionItem = ({ courseEnrollment, studentName, itemValue }
             <h3 className='mb-4 text-2xl text-blue-700'>{courseEnrollment.courseTitle}</h3>
             <p className='mt-2 text-sm text-gray-700'>Stemify</p>
 
-            <div className='mt-4 space-y-1 text-sm text-gray-800'>
+            <div className='mt-2 space-y-1 text-sm text-gray-800'>
               <p>
                 Completed by {studentName} by <span className='font-semibold'>{courseEnrollment.completedAt}</span>
               </p>
