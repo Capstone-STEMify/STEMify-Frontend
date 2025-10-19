@@ -1,4 +1,4 @@
-import { QuizHeader } from "./header/QuizOverviewHeader";
+import { QuizHeader } from "./header/QuizHeader";
 import { QuizTable } from "./table/QuizTable";
 import { QuizToolbar } from "./tool-bar/QuizToolBar";
 

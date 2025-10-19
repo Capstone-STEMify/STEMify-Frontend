@@ -1,52 +1,85 @@
-interface AccuracyCircleProps {
-  accuracy: number | null;
+// app/quiz-overview/components/progress-circle.tsx
+// (File này cũng có thể được chuyển ra một thư mục components chung, ví dụ: /components/ui/progress-circle.tsx)
+
+import { cn } from "@/shadcn/utils";
+
+interface ProgressCircleProps {
+  value: number | null;
+  size?: number;
+  strokeWidth?: number;
+  className?: string;
+  showPercentageText?: boolean;
 }
 
-export function AccuracyCircle({ accuracy }: AccuracyCircleProps) {
-  if (accuracy === null) {
-    return <span className="text-gray-400">-</span>;
+export function ProgressCircle({
+  value,
+  size = 36,
+  strokeWidth = 3,
+  className,
+  showPercentageText = true,
+}: ProgressCircleProps) {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = value !== null ? circumference - (value / 100) * circumference : 0;
+
+  // Handle the indeterminate/null state
+  if (value === null) {
+    return (
+      <div 
+        className="relative flex items-center justify-center"
+        style={{ width: size, height: size }}
+      >
+        <svg className="h-full w-full" viewBox={`0 0 ${size} ${size}`}>
+          <circle
+            className="text-gray-200"
+            strokeWidth={strokeWidth}
+            stroke="currentColor"
+            fill="transparent"
+            r={radius}
+            cx={size / 2}
+            cy={size / 2}
+          />
+        </svg>
+        <span className="absolute text-gray-400">-</span>
+      </div>
+    );
   }
 
-  const getRingColor = (value: number) => {
-    if (value >= 90) return "from-green-500 to-green-400";
-    if (value >= 70) return "from-orange-500 to-orange-400";
-    return "from-red-500 to-red-400";
-  };
-
-  const ringColor = getRingColor(accuracy);
-
   return (
-    <div className="relative h-10 w-10 flex items-center justify-center">
-      <svg className="absolute" width="40" height="40" viewBox="0 0 40 40">
+    <div 
+      className="relative flex items-center justify-center"
+      style={{ width: size, height: size }}
+    >
+      <svg className="h-full w-full -rotate-90" viewBox={`0 0 ${size} ${size}`}>
+        {/* Background Circle */}
         <circle
-          cx="20"
-          cy="20"
-          r="17"
+          className="text-gray-200"
+          strokeWidth={strokeWidth}
+          stroke="currentColor"
           fill="transparent"
-          stroke="#e5e7eb"
-          strokeWidth="3"
+          r={radius}
+          cx={size / 2}
+          cy={size / 2}
         />
+        {/* Foreground Circle */}
         <circle
-          cx="20"
-          cy="20"
-          r="17"
-          fill="transparent"
-          stroke="url(#accuracy-gradient)"
-          strokeWidth="3"
-          strokeDasharray={`${(accuracy * 2 * Math.PI * 17) / 100} ${2 * Math.PI * 17}`}
+          className={cn("transition-all duration-300", className)}
+          strokeWidth={strokeWidth}
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
           strokeLinecap="round"
-          transform="rotate(-90 20 20)"
+          stroke="currentColor"
+          fill="transparent"
+          r={radius}
+          cx={size / 2}
+          cy={size / 2}
         />
-        <defs>
-          <linearGradient id="accuracy-gradient">
-            <stop offset="0%" stopColor={accuracy >= 90 ? '#22c55e' : (accuracy >= 70 ? '#f97316' : '#ef4444')} />
-            <stop offset="100%" stopColor={accuracy >= 90 ? '#4ade80' : (accuracy >= 70 ? '#fb923c' : '#f87171')} />
-          </linearGradient>
-        </defs>
       </svg>
-      <span className={`text-xs font-semibold text-gray-700`}>
-        {accuracy}%
-      </span>
+      {showPercentageText && (
+        <span className="absolute text-xs font-semibold text-gray-700">
+          {value}%
+        </span>
+      )}
     </div>
   );
 }

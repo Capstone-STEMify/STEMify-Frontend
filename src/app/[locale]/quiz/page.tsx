@@ -1,8 +1,8 @@
-import QuizActive from '@/features/quiz/components/active/QuizActive'
+import TeacherQuiz from '@/features/quiz/components/TeacherQuiz'
 import React from 'react'
 
 export default function QuizPage() {
   return (
-    <QuizActive/>
+    <TeacherQuiz/>
   )
 }

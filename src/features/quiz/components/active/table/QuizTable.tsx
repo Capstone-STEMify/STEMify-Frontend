@@ -15,9 +15,16 @@ import { ChevronUp, Mic, FileText, MoreHorizontal } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/shadcn/dropdown-menu";
 import { Button } from "@/components/shadcn/button";
 import { StatusBadge } from "../badge/StatusBadge";
-import { AccuracyCircle } from "../circle/AccuracyCircle";
+import { ProgressCircle } from "../circle/AccuracyCircle";
 
 export function QuizTable() {
+  const getAccuracyColor = (accuracy: number | null): string => {
+  if (accuracy === null) return "text-gray-400";
+  if (accuracy >= 90) return "text-green-500";
+  if (accuracy >= 70) return "text-orange-400";
+  return "text-red-500";
+};
+
   return (
     <div className="mt-4 border rounded-lg">
       <Table>
@@ -96,7 +103,12 @@ export function QuizTable() {
               </TableCell>
               <TableCell>
                 <div className="flex justify-center">
-                  <AccuracyCircle accuracy={quiz.accuracy} />
+                  <ProgressCircle 
+      value={quiz.accuracy} 
+      size={40}
+      strokeWidth={4}
+      className={getAccuracyColor(quiz.accuracy)}
+    />
                 </div>
               </TableCell>
               <TableCell className="text-gray-600">{quiz.assignedDate}</TableCell>
