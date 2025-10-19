@@ -1,5 +1,6 @@
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
+import { issue } from '@uiw/react-md-editor'
 
 // models
 export enum EnrollmentStatus {
@@ -37,9 +38,10 @@ export type CourseEnrollment = {
 export type CurriculumEnrollment = {
   id: number
   studentId: string
+  studentName?: string
   curriculumId: number
   curriculumTitle: string
-  coverImageUrl: string
+  coverImageUrl?: string
   description: string
   duration: number
   enrolledAt: string
@@ -47,6 +49,7 @@ export type CurriculumEnrollment = {
   status: string
   certificateUrl?: string
   certificateId?: number
+  issuedDate?: string
   progressPercentage: number
   courseEnrollments: CourseEnrollment[]
 }
@@ -65,7 +68,8 @@ export type CourseEnrollmentSliceParams = {
 
 export type CurriculumEnrollmentSliceParams = {
   studentId?: string
-  curriculumId?: number
+  curriculumId?: number,
+  certificateId?: number
 } & SliceQueryParams
 
 export type Enrollment = CourseEnrollment | CurriculumEnrollment

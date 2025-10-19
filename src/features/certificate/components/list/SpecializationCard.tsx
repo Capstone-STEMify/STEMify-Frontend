@@ -9,6 +9,8 @@ import { CurriculumEnrollment, EnrollmentStatus } from '@/features/enrollment/ty
 import { Progress } from '@/components/shadcn/progress'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { set } from 'zod'
 
 interface SpecializationCardProps {
   curriculum: CurriculumEnrollment
@@ -18,6 +20,7 @@ interface SpecializationCardProps {
 export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCardProps) => {
   const locale = useLocale()
   const router = useRouter()
+  const dispatch = useAppDispatch()
 
   return (
     <AccordionItem value={itemValue} className='border-b-0'>
@@ -28,7 +31,7 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
               <div>
                 <Image
                   className='aspect-square rounded-sm border bg-white object-contain shadow-sm'
-                  src={curriculum.coverImageUrl}
+                  src={curriculum.coverImageUrl ?? ''}
                   width={120}
                   height={120}
                   alt='Specialization'
@@ -68,7 +71,13 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
           {curriculum.certificateUrl && (
             <div className='flex flex-col items-center gap-6 bg-blue-50/70 p-16 sm:flex-row'>
               <div className='sm:w-2/5 lg:w-2/3'>
-                <Image src={curriculum.coverImageUrl} alt='University Logo' width={40} height={40} className='mb-4' />
+                <Image
+                  src={curriculum.coverImageUrl ?? ''}
+                  alt='University Logo'
+                  width={40}
+                  height={40}
+                  className='mb-4'
+                />
                 <h4 className='text-4xl font-semibold text-gray-900'>
                   Congratulations on earning your {curriculum.curriculumTitle} Specialization Certificate!
                 </h4>
