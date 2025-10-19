@@ -49,6 +49,8 @@ import { certificateApi } from '@/features/certificate/api/certificateApi'
 import { cartApi } from '@/features/cart/api/cartApi'
 import { quizBuilderSlice } from '@/features/resource/quiz/slice/quiz-builder-slice'
 import { quizPlayerSlice } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { contactSlice } from '@/features/contact/slice/contactSlice'
+import { contactApi } from '@/features/contact/api/contactApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -80,6 +82,7 @@ export const rootReducer = combineReducers({
   component: componentSlice.reducer,
   quizBuilder: quizBuilderSlice.reducer,
   quizPlayer: quizPlayerSlice.reducer,
+  contactSlice: contactSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -103,5 +106,6 @@ export const rootReducer = combineReducers({
   [componentApi.reducerPath]: componentApi.reducer,
   [chatAgentApi.reducerPath]: chatAgentApi.reducer,
   [certificateApi.reducerPath]: certificateApi.reducer,
-  [cartApi.reducerPath]: cartApi.reducer
+  [cartApi.reducerPath]: cartApi.reducer,
+  [contactApi.reducerPath]: contactApi.reducer
 })

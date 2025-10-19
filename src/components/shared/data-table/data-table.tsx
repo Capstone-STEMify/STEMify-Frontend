@@ -47,6 +47,7 @@ export type DataTableProps<TData extends { id: string | number }, TValue> = {
   enableDnd?: boolean
   onReorder?: (newData: TData[]) => void
   disabledRowIds?: (string | number)[]
+  onRowClick?: (row: TData) => void
 }
 
 function DraggableRow<TData extends { id: string | number }>({ row }: { row: Row<TData> }) {
@@ -87,7 +88,8 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   handlePageChange,
   enableDnd,
   onReorder,
-  disabledRowIds
+  disabledRowIds,
+  onRowClick
 }: DataTableProps<TData, TValue>) {
   const tc = useTranslations('common')
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -204,6 +206,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
                       className={isDisabled ? 'pointer-events-none bg-blue-50 opacity-60' : ''}
+                      onClick={() => !isDisabled && onRowClick?.(row.original)}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>

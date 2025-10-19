@@ -49,6 +49,9 @@ export type ModalType =
   | 'selectComponentListModal'
   | 'upsertAssembly'
   | 'quizAI'
+
+  // sheet
+  | 'contactDetail'
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void

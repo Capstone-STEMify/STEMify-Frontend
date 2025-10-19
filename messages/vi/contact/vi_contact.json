@@ -1,0 +1,48 @@
+{
+  "contact": {
+    "firstName": "Tên",
+    "lastName": "Họ",
+    "email": "Email",
+    "phoneNumber": "Số Điện thoại",
+    "organizationName": "Tên tổ chức",
+    "organizationType": "Loại tổ chức",
+    "jobRoleName": "Chức vụ",
+    "status": "Trạng thái",
+    "form": {
+      "firstName": {
+        "label": "Tên",
+        "placeholder": "Nhập tên"
+      },
+      "lastName": {
+        "label": "Họ",
+        "placeholder": "Nhập họ"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Nhập địa chỉ email"
+      },
+      "phoneNumber": {
+        "label": "Số Điện thoại",
+        "placeholder": "Nhập số điện thoại"
+      },
+      "organizationName": {
+        "label": "Tên tổ chức",
+        "placeholder": "Nhập tên tổ chức"
+      },
+      "organizationType": {
+        "label": "Loại tổ chức",
+        "placeholder": "Nhập loại tổ chức"
+      },
+      "jobRoleName": {
+        "label": "Chức vụ",
+        "placeholder": "Nhập chức vụ"
+      },
+      "status": {
+        "label": "Trạng thái",
+        "placeholder": "Chọn trạng thái"
+      },
+      "createContact": "Tạo Liên hệ",
+      "updateContact": "Cập nhật Liên hệ"
+    }
+  }
+}

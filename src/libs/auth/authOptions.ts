@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async jwt({ token, account, profile }) {
-      console.log('JWT callback', { token, account, profile })
+    // console.log('JWT callback', { token, account, profile })
       if (account?.access_token) {
         token.accessToken = account.access_token
         token.idToken = account.id_token

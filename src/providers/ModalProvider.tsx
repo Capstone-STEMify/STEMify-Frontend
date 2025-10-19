@@ -30,6 +30,7 @@ import UpsertComponentModal from '@/features/kit-components/components/upsert/Up
 import SelectComponentListModal from '@/features/kit-components/components/list/SelectComponentListModal'
 import UploadCSVModal from '@/features/subscription/components/modal/UploadCSVModal'
 import QuizAIModal from '@/features/resource/quiz/components/modal/QuizAIModal'
+import ContactDetailSheet from '@/features/contact/components/detail/ContactDetailSheet'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -92,6 +93,9 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'kitListTableModal' && <KitListTableModal {...modalProps} />}
       {modalType === 'selectComponentListModal' && <SelectComponentListModal {...modalProps} />}
       {modalType === 'quizAI' && <QuizAIModal {...modalProps} />}
+
+      {/* sheet */}
+      {modalType === 'contactDetail' && <ContactDetailSheet {...modalProps} />}
     </ModalContext.Provider>
   )
 }

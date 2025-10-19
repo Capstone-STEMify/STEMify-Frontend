@@ -3,17 +3,19 @@ import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import SSelect from '@/components/shared/SSelect'
 import { useGetContactColumnTable } from '@/features/contact/components/list/ContactColumnTable'
-import { ContactRequest, ContactRequestStatus } from '@/features/contact/types/contact.type'
+import { Contact, ContactStatus } from '@/features/contact/types/contact.type'
 import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
 import React from 'react'
 
 export default function ContactList() {
+  const { openModal } = useModal()
   const t = useTranslations('Admin.placeholder')
   const tList = useTranslations('curriculum.list')
   const dispatch = useAppDispatch()
   const columns = useGetContactColumnTable()
-  const data: ContactRequest[] = [
+  const data: Contact[] = [
     {
       id: 1,
       firstName: 'John',
@@ -25,7 +27,7 @@ export default function ContactList() {
       updatedAt: '2023-10-05',
       organizationType: 'Technology',
       jobRoleName: 'Software Engineer',
-      status: ContactRequestStatus.PENDING
+      status: ContactStatus.PENDING
     },
     {
       id: 2,
@@ -38,13 +40,13 @@ export default function ContactList() {
       updatedAt: '2023-09-20',
       organizationType: 'Consulting',
       jobRoleName: 'Project Manager',
-      status: ContactRequestStatus.RESOLVED
+      status: ContactStatus.RESOLVED
     }
   ]
   const rows = React.useMemo(() => data ?? [], [data])
 
   // Options for selects
-  const statusOptions = Object.entries(ContactRequestStatus).map(([key, value]) => ({
+  const statusOptions = Object.entries(ContactStatus).map(([key, value]) => ({
     label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
     value: value
   }))
@@ -53,7 +55,7 @@ export default function ContactList() {
     // dispatch(setPageIndex(page))
   }
   return (
-    <div className='mx-auto max-w-6xl p-4'>
+    <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
       <div className='flex items-center gap-4 py-4'>
         <Input
           placeholder={t('userSearch')}
@@ -81,6 +83,7 @@ export default function ContactList() {
         pagingData={data}
         // pagingParams={queryParams}
         handlePageChange={handlePageChange}
+        onRowClick={(row) => openModal('contactDetail', { contact: row })}
       />
     </div>
   )

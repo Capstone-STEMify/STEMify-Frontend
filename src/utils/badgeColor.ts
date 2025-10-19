@@ -1,4 +1,4 @@
-import { ContactRequestStatus } from '@/features/contact/types/contact.type'
+import { ContactStatus } from '@/features/contact/types/contact.type'
 import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
 import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
@@ -12,7 +12,7 @@ export const getStatusBadgeClass = (
     | CourseStatus
     | KitProductStatus
     | SubscriptionStatus
-    | ContactRequestStatus
+    | ContactStatus
     | OrganizationStatus
 ) => {
   switch (status) {
@@ -22,7 +22,7 @@ export const getStatusBadgeClass = (
       CurriculumStatus.PUBLISHED ||
       CourseStatus.PUBLISHED ||
       KitProductStatus.PUBLISHED ||
-      ContactRequestStatus.PROCESSING:
+      ContactStatus.PROCESSING:
       return 'bg-blue-100 text-blue-800 border border-blue-300'
     case LessonStatus.ARCHIVED ||
       CurriculumStatus.ARCHIVED ||
@@ -33,7 +33,7 @@ export const getStatusBadgeClass = (
       return 'bg-gray-100 text-gray-800 border border-gray-300'
     case LessonStatus.DELETED || CurriculumStatus.DELETED || CourseStatus.DELETED:
       return 'bg-red-100 text-red-800 border border-red-300'
-    case LessonStatus.PENDING || CurriculumStatus.PENDING || CourseStatus.PENDING || ContactRequestStatus.PENDING:
+    case LessonStatus.PENDING || CurriculumStatus.PENDING || CourseStatus.PENDING || ContactStatus.PENDING:
       return 'bg-yellow-100 text-yellow-800 border border-yellow-300'
     case LessonStatus.REJECTED || CurriculumStatus.REJECTED || CourseStatus.REJECTED:
       return 'bg-red-200 text-red-900 border border-red-400'
@@ -41,7 +41,7 @@ export const getStatusBadgeClass = (
       CurriculumStatus.APPROVED ||
       CourseStatus.APPROVED ||
       SubscriptionStatus.ACTIVE ||
-      ContactRequestStatus.RESOLVED ||
+      ContactStatus.RESOLVED ||
       OrganizationStatus.ACTIVE:
       return 'bg-green-200 text-green-900 border border-green-400'
     default:

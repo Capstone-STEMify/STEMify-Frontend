@@ -1,0 +1,48 @@
+{
+  "contact": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "organizationName": "Organization Name",
+    "organizationType": "Organization Type",
+    "jobRoleName": "Job Role",
+    "status": "Status",
+    "form": {
+      "firstName": {
+        "label": "First Name",
+        "placeholder": "Enter first name"
+      },
+      "lastName": {
+        "label": "Last Name",
+        "placeholder": "Enter last name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter email address"
+      },
+      "phoneNumber": {
+        "label": "Phone Number",
+        "placeholder": "Enter phone number"
+      },
+      "organizationName": {
+        "label": "Organization Name",
+        "placeholder": "Enter organization name"
+      },
+      "organizationType": {
+        "label": "Organization Type",
+        "placeholder": "Enter organization type"
+      },
+      "jobRoleName": {
+        "label": "Job Role",
+        "placeholder": "Enter job role"
+      },
+      "status": {
+        "label": "Status",
+        "placeholder": "Select status"
+      },
+      "createContact": "Create Contact",
+      "updateContact": "Update Contact"
+    }
+  }
+}

@@ -85,13 +85,13 @@ export default withAuth(
 
     // 🔹 Lấy token từ cookie
     const token = await getToken({ req, secret: process.env.AUTH_SECRET })
-    console.log('Middleware token:', token)
+    // console.log('Middleware token:', token)
     // 🔹 Nếu không có token -> next-intl middleware xử lý tiếp
     if (!token) return intlMiddleware(req)
 
     // 🔹 Nếu token hết hạn
     if (token?.exp && Date.now() >= token.exp * 1000) {
-      console.log('Token expired → redirect to signin')
+      // console.log('Token expired → redirect to signin')
       return NextResponse.redirect(new URL(`/${locale}/api/auth/signin`, req.url))
     }
 

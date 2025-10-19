@@ -1,4 +1,7 @@
-export type ContactRequest = {
+import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
+
+export type Contact = {
   id: number
   firstName: string
   lastName: string
@@ -9,12 +12,16 @@ export type ContactRequest = {
   createdAt: string
   updatedAt: string
   jobRoleName: string
-  status: ContactRequestStatus
+  status: ContactStatus
 }
 
-export enum ContactRequestStatus {
+export enum ContactStatus {
   PENDING = 'Pending',
   PROCESSING = 'Processing',
   RESOLVED = 'Resolved',
   SPAM = 'Spam'
 }
+
+export type ContactSliceParams = {} & SliceQueryParams
+
+export type ContactQueryParams = {} & SearchPaginatedRequestParams
