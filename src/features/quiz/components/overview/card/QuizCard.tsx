@@ -1,6 +1,5 @@
 import { Card, CardContent, CardFooter } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Button } from '@/components/shadcn/button'
 import { MoreHorizontal, BookOpen, Users, FileSignature } from 'lucide-react'
 

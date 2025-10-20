@@ -1,5 +1,3 @@
-// app/quiz-active/components/quiz-toolbar.tsx
-
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/shadcn/dropdown-menu'

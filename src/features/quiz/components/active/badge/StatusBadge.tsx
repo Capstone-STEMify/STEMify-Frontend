@@ -1,5 +1,3 @@
-// app/quiz-active/components/status-badge.tsx
-
 import { Badge } from '@/components/shadcn/badge'
 import { cn } from '@/shadcn/utils'
 import { CheckCircle2, Clock } from 'lucide-react'

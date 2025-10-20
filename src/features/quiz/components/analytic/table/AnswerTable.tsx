@@ -1,74 +1,69 @@
-// app/quiz-analytic/components/answer-grid-table.tsx
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/shadcn/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar";
-import { learners, questions, answerIcons, answerColors, LearnerAnswer } from "../data";
-import { Badge } from "@/components/shadcn/badge";
-import { cn } from "@/shadcn/utils";
-import { useState } from "react";
-import { QuizResultPopup } from "../pop-up/QuizResultPopup";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
+import { learners, questions, answerIcons, answerColors, LearnerAnswer } from '../data'
+import { Badge } from '@/components/shadcn/badge'
+import { cn } from '@/shadcn/utils'
+import { useState } from 'react'
+import { QuizResultPopup } from '../pop-up/QuizResultPopup'
 
 export function AnswerGridTable() {
-  const [selectedLearner, setSelectedLearner] = useState<LearnerAnswer | null>(null);
+  const [selectedLearner, setSelectedLearner] = useState<LearnerAnswer | null>(null)
 
   return (
     <>
-      <div className="border rounded-lg overflow-hidden">
-        <div className="overflow-x-auto relative">
-          <Table className="min-w-[2000px]">
+      <div className='overflow-hidden rounded-lg border'>
+        <div className='relative overflow-x-auto'>
+          <Table className='min-w-[2000px]'>
             <TableHeader>
-              <TableRow className="bg-gray-50 hover:bg-gray-50">
-                <TableHead className="sticky left-0 z-10 w-[350px] bg-inherit">
-                  Learner
-                </TableHead>
+              <TableRow className='bg-gray-50 hover:bg-gray-50'>
+                <TableHead className='sticky left-0 z-10 w-[350px] bg-inherit'>Learner</TableHead>
                 {questions.map((q) => (
-                  <TableHead key={q.id} className="text-center w-[100px]">
+                  <TableHead key={q.id} className='w-[100px] text-center'>
                     {q.title}
-                    <Badge variant="secondary" className="ml-2 font-normal">{q.percentage}%</Badge>
+                    <Badge variant='secondary' className='ml-2 font-normal'>
+                      {q.percentage}%
+                    </Badge>
                   </TableHead>
                 ))}
               </TableRow>
             </TableHeader>
             <TableBody>
               {learners.map((learner, index) => (
-                <TableRow key={learner.id} className="group">
-                  <TableCell className="sticky left-0 z-10 bg-background group-hover:bg-muted/50">
-                    <div 
-                      className="flex items-center gap-3 cursor-pointer" 
-                      onClick={() => setSelectedLearner(learner)}
-                    >
-                      <span className="w-6 text-center text-sm text-gray-500 font-medium">{index + 1}</span>
-                      <Avatar className="h-9 w-9">
+                <TableRow key={learner.id} className='group'>
+                  <TableCell className='bg-background group-hover:bg-muted/50 sticky left-0 z-10'>
+                    <div className='flex cursor-pointer items-center gap-3' onClick={() => setSelectedLearner(learner)}>
+                      <span className='w-6 text-center text-sm font-medium text-gray-500'>{index + 1}</span>
+                      <Avatar className='h-9 w-9'>
                         <AvatarImage src={learner.avatar} />
                         <AvatarFallback>
-                          {learner.name.split(' ').map(n => n[0]).join('')}
+                          {learner.name
+                            .split(' ')
+                            .map((n) => n[0])
+                            .join('')}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium flex items-center gap-2">
+                        <p className='flex items-center gap-2 font-medium'>
                           {learner.name}
-                          {learner.designation && <Badge variant="outline" className="font-normal">{learner.designation}</Badge>}
+                          {learner.designation && (
+                            <Badge variant='outline' className='font-normal'>
+                              {learner.designation}
+                            </Badge>
+                          )}
                         </p>
-                        <span className="text-xs text-gray-500">{learner.role}</span>
+                        <span className='text-xs text-gray-500'>{learner.role}</span>
                       </div>
                     </div>
                   </TableCell>
 
                   {learner.answers.map((answer) => {
-                    const Icon = answerIcons[answer.status];
-                    const color = answerColors[answer.status];
+                    const Icon = answerIcons[answer.status]
+                    const color = answerColors[answer.status]
                     return (
-                      <TableCell key={`${learner.id}-${answer.questionId}`} className="text-center">
-                        <Icon className={cn("h-5 w-5 mx-auto", color)} />
+                      <TableCell key={`${learner.id}-${answer.questionId}`} className='text-center'>
+                        <Icon className={cn('mx-auto h-5 w-5', color)} />
                       </TableCell>
-                    );
+                    )
                   })}
                 </TableRow>
               ))}
@@ -76,16 +71,16 @@ export function AnswerGridTable() {
           </Table>
         </div>
       </div>
-      
-      <QuizResultPopup 
-        isOpen={!!selectedLearner} 
+
+      <QuizResultPopup
+        isOpen={!!selectedLearner}
         onOpenChange={(isOpen) => {
           if (!isOpen) {
-            setSelectedLearner(null);
+            setSelectedLearner(null)
           }
         }}
         learner={selectedLearner}
       />
     </>
-  );
+  )
 }

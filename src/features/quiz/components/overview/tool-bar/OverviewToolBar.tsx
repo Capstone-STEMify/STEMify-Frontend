@@ -1,5 +1,3 @@
-// app/quiz-overview/components/quiz-overview-toolbar.tsx
-
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { CalendarDays, Plus, Search, X } from 'lucide-react'

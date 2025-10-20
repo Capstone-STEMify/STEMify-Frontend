@@ -1,5 +1,3 @@
-// app/quiz-active/components/quiz-list.tsx
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
