@@ -51,14 +51,10 @@ export function QuizCard({ quiz }: QuizCardProps) {
           >
             {quiz.priority}
           </Badge>
-          <Avatar className='ml-auto h-6 w-6'>
-            <AvatarImage src='/avatars/01.png' />
-            <AvatarFallback>R</AvatarFallback>
-          </Avatar>
         </div>
       </CardContent>
 
-      <CardFooter className='flex items-center justify-between bg-gray-50/70 px-4 py-2 text-xs text-gray-500'>
+      <CardFooter className='flex items-center justify-between bg-gray-50/70 px-6 py-2 text-xs text-gray-500'>
         <div className='flex items-center gap-4'>
           <span>Edited {quiz.lastEdited}</span>
           <div className='flex items-center gap-1.5'>
