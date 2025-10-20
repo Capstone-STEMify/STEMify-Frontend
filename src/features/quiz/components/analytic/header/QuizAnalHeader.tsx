@@ -78,14 +78,14 @@ export function QuizDetailHeader() {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 p-4">
             <div className="flex items-center gap-3 border-r-2">
-              <ProgressCircle value={50} size={40} className="text-red-500" />
+              <ProgressCircle value={50} size={40} className="text-red-500" showPercentageText={false}/>
               <div>
                 <span className="text-xs text-gray-500">Accuracy</span>
                 <p className="font-semibold text-lg">50%</p>
               </div>
             </div>
             <div className="flex items-center gap-3 border-r-2">
-              <ProgressCircle value={100} size={40} className="text-green-500" />
+              <ProgressCircle value={100} size={40} className="text-green-500" showPercentageText={false}/>
               <div>
                 <span className="text-xs text-gray-500">Completed Course</span>
                 <p className="font-semibold text-lg">100%</p>

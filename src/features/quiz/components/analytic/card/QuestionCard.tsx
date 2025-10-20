@@ -1,17 +1,49 @@
 // app/quiz-analytic/components/question-card.tsx
 
-import { Badge } from "@/components/shadcn/badge";
-import { Progress } from "@/components/shadcn/progress";
 import { Card, CardContent } from "@/components/shadcn/card";
-import { GripVertical, Layers, Star, Clock } from "lucide-react";
+import { Progress } from "@/components/shadcn/progress";
+import { HelpCircle, Layers, Star, Clock, Check, X } from "lucide-react";
+import { ProgressCircle } from "../../active/circle/AccuracyCircle";
 
-const AnswerOption = ({ label, percentage, responses }: { label: string, percentage: number, responses: number }) => (
-  <div>
-    <div className="flex justify-between items-center mb-1">
-      <span className="text-sm font-medium">{label}</span>
-      <span className="text-sm text-gray-500">{responses} resp. • {percentage}%</span>
+const StatisticsBox = () => (
+  <div className="border rounded-lg p-6 space-y-4">
+    <h3 className="font-semibold text-base">Statistics</h3>
+    <div className="flex items-center gap-3">
+      <div className="p-1.5 bg-green-100 rounded-full">
+        <Check className="h-4 w-4 text-green-600" />
+      </div>
+      <div>
+        <span className="text-sm text-gray-500">Correct</span>
+        <p className="font-semibold">20</p>
+      </div>
     </div>
-    <Progress value={percentage} className={percentage > 0 ? "h-2" : "h-2 bg-gray-200"} />
+    <div className="flex items-center gap-3">
+      <div className="p-1.5 bg-red-100 rounded-full">
+        <X className="h-4 w-4 text-red-600" />
+      </div>
+      <div>
+        <span className="text-sm text-gray-500">Incorrect</span>
+        <p className="font-semibold">0</p>
+      </div>
+    </div>
+    <div className="flex items-center gap-3">
+      <ProgressCircle value={100} size={28} className="text-green-500" strokeWidth={3} showPercentageText={false}/>
+      <div>
+        <span className="text-sm text-gray-500">Accuracy</span>
+        <p className="font-semibold">100%</p>
+      </div>
+    </div>
+  </div>
+);
+
+const AnswerOption = ({ label, percentage, responses, isCorrect }: { label: string, percentage: number, responses: number, isCorrect?: boolean }) => (
+  <div>
+    <p className="text-sm font-medium mb-1.5">{label}</p>
+    <Progress value={percentage} className={`h-2 ${isCorrect ? '[&>div]:bg-teal-500' : ''}`} />
+    <div className="flex justify-between items-center mt-1.5">
+      <span className="text-xs text-gray-500">{responses} resp.</span>
+      <span className="text-xs text-gray-500">{percentage}%</span>
+    </div>
   </div>
 );
 
@@ -19,29 +51,34 @@ export function QuestionCard() {
   return (
     <Card>
       <CardContent className="p-6">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <p className="text-sm font-semibold text-gray-500 mb-2">Question 1 of 20</p>
-            <div className="flex gap-2">
-              <Badge variant="outline"><Layers className="h-3 w-3 mr-1.5" /> Multiple choice</Badge>
-              <Badge variant="outline"><Clock className="h-3 w-3 mr-1.5" /> Avg. time 32s</Badge>
-              <Badge variant="outline"><Star className="h-3 w-3 mr-1.5" /> 1 point</Badge>
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-2 font-semibold">
+            <HelpCircle className="h-5 w-5 text-gray-400" />
+            <span>Question 2 of 20</span>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-gray-600">
+            <span className="flex items-center gap-1.5"><Layers className="h-4 w-4" /> Multiple choice</span>
+            <span className="flex items-center gap-1.5"><Clock className="h-4 w-4" /> Avg. time 32s</span>
+            <span className="flex items-center gap-1.5"><Star className="h-4 w-4 text-yellow-500" /> 1 point</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-6">
+            <p className="text-lg font-semibold">
+              Which aspect of UI design involves choosing colors, typography, and creating icons for a digital interface?
+            </p>
+            <div className="space-y-4 pt-2">
+              <AnswerOption label="Information Architecture" percentage={0} responses={0} />
+              <AnswerOption label="Interaction Design" percentage={0} responses={0} />
+              <AnswerOption label="Visual Design" percentage={100} responses={20} isCorrect />
+              <AnswerOption label="User Research" percentage={0} responses={0} />
             </div>
           </div>
-          <GripVertical className="h-5 w-5 text-gray-400 cursor-pointer" />
-        </div>
-        
-        <div className="my-6">
-          <img src="/courses/course-5.png" alt="Question visual" className="w-48 h-auto rounded-md border" />
-        </div>
 
-        <p className="font-semibold text-base mb-6">What does UI stand for in the context of design?</p>
-
-        <div className="space-y-4">
-          <AnswerOption label="User Integration" percentage={0} responses={0} />
-          <AnswerOption label="User Interface" percentage={70} responses={13} />
-          <AnswerOption label="Universal Interaction" percentage={0} responses={0} />
-          <AnswerOption label="User Involvement" percentage={0} responses={0} />
+          <div className="lg:col-span-1">
+            <StatisticsBox />
+          </div>
         </div>
       </CardContent>
     </Card>

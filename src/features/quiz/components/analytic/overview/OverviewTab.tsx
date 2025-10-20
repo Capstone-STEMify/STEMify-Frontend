@@ -2,7 +2,6 @@
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/shadcn/alert";
 import { Button } from "@/components/shadcn/button";
-import { Terminal } from "lucide-react";
 import { AnswerGridTable } from "../table/AnswerTable";
 
 export function LearnerOverviewTab() {
