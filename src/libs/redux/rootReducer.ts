@@ -53,6 +53,7 @@ import { contactSlice } from '@/features/contact/slice/contactSlice'
 import { contactApi } from '@/features/contact/api/contactApi'
 import { contractSlice } from '@/features/contract/slice/contractSlice'
 import { contractApi } from '@/features/contract/api/contractApi'
+import { jobRoleApi } from '@/features/job-role/api/jobRoleApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -84,8 +85,8 @@ export const rootReducer = combineReducers({
   component: componentSlice.reducer,
   quizBuilder: quizBuilderSlice.reducer,
   quizPlayer: quizPlayerSlice.reducer,
-  contactSlice: contactSlice.reducer,
-  contractSlice: contractSlice.reducer,
+  contact: contactSlice.reducer,
+  contract: contractSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -111,5 +112,6 @@ export const rootReducer = combineReducers({
   [certificateApi.reducerPath]: certificateApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
   [contactApi.reducerPath]: contactApi.reducer,
-  [contractApi.reducerPath]: contractApi.reducer
+  [contractApi.reducerPath]: contractApi.reducer,
+  [jobRoleApi.reducerPath]: jobRoleApi.reducer
 })

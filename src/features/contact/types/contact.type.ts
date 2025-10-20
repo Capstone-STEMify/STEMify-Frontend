@@ -5,19 +5,19 @@ export type Contact = {
   id: number
   firstName: string
   lastName: string
-  emailAddress: string
+  email: string
   phoneNumber: string
   organizationName: string
-  organizationType: string
   createdAt: string
   updatedAt: string
-  jobRoleName: string
+  jobRoleId: number
+  jobRole: string
   status: ContactStatus
 }
 
 export enum ContactStatus {
   PENDING = 'Pending',
-  PROCESSING = 'Processing',
+  IN_PROGRESS = 'InProgress',
   RESOLVED = 'Resolved',
   SPAM = 'Spam'
 }

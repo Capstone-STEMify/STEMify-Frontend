@@ -14,6 +14,8 @@ import {
   useGetContactByIdQuery,
   useUpdateContactMutation
 } from '@/features/contact/api/contactApi'
+import { useGetAllJobRoleQuery } from '@/features/job-role/api/jobRoleApi'
+import { first } from 'lodash-es'
 
 // ----------------------
 // 🔹 SCHEMA
@@ -21,27 +23,28 @@ import {
 const contactSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
-  emailAddress: z.string().email('Invalid email'),
+  email: z.string().email('Invalid email'),
   phoneNumber: z.string().min(6, 'Invalid phone number'),
   organizationName: z.string().min(1, 'Organization name is required'),
-  organizationType: z.string().min(1, 'Organization type is required'),
-  jobRoleName: z.string().min(1, 'Job role is required'),
+  jobRoleId: z.coerce.number().min(1, 'Job role is required'),
   status: z.enum(ContactStatus)
 })
 
 // ----------------------
 // 🔹 TYPE & DEFAULT
 // ----------------------
+
+const patchContactSchema = contactSchema.partial()
+
 export type ContactFormData = z.infer<typeof contactSchema>
 
 const defaultContactData: ContactFormData = {
   firstName: '',
   lastName: '',
-  emailAddress: '',
+  email: '',
   phoneNumber: '',
   organizationName: '',
-  organizationType: '',
-  jobRoleName: '',
+  jobRoleId: 1,
   status: ContactStatus.PENDING
 }
 
@@ -53,7 +56,7 @@ interface UpsertContactDetailProps {
 // ----------------------
 // 🔹 COMPONENT
 // ----------------------
-export default function UpsertContactDetail({ id, onSuccess }: UpsertContactDetailProps) {
+export default function UpsertContact({ id, onSuccess }: UpsertContactDetailProps) {
   const isEditing = !!id
   const { closeModal } = useModal()
   const tv = useTranslations('validation')
@@ -65,23 +68,40 @@ export default function UpsertContactDetail({ id, onSuccess }: UpsertContactDeta
   const { data: contactData, isLoading: isContactLoading } = useGetContactByIdQuery(id as number, {
     skip: !isEditing
   })
+  const { data: jobRoleData, isLoading: isJobRoleLoading } = useGetAllJobRoleQuery()
 
   const [createContact, { isLoading: isCreating }] = useCreateContactMutation()
   const [updateContact, { isLoading: isUpdating }] = useUpdateContactMutation()
 
+  const jobRoleOptions =
+    jobRoleData?.data?.items?.map((role) => ({
+      label: role.name,
+      value: role.id.toString()
+    })) ?? []
+  console.log('jobRoleOptions', jobRoleOptions)
   // Form setup
   const form = useAppForm({
-    defaultValues: defaultContactData,
+    defaultValues: isEditing ? (contactData?.data ?? defaultContactData) : defaultContactData,
     validators: {
-      onChange: contactSchema
+      onChange: contactSchema as any
     },
     onSubmit: async ({ value }) => {
       try {
+        const payload = {
+          firstName: value.firstName,
+          lastName: value.lastName,
+          ...(value.email && { email: value.email }),
+          ...(value.phoneNumber && { phoneNumber: value.phoneNumber }),
+          ...(value.organizationName && { organizationName: value.organizationName }),
+          ...(value.jobRoleId && { jobRoleId: Number(value.jobRoleId) }),
+          ...(value.status && { status: value.status })
+        }
+
         if (isEditing) {
-          await updateContact({ id: id!, body: value }).unwrap()
+          await updateContact({ id: id!, body: { ...payload, status: value.status } }).unwrap()
           toast.success(tt('successMessage.update', { title: `${value.firstName} ${value.lastName}` }))
         } else {
-          await createContact(value).unwrap()
+          await createContact(payload).unwrap()
           toast.success(tt('successMessage.create', { title: `${value.firstName} ${value.lastName}` }))
         }
         onSuccess?.()
@@ -93,12 +113,16 @@ export default function UpsertContactDetail({ id, onSuccess }: UpsertContactDeta
     }
   })
 
-  // Pre-fill when editing
   React.useEffect(() => {
-    if (isEditing && contactData?.data) {
-      form.reset(contactData.data)
+    if (isEditing && contactData?.data && jobRoleOptions.length > 0) {
+      const data = contactData.data
+      form.reset({
+        ...data,
+        jobRoleId: data.jobRoleId,
+        status: data.status.trim() as ContactStatus
+      })
     }
-  }, [isEditing, contactData, form])
+  }, [isEditing, contactData?.data, jobRoleOptions])
 
   if (isContactLoading) {
     return <LoadingComponent />
@@ -130,7 +154,7 @@ export default function UpsertContactDetail({ id, onSuccess }: UpsertContactDeta
 
       <div className='grid grid-cols-2 gap-4'>
         <form.AppField
-          name='emailAddress'
+          name='email'
           children={(field) => <field.TextField label={t('email.label')} placeholder={t('email.placeholder')} />}
         />
         <form.AppField
@@ -148,30 +172,24 @@ export default function UpsertContactDetail({ id, onSuccess }: UpsertContactDeta
         )}
       />
 
-      <div className='grid grid-cols-2 gap-4'>
-        <form.AppField
-          name='organizationType'
-          children={(field) => (
-            <field.TextField label={t('organizationType.label')} placeholder={t('organizationType.placeholder')} />
-          )}
-        />
-        <form.AppField
-          name='jobRoleName'
-          children={(field) => (
-            <field.TextField label={t('jobRoleName.label')} placeholder={t('jobRoleName.placeholder')} />
-          )}
-        />
-      </div>
+      <form.AppField
+        name='jobRoleId'
+        children={(field) => (
+          <field.SelectField label={t('jobRoleName.label')} options={jobRoleOptions} placeholder='Select a job role' />
+        )}
+      />
 
       <form.AppField
         name='status'
         children={(field) => (
           <field.SelectField
             label={t('status.label')}
-            options={Object.values(ContactStatus).map((s) => ({
-              label: s,
-              value: s
-            }))}
+            options={[
+              { label: 'Pending', value: ContactStatus.PENDING },
+              { label: 'In Progress', value: ContactStatus.IN_PROGRESS },
+              { label: 'Resolved', value: ContactStatus.RESOLVED },
+              { label: 'Spam', value: ContactStatus.SPAM }
+            ]}
           />
         )}
       />

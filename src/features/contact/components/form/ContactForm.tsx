@@ -16,8 +16,7 @@ export default function ContactForm() {
     email: '',
     phone: '',
     jobRole: '',
-    organizationName: '',
-    organizationType: ''
+    organizationName: ''
   })
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -135,29 +134,6 @@ export default function ContactForm() {
                   onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
                   className='h-11 border-slate-200 focus:border-blue-500 focus:ring-blue-500'
                 />
-              </div>
-
-              <div className='space-y-2'>
-                <Label htmlFor='organizationType' className='text-sm font-medium text-slate-700'>
-                  Organization Type
-                </Label>
-                <Select
-                  value={formData.organizationType}
-                  onValueChange={(value) => setFormData({ ...formData, organizationType: value })}
-                >
-                  <SelectTrigger className='h-11 border-slate-200 focus:border-blue-500 focus:ring-blue-500'>
-                    <SelectValue placeholder='Select organization type' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value='startup'>Startup</SelectItem>
-                    <SelectItem value='smb'>Small/Medium Business</SelectItem>
-                    <SelectItem value='enterprise'>Enterprise</SelectItem>
-                    <SelectItem value='nonprofit'>Non-Profit</SelectItem>
-                    <SelectItem value='education'>Education</SelectItem>
-                    <SelectItem value='government'>Government</SelectItem>
-                    <SelectItem value='other'>Other</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
             </div>
 

@@ -16,14 +16,14 @@ type SelectFieldProps = {
 
 export const SelectField = ({ label, options, placeholder }: SelectFieldProps) => {
   const field = useFieldContext<string>()
-
+  const stringValue = field.state.value !== undefined && field.state.value !== null ? String(field.state.value) : ''
   return (
     <div className='space-y-2'>
       <div className='space-y-2'>
         <Label htmlFor={field.name} className='text-base'>
           {label}
         </Label>
-        <Select value={field.state.value} onValueChange={(value) => field.handleChange(value)}>
+        <Select key={stringValue} value={stringValue} onValueChange={(value) => field.handleChange(value)}>
           <SelectTrigger id={field.name} onBlur={field.handleBlur} className='w-full'>
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>

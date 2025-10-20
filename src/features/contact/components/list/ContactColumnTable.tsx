@@ -24,7 +24,7 @@ export function useGetContactColumnTable(): ColumnDef<Contact>[] {
       header: tc('tableHeader.lastName')
     },
     {
-      accessorKey: 'emailAddress',
+      accessorKey: 'email',
       header: tc('tableHeader.email')
     },
     {
@@ -36,15 +36,11 @@ export function useGetContactColumnTable(): ColumnDef<Contact>[] {
       header: tc('tableHeader.organizationName')
     },
     {
-      accessorKey: 'organizationType',
-      header: tc('tableHeader.organizationType')
-    },
-    {
       accessorKey: 'createdAt',
       header: tc('tableHeader.createdAt')
     },
     {
-      accessorKey: 'jobRoleName',
+      accessorKey: 'jobRole',
       header: tc('tableHeader.jobRole')
     },
     {

@@ -3,7 +3,7 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/shadcn/sheet'
 import { useModal } from '@/providers/ModalProvider'
 import { Contact } from '@/features/contact/types/contact.type'
-import UpsertContactDetail from '@/features/contact/components/detail/UpsertContactDetail'
+import UpsertContact from '@/features/contact/components/detail/UpsertContact'
 
 export default function ContactDetailSheet({ contact }: { contact: Contact }) {
   const { closeModal } = useModal()
@@ -16,7 +16,7 @@ export default function ContactDetailSheet({ contact }: { contact: Contact }) {
             Contact Details - {contact.firstName} {contact.lastName}
           </SheetTitle>
         </SheetHeader>
-        <UpsertContactDetail />
+        <UpsertContact id={contact.id} onSuccess={closeModal} />
       </SheetContent>
     </Sheet>
   )
