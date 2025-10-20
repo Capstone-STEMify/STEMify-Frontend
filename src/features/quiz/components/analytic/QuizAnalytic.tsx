@@ -13,18 +13,37 @@ export default function QuizAnalytic() {
         
         <QuizDetailHeader />
 
-        {/* 2. Logic Tab */}
         <Tabs defaultValue="overview" className="mt-6">
           <TabsList className="border-b w-full justify-start rounded-none bg-transparent p-0">
+            
             <TabsTrigger 
               value="questions" 
-              className="rounded-none data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+              className="
+                flex-none w-auto text-gray-400
+                rounded-none
+                data-[state=active]:shadow-none 
+                data-[state=active]:text-foreground
+                data-[state=active]:border-transparent
+                data-[state=active]:bg-transparent
+                data-[state=active]:border-b-primary
+                data-[state=active]:border-b-2
+              "
             >
               Questions
             </TabsTrigger>
+            
             <TabsTrigger 
               value="overview" 
-              className="rounded-none data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+              className="
+                flex-none w-auto text-gray-400
+                rounded-none
+                data-[state=active]:shadow-none 
+                data-[state=active]:text-foreground
+                data-[state=active]:border-transparent
+                data-[state=active]:bg-transparent
+                data-[state=active]:border-b-primary
+                data-[state=active]:border-b-2
+              "
             >
               Overview
             </TabsTrigger>
@@ -33,7 +52,6 @@ export default function QuizAnalytic() {
           <TabsContent value="questions" className="mt-6">
             <QuestionDetailTab />
           </TabsContent>
-          
           <TabsContent value="overview" className="mt-6">
             <LearnerOverviewTab />
           </TabsContent>

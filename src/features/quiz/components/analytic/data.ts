@@ -8,6 +8,7 @@ export interface LearnerAnswer {
   name: string;
   role: string;
   avatar: string;
+  designation?: string;
   answers: {
     questionId: string;
     status: "correct" | "incorrect" | "unanswered" | "review";
@@ -28,45 +29,44 @@ export const answerColors: { [key: string]: string } = {
   review: "text-gray-400",
 };
 
+export const questions = Array.from({ length: 20 }, (_, i) => ({
+  id: `q${i + 1}`,
+  title: `Q.${i + 1}`,
+  percentage: Math.floor(Math.random() * 81) + 20,
+}));
+
+const getRandomStatus = (): "correct" | "incorrect" | "unanswered" => {
+  const statuses: ("correct" | "incorrect" | "unanswered")[] = ["correct", "correct", "correct", "incorrect", "unanswered"];
+  return statuses[Math.floor(Math.random() * statuses.length)];
+};
+
+const generateAnswers = () => {
+  return questions.map(q => ({ questionId: q.id, status: getRandomStatus() }));
+};
+
 export const learners: LearnerAnswer[] = [
   {
-    id: "1",
-    name: "Adit Irwan",
-    role: "Sr UI/UX Designer",
-    avatar: "/avatars/01.png",
-    answers: [
-      { questionId: "q5", status: "correct" },
-      { questionId: "q6", status: "correct" },
-      { questionId: "q7", status: "correct" },
-      { questionId: "q8", status: "correct" },
-      { questionId: "q9", status: "unanswered" },
-      { questionId: "q10", status: "correct" },
-      { questionId: "q11", status: "review" },
-    ],
+    id: "1", name: "Adit Irwan", designation: "Design", role: "Sr UI/UX Designer", avatar: "/avatars/01.png", answers: generateAnswers(),
   },
   {
-    id: "2",
-    name: "Arif Brata",
-    role: "Sr UI/UX Designer",
-    avatar: "/avatars/02.png",
-    answers: [
-      { questionId: "q5", status: "correct" },
-      { questionId: "q6", status: "unanswered" },
-      { questionId: "q7", status: "correct" },
-      { questionId: "q8", status: "incorrect" },
-      { questionId: "q9", status: "correct" },
-      { questionId: "q10", status: "correct" },
-      { questionId: "q11", status: "correct" },
-    ],
+    id: "2", name: "Arif Brata", designation: "Design", role: "Sr UI/UX Designer", avatar: "/avatars/02.png", answers: generateAnswers(),
   },
-];
-
-export const questions = [
-  { id: "q5", title: "Q.5", percentage: 90 },
-  { id: "q6", title: "No.6", percentage: 90 },
-  { id: "q7", title: "No.7", percentage: 65 },
-  { id: "q8", title: "No.8", percentage: 70 },
-  { id: "q9", title: "No.9", percentage: 50 },
-  { id: "q10", title: "No.10", percentage: 100 },
-  { id: "q11", title: "No.11", percentage: 9 },
+  {
+    id: "3", name: "Ardhi Irwandi", designation: "Design", role: "Sr UI/UX Designer", avatar: "/avatars/03.png", answers: generateAnswers(),
+  },
+  {
+    id: "4", name: "Bagus Yuli", designation: "Design", role: "Sr UI/UX Designer", avatar: "/avatars/04.png", answers: generateAnswers(),
+  },
+  {
+    id: "5", name: "Bani Naon", designation: "Design", role: "Jr UI/UX Designer", avatar: "", answers: generateAnswers(),
+  },
+  {
+    id: "6", name: "Brian", designation: "Design", role: "Sr UI/UX Designer", avatar: "/avatars/01.png", answers: generateAnswers(),
+  },
+  {
+    id: "7", name: "Brian Domani", designation: "Design", role: "Sr UI/UX Designer", avatar: "", answers: generateAnswers(),
+  },
+  {
+    id: "8", name: "Depe Prada", designation: "Design", role: "PM UI/UX Designer", avatar: "", answers: generateAnswers(),
+  },
 ];

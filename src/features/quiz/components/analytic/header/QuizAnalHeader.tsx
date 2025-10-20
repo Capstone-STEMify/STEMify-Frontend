@@ -76,22 +76,22 @@ export function QuizDetailHeader() {
           </div>
           
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 border rounded-lg p-4">
-            <div className="flex items-center gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 p-4">
+            <div className="flex items-center gap-3 border-r-2">
               <ProgressCircle value={50} size={40} className="text-red-500" />
               <div>
                 <span className="text-xs text-gray-500">Accuracy</span>
                 <p className="font-semibold text-lg">50%</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 border-r-2">
               <ProgressCircle value={100} size={40} className="text-green-500" />
               <div>
                 <span className="text-xs text-gray-500">Completed Course</span>
                 <p className="font-semibold text-lg">100%</p>
               </div>
             </div>
-            <div>
+            <div className="border-r-2">
               <span className="text-xs text-gray-500">Submissions</span>
               <p className="font-semibold text-lg">20</p>
             </div>
@@ -103,9 +103,9 @@ export function QuizDetailHeader() {
         </div>
         <div className="flex-shrink-0">
           <img 
-            src="/courses/course-1.png"
+            src="/images/stemclass.jpg"
             alt="UI Design" 
-            className="rounded-lg w-full md:w-64 h-48 object-cover"
+            className="rounded-lg w-full md:w-120 h-60 object-cover"
           />
         </div>
       </div>
