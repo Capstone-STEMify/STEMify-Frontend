@@ -9,7 +9,8 @@ export type Plan = {
   curriculumCount: number
   maxTeacherSeats: number
   maxStudentSeats: number
-  createdDate: string
+  createdAt: string
+  updatedAt: string
   curriculums: Partial<Curriculum>[]
   planBillingCycles: PlanBillingCycle[]
 }
@@ -27,8 +28,8 @@ export enum BillingCycle {
 }
 
 export type PlanPricingTier = {
-  id: string
-  planId: string
+  id: number
+  planId: number
   billingCycle: BillingCycle
   pricePerSeat: number
   minSeat: number
