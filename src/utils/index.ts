@@ -98,3 +98,11 @@ export const capitalizeFirst = (text: string) =>
 export function normalizeMarkdown(text: string): string {
   return text.replace(/\\n/g, '\n')
 }
+
+export const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+    minimumFractionDigits: 0
+  }).format(price)
+}

@@ -9,7 +9,7 @@ const initialState: PlanSliceParams = {
   status: ''
 }
 
-export const planProductSlice = createQuerySlice('planProductSlice', initialState)
+export const planSlice = createQuerySlice('planSlice', initialState)
 
 export const { setPageIndex, setPageSize, setSearchTerm, setParam, setMultipleParams, resetParams } =
-  planProductSlice.actions
+  planSlice.actions

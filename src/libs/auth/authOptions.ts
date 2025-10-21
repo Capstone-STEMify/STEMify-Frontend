@@ -63,8 +63,11 @@ export const authOptions: NextAuthOptions = {
   providers: [oidcProvider],
   secret: process.env.AUTH_SECRET,
   callbacks: {
+    async signIn({ account }) {
+      console.log('SignIn callback', { account })
+      return true
+    },
     async jwt({ token, account, profile }) {
-    // console.log('JWT callback', { token, account, profile })
       if (account?.access_token) {
         token.accessToken = account.access_token
         token.idToken = account.id_token

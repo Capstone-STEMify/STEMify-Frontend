@@ -9,7 +9,7 @@ import { BillingCycle, Plan, PlanPricingTier } from '@/features/plan/types/plan.
 import { formatDate } from '@/utils/index'
 import AdminPricingTierTable from '@/features/plan/components/list/AdminPricingTierTable'
 import SSheet from '@/components/shared/SSheet'
-import CreateSubscriptionPlanSheet from '@/features/plan/components/list/CreateSubscriptionPlanSheet'
+import CreateSubscriptionPlanSheet from '@/features/plan/components/sheet/CreateSubscriptionPlanSheet'
 
 const plans: (Plan & { pricingTiers: PlanPricingTier[] })[] = [
   {

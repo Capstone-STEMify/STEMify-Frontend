@@ -4,7 +4,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 export const planApi = createCrudApi<Plan, PlanSliceParams>({
   reducerPath: 'planApi',
   tagTypes: ['Plan'],
-  baseUrl: '/plan-products'
+  baseUrl: '/plans'
 })
 
 export const {

@@ -1,30 +1,16 @@
-import { FeatureItem } from '../item/FeatureItem'
 import React from 'react'
 import { motion } from 'framer-motion'
+import { Plan } from '@/features/plan/types/plan.type'
 
 interface PricingPlanItemProps {
-  title: string
-  price: number
-  description: string
-  features: string[]
+  plan: Plan
   isSelected: boolean
-  isPopular?: boolean
   onSelect: () => void
   isYearly: boolean
 }
 
-export function PricingPlanItem({
-  title,
-  price,
-  description,
-  features,
-  isSelected,
-  isPopular = false,
-  onSelect,
-  isYearly
-}: PricingPlanItemProps) {
-  const yearlyPrice = Math.floor(price * 10)
-  const displayPrice = isYearly ? yearlyPrice : price
+export function PricingPlanItem({ plan, isSelected, onSelect, isYearly }: PricingPlanItemProps) {
+  const isPopular = plan.id === 2
 
   return (
     <motion.div
@@ -49,26 +35,21 @@ export function PricingPlanItem({
 
       <div className='mb-6 pt-4'>
         <motion.div
-          key={displayPrice}
+          key={plan.id}
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.3 }}
           className='mb-3 flex items-baseline gap-1'
         >
-          <span className='text-5xl font-bold'>${displayPrice}</span>
           <span className={`text-base ${isSelected ? 'text-gray-400' : 'text-gray-500'}`}>
             {isYearly ? '/ 12 months' : '/ 6 months'}
           </span>
         </motion.div>
-        <h3 className='mb-2 text-xl font-semibold'>{title}</h3>
-        <p className={`h-10 text-sm ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>{description}</p>
+        <h3 className='mb-2 text-xl font-semibold'>{plan.name}</h3>
+        <p className={`h-10 text-sm ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>{plan.description}</p>
       </div>
 
-      <div className='mb-8 flex-grow space-y-2'>
-        {features.map((feature, idx) => (
-          <FeatureItem key={idx} text={feature} isSelected={isSelected} />
-        ))}
-      </div>
+      <div className='mb-8 flex-grow space-y-2'>{plan.accessSupportDetail}</div>
 
       <motion.button
         whileHover={{ scale: 1.05 }}

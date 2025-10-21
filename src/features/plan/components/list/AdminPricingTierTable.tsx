@@ -2,7 +2,7 @@
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import PricingTierUpsert from '@/features/plan/components/list/PricingTierUpsert'
+import PricingTierUpsert from '@/features/plan/components/upsert/PricingTierUpsert'
 import { BillingCycle, Plan, PlanPricingTier } from '@/features/plan/types/plan.type'
 import { Pencil, Trash2 } from 'lucide-react'
 import React from 'react'

@@ -37,7 +37,6 @@ import { lessonAssetSelectionSlice } from '@/features/resource/lesson-asset/slic
 import { tiptapSlice } from '@/components/tiptap/slice/tiptapSlice'
 import { assemblySlice } from '@/features/assembly/slice/assemblySlice'
 import { planApi } from '@/features/plan/api/planApi'
-import { planProductSlice } from '@/features/plan/slice/planProductSlice'
 import { workspaceTreeSlice } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { componentSlice } from '@/features/kit-components/slice/componentSlice'
 import { componentApi } from '@/features/kit-components/api/kitComponentApi'
@@ -54,6 +53,7 @@ import { contactApi } from '@/features/contact/api/contactApi'
 import { contractSlice } from '@/features/contract/slice/contractSlice'
 import { contractApi } from '@/features/contract/api/contractApi'
 import { jobRoleApi } from '@/features/job-role/api/jobRoleApi'
+import { planSlice } from '@/features/plan/slice/planProductSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -80,7 +80,7 @@ export const rootReducer = combineReducers({
   lessonAssetSelection: lessonAssetSelectionSlice.reducer,
   tiptap: tiptapSlice.reducer,
   assembly: assemblySlice.reducer,
-  planProduct: planProductSlice.reducer,
+  plan: planSlice.reducer,
   workspaceTree: workspaceTreeSlice.reducer,
   component: componentSlice.reducer,
   quizBuilder: quizBuilderSlice.reducer,

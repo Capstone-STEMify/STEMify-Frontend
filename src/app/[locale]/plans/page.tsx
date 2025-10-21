@@ -1,10 +1,5 @@
-import SubscriptionPlan from '@/features/plan/components/SubscriptionPlan'
-import React from 'react'
+import PlanList from '@/features/plan/components/list/PlanList'
 
-export default function PlanProductListPage() {
-  return (
-    <div>
-      <SubscriptionPlan />
-    </div>
-  )
+export default function PlanListPage() {
+  return <PlanList />
 }
