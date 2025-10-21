@@ -11,7 +11,7 @@ import { addInstance, setSelectedId } from '@/features/creator-3d/slice/creatorS
 import { addTargetToAction } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 
 export function createInstanceFromTemplate(
@@ -103,11 +103,35 @@ export function useAddObject() {
   const dispatch = useAppDispatch()
   const selectedActionId = useAppSelector((s) => s.workspaceTree.selectedActionId)
   const actions = useAppSelector((s) => s.workspaceTree.actions)
+  const instances = useAppSelector((s) => s.creatorScene.instances)
 
   const counters = useRef<{ [key: string]: number }>({
     straw: 0,
     connector: 0
   })
+
+  // 🔄 Sync counters với instances hiện có (chạy mỗi khi instances thay đổi)
+  useEffect(() => {
+    const maxCounters: { [key: string]: number } = {
+      straw: 0,
+      connector: 0
+    }
+
+    instances.forEach((instance) => {
+      // Parse ID format: "straw_5" hoặc "connector_3"
+      const match = instance.id.match(/^(straw|connector)_(\d+)$/)
+      if (match) {
+        const [, prefix, numStr] = match
+        const num = parseInt(numStr, 10)
+        if (!isNaN(num)) {
+          maxCounters[prefix] = Math.max(maxCounters[prefix] || 0, num)
+        }
+      }
+    })
+
+    // Cập nhật counters để ID tiếp theo luôn lớn hơn max hiện tại
+    counters.current = maxCounters
+  }, [instances])
 
   const generateId = useCallback((prefix: string) => {
     counters.current[prefix] = (counters.current[prefix] ?? 0) + 1
@@ -115,7 +139,7 @@ export function useAddObject() {
   }, [])
 
   return (template: ComponentTemplate, position: { x: number; y: number; z: number }) => {
-    const instance = createInstanceFromTemplate(template, position, generateId)
+    // Validation
     if (!selectedActionId) {
       toast.error('⚠️ Please select an Action in Workspace Tree before adding a component.')
       return null
@@ -131,9 +155,16 @@ export function useAddObject() {
       toast.error('⚠️ Transform Arm Action chỉ chấp nhận Connector.')
       return null
     }
+
+    // Create instance
+    const instance = createInstanceFromTemplate(template, position, generateId)
+
+    // Dispatch actions
     dispatch(addInstance(instance))
     dispatch(setSelectedId(instance.id))
     dispatch(addTargetToAction({ actionId: selectedActionId, targetId: instance.id }))
+
+    console.log('✅ Added object:', instance.id, 'to action:', selectedActionId)
 
     return instance.id
   }

@@ -62,7 +62,7 @@ export type Step = {
   expectedResult: string
 }
 
-interface WorkspaceTreeState {
+export interface WorkspaceTreeState {
   actions: WorkspaceAction[]
   activities: WorkspaceActivity[]
   selectedActionId?: string | null
