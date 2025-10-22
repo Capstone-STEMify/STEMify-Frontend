@@ -17,7 +17,7 @@ export function QuickStatsGrid() {
   return (
     <div className="grid grid-cols-2 gap-6">
       {stats.map((stat) => (
-        <Card key={stat.title} className="shadow-sm rounded-xl">
+        <Card key={stat.title} className="rounded-xl bg-white border-none shadow-md">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className={`p-2 rounded-lg ${stat.bgColor}`}>
@@ -31,7 +31,7 @@ export function QuickStatsGrid() {
                 </ResponsiveContainer>
               </div>
             </div>
-            <h3 className="text-2xl font-bold mt-4">{stat.value}</h3>
+            <h3 className="text-2xl font-semibold mt-4">{stat.value}</h3>
             <p className="text-sm text-gray-500">{stat.title}</p>
           </CardContent>
         </Card>

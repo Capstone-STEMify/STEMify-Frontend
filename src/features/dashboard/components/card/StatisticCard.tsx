@@ -22,7 +22,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export function ProgressStatisticsCard() {
   return (
-    <Card className="shadow-sm rounded-xl h-full bg-white border-none">
+    <Card className="shadow-md rounded-xl h-full bg-white border-none">
       <CardHeader className="flex flex-row items-center justify-between py-6">
         <CardTitle className="text-lg font-semibold">Progress Statistics</CardTitle>
         <DropdownMenu>

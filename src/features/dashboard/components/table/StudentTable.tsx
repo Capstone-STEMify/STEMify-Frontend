@@ -11,7 +11,7 @@ import { Student, studentData } from "../../api/data";
 
 export function StudentListTable() {
   return (
-    <Card className="shadow-sm rounded-xl bg-white border-none">
+    <Card className="shadow-md rounded-xl bg-white border-none">
       <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4 py-4">
         <CardTitle className="text-lg font-semibold">Total Student List</CardTitle>
         <div className="flex w-full md:w-auto items-center gap-2">

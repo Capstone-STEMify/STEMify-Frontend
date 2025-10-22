@@ -9,7 +9,7 @@ import { Badge } from "@/components/shadcn/badge";
 
 export function StudentRetentionCard() {
   return (
-    <Card className="shadow-sm rounded-xl h-full bg-white border-none">
+    <Card className="shadow-md rounded-xl h-full bg-white border-none">
       <CardHeader className="flex flex-row items-center justify-between pt-6">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           Student Retention
