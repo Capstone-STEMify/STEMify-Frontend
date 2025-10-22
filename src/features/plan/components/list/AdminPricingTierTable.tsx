@@ -4,8 +4,8 @@ import { Button } from '@/components/shadcn/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Pencil, Trash2 } from 'lucide-react'
 import { Plan, BillingCycle } from '@/features/plan/types/plan.type'
-import PricingTierUpsert from '@/features/plan/components/upsert/PricingTierUpsert'
 import React from 'react'
+import SAvatar from '@/components/shared/SAvatar'
 
 type AdminPricingTierTableProps = {
   plan: Plan
@@ -25,9 +25,19 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
 
   return (
     <div className='space-y-6 p-6'>
-      <PricingTierUpsert />
+      <div className='mb-4 flex items-center justify-between'>
+        <h2 className='text-foreground text-2xl font-bold tracking-tight'>{plan.name}</h2>
 
-      <h2 className='text-foreground text-2xl font-bold tracking-tight'>{plan.name}</h2>
+        <div className='flex items-center gap-2'>
+          <span>Organization:</span>
+          <div className='*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2'>
+            <SAvatar src='https://github.com/shadcn.png' fallback='CN' />
+            <SAvatar src='https://github.com/shadcn.png' fallback='CN' />
+            <SAvatar src='https://github.com/shadcn.png' fallback='CN' />
+          </div>
+        </div>
+      </div>
+
       <div className='bg-card overflow-hidden rounded-lg border shadow-sm'>
         <Table>
           <TableHeader className='bg-muted/70 border-b'>
@@ -77,8 +87,8 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
                 <TableCell className='text-muted-foreground text-sm'>
                   {plan.curriculums.length > 0 ? (
                     <ul className='list-disc pl-4'>
-                      {plan.curriculums.map((c) => (
-                        <li key={c.id}>{c.title}</li>
+                      {plan.curriculums.map((c, index) => (
+                        <li key={index}>{c.title}</li>
                       ))}
                     </ul>
                   ) : (

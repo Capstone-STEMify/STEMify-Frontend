@@ -52,6 +52,7 @@ export type ModalType =
 
   // sheet
   | 'contactDetail'
+  | 'upsertPlan'
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void

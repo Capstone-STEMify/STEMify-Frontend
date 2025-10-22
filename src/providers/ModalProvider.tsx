@@ -31,6 +31,7 @@ import SelectComponentListModal from '@/features/kit-components/components/list/
 import UploadCSVModal from '@/features/subscription/components/modal/UploadCSVModal'
 import QuizAIModal from '@/features/resource/quiz/components/modal/QuizAIModal'
 import ContactDetailSheet from '@/features/contact/components/detail/ContactDetailSheet'
+import UpsertPlan from '@/features/plan/components/upsert/UpsertPlan'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -96,6 +97,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
 
       {/* sheet */}
       {modalType === 'contactDetail' && <ContactDetailSheet {...modalProps} />}
+      {modalType === 'upsertPlan' && <UpsertPlan {...modalProps} />}
     </ModalContext.Provider>
   )
 }

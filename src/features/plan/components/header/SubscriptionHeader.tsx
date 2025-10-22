@@ -26,12 +26,12 @@ export function SubscriptionHeader() {
       {/* Left Section: Title + Description */}
       <motion.div variants={containerVariants} initial='hidden' animate='visible' className='flex flex-col gap-4'>
         <motion.div variants={itemVariants} className='flex items-center gap-3'>
-          <div className='h-1 w-12 rounded-full bg-gradient-to-r from-sky-400 to-indigo-500' />
+          <div className='h-1 w-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400' />
           <span className='text-sm font-semibold tracking-widest text-sky-500 uppercase'>Flexible Plans</span>
         </motion.div>
 
         <motion.h1 variants={itemVariants} className='mb-2 text-4xl font-bold md:text-6xl'>
-          <span className='bg-gradient-to-r from-slate-900 via-indigo-600 to-slate-900 bg-clip-text text-transparent'>
+          <span className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent'>
             Plans & Pricing
           </span>
         </motion.h1>
@@ -42,15 +42,6 @@ export function SubscriptionHeader() {
             Choose the perfect plan for your team and unlock unlimited potential.
           </span>
         </motion.p>
-
-        <motion.div variants={itemVariants} className='mt-4 flex flex-wrap gap-4'>
-          {['No Setup Fees', 'Cancel Anytime', 'Free Trial'].map((feature, index) => (
-            <div key={index} className='flex items-center gap-2 text-sm font-medium text-slate-700'>
-              <div className='h-1.5 w-1.5 rounded-full bg-sky-400' />
-              {feature}
-            </div>
-          ))}
-        </motion.div>
       </motion.div>
 
       {/* Right Section: Billing Cycle Switch */}
@@ -70,7 +61,7 @@ export function SubscriptionHeader() {
               onClick={() => handleSelect(option.value)}
               className={`rounded-full px-6 py-2 font-medium transition-all duration-300 ${
                 billingCycle === option.value
-                  ? 'bg-gradient-to-r from-indigo-500 to-sky-400 text-white shadow-md'
+                  ? 'bg-gradient-to-r from-sky-500 to-cyan-400 text-white shadow-md'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
