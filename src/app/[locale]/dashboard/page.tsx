@@ -2,7 +2,5 @@ import OrganizationDashboard from '@/features/dashboard/components/OrganizationD
 import React from 'react'
 
 export default function OrganizationDashboardPage() {
-  return (
-    <OrganizationDashboard />
-  )
+  return <OrganizationDashboard />
 }

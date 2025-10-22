@@ -1,33 +1,37 @@
-// app/organization-dashboard/components/student-list-table.tsx
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/shadcn/table";
-import { Input } from "@/components/shadcn/input";
-import { Button } from "@/components/shadcn/button";
-import { Checkbox } from "@/components/shadcn/checkbox";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar";
-import { Search, Filter, Download } from "lucide-react";
-import { Student, studentData } from "../../api/data";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
+import { Input } from '@/components/shadcn/input'
+import { Button } from '@/components/shadcn/button'
+import { Checkbox } from '@/components/shadcn/checkbox'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
+import { Search, Filter, Download } from 'lucide-react'
+import { Student, studentData } from '../../api/data'
 
 export function StudentListTable() {
   return (
-    <Card className="shadow-md rounded-xl bg-white border-none">
-      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4 py-4">
-        <CardTitle className="text-lg font-semibold">Total Student List</CardTitle>
-        <div className="flex w-full md:w-auto items-center gap-2">
-          <div className="relative w-full md:w-auto">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input type="search" placeholder="Search Student" className="pl-8" />
+    <Card className='rounded-xl border-none bg-white shadow-md'>
+      <CardHeader className='flex flex-col items-center justify-between gap-4 py-4 md:flex-row'>
+        <CardTitle className='text-lg font-semibold'>Total Student List</CardTitle>
+        <div className='flex w-full items-center gap-2 md:w-auto'>
+          <div className='relative w-full md:w-auto'>
+            <Search className='text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4' />
+            <Input type='search' placeholder='Search Student' className='pl-8' />
           </div>
-          <Button variant="outline"><Filter className="h-4 w-4 mr-2" /> Filter</Button>
-          <Button variant="outline"><Download className="h-4 w-4 mr-2" /> Export</Button>
+          <Button variant='outline'>
+            <Filter className='mr-2 h-4 w-4' /> Filter
+          </Button>
+          <Button variant='outline'>
+            <Download className='mr-2 h-4 w-4' /> Export
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-100">
-              <TableHead className="w-[50px]"><Checkbox /></TableHead>
+            <TableRow className='bg-gray-100'>
+              <TableHead className='w-[50px]'>
+                <Checkbox />
+              </TableHead>
               <TableHead>Student Id</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Position</TableHead>
@@ -39,15 +43,17 @@ export function StudentListTable() {
           <TableBody>
             {studentData.map((student: Student) => (
               <TableRow key={student.id}>
-                <TableCell><Checkbox /></TableCell>
-                <TableCell className="font-medium">{student.id}</TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
+                  <Checkbox />
+                </TableCell>
+                <TableCell className='font-medium'>{student.id}</TableCell>
+                <TableCell>
+                  <div className='flex items-center gap-2'>
+                    <Avatar className='h-8 w-8'>
                       <AvatarImage src={student.avatar} />
                       <AvatarFallback>{student.name.slice(0, 2)}</AvatarFallback>
                     </Avatar>
-                    <span className="font-medium">{student.name}</span>
+                    <span className='font-medium'>{student.name}</span>
                   </div>
                 </TableCell>
                 <TableCell>{student.position}</TableCell>
@@ -60,5 +66,5 @@ export function StudentListTable() {
         </Table>
       </CardContent>
     </Card>
-  );
+  )
 }
