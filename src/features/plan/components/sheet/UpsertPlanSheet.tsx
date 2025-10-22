@@ -13,7 +13,7 @@ export default function UpsertPlanSheet({ planId }: { planId: number }) {
         <SheetHeader>
           <SheetTitle>{planId ? 'Edit Plan' : 'Create New Plan'}</SheetTitle>
         </SheetHeader>
-        <UpsertPlan />
+        <UpsertPlan planId={planId} />
       </SheetContent>
     </Sheet>
   )

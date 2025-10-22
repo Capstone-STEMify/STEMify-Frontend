@@ -6,6 +6,8 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { Plan, BillingCycle } from '@/features/plan/types/plan.type'
 import React from 'react'
 import SAvatar from '@/components/shared/SAvatar'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/shadcn/hover-card'
+import Image from 'next/image'
 
 type AdminPricingTierTableProps = {
   plan: Plan
@@ -49,7 +51,6 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
               <TableHead className='text-foreground font-semibold'>Student Seats</TableHead>
               <TableHead className='text-foreground font-semibold'>Curriculums</TableHead>
               <TableHead className='text-foreground font-semibold'>Created Date</TableHead>
-              <TableHead className='text-foreground text-right font-semibold'>Actions</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -88,7 +89,19 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
                   {plan.curriculums.length > 0 ? (
                     <ul className='list-disc pl-4'>
                       {plan.curriculums.map((c, index) => (
-                        <li key={index}>{c.title}</li>
+                        <li key={index}>
+                          <HoverCard>
+                            <HoverCardTrigger asChild>
+                              <Button variant='link'>{c.title}</Button>
+                            </HoverCardTrigger>
+                            <HoverCardContent className='w-80'>
+                              <div className='flex flex-col'>
+                                <Image src={c.imageUrl || ''} alt={c.title || ''} width={100} height={100} />
+                                <h4 className='text-sm font-semibold'>{c.title}</h4>
+                              </div>
+                            </HoverCardContent>
+                          </HoverCard>
+                        </li>
                       ))}
                     </ul>
                   ) : (
@@ -99,28 +112,6 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
                 {/* Created Date */}
                 <TableCell className='text-muted-foreground text-sm'>
                   {new Date(plan.createdAt ?? '').toLocaleDateString('vi-VN')}
-                </TableCell>
-
-                {/* Actions */}
-                <TableCell className='text-right'>
-                  <div className='flex items-center justify-end gap-1'>
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      className='hover:bg-primary/10 hover:text-primary h-8 w-8 p-0'
-                      onClick={() => console.log('Edit billing cycle:', cycle.id)}
-                    >
-                      <Pencil className='h-3.5 w-3.5' />
-                    </Button>
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      className='text-destructive hover:bg-destructive/10 hover:text-destructive h-8 w-8 p-0'
-                      onClick={() => console.log('Delete billing cycle:', cycle.id)}
-                    >
-                      <Trash2 className='h-3.5 w-3.5' />
-                    </Button>
-                  </div>
                 </TableCell>
               </TableRow>
             ))}

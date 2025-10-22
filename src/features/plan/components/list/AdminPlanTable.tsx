@@ -16,7 +16,7 @@ export default function AdminPlanTable() {
   const { openModal } = useModal()
   const [expandedPlans, setExpandedPlans] = useState<number[]>([])
   const { data } = useSearchPlanQuery({ pageNumber: 1, pageSize: 20 })
-  const [deletePlan, { isLoading: isDeleting }] = useDeletePlanMutation()
+  const [deletePlan] = useDeletePlanMutation()
   const toggleExpand = (planId: number) => {
     setExpandedPlans((prev) => (prev.includes(planId) ? prev.filter((id) => id !== planId) : [...prev, planId]))
   }
@@ -29,7 +29,9 @@ export default function AdminPlanTable() {
             <h1 className='text-foreground text-3xl font-bold'>Plan Management</h1>
             <p className='text-muted-foreground mt-1'>Manage subscription plans and pricing tiers</p>
           </div>
-          <CreateSubscriptionPlanSheet />
+          <Button onClick={() => openModal('upsertPlan')}>Create New Plan</Button>
+
+          {/* <CreateSubscriptionPlanSheet /> */}
         </div>
 
         <div className='border-border overflow-hidden rounded-lg border'>

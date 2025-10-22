@@ -6,6 +6,8 @@ import z from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { useCreatePlanMutation, useGetPlanByIdQuery, useUpdatePlanMutation } from '@/features/plan/api/planApi'
 import { useModal } from '@/providers/ModalProvider'
+import { BillingCycle } from '@/features/plan/types/plan.type'
+import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
 
 type PlanFormData = {
   name: string
@@ -24,7 +26,7 @@ const defaultPlanFormData: PlanFormData = {
   name: '',
   description: '',
   accessSupportDetail: '',
-  maxTeacherSeats: 100,
+  maxTeacherSeats: 10,
   maxStudentSeats: 100,
   billingCycles: [
     { billingCycle: 'Semiannual', price: 0 },
@@ -48,17 +50,18 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
     description: z.string().min(10, 'Description must be at least 10 characters'),
     accessSupportDetail: z.string().min(10, 'Access support detail must be at least 10 characters'),
     maxTeacherSeats: z.number().min(1, 'Must be at least 1'),
-    maxStudentSeats: z.number().min(1, 'Must be at least 1'),
+    maxStudentSeats: z.number().min(10, 'Must be at least 1'),
     billingCycles: z.array(
       z.object({
-        billingCycle: z.enum(['Semiannual', 'Annual']),
+        billingCycle: z.enum(BillingCycle),
         price: z.number().min(0, 'Price must be positive')
       })
     ),
-    curriculumIds: z.array(z.number()).optional()
+    curriculumIds: z.array(z.number()).min(1, 'Select at least one curriculum')
   })
 
   const { data: planData } = useGetPlanByIdQuery(planId!, { skip: !isEditing })
+  const { data: curriculumData } = useSearchCurriculumQuery({ pageNumber: 1, pageSize: 50 })
   const [createPlan, { isLoading: isCreating }] = useCreatePlanMutation()
   const [updatePlan, { isLoading: isUpdating }] = useUpdatePlanMutation()
 
@@ -67,7 +70,8 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
     validators: { onChange: planSchema as any },
     onSubmit: async ({ value }) => {
       const payload = {
-        ...value
+        ...value,
+        curriculumIds: value.curriculumIds.map((id) => Number(id))
       }
 
       if (isEditing) {
@@ -82,7 +86,6 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
     }
   })
 
-  // ✅ Populate data when editing
   useEffect(() => {
     if (isEditing && planData?.data) {
       const p = planData.data
@@ -97,7 +100,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
             billingCycle: bc.billingCycle,
             price: bc.price
           })) ?? defaultPlanFormData.billingCycles,
-        curriculumIds: p.curriculums?.map((c: any) => c.id) ?? []
+        curriculumIds: p.curriculums.map((c: any) => c.id)
       })
     }
   }, [planData, isEditing, form])
@@ -151,8 +154,8 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
       </div>
 
       {/* Billing Cycles */}
-      <div className='rounded-lg border p-4'>
-        <h4 className='mb-3 text-sm font-semibold text-gray-700'>Billing Cycles</h4>
+      <div className='rounded-lg border p-3'>
+        <h3>Billing Cycles</h3>
 
         {form.state.values.billingCycles.map((cycle, index) => (
           <div key={index} className='mb-3 items-center gap-3'>
@@ -169,6 +172,22 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
           </div>
         ))}
       </div>
+
+      {/* === Curriculum Checkbox Group === */}
+      <form.AppField name='curriculumIds'>
+        {(field) => (
+          <field.DropdownMultipleCheckboxField
+            label='Curriculums'
+            description='Select one or more curriculums for this plan'
+            options={
+              curriculumData?.data?.items?.map((c) => ({
+                label: `${c.title} (${c.code})`,
+                value: String(c.id)
+              })) ?? []
+            }
+          />
+        )}
+      </form.AppField>
 
       <div className='flex justify-end'>
         <form.AppForm>
