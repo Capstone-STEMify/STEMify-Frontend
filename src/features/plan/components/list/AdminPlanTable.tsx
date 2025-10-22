@@ -8,13 +8,15 @@ import { Pencil, Trash2, ChevronDown, ChevronRight } from 'lucide-react'
 import { formatDate } from '@/utils/index'
 import AdminPricingTierTable from '@/features/plan/components/list/AdminPricingTierTable'
 import CreateSubscriptionPlanSheet from '@/features/plan/components/sheet/CreateSubscriptionPlanSheet'
-import { useSearchPlanQuery } from '@/features/plan/api/planApi'
+import { useDeletePlanMutation, useSearchPlanQuery } from '@/features/plan/api/planApi'
 import { useModal } from '@/providers/ModalProvider'
+import { toast } from 'sonner'
 
 export default function AdminPlanTable() {
   const { openModal } = useModal()
   const [expandedPlans, setExpandedPlans] = useState<number[]>([])
   const { data } = useSearchPlanQuery({ pageNumber: 1, pageSize: 20 })
+  const [deletePlan, { isLoading: isDeleting }] = useDeletePlanMutation()
   const toggleExpand = (planId: number) => {
     setExpandedPlans((prev) => (prev.includes(planId) ? prev.filter((id) => id !== planId) : [...prev, planId]))
   }
@@ -80,7 +82,13 @@ export default function AdminPlanTable() {
                           className='text-destructive hover:text-destructive h-8 w-8 p-0'
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log('[v0] Delete plan:', plan.id)
+                            openModal('confirm', {
+                              message: 'Are you sure you want to edit this plan?',
+                              onConfirm: async () => {
+                                await deletePlan(plan.id)
+                                toast.success('Plan deleted successfully')
+                              }
+                            })
                           }}
                         >
                           <Trash2 className='h-4 w-4' />
