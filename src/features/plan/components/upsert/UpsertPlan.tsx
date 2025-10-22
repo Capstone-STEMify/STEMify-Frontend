@@ -1,9 +1,11 @@
-import { useAppForm } from '@/components/shared/form/items'
-import { useCreatePlanMutation, useGetPlanByIdQuery, useUpdatePlanMutation } from '@/features/plan/api/planApi'
-import { useModal } from '@/providers/ModalProvider'
+'use client'
+
 import React, { useEffect } from 'react'
 import { toast } from 'sonner'
 import z from 'zod'
+import { useAppForm } from '@/components/shared/form/items'
+import { useCreatePlanMutation, useGetPlanByIdQuery, useUpdatePlanMutation } from '@/features/plan/api/planApi'
+import { useModal } from '@/providers/ModalProvider'
 
 type PlanFormData = {
   name: string
@@ -11,7 +13,10 @@ type PlanFormData = {
   accessSupportDetail: string
   maxTeacherSeats: number
   maxStudentSeats: number
-  isAddOn: boolean
+  billingCycles: {
+    billingCycle: 'Semiannual' | 'Annual'
+    price: number
+  }[]
   curriculumIds: number[]
 }
 
@@ -20,8 +25,11 @@ const defaultPlanFormData: PlanFormData = {
   description: '',
   accessSupportDetail: '',
   maxTeacherSeats: 100,
-  maxStudentSeats: 10,
-  isAddOn: false,
+  maxStudentSeats: 100,
+  billingCycles: [
+    { billingCycle: 'Semiannual', price: 0 },
+    { billingCycle: 'Annual', price: 0 }
+  ],
   curriculumIds: []
 }
 
@@ -34,51 +42,65 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
   const isEditing = !!planId
   const { closeModal } = useModal()
 
+  // ✅ Schema validation
   const planSchema = z.object({
     name: z.string().min(1, 'Plan name is required'),
-    description: z.string().min(50, 'Description must be at least 50 characters long'),
-    accessSupportDetail: z.string().min(50, 'Access support detail must be at least 50 characters long'),
-    maxTeacherSeats: z.number().min(10, 'Must be at least 10'),
-    maxStudentSeats: z.number().min(100, 'Must be at least 100'),
-    isAddOn: z.boolean(),
-    curriculumIds: z.array(z.number())
+    description: z.string().min(10, 'Description must be at least 10 characters'),
+    accessSupportDetail: z.string().min(10, 'Access support detail must be at least 10 characters'),
+    maxTeacherSeats: z.number().min(1, 'Must be at least 1'),
+    maxStudentSeats: z.number().min(1, 'Must be at least 1'),
+    billingCycles: z.array(
+      z.object({
+        billingCycle: z.enum(['Semiannual', 'Annual']),
+        price: z.number().min(0, 'Price must be positive')
+      })
+    ),
+    curriculumIds: z.array(z.number()).optional()
   })
-  const { data: planData } = useGetPlanByIdQuery(planId!, {
-    skip: !isEditing
-  })
+
+  const { data: planData } = useGetPlanByIdQuery(planId!, { skip: !isEditing })
   const [createPlan, { isLoading: isCreating }] = useCreatePlanMutation()
   const [updatePlan, { isLoading: isUpdating }] = useUpdatePlanMutation()
 
   const form = useAppForm({
     defaultValues: defaultPlanFormData,
-    validators: {
-      onChange: planSchema
-    },
+    validators: { onChange: planSchema as any },
     onSubmit: async ({ value }) => {
-      if (isEditing) {
-        await updatePlan({ id: planId!, body: value }).unwrap()
-      } else {
-        await createPlan(value).unwrap()
+      const payload = {
+        ...value
       }
+
+      if (isEditing) {
+        await updatePlan({ id: planId!, body: payload }).unwrap()
+      } else {
+        await createPlan(payload).unwrap()
+      }
+
       toast.success(`Plan ${isEditing ? 'updated' : 'created'} successfully`)
       closeModal()
       onSuccess && onSuccess()
     }
   })
 
-  // useEffect(() => {
-  //   if (isEditing && planData?.data) {
-  //     form.reset({
-  //       name: planData.data.name,
-  //       description: planData.data.description,
-  //       accessSupportDetail: planData.data.accessSupportDetail,
-  //       maxTeacherSeats: planData.data.maxTeacherSeats,
-  //       maxStudentSeats: planData.data.maxStudentSeats,
-  //       // isAddOn: planData.data.planBillingCycles.,
-  //       // curriculumIds: planData.data.curriculums.map((curriculum) => curriculum.id)
-  //     })
-  //   }
-  // }, [planData, isEditing, form])
+  // ✅ Populate data when editing
+  useEffect(() => {
+    if (isEditing && planData?.data) {
+      const p = planData.data
+      form.reset({
+        name: p.name,
+        description: p.description,
+        accessSupportDetail: p.accessSupportDetail,
+        maxTeacherSeats: p.maxTeacherSeats,
+        maxStudentSeats: p.maxStudentSeats,
+        billingCycles:
+          p.planBillingCycles?.map((bc: any) => ({
+            billingCycle: bc.billingCycle,
+            price: bc.price
+          })) ?? defaultPlanFormData.billingCycles,
+        curriculumIds: p.curriculums?.map((c: any) => c.id) ?? []
+      })
+    }
+  }, [planData, isEditing, form])
 
   return (
     <form
@@ -86,14 +108,22 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         e.preventDefault()
         form.handleSubmit()
       }}
-      className='space-y-4'
+      className='space-y-6 overflow-y-scroll px-4 pb-4'
     >
-      <form.AppField name='name' children={(field) => <field.TextField label='name' placeholder='fill name' />} />
+      <form.AppField
+        name='name'
+        children={(field) => <field.TextField label='Plan Name' placeholder='Enter plan name' />}
+      />
 
       <form.AppField
         name='description'
         children={(field) => (
-          <field.TextAreaField label='description' placeholder='fill description' rows={4} className='resize-none' />
+          <field.TextAreaField
+            label='Description'
+            placeholder='Enter plan description'
+            rows={3}
+            className='resize-none'
+          />
         )}
       />
 
@@ -101,29 +131,52 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         name='accessSupportDetail'
         children={(field) => (
           <field.TextAreaField
-            label='access support detail'
-            placeholder='fill access support detail'
-            rows={4}
+            label='Access Support Detail'
+            placeholder='Explain support and access details'
+            rows={3}
             className='resize-none'
           />
         )}
       />
 
-      <form.AppField
-        name='maxTeacherSeats'
-        children={(field) => (
-          <field.TextField type='number' label='max teacher seats' placeholder='fill max teacher seats' />
-        )}
-      />
+      <div className='grid grid-cols-2 gap-4'>
+        <form.AppField
+          name='maxTeacherSeats'
+          children={(field) => <field.TextField type='number' label='Max Teacher Seats' placeholder='e.g. 100' />}
+        />
+        <form.AppField
+          name='maxStudentSeats'
+          children={(field) => <field.TextField type='number' label='Max Student Seats' placeholder='e.g. 100' />}
+        />
+      </div>
 
-      <form.AppField
-        name='maxStudentSeats'
-        children={(field) => (
-          <field.TextField type='number' label='max student seats' placeholder='fill max student seats' />
-        )}
-      />
+      {/* Billing Cycles */}
+      <div className='rounded-lg border p-4'>
+        <h4 className='mb-3 text-sm font-semibold text-gray-700'>Billing Cycles</h4>
 
-      <form.AppField name='isAddOn' children={(field) => <field.CheckboxField label='is add-on plan' />} />
+        {form.state.values.billingCycles.map((cycle, index) => (
+          <div key={index} className='mb-3 items-center gap-3'>
+            <span className='w-32 text-sm font-medium text-gray-600'>
+              {cycle.billingCycle === 'Semiannual' ? 'Semiannual (6 months)' : 'Annual (12 months)'}
+            </span>
+
+            <form.AppField
+              name={`billingCycles[${index}].price`}
+              children={(field) => (
+                <field.TextField type='number' label='' placeholder='Enter price' className='flex-1' />
+              )}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className='flex justify-end'>
+        <form.AppForm>
+          <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
+            {isEditing ? 'Update' : 'Create'} Plan
+          </form.SubmitButton>
+        </form.AppForm>
+      </div>
     </form>
   )
 }

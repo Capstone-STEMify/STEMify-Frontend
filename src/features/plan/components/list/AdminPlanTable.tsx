@@ -9,8 +9,10 @@ import { formatDate } from '@/utils/index'
 import AdminPricingTierTable from '@/features/plan/components/list/AdminPricingTierTable'
 import CreateSubscriptionPlanSheet from '@/features/plan/components/sheet/CreateSubscriptionPlanSheet'
 import { useSearchPlanQuery } from '@/features/plan/api/planApi'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function AdminPlanTable() {
+  const { openModal } = useModal()
   const [expandedPlans, setExpandedPlans] = useState<number[]>([])
   const { data } = useSearchPlanQuery({ pageNumber: 1, pageSize: 20 })
   const toggleExpand = (planId: number) => {
@@ -67,7 +69,7 @@ export default function AdminPlanTable() {
                           className='h-8 w-8 p-0'
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log('[v0] Edit plan:', plan.id)
+                            openModal('upsertPlan', { planId: plan.id })
                           }}
                         >
                           <Pencil className='h-4 w-4' />
