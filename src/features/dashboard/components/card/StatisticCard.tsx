@@ -22,8 +22,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export function ProgressStatisticsCard() {
   return (
-    <Card className="shadow-sm rounded-xl h-full">
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="shadow-sm rounded-xl h-full bg-white border-none">
+      <CardHeader className="flex flex-row items-center justify-between py-6">
         <CardTitle className="text-lg font-semibold">Progress Statistics</CardTitle>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -37,6 +37,16 @@ export function ProgressStatisticsCard() {
         </DropdownMenu>
       </CardHeader>
       <CardContent>
+        <div className="flex justify-end items-center gap-4 text-sm mb-4 pt-4">
+          <div className="flex items-center">
+            <span className="h-2.5 w-2.5 rounded-full bg-indigo-600 mr-2"></span>
+            <span>Retention</span>
+          </div>
+           <div className="flex items-center">
+            <span className="h-2.5 w-2.5 rounded-full bg-indigo-100 mr-2"></span>
+            <span>Dropped</span>
+          </div>
+        </div>
         <div className="h-56 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={progressData} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>

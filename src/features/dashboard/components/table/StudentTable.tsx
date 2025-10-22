@@ -11,8 +11,8 @@ import { Student, studentData } from "../../api/data";
 
 export function StudentListTable() {
   return (
-    <Card className="shadow-sm rounded-xl">
-      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
+    <Card className="shadow-sm rounded-xl bg-white border-none">
+      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4 py-4">
         <CardTitle className="text-lg font-semibold">Total Student List</CardTitle>
         <div className="flex w-full md:w-auto items-center gap-2">
           <div className="relative w-full md:w-auto">
@@ -26,7 +26,7 @@ export function StudentListTable() {
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-gray-100">
               <TableHead className="w-[50px]"><Checkbox /></TableHead>
               <TableHead>Student Id</TableHead>
               <TableHead>Name</TableHead>
