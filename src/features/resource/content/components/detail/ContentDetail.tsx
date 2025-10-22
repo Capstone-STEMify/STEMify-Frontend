@@ -4,7 +4,7 @@ import TiptapViewer from '@/components/tiptap/TiptapViewer'
 import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
 import { useModal } from '@/providers/ModalProvider'
 import { normalizeMarkdown } from '@/utils/index'
-import { FilePlus } from 'lucide-react'
+import { BookPlus, FilePlus } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useParams, useRouter } from 'next/navigation'
 
@@ -25,6 +25,11 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
     router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}`)
   }
 
+  const handleCreateQuiz = () => {
+    closeModal()
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/create`)
+  }
+
   if (isLoading)
     return (
       <div className='flex items-center justify-center'>
@@ -36,10 +41,16 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
       <div className='flex flex-col items-center justify-center space-y-4 rounded-2xl border bg-gray-50 py-10 text-center'>
         <h3 className='text-lg font-semibold text-gray-800'>{t('detail.noData')}</h3>
         <p className='text-gray-500'>{t('detail.noDataDetail')}</p>
-        <Button onClick={handleCreateContent} className='bg-amber-custom-400 flex items-center gap-2'>
-          <FilePlus className='h-4 w-4' />
-          {t('form.title.create')}
-        </Button>
+        <div className='flex gap-2'>
+          <Button onClick={handleCreateContent} className='bg-amber-custom-400 flex items-center gap-2'>
+            <FilePlus className='h-4 w-4' />
+            {t('form.title.create')}
+          </Button>
+          <Button onClick={handleCreateQuiz} className='bg-sky-custom-300 flex items-center gap-2'>
+            <BookPlus className='h-4 w-4' />
+            {t('form.title.createQuiz')}
+          </Button>
+        </div>
       </div>
     )
 

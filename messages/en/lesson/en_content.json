@@ -9,7 +9,8 @@
     "form": {
       "title": {
         "create": "Create Content",
-        "update": "Update Content"
+        "update": "Update Content",
+        "createQuiz": "Create Quiz"
       }
     }
   }

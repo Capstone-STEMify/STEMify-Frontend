@@ -17,7 +17,7 @@ export function SubscriptionHeader() {
 
   useEffect(() => {
     if (!billingCycle) {
-      dispatch(setParam({ key: 'billingCycle', value: BillingCycle.SIXMONTHS }))
+      dispatch(setParam({ key: 'billingCycle', value: BillingCycle.SEMIANNUAL }) )
     }
   }, [billingCycle, dispatch])
 
@@ -53,8 +53,8 @@ export function SubscriptionHeader() {
       >
         <div className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 p-1 shadow-sm backdrop-blur-md'>
           {[
-            { label: 'Semiannual', value: BillingCycle.SIXMONTHS },
-            { label: 'Annual', value: BillingCycle.TWELVEMONTHS }
+            { label: 'Semiannual', value: BillingCycle.SEMIANNUAL },
+            { label: 'Annual', value: BillingCycle.ANNUAL }
           ].map((option) => (
             <button
               key={option.value}

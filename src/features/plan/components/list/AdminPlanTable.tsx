@@ -42,7 +42,7 @@ export default function AdminPlanTable() {
                 <TableHead>Plan Name</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Curriculums</TableHead>
-                <TableHead>Updated</TableHead>
+                <TableHead>Updated Date</TableHead>
                 <TableHead className='text-right'>Actions</TableHead>
               </TableRow>
             </TableHeader>

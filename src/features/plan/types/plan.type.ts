@@ -23,8 +23,8 @@ export type PlanBillingCycle = {
 }
 
 export enum BillingCycle {
-  SIXMONTHS = 'Semiannual',
-  TWELVEMONTHS = 'Annual'
+  SEMIANNUAL = 'Semiannual',
+  ANNUAL = 'Annual'
 }
 
 export type PlanPricingTier = {

@@ -16,9 +16,9 @@ type AdminPricingTierTableProps = {
 export default function AdminPricingTierTable({ plan }: AdminPricingTierTableProps) {
   const getBillingCycleLabel = (cycle: BillingCycle) => {
     switch (cycle) {
-      case BillingCycle.SIXMONTHS:
+      case BillingCycle.SEMIANNUAL:
         return '6 Months'
-      case BillingCycle.TWELVEMONTHS:
+      case BillingCycle.ANNUAL:
         return '12 Months'
       default:
         return cycle

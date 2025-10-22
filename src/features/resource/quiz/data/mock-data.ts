@@ -151,15 +151,15 @@ export const mockQuestions: Question[] = [
 // Mock Quiz
 export const mockQuiz: Quiz = {
   id: 1,
-  sectionId: 1,
+  contentId: 1,
   title: 'UI Design Fundamentals & Best Practice',
   description: 'Kiểm tra kiến thức của bạn',
-  duration: 10, // 10 minutes
-  createdBy: 'admin@example.com',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  durationDays: 1,
   status: 'published',
-  passingScore: 70,
+  passingMarks: 70,
+  timeLimitMinutes: 30,
+  totalMarks: 7,
+  totalQuestions: 10,
   questions: mockQuestions
 }
 
@@ -168,28 +168,28 @@ export const mockQuizzes: Quiz[] = [
   mockQuiz,
   {
     id: 2,
-    sectionId: 1,
+    contentId: 1,
     title: 'Advanced React Patterns',
     description: 'Test your knowledge of advanced React patterns',
-    duration: 15,
-    createdBy: 'instructor@example.com',
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    durationDays: 15,
     status: 'published',
-    passingScore: 75,
+    passingMarks: 75,
+    timeLimitMinutes: 60,
+    totalMarks: 100,
+    totalQuestions: 10,
     questions: []
   },
   {
     id: 3,
-    sectionId: 2,
+    contentId: 2,
     title: 'TypeScript Basics',
     description: 'Learn TypeScript fundamentals',
-    duration: 20,
-    createdBy: 'instructor@example.com',
-    createdAt: new Date(Date.now() - 172800000).toISOString(),
-    updatedAt: new Date(Date.now() - 172800000).toISOString(),
+    durationDays: 20,
     status: 'draft',
-    passingScore: 60,
+    passingMarks: 60,
+    timeLimitMinutes: 45,
+    totalMarks: 50,
+    totalQuestions: 10,
     questions: []
   }
 ]

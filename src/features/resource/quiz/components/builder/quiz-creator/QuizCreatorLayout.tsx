@@ -14,7 +14,7 @@ export default function QuizCreationLayout() {
   const isMobile = useIsMobile()
 
   return (
-    <div className='flex flex-col md:h-[80vh] md:flex-row lg:h-[80vh] xl:h-[87vh] 2xl:h-[92vh]'>
+    <div className='flex flex-col md:h-[80vh] md:flex-row lg:h-[80vh] xl:h-[87vh] 2xl:h-[90vh]'>
       {/* Main Content */}
       <div className='relative flex-1 overflow-auto'>
         {isMobile && (

@@ -59,7 +59,7 @@ export function SubscriptionPlan({ plans }: SubscriptionPlanProps) {
                     <div className='flex items-baseline gap-2'>
                       <span className='text-3xl font-extrabold text-slate-900'>{formatPrice(price)}</span>
                       <span className='text-slate-500'>
-                        /{billingCycle === BillingCycle.TWELVEMONTHS ? 'year' : '6 months'}
+                        /{billingCycle === BillingCycle.ANNUAL ? 'year' : '6 months'}
                       </span>
                     </div>
                   </div>

@@ -29,8 +29,8 @@ const defaultPlanFormData: PlanFormData = {
   maxTeacherSeats: 10,
   maxStudentSeats: 100,
   billingCycles: [
-    { billingCycle: 'Semiannual', price: 0 },
-    { billingCycle: 'Annual', price: 0 }
+    { billingCycle: BillingCycle.SEMIANNUAL, price: 0 },
+    { billingCycle: BillingCycle.ANNUAL, price: 0 }
   ],
   curriculumIds: []
 }
