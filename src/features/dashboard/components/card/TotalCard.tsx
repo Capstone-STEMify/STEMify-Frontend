@@ -45,7 +45,7 @@ export function TotalStudentsCard() {
           <Badge className='mt-1 self-start bg-green-100 text-green-700'>+45</Badge>
         </div>
 
-        <div className='relative mt-8 mb-6 w-full md:mt-2'>
+        <div className='relative mt-8 mb-6 w-full md:mt-6 md:mb-2'>
           <span className='absolute -top-5 left-0 text-sm font-semibold text-gray-700'>15%</span>
           <span className='absolute -top-5 left-[15%] text-sm font-semibold text-gray-700'>63%</span>
           <span className='absolute -top-5 right-[15%] text-sm font-semibold text-gray-700'>3%</span>
@@ -57,7 +57,7 @@ export function TotalStudentsCard() {
           </div>
         </div>
 
-        <div className='mt-6 space-y-4 md:pt-14'>
+        <div className='mt-6 space-y-4 md:pt-10'>
           {rates.map((rate) => (
             <div key={rate.title} className='flex items-center justify-between text-sm'>
               <div className='flex items-center'>
