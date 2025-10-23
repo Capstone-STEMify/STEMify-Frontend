@@ -14,8 +14,7 @@ export type Content = {
 
 export enum ContentType {
   TEXT = 'TEXT',
-  VIDEO = 'VIDEO',
-  DOCUMENT = 'DOCUMENT'
+  QUIZ = 'QUIZ'
 }
 
 export type ContentQueryParams = {

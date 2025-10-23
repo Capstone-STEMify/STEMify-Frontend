@@ -88,6 +88,7 @@ export const rootReducer = combineReducers({
   quizPlayer: quizPlayerSlice.reducer,
   contact: contactSlice.reducer,
   contract: contractSlice.reducer,
+  
 
 
   // api reducers

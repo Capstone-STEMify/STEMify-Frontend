@@ -7,6 +7,7 @@ import { Trash2, GripVertical } from 'lucide-react'
 import { Input } from '@/components/shadcn/input'
 import { Card } from '@/components/shadcn/card'
 import { Label } from '@/components/shadcn/label'
+import SSelect from '@/components/shared/SSelect'
 
 interface Answer {
   id: number
@@ -103,7 +104,7 @@ export default function QuestionEditor({ question, onUpdateQuestion }: QuestionE
   }
 
   return (
-    <div className='mx-auto max-w-4xl space-y-6 pt-3'>
+    <div className='mx-auto space-y-6 px-10 pt-3'>
       {/* Header with Type Selector */}
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>

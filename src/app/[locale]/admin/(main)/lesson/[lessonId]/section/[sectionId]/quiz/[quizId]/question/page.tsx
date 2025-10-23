@@ -1,9 +1,9 @@
 import UpsertQuestion from '@/features/resource/question/components/upsert/UpsertQuestion'
 import React from 'react'
 
-export default function Page() {
+export default function QuestionPage() {
   return (
-    <div className='-m-4'>
+    <div>
       <UpsertQuestion />
     </div>
   )
