@@ -1,59 +1,44 @@
 'use client'
 
-import type React from 'react'
-
-import { Plus, MoreVertical, GripVertical } from 'lucide-react'
-
-interface Question {
-  id: number
-  title: string
-  type: string
-  required: boolean
-}
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
+import { SortableItem } from './SortableItem'
+import { Plus } from 'lucide-react'
+import { Question } from '@/features/resource/question/types/question.type'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { selectQuestion } from '@/features/resource/question/slice/questionSlice'
 
 interface SidebarProps {
   questions: Question[]
-  selectedQuestion: number
-  onSelectQuestion: (id: number) => void
-  onReorderQuestions: (fromIndex: number, toIndex: number) => void
-  draggedQuestion: number | null
-  onDraggedQuestion: (id: number | null) => void
+  onReorderQuestions: (newOrder: Question[]) => void
 }
 
-export default function QuestionSidebar({
-  questions,
-  selectedQuestion,
-  onSelectQuestion,
-  onReorderQuestions,
-  draggedQuestion,
-  onDraggedQuestion
-}: SidebarProps) {
+export default function QuestionSidebar({ questions, onReorderQuestions }: SidebarProps) {
+  const dispatch = useAppDispatch()
+  const { selectedQuestionId } = useAppSelector((state) => state.question)
+  const sensors = useSensors(useSensor(PointerSensor))
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = questions.findIndex((q) => q.id === active.id)
+    const newIndex = questions.findIndex((q) => q.id === over.id)
+    const reordered = arrayMove(questions, oldIndex, newIndex)
+    onReorderQuestions(reordered)
+  }
+
   const getTypeDisplayName = (type: string) => {
     switch (type) {
-      case 'single-choice':
+      case 'SingleChoice':
         return 'Single choice'
-      case 'multiple-choice':
+      case 'MultipleChoice':
         return 'Multiple choice'
-      case 'true-false':
+      case 'TrueFalse':
         return 'True/False'
       default:
-        return 'Multiple choice'
+        return 'Unknown'
     }
-  }
-
-  const handleDragStart = (index: number) => {
-    onDraggedQuestion(index)
-  }
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-  }
-
-  const handleDrop = (toIndex: number) => {
-    if (draggedQuestion !== null && draggedQuestion !== toIndex) {
-      onReorderQuestions(draggedQuestion, toIndex)
-    }
-    onDraggedQuestion(null)
   }
 
   return (
@@ -67,36 +52,29 @@ export default function QuestionSidebar({
         </div>
         <p className='text-muted-foreground mt-1 text-sm'>{questions.length} questions</p>
       </div>
-      <div className='flex-1 overflow-auto'>
-        <div className='space-y-2 p-4'>
-          {questions.map((question, index) => (
-            <div
-              key={question.id}
-              draggable
-              onDragStart={() => handleDragStart(index)}
-              onDragOver={handleDragOver}
-              onDrop={() => handleDrop(index)}
-              className={`group flex cursor-move items-start gap-3 rounded-lg p-3 transition-all ${
-                selectedQuestion === question.id
-                  ? 'bg-primary text-primary-foreground shadow-md'
-                  : draggedQuestion === index
-                    ? 'bg-secondary/50 opacity-50'
-                    : 'bg-secondary hover:bg-secondary/80 text-foreground'
-              }`}
-            >
-              <GripVertical className='mt-1 h-4 w-4 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100' />
-              <button onClick={() => onSelectQuestion(question.id)} className='min-w-0 flex-1 text-left'>
-                <div className='truncate text-sm font-semibold'>Q{question.id}</div>
-                <div className='mt-1 truncate text-xs opacity-75'>{question.title}</div>
-                <div className='mt-2 text-xs opacity-60'>{getTypeDisplayName(question.type)}</div>
-              </button>
-              <button className='hover:bg-primary/20 flex-shrink-0 rounded p-1 opacity-0 transition-colors group-hover:opacity-100'>
-                <MoreVertical className='h-4 w-4' />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
+
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={questions.map((q) => q.id)} strategy={verticalListSortingStrategy}>
+          <div className='flex-1 space-y-2 overflow-auto p-4'>
+            {questions.map((question, index) => (
+              <SortableItem key={question.id} id={question.id}>
+                <button
+                  onPointerDown={() => dispatch(selectQuestion(question.id))}
+                  className={`group flex w-full flex-col rounded-lg p-3 text-left transition-all ${
+                    selectedQuestionId === question.id
+                      ? 'bg-primary text-primary-foreground shadow-md'
+                      : 'bg-secondary hover:bg-secondary/80 text-foreground'
+                  }`}
+                >
+                  <div className='font-semibold'>Q{index + 1}</div>
+                  <div className='truncate text-sm'>{question.content}</div>
+                  <div className='text-xs opacity-70'>{getTypeDisplayName(question.questionType)}</div>
+                </button>
+              </SortableItem>
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </aside>
   )
 }

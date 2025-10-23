@@ -1,109 +1,114 @@
 'use client'
 
-import { useState } from 'react'
-import QuestionSidebar from '@/features/resource/question/components/upsert/QuestionSidebar'
-import QuestionEditor from '@/features/resource/question/components/upsert/QuestionEditor'
-
+import { useEffect, useState } from 'react'
+import QuestionSidebar from './QuestionSidebar'
+import QuestionEditor from './QuestionEditor'
+import { Question, QuestionType } from '@/features/resource/question/types/question.type'
+import { useGetQuizByIdQuery, useSearchQuizQuery } from '@/features/resource/quiz/api/quizApi'
+import { useParams } from 'next/navigation'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { selectQuestion } from '@/features/resource/question/slice/questionSlice'
+// const [questions, setQuestions] = useState<Question[]>([
+//   {
+//     id: 1,
+//     questionType: QuestionType.SINGLE_CHOICE,
+//     content: 'What does UI stand for?',
+//     orderIndex: 1,
+//     answerExplanation: '',
+//     points: 5,
+//     answers: [
+//       { id: 1, content: 'User Interface', isCorrect: true },
+//       { id: 2, content: 'User Integration', isCorrect: false }
+//     ]
+//   },
+//   {
+//     id: 2,
+//     questionType: QuestionType.TRUE_FALSE,
+//     content: 'HTML stands for HyperText Markup Language.',
+//     orderIndex: 2,
+//     answerExplanation: '',
+//     points: 2,
+//     answers: [
+//       { id: 1, content: 'True', isCorrect: true },
+//       { id: 2, content: 'False', isCorrect: false }
+//     ]
+//   },
+//   {
+//     id: 3,
+//     questionType: QuestionType.TRUE_FALSE,
+//     content: 'HTML stands for HyperText Markup Language.',
+//     orderIndex: 3,
+//     answerExplanation: '',
+//     points: 2,
+//     answers: [
+//       { id: 1, content: 'True', isCorrect: true },
+//       { id: 2, content: 'False', isCorrect: false }
+//     ]
+//   },
+//   {
+//     id: 4,
+//     questionType: QuestionType.TRUE_FALSE,
+//     content: 'HTML stands for HyperText Markup Language.',
+//     orderIndex: 4,
+//     answerExplanation: '',
+//     points: 2,
+//     answers: [
+//       { id: 1, content: 'True', isCorrect: true },
+//       { id: 2, content: 'False', isCorrect: false }
+//     ]
+//   },
+//   {
+//     id: 5,
+//     questionType: QuestionType.TRUE_FALSE,
+//     content: 'HTML stands for HyperText Markup Language.',
+//     orderIndex: 5,
+//     answerExplanation: '',
+//     points: 2,
+//     answers: [
+//       { id: 1, content: 'True', isCorrect: true },
+//       { id: 2, content: 'False', isCorrect: false }
+//     ]
+//   }
+// ])
 export default function UpsertQuestion() {
-  const [questions, setQuestions] = useState([
-    {
-      id: 1,
-      title: 'What does UI stand for...',
-      type: 'single-choice',
-      required: true,
-      answers: [
-        { id: 1, text: 'User Interface' },
-        { id: 2, text: 'User Integration' },
-        { id: 3, text: 'Unified Input' },
-        { id: 4, text: 'Universal Icon' }
-      ],
-      correctAnswer: 1
-    },
-    {
-      id: 2,
-      title: 'Which aspect of UI de...',
-      type: 'multiple-choice',
-      required: false,
-      answers: [
-        { id: 1, text: 'Color scheme' },
-        { id: 2, text: 'Typography' },
-        { id: 3, text: 'Layout' },
-        { id: 4, text: 'Animation' }
-      ],
-      correctAnswers: [1, 2]
-    },
-    {
-      id: 3,
-      title: 'How to export a pictu...',
-      type: 'true-false',
-      required: false,
-      answers: [
-        { id: 1, text: 'True' },
-        { id: 2, text: 'False' }
-      ],
-      correctAnswer: 1
-    },
-    {
-      id: 4,
-      title: 'Which term refers to t...',
-      type: 'single-choice',
-      required: false,
-      answers: [
-        { id: 1, text: 'Option A' },
-        { id: 2, text: 'Option B' },
-        { id: 3, text: 'Option C' }
-      ],
-      correctAnswer: 2
-    },
-    {
-      id: 5,
-      title: 'Why is maintaining co...',
-      type: 'multiple-choice',
-      required: false,
-      answers: [
-        { id: 1, text: 'Consistency' },
-        { id: 2, text: 'Clarity' },
-        { id: 3, text: 'Accessibility' }
-      ],
-      correctAnswers: [1, 3]
+  const { quizId } = useParams()
+  const { data, isLoading, isError } = useGetQuizByIdQuery(Number(quizId))
+  const [questions, setQuestions] = useState<Question[]>([])
+  const { selectedQuestionId } = useAppSelector((state) => state.question)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (data?.data?.questions) {
+      setQuestions(data.data.questions)
+      if (!selectedQuestionId && data.data.questions.length > 0) {
+        dispatch(selectQuestion(data.data.questions[0].id))
+      }
     }
-  ])
+  }, [data])
 
-  const [selectedQuestion, setSelectedQuestion] = useState(1)
-  const [draggedQuestion, setDraggedQuestion] = useState<number | null>(null)
-
-  const currentQuestion = questions.find((q) => q.id === selectedQuestion)
-
-  const updateQuestion = (questionId: number, updates: any) => {
-    setQuestions(questions.map((q) => (q.id === questionId ? { ...q, ...updates } : q)))
+  const handleUpdate = (updates: Partial<Question>) => {
+    if (!selectedQuestionId) return
+    setQuestions((prev) => prev.map((q) => (q.id === selectedQuestionId ? { ...q, ...updates } : q)))
   }
 
-  const reorderQuestions = (fromIndex: number, toIndex: number) => {
-    const newQuestions = [...questions]
-    const [movedQuestion] = newQuestions.splice(fromIndex, 1)
-    newQuestions.splice(toIndex, 0, movedQuestion)
-    setQuestions(newQuestions)
+  const handleReorder = (newOrder: Question[]) => {
+    setQuestions(newOrder.map((q, i) => ({ ...q, orderIndex: i + 1 })))
   }
+
+  if (isLoading) return <p className='p-4'>Loading questions...</p>
+  if (isError) return <p className='p-4 text-red-500'>Failed to load quiz</p>
+
+  const currentQuestion = questions.find((q) => q.id === selectedQuestionId)
 
   return (
-    <div className='flex'>
-      <QuestionSidebar
-        questions={questions}
-        selectedQuestion={selectedQuestion}
-        onSelectQuestion={setSelectedQuestion}
-        onReorderQuestions={reorderQuestions}
-        draggedQuestion={draggedQuestion}
-        onDraggedQuestion={setDraggedQuestion}
-      />
-      <main className='flex flex-1 flex-col overflow-hidden'>
-        <div className='flex-1 overflow-auto'>
-          {currentQuestion && (
-            <QuestionEditor
-              question={currentQuestion}
-              onUpdateQuestion={(updates) => updateQuestion(currentQuestion.id, updates)}
-            />
-          )}
-        </div>
+    <div className='flex h-screen'>
+      <QuestionSidebar questions={questions} onReorderQuestions={handleReorder} />
+      <main className='flex-1 overflow-auto'>
+        {currentQuestion ? (
+          <QuestionEditor question={currentQuestion} onUpdateQuestion={handleUpdate} />
+        ) : (
+          <div className='text-muted-foreground p-10'>Select a question to edit</div>
+        )}
       </main>
     </div>
   )
