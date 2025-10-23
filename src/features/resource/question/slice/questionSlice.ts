@@ -20,6 +20,9 @@ export const questionSlice = createSlice({
       state.selectedQuestionId = action.payload
     },
 
+    setQuestions: (state, action: PayloadAction<Question[]>) => {
+      state.questions = action.payload
+    },
     // 👉 Thêm câu hỏi mới
     addQuestion: (state, action: PayloadAction<Question>) => {
       const nextOrder = state.questions.length + 1
@@ -46,37 +49,11 @@ export const questionSlice = createSlice({
     // 👉 Reorder danh sách câu hỏi
     reorderQuestions: (state, action: PayloadAction<Question[]>) => {
       state.questions = action.payload.map((q, i) => ({ ...q, orderIndex: i + 1 }))
-    },
-
-    // 👉 Thêm câu trả lời
-    addAnswer: (state, action: PayloadAction<{ questionId: number; answer: Answer }>) => {
-      const q = state.questions.find((x) => x.id === action.payload.questionId)
-      if (q) q.answers = [...q.answers, action.payload.answer]
-    },
-
-    // 👉 Xóa câu trả lời
-    deleteAnswer: (state, action: PayloadAction<{ questionId: number; answerId: number }>) => {
-      const q = state.questions.find((x) => x.id === action.payload.questionId)
-      if (q) q.answers = q.answers.filter((a) => a.id !== action.payload.answerId)
-    },
-
-    // 👉 Reorder câu trả lời
-    reorderAnswers: (state, action: PayloadAction<{ questionId: number; newOrder: Answer[] }>) => {
-      const q = state.questions.find((x) => x.id === action.payload.questionId)
-      if (q) q.answers = [...action.payload.newOrder]
     }
   }
 })
 
-export const {
-  selectQuestion,
-  addQuestion,
-  updateQuestion,
-  deleteQuestion,
-  reorderQuestions,
-  addAnswer,
-  deleteAnswer,
-  reorderAnswers
-} = questionSlice.actions
+export const { selectQuestion, setQuestions, addQuestion, updateQuestion, deleteQuestion, reorderQuestions } =
+  questionSlice.actions
 
 export default questionSlice.reducer

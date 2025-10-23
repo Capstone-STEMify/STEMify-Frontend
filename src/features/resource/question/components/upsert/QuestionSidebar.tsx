@@ -4,28 +4,43 @@ import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from 
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
 import { SortableItem } from './SortableItem'
 import { Plus } from 'lucide-react'
-import { Question } from '@/features/resource/question/types/question.type'
+import { Question, QuestionType } from '@/features/resource/question/types/question.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { selectQuestion } from '@/features/resource/question/slice/questionSlice'
+import { addQuestion, selectQuestion, reorderQuestions } from '@/features/resource/question/slice/questionSlice'
+import { Button } from '@/components/shadcn/button'
 
-interface SidebarProps {
-  questions: Question[]
-  onReorderQuestions: (newOrder: Question[]) => void
-}
-
-export default function QuestionSidebar({ questions, onReorderQuestions }: SidebarProps) {
+export default function QuestionSidebar() {
   const dispatch = useAppDispatch()
-  const { selectedQuestionId } = useAppSelector((state) => state.question)
-  const sensors = useSensors(useSensor(PointerSensor))
+  const { questions, selectedQuestionId } = useAppSelector((state) => state.question)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 }
+    })
+  )
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event
     if (!over || active.id === over.id) return
-
     const oldIndex = questions.findIndex((q) => q.id === active.id)
     const newIndex = questions.findIndex((q) => q.id === over.id)
     const reordered = arrayMove(questions, oldIndex, newIndex)
-    onReorderQuestions(reordered)
+    dispatch(reorderQuestions(reordered))
+  }
+
+  const handleAddQuestion = () => {
+    const newQuestion: Question = {
+      id: Date.now(),
+      questionType: QuestionType.SINGLE_CHOICE,
+      content: 'New question',
+      orderIndex: questions.length + 1,
+      answerExplanation: '',
+      points: 1,
+      answers: []
+    }
+
+    dispatch(addQuestion(newQuestion))
+    dispatch(selectQuestion(newQuestion.id))
   }
 
   const getTypeDisplayName = (type: string) => {
@@ -46,9 +61,9 @@ export default function QuestionSidebar({ questions, onReorderQuestions }: Sideb
       <div className='border-border border-b p-3'>
         <div className='flex items-center justify-between'>
           <h2 className='text-foreground text-lg font-bold'>Questions</h2>
-          <button className='hover:bg-secondary text-foreground hover:text-primary rounded-lg transition-colors'>
+          <Button variant='ghost' onClick={handleAddQuestion}>
             <Plus className='h-5 w-5' />
-          </button>
+          </Button>
         </div>
         <p className='text-muted-foreground mt-1 text-sm'>{questions.length} questions</p>
       </div>

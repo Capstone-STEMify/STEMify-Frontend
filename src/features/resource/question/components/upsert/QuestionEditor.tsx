@@ -7,30 +7,60 @@ import { Card } from '@/components/shadcn/card'
 import { Label } from '@/components/shadcn/label'
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
-import { Answer, Question, QuestionType } from '@/features/resource/question/types/question.type'
+import { Answer, QuestionType } from '@/features/resource/question/types/question.type'
 import { SortableItem } from '@/features/resource/question/components/upsert/SortableItem'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { questionSlice, updateQuestion } from '@/features/resource/question/slice/questionSlice'
+import { Button } from '@/components/shadcn/button'
+import { useCreateQuestionMutation } from '@/features/resource/question/api/questionApi'
+import { useParams } from 'next/navigation'
+import { toast } from 'sonner'
 
-interface Props {
-  question: Question
-  onUpdateQuestion: (updates: Partial<Question>) => void
-}
-
-export default function QuestionEditor({ question, onUpdateQuestion }: Props) {
-  const [answers, setAnswers] = useState<Answer[]>(question.answers)
-  const [newAnswerText, setNewAnswerText] = useState('')
+export default function QuestionEditor() {
   const dispatch = useAppDispatch()
+  const { quizId } = useParams()
+  const { questions, selectedQuestionId } = useAppSelector((state) => state.question)
+  const question = questions.find((q) => q.id === selectedQuestionId)
+  const [createQuestion, { isLoading, isSuccess }] = useCreateQuestionMutation()
+  const [newAnswerText, setNewAnswerText] = useState('')
+  const [answers, setAnswers] = useState<Answer[]>(question?.answers || [])
 
   useEffect(() => {
-    setAnswers(question.answers)
-  }, [question.answers])
+    if (question) setAnswers(question.answers)
+  }, [question])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 5 }
     })
   )
+  if (!question) {
+    return <div className='text-muted-foreground p-10'>Select a question to edit</div>
+  }
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+    const oldIndex = answers.findIndex((a) => a.id === active.id)
+    const newIndex = answers.findIndex((a) => a.id === over.id)
+    const reordered = arrayMove(answers, oldIndex, newIndex)
+    setAnswers(reordered)
+    dispatch(updateQuestion({ id: question.id, updates: { answers: reordered } }))
+  }
 
+  const handleTypeChange = (newType: QuestionType) => {
+    if (newType === QuestionType.TRUE_FALSE) {
+      const tfAnswers: Answer[] = [
+        { id: 1, content: 'True', isCorrect: false },
+        { id: 2, content: 'False', isCorrect: false }
+      ]
+      setAnswers(tfAnswers)
+      dispatch(updateQuestion({ id: question.id, updates: { questionType: newType, answers: tfAnswers } }))
+    } else {
+      dispatch(updateQuestion({ id: question.id, updates: { questionType: newType } }))
+    }
+  }
+
+  // 🧠 Add new answer
   const handleAddAnswer = () => {
     if (!newAnswerText.trim()) return
     const maxId = answers.length > 0 ? Math.max(...answers.map((a) => a.id)) : 0
@@ -41,36 +71,21 @@ export default function QuestionEditor({ question, onUpdateQuestion }: Props) {
     }
     const updated = [...answers, newAnswer]
     setAnswers(updated)
-    onUpdateQuestion({ answers: updated })
+    dispatch(updateQuestion({ id: question.id, updates: { answers: updated } }))
     setNewAnswerText('')
   }
 
+  // 🧠 Delete answer
   const handleDelete = (id: number) => {
     const updated = answers.filter((a) => a.id !== id)
     setAnswers(updated)
-    onUpdateQuestion({ answers: updated })
+    dispatch(updateQuestion({ id: question.id, updates: { answers: updated } }))
   }
 
-  const handleDragEnd = (event: any) => {
-    const { active, over } = event
-    if (!over || active.id === over.id) return
-    const oldIndex = answers.findIndex((a) => a.id === active.id)
-    const newIndex = answers.findIndex((a) => a.id === over.id)
-    const reordered = arrayMove(answers, oldIndex, newIndex)
-    setAnswers(reordered)
-    onUpdateQuestion({ answers: reordered })
-  }
-
-  const handleTypeChange = (newType: QuestionType) => {
-    if (newType === QuestionType.TRUE_FALSE) {
-      const tfAnswers: Answer[] = [
-        { id: 1, content: 'True', isCorrect: false },
-        { id: 2, content: 'False', isCorrect: false }
-      ]
-      setAnswers(tfAnswers)
-      onUpdateQuestion({ questionType: newType, answers: tfAnswers })
-    } else {
-      onUpdateQuestion({ questionType: newType })
+  const handleSaveChanges = async () => {
+    await createQuestion({ quizId: Number(quizId), questions: questions })
+    if (isSuccess) {
+      toast.success('Questions saved successfully')
     }
   }
 
@@ -78,26 +93,31 @@ export default function QuestionEditor({ question, onUpdateQuestion }: Props) {
     <div className='mx-auto space-y-6 px-10 pt-3'>
       {/* Header */}
       <div className='flex items-center justify-between'>
-        <select
-          value={question.questionType}
-          onChange={(e) => handleTypeChange(e.target.value as QuestionType)}
-          className='bg-primary/10 text-primary rounded-lg border px-4 py-2 font-medium'
-        >
-          <option value='SingleChoice'>Single Choice</option>
-          <option value='MultipleChoice'>Multiple Choice</option>
-          <option value='TrueFalse'>True/False</option>
-        </select>
-
         <div className='flex items-center gap-3'>
-          <Label htmlFor='points'>Points:</Label>
-          <Input
-            id='points'
-            type='number'
-            value={question.points}
-            onChange={(e) => onUpdateQuestion({ points: parseInt(e.target.value) || 0 })}
-            className='w-20'
-          />
+          <select
+            value={question.questionType}
+            onChange={(e) => handleTypeChange(e.target.value as QuestionType)}
+            className='bg-primary/10 text-primary rounded-lg border px-4 py-2 font-medium'
+          >
+            <option value='SingleChoice'>Single Choice</option>
+            <option value='MultipleChoice'>Multiple Choice</option>
+            <option value='TrueFalse'>True/False</option>
+          </select>
+
+          <div className='flex items-center gap-3'>
+            <Label htmlFor='points'>Points:</Label>
+            <Input
+              id='points'
+              type='number'
+              value={question.points}
+              onChange={(e) =>
+                dispatch(updateQuestion({ id: question.id, updates: { points: parseInt(e.target.value) || 0 } }))
+              }
+              className='w-20'
+            />
+          </div>
         </div>
+        <Button onClick={handleSaveChanges}>Save Changes</Button>
       </div>
 
       {/* Question content */}
@@ -105,7 +125,7 @@ export default function QuestionEditor({ question, onUpdateQuestion }: Props) {
         <Label className='text-foreground font-semibold'>Question</Label>
         <Input
           value={question.content}
-          onChange={(e) => onUpdateQuestion({ content: e.target.value })}
+          onChange={(e) => dispatch(updateQuestion({ id: question.id, updates: { content: e.target.value } }))}
           placeholder='Enter question content...'
         />
 
@@ -127,7 +147,7 @@ export default function QuestionEditor({ question, onUpdateQuestion }: Props) {
                               ? answers.map((ans) => (ans.id === a.id ? { ...ans, isCorrect: !ans.isCorrect } : ans))
                               : answers.map((ans) => ({ ...ans, isCorrect: ans.id === a.id }))
                           setAnswers(updated)
-                          onUpdateQuestion({ answers: updated })
+                          dispatch(updateQuestion({ id: question.id, updates: { answers: updated } }))
                         }}
                       />
                       <span>{a.content}</span>

@@ -4,14 +4,28 @@ import { ApiSuccessResponse } from '@/types/baseModel'
 
 export const questionApi = quizApi.injectEndpoints({
   endpoints: (build) => ({
-    createQuestion: build.mutation<ApiSuccessResponse<Question>, { quizId: number; body: Question }>({
-      query: ({ quizId, body }) => ({
+    createQuestion: build.mutation<ApiSuccessResponse<Question>, { quizId: number; questions: Question[] }>({
+      query: ({ quizId, questions }) => ({
         url: `/quizzes/${quizId}/questions`,
         method: 'POST',
-        body
+        body: {
+          questions
+        }
+      }),
+      invalidatesTags: ['QuizQuestions']
+    }),
+    updateQuestion: build.mutation<ApiSuccessResponse<Question>, { quizId: number; questions: Question[] }>({
+      query: ({ quizId, questions }) => ({
+        url: `/quizzes/${quizId}/questions`,
+        method: 'PATCH',
+        body: {
+          questions
+        }
       }),
       invalidatesTags: ['QuizQuestions']
     })
   }),
   overrideExisting: false
 })
+
+export const { useCreateQuestionMutation, useUpdateQuestionMutation } = questionApi
