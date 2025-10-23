@@ -7,7 +7,8 @@ import z from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { useCreateQuizMutation } from '@/features/resource/quiz/api/quizApi'
 import { toast } from 'sonner'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 type QuizFormData = {
   title: string
@@ -33,7 +34,9 @@ const defaultQuizFormData: QuizFormData = {
 
 export default function QuizCreate() {
   const { openModal } = useModal()
-  const { sectionId } = useParams()
+  const { lessonId, sectionId, quizId } = useParams()
+  const router = useRouter()
+  const locale = useLocale()
   const quizSchema = z.object({
     title: z.string().min(1, 'Title is required'),
     description: z.string().min(10, 'Description must be at least 10 characters'),
@@ -43,20 +46,26 @@ export default function QuizCreate() {
     timeLimitMinutes: z.number().min(1, 'Time limit must be at least 1 minute').optional()
   })
 
-  const [createQuiz, { isLoading: isCreating }] = useCreateQuizMutation()
+  const [createQuiz, { isLoading: isCreating, isSuccess: isCreated }] = useCreateQuizMutation()
 
   const form = useAppForm({
     defaultValues: defaultQuizFormData,
-    validators: { onChange: quizSchema },
+    // validators: { onChange: quizSchema },
     onSubmit: async ({ value }) => {
       const payload = {
         ...value,
         sectionId: Number(sectionId),
         contentType: 'Quiz'
       }
+      console.log('Creating quiz with payload:', payload)
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
 
-      await createQuiz(payload).unwrap()
-      toast.success('Quiz created successfully')
+      // await createQuiz(payload).unwrap()
+      // toast.success('Quiz created successfully')
+      // if (isCreated) {
+      //   form.reset()
+      //   router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
+      // }
     }
   })
   return (

@@ -1,6 +1,6 @@
 export type Question = {
   id: number
-  questionType: string
+  questionType: QuestionType
   content: string
   orderIndex: number
   answerExplanation: string
@@ -12,4 +12,10 @@ export type Answer = {
   id: number
   content: string
   isCorrect: boolean
+}
+
+export enum QuestionType {
+  SINGLE_CHOICE = 'SingleChoice',
+  MULTIPLE_CHOICE = 'MultipleChoice',
+  TRUE_FALSE = 'TrueFalse'
 }

@@ -3,7 +3,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
   reducerPath: 'quizApi',
-  tagTypes: ['Quiz'],
+  tagTypes: ['Quiz', 'QuizQuestions'],
   baseUrl: '/quizzes'
 })
 

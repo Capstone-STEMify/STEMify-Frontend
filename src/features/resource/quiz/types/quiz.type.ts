@@ -1,24 +1,5 @@
+import { Question } from '@/features/resource/question/types/question.type'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
-
-export type Answer = {
-  id: number
-  questionId: number
-  content: string
-  isCorrect: boolean
-}
-
-export type Question = {
-  id: number
-  quizId: number
-  questionTypeId: number
-  name: string
-  fileUrl?: string
-  description?: string
-  answerExplanation?: string
-  point: number
-  orderIndex: number
-  answers: Answer[]
-}
 
 export type Quiz = {
   id: number
@@ -34,4 +15,6 @@ export type Quiz = {
   questions: Question[]
 }
 
-export type QuizQueryParams = {} & SearchPaginatedRequestParams
+export type QuizQueryParams = {
+  sectionId?: number
+} & SearchPaginatedRequestParams
