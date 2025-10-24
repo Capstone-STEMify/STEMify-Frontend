@@ -25,6 +25,7 @@ import { contactApi } from '@/features/contact/api/contactApi'
 import { contractApi } from '@/features/contract/api/contractApi'
 import { jobRoleApi } from '@/features/job-role/api/jobRoleApi'
 import { quizApi } from '@/features/resource/quiz/api/quizApi'
+import { emulatorApi } from '@/features/emulator/api/emulatorApi'
 
 export const apiMiddlewares: Middleware[] = [
   courseApi.middleware,
@@ -52,7 +53,8 @@ export const apiMiddlewares: Middleware[] = [
   contactApi.middleware,
   contractApi.middleware,
   jobRoleApi.middleware,
-  quizApi.middleware
+  quizApi.middleware,
+  emulatorApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]

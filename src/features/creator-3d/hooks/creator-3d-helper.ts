@@ -274,59 +274,6 @@ export function exportAssembly(
     ...(a.type === 'rotate_highlight' && { rotationSpeed: a.rotationSpeed })
   }))
 
-  // const steps = exportedActions.map((a) => {
-  //   if (a.type === 'highlight') {
-  //     return {
-  //       actionId: a.id,
-  //       title: `Highlight: ${a.name}`,
-  //       description: `Highlights targets: ${
-  //         Array.isArray(a.targets) ? a.targets.join(', ') : a.targets === 'all' ? 'all' : ''
-  //       }`,
-  //       expectedResult: 'Targets are highlighted',
-  //       hints: ['Notice the highlighted components']
-  //     }
-  //   }
-
-  //   if (a.type === 'transform_arm') {
-  //     return {
-  //       actionId: a.id,
-  //       title: `Adjust Arms: ${a.name}`,
-  //       description: 'Connector arms should rotate as exported',
-  //       expectedResult: 'Arms are rotated according to saved values',
-  //       hints: ['Check connector arms rotations']
-  //     }
-  //   }
-
-  //   if (a.type === 'rotate_highlight') {
-  //     return {
-  //       actionId: a.id,
-  //       title: `Rotate Highlight: ${a.name}`,
-  //       description: 'Rotates while highlighting',
-  //       expectedResult: 'Rotation + highlight effect works',
-  //       hints: ['Observe the spinning highlight']
-  //     }
-  //   }
-
-  //   return {
-  //     actionId: a.id,
-  //     title: a.name,
-  //     description: 'Run this action',
-  //     expectedResult: 'Effect is applied',
-  //     hints: []
-  //   }
-  // })
-
-  // const activities = [
-  //   {
-  //     id: 'custom_assembly',
-  //     name: metadata.title,
-  //     description: metadata.description,
-  //     difficulty: 'beginner',
-  //     estimatedTime: 600,
-  //     steps
-  //   }
-  // ]
-
   const exportedActivities = activities.map((activity) => ({
     id: activity.id,
     name: activity.name,

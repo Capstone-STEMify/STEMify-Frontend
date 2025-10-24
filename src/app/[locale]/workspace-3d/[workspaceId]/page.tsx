@@ -3,8 +3,23 @@
 import { Suspense } from 'react'
 import Creator3DHeader from '@/features/creator-3d/components/creator3d/Creator3DHeader'
 import Creator3D from '@/features/creator-3d/components/creator3d/Creator3D'
+import { useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi'
 
 export default function Create3DPage() {
+  const { data: emulatorData, isLoading: isLoadingEmulator } = useGetEmulatorByIdQuery(
+    {
+      emulatorId: 'emu_9269bc591432'
+    },
+    {
+      refetchOnFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMountOrArgChange: false,
+      skip: false
+    }
+  )
+
+  if (isLoadingEmulator || !emulatorData) return <div>Loading...</div>
+
   return (
     <div className='flex h-screen w-screen flex-col overflow-hidden bg-gray-50'>
       <Creator3DHeader />
@@ -20,7 +35,7 @@ export default function Create3DPage() {
             </div>
           }
         >
-          <Creator3D />
+          <Creator3D emulatorData={emulatorData} />
         </Suspense>
       </div>
     </div>

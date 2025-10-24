@@ -55,6 +55,7 @@ import { jobRoleApi } from '@/features/job-role/api/jobRoleApi'
 import { planSlice } from '@/features/plan/slice/planProductSlice'
 import { quizApi } from '@/features/resource/quiz/api/quizApi'
 import { questionSlice } from '@/features/resource/question/slice/questionSlice'
+import { emulatorApi } from '@/features/emulator/api/emulatorApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -115,5 +116,6 @@ export const rootReducer = combineReducers({
   [contactApi.reducerPath]: contactApi.reducer,
   [contractApi.reducerPath]: contractApi.reducer,
   [jobRoleApi.reducerPath]: jobRoleApi.reducer,
-  [quizApi.reducerPath]: quizApi.reducer
+  [quizApi.reducerPath]: quizApi.reducer,
+  [emulatorApi.reducerPath]: emulatorApi.reducer
 })

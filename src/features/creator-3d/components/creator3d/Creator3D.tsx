@@ -26,8 +26,15 @@ import { toast } from 'sonner'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
+import { useCreateEmulatorMutation, useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi'
+import { ApiSuccessResponse } from '@/types/baseModel'
+import { Emulator } from '@/features/emulator/types/emulator.type'
+import { useGLTF } from '@react-three/drei'
+type Creator3DProps = {
+  emulatorData: ApiSuccessResponse<Emulator> | undefined
+}
 
-export default function Creator3D() {
+export default function Creator3D({ emulatorData }: Creator3DProps) {
   const { workspaceId } = useParams() as { workspaceId: string }
   const t3d = useTranslations('creator3D.main_content')
   const dispatch = useAppDispatch()
@@ -36,7 +43,10 @@ export default function Creator3D() {
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
   const actions = useAppSelector((s) => s.workspaceTree.actions)
+
+  const [createEmulator, { isLoading: isCreating }] = useCreateEmulatorMutation()
   const prevInstanceIds = useRef<string[]>([])
+
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
       addObject(template, { x: 0, y: 0, z: 0 })
@@ -90,39 +100,52 @@ export default function Creator3D() {
     try {
       toast.info('💾 Đang lưu thay đổi vào Supabase...')
 
-      const { data: existing, error: fetchError } = await supabase
-        .from('assembly_data')
-        .select('id, name, description, author')
-        .eq('id', workspaceId)
-        .single()
+      // const { data: existing, error: fetchError } = await supabase
+      //   .from('assembly_data')
+      //   .select('id, name, description, author')
+      //   .eq('id', workspaceId)
+      //   .single()
 
-      if (fetchError || !existing) {
-        toast.error('Không tìm thấy assembly để lưu.')
-        return
-      }
+      // if (fetchError || !existing) {
+      //   toast.error('Không tìm thấy assembly để lưu.')
+      //   return
+      // }
+
+      const existing = emulatorData!.data
 
       // ⚙️ Export lại dữ liệu mới (scene + actions + instances)
       const exportData = exportAssemblyFn({
-        title: existing.name,
-        description: existing.description,
-        author: existing.author
+        title: `Assembly ${workspaceId}`,
+        description: 'Exported from workspace',
+        author: 'STEMify User'
       })
 
-      // ⚙️ Cập nhật bản ghi
-      const { error: updateError } = await supabase
-        .from('assembly_data')
-        .update({
-          data: exportData,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', workspaceId)
+      const res = await createEmulator({
+        body: {
+          name: `Emulator for ${existing.name}`,
+          description: `Emulator created for assembly ${existing.name}`,
+          visibility: 'private',
+          definition_json: JSON.stringify(exportData)
+        }
+      })
 
-      if (updateError) {
-        console.error('Supabase update error:', updateError)
-        toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
-      } else {
-        toast.success('✅ Đã lưu thay đổi vào Supabase!')
-      }
+      console.log('Emulator creation response:', res)
+
+      // ⚙️ Cập nhật bản ghi
+      // const { error: updateError } = await supabase
+      //   .from('assembly_data')
+      //   .update({
+      //     data: exportData,
+      //     updated_at: new Date().toISOString()
+      //   })
+      //   .eq('id', workspaceId)
+
+      // if (updateError) {
+      //   console.error('Supabase update error:', updateError)
+      //   toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
+      // } else {
+      //   toast.success('✅ Đã lưu thay đổi vào Supabase!')
+      // }
     } catch (err) {
       console.error(err)
       toast.error('Lỗi không xác định khi lưu dữ liệu.')
@@ -140,15 +163,17 @@ export default function Creator3D() {
   const handleImportAssembly = useCallback(
     async (id: string) => {
       try {
-        toast.info(t3d('importing_assembly'))
-
-        const res = await fetch(`/api/assemblies/${id}`)
-        if (!res.ok) throw new Error('Không thể tải dữ liệu từ Supabase')
-        const data = await res.json()
-        if (!data) throw new Error('Dữ liệu assembly không hợp lệ')
-
         dispatch(clearScene())
         dispatch(clearAction())
+
+        if (!emulatorData) {
+          toast.warning('Đang tải emulator...')
+          return
+        }
+
+        const existing = emulatorData.data
+        const data = existing.definitionJson ? JSON.parse(existing.definitionJson) : null
+        if (!data) throw new Error('Dữ liệu assembly không hợp lệ')
 
         const allInstances: AssemblyInstance[] = []
 
@@ -156,7 +181,7 @@ export default function Creator3D() {
         // 🔹 Helper: Load Template by ID
         // ================================
         const loadTemplateById = async (templateId: string) => {
-          const template = data.templates.components.find((t: any) => t.id === templateId)
+          const template = data.templates.components.find((t: any) => t.id === templateId || t._id === templateId)
           if (!template) throw new Error(`Không tìm thấy templateId: ${templateId}`)
           const res = await fetch(template.source)
           if (!res.ok) throw new Error(`Không tải được file template: ${template.source}`)
@@ -282,6 +307,7 @@ export default function Creator3D() {
         // ================================
         // 🔹 Restore Actions
         // ================================
+        dispatch(clearAction())
         if (Array.isArray(data.actions)) {
           for (const act of data.actions) {
             dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
@@ -361,7 +387,7 @@ export default function Creator3D() {
         toast.error(err.message || t3d('export_error'))
       }
     },
-    [dispatch]
+    [dispatch, emulatorData]
   )
 
   useEffect(() => {

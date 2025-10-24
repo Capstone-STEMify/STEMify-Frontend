@@ -1,5 +1,10 @@
 'use client'
 
+useGLTF.preload('/models/connector_1leg.glb')
+useGLTF.preload('/models/connector_2legs.glb')
+useGLTF.preload('/models/connector_3legs.glb')
+useGLTF.preload('/models/connector_5legs.glb')
+
 import { Canvas } from '@react-three/fiber'
 import { useRef, useCallback, useState, useEffect } from 'react'
 import { CreatorToolbar } from '@/features/creator-3d/components/creator-workspace/CreatorToolbar'
@@ -15,6 +20,7 @@ import {
   setSelectedId
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { syncRedo, syncUndo } from '@/features/creator-3d/slice/createSceneThunk'
+import { useGLTF } from '@react-three/drei'
 
 interface CreatorWorkspaceProps {
   onObjectSelect: (objectId: string | null) => void
