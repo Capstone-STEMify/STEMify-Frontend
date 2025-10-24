@@ -16,6 +16,7 @@ import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/features
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 import SSelect from '@/components/shared/SSelect'
+import BackButton from '@/components/shared/button/BackButton'
 
 export default function QuestionEditor() {
   const dispatch = useAppDispatch()
@@ -110,6 +111,7 @@ export default function QuestionEditor() {
       {/* Header */}
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
+          <BackButton />
           <SSelect
             options={[
               { label: 'Single Choice', value: QuestionType.SINGLE_CHOICE },

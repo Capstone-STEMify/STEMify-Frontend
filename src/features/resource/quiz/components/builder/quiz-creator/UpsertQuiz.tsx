@@ -5,7 +5,7 @@ import BackButton from '@/components/shared/button/BackButton'
 import { useModal } from '@/providers/ModalProvider'
 import z from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
-import { useCreateQuizMutation, useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
+import { useCreateQuizMutation, useGetQuizByIdQuery, useUpdateQuizMutation } from '@/features/resource/quiz/api/quizApi'
 import { toast } from 'sonner'
 import { useParams, useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
@@ -36,7 +36,7 @@ const defaultQuizFormData: QuizFormData = {
 
 export default function UpsertQuiz() {
   const { openModal } = useModal()
-  const { sectionId, quizId } = useParams()
+  const { lessonId, sectionId, quizId } = useParams()
   const isEditing = !!quizId
 
   const router = useRouter()
@@ -53,6 +53,7 @@ export default function UpsertQuiz() {
   const { data: quizData } = useGetQuizByIdQuery(Number(quizId), { skip: !isEditing })
 
   const [createQuiz, { isLoading: isCreating, isSuccess: isCreated }] = useCreateQuizMutation()
+  const [updateQuiz, { isLoading: isUpdating, isSuccess: isUpdated }] = useUpdateQuizMutation()
 
   const form = useAppForm({
     defaultValues: defaultQuizFormData,
@@ -63,17 +64,25 @@ export default function UpsertQuiz() {
         sectionId: Number(sectionId),
         contentType: ContentType.QUIZ
       }
-      console.log('Creating quiz with payload:', payload)
-      // router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
 
-      // await createQuiz(payload).unwrap()
-      // toast.success('Quiz created successfully')
-      // if (isCreated) {
-      //   form.reset()
-      //   router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
-      // }
+      if (isEditing) {
+        const res = await updateQuiz({ id: Number(quizId), body: payload }).unwrap()
+        if (isUpdated) {
+          toast.success('Quiz updated successfully')
+        }
+      } else {
+        const res = await createQuiz(payload).unwrap()
+        toast.success('Quiz created successfully')
+        if (isCreated) {
+          router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${res.data.id}/question`)
+        }
+      }
     }
   })
+
+  const handleMoveToQuestions = () => {
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
+  }
 
   useEffect(() => {
     if (isEditing && quizData?.data) {
@@ -102,12 +111,23 @@ export default function UpsertQuiz() {
         <BackButton />
         <h1 className='text-xl font-semibold'>Create new Quiz</h1>
         <div className='space-x-2'>
-          <Button className='bg-blue-600 px-6 text-white hover:bg-blue-700' onClick={() => openModal('quizAI')}>
+          <Button
+            type='button'
+            className='bg-blue-600 px-6 text-white hover:bg-blue-700'
+            onClick={() => openModal('quizAI')}
+          >
             Create with AI
           </Button>
           <form.AppForm>
-            <form.SubmitButton loading={isCreating}>Create Quiz</form.SubmitButton>
+            <form.SubmitButton loading={isCreating || isUpdating}>
+              {isEditing ? 'Update Quiz' : 'Create Quiz'}
+            </form.SubmitButton>
           </form.AppForm>
+          {isEditing && (
+            <Button type='button' onClick={handleMoveToQuestions}>
+              Move to questions
+            </Button>
+          )}
         </div>
       </div>
       <div className='space-y-3'>

@@ -3,7 +3,7 @@
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
 import { SortableItem } from './SortableItem'
-import { Plus } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { Question, QuestionType } from '@/features/resource/question/types/question.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { addQuestion, selectQuestion, reorderQuestions } from '@/features/resource/question/slice/questionSlice'
@@ -82,7 +82,15 @@ export default function QuestionSidebar() {
                       : 'bg-secondary hover:bg-secondary/80 text-foreground'
                   }`}
                 >
-                  <div className='font-semibold'>Q{index + 1}</div>
+                  <div className='flex items-center justify-between'>
+                    <div className='font-semibold'>Q{index + 1}</div>
+                    <Button
+                      variant={'ghost'}
+                      className={`${selectedQuestionId === question.id ? 'text-primary-foreground' : 'text-foreground/70'} p-0`}
+                    >
+                      <Trash2 size={17} className='text-red-500' />
+                    </Button>
+                  </div>
                   <div className='truncate text-sm'>{question.content}</div>
                   <div className='text-xs opacity-70'>{getTypeDisplayName(question.questionType)}</div>
                 </button>

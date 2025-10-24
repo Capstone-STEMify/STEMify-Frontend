@@ -1,18 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import QuestionSidebar from './QuestionSidebar'
 import QuestionEditor from './QuestionEditor'
-import { Question, QuestionType } from '@/features/resource/question/types/question.type'
-import { useGetQuizByIdQuery, useSearchQuizQuery } from '@/features/resource/quiz/api/quizApi'
+import { useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { useParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import {
-  reorderQuestions,
-  selectQuestion,
-  setQuestions,
-  updateQuestion
-} from '@/features/resource/question/slice/questionSlice'
+import { selectQuestion, setQuestions } from '@/features/resource/question/slice/questionSlice'
 
 export default function UpsertQuestion() {
   const { quizId } = useParams()
