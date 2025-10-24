@@ -20,7 +20,7 @@ export function QuickStatsGrid() {
           <CardContent className='p-4'>
             <div className='flex items-center justify-between'>
               <div className={`rounded-lg p-2 ${stat.bgColor}`}>
-                <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                <stat.icon className={`h-4 w-4 ${stat.color}`} />
               </div>
               <div className='h-10 w-20'>
                 <ResponsiveContainer width='100%' height='100%'>
