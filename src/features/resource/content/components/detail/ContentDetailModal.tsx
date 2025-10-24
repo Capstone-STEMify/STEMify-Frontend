@@ -29,13 +29,13 @@ export default function ContentDetailModal({ sectionId }: ContentDetailModalProp
     } else if (contentData.data.items[0].contentType === ContentType.TEXT) {
       router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentData.data.items[0].id}`)
     } else if (contentData.data.items[0].contentType === ContentType.QUIZ) {
-      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${contentData.data.items[0].id}`)
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${contentData.data.items[0].quizId}`)
     }
   }
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className=''>
+      <DialogContent>
         <DialogTitle className='flex items-center justify-between'>
           <div>{t('detail.title')}</div>
           <div className='mr-5'>

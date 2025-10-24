@@ -12,9 +12,10 @@ import { SortableItem } from '@/features/resource/question/components/upsert/Sor
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { questionSlice, updateQuestion } from '@/features/resource/question/slice/questionSlice'
 import { Button } from '@/components/shadcn/button'
-import { useCreateQuestionMutation } from '@/features/resource/question/api/questionApi'
+import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/features/resource/question/api/questionApi'
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
+import SSelect from '@/components/shared/SSelect'
 
 export default function QuestionEditor() {
   const dispatch = useAppDispatch()
@@ -22,6 +23,7 @@ export default function QuestionEditor() {
   const { questions, selectedQuestionId } = useAppSelector((state) => state.question)
   const question = questions.find((q) => q.id === selectedQuestionId)
   const [createQuestion, { isLoading, isSuccess }] = useCreateQuestionMutation()
+  const [updateQuestionApi] = useUpdateQuestionMutation()
   const [newAnswerText, setNewAnswerText] = useState('')
   const [answers, setAnswers] = useState<Answer[]>(question?.answers || [])
 
@@ -83,9 +85,23 @@ export default function QuestionEditor() {
   }
 
   const handleSaveChanges = async () => {
-    await createQuestion({ quizId: Number(quizId), questions: questions })
-    if (isSuccess) {
-      toast.success('Questions saved successfully')
+    // 🔹 Chuẩn hóa dữ liệu: xóa `id` nếu là câu hỏi mới
+    const cleanedQuestions = questions.map((q) => {
+      const clone = { ...q }
+      if (!clone.id) delete (clone as any).id
+      return clone
+    })
+
+    try {
+      if (questions.every((q) => !q.id)) {
+        await createQuestion({ quizId: Number(quizId), questions: cleanedQuestions })
+        toast.success('Quiz created successfully')
+      } else {
+        await updateQuestionApi({ quizId: Number(quizId), questions: cleanedQuestions })
+        toast.success('Quiz updated successfully')
+      }
+    } catch (error) {
+      toast.error('Failed to save questions')
     }
   }
 
@@ -94,15 +110,16 @@ export default function QuestionEditor() {
       {/* Header */}
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
-          <select
+          <SSelect
+            options={[
+              { label: 'Single Choice', value: QuestionType.SINGLE_CHOICE },
+              { label: 'Multiple Choice', value: QuestionType.MULTIPLE_CHOICE },
+              { label: 'True/False', value: QuestionType.TRUE_FALSE }
+            ]}
+            placeholder='Select question type'
             value={question.questionType}
-            onChange={(e) => handleTypeChange(e.target.value as QuestionType)}
-            className='bg-primary/10 text-primary rounded-lg border px-4 py-2 font-medium'
-          >
-            <option value='SingleChoice'>Single Choice</option>
-            <option value='MultipleChoice'>Multiple Choice</option>
-            <option value='TrueFalse'>True/False</option>
-          </select>
+            onChange={(value) => handleTypeChange(value as QuestionType)}
+          />
 
           <div className='flex items-center gap-3'>
             <Label htmlFor='points'>Points:</Label>

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ChevronRight, Settings, PanelLeft } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
-import QuizCreate from '@/features/resource/quiz/components/builder/quiz-creator/QuizCreator'
+import UpsertQuiz from '@/features/resource/quiz/components/builder/quiz-creator/UpsertQuiz'
 import QuizSettings from '@/features/resource/quiz/components/builder/quiz-creator/QuizSettingsSidebar'
 import { Sheet, SheetContent, SheetTitle } from '@/components/shadcn/sheet'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -28,7 +28,7 @@ export default function QuizCreationLayout() {
           </Button>
         )}
 
-        <QuizCreate />
+        <UpsertQuiz />
       </div>
 
       {!isMobile && (

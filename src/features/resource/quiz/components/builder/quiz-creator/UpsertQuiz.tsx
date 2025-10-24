@@ -5,10 +5,12 @@ import BackButton from '@/components/shared/button/BackButton'
 import { useModal } from '@/providers/ModalProvider'
 import z from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
-import { useCreateQuizMutation } from '@/features/resource/quiz/api/quizApi'
+import { useCreateQuizMutation, useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { toast } from 'sonner'
 import { useParams, useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import { ContentType } from '@/features/resource/content/types/content.type'
+import { useEffect } from 'react'
 
 type QuizFormData = {
   title: string
@@ -32,9 +34,11 @@ const defaultQuizFormData: QuizFormData = {
   // sectionId: 0
 }
 
-export default function QuizCreate() {
+export default function UpsertQuiz() {
   const { openModal } = useModal()
-  const { lessonId, sectionId, quizId } = useParams()
+  const { sectionId, quizId } = useParams()
+  const isEditing = !!quizId
+
   const router = useRouter()
   const locale = useLocale()
   const quizSchema = z.object({
@@ -46,19 +50,21 @@ export default function QuizCreate() {
     timeLimitMinutes: z.number().min(1, 'Time limit must be at least 1 minute').optional()
   })
 
+  const { data: quizData } = useGetQuizByIdQuery(Number(quizId), { skip: !isEditing })
+
   const [createQuiz, { isLoading: isCreating, isSuccess: isCreated }] = useCreateQuizMutation()
 
   const form = useAppForm({
     defaultValues: defaultQuizFormData,
-    // validators: { onChange: quizSchema },
+    validators: { onChange: quizSchema },
     onSubmit: async ({ value }) => {
       const payload = {
         ...value,
         sectionId: Number(sectionId),
-        contentType: 'Quiz'
+        contentType: ContentType.QUIZ
       }
       console.log('Creating quiz with payload:', payload)
-      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
+      // router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
 
       // await createQuiz(payload).unwrap()
       // toast.success('Quiz created successfully')
@@ -68,9 +74,24 @@ export default function QuizCreate() {
       // }
     }
   })
+
+  useEffect(() => {
+    if (isEditing && quizData?.data) {
+      const q = quizData.data
+      form.reset({
+        title: q.title,
+        description: q.description,
+        totalMarks: q.totalMarks,
+        passingMarks: q.passingMarks,
+        durationDays: q.durationDays,
+        timeLimitMinutes: q.timeLimitMinutes || undefined
+      })
+    }
+  }, [isEditing, quizData, form])
+
   return (
     <form
-      className='mx-auto px-10'
+      className='px-10'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
@@ -89,7 +110,6 @@ export default function QuizCreate() {
           </form.AppForm>
         </div>
       </div>
-
       <div className='space-y-3'>
         <div className='grid grid-cols-1 gap-5 md:grid-cols-2'>
           <form.AppField

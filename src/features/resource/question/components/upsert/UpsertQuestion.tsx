@@ -32,7 +32,7 @@ export default function UpsertQuestion() {
   if (isError) return <p className='p-4 text-red-500'>Failed to load quiz</p>
 
   return (
-    <div className='flex h-screen'>
+    <div className='flex h-[90vh]'>
       <QuestionSidebar />
       <main className='flex-1 overflow-auto'>
         <QuestionEditor />

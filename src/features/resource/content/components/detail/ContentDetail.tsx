@@ -2,7 +2,7 @@ import { Button } from '@/components/shadcn/button'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import TiptapViewer from '@/components/tiptap/TiptapViewer'
 import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
-import { ContentType } from '@/features/resource/content/types/content.type'
+import { ContentType, QuizContent } from '@/features/resource/content/types/content.type'
 import { useSearchQuizQuery } from '@/features/resource/quiz/api/quizApi'
 import QuizViewer from '@/features/resource/quiz/components/builder/view/QuizViewer'
 import { useModal } from '@/providers/ModalProvider'
@@ -20,7 +20,7 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
   const t = useTranslations('content')
   const { data: contentData, isLoading } = useSearchContentQuery({ sectionId })
   // const { data: quizData } = useSearchQuizQuery({ sectionId })
-  const { closeModal } = useModal()
+  const { closeModal, openModal } = useModal()
   const router = useRouter()
   const locale = useLocale()
 
@@ -31,7 +31,7 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
 
   const handleCreateQuiz = () => {
     closeModal()
-    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${contentData?.data.items[0].id}`)
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz`)
   }
 
   if (isLoading)

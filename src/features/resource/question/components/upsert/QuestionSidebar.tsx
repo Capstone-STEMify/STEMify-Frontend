@@ -29,8 +29,9 @@ export default function QuestionSidebar() {
   }
 
   const handleAddQuestion = () => {
+    const tempId = -(questions.length + 1)
     const newQuestion: Question = {
-      id: Date.now(),
+      id: tempId,
       questionType: QuestionType.SINGLE_CHOICE,
       content: 'New question',
       orderIndex: questions.length + 1,
