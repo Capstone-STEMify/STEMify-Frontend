@@ -46,7 +46,6 @@ import { curriculumEnrollmentSlice } from '@/features/enrollment/slice/curriculu
 import { chatAgentApi } from '@/features/chat/api/chatAgentApi'
 import { certificateApi } from '@/features/certificate/api/certificateApi'
 import { cartApi } from '@/features/cart/api/cartApi'
-import { quizBuilderSlice } from '@/features/resource/quiz/slice/quiz-builder-slice'
 import { quizPlayerSlice } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { contactSlice } from '@/features/contact/slice/contactSlice'
 import { contactApi } from '@/features/contact/api/contactApi'
@@ -85,7 +84,6 @@ export const rootReducer = combineReducers({
   plan: planSlice.reducer,
   workspaceTree: workspaceTreeSlice.reducer,
   component: componentSlice.reducer,
-  quizBuilder: quizBuilderSlice.reducer,
   quizPlayer: quizPlayerSlice.reducer,
   contact: contactSlice.reducer,
   contract: contractSlice.reducer,

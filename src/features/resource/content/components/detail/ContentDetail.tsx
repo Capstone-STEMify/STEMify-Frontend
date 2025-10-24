@@ -4,6 +4,7 @@ import TiptapViewer from '@/components/tiptap/TiptapViewer'
 import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
 import { ContentType } from '@/features/resource/content/types/content.type'
 import { useSearchQuizQuery } from '@/features/resource/quiz/api/quizApi'
+import QuizViewer from '@/features/resource/quiz/components/builder/view/QuizViewer'
 import { useModal } from '@/providers/ModalProvider'
 import { normalizeMarkdown } from '@/utils/index'
 import { BookPlus, FilePlus } from 'lucide-react'
@@ -39,7 +40,7 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
         <LoadingComponent size={150} />
       </div>
     )
-  if (!contentData?.data?.items?.length)
+  if (!contentData?.data?.items?.length || !contentData)
     return (
       <div className='flex flex-col items-center justify-center space-y-4 rounded-2xl border bg-gray-50 py-10 text-center'>
         <h3 className='text-lg font-semibold text-gray-800'>{t('detail.noData')}</h3>
@@ -59,10 +60,10 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
 
   return (
     <div>
-      {contentData?.data.items[0].contentType === ContentType.TEXT ? (
+      {contentData.data.items[0].contentType === ContentType.TEXT ? (
         <TiptapViewer content={normalizeMarkdown(contentData?.data.items[0].contentBody)} />
       ) : (
-        <div></div>
+        <QuizViewer quiz={contentData.data.items[0]} />
       )}
     </div>
   )

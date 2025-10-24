@@ -15,7 +15,6 @@ export const questionSlice = createSlice({
   name: 'question',
   initialState,
   reducers: {
-    // 👉 Chọn câu hỏi
     selectQuestion: (state, action: PayloadAction<number | null>) => {
       state.selectedQuestionId = action.payload
     },
@@ -23,13 +22,11 @@ export const questionSlice = createSlice({
     setQuestions: (state, action: PayloadAction<Question[]>) => {
       state.questions = action.payload
     },
-    // 👉 Thêm câu hỏi mới
     addQuestion: (state, action: PayloadAction<Question>) => {
       const nextOrder = state.questions.length + 1
       state.questions.push({ ...action.payload, orderIndex: nextOrder })
     },
 
-    // 👉 Cập nhật câu hỏi
     updateQuestion: (state, action: PayloadAction<{ id: number; updates: Partial<Question> }>) => {
       const { id, updates } = action.payload
       const index = state.questions.findIndex((q) => q.id === id)
@@ -38,7 +35,6 @@ export const questionSlice = createSlice({
       }
     },
 
-    // 👉 Xóa câu hỏi
     deleteQuestion: (state, action: PayloadAction<number>) => {
       state.questions = state.questions.filter((q) => q.id !== action.payload)
       if (state.selectedQuestionId === action.payload) {

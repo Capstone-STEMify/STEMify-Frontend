@@ -1,21 +1,37 @@
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
-export type Content = {
+export enum ContentType {
+  TEXT = 'Text',
+  QUIZ = 'Quiz'
+}
+
+export type BaseContent = {
   id: number
   contentType: ContentType
   contentBody: string
-  fileName: string
-  fileUrl: string
-  uploadDate: string
+  fileName?: string
+  fileUrl?: string
+  uploadDate?: string
   status: string
   sectionId: number
 }
 
-export enum ContentType {
-  TEXT = 'TEXT',
-  QUIZ = 'QUIZ'
+export type TextContent = BaseContent & {
+  contentType: ContentType.TEXT
 }
+
+export type QuizContent = BaseContent & {
+  contentType: ContentType.QUIZ
+  quizTitle: string
+  quizDescription: string
+  totalMarks: number
+  passingMarks: number
+  timeLimitInMinutes: number
+  quizId: number
+}
+
+export type Content = TextContent | QuizContent
 
 export type ContentQueryParams = {
   contentType?: ContentType

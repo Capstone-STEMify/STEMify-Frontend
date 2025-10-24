@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
 import ContentDetail from '@/features/resource/content/components/detail/ContentDetail'
+import { ContentType } from '@/features/resource/content/types/content.type'
 import { useModal } from '@/providers/ModalProvider'
 import { useLocale, useTranslations } from 'next-intl'
 import { useParams, useRouter } from 'next/navigation'
@@ -25,8 +26,10 @@ export default function ContentDetailModal({ sectionId }: ContentDetailModalProp
     closeModal()
     if (!contentData?.data?.items?.length) {
       router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}`)
-    } else {
+    } else if (contentData.data.items[0].contentType === ContentType.TEXT) {
       router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentData.data.items[0].id}`)
+    } else if (contentData.data.items[0].contentType === ContentType.QUIZ) {
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${contentData.data.items[0].id}`)
     }
   }
 
