@@ -1,35 +1,56 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import QuestionSidebar from './QuestionSidebar'
 import QuestionEditor from './QuestionEditor'
 import { useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { useParams } from 'next/navigation'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { selectQuestion, setQuestions } from '@/features/resource/question/slice/questionSlice'
+import { Question } from '@/features/resource/question/types/question.type'
 
 export default function UpsertQuestion() {
-  const { quizId } = useParams()
-  const { data, isLoading, isError } = useGetQuizByIdQuery(Number(quizId))
-  const { selectedQuestionId } = useAppSelector((state) => state.question)
-  const dispatch = useAppDispatch()
+  const params = useParams()
+  const quizId = Number(params.quizId) || 0 // ép kiểu sang number
+  const { data, isLoading, isError } = useGetQuizByIdQuery(quizId)
+
+  const [questionsByQuiz, setQuestionsByQuiz] = useState<Record<number, Question[]>>({})
+  const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(null)
+
   useEffect(() => {
     if (data?.data?.questions) {
-      dispatch(setQuestions(data.data.questions))
-      if (!selectedQuestionId && data.data.questions.length > 0) {
-        dispatch(selectQuestion(data.data.questions[0].id))
+      setQuestionsByQuiz((prev) => ({
+        ...prev,
+        [quizId]: data.data.questions
+      }))
+      if (data.data.questions.length > 0) {
+        setSelectedQuestionId(data.data.questions[0].id)
       }
     }
-  }, [data])
+  }, [data, quizId])
 
   if (isLoading) return <p className='p-4'>Loading questions...</p>
   if (isError) return <p className='p-4 text-red-500'>Failed to load quiz</p>
 
   return (
     <div className='flex h-[90vh]'>
-      <QuestionSidebar />
+      <QuestionSidebar
+        questions={questionsByQuiz[quizId] || []}
+        setQuestions={(newQs) => setQuestionsByQuiz((prev) => ({ ...prev, [quizId]: newQs }))}
+        selectedQuestionId={selectedQuestionId}
+        setSelectedQuestionId={setSelectedQuestionId}
+      />
+
       <main className='flex-1 overflow-auto'>
-        <QuestionEditor />
+        <QuestionEditor
+          quizId={quizId}
+          questions={questionsByQuiz[quizId] || []}
+          setQuestions={(newQs) =>
+            setQuestionsByQuiz((prev) => ({
+              ...prev,
+              [quizId]: typeof newQs === 'function' ? newQs(prev[quizId] || []) : newQs
+            }))
+          }
+          selectedQuestionId={selectedQuestionId}
+        />
       </main>
     </div>
   )

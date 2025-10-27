@@ -23,7 +23,7 @@ export default function BackButton({ url, onClick, className }: Props) {
   }
 
   return (
-    <Button onClick={onClick || goBack} variant='secondary' className={`cursor-pointer ${className}`}>
+    <Button type='button' onClick={onClick || goBack} variant='secondary' className={`cursor-pointer ${className}`}>
       <ChevronLeft className='link text-gray-600 hover:text-black' />
     </Button>
   )
