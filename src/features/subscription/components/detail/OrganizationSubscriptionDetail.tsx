@@ -26,6 +26,7 @@ import SEmpty from '@/components/shared/empty/SEmpty'
 import { useEffect } from 'react'
 import { SCard } from '@/components/shared/card/SCard'
 import CardLayout from '@/components/shared/card/CardLayout'
+import LicenseAssignmentList from '@/features/license-assignment/components/list/licenseAssignmentList'
 
 export default function OrganizationSubscriptionDetail() {
   const { openModal } = useModal()
@@ -248,104 +249,7 @@ export default function OrganizationSubscriptionDetail() {
         </div>
 
         {/* Users Section */}
-        <Card className='py-4 shadow-lg'>
-          <CardHeader>
-            <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-              <div>
-                <CardTitle className='text-xl'>User Management</CardTitle>
-                <p className='text-muted-foreground mt-1 text-sm'>Manage users and pending invitations</p>
-              </div>
-              <Button className='bg-blue-600 hover:bg-blue-700' onClick={() => openModal('uploadCSV')}>
-                <UserPlus className='mr-2 h-4 w-4' />
-                Invite Users
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className='space-y-6'>
-            {/* Search and Tabs */}
-            <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-              <div className='relative flex-1 sm:max-w-sm'>
-                <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
-                <Input placeholder='Search users...' className='pl-9' />
-              </div>
-              <div className='flex gap-2'>
-                <Badge variant='default' className='cursor-pointer px-4 py-1.5'>
-                  Users
-                </Badge>
-                <Badge variant='secondary' className='cursor-pointer px-4 py-1.5'>
-                  Pending Invites
-                </Badge>
-              </div>
-            </div>
-
-            {/* Table */}
-            <div className='overflow-hidden rounded-lg'>
-              <div className='overflow-x-auto'>
-                <table className='w-full'>
-                  <thead className='bg-muted/50'>
-                    <tr>
-                      <th className='text-muted-foreground px-6 py-3 text-left text-xs font-medium tracking-wider uppercase'>
-                        Name
-                      </th>
-                      <th className='text-muted-foreground px-6 py-3 text-left text-xs font-medium tracking-wider uppercase'>
-                        Email
-                      </th>
-                      <th className='text-muted-foreground px-6 py-3 text-left text-xs font-medium tracking-wider uppercase'>
-                        Status
-                      </th>
-                      <th className='text-muted-foreground px-6 py-3 text-left text-xs font-medium tracking-wider uppercase'>
-                        Account Type
-                      </th>
-                      <th className='text-muted-foreground px-6 py-3 text-left text-xs font-medium tracking-wider uppercase'>
-                        Date Added
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className='divide-y bg-white'>
-                    <tr className='hover:bg-muted/50 transition-colors'>
-                      <td className='px-6 py-4 whitespace-nowrap'>
-                        <div className='flex items-center gap-3'>
-                          <div className='flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-600'>
-                            R
-                          </div>
-                          <span className='font-medium'>Rosie</span>
-                        </div>
-                      </td>
-                      <td className='text-muted-foreground px-6 py-4 text-sm whitespace-nowrap'>rosie91@fpt.edu.vn</td>
-                      <td className='px-6 py-4 whitespace-nowrap'>
-                        <Badge variant='outline' className='-emerald-200 bg-emerald-50 text-emerald-700'>
-                          <CheckCircle className='mr-1 h-3 w-3' />
-                          Active
-                        </Badge>
-                      </td>
-                      <td className='px-6 py-4 text-sm whitespace-nowrap'>Student</td>
-                      <td className='text-muted-foreground px-6 py-4 text-sm whitespace-nowrap'>Jan 09, 2025</td>
-                    </tr>
-                    <tr className='hover:bg-muted/50 transition-colors'>
-                      <td className='px-6 py-4 whitespace-nowrap'>
-                        <div className='flex items-center gap-3'>
-                          <div className='flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 font-semibold text-purple-600'>
-                            L
-                          </div>
-                          <span className='font-medium'>Leo</span>
-                        </div>
-                      </td>
-                      <td className='text-muted-foreground px-6 py-4 text-sm whitespace-nowrap'>leo@example.com</td>
-                      <td className='px-6 py-4 whitespace-nowrap'>
-                        <Badge variant='outline' className='-emerald-200 bg-emerald-50 text-emerald-700'>
-                          <CheckCircle className='mr-1 h-3 w-3' />
-                          Active
-                        </Badge>
-                      </td>
-                      <td className='px-6 py-4 text-sm whitespace-nowrap'>Student</td>
-                      <td className='text-muted-foreground px-6 py-4 text-sm whitespace-nowrap'>Jan 09, 2025</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <LicenseAssignmentList />
 
         {/* Curriculum Section */}
         <Card className='py-4 shadow-lg'>

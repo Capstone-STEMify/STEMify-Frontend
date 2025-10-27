@@ -1,25 +1,22 @@
-import {
-  OrganizationSubscription,
-  OrganizationSubscriptionSliceParams
-} from '@/features/subscription/types/subscription.type'
+import { LicenseAssignment, LicenseAssignmentSliceParams } from '@/features/license-assignment/types/licenseAssignment'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
-export const subscriptionApi = createCrudApi<OrganizationSubscription, OrganizationSubscriptionSliceParams>({
-  reducerPath: 'subscriptionApi',
-  tagTypes: ['Subscription'],
-  baseUrl: '/organization-subscription-orders'
+export const licenseAssignmentApi = createCrudApi<LicenseAssignment, LicenseAssignmentSliceParams>({
+  reducerPath: 'licenseAssignmentApi',
+  tagTypes: ['LicenseAssignment'],
+  baseUrl: '/license-assignments'
 })
 
 export const {
-  useGetByIdQuery: useGetSubscriptionByIdQuery,
-  useSearchQuery: useSearchSubscriptionQuery,
-  useGetAllQuery: useGetAllSubscriptionQuery,
-  useCreateMutation: useCreateSubscriptionMutation,
-  useUpdateMutation: useUpdateSubscriptionMutation,
-  useDeleteMutation: useDeleteSubscriptionMutation,
+  useGetByIdQuery: useGetLicenseAssignmentByIdQuery,
+  useSearchQuery: useSearchLicenseAssignmentQuery,
+  useGetAllQuery: useGetAllLicenseAssignmentQuery,
+  useCreateMutation: useCreateLicenseAssignmentMutation,
+  useUpdateMutation: useUpdateLicenseAssignmentMutation,
+  useDeleteMutation: useDeleteLicenseAssignmentMutation,
 
   // lazy
-  useLazyGetByIdQuery: useLazyGetSubscriptionByIdQuery,
-  useLazySearchQuery: useLazySearchSubscriptionQuery,
-  useLazyGetAllQuery: useLazyGetAllSubscriptionQuery
-} = subscriptionApi
+  useLazyGetByIdQuery: useLazyGetLicenseAssignmentByIdQuery,
+  useLazySearchQuery: useLazySearchLicenseAssignmentQuery,
+  useLazyGetAllQuery: useLazyGetAllLicenseAssignmentQuery
+} = licenseAssignmentApi

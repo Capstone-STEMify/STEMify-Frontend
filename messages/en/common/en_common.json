@@ -116,7 +116,9 @@
       "seats": "Seats",
       "pricePlan": "Price Plan",
       "expiredDate": "Expired Date",
-      "curriculums": "Curriculums"
+      "curriculums": "Curriculums",
+      "accountType": "Account Type",
+      "assignedDate": "Assigned Date"
     },
     "paging": {
       "previous": "Previous",
