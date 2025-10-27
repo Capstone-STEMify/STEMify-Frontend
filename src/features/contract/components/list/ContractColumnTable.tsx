@@ -4,9 +4,9 @@ import { useTranslations } from 'next-intl'
 import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { Contract } from '@/features/contract/types/contract.type'
+import { Badge } from '@/components/shadcn/badge'
 
 export function useGetContractColumnTable(): ColumnDef<Contract>[] {
-  const { openModal } = useModal()
   const tm = useTranslations('message')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
@@ -24,6 +24,13 @@ export function useGetContractColumnTable(): ColumnDef<Contract>[] {
     {
       accessorKey: 'organizationName',
       header: tc('tableHeader.organizationName')
+    },
+    {
+      accessorKey: 'status',
+      header: tc('tableHeader.status'),
+      cell: ({ row }) => {
+        return <Badge>{row.original.status}</Badge>
+      }
     }
   ]
 }

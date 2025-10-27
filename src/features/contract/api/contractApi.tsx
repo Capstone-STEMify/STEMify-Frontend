@@ -4,7 +4,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 export const contractApi = createCrudApi<Contract, ContractQueryParams>({
   reducerPath: 'contractApi',
   tagTypes: ['Contract'],
-  baseUrl: '/contacts'
+  baseUrl: '/contracts'
 })
 
 export const {

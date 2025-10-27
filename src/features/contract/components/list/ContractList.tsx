@@ -1,6 +1,7 @@
 'use client'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
+import { useSearchContractQuery } from '@/features/contract/api/contractApi'
 import { useGetContractColumnTable } from '@/features/contract/components/list/ContractColumnTable'
 import { Contract } from '@/features/contract/types/contract.type'
 import { useAppDispatch } from '@/hooks/redux-hooks'
@@ -14,23 +15,9 @@ export default function ContractList() {
   const tList = useTranslations('curriculum.list')
   const dispatch = useAppDispatch()
   const columns = useGetContractColumnTable()
-  const data: Contract[] = [
-    {
-      id: 1,
-      description: 'Contract 1 description',
-      name: 'Contract 1',
-      organizationName: 'Organization A',
-      createdAt: '2024-01-01'
-    },
-    {
-      id: 2,
-      description: 'Contract 2 description',
-      name: 'Contract 2',
-      organizationName: 'Organization B',
-      createdAt: '2024-02-01'
-    }
-  ]
-  const rows = React.useMemo(() => data ?? [], [data])
+  const { data } = useSearchContractQuery({})
+
+  const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
   const handlePageChange = (page: number) => {
     // dispatch(setPageIndex(page))
@@ -52,7 +39,6 @@ export default function ContractList() {
         pagingData={data}
         // pagingParams={queryParams}
         handlePageChange={handlePageChange}
-        onRowClick={(row) => openModal('contactDetail', { contact: row })}
       />
     </div>
   )

@@ -97,6 +97,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
 
       {/* sheet */}
       {modalType === 'contactDetail' && <ContactDetailSheet {...modalProps} />}
+
       {modalType === 'upsertPlan' && <UpsertPlanSheet {...modalProps} />}
     </ModalContext.Provider>
   )
