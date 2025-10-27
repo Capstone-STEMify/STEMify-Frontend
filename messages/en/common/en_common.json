@@ -110,13 +110,15 @@
       "phoneNumber": "Phone",
       "organizationName": "Organization Name",
       "organizationType": "Organization Type",
+      "organizationImage": "Organization Image",
       "createdAt": "Created At",
       "jobRole": "Job Role",
       "users": "Users",
       "seats": "Seats",
       "pricePlan": "Price Plan",
       "expiredDate": "Expired Date",
-      "curriculums": "Curriculums"
+      "curriculums": "Curriculums",
+      "downloadFile": "Download File"
     },
     "paging": {
       "previous": "Previous",

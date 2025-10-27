@@ -108,13 +108,15 @@
       "phoneNumber": "Số Điện Thoại",
       "organizationName": "Tên Tổ Chức",
       "organizationType": "Loại Tổ Chức",
+      "organizationImage": "Ảnh Tổ Chức",
       "createdAt": "Ngày Tạo",
       "jobRole": "Vai Trò Công Việc",
       "users": "Người Dùng",
       "seats": "Ghế",
       "pricePlan": "Gói",
       "expiredDate": "Ngày Hết Hạn",
-      "curriculums": "Chương Trình Học"
+      "curriculums": "Chương Trình Học",
+      "downloadFile": "Tải Tệp"
     },
     "paging": {
       "previous": "Trước",

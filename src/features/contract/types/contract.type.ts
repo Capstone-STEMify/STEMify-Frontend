@@ -6,7 +6,13 @@ export type Contract = {
   name: string
   description: string
   createdAt: string
-  organizationName: string
+  organization: {
+    id: number
+    name: string
+    organizationType: string
+    imageUrl: string
+  }
+  fileUrl: string
   status: string
 }
 
