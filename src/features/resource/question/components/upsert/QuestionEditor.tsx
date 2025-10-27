@@ -7,23 +7,24 @@ import { Card } from '@/components/shadcn/card'
 import { Label } from '@/components/shadcn/label'
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
-import { Answer, QuestionType } from '@/features/resource/question/types/question.type'
+import { Answer, Question, QuestionType } from '@/features/resource/question/types/question.type'
 import { SortableItem } from '@/features/resource/question/components/upsert/SortableItem'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { questionSlice, updateQuestion } from '@/features/resource/question/slice/questionSlice'
 import { Button } from '@/components/shadcn/button'
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/features/resource/question/api/questionApi'
-import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 import SSelect from '@/components/shared/SSelect'
 import BackButton from '@/components/shared/button/BackButton'
 
-export default function QuestionEditor() {
-  const dispatch = useAppDispatch()
-  const { quizId } = useParams()
-  const { questions, selectedQuestionId } = useAppSelector((state) => state.question)
+interface Props {
+  quizId: number
+  questions: Question[]
+  setQuestions: React.Dispatch<React.SetStateAction<Question[]>>
+  selectedQuestionId: number | null
+}
+
+export default function QuestionEditor({ quizId, questions, setQuestions, selectedQuestionId }: Props) {
   const question = questions.find((q) => q.id === selectedQuestionId)
-  const [createQuestion, { isLoading, isSuccess }] = useCreateQuestionMutation()
+  const [createQuestion] = useCreateQuestionMutation()
   const [updateQuestionApi] = useUpdateQuestionMutation()
   const [newAnswerText, setNewAnswerText] = useState('')
   const [answers, setAnswers] = useState<Answer[]>(question?.answers || [])
@@ -32,14 +33,16 @@ export default function QuestionEditor() {
     if (question) setAnswers(question.answers)
   }, [question])
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 }
-    })
-  )
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
+
   if (!question) {
     return <div className='text-muted-foreground p-10'>Select a question to edit</div>
   }
+
+  const updateQuestion = (updates: Partial<Question>) => {
+    setQuestions((prev) => prev.map((q) => (q.id === question.id ? { ...q, ...updates } : q)))
+  }
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event
     if (!over || active.id === over.id) return
@@ -47,7 +50,7 @@ export default function QuestionEditor() {
     const newIndex = answers.findIndex((a) => a.id === over.id)
     const reordered = arrayMove(answers, oldIndex, newIndex)
     setAnswers(reordered)
-    dispatch(updateQuestion({ id: question.id, updates: { answers: reordered } }))
+    updateQuestion({ answers: reordered })
   }
 
   const handleTypeChange = (newType: QuestionType) => {
@@ -57,49 +60,59 @@ export default function QuestionEditor() {
         { id: 2, content: 'False', isCorrect: false }
       ]
       setAnswers(tfAnswers)
-      dispatch(updateQuestion({ id: question.id, updates: { questionType: newType, answers: tfAnswers } }))
-    } else {
-      dispatch(updateQuestion({ id: question.id, updates: { questionType: newType } }))
-    }
+      updateQuestion({ questionType: newType, answers: tfAnswers })
+    } else updateQuestion({ questionType: newType })
   }
 
-  // 🧠 Add new answer
   const handleAddAnswer = () => {
     if (!newAnswerText.trim()) return
     const maxId = answers.length > 0 ? Math.max(...answers.map((a) => a.id)) : 0
-    const newAnswer: Answer = {
-      id: maxId + 1,
-      content: newAnswerText.trim(),
-      isCorrect: false
-    }
+    const newAnswer: Answer = { id: maxId + 1, content: newAnswerText.trim(), isCorrect: false }
     const updated = [...answers, newAnswer]
     setAnswers(updated)
-    dispatch(updateQuestion({ id: question.id, updates: { answers: updated } }))
+    updateQuestion({ answers: updated })
     setNewAnswerText('')
   }
 
-  // 🧠 Delete answer
   const handleDelete = (id: number) => {
     const updated = answers.filter((a) => a.id !== id)
     setAnswers(updated)
-    dispatch(updateQuestion({ id: question.id, updates: { answers: updated } }))
+    updateQuestion({ answers: updated })
   }
 
   const handleSaveChanges = async () => {
-    // 🔹 Chuẩn hóa dữ liệu: xóa `id` nếu là câu hỏi mới
     const cleanedQuestions = questions.map((q) => {
       const clone = { ...q }
-      if (!clone.id) delete (clone as any).id
+
+      if (!clone.id || clone.id < 0) delete (clone as any).id
+
+      // Duyệt answers
+      clone.answers = (clone.answers || []).map((a) => {
+        const answer = { ...a }
+
+        if (!clone.id || !answer.id || answer.id < 0) {
+          delete (answer as any).id
+        }
+
+        return answer
+      })
+
       return clone
     })
 
     try {
+      let result
       if (questions.every((q) => !q.id)) {
-        await createQuestion({ quizId: Number(quizId), questions: cleanedQuestions })
+        result = await createQuestion({ quizId, questions: cleanedQuestions }).unwrap()
         toast.success('Quiz created successfully')
       } else {
-        await updateQuestionApi({ quizId: Number(quizId), questions: cleanedQuestions })
+        result = await updateQuestionApi({ quizId, questions: cleanedQuestions }).unwrap()
         toast.success('Quiz updated successfully')
+      }
+
+      // Cập nhật lại state từ backend (đảm bảo answers mới có id thật)
+      if (result?.data?.questions) {
+        setQuestions(result.data.questions)
       }
     } catch (error) {
       toast.error('Failed to save questions')
@@ -108,7 +121,6 @@ export default function QuestionEditor() {
 
   return (
     <div className='mx-auto space-y-6 px-10 pt-3'>
-      {/* Header */}
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
           <BackButton />
@@ -122,16 +134,13 @@ export default function QuestionEditor() {
             value={question.questionType}
             onChange={(value) => handleTypeChange(value as QuestionType)}
           />
-
           <div className='flex items-center gap-3'>
             <Label htmlFor='points'>Points:</Label>
             <Input
               id='points'
               type='number'
               value={question.points}
-              onChange={(e) =>
-                dispatch(updateQuestion({ id: question.id, updates: { points: parseInt(e.target.value) || 0 } }))
-              }
+              onChange={(e) => updateQuestion({ points: parseInt(e.target.value) || 0 })}
               className='w-20'
             />
           </div>
@@ -139,16 +148,14 @@ export default function QuestionEditor() {
         <Button onClick={handleSaveChanges}>Save Changes</Button>
       </div>
 
-      {/* Question content */}
       <Card className='space-y-4 p-5'>
         <Label className='text-foreground font-semibold'>Question</Label>
         <Input
           value={question.content}
-          onChange={(e) => dispatch(updateQuestion({ id: question.id, updates: { content: e.target.value } }))}
+          onChange={(e) => updateQuestion({ content: e.target.value })}
           placeholder='Enter question content...'
         />
 
-        {/* Answers */}
         <Label className='text-foreground mt-4 font-semibold'>Answers</Label>
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={answers.map((a) => a.id)} strategy={verticalListSortingStrategy}>
@@ -164,9 +171,12 @@ export default function QuestionEditor() {
                           const updated =
                             question.questionType === QuestionType.MULTIPLE_CHOICE
                               ? answers.map((ans) => (ans.id === a.id ? { ...ans, isCorrect: !ans.isCorrect } : ans))
-                              : answers.map((ans) => ({ ...ans, isCorrect: ans.id === a.id }))
+                              : answers.map((ans) => ({
+                                  ...ans,
+                                  isCorrect: ans.id === a.id
+                                }))
                           setAnswers(updated)
-                          dispatch(updateQuestion({ id: question.id, updates: { answers: updated } }))
+                          updateQuestion({ answers: updated })
                         }}
                       />
                       <span>{a.content}</span>
@@ -184,7 +194,6 @@ export default function QuestionEditor() {
           </SortableContext>
         </DndContext>
 
-        {/* Add answer */}
         {question.questionType !== QuestionType.TRUE_FALSE && (
           <div className='mt-3 flex gap-2'>
             <Input

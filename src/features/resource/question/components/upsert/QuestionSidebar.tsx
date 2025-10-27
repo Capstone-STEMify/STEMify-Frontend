@@ -5,19 +5,17 @@ import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-ki
 import { SortableItem } from './SortableItem'
 import { Plus, Trash2 } from 'lucide-react'
 import { Question, QuestionType } from '@/features/resource/question/types/question.type'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { addQuestion, selectQuestion, reorderQuestions } from '@/features/resource/question/slice/questionSlice'
 import { Button } from '@/components/shadcn/button'
 
-export default function QuestionSidebar() {
-  const dispatch = useAppDispatch()
-  const { questions, selectedQuestionId } = useAppSelector((state) => state.question)
+interface Props {
+  questions: Question[]
+  setQuestions: (q: Question[]) => void
+  selectedQuestionId: number | null
+  setSelectedQuestionId: (id: number | null) => void
+}
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 }
-    })
-  )
+export default function QuestionSidebar({ questions, setQuestions, selectedQuestionId, setSelectedQuestionId }: Props) {
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event
@@ -25,7 +23,7 @@ export default function QuestionSidebar() {
     const oldIndex = questions.findIndex((q) => q.id === active.id)
     const newIndex = questions.findIndex((q) => q.id === over.id)
     const reordered = arrayMove(questions, oldIndex, newIndex)
-    dispatch(reorderQuestions(reordered))
+    setQuestions(reordered)
   }
 
   const handleAddQuestion = () => {
@@ -39,9 +37,14 @@ export default function QuestionSidebar() {
       points: 1,
       answers: []
     }
+    setQuestions([...questions, newQuestion])
+    setSelectedQuestionId(newQuestion.id)
+  }
 
-    dispatch(addQuestion(newQuestion))
-    dispatch(selectQuestion(newQuestion.id))
+  const handleDelete = (id: number) => {
+    const filtered = questions.filter((q) => q.id !== id)
+    setQuestions(filtered)
+    if (selectedQuestionId === id) setSelectedQuestionId(filtered[0]?.id ?? null)
   }
 
   const getTypeDisplayName = (type: string) => {
@@ -75,7 +78,7 @@ export default function QuestionSidebar() {
             {questions.map((question, index) => (
               <SortableItem key={question.id} id={question.id}>
                 <button
-                  onPointerDown={() => dispatch(selectQuestion(question.id))}
+                  onPointerDown={() => setSelectedQuestionId(question.id)}
                   className={`group flex w-full flex-col rounded-lg p-3 text-left transition-all ${
                     selectedQuestionId === question.id
                       ? 'bg-primary text-primary-foreground shadow-md'
@@ -87,6 +90,7 @@ export default function QuestionSidebar() {
                     <Button
                       variant={'ghost'}
                       className={`${selectedQuestionId === question.id ? 'text-primary-foreground' : 'text-foreground/70'} p-0`}
+                      onClick={() => handleDelete(question.id)}
                     >
                       <Trash2 size={17} className='text-red-500' />
                     </Button>

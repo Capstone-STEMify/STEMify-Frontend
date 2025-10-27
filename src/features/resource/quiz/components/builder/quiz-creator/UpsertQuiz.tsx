@@ -56,7 +56,7 @@ export default function UpsertQuiz() {
   const [updateQuiz, { isLoading: isUpdating, isSuccess: isUpdated }] = useUpdateQuizMutation()
 
   const form = useAppForm({
-    defaultValues: defaultQuizFormData,
+    defaultValues: isEditing ? quizData?.data || defaultQuizFormData : defaultQuizFormData,
     validators: { onChange: quizSchema },
     onSubmit: async ({ value }) => {
       const payload = {
@@ -96,7 +96,7 @@ export default function UpsertQuiz() {
         timeLimitMinutes: q.timeLimitMinutes || undefined
       })
     }
-  }, [isEditing, quizData, form])
+  }, [isEditing, quizData])
 
   return (
     <form
