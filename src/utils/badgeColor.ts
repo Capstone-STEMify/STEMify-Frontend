@@ -1,10 +1,11 @@
 import { ContactStatus } from '@/features/contact/types/contact.type'
 import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
+import { OrganizationStatus } from '@/features/organization/types/organization.type'
 import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
 import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
 import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
-import { OrganizationStatus, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
 
 export const getStatusBadgeClass = (
   status:

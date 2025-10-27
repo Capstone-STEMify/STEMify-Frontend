@@ -1,3 +1,4 @@
+import { OrganizationStatus } from '@/features/organization/types/organization.type'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { Curriculum } from '@/features/resource/curriculum/types/curriculum.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
@@ -28,18 +29,6 @@ export type PlanBillingCycle = {
   name: string
   price: number
   billingCycle: BillingCycle
-}
-
-export type AdminOrganization = {
-  firstName: string
-  lastName: string
-  email: string
-  phoneNumber: string
-}
-
-export enum OrganizationStatus {
-  ACTIVE = 'Active',
-  INACTIVE = 'Inactive'
 }
 
 export enum SubscriptionStatus {

@@ -110,6 +110,7 @@
       "phoneNumber": "Phone",
       "organizationName": "Organization Name",
       "organizationType": "Organization Type",
+      "organizationImage": "Organization Image",
       "createdAt": "Created At",
       "jobRole": "Job Role",
       "users": "Users",
@@ -118,7 +119,8 @@
       "expiredDate": "Expired Date",
       "curriculums": "Curriculums",
       "accountType": "Account Type",
-      "assignedDate": "Assigned Date"
+      "assignedDate": "Assigned Date",
+      "downloadFile": "Download File"
     },
     "paging": {
       "previous": "Previous",

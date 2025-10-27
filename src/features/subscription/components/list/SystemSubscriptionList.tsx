@@ -3,13 +3,10 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import SSelect from '@/components/shared/SSelect'
+import { OrganizationStatus } from '@/features/organization/types/organization.type'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { useGetOrganizationColumnTable } from '@/features/subscription/components/list/SystemSubscriptionColumnTable'
-import {
-  OrganizationStatus,
-  OrganizationSubscription,
-  SubscriptionStatus
-} from '@/features/subscription/types/subscription.type'
+import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { useLocale, useTranslations } from 'next-intl'
@@ -26,7 +23,7 @@ const data: OrganizationSubscription[] = [
     organizationType: 'Technology',
     startDate: '2023-10-01',
     endDate: '2024-10-01',
-    billingCycle: BillingCycle.TWELVEMONTHS,
+    billingCycle: BillingCycle.ANNUAL,
     status: SubscriptionStatus.ACTIVE,
     totalCurriculums: 10,
     totalSeats: 100,
