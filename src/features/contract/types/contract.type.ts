@@ -7,6 +7,7 @@ export type Contract = {
   description: string
   createdAt: string
   organizationName: string
+  status: string
 }
 
 export type ContractSliceParams = {} & SliceQueryParams
