@@ -56,6 +56,8 @@ import { planSlice } from '@/features/plan/slice/planProductSlice'
 import { quizApi } from '@/features/resource/quiz/api/quizApi'
 import { questionSlice } from '@/features/resource/question/slice/questionSlice'
 import { emulatorApi } from '@/features/emulator/api/emulatorApi'
+import { organizationSubscriptionSlice } from '@/features/subscription/slice/subscriptionSlice'
+import { subscriptionApi } from '@/features/subscription/api/subscriptionApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -89,6 +91,8 @@ export const rootReducer = combineReducers({
   contact: contactSlice.reducer,
   contract: contractSlice.reducer,
   question: questionSlice.reducer,
+  planProduct: planSlice.reducer,
+  organizationSubscription: organizationSubscriptionSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -117,5 +121,6 @@ export const rootReducer = combineReducers({
   [contractApi.reducerPath]: contractApi.reducer,
   [jobRoleApi.reducerPath]: jobRoleApi.reducer,
   [quizApi.reducerPath]: quizApi.reducer,
-  [emulatorApi.reducerPath]: emulatorApi.reducer
+  [emulatorApi.reducerPath]: emulatorApi.reducer,
+  [subscriptionApi.reducerPath]: subscriptionApi.reducer
 })

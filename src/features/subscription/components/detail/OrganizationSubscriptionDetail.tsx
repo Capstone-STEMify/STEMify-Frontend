@@ -18,9 +18,41 @@ import {
   CreditCard
 } from 'lucide-react'
 import { useModal } from '@/providers/ModalProvider'
+import { useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
+import { useParams } from 'next/navigation'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { formatDate } from '@/utils/index'
+import SEmpty from '@/components/shared/empty/SEmpty'
+import { useEffect } from 'react'
+import { SCard } from '@/components/shared/card/SCard'
+import CardLayout from '@/components/shared/card/CardLayout'
 
 export default function OrganizationSubscriptionDetail() {
   const { openModal } = useModal()
+  const { subscriptionId } = useParams()
+
+  const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscriptionByIdQuery(Number(subscriptionId))
+
+  const getRemainingMonths = (endDate: string | undefined) => {
+    if (!endDate) return 0
+    const end = new Date(endDate)
+    const now = new Date()
+    const diff = end.getTime() - now.getTime()
+    const months = Math.ceil(diff / (1000 * 60 * 60 * 24 * 30))
+    return months > 0 ? months : 0
+  }
+
+  if (isLoadingSubscription) {
+    return (
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
+  }
+
+  if (!subscription?.data) {
+    return <SEmpty title='Organization Subscription Not Found' />
+  }
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-6'>
       <div className='mx-auto max-w-7xl space-y-8'>
@@ -32,8 +64,7 @@ export default function OrganizationSubscriptionDetail() {
           </div>
           {/* Action Buttons */}
           <div className='flex gap-3 lg:items-end'>
-            <Button className='bg-amber-400 text-white shadow-lg'>Send Renewal Request</Button>
-            <Button className='bg-sky-400 shadow-lg'>Change Plan</Button>
+            {/* <Button className='bg-sky-400 shadow-lg'>Change Plan</Button> */}
             <Button variant='outline' className='shadow-lg'>
               Cancel Subscription
             </Button>
@@ -53,26 +84,31 @@ export default function OrganizationSubscriptionDetail() {
                     <div className='flex items-center gap-2'>
                       <h2 className='text-xl font-semibold'>Current Plan</h2>
                       <Badge className='bg-emerald-500/90 hover:bg-emerald-500'>
-                        <span className='mr-1'>●</span> Active
+                        <span className='mr-1'>●</span> {subscription?.data.status}
                       </Badge>
                     </div>
-                    <p className='text-sm'>Your subscription is active and running</p>
+                    <p className='text-sm'>Your subscription is {subscription?.data.status}</p>
                   </div>
                 </div>
 
                 <div className='grid gap-6 sm:grid-cols-2'>
                   <div className='rounded-xl bg-sky-100/90 p-4 backdrop-blur-sm'>
                     <p className='text-sm font-medium'>Package Details</p>
-                    <p className='mt-1 text-2xl font-bold'>Basic Package</p>
-                    <p className='mt-1 text-sm'>100K đ/Seat/6 Months</p>
+                    <p className='mt-1 text-2xl font-bold'>{subscription?.data.planBillingCycle?.name}</p>
+                    <p className='mt-1 text-sm'>
+                      {subscription?.data.planBillingCycle?.price} đ/
+                      {subscription?.data.planBillingCycle?.billingCycle}
+                    </p>
                   </div>
                   <div className='rounded-xl bg-sky-100/90 p-4 backdrop-blur-sm'>
                     <div className='flex items-center gap-2'>
                       <Calendar className='h-4 w-4' />
                       <p className='text-sm font-medium'>Expires On</p>
                     </div>
-                    <p className='mt-1 text-2xl font-bold'>Oct 26, 2025</p>
-                    <p className='mt-1 text-sm'>6 months remaining</p>
+                    <p className='mt-1 text-2xl font-bold'>
+                      {subscription?.data.endDate ? formatDate(subscription.data.endDate.toString()) : '—'}
+                    </p>
+                    <p className='mt-1 text-sm'>{getRemainingMonths(subscription?.data.endDate)} months remaining</p>
                   </div>
                 </div>
 
@@ -80,15 +116,16 @@ export default function OrganizationSubscriptionDetail() {
                 <div className='space-y-2'>
                   <div className='flex items-center justify-between text-sm'>
                     <span className=''>Subscription Period</span>
-                    <span className='font-medium'>50% Complete</span>
                   </div>
                   <Progress
                     value={50}
                     className='h-3 bg-white/20 [&>div]:bg-gradient-to-r [&>div]:from-emerald-400 [&>div]:to-emerald-500'
                   />
                   <div className='flex justify-between text-xs'>
-                    <span>Jan 06, 2025</span>
-                    <span>Oct 26, 2025</span>
+                    <span>
+                      {subscription?.data.startDate ? formatDate(subscription.data.startDate.toString()) : '—'}
+                    </span>
+                    <span>{subscription?.data.endDate ? formatDate(subscription.data.endDate.toString()) : '—'}</span>
                   </div>
                 </div>
               </div>
@@ -113,10 +150,25 @@ export default function OrganizationSubscriptionDetail() {
             </CardHeader>
             <CardContent className='space-y-3'>
               <p className='text-3xl font-bold'>
-                80 <span className='text-muted-foreground text-lg font-normal'>of 100</span>
+                {subscription?.data.currentStudentSeats + subscription?.data.currentTeacherSeats}{' '}
+                <span className='text-muted-foreground text-lg font-normal'>
+                  of {subscription?.data.maxStudentSeats + subscription?.data.maxTeacherSeats}
+                </span>
               </p>
-              <Progress value={80} className='h-2 bg-blue-100 [&>div]:bg-blue-600' />
-              <p className='text-muted-foreground text-xs'>20 licenses remaining</p>
+              <Progress
+                value={
+                  ((subscription?.data.currentStudentSeats + subscription?.data.currentTeacherSeats) /
+                    (subscription?.data.maxStudentSeats + subscription?.data.maxTeacherSeats)) *
+                  100
+                }
+                className='h-2 bg-blue-100 [&>div]:bg-blue-600'
+              />
+              <p className='text-muted-foreground text-xs'>
+                {subscription?.data.maxStudentSeats +
+                  subscription?.data.maxTeacherSeats -
+                  (subscription?.data.currentStudentSeats + subscription?.data.currentTeacherSeats)}{' '}
+                licenses remaining
+              </p>
             </CardContent>
           </Card>
 
@@ -135,7 +187,16 @@ export default function OrganizationSubscriptionDetail() {
               <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Total Students</CardTitle>
             </CardHeader>
             <CardContent className='space-y-1'>
-              <p className='text-3xl font-bold'>60</p>
+              <p className='text-3xl font-bold'>
+                {subscription?.data.currentStudentSeats}{' '}
+                <span className='text-muted-foreground text-lg font-normal'>
+                  of {subscription?.data.maxStudentSeats}
+                </span>
+              </p>
+              <Progress
+                value={(subscription?.data.currentStudentSeats / subscription?.data.maxStudentSeats) * 100}
+                className='h-2 bg-blue-100 [&>div]:bg-blue-600'
+              />
               <p className='text-muted-foreground text-xs'>Down 20% this period</p>
             </CardContent>
           </Card>
@@ -155,7 +216,16 @@ export default function OrganizationSubscriptionDetail() {
               <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Total Teachers</CardTitle>
             </CardHeader>
             <CardContent className='space-y-1'>
-              <p className='text-3xl font-bold'>10</p>
+              <p className='text-3xl font-bold'>
+                {subscription?.data.currentTeacherSeats}{' '}
+                <span className='text-muted-foreground text-lg font-normal'>
+                  of {subscription?.data.maxTeacherSeats}
+                </span>
+              </p>
+              <Progress
+                value={(subscription?.data.currentTeacherSeats / subscription?.data.maxTeacherSeats) * 100}
+                className='h-2 bg-blue-100 [&>div]:bg-blue-600'
+              />
               <p className='text-muted-foreground text-xs'>Strong user retention</p>
             </CardContent>
           </Card>
@@ -171,7 +241,7 @@ export default function OrganizationSubscriptionDetail() {
               <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Total Curricula</CardTitle>
             </CardHeader>
             <CardContent className='space-y-1'>
-              <p className='text-3xl font-bold'>2</p>
+              <p className='text-3xl font-bold'>{subscription?.data.curriculumCount}</p>
               <p className='text-muted-foreground text-xs'>Including 10 courses</p>
             </CardContent>
           </Card>
@@ -287,26 +357,24 @@ export default function OrganizationSubscriptionDetail() {
           </CardHeader>
           <CardContent>
             <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-              <Card className='group overflow-hidden shadow-md transition-all hover:shadow-xl'>
-                <div className='relative h-48 overflow-hidden bg-gradient-to-br from-blue-100 to-blue-200'>
-                  <div className='absolute inset-0 flex items-center justify-center'>
-                    <BookOpen className='h-16 w-16 text-blue-400' />
+              {subscription?.data.curriculums.map((curriculum) => (
+                <CardLayout
+                  key={curriculum.id}
+                  className='rounded-2xl border-none shadow-sm'
+                  imageSrc={curriculum.imageUrl || '/images/fallback.png'}
+                  footer={
+                    <div className='flex items-center gap-2'>
+                      <Badge className='bg-sky-custom-300'>Age 6-12</Badge>
+                      <Badge className='bg-rose-100 text-rose-700'>10+ Courses</Badge>
+                    </div>
+                  }
+                >
+                  <div>
+                    <p className='text-muted-foreground text-sm font-medium'>{curriculum.code}</p>
+                    <h3 className='text-md line-clamp-1 font-semibold text-gray-900'>{curriculum.title}</h3>
                   </div>
-                </div>
-                <CardContent className='p-5'>
-                  <div className='mb-3 flex items-center gap-2'>
-                    <Badge variant='secondary' className='bg-blue-100 text-blue-700'>
-                      6-12+
-                    </Badge>
-                    <Badge variant='secondary'>Beginner</Badge>
-                  </div>
-                  <p className='text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase'>STEM-01</p>
-                  <h3 className='mb-2 text-lg font-semibold'>Basic STEM</h3>
-                  <p className='text-muted-foreground line-clamp-2 text-sm'>
-                    Introduction to basic STEM concepts and foundational learning.
-                  </p>
-                </CardContent>
-              </Card>
+                </CardLayout>
+              ))}
             </div>
           </CardContent>
         </Card>
