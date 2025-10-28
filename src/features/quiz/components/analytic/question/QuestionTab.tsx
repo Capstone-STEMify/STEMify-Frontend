@@ -2,8 +2,13 @@ import { Button } from '@/components/shadcn/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/shadcn/dropdown-menu'
 import { ChevronDown, Info, ArrowDownUp } from 'lucide-react'
 import { QuestionCard } from '../card/QuestionCard'
+import { QuizStatistics } from '@/features/quiz/types/studentQuiz.type'
 
-export function QuestionDetailTab() {
+type QuestionDetailTabProps = {
+  data: QuizStatistics
+}
+
+export function QuestionDetailTab({data}: QuestionDetailTabProps) {
   return (
     <div className='space-y-6'>
       <div className='flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
@@ -27,7 +32,7 @@ export function QuestionDetailTab() {
       </div>
 
       <div className='space-y-6'>
-        <QuestionCard />
+        <QuestionCard data={data.questionStatistics} totalQuestion={data.totalQuestions}/>
       </div>
     </div>
   )

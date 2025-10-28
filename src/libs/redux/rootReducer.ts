@@ -61,6 +61,7 @@ import { subscriptionApi } from '@/features/subscription/api/subscriptionApi'
 import { licenseAssignmentSlice } from '@/features/license-assignment/slice/licenseAssignmentSlice'
 import { licenseAssignmentApi } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { studentQuizApi } from '@/features/quiz/api/studentQuizApi'
+import { quizSelectedSlice } from '@/features/quiz/slice/studentQuizSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -91,6 +92,7 @@ export const rootReducer = combineReducers({
   workspaceTree: workspaceTreeSlice.reducer,
   component: componentSlice.reducer,
   quizPlayer: quizPlayerSlice.reducer,
+  quizSelected: quizSelectedSlice.reducer,
   contact: contactSlice.reducer,
   contract: contractSlice.reducer,
   question: questionSlice.reducer,

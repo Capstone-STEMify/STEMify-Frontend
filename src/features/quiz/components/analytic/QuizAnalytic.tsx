@@ -4,17 +4,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/ta
 import { QuizDetailHeader } from './header/QuizAnalHeader'
 import { QuestionDetailTab } from './question/QuestionTab'
 import { LearnerOverviewTab } from './overview/OverviewTab'
-import { useParams } from 'next/navigation'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/libs/redux/store'
 
 export default function QuizAnalytic() {
-  // const params = useParams()
-  // const studentQuizIdParam = params?.studentQuizId
-  // const studentQuizId = studentQuizIdParam ? Number(studentQuizIdParam): null
-  
+
+  const quiz = useSelector((state: RootState) => state.quizSelected.selectedQuiz)
+
+  if (!quiz) {
+    return <p className='text-center mt-10 text-gray-500'>Loading quiz data...</p>
+  }
+
   return (
     <div className='min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8'>
       <div className='mx-auto max-w-7xl'>
-        <QuizDetailHeader />
+        <QuizDetailHeader data={quiz} />
 
         <Tabs defaultValue='overview' className='mt-6'>
           <TabsList className='w-full justify-start rounded-none border-b bg-transparent p-0'>
@@ -34,7 +38,7 @@ export default function QuizAnalytic() {
           </TabsList>
 
           <TabsContent value='questions' className='mt-6'>
-            <QuestionDetailTab />
+            <QuestionDetailTab data={quiz} />
           </TabsContent>
           <TabsContent value='overview' className='mt-6'>
             <LearnerOverviewTab />
