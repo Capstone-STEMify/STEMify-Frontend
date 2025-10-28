@@ -28,6 +28,7 @@ import { quizApi } from '@/features/resource/quiz/api/quizApi'
 import { emulatorApi } from '@/features/emulator/api/emulatorApi'
 import { subscriptionApi } from '@/features/subscription/api/subscriptionApi'
 import { licenseAssignmentApi } from '@/features/license-assignment/api/licenseAssignmentApi'
+import { studentQuizApi } from '@/features/quiz/api/studentQuizApi'
 
 export const apiMiddlewares: Middleware[] = [
   courseApi.middleware,
@@ -58,7 +59,8 @@ export const apiMiddlewares: Middleware[] = [
   quizApi.middleware,
   emulatorApi.middleware,
   subscriptionApi.middleware,
-  licenseAssignmentApi.middleware
+  licenseAssignmentApi.middleware,
+  studentQuizApi.middleware,
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]
