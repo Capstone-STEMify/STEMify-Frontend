@@ -10,7 +10,6 @@ import Step3SubscriptionConfiguration from '@/features/subscription/components/u
 import Step4AdminAccounts from '@/features/subscription/components/upsert/create/Step4AdminAccounts'
 import {} from 'sonner'
 import { useOrganizationSubscriptionForm } from '@/features/subscription/components/upsert/create/useOrganizationSubscriptionForm'
-import { useEffect } from 'react'
 
 export default function CreateOrganizationSubscription() {
   const formWizard = useOrganizationSubscriptionForm()

@@ -19,7 +19,9 @@ export type AdminOrganization = {
 
 export enum OrganizationStatus {
   ACTIVE = 'Active',
-  INACTIVE = 'Inactive'
+  INACTIVE = 'Inactive',
+  ARCHIVE = 'Archive',
+  DRAFT = 'Draft'
 }
 
 export type OrganizationType = {
@@ -27,4 +29,6 @@ export type OrganizationType = {
   name: string
 }
 
-export type OrganizationQueryParams = {} & SearchPaginatedRequestParams
+export type OrganizationQueryParams = {
+  status?: OrganizationStatus
+} & SearchPaginatedRequestParams
