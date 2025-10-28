@@ -19,7 +19,7 @@ export function LearnerOverviewTab({data}: LearnerOverviewTabProps) {
           </Button>
         </AlertDescription>
       </Alert>
-      <AnswerGridTable studentData={data.studentStatistics} questionData={data.questionStatistics}/>
+      <AnswerGridTable data={data} studentData={data.studentStatistics} questionData={data.questionStatistics}/>
     </div>
   )
 }

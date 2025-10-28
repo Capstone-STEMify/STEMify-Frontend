@@ -1,52 +1,33 @@
 'use client'
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/shadcn/dialog'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion'
+import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Button } from '@/components/shadcn/button'
-import { LearnerAnswer } from '../data'
 import { Badge } from '@/components/shadcn/badge'
 import {
   Printer,
   Download,
-  X as XIcon,
   CheckCircle2,
   XCircle,
   HelpCircle,
   Layers,
   Star,
-  Clock,
-  Share
+  Share,
+  ChevronDown,
+  X as XIcon 
 } from 'lucide-react'
 import { ProgressCircle } from '../../active/circle/AccuracyCircle'
 import { cn } from '@/shadcn/utils'
+import { QuizStatistics, StudentStatistic } from '@/features/quiz/types/studentQuiz.type'
 
 type Status = 'correct' | 'incorrect' | 'unanswered' | 'review'
 
 interface QuizResultPopupProps {
-  learner: LearnerAnswer | null
+  learner: StudentStatistic | null
+  quiz: QuizStatistics
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
 }
-
-const detailedQuestionExamples = [
-  {
-    status: 'incorrect' as Status,
-    questionText: 'What does UI stand for in the context of design?',
-    correctAnswer: 'User Interface'
-  },
-  {
-    status: 'correct' as Status,
-    questionText:
-      'Which aspect of UI design involves choosing colors, typography, and creating icons for a digital interface?',
-    correctAnswer: 'Visual Design'
-  },
-  {
-    status: 'incorrect' as Status,
-    questionText: 'What is the primary goal of UX design?',
-    correctAnswer: 'To improve user satisfaction and loyalty'
-  }
-]
 
 const AnswerGridItem = ({ status, number }: { status: Status; number: number }) => {
   const statusClasses = {
@@ -73,28 +54,97 @@ const AnswerGridItem = ({ status, number }: { status: Status; number: number }) 
   )
 }
 
-export function QuizResultPopup({ learner, isOpen, onOpenChange }: QuizResultPopupProps) {
-  if (!learner) return null
+const CustomAccordionItem = ({
+  triggerContent,
+  bodyContent
+}: {
+  triggerContent: React.ReactNode
+  bodyContent: React.ReactNode
+}) => {
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false)
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-4xl p-8'>
-        <DialogHeader className='flex flex-row items-start justify-between border-b pb-4'>
+    <div className='border mb-2 p-4 rounded-md'>
+      <button
+        type='button'
+        className='flex w-full items-center justify-between text-left font-semibold no-underline hover:no-underline'
+        onClick={() => setIsAccordionOpen(!isAccordionOpen)}
+        aria-expanded={isAccordionOpen}
+      >
+        {triggerContent}
+        <ChevronDown
+          className={`h-5 w-5 shrink-0 text-gray-400 transition-transform duration-200 ${
+            isAccordionOpen ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
+      
+      {/* Đây là AccordionContent */}
+      {isAccordionOpen && (
+        <div className='pt-4'>
+          {bodyContent}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizResultPopupProps) {
+  if (!learner || !isOpen) return null
+
+  const answered = learner.totalAnswers ?? learner.questionResults.length
+  const correct = learner.totalCorrectAnswers ?? learner.questionResults.filter((q) => q.isCorrect).length
+  const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0
+
+  const detailedQuestions = (quiz.questionStatistics || []).map((qStat) => {
+    const res = learner.questionResults.find((r) => r.questionId === qStat.questionId)
+    const status: Status = res ? (res.isCorrect ? 'correct' : 'incorrect') : 'unanswered'
+    return {
+      ...qStat,
+      status,
+      learnerAnswer: res?.correctAnswer ?? null
+    }
+  })
+
+  return (
+    <div
+      role='dialog'
+      aria-modal='true'
+      className='fixed inset-0 z-50'
+    >
+      <div
+        className='fixed inset-0 bg-black/80'
+        onClick={() => onOpenChange(false)}
+      />
+
+      <div className='fixed left-1/2 top-1/2 z-50 w-full max-w-4xl max-h-[90vh] -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 rounded-lg shadow-lg flex flex-col overflow-hidden'>
+        
+        <button
+          type='button'
+          className='absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 z-10'
+          onClick={() => onOpenChange(false)}
+        >
+          <XIcon className='h-5 w-5' />
+          <span className='sr-only'>Close</span>
+        </button>
+        
+        <div className='flex flex-row items-start justify-between border-b p-8 pb-4'>
           <div className='flex items-center gap-4'>
             <Avatar className='h-14 w-14'>
-              <AvatarImage src={learner.avatar} />
+              <AvatarImage src={learner.imageUrl || '/images/macbg.png'} />
               <AvatarFallback>
-                {learner.name
+                {learner.studentName
                   .split(' ')
                   .map((n) => n[0])
                   .join('')}
               </AvatarFallback>
             </Avatar>
             <div>
-              <DialogTitle className='flex items-center gap-2 text-xl font-bold'>
-                {learner.name} <Badge variant='outline'>{learner.designation}</Badge>
-              </DialogTitle>
-              <p className='text-sm text-gray-500'>{learner.role}</p>
+              <h2 className='flex items-center gap-2 text-xl font-bold'>
+                {learner.studentName}
+                <Badge variant='outline' className='ml-2'>{learner.status}</Badge>
+              </h2>
+              <p className='text-sm text-gray-500'>Score: {learner.totalScore}</p>
             </div>
           </div>
           <div className='flex items-center gap-2'>
@@ -108,73 +158,64 @@ export function QuizResultPopup({ learner, isOpen, onOpenChange }: QuizResultPop
               <Share className='h-4 w-4' />
             </Button>
           </div>
-        </DialogHeader>
+        </div>
 
-        <div className='my-6 space-y-2'>
-          <div className='flex items-start justify-between'>
-            <h3 className='max-w-md text-2xl font-bold'>UI Design Fundamentals & Best Practice</h3>
-            <div className='flex items-center gap-6 text-sm'>
-              <div>
-                <span className='text-gray-500'>Accuracy</span>
-                <div className='mt-2 flex items-center gap-1.5 text-lg font-semibold'>
-                  <ProgressCircle
-                    value={85}
-                    size={28}
-                    className='text-green-500'
-                    strokeWidth={3.5}
-                    showPercentageText={false}
-                  />
-                  <span className='text-green-600'>85%</span>
+        <div className='flex-1 overflow-y-auto p-8'>
+          <div className='my-6 space-y-2'>
+            <div className='flex items-start justify-between'>
+              <h3 className='max-w-md text-2xl font-bold'>{quiz.quizName}</h3>
+              <div className='flex items-center gap-6 text-sm'>
+                <div>
+                  <span className='text-gray-500'>Accuracy</span>
+                  <div className='mt-2 flex items-center gap-1.5 text-lg font-semibold'>
+                    <ProgressCircle
+                      value={accuracy}
+                      size={28}
+                      className='text-green-500'
+                      strokeWidth={3.5}
+                      showPercentageText={false}
+                    />
+                    <span className='text-green-600'>{accuracy}%</span>
+                  </div>
+                </div>
+                <div>
+                  <span className='text-gray-500'>Point</span>
+                  <p className='mt-2 text-lg font-semibold'>{learner.totalScore}</p>
+                </div>
+                <div>
+                  <span className='text-gray-500'>Answered</span>
+                  <p className='mt-2 text-lg font-semibold'>{answered}/{quiz.totalQuestions}</p>
                 </div>
               </div>
-              <div>
-                <span className='text-gray-500'>Point</span>
-                <p className='mt-2 text-lg font-semibold'>145</p>
-              </div>
-              <div>
-                <span className='text-gray-500'>Answered</span>
-                <p className='mt-2 text-lg font-semibold'>19/20</p>
-              </div>
+            </div>
+            <div className='flex items-center gap-3 text-sm text-gray-500'>
+              <span className='flex items-center gap-1.5'>
+                <HelpCircle className='h-4 w-4' /> {quiz.totalQuestions} Questions
+              </span>
             </div>
           </div>
-          <div className='flex items-center gap-3 text-sm text-gray-500'>
-            <span>Finished Oct 03, 2023 - 10:00 AM</span>
+
+          <div className='mb-4 grid grid-cols-10 gap-2'>
+            {(learner.questionResults || []).map((ans, index) => {
+              const status: Status = ans.isCorrect ? 'correct' : 'incorrect'
+              return <AnswerGridItem key={ans.questionId} status={status} number={index + 1} />
+            })}
+          </div>
+
+          <div className='mb-6 flex items-center gap-4 text-xs text-gray-600'>
             <span className='flex items-center gap-1.5'>
-              <HelpCircle className='h-4 w-4' /> 20 Questions
+              <div className='h-2 w-2 rounded-full bg-green-500' />
+              Correct {} - 72%
+            </span>
+            <span className='flex items-center gap-1.5'>
+              <div className='h-2 w-2 rounded-full bg-red-500' />
+              Incorrect 2 - 12%
             </span>
           </div>
-        </div>
-
-        <div className='mb-4 grid grid-cols-10 gap-2'>
-          {learner.answers.map((ans, index) => (
-            <AnswerGridItem key={ans.questionId} status={ans.status} number={index + 1} />
-          ))}
-        </div>
-
-        <div className='mb-6 flex items-center gap-4 text-xs text-gray-600'>
-          <span className='flex items-center gap-1.5'>
-            <div className='h-2 w-2 rounded-full bg-green-500' />
-            Correct 16 - 72%
-          </span>
-          <span className='flex items-center gap-1.5'>
-            <div className='h-2 w-2 rounded-full bg-yellow-500' />
-            Half Correct 1 - 3%
-          </span>
-          <span className='flex items-center gap-1.5'>
-            <div className='h-2 w-2 rounded-full bg-red-500' />
-            Incorrect 2 - 12%
-          </span>
-          <span className='flex items-center gap-1.5'>
-            <div className='h-2 w-2 rounded-full bg-gray-400' />
-            Skipped 1 - 3%
-          </span>
-        </div>
-
-        {/* Question Accordion */}
-        <Accordion type='single' collapsible className='w-full'>
-          {detailedQuestionExamples.map((question, index) => (
-            <AccordionItem key={index} value={`item-${index + 1}`}>
-              <AccordionTrigger className='text-left font-semibold no-underline hover:no-underline [&[data-state=open]>svg]:rotate-180'>
+          <div className='w-full'>
+            {detailedQuestions.map((question, index) => {
+              
+              const triggerJSX = (
                 <div className='flex w-full items-center justify-between pr-4'>
                   <div className='flex items-center gap-3'>
                     <HelpCircle className='h-5 w-5 text-gray-400' />
@@ -188,32 +229,40 @@ export function QuizResultPopup({ learner, isOpen, onOpenChange }: QuizResultPop
                     </Badge>
                   </div>
                   <div className='flex items-center gap-4 text-sm font-normal text-gray-600'>
-                    <span className='flex items-center gap-1.5'>
-                      <Layers className='h-4 w-4' /> Multiple choice
+                    <span className='flex items-center gap-1.5 p-2 bg-gray-100 rounded-md font-semibold'>
+                      <Layers className='h-4 w-4' /> {question.questionType}
                     </span>
                     <span className='flex items-center gap-1.5'>
-                      <Clock className='h-4 w-4' /> Time 32s
-                    </span>
-                    <span className='flex items-center gap-1.5'>
-                      <Star className='h-4 w-4 text-yellow-500' /> 1 point
+                      <Star className='h-4 w-4 text-yellow-500' /> {question.point} point
                     </span>
                   </div>
                 </div>
-              </AccordionTrigger>
-              <AccordionContent className='space-y-4 pl-12 text-base'>
-                <p>{question.questionText}</p>
+              );
 
-                {question.status === 'incorrect' && (
-                  <div className='mt-4 rounded-r-md border-l-4 border-green-500 bg-green-50 p-4'>
-                    <p className='text-xs font-semibold text-green-800'>CORRECT ANSWER</p>
-                    <p className='font-medium text-green-900'>{question.correctAnswer}</p>
-                  </div>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </DialogContent>
-    </Dialog>
+              const bodyJSX = (
+                <div className='space-y-4 pl-12 text-base'>
+                  <p className='break-words'>{question.questionTitle}</p>
+
+                  {question.status === 'incorrect' && (
+                    <div className='mt-4 rounded-r-md border-l-4 border-green-500 bg-green-50 p-4'>
+                      <p className='text-xs font-semibold text-green-800'>CORRECT ANSWER</p>
+                      <p className='font-medium text-green-900'>{question.learnerAnswer ?? question.answerStatistics?.[0]?.content}</p>
+                    </div>
+                  )}
+                </div>
+              );
+
+              return (
+                <CustomAccordionItem
+                  key={question.questionId}
+                  triggerContent={triggerJSX}
+                  bodyContent={bodyJSX}
+                />
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

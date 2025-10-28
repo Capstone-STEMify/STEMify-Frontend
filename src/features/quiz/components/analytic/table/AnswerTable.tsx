@@ -4,14 +4,15 @@ import { Badge } from '@/components/shadcn/badge'
 import { cn } from '@/shadcn/utils'
 import { useState } from 'react'
 import { QuizResultPopup } from '../pop-up/QuizResultPopup'
-import { answerColors, answerIcons, QuestionStatistic, StudentStatistic } from '@/features/quiz/types/studentQuiz.type'
+import { answerColors, answerIcons, QuestionStatistic, QuizStatistics, StudentStatistic } from '@/features/quiz/types/studentQuiz.type'
 
 type AnswerGridTableProps = {
   studentData: StudentStatistic[]
   questionData: QuestionStatistic[]
+  data: QuizStatistics
 }
 
-export function AnswerGridTable({studentData, questionData}: AnswerGridTableProps) {
+export function AnswerGridTable({data, studentData, questionData}: AnswerGridTableProps) {
   const [selectedLearner, setSelectedLearner] = useState<StudentStatistic | null>(null)
 
   console.log('question', questionData)
@@ -88,6 +89,7 @@ export function AnswerGridTable({studentData, questionData}: AnswerGridTableProp
           }
         }}
         learner={selectedLearner}
+        quiz={data}
       />
     </>
   )
