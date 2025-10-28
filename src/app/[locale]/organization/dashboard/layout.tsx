@@ -9,7 +9,6 @@ export default async function DashboardLayout({
 }>) {
   return (
     <div className='min-h-screen'>
-      <Header />
       <main>{children}</main>
     </div>
   )
