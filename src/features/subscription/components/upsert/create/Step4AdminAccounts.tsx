@@ -24,7 +24,7 @@ export default function Step4AdminAccounts({
 }: {
   formWizard: ReturnType<typeof useOrganizationSubscriptionForm>
 }) {
-  const { currentStep, goBack, submitAdmins } = formWizard
+  const { currentStep, goBack } = formWizard
   const form = useAppForm({
     defaultValues: {
       admins: [{ email: '', firstName: '', lastName: '', phoneNumber: '' }]
@@ -32,7 +32,6 @@ export default function Step4AdminAccounts({
     validators: { onChange: adminSchema as any },
     onSubmit: async ({ value }) => {
       toast.success('Admin accounts validated successfully!')
-      submitAdmins(value)
     }
   })
 

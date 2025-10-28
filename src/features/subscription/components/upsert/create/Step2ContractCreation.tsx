@@ -14,6 +14,7 @@ import {
 } from '@/features/contract/api/contractApi'
 import { fileToBase64 } from '@/utils/index'
 import { useEffect, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 const contractDefaultValues: ContractFormData = {
   name: '',
@@ -27,7 +28,11 @@ export default function Step2ContractCreation({
 }: {
   formWizard: ReturnType<typeof useOrganizationSubscriptionForm>
 }) {
-  const { organizationId } = useAppSelector((state) => state.subscriptionForm)
+  const searchParams = useSearchParams()
+  const organizationId = searchParams.get('organizationId')
+  const contractId = searchParams.get('contractId')
+
+  // const { organizationId } = useAppSelector((state) => state.subscriptionForm)
   const { currentStep, goBack, goNext } = formWizard
   const fileFieldRef = useRef<any>(null)
 

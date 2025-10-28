@@ -32,13 +32,13 @@ export default function Step1OrganizationCreation({
 }) {
   const dispatch = useAppDispatch()
   const searchParams = useSearchParams()
-  const id = searchParams.get('id')
+  const organizationId = searchParams.get('organizationId')
 
   const { currentStep, goBack, goNext } = formWizard
   const imageFieldRef = useRef<any>(null)
 
   const { data: orgData } = useGetOrganizationByIdQuery(Number(1), {
-    skip: !id
+    skip: !organizationId
   })
 
   const { data: orgTypesData, isLoading } = useGetAllOrganizationTypesQuery({ pageNumber: 1, pageSize: 50 })
@@ -76,8 +76,8 @@ export default function Step1OrganizationCreation({
         organizationTypeId: Number(value.organizationTypeId),
         image: imageBase64
       }
-      if (id) {
-        const res = await updateOrg({ id: Number(id), body: payload }).unwrap()
+      if (organizationId) {
+        const res = await updateOrg({ id: Number(organizationId), body: payload }).unwrap()
         dispatch(setOrganizationId(res.data.id))
         toast.message('Organization updated successfully')
       } else {
@@ -90,7 +90,7 @@ export default function Step1OrganizationCreation({
   })
 
   useEffect(() => {
-    if (id && orgData?.data) {
+    if (organizationId && orgData?.data) {
       const matchedType = orgTypes.find(
         (type) => type.name.toLowerCase() === orgData.data.organizationType.toLowerCase()
       )
@@ -103,7 +103,7 @@ export default function Step1OrganizationCreation({
         imageUrl: orgData.data.imageUrl
       })
     }
-  }, [id, orgData, form])
+  }, [organizationId, orgData, form])
 
   return (
     <form

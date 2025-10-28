@@ -1,27 +1,32 @@
-import { OrganizationStatus } from '@/features/organization/types/organization.type'
+import { Contract } from '@/features/contract/types/contract.type'
+import { Organization, OrganizationStatus } from '@/features/organization/types/organization.type'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { Curriculum } from '@/features/resource/curriculum/types/curriculum.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
+import { Subscript } from 'lucide-react'
 
-export type OrganizationSubscription = {
+export interface OrganizationSubscription {
   id: number
-  organizationId?: number
+  organizationId: number
+  planBillingCycleId: number
+  contractId: number
+  planName: string
+  grossAmount: number
+  netAmount: number
+  discountPercent: number
   status: SubscriptionStatus
-  curriculumCount: number
-  totalSeats: number
-  currentStudentSeats: number
-  currentTeacherSeats: number
-  maxStudentSeats: number
-  maxTeacherSeats: number
   startDate: string
   endDate: string
-  planBillingCycle?: PlanBillingCycle
-  organizationName?: string
-  organizationDescription?: string
-  organizationImageUrl?: string
-  organizationType?: string
-  organizationStatus?: OrganizationStatus
-  curriculums: Curriculum[]
+  maxStudentSeats: number
+  maxTeacherSeats: number
+  curriculumCount: number
+  currentStudentSeats: number
+  currentTeacherSeats: number
+  createdDate: string
+  organization: Partial<Organization>
+  curriculums: Partial<Curriculum>[]
+  contract: Contract
+  planBillingCycle: PlanBillingCycle
 }
 
 export type PlanBillingCycle = {
@@ -45,3 +50,15 @@ export type OrganizationSubscriptionSliceParams = {
   parentSubscriptionId?: number
   status?: SubscriptionStatus
 } & SliceQueryParams
+
+export type SubscriptionFormData = {
+  planBillingCycleId: number
+  planName: string
+  grossAmount: number
+  netAmount: number
+  startDate: Date | null
+  discountPercent: number
+  maxStudentSeats: number
+  maxTeacherSeats: number
+  curriculumIds: number[]
+}
