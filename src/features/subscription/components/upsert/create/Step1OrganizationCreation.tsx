@@ -6,21 +6,16 @@ import {
   useGetOrganizationByIdQuery,
   useUpdateOrganizationMutation
 } from '@/features/organization/api/organizationApi'
+import { OrganizationFormData } from '@/features/organization/types/organization.type'
 import { useGetPlanByIdQuery } from '@/features/plan/api/planApi'
 import { useOrganizationSubscriptionForm } from '@/features/subscription/components/upsert/create/useOrganizationSubscriptionForm'
+import { setOrganizationId } from '@/features/subscription/slice/subscriptionFormSlice'
+import { useAppDispatch } from '@/hooks/redux-hooks'
 import { fileToBase64 } from '@/utils/index'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import z from 'zod'
-
-type OrganizationFormData = {
-  name: string
-  description: string
-  organizationTypeId: string
-  image: File | null
-  imageUrl?: string
-}
 
 const organizationDefaultValues: OrganizationFormData = {
   name: '',
@@ -35,6 +30,7 @@ export default function Step1OrganizationCreation({
 }: {
   formWizard: ReturnType<typeof useOrganizationSubscriptionForm>
 }) {
+  const dispatch = useAppDispatch()
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
 
@@ -81,10 +77,12 @@ export default function Step1OrganizationCreation({
         image: imageBase64
       }
       if (id) {
-        await updateOrg({ id: Number(id), body: payload }).unwrap()
+        const res = await updateOrg({ id: Number(id), body: payload }).unwrap()
+        dispatch(setOrganizationId(res.data.id))
         toast.message('Organization updated successfully')
       } else {
         const res = await createOrg(payload).unwrap()
+        dispatch(setOrganizationId(res.data.id))
         toast.message('Organization created successfully')
       }
       goNext()
@@ -111,10 +109,6 @@ export default function Step1OrganizationCreation({
     <form
       onSubmit={(e) => {
         e.preventDefault()
-        console.log('🧾 Current form state:', form.state)
-        if (Object.keys(form.state.errors).length > 0) {
-          console.warn('❌ Form has errors:', form.state.errors)
-        }
         form.handleSubmit(e)
       }}
       className='space-y-6'

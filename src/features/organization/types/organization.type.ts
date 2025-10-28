@@ -32,3 +32,12 @@ export type OrganizationType = {
 export type OrganizationQueryParams = {
   status?: OrganizationStatus
 } & SearchPaginatedRequestParams
+
+// Form Data
+export type OrganizationFormData = {
+  name: string
+  description: string
+  organizationTypeId: string
+  image: File | null
+  imageUrl?: string
+}
