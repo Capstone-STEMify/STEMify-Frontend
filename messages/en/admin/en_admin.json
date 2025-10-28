@@ -19,7 +19,10 @@
       "straw_labs_creator": "Straw Labs Creator",
       "makecode": "Make Code",
       "makecode_creator": "Make Code Creator",
-      "component": "Component"
+      "component": "Component",
+      "subscription": "Subscription",
+      "dashboard": "Dashboard",
+      "classroom": "Classroom"
     },
     "course_management": {
       "title": "Resource Management"
