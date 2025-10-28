@@ -3,10 +3,10 @@
 import { cn } from '@/utils/shadcn/utils'
 import { IconCirclePlusFilled, IconMail, type Icon } from '@tabler/icons-react'
 
-import { Button } from 'components/shadcn/button'
 import {
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem
@@ -29,6 +29,7 @@ export function NavMain({
   const t = useTranslations('Admin')
   return (
     <SidebarGroup>
+      <SidebarGroupLabel>Overview</SidebarGroupLabel>
       <SidebarGroupContent className='flex flex-col gap-2'>
         <SidebarMenu>
           {items.map((item) => {

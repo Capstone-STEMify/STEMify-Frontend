@@ -1,5 +1,4 @@
-import { AppSidebar } from '@/components/shadcn/app-sidebar'
-import { OrganizationSidebar } from '@/components/shadcn/organization-sidebar'
+import { OrganizationSidebar } from '@/components/layout/organization/sidebar/organization-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import { SiteHeader } from '@/components/shadcn/site-header'
 import { authOptions } from '@/libs/auth/authOptions'

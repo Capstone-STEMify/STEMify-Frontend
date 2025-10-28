@@ -15,12 +15,12 @@ import {
   IconListDetails,
   IconPuzzle,
   IconReport,
-  IconSearch,
+  IconSearch
 } from '@tabler/icons-react'
 
-import { NavDocuments } from 'components/shadcn/nav-documents'
-import { NavMain } from 'components/shadcn/nav-main'
-import { NavUser } from 'components/shadcn/nav-user'
+import { NavDocuments } from '@/components/layout/admin/sidebar/nav-documents'
+import { NavMain } from '@/components/layout/admin/sidebar/nav-main'
+import { NavUser } from '@/components/layout/admin/sidebar/nav-user'
 import {
   Sidebar,
   SidebarContent,
@@ -34,7 +34,7 @@ import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { UserRole } from '@/types/userRole'
-
+import { title } from 'process'
 
 // thay /admin thành /organization
 const data = {
@@ -43,7 +43,7 @@ const data = {
     email: 'm@example.com',
     avatar: '/avatars/shadcn.jpg'
   },
-  navMain: [
+  navResource: [
     {
       title: 'side_bar.curriculum',
       url: '/admin/curriculum',
@@ -68,6 +68,28 @@ const data = {
       title: 'side_bar.component',
       url: '/admin/component',
       icon: IconPuzzle
+    }
+  ],
+  operationsCenter: [
+    {
+      title: 'side_bar.dashboard',
+      url: '/admin/dashboard',
+      icon: IconCamera
+    },
+    {
+      title: 'side_bar.user',
+      url: '/admin/user',
+      icon: IconDatabase
+    },
+    {
+      title: 'side_bar.organization',
+      url: '/admin/organization',
+      icon: IconCamera
+    },
+    {
+      title: 'side_bar.plan',
+      url: '/admin/plan',
+      icon: IconFileDescription
     }
   ],
   navDesign: [
@@ -140,13 +162,13 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   }
 }
 
-export function AppSidebar({ user, ...props }: AppSidebarProps) {
+export function AdminAppSidebar({ user, ...props }: AppSidebarProps) {
   const locale = useLocale()
   const pathname = usePathname()
 
   // const userRole = useAppSelector((state) => state?.auth?.user?.role)
 
-  const navMainWithLocale = data.navMain.map((item) => ({
+  const navResourceWithLocale = data.navResource.map((item) => ({
     ...item,
     url: `/${locale}${item.url}`,
     isActive: pathname === `/${locale}${item.url}`
@@ -159,6 +181,12 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
   }))
 
   const documentsWithLocale = data.documents.map((item) => ({
+    ...item,
+    url: `/${locale}${item.url}`,
+    isActive: pathname === `/${locale}${item.url}`
+  }))
+
+  const operationsCenterWithLocale = data.operationsCenter.map((item) => ({
     ...item,
     url: `/${locale}${item.url}`,
     isActive: pathname === `/${locale}${item.url}`
@@ -179,7 +207,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navMainWithLocale} />
+        <NavMain items={navResourceWithLocale} />
         {/* <NavDesign items={navDesignWithLocale} /> */}
         {user.role && user.role === UserRole.ADMIN && <NavDocuments items={documentsWithLocale} />}
         {/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}

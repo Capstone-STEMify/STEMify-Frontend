@@ -18,9 +18,7 @@ import {
   IconSearch
 } from '@tabler/icons-react'
 
-import { NavDocuments } from 'components/shadcn/nav-documents'
-import { NavMain } from 'components/shadcn/nav-main'
-import { NavUser } from 'components/shadcn/nav-user'
+import { NavDocuments } from '@/components/layout/admin/sidebar/nav-documents'
 import {
   Sidebar,
   SidebarContent,
@@ -34,6 +32,8 @@ import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { UserRole } from '@/types/userRole'
+import { NavMain } from '@/components/layout/admin/sidebar/nav-main'
+import { NavUser } from '@/components/layout/admin/sidebar/nav-user'
 
 // thay /admin thành /organization
 const data = {
