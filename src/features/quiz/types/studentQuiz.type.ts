@@ -1,4 +1,5 @@
 import { SearchPaginatedRequestParams } from "@/types/baseModel";
+import { CheckCircle2, LucideIcon, XCircle } from "lucide-react";
 
 export type QuizStatistics = {
   quizId: number;
@@ -54,3 +55,14 @@ export type AnswerStatistic = {
 export type QuizStatisticQueryParam = {
   classroomId: number
 } & SearchPaginatedRequestParams
+
+
+export const answerIcons: { [key: string]: LucideIcon } = {
+  'true': CheckCircle2,
+  'false': XCircle,
+};
+
+export const answerColors: { [key: string]: string } = {
+  'true': "text-green-500",
+  'false': "text-red-500",
+};

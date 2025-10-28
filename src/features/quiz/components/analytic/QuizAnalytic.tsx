@@ -41,7 +41,7 @@ export default function QuizAnalytic() {
             <QuestionDetailTab data={quiz} />
           </TabsContent>
           <TabsContent value='overview' className='mt-6'>
-            <LearnerOverviewTab />
+            <LearnerOverviewTab data={quiz}/>
           </TabsContent>
         </Tabs>
       </div>
