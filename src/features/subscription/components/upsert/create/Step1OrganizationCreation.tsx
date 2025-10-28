@@ -2,26 +2,23 @@ import { useState } from 'react'
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
-import { Upload, X } from 'lucide-react'
+import { FileText, Upload, UploadCloud, X } from 'lucide-react'
+import { useFileUpload } from '@/components/shared/file/useFileUpload'
+import { Button } from '@/components/shadcn/button'
+import Image from 'next/image'
 export default function Step1OrganizationCreation({ formData, setFormData }: { formData: any; setFormData: any }) {
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setFormData({ ...formData, organizationImage: file })
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const removeImage = () => {
-    setFormData({ ...formData, organizationImage: null })
-    setImagePreview(null)
-  }
+  const [file, setFile] = useState<File | null>(null)
+  const [base64, setBase64] = useState('')
+  const { inputRef, handleClick, handleFileChange, handleDrop, handleDragOver, handleDragLeave, accept, isDragging } =
+    useFileUpload(
+      (file, base64) => {
+        setFile(file)
+        setBase64(base64)
+        setFormData({ ...formData, organizationImage: base64 })
+      },
+      'image',
+      10
+    )
 
   return (
     <div className='space-y-6'>
@@ -47,32 +44,65 @@ export default function Step1OrganizationCreation({ formData, setFormData }: { f
         <Label htmlFor='organizationImage' className='text-sm font-medium text-slate-700'>
           Organization Image
         </Label>
-        <div className='flex items-start gap-4'>
-          {imagePreview ? (
-            <div className='relative'>
-              <img
-                src={imagePreview || '/placeholder.svg'}
-                alt='Organization preview'
-                className='h-24 w-24 rounded-lg border-2 border-slate-200 object-cover'
-              />
-              <button
-                type='button'
-                onClick={removeImage}
-                className='absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-white hover:bg-slate-800'
+        <div
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-all ${
+            isDragging ? 'border-slate-500 bg-slate-100' : 'border-slate-300 bg-slate-50'
+          }`}
+        >
+          {file ? (
+            <div className='group relative flex flex-col items-center justify-center'>
+              <div className='relative overflow-hidden rounded-xl border-2 border-slate-200 bg-slate-100 shadow-sm transition-all hover:shadow-md'>
+                <Image
+                  src={
+                    base64
+                      ? `data:image/*;base64,${base64}`
+                      : formData.organizationImage
+                        ? `data:image/*;base64,${formData.organizationImage}`
+                        : '/placeholder.svg'
+                  }
+                  alt='Organization preview'
+                  width={192}
+                  height={192}
+                  className='h-48 w-48 rounded-xl object-cover'
+                />
+
+                <button
+                  onClick={() => {
+                    setFile(null)
+                    setBase64('')
+                    setFormData({ ...formData, organizationImage: null })
+                  }}
+                  className='absolute top-2 right-2 hidden rounded-full bg-slate-900/70 p-1.5 text-white transition-all group-hover:block hover:bg-red-500'
+                  title='Remove image'
+                >
+                  <X className='h-4 w-4' />
+                </button>
+              </div>
+
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={handleClick}
+                className='mt-3 w-32 border-slate-300 hover:bg-slate-100'
               >
-                <X className='h-4 w-4' />
-              </button>
+                Change Image
+              </Button>
             </div>
           ) : (
-            <label
-              htmlFor='organizationImage'
-              className='flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 transition-colors hover:border-slate-400 hover:bg-slate-100'
-            >
-              <Upload className='h-6 w-6 text-slate-400' />
-              <span className='mt-1 text-xs text-slate-500'>Upload</span>
-            </label>
+            <>
+              <UploadCloud className='mb-2 h-10 w-10 text-slate-500' />
+              <p className='mb-2 text-sm text-slate-600'>
+                Drag & drop your file here, or <span className='font-medium text-slate-900'>browse</span>
+              </p>
+              <Button variant='outline' onClick={handleClick}>
+                Choose File
+              </Button>
+            </>
           )}
-          <input id='organizationImage' type='file' accept='image/*' onChange={handleImageChange} className='hidden' />
+          <input ref={inputRef} type='file' accept={accept} onChange={handleFileChange} className='hidden' />
           <div className='flex-1'>
             <p className='text-sm text-slate-600'>Upload your organization logo or image</p>
             <p className='mt-1 text-xs text-slate-500'>PNG, JPG or GIF (max. 5MB)</p>
