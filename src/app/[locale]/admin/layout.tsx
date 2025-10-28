@@ -1,10 +1,10 @@
-import { AppSidebar } from '@/components/shadcn/app-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import { SiteHeader } from '@/components/shadcn/site-header'
 import { authOptions } from '@/libs/auth/authOptions'
 import { UserRole } from '@/types/userRole'
 import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
+import { AdminAppSidebar } from '../../../components/layout/admin/sidebar/admin-app-sidebar'
 
 export const metadata: Metadata = {
   title: 'Admin'
@@ -24,12 +24,12 @@ export default async function AdminLayout({
     <SidebarProvider
       style={
         {
-          '--sidebar-width': 'calc(var(--spacing) * 55)',
+          '--sidebar-width': 'calc(var(--spacing) * 60)',
           '--header-height': 'calc(var(--spacing) * 12)'
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant='inset' user={session.user} />
+      <AdminAppSidebar variant='inset' user={session.user} />
       <SidebarInset>
         <SiteHeader />
         <div className='flex flex-1 flex-col'>
