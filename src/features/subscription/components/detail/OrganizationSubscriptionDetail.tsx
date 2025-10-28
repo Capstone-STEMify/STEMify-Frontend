@@ -27,6 +27,7 @@ import { useEffect } from 'react'
 import { SCard } from '@/components/shared/card/SCard'
 import CardLayout from '@/components/shared/card/CardLayout'
 import LicenseAssignmentList from '@/features/license-assignment/components/list/licenseAssignmentList'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 
 export default function OrganizationSubscriptionDetail() {
   const { openModal } = useModal()
@@ -84,21 +85,20 @@ export default function OrganizationSubscriptionDetail() {
                   <div>
                     <div className='flex items-center gap-2'>
                       <h2 className='text-xl font-semibold'>Current Plan</h2>
-                      <Badge className='bg-emerald-500/90 hover:bg-emerald-500'>
+                      <Badge className={`${getStatusBadgeClass(subscription?.data.status)}`}>
                         <span className='mr-1'>●</span> {subscription?.data.status}
                       </Badge>
                     </div>
-                    <p className='text-sm'>Your subscription is {subscription?.data.status}</p>
                   </div>
                 </div>
 
                 <div className='grid gap-6 sm:grid-cols-2'>
                   <div className='rounded-xl bg-sky-100/90 p-4 backdrop-blur-sm'>
                     <p className='text-sm font-medium'>Package Details</p>
-                    <p className='mt-1 text-2xl font-bold'>{subscription?.data.planBillingCycle?.name}</p>
+                    <p className='mt-1 text-2xl font-bold'>{subscription?.data.planName}</p>
                     <p className='mt-1 text-sm'>
-                      {subscription?.data.planBillingCycle?.price} đ/
-                      {subscription?.data.planBillingCycle?.billingCycle}
+                      {subscription?.data.netAmount} đ/
+                      {subscription?.data.planBillingCycle}
                     </p>
                   </div>
                   <div className='rounded-xl bg-sky-100/90 p-4 backdrop-blur-sm'>
@@ -143,9 +143,6 @@ export default function OrganizationSubscriptionDetail() {
                 <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white'>
                   <Users className='h-6 w-6' />
                 </div>
-                <Badge variant='secondary' className='text-xs'>
-                  80/100
-                </Badge>
               </div>
               <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Assigned Licenses</CardTitle>
             </CardHeader>
@@ -180,10 +177,6 @@ export default function OrganizationSubscriptionDetail() {
                 <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600 transition-colors group-hover:bg-amber-600 group-hover:text-amber-100'>
                   <GraduationCap className='h-6 w-6' />
                 </div>
-                <div className='flex items-center gap-1 text-red-600'>
-                  <TrendingDown className='h-4 w-4' />
-                  <span className='text-xs font-medium'>-20%</span>
-                </div>
               </div>
               <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Total Students</CardTitle>
             </CardHeader>
@@ -198,7 +191,9 @@ export default function OrganizationSubscriptionDetail() {
                 value={(subscription?.data.currentStudentSeats / subscription?.data.maxStudentSeats) * 100}
                 className='h-2 bg-blue-100 [&>div]:bg-blue-600'
               />
-              <p className='text-muted-foreground text-xs'>Down 20% this period</p>
+              <p className='text-muted-foreground text-xs'>
+                {subscription?.data.maxStudentSeats - subscription?.data.currentStudentSeats} seats remaining
+              </p>
             </CardContent>
           </Card>
 
@@ -208,10 +203,6 @@ export default function OrganizationSubscriptionDetail() {
               <div className='flex items-center justify-between'>
                 <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 transition-colors group-hover:bg-emerald-600 group-hover:text-emerald-100'>
                   <Users className='h-6 w-6' />
-                </div>
-                <div className='flex items-center gap-1 text-emerald-600'>
-                  <TrendingUp className='h-4 w-4' />
-                  <span className='text-xs font-medium'>+12.5%</span>
                 </div>
               </div>
               <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Total Teachers</CardTitle>
@@ -227,7 +218,9 @@ export default function OrganizationSubscriptionDetail() {
                 value={(subscription?.data.currentTeacherSeats / subscription?.data.maxTeacherSeats) * 100}
                 className='h-2 bg-blue-100 [&>div]:bg-blue-600'
               />
-              <p className='text-muted-foreground text-xs'>Strong user retention</p>
+              <p className='text-muted-foreground text-xs'>
+                {subscription?.data.maxTeacherSeats - subscription?.data.currentTeacherSeats} seats remaining
+              </p>
             </CardContent>
           </Card>
 

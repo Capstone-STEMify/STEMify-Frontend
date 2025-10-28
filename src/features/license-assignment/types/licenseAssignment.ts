@@ -1,15 +1,19 @@
+import { User } from '@/features/user/types/user.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 
 export type LicenseAssignment = {
   id: number
   organizationSubscriptionOrderId: number
-  userId: string
-  userName: string
-  userEmail: string
-  userImageUrl?: string
+  user: User
   status: LicenseAssignmentStatus
   assignedAt: string
   revokedAt?: string
+  type: LicenseAssignmentType
+}
+
+export type LicenseAssignmentCreatePayload = {
+  organizationSubscriptionOrderId: number
+  userEmail: string
   type: LicenseAssignmentType
 }
 
@@ -23,12 +27,12 @@ export enum LicenseAssignmentStatus {
 export enum LicenseAssignmentType {
   STUDENT = 'Student',
   TEACHER = 'Teacher',
-  ORG_ADMIN = 'Organization Admin'
+  ORGANIZATION_ADMIN = 'OrganizationAdmin'
 }
 
 export type LicenseAssignmentSliceParams = {
-    organizationSubscriptionOrderId?: number
-    userId?: string
-    status?: LicenseAssignmentStatus
-    type?: LicenseAssignmentType
+  organizationSubscriptionOrderId?: number
+  userId?: string
+  status?: LicenseAssignmentStatus
+  type?: LicenseAssignmentType
 } & SliceQueryParams

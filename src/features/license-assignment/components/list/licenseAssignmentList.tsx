@@ -41,10 +41,15 @@ export default function LicenseAssignmentList() {
     dispatch(setPageIndex(page))
   }
 
-  const accountTypeOptions = Object.entries(LicenseAssignmentType).map(([key, value]) => ({
-    label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-    value: value
-  }))
+  const accountTypeOptions = Object.entries(LicenseAssignmentType).map(([key, value]) => {
+    const label = key
+      .toLowerCase()
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+
+    return { label, value }
+  })
 
   const statusTabs = Object.entries(LicenseAssignmentStatus)
     .filter(([key]) => key.toLowerCase() !== 'revoked' && key.toLowerCase() !== 'expired')
@@ -66,7 +71,7 @@ export default function LicenseAssignmentList() {
               <CardTitle className='text-xl'>User Management</CardTitle>
               <p className='text-muted-foreground mt-1 text-sm'>Manage users and pending invitations</p>
             </div>
-            <Button className='bg-blue-600 hover:bg-blue-700' onClick={() => openModal('uploadCSV')}>
+            <Button className='bg-sky-500' onClick={() => openModal('uploadCSV')}>
               <UserPlus className='mr-2 h-4 w-4' />
               Invite Users
             </Button>

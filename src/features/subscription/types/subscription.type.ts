@@ -22,6 +22,11 @@ export interface OrganizationSubscription {
   curriculumCount: number
   currentStudentSeats: number
   currentTeacherSeats: number
+  organizationName?: string
+  organizationDescription?: string
+  organizationImageUrl?: string
+  organizationType?: string
+  organizationStatus?: OrganizationStatus
   createdDate: string
   organization: Partial<Organization>
   curriculums: Partial<Curriculum>[]
