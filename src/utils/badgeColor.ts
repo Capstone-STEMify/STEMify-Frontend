@@ -6,6 +6,7 @@ import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculu
 import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
 import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+import { sub } from '@tensorflow/tfjs'
 
 export const getStatusBadgeClass = (
   status:
@@ -17,6 +18,7 @@ export const getStatusBadgeClass = (
     | ContactStatus
     | OrganizationStatus
     | LicenseAssignmentStatus
+    | SubscriptionStatus
 ) => {
   switch (status) {
     case LessonStatus.DRAFT || CurriculumStatus.DRAFT || CourseStatus.DRAFT || KitProductStatus.DRAFT:
@@ -33,15 +35,18 @@ export const getStatusBadgeClass = (
       KitProductStatus.ARCHIVED ||
       SubscriptionStatus.EXPIRED ||
       OrganizationStatus.INACTIVE ||
-      LicenseAssignmentStatus.EXPIRED:
+      LicenseAssignmentStatus.EXPIRED ||
+      SubscriptionStatus.ARCHIVED ||
+      SubscriptionStatus.CANCELED:
       return 'bg-gray-100 text-gray-800 border border-gray-300'
-    case LessonStatus.DELETED || CurriculumStatus.DELETED || CourseStatus.DELETED:
+    case LessonStatus.DELETED || CurriculumStatus.DELETED || CourseStatus.DELETED || SubscriptionStatus.EXPIRED:
       return 'bg-red-100 text-red-800 border border-red-300'
     case LessonStatus.PENDING ||
       CurriculumStatus.PENDING ||
       CourseStatus.PENDING ||
       ContactStatus.PENDING ||
-      LicenseAssignmentStatus.PENDING:
+      LicenseAssignmentStatus.PENDING ||
+      SubscriptionStatus.PENDING:
       return 'bg-yellow-100 text-yellow-800 border border-yellow-300'
     case LessonStatus.REJECTED || CurriculumStatus.REJECTED || CourseStatus.REJECTED:
       return 'bg-red-200 text-red-900 border border-red-400'
@@ -51,7 +56,8 @@ export const getStatusBadgeClass = (
       SubscriptionStatus.ACTIVE ||
       ContactStatus.RESOLVED ||
       OrganizationStatus.ACTIVE ||
-      LicenseAssignmentStatus.ACTIVE:
+      LicenseAssignmentStatus.ACTIVE ||
+      SubscriptionStatus.ACTIVE:
       return '-emerald-200 bg-emerald-50 text-emerald-700 border border-emerald-300'
     default:
       return 'bg-gray-100 text-gray-800 border border-gray-300'

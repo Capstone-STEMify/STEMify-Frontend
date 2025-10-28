@@ -15,7 +15,10 @@ export type OrganizationSubscription = {
   maxTeacherSeats: number
   startDate: string
   endDate: string
-  planBillingCycle?: PlanBillingCycle
+  netAmount: number
+  grossAmount: number
+  planBillingCycle: string
+  planName: string
   organizationName?: string
   organizationDescription?: string
   organizationImageUrl?: string

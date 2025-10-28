@@ -28,7 +28,7 @@ import KitListTableModal from '@/features/resource/kit/components/list/KitListTa
 import InformationModal from '@/components/shared/modals/InformationModal'
 import UpsertComponentModal from '@/features/kit-components/components/upsert/UpsertComponentModal'
 import SelectComponentListModal from '@/features/kit-components/components/list/SelectComponentListModal'
-import UploadCSVModal from '@/features/subscription/components/modal/UploadCSVModal'
+import UploadCSVModal from '@/features/license-assignment/components/modal/UploadCSVModal'
 import QuizAIModal from '@/features/resource/quiz/components/modal/QuizAIModal'
 import ContactDetailSheet from '@/features/contact/components/detail/ContactDetailSheet'
 import UpsertPlanSheet from '@/features/plan/components/sheet/UpsertPlanSheet'
