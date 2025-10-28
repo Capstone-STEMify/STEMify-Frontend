@@ -5,7 +5,7 @@ import { Label } from '@/components/shadcn/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { Check } from 'lucide-react'
 
-export default function Step2SubscriptionConfiguration({ formData, setFormData }: { formData: any; setFormData: any }) {
+export default function Step3SubscriptionConfiguration({ formData, setFormData }: { formData: any; setFormData: any }) {
   const packages = [
     { value: 'basic', label: 'Basic', description: 'Essential features for small teams' },
     { value: 'professional', label: 'Professional', description: 'Advanced features for growing organizations' },

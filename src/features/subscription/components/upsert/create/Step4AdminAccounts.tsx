@@ -11,7 +11,7 @@ type AdminAccount = {
   phoneNumber: string
 }
 
-export default function Step3AdminAccounts({ formData, setFormData }: { formData: any; setFormData: any }) {
+export default function Step4AdminAccounts({ formData, setFormData }: { formData: any; setFormData: any }) {
   const addAdmin = () => {
     setFormData({
       ...formData,

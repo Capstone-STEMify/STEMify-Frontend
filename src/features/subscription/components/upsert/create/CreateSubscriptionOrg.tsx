@@ -5,15 +5,13 @@ import type React from 'react'
 import { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
-import { Input } from '@/components/shadcn/input'
-import { Label } from '@/components/shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
-import { Check, Upload, X } from 'lucide-react'
-import Step3AdminAccounts from '@/features/subscription/components/upsert/create/Step3AdminAccounts'
-import Step2SubscriptionConfiguration from '@/features/subscription/components/upsert/create/Step2SubscriptionConfiguration'
+import { Check } from 'lucide-react'
 import Step1OrganizationCreation from '@/features/subscription/components/upsert/create/Step1OrganizationCreation'
+import Step2ContractCreation from '@/features/subscription/components/upsert/create/Step2ContractCreation'
+import Step3SubscriptionConfiguration from '@/features/subscription/components/upsert/create/Step3SubscriptionConfiguration'
+import Step4AdminAccounts from '@/features/subscription/components/upsert/create/Step4AdminAccounts'
 
-type Step = 1 | 2 | 3
+type Step = 1 | 2 | 3 | 4
 
 type AdminAccount = {
   email: string
@@ -29,24 +27,25 @@ export default function CreateOrganizationSubscription() {
     organizationName: '',
     organizationImage: null as File | null,
     organizationType: '',
-    // Step 2: Subscription
+    // Step 3: Subscription
     package: '',
     billingCycle: '',
     tier: '',
     seats: '',
     curriculum: '',
-    // Step 3: Admin Accounts
+    // Step 4: Admin Accounts
     admins: [{ email: '', firstName: '', lastName: '', phoneNumber: '' }] as AdminAccount[]
   })
 
   const steps = [
     { number: 1, title: 'Create Organization', description: 'Organization details' },
-    { number: 2, title: 'Configure Subscription', description: 'Select plan and options' },
-    { number: 3, title: 'Add Admin Accounts', description: 'Grant access to admins' }
+    { number: 2, title: 'Create Contract', description: 'Set up contract details' },
+    { number: 3, title: 'Configure Subscription', description: 'Select plan and options' },
+    { number: 4, title: 'Add Admin Accounts', description: 'Grant access to admins' }
   ]
 
   const handleNext = () => {
-    if (currentStep < 3) {
+    if (currentStep < 4) {
       setCurrentStep((currentStep + 1) as Step)
     }
   }
@@ -121,8 +120,9 @@ export default function CreateOrganizationSubscription() {
         {/* Form Content */}
         <Card className='p-8'>
           {currentStep === 1 && <Step1OrganizationCreation formData={formData} setFormData={setFormData} />}
-          {currentStep === 2 && <Step2SubscriptionConfiguration formData={formData} setFormData={setFormData} />}
-          {currentStep === 3 && <Step3AdminAccounts formData={formData} setFormData={setFormData} />}
+          {currentStep === 2 && <Step2ContractCreation formData={formData} setFormData={setFormData} />}
+          {currentStep === 3 && <Step3SubscriptionConfiguration formData={formData} setFormData={setFormData} />}
+          {currentStep === 4 && <Step4AdminAccounts formData={formData} setFormData={setFormData} />}
 
           {/* Navigation Buttons */}
           <div className='mt-8 flex items-center justify-between border-t pt-6'>
