@@ -1,8 +1,7 @@
 import { createCrudApi } from '@/libs/redux/baseApi'
-import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
-import { QuizStatistics } from '../types/studentQuiz.type'
+import { QuizStatisticQueryParam, QuizStatistics } from '../types/studentQuiz.type'
 
-export const studentQuizApi = createCrudApi<QuizStatistics, SliceQueryParams>({
+export const studentQuizApi = createCrudApi<QuizStatistics, QuizStatisticQueryParam>({
   reducerPath: 'studentQuizApi',
   tagTypes: ['StudentQuiz'],
   baseUrl: '/student-quizzes'

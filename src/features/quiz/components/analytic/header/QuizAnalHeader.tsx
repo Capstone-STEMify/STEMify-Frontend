@@ -50,12 +50,12 @@ export function QuizDetailHeader() {
             UI Design Fundamentals & Best Practice
             <Edit2 className='h-5 w-5 cursor-pointer text-gray-400' />
           </h1>
-          <div className='mt-3 mb-4 flex items-center gap-2'>
+          {/* <div className='mt-3 mb-4 flex items-center gap-2'>
             <Badge>Fundamental</Badge>
             <Badge>Design</Badge>
             <Badge>Not Urgent</Badge>
-          </div>
-          <div className='flex items-center gap-4 text-sm text-gray-500'>
+          </div> */}
+          <div className='flex items-center gap-4 text-sm text-gray-500 mt-2'>
             <span className='flex items-center gap-1.5'>
               <BookOpen className='h-4 w-4' /> Quiz
             </span>
@@ -81,13 +81,9 @@ export function QuizDetailHeader() {
                 <p className='text-lg font-semibold'>100%</p>
               </div>
             </div>
-            <div className='border-r-2'>
+            <div>
               <span className='text-xs text-gray-500'>Submissions</span>
               <p className='text-lg font-semibold'>20</p>
-            </div>
-            <div>
-              <span className='text-xs text-gray-500'>Avg. Complete Time</span>
-              <p className='text-lg font-semibold'>04:20</p>
             </div>
           </div>
         </div>

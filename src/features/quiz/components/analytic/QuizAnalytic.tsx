@@ -4,8 +4,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/ta
 import { QuizDetailHeader } from './header/QuizAnalHeader'
 import { QuestionDetailTab } from './question/QuestionTab'
 import { LearnerOverviewTab } from './overview/OverviewTab'
+import { useParams } from 'next/navigation'
 
 export default function QuizAnalytic() {
+  // const params = useParams()
+  // const studentQuizIdParam = params?.studentQuizId
+  // const studentQuizId = studentQuizIdParam ? Number(studentQuizIdParam): null
+  
   return (
     <div className='min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8'>
       <div className='mx-auto max-w-7xl'>
