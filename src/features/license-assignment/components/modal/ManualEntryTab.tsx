@@ -5,12 +5,16 @@ import {
   useCreateLicenseAssignmentMutation
 } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
-import { to } from '@react-spring/core'
+import { useOrganizationSubscriptionForm } from '@/features/subscription/components/upsert/create/useOrganizationSubscriptionForm'
 import { useParams } from 'next/navigation'
 import { KeyboardEvent, useState } from 'react'
 import { toast } from 'sonner'
 
-export default function ManualEntryTab() {
+type ManualEntryTabProps = {
+  goBack?: () => void
+}
+
+export default function ManualEntryTab({ goBack }: ManualEntryTabProps) {
   const [emailList, setEmailList] = useState<string[]>([])
   const [input, setInput] = useState('')
   const { subscriptionId } = useParams()
@@ -19,13 +23,17 @@ export default function ManualEntryTab() {
   const [createLicenseAssignmentBulk] = useCreateLicenseAssignmentBulkMutation()
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (['Enter', ' ', ','].includes(e.key)) {
+    if (['Enter', ' ', ',', ';'].includes(e.key)) {
       e.preventDefault()
       const value = input.trim()
-      if (value && /\S+@\S+\.\S+/.test(value)) {
-        if (!emailList.includes(value)) {
-          setEmailList([...emailList, value])
-        }
+      if (value) {
+        const newEmails = value
+          .split(/[\s,;]+/) // tách theo khoảng trắng, dấu phẩy, chấm phẩy
+          .map((v) => v.trim())
+          .filter((v) => /\S+@\S+\.\S+/.test(v))
+
+        const uniqueEmails = [...new Set([...emailList, ...newEmails])]
+        setEmailList(uniqueEmails)
         setInput('')
       }
     } else if (e.key === 'Backspace' && !input && emailList.length > 0) {
@@ -33,8 +41,27 @@ export default function ManualEntryTab() {
     }
   }
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    const pasted = e.clipboardData.getData('text')
+    const newEmails = pasted
+      .split(/[\s,;]+/)
+      .map((v) => v.trim())
+      .filter((v) => /\S+@\S+\.\S+/.test(v))
+
+    if (newEmails.length > 0) {
+      const uniqueEmails = [...new Set([...emailList, ...newEmails])]
+      setEmailList(uniqueEmails)
+    }
+  }
+
   const removeEmail = (email: string) => {
     setEmailList(emailList.filter((e) => e !== email))
+  }
+
+  const clearAll = () => {
+    setEmailList([])
+    setInput('')
   }
 
   const handleSubmit = async () => {
@@ -87,6 +114,7 @@ export default function ManualEntryTab() {
             type='text'
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onPaste={handlePaste}
             onKeyDown={handleKeyDown}
             placeholder='Enter email...'
             className='min-w-[140px] flex-1 bg-transparent text-sm outline-none'
@@ -95,10 +123,26 @@ export default function ManualEntryTab() {
       </div>
 
       {/* Submit */}
-      <div className='flex justify-end'>
-        <Button onClick={handleSubmit} disabled={emailList.length === 0} className='bg-sky-500'>
-          Send Invitations
-        </Button>
+      <div className='flex justify-between'>
+        {goBack ? (
+          <Button variant='outline' onClick={goBack}>
+            Back
+          </Button>
+        ) : null}
+        <div className='flex w-full justify-end gap-2'>
+          <Button
+            variant='outline'
+            onClick={clearAll}
+            disabled={emailList.length === 0}
+            className='border-gray-300 text-gray-700 hover:bg-gray-100'
+          >
+            Clear All
+          </Button>
+
+          <Button onClick={handleSubmit} disabled={emailList.length === 0} className='bg-sky-500 hover:bg-sky-600'>
+            Send Invitations
+          </Button>
+        </div>
       </div>
     </div>
   )
