@@ -4,8 +4,10 @@ import * as React from 'react'
 import {
   IconBook,
   IconBox,
+  IconBuilding,
   IconCamera,
   IconChalkboard,
+  IconChartAreaLine,
   IconDatabase,
   IconFileAi,
   IconFileDescription,
@@ -15,10 +17,11 @@ import {
   IconListDetails,
   IconPuzzle,
   IconReport,
-  IconSearch
+  IconSearch,
+  IconUser,
+  IconVip
 } from '@tabler/icons-react'
 
-import { NavDocuments } from '@/components/layout/admin/sidebar/nav-documents'
 import { NavMain } from '@/components/layout/admin/sidebar/nav-main'
 import { NavUser } from '@/components/layout/admin/sidebar/nav-user'
 import {
@@ -31,10 +34,11 @@ import {
   SidebarMenuItem
 } from 'components/shadcn/sidebar'
 import Link from 'next/link'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { UserRole } from '@/types/userRole'
 import { title } from 'process'
+import { NavSecondary } from '@/components/layout/admin/sidebar/nav-secondary'
 
 // thay /admin thành /organization
 const data = {
@@ -74,22 +78,22 @@ const data = {
     {
       title: 'side_bar.dashboard',
       url: '/admin/dashboard',
-      icon: IconCamera
+      icon: IconChartAreaLine
     },
     {
       title: 'side_bar.user',
       url: '/admin/user',
-      icon: IconDatabase
+      icon: IconUser
     },
     {
       title: 'side_bar.organization',
       url: '/admin/organization',
-      icon: IconCamera
+      icon: IconBuilding
     },
     {
       title: 'side_bar.plan',
       url: '/admin/plan',
-      icon: IconFileDescription
+      icon: IconVip
     }
   ],
   navDesign: [
@@ -117,8 +121,11 @@ const data = {
   navSecondary: [
     {
       title: 'side_bar.help',
-      url: '#',
-      icon: IconHelp
+      icon: IconHelp,
+      children: [
+        { title: 'side_bar.organization.list', url: '/admin/organization/list', icon: IconListDetails },
+        { title: 'side_bar.organization.create', url: '/admin/organization/create', icon: IconFileDescription }
+      ]
     },
     {
       title: 'side_bar.search',
@@ -128,24 +135,31 @@ const data = {
   ],
   documents: [
     {
-      name: 'side_bar.topic',
-      url: '/admin/topic',
-      icon: IconDatabase
-    },
-    {
-      name: 'side_bar.skill',
-      url: '/admin/skill',
-      icon: IconReport
-    },
-    {
-      name: 'side_bar.ageRange',
-      url: '/admin/age-range',
-      icon: IconReport
-    },
-    {
-      name: 'side_bar.standard',
-      url: '/admin/standard',
-      icon: IconFileWord
+      name: 'side_bar.catalog',
+      url: '/admin/course-management',
+      icon: IconDatabase,
+      children: [
+        {
+          name: 'side_bar.topic',
+          url: '/admin/topic',
+          icon: IconDatabase
+        },
+        {
+          name: 'side_bar.skill',
+          url: '/admin/skill',
+          icon: IconReport
+        },
+        {
+          name: 'side_bar.ageRange',
+          url: '/admin/age-range',
+          icon: IconReport
+        },
+        {
+          name: 'side_bar.standard',
+          url: '/admin/standard',
+          icon: IconFileWord
+        }
+      ]
     }
   ]
 }
@@ -165,6 +179,7 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 export function AdminAppSidebar({ user, ...props }: AppSidebarProps) {
   const locale = useLocale()
   const pathname = usePathname()
+  const t = useTranslations('Admin')
 
   // const userRole = useAppSelector((state) => state?.auth?.user?.role)
 
@@ -182,11 +197,24 @@ export function AdminAppSidebar({ user, ...props }: AppSidebarProps) {
 
   const documentsWithLocale = data.documents.map((item) => ({
     ...item,
+    title: item.name,
+    url: `/${locale}${item.url}`,
+    isActive: pathname === `/${locale}${item.url}`,
+    children: item.children
+      ? item.children.map((child) => ({
+          ...child,
+          title: child.name
+        }))
+      : undefined
+  }))
+
+  const operationsCenterWithLocale = data.operationsCenter.map((item) => ({
+    ...item,
     url: `/${locale}${item.url}`,
     isActive: pathname === `/${locale}${item.url}`
   }))
 
-  const operationsCenterWithLocale = data.operationsCenter.map((item) => ({
+  const secondaryWithLocale = data.navSecondary.map((item) => ({
     ...item,
     url: `/${locale}${item.url}`,
     isActive: pathname === `/${locale}${item.url}`
@@ -207,10 +235,11 @@ export function AdminAppSidebar({ user, ...props }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navResourceWithLocale} />
+        <NavMain label='side_bar.operationCenter' items={operationsCenterWithLocale} />
+        <NavMain label='side_bar.resource' items={navResourceWithLocale} />
+
         {/* <NavDesign items={navDesignWithLocale} /> */}
-        {user.role && user.role === UserRole.ADMIN && <NavDocuments items={documentsWithLocale} />}
-        {/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}
+        {user.role === UserRole.STAFF && <NavSecondary items={documentsWithLocale} />}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

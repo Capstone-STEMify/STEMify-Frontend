@@ -22,7 +22,11 @@
       "component": "Thành phần kit",
       "subscription": "Gói đăng ký",
       "dashboard": "Thống kê",
-      "classroom": "Lớp học"
+      "classroom": "Lớp học",
+      "organization": "Tổ chức",
+      "plan": "Gói",
+      "resource": "Tài nguyên",
+      "operationCenter": "Hệ thống"
     },
     "course_management": {
       "title": "Quản lý tài nguyên",
