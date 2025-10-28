@@ -1,110 +1,75 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
-import { Input } from '@/components/shadcn/input'
-import { Label } from '@/components/shadcn/label'
-import { Textarea } from '@/components/shadcn/textarea'
+import { useAppForm } from '@/components/shared/form/items'
+import z from 'zod'
+import { toast } from 'sonner'
+import { useOrganizationSubscriptionForm } from '@/features/subscription/components/upsert/create/useOrganizationSubscriptionForm'
 import { Button } from '@/components/shadcn/button'
-import { UploadCloud, FileText } from 'lucide-react'
-import { useFileUpload } from '@/components/shared/file/useFileUpload'
 
-type Step2ContractCreationProps = {
-  formData: any
-  setFormData: (data: any) => void
-}
+export default function Step2ContractCreation({
+  formWizard
+}: {
+  formWizard: ReturnType<typeof useOrganizationSubscriptionForm>
+}) {
+  const { currentStep, goBack, submitContract } = formWizard
 
-export default function Step2ContractCreation({ formData, setFormData }: Step2ContractCreationProps) {
-  const [file, setFile] = useState<File | null>(null)
-  const [base64, setBase64] = useState('')
-  const { inputRef, handleClick, handleFileChange, handleDrop, handleDragOver, handleDragLeave, accept, isDragging } =
-    useFileUpload(
-      (file, base64) => {
-        setFile(file)
-        setBase64(base64)
-      },
-      'any',
-      10
-    )
+  const contractSchema = z.object({
+    name: z.string().min(1, 'Contract name is required'),
+    description: z.string().min(10, 'Description must be at least 10 characters'),
+    fileBase64: z.string().min(1, 'Please upload a contract file')
+  })
+
+  const form = useAppForm({
+    defaultValues: {
+      name: '',
+      description: '',
+      fileBase64: ''
+    },
+    validators: { onChange: contractSchema as any },
+    onSubmit: async ({ value }) => {
+      toast.success('Contract step validated successfully!')
+      submitContract(value)
+    }
+  })
 
   return (
-    <div className='space-y-6'>
-      <div>
-        <h2 className='mb-4 text-2xl font-bold text-slate-900'>Create Contract</h2>
-        <p className='text-slate-600'>Provide contract information and upload the signed document.</p>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+      className='space-y-6'
+    >
+      <form.AppField name='name'>
+        {(field) => <field.TextField label='Contract Name' placeholder='Enter contract name' />}
+      </form.AppField>
+
+      <form.AppField name='description'>
+        {(field) => (
+          <field.TextAreaField
+            label='Description'
+            placeholder='Enter contract description'
+            rows={3}
+            className='resize-none'
+          />
+        )}
+      </form.AppField>
+
+      <form.AppField name='fileBase64'>
+        {(field) => <field.FileField label='Contract File (PDF)' accept='application/pdf' />}
+      </form.AppField>
+
+      <div className='mt-8 flex items-center justify-between border-t pt-6'>
+        <Button variant='outline' onClick={goBack} disabled={currentStep === 1}>
+          Back
+        </Button>
+
+        <div className='text-sm text-slate-600'>Step {currentStep} of 4</div>
+
+        <form.AppForm>
+          <form.SubmitButton>Next</form.SubmitButton>
+        </form.AppForm>
       </div>
-
-      {/* Contract Name */}
-      <div className='space-y-2'>
-        <Label htmlFor='contractName' className='text-sm font-medium text-slate-700'>
-          Contract Name <span className='text-red-500'>*</span>
-        </Label>
-        <Input
-          id='contractName'
-          placeholder='Enter contract name (e.g. FPT School - Subscription Contract)'
-          value={formData.contractName || ''}
-          onChange={(e) => setFormData({ ...formData, contractName: e.target.value })}
-          className='border-slate-300'
-        />
-      </div>
-
-      {/* Description */}
-      <div className='space-y-2'>
-        <Label htmlFor='description' className='text-sm font-medium text-slate-700'>
-          Description
-        </Label>
-        <Textarea
-          id='description'
-          rows={4}
-          placeholder='Enter description for the contract'
-          value={formData.contractDescription || ''}
-          onChange={(e) => setFormData({ ...formData, contractDescription: e.target.value })}
-          className='border-slate-300'
-        />
-      </div>
-
-      {/* File Upload */}
-      <div className='space-y-3'>
-        <p className='font-medium text-slate-700'>Upload Contract (PDF only)</p>
-
-        <div
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-all ${
-            isDragging ? 'border-slate-500 bg-slate-100' : 'border-slate-300 bg-slate-50'
-          }`}
-        >
-          {file ? (
-            <>
-              <FileText className='h-10 w-10 text-slate-700' />
-              <p className='mt-2 text-sm font-medium'>{file.name}</p>
-              <p className='text-xs text-slate-500'>{(file.size / 1024).toFixed(1)} KB</p>
-              <Button variant='outline' size='sm' className='mt-3' onClick={() => setFile(null)}>
-                Remove
-              </Button>
-            </>
-          ) : (
-            <>
-              <UploadCloud className='mb-2 h-10 w-10 text-slate-500' />
-              <p className='mb-2 text-sm text-slate-600'>
-                Drag & drop your file here, or <span className='font-medium text-slate-900'>browse</span>
-              </p>
-              <Button variant='outline' onClick={handleClick}>
-                Choose File
-              </Button>
-            </>
-          )}
-        </div>
-
-        <input ref={inputRef} type='file' accept={accept} onChange={handleFileChange} className='hidden' />
-      </div>
-
-      {/* Preview (Optional) */}
-      {formData.contractFile && (
-        <div className='rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700'>
-          <strong>Preview:</strong> {formData.contractFile.name}
-        </div>
-      )}
-    </div>
+    </form>
   )
 }

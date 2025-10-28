@@ -1,138 +1,117 @@
-import type React from 'react'
+'use client'
 
-import { Input } from '@/components/shadcn/input'
-import { Label } from '@/components/shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
-import { Check } from 'lucide-react'
+import { useAppForm } from '@/components/shared/form/items'
+import z from 'zod'
+import { toast } from 'sonner'
+import { useOrganizationSubscriptionForm } from '@/features/subscription/components/upsert/create/useOrganizationSubscriptionForm'
+import { Button } from '@/components/shadcn/button'
 
-export default function Step3SubscriptionConfiguration({ formData, setFormData }: { formData: any; setFormData: any }) {
-  const packages = [
-    { value: 'basic', label: 'Basic', description: 'Essential features for small teams' },
-    { value: 'professional', label: 'Professional', description: 'Advanced features for growing organizations' },
-    { value: 'enterprise', label: 'Enterprise', description: 'Full sshadcnte for large organizations' }
-  ]
-
-  const billingCycles = [
-    { value: 'monthly', label: 'Monthly', discount: null },
-    { value: 'quarterly', label: 'Quarterly', discount: '5% off' },
-    { value: 'annually', label: 'Annually', discount: '15% off' }
-  ]
+export default function Step3SubscriptionConfiguration({
+  formWizard
+}: {
+  formWizard: ReturnType<typeof useOrganizationSubscriptionForm>
+}) {
+  const { currentStep, goBack, submitSubscription } = formWizard
+  const subscriptionSchema = z.object({
+    planBillingCycleId: z.string().min(1, 'Billing cycle is required'),
+    planName: z.string().min(1, 'Plan name is required'),
+    grossAmount: z.number().min(1, 'Gross amount must be greater than 0'),
+    netAmount: z.number().min(1, 'Net amount must be greater than 0'),
+    discountPercent: z.number().min(0).max(100, 'Discount must be between 0 and 100'),
+    maxStudentSeats: z.number().min(1, 'At least 1 student seat required'),
+    maxTeacherSeats: z.number().min(1, 'At least 1 teacher seat required'),
+    curriculumIds: z.array(z.number())
+  })
+  const form = useAppForm({
+    defaultValues: {
+      planBillingCycleId: '',
+      planName: '',
+      grossAmount: 0,
+      netAmount: 0,
+      discountPercent: 0,
+      maxStudentSeats: 10,
+      maxTeacherSeats: 2,
+      curriculumIds: [1]
+    },
+    validators: { onChange: subscriptionSchema },
+    onSubmit: async ({ value }) => {
+      toast.success('Subscription step validated successfully!')
+      submitSubscription(value)
+    }
+  })
 
   return (
-    <div className='space-y-6'>
-      <div>
-        <h2 className='mb-4 text-2xl font-bold text-slate-900'>Configure Subscription</h2>
-        <p className='text-slate-600'>Select your subscription plan and options</p>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+      className='space-y-6'
+    >
+      <form.AppField name='planName'>
+        {(field) => <field.TextField label='Plan Name' placeholder='Enter plan name' />}
+      </form.AppField>
+
+      <form.AppField name='planBillingCycleId'>
+        {(field) => (
+          <field.SelectField
+            label='Billing Cycle'
+            placeholder='Select cycle'
+            options={[
+              { label: 'Semiannual (6 months)', value: '1' },
+              { label: 'Annual (12 months)', value: '2' }
+            ]}
+          />
+        )}
+      </form.AppField>
+
+      <div className='grid grid-cols-2 gap-4'>
+        <form.AppField name='grossAmount'>
+          {(field) => <field.TextField type='number' label='Gross Amount' />}
+        </form.AppField>
+        <form.AppField name='netAmount'>
+          {(field) => <field.TextField type='number' label='Net Amount' />}
+        </form.AppField>
       </div>
 
-      {/* Package Selection */}
-      <div className='space-y-2'>
-        <Label className='text-sm font-medium text-slate-700'>
-          Package <span className='text-red-500'>*</span>
-        </Label>
-        <div className='grid gap-3 md:grid-cols-3'>
-          {packages.map((pkg) => (
-            <button
-              key={pkg.value}
-              type='button'
-              onClick={() => setFormData({ ...formData, package: pkg.value })}
-              className={`flex flex-col items-start rounded-lg border-2 p-4 text-left transition-all ${
-                formData.package === pkg.value
-                  ? 'border-slate-900 bg-slate-50'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
-            >
-              <div className='mb-2 flex w-full items-center justify-between'>
-                <span className='font-semibold text-slate-900'>{pkg.label}</span>
-                {formData.package === pkg.value && <Check className='h-5 w-5 text-slate-900' />}
-              </div>
-              <span className='text-sm text-slate-600'>{pkg.description}</span>
-            </button>
-          ))}
-        </div>
+      <form.AppField name='discountPercent'>
+        {(field) => <field.TextField type='number' label='Discount (%)' />}
+      </form.AppField>
+
+      <div className='grid grid-cols-2 gap-4'>
+        <form.AppField name='maxStudentSeats'>
+          {(field) => <field.TextField type='number' label='Max Student Seats' />}
+        </form.AppField>
+        <form.AppField name='maxTeacherSeats'>
+          {(field) => <field.TextField type='number' label='Max Teacher Seats' />}
+        </form.AppField>
       </div>
 
-      {/* Billing Cycle */}
-      <div className='space-y-2'>
-        <Label className='text-sm font-medium text-slate-700'>
-          Billing Cycle <span className='text-red-500'>*</span>
-        </Label>
-        <div className='grid gap-3 md:grid-cols-3'>
-          {billingCycles.map((cycle) => (
-            <button
-              key={cycle.value}
-              type='button'
-              onClick={() => setFormData({ ...formData, billingCycle: cycle.value })}
-              className={`flex flex-col items-start rounded-lg border-2 p-4 text-left transition-all ${
-                formData.billingCycle === cycle.value
-                  ? 'border-slate-900 bg-slate-50'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
-            >
-              <div className='mb-1 flex w-full items-center justify-between'>
-                <span className='font-semibold text-slate-900'>{cycle.label}</span>
-                {formData.billingCycle === cycle.value && <Check className='h-5 w-5 text-slate-900' />}
-              </div>
-              {cycle.discount && <span className='text-sm font-medium text-green-600'>{cycle.discount}</span>}
-            </button>
-          ))}
-        </div>
-      </div>
+      <form.AppField name='curriculumIds'>
+        {(field) => (
+          <field.DropdownMultipleCheckboxField
+            label='Curriculums'
+            description='Select one or more curriculums'
+            options={[
+              { label: 'STEM Fundamentals', value: '1' },
+              { label: 'Robotics Beginner', value: '2' },
+              { label: 'AI Starter', value: '3' }
+            ]}
+          />
+        )}
+      </form.AppField>
 
-      {/* Tier Selection */}
-      <div className='space-y-2'>
-        <Label htmlFor='tier' className='text-sm font-medium text-slate-700'>
-          Tier <span className='text-red-500'>*</span>
-        </Label>
-        <Select value={formData.tier} onValueChange={(value) => setFormData({ ...formData, tier: value })}>
-          <SelectTrigger id='tier' className='border-slate-300'>
-            <SelectValue placeholder='Select tier' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='starter'>Starter - Up to 50 users</SelectItem>
-            <SelectItem value='growth'>Growth - Up to 200 users</SelectItem>
-            <SelectItem value='scale'>Scale - Up to 500 users</SelectItem>
-            <SelectItem value='unlimited'>Unlimited - Unlimited users</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <div className='mt-8 flex items-center justify-between border-t pt-6'>
+        <Button variant='outline' onClick={goBack} disabled={currentStep === 1}>
+          Back
+        </Button>
 
-      {/* Number of Seats */}
-      <div className='space-y-2'>
-        <Label htmlFor='seats' className='text-sm font-medium text-slate-700'>
-          Number of Seats <span className='text-red-500'>*</span>
-        </Label>
-        <Input
-          id='seats'
-          type='number'
-          min='1'
-          placeholder='Enter number of seats'
-          value={formData.seats}
-          onChange={(e) => setFormData({ ...formData, seats: e.target.value })}
-          className='border-slate-300'
-        />
-        <p className='text-xs text-slate-500'>Specify how many user seats you need</p>
-      </div>
+        <div className='text-sm text-slate-600'>Step {currentStep} of 4</div>
 
-      {/* Curriculum Selection */}
-      <div className='space-y-2'>
-        <Label htmlFor='curriculum' className='text-sm font-medium text-slate-700'>
-          Curriculum
-        </Label>
-        <Select value={formData.curriculum} onValueChange={(value) => setFormData({ ...formData, curriculum: value })}>
-          <SelectTrigger id='curriculum' className='border-slate-300'>
-            <SelectValue placeholder='Select curriculum (optional)' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='standard'>Standard Curriculum</SelectItem>
-            <SelectItem value='advanced'>Advanced Curriculum</SelectItem>
-            <SelectItem value='custom'>Custom Curriculum</SelectItem>
-            <SelectItem value='stem'>STEM Focus</SelectItem>
-            <SelectItem value='business'>Business & Management</SelectItem>
-            <SelectItem value='creative'>Creative Arts</SelectItem>
-          </SelectContent>
-        </Select>
+        <form.AppForm>
+          <form.SubmitButton>Next</form.SubmitButton>
+        </form.AppForm>
       </div>
-    </div>
+    </form>
   )
 }

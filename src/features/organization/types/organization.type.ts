@@ -1,3 +1,5 @@
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
+
 export type Organization = {
   id: number
   name: string
@@ -19,3 +21,10 @@ export enum OrganizationStatus {
   ACTIVE = 'Active',
   INACTIVE = 'Inactive'
 }
+
+export type OrganizationType = {
+  id: number
+  name: string
+}
+
+export type OrganizationQueryParams = {} & SearchPaginatedRequestParams
