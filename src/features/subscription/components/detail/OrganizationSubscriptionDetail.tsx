@@ -28,6 +28,8 @@ import { SCard } from '@/components/shared/card/SCard'
 import CardLayout from '@/components/shared/card/CardLayout'
 import LicenseAssignmentList from '@/features/license-assignment/components/list/licenseAssignmentList'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import BackButton from '@/components/shared/button/BackButton'
+import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
 
 export default function OrganizationSubscriptionDetail() {
   const { openModal } = useModal()
@@ -61,7 +63,10 @@ export default function OrganizationSubscriptionDetail() {
         {/* Header */}
         <div className='flex items-center justify-between'>
           <div>
-            <h1 className='text-foreground text-3xl font-bold tracking-tight'>Subscription Overview</h1>
+            <div className='flex items-center gap-3'>
+              <BackButton className='mt-2 bg-slate-200' />
+              <h1 className='text-foreground text-3xl font-bold tracking-tight'>Subscription Overview</h1>
+            </div>
             <p className='text-muted-foreground mt-1'>Manage your organization's subscription and users</p>
           </div>
           {/* Action Buttons */}
@@ -74,7 +79,7 @@ export default function OrganizationSubscriptionDetail() {
         </div>
 
         {/* Current Plan Card - Enhanced */}
-        <Card className='overflow-hidden bg-gradient-to-br from-sky-100 to-sky-300 shadow-xl'>
+        <Card className='overflow-hidden bg-sky-100 shadow-md'>
           <CardContent className='p-8'>
             <div className='flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between'>
               <div className='flex-1 space-y-6'>
@@ -89,11 +94,17 @@ export default function OrganizationSubscriptionDetail() {
                         <span className='mr-1'>●</span> {subscription?.data.status}
                       </Badge>
                     </div>
+                    {subscription?.data.status == SubscriptionStatus.PENDING && (
+                      <p className='text-sm'>
+                        This subscription will be activated on{' '}
+                        <span className='font-semibold'>{formatDate(subscription.data.startDate.toString())}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 <div className='grid gap-6 sm:grid-cols-2'>
-                  <div className='rounded-xl bg-sky-100/90 p-4 backdrop-blur-sm'>
+                  <div className='rounded-xl bg-slate-50 p-4 shadow-sm backdrop-blur-sm'>
                     <p className='text-sm font-medium'>Package Details</p>
                     <p className='mt-1 text-2xl font-bold'>{subscription?.data.planName}</p>
                     <p className='mt-1 text-sm'>
@@ -101,7 +112,7 @@ export default function OrganizationSubscriptionDetail() {
                       {subscription?.data.planBillingCycle}
                     </p>
                   </div>
-                  <div className='rounded-xl bg-sky-100/90 p-4 backdrop-blur-sm'>
+                  <div className='rounded-xl bg-slate-50 p-4 shadow-sm backdrop-blur-sm'>
                     <div className='flex items-center gap-2'>
                       <Calendar className='h-4 w-4' />
                       <p className='text-sm font-medium'>Expires On</p>
@@ -115,14 +126,14 @@ export default function OrganizationSubscriptionDetail() {
 
                 {/* Progress Bar */}
                 <div className='space-y-2'>
-                  <div className='flex items-center justify-between text-sm'>
+                  <div className='flex items-center justify-between text-sm font-semibold'>
                     <span className=''>Subscription Period</span>
                   </div>
                   <Progress
                     value={50}
-                    className='h-3 bg-white/20 [&>div]:bg-gradient-to-r [&>div]:from-emerald-400 [&>div]:to-emerald-500'
+                    className='h-3 bg-white [&>div]:bg-gradient-to-r [&>div]:from-emerald-400 [&>div]:to-emerald-500'
                   />
-                  <div className='flex justify-between text-xs'>
+                  <div className='flex justify-between text-xs font-semibold'>
                     <span>
                       {subscription?.data.startDate ? formatDate(subscription.data.startDate.toString()) : '—'}
                     </span>

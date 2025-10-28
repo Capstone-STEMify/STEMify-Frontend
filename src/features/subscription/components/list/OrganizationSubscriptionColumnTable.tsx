@@ -7,6 +7,8 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { Badge } from '@/components/shadcn/badge'
 import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+import { useRouter } from 'next/navigation'
+import { Sparkles, Users } from 'lucide-react'
 
 export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationSubscription>[] {
   const { openModal } = useModal()
@@ -14,17 +16,27 @@ export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationS
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
 
+  const router = useRouter()
+
   return [
     createSelectColumn<OrganizationSubscription>(),
     {
       accessorKey: 'plan',
       header: tc('tableHeader.plan'),
       cell: ({ row }) => {
-        const plan = row.getValue<string>('plan')
-        const billingCycle = row.getValue<BillingCycle>('billingCycle')
+        const plan = row.original.planName
+        const billingCycle = row.original.planBillingCycle
         return (
           <div>
-            <p className='font-medium'>{plan}</p>
+            <div className='mb-1 flex items-center gap-2'>
+              <Sparkles className='mr-1 inline-block h-6 w-6 text-yellow-400' />
+              <p
+                className='cursor-pointer font-medium hover:underline'
+                onClick={() => router.push(`/organization/subscriptions/${row.original.id}`)}
+              >
+                {plan}
+              </p>
+            </div>
             <p className='text-muted-foreground text-sm'>{billingCycle}</p>
           </div>
         )
@@ -42,21 +54,39 @@ export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationS
       accessorKey: 'pricePerSeat',
       header: tc('tableHeader.price'),
       cell: ({ row }) => {
-        const raw = row.getValue<string>('pricePerSeat')
-        return <div>{raw} đ / seat</div>
+        const raw = row.original.netAmount
+        return <div>{raw} đ </div>
       }
     },
     {
-      accessorKey: 'totalCurriculums',
+      accessorKey: 'curriculumCount',
       header: tc('tableHeader.curriculums')
     },
     {
       accessorKey: 'totalUsers',
-      header: tc('tableHeader.users')
+      header: tc('tableHeader.users'),
+      cell: ({ row }) => {
+        const raw = row.original.currentStudentSeats + row.original.currentTeacherSeats
+        return (
+          <div className='flex items-center gap-2'>
+            <Users className='h-4 w-4 text-gray-500' />
+            <div>{raw}</div>
+          </div>
+        )
+      }
     },
     {
       accessorKey: 'totalSeats',
-      header: tc('tableHeader.seats')
+      header: tc('tableHeader.seats'),
+      cell: ({ row }) => {
+        const raw = row.original.maxStudentSeats + row.original.maxTeacherSeats
+        return (
+          <div className='flex items-center gap-2'>
+            <Users className='h-4 w-4 text-gray-500' />
+            <div>{raw}</div>
+          </div>
+        )
+      }
     },
     {
       accessorKey: 'startDate',
