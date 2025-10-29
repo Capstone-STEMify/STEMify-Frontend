@@ -58,9 +58,6 @@ export type OrganizationSubscriptionSliceParams = {
 
 export type SubscriptionFormData = {
   planBillingCycleId: number
-  planName: string
-  grossAmount: number
-  netAmount: number
   startDate: Date | null
   discountPercent: number
   maxStudentSeats: number

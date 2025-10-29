@@ -40,7 +40,7 @@ export const DropdownMultipleCheckboxField = ({
 
   return (
     <div className='space-y-2'>
-      {label && <Label className='text-sm font-medium'>{label}</Label>}
+      {label && <Label className='text-base font-medium'>{label}</Label>}
       {description && <p className='text-muted-foreground text-xs'>{description}</p>}
 
       <Popover open={open} onOpenChange={setOpen}>

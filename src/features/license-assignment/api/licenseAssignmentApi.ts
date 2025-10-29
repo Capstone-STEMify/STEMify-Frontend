@@ -1,4 +1,8 @@
-import { LicenseAssignment, LicenseAssignmentCreatePayload, LicenseAssignmentSliceParams } from '@/features/license-assignment/types/licenseAssignment'
+import {
+  LicenseAssignment,
+  LicenseAssignmentCreatePayload,
+  LicenseAssignmentSliceParams
+} from '@/features/license-assignment/types/licenseAssignment'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const licenseAssignmentApi = createCrudApi<LicenseAssignment, LicenseAssignmentSliceParams>({
@@ -7,11 +11,11 @@ export const licenseAssignmentApi = createCrudApi<LicenseAssignment, LicenseAssi
   baseUrl: '/license-assignments'
 }).injectEndpoints({
   endpoints: (builder) => ({
-    createLicenseAssignmentBulk: builder.mutation<void, { licenseAssignmentCreatePayload: LicenseAssignmentCreatePayload[] }>({
-      query: ({ licenseAssignmentCreatePayload }) => ({
+    createLicenseAssignmentBulk: builder.mutation<void, { body: LicenseAssignmentCreatePayload[] }>({
+      query: ({ body }) => ({
         url: `/license-assignments/bulk`,
         method: 'POST',
-        body: { licenseAssignmentCreatePayload }
+        body
       })
     })
   })

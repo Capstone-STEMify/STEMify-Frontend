@@ -9,10 +9,10 @@ import Step2ContractCreation from '@/features/subscription/components/upsert/cre
 import Step3SubscriptionConfiguration from '@/features/subscription/components/upsert/create/Step3SubscriptionConfiguration'
 import Step4AdminAccounts from '@/features/subscription/components/upsert/create/Step4AdminAccounts'
 import {} from 'sonner'
-import { useOrganizationSubscriptionForm } from '@/features/subscription/components/upsert/create/useOrganizationSubscriptionForm'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 export default function CreateOrganizationSubscription() {
-  const formWizard = useOrganizationSubscriptionForm()
+  const { currentStep } = useAppSelector((state) => state.organizationSubscriptionForm)
 
   const steps = [
     { number: 1, title: 'Create Organization', description: 'Organization details' },
@@ -38,14 +38,14 @@ export default function CreateOrganizationSubscription() {
               <div className='flex flex-col items-center'>
                 <div
                   className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all ${
-                    formWizard.currentStep > step.number
+                    currentStep > step.number
                       ? 'border-slate-900 bg-slate-900 text-white'
-                      : formWizard.currentStep === step.number
+                      : currentStep === step.number
                         ? 'border-slate-900 bg-white text-slate-900'
                         : 'border-slate-300 bg-white text-slate-400'
                   }`}
                 >
-                  {formWizard.currentStep > step.number ? (
+                  {currentStep > step.number ? (
                     <Check className='h-6 w-6' />
                   ) : (
                     <span className='text-lg font-semibold'>{step.number}</span>
@@ -54,7 +54,7 @@ export default function CreateOrganizationSubscription() {
                 <div className='mt-2 text-center'>
                   <p
                     className={`text-sm font-medium ${
-                      formWizard.currentStep >= step.number ? 'text-slate-900' : 'text-slate-400'
+                      currentStep >= step.number ? 'text-slate-900' : 'text-slate-400'
                     }`}
                   >
                     {step.title}
@@ -67,7 +67,7 @@ export default function CreateOrganizationSubscription() {
               {index < steps.length - 1 && (
                 <div
                   className={`mx-6 h-0.5 w-16 transition-all ${
-                    formWizard.currentStep > step.number ? 'bg-slate-900' : 'bg-slate-300'
+                    currentStep > step.number ? 'bg-slate-900' : 'bg-slate-300'
                   }`}
                 />
               )}
@@ -77,10 +77,10 @@ export default function CreateOrganizationSubscription() {
 
         {/* Form Content */}
         <Card className='p-8'>
-          {formWizard.currentStep === 1 && <Step1OrganizationCreation formWizard={formWizard} />}
-          {formWizard.currentStep === 2 && <Step2ContractCreation formWizard={formWizard} />}
-          {formWizard.currentStep === 3 && <Step3SubscriptionConfiguration formWizard={formWizard} />}
-          {formWizard.currentStep === 4 && <Step4AdminAccounts formWizard={formWizard} />}
+          {currentStep === 1 && <Step1OrganizationCreation />}
+          {currentStep === 2 && <Step2ContractCreation />}
+          {currentStep === 3 && <Step3SubscriptionConfiguration />}
+          {currentStep === 4 && <Step4AdminAccounts />}
         </Card>
       </div>
     </div>

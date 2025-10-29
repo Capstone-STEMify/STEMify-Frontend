@@ -27,14 +27,5 @@ export enum BillingCycle {
   ANNUAL = 'Annual'
 }
 
-export type PlanPricingTier = {
-  id: number
-  planId: number
-  billingCycle: BillingCycle
-  pricePerSeat: number
-  minSeat: number
-  maxSeat: number
-}
-
 // Slice
 export type PlanSliceParams = {} & SliceQueryParams

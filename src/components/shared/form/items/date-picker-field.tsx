@@ -18,9 +18,9 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
   const [open, setOpen] = React.useState(false)
 
   return (
-    <div className='flex flex-col gap-3'>
+    <div className='flex flex-col space-y-2'>
       {label && (
-        <Label htmlFor={field.name} className='px-1'>
+        <Label htmlFor={field.name} className='text-base'>
           {label}
         </Label>
       )}
@@ -31,7 +31,7 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
             type='button'
             variant='outline'
             id={field.name}
-            className='w-48 justify-between font-normal'
+            className='w-48 w-full justify-between font-normal'
             onClick={() => setOpen((o) => !o)}
           >
             {field.state.value ? field.state.value.toLocaleDateString() : placeholder}
@@ -39,7 +39,7 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className='w-auto p-0' align='start'>
+        <PopoverContent className='w-auto' align='start'>
           <Calendar
             mode='single'
             selected={field.state.value ?? undefined}

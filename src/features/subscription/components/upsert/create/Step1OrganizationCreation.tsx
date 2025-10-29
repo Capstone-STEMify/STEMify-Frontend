@@ -8,9 +8,8 @@ import {
 } from '@/features/organization/api/organizationApi'
 import { OrganizationFormData } from '@/features/organization/types/organization.type'
 import { useGetPlanByIdQuery } from '@/features/plan/api/planApi'
-import { useOrganizationSubscriptionForm } from '@/features/subscription/components/upsert/create/useOrganizationSubscriptionForm'
-import { setOrganizationId } from '@/features/subscription/slice/subscriptionFormSlice'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { goBack, goNext, setOrganizationId } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { fileToBase64 } from '@/utils/index'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
@@ -25,16 +24,12 @@ const organizationDefaultValues: OrganizationFormData = {
   imageUrl: ''
 }
 
-export default function Step1OrganizationCreation({
-  formWizard
-}: {
-  formWizard: ReturnType<typeof useOrganizationSubscriptionForm>
-}) {
+export default function Step1OrganizationCreation() {
   const dispatch = useAppDispatch()
   const searchParams = useSearchParams()
   const organizationId = searchParams.get('organizationId')
 
-  const { currentStep, goBack, goNext } = formWizard
+  const { currentStep } = useAppSelector((state) => state.organizationSubscriptionForm)
   const imageFieldRef = useRef<any>(null)
 
   const { data: orgData } = useGetOrganizationByIdQuery(Number(1), {
@@ -42,8 +37,8 @@ export default function Step1OrganizationCreation({
   })
 
   const { data: orgTypesData, isLoading } = useGetAllOrganizationTypesQuery({ pageNumber: 1, pageSize: 50 })
-  const [createOrg, { isLoading: isCreating }] = useCreateOrganizationMutation()
-  const [updateOrg, { isLoading: isUpdating }] = useUpdateOrganizationMutation()
+  const [createOrg, { isLoading: isCreating, isError: isCreateError }] = useCreateOrganizationMutation()
+  const [updateOrg, { isLoading: isUpdating, isError: isUpdateError }] = useUpdateOrganizationMutation()
 
   const orgTypes = orgTypesData?.data.items || []
   const organizationTypesOptions = orgTypes.map((type) => ({ label: type.name, value: String(type.id) }))
@@ -78,14 +73,19 @@ export default function Step1OrganizationCreation({
       }
       if (organizationId) {
         const res = await updateOrg({ id: Number(organizationId), body: payload }).unwrap()
-        dispatch(setOrganizationId(res.data.id))
-        toast.message('Organization updated successfully')
+        if (res) {
+          dispatch(setOrganizationId(res.data.id))
+          dispatch(goNext())
+        }
       } else {
         const res = await createOrg(payload).unwrap()
-        dispatch(setOrganizationId(res.data.id))
-        toast.message('Organization created successfully')
+        if (res) {
+          dispatch(setOrganizationId(res.data.id))
+          dispatch(goNext())
+        }
       }
-      goNext()
+      if (!isCreateError || !isUpdateError) {
+      }
     }
   })
 
@@ -158,7 +158,7 @@ export default function Step1OrganizationCreation({
 
       {/* Navigation */}
       <div className='mt-5 flex items-center justify-between'>
-        <Button variant='outline' onClick={goBack} disabled={currentStep === 1}>
+        <Button variant='outline' onClick={() => dispatch(goBack())} disabled={currentStep === 1}>
           Back
         </Button>
 

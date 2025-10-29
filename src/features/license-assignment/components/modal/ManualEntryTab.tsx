@@ -5,16 +5,19 @@ import {
   useCreateLicenseAssignmentMutation
 } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
-import { useOrganizationSubscriptionForm } from '@/features/subscription/components/upsert/create/useOrganizationSubscriptionForm'
+import { goBack } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useParams } from 'next/navigation'
 import { KeyboardEvent, useState } from 'react'
 import { toast } from 'sonner'
 
 type ManualEntryTabProps = {
-  goBack?: () => void
+  isStep?: boolean
 }
 
-export default function ManualEntryTab({ goBack }: ManualEntryTabProps) {
+export default function ManualEntryTab({ isStep }: ManualEntryTabProps) {
+  const dispatch = useAppDispatch()
+  const { organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
   const [emailList, setEmailList] = useState<string[]>([])
   const [input, setInput] = useState('')
   const { subscriptionId } = useParams()
@@ -65,13 +68,14 @@ export default function ManualEntryTab({ goBack }: ManualEntryTabProps) {
   }
 
   const handleSubmit = async () => {
-    createLicenseAssignmentBulk({
-      licenseAssignmentCreatePayload: emailList.map((email) => ({
-        organizationSubscriptionOrderId: Number(subscriptionId),
+    await createLicenseAssignmentBulk({
+      body: emailList.map((email) => ({
+        organizationSubscriptionOrderId: Number(organizationSubscriptionId),
         userEmail: email,
         type: type
       }))
-    })
+    }).unwrap()
+
     toast.success('Send invitations successfully')
   }
 
@@ -124,8 +128,8 @@ export default function ManualEntryTab({ goBack }: ManualEntryTabProps) {
 
       {/* Submit */}
       <div className='flex justify-between'>
-        {goBack ? (
-          <Button variant='outline' onClick={goBack}>
+        {isStep ? (
+          <Button variant='outline' onClick={() => dispatch(goBack())}>
             Back
           </Button>
         ) : null}

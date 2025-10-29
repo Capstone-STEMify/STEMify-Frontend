@@ -3,10 +3,9 @@
 import { useAppForm } from '@/components/shared/form/items'
 import z from 'zod'
 import { toast } from 'sonner'
-import { useOrganizationSubscriptionForm } from '@/features/subscription/components/upsert/create/useOrganizationSubscriptionForm'
 import { Button } from '@/components/shadcn/button'
 import { ContractFormData } from '@/features/contract/types/contract.type'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import {
   useCreateContractMutation,
   useGetContractByIdQuery,
@@ -14,7 +13,7 @@ import {
 } from '@/features/contract/api/contractApi'
 import { fileToBase64 } from '@/utils/index'
 import { useEffect, useRef } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { goBack, goNext } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 
 const contractDefaultValues: ContractFormData = {
   name: '',
@@ -23,20 +22,12 @@ const contractDefaultValues: ContractFormData = {
   previewUrlFromServer: ''
 }
 
-export default function Step2ContractCreation({
-  formWizard
-}: {
-  formWizard: ReturnType<typeof useOrganizationSubscriptionForm>
-}) {
-  const searchParams = useSearchParams()
-  const organizationId = searchParams.get('organizationId')
-  const contractId = searchParams.get('contractId')
-
-  // const { organizationId } = useAppSelector((state) => state.subscriptionForm)
-  const { currentStep, goBack, goNext } = formWizard
+export default function Step2ContractCreation() {
+  const dispatch = useAppDispatch()
+  const { currentStep, organizationId, contractId } = useAppSelector((state) => state.organizationSubscriptionForm)
   const fileFieldRef = useRef<any>(null)
 
-  const { data: contractData } = useGetContractByIdQuery(1)
+  const { data: contractData } = useGetContractByIdQuery(1, { skip: !contractId })
   const [createContract, { isLoading: isCreating }] = useCreateContractMutation()
   const [updateContract, { isLoading: isUpdating }] = useUpdateContractMutation()
 
@@ -64,7 +55,7 @@ export default function Step2ContractCreation({
       createContract(payload).unwrap()
 
       toast.success('Contract step validated successfully!')
-      goNext()
+      dispatch(goNext())
     }
   })
 
@@ -132,7 +123,7 @@ export default function Step2ContractCreation({
       )}
 
       <div className='mt-8 flex items-center justify-between border-t pt-6'>
-        <Button variant='outline' onClick={goBack} disabled={currentStep === 1}>
+        <Button variant='outline' onClick={() => dispatch(goBack())} disabled={currentStep === 1}>
           Back
         </Button>
 
