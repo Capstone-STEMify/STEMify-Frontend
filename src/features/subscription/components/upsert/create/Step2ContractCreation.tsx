@@ -1,110 +1,138 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
-import { Input } from '@/components/shadcn/input'
-import { Label } from '@/components/shadcn/label'
-import { Textarea } from '@/components/shadcn/textarea'
+import { useAppForm } from '@/components/shared/form/items'
+import z from 'zod'
+import { toast } from 'sonner'
 import { Button } from '@/components/shadcn/button'
-import { UploadCloud, FileText } from 'lucide-react'
-import { useFileUpload } from '@/components/shared/file/useFileUpload'
+import { ContractFormData } from '@/features/contract/types/contract.type'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import {
+  useCreateContractMutation,
+  useGetContractByIdQuery,
+  useUpdateContractMutation
+} from '@/features/contract/api/contractApi'
+import { fileToBase64 } from '@/utils/index'
+import { useEffect, useRef } from 'react'
+import { goBack, goNext } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 
-type Step2ContractCreationProps = {
-  formData: any
-  setFormData: (data: any) => void
+const contractDefaultValues: ContractFormData = {
+  name: '',
+  description: '',
+  fileBase64: '',
+  previewUrlFromServer: ''
 }
 
-export default function Step2ContractCreation({ formData, setFormData }: Step2ContractCreationProps) {
-  const [file, setFile] = useState<File | null>(null)
-  const [base64, setBase64] = useState('')
-  const { inputRef, handleClick, handleFileChange, handleDrop, handleDragOver, handleDragLeave, accept, isDragging } =
-    useFileUpload(
-      (file, base64) => {
-        setFile(file)
-        setBase64(base64)
-      },
-      'any',
-      10
-    )
+export default function Step2ContractCreation() {
+  const dispatch = useAppDispatch()
+  const { currentStep, organizationId, contractId } = useAppSelector((state) => state.organizationSubscriptionForm)
+  const fileFieldRef = useRef<any>(null)
+
+  const { data: contractData } = useGetContractByIdQuery(1, { skip: !contractId })
+  const [createContract, { isLoading: isCreating }] = useCreateContractMutation()
+  const [updateContract, { isLoading: isUpdating }] = useUpdateContractMutation()
+
+  const contractSchema = z.object({
+    name: z.string().min(1, 'Contract name is required'),
+    description: z.string().min(10, 'Description must be at least 10 characters'),
+    fileBase64: z.string().min(1, 'Please upload a contract file'),
+    previewUrlFromServer: z.string().optional()
+  })
+
+  const form = useAppForm({
+    defaultValues: contractDefaultValues,
+    // validators: { onChange: contractSchema },
+    onSubmit: async ({ value }) => {
+      const fileValue = value.fileBase64 as any
+      if (fileValue instanceof File) {
+        value.fileBase64 = await fileToBase64(fileValue)
+      }
+
+      const payload = {
+        ...value,
+        organizationId: 1
+      }
+
+      createContract(payload).unwrap()
+
+      toast.success('Contract step validated successfully!')
+      dispatch(goNext())
+    }
+  })
+
+  useEffect(() => {
+    if (contractData?.data) {
+      form.reset({
+        name: contractData.data.name,
+        description: contractData.data.description,
+        fileBase64: '',
+        previewUrlFromServer: contractData.data.fileUrl
+      })
+    }
+  }, [contractData, form])
 
   return (
-    <div className='space-y-6'>
-      <div>
-        <h2 className='mb-4 text-2xl font-bold text-slate-900'>Create Contract</h2>
-        <p className='text-slate-600'>Provide contract information and upload the signed document.</p>
-      </div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+      className='space-y-6'
+    >
+      <form.AppField name='name'>
+        {(field) => <field.TextField label='Contract Name' placeholder='Enter contract name' />}
+      </form.AppField>
 
-      {/* Contract Name */}
-      <div className='space-y-2'>
-        <Label htmlFor='contractName' className='text-sm font-medium text-slate-700'>
-          Contract Name <span className='text-red-500'>*</span>
-        </Label>
-        <Input
-          id='contractName'
-          placeholder='Enter contract name (e.g. FPT School - Subscription Contract)'
-          value={formData.contractName || ''}
-          onChange={(e) => setFormData({ ...formData, contractName: e.target.value })}
-          className='border-slate-300'
-        />
-      </div>
+      <form.AppField name='description'>
+        {(field) => (
+          <field.TextAreaField
+            label='Description'
+            placeholder='Enter contract description'
+            rows={3}
+            className='resize-none'
+          />
+        )}
+      </form.AppField>
 
-      {/* Description */}
-      <div className='space-y-2'>
-        <Label htmlFor='description' className='text-sm font-medium text-slate-700'>
-          Description
-        </Label>
-        <Textarea
-          id='description'
-          rows={4}
-          placeholder='Enter description for the contract'
-          value={formData.contractDescription || ''}
-          onChange={(e) => setFormData({ ...formData, contractDescription: e.target.value })}
-          className='border-slate-300'
-        />
-      </div>
+      <form.AppField name='fileBase64'>
+        {(field) => {
+          fileFieldRef.current = field
+          return (
+            <field.FileField
+              label='Contract File (PDF)'
+              previewUrlFromServer={form.state.values.previewUrlFromServer}
+            />
+          )
+        }}
+      </form.AppField>
 
-      {/* File Upload */}
-      <div className='space-y-3'>
-        <p className='font-medium text-slate-700'>Upload Contract (PDF only)</p>
-
-        <div
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-all ${
-            isDragging ? 'border-slate-500 bg-slate-100' : 'border-slate-300 bg-slate-50'
-          }`}
-        >
-          {file ? (
-            <>
-              <FileText className='h-10 w-10 text-slate-700' />
-              <p className='mt-2 text-sm font-medium'>{file.name}</p>
-              <p className='text-xs text-slate-500'>{(file.size / 1024).toFixed(1)} KB</p>
-              <Button variant='outline' size='sm' className='mt-3' onClick={() => setFile(null)}>
-                Remove
-              </Button>
-            </>
-          ) : (
-            <>
-              <UploadCloud className='mb-2 h-10 w-10 text-slate-500' />
-              <p className='mb-2 text-sm text-slate-600'>
-                Drag & drop your file here, or <span className='font-medium text-slate-900'>browse</span>
-              </p>
-              <Button variant='outline' onClick={handleClick}>
-                Choose File
-              </Button>
-            </>
-          )}
-        </div>
-
-        <input ref={inputRef} type='file' accept={accept} onChange={handleFileChange} className='hidden' />
-      </div>
-
-      {/* Preview (Optional) */}
-      {formData.contractFile && (
-        <div className='rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700'>
-          <strong>Preview:</strong> {formData.contractFile.name}
+      {Object.keys(form.state.errors).length > 0 && (
+        <div className='rounded-md bg-red-50 p-4'>
+          <h3 className='text-sm font-medium text-red-800'>Please fix the following errors:</h3>
+          <ul className='mt-2 list-disc space-y-1 pl-5 text-sm text-red-700'>
+            {Object.entries(form.state.errors).map(([field, errorObj], i) => {
+              const message =
+                typeof errorObj === 'string' ? errorObj : (errorObj as any)?.message || JSON.stringify(errorObj)
+              return (
+                <li key={i}>
+                  <b>{field}</b>: {message}
+                </li>
+              )
+            })}
+          </ul>
         </div>
       )}
-    </div>
+
+      <div className='mt-8 flex items-center justify-between border-t pt-6'>
+        <Button variant='outline' onClick={() => dispatch(goBack())} disabled={currentStep === 1}>
+          Back
+        </Button>
+
+        <div className='text-sm text-slate-600'>Step {currentStep} of 4</div>
+
+        <form.AppForm>
+          <form.SubmitButton>Next</form.SubmitButton>
+        </form.AppForm>
+      </div>
+    </form>
   )
 }

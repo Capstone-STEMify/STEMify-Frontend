@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, DragEvent } from 'react'
 import { Upload, FileText, Video } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useFieldContext } from '@/components/shared/form/items'
@@ -23,9 +23,11 @@ export default function FileField({ previewUrlFromServer, accept = '*', label = 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const lastObjectUrl = useRef<string | null>(null)
 
-  // Effect to handle preview logic
+  // ✅ trạng thái highlight khi kéo file vào vùng upload
+  const [isDragging, setIsDragging] = useState(false)
+
+  // Effect preview
   useEffect(() => {
-    // Clean up previous object URL
     const cleanup = () => {
       if (lastObjectUrl.current) {
         URL.revokeObjectURL(lastObjectUrl.current)
@@ -34,34 +36,64 @@ export default function FileField({ previewUrlFromServer, accept = '*', label = 
     }
 
     const file = field.state.value
-    if (file) {
-      cleanup() // Revoke old URL before creating a new one
+
+    if (file instanceof File) {
+      cleanup()
       const isImage = file.type.startsWith('image/')
       const objectUrl = isImage ? URL.createObjectURL(file) : null
-      if (objectUrl) {
-        lastObjectUrl.current = objectUrl
-      }
+      if (objectUrl) lastObjectUrl.current = objectUrl
       setPreview({ url: objectUrl, name: file.name, isImage })
     } else if (previewUrlFromServer) {
-      // Handle existing file from server
       const isImageUrl = /\.(jpg|jpeg|png|gif)$/i.test(previewUrlFromServer)
       setPreview({ url: isImageUrl ? previewUrlFromServer : null, name: 'Existing file', isImage: isImageUrl })
     } else {
-      // Reset state
       setPreview({ url: null, name: '', isImage: false })
     }
 
-    return cleanup // Cleanup on unmount
+    return cleanup
   }, [field.state.value, previewUrlFromServer])
 
+  // ✅ xử lý khi user chọn file
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null
     field.handleChange(file)
   }
 
+  // ✅ xử lý kéo-thả file
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+  }
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+
+    const file = e.dataTransfer.files?.[0]
+    if (file) field.handleChange(file)
+  }
+
+  // Render preview
   const renderPreview = () => {
     if (preview.isImage && preview.url) {
-      return <Image src={preview.url} alt='Preview' className='mx-auto mb-3 max-h-64 rounded-xl object-cover' />
+      return (
+        <Image
+          src={preview.url.replace(/^http:\/\//, 'https://')}
+          alt='Preview'
+          width={200}
+          height={200}
+          className='mx-auto mb-3 max-h-64 rounded-xl object-cover'
+          unoptimized
+        />
+      )
     }
     if (preview.name) {
       const isVideo = accept.startsWith('video/')
@@ -81,7 +113,16 @@ export default function FileField({ previewUrlFromServer, accept = '*', label = 
       content={
         <>
           <h3 className='mb-3 text-xl font-semibold text-gray-800'>{label}</h3>
-          <div className='relative rounded-2xl border-2 border-dashed border-gray-300 p-8 text-center'>
+
+          {/* ✅ vùng drag & drop */}
+          <div
+            className={`relative rounded-2xl border-2 border-dashed p-8 text-center transition-all ${
+              isDragging ? 'border-blue-400 bg-blue-50' : 'border-gray-300'
+            }`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
             {renderPreview()}
             <p className='my-2 text-gray-600'>Drag & drop or click to upload</p>
             <Button type='button' className='rounded-full px-4 py-2' onClick={() => fileInputRef.current?.click()}>

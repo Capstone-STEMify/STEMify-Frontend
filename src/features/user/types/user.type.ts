@@ -9,6 +9,7 @@ export type User = {
   role: UserRole
   firstName: string
   lastName: string
+  imageUrl?: string
 }
 
 export type UserFormData = Omit<User, 'id'> & {

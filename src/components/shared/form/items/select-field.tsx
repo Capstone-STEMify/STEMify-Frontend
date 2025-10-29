@@ -12,9 +12,10 @@ type SelectFieldProps = {
   label: string
   options: SelectOption[]
   placeholder?: string
+  disabled?: boolean
 }
 
-export const SelectField = ({ label, options, placeholder }: SelectFieldProps) => {
+export const SelectField = ({ label, options, placeholder, disabled }: SelectFieldProps) => {
   const field = useFieldContext<string>()
   const stringValue = field.state.value !== undefined && field.state.value !== null ? String(field.state.value) : ''
   return (
@@ -23,7 +24,12 @@ export const SelectField = ({ label, options, placeholder }: SelectFieldProps) =
         <Label htmlFor={field.name} className='text-base'>
           {label}
         </Label>
-        <Select key={stringValue} value={stringValue} onValueChange={(value) => field.handleChange(value)}>
+        <Select
+          key={stringValue}
+          value={stringValue}
+          onValueChange={(value) => field.handleChange(value)}
+          disabled={disabled}
+        >
           <SelectTrigger id={field.name} onBlur={field.handleBlur} className='w-full'>
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>

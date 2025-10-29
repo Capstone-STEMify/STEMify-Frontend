@@ -1,3 +1,4 @@
+import { Organization } from '@/features/organization/types/organization.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
@@ -6,12 +7,7 @@ export type Contract = {
   name: string
   description: string
   createdAt: string
-  organization: {
-    id: number
-    name: string
-    organizationType: string
-    imageUrl: string
-  }
+  organization: Partial<Organization>
   fileUrl: string
   status: string
 }
@@ -19,3 +15,12 @@ export type Contract = {
 export type ContractSliceParams = {} & SliceQueryParams
 
 export type ContractQueryParams = {} & SearchPaginatedRequestParams
+
+// Form Data
+export type ContractFormData = {
+  name: string
+  // organizationId: number this should be included in request but not in the form
+  description: string
+  fileBase64: string
+  previewUrlFromServer?: string
+}

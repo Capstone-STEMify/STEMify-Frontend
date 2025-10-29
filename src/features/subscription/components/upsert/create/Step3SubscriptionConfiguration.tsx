@@ -1,138 +1,146 @@
-import type React from 'react'
+'use client'
 
-import { Input } from '@/components/shadcn/input'
-import { Label } from '@/components/shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
-import { Check } from 'lucide-react'
+import { useAppForm } from '@/components/shared/form/items'
+import z from 'zod'
+import { toast } from 'sonner'
+import { Button } from '@/components/shadcn/button'
+import { SubscriptionFormData } from '@/features/subscription/types/subscription.type'
+import { useEffect } from 'react'
+import { useCreateSubscriptionMutation, useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
+import { useGetAllCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
+import { or } from 'ajv/dist/compile/codegen'
+import { useGetAllPlanQuery } from '@/features/plan/api/planApi'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { goBack, goNext, setOrganizationSubscriptionId } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 
-export default function Step3SubscriptionConfiguration({ formData, setFormData }: { formData: any; setFormData: any }) {
-  const packages = [
-    { value: 'basic', label: 'Basic', description: 'Essential features for small teams' },
-    { value: 'professional', label: 'Professional', description: 'Advanced features for growing organizations' },
-    { value: 'enterprise', label: 'Enterprise', description: 'Full sshadcnte for large organizations' }
-  ]
+const subscriptionDefaultValues: SubscriptionFormData = {
+  planBillingCycleId: 1,
+  startDate: null,
+  discountPercent: 0,
+  maxStudentSeats: 10,
+  maxTeacherSeats: 2,
+  curriculumIds: []
+}
 
-  const billingCycles = [
-    { value: 'monthly', label: 'Monthly', discount: null },
-    { value: 'quarterly', label: 'Quarterly', discount: '5% off' },
-    { value: 'annually', label: 'Annually', discount: '15% off' }
-  ]
+export default function Step3SubscriptionConfiguration() {
+  const dispatch = useAppDispatch()
+  const { currentStep, organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
+  const { data: planData } = useGetAllPlanQuery()
+  const { data: curriculumData } = useGetAllCurriculumQuery()
+  const { data: subscriptionData } = useGetSubscriptionByIdQuery(organizationSubscriptionId!, {
+    skip: !organizationSubscriptionId
+  })
+  const [createSubscription] = useCreateSubscriptionMutation()
+
+  const subscription = subscriptionData?.data
+  const subscriptionSchema = z.object({
+    planBillingCycleId: z.number().min(1, 'Select a plan and billing cycle'),
+    startDate: z.date().nullable(),
+    discountPercent: z.number().min(0).max(100, 'Discount must be between 0 and 100'),
+    maxStudentSeats: z.number().min(1, 'At least 1 student seat required'),
+    maxTeacherSeats: z.number().min(1, 'At least 1 teacher seat required'),
+    curriculumIds: z.array(z.number())
+  })
+
+  const plans = planData?.data.items ?? []
+
+  const billingCycleOptions =
+    plans.flatMap((plan) =>
+      plan.planBillingCycles.map((cycle) => ({
+        label: `${plan.name} - ${cycle.billingCycle} (${cycle.price}$)`,
+        value: String(cycle.id)
+      }))
+    ) ?? []
+
+  const curriculumOptions =
+    curriculumData?.data.items.map((curriculum) => ({
+      label: curriculum.title,
+      value: String(curriculum.id)
+    })) || []
+
+  const form = useAppForm({
+    defaultValues: subscriptionDefaultValues,
+    validators: { onChange: subscriptionSchema as any },
+    onSubmit: async ({ value }) => {
+      const payload = {
+        ...value,
+        contractId: 1,
+        organizationId: 1,
+        planBillingCycleId: Number(value.planBillingCycleId),
+        startDate: value.startDate ? value.startDate.toISOString().split('T')[0] : undefined
+      }
+
+      const res = await createSubscription(payload).unwrap()
+      if (res) {
+        dispatch(setOrganizationSubscriptionId(res.data.id))
+        dispatch(goNext())
+      }
+    }
+  })
+
+  useEffect(() => {
+    if (subscription && organizationSubscriptionId) {
+      form.reset({
+        planBillingCycleId: subscription.planBillingCycleId,
+        startDate: subscription.startDate ? new Date(subscription.startDate) : null,
+        discountPercent: subscription.discountPercent,
+        maxStudentSeats: subscription.maxStudentSeats,
+        maxTeacherSeats: subscription.maxTeacherSeats,
+        curriculumIds: subscription.curriculums.filter((c) => c.id).map((c) => c.id as number)
+      })
+    }
+  }, [subscription, organizationSubscriptionId])
 
   return (
-    <div className='space-y-6'>
-      <div>
-        <h2 className='mb-4 text-2xl font-bold text-slate-900'>Configure Subscription</h2>
-        <p className='text-slate-600'>Select your subscription plan and options</p>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+      className='space-y-6'
+    >
+      <div className='grid grid-cols-2 gap-4'>
+        <form.AppField name='planBillingCycleId'>
+          {(field) => (
+            <field.SelectField
+              label='Plan & Billing Cycle'
+              placeholder='Select plan and billing cycle'
+              options={billingCycleOptions}
+            />
+          )}
+        </form.AppField>
+
+        <form.AppField name='startDate'>{(field) => <field.DatePickerField label='Start Date' />}</form.AppField>
       </div>
 
-      {/* Package Selection */}
-      <div className='space-y-2'>
-        <Label className='text-sm font-medium text-slate-700'>
-          Package <span className='text-red-500'>*</span>
-        </Label>
-        <div className='grid gap-3 md:grid-cols-3'>
-          {packages.map((pkg) => (
-            <button
-              key={pkg.value}
-              type='button'
-              onClick={() => setFormData({ ...formData, package: pkg.value })}
-              className={`flex flex-col items-start rounded-lg border-2 p-4 text-left transition-all ${
-                formData.package === pkg.value
-                  ? 'border-slate-900 bg-slate-50'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
-            >
-              <div className='mb-2 flex w-full items-center justify-between'>
-                <span className='font-semibold text-slate-900'>{pkg.label}</span>
-                {formData.package === pkg.value && <Check className='h-5 w-5 text-slate-900' />}
-              </div>
-              <span className='text-sm text-slate-600'>{pkg.description}</span>
-            </button>
-          ))}
-        </div>
+      <div className='grid grid-cols-2 gap-4'>
+        <form.AppField name='maxStudentSeats'>
+          {(field) => <field.TextField type='number' label='Max Student Seats' />}
+        </form.AppField>
+        <form.AppField name='maxTeacherSeats'>
+          {(field) => <field.TextField type='number' label='Max Teacher Seats' />}
+        </form.AppField>
       </div>
 
-      {/* Billing Cycle */}
-      <div className='space-y-2'>
-        <Label className='text-sm font-medium text-slate-700'>
-          Billing Cycle <span className='text-red-500'>*</span>
-        </Label>
-        <div className='grid gap-3 md:grid-cols-3'>
-          {billingCycles.map((cycle) => (
-            <button
-              key={cycle.value}
-              type='button'
-              onClick={() => setFormData({ ...formData, billingCycle: cycle.value })}
-              className={`flex flex-col items-start rounded-lg border-2 p-4 text-left transition-all ${
-                formData.billingCycle === cycle.value
-                  ? 'border-slate-900 bg-slate-50'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
-            >
-              <div className='mb-1 flex w-full items-center justify-between'>
-                <span className='font-semibold text-slate-900'>{cycle.label}</span>
-                {formData.billingCycle === cycle.value && <Check className='h-5 w-5 text-slate-900' />}
-              </div>
-              {cycle.discount && <span className='text-sm font-medium text-green-600'>{cycle.discount}</span>}
-            </button>
-          ))}
-        </div>
+      <div className='grid grid-cols-2 gap-4'>
+        <form.AppField name='curriculumIds'>
+          {(field) => <field.DropdownMultipleCheckboxField label='Curriculums' options={curriculumOptions} />}
+        </form.AppField>
+        <form.AppField name='discountPercent'>
+          {(field) => <field.TextField type='number' label='Discount (%)' />}
+        </form.AppField>
       </div>
+      <div className='mt-5 flex items-center justify-between'>
+        <Button variant='outline' onClick={() => dispatch(goBack())} disabled={currentStep === 1}>
+          Back
+        </Button>
 
-      {/* Tier Selection */}
-      <div className='space-y-2'>
-        <Label htmlFor='tier' className='text-sm font-medium text-slate-700'>
-          Tier <span className='text-red-500'>*</span>
-        </Label>
-        <Select value={formData.tier} onValueChange={(value) => setFormData({ ...formData, tier: value })}>
-          <SelectTrigger id='tier' className='border-slate-300'>
-            <SelectValue placeholder='Select tier' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='starter'>Starter - Up to 50 users</SelectItem>
-            <SelectItem value='growth'>Growth - Up to 200 users</SelectItem>
-            <SelectItem value='scale'>Scale - Up to 500 users</SelectItem>
-            <SelectItem value='unlimited'>Unlimited - Unlimited users</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+        <div className='text-sm text-slate-600'>Step {currentStep} of 4</div>
 
-      {/* Number of Seats */}
-      <div className='space-y-2'>
-        <Label htmlFor='seats' className='text-sm font-medium text-slate-700'>
-          Number of Seats <span className='text-red-500'>*</span>
-        </Label>
-        <Input
-          id='seats'
-          type='number'
-          min='1'
-          placeholder='Enter number of seats'
-          value={formData.seats}
-          onChange={(e) => setFormData({ ...formData, seats: e.target.value })}
-          className='border-slate-300'
-        />
-        <p className='text-xs text-slate-500'>Specify how many user seats you need</p>
+        <form.AppForm>
+          <form.SubmitButton>Next</form.SubmitButton>
+        </form.AppForm>
       </div>
-
-      {/* Curriculum Selection */}
-      <div className='space-y-2'>
-        <Label htmlFor='curriculum' className='text-sm font-medium text-slate-700'>
-          Curriculum
-        </Label>
-        <Select value={formData.curriculum} onValueChange={(value) => setFormData({ ...formData, curriculum: value })}>
-          <SelectTrigger id='curriculum' className='border-slate-300'>
-            <SelectValue placeholder='Select curriculum (optional)' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='standard'>Standard Curriculum</SelectItem>
-            <SelectItem value='advanced'>Advanced Curriculum</SelectItem>
-            <SelectItem value='custom'>Custom Curriculum</SelectItem>
-            <SelectItem value='stem'>STEM Focus</SelectItem>
-            <SelectItem value='business'>Business & Management</SelectItem>
-            <SelectItem value='creative'>Creative Arts</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
+    </form>
   )
 }

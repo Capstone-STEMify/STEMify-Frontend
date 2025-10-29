@@ -62,6 +62,8 @@ import { licenseAssignmentSlice } from '@/features/license-assignment/slice/lice
 import { licenseAssignmentApi } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { studentQuizApi } from '@/features/quiz/api/studentQuizApi'
 import { quizSelectedSlice } from '@/features/quiz/slice/studentQuizSlice'
+import { organizationApi } from '@/features/organization/api/organizationApi'
+import { organizationSubscriptionFormSlice } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -98,8 +100,9 @@ export const rootReducer = combineReducers({
   question: questionSlice.reducer,
   planProduct: planSlice.reducer,
   organizationSubscription: organizationSubscriptionSlice.reducer,
-  licenseAssignment: licenseAssignmentSlice.reducer,
-  
+  licenseAssignment: licenseAssignmentSlice.reducer,  
+  organizationSubscriptionForm: organizationSubscriptionFormSlice.reducer,
+
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
   [lessonApi.reducerPath]: lessonApi.reducer,
@@ -131,4 +134,5 @@ export const rootReducer = combineReducers({
   [subscriptionApi.reducerPath]: subscriptionApi.reducer,
   [licenseAssignmentApi.reducerPath]: licenseAssignmentApi.reducer,
   [studentQuizApi.reducerPath]: studentQuizApi.reducer
+  [organizationApi.reducerPath]: organizationApi.reducer
 })

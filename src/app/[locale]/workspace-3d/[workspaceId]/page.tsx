@@ -8,7 +8,7 @@ import { useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi'
 export default function Create3DPage() {
   const { data: emulatorData, isLoading: isLoadingEmulator } = useGetEmulatorByIdQuery(
     {
-      emulatorId: 'emu_9269bc591432'
+      emulatorId: 'emu_190f34e7f3dc'
     },
     {
       refetchOnFocus: false,

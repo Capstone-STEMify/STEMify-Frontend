@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Upload, X, FileSpreadsheet } from 'lucide-react'
+import { Button } from '@/components/shadcn/button'
+import { Input } from '@/components/shadcn/input'
 
 interface UploadedFile {
   name: string
@@ -190,20 +192,20 @@ export default function UploadCSV() {
         <div className='mt-6'>
           <p className='mb-3 text-center text-sm text-gray-600'>Or upload from URL</p>
           <div className='flex gap-2'>
-            <input
+            <Input
               type='text'
               placeholder='Add file URL'
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
-              className='flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none'
+              className='flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none'
             />
-            <button
+            <Button
               onClick={handleUrlUpload}
               disabled={!urlInput}
-              className='rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300'
+              className='transition-colorshover:bg-sky-600 rounded-lg bg-sky-500 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed'
             >
               Upload
-            </button>
+            </Button>
           </div>
         </div>
 
