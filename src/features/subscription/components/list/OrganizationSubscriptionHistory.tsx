@@ -13,6 +13,7 @@ import { useTranslations } from 'next-intl'
 
 import React, { useMemo } from 'react'
 import { Card, CardAction, CardContent } from '@/components/shadcn/card'
+import { BarChart2, CheckCircle2, Clock, TimerOff, XCircle } from 'lucide-react'
 
 export default function OrganizationSubscriptionHistory() {
   const t = useTranslations('subscription')
@@ -66,74 +67,59 @@ export default function OrganizationSubscriptionHistory() {
 
       {/* Stats Cards */}
       <div className='grid grid-cols-2 gap-4 sm:grid-cols-4'>
-        <Card className='overflow-hidden shadow-sm'>
+        {/* Total */}
+        <Card className='relative overflow-hidden rounded-xl border bg-gradient-to-br from-slate-50 to-slate-100 shadow-sm transition hover:shadow-md'>
           <CardContent className='p-6'>
-            <div className='mb-3 flex items-center justify-between'>
-              <p className='text-muted-foreground text-sm font-medium tracking-wide uppercase'>Total</p>
-              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-slate-100'>
-                <svg className='h-5 w-5 text-slate-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'
-                  />
-                </svg>
+            <div className='mb-4 flex items-center justify-between'>
+              <p className='text-sm font-medium text-slate-600'>Total</p>
+              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-slate-200'>
+                <BarChart2 className='h-5 w-5 text-slate-700' />
               </div>
             </div>
             <p className='text-4xl font-bold text-slate-900'>{subscriptionStats.total}</p>
+            <p className='text-muted-foreground mt-1 text-xs'>All subscriptions in system</p>
           </CardContent>
         </Card>
 
-        <Card className='relative overflow-hidden shadow-sm'>
-          <CardContent className='relative z-10 p-6'>
-            <div className='mb-3 flex items-center justify-between'>
-              <p className='text-muted-foreground text-sm font-medium tracking-wide uppercase'>Active</p>
-              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-green-100'>
-                <svg className='h-5 w-5 text-green-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
-                  />
-                </svg>
+        {/* Active */}
+        <Card className='relative overflow-hidden rounded-xl border bg-gradient-to-br from-emerald-50 to-emerald-100 shadow-sm transition hover:shadow-md'>
+          <CardContent className='p-6'>
+            <div className='mb-4 flex items-center justify-between'>
+              <p className='text-sm font-medium text-emerald-700'>Active</p>
+              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-emerald-200'>
+                <CheckCircle2 className='h-5 w-5 text-emerald-700' />
               </div>
             </div>
-            <p className='text-4xl font-bold text-green-600'>{subscriptionStats.active}</p>
+            <p className='text-4xl font-bold text-emerald-700'>{subscriptionStats.active}</p>
+            <p className='mt-1 text-xs text-emerald-700/70'>Currently active subscriptions</p>
           </CardContent>
         </Card>
 
-        <Card className='relative overflow-hidden shadow-sm'>
-          <CardContent className='relative z-10 p-6'>
-            <div className='mb-3 flex items-center justify-between'>
-              <p className='text-muted-foreground text-sm font-medium tracking-wide uppercase'>Pending</p>
-              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-yellow-100'>
-                <svg className='h-5 w-5 text-yellow-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'
-                  />
-                </svg>
+        {/* Pending */}
+        <Card className='relative overflow-hidden rounded-xl border bg-gradient-to-br from-amber-50 to-yellow-100 shadow-sm transition hover:shadow-md'>
+          <CardContent className='p-6'>
+            <div className='mb-4 flex items-center justify-between'>
+              <p className='text-sm font-medium text-amber-700'>Pending</p>
+              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-amber-200'>
+                <Clock className='h-5 w-5 text-amber-700' />
               </div>
             </div>
-            <p className='text-4xl font-bold text-yellow-600'>{subscriptionStats.pending}</p>
+            <p className='text-4xl font-bold text-amber-700'>{subscriptionStats.pending}</p>
+            <p className='mt-1 text-xs text-amber-700/70'>Awaiting approval</p>
           </CardContent>
         </Card>
 
-        <Card className='relative overflow-hidden shadow-sm'>
-          <CardContent className='relative z-10 p-6'>
-            <div className='mb-3 flex items-center justify-between'>
-              <p className='text-muted-foreground text-sm font-medium tracking-wide uppercase'>Expired</p>
-              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-red-100'>
-                <svg className='h-5 w-5 text-red-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
-                </svg>
+        {/* Expired */}
+        <Card className='relative overflow-hidden rounded-xl border bg-gradient-to-br from-rose-50 to-rose-100 shadow-sm transition hover:shadow-md'>
+          <CardContent className='p-6'>
+            <div className='mb-4 flex items-center justify-between'>
+              <p className='text-sm font-medium text-rose-700'>Expired</p>
+              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-rose-200'>
+                <TimerOff className='h-5 w-5 text-rose-700' />
               </div>
             </div>
-            <p className='text-4xl font-bold text-red-600'>{subscriptionStats.expired}</p>
+            <p className='text-4xl font-bold text-rose-700'>{subscriptionStats.expired}</p>
+            <p className='mt-1 text-xs text-rose-700/70'>Ended or canceled subscriptions</p>
           </CardContent>
         </Card>
       </div>

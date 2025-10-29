@@ -2,7 +2,6 @@
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { Pencil, Trash2 } from 'lucide-react'
 import { Plan, BillingCycle } from '@/features/plan/types/plan.type'
 import React from 'react'
 import SAvatar from '@/components/shared/SAvatar'

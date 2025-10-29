@@ -76,6 +76,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
     {
       accessorKey: 'code',
       header: tc('tableHeader.code'),
+      enableSorting: true,
       cell: ({ row }) => row.getValue('code')
     },
     {

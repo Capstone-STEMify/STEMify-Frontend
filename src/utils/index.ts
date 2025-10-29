@@ -51,7 +51,16 @@ export const formatDate = (dateString: string) => {
   })
 }
 
-/**
+export function formatDateV2(date: Date | undefined) {
+  if (!date) {
+    return ''
+  }
+  return date.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  })
+} /**
  *
  * Get label from options based on id
  * @param id
