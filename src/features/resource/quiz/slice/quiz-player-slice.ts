@@ -1,5 +1,4 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { mockQuiz } from '@/features/resource/quiz/data/mock-data'
 import { Question } from '@/features/resource/question/types/question.type'
 
 interface QuizPlayerState {
@@ -11,9 +10,9 @@ interface QuizPlayerState {
 }
 
 const initialState: QuizPlayerState = {
-  questions: mockQuiz.questions,
+  questions: [],
   currentQuestionIndex: 0,
-  timeRemaining: mockQuiz.duration * 60,
+  timeRemaining: 1000 * 60,
   isSubmitted: false,
   userAnswers: {}
 }
@@ -50,7 +49,7 @@ export const quizPlayerSlice = createSlice({
     },
     resetQuiz: (state) => {
       state.currentQuestionIndex = 0
-      state.timeRemaining = mockQuiz.duration * 60
+      state.timeRemaining = 1000 * 60
       state.isSubmitted = false
       state.userAnswers = {}
     }

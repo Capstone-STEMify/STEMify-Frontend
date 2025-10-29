@@ -4,10 +4,17 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import QuestionCard from '@/features/resource/quiz/components/player/question/card/QuestionCard'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import NavigationButtons from '@/features/resource/quiz/components/player/NavigationButton'
+import { useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
+import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 
-export default function QuizMainContent() {
-  const { questions, currentQuestionIndex } = useAppSelector((state) => state.quizPlayer)
+type QuizMainContentProps = {
+  quiz: Quiz
+}
+
+export default function QuizMainContent({ quiz }: QuizMainContentProps) {
+  const { currentQuestionIndex } = useAppSelector((state) => state.quizPlayer)
   const isMobile = useIsMobile()
+  const questions = quiz.questions
   const currentQuestion = questions[currentQuestionIndex]
 
   return (
@@ -18,7 +25,7 @@ export default function QuizMainContent() {
       </div>
 
       {/* Navigation */}
-      <NavigationButtons />
+      <NavigationButtons quiz={quiz} />
     </main>
   )
 }

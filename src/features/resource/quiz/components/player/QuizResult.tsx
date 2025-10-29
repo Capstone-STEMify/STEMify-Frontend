@@ -4,9 +4,14 @@ import { CheckCircle, XCircle } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 
-export default function ResultsScreen() {
-  const { questions } = useAppSelector((state) => state.quizPlayer)
+type QuizResultProps = {
+  quiz: Quiz
+}
+
+export default function QuizResult({ quiz }: QuizResultProps) {
+  const questions = quiz.questions
 
   // Calculate score (mock calculation)
   const correctAnswers = Math.floor(questions.length * 0.7)
@@ -46,7 +51,7 @@ export default function ResultsScreen() {
               </div>
               <div className='flex-1'>
                 <p className='text-foreground mb-1 font-medium'>Câu {index + 1}</p>
-                <p className='text-foreground/60 text-sm'>{question.name}</p>
+                <p className='text-foreground/60 text-sm'>{question.content}</p>
               </div>
             </Card>
           ))}

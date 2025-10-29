@@ -4,11 +4,26 @@ import { Clock } from 'lucide-react'
 import { Card } from '@/components/shadcn/card'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setCurrentQuestionIndex } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { decrementTime, setCurrentQuestionIndex } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { Quiz } from '@/features/resource/quiz/types/quiz.type'
+import { useEffect } from 'react'
 
-export default function Sidebar() {
-  const { questions, currentQuestionIndex, timeRemaining } = useAppSelector((state) => state.quizPlayer)
+type QuizSidebarProps = {
+  quiz: Quiz
+}
+
+export default function QuizSidebar({ quiz }: QuizSidebarProps) {
+  const questions = quiz.questions
+  const { currentQuestionIndex, timeRemaining, isSubmitted } = useAppSelector((state) => state.quizPlayer)
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (isSubmitted) return
+    const timer = setInterval(() => {
+      dispatch(decrementTime())
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [dispatch, isSubmitted])
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)

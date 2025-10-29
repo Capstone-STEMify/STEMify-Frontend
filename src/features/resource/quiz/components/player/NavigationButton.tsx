@@ -5,9 +5,15 @@ import { ChevronLeft, ChevronRight, Send } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { goToNextQuestion, goToPreviousQuestion, submitQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 
-export default function NavigationButtons() {
-  const { questions, currentQuestionIndex } = useAppSelector((state) => state.quizPlayer)
+type NavigationButtonsProps = {
+  quiz: Quiz
+}
+
+export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
+  const questions = quiz.questions
+  const { currentQuestionIndex } = useAppSelector((state) => state.quizPlayer)
   const dispatch = useAppDispatch()
   const isMobile = useIsMobile()
 
