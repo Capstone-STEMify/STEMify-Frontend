@@ -6,7 +6,7 @@ interface QuizState {
 }
 
 const initialState: QuizState = {
-  selectedQuiz: null,
+  selectedQuiz: null
 }
 
 export const quizSelectedSlice = createSlice({
@@ -18,8 +18,8 @@ export const quizSelectedSlice = createSlice({
     },
     clearSelectedQuiz: (state) => {
       state.selectedQuiz = null
-    },
-  },
+    }
+  }
 })
 
 export const { setSelectedQuiz, clearSelectedQuiz } = quizSelectedSlice.actions

@@ -8,7 +8,7 @@ type QuestionDetailTabProps = {
   data: QuizStatistics
 }
 
-export function QuestionDetailTab({data}: QuestionDetailTabProps) {
+export function QuestionDetailTab({ data }: QuestionDetailTabProps) {
   return (
     <div className='space-y-6'>
       <div className='flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
@@ -32,7 +32,7 @@ export function QuestionDetailTab({data}: QuestionDetailTabProps) {
       </div>
 
       <div className='space-y-6'>
-        <QuestionCard data={data.questionStatistics} totalQuestion={data.totalQuestions}/>
+        <QuestionCard data={data.questionStatistics} totalQuestion={data.totalQuestions} />
       </div>
     </div>
   )

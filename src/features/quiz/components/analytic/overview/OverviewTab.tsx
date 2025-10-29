@@ -7,7 +7,7 @@ type LearnerOverviewTabProps = {
   data: QuizStatistics
 }
 
-export function LearnerOverviewTab({data}: LearnerOverviewTabProps) {
+export function LearnerOverviewTab({ data }: LearnerOverviewTabProps) {
   return (
     <div className='space-y-6'>
       <Alert className='border-yellow-200 bg-yellow-50'>
@@ -19,7 +19,7 @@ export function LearnerOverviewTab({data}: LearnerOverviewTabProps) {
           </Button>
         </AlertDescription>
       </Alert>
-      <AnswerGridTable data={data} studentData={data.studentStatistics} questionData={data.questionStatistics}/>
+      <AnswerGridTable data={data} studentData={data.studentStatistics} questionData={data.questionStatistics} />
     </div>
   )
 }

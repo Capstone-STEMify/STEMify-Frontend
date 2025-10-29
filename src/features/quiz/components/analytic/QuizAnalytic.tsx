@@ -8,11 +8,10 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@/libs/redux/store'
 
 export default function QuizAnalytic() {
-
   const quiz = useSelector((state: RootState) => state.quizSelected.selectedQuiz)
 
   if (!quiz) {
-    return <p className='text-center mt-10 text-gray-500'>Loading quiz data...</p>
+    return <p className='mt-10 text-center text-gray-500'>Loading quiz data...</p>
   }
 
   return (
@@ -41,7 +40,7 @@ export default function QuizAnalytic() {
             <QuestionDetailTab data={quiz} />
           </TabsContent>
           <TabsContent value='overview' className='mt-6'>
-            <LearnerOverviewTab data={quiz}/>
+            <LearnerOverviewTab data={quiz} />
           </TabsContent>
         </Tabs>
       </div>

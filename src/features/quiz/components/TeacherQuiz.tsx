@@ -11,9 +11,9 @@ import { useSearchStudentQuizQuery } from '../api/studentQuizApi'
 export default function TeacherQuiz() {
   const [activeTab, setActiveTab] = useState('overview')
 
-  const {data: quizStatisticData, isLoading, isFetching} = useSearchStudentQuizQuery({classroomId: 1})
+  const { data: quizStatisticData, isLoading, isFetching } = useSearchStudentQuizQuery({ classroomId: 1 })
 
-  console.log('quizData: ',quizStatisticData)
+  console.log('quizData: ', quizStatisticData)
 
   const quizListDisplay = quizStatisticData?.data.items || []
 
@@ -33,11 +33,11 @@ export default function TeacherQuiz() {
 
         {activeTab === 'overview' ? (
           <>
-            <QuizOverview data={quizListDisplay}/>
+            <QuizOverview data={quizListDisplay} />
           </>
         ) : (
           <>
-            <QuizActive data={quizListDisplay}/>
+            <QuizActive data={quizListDisplay} />
           </>
         )}
       </div>

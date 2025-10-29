@@ -16,7 +16,7 @@ type QuizDetailHeaderProps = {
   data: QuizStatistics
 }
 
-export function QuizDetailHeader({data}: QuizDetailHeaderProps) {
+export function QuizDetailHeader({ data }: QuizDetailHeaderProps) {
   return (
     <div>
       <div className='mb-4 flex items-center justify-between'>
@@ -60,7 +60,7 @@ export function QuizDetailHeader({data}: QuizDetailHeaderProps) {
             <Badge>Design</Badge>
             <Badge>Not Urgent</Badge>
           </div> */}
-          <div className='flex items-center gap-4 text-sm text-gray-500 mt-2'>
+          <div className='mt-2 flex items-center gap-4 text-sm text-gray-500'>
             <span className='flex items-center gap-1.5'>
               <BookOpen className='h-4 w-4' /> Quiz
             </span>
@@ -73,14 +73,26 @@ export function QuizDetailHeader({data}: QuizDetailHeaderProps) {
           {/* Stats */}
           <div className='mt-6 grid grid-cols-2 gap-4 p-4 md:grid-cols-4'>
             <div className='flex items-center gap-3 border-r-2'>
-              <ProgressCircle value={data.averageScore} size={40} className='text-red-500' showPercentageText={false} strokeWidth={4} />
+              <ProgressCircle
+                value={data.averageScore}
+                size={40}
+                className='text-red-500'
+                showPercentageText={false}
+                strokeWidth={4}
+              />
               <div>
                 <span className='text-xs text-gray-500'>Accuracy</span>
                 <p className='text-lg font-semibold'>50%</p>
               </div>
             </div>
             <div className='flex items-center gap-3 border-r-2'>
-              <ProgressCircle value={data.passRate} size={40} className='text-green-500' showPercentageText={false} strokeWidth={4}/>
+              <ProgressCircle
+                value={data.passRate}
+                size={40}
+                className='text-green-500'
+                showPercentageText={false}
+                strokeWidth={4}
+              />
               <div>
                 <span className='text-xs text-gray-500'>Completed Course</span>
                 <p className='text-lg font-semibold'>100%</p>

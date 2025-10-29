@@ -6,7 +6,7 @@ type QuizOverviewProps = {
   data: QuizStatistics[]
 }
 
-export default function QuizOverview({data}: QuizOverviewProps) {
+export default function QuizOverview({ data }: QuizOverviewProps) {
   const QuizHeader = () => (
     <div>
       <h1 className='text-2xl font-bold tracking-tight'>Quiz</h1>
@@ -17,7 +17,7 @@ export default function QuizOverview({data}: QuizOverviewProps) {
     <div className='min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8'>
       <div className='mx-auto max-w-7xl'>
         <QuizOverviewToolbar />
-        <QuizCardGrid data = {data}/>
+        <QuizCardGrid data={data} />
       </div>
     </div>
   )

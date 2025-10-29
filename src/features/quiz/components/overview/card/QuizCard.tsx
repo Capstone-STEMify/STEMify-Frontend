@@ -33,19 +33,29 @@ export function QuizCard({ quiz }: QuizCardProps) {
 
       <CardContent className='flex-grow pt-4'>
         <h3 className='mb-4 h-10 text-base leading-tight font-semibold'>{quiz.quizName}</h3>
-        <div className='flex items-center justify-between text-sm mb-4'>
+        <div className='mb-4 flex items-center justify-between text-sm'>
           <div className='flex items-center gap-2'>
-            <ProgressCircle value={quiz.averageScore} className='text-red-400' showPercentageText={false} strokeWidth={5}/>
+            <ProgressCircle
+              value={quiz.averageScore}
+              className='text-red-400'
+              showPercentageText={false}
+              strokeWidth={5}
+            />
             <div>
-            <p className='text-sm text-gray-500'>Accuracy</p>
-            <p className='text-sm font-bold'>{quiz.averageScore} %</p>
+              <p className='text-sm text-gray-500'>Accuracy</p>
+              <p className='text-sm font-bold'>{quiz.averageScore} %</p>
             </div>
           </div>
           <div className='flex items-center gap-2'>
-            <ProgressCircle value={quiz.passRate} className='text-green-500' showPercentageText={false} strokeWidth={5}/>
+            <ProgressCircle
+              value={quiz.passRate}
+              className='text-green-500'
+              showPercentageText={false}
+              strokeWidth={5}
+            />
             <div>
-            <p className='text-sm text-gray-500'>Completion Rate</p>
-            <p className='text-sm font-bold'>{quiz.passRate} %</p>
+              <p className='text-sm text-gray-500'>Completion Rate</p>
+              <p className='text-sm font-bold'>{quiz.passRate} %</p>
             </div>
           </div>
         </div>
@@ -63,7 +73,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
       <CardFooter className='flex items-center justify-between bg-gray-50/70 px-6 py-2 text-xs text-gray-500'>
         <div className='flex items-center gap-4'>
           {/* <span>Edited {quiz.lastEdited}</span> */}
-          <div className='flex items-center font-bold gap-1.5 text-black'>
+          <div className='flex items-center gap-1.5 font-bold text-black'>
             <BookOpen className='h-3 w-3' />
             <span>{quiz.totalQuestions} Question(s)</span>
           </div>

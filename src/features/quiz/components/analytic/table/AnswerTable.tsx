@@ -4,7 +4,13 @@ import { Badge } from '@/components/shadcn/badge'
 import { cn } from '@/shadcn/utils'
 import { useState } from 'react'
 import { QuizResultPopup } from '../pop-up/QuizResultPopup'
-import { answerColors, answerIcons, QuestionStatistic, QuizStatistics, StudentStatistic } from '@/features/quiz/types/studentQuiz.type'
+import {
+  answerColors,
+  answerIcons,
+  QuestionStatistic,
+  QuizStatistics,
+  StudentStatistic
+} from '@/features/quiz/types/studentQuiz.type'
 
 type AnswerGridTableProps = {
   studentData: StudentStatistic[]
@@ -12,7 +18,7 @@ type AnswerGridTableProps = {
   data: QuizStatistics
 }
 
-export function AnswerGridTable({data, studentData, questionData}: AnswerGridTableProps) {
+export function AnswerGridTable({ data, studentData, questionData }: AnswerGridTableProps) {
   const [selectedLearner, setSelectedLearner] = useState<StudentStatistic | null>(null)
 
   console.log('question', questionData)
@@ -22,19 +28,19 @@ export function AnswerGridTable({data, studentData, questionData}: AnswerGridTab
       <div className='overflow-hidden rounded-lg border'>
         <div className='relative overflow-x-auto'>
           <Table className='min-w-[2000px]'>
-<TableHeader>
-  <TableRow className='bg-gray-50 hover:bg-gray-50'>
-    <TableHead className='sticky left-0 z-10 w-[350px] bg-inherit'>Learner</TableHead>
-    {questionData.map((q) => (
-      <TableHead key={q.questionId} className='min-w-[120px] p-4 text-center whitespace-nowrap'>
-        Q.{q.questionId}
-        <Badge variant='secondary' className='ml-2 font-normal'>
-          {q.correctRate}%
-        </Badge>
-      </TableHead>
-    ))}
-  </TableRow>
-</TableHeader>
+            <TableHeader>
+              <TableRow className='bg-gray-50 hover:bg-gray-50'>
+                <TableHead className='sticky left-0 z-10 w-[350px] bg-inherit'>Learner</TableHead>
+                {questionData.map((q) => (
+                  <TableHead key={q.questionId} className='min-w-[120px] p-4 text-center whitespace-nowrap'>
+                    Q.{q.questionId}
+                    <Badge variant='secondary' className='ml-2 font-normal'>
+                      {q.correctRate}%
+                    </Badge>
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
             <TableBody>
               {studentData.map((learner, index) => (
                 <TableRow key={learner.studentId} className='group'>

@@ -9,13 +9,13 @@ type QuizCardGridProps = {
   data: QuizStatistics[]
 }
 
-export function QuizCardGrid({data}: QuizCardGridProps) {
+export function QuizCardGrid({ data }: QuizCardGridProps) {
   const dispatch = useDispatch()
   return (
     <div className='mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
       {data.map((quiz) => (
         <Link key={quiz.quizId} href={`/quiz/${quiz.quizId}`} onClick={() => dispatch(setSelectedQuiz(quiz))}>
-        <QuizCard quiz={quiz} />
+          <QuizCard quiz={quiz} />
         </Link>
       ))}
     </div>

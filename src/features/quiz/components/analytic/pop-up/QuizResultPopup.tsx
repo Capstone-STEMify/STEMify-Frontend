@@ -14,7 +14,7 @@ import {
   Star,
   Share,
   ChevronDown,
-  X as XIcon 
+  X as XIcon
 } from 'lucide-react'
 import { ProgressCircle } from '../../active/circle/AccuracyCircle'
 import { cn } from '@/shadcn/utils'
@@ -64,7 +64,7 @@ const CustomAccordionItem = ({
   const [isAccordionOpen, setIsAccordionOpen] = useState(false)
 
   return (
-    <div className='border mb-2 p-4 rounded-md'>
+    <div className='mb-2 rounded-md border p-4'>
       <button
         type='button'
         className='flex w-full items-center justify-between text-left font-semibold no-underline hover:no-underline'
@@ -78,13 +78,9 @@ const CustomAccordionItem = ({
           }`}
         />
       </button>
-      
+
       {/* Đây là AccordionContent */}
-      {isAccordionOpen && (
-        <div className='pt-4'>
-          {bodyContent}
-        </div>
-      )}
+      {isAccordionOpen && <div className='pt-4'>{bodyContent}</div>}
     </div>
   )
 }
@@ -107,27 +103,19 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
   })
 
   return (
-    <div
-      role='dialog'
-      aria-modal='true'
-      className='fixed inset-0 z-50'
-    >
-      <div
-        className='fixed inset-0 bg-black/80'
-        onClick={() => onOpenChange(false)}
-      />
+    <div role='dialog' aria-modal='true' className='fixed inset-0 z-50'>
+      <div className='fixed inset-0 bg-black/80' onClick={() => onOpenChange(false)} />
 
-      <div className='fixed left-1/2 top-1/2 z-50 w-full max-w-4xl max-h-[90vh] -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 rounded-lg shadow-lg flex flex-col overflow-hidden'>
-        
+      <div className='fixed top-1/2 left-1/2 z-50 flex max-h-[90vh] w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-900'>
         <button
           type='button'
-          className='absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 z-10'
+          className='absolute top-4 right-4 z-10 rounded-sm opacity-70 transition-opacity hover:opacity-100'
           onClick={() => onOpenChange(false)}
         >
           <XIcon className='h-5 w-5' />
           <span className='sr-only'>Close</span>
         </button>
-        
+
         <div className='flex flex-row items-start justify-between border-b p-8 pb-4'>
           <div className='flex items-center gap-4'>
             <Avatar className='h-14 w-14'>
@@ -142,7 +130,9 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
             <div>
               <h2 className='flex items-center gap-2 text-xl font-bold'>
                 {learner.studentName}
-                <Badge variant='outline' className='ml-2'>{learner.status}</Badge>
+                <Badge variant='outline' className='ml-2'>
+                  {learner.status}
+                </Badge>
               </h2>
               <p className='text-sm text-gray-500'>Score: {learner.totalScore}</p>
             </div>
@@ -184,7 +174,9 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                 </div>
                 <div>
                   <span className='text-gray-500'>Answered</span>
-                  <p className='mt-2 text-lg font-semibold'>{answered}/{quiz.totalQuestions}</p>
+                  <p className='mt-2 text-lg font-semibold'>
+                    {answered}/{quiz.totalQuestions}
+                  </p>
                 </div>
               </div>
             </div>
@@ -214,7 +206,6 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
           </div>
           <div className='w-full'>
             {detailedQuestions.map((question, index) => {
-              
               const triggerJSX = (
                 <div className='flex w-full items-center justify-between pr-4'>
                   <div className='flex items-center gap-3'>
@@ -229,7 +220,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                     </Badge>
                   </div>
                   <div className='flex items-center gap-4 text-sm font-normal text-gray-600'>
-                    <span className='flex items-center gap-1.5 p-2 bg-gray-100 rounded-md font-semibold'>
+                    <span className='flex items-center gap-1.5 rounded-md bg-gray-100 p-2 font-semibold'>
                       <Layers className='h-4 w-4' /> {question.questionType}
                     </span>
                     <span className='flex items-center gap-1.5'>
@@ -237,7 +228,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                     </span>
                   </div>
                 </div>
-              );
+              )
 
               const bodyJSX = (
                 <div className='space-y-4 pl-12 text-base'>
@@ -246,19 +237,15 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                   {question.status === 'incorrect' && (
                     <div className='mt-4 rounded-r-md border-l-4 border-green-500 bg-green-50 p-4'>
                       <p className='text-xs font-semibold text-green-800'>CORRECT ANSWER</p>
-                      <p className='font-medium text-green-900'>{question.learnerAnswer ?? question.answerStatistics?.[0]?.content}</p>
+                      <p className='font-medium text-green-900'>
+                        {question.learnerAnswer ?? question.answerStatistics?.[0]?.content}
+                      </p>
                     </div>
                   )}
                 </div>
-              );
-
-              return (
-                <CustomAccordionItem
-                  key={question.questionId}
-                  triggerContent={triggerJSX}
-                  bodyContent={bodyJSX}
-                />
               )
+
+              return <CustomAccordionItem key={question.questionId} triggerContent={triggerJSX} bodyContent={bodyJSX} />
             })}
           </div>
         </div>

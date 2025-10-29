@@ -16,7 +16,7 @@ type QuizTableProps = {
   data: QuizStatistics[]
 }
 
-export function QuizTable({data}: QuizTableProps) {
+export function QuizTable({ data }: QuizTableProps) {
   const getAccuracyColor = (accuracy: number | null): string => {
     if (accuracy === null) return 'text-gray-400'
     if (accuracy >= 90) return 'text-green-500'
@@ -35,14 +35,10 @@ export function QuizTable({data}: QuizTableProps) {
               </div>
             </TableHead>
             <TableHead className='min-w-[250px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Quiz name
-              </button>
+              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>Quiz name</button>
             </TableHead>
             <TableHead className='w-[180px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Learners
-              </button>
+              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>Learners</button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
@@ -75,7 +71,7 @@ export function QuizTable({data}: QuizTableProps) {
                     <Checkbox id={`quiz-${quiz.quizId}`} />
                     <div className='rounded-full bg-gray-100 p-2'>
                       {/* use a simple icon placeholder */}
-                      <span className='h-4 w-4 block' />
+                      <span className='block h-4 w-4' />
                     </div>
                   </div>
                 </TableCell>
@@ -119,12 +115,8 @@ export function QuizTable({data}: QuizTableProps) {
                     />
                   </div>
                 </TableCell>
-                <TableCell className='text-center text-gray-600'>
-                  {quiz.submissions}
-                </TableCell>
-                <TableCell className='text-center text-gray-600'>
-                  {quiz.dueDate || '-'}
-                </TableCell>
+                <TableCell className='text-center text-gray-600'>{quiz.submissions}</TableCell>
+                <TableCell className='text-center text-gray-600'>{quiz.dueDate || '-'}</TableCell>
                 <TableCell className='text-center'>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
