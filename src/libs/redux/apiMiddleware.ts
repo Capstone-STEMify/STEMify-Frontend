@@ -30,6 +30,7 @@ import { subscriptionApi } from '@/features/subscription/api/subscriptionApi'
 import { licenseAssignmentApi } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { studentQuizApi } from '@/features/quiz/api/studentQuizApi'
 import { organizationApi } from '@/features/organization/api/organizationApi'
+import { classroomApi } from '@/features/classroom/api/classroomApi'
 
 export const apiMiddlewares: Middleware[] = [
   courseApi.middleware,
@@ -62,7 +63,8 @@ export const apiMiddlewares: Middleware[] = [
   subscriptionApi.middleware,
   licenseAssignmentApi.middleware,
   studentQuizApi.middleware,
-  organizationApi.middleware
+  organizationApi.middleware,
+  classroomApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]

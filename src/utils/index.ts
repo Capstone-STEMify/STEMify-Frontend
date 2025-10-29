@@ -55,9 +55,9 @@ export function formatDateV2(date: Date | undefined) {
   if (!date) {
     return ''
   }
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString('en-SG', {
     day: '2-digit',
-    month: 'long',
+    month: 'short',
     year: 'numeric'
   })
 } /**

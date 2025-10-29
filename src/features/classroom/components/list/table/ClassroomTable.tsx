@@ -8,7 +8,9 @@ import { Button } from '@/components/shadcn/button'
 import Image from 'next/image'
 import { ChevronDown } from 'lucide-react'
 import { DataTable } from '@/components/shared/data-table/data-table'
-import { useGetClassroomColumn } from '@/features/classroom/components/list/ClassroomColumn'
+import { useGetClassroomColumn } from '@/features/classroom/components/list/table/ClassroomColumn'
+import { useSearchClassroomsQuery } from '@/features/classroom/api/classroomApi'
+import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
 
 // Mock data
 type Classroom = {
@@ -78,6 +80,8 @@ const mockClassrooms: Classroom[] = [
 // Columns
 
 export default function ClassroomTable() {
+  const { data } = useSearchClassroomsQuery({ status: ClassroomStatus.PENDING })
+  const rows = React.useMemo(() => data?.data.items ?? [], [data])
   const columns = useGetClassroomColumn()
   return (
     <div className='mt-8 space-y-6'>
@@ -116,8 +120,8 @@ export default function ClassroomTable() {
 
       {/* Table */}
       <DataTable
-        enableRowSelection
-        data={mockClassrooms}
+        enableRowSelection={true}
+        data={rows}
         columns={columns}
         pagingData={{
           data: { totalPages: 24, totalItems: 120 }

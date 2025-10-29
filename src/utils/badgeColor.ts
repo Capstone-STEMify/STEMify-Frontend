@@ -1,3 +1,4 @@
+import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import { ContactStatus } from '@/features/contact/types/contact.type'
 import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
 import { OrganizationStatus } from '@/features/organization/types/organization.type'
@@ -17,6 +18,7 @@ export const getStatusBadgeClass = (
     | OrganizationStatus
     | LicenseAssignmentStatus
     | SubscriptionStatus
+    | ClassroomStatus
     | undefined
 ) => {
   switch (status) {
@@ -33,6 +35,7 @@ export const getStatusBadgeClass = (
     case CourseStatus.PUBLISHED:
     case KitProductStatus.PUBLISHED:
     case ContactStatus.IN_PROGRESS:
+    case ClassroomStatus.IN_PROGRESS:
       return 'bg-blue-100 text-blue-800 border border-blue-300'
 
     // ARCHIVED / EXPIRED / INACTIVE / CANCELED
@@ -52,6 +55,7 @@ export const getStatusBadgeClass = (
     case CurriculumStatus.DELETED:
     case CourseStatus.DELETED:
     case SubscriptionStatus.EXPIRED:
+    case ClassroomStatus.DELETED:
       return 'bg-red-100 text-red-800 border border-red-300'
 
     // PENDING
@@ -61,6 +65,7 @@ export const getStatusBadgeClass = (
     case ContactStatus.PENDING:
     case LicenseAssignmentStatus.PENDING:
     case SubscriptionStatus.PENDING:
+    case ClassroomStatus.PENDING:
       return 'bg-yellow-100 text-yellow-800 border border-yellow-300'
 
     // REJECTED
@@ -69,7 +74,7 @@ export const getStatusBadgeClass = (
     case CourseStatus.REJECTED:
       return 'bg-red-200 text-red-900 border border-red-400'
 
-    // ACTIVE / APPROVED / RESOLVED
+    // ACTIVE / APPROVED / RESOLVED / COMPLETED
     case LessonStatus.APPROVED:
     case CurriculumStatus.APPROVED:
     case CourseStatus.APPROVED:
@@ -77,6 +82,7 @@ export const getStatusBadgeClass = (
     case ContactStatus.RESOLVED:
     case OrganizationStatus.ACTIVE:
     case LicenseAssignmentStatus.ACTIVE:
+    case ClassroomStatus.COMPLETED:
       return 'bg-emerald-50 text-emerald-700 border border-emerald-300'
 
     default:

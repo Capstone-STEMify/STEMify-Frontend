@@ -1,4 +1,4 @@
-import OrganizationClassroomList from '@/features/classroom/components/OrganizationClassroomList'
+import OrganizationClassroomList from '@/features/classroom/components/list/OrganizationClassroomList'
 import React from 'react'
 
 export default function ClassroomPage() {
