@@ -37,7 +37,7 @@ export default function TeacherQuiz() {
           </>
         ) : (
           <>
-            <QuizActive/>
+            <QuizActive data={quizListDisplay}/>
           </>
         )}
       </div>

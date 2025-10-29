@@ -8,6 +8,7 @@ export type QuizStatistics = {
   submissions: number;
   averageScore: number;
   passRate: number;
+  dueDate: string;
   totalQuestions: number;
   studentStatistics: StudentStatistic[];
   questionStatistics: QuestionStatistic[];
