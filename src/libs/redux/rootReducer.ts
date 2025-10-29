@@ -60,6 +60,8 @@ import { organizationSubscriptionSlice } from '@/features/subscription/slice/sub
 import { subscriptionApi } from '@/features/subscription/api/subscriptionApi'
 import { licenseAssignmentSlice } from '@/features/license-assignment/slice/licenseAssignmentSlice'
 import { licenseAssignmentApi } from '@/features/license-assignment/api/licenseAssignmentApi'
+import { studentQuizApi } from '@/features/quiz/api/studentQuizApi'
+import { quizSelectedSlice } from '@/features/quiz/slice/studentQuizSlice'
 import { organizationApi } from '@/features/organization/api/organizationApi'
 import { organizationSubscriptionFormSlice } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 
@@ -92,12 +94,13 @@ export const rootReducer = combineReducers({
   workspaceTree: workspaceTreeSlice.reducer,
   component: componentSlice.reducer,
   quizPlayer: quizPlayerSlice.reducer,
+  quizSelected: quizSelectedSlice.reducer,
   contact: contactSlice.reducer,
   contract: contractSlice.reducer,
   question: questionSlice.reducer,
   planProduct: planSlice.reducer,
   organizationSubscription: organizationSubscriptionSlice.reducer,
-  licenseAssignment: licenseAssignmentSlice.reducer,
+  licenseAssignment: licenseAssignmentSlice.reducer,  
   organizationSubscriptionForm: organizationSubscriptionFormSlice.reducer,
 
   // api reducers
@@ -130,5 +133,6 @@ export const rootReducer = combineReducers({
   [emulatorApi.reducerPath]: emulatorApi.reducer,
   [subscriptionApi.reducerPath]: subscriptionApi.reducer,
   [licenseAssignmentApi.reducerPath]: licenseAssignmentApi.reducer,
+  [studentQuizApi.reducerPath]: studentQuizApi.reducer
   [organizationApi.reducerPath]: organizationApi.reducer
 })

@@ -1,13 +1,27 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
-import { learners, questions, answerIcons, answerColors, LearnerAnswer } from '../data'
 import { Badge } from '@/components/shadcn/badge'
 import { cn } from '@/shadcn/utils'
 import { useState } from 'react'
 import { QuizResultPopup } from '../pop-up/QuizResultPopup'
+import {
+  answerColors,
+  answerIcons,
+  QuestionStatistic,
+  QuizStatistics,
+  StudentStatistic
+} from '@/features/quiz/types/studentQuiz.type'
 
-export function AnswerGridTable() {
-  const [selectedLearner, setSelectedLearner] = useState<LearnerAnswer | null>(null)
+type AnswerGridTableProps = {
+  studentData: StudentStatistic[]
+  questionData: QuestionStatistic[]
+  data: QuizStatistics
+}
+
+export function AnswerGridTable({ data, studentData, questionData }: AnswerGridTableProps) {
+  const [selectedLearner, setSelectedLearner] = useState<StudentStatistic | null>(null)
+
+  console.log('question', questionData)
 
   return (
     <>
@@ -17,26 +31,26 @@ export function AnswerGridTable() {
             <TableHeader>
               <TableRow className='bg-gray-50 hover:bg-gray-50'>
                 <TableHead className='sticky left-0 z-10 w-[350px] bg-inherit'>Learner</TableHead>
-                {questions.map((q) => (
-                  <TableHead key={q.id} className='w-[100px] text-center'>
-                    {q.title}
+                {questionData.map((q) => (
+                  <TableHead key={q.questionId} className='min-w-[120px] p-4 text-center whitespace-nowrap'>
+                    Q.{q.questionId}
                     <Badge variant='secondary' className='ml-2 font-normal'>
-                      {q.percentage}%
+                      {q.correctRate}%
                     </Badge>
                   </TableHead>
                 ))}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {learners.map((learner, index) => (
-                <TableRow key={learner.id} className='group'>
+              {studentData.map((learner, index) => (
+                <TableRow key={learner.studentId} className='group'>
                   <TableCell className='bg-background group-hover:bg-muted/50 sticky left-0 z-10'>
                     <div className='flex cursor-pointer items-center gap-3' onClick={() => setSelectedLearner(learner)}>
                       <span className='w-6 text-center text-sm font-medium text-gray-500'>{index + 1}</span>
                       <Avatar className='h-9 w-9'>
-                        <AvatarImage src={learner.avatar} />
+                        <AvatarImage src={learner.imageUrl || '/images/macbg.png'} />
                         <AvatarFallback>
-                          {learner.name
+                          {learner.studentName
                             .split(' ')
                             .map((n) => n[0])
                             .join('')}
@@ -44,23 +58,24 @@ export function AnswerGridTable() {
                       </Avatar>
                       <div>
                         <p className='flex items-center gap-2 font-medium'>
-                          {learner.name}
-                          {learner.designation && (
+                          {learner.studentName}
+                          {/* {learner.designation && (
                             <Badge variant='outline' className='font-normal'>
                               {learner.designation}
                             </Badge>
-                          )}
+                          )} */}
                         </p>
-                        <span className='text-xs text-gray-500'>{learner.role}</span>
+                        {/* <span className='text-xs text-gray-500'>{learner.role}</span> */}
                       </div>
                     </div>
                   </TableCell>
 
-                  {learner.answers.map((answer) => {
-                    const Icon = answerIcons[answer.status]
-                    const color = answerColors[answer.status]
+                  {learner.questionResults.map((answer) => {
+                    const key = answer.isCorrect ? 'true' : 'false'
+                    const Icon = answerIcons[key]
+                    const color = answerColors[key]
                     return (
-                      <TableCell key={`${learner.id}-${answer.questionId}`} className='text-center'>
+                      <TableCell key={`${learner.studentId}-${answer.questionId}`} className='text-center'>
                         <Icon className={cn('mx-auto h-5 w-5', color)} />
                       </TableCell>
                     )
@@ -80,6 +95,7 @@ export function AnswerGridTable() {
           }
         }}
         learner={selectedLearner}
+        quiz={data}
       />
     </>
   )

@@ -15,20 +15,6 @@ export interface LearnerAnswer {
   }[];
 }
 
-export const answerIcons: { [key: string]: LucideIcon } = {
-  correct: CheckCircle2,
-  incorrect: XCircle,
-  unanswered: Circle,
-  review: HelpCircle,
-};
-
-export const answerColors: { [key: string]: string } = {
-  correct: "text-green-500",
-  incorrect: "text-red-500",
-  unanswered: "text-gray-300",
-  review: "text-gray-400",
-};
-
 export const questions = Array.from({ length: 20 }, (_, i) => ({
   id: `q${i + 1}`,
   title: `Q.${i + 1}`,
