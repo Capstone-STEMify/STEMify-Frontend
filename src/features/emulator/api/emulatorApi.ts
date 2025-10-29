@@ -1,5 +1,5 @@
 import { Emulator, EmulatorCreateRequest } from '@/features/emulator/types/emulator.type'
-import { ApiSuccessResponse } from '@/types/baseModel'
+import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const emulatorApi = createApi({
   reducerPath: 'emulatorApi',
@@ -16,6 +16,14 @@ export const emulatorApi = createApi({
       query: ({ emulatorId }) => ({
         url: `/v1/emulations/${emulatorId}`,
         method: 'GET'
+      }),
+      providesTags: ['Emulator']
+    }),
+    searchEmulations: builder.query<ApiSuccessResponse<PaginatedResult<Emulator[]>>, any>({
+      query: ({ queryParams }) => ({
+        url: `/v1/emulations`,
+        method: 'GET',
+        params: queryParams
       }),
       providesTags: ['Emulator']
     }),
