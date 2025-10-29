@@ -37,10 +37,8 @@ import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { UserRole } from '@/types/userRole'
-import { title } from 'process'
 import { NavSecondary } from '@/components/layout/admin/sidebar/nav-secondary'
 
-// thay /admin thành /organization
 const data = {
   user: {
     name: 'shadcn',
@@ -86,8 +84,8 @@ const data = {
       icon: IconUser
     },
     {
-      title: 'side_bar.organization',
-      url: '/admin/organization',
+      title: 'side_bar.organizationSubscription',
+      url: '/admin/organization-subscription',
       icon: IconBuilding
     },
     {

@@ -4,7 +4,9 @@
       "organizationTitle": "Organization List",
       "searchPlaceholder": "Search organizations by name...",
       "subscriptionTitle": "Subscription List",
-      "subscriptionHistoryTitle": "Subscription History"
+      "subscriptionHistoryTitle": "Subscription History",
+      "organizationSubscriptionTitle": "Organization Subscription Management",
+      "organizationSubscriptionDescription": "Browse and manage all organization subscriptions registered on the platform."
     },
     "detail": {
       "title": "Organization Details",

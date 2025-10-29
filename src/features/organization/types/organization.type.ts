@@ -1,3 +1,4 @@
+import { OrganizationSubscription } from '@/features/subscription/types/subscription.type'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Organization = {
@@ -5,9 +6,11 @@ export type Organization = {
   name: string
   organizationType: string
   description: string
-  imageUrl?: string
+  imageUrl: string
   status: OrganizationStatus
-  createdAt: string
+  createdDate: string
+  lastModifiedDate: string
+  subscriptions: Partial<OrganizationSubscription>[]
 }
 
 export type AdminOrganization = {

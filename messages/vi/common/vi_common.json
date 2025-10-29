@@ -116,7 +116,14 @@
       "pricePlan": "Gói",
       "expiredDate": "Ngày Hết Hạn",
       "curriculums": "Chương Trình Học",
-      "downloadFile": "Tải Tệp"
+      "downloadFile": "Tải Tệp",
+      "planName": "Tên Gói",
+      "planBillingCycle": "Chu Kỳ Gói",
+      "netAmount": "Số Tiền Sau Giảm",
+      "lastModified": "Lần Chỉnh Sửa Cuối",
+      "grossAmount": "Tổng Số Tiền",
+      "studentSeats": "Ghế Học Sinh",
+      "teacherSeats": "Ghế Giáo Viên"
     },
     "paging": {
       "previous": "Trước",

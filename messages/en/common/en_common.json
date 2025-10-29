@@ -120,7 +120,14 @@
       "curriculums": "Curriculums",
       "accountType": "Account Type",
       "assignedDate": "Assigned Date",
-      "downloadFile": "Download File"
+      "downloadFile": "Download File",
+      "planName": "Plan Name",
+      "planBillingCycle": "Plan Billing Cycle",
+      "netAmount": "Net Amount",
+      "lastModified": "Last Modified",
+      "grossAmount": "Gross Amount",
+      "studentSeats": "Student Seats",
+      "teacherSeats": "Teacher Seats"
     },
     "paging": {
       "previous": "Previous",

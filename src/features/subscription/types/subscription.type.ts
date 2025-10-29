@@ -31,7 +31,7 @@ export interface OrganizationSubscription {
   organization: Partial<Organization>
   curriculums: Partial<Curriculum>[]
   contract: Contract
-  planBillingCycle: string
+  planBillingCycle: BillingCycle
 }
 
 export type PlanBillingCycle = {
