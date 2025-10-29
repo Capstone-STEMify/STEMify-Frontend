@@ -1,11 +1,22 @@
-import { quizOverviews } from '@/features/quiz/api/data'
+'use client'
+import Link from 'next/link'
 import { QuizCard } from '../card/QuizCard'
+import { QuizStatistics } from '@/features/quiz/types/studentQuiz.type'
+import { useDispatch } from 'react-redux'
+import { setSelectedQuiz } from '@/features/quiz/slice/studentQuizSlice'
 
-export function QuizCardGrid() {
+type QuizCardGridProps = {
+  data: QuizStatistics[]
+}
+
+export function QuizCardGrid({ data }: QuizCardGridProps) {
+  const dispatch = useDispatch()
   return (
     <div className='mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
-      {quizOverviews.map((quiz) => (
-        <QuizCard key={quiz.id} quiz={quiz} />
+      {data.map((quiz) => (
+        <Link key={quiz.quizId} href={`/quiz/${quiz.quizId}`} onClick={() => dispatch(setSelectedQuiz(quiz))}>
+          <QuizCard quiz={quiz} />
+        </Link>
       ))}
     </div>
   )
