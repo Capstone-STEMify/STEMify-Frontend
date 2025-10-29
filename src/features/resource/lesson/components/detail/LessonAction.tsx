@@ -8,8 +8,9 @@ import { studentProgressSlice } from '@/features/student-progress/slice/studentP
 import { useTranslations } from 'next-intl'
 import { UserRole } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
+import { setIsPrintModalOpen } from '@/features/resource/lesson/slice/lessonDetailSlice'
 
-export default function LessonAction({ lessonId, onPrintClick }: { lessonId: number; onPrintClick: () => void }) {
+export default function LessonAction({ lessonId }: { lessonId: number }) {
   const t = useTranslations('LessonDetails')
   const tt = useTranslations('toast')
   const { openModal } = useModal()
@@ -42,7 +43,7 @@ export default function LessonAction({ lessonId, onPrintClick }: { lessonId: num
           // onClick={() => {
           //   openModal('pacingGuide')
           // }}
-          onClick={onPrintClick}
+          onClick={() => dispatch(setIsPrintModalOpen(true))}
         >
           DOWNLOAD AND PRINT
         </Button>

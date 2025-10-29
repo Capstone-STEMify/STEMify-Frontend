@@ -6,20 +6,17 @@ import { Check, GraduationCap, Lock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
 import { UserRole } from '@/types/userRole'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
 
 type LessonOutlineProps = {
   sectionData?: Section[]
-  selectedSectionId: number | null
-  onSelectSection: (sectionId: number) => void
   sectionStatus?: ApiSuccessResponse<PaginatedResult<StudentProgress>>
 }
 
-export default function LessonOutline({
-  sectionData,
-  selectedSectionId,
-  onSelectSection,
-  sectionStatus
-}: LessonOutlineProps) {
+export default function LessonOutline({ sectionData, sectionStatus }: LessonOutlineProps) {
+  const dispatch = useAppDispatch()
+  const { selectedSectionId } = useAppSelector((state) => state.lessonDetail)
   const t = useTranslations('LessonDetails')
   const { data: userData } = useSession()
 
@@ -62,7 +59,7 @@ export default function LessonOutline({
                 )}
                 onClick={() => {
                   if (isLoggedIn) {
-                    onSelectSection(sec.id)
+                    dispatch(setSelectedSectionId(sec.id))
                   }
                 }}
               >

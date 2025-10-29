@@ -14,10 +14,9 @@ import { useTranslations } from 'next-intl'
 type LessonDescriptionProps = {
   lessonData?: ApiSuccessResponse<Lesson>
   lessonLoading: boolean
-  onPrintClick: () => void
 }
 
-export default function LessonDescription({ lessonData, lessonLoading, onPrintClick }: LessonDescriptionProps) {
+export default function LessonDescription({ lessonData, lessonLoading }: LessonDescriptionProps) {
   const t = useTranslations('LessonDetails')
   if (lessonLoading)
     return (
@@ -130,7 +129,7 @@ export default function LessonDescription({ lessonData, lessonLoading, onPrintCl
           </div>
         </section>
       </ScrollArea>
-      <LessonAction lessonId={lessonData.data.id} onPrintClick={onPrintClick} />
+      <LessonAction lessonId={lessonData.data.id} />
     </div>
   )
 }

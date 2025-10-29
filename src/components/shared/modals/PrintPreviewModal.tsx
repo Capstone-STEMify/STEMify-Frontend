@@ -5,6 +5,8 @@ import { Button } from '@/components/shadcn/button'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { Printer, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setIsPrintModalOpen } from '@/features/resource/lesson/slice/lessonDetailSlice'
 
 // A child component to render footer just when printing
 const PrintFooter = () => {
@@ -23,13 +25,13 @@ const PrintFooter = () => {
 }
 
 type PrintPreviewModalProps = {
-  isOpen: boolean
-  onClose: () => void
   title: string
   children: React.ReactNode
 }
 
-export default function PrintPreviewModal({ isOpen, onClose, title, children }: PrintPreviewModalProps) {
+export default function PrintPreviewModal({ title, children }: PrintPreviewModalProps) {
+  const { isPrintModalOpen } = useAppSelector((state) => state.lessonDetail)
+  const dispatch = useAppDispatch()
   const contentRef = useRef<HTMLDivElement>(null)
 
   const tc = useTranslations('common.button')
@@ -62,7 +64,7 @@ export default function PrintPreviewModal({ isOpen, onClose, title, children }: 
   })
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isPrintModalOpen} onOpenChange={() => dispatch(setIsPrintModalOpen(false))}>
       <DialogContent className='flex h-[90vh] max-w-4xl flex-col p-0'>
         <DialogHeader className='p-6 pb-2'>
           <DialogTitle className='text-xl font-bold'>{title}</DialogTitle>
@@ -81,7 +83,7 @@ export default function PrintPreviewModal({ isOpen, onClose, title, children }: 
         </div>
 
         <DialogFooter className='border-t bg-gray-50 p-6'>
-          <Button variant='outline' onClick={onClose}>
+          <Button variant='outline' onClick={() => dispatch(setIsPrintModalOpen(false))}>
             <X className='mr-2 h-4 w-4' /> {tc('cancel')}
           </Button>
           <Button onClick={handlePrint}>

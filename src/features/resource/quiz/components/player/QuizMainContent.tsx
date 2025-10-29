@@ -1,6 +1,5 @@
 'use client'
 
-import { useSelector } from 'react-redux'
 import { useIsMobile } from '@/hooks/use-mobile'
 import QuestionCard from '@/features/resource/quiz/components/player/question/card/QuestionCard'
 import { useAppSelector } from '@/hooks/redux-hooks'

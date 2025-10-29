@@ -161,7 +161,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
           <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd} sensors={sensors}>
             <SortableContext key={Date.now()} items={itemIds} strategy={verticalListSortingStrategy}>
               <Table>
-                <TableHeader className='bg-accent-foreground sticky top-0 z-10'>
+                <TableHeader className='bg-muted sticky top-0 z-10'>
                   {table.getHeaderGroups().map((hg) => (
                     <TableRow key={hg.id}>
                       <TableHead className='w-6' />

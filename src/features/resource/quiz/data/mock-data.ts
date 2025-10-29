@@ -114,33 +114,3 @@ export const mockQuiz: Quiz = {
   questions: mockQuestions
 }
 
-// Mock multiple quizzes for listing
-export const mockQuizzes: Quiz[] = [
-  mockQuiz,
-  {
-    id: 2,
-    contentId: 1,
-    title: 'Advanced React Patterns',
-    description: 'Test your knowledge of advanced React patterns',
-    durationDays: 15,
-    status: 'published',
-    passingMarks: 75,
-    timeLimitMinutes: 60,
-    totalMarks: 100,
-    totalQuestions: 10,
-    questions: []
-  },
-  {
-    id: 3,
-    contentId: 2,
-    title: 'TypeScript Basics',
-    description: 'Learn TypeScript fundamentals',
-    durationDays: 20,
-    status: 'draft',
-    passingMarks: 60,
-    timeLimitMinutes: 45,
-    totalMarks: 50,
-    totalQuestions: 10,
-    questions: []
-  }
-]

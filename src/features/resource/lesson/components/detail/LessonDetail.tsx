@@ -6,7 +6,7 @@ import BackButton from '@/components/shared/button/BackButton'
 import STabs from '@/components/shared/STabs'
 import { useParams, useRouter } from 'next/navigation'
 import { useSearchSectionQuery } from '@/features/resource/section/api/sectionApi'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
 import LessonDescription from '@/features/resource/lesson/components/detail/LessonDescription'
 import LessonOutline from '@/features/resource/lesson/components/detail/LessonOutline'
@@ -16,22 +16,28 @@ import { useTranslations } from 'next-intl'
 import PrintPreviewModal from '@/components/shared/modals/PrintPreviewModal'
 import LessonPrintableContent from './LessonPrintableContent'
 import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
+import { setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
+import QuizPlayerContainer from '@/features/resource/quiz/components/player/QuizPlayerContainer'
 
-export default function LessonDetail({ id }: { id?: number }) {
+export default function LessonDetail() {
+  // translations
   const t = useTranslations('LessonDetails')
   const tc = useTranslations('common.message')
+
+  // redux
+  const dispatch = useAppDispatch()
   const userId = useAppSelector((state) => state.auth.user?.userId)
-  const params = useParams()
-  const lessonId = params?.lessonId ? Number(params.lessonId) : id
-  const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null)
+  const { selectedSectionId, mode } = useAppSelector((state) => state.lessonDetail)
   const token = useAppSelector((state) => state.auth.token)
+
+  // router
+  const { lessonId } = useParams()
+
+  // api and data fetching
   const { data: lessonData, isLoading: lessonLoading } = useGetLessonByIdQuery(Number(lessonId))
   const { data: sections } = useSearchSectionQuery({ lessonId: Number(lessonId) }, { skip: !lessonId })
 
-  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
-
   const courseId = lessonData?.data.courseId
-
   const sectionData = sections?.data?.items ?? []
 
   const { data: enrollment } = useSearchCourseEnrollmentQuery(
@@ -56,9 +62,17 @@ export default function LessonDetail({ id }: { id?: number }) {
   useEffect(() => {
     if (sectionData.length > 0) {
       const firstSection = [...sectionData].sort((a, b) => a.orderIndex - b.orderIndex)[0]
-      setSelectedSectionId(firstSection.id)
+      dispatch(setSelectedSectionId(firstSection.id))
     }
   }, [sectionData])
+
+  if (mode === 'quiz') {
+    return (
+      <div>
+        <QuizPlayerContainer />
+      </div>
+    )
+  }
 
   return (
     <div className='bg-light pb-20'>
@@ -82,25 +96,12 @@ export default function LessonDetail({ id }: { id?: number }) {
                   {
                     value: 'description',
                     label: `${t('description')}`,
-                    content: (
-                      <LessonDescription
-                        lessonData={lessonData}
-                        lessonLoading={lessonLoading}
-                        onPrintClick={() => setIsPrintModalOpen(true)}
-                      />
-                    )
+                    content: <LessonDescription lessonData={lessonData} lessonLoading={lessonLoading} />
                   },
                   {
                     value: 'sections',
                     label: `${t('sections')}`,
-                    content: (
-                      <LessonOutline
-                        sectionData={sectionData}
-                        selectedSectionId={selectedSectionId}
-                        onSelectSection={setSelectedSectionId}
-                        sectionStatus={sectionStatus}
-                      />
-                    )
+                    content: <LessonOutline sectionData={sectionData} sectionStatus={sectionStatus} />
                   }
                 ]}
               />
@@ -111,7 +112,6 @@ export default function LessonDetail({ id }: { id?: number }) {
             <ResizablePanel defaultSize={70} minSize={40}>
               {selectedSectionId ? (
                 <LessonContent
-                  sectionId={selectedSectionId || 1}
                   token={token}
                   lessonId={Number(lessonId)}
                   sectionStatus={sectionStatus}
@@ -126,11 +126,7 @@ export default function LessonDetail({ id }: { id?: number }) {
       </div>
 
       {/* Render Modal */}
-      <PrintPreviewModal
-        isOpen={isPrintModalOpen}
-        onClose={() => setIsPrintModalOpen(false)}
-        title={tc('printPreview')}
-      >
+      <PrintPreviewModal title={tc('printPreview')}>
         <LessonPrintableContent lessonData={lessonData} sectionData={sectionData} />
       </PrintPreviewModal>
     </div>

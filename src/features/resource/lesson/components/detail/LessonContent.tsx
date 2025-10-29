@@ -15,18 +15,20 @@ import { signIn, useSession } from 'next-auth/react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { Info } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import { ContentType } from '@/features/resource/content/types/content.type'
+import QuizViewer from '@/features/resource/quiz/components/viewer/QuizViewer'
 
 const TiptapViewer = dynamic(() => import('@/components/tiptap/TiptapViewer'), { ssr: false })
 
 type LessonContentProps = {
-  sectionId: number
   token: string | null
   lessonId: number
   sectionStatus?: ApiSuccessResponse<PaginatedResult<StudentProgress>>
   enrollmentId?: number
 }
 
-export default function LessonContent({ sectionId, token, lessonId, sectionStatus, enrollmentId }: LessonContentProps) {
+export default function LessonContent({ token, lessonId, sectionStatus, enrollmentId }: LessonContentProps) {
+  const sectionId = useAppSelector((state) => state.lessonDetail.selectedSectionId)
   const dispatch = useAppDispatch()
 
   const t = useTranslations('LessonDetails')
@@ -46,6 +48,14 @@ export default function LessonContent({ sectionId, token, lessonId, sectionStatu
         <LoadingComponent size={18} textShow={false} />
       </div>
     )
+  }
+
+  if (!sectionId) {
+    return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
+  }
+
+  if (content?.data.items[0].contentType === ContentType.QUIZ) {
+    return <QuizViewer quiz={content.data.items[0]} />
   }
 
   const handleCompleteSection = async () => {
