@@ -3,7 +3,6 @@
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Badge } from '@/components/shadcn/badge'
 import { Card } from '@/components/shadcn/card'
-import { mockQuestionTypes } from '@/features/resource/quiz/data/mock-data'
 import TrueFalseQuestion from '@/features/resource/quiz/components/player/question/types/TrueFalseQuestion'
 import SingleChoiceQuestion from '@/features/resource/quiz/components/player/question/types/SingleChoiceQuestion'
 import MultipleChoiceQuestion from '@/features/resource/quiz/components/player/question/types/MultipleChoiceQuestion'
@@ -15,10 +14,6 @@ type QuestionCardProps = {
 }
 
 export default function QuestionCard({ question }: QuestionCardProps) {
-  const getTypeName = (questionTypeId: number) => {
-    return mockQuestionTypes.find((t) => t.id === questionTypeId)?.name || ''
-  }
-
   return (
     <div className='w-full max-w-2xl'>
       {/* Question Type Badge */}
