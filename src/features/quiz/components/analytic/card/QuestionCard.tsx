@@ -95,9 +95,18 @@ export function QuestionCard({data, totalQuestion}: QuestionCardProps) {
               {questions.questionTitle}
             </p>
             <div className='space-y-4 pt-2'>
-              {questions.answerStatistics.map((answer) => (
-              <AnswerOption key={answer.answerId} label={answer.content} percentage={0} responses={answer.selectionCount} />
-              ))}
+              {questions.answerStatistics.map((answer) => {
+                const totalResponses = questions.totalCorrectAnswers + questions.totalIncorrectAnswers;
+                const percentage = totalResponses > 0 ? Math.round((answer.selectionCount / totalResponses) * 100) : 0;
+                return (
+                  <AnswerOption
+                    key={answer.answerId}
+                    label={answer.content}
+                    percentage={percentage}
+                    responses={answer.selectionCount}
+                  />
+                );
+              })}
             </div>
           </div>
 
