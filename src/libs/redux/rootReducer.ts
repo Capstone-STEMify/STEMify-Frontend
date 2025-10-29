@@ -100,7 +100,7 @@ export const rootReducer = combineReducers({
   question: questionSlice.reducer,
   planProduct: planSlice.reducer,
   organizationSubscription: organizationSubscriptionSlice.reducer,
-  licenseAssignment: licenseAssignmentSlice.reducer,  
+  licenseAssignment: licenseAssignmentSlice.reducer,
   organizationSubscriptionForm: organizationSubscriptionFormSlice.reducer,
 
   // api reducers
@@ -133,6 +133,6 @@ export const rootReducer = combineReducers({
   [emulatorApi.reducerPath]: emulatorApi.reducer,
   [subscriptionApi.reducerPath]: subscriptionApi.reducer,
   [licenseAssignmentApi.reducerPath]: licenseAssignmentApi.reducer,
-  [studentQuizApi.reducerPath]: studentQuizApi.reducer
+  [studentQuizApi.reducerPath]: studentQuizApi.reducer,
   [organizationApi.reducerPath]: organizationApi.reducer
 })
