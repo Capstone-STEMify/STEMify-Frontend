@@ -1,27 +1,10 @@
 'use client'
 
 import { Input } from '@/components/shadcn/input'
+import { Question } from '@/features/resource/question/types/question.type'
 import { setUserAnswer } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import type React from 'react'
-
-interface Question {
-  id: number
-  quizId: number
-  questionTypeId: number
-  name: string
-  fileUrl?: string
-  description?: string
-  answerExplanation?: string
-  point: number
-  orderIndex: number
-  answers: Array<{
-    id: number
-    questionId: number
-    content: string
-    isCorrect: boolean
-  }>
-}
 
 interface ShortAnswerQuestionProps {
   question: Question

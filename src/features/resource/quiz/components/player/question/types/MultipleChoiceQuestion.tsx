@@ -3,7 +3,7 @@
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setUserAnswer } from '@/features/resource/quiz/slice/quiz-player-slice'
-import { Question } from '@/features/resource/quiz/types/quiz.type'
+import { Question } from '@/features/resource/question/types/question.type'
 
 type MultipleChoiceQuestionProps = {
   question: Question

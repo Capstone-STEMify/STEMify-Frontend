@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@/components/shadcn/button'
+import { Question } from '@/features/resource/question/types/question.type'
 import { setUserAnswer } from '@/features/resource/quiz/slice/quiz-player-slice'
-import { Question } from '@/features/resource/quiz/types/quiz.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 
 type SingleChoiceQuestionProps = {

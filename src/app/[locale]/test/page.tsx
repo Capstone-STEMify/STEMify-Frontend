@@ -1,10 +1,10 @@
-import QuizBuilderContainer from '@/features/resource/quiz/components/builder/QuizBuilderContainer'
+import QuizPlayerContainer from '@/features/resource/quiz/components/player/QuizPlayerContainer'
 import React from 'react'
 
 export default function Test() {
   return (
     <div>
-      <QuizBuilderContainer />
+      <QuizPlayerContainer />
     </div>
   )
 }
