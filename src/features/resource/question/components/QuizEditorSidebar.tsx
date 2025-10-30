@@ -64,20 +64,21 @@ export const QuizEditorSidebar = ({
     setIsSavingQuestions(true)
     try {
       const questionsPayload = quiz.questions.map((q) => ({
-        // id: q.id,
+        id: q.id, // create thì comment id
         questionType: q.questionType,
         content: q.content,
         orderIndex: q.orderIndex,
         answerExplanation: q.answerExplanation,
         points: q.points,
         answers: q.answers.map((a) => ({
-          // id: a.id,
+          id: a.id, // create thì comment id
           content: a.content,
           isCorrect: a.isCorrect
         }))
       }))
 
-      const res = await createQuestion({ quizId: quiz.id, questions: questionsPayload }).unwrap()
+      // const res = await createQuestion({ quizId: quiz.id, questions: questionsPayload }).unwrap()
+      const res = await updateQuestion({ quizId: quiz.id, questions: questionsPayload }).unwrap()
 
       toast.message(`${quiz.questions.length} questions saved successfully`)
     } catch (error) {
