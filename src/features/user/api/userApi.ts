@@ -1,7 +1,7 @@
 import { createCrudApi } from '@/libs/redux/baseApi'
-import { User, UserQueryParams } from '../types/user.type'
+import { User, UserQueryParams, UserSliceParams } from '../types/user.type'
 
-export const userApi = createCrudApi<User, UserQueryParams>({
+export const userApi = createCrudApi<User, UserSliceParams>({
   reducerPath: 'userApi',
   tagTypes: ['User'],
   baseUrl: '/users'

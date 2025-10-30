@@ -26,14 +26,7 @@ export default function UserTable() {
 
   const userParams = useAppSelector((state) => state.user)
 
-  const queryParams: UserQueryParams = {
-    pageNumber: userParams.pageNumber,
-    pageSize: userParams.pageSize,
-    search: debouncedSearchQuery,
-    status: userParams.status
-  }
-
-  const { data } = useSearchUserQuery(queryParams, { skip: status !== 'authenticated' })
+  const { data } = useSearchUserQuery(userParams, { skip: status !== 'authenticated' })
 
   const rows = React.useMemo(
     () =>
@@ -70,7 +63,7 @@ export default function UserTable() {
         columns={columns as any}
         enableRowSelection
         pagingData={data}
-        pagingParams={queryParams}
+        pagingParams={userParams}
         handlePageChange={handlePageChange}
       />
     </div>

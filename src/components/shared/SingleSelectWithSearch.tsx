@@ -11,12 +11,15 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/shadcn/avatar'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
+import { Badge } from '@/components/shadcn/badge'
 
 type Option = {
   value: number | string
   label: string
   subLabel?: string
   imageUrl?: string
+  status?: string
+  date?: string
 }
 
 type Props = {
@@ -33,34 +36,50 @@ export function SingleSelectWithSearch({ options, value, onChange, placeholder =
   const selected = options.find((opt) => opt.value === value)
 
   return (
-    <div>
-      {label && <label className='text-base font-medium'>{label}</label>}
+    <div className='w-full'>
+      {label && <label className='mb-2 block text-sm font-medium text-gray-700'>{label}</label>}
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant='outline' role='combobox' aria-expanded={open} className='mt-2 w-full justify-between'>
+          <Button
+            variant='outline'
+            role='combobox'
+            aria-expanded={open}
+            className='h-10 w-full justify-between rounded-lg border-gray-300 bg-white px-3 text-left font-normal hover:bg-gray-50'
+          >
             {selected ? (
-              <div className='flex items-center gap-2'>
-                {selected.imageUrl && (
-                  <Avatar className='h-5 w-5'>
+              <div className='flex items-center gap-2.5'>
+                <Avatar className='h-6 w-6 shrink-0'>
+                  {selected.imageUrl ? (
                     <AvatarImage src={selected.imageUrl} alt={selected.label} />
-                    <AvatarFallback>{selected.label[0]}</AvatarFallback>
-                  </Avatar>
+                  ) : (
+                    <AvatarFallback className='bg-sky-100 text-xs font-semibold text-sky-600'>
+                      {selected.label[0]?.toUpperCase()}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                <span className='text-md truncate font-semibold text-gray-900'>{selected.label}</span>
+                {selected.status && (
+                  <Badge className='ml-auto shrink-0 bg-sky-100 text-xs text-blue-800'>{selected.status}</Badge>
                 )}
-                <span>{selected.label}</span>
               </div>
             ) : (
-              <span className='text-muted-foreground'>{placeholder}</span>
+              <span className='text-sm text-gray-400'>{placeholder}</span>
             )}
-            <ChevronsUpDown className='text-muted-foreground ml-2 h-4 w-4' />
+            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 text-gray-400' />
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className='w-[300px] p-0'>
-          <Command>
-            <CommandInput placeholder='Search...' />
-            <CommandEmpty>No result found.</CommandEmpty>
-            <CommandList>
+        <PopoverContent
+          className='p-0'
+          align='start'
+          sideOffset={4}
+          style={{ width: 'var(--radix-popover-trigger-width)' }}
+        >
+          <Command className='rounded-lg border-0'>
+            <CommandInput placeholder='Search...' className='h-10 border-b' />
+            <CommandEmpty className='py-6 text-center text-sm text-gray-500'>No result found.</CommandEmpty>
+            <CommandList className='max-h-[300px]'>
               <CommandGroup>
                 {options.map((opt) => (
                   <CommandItem
@@ -70,19 +89,35 @@ export function SingleSelectWithSearch({ options, value, onChange, placeholder =
                       onChange(opt.value.toString())
                       setOpen(false)
                     }}
-                    className='flex items-center gap-3'
+                    className='flex cursor-pointer items-center gap-3 px-3 py-2.5 hover:bg-gray-50'
                   >
-                    <Avatar className='h-6 w-6'>
-                      <AvatarImage src={opt.imageUrl} alt={opt.label} />
-                      <AvatarFallback>{opt.label}</AvatarFallback>
+                    <Avatar className='h-7 w-7 shrink-0'>
+                      {opt.imageUrl ? (
+                        <AvatarImage src={opt.imageUrl} alt={opt.label} />
+                      ) : (
+                        <AvatarFallback className='bg-sky-100 text-xs font-semibold text-sky-600'>
+                          {opt.label[0]?.toUpperCase()}
+                        </AvatarFallback>
+                      )}
                     </Avatar>
 
-                    <div className='flex flex-col'>
-                      <span>{opt.label}</span>
-                      {opt.subLabel && <span className='text-muted-foreground text-xs'>{opt.subLabel}</span>}
+                    <div className='flex min-w-0 flex-1 flex-col'>
+                      <div className='flex items-center justify-between gap-2'>
+                        <div>
+                          <span className='truncate text-sm font-medium text-gray-900'>{opt.label}</span>
+                          {opt.date ? (
+                            <p className='truncate text-xs text-gray-500'>{opt.date}</p>
+                          ) : opt.subLabel ? (
+                            <p className='truncate text-xs text-gray-500'>{opt.subLabel}</p>
+                          ) : null}
+                        </div>
+                        {opt.status && (
+                          <Badge className='shrink-0 bg-sky-100 text-xs text-blue-800'>{opt.status}</Badge>
+                        )}
+                      </div>
                     </div>
 
-                    {value === opt.value && <Check className='text-primary ml-auto h-4 w-4' />}
+                    {value === opt.value && <Check className='h-4 w-4 shrink-0 text-sky-500' />}
                   </CommandItem>
                 ))}
               </CommandGroup>

@@ -17,9 +17,13 @@ export type UserFormData = Omit<User, 'id'> & {
 }
 
 export type UserQueryParams = {
-  // nothing here for now, but can be extended in the future
+  role?: UserRole
+  organizationId?: number
+  subscriptionOrderId?: number
 } & SearchPaginatedRequestParams
 
 export type UserSliceParams = {
-  // nothing here for now, but can be extended in the future
+  role?: UserRole
+  organizationId?: number
+  subscriptionOrderId?: number
 } & SliceQueryParams

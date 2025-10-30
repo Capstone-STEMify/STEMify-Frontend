@@ -18,9 +18,9 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
   const [open, setOpen] = React.useState(false)
 
   return (
-    <div className='flex flex-col space-y-2'>
+    <div className='flex w-full flex-col space-y-2'>
       {label && (
-        <Label htmlFor={field.name} className='text-base'>
+        <Label htmlFor={field.name} className='text-sm font-medium text-gray-700'>
           {label}
         </Label>
       )}
@@ -31,15 +31,18 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
             type='button'
             variant='outline'
             id={field.name}
-            className='w-full justify-between font-normal'
+            className='h-10 w-full justify-between rounded-lg border-gray-300 bg-white px-3 text-left font-normal hover:bg-gray-50'
             onClick={() => setOpen((o) => !o)}
           >
-            {field.state.value ? new Date(field.state.value).toLocaleDateString() : placeholder}
-            <ChevronDownIcon className='ml-2 h-4 w-4 opacity-50' />
+            <span className='text-sm text-gray-900'>
+              {field.state.value ? new Date(field.state.value).toLocaleDateString() : ''}
+            </span>
+            {!field.state.value && <span className='text-sm text-gray-400'>{placeholder}</span>}
+            <ChevronDownIcon className='ml-2 h-4 w-4 shrink-0 text-gray-400' />
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className='w-auto' align='center'>
+        <PopoverContent className='w-auto p-0' align='start' sideOffset={4}>
           <Calendar
             mode='single'
             selected={field.state.value ?? undefined}
@@ -48,6 +51,7 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
               setOpen(false)
             }}
             captionLayout='dropdown'
+            initialFocus
           />
         </PopoverContent>
       </Popover>
