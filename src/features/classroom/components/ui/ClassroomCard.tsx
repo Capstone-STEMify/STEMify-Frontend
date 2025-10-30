@@ -11,10 +11,10 @@ interface ClassroomCardProps {
   id: number
   category: string
   duration: string
+  students: Student[]
   title: string
   buttonText: string
   buttonColor: string
-  students: Student[]
   bgColor?: string
   textColor?: string
   borderColor?: string
