@@ -6,13 +6,13 @@ interface QuizPlayerState {
   currentQuestionIndex: number
   timeRemaining: number
   isSubmitted: boolean
-  userAnswers: Record<number, string | number>
+  userAnswers: Record<number, (string | number)[]>
 }
 
 const initialState: QuizPlayerState = {
   questions: [],
   currentQuestionIndex: 0,
-  timeRemaining: 1000 * 60,
+  timeRemaining: 100 * 60,
   isSubmitted: false,
   userAnswers: {}
 }
@@ -25,7 +25,13 @@ export const quizPlayerSlice = createSlice({
       state.currentQuestionIndex = action.payload
     },
     setUserAnswer: (state, action: PayloadAction<{ questionId: number; answer: string | number }>) => {
-      state.userAnswers[action.payload.questionId] = action.payload.answer
+      state.userAnswers[action.payload.questionId] = [action.payload.answer]
+    },
+    /** Multiple-choice toggle */
+    toggleUserAnswer: (state, action: PayloadAction<{ questionId: number; answer: string | number }>) => {
+      const { questionId, answer } = action.payload
+      const prev = state.userAnswers[questionId] || []
+      state.userAnswers[questionId] = prev.includes(answer) ? prev.filter((a) => a !== answer) : [...prev, answer]
     },
     goToNextQuestion: (state) => {
       if (state.currentQuestionIndex < state.questions.length - 1) {
@@ -49,7 +55,7 @@ export const quizPlayerSlice = createSlice({
     },
     resetQuiz: (state) => {
       state.currentQuestionIndex = 0
-      state.timeRemaining = 1000 * 60
+      state.timeRemaining = 100 * 60
       state.isSubmitted = false
       state.userAnswers = {}
     }
@@ -59,6 +65,7 @@ export const quizPlayerSlice = createSlice({
 export const {
   setCurrentQuestionIndex,
   setUserAnswer,
+  toggleUserAnswer,
   goToNextQuestion,
   goToPreviousQuestion,
   submitQuiz,

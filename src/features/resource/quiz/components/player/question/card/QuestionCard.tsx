@@ -6,14 +6,16 @@ import { Card } from '@/components/shadcn/card'
 import TrueFalseQuestion from '@/features/resource/quiz/components/player/question/types/TrueFalseQuestion'
 import SingleChoiceQuestion from '@/features/resource/quiz/components/player/question/types/SingleChoiceQuestion'
 import MultipleChoiceQuestion from '@/features/resource/quiz/components/player/question/types/MultipleChoiceQuestion'
-import ShortAnswerQuestion from '@/features/resource/quiz/components/player/question/types/ShortAnswerQuestion'
 import { Question, QuestionType } from '@/features/resource/question/types/question.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 type QuestionCardProps = {
   question: Question
 }
 
 export default function QuestionCard({ question }: QuestionCardProps) {
+  const { isSubmitted, userAnswers } = useAppSelector((state) => state.quizPlayer)
+
   return (
     <div className='w-full max-w-2xl'>
       {/* Question Type Badge */}

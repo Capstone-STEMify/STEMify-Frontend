@@ -21,9 +21,9 @@ export default function QuizPlayerContainer() {
 
   return (
     <div className='bg-background flex h-screen'>
-      {!isMobile && <QuizSidebar quiz={quizData.data} />}
-      {isMobile && <QuizMobileSidebar />}
-
+      {/* {!isMobile && <QuizSidebar quiz={quizData.data} />}
+      {isMobile && <QuizMobileSidebar />} */}
+      <QuizSidebar quiz={quizData.data} />
       {/* Main Content */}
       <QuizMainContent quiz={quizData.data} />
     </div>
