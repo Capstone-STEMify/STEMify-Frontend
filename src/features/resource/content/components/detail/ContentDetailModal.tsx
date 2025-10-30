@@ -29,7 +29,9 @@ export default function ContentDetailModal({ sectionId }: ContentDetailModalProp
     } else if (contentData.data.items[0].contentType === ContentType.TEXT) {
       router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentData.data.items[0].id}`)
     } else if (contentData.data.items[0].contentType === ContentType.QUIZ) {
-      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${contentData.data.items[0].quizId}`)
+      router.push(
+        `/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${contentData.data.items[0].quizId}/question`
+      )
     }
   }
 
@@ -47,7 +49,11 @@ export default function ContentDetailModal({ sectionId }: ContentDetailModalProp
         <hr />
 
         <ScrollArea className='h-[60vh] w-[70vw] max-w-6xl'>
-          <ContentDetail sectionId={sectionId} />
+          {contentData && contentData.data.items[0].contentType === ContentType.QUIZ ? (
+            <ContentDetail sectionId={sectionId} quizId={contentData.data.items[0].quizId} />
+          ) : (
+            <ContentDetail sectionId={sectionId} />
+          )}
         </ScrollArea>
       </DialogContent>
     </Dialog>

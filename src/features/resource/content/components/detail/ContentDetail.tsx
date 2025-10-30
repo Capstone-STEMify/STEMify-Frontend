@@ -13,9 +13,10 @@ import { useParams, useRouter } from 'next/navigation'
 
 type ContentDetailProps = {
   sectionId: number
+  quizId?: number
 }
 
-export default function ContentDetail({ sectionId }: ContentDetailProps) {
+export default function ContentDetail({ sectionId, quizId }: ContentDetailProps) {
   const { lessonId } = useParams()
   const t = useTranslations('content')
   const { data: contentData, isLoading } = useSearchContentQuery({ sectionId })
@@ -31,7 +32,7 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
 
   const handleCreateQuiz = () => {
     closeModal()
-    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz`)
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
   }
 
   if (isLoading)
@@ -63,7 +64,7 @@ export default function ContentDetail({ sectionId }: ContentDetailProps) {
       {contentData.data.items[0].contentType === ContentType.TEXT ? (
         <TiptapViewer content={normalizeMarkdown(contentData?.data.items[0].contentBody)} />
       ) : (
-        <QuizViewer quiz={contentData.data.items[0]} />
+        <QuizViewer quiz={contentData.data.items[0]} isShowQuestionAnswer />
       )}
     </div>
   )
