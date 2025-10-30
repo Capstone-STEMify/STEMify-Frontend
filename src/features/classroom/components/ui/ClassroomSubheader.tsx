@@ -1,23 +1,23 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { cn } from '@/utils/shadcn/utils'
 import { useLocale, useTranslations } from 'next-intl'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Button } from '@/components/shadcn/button'
-import { Bell, Settings, Users } from 'lucide-react'
 
 export default function ClassroomSubHeader() {
+  const { classroomId } = useParams()
   const t = useTranslations('Header')
   const pathname = usePathname()
   const locale = useLocale()
 
   const subNavItems = [
-    { name: 'overview', href: `/${locale}/classroom/overview` },
-    { name: 'course', href: `/${locale}/classroom/course` },
-    { name: 'quiz', href: `/${locale}/classroom/quiz` },
-    { name: 'assignment', href: `/${locale}/classroom/assignments` }
+    { name: 'overview', href: `/${locale}/classroom/${classroomId}/overview` },
+    { name: 'course', href: `/${locale}/classroom/${classroomId}/course` },
+    { name: 'quiz', href: `/${locale}/classroom/${classroomId}/quiz` },
+    { name: 'assignment', href: `/${locale}/classroom/${classroomId}/assignments` }
   ]
 
   return (
