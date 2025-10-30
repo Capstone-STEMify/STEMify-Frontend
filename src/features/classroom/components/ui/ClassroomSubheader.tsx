@@ -59,7 +59,7 @@ export default function ClassroomSubHeader() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    'relative flex h-16 items-center text-sm font-medium transition-colors duration-200 hover:text-slate-900',
+                    'relative flex h-16 items-center text-base font-medium transition-colors duration-200 hover:text-slate-900',
                     isActive ? 'text-slate-900' : 'text-slate-600'
                   )}
                 >
