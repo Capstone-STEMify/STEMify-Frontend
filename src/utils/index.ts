@@ -87,13 +87,24 @@ export const getOptions = (
   data: any[] | undefined,
   labelKey: string,
   imageKey?: string,
-  subLabelKey?: string
-): { value: string; label: string; imageUrl?: string; subLabel?: string }[] =>
+  subLabelKey?: string,
+  statusKey?: string,
+  startDateKey?: string,
+  endDateKey?: string
+): { value: string; label: string; imageUrl?: string; subLabel?: string; status?: string; date?: string }[] =>
   data?.map((item) => ({
     value: item.id ? item.id.toString() : item.userId ? item.userId.toString() : '',
     label: item[labelKey],
     imageUrl: imageKey ? item[imageKey] : undefined,
-    subLabel: subLabelKey ? item[subLabelKey] : undefined
+    subLabel: subLabelKey ? item[subLabelKey] : undefined,
+    status: statusKey ? item[statusKey] : undefined,
+    date:
+      startDateKey && endDateKey
+        ? 'Start Date: ' +
+          (item[startDateKey] ? new Date(item[startDateKey]).toLocaleDateString() : 'N/A') +
+          ' - End Date: ' +
+          (item[endDateKey] ? new Date(item[endDateKey]).toLocaleDateString() : 'N/A')
+        : undefined
   })) || []
 
 export function fileToBase64(file: File): Promise<string> {
