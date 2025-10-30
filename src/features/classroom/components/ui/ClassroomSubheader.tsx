@@ -18,23 +18,29 @@ export default function ClassroomSubHeader() {
   ]
 
   return (
-    <div>
-      <div className='mx-auto flex h-12 items-center gap-6 px-6 text-sm font-medium'>
-        {subNavItems.map((item) => {
-          const isActive = pathname.startsWith(item.href)
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={cn(
-                'transition-colors hover:text-black',
-                isActive ? 'border-b-2 border-black pb-2 text-black' : 'text-muted-foreground'
-              )}
-            >
-              {t(item.name)}
-            </Link>
-          )
-        })}
+    <div className='sticky top-2 z-40 flex justify-center'>
+      {/* Subheader floating bar */}
+      <div className='relative mt-2 w-fit rounded-full border border-gray-200 bg-white/80 px-15 shadow-md backdrop-blur-lg transition-all duration-300 hover:shadow-lg'>
+        <nav className='flex h-12 items-center justify-center gap-12'>
+          {subNavItems.map((item) => {
+            const isActive = pathname.startsWith(item.href)
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  'relative flex h-full items-center text-sm font-medium transition-all duration-200 hover:text-black',
+                  isActive ? 'text-black' : 'text-gray-500'
+                )}
+              >
+                {t(item.name)}
+                {isActive && (
+                  <span className='absolute right-0 -bottom-1 left-0 mx-auto h-[2px] w-full rounded-full bg-black transition-all duration-300' />
+                )}
+              </Link>
+            )
+          })}
+        </nav>
       </div>
     </div>
   )
