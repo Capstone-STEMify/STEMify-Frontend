@@ -7,7 +7,7 @@ export default async function ClassroomLayout({ children }: Readonly<{ children:
       <Header />
       <div className='pt-24'>
         <ClassroomSubHeader />
-        <main className='mt-6'>{children}</main>
+        <main>{children}</main>
       </div>
     </div>
   )
