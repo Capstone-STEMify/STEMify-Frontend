@@ -9,7 +9,6 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   [UserRole.STUDENT]: [
     { name: 'home', path: '/' },
     { name: 'resources', path: '/resource' },
-    { name: 'classroom', path: '/classroom' },
     { name: 'myLearning', path: '/my-learning' },
     { name: 'strawLab', path: '/straw-lab' }
   ],
