@@ -111,6 +111,7 @@ export function QuestionCard({ data, totalQuestion }: QuestionCardProps) {
                         label={answer.content}
                         percentage={percentage}
                         responses={answer.selectionCount}
+                        isCorrect={answer.isCorrect}
                       />
                     )
                   })}

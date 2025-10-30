@@ -51,6 +51,7 @@ export type AnswerStatistic = {
   answerId: number
   content: string
   selectionCount: number
+  isCorrect: boolean
 }
 
 export type QuizStatisticQueryParam = {
