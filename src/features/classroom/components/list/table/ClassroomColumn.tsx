@@ -6,7 +6,7 @@ import { Classroom, ClassroomStatus } from '@/features/classroom/types/classroom
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDateV2 } from '@/utils/index'
 import { ColumnDef } from '@tanstack/react-table'
-import { ChevronDown, Users } from 'lucide-react'
+import { Users } from 'lucide-react'
 import Image from 'next/image'
 
 export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
@@ -53,7 +53,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
         return (
           <div className='flex flex-col items-center'>
             <Image
-              src={curriculum.imageUrl}
+              src={curriculum.imageUrl || '/images/placeholder-image.png'}
               alt={curriculum.title}
               width={32}
               height={32}

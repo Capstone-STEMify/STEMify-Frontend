@@ -26,7 +26,7 @@ export default function UpsertClassroomModal({ classroomId, onConfirm }: UpsertC
       <DialogContent>
         <DialogTitle>{classroomId ? `${t('form.title.update')}` : `${t('form.title.create')}`}</DialogTitle>
         <hr />
-        <ScrollArea className='h-[500px] w-4xl pr-5'>
+        <ScrollArea className='h-[500px] w-4xl'>
           <UpsertClassroom classroomId={classroomId} onSuccess={handleSuccess} />
         </ScrollArea>
       </DialogContent>

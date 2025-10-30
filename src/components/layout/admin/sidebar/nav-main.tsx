@@ -19,7 +19,7 @@ export function NavMain({
   items,
   label
 }: {
-  label: string
+  label?: string
   items: {
     title: string
     url: string
@@ -31,7 +31,7 @@ export function NavMain({
   const t = useTranslations('Admin')
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>{t(label)}</SidebarGroupLabel>
+      {label && <SidebarGroupLabel>{t(label)}</SidebarGroupLabel>}
       <SidebarGroupContent className='flex flex-col gap-2'>
         <SidebarMenu>
           {items.map((item) => {

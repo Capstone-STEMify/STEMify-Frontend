@@ -31,7 +31,7 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
             type='button'
             variant='outline'
             id={field.name}
-            className='w-48 justify-between font-normal'
+            className='w-full justify-between font-normal'
             onClick={() => setOpen((o) => !o)}
           >
             {field.state.value ? new Date(field.state.value).toLocaleDateString() : placeholder}
@@ -39,7 +39,7 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className='w-auto' align='start'>
+        <PopoverContent className='w-auto' align='center'>
           <Calendar
             mode='single'
             selected={field.state.value ?? undefined}

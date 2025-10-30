@@ -33,12 +33,12 @@ export function SingleSelectWithSearch({ options, value, onChange, placeholder =
   const selected = options.find((opt) => opt.value === value)
 
   return (
-    <div className='space-y-2'>
-      {label && <label className='text-md font-medium'>{label}</label>}
+    <div>
+      {label && <label className='text-base font-medium'>{label}</label>}
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant='outline' role='combobox' aria-expanded={open} className='w-full justify-between'>
+          <Button variant='outline' role='combobox' aria-expanded={open} className='mt-2 w-full justify-between'>
             {selected ? (
               <div className='flex items-center gap-2'>
                 {selected.imageUrl && (
