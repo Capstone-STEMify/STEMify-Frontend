@@ -8,6 +8,11 @@
     "shop": "Shop",
     "gift": "Gift",
     "signIn": "Sign In",
+    "classroom": "Classroom",
+    "overview": "Overview",
+    "quiz": "Quiz",
+    "assignment": "Assignment",
+    "course": "Course",
     "english": "English",
     "vietnamese": "Vietnamese",
     "notifications": {
