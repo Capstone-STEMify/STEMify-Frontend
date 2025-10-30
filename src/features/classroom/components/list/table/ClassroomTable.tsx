@@ -11,6 +11,8 @@ import { DataTable } from '@/components/shared/data-table/data-table'
 import { useGetClassroomColumn } from '@/features/classroom/components/list/table/ClassroomColumn'
 import { useSearchClassroomsQuery } from '@/features/classroom/api/classroomApi'
 import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
+import UpsertClassroomModal from '@/features/classroom/components/upsert/UpsertClassroomModal'
+import { useModal } from '@/providers/ModalProvider'
 
 // Mock data
 type Classroom = {
@@ -80,6 +82,8 @@ const mockClassrooms: Classroom[] = [
 // Columns
 
 export default function ClassroomTable() {
+  const { openModal } = useModal()
+
   const { data } = useSearchClassroomsQuery({ status: ClassroomStatus.PENDING })
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
   const columns = useGetClassroomColumn()
@@ -90,7 +94,9 @@ export default function ClassroomTable() {
         <div>
           <h1 className='text-2xl font-bold'>Classroom</h1>
         </div>
-        <Button className='bg-sky-600 text-white hover:bg-sky-700'>+ Create class</Button>
+        <Button className='bg-sky-600 text-white hover:bg-sky-700' onClick={() => openModal('upsertClassroom')}>
+          + Create class
+        </Button>
       </div>
 
       {/* Filters */}

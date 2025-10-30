@@ -31,10 +31,10 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
             type='button'
             variant='outline'
             id={field.name}
-            className='w-48 w-full justify-between font-normal'
+            className='w-48 justify-between font-normal'
             onClick={() => setOpen((o) => !o)}
           >
-            {field.state.value ? field.state.value.toLocaleDateString() : placeholder}
+            {field.state.value ? new Date(field.state.value).toLocaleDateString() : placeholder}
             <ChevronDownIcon className='ml-2 h-4 w-4 opacity-50' />
           </Button>
         </PopoverTrigger>

@@ -34,6 +34,7 @@ export type ModalType =
   | 'upsertKit'
   | 'upsertComponent'
   | 'upsertOrganization'
+  | 'upsertClassroom'
 
   // detail
   | 'lessonDetail'

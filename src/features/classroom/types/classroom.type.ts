@@ -21,6 +21,7 @@ export type Classroom = {
   numberOfStudents: number
   students: any[]
   curriculum: Pick<Curriculum, 'id' | 'title' | 'description' | 'imageUrl' | 'courseCount' | 'code'>
+  organizationSubscriptionOrderId: number
 }
 
 export type ClassroomQueryParams = {
@@ -33,4 +34,13 @@ export enum ClassroomStatus {
   IN_PROGRESS = 'InProgress',
   COMPLETED = 'Completed',
   DELETED = 'Deleted'
+}
+
+export enum Grade {
+  GRADE_1 = 'Grade 1',
+  GRADE_2 = 'Grade 2',
+  GRADE_3 = 'Grade 3',
+  GRADE_4 = 'Grade 4',
+  GRADE_5 = 'Grade 5',
+  GRADE_6 = 'Grade 6'
 }

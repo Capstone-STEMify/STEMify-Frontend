@@ -12,6 +12,7 @@ import MultiImageField from '@/components/shared/form/items/multi-image-field'
 import SwitchField from '@/components/shared/form/items/switch-field'
 import { DropdownMultipleCheckboxField } from '@/components/shared/form/items/dropdown-multiple-checkbox-field'
 import { DatePickerField } from '@/components/shared/form/items/date-picker-field'
+import { SingleSelectWithSearch } from '@/components/shared/SingleSelectWithSearch'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts()
 
@@ -28,7 +29,8 @@ export const { useAppForm } = createFormHook({
     FileField,
     MultiImageField,
     SwitchField,
-    DropdownMultipleCheckboxField
+    DropdownMultipleCheckboxField,
+    SingleSelectWithSearch
   },
   formComponents: {
     SubmitButton

@@ -32,6 +32,7 @@ import UploadCSVModal from '@/features/license-assignment/components/modal/Uploa
 import QuizAIModal from '@/features/resource/quiz/components/modal/QuizAIModal'
 import ContactDetailSheet from '@/features/contact/components/detail/ContactDetailSheet'
 import UpsertPlanSheet from '@/features/plan/components/sheet/UpsertPlanSheet'
+import UpsertClassroomModal from '@/features/classroom/components/upsert/UpsertClassroomModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -80,6 +81,8 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertContent' && <UpsertContentModal {...modalProps} />}
       {modalType === 'upsertKit' && <UpsertKitModal {...modalProps} />}
       {modalType === 'upsertComponent' && <UpsertComponentModal {...modalProps} />}
+      {modalType === 'upsertPlan' && <UpsertPlanSheet {...modalProps} />}
+      {modalType === 'upsertClassroom' && <UpsertClassroomModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}

@@ -83,10 +83,17 @@ export const getLabel = (id: number | undefined, options: { value: string; label
  * ==> [{ value: '1', label: 'Math' }, { value: '2', label: 'Science' }]
  * @description Converts an array of objects into an array of options with value and label properties.
  */
-export const getOptions = (data: any[] | undefined, labelKey: string): { value: string; label: string }[] =>
+export const getOptions = (
+  data: any[] | undefined,
+  labelKey: string,
+  imageKey?: string,
+  subLabelKey?: string
+): { value: string; label: string; imageUrl?: string; subLabel?: string }[] =>
   data?.map((item) => ({
-    value: item.id.toString(),
-    label: item[labelKey]
+    value: item.id ? item.id.toString() : item.userId ? item.userId.toString() : '',
+    label: item[labelKey],
+    imageUrl: imageKey ? item[imageKey] : undefined,
+    subLabel: subLabelKey ? item[subLabelKey] : undefined
   })) || []
 
 export function fileToBase64(file: File): Promise<string> {
