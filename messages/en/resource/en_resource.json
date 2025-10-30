@@ -18,9 +18,9 @@
       "title": "Curriculums",
       "description": "Integrated curriculum for today’s STEM educators and tomorrow’s STEM leaders"
     },
-    "news": {
-      "title": "News and Blogs",
-      "description": "Stay updated with the latest news, trends, and insights in STEM education through our blogs and articles."
+    "stemKit": {
+      "title": "STEM Kit",
+      "description": "Explore our STEM Kit products designed to enhance hands-on learning experiences."
     }
   }
 }

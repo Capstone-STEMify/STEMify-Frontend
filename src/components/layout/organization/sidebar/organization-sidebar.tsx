@@ -55,7 +55,7 @@ const data = {
     },
     {
       title: 'side_bar.classroom',
-      url: '/organization/classrooms',
+      url: '/organization/classroom',
       icon: IconChalkboard
     }
   ]
