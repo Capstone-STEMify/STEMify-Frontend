@@ -1,7 +1,7 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
-import { Plus } from 'lucide-react'
+import { FileEdit } from 'lucide-react'
 import {
   DndContext,
   closestCenter,
@@ -22,9 +22,12 @@ import {
   reorderQuestions,
   selectQuiz,
   selectSelectedQuestionId,
-  resetQuizEditor
+  resetQuizEditor,
+  markAsSaved
 } from '@/features/resource/question/slice/quizEditorSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/features/resource/question/api/questionApi'
+import { toast } from 'sonner'
 
 const QuizEditor = () => {
   const { quizId } = useParams()
@@ -34,8 +37,14 @@ const QuizEditor = () => {
   const quiz = useAppSelector(selectQuiz)
   const selectedQuestionId = useAppSelector(selectSelectedQuestionId)
 
+  const [isSavingQuestions, setIsSavingQuestions] = useState(false)
+  const hasQuestionsInAPI = quiz.questions.some((q) => q.id < 1000000000000)
+
+  const [createQuestion] = useCreateQuestionMutation()
+  const [updateQuestion] = useUpdateQuestionMutation()
+
   // Fetch quiz data
-  const { data: quizData } = useGetQuizByIdQuery(Number(quizId), { skip: !quizId })
+  const { data: quizData, isLoading } = useGetQuizByIdQuery(Number(quizId), { skip: !quizId })
 
   // Initialize quiz data when fetched
   useEffect(() => {
@@ -73,36 +82,122 @@ const QuizEditor = () => {
     dispatch(addQuestion())
   }
 
+  const handleSaveQuestions = async () => {
+    setIsSavingQuestions(true)
+    try {
+      if (!quizId) {
+        toast.error('Please save quiz info first')
+        return
+      }
+
+      if (hasQuestionsInAPI) {
+        const updateQuestionsPayload = quiz.questions.map((q) => {
+          const isExistingQuestion = q.id < 1000000000000
+
+          if (isExistingQuestion) {
+            return {
+              id: q.id,
+              questionType: q.questionType,
+              content: q.content,
+              orderIndex: q.orderIndex,
+              answerExplanation: q.answerExplanation,
+              points: q.points,
+              answers: q.answers.map((a) => ({
+                id: a.id,
+                content: a.content,
+                isCorrect: a.isCorrect
+              }))
+            }
+          } else {
+            return {
+              questionType: q.questionType,
+              content: q.content,
+              orderIndex: q.orderIndex,
+              answerExplanation: q.answerExplanation,
+              points: q.points,
+              answers: q.answers.map((a) => ({
+                content: a.content,
+                isCorrect: a.isCorrect
+              }))
+            }
+          }
+        })
+
+        await updateQuestion({
+          quizId: Number(quizId),
+          questions: updateQuestionsPayload
+        }).unwrap()
+
+        toast.success(`${quiz.questions.length} questions updated successfully`)
+      } else {
+        const createQuestionsPayload = quiz.questions.map((q) => ({
+          questionType: q.questionType,
+          content: q.content,
+          orderIndex: q.orderIndex,
+          answerExplanation: q.answerExplanation,
+          points: q.points,
+          answers: q.answers.map((a) => ({
+            content: a.content,
+            isCorrect: a.isCorrect
+          }))
+        }))
+
+        await createQuestion({
+          quizId: Number(quizId),
+          questions: createQuestionsPayload
+        }).unwrap()
+
+        toast.success(`${quiz.questions.length} questions created successfully`)
+      }
+
+      dispatch(markAsSaved())
+    } catch (error) {
+      toast.error('Failed to save questions')
+      console.error('Save questions error:', error)
+    } finally {
+      setIsSavingQuestions(false)
+    }
+  }
+
   return (
-    <div className='bg-background flex w-full'>
-      <QuizEditorSidebar />
+    <div className='bg-background flex h-[90vh] w-full overflow-hidden'>
+      <QuizEditorSidebar onAddQuestion={handleAddQuestion} />
 
-      <main className='flex-1 overflow-auto'>
-        <div className='mx-auto max-w-4xl p-8'>
-          <div className='mb-8'>
-            <h1 className='text-foreground mb-2 text-3xl font-bold'>{quiz.title}</h1>
-            {quiz.description && <p className='text-muted-foreground'>{quiz.description}</p>}
+      <main className='flex flex-1 flex-col overflow-hidden'>
+        {/* Header cố định */}
+        <div className='border-border bg-background flex shrink-0 justify-between border-b px-8 py-4'>
+          <div>
+            <h2 className='text-foreground font-bold'>{quiz.title || 'Untitled Quiz'}</h2>
+            {quiz.description && <p className='text-muted-foreground mt-1'>{quiz.description}</p>}
           </div>
+          {/* Footer cố định */}
+          {quizId && quiz.questions.length > 0 && (
+            <div>
+              <Button onClick={handleSaveQuestions} disabled={isSavingQuestions} size='lg' className='min-w-40'>
+                <FileEdit className='mr-2 h-4 w-4' />
+                {isSavingQuestions ? 'Saving...' : 'Save Questions'}
+              </Button>
+            </div>
+          )}
+        </div>
 
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={quiz.questions.map((q) => Number(q.id))} strategy={verticalListSortingStrategy}>
-              <div className='space-y-4'>
-                {quiz.questions.map((question) => (
-                  <QuestionCard key={question.id} question={question} isSelected={selectedQuestionId === question.id} />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
-
-          <div className='mt-4'>
-            <Button
-              onClick={handleAddQuestion}
-              variant='outline'
-              className='hover:border-primary hover:bg-primary/5 h-24 w-full border-2 border-dashed transition-all'
-            >
-              <Plus className='mr-2 h-5 w-5' />
-              Add Question
-            </Button>
+        {/* Nội dung scroll */}
+        <div className='flex-1 overflow-y-auto'>
+          <div className='mx-auto max-w-5xl p-8'>
+            {/* danh sách câu hỏi */}
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+              <SortableContext items={quiz.questions.map((q) => Number(q.id))} strategy={verticalListSortingStrategy}>
+                <div className='space-y-4'>
+                  {quiz.questions.map((question) => (
+                    <QuestionCard
+                      key={question.id}
+                      question={question}
+                      isSelected={selectedQuestionId === question.id}
+                    />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           </div>
         </div>
       </main>
