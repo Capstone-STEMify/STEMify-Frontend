@@ -7,6 +7,7 @@ import { useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscri
 import { useParams } from 'next/navigation'
 import ContractInfo from '@/features/subscription/components/detail/system/ContractInfo'
 import SubscriptionInfo from '@/features/subscription/components/detail/system/SubscriptionInfo'
+import BackButton from '@/components/shared/button/BackButton'
 
 export default function SystemSubscriptionDetail() {
   const { subscriptionId } = useParams()
@@ -19,7 +20,8 @@ export default function SystemSubscriptionDetail() {
   return (
     <div className='bg-muted/30 min-h-screen p-6'>
       <div className='mx-auto max-w-7xl'>
-        <div className='mb-6 flex items-center justify-between'>
+        <div className='mb-6 flex items-center justify-start gap-4'>
+          <BackButton />
           <h1 className='text-2xl font-semibold'>Organization Details</h1>
         </div>
 
