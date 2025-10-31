@@ -64,8 +64,7 @@ export const apiMiddlewares: Middleware[] = [
   licenseAssignmentApi.middleware,
   studentQuizApi.middleware,
   organizationApi.middleware,
-  classroomApi.middleware,
-  jobRoleApi.middleware
+  classroomApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]
