@@ -37,7 +37,11 @@ export function useGetContactColumnTable(): ColumnDef<Contact>[] {
     },
     {
       accessorKey: 'createdAt',
-      header: tc('tableHeader.createdAt')
+      header: tc('tableHeader.createdDate'),
+      cell: ({ row }) => {
+        const date = new Date(row.getValue('createdAt'))
+        return date.toLocaleDateString()
+      }
     },
     {
       accessorKey: 'jobRole',
@@ -47,9 +51,7 @@ export function useGetContactColumnTable(): ColumnDef<Contact>[] {
       accessorKey: 'status',
       header: tc('tableHeader.status'),
       cell: ({ row }) => {
-        const value = row.getValue<ContactStatus>('status')
-        const badgeValue = value.toLocaleUpperCase() as ContactStatus
-        return <Badge className={`${getStatusBadgeClass(badgeValue)}`}>{value}</Badge>
+        return <Badge className={`${getStatusBadgeClass(row.original.status)}`}>{row.original.status}</Badge>
       }
     }
   ]

@@ -1,10 +1,10 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { Pencil, Trash2, ChevronDown, ChevronRight } from 'lucide-react'
+import { Pencil, Trash2, ChevronDown, ChevronRight, Search } from 'lucide-react'
 import { useDeletePlanMutation, useSearchPlanQuery } from '@/features/plan/api/planApi'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
@@ -14,6 +14,14 @@ import { useDeleteOrganizationMutation, useSearchOrganizationsQuery } from '@/fe
 import Image from 'next/image'
 import { formatDate } from '@/utils/index'
 import SystemSubscriptionTable from '@/features/subscription/components/list/SystemSubscriptionTable'
+import SearchBar from '@/components/shared/search/SearchBar'
+import { Input } from '@/components/shadcn/input'
+import SSelect from '@/components/shared/SSelect'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setParam, setSearchTerm } from '@/features/organization/slice/organizationSlice'
+import { OrganizationStatus } from '@/features/organization/types/organization.type'
+import useDebounce from '@/hooks/useDebounce'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 
 export default function SystemOrganizationList() {
   const t = useTranslations('subscription')
@@ -21,17 +29,33 @@ export default function SystemOrganizationList() {
   const tList = useTranslations('curriculum.list')
   const router = useRouter()
   const locale = useLocale()
+  const dispatch = useAppDispatch()
+  const [search, setSearch] = useState<string>('')
+  const debouncedSearchQuery = useDebounce(search, 500)
 
   const { openModal } = useModal()
   const [expandedOrganizations, setExpandedOrganizations] = useState<number[]>([])
-  const { data } = useSearchOrganizationsQuery({ pageNumber: 1, pageSize: 20 })
+  const queryParams = useAppSelector((state) => state.organization)
+  const { data } = useSearchOrganizationsQuery(queryParams)
+  const organizations = data?.data.items || []
+
+  useEffect(() => {
+    dispatch(setSearchTerm(debouncedSearchQuery))
+  }, [debouncedSearchQuery, dispatch])
+
+  const statusOptions = Object.entries(OrganizationStatus)
+    .filter(([key]) => key.toLowerCase() !== 'deleted')
+    .map(([key, value]) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      value: value
+    }))
+
   const [deleteOrganization] = useDeleteOrganizationMutation()
   const toggleExpand = (organizationId: number) => {
     setExpandedOrganizations((prev) =>
       prev.includes(organizationId) ? prev.filter((id) => id !== organizationId) : [...prev, organizationId]
     )
   }
-  const organizations = data?.data.items || []
   return (
     <div className='my-5 px-10'>
       <div className='mx-auto max-w-7xl space-y-6'>
@@ -40,9 +64,33 @@ export default function SystemOrganizationList() {
             <h1 className='mt-4 mb-4 text-3xl font-bold'>{t('list.organizationSubscriptionTitle')}</h1>
             <p className='text-muted-foreground mt-1'>{t('list.organizationSubscriptionDescription')}</p>
           </div>
-          <Button className='bg-sky-500' onClick={() => router.push(`/${locale}/admin/subscription/create`)}>
+          <Button
+            className='bg-sky-500'
+            onClick={() => router.push(`/${locale}/admin/organization-subscription/create`)}
+          >
             + {tc('button.create')}
           </Button>
+        </div>
+
+        <div className='flex items-center justify-start gap-2'>
+          {/* Search Input */}
+          <div className='relative w-100'>
+            <Input
+              type='text'
+              placeholder={t('list.placeholder.search')}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
+            />
+            <Search className='absolute top-3 left-3 h-4 w-4 text-gray-400' />
+          </div>
+          <SSelect
+            className='w-fit'
+            placeholder={t('list.placeholder.status')}
+            value={queryParams.status?.toString() ?? ''}
+            onChange={(val) => dispatch(setParam({ key: 'status', value: val as OrganizationStatus }))}
+            options={statusOptions}
+          />
         </div>
 
         <div className='border-border overflow-hidden rounded-lg border'>
@@ -55,7 +103,6 @@ export default function SystemOrganizationList() {
                 <TableHead>{tc('tableHeader.organizationType')}</TableHead>
                 <TableHead>{tc('tableHeader.status')}</TableHead>
                 <TableHead>{tc('tableHeader.createdDate')}</TableHead>
-                <TableHead>{tc('tableHeader.lastModified')}</TableHead>
                 <TableHead className='text-center'>{tc('tableHeader.actions')}</TableHead>
               </TableRow>
             </TableHeader>
@@ -87,10 +134,9 @@ export default function SystemOrganizationList() {
                     <TableCell className='font-medium'>{organization.name}</TableCell>
                     <TableCell>{organization.organizationType}</TableCell>
                     <TableCell>
-                      <Badge className='bg-emerald-700 text-white'>{organization.status}</Badge>
+                      <Badge className={getStatusBadgeClass(organization.status)}>{organization.status}</Badge>
                     </TableCell>
                     <TableCell>{formatDate(organization.createdDate)}</TableCell>
-                    <TableCell>{formatDate(organization.lastModifiedDate)}</TableCell>
 
                     <TableCell>
                       <div className='flex items-center justify-center gap-2'>
@@ -100,7 +146,7 @@ export default function SystemOrganizationList() {
                           className='h-8 w-8 p-0'
                           onClick={(e) => {
                             e.stopPropagation()
-                            openModal('upsertPlan', { planId: organization.id })
+                            openModal('upsertOrganization', { organizationId: organization.id })
                           }}
                         >
                           <Pencil className='h-4 w-4' />

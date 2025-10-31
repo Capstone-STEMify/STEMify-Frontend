@@ -99,7 +99,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'quizAI' && <QuizAIModal {...modalProps} />}
 
       {/* sheet */}
-      {modalType === 'contactDetail' && <ContactDetailSheet {...modalProps} />}
+      {modalType === 'upsertContact' && <ContactDetailSheet {...modalProps} />}
 
       {modalType === 'upsertPlan' && <UpsertPlanSheet {...modalProps} />}
     </ModalContext.Provider>

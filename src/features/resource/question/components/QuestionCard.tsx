@@ -21,14 +21,17 @@ import {
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Question, QuestionType } from '@/features/resource/question/types/question.type'
 import { cn } from '@/utils/shadcn/utils'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import {
+  deleteQuestion,
+  duplicateQuestion,
+  selectQuestion,
+  updateQuestion
+} from '@/features/resource/question/slice/quizEditorSlice'
 
 type QuestionCardProps = {
   question: Question
   isSelected: boolean
-  onSelect: () => void
-  onUpdate: (question: Question) => void
-  onDelete: (id: number) => void
-  onDuplicate: (id: number) => void
 }
 
 const SortableAnswer = ({
@@ -66,7 +69,7 @@ const SortableAnswer = ({
 
       {question.questionType === QuestionType.SINGLE_CHOICE ? (
         <RadioGroupItem
-          value={answer.id.toString()}
+          value={answer.id ? answer.id.toString() : answer.key.toString()}
           onClick={(e) => {
             e.stopPropagation()
             onToggleCorrect(answer.id)
@@ -80,7 +83,7 @@ const SortableAnswer = ({
         />
       ) : (
         <RadioGroupItem
-          value={answer.id.toString()}
+          value={answer.id ? answer.id.toString() : answer.key.toString()}
           onClick={(e) => {
             e.stopPropagation()
             onToggleCorrect(answer.id)
@@ -119,14 +122,8 @@ const SortableAnswer = ({
   )
 }
 
-export const QuestionCard = ({
-  question,
-  isSelected,
-  onSelect,
-  onUpdate,
-  onDelete,
-  onDuplicate
-}: QuestionCardProps) => {
+export const QuestionCard = ({ question, isSelected }: QuestionCardProps) => {
+  const dispatch = useAppDispatch()
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: question.id })
 
   const style = {
@@ -141,6 +138,22 @@ export const QuestionCard = ({
     })
   )
 
+  const handleSelect = () => {
+    dispatch(selectQuestion(question.id))
+  }
+
+  const handleUpdate = (updatedQuestion: Question) => {
+    dispatch(updateQuestion(updatedQuestion))
+  }
+
+  const handleDelete = () => {
+    dispatch(deleteQuestion(question.id))
+  }
+
+  const handleDuplicate = () => {
+    dispatch(duplicateQuestion(question.id))
+  }
+
   const handleAnswerDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
@@ -149,7 +162,7 @@ export const QuestionCard = ({
       const newIndex = question.answers.findIndex((a) => a.id === over.id)
 
       const reorderedAnswers = arrayMove(question.answers, oldIndex, newIndex)
-      onUpdate({ ...question, answers: reorderedAnswers })
+      handleUpdate({ ...question, answers: reorderedAnswers })
     }
   }
 
@@ -158,17 +171,17 @@ export const QuestionCard = ({
 
     if (type === QuestionType.TRUE_FALSE) {
       newAnswers = [
-        { id: Date.now(), content: 'True', isCorrect: false },
-        { id: Date.now() + 1, content: 'False', isCorrect: false }
+        { id: Date.now() + 1, content: 'True', isCorrect: false },
+        { id: Date.now() + 2, content: 'False', isCorrect: false }
       ]
     } else if (question.questionType === QuestionType.TRUE_FALSE) {
       newAnswers = [
-        { id: Date.now(), content: '', isCorrect: false },
-        { id: Date.now() + 1, content: '', isCorrect: false }
+        { id: Date.now() + 3, content: '', isCorrect: false },
+        { id: Date.now() + 4, content: '', isCorrect: false }
       ]
     }
 
-    onUpdate({ ...question, questionType: type, answers: newAnswers })
+    handleUpdate({ ...question, questionType: type, answers: newAnswers })
   }
 
   const addAnswer = () => {
@@ -177,19 +190,19 @@ export const QuestionCard = ({
       content: '',
       isCorrect: false
     }
-    onUpdate({ ...question, answers: [...question.answers, newAnswer] })
+    handleUpdate({ ...question, answers: [...question.answers, newAnswer] })
   }
 
   const removeAnswer = (answerId: number) => {
     if (question.answers.length <= 2) return
-    onUpdate({
+    handleUpdate({
       ...question,
       answers: question.answers.filter((a) => a.id !== answerId)
     })
   }
 
   const updateAnswer = (answerId: number, content: string) => {
-    onUpdate({
+    handleUpdate({
       ...question,
       answers: question.answers.map((a) => (a.id === answerId ? { ...a, content } : a))
     })
@@ -198,7 +211,7 @@ export const QuestionCard = ({
   const toggleAnswerCorrect = (answerId: number) => {
     const isSingleChoice = question.questionType === QuestionType.SINGLE_CHOICE
 
-    onUpdate({
+    handleUpdate({
       ...question,
       answers: question.answers.map((a) =>
         a.id === answerId ? { ...a, isCorrect: !a.isCorrect } : isSingleChoice ? { ...a, isCorrect: false } : a
@@ -215,7 +228,7 @@ export const QuestionCard = ({
         isSelected ? 'ring-primary shadow-lg ring-2' : 'hover:shadow-md',
         isDragging && 'opacity-50'
       )}
-      onClick={onSelect}
+      onClick={handleSelect}
     >
       <div className='flex items-start gap-4'>
         <div {...attributes} {...listeners} className='mt-2 cursor-grab active:cursor-grabbing'>
@@ -239,7 +252,7 @@ export const QuestionCard = ({
               <Input
                 type='number'
                 value={question.points}
-                onChange={(e) => onUpdate({ ...question, points: parseInt(e.target.value) || 1 })}
+                onChange={(e) => handleUpdate({ ...question, points: parseInt(e.target.value) || 1 })}
                 className='w-20'
                 placeholder='Points'
               />
@@ -251,7 +264,7 @@ export const QuestionCard = ({
                 size='icon'
                 onClick={(e) => {
                   e.stopPropagation()
-                  onDuplicate(question.id)
+                  handleDuplicate()
                 }}
               >
                 <Copy className='h-4 w-4' />
@@ -261,7 +274,7 @@ export const QuestionCard = ({
                 size='icon'
                 onClick={(e) => {
                   e.stopPropagation()
-                  onDelete(question.id)
+                  handleDelete()
                 }}
               >
                 <Trash2 className='text-destructive h-4 w-4' />
@@ -272,7 +285,7 @@ export const QuestionCard = ({
           <div>
             <Textarea
               value={question.content}
-              onChange={(e) => onUpdate({ ...question, content: e.target.value })}
+              onChange={(e) => handleUpdate({ ...question, content: e.target.value })}
               placeholder='Enter your question here...'
               className='min-h-20'
               onClick={(e) => e.stopPropagation()}
@@ -283,7 +296,7 @@ export const QuestionCard = ({
             <Label>Answers (Drag to reorder)</Label>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleAnswerDragEnd}>
               <SortableContext items={question.answers.map((a) => a.id)} strategy={verticalListSortingStrategy}>
-                <RadioGroup value={question.answers.find((a) => a.isCorrect)?.id.toString()}>
+                <RadioGroup value={question.answers.find((a) => a.isCorrect)?.id?.toString()}>
                   <div className='space-y-2'>
                     {question.answers.map((answer, index) => (
                       <SortableAnswer
@@ -321,7 +334,7 @@ export const QuestionCard = ({
             <Label>Explanation (Optional)</Label>
             <Textarea
               value={question.answerExplanation}
-              onChange={(e) => onUpdate({ ...question, answerExplanation: e.target.value })}
+              onChange={(e) => handleUpdate({ ...question, answerExplanation: e.target.value })}
               placeholder='Explain the correct answer...'
               rows={2}
               onClick={(e) => e.stopPropagation()}

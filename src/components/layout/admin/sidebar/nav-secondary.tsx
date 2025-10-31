@@ -42,7 +42,7 @@ export function NavSecondary({
               <Collapsible key={item.title} defaultOpen={false} className='group/collapsible'>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton>
+                    <SidebarMenuButton className='text-xs'>
                       <item.icon />
                       <span>{t(item.title)}</span>
                       <ChevronDown className='ml-auto size-4 opacity-50 transition-transform group-data-[state=open]/collapsible:rotate-180' />

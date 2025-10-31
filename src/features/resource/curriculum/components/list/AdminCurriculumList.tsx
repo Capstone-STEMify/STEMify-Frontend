@@ -76,7 +76,7 @@ export default function AdminCurriculumList() {
           <CardLayout
             className='cursor-pointer rounded-2xl border-none bg-transparent'
             key={curriculum.id}
-            imageSrc={curriculum.imageUrl || '/images/fallback.png'}
+            imageSrc={curriculum.imageUrl}
             onClick={() => router.push(`/${locale}/admin/curriculum/${curriculum.id}`)}
           >
             <div className='m-2 mt-1'>

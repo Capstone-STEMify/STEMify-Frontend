@@ -52,7 +52,7 @@ export type ModalType =
   | 'quizAI'
 
   // sheet
-  | 'contactDetail'
+  | 'upsertContact'
   | 'upsertPlan'
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void

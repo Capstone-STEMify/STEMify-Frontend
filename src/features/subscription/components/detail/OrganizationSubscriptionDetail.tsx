@@ -269,7 +269,7 @@ export default function OrganizationSubscriptionDetail() {
                 <CardLayout
                   key={curriculum.id}
                   className='rounded-2xl border-none shadow-sm'
-                  imageSrc={curriculum.imageUrl || '/images/fallback.png'}
+                  imageSrc={curriculum.imageUrl}
                   footer={
                     <div className='flex items-center gap-2'>
                       <Badge className='bg-sky-custom-300'>Age 6-12</Badge>

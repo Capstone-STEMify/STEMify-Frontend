@@ -8,7 +8,8 @@ import { formatDate, formatPrice } from '@/utils/index'
 import React from 'react'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { Card } from '@/components/shadcn/card'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 type SystemSubscriptionTableProps = {
   organization: Organization
@@ -16,6 +17,8 @@ type SystemSubscriptionTableProps = {
 
 export default function SystemSubscriptionTable({ organization }: SystemSubscriptionTableProps) {
   const tc = useTranslations('common')
+  const router = useRouter()
+  const locale = useLocale()
 
   const getBillingCycleLabel = (cycle: BillingCycle | string) => {
     switch (cycle) {
@@ -31,76 +34,76 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
   return (
     <div className='space-y-6 p-6'>
       <h2 className='text-lg font-semibold'>Organization Subscriptions</h2>
-      <Card className=''>
-        <Table>
-          <TableHeader className='border-b'>
-            <TableRow className='bg-muted/60 text-foreground'>
-              <TableHead className='font-semibold'>{tc('tableHeader.planName')}</TableHead>
-              <TableHead className='font-semibold'>{tc('tableHeader.planBillingCycle')}</TableHead>
-              <TableHead className='font-semibold'>{tc('tableHeader.grossAmount')}</TableHead>
-              <TableHead className='font-semibold'>{tc('tableHeader.netAmount')}</TableHead>
-              <TableHead className='font-semibold'>{tc('tableHeader.status')}</TableHead>
-              <TableHead className='font-semibold'>{tc('tableHeader.studentSeats')}</TableHead>
-              <TableHead className='font-semibold'>{tc('tableHeader.teacherSeats')}</TableHead>
-              <TableHead className='font-semibold'>{tc('tableHeader.startDate')}</TableHead>
-              <TableHead className='font-semibold'>{tc('tableHeader.endDate')}</TableHead>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {organization.subscriptions.map((subscription, index) => (
-              <TableRow
-                key={subscription.id ?? index}
-                className={`hover:bg-muted/40 border-b transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/20'}`}
-              >
-                <TableCell className='font-medium'>{subscription.planName}</TableCell>
-                <TableCell>{getBillingCycleLabel(subscription.planBillingCycle ?? 'N/A')}</TableCell>
-
-                <TableCell className='text-muted-foreground text-sm font-medium'>
-                  {formatPrice(subscription.grossAmount ?? 0) ?? '-'}
-                </TableCell>
-
-                <TableCell className='text-foreground text-sm font-medium'>
-                  {formatPrice(subscription.netAmount ?? 0) ?? '-'}
-                </TableCell>
-
-                <TableCell>
-                  <Badge className={getStatusBadgeClass(subscription.status)}>{subscription.status ?? 'N/A'}</Badge>
-                </TableCell>
-
-                <TableCell className='space-y-1 text-[12px]'>
-                  <p className='font-medium'>
-                    <span className='text-muted-foreground'>Current:</span>{' '}
-                    <span className='text-foreground font-semibold'>{subscription.currentStudentSeats ?? '-'}</span>
-                  </p>
-                  <p className='font-medium'>
-                    <span className='text-muted-foreground'>Max:</span>{' '}
-                    <span className='text-foreground font-semibold'>{subscription.maxStudentSeats ?? '-'}</span>
-                  </p>
-                </TableCell>
-
-                <TableCell className='space-y-1 text-[12px]'>
-                  <p className='font-medium'>
-                    <span className='text-muted-foreground'>Current:</span>{' '}
-                    <span className='text-foreground font-semibold'>{subscription.currentTeacherSeats ?? '-'}</span>
-                  </p>
-                  <p className='font-medium'>
-                    <span className='text-muted-foreground'>Max:</span>{' '}
-                    <span className='text-foreground font-semibold'>{subscription.maxTeacherSeats ?? '-'}</span>
-                  </p>
-                </TableCell>
-
-                <TableCell className='text-muted-foreground text-sm'>
-                  {formatDate(subscription.startDate ?? 'N/A')}
-                </TableCell>
-                <TableCell className='text-muted-foreground text-sm'>
-                  {formatDate(subscription.endDate ?? 'N/A')}
-                </TableCell>
+      {organization.subscriptions.length === 0 ? (
+        <p className='text-muted-foreground text-center'>No subscriptions found for this organization.</p>
+      ) : (
+        <Card className=''>
+          <Table>
+            <TableHeader className='border-b'>
+              <TableRow className='bg-muted/60 text-foreground'>
+                <TableHead className='font-semibold'>{tc('tableHeader.planName')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.planBillingCycle')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.grossAmount')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.netAmount')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.studentSeats')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.teacherSeats')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.status')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.startDate')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.endDate')}</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Card>
+            </TableHeader>
+
+            <TableBody>
+              {organization.subscriptions.map((subscription, index) => (
+                <TableRow
+                  key={subscription.id ?? index}
+                  className={`hover:bg-muted/40 border-b transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/20'}`}
+                >
+                  <TableCell
+                    className='cursor-pointer font-medium text-blue-600 hover:underline'
+                    onClick={() => router.push(`/${locale}/admin/organization-subscription/${subscription.id}`)}
+                  >
+                    {subscription.planName}
+                  </TableCell>
+                  <TableCell>{getBillingCycleLabel(subscription.planBillingCycle ?? 'N/A')}</TableCell>
+
+                  <TableCell className='text-muted-foreground text-sm font-medium'>
+                    {formatPrice(subscription.grossAmount ?? 0) ?? '-'}
+                  </TableCell>
+
+                  <TableCell className='text-foreground text-sm font-medium'>
+                    {formatPrice(subscription.netAmount ?? 0) ?? '-'}
+                  </TableCell>
+
+                  <TableCell className='space-y-1'>
+                    <p>
+                      <span className='text-foreground font-semibold'>{subscription.currentStudentSeats ?? '-'}</span>/
+                      <span className='text-foreground font-semibold'>{subscription.maxStudentSeats ?? '-'}</span>
+                    </p>
+                  </TableCell>
+
+                  <TableCell className='space-y-1'>
+                    <p>
+                      <span className='text-foreground font-semibold'>{subscription.currentTeacherSeats ?? '-'}</span>/
+                      <span className='text-foreground font-semibold'>{subscription.maxTeacherSeats ?? '-'}</span>
+                    </p>
+                  </TableCell>
+                  <TableCell>
+                    <Badge className={getStatusBadgeClass(subscription.status)}>{subscription.status ?? 'N/A'}</Badge>
+                  </TableCell>
+
+                  <TableCell className='text-muted-foreground text-sm'>
+                    {formatDate(subscription.startDate ?? 'N/A')}
+                  </TableCell>
+                  <TableCell className='text-muted-foreground text-sm'>
+                    {formatDate(subscription.endDate ?? 'N/A')}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
+      )}
     </div>
   )
 }

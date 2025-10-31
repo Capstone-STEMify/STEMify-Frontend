@@ -3,17 +3,21 @@
 import { motion } from 'framer-motion'
 import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
-import { Check } from 'lucide-react'
+import { Check, Router } from 'lucide-react'
 import { formatPrice } from '@/utils/index'
 import { BillingCycle, Plan } from '@/features/plan/types/plan.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { containerVariants, itemVariants } from '@/utils/motion'
+import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 interface SubscriptionPlanProps {
   plans: Plan[]
 }
 
 export function SubscriptionPlan({ plans }: SubscriptionPlanProps) {
+  const router = useRouter()
+  const locale = useLocale()
   const billingCycle = useAppSelector((state) => state.plan.billingCycle)
 
   const getPrice = (plan: Plan) => {
@@ -66,9 +70,10 @@ export function SubscriptionPlan({ plans }: SubscriptionPlanProps) {
 
                   {/* CTA */}
                   <Button
+                    onClick={() => router.push(`/${locale}/contact`)}
                     className={`mb-8 w-full rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 py-5 font-semibold text-white shadow-md transition-transform duration-300 hover:scale-[1.02]`}
                   >
-                    Get Started
+                    Contact Us
                   </Button>
 
                   {/* Features */}

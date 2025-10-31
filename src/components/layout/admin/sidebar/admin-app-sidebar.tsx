@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import {
+  IconAddressBook,
   IconBook,
   IconBox,
   IconBuilding,
@@ -92,6 +93,11 @@ const data = {
       title: 'side_bar.plan',
       url: '/admin/plan',
       icon: IconVip
+    },
+    {
+      title: 'side_bar.contact',
+      url: '/admin/contact',
+      icon: IconAddressBook
     }
   ],
   navDesign: [
@@ -233,7 +239,9 @@ export function AdminAppSidebar({ user, ...props }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain label='side_bar.operationCenter' items={operationsCenterWithLocale} />
+        {user.role === UserRole.ADMIN && (
+          <NavMain label='side_bar.operationCenter' items={operationsCenterWithLocale} />
+        )}
         <NavMain label='side_bar.resource' items={navResourceWithLocale} />
 
         {/* <NavDesign items={navDesignWithLocale} /> */}

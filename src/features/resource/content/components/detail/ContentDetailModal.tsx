@@ -49,7 +49,9 @@ export default function ContentDetailModal({ sectionId }: ContentDetailModalProp
         <hr />
 
         <ScrollArea className='h-[60vh] w-[70vw] max-w-6xl'>
-          {contentData && contentData.data.items[0].contentType === ContentType.QUIZ ? (
+          {contentData &&
+          contentData.data.items.length > 0 &&
+          contentData.data.items[0].contentType === ContentType.QUIZ ? (
             <ContentDetail sectionId={sectionId} quizId={contentData.data.items[0].quizId} />
           ) : (
             <ContentDetail sectionId={sectionId} />

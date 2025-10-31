@@ -15,7 +15,6 @@ import {
   useUpdateContactMutation
 } from '@/features/contact/api/contactApi'
 import { useGetAllJobRoleQuery } from '@/features/job-role/api/jobRoleApi'
-import { first } from 'lodash-es'
 
 // ----------------------
 // 🔹 SCHEMA
@@ -45,7 +44,7 @@ const defaultContactData: ContactFormData = {
   phoneNumber: '',
   organizationName: '',
   jobRoleId: 1,
-  status: ContactStatus.PENDING
+  status: ContactStatus.NEW
 }
 
 interface UpsertContactDetailProps {
@@ -86,30 +85,25 @@ export default function UpsertContact({ id, onSuccess }: UpsertContactDetailProp
       onChange: contactSchema as any
     },
     onSubmit: async ({ value }) => {
-      try {
-        const payload = {
-          firstName: value.firstName,
-          lastName: value.lastName,
-          ...(value.email && { email: value.email }),
-          ...(value.phoneNumber && { phoneNumber: value.phoneNumber }),
-          ...(value.organizationName && { organizationName: value.organizationName }),
-          ...(value.jobRoleId && { jobRoleId: Number(value.jobRoleId) }),
-          ...(value.status && { status: value.status })
-        }
-
-        if (isEditing) {
-          await updateContact({ id: id!, body: { ...payload, status: value.status } }).unwrap()
-          toast.success(tt('successMessage.update', { title: `${value.firstName} ${value.lastName}` }))
-        } else {
-          await createContact(payload).unwrap()
-          toast.success(tt('successMessage.create', { title: `${value.firstName} ${value.lastName}` }))
-        }
-        onSuccess?.()
-        closeModal()
-      } catch (err) {
-        toast.error(tt('errorMessage'))
-        console.error(err)
+      const payload = {
+        firstName: value.firstName,
+        lastName: value.lastName,
+        ...(value.email && { email: value.email }),
+        ...(value.phoneNumber && { phoneNumber: value.phoneNumber }),
+        ...(value.organizationName && { organizationName: value.organizationName }),
+        ...(value.jobRoleId && { jobRoleId: Number(value.jobRoleId) }),
+        ...(value.status && { status: value.status })
       }
+
+      if (isEditing) {
+        await updateContact({ id: id!, body: { ...payload, status: value.status } }).unwrap()
+        toast.success(tt('successMessage.update', { title: '' }))
+      } else {
+        await createContact(payload).unwrap()
+        toast.success(tt('successMessage.create', { title: '' }))
+      }
+      onSuccess?.()
+      closeModal()
     }
   })
 
@@ -179,32 +173,43 @@ export default function UpsertContact({ id, onSuccess }: UpsertContactDetailProp
         )}
       />
 
-      <form.AppField
-        name='status'
-        children={(field) => (
-          <field.SelectField
-            label={t('status.label')}
-            options={[
-              { label: 'Pending', value: ContactStatus.PENDING },
-              { label: 'In Progress', value: ContactStatus.IN_PROGRESS },
-              { label: 'Resolved', value: ContactStatus.RESOLVED },
-              { label: 'Spam', value: ContactStatus.SPAM }
-            ]}
+      {isEditing ? (
+        <>
+          <form.AppField
+            name='status'
+            children={(field) => (
+              <field.SelectField
+                label={t('status.label')}
+                options={[
+                  { label: 'New', value: ContactStatus.NEW },
+                  { label: 'In Progress', value: ContactStatus.IN_PROGRESS },
+                  { label: 'Resolved', value: ContactStatus.RESOLVED },
+                  { label: 'Spam', value: ContactStatus.SPAM }
+                ]}
+              />
+            )}
           />
-        )}
-      />
+          <div className='flex justify-end gap-3 pt-2'>
+            <Button type='button' variant='outline' onClick={closeModal}>
+              {tc('button.cancel')}
+            </Button>
 
-      <div className='flex justify-end gap-3 pt-2'>
-        <Button type='button' variant='outline' onClick={closeModal}>
-          {tc('button.cancel')}
-        </Button>
-
-        <form.AppForm>
-          <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
-            {isEditing ? `${tc('button.update')}` : `${tc('button.create')}`}
-          </form.SubmitButton>
-        </form.AppForm>
-      </div>
+            <form.AppForm>
+              <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
+                {isEditing ? `${tc('button.update')}` : `${tc('button.create')}`}
+              </form.SubmitButton>
+            </form.AppForm>
+          </div>
+        </>
+      ) : (
+        <>
+          <form.AppForm>
+            <form.SubmitButton loading={isCreating || isUpdating} className='w-full cursor-pointer bg-sky-400'>
+              {tc('button.create')}
+            </form.SubmitButton>
+          </form.AppForm>
+        </>
+      )}
     </form>
   )
 }
