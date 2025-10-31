@@ -37,26 +37,30 @@ export default function ContactList() {
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
   // Options for selects
-  const statusOptions = Object.entries(ContactStatus).map(([key, value]) => ({
-    label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-    value: value
-  }))
+  const statusOptions = Object.entries(ContactStatus).map(([key, value]) => {
+    const formattedLabel = value.replace(/([a-z])([A-Z])/g, '$1 $2')
+
+    return {
+      label: formattedLabel,
+      value
+    }
+  })
 
   const handlePageChange = (page: number) => {
     dispatch(setPageIndex(page))
   }
   return (
     <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-      <div className='flex items-center gap-4 py-4'>
-        <div>
+      <div className='flex items-center justify-between gap-4 py-4'>
+        <div className='flex gap-2'>
           <Input
             placeholder={t('userSearch')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className='max-w-sm'
+            className='w-92'
           />
           <SSelect
-            className='w-30'
+            className='w-40'
             placeholder={tList('placeholder.status')}
             value={contactParams.status ?? ''}
             onChange={(val) => dispatch(setParam({ key: 'status', value: val as ContactStatus }))}
@@ -66,7 +70,13 @@ export default function ContactList() {
             }}
           />
         </div>
-        <Button onClick={() => {openModal('upsertContact')}}>Create New</Button>
+        <Button
+          onClick={() => {
+            openModal('upsertContact')
+          }}
+        >
+          Create New
+        </Button>
       </div>
       <DataTable
         data={rows}

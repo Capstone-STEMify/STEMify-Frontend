@@ -51,8 +51,7 @@ export function useGetContactColumnTable(): ColumnDef<Contact>[] {
       accessorKey: 'status',
       header: tc('tableHeader.status'),
       cell: ({ row }) => {
-        const value = row.original.status
-        return <Badge className={`${getStatusBadgeClass(value)}`}>{value}</Badge>
+        return <Badge className={`${getStatusBadgeClass(row.original.status)}`}>{row.original.status}</Badge>
       }
     }
   ]
