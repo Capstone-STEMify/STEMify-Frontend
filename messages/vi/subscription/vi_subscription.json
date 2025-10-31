@@ -6,7 +6,11 @@
       "subscriptionTitle": "Danh sách gói đăng ký",
       "subscriptionHistoryTitle": "Lịch sử đăng ký",
       "organizationSubscriptionTitle": "Quản lý đăng ký tổ chức",
-      "organizationSubscriptionDescription": "Duyệt và quản lý tất cả các đăng ký tổ chức đã đăng ký trên nền tảng."
+      "organizationSubscriptionDescription": "Duyệt và quản lý tất cả các đăng ký tổ chức đã đăng ký trên nền tảng.",
+      "placeholder": {
+        "search": "Tìm kiếm tổ chức theo tên...",
+        "status": "Lọc theo trạng thái"
+      }
     },
     "detail": {
       "title": "Thông tin tổ chức",
