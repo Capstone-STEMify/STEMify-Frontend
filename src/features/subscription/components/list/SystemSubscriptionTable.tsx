@@ -8,7 +8,8 @@ import { formatDate, formatPrice } from '@/utils/index'
 import React from 'react'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { Card } from '@/components/shadcn/card'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 type SystemSubscriptionTableProps = {
   organization: Organization
@@ -16,6 +17,8 @@ type SystemSubscriptionTableProps = {
 
 export default function SystemSubscriptionTable({ organization }: SystemSubscriptionTableProps) {
   const tc = useTranslations('common')
+  const router = useRouter()
+  const locale = useLocale()
 
   const getBillingCycleLabel = (cycle: BillingCycle | string) => {
     switch (cycle) {
@@ -56,7 +59,12 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
                   key={subscription.id ?? index}
                   className={`hover:bg-muted/40 border-b transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/20'}`}
                 >
-                  <TableCell className='font-medium'>{subscription.planName}</TableCell>
+                  <TableCell
+                    className='cursor-pointer font-medium text-blue-600 hover:underline'
+                    onClick={() => router.push(`/${locale}/admin/organization-subscription/${subscription.id}`)}
+                  >
+                    {subscription.planName}
+                  </TableCell>
                   <TableCell>{getBillingCycleLabel(subscription.planBillingCycle ?? 'N/A')}</TableCell>
 
                   <TableCell className='text-muted-foreground text-sm font-medium'>

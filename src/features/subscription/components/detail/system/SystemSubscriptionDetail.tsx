@@ -21,7 +21,6 @@ export default function SystemSubscriptionDetail() {
       <div className='mx-auto max-w-7xl'>
         <div className='mb-6 flex items-center justify-between'>
           <h1 className='text-2xl font-semibold'>Organization Details</h1>
-          <Button variant='outline'>Change plan</Button>
         </div>
 
         <div className='grid gap-6 lg:grid-cols-[320px_1fr]'>

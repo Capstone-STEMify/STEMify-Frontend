@@ -62,24 +62,6 @@ export default function ContractInfo({ contractId }: ContractInfoProps) {
           </div>
         )}
 
-        {/* Organization */}
-        <div>
-          <p className='text-muted-foreground mb-1 flex items-center gap-1 text-xs'>
-            <Building2 size={14} /> Organization
-          </p>
-          <div className='flex items-center gap-2'>
-            <div className='relative h-8 w-8 overflow-hidden rounded-full border'>
-              <Image
-                src={contract.organization.imageUrl || '/placeholder.png'}
-                alt={contract.organization.name || 'Organization logo'}
-                fill
-                className='object-cover'
-              />
-            </div>
-            <span className='line-clamp-1 text-sm font-medium'>{contract.organization.name}</span>
-          </div>
-        </div>
-
         {/* Created date */}
         <div className='flex justify-between'>
           <span className='text-muted-foreground flex items-center gap-1'>
@@ -91,7 +73,7 @@ export default function ContractInfo({ contractId }: ContractInfoProps) {
 
         {/* View file (if available) */}
         {contract.fileUrl ? (
-          <Button asChild variant='outline' size='sm' className='mt-2 w-full'>
+          <Button asChild variant='outline' size='sm' className='mt-2 w-full p-6'>
             <Link href={contract.fileUrl} target='_blank' className='flex items-center gap-1'>
               <FileText size={14} /> View Contract File
             </Link>

@@ -89,7 +89,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                     <span>Name</span>
                   </div>
                 </TableHead>
-                <TableHead className='w-[15%]'>Type</TableHead>
+                <TableHead className='w-[15%]'>Role</TableHead>
                 <TableHead className='w-[15%]'>
                   <div className='flex items-center gap-1.5'>
                     <Calendar size={14} />
