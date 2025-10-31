@@ -64,7 +64,10 @@ export default function SystemOrganizationList() {
             <h1 className='mt-4 mb-4 text-3xl font-bold'>{t('list.organizationSubscriptionTitle')}</h1>
             <p className='text-muted-foreground mt-1'>{t('list.organizationSubscriptionDescription')}</p>
           </div>
-          <Button className='bg-sky-500' onClick={() => router.push(`/${locale}/admin/subscription/create`)}>
+          <Button
+            className='bg-sky-500'
+            onClick={() => router.push(`/${locale}/admin/organization-subscription/create`)}
+          >
             + {tc('button.create')}
           </Button>
         </div>

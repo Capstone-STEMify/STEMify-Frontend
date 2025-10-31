@@ -113,30 +113,30 @@ export default function Step1OrganizationCreation() {
       }}
       className='space-y-6'
     >
-      <form.AppField name='name'>
-        {(field) => <field.TextField label='Organization Name' placeholder='Enter name' />}
-      </form.AppField>
-
-      <form.AppField name='description'>
-        {(field) => <field.TextAreaField label='Description' rows={3} placeholder='Description' />}
-      </form.AppField>
-
       <form.AppField name='image'>
         {(field) => {
           imageFieldRef.current = field
           return <field.ImageField key={form.state.values.imageUrl} previewUrlFromServer={form.state.values.imageUrl} />
         }}
       </form.AppField>
+      <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+        <form.AppField name='name'>
+          {(field) => <field.TextField label='Organization Name' placeholder='Enter name' />}
+        </form.AppField>
+        <form.AppField name='organizationTypeId'>
+          {(field) => (
+            <field.SelectField
+              label='Organization Type'
+              placeholder='Select Organization Type'
+              options={organizationTypesOptions}
+              disabled={isLoading}
+            />
+          )}
+        </form.AppField>
+      </div>
 
-      <form.AppField name='organizationTypeId'>
-        {(field) => (
-          <field.SelectField
-            label='Organization Type'
-            placeholder='Select Organization Type'
-            options={organizationTypesOptions}
-            disabled={isLoading}
-          />
-        )}
+      <form.AppField name='description'>
+        {(field) => <field.TextAreaField label='Description' placeholder='Description' rows={5} className='max-h-40' />}
       </form.AppField>
 
       {/* {Object.keys(form.state.errors).length > 0 && (
