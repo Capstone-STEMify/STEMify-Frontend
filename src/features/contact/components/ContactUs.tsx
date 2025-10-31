@@ -8,7 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile'
 const ContactUs = () => {
   const isMobile = useIsMobile()
   return (
-    <div className='my-8 flex items-center justify-center'>
+    <div className='mb-8 flex items-center justify-center'>
       <main className='mx-auto flex w-full max-w-7xl flex-col overflow-hidden pt-15 lg:flex-row'>
         <ContactForm />
 
