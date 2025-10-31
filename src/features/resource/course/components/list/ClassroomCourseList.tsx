@@ -58,7 +58,7 @@ export default function ClassroomCourseList() {
           {courses.map((course) => (
             <CardLayout
               key={course.id}
-              href={`/classroom/${classroomId}/course/${course.id}`}
+              href={`/resource/course/${course.id}`}
               imageSrc={course.imageUrl}
               imageRatio='aspect-video'
               badge={
