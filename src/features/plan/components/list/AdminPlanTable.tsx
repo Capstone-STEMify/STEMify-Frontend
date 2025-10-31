@@ -29,7 +29,9 @@ export default function AdminPlanTable() {
             <h1 className='text-foreground text-3xl font-bold'>Plan Management</h1>
             <p className='text-muted-foreground mt-1'>Manage subscription plans and pricing tiers</p>
           </div>
-          <Button onClick={() => openModal('upsertPlan')}>Create New Plan</Button>
+          <Button onClick={() => openModal('upsertPlan')} className='bg-blue-500'>
+            Create New Plan
+          </Button>
 
           {/* <CreateSubscriptionPlanSheet /> */}
         </div>
@@ -42,7 +44,7 @@ export default function AdminPlanTable() {
                 <TableHead>Plan Name</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Curriculums</TableHead>
-                <TableHead>Updated Date</TableHead>
+                <TableHead>Created Date</TableHead>
                 <TableHead className='text-right'>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -64,7 +66,7 @@ export default function AdminPlanTable() {
                     <TableCell>
                       <Badge className='bg-emerald-700 text-white'>{plan.curriculumCount}</Badge>
                     </TableCell>
-                    <TableCell className='text-muted-foreground text-sm'>{formatDate(plan.updatedAt)}</TableCell>
+                    <TableCell className='text-muted-foreground text-sm'>{formatDate(plan.createdAt)}</TableCell>
                     <TableCell className='text-right'>
                       <div className='flex items-center justify-end gap-2'>
                         <Button
@@ -101,7 +103,7 @@ export default function AdminPlanTable() {
 
                   {expandedPlans.includes(plan.id) && (
                     <TableRow>
-                      <TableCell colSpan={7} className='bg-muted/30 p-0'>
+                      <TableCell colSpan={7} className='bg-slate-50 p-0'>
                         <AdminPricingTierTable plan={plan} />
                       </TableCell>
                     </TableRow>

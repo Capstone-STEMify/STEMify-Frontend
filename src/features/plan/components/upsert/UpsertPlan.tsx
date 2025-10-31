@@ -160,7 +160,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         {form.state.values.billingCycles.map((cycle, index) => (
           <div key={index} className='mb-3 items-center gap-3'>
             <span className='w-32 text-sm font-medium text-gray-600'>
-              {cycle.billingCycle === 'Semiannual' ? 'Semiannual (6 months)' : 'Annual (12 months)'}
+              {cycle.billingCycle === 'Semiannual' ? 'Price for Semiannual (6 months)' : 'Price for Annual (12 months)'}
             </span>
 
             <form.AppField
@@ -191,7 +191,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
 
       <div className='flex justify-end'>
         <form.AppForm>
-          <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
+          <form.SubmitButton loading={isCreating || isUpdating} className='cursor-pointer bg-blue-500'>
             {isEditing ? 'Update' : 'Create'} Plan
           </form.SubmitButton>
         </form.AppForm>
