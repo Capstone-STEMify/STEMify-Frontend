@@ -22,6 +22,11 @@ export enum ContactStatus {
   SPAM = 'Spam'
 }
 
+export type JobRole = {
+  id: number
+  name: string
+}
+
 export type ContactSliceParams = {} & SliceQueryParams
 
 export type ContactQueryParams = {} & SearchPaginatedRequestParams

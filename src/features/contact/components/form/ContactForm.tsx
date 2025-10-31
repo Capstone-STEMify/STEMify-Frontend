@@ -8,8 +8,14 @@ import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/shadcn/card'
+import { useGetAllJobRolesQuery } from '@/features/contact/api/jobRoleApi'
+import { getOptions } from '@/utils/index'
+import SSelect from '@/components/shared/SSelect'
 
 export default function ContactForm() {
+  const { data: jobRoleData, isLoading: jobRoleLoading } = useGetAllJobRolesQuery()
+  const jobRoleOptions = getOptions(jobRoleData?.data.items, 'name')
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -96,27 +102,15 @@ export default function ContactForm() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='jobRole' className='text-sm font-medium text-slate-700'>
-                  Job Role
-                </Label>
-                <Select
-                  value={formData.jobRole}
-                  onValueChange={(value) => setFormData({ ...formData, jobRole: value })}
-                >
-                  <SelectTrigger className='h-11 border-slate-200 focus:border-blue-500 focus:ring-blue-500'>
-                    <SelectValue placeholder='Select your role' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value='ceo'>CEO / Founder</SelectItem>
-                    <SelectItem value='cto'>CTO / Technical Lead</SelectItem>
-                    <SelectItem value='manager'>Manager</SelectItem>
-                    <SelectItem value='developer'>Developer</SelectItem>
-                    <SelectItem value='designer'>Designer</SelectItem>
-                    <SelectItem value='marketing'>Marketing</SelectItem>
-                    <SelectItem value='sales'>Sales</SelectItem>
-                    <SelectItem value='other'>Other</SelectItem>
-                  </SelectContent>
-                </Select>
+                {/* <SSelect
+                  placeholder={t('list.placeholder.skill')}
+                  value={filters.skillId?.toString() ?? ''}
+                  onChange={(val) => dispatch(setParam({ key: 'skillId', value: Number(val) }))}
+                  options={skillOptions}
+                  onOpen={(open) => {
+                    if (open && !skills) getSkill()
+                  }}
+                /> */}
               </div>
             </div>
 
