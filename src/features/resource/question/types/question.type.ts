@@ -1,5 +1,6 @@
 export type Question = {
-  id: number
+  id: number | null
+  key: number
   questionType: QuestionType
   content: string
   orderIndex: number
@@ -9,7 +10,8 @@ export type Question = {
 }
 
 export type Answer = {
-  id: number
+  key: number
+  id: number | null
   content: string
   isCorrect: boolean
 }

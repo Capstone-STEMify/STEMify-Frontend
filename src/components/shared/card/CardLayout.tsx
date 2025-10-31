@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter } from '@/components/shadcn/card'
 import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'
+import { GraduationCap } from 'lucide-react'
 
 interface CardLayoutProps {
   imageSrc?: string
@@ -44,13 +45,19 @@ export default function CardLayout({
     >
       {/* Image section */}
       <div className={clsx('relative w-full overflow-hidden', imageRatio)}>
-        <Image
-          src={imageSrc || '/images/fallback.png'}
-          alt={alt}
-          fill
-          className={imageClassName}
-          sizes='(max-width: 768px) 100vw, 33vw'
-        />
+        {imageSrc ? (
+          <Image
+            src={imageSrc || '/images/fallback.png'}
+            alt={alt}
+            fill
+            className={imageClassName}
+            sizes='(max-width: 768px) 100vw, 33vw'
+          />
+        ) : (
+          <div className='flex h-full w-full items-center justify-center bg-gradient-to-br from-sky-100 to-blue-400'>
+            <GraduationCap className='h-12 w-12 text-white/60' />
+          </div>
+        )}
         {badge && <div className='absolute top-2 left-2'>{badge}</div>}
         {infor && <div className='absolute bottom-2 left-2'>{infor}</div>}
         {action && <div className='absolute top-2 right-2'>{action}</div>}

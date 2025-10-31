@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { cn } from '@/utils/shadcn/utils'
 import { useCreateQuizMutation, useUpdateQuizMutation } from '@/features/resource/quiz/api/quizApi'
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/features/resource/question/api/questionApi'
+import { useParams, useRouter } from 'next/navigation'
 
 type QuizEditorSidebarProps = {
   quiz: Quiz
@@ -25,31 +26,37 @@ export const QuizEditorSidebar = ({
   onQuestionSelect,
   onQuizUpdate
 }: QuizEditorSidebarProps) => {
+  const { quizId, sectionId, lessonId } = useParams()
   const [collapsed, setCollapsed] = useState(false)
   const [isSavingQuiz, setIsSavingQuiz] = useState(false)
   const [isSavingQuestions, setIsSavingQuestions] = useState(false)
+  const isEditMode = quiz.questions.length > 0
 
   const [createQuiz] = useCreateQuizMutation()
   const [updateQuiz] = useUpdateQuizMutation()
 
   const [createQuestion] = useCreateQuestionMutation()
   const [updateQuestion] = useUpdateQuestionMutation()
+
+  const router = useRouter()
   const handleSaveQuiz = async () => {
     setIsSavingQuiz(true)
     try {
       const quizPayload = {
         title: quiz.title,
         description: quiz.description,
-        totalMarks: quiz.totalMarks,
+        totalMarks: 100,
         passingMarks: quiz.passingMarks,
         durationDays: quiz.durationDays,
-        timeLimitMinutes: quiz.timeLimitMinutes
+        timeLimitMinutes: quiz.timeLimitMinutes,
+        sectionId: Number(sectionId)
       }
 
-      if (quiz.id) {
-        await updateQuiz({ id: quiz.id, body: quizPayload }).unwrap()
+      if (quizId) {
+        await updateQuiz({ id: Number(quizId), body: quizPayload }).unwrap()
       } else {
-        await createQuiz(quizPayload).unwrap()
+        const res = await createQuiz(quizPayload).unwrap()
+        router.push(`/admin/lesson/${lessonId}/section/${sectionId}/quiz/${res.data.id}/question`)
       }
 
       toast.message('Quiz info saved successfully')
@@ -64,21 +71,28 @@ export const QuizEditorSidebar = ({
     setIsSavingQuestions(true)
     try {
       const questionsPayload = quiz.questions.map((q) => ({
-        id: q.id, // create thì comment id
+        id: q.id, // create thì id = null
         questionType: q.questionType,
         content: q.content,
         orderIndex: q.orderIndex,
         answerExplanation: q.answerExplanation,
         points: q.points,
+        key: q.key,
         answers: q.answers.map((a) => ({
-          id: a.id, // create thì comment id
+          id: a.id, // create thì id = null
           content: a.content,
-          isCorrect: a.isCorrect
+          isCorrect: a.isCorrect,
+          key: a.key
         }))
       }))
 
-      // const res = await createQuestion({ quizId: quiz.id, questions: questionsPayload }).unwrap()
-      const res = await updateQuestion({ quizId: quiz.id, questions: questionsPayload }).unwrap()
+      if (quizId) {
+        if (isEditMode) {
+          const res = await updateQuestion({ quizId: Number(quizId), questions: questionsPayload }).unwrap()
+        } else {
+          const res = await createQuestion({ quizId: Number(quizId), questions: questionsPayload }).unwrap()
+        }
+      }
 
       toast.message(`${quiz.questions.length} questions saved successfully`)
     } catch (error) {
@@ -178,7 +192,7 @@ export const QuizEditorSidebar = ({
                 {quiz.questions.map((question, index) => (
                   <button
                     key={question.id}
-                    onClick={() => onQuestionSelect(question.id)}
+                    onClick={() => onQuestionSelect(Number(question.id))}
                     className={cn(
                       'w-full rounded-lg border p-3 text-left transition-all',
                       selectedQuestionId === question.id

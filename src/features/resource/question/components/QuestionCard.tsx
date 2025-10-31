@@ -66,7 +66,7 @@ const SortableAnswer = ({
 
       {question.questionType === QuestionType.SINGLE_CHOICE ? (
         <RadioGroupItem
-          value={answer.id.toString()}
+          value={answer.id ? answer.id.toString() : answer.key.toString()}
           onClick={(e) => {
             e.stopPropagation()
             onToggleCorrect(answer.id)
@@ -80,7 +80,7 @@ const SortableAnswer = ({
         />
       ) : (
         <RadioGroupItem
-          value={answer.id.toString()}
+          value={answer.id ? answer.id.toString() : answer.key.toString()}
           onClick={(e) => {
             e.stopPropagation()
             onToggleCorrect(answer.id)
@@ -127,7 +127,7 @@ export const QuestionCard = ({
   onDelete,
   onDuplicate
 }: QuestionCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: question.id })
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: question.key })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -158,13 +158,13 @@ export const QuestionCard = ({
 
     if (type === QuestionType.TRUE_FALSE) {
       newAnswers = [
-        { id: Date.now(), content: 'True', isCorrect: false },
-        { id: Date.now() + 1, content: 'False', isCorrect: false }
+        { id: null, content: 'True', isCorrect: false, key: Date.now() + 1 },
+        { id: null, content: 'False', isCorrect: false, key: Date.now() + 2 }
       ]
     } else if (question.questionType === QuestionType.TRUE_FALSE) {
       newAnswers = [
-        { id: Date.now(), content: '', isCorrect: false },
-        { id: Date.now() + 1, content: '', isCorrect: false }
+        { id: null, content: '', isCorrect: false, key: Date.now() + 3 },
+        { id: null, content: '', isCorrect: false, key: Date.now() + 4 }
       ]
     }
 
@@ -173,9 +173,10 @@ export const QuestionCard = ({
 
   const addAnswer = () => {
     const newAnswer = {
-      id: Date.now(),
+      id: null,
       content: '',
-      isCorrect: false
+      isCorrect: false,
+      key: Date.now()
     }
     onUpdate({ ...question, answers: [...question.answers, newAnswer] })
   }
@@ -251,7 +252,7 @@ export const QuestionCard = ({
                 size='icon'
                 onClick={(e) => {
                   e.stopPropagation()
-                  onDuplicate(question.id)
+                  onDuplicate(Number(question.id))
                 }}
               >
                 <Copy className='h-4 w-4' />
@@ -261,7 +262,7 @@ export const QuestionCard = ({
                 size='icon'
                 onClick={(e) => {
                   e.stopPropagation()
-                  onDelete(question.id)
+                  onDelete(Number(question.id))
                 }}
               >
                 <Trash2 className='text-destructive h-4 w-4' />
@@ -282,12 +283,18 @@ export const QuestionCard = ({
           <div className='space-y-2'>
             <Label>Answers (Drag to reorder)</Label>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleAnswerDragEnd}>
-              <SortableContext items={question.answers.map((a) => a.id)} strategy={verticalListSortingStrategy}>
-                <RadioGroup value={question.answers.find((a) => a.isCorrect)?.id.toString()}>
+              <SortableContext items={question.answers.map((a) => a.key)} strategy={verticalListSortingStrategy}>
+                <RadioGroup
+                  value={
+                    question.answers.find((a) => a.isCorrect)?.id?.toString()
+                      ? question.answers.find((a) => a.isCorrect)?.id?.toString()
+                      : question.answers.find((a) => a.isCorrect)?.key.toString()
+                  }
+                >
                   <div className='space-y-2'>
                     {question.answers.map((answer, index) => (
                       <SortableAnswer
-                        key={answer.id}
+                        key={answer.key}
                         answer={answer}
                         index={index}
                         question={question}

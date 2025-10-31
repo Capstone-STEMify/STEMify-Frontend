@@ -233,7 +233,9 @@ export function AdminAppSidebar({ user, ...props }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain label='side_bar.operationCenter' items={operationsCenterWithLocale} />
+        {user.role === UserRole.ADMIN && (
+          <NavMain label='side_bar.operationCenter' items={operationsCenterWithLocale} />
+        )}
         <NavMain label='side_bar.resource' items={navResourceWithLocale} />
 
         {/* <NavDesign items={navDesignWithLocale} /> */}

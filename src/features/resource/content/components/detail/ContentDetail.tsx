@@ -32,7 +32,7 @@ export default function ContentDetail({ sectionId, quizId }: ContentDetailProps)
 
   const handleCreateQuiz = () => {
     closeModal()
-    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/question`)
   }
 
   if (isLoading)

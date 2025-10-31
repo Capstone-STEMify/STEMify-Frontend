@@ -24,7 +24,7 @@ export const questionApi = quizApi.injectEndpoints({
     }),
     updateQuestion: build.mutation<
       ApiSuccessResponse<QuestionListResponse>,
-      { quizId: number; questions: (Omit<Question, 'id '> & { id?: number })[] }
+      { quizId: number; questions: (Omit<Question, 'id '> & { id: number | null })[] }
     >({
       query: ({ quizId, questions }) => ({
         url: `/quizzes/${quizId}/questions`,

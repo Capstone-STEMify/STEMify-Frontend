@@ -22,7 +22,7 @@ import { useParams } from 'next/navigation'
 const QuizEditor = () => {
   const { quizId } = useParams()
 
-  const { data: quizData } = useGetQuizByIdQuery(Number(quizId))
+  const { data: quizData } = useGetQuizByIdQuery(Number(quizId), { skip: !quizId })
 
   const [quiz, setQuiz] = useState<Quiz>({
     id: 1,
@@ -76,15 +76,16 @@ const QuizEditor = () => {
 
   const addQuestion = () => {
     const newQuestion: Question = {
-      id: Date.now(),
+      id: null,
+      key: Date.now(),
       questionType: QuestionType.SINGLE_CHOICE,
       content: '',
       orderIndex: quiz.questions.length + 1,
       answerExplanation: '',
       points: 1,
       answers: [
-        { id: Date.now() + 1, content: '', isCorrect: false },
-        { id: Date.now() + 2, content: '', isCorrect: false }
+        { id: null, content: '', isCorrect: false, key: Date.now() + 1 },
+        { id: null, content: '', isCorrect: false, key: Date.now() + 2 }
       ]
     }
 
@@ -160,7 +161,7 @@ const QuizEditor = () => {
           </div>
 
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={quiz.questions.map((q) => q.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext items={quiz.questions.map((q) => Number(q.id))} strategy={verticalListSortingStrategy}>
               <div className='space-y-4'>
                 {quiz.questions.map((question) => (
                   <QuestionCard
