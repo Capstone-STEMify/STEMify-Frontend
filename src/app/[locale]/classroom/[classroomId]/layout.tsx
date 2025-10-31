@@ -1,9 +1,15 @@
-import ClassroomSubHeader from '@/features/classroom/components/ui/ClassroomSubheader'
+import ClassroomSubHeaderServer from '@/features/classroom/components/ui/ClassroomSubHeaderServer'
 
-export default async function ClassroomDetailLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function ClassroomDetailLayout({
+  children,
+  params: { classroomId, locale }
+}: {
+  children: React.ReactNode
+  params: { classroomId: number; locale: string }
+}) {
   return (
     <div className='space-y-2'>
-      <ClassroomSubHeader />
+      <ClassroomSubHeaderServer classroomId={classroomId} locale={locale} />
       <main>{children}</main>
     </div>
   )
