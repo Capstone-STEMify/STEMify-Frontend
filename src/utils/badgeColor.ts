@@ -8,6 +8,7 @@ import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculu
 import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
 import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+import { UserStatus } from '@/features/user/types/user.type'
 
 export const getStatusBadgeClass = (
   status:
@@ -21,6 +22,7 @@ export const getStatusBadgeClass = (
     | SubscriptionStatus
     | ClassroomStatus
     | ContractStatus
+    | UserStatus
     | undefined
 ) => {
   switch (status) {
