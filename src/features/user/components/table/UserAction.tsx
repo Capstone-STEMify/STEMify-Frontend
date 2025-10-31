@@ -6,8 +6,8 @@ import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { toast } from 'sonner'
 import { useDeleteUserMutation } from '../../api/userApi'
-import { User } from '../../types/user.type'
-import { RoleBadge } from './RoleBadge'
+import { User } from '@/features/user/types/user.type'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 
 export function useGetUserAction(): ColumnDef<User>[] {
   const { openModal } = useModal()
@@ -19,7 +19,7 @@ export function useGetUserAction(): ColumnDef<User>[] {
   const handleDelete = async (id: string, userName: string) => {
     try {
       await deleteUser(id).unwrap()
-      toast.success(tt('successMessage.delete', {title: userName}))
+      toast.success(tt('successMessage.delete', { title: userName }))
     } catch (error) {
       toast.error(tt('errorMessage'))
     }
@@ -27,6 +27,21 @@ export function useGetUserAction(): ColumnDef<User>[] {
 
   return [
     createSelectColumn<User>(),
+    {
+      accessorKey: 'avatar',
+      header: t('avatar'),
+      cell: ({ row }) => {
+        const imageUrl = row.original.imageUrl
+        return (
+          <div>
+            <Avatar>
+              <AvatarImage src={imageUrl} alt={row.original.userName} />
+              <AvatarFallback>{row.original.userName.charAt(0)}</AvatarFallback>
+            </Avatar>
+          </div>
+        )
+      }
+    },
     {
       accessorKey: 'userName',
       header: t('userName')
@@ -46,9 +61,9 @@ export function useGetUserAction(): ColumnDef<User>[] {
     {
       accessorKey: 'userRole',
       header: t('userRole'),
-      cell: ({ getValue }) => {
-        const role = getValue() as string
-        return <RoleBadge role={role as any} />
+      cell: ({ row }) => {
+        const role = row.original.userRole
+        return <div>{role}</div>
       }
     },
     createActionsColumnFromItems<User>([

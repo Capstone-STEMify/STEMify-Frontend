@@ -27,6 +27,7 @@
     "minAge": "Tuổi tối thiểu",
     "maxAge": "Tuổi tối đa",
     "quantity": "Số lượng",
+    "avatar": "Ảnh Đại Diện",
     "PLO": {
       "name": "Tên",
       "description": "Mô tả"

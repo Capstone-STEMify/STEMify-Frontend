@@ -98,7 +98,11 @@
       "updateButton": "Update",
       "account": "Account",
       "notifications": "Notifications",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "usernamePlaceholder": "Enter username",
+      "firstNamePlaceholder": "Enter first name",
+      "lastNamePlaceholder": "Enter last name",
+      "emailPlaceholder": "Enter email address"
     },
     "course_details": {
       "description": "Description",

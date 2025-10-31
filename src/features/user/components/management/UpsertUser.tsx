@@ -96,8 +96,12 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
   React.useEffect(() => {
     if (isEditing && existingData?.data) {
       form.reset({
-        ...existingData.data,
-        password: ''
+        email: existingData.data.email,
+        userName: existingData.data.userName,
+        password: '',
+        role: existingData.data.userRole,
+        firstName: existingData.data.firstName,
+        lastName: existingData.data.lastName
       })
     }
   }, [existingData, isEditing, form])
@@ -106,7 +110,10 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
     return <LoadingComponent />
   }
 
-  const roleOptions = Object.values(UserRole).map((role) => ({ value: role, label: role }))
+  // remove guest role from options
+  const roleOptions = Object.values(UserRole)
+    .map((role) => ({ value: role, label: role }))
+    .filter((role) => role.value !== UserRole.GUEST)
 
   return (
     <form
@@ -114,14 +121,21 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
         e.preventDefault()
         form.handleSubmit()
       }}
-      className='space-y-4'
+      className='w-3xl space-y-4'
     >
-      <h2 className='text-xl font-bold'>{isEditing ? t('updateTitle') : t('createTitle')}</h2>
       <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-        <form.AppField name='userName'>{(field) => <field.TextField label={t('username')} />}</form.AppField>
-        <form.AppField name='email'>{(field) => <field.TextField label='Email' type='email' />}</form.AppField>
-        <form.AppField name='firstName'>{(field) => <field.TextField label={t('firstName')} />}</form.AppField>
-        <form.AppField name='lastName'>{(field) => <field.TextField label={t('lastName')} />}</form.AppField>
+        <form.AppField name='userName'>
+          {(field) => <field.TextField label={t('username')} placeholder={t('usernamePlaceholder')} />}
+        </form.AppField>
+        <form.AppField name='email'>
+          {(field) => <field.TextField label='Email' type='email' placeholder={t('emailPlaceholder')} />}
+        </form.AppField>
+        <form.AppField name='firstName'>
+          {(field) => <field.TextField label={t('firstName')} placeholder={t('firstNamePlaceholder')} />}
+        </form.AppField>
+        <form.AppField name='lastName'>
+          {(field) => <field.TextField label={t('lastName')} placeholder={t('lastNamePlaceholder')} />}
+        </form.AppField>
         <form.AppField name='password'>
           {(field) => (
             <field.TextField

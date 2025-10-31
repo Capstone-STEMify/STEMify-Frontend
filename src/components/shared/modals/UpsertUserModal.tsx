@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from '@/components/shadcn/dialog'
 import UpsertUser from '@/features/user/components/management/UpsertUser'
 import { useModal } from '@/providers/ModalProvider'
 import { DialogTitle } from '@radix-ui/react-dialog'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 interface UpsertUserModalProps {
@@ -13,6 +14,7 @@ interface UpsertUserModalProps {
 export default function UpsertUserModal({ id, onSuccess: onConfirm }: UpsertUserModalProps) {
   const { closeModal } = useModal()
   const [isOpen, setIsOpen] = React.useState(true)
+  const t = useTranslations('Admin.user')
 
   // Hàm này được gọi khi form submit thành công
   const handleSuccess = () => {
@@ -40,8 +42,8 @@ export default function UpsertUserModal({ id, onSuccess: onConfirm }: UpsertUser
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTitle></DialogTitle>
-      <DialogContent className='sm:max-w-3xl'>
+      <DialogContent>
+        <DialogTitle>{id ? t('editTitle') : t('createTitle')}</DialogTitle>
         <UpsertUser id={id} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>
