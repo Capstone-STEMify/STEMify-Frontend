@@ -1,12 +1,9 @@
 'use client'
 import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { useParams, useSearchParams } from 'next/navigation'
-import { Card, CardContent, CardHeader } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { BookOpen, Clock, User, GraduationCap, Play, MoreVertical } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
 import { getLevelBadgeClass } from '@/utils/badgeColor'
 import CardLayout from '@/components/shared/card/CardLayout'
@@ -64,72 +61,47 @@ export default function ClassroomCourseList() {
               imageSrc={course.imageUrl}
               imageRatio='aspect-video'
               badge={<Badge className={`border ${getLevelBadgeClass(course.level)}`}>{course.level}</Badge>}
-              
+              action={
+                <Badge variant={'secondary'} className='flex items-center py-0.5'>
+                  <BookOpen className='text-purple-600' />
+                  <span>{course.lessonIds.length} Lessons</span>
+                </Badge>
+              }
               footer={
-                <Button className='mt-2 w-full bg-blue-600 hover:bg-blue-700' size='sm'>
-                  <Play className='mr-2 h-4 w-4' />
-                  Start Course
-                </Button>
+                <div className='flex w-full items-center gap-2 border-t border-slate-100 pt-2'>
+                  <div className='flex items-center gap-1.5'>
+                    <User className='h-3.5 w-3.5 text-slate-400' />
+                    <p className='line-clamp-1 text-xs text-slate-500'>{course.createdByUserName}</p>
+                  </div>
+                </div>
               }
               children={
                 <div>
-                  <div className='flex justify-between space-y-2'>
-                    {/* Title */}
-                    <h3 className='line-clamp-2 text-lg font-bold text-slate-900 transition-colors group-hover:text-blue-600'>
+                  <div className='flex flex-col justify-between space-y-2'>
+                    <div className='flex items-center justify-between gap-2'>
+                      <div className='flex gap-2'>
+                        <Badge variant='secondary' className='flex items-center py-0.5'>
+                          {course.code}
+                        </Badge>
+                      </div>
+                      <div className='flex gap-2'>
+                        <Badge variant={'secondary'} className='flex items-center py-0.5'>
+                          <Clock className='text-blue-600' />
+                          <span>{formatDuration(course.duration)}</span>
+                        </Badge>
+                      </div>
+                    </div>
+                    <h3 className='line-clamp-1 text-lg font-bold text-slate-900 transition-colors group-hover:text-blue-600'>
                       {course.title}
                     </h3>
-                    {/* Code */}
-                    <div className='flex items-center gap-2'>
-                      <Badge variant='secondary' className='border-0 bg-slate-100 font-mono text-xs text-slate-700'>
-                        {course.code}
-                      </Badge>
+                    <div className='mb-1 flex gap-2'>
+                      <GraduationCap className='h-4 w-4 text-amber-600' />
+                      <p className='text-xs font-semibold text-slate-700'>{course.ageRangeLabel} years old</p>
                     </div>
                   </div>
 
                   <div className='space-y-4'>
-                    {/* Description */}
                     <p className='line-clamp-3 text-sm text-slate-600'>{course.description}</p>
-
-                    {/* Meta Info */}
-                    <div className='grid grid-cols-2 gap-3 pt-2'>
-                      {/* Duration */}
-                      <div className='flex items-center gap-2 text-sm text-slate-600'>
-                        <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50'>
-                          <Clock className='h-4 w-4 text-blue-600' />
-                        </div>
-                        <div>
-                          <p className='text-xs text-slate-500'>Duration</p>
-                          <p className='font-semibold text-slate-700'>{formatDuration(course.duration)}</p>
-                        </div>
-                      </div>
-
-                      {/* Lessons */}
-                      <div className='flex items-center gap-2 text-sm text-slate-600'>
-                        <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50'>
-                          <BookOpen className='h-4 w-4 text-purple-600' />
-                        </div>
-                        <div>
-                          <p className='text-xs text-slate-500'>Lessons</p>
-                          <p className='font-semibold text-slate-700'>{course.lessonIds.length}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Age Range */}
-                    <div className='flex items-center gap-2 border-t border-slate-100 pt-2'>
-                      <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50'>
-                        <GraduationCap className='h-4 w-4 text-amber-600' />
-                      </div>
-                      <div className='flex-1'>
-                        <p className='text-xs text-slate-500'>Age Range</p>
-                        <p className='text-sm font-semibold text-slate-700'>{course.ageRangeLabel} years old</p>
-                      </div>
-                      {/* Created by */}
-                      <div className='flex items-center gap-1.5'>
-                        <User className='h-3.5 w-3.5 text-slate-400' />
-                        <p className='line-clamp-1 text-xs text-slate-500'>{course.createdByUserName}</p>
-                      </div>
-                    </div>
                   </div>
                 </div>
               }
