@@ -1,13 +1,13 @@
 import {
   Organization,
   OrganizationQueryParams,
+  OrganizationSliceParams,
   OrganizationType
 } from '@/features/organization/types/organization.type'
-import { Plan } from '@/features/plan/types/plan.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
-export const organizationApi = createCrudApi<Organization, OrganizationQueryParams>({
+export const organizationApi = createCrudApi<Organization, OrganizationSliceParams>({
   reducerPath: 'organizationApi',
   baseUrl: '/organizations',
   tagTypes: ['Organization']
@@ -15,7 +15,7 @@ export const organizationApi = createCrudApi<Organization, OrganizationQueryPara
   endpoints: (build) => ({
     getAllOrganizationTypes: build.query<
       ApiSuccessResponse<PaginatedResult<OrganizationType>>,
-      OrganizationQueryParams
+      OrganizationSliceParams
     >({
       query: () => '/organization-types',
       providesTags: ['Organization']

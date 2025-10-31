@@ -1,4 +1,5 @@
 import { OrganizationSubscription } from '@/features/subscription/types/subscription.type'
+import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Organization = {
@@ -23,8 +24,9 @@ export type AdminOrganization = {
 export enum OrganizationStatus {
   ACTIVE = 'Active',
   INACTIVE = 'Inactive',
-  ARCHIVE = 'Archive',
-  DRAFT = 'Draft'
+  ARCHIVED = 'Archived',
+  DRAFT = 'Draft',
+  DELETED = 'Deleted'
 }
 
 export type OrganizationType = {
@@ -35,6 +37,8 @@ export type OrganizationType = {
 export type OrganizationQueryParams = {
   status?: OrganizationStatus
 } & SearchPaginatedRequestParams
+
+export type OrganizationSliceParams = { status?: OrganizationStatus } & SliceQueryParams
 
 // Form Data
 export type OrganizationFormData = {

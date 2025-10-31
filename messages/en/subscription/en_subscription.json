@@ -6,7 +6,11 @@
       "subscriptionTitle": "Subscription List",
       "subscriptionHistoryTitle": "Subscription History",
       "organizationSubscriptionTitle": "Organization Subscription Management",
-      "organizationSubscriptionDescription": "Browse and manage all organization subscriptions registered on the platform."
+      "organizationSubscriptionDescription": "Browse and manage all organization subscriptions registered on the platform.",
+      "placeholder": {
+        "search": "Search organizations by name...",
+        "status": "Filter by status"
+      }
     },
     "detail": {
       "title": "Organization Details",
