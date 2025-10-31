@@ -62,7 +62,7 @@ export const getStatusBadgeClass = (
     case LessonStatus.PENDING:
     case CurriculumStatus.PENDING:
     case CourseStatus.PENDING:
-    case ContactStatus.PENDING:
+    case ContactStatus.NEW:
     case LicenseAssignmentStatus.PENDING:
     case SubscriptionStatus.PENDING:
     case ClassroomStatus.PENDING:

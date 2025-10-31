@@ -16,7 +16,7 @@ export type Contact = {
 }
 
 export enum ContactStatus {
-  PENDING = 'Pending',
+  NEW = 'New',
   IN_PROGRESS = 'InProgress',
   RESOLVED = 'Resolved',
   SPAM = 'Spam'
