@@ -1,11 +1,14 @@
 'use client'
+import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import SSelect from '@/components/shared/SSelect'
 import { useSearchContactQuery } from '@/features/contact/api/contactApi'
 import { useGetContactColumnTable } from '@/features/contact/components/list/ContactColumnTable'
+import { setPageIndex, setParam } from '@/features/contact/slice/contactSlice'
 import { Contact, ContactQueryParams, ContactStatus } from '@/features/contact/types/contact.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import useDebounce from '@/hooks/useDebounce'
 import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
 import React from 'react'
@@ -14,14 +17,18 @@ export default function ContactList() {
   const { openModal } = useModal()
   const t = useTranslations('Admin.placeholder')
   const tList = useTranslations('curriculum.list')
-  const dispatch = useAppDispatch()
   const columns = useGetContactColumnTable()
+
+  const dispatch = useAppDispatch()
   const contactParams = useAppSelector((state) => state.contact)
+
+  const [searchQuery, setSearchQuery] = React.useState<string>('')
+  const debouncedSearch = useDebounce(searchQuery, 300)
 
   const queryParams: ContactQueryParams = {
     pageNumber: contactParams.pageNumber,
     pageSize: contactParams.pageSize,
-    search: contactParams.search,
+    search: debouncedSearch.trim() || undefined,
     orderBy: contactParams.orderBy,
     sortDirection: contactParams.sortDirection,
     status: contactParams.status
@@ -36,38 +43,39 @@ export default function ContactList() {
   }))
 
   const handlePageChange = (page: number) => {
-    // dispatch(setPageIndex(page))
+    dispatch(setPageIndex(page))
   }
   return (
     <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
       <div className='flex items-center gap-4 py-4'>
-        <Input
-          placeholder={t('userSearch')}
-          //   value={searchQuery}
-          //   onChange={(e) => setSearchQuery(e.target.value)}
-          className='max-w-sm'
-        />
-        <SSelect
-          className='w-30'
-          placeholder={tList('placeholder.status')}
-          //   value={filters.status?.toString() ?? ''}
-          value={''}
-          //   onChange={(val) => dispatch(setParam({ key: 'status', value: val as CurriculumStatus }))}
-          onChange={(val) => {}}
-          options={statusOptions}
-          onOpen={() => {
-            // No action needed; statusOptions is static
-          }}
-        />
+        <div>
+          <Input
+            placeholder={t('userSearch')}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className='max-w-sm'
+          />
+          <SSelect
+            className='w-30'
+            placeholder={tList('placeholder.status')}
+            value={contactParams.status ?? ''}
+            onChange={(val) => dispatch(setParam({ key: 'status', value: val as ContactStatus }))}
+            options={statusOptions}
+            onOpen={() => {
+              // No action needed; statusOptions is static
+            }}
+          />
+        </div>
+        <Button onClick={() => {openModal('upsertContact')}}>Create New</Button>
       </div>
       <DataTable
         data={rows}
         columns={columns}
         enableRowSelection
         pagingData={data}
-        // pagingParams={queryParams}
+        pagingParams={queryParams}
         handlePageChange={handlePageChange}
-        onRowClick={(row) => openModal('contactDetail', { contact: row })}
+        onRowClick={(row) => openModal('upsertContact', { contact: row })}
       />
     </div>
   )
