@@ -25,7 +25,7 @@ export default function ClassroomSubHeaderClient({ locale, classroomId, curricul
       href: `/${locale}/classroom/${classroomId}/course${curriculumId ? `?curriculumId=${curriculumId}` : ''}`
     },
     { name: 'quiz', href: `/${locale}/classroom/${classroomId}/quiz` },
-    { name: 'assignment', href: `/${locale}/classroom/${classroomId}/assignments` }
+    { name: 'assignment', href: `/${locale}/classroom/${classroomId}/assignment` }
   ]
 
   return (
