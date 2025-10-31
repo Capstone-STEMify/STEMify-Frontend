@@ -172,12 +172,10 @@ const QuizEditor = () => {
           </div>
           {/* Footer cố định */}
           {quizId && quiz.questions.length > 0 && (
-            <div>
-              <Button onClick={handleSaveQuestions} disabled={isSavingQuestions} size='lg' className='min-w-40'>
-                <FileEdit className='mr-2 h-4 w-4' />
-                {isSavingQuestions ? 'Saving...' : 'Save Questions'}
-              </Button>
-            </div>
+            <Button onClick={handleSaveQuestions} disabled={isSavingQuestions} size='lg' className='bg-blue-400'>
+              <FileEdit className='mr-2 h-4 w-4' />
+              {isSavingQuestions ? 'Saving...' : 'Save Questions'}
+            </Button>
           )}
         </div>
 

@@ -212,7 +212,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
 
             {/* Save Quiz Info */}
             <div className='mt-6 border-t pt-4'>
-              <Button onClick={handleSaveQuiz} className='w-full' disabled={isSavingQuiz}>
+              <Button onClick={handleSaveQuiz} className='w-full bg-blue-400' disabled={isSavingQuiz}>
                 <Save className='mr-2 h-4 w-4' />
                 {isSavingQuiz ? 'Saving...' : quizId ? 'Update Quiz Info' : 'Create Quiz'}
               </Button>
