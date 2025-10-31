@@ -32,7 +32,14 @@ export default function OrganizationInfo({ organizationId }: OrganizationInfoPro
     )
   }
 
-  if (!organization) return null
+  if (!organization)
+    return (
+      <Card>
+        <CardContent>
+          <p className='text-muted-foreground text-center text-sm'>No organization data available.</p>
+        </CardContent>
+      </Card>
+    )
 
   return (
     <Card className='overflow-hidden border py-4 shadow-sm'>

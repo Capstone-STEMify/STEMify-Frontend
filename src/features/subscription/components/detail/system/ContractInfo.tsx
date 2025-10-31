@@ -34,7 +34,14 @@ export default function ContractInfo({ contractId }: ContractInfoProps) {
     )
   }
 
-  if (!contract) return null
+  if (!contract)
+    return (
+      <Card>
+        <CardContent>
+          <p className='text-muted-foreground text-center text-sm'>No contract data available.</p>
+        </CardContent>
+      </Card>
+    )
 
   return (
     <Card className='py-4'>
