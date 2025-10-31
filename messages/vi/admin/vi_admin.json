@@ -99,7 +99,11 @@
       "updateButton": "Cập nhật",
       "account": "Tài khoản",
       "notifications": "Thông báo",
-      "signOut": "Đăng xuất"
+      "signOut": "Đăng xuất",
+      "usernamePlaceholder": "Nhập tên người dùng",
+      "firstNamePlaceholder": "Nhập tên",
+      "lastNamePlaceholder": "Nhập họ",
+      "emailPlaceholder": "Nhập địa chỉ email"
     },
     "course_details": {
       "description": "Mô tả",

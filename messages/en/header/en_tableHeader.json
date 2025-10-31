@@ -27,6 +27,7 @@
     "minAge": "Min Age",
     "maxAge": "Max Age",
     "quantity": "Quantity",
+    "avatar": "Avatar",
     "PLO": {
       "name": "Name",
       "description": "Description"

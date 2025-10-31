@@ -123,7 +123,8 @@
       "lastModified": "Lần Chỉnh Sửa Cuối",
       "grossAmount": "Tổng Số Tiền",
       "studentSeats": "Ghế Học Sinh",
-      "teacherSeats": "Ghế Giáo Viên"
+      "teacherSeats": "Ghế Giáo Viên",
+      "avatar": "Ảnh Đại Diện"
     },
     "paging": {
       "previous": "Trước",
