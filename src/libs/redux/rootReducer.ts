@@ -54,7 +54,6 @@ import { contractApi } from '@/features/contract/api/contractApi'
 import { jobRoleApi } from '@/features/job-role/api/jobRoleApi'
 import { planSlice } from '@/features/plan/slice/planProductSlice'
 import { quizApi } from '@/features/resource/quiz/api/quizApi'
-import { questionSlice } from '@/features/resource/question/slice/questionSlice'
 import { emulatorApi } from '@/features/emulator/api/emulatorApi'
 import { organizationSubscriptionSlice } from '@/features/subscription/slice/subscriptionSlice'
 import { subscriptionApi } from '@/features/subscription/api/subscriptionApi'
@@ -66,6 +65,7 @@ import { organizationApi } from '@/features/organization/api/organizationApi'
 import { organizationSubscriptionFormSlice } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 import { classroomApi } from '@/features/classroom/api/classroomApi'
 import { lessonDetailSlice } from '@/features/resource/lesson/slice/lessonDetailSlice'
+import { quizEditorSlice } from '@/features/resource/question/slice/quizEditorSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -99,7 +99,7 @@ export const rootReducer = combineReducers({
   quizSelected: quizSelectedSlice.reducer,
   contact: contactSlice.reducer,
   contract: contractSlice.reducer,
-  question: questionSlice.reducer,
+  quizEditor: quizEditorSlice.reducer,
   planProduct: planSlice.reducer,
   organizationSubscription: organizationSubscriptionSlice.reducer,
   licenseAssignment: licenseAssignmentSlice.reducer,

@@ -5,40 +5,51 @@ import { Textarea } from '@/components/shadcn/textarea'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { Separator } from '@/components/shadcn/separator'
 import { Save, ChevronLeft, ChevronRight, FileEdit } from 'lucide-react'
-import { useState } from 'react'
-import { Quiz } from '@/features/resource/quiz/types/quiz.type'
+import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/utils/shadcn/utils'
 import { useCreateQuizMutation, useUpdateQuizMutation } from '@/features/resource/quiz/api/quizApi'
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/features/resource/question/api/questionApi'
 import { useParams, useRouter } from 'next/navigation'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import {
+  selectQuiz,
+  selectSelectedQuestionId,
+  selectIsDirty,
+  updateQuizInfo,
+  selectQuestion,
+  markAsSaved
+} from '@/features/resource/question/slice/quizEditorSlice'
 
-type QuizEditorSidebarProps = {
-  quiz: Quiz
-  selectedQuestionId: number | null
-  onQuestionSelect: (id: number) => void
-  onQuizUpdate: (quiz: Quiz) => void
-}
-
-export const QuizEditorSidebar = ({
-  quiz,
-  selectedQuestionId,
-  onQuestionSelect,
-  onQuizUpdate
-}: QuizEditorSidebarProps) => {
+export const QuizEditorSidebar = () => {
   const { quizId, sectionId, lessonId } = useParams()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+
+  // Get state from Redux
+  const quiz = useAppSelector(selectQuiz)
+  const selectedQuestionId = useAppSelector(selectSelectedQuestionId)
+  const isDirty = useAppSelector(selectIsDirty)
+
   const [collapsed, setCollapsed] = useState(false)
   const [isSavingQuiz, setIsSavingQuiz] = useState(false)
   const [isSavingQuestions, setIsSavingQuestions] = useState(false)
-  const isEditMode = quiz.questions.length > 0
+
+  const hasQuestionsInAPI = quiz.questions.some((q) => q.id < 1000000000000)
 
   const [createQuiz] = useCreateQuizMutation()
   const [updateQuiz] = useUpdateQuizMutation()
-
   const [createQuestion] = useCreateQuestionMutation()
   const [updateQuestion] = useUpdateQuestionMutation()
 
-  const router = useRouter()
+  const handleQuizInfoChange = (updates: Partial<typeof quiz>) => {
+    dispatch(updateQuizInfo(updates))
+  }
+
+  const handleQuestionSelect = (id: number) => {
+    dispatch(selectQuestion(id))
+  }
+
   const handleSaveQuiz = async () => {
     setIsSavingQuiz(true)
     try {
@@ -59,9 +70,10 @@ export const QuizEditorSidebar = ({
         router.push(`/admin/lesson/${lessonId}/section/${sectionId}/quiz/${res.data.id}/question`)
       }
 
+      dispatch(markAsSaved())
       toast.message('Quiz info saved successfully')
     } catch (error) {
-      toast('Failed to save quiz info')
+      toast.error('Failed to save quiz info')
     } finally {
       setIsSavingQuiz(false)
     }
@@ -70,33 +82,80 @@ export const QuizEditorSidebar = ({
   const handleSaveQuestions = async () => {
     setIsSavingQuestions(true)
     try {
-      const questionsPayload = quiz.questions.map((q) => ({
-        id: q.id, // create thì id = null
-        questionType: q.questionType,
-        content: q.content,
-        orderIndex: q.orderIndex,
-        answerExplanation: q.answerExplanation,
-        points: q.points,
-        key: q.key,
-        answers: q.answers.map((a) => ({
-          id: a.id, // create thì id = null
-          content: a.content,
-          isCorrect: a.isCorrect,
-          key: a.key
-        }))
-      }))
-
-      if (quizId) {
-        if (isEditMode) {
-          const res = await updateQuestion({ quizId: Number(quizId), questions: questionsPayload }).unwrap()
-        } else {
-          const res = await createQuestion({ quizId: Number(quizId), questions: questionsPayload }).unwrap()
-        }
+      if (!quizId) {
+        toast.error('Quiz ID is required')
+        return
       }
 
-      toast.message(`${quiz.questions.length} questions saved successfully`)
+      if (hasQuestionsInAPI) {
+        // ✅ UPDATE MODE: Mix of existing and new questions
+        const updateQuestionsPayload = quiz.questions.map((q) => {
+          // Questions from API have small IDs (< 1000000000000)
+          const isExistingQuestion = q.id < 1000000000000
+
+          if (isExistingQuestion) {
+            // Existing question: Include IDs
+            return {
+              id: q.id,
+              questionType: q.questionType,
+              content: q.content,
+              orderIndex: q.orderIndex,
+              answerExplanation: q.answerExplanation,
+              points: q.points,
+              answers: q.answers.map((a) => ({
+                id: a.id,
+                content: a.content,
+                isCorrect: a.isCorrect
+              }))
+            }
+          } else {
+            // New question: Omit IDs (backend will generate)
+            return {
+              questionType: q.questionType,
+              content: q.content,
+              orderIndex: q.orderIndex,
+              answerExplanation: q.answerExplanation,
+              points: q.points,
+              answers: q.answers.map((a) => ({
+                content: a.content,
+                isCorrect: a.isCorrect
+              }))
+            }
+          }
+        })
+
+        await updateQuestion({
+          quizId: Number(quizId),
+          questions: updateQuestionsPayload
+        }).unwrap()
+
+        toast.message(`${quiz.questions.length} questions updated successfully`)
+      } else {
+        // ✅ CREATE MODE: All questions are new
+        const createQuestionsPayload = quiz.questions.map((q) => ({
+          questionType: q.questionType,
+          content: q.content,
+          orderIndex: q.orderIndex,
+          answerExplanation: q.answerExplanation,
+          points: q.points,
+          answers: q.answers.map((a) => ({
+            content: a.content,
+            isCorrect: a.isCorrect
+          }))
+        }))
+
+        await createQuestion({
+          quizId: Number(quizId),
+          questions: createQuestionsPayload
+        }).unwrap()
+
+        toast.message(`${quiz.questions.length} questions created successfully`)
+      }
+
+      dispatch(markAsSaved())
     } catch (error) {
       toast.error('Failed to save questions')
+      console.error('Save questions error:', error)
     } finally {
       setIsSavingQuestions(false)
     }
@@ -115,7 +174,10 @@ export const QuizEditorSidebar = ({
   return (
     <aside className='border-border bg-card flex w-80 flex-col border-r'>
       <div className='border-border flex items-center justify-between border-b p-4'>
-        <h2 className='text-foreground font-semibold'>Quiz Settings</h2>
+        <div className='flex items-center gap-2'>
+          <h2 className='text-foreground font-semibold'>Quiz Settings</h2>
+          {isDirty && <span className='text-xs text-orange-500'>● Unsaved</span>}
+        </div>
         <Button variant='ghost' size='icon' onClick={() => setCollapsed(true)}>
           <ChevronLeft className='h-4 w-4' />
         </Button>
@@ -129,7 +191,7 @@ export const QuizEditorSidebar = ({
               <Input
                 id='title'
                 value={quiz.title}
-                onChange={(e) => onQuizUpdate({ ...quiz, title: e.target.value })}
+                onChange={(e) => handleQuizInfoChange({ title: e.target.value })}
                 placeholder='Enter quiz title'
               />
             </div>
@@ -139,7 +201,7 @@ export const QuizEditorSidebar = ({
               <Textarea
                 id='description'
                 value={quiz.description}
-                onChange={(e) => onQuizUpdate({ ...quiz, description: e.target.value })}
+                onChange={(e) => handleQuizInfoChange({ description: e.target.value })}
                 placeholder='Enter quiz description'
                 rows={3}
               />
@@ -149,7 +211,12 @@ export const QuizEditorSidebar = ({
           <div className='grid grid-cols-2 gap-4'>
             <div className='space-y-1'>
               <Label htmlFor='totalMarks'>Total Marks</Label>
-              <Input id='totalMarks' type='number' value={quiz.totalMarks} readOnly className='bg-muted' />
+              <Input
+                id='totalMarks'
+                type='number'
+                value={quiz.totalMarks}
+                onChange={(e) => handleQuizInfoChange({ totalMarks: parseInt(e.target.value) || 100 })}
+              />
             </div>
 
             <div className='space-y-1'>
@@ -158,7 +225,7 @@ export const QuizEditorSidebar = ({
                 id='passingMarks'
                 type='number'
                 value={quiz.passingMarks}
-                onChange={(e) => onQuizUpdate({ ...quiz, passingMarks: parseInt(e.target.value) || 0 })}
+                onChange={(e) => handleQuizInfoChange({ passingMarks: parseInt(e.target.value) || 50 })}
               />
             </div>
 
@@ -168,7 +235,7 @@ export const QuizEditorSidebar = ({
                 id='timeLimit'
                 type='number'
                 value={quiz.timeLimitMinutes}
-                onChange={(e) => onQuizUpdate({ ...quiz, timeLimitMinutes: parseInt(e.target.value) || 0 })}
+                onChange={(e) => handleQuizInfoChange({ timeLimitMinutes: parseInt(e.target.value) || 0 })}
               />
             </div>
 
@@ -178,7 +245,7 @@ export const QuizEditorSidebar = ({
                 id='duration'
                 type='number'
                 value={quiz.durationDays}
-                onChange={(e) => onQuizUpdate({ ...quiz, durationDays: parseInt(e.target.value) || 0 })}
+                onChange={(e) => handleQuizInfoChange({ durationDays: parseInt(e.target.value) || 0 })}
               />
             </div>
           </div>
@@ -192,7 +259,7 @@ export const QuizEditorSidebar = ({
                 {quiz.questions.map((question, index) => (
                   <button
                     key={question.id}
-                    onClick={() => onQuestionSelect(Number(question.id))}
+                    onClick={() => handleQuestionSelect(Number(question.id))}
                     className={cn(
                       'w-full rounded-lg border p-3 text-left transition-all',
                       selectedQuestionId === question.id
