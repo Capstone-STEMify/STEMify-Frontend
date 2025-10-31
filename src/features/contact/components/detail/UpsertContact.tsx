@@ -45,7 +45,7 @@ const defaultContactData: ContactFormData = {
   phoneNumber: '',
   organizationName: '',
   jobRoleId: 1,
-  status: ContactStatus.PENDING
+  status: ContactStatus.NEW
 }
 
 interface UpsertContactDetailProps {
@@ -86,30 +86,25 @@ export default function UpsertContact({ id, onSuccess }: UpsertContactDetailProp
       onChange: contactSchema as any
     },
     onSubmit: async ({ value }) => {
-      try {
-        const payload = {
-          firstName: value.firstName,
-          lastName: value.lastName,
-          ...(value.email && { email: value.email }),
-          ...(value.phoneNumber && { phoneNumber: value.phoneNumber }),
-          ...(value.organizationName && { organizationName: value.organizationName }),
-          ...(value.jobRoleId && { jobRoleId: Number(value.jobRoleId) }),
-          ...(value.status && { status: value.status })
-        }
-
-        if (isEditing) {
-          await updateContact({ id: id!, body: { ...payload, status: value.status } }).unwrap()
-          toast.success(tt('successMessage.update', { title: `${value.firstName} ${value.lastName}` }))
-        } else {
-          await createContact(payload).unwrap()
-          toast.success(tt('successMessage.create', { title: `${value.firstName} ${value.lastName}` }))
-        }
-        onSuccess?.()
-        closeModal()
-      } catch (err) {
-        toast.error(tt('errorMessage'))
-        console.error(err)
+      const payload = {
+        firstName: value.firstName,
+        lastName: value.lastName,
+        ...(value.email && { email: value.email }),
+        ...(value.phoneNumber && { phoneNumber: value.phoneNumber }),
+        ...(value.organizationName && { organizationName: value.organizationName }),
+        ...(value.jobRoleId && { jobRoleId: Number(value.jobRoleId) }),
+        ...(value.status && { status: value.status })
       }
+
+      if (isEditing) {
+        await updateContact({ id: id!, body: { ...payload, status: value.status } }).unwrap()
+        toast.success(tt('successMessage.update', { title: '' }))
+      } else {
+        await createContact(payload).unwrap()
+        toast.success(tt('successMessage.create', { title: '' }))
+      }
+      onSuccess?.()
+      closeModal()
     }
   })
 
@@ -185,7 +180,7 @@ export default function UpsertContact({ id, onSuccess }: UpsertContactDetailProp
           <field.SelectField
             label={t('status.label')}
             options={[
-              { label: 'Pending', value: ContactStatus.PENDING },
+              { label: 'New', value: ContactStatus.NEW },
               { label: 'In Progress', value: ContactStatus.IN_PROGRESS },
               { label: 'Resolved', value: ContactStatus.RESOLVED },
               { label: 'Spam', value: ContactStatus.SPAM }

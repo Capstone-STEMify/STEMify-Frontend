@@ -37,7 +37,11 @@ export function useGetContactColumnTable(): ColumnDef<Contact>[] {
     },
     {
       accessorKey: 'createdAt',
-      header: tc('tableHeader.createdAt')
+      header: tc('tableHeader.createdDate'),
+      cell: ({ row }) => {
+        const date = new Date(row.getValue('createdAt'))
+        return date.toLocaleDateString()
+      }
     },
     {
       accessorKey: 'jobRole',

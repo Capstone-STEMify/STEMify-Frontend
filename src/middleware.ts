@@ -138,7 +138,7 @@ export default withAuth(
         const locale = matched ?? 'vi'
         const pathNoLocale = pathname.replace(new RegExp(`^/${locale}`), '') || '/'
 
-        const PUBLIC_PATHS = ['/', '/unauthorized', '/api/auth/signin']
+        const PUBLIC_PATHS = ['/', '/unauthorized', '/api/auth/signin', '/plans', '/contact']
 
         const isPublic = PUBLIC_PATHS.includes(pathNoLocale)
 

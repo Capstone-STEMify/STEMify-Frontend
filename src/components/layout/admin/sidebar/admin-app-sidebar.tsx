@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import {
+  IconAddressBook,
   IconBook,
   IconBox,
   IconBuilding,
@@ -92,6 +93,11 @@ const data = {
       title: 'side_bar.plan',
       url: '/admin/plan',
       icon: IconVip
+    },
+    {
+      title: 'side_bar.contact',
+      url: '/admin/contact',
+      icon: IconAddressBook
     }
   ],
   navDesign: [
