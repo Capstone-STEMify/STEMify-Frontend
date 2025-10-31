@@ -34,8 +34,8 @@ export default function SystemSubscriptionDetail() {
 
           {/* Main Content */}
           <div className='space-y-6'>
-            <SubscriptionInfo subscriptionId={subscription.id} />
-            <OrganizationAdmins />
+            <SubscriptionInfo subscription={subscription} />
+            <OrganizationAdmins organizationSubscriptionOrderId={subscription.id} />
           </div>
         </div>
       </div>

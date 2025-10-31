@@ -1,5 +1,6 @@
 import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import { ContactStatus } from '@/features/contact/types/contact.type'
+import { ContractStatus } from '@/features/contract/types/contract.type'
 import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
 import { OrganizationStatus } from '@/features/organization/types/organization.type'
 import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
@@ -19,6 +20,7 @@ export const getStatusBadgeClass = (
     | LicenseAssignmentStatus
     | SubscriptionStatus
     | ClassroomStatus
+    | ContractStatus
     | undefined
 ) => {
   switch (status) {
@@ -48,6 +50,7 @@ export const getStatusBadgeClass = (
     case LicenseAssignmentStatus.EXPIRED:
     case SubscriptionStatus.ARCHIVED:
     case SubscriptionStatus.CANCELED:
+    case ContractStatus.ARCHIVED:
       return 'bg-gray-100 text-gray-800 border border-gray-300'
 
     // DELETED / EXPIRED
@@ -56,6 +59,7 @@ export const getStatusBadgeClass = (
     case CourseStatus.DELETED:
     case SubscriptionStatus.EXPIRED:
     case ClassroomStatus.DELETED:
+    case ContractStatus.EXPIRED:
       return 'bg-red-100 text-red-800 border border-red-300'
 
     // PENDING
@@ -83,6 +87,7 @@ export const getStatusBadgeClass = (
     case OrganizationStatus.ACTIVE:
     case LicenseAssignmentStatus.ACTIVE:
     case ClassroomStatus.COMPLETED:
+    case ContractStatus.ACTIVE:
       return 'bg-emerald-50 text-emerald-700 border border-emerald-300'
 
     default:
