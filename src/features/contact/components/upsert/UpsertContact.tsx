@@ -173,32 +173,43 @@ export default function UpsertContact({ id, onSuccess }: UpsertContactDetailProp
         )}
       />
 
-      <form.AppField
-        name='status'
-        children={(field) => (
-          <field.SelectField
-            label={t('status.label')}
-            options={[
-              { label: 'New', value: ContactStatus.NEW },
-              { label: 'In Progress', value: ContactStatus.IN_PROGRESS },
-              { label: 'Resolved', value: ContactStatus.RESOLVED },
-              { label: 'Spam', value: ContactStatus.SPAM }
-            ]}
+      {isEditing ? (
+        <>
+          <form.AppField
+            name='status'
+            children={(field) => (
+              <field.SelectField
+                label={t('status.label')}
+                options={[
+                  { label: 'New', value: ContactStatus.NEW },
+                  { label: 'In Progress', value: ContactStatus.IN_PROGRESS },
+                  { label: 'Resolved', value: ContactStatus.RESOLVED },
+                  { label: 'Spam', value: ContactStatus.SPAM }
+                ]}
+              />
+            )}
           />
-        )}
-      />
+          <div className='flex justify-end gap-3 pt-2'>
+            <Button type='button' variant='outline' onClick={closeModal}>
+              {tc('button.cancel')}
+            </Button>
 
-      <div className='flex justify-end gap-3 pt-2'>
-        <Button type='button' variant='outline' onClick={closeModal}>
-          {tc('button.cancel')}
-        </Button>
-
-        <form.AppForm>
-          <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
-            {isEditing ? `${tc('button.update')}` : `${tc('button.create')}`}
-          </form.SubmitButton>
-        </form.AppForm>
-      </div>
+            <form.AppForm>
+              <form.SubmitButton loading={isCreating || isUpdating} className='bg-amber-custom-400 cursor-pointer'>
+                {isEditing ? `${tc('button.update')}` : `${tc('button.create')}`}
+              </form.SubmitButton>
+            </form.AppForm>
+          </div>
+        </>
+      ) : (
+        <>
+          <form.AppForm>
+            <form.SubmitButton loading={isCreating || isUpdating} className='w-full cursor-pointer bg-sky-400'>
+              {tc('button.create')}
+            </form.SubmitButton>
+          </form.AppForm>
+        </>
+      )}
     </form>
   )
 }
