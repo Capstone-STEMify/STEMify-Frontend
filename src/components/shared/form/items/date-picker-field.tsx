@@ -11,9 +11,14 @@ import { useFieldContext } from '@/components/shared/form/items'
 type DatePickerFieldProps = {
   label?: string
   placeholder?: string
+  onChange?: (date: Date | null) => void // ✅ Add onChange prop
 }
 
-export function DatePickerField({ label = 'Select Date', placeholder = 'Select date' }: DatePickerFieldProps) {
+export function DatePickerField({
+  label = 'Select Date',
+  placeholder = 'Select date',
+  onChange // ✅ Destructure onChange
+}: DatePickerFieldProps) {
   const field = useFieldContext<Date | null>()
   const [open, setOpen] = React.useState(false)
 
@@ -47,7 +52,14 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
             mode='single'
             selected={field.state.value ?? undefined}
             onSelect={(date) => {
-              field.handleChange(date ?? null)
+              const selectedDate = date ?? null
+              field.handleChange(selectedDate) // ✅ Update field
+
+              // ✅ Call custom onChange if provided
+              if (onChange) {
+                onChange(selectedDate)
+              }
+
               setOpen(false)
             }}
             captionLayout='dropdown'
