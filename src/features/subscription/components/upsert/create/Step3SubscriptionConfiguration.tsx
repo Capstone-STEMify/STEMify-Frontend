@@ -135,8 +135,6 @@ export default function Step3SubscriptionConfiguration() {
   const selectedPlanCard = planCards.find((card) => card?.planBillingCycleId === selectedPlanBillingCycleId)
 
   useEffect(() => {
-    console.log('Start date changed:', startDate, 'Billing cycle:', selectedBillingCycle)
-
     if (startDate) {
       const end = new Date(startDate)
       const monthsToAdd = selectedBillingCycle === BillingCycle.ANNUAL ? 12 : 6
