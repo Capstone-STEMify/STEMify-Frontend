@@ -45,7 +45,7 @@ export function SingleSelectWithSearch({ options, value, onChange, placeholder =
             variant='outline'
             role='combobox'
             aria-expanded={open}
-            className='h-10 w-full justify-between rounded-lg border-gray-300 bg-white px-3 text-left font-normal hover:bg-gray-50'
+            className='h-10 w-full justify-between rounded-lg border-gray-200 bg-white px-3 text-left font-normal hover:bg-gray-50'
           >
             {selected ? (
               <div className='flex items-center gap-2.5'>

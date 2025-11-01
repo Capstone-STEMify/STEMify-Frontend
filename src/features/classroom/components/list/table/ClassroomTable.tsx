@@ -1,132 +1,100 @@
 'use client'
 
-import React from 'react'
-import { ColumnDef } from '@tanstack/react-table'
-import { Badge } from '@/components/shadcn/badge'
-import { Progress } from '@/components/shadcn/progress'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
-import Image from 'next/image'
-import { ChevronDown } from 'lucide-react'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useGetClassroomColumn } from '@/features/classroom/components/list/table/ClassroomColumn'
 import { useSearchClassroomsQuery } from '@/features/classroom/api/classroomApi'
 import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
-import UpsertClassroomModal from '@/features/classroom/components/upsert/UpsertClassroomModal'
 import { useModal } from '@/providers/ModalProvider'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
-
-// Mock data
-type Classroom = {
-  id: number
-  title: string
-  students: string[]
-  category: string
-  duration: string
-  status: 'In progress' | 'Completed' | 'Pending'
-  completedTasks: number
-  totalTasks: number
-}
-
-const mockClassrooms: Classroom[] = [
-  {
-    id: 1,
-    title: 'UI/UX fundamental',
-    students: ['/avatars/1.png', '/avatars/2.png', '/avatars/3.png', '/avatars/4.png'],
-    category: 'UI/UX',
-    duration: '14 Hours',
-    status: 'In progress',
-    completedTasks: 3,
-    totalTasks: 16
-  },
-  {
-    id: 2,
-    title: 'Basic research',
-    students: ['/avatars/5.png', '/avatars/6.png', '/avatars/7.png'],
-    category: 'Research',
-    duration: '20 Hours',
-    status: 'In progress',
-    completedTasks: 10,
-    totalTasks: 16
-  },
-  {
-    id: 3,
-    title: 'Fullstack Web Design',
-    students: ['/avatars/8.png', '/avatars/9.png', '/avatars/10.png'],
-    category: 'Engineer',
-    duration: '24 Hours',
-    status: 'Pending',
-    completedTasks: 4,
-    totalTasks: 20
-  },
-  {
-    id: 4,
-    title: 'Graphic design skill',
-    students: ['/avatars/1.png', '/avatars/2.png', '/avatars/3.png'],
-    category: 'Design',
-    duration: '10 Hours',
-    status: 'Completed',
-    completedTasks: 16,
-    totalTasks: 16
-  },
-  {
-    id: 5,
-    title: 'Basic Illustration',
-    students: ['/avatars/5.png', '/avatars/6.png'],
-    category: 'Illustration',
-    duration: '12 Hours',
-    status: 'Completed',
-    completedTasks: 20,
-    totalTasks: 20
-  }
-]
-
-// Columns
+import { Input } from '@/components/shadcn/input'
+import SSelect from '@/components/shared/SSelect'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { resetParams, setParam, setSearchTerm } from '@/features/classroom/slice/classroomSlice'
+import useDebounce from '@/hooks/useDebounce'
+import { SingleSelectWithSearch } from '@/components/shared/SingleSelectWithSearch'
+import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
+import { getOptions } from '@/utils/index'
 
 export default function ClassroomTable() {
   const { openModal } = useModal()
   const router = useRouter()
   const locale = useLocale()
+  const dispatch = useAppDispatch()
+  const [search, setSearch] = useState<string>('')
 
-  const { data } = useSearchClassroomsQuery({ status: ClassroomStatus.PENDING })
+  const queryParams = useAppSelector((state) => state.classroom)
+  const debouncedSearchQuery = useDebounce(search, 500)
+  const { data } = useSearchClassroomsQuery(queryParams)
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
   const columns = useGetClassroomColumn()
+
+  // get curriculum by organization id
+  // TODO: fix later by adding organizationId to the state
+  const searchCurriculumQuery = useAppSelector((state) => state.curriculum)
+  const { data: curriculumData } = useSearchCurriculumQuery({
+    ...searchCurriculumQuery
+  })
+
+  // options for status select
+  const statusOptions = Object.entries(ClassroomStatus)
+    .filter(([key]) => key.toLowerCase() !== 'deleted')
+    .map(([key, value]) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      value: value
+    }))
+
+  const curriculumOptions = getOptions(curriculumData?.data.items, 'title', 'imageUrl', 'courseCount')
+
+  useEffect(() => {
+    dispatch(setSearchTerm(debouncedSearchQuery))
+  }, [debouncedSearchQuery, dispatch])
+
   return (
     <div className='mt-8 space-y-6'>
       {/* Header */}
       <div className='flex items-center justify-between'>
         <div>
-          <h1 className='text-2xl font-bold'>Classroom</h1>
+          <h1 className='text-2xl font-bold'>Classroom List</h1>
         </div>
-        <Button
-          className='bg-sky-600 text-white hover:bg-sky-700'
-          onClick={() => router.push(`/${locale}/organization/classroom/create`)}
-        >
-          + Create class
-        </Button>
+        <div className='flex gap-2'>
+          <Button variant='outline' onClick={() => dispatch(resetParams())} className='hover:bg-slate-100'>
+            Clear Filter
+          </Button>
+          <Button
+            className='bg-sky-600 text-white hover:bg-sky-700'
+            onClick={() => router.push(`/${locale}/organization/classroom/create`)}
+          >
+            + Create class
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}
       <div className='flex flex-wrap items-center justify-between gap-4'>
         <div className='flex gap-2'>
-          <select className='border-border bg-background text-muted-foreground rounded-md border px-3 py-2 text-sm'>
-            <option>All category</option>
-            <option>Design</option>
-            <option>Research</option>
-            <option>Engineering</option>
-          </select>
-          <select className='border-border bg-background text-muted-foreground rounded-md border px-3 py-2 text-sm'>
-            <option>All status</option>
-            <option>Completed</option>
-            <option>In progress</option>
-            <option>Pending</option>
-          </select>
-        </div>
-        <div className='flex gap-2'>
-          <input
+          <Input
             type='text'
             placeholder='Search...'
-            className='border-border bg-background text-muted-foreground w-64 rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 focus:outline-none'
+            onChange={(e) => setSearch(e.target.value)}
+            className='w-80 bg-white py-4.5'
+            style={{ width: '320px' }}
+          />
+          <SingleSelectWithSearch
+            value={queryParams.curriculumId?.toString() ?? ''}
+            options={curriculumOptions}
+            placeholder='Select curriculum'
+            onChange={(val) => dispatch(setParam({ key: 'curriculumId', value: Number(val) }))}
+          />
+        </div>
+        <div className='flex gap-2'>
+          <SSelect
+            placeholder='Select status'
+            value={queryParams.status?.toString() ?? ClassroomStatus.PENDING}
+            onChange={(val) => dispatch(setParam({ key: 'status', value: val as ClassroomStatus }))}
+            options={statusOptions}
           />
         </div>
       </div>
@@ -136,10 +104,8 @@ export default function ClassroomTable() {
         enableRowSelection={true}
         data={rows}
         columns={columns}
-        pagingData={{
-          data: { totalPages: 24, totalItems: 120 }
-        }}
-        pagingParams={{ pageNumber: 1, pageSize: 5 }}
+        pagingData={data?.data.items}
+        pagingParams={queryParams}
         handlePageChange={() => {}}
       />
     </div>

@@ -10,26 +10,25 @@ import { format } from 'date-fns'
 import React from 'react'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import Link from 'next/link'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import SEmpty from '@/components/shared/empty/SEmpty'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 export default function ClassroomList() {
-  const { data, isLoading } = useSearchClassroomsQuery({ status: ClassroomStatus.PENDING })
+  const queryParams = useAppSelector((state) => state.classroom)
+  const { data, isLoading, error } = useSearchClassroomsQuery(queryParams)
   const classrooms = data?.data.items || []
 
   if (isLoading) {
     return (
-      <div>
-        <h2 className='mb-6 text-2xl font-bold text-gray-900'>My Classrooms</h2>
-        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-          {[1, 2, 3].map((i) => (
-            <div key={i} className='h-48 animate-pulse rounded-xl bg-gray-200' />
-          ))}
-        </div>
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
       </div>
     )
   }
 
-  if (classrooms.length === 0) {
-    return null
+  if (error || !classrooms || classrooms.length === 0) {
+    return <SEmpty title='No Classrooms Found' description="You don't have any classrooms yet." />
   }
 
   return (

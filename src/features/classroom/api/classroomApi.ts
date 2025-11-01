@@ -1,7 +1,7 @@
-import { Classroom, ClassroomQueryParams } from '@/features/classroom/types/classroom.type'
+import { Classroom, ClassroomSliceParams } from '@/features/classroom/types/classroom.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
-export const classroomApi = createCrudApi<Classroom, ClassroomQueryParams>({
+export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
   reducerPath: 'classroomApi',
   baseUrl: '/classrooms',
   tagTypes: ['Classroom']
