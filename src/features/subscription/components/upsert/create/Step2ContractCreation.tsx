@@ -18,7 +18,7 @@ import { goBack, goNext, setContractId } from '@/features/subscription/slice/org
 const contractDefaultValues: ContractFormData = {
   name: '',
   description: '',
-  fileBase64: '',
+  file: '',
   previewUrlFromServer: ''
 }
 
@@ -42,9 +42,9 @@ export default function Step2ContractCreation() {
     defaultValues: contractDefaultValues,
     // validators: { onChange: contractSchema },
     onSubmit: async ({ value }) => {
-      const fileValue = value.fileBase64 as any
+      const fileValue = value.file as any
       if (fileValue instanceof File) {
-        value.fileBase64 = await fileToBase64(fileValue)
+        value.file = await fileToBase64(fileValue)
       }
 
       const payload = {
@@ -65,7 +65,7 @@ export default function Step2ContractCreation() {
       form.reset({
         name: contractData.data.name,
         description: contractData.data.description,
-        fileBase64: '',
+        file: '',
         previewUrlFromServer: contractData.data.fileUrl
       })
     }
@@ -94,7 +94,7 @@ export default function Step2ContractCreation() {
         )}
       </form.AppField>
 
-      <form.AppField name='fileBase64'>
+      <form.AppField name='file'>
         {(field) => {
           fileFieldRef.current = field
           return (

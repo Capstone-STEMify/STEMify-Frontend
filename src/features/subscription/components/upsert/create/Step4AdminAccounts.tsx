@@ -12,7 +12,6 @@ export default function Step4AdminAccounts() {
   const locale = useLocale()
 
   const handleOpenModal = () => {
-    console.log('open success modal called')
     openModal('success', {
       onClose: () => {
         router.push(`/${locale}/admin/organization-subscription`)

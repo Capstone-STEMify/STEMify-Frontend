@@ -95,11 +95,15 @@ export default function ManualEntryTab({
     <div className='space-y-4'>
       {/* Select user type */}
       {userType ? (
-        <div className='space-y-2 rounded-md border border-blue-200 bg-amber-50 p-4'>
-          <p className='text-lg font-bold text-blue-600'>Create {userType} Account(s)</p>
-          <p className='text-sm text-blue-600'>
-            A new <span className='font-semibold'>{userType}</span> account will be created for this organization. The
-            account will automatically be assigned a valid license from this subscription.
+        <div className='rounded-lg border border-blue-100 bg-blue-50/60 p-5 shadow-sm transition-all hover:shadow-md'>
+          <h3 className='flex items-center gap-2 text-base font-semibold text-blue-700'>
+            <span className='inline-flex h-2 w-2 rounded-full bg-blue-500' />
+            Create {userType} Account
+          </h3>
+
+          <p className='mt-1 text-sm leading-relaxed text-slate-600'>
+            A new <span className='font-semibold text-blue-700'>{userType}</span> account will be created for this
+            organization. The account will automatically be assigned a valid license from this subscription.
           </p>
         </div>
       ) : (

@@ -27,6 +27,6 @@ export type ContractFormData = {
   name: string
   // organizationId: number this should be included in request but not in the form
   description: string
-  fileBase64: string
+  file: string
   previewUrlFromServer?: string
 }
