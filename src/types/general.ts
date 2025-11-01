@@ -18,6 +18,7 @@ export type ModalType =
   | 'enroll'
   | 'editImage'
   | 'information'
+  | 'success'
 
   // upsert
   | 'upsertCourse'

@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { Pencil, Trash2, ChevronDown, ChevronRight, Search } from 'lucide-react'
+import { Pencil, Trash2, ChevronDown, ChevronRight, Search, GraduationCap } from 'lucide-react'
 import { useDeletePlanMutation, useSearchPlanQuery } from '@/features/plan/api/planApi'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
@@ -18,10 +18,13 @@ import SearchBar from '@/components/shared/search/SearchBar'
 import { Input } from '@/components/shadcn/input'
 import SSelect from '@/components/shared/SSelect'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setParam, setSearchTerm } from '@/features/organization/slice/organizationSlice'
+import { setPageIndex, setParam, setSearchTerm } from '@/features/organization/slice/organizationSlice'
 import { OrganizationStatus } from '@/features/organization/types/organization.type'
 import useDebounce from '@/hooks/useDebounce'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { SPagination } from '@/components/shared/SPagination'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import SEmpty from '@/components/shared/empty/SEmpty'
 
 export default function SystemOrganizationList() {
   const t = useTranslations('subscription')
@@ -36,7 +39,7 @@ export default function SystemOrganizationList() {
   const { openModal } = useModal()
   const [expandedOrganizations, setExpandedOrganizations] = useState<number[]>([])
   const queryParams = useAppSelector((state) => state.organization)
-  const { data } = useSearchOrganizationsQuery(queryParams)
+  const { data, isLoading } = useSearchOrganizationsQuery(queryParams)
   const organizations = data?.data.items || []
 
   useEffect(() => {
@@ -55,6 +58,20 @@ export default function SystemOrganizationList() {
     setExpandedOrganizations((prev) =>
       prev.includes(organizationId) ? prev.filter((id) => id !== organizationId) : [...prev, organizationId]
     )
+  }
+  const handlePageChange = (newPage: number) => {
+    dispatch(setPageIndex(newPage))
+  }
+
+  if (isLoading) {
+    return (
+      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+        <LoadingComponent size={150} />
+      </div>
+    )
+  }
+  if (!data) {
+    return <SEmpty title={tc('message.noData')} />
   }
   return (
     <div className='my-5 px-10'>
@@ -119,15 +136,21 @@ export default function SystemOrganizationList() {
                         )}
                       </Button>
                     </TableCell>
-                    <TableCell className='font-medium'>
+                    <TableCell className='py-4 font-medium'>
                       <div className='h-12 w-12 overflow-hidden rounded-full'>
-                        <Image
-                          src={organization.imageUrl}
-                          alt={organization.name}
-                          width={56}
-                          height={56}
-                          className='h-full w-full rounded-full object-cover'
-                        />
+                        {organization.imageUrl ? (
+                          <Image
+                            src={organization.imageUrl}
+                            alt='preview'
+                            className='h-full w-full rounded-full object-cover'
+                            width={64}
+                            height={64}
+                          />
+                        ) : (
+                          <div className='flex h-full w-full items-center justify-center bg-sky-100 text-xl font-semibold text-blue-400'>
+                            <GraduationCap className='h-4 w-4' />
+                          </div>
+                        )}
                       </div>
                     </TableCell>
 
@@ -183,6 +206,16 @@ export default function SystemOrganizationList() {
               ))}
             </TableBody>
           </Table>
+        </div>
+        <div className='flex items-center justify-between gap-2 py-4'>
+          {data?.data?.totalPages > 1 && (
+            <SPagination
+              pageNumber={queryParams?.pageNumber}
+              totalPages={data.data.totalPages}
+              onPageChanged={handlePageChange}
+              className='w-fit'
+            />
+          )}
         </div>
       </div>
     </div>

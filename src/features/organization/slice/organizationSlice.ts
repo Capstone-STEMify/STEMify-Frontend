@@ -1,12 +1,12 @@
-import { OrganizationSliceParams } from '@/features/organization/types/organization.type'
+import { OrganizationSliceParams, OrganizationStatus } from '@/features/organization/types/organization.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: OrganizationSliceParams = {
   pageNumber: 1,
-  pageSize: 5,
+  pageSize: 10,
   search: '',
   orderBy: '',
-  status: undefined
+  status: OrganizationStatus.ACTIVE
 }
 
 export const organizationSlice = createQuerySlice('organizationSlice', initialState)

@@ -15,7 +15,7 @@ import {
   goNext,
   setOrganizationSubscriptionId
 } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
-import { Check, Calendar, Users, GraduationCap, Tag } from 'lucide-react'
+import { Check, Calendar, Users, GraduationCap, Tag, BookOpen } from 'lucide-react'
 import { cn } from '@/utils/shadcn/utils'
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
@@ -33,7 +33,7 @@ const subscriptionDefaultValues: SubscriptionFormData = {
 
 export default function Step3SubscriptionConfiguration() {
   const dispatch = useAppDispatch()
-  const { currentStep, organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
+  const { currentStep, organizationSubscriptionId, organizationId, contractId } = useAppSelector((state) => state.organizationSubscriptionForm)
   const { data: planData } = useGetAllPlanQuery()
   const { data: curriculumData } = useGetAllCurriculumQuery()
   const { data: subscriptionData } = useGetSubscriptionByIdQuery(organizationSubscriptionId!, {
@@ -56,6 +56,7 @@ export default function Step3SubscriptionConfiguration() {
   const [startDate, setStartDate] = useState<Date | null>(null)
   const [endDate, setEndDate] = useState<Date | null>(null)
   const [discountPercent, setDiscountPercent] = useState<number>(0)
+  const [selectedCurriculumIds, setSelectedCurriculumIds] = useState<number[]>([])
 
   const subscription = subscriptionData?.data
   const subscriptionSchema = z.object({
@@ -99,9 +100,13 @@ export default function Step3SubscriptionConfiguration() {
       value: String(curriculum.id)
     })) || []
 
+  // Get selected curriculums details
+  const selectedCurriculums = curriculumData?.data.items.filter((curriculum) =>
+    selectedCurriculumIds.includes(curriculum.id)
+  )
+
   const form = useAppForm({
     defaultValues: subscriptionDefaultValues,
-    // validators: { onChange: subscriptionSchema as any }, // Remove onChange validation
     onSubmit: async ({ value }) => {
       if (!value.planBillingCycleId || value.planBillingCycleId === 0) {
         toast.error('Please select a plan')
@@ -110,8 +115,8 @@ export default function Step3SubscriptionConfiguration() {
 
       const payload = {
         planBillingCycleId: value.planBillingCycleId,
-        contractId: 1,
-        organizationId: 1,
+        contractId: contractId,
+        organizationId: organizationId,
         startDate: value.startDate ? value.startDate.toISOString().split('T')[0] : undefined,
         discountPercent: value.discountPercent,
         maxStudentSeats: value.maxStudentSeats,
@@ -139,33 +144,28 @@ export default function Step3SubscriptionConfiguration() {
       const end = new Date(startDate)
       const monthsToAdd = selectedBillingCycle === BillingCycle.ANNUAL ? 12 : 6
       end.setMonth(end.getMonth() + monthsToAdd)
-      end.setDate(end.getDate() - 1) // Subtract 1 day for accurate period
-
-      console.log('Calculated end date:', end)
+      end.setDate(end.getDate() - 1)
       setEndDate(end)
     } else {
       setEndDate(null)
     }
   }, [startDate, selectedBillingCycle])
 
-  // Update seats when plan is selected - SEATS COME FROM PLAN
+  // Update seats when plan is selected
   useEffect(() => {
     if (selectedPlanCard) {
-      // Save full plan info to useState
       setSelectedPlanInfo(selectedPlanCard)
-
       form.setFieldValue('planBillingCycleId', selectedPlanCard.planBillingCycleId)
       form.setFieldValue('maxStudentSeats', selectedPlanCard.maxStudentSeats)
       form.setFieldValue('maxTeacherSeats', selectedPlanCard.maxTeacherSeats)
     } else {
       setSelectedPlanInfo(null)
     }
-  }, [selectedPlanCard?.planBillingCycleId]) // Only trigger when actual plan changes
+  }, [selectedPlanCard?.planBillingCycleId])
 
   // Load existing subscription data
   useEffect(() => {
     if (subscription && organizationSubscriptionId && plans.length > 0) {
-      // Find the plan billing cycle to extract the billing cycle type
       const planBillingCycle = plans
         .flatMap((p) => p.planBillingCycles)
         .find((pbc) => pbc.id === subscription.planBillingCycleId)
@@ -174,15 +174,13 @@ export default function Step3SubscriptionConfiguration() {
         setSelectedBillingCycle(planBillingCycle.billingCycle)
       }
 
-      // Set the selected plan in useState
       setSelectedPlanBillingCycleId(subscription.planBillingCycleId)
-
-      // Set start date in useState
       const existingStartDate = subscription.startDate ? new Date(subscription.startDate) : null
       setStartDate(existingStartDate)
-
-      // Set discount in useState
       setDiscountPercent(subscription.discountPercent)
+
+      const curriculumIds = subscription.curriculums.filter((c) => c.id).map((c) => c.id as number)
+      setSelectedCurriculumIds(curriculumIds)
 
       form.reset({
         planBillingCycleId: subscription.planBillingCycleId,
@@ -190,7 +188,7 @@ export default function Step3SubscriptionConfiguration() {
         discountPercent: subscription.discountPercent,
         maxStudentSeats: subscription.maxStudentSeats,
         maxTeacherSeats: subscription.maxTeacherSeats,
-        curriculumIds: subscription.curriculums.filter((c) => c.id).map((c) => c.id as number)
+        curriculumIds: curriculumIds
       })
     }
   }, [subscription, organizationSubscriptionId, plans])
@@ -230,7 +228,6 @@ export default function Step3SubscriptionConfiguration() {
               type='button'
               onClick={() => {
                 setSelectedBillingCycle(BillingCycle.SEMIANNUAL)
-                // Clear plan selection when changing billing cycle
                 setSelectedPlanBillingCycleId(0)
                 setSelectedPlanInfo(null)
                 form.setFieldValue('planBillingCycleId', 0)
@@ -248,7 +245,6 @@ export default function Step3SubscriptionConfiguration() {
               type='button'
               onClick={() => {
                 setSelectedBillingCycle(BillingCycle.ANNUAL)
-                // Clear plan selection when changing billing cycle
                 setSelectedPlanBillingCycleId(0)
                 setSelectedPlanInfo(null)
                 form.setFieldValue('planBillingCycleId', 0)
@@ -358,7 +354,7 @@ export default function Step3SubscriptionConfiguration() {
         )}
       </div>
 
-      {/* Configuration Card - Combined Date and Additional Settings */}
+      {/* Configuration Card */}
       <Card className='border-2 border-slate-200'>
         <CardContent className='p-6'>
           <div className='space-y-6'>
@@ -407,42 +403,67 @@ export default function Step3SubscriptionConfiguration() {
             {/* Divider */}
             <div className='border-t border-slate-200'></div>
 
-            {/* Additional Configuration */}
+            {/* Curriculum Selection & Details */}
             <div className='space-y-4'>
-              <Label className='text-base font-semibold text-slate-900'>Additional Configuration</Label>
-
-              <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                <form.AppField name='curriculumIds'>
-                  {(field) => <field.DropdownMultipleCheckboxField label='Curriculums' options={curriculumOptions} />}
-                </form.AppField>
-
-                <form.AppField name='discountPercent'>
-                  {(field) => (
-                    <div className='space-y-2'>
-                      <field.TextField
-                        type='number'
-                        label='Discount (%)'
-                        min={0}
-                        max={100}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const value = Number(e.target.value)
-                          setDiscountPercent(value)
-                          field.form.setFieldValue('discountPercent', value)
-                        }}
-                      />
-                      <p className='text-xs text-slate-500'>
-                        Applied discount will be shown in the plan overview above
-                      </p>
-                    </div>
-                  )}
-                </form.AppField>
+              <div className='flex items-center gap-2'>
+                <BookOpen className='h-5 w-5 text-slate-600' />
+                <Label className='text-base font-semibold text-slate-900'>Curriculum Selection</Label>
               </div>
+
+              <form.AppField name='curriculumIds'>
+                {(field) => (
+                  <field.DropdownMultipleCheckboxField
+                    label='Select Curriculums'
+                    options={curriculumOptions}
+                    onChange={(value: string[]) => {
+                      const ids = value.map(Number)
+                      setSelectedCurriculumIds(ids)
+                      field.form.setFieldValue('curriculumIds', ids)
+                    }}
+                  />
+                )}
+              </form.AppField>
+
+              {/* Selected Curriculums Display */}
+              {selectedCurriculums && selectedCurriculums.length > 0 && (
+                <div className='mt-4 space-y-3'>
+                  <Label className='text-sm font-medium text-slate-700'>Selected Curriculums</Label>
+                  <div className='grid grid-cols-1 gap-3 md:grid-cols-3'>
+                    {selectedCurriculums.map((curriculum) => (
+                      <div
+                        key={curriculum.id}
+                        className='flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3'
+                      >
+                        {curriculum.imageUrl ? (
+                          <img
+                            src={curriculum.imageUrl}
+                            alt={curriculum.title}
+                            className='h-12 w-12 flex-shrink-0 rounded object-cover'
+                          />
+                        ) : (
+                          <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded bg-gradient-to-br from-sky-50 to-sky-400'>
+                            <GraduationCap className='h-6 w-6 text-blue-500' />
+                          </div>
+                        )}
+                        <div className='flex flex-col'>
+                          <p className='font-medium text-slate-900'>{curriculum.title}</p>
+                          <p className='text-xs text-slate-500'>
+                            {curriculum.courseCount} course{curriculum.courseCount !== 1 ? 's' : ''}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+
+            {/* Divider */}
+            <div className='border-t border-slate-300'></div>
 
             {/* Plan Overview Display */}
             {selectedPlanInfo && (
               <>
-                <div className='border-t border-slate-200'></div>
                 <div className='space-y-4'>
                   <div className='flex items-center justify-between'>
                     <Label className='text-base font-semibold text-slate-900'>Plan Overview</Label>
@@ -453,65 +474,6 @@ export default function Step3SubscriptionConfiguration() {
 
                   {/* Plan Details Grid */}
                   <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                    {/* Price Info */}
-                    <div className='rounded-lg border border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50 p-4'>
-                      <div className='flex items-start justify-between'>
-                        <div className='flex-1'>
-                          <p className='text-xs font-medium text-slate-600'>Plan Price</p>
-                          <div className='mt-1 flex items-baseline gap-1'>
-                            <span
-                              className={cn(
-                                'text-2xl font-bold',
-                                discountPercent > 0 ? 'text-slate-400 line-through' : 'text-blue-600'
-                              )}
-                            >
-                              ${selectedPlanInfo.price.toLocaleString()}
-                            </span>
-                            <span className='text-xs text-slate-500'>
-                              /{selectedBillingCycle === BillingCycle.ANNUAL ? 'year' : '6 months'}
-                            </span>
-                          </div>
-                          {discountPercent > 0 && (
-                            <div className='mt-2 space-y-1'>
-                              <div className='flex items-center gap-2'>
-                                <span className='rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700'>
-                                  -{discountPercent}%
-                                </span>
-                                <span className='text-xs text-slate-500'>
-                                  Save ${((selectedPlanInfo.price * discountPercent) / 100).toFixed(2)}
-                                </span>
-                              </div>
-                              <div className='flex items-baseline gap-1'>
-                                <p className='text-xs text-green-600'>Final Price:</p>
-                                <p className='text-2xl font-bold text-green-700'>
-                                  ${calculateFinalPrice().toLocaleString()}
-                                </p>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-blue-100'>
-                          <Tag className='h-5 w-5 text-blue-600' />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Billing Period */}
-                    <div className='rounded-lg border border-slate-200 bg-gradient-to-br from-purple-50 to-pink-50 p-4'>
-                      <div className='flex items-start justify-between'>
-                        <div>
-                          <p className='text-xs font-medium text-slate-600'>Billing Period</p>
-                          <p className='mt-1 text-2xl font-bold text-purple-600'>
-                            {selectedBillingCycle === BillingCycle.ANNUAL ? '12' : '6'}
-                          </p>
-                          <p className='text-xs text-slate-500'>months</p>
-                        </div>
-                        <div className='flex h-10 w-10 items-center justify-center rounded-full bg-purple-100'>
-                          <Calendar className='h-5 w-5 text-purple-600' />
-                        </div>
-                      </div>
-                    </div>
-
                     {/* Student Seats */}
                     <div className='rounded-lg border border-slate-200 bg-gradient-to-br from-green-50 to-emerald-50 p-4'>
                       <div className='flex items-start justify-between'>
@@ -548,24 +510,61 @@ export default function Step3SubscriptionConfiguration() {
                       <p className='mt-1 text-sm text-slate-700'>{selectedPlanInfo.description}</p>
                     </div>
                   )}
-
-                  {/* Curriculum Count */}
-                  {selectedPlanInfo.curriculumCount > 0 && (
-                    <div className='flex items-center gap-2 rounded-md bg-indigo-50 px-4 py-2'>
-                      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100'>
-                        <span className='text-sm font-bold text-indigo-600'>{selectedPlanInfo.curriculumCount}</span>
-                      </div>
-                      <span className='text-sm font-medium text-slate-700'>Available Curriculums in this plan</span>
-                    </div>
-                  )}
                 </div>
               </>
             )}
+            <div className='border-t border-slate-300'></div>
+
+            {/* Discount and Final Price */}
+            <div className='space-y-4'>
+              <Label className='text-base font-semibold text-slate-900'>Pricing</Label>
+
+              {/* Discount Input */}
+              <form.AppField name='discountPercent'>
+                {(field) => (
+                  <div className='space-y-2'>
+                    <field.TextField
+                      type='number'
+                      label='Discount (%)'
+                      min={0}
+                      max={100}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = Number(e.target.value)
+                        setDiscountPercent(value)
+                        field.form.setFieldValue('discountPercent', value)
+                      }}
+                    />
+                  </div>
+                )}
+              </form.AppField>
+
+              {/* Price Summary */}
+              {selectedPlanInfo && (
+                <div className='mt-4 space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-4'>
+                  <div className='flex justify-between text-sm'>
+                    <span className='font-medium text-slate-700'>Total Amount</span>
+                    <span className='font-semibold text-slate-900'>${selectedPlanInfo.price.toLocaleString()}</span>
+                  </div>
+
+                  <div className='flex justify-between text-sm'>
+                    <span className='font-medium text-slate-700'>Discount</span>
+                    <span className='font-semibold text-green-600'>
+                      {discountPercent > 0 ? `-${discountPercent}%` : '—'}
+                    </span>
+                  </div>
+
+                  <div className='flex justify-between border-t border-slate-200 pt-2 text-base'>
+                    <span className='font-semibold text-slate-900'>Final Amount</span>
+                    <span className='font-bold text-blue-600'>${calculateFinalPrice().toLocaleString()}</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Error Display - Only show if there are actual errors after user interaction */}
+      {/* Error Display */}
       {Object.keys(form.state.errors).length > 0 && form.state.isSubmitted && (
         <Card className='border-2 border-red-200 bg-red-50'>
           <CardContent className='p-4'>

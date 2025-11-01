@@ -13,7 +13,7 @@ import {
 } from '@/features/contract/api/contractApi'
 import { fileToBase64 } from '@/utils/index'
 import { useEffect, useRef } from 'react'
-import { goBack, goNext } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
+import { goBack, goNext, setContractId } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 
 const contractDefaultValues: ContractFormData = {
   name: '',
@@ -49,12 +49,13 @@ export default function Step2ContractCreation() {
 
       const payload = {
         ...value,
-        organizationId: 1
+        organizationId: organizationId
       }
 
-      createContract(payload).unwrap()
+      const res = await createContract(payload).unwrap()
 
       toast.success('Contract step validated successfully!')
+      dispatch(setContractId(res.data.id))
       dispatch(goNext())
     }
   })

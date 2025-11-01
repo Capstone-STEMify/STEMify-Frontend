@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/shadcn/skeleton'
 import { useGetOrganizationByIdQuery } from '@/features/organization/api/organizationApi'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDateV2 } from '@/utils/index'
-import { Building2, Calendar } from 'lucide-react'
+import { Building2, Calendar, GraduationCap } from 'lucide-react'
 
 type OrganizationInfoProps = {
   organizationId: number
@@ -47,12 +47,18 @@ export default function OrganizationInfo({ organizationId }: OrganizationInfoPro
       <CardHeader className='pb-3'>
         <div className='flex items-center gap-3'>
           <div className='relative h-12 w-12 overflow-hidden rounded-full border'>
-            <Image
-              src={organization.imageUrl || '/placeholder.png'}
-              alt={organization.name || 'Organization logo'}
-              fill
-              className='object-cover'
-            />
+            {organization.imageUrl ? (
+              <Image
+                src={organization.imageUrl}
+                alt={organization.name || 'Organization logo'}
+                fill
+                className='object-cover'
+              />
+            ) : (
+              <div className='flex h-full w-full items-center justify-center bg-sky-100 text-xl font-semibold text-blue-400'>
+                <GraduationCap className='h-4 w-4' />
+              </div>
+            )}
           </div>
           <div className='flex-1'>
             <CardTitle className='line-clamp-1 text-base font-semibold'>{organization.name}</CardTitle>
@@ -88,7 +94,7 @@ export default function OrganizationInfo({ organizationId }: OrganizationInfoPro
               <Calendar size={14} />
               Updated
             </span>
-            <span>{formatDateV2(new Date(organization.lastModifiedDate))}</span>
+            <span>{formatDateV2(new Date(organization.lastModifiedDate ?? organization.createdDate))}</span>
           </div>
           <div className='flex justify-between'>
             <span className='text-muted-foreground'>Subscriptions</span>

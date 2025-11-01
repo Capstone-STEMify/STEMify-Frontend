@@ -7,8 +7,11 @@ interface UploadedFile {
   name: string
   size?: number
 }
+export interface UploadCSVProps {
+  organizationSubscriptionOrderId?: number
+}
 
-export default function UploadCSV() {
+export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSVProps) {
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
   const [isUploading, setIsUploading] = useState<boolean>(false)
