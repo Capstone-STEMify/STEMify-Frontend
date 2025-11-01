@@ -4,14 +4,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/s
 import { Button } from '@/components/shadcn/button'
 import { CheckCircle2 } from 'lucide-react'
 
-interface SuccessModalProps {
-  open: boolean
+type SuccessModalProps = {
   onClose: () => void
 }
 
-export default function SuccessModal({ open, onClose }: SuccessModalProps) {
+export default function SuccessModal({ onClose }: SuccessModalProps) {
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open onOpenChange={onClose}>
       <DialogContent className='max-w-md rounded-2xl border-0 bg-gradient-to-br from-sky-50 to-blue-50 p-8 shadow-2xl'>
         <DialogHeader className='flex flex-col items-center space-y-4 text-center'>
           <div className='flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg'>
