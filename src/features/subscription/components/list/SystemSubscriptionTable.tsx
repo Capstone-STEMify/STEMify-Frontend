@@ -77,14 +77,12 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
 
                   <TableCell className='space-y-1'>
                     <p>
-                      <span className='text-foreground font-semibold'>{subscription.currentStudentSeats ?? '-'}</span>/
                       <span className='text-foreground font-semibold'>{subscription.maxStudentSeats ?? '-'}</span>
                     </p>
                   </TableCell>
 
                   <TableCell className='space-y-1'>
                     <p>
-                      <span className='text-foreground font-semibold'>{subscription.currentTeacherSeats ?? '-'}</span>/
                       <span className='text-foreground font-semibold'>{subscription.maxTeacherSeats ?? '-'}</span>
                     </p>
                   </TableCell>
