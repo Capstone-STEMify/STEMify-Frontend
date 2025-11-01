@@ -39,9 +39,9 @@ export default function CreateOrganizationSubscription() {
                 <div
                   className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all duration-300 ${
                     currentStep > step.number
-                      ? 'border-transparent bg-gradient-to-r from-sky-300 to-blue-600 text-white shadow-md'
+                      ? 'border-transparent bg-sky-500 text-white shadow-md'
                       : currentStep === step.number
-                        ? 'border-blue-400 bg-white text-blue-600 shadow-sm'
+                        ? 'border-sky-400 bg-white text-sky-500 shadow-sm'
                         : 'border-slate-200 bg-white text-slate-400'
                   }`}
                 >
@@ -55,7 +55,7 @@ export default function CreateOrganizationSubscription() {
                 {/* Label */}
                 <div className='mt-2 text-center'>
                   <p
-                    className={`text-sm font-medium ${currentStep >= step.number ? 'text-blue-700' : 'text-slate-400'}`}
+                    className={`text-sm font-medium ${currentStep >= step.number ? 'text-sky-500' : 'text-slate-400'}`}
                   >
                     {step.title}
                   </p>

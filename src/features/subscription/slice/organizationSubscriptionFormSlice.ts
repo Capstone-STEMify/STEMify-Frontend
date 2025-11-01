@@ -11,7 +11,7 @@ type OrganizationSubscriptionFormState = {
 }
 
 const initialState: OrganizationSubscriptionFormState = {
-  currentStep: 2,
+  currentStep: 4,
   loading: false,
   organizationId: undefined,
   contractId: undefined,
