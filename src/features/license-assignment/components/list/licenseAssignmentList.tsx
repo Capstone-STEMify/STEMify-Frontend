@@ -16,7 +16,9 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import useDebounce from '@/hooks/useDebounce'
 import { useModal } from '@/providers/ModalProvider'
 import { cn } from '@/utils/shadcn/utils'
+import { or } from 'ajv/dist/compile/codegen'
 import { CheckCircle, UserPlus } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 export default function LicenseAssignmentList() {
@@ -27,11 +29,12 @@ export default function LicenseAssignmentList() {
   const debouncedSearchQuery = useDebounce(search, 500)
 
   const params = useAppSelector((state) => state.licenseAssignment)
+  const { subscriptionId } = useParams()
   useEffect(() => {
-    dispatch(setParam({ key: 'organizationSubscriptionOrderId', value: params.organizationSubscriptionOrderId }))
+    dispatch(setParam({ key: 'organizationSubscriptionOrderId', value: subscriptionId }))
     dispatch(setParam({ key: 'status', value: currentTab }))
     dispatch(setParam({ key: 'search', value: debouncedSearchQuery }))
-  }, [dispatch, params.organizationSubscriptionOrderId, currentTab, debouncedSearchQuery])
+  }, [dispatch, subscriptionId, currentTab, debouncedSearchQuery])
 
   const { data: licenses, isLoading } = useSearchLicenseAssignmentQuery(params)
   const rows = React.useMemo(() => licenses?.data.items ?? [], [licenses])
@@ -71,7 +74,10 @@ export default function LicenseAssignmentList() {
               <CardTitle className='text-xl'>User Management</CardTitle>
               <p className='text-muted-foreground mt-1 text-sm'>Manage users and pending invitations</p>
             </div>
-            <Button className='bg-sky-500' onClick={() => openModal('uploadCSV')}>
+            <Button
+              className='bg-sky-500'
+              onClick={() => openModal('uploadCSV', { organizationSubscriptionOrderId: Number(subscriptionId) })}
+            >
               <UserPlus className='mr-2 h-4 w-4' />
               Invite Users
             </Button>
