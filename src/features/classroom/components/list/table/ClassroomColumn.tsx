@@ -16,7 +16,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
       cell: ({ row }) => {
         const curriculum = row.original.curriculum
         return (
-          <div className='flex items-center gap-3'>
+          <div className='flex items-center gap-3 py-4'>
             {curriculum.imageUrl ? (
               <img
                 src={curriculum.imageUrl}

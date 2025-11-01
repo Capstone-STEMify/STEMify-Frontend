@@ -23,7 +23,7 @@ export default function OrganizationClassroomList() {
   }
 
   return (
-    <main className='min-h-screen bg-gray-50 px-8'>
+    <main className='min-h-screen px-8'>
       <div className='mx-auto max-w-7xl'>
         {/* <div className='mb-6 flex items-end justify-between'>
           <div>
