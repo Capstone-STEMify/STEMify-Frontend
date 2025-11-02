@@ -28,12 +28,7 @@ export default function TeacherQuiz() {
   }
 
   return (
-    <div
-      className={cn(
-        'min-h-screen p-4 transition-colors duration-300 sm:p-6 lg:p-8',
-        activeTab === 'overview' ? 'bg-gray-50' : 'bg-white'
-      )}
-    >
+    <div className={cn('min-h-screen p-4 transition-colors duration-300', 'bg-slate-50/50')}>
       <div className='mx-auto max-w-7xl'>
         <QuizNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 

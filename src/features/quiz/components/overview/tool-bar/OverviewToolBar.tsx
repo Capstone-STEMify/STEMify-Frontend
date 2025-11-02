@@ -25,10 +25,9 @@ export function QuizOverviewToolbar() {
         </Button>
       </div>
       <div className='mt-4 flex items-center gap-4'>
-        <span className='text-sm font-medium text-gray-700'>100 content</span>
         <div className='relative flex-grow'>
           <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400' />
-          <Input placeholder='Search...' className='pl-9' />
+          <Input placeholder='Search...' className='bg-white pl-9' />
         </div>
       </div>
     </div>

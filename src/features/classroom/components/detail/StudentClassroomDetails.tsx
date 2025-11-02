@@ -77,7 +77,8 @@ export default function StudentClassroomDetail() {
       createEnrollment({
         curriculumId: classroom?.curriculum.id,
         studentId: auth?.user?.userId,
-        status: EnrollmentStatus.IN_PROGRESS
+        status: EnrollmentStatus.IN_PROGRESS,
+        classroomId: Number(classroomId)
       })
       toast.success(tt('successMessage.enroll'), {
         description: `${tt('successMessage.enrollDes', { title: createEnrollmentResponse?.data.curriculumTitle || '' })}`
@@ -129,7 +130,7 @@ export default function StudentClassroomDetail() {
               <Card className='overflow-hidden border border-slate-200 py-4 shadow-sm'>
                 <CardHeader className='pb-4'>
                   <CardTitle className='flex items-center gap-2 text-lg'>
-                    <BookOpen className='h-5 w-5 text-purple-600' />
+                    <BookOpen className='h-5 w-5 text-blue-600' />
                     Curriculum
                   </CardTitle>
                 </CardHeader>
@@ -148,7 +149,7 @@ export default function StudentClassroomDetail() {
                     <div className='flex-1'>
                       <div className='mb-2 flex items-start justify-between gap-2'>
                         <h3 className='text-xl font-bold text-slate-900'>{classroom.curriculum.title}</h3>
-                        <Badge variant='secondary' className='border-0 bg-purple-100 text-purple-700'>
+                        <Badge variant='secondary' className='border-0 bg-emerald-100 text-emerald-700'>
                           {classroom.curriculum.code}
                         </Badge>
                       </div>
@@ -201,7 +202,7 @@ export default function StudentClassroomDetail() {
                       >
                         <Avatar className='h-10 w-10 border-2 border-white shadow-sm'>
                           <AvatarImage src={student.imageUrl || student.ImageUrl} />
-                          <AvatarFallback className='bg-gradient-to-br from-blue-500 to-purple-500 text-white'>
+                          <AvatarFallback className='bg-gradient-to-br from-purple-100 to-blue-500 text-white'>
                             {student.name?.charAt(0).toUpperCase() || student.Name?.charAt(0).toUpperCase() || 'S'}
                           </AvatarFallback>
                         </Avatar>
@@ -266,7 +267,7 @@ export default function StudentClassroomDetail() {
                   <div className='flex items-start gap-3'>
                     <Avatar className='h-12 w-12 border-2 border-white shadow-md'>
                       <AvatarImage src={classroom.teacher.ImageUrl} />
-                      <AvatarFallback className='bg-gradient-to-br from-blue-500 to-purple-500 font-semibold text-white'>
+                      <AvatarFallback className='bg-gradient-to-br from-amber-100 to-amber-500 font-semibold text-white'>
                         {classroom.teacher.Name.split(' ')
                           .map((n) => n[0])
                           .join('')

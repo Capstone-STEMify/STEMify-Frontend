@@ -65,7 +65,7 @@ export default function ClassroomDetail() {
         <div className='text-center'>
           <h2 className='mb-2 text-2xl font-bold text-slate-900'>Classroom not found</h2>
           <p className='mb-6 text-slate-600'>The classroom you're looking for doesn't exist.</p>
-          <Link href='/classroom'>
+          <Link href='/organization/classroom'>
             <Button>Back to Classrooms</Button>
           </Link>
         </div>
@@ -77,7 +77,7 @@ export default function ClassroomDetail() {
     <div className='min-h-screen bg-slate-50/50'>
       <div className='container mx-auto px-6 pb-8'>
         {/* Back Button */}
-        <Link href='/classroom'>
+        <Link href='/organization/classroom'>
           <Button variant='ghost' className='mb-6 -ml-2'>
             <ArrowLeft className='mr-2 h-4 w-4' />
             Back to Classrooms
@@ -133,7 +133,7 @@ export default function ClassroomDetail() {
               <Card className='overflow-hidden border border-slate-200 py-4 shadow-sm'>
                 <CardHeader className='pb-4'>
                   <CardTitle className='flex items-center gap-2 text-lg'>
-                    <BookOpen className='h-5 w-5 text-purple-600' />
+                    <BookOpen className='h-5 w-5 text-purple-500' />
                     Curriculum
                   </CardTitle>
                 </CardHeader>
@@ -152,7 +152,7 @@ export default function ClassroomDetail() {
                     <div className='flex-1'>
                       <div className='mb-2 flex items-start justify-between gap-2'>
                         <h3 className='text-xl font-bold text-slate-900'>{classroom.curriculum.title}</h3>
-                        <Badge variant='secondary' className='border-0 bg-purple-100 text-purple-700'>
+                        <Badge variant='secondary' className='border-0 bg-emerald-100 text-emerald-700'>
                           {classroom.curriculum.code}
                         </Badge>
                       </div>
@@ -179,7 +179,6 @@ export default function ClassroomDetail() {
                   </CardTitle>
                   <Button
                     size='sm'
-                    className='bg-blue-600 hover:bg-blue-700'
                     onClick={() => {
                       openModal('addPeople')
                     }}
@@ -199,7 +198,7 @@ export default function ClassroomDetail() {
                       >
                         <Avatar className='h-10 w-10 border-2 border-white shadow-sm'>
                           <AvatarImage src={student.imageUrl || student.ImageUrl} />
-                          <AvatarFallback className='bg-gradient-to-br from-blue-500 to-purple-500 text-white'>
+                          <AvatarFallback className='bg-gradient-to-br from-purple-100 to-blue-500 text-white'>
                             {student.name?.charAt(0).toUpperCase() || student.Name?.charAt(0).toUpperCase() || 'S'}
                           </AvatarFallback>
                         </Avatar>
@@ -222,7 +221,7 @@ export default function ClassroomDetail() {
                     <Users className='mx-auto mb-3 h-12 w-12 text-slate-300' />
                     <h3 className='mb-1 font-semibold text-slate-700'>No students yet</h3>
                     <p className='mb-4 text-sm text-slate-500'>Start building your class by adding students</p>
-                    <Button className='bg-blue-600 hover:bg-blue-700'>
+                    <Button>
                       <UserPlus className='mr-2 h-4 w-4' />
                       Add First Student
                     </Button>
@@ -264,7 +263,7 @@ export default function ClassroomDetail() {
                   <div className='flex items-start gap-3'>
                     <Avatar className='h-12 w-12 border-2 border-white shadow-md'>
                       <AvatarImage src={classroom.teacher.ImageUrl} />
-                      <AvatarFallback className='bg-gradient-to-br from-blue-500 to-purple-500 font-semibold text-white'>
+                      <AvatarFallback className='bg-gradient-to-br from-amber-100 to-amber-500 font-semibold text-white'>
                         {classroom.teacher.Name.split(' ')
                           .map((n) => n[0])
                           .join('')

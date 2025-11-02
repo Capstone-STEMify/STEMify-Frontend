@@ -48,7 +48,7 @@ export default function ClassroomSubHeaderClient({ locale, classroom, curriculum
               <ArrowLeft className='h-5 w-5' />
             </Button>
             <div className='h-8 w-px bg-gray-200' />
-            <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 shadow-md'>
+            <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-sky-600 shadow-md'>
               <span className='text-xl font-bold text-white'>{classroom.name?.charAt(0).toUpperCase() ?? 'C'}</span>
             </div>
             <div>

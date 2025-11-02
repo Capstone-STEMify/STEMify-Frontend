@@ -45,7 +45,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer }: QuizViewerPro
   const questions = quizData.data.questions
 
   return (
-    <div className='mx-auto max-w-4xl space-y-6 pb-8'>
+    <div className='mx-auto max-w-4xl space-y-6 p-8'>
       {/* Quiz Header */}
       <div className='space-y-4'>
         <div className='space-y-2 text-center'>
@@ -83,7 +83,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer }: QuizViewerPro
                   <Clock className='h-6 w-6 text-sky-600' />
                 </div>
                 <p className='text-sm font-medium text-gray-600'>Question Length</p>
-                <p className='text-2xl font-bold text-gray-900'>{questions.length} mins</p>
+                <p className='text-2xl font-bold text-gray-900'>{questions.length}</p>
               </div>
             </div>
           </CardContent>
@@ -215,7 +215,11 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer }: QuizViewerPro
           </div>
         </div>
       ) : (
-        <Button onClick={() => dispatch(setMode('quiz'))}> Start quiz</Button>
+        <div className='flex justify-center'>
+          <Button onClick={() => dispatch(setMode('quiz'))} className='text-md bg-amber-400 px-6 py-5 font-medium'>
+            Attempt Now
+          </Button>
+        </div>
       )}
     </div>
   )
