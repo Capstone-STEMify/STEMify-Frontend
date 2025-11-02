@@ -22,6 +22,8 @@ import { DataTable } from '@/components/shared/data-table/data-table'
 import { UserRole } from '@/types/userRole'
 import { useGetUserAction } from '@/features/user/components/table/UserAction'
 import BackButton from '@/components/shared/button/BackButton'
+import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 type ClassroomFormData = {
   name: string
@@ -59,9 +61,13 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
   const isEditing = !!classroomId
   const { closeModal } = useModal()
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const locale = useLocale()
   const [currentStep, setCurrentStep] = useState(1)
   const [selectedStudentIds, setSelectedStudentIds] = React.useState<string[]>([])
   const [selectedSubscriptionId, setSelectedSubscriptionId] = useState<number | undefined>(undefined)
+  const [minDate, setMinDate] = useState<Date | undefined>(undefined)
+  const [maxDate, setMaxDate] = useState<Date | undefined>(undefined)
 
   // Schema validation
   const classroomSchema = z
@@ -155,6 +161,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
       }
 
       toast.success(`Classroom ${isEditing ? 'updated' : 'created'} successfully`)
+      router.push(`/${locale}/organization/classroom`)
       closeModal()
       onSuccess && onSuccess()
     }
@@ -318,19 +325,6 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
                     />
                   )}
                 />
-
-                {/* Row 2: Dates */}
-                <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-                  <form.AppField
-                    name='startDate'
-                    children={(field) => <field.DatePickerField label='Start Date' placeholder='Select start date' />}
-                  />
-                  <form.AppField
-                    name='endDate'
-                    children={(field) => <field.DatePickerField label='End Date' placeholder='Select end date' />}
-                  />
-                </div>
-
                 {/* Subscription */}
                 <form.AppField
                   name='organizationSubscriptionOrderId'
@@ -343,10 +337,44 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
                       onChange={(val) => {
                         form.setFieldValue('organizationSubscriptionOrderId', Number(val))
                         setSelectedSubscriptionId(Number(val))
+                        const selected = organizationSubscriptionData?.data.items.find((s) => s.id === Number(val))
+
+                        setMinDate(selected ? new Date(selected.startDate) : undefined)
+                        setMaxDate(selected ? new Date(selected.endDate) : undefined)
                       }}
                     />
                   )}
                 />
+                {/* Row 2: Dates */}
+                <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+                  <form.AppField
+                    name='startDate'
+                    children={(field) => {
+                      const today = new Date()
+                      const effectiveMinStartDate = minDate && minDate > today ? minDate : today
+
+                      return (
+                        <field.DatePickerField
+                          label='Start Date'
+                          placeholder='Select start date'
+                          minDate={effectiveMinStartDate}
+                          maxDate={maxDate}
+                        />
+                      )
+                    }}
+                  />
+                  <form.AppField
+                    name='endDate'
+                    children={(field) => (
+                      <field.DatePickerField
+                        label='End Date'
+                        placeholder='Select end date'
+                        minDate={minDate}
+                        maxDate={maxDate}
+                      />
+                    )}
+                  />
+                </div>
               </div>
             </div>
           </div>

@@ -84,7 +84,7 @@ export function SingleSelectWithSearch({ options, value, onChange, placeholder =
                 {options.map((opt) => (
                   <CommandItem
                     key={opt.value}
-                    value={opt.label}
+                    value={opt.value.toString()}
                     onSelect={() => {
                       onChange(opt.value.toString())
                       setOpen(false)
