@@ -51,6 +51,7 @@ export type ModalType =
   | 'selectComponentListModal'
   | 'upsertAssembly'
   | 'quizAI'
+  | 'addPeople'
 
   // sheet
   | 'upsertContact'

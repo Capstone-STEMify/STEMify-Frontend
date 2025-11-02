@@ -26,8 +26,10 @@ import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function ClassroomDetail() {
+  const { openModal } = useModal()
   const { classroomId } = useParams()
   const { data, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
   const classroom = data?.data
@@ -175,7 +177,13 @@ export default function ClassroomDetail() {
                     <Users className='h-5 w-5 text-blue-600' />
                     Students ({classroom.numberOfStudents})
                   </CardTitle>
-                  <Button size='sm' className='bg-blue-600 hover:bg-blue-700'>
+                  <Button
+                    size='sm'
+                    className='bg-blue-600 hover:bg-blue-700'
+                    onClick={() => {
+                      openModal('addPeople')
+                    }}
+                  >
                     <UserPlus className='mr-2 h-4 w-4' />
                     Add Student
                   </Button>
