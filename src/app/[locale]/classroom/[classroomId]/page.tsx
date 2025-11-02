@@ -1,10 +1,10 @@
-import ClassroomDetail from '@/features/classroom/components/detail/ClassroomDetail'
+import StudentClassroomDetail from '@/features/classroom/components/detail/StudentClassroomDetails'
 import React from 'react'
 
 export default function ClassroomDetailPage() {
   return (
     <div>
-      <ClassroomDetail />
+      <StudentClassroomDetail />
     </div>
   )
 }

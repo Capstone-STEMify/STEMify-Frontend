@@ -26,18 +26,63 @@ import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { useModal } from '@/providers/ModalProvider'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { UserRole } from '@/types/userRole'
+import {
+  useCreateCurriculumEnrollmentMutation,
+  useSearchCurriculumEnrollmentQuery
+} from '@/features/enrollment/api/curriculumEnrollmentApi'
+import { useRouter } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
+import { signIn } from 'next-auth/react'
+import { EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
+import { toast } from 'sonner'
 
-export default function ClassroomDetail() {
-  const { openModal } = useModal()
+export default function StudentClassroomDetail() {
+  const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const { classroomId } = useParams()
+  const auth = useAppSelector((state) => state.auth)
+  const userRole = auth.user?.role || UserRole.GUEST
+  const router = useRouter()
+  const locale = useLocale()
+
   const { data, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
   const classroom = data?.data
+
+  const { data: curriculumEnrollment } = useSearchCurriculumEnrollmentQuery(
+    {
+      curriculumId: classroom?.curriculum.id,
+      studentId: auth?.user?.userId || '',
+      classroomId: Number(classroomId),
+      pageNumber: 1,
+      pageSize: 20
+    },
+    { skip: !auth.user?.userId || !classroom?.curriculum.id || userRole !== UserRole.STUDENT }
+  )
+  const [createEnrollment, { data: createEnrollmentResponse }] = useCreateCurriculumEnrollmentMutation()
 
   const copyClassCode = () => {
     if (classroom?.classCode) {
       navigator.clipboard.writeText(classroom.classCode)
       // You can add a toast notification here
+    }
+  }
+  const handleEnroll = () => {
+    if (!auth.user?.userId) {
+      signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
+      return
+    }
+    if (classroom?.curriculum.id) {
+      createEnrollment({
+        curriculumId: classroom?.curriculum.id,
+        studentId: auth?.user?.userId,
+        status: EnrollmentStatus.IN_PROGRESS,
+        classroomId: Number(classroomId)
+      })
+      toast.success(tt('successMessage.enroll'), {
+        description: `${tt('successMessage.enrollDes', { title: createEnrollmentResponse?.data.curriculumTitle || '' })}`
+      })
     }
   }
 
@@ -65,7 +110,7 @@ export default function ClassroomDetail() {
         <div className='text-center'>
           <h2 className='mb-2 text-2xl font-bold text-slate-900'>Classroom not found</h2>
           <p className='mb-6 text-slate-600'>The classroom you're looking for doesn't exist.</p>
-          <Link href='/organization/classroom'>
+          <Link href='/classroom'>
             <Button>Back to Classrooms</Button>
           </Link>
         </div>
@@ -75,55 +120,7 @@ export default function ClassroomDetail() {
 
   return (
     <div className='min-h-screen bg-slate-50/50'>
-      <div className='container mx-auto px-6 pb-8'>
-        {/* Back Button */}
-        <Link href='/organization/classroom'>
-          <Button variant='ghost' className='mb-6 -ml-2'>
-            <ArrowLeft className='mr-2 h-4 w-4' />
-            Back to Classrooms
-          </Button>
-        </Link>
-
-        {/* Header Section */}
-        <div className='mb-8'>
-          <div className='mb-4 flex items-start justify-between gap-4'>
-            <div className='flex-1'>
-              <div className='mb-2 flex items-center gap-3'>
-                <h1 className='text-4xl font-bold text-slate-900'>{classroom.name}</h1>
-                <Badge className={`border ${getStatusBadgeClass(classroom.status)}`}>{classroom.status}</Badge>
-              </div>
-              <div className='flex items-center gap-4 text-slate-600'>
-                <div className='flex items-center gap-2'>
-                  <GraduationCap className='h-4 w-4' />
-                  <span className='text-sm font-medium'>{classroom.grade}</span>
-                </div>
-                <div className='flex items-center gap-2'>
-                  <Users className='h-4 w-4' />
-                  <span className='text-sm font-medium'>{classroom.numberOfStudents} Students</span>
-                </div>
-                <div className='flex items-center gap-2'>
-                  <Calendar className='h-4 w-4' />
-                  <span className='text-sm'>
-                    {format(new Date(classroom.startDate), 'MMM dd, yyyy')} -{' '}
-                    {format(new Date(classroom.endDate), 'MMM dd, yyyy')}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className='flex gap-2'>
-              <Button variant='outline' size='icon'>
-                <Settings className='h-4 w-4' />
-              </Button>
-              <Button variant='outline' size='icon'>
-                <MoreVertical className='h-4 w-4' />
-              </Button>
-            </div>
-          </div>
-
-          {/* Description */}
-          {classroom.description && <p className='max-w-3xl text-slate-700'>{classroom.description}</p>}
-        </div>
-
+      <div className='container mx-auto px-6 py-8'>
         {/* Main Content Grid */}
         <div className='grid gap-6 md:grid-cols-3'>
           {/* Left Column - Main Info */}
@@ -133,7 +130,7 @@ export default function ClassroomDetail() {
               <Card className='overflow-hidden border border-slate-200 py-4 shadow-sm'>
                 <CardHeader className='pb-4'>
                   <CardTitle className='flex items-center gap-2 text-lg'>
-                    <BookOpen className='h-5 w-5 text-purple-500' />
+                    <BookOpen className='h-5 w-5 text-blue-600' />
                     Curriculum
                   </CardTitle>
                 </CardHeader>
@@ -165,6 +162,22 @@ export default function ClassroomDetail() {
                       </div>
                     </div>
                   </div>
+                  {curriculumEnrollment?.data.items[0] ? (
+                    <Button
+                      className='mt-4'
+                      onClick={() =>
+                        router.push(
+                          `/${locale}/classroom/${classroom.id}/course?curriculumId=${classroom.curriculum.id}`
+                        )
+                      }
+                    >
+                      Continue Learning
+                    </Button>
+                  ) : (
+                    <Button className='mt-4' onClick={handleEnroll}>
+                      {tc('button.enroll')}
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             )}
@@ -177,15 +190,6 @@ export default function ClassroomDetail() {
                     <Users className='h-5 w-5 text-blue-600' />
                     Students ({classroom.numberOfStudents})
                   </CardTitle>
-                  <Button
-                    size='sm'
-                    onClick={() => {
-                      openModal('addPeople')
-                    }}
-                  >
-                    <UserPlus className='mr-2 h-4 w-4' />
-                    Add Student
-                  </Button>
                 </div>
               </CardHeader>
               <CardContent>
@@ -221,7 +225,7 @@ export default function ClassroomDetail() {
                     <Users className='mx-auto mb-3 h-12 w-12 text-slate-300' />
                     <h3 className='mb-1 font-semibold text-slate-700'>No students yet</h3>
                     <p className='mb-4 text-sm text-slate-500'>Start building your class by adding students</p>
-                    <Button>
+                    <Button className='bg-blue-600 hover:bg-blue-700'>
                       <UserPlus className='mr-2 h-4 w-4' />
                       Add First Student
                     </Button>
@@ -313,39 +317,6 @@ export default function ClassroomDetail() {
                     </svg>
                     <span>Visible to students</span>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Stats Card */}
-            <Card className='border border-slate-200 py-4 shadow-sm'>
-              <CardHeader className='pb-3'>
-                <CardTitle className='text-base'>Quick Stats</CardTitle>
-              </CardHeader>
-              <CardContent className='space-y-4'>
-                <div className='flex items-center justify-between'>
-                  <span className='text-sm text-slate-600'>Created</span>
-                  <span className='text-sm font-medium text-slate-900'>
-                    {format(new Date(classroom.createdAt), 'MMM dd, yyyy')}
-                  </span>
-                </div>
-                <Separator />
-                <div className='flex items-center justify-between'>
-                  <span className='text-sm text-slate-600'>Last Updated</span>
-                  <span className='text-sm font-medium text-slate-900'>
-                    {format(new Date(classroom.updatedAt), 'MMM dd, yyyy')}
-                  </span>
-                </div>
-                <Separator />
-                <div className='flex items-center justify-between'>
-                  <span className='text-sm text-slate-600'>Duration</span>
-                  <span className='text-sm font-medium text-slate-900'>
-                    {Math.ceil(
-                      (new Date(classroom.endDate).getTime() - new Date(classroom.startDate).getTime()) /
-                        (1000 * 60 * 60 * 24)
-                    )}{' '}
-                    days
-                  </span>
                 </div>
               </CardContent>
             </Card>

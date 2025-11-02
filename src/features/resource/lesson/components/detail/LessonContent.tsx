@@ -42,6 +42,16 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
   const { data: content, isLoading: fetchingContent, isError, error } = useSearchContentQuery({ sectionId })
   const [completeSection, { isLoading }] = useUpdateSectionStudentProgressMutation()
 
+  function normalizeMarkdown(text: string): string {
+    return text.replace(/\\n/g, '\n')
+  }
+
+  const currentSectionProgress = sectionStatus?.data.items.find((item) => item.sectionId === sectionId)
+
+  if (!content || content.data.items.length === 0) {
+    return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
+  }
+
   if (fetchingContent) {
     return (
       <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
@@ -52,10 +62,6 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
 
   if (!sectionId) {
     return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
-  }
-
-  if (content?.data.items[0].contentType === ContentType.QUIZ) {
-    return <QuizViewer quiz={content.data.items[0]} />
   }
 
   const handleCompleteSection = async () => {
@@ -70,58 +76,52 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
     }
   }
 
-  function normalizeMarkdown(text: string): string {
-    return text.replace(/\\n/g, '\n')
+  if (!content || content.data.items.length === 0) return null
+
+  const lastItem = content.data.items[content.data.items.length - 1]
+
+  if (lastItem.contentType === ContentType.QUIZ) {
+    return <QuizViewer quiz={lastItem} />
   }
 
-  const currentSectionProgress = sectionStatus?.data.items.find((item) => item.sectionId === sectionId)
-
-  if (!content || content.data.items.length === 0) {
-    return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
-  }
-
-  if (content) {
-    return (
-      <div className='relative flex min-h-[650px] flex-col gap-6 p-6'>
-        {/* Content with conditional blur */}
-        <div className={`flex-1 ${!isLoggedIn ? 'blur-xs' : ''}`}>
-          <div key={content.data.items[0].id} className='prose mx-auto w-full flex-1'>
-            <ScrollArea className='h-[650px]'>
-              <TiptapViewer content={normalizeMarkdown(content.data.items[0].contentBody)} />
-            </ScrollArea>
-          </div>
+  return (
+    <div className='relative flex min-h-[650px] flex-col gap-6 p-6'>
+      {/* Content with conditional blur */}
+      <div className={`flex-1 ${!isLoggedIn ? 'blur-xs' : ''}`}>
+        <div key={lastItem.id} className='prose mx-auto w-full flex-1'>
+          <ScrollArea className='h-[650px]'>
+            <TiptapViewer content={normalizeMarkdown(lastItem.contentBody)} />
+          </ScrollArea>
         </div>
+      </div>
 
-        {/* Login overlay when not logged in */}
-        {!isLoggedIn && (
-          <div className='absolute inset-0 flex items-center justify-center bg-white/80'>
-            <div className='bg-sky-custom-300 flex max-w-md flex-col items-center gap-4 rounded-lg p-6 text-white shadow-lg'>
-              <Info size={24} className='text-white' />
-              <div className='text-center'>
-                <h3 className='mb-2 text-lg font-semibold'>{t('requestSignIn.title')}</h3>
-                <p className='text-sm'>{t('requestSignIn.description')}</p>
-              </div>
-              <Button
-                className='bg-white text-sky-500 hover:bg-gray-50'
-                onClick={() => signIn('oidc', { callbackUrl: '/', prompt: 'login' })}
-              >
-                {t('requestSignIn.button')}
-              </Button>
+      {/* Login overlay when not logged in */}
+      {!isLoggedIn && (
+        <div className='absolute inset-0 flex items-center justify-center bg-white/80'>
+          <div className='bg-sky-custom-300 flex max-w-md flex-col items-center gap-4 rounded-lg p-6 text-white shadow-lg'>
+            <Info size={24} className='text-white' />
+            <div className='text-center'>
+              <h3 className='mb-2 text-lg font-semibold'>{t('requestSignIn.title')}</h3>
+              <p className='text-sm'>{t('requestSignIn.description')}</p>
             </div>
-          </div>
-        )}
-
-        {/* Complete section button - only show if logged in */}
-        {isLoggedIn && currentSectionProgress?.status === ProgressStatus.IN_PROGRESS && (
-          <div className='mt-auto self-end'>
-            <Button className='bg-amber-custom-400' onClick={handleCompleteSection} disabled={isLoading}>
-              {isLoading ? 'Completing...' : 'Mark as Complete'}
+            <Button
+              className='bg-white text-sky-500 hover:bg-gray-50'
+              onClick={() => signIn('oidc', { callbackUrl: '/', prompt: 'login' })}
+            >
+              {t('requestSignIn.button')}
             </Button>
           </div>
-        )}
-      </div>
-    )
-  }
+        </div>
+      )}
 
-  return <div>{t('notFound.no_section')}</div>
+      {/* Complete section button - only show if logged in */}
+      {isLoggedIn && currentSectionProgress?.status === ProgressStatus.IN_PROGRESS && (
+        <div className='mt-auto self-end'>
+          <Button className='bg-amber-custom-400' onClick={handleCompleteSection} disabled={isLoading}>
+            {isLoading ? 'Completing...' : 'Mark as Complete'}
+          </Button>
+        </div>
+      )}
+    </div>
+  )
 }

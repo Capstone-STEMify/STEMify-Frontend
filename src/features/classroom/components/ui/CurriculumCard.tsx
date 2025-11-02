@@ -7,56 +7,38 @@ interface Student {
   avatar: string
 }
 
-interface ClassroomCardProps {
+interface CurriculumCardProps {
   id: number
-  category: string
+  curriculumTitle: string
   duration: string
   students: Student[]
-  title: string
-  buttonText: string
-  buttonColor: string
-  bgColor?: string
-  textColor?: string
-  borderColor?: string
+  curriculumCode: string
 }
 
-export function ClassroomCard({
-  category,
+export function CurriculumCard({
+  curriculumTitle,
   duration,
-  title,
-  buttonText,
-  buttonColor,
-  students,
-  bgColor = 'bg-white',
-  textColor = 'text-white',
-  borderColor = ''
-}: ClassroomCardProps) {
+  curriculumCode,
+  students
+}: CurriculumCardProps) {
   return (
-    <div className={`flex h-full flex-col justify-between rounded-lg p-6 ${bgColor} ${borderColor}`}>
+    <div className={`flex h-full flex-col justify-between rounded-lg bg-white p-6`}>
       {/* Header */}
       <div className='mb-6'>
         <div className='mb-4 flex items-start justify-between'>
-          <span
-            className={`text-xs font-semibold tracking-wider ${textColor === 'text-white' ? 'text-teal-100' : 'text-teal-600'}`}
-          >
-            {category}
-          </span>
-          <span className={`text-xs font-semibold ${textColor === 'text-white' ? 'text-teal-100' : 'text-gray-500'}`}>
-            {duration}
-          </span>
+          <span className={'text-xs font-semibold tracking-wider text-teal-100'}>{curriculumCode}</span>
+          <span className={'text-xs font-semibold tracking-wider text-teal-100'}>{duration}</span>
         </div>
 
         {/* Title */}
-        <h3 className={`text-lg leading-tight font-bold ${textColor}`}>{title}</h3>
+        <h3 className={`text-lg leading-tight font-bold text-gray-900`}>{curriculumTitle}</h3>
       </div>
 
       {/* Footer */}
       <div className='flex items-end justify-between'>
         {/* Button */}
-        <Button
-          className={`${buttonColor} rounded px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90`}
-        >
-          {buttonText}
+        <Button className={`bg-teal-600 rounded px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90`}>
+          Enroll
         </Button>
 
         {/* Student Avatars */}

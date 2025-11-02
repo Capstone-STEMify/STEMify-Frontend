@@ -42,7 +42,7 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
       {isLastQuestion ? (
         <Button
           onClick={() => dispatch(submitQuiz())}
-          className={`flex items-center gap-2 px-4 py-2 font-semibold shadow-lg md:px-6 md:py-3 ${
+          className={`flex items-center gap-2 bg-amber-400 px-4 py-2 font-semibold shadow-lg md:px-6 md:py-3 ${
             isMobile ? 'w-full justify-center text-sm' : ''
           }`}
         >
@@ -52,6 +52,7 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
       ) : (
         <Button
           onClick={() => dispatch(goToNextQuestion())}
+          variant='secondary'
           className={`flex items-center gap-2 px-4 py-2 font-semibold md:px-6 md:py-3 ${
             isMobile ? 'w-full justify-center text-sm' : ''
           }`}

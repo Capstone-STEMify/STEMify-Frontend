@@ -10,6 +10,7 @@ import { ChevronsUpDown, Check } from 'lucide-react'
 import { useFieldContext } from '@/components/shared/form/items'
 import { FieldErrors } from './field-errors'
 import { cn } from '@/utils/shadcn/utils'
+import { on } from 'events'
 
 type DropdownMultipleCheckboxFieldProps = {
   label?: string
@@ -20,6 +21,7 @@ type DropdownMultipleCheckboxFieldProps = {
   }[]
   placeholder?: string
   maxHeight?: string
+  onChange?: (value: any) => void
 }
 
 export const DropdownMultipleCheckboxField = ({
@@ -27,7 +29,8 @@ export const DropdownMultipleCheckboxField = ({
   description,
   options,
   placeholder = 'Select options...',
-  maxHeight = '180px'
+  maxHeight = '180px',
+  onChange
 }: DropdownMultipleCheckboxFieldProps) => {
   const field = useFieldContext<number[]>()
   const [open, setOpen] = useState(false)
@@ -36,6 +39,7 @@ export const DropdownMultipleCheckboxField = ({
   const toggle = (value: number, checked: boolean) => {
     const newValue = checked ? [...selectedValues, value] : selectedValues.filter((v) => v !== value)
     field.handleChange(newValue)
+    onChange?.(newValue)
   }
 
   return (

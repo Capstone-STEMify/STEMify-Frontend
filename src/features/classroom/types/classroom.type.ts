@@ -1,4 +1,5 @@
 import { Curriculum } from '@/features/resource/curriculum/types/curriculum.type'
+import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Classroom = {
@@ -15,6 +16,7 @@ export type Classroom = {
     Name: string
     Email: string
     ImageUrl: string
+    userName: string
   }
   classCode: string
   status: ClassroomStatus
@@ -24,9 +26,9 @@ export type Classroom = {
   organizationSubscriptionOrderId: number
 }
 
-export type ClassroomQueryParams = {
+export type ClassroomSliceParams = {
   status?: ClassroomStatus
-} & SearchPaginatedRequestParams
+} & SliceQueryParams
 
 // Pending, InProgress, Completed, Deleted
 export enum ClassroomStatus {

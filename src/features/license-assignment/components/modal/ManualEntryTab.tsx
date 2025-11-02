@@ -7,21 +7,32 @@ import {
 import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
 import { goBack } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { useModal } from '@/providers/ModalProvider'
 import { useParams } from 'next/navigation'
 import { KeyboardEvent, useState } from 'react'
 import { toast } from 'sonner'
 
 type ManualEntryTabProps = {
   isStep?: boolean
+  openModal?: () => void
+  userType?: LicenseAssignmentType
+  labelButton?: string
+  organizationSubscriptionOrderId?: number
 }
 
-export default function ManualEntryTab({ isStep }: ManualEntryTabProps) {
+export default function ManualEntryTab({
+  isStep,
+  openModal,
+  userType,
+  labelButton,
+  organizationSubscriptionOrderId
+}: ManualEntryTabProps) {
   const dispatch = useAppDispatch()
   const { organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
   const [emailList, setEmailList] = useState<string[]>([])
   const [input, setInput] = useState('')
   const { subscriptionId } = useParams()
-  const [type, setType] = useState<LicenseAssignmentType>(LicenseAssignmentType.STUDENT)
+  const [type, setType] = useState<LicenseAssignmentType>(userType ?? LicenseAssignmentType.STUDENT)
 
   const [createLicenseAssignmentBulk] = useCreateLicenseAssignmentBulkMutation()
 
@@ -70,36 +81,51 @@ export default function ManualEntryTab({ isStep }: ManualEntryTabProps) {
   const handleSubmit = async () => {
     await createLicenseAssignmentBulk({
       body: emailList.map((email) => ({
-        organizationSubscriptionOrderId: Number(organizationSubscriptionId),
+        organizationSubscriptionOrderId: organizationSubscriptionOrderId ?? Number(organizationSubscriptionId),
         userEmail: email,
         type: type
       }))
     }).unwrap()
 
     toast.success('Send invitations successfully')
+    openModal?.()
   }
 
   return (
     <div className='space-y-4'>
       {/* Select user type */}
-      <div className='space-y-1'>
-        <label className='block text-sm font-medium'>User Type</label>
-        <Select value={type} onValueChange={(val) => setType(val as LicenseAssignmentType)}>
-          <SelectTrigger className='w-full'>
-            <SelectValue placeholder='Select user type' />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.entries(LicenseAssignmentType).map(([key, value]) => (
-              <SelectItem key={key} value={value}>
-                {key
-                  .replace(/_/g, ' ')
-                  .toLowerCase()
-                  .replace(/\b\w/g, (c) => c.toUpperCase())}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {userType ? (
+        <div className='rounded-lg border border-blue-100 bg-blue-50/60 p-5 shadow-sm transition-all hover:shadow-md'>
+          <h3 className='flex items-center gap-2 text-base font-semibold text-blue-700'>
+            <span className='inline-flex h-2 w-2 rounded-full bg-blue-500' />
+            Create {userType} Account
+          </h3>
+
+          <p className='mt-1 text-sm leading-relaxed text-slate-600'>
+            A new <span className='font-semibold text-blue-700'>{userType}</span> account will be created for this
+            organization. The account will automatically be assigned a valid license from this subscription.
+          </p>
+        </div>
+      ) : (
+        <div className='space-y-1'>
+          <label className='block text-sm font-medium'>User Type</label>
+          <Select value={type} onValueChange={(val) => setType(val as LicenseAssignmentType)}>
+            <SelectTrigger className='w-full'>
+              <SelectValue placeholder='Select user type' />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(LicenseAssignmentType).map(([key, value]) => (
+                <SelectItem key={key} value={value}>
+                  {key
+                    .replace(/_/g, ' ')
+                    .toLowerCase()
+                    .replace(/\b\w/g, (c) => c.toUpperCase())}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       {/* Email input */}
       <div className='space-y-1'>
@@ -144,7 +170,7 @@ export default function ManualEntryTab({ isStep }: ManualEntryTabProps) {
           </Button>
 
           <Button onClick={handleSubmit} disabled={emailList.length === 0} className='bg-sky-500 hover:bg-sky-600'>
-            Send Invitations
+            {labelButton || 'Send Invitations'}
           </Button>
         </div>
       </div>

@@ -7,13 +7,23 @@ import { Calendar } from '@/components/shadcn/calendar'
 import { Label } from '@/components/shadcn/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { useFieldContext } from '@/components/shared/form/items'
+import { Matcher } from 'react-day-picker'
 
 type DatePickerFieldProps = {
   label?: string
   placeholder?: string
+  onChange?: (date: Date | null) => void
+  minDate?: Date
+  maxDate?: Date
 }
 
-export function DatePickerField({ label = 'Select Date', placeholder = 'Select date' }: DatePickerFieldProps) {
+export function DatePickerField({
+  label = 'Select Date',
+  placeholder = 'Select date',
+  onChange,
+  minDate,
+  maxDate
+}: DatePickerFieldProps) {
   const field = useFieldContext<Date | null>()
   const [open, setOpen] = React.useState(false)
 
@@ -46,8 +56,19 @@ export function DatePickerField({ label = 'Select Date', placeholder = 'Select d
           <Calendar
             mode='single'
             selected={field.state.value ?? undefined}
+            disabled={
+              [minDate ? { before: minDate } : undefined, maxDate ? { after: maxDate } : undefined].filter(
+                Boolean
+              ) as Matcher[]
+            }
             onSelect={(date) => {
-              field.handleChange(date ?? null)
+              const selectedDate = date ?? null
+              field.handleChange(selectedDate)
+
+              if (onChange) {
+                onChange(selectedDate)
+              }
+
               setOpen(false)
             }}
             captionLayout='dropdown'

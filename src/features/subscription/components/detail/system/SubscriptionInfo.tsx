@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
-import { BookOpen, Calendar, Users } from 'lucide-react'
+import { BookOpen, Calendar, GraduationCap, Users } from 'lucide-react'
 import { OrganizationSubscription } from '@/features/subscription/types/subscription.type'
 import { formatDateV2 } from '@/utils/index'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
@@ -127,8 +127,21 @@ export default function SubscriptionInfo({ subscription }: SubscriptionInfoProps
                     {curriculums.map((c) => (
                       <div
                         key={c.id}
-                        className='flex items-center justify-between rounded-md border bg-gray-50 px-3 py-2'
+                        className='flex items-center justify-start gap-4 rounded-md border bg-gray-50 px-3 py-2'
                       >
+                        <>
+                          {c.imageUrl ? (
+                            <img
+                              src={c.imageUrl}
+                              alt={c.title}
+                              className='h-12 w-12 flex-shrink-0 rounded object-cover'
+                            />
+                          ) : (
+                            <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded bg-gradient-to-br from-sky-50 to-sky-400'>
+                              <GraduationCap className='h-6 w-6 text-blue-500' />
+                            </div>
+                          )}
+                        </>
                         <div>
                           <p className='text-sm font-medium'>{c.title}</p>
                           <p className='text-xs text-gray-600'>

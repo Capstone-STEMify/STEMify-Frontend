@@ -34,28 +34,28 @@ export default function CreateOrganizationSubscription() {
         <div className='mb-8 flex justify-center'>
           {steps.map((step, index) => (
             <div key={step.number} className='flex items-center'>
-              {/* Step Circle + Text */}
               <div className='flex flex-col items-center'>
+                {/* Circle */}
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all ${
+                  className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all duration-300 ${
                     currentStep > step.number
-                      ? 'border-slate-900 bg-slate-900 text-white'
+                      ? 'border-transparent bg-sky-500 text-white shadow-md'
                       : currentStep === step.number
-                        ? 'border-slate-900 bg-white text-slate-900'
-                        : 'border-slate-300 bg-white text-slate-400'
+                        ? 'border-sky-400 bg-white text-sky-500 shadow-sm'
+                        : 'border-slate-200 bg-white text-slate-400'
                   }`}
                 >
                   {currentStep > step.number ? (
-                    <Check className='h-6 w-6' />
+                    <Check className='h-5 w-5' />
                   ) : (
                     <span className='text-lg font-semibold'>{step.number}</span>
                   )}
                 </div>
+
+                {/* Label */}
                 <div className='mt-2 text-center'>
                   <p
-                    className={`text-sm font-medium ${
-                      currentStep >= step.number ? 'text-slate-900' : 'text-slate-400'
-                    }`}
+                    className={`text-sm font-medium ${currentStep >= step.number ? 'text-sky-500' : 'text-slate-400'}`}
                   >
                     {step.title}
                   </p>
@@ -63,11 +63,11 @@ export default function CreateOrganizationSubscription() {
                 </div>
               </div>
 
-              {/* Connector line */}
+              {/* Connector */}
               {index < steps.length - 1 && (
                 <div
-                  className={`mx-6 h-0.5 w-16 transition-all ${
-                    currentStep > step.number ? 'bg-slate-900' : 'bg-slate-300'
+                  className={`mx-6 h-0.5 w-16 transition-all duration-300 ${
+                    currentStep > step.number ? 'bg-gradient-to-r from-sky-400 to-blue-500' : 'bg-slate-200'
                   }`}
                 />
               )}

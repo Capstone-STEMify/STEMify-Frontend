@@ -18,6 +18,7 @@ export type ModalType =
   | 'enroll'
   | 'editImage'
   | 'information'
+  | 'success'
 
   // upsert
   | 'upsertCourse'
@@ -50,6 +51,7 @@ export type ModalType =
   | 'selectComponentListModal'
   | 'upsertAssembly'
   | 'quizAI'
+  | 'addPeople'
 
   // sheet
   | 'upsertContact'

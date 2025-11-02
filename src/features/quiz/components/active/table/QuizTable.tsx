@@ -127,8 +127,6 @@ export function QuizTable({ data }: QuizTableProps) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end'>
                       <DropdownMenuItem>View Details</DropdownMenuItem>
-                      <DropdownMenuItem>Edit Quiz</DropdownMenuItem>
-                      <DropdownMenuItem className='text-red-500'>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

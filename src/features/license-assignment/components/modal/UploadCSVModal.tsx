@@ -6,7 +6,11 @@ import UploadCSV from '@/features/license-assignment/components/modal/UploadCSV'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import ManualEntryTab from '@/features/license-assignment/components/modal/ManualEntryTab'
 
-export default function UploadCSVModal() {
+export type UploadCSVModalProps = {
+  organizationSubscriptionOrderId?: number
+}
+
+export default function UploadCSVModal({ organizationSubscriptionOrderId }: UploadCSVModalProps) {
   const { closeModal } = useModal()
 
   return (
@@ -24,11 +28,11 @@ export default function UploadCSVModal() {
           </TabsList>
 
           <TabsContent value='csv'>
-            <UploadCSV />
+            <UploadCSV organizationSubscriptionOrderId={organizationSubscriptionOrderId} />
           </TabsContent>
 
           <TabsContent value='manual'>
-            <ManualEntryTab />
+            <ManualEntryTab organizationSubscriptionOrderId={organizationSubscriptionOrderId} />
           </TabsContent>
         </Tabs>
       </DialogContent>

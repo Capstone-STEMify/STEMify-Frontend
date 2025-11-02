@@ -106,10 +106,13 @@ export default function QuizResult({ quiz }: QuizResultProps) {
 
         {/* Action Button */}
         <div className='grid grid-cols-2 gap-2'>
-          <Button className='w-full py-3 font-semibold' onClick={() => dispatch(setMode('normal'))}>
-            Quay lại chế độ bình thường
+          <Button className='w-full bg-sky-500 py-3 font-semibold' onClick={() => dispatch(setMode('normal'))}>
+            Học phần tiếp theo
           </Button>
-          <Button className='w-full py-3 font-semibold' onClick={() => dispatch(resetQuiz())}>
+          <Button
+            className='w-full bg-slate-200 py-3 font-semibold text-blue-600'
+            onClick={() => dispatch(resetQuiz())}
+          >
             Làm lại bài quiz
           </Button>
         </div>

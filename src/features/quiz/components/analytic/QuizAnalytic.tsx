@@ -6,16 +6,17 @@ import { QuestionDetailTab } from './question/QuestionTab'
 import { LearnerOverviewTab } from './overview/OverviewTab'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/libs/redux/store'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 export default function QuizAnalytic() {
   const quiz = useSelector((state: RootState) => state.quizSelected.selectedQuiz)
 
   if (!quiz) {
-    return <p className='mt-10 text-center text-gray-500'>Loading quiz data...</p>
+    return <LoadingComponent />
   }
 
   return (
-    <div className='min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8'>
+    <div className='min-h-screen bg-slate-50/50 p-4 sm:px-6 lg:px-8'>
       <div className='mx-auto max-w-7xl'>
         <QuizDetailHeader data={quiz} />
 
