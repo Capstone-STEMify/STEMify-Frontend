@@ -161,7 +161,6 @@ export default function ClassroomDetail() {
                           <span>{classroom.curriculum.courseCount} Courses</span>
                         </div>
                       </div>
-                      <Button className='mt-4 bg-purple-600 hover:bg-purple-700'>View Curriculum</Button>
                     </div>
                   </div>
                 </CardContent>
@@ -276,6 +275,41 @@ export default function ClassroomDetail() {
               </Card>
             )}
 
+            {/* Google Meet Card */}
+            <Card className='border border-slate-200 py-4 shadow-sm'>
+              <CardContent className='p-4'>
+                <div className='space-y-3'>
+                  <div className='flex items-center justify-between'>
+                    <div className='flex items-center gap-2'>
+                      <div className='flex h-8 w-8 items-center justify-center rounded bg-white'>
+                        <svg viewBox='0 0 24 24' className='h-5 w-5'>
+                          <path
+                            fill='#00832d'
+                            d='M17,13l3.7-3.7c0.7-0.7,1.9-0.2,1.9,0.7v7.9c0,0.9-1.2,1.5-1.9,0.7L17,15v4c0,1.1-0.9,2-2,2H4c-1.1,0-2-0.9-2-2V5 c0-1.1,0.9-2,2-2h11c1.1,0,2,0.9,2,2v4l3.7-3.7c0.7-0.7,1.9-0.2,1.9,0.7v7.9C22.6,13.2,21.4,13.7,17,13z'
+                          />
+                        </svg>
+                      </div>
+                      <span className='font-semibold text-slate-900'>Meet</span>
+                    </div>
+                    <Button variant='ghost' size='icon' className='h-8 w-8'>
+                      <MoreVertical className='h-4 w-4 text-slate-600' />
+                    </Button>
+                  </div>
+
+                  <Button className='w-full border-2 border-slate-300 bg-white text-blue-600 hover:bg-slate-50'>
+                    Join
+                  </Button>
+
+                  <div className='flex items-center gap-2 text-sm text-slate-600'>
+                    <svg viewBox='0 0 24 24' className='h-4 w-4' fill='currentColor'>
+                      <path d='M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z' />
+                    </svg>
+                    <span>Visible to students</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Quick Stats Card */}
             <Card className='border border-slate-200 py-4 shadow-sm'>
               <CardHeader className='pb-3'>
@@ -306,31 +340,6 @@ export default function ClassroomDetail() {
                     days
                   </span>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Actions Card */}
-            <Card className='border border-slate-200 py-4 shadow-sm'>
-              <CardHeader className='pb-3'>
-                <CardTitle className='text-base'>Actions</CardTitle>
-              </CardHeader>
-              <CardContent className='space-y-2'>
-                <Button variant='outline' className='w-full justify-start' size='sm'>
-                  <Edit className='mr-2 h-4 w-4' />
-                  Edit Classroom
-                </Button>
-                <Button variant='outline' className='w-full justify-start' size='sm'>
-                  <UserPlus className='mr-2 h-4 w-4' />
-                  Invite Students
-                </Button>
-                <Button
-                  variant='outline'
-                  className='w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-700'
-                  size='sm'
-                >
-                  <Settings className='mr-2 h-4 w-4' />
-                  Archive Classroom
-                </Button>
               </CardContent>
             </Card>
           </div>

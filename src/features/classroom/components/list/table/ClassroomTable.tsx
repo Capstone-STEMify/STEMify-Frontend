@@ -101,12 +101,15 @@ export default function ClassroomTable() {
 
       {/* Table */}
       <DataTable
-        enableRowSelection={true}
+        enableRowSelection={false}
         data={rows}
         columns={columns}
         pagingData={data?.data.items}
         pagingParams={queryParams}
         handlePageChange={() => {}}
+        onRowClick={(val) => {
+          router.push(`/${locale}/organization/classroom/${val.id}`)
+        }}
       />
     </div>
   )
