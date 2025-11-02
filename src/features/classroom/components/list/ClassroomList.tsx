@@ -13,16 +13,23 @@ import Link from 'next/link'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 
 export default function ClassroomList() {
+  const user = useAppSelector((state) => state.auth?.user)
   const queryParams = useAppSelector((state) => state.classroom)
-  const { data, isLoading, error } = useSearchClassroomsQuery(queryParams)
+  const { data, isLoading, error } = useSearchClassroomsQuery({
+    ...queryParams,
+    studentId: user?.userId
+  })
   const classrooms = data?.data.items || []
 
   if (isLoading) {
     return (
-      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
-        <LoadingComponent size={150} />
+      <div className='my-5 grid h-fit grid-cols-1 justify-items-center gap-y-10 py-10 sm:grid-cols-2 md:grid-cols-3'>
+        <SkeletonCard size='md' />
+        <SkeletonCard size='md' />
+        <SkeletonCard size='md' />
       </div>
     )
   }

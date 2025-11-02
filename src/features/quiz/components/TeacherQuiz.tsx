@@ -7,11 +7,17 @@ import { QuizNavigation } from './navigation/QuizNavigation'
 import QuizOverview from './overview/QuizOverView'
 import QuizActive from './active/QuizActive'
 import { useSearchStudentQuizQuery } from '../api/studentQuizApi'
+import { useParams } from 'next/navigation'
 
 export default function TeacherQuiz() {
   const [activeTab, setActiveTab] = useState('overview')
+  const { classroomId } = useParams()
 
-  const { data: quizStatisticData, isLoading, isFetching } = useSearchStudentQuizQuery({ classroomId: 1 })
+  const {
+    data: quizStatisticData,
+    isLoading,
+    isFetching
+  } = useSearchStudentQuizQuery({ classroomId: Number(classroomId) })
 
   console.log('quizData: ', quizStatisticData)
 

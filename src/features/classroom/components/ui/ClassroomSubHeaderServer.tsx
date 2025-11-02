@@ -22,12 +22,5 @@ export default function ClassroomSubHeaderServer({ classroomId, locale }: Classr
 
   if (!classroom) return <div>Loading...</div>
 
-  return (
-    <ClassroomSubHeaderClient
-      locale={locale}
-      classroomId={classroomId}
-      curriculumId={classroom.curriculum?.id}
-      classroomName={classroom.name}
-    />
-  )
+  return <ClassroomSubHeaderClient locale={locale} classroom={classroom} curriculumId={classroom.curriculum?.id} />
 }
