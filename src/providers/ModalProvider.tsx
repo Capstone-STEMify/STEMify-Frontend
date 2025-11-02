@@ -34,6 +34,7 @@ import ContactDetailSheet from '@/features/contact/components/detail/ContactDeta
 import UpsertPlanSheet from '@/features/plan/components/sheet/UpsertPlanSheet'
 import UpsertClassroomModal from '@/features/classroom/components/upsert/UpsertClassroomModal'
 import SuccessModal from '@/components/shared/modals/SuccessModal'
+import AddPeopleModal from '@/features/user/components/modal/AddPeopleModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -99,6 +100,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'kitListTableModal' && <KitListTableModal {...modalProps} />}
       {modalType === 'selectComponentListModal' && <SelectComponentListModal {...modalProps} />}
       {modalType === 'quizAI' && <QuizAIModal {...modalProps} />}
+      {modalType === 'addPeople' && <AddPeopleModal {...modalProps} />}
 
       {/* sheet */}
       {modalType === 'upsertContact' && <ContactDetailSheet {...modalProps} />}
