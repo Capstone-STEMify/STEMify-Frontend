@@ -27,10 +27,10 @@ export default function AssignmentDetail() {
           </TabsList>
 
           <TabsContent value='reviewed' className='mt-6'>
-            <AssignmentTable filter="reviewed" />
+            <AssignmentTable filter='reviewed' />
           </TabsContent>
           <TabsContent value='not-reviewed' className='mt-6'>
-            <AssignmentTable filter="not-reviewed" />
+            <AssignmentTable filter='not-reviewed' />
           </TabsContent>
         </Tabs>
       </div>

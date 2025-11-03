@@ -2,7 +2,5 @@ import AssignmentDetail from '@/features/assignment/components/detail/Assignment
 import React from 'react'
 
 export default function AssignmentDetailPage() {
-  return (
-    <AssignmentDetail/>
-  )
+  return <AssignmentDetail />
 }

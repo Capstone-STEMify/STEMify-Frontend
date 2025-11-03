@@ -22,7 +22,7 @@ export function AssignmentList() {
   }
 
   return (
-    <div className='w-full max-w-7xl mx-auto mt-4 rounded-lg border'>
+    <div className='mx-auto mt-4 w-full max-w-7xl rounded-lg border'>
       <Table>
         <TableHeader>
           <TableRow className='bg-gray-50/50 hover:bg-gray-50'>

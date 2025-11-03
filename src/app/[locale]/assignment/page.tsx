@@ -2,7 +2,5 @@ import { AssignmentList } from '@/features/assignment/components/table/Assignmen
 import React from 'react'
 
 export default function AssignmentPage() {
-  return (
-    <AssignmentList/>
-  )
+  return <AssignmentList />
 }
