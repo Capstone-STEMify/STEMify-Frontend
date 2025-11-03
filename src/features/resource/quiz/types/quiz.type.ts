@@ -45,3 +45,8 @@ export enum QuizAttemptStatus {
   PASSED = 'Passed',
   FAILED = 'Failed'
 }
+
+export type QuestionAttempt = {
+  questionId: number
+  answerIds: number[]
+}

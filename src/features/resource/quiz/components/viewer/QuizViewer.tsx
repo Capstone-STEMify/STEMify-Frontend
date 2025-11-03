@@ -2,7 +2,7 @@ import { QuizContent } from '@/features/resource/content/types/content.type'
 import React from 'react'
 import { Clock, Trophy, CheckCircle, AlertCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/shadcn/card'
-import { useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
+import { useCreateQuizAttemptMutation, useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Label } from '@/components/shadcn/label'
@@ -20,6 +20,7 @@ type QuizViewerProps = {
 export default function QuizViewer({ quiz, isShowQuestionAnswer }: QuizViewerProps) {
   const dispatch = useAppDispatch()
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
+  const [createQuizAttempt, { isLoading: isCreating }] = useCreateQuizAttemptMutation()
 
   if (isLoading) {
     return (
@@ -43,6 +44,13 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer }: QuizViewerPro
   }
 
   const questions = quizData.data.questions
+
+  const handleAttemptQuiz = async () => {
+    const res = await createQuizAttempt({ studentQuizId: 1 }).unwrap() //TODO: replace with actual studentQuizId
+    if (res) {
+      dispatch(setMode('quiz'))
+    }
+  }
 
   return (
     <div className='mx-auto max-w-4xl space-y-6 p-8'>
@@ -216,7 +224,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer }: QuizViewerPro
         </div>
       ) : (
         <div className='flex justify-center'>
-          <Button onClick={() => dispatch(setMode('quiz'))} className='text-md bg-amber-400 px-6 py-5 font-medium'>
+          <Button onClick={handleAttemptQuiz} className='text-md bg-amber-400 px-6 py-5 font-medium'>
             Attempt Now
           </Button>
         </div>

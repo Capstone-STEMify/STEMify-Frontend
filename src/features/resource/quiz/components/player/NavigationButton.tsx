@@ -1,31 +1,58 @@
 'use client'
 
 import { useIsMobile } from '@/hooks/use-mobile'
-import { ChevronLeft, ChevronRight, Send } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Send, Loader2 } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { goToNextQuestion, goToPreviousQuestion, submitQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { Quiz } from '@/features/resource/quiz/types/quiz.type'
+import { useUpdateQuizAttemptMutation } from '@/features/resource/quiz/api/quizApi'
+import { toast } from 'sonner'
 
 type NavigationButtonsProps = {
   quiz: Quiz
+  studentQuizId: number // ID của student quiz attempt
 }
 
-export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
+export default function NavigationButtons({ quiz, studentQuizId }: NavigationButtonsProps) {
   const questions = quiz.questions
-  const { currentQuestionIndex } = useAppSelector((state) => state.quizPlayer)
+  const { currentQuestionIndex, userAnswers } = useAppSelector((state) => state.quizPlayer)
   const dispatch = useAppDispatch()
   const isMobile = useIsMobile()
+  const [submitQuizAttempt, { isLoading }] = useUpdateQuizAttemptMutation()
 
   const isFirstQuestion = currentQuestionIndex === 0
   const isLastQuestion = currentQuestionIndex === questions.length - 1
+
+  const handleSubmitQuiz = async () => {
+    try {
+      // Chuyển đổi userAnswers từ Redux state sang format API mong đợi
+      const questionAttempts = Object.entries(userAnswers).map(([questionId, answerIds]) => ({
+        questionId: Number(questionId),
+        answerIds: Array.isArray(answerIds) ? answerIds.map(Number) : [Number(answerIds)]
+      }))
+
+      // Gọi API
+      await submitQuizAttempt({
+        studentQuizId,
+        questionAttempts
+      }).unwrap()
+
+      // Nếu thành công, dispatch action submitQuiz để chuyển sang trang kết quả
+      dispatch(submitQuiz())
+      toast.success('Nộp bài thành công!')
+    } catch (error) {
+      console.error('Failed to submit quiz:', error)
+      toast.error('Có lỗi xảy ra khi nộp bài. Vui lòng thử lại!')
+    }
+  }
 
   return (
     <div className={`mt-8 flex items-center justify-between gap-4 ${isMobile ? 'flex-col' : ''}`}>
       {/* Previous Button */}
       <Button
         onClick={() => dispatch(goToPreviousQuestion())}
-        disabled={isFirstQuestion}
+        disabled={isFirstQuestion || isLoading}
         variant='outline'
         size='lg'
         className={`group border-2 border-gray-300 bg-white font-semibold shadow-md transition-all hover:border-indigo-400 hover:bg-indigo-50 hover:shadow-lg disabled:opacity-30 ${
@@ -50,18 +77,29 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
       {/* Next/Submit Button */}
       {isLastQuestion ? (
         <Button
-          onClick={() => dispatch(submitQuiz())}
+          onClick={handleSubmitQuiz}
+          disabled={isLoading}
           size='lg'
-          className={`group bg-gradient-to-r from-amber-500 to-orange-500 font-bold shadow-lg transition-all hover:from-amber-600 hover:to-orange-600 hover:shadow-xl ${
+          className={`group bg-gradient-to-r from-amber-500 to-orange-500 font-bold shadow-lg transition-all hover:from-amber-600 hover:to-orange-600 hover:shadow-xl disabled:opacity-50 ${
             isMobile ? 'w-full justify-center' : 'px-8'
           }`}
         >
-          <Send className='mr-2 h-5 w-5 transition-transform group-hover:translate-x-1' />
-          Nộp bài
+          {isLoading ? (
+            <>
+              <Loader2 className='mr-2 h-5 w-5 animate-spin' />
+              Đang nộp bài...
+            </>
+          ) : (
+            <>
+              <Send className='mr-2 h-5 w-5 transition-transform group-hover:translate-x-1' />
+              Nộp bài
+            </>
+          )}
         </Button>
       ) : (
         <Button
           onClick={() => dispatch(goToNextQuestion())}
+          disabled={isLoading}
           size='lg'
           className={`group bg-gradient-to-r from-indigo-600 to-purple-600 font-semibold shadow-lg transition-all hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl ${
             isMobile ? 'w-full justify-center' : 'px-6'

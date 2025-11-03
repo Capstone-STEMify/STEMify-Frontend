@@ -8,9 +8,10 @@ import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 
 type QuizMainContentProps = {
   quiz: Quiz
+  studentQuizId: number
 }
 
-export default function QuizMainContent({ quiz }: QuizMainContentProps) {
+export default function QuizMainContent({ quiz, studentQuizId }: QuizMainContentProps) {
   const { currentQuestionIndex } = useAppSelector((state) => state.quizPlayer)
   const isMobile = useIsMobile()
   const questions = quiz.questions
@@ -38,7 +39,7 @@ export default function QuizMainContent({ quiz }: QuizMainContentProps) {
 
         {/* Navigation */}
         <div className='mx-auto w-full max-w-3xl'>
-          <NavigationButtons quiz={quiz} />
+          <NavigationButtons quiz={quiz} studentQuizId={studentQuizId} />
         </div>
       </div>
     </main>
