@@ -102,31 +102,6 @@ export default function ClassroomList() {
 
                   {/* Students */}
                   <div className='flex items-center justify-between border-t border-gray-100 pt-3'>
-                    {/* Student Avatars */}
-                    {classroom.students && classroom.students.length > 0 ? (
-                      <div className='flex -space-x-2'>
-                        {classroom.students.slice(0, 3).map((student, index) => (
-                          <Avatar key={index} className='h-7 w-7 border-2 border-white'>
-                            <AvatarImage src={student.imageUrl || student.ImageUrl} />
-                            <AvatarFallback className='bg-gradient-to-br from-blue-400 to-purple-400 text-xs text-white'>
-                              {student.name?.charAt(0).toUpperCase() || student.Name?.charAt(0).toUpperCase() || 'S'}
-                            </AvatarFallback>
-                          </Avatar>
-                        ))}
-                        {classroom.students.length > 3 && (
-                          <div className='flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-gray-200 text-xs font-semibold text-gray-600'>
-                            +{classroom.students.length - 3}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className='flex items-center gap-1.5 text-gray-400'>
-                        <Users className='h-3.5 w-3.5' />
-                        <span className='text-sm'>No students</span>
-                      </div>
-                    )}
-
-                    {/* Student Count */}
                     <div className='flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1'>
                       <Users className='h-3.5 w-3.5 text-blue-600' />
                       <span className='text-xs font-semibold text-blue-600'>{classroom.numberOfStudents}</span>

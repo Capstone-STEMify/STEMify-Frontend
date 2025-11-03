@@ -35,12 +35,9 @@ export default function ClassroomCourseList() {
     <div className='container mx-auto px-6 pb-8'>
       {/* Header */}
       <div className='mb-8'>
-        <div className='mb-2 flex items-center justify-between'>
-          <div>
+        <div className='my-6 flex items-center justify-between'>
+          <div className='flex gap-6'>
             <h2 className='text-3xl font-bold text-slate-900'>Courses</h2>
-            <p className='mt-1 text-slate-600'>
-              {totalCount} {totalCount === 1 ? 'course' : 'courses'} available
-            </p>
           </div>
         </div>
       </div>
@@ -70,14 +67,7 @@ export default function ClassroomCourseList() {
                   <span className='text-xs'>{formatDuration(course.duration)}</span>
                 </Badge>
               }
-              footer={
-                <div className='flex w-full items-center gap-2 border-t border-slate-100 pt-2'>
-                  <div className='flex items-center gap-1.5'>
-                    <User className='h-3.5 w-3.5 text-slate-400' />
-                    <p className='line-clamp-1 text-xs text-slate-500'>{data?.data.createdByUserName}</p>
-                  </div>
-                </div>
-              }
+              footer={<div className='flex w-full items-center gap-2 border-t border-slate-100 pt-2'></div>}
             >
               <div>
                 <div className='flex flex-col justify-between space-y-2'>
