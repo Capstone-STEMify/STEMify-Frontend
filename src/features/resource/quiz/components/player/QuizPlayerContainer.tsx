@@ -44,7 +44,7 @@ export default function QuizPlayerContainer() {
   return (
     <div className='flex h-screen overflow-hidden bg-white'>
       <QuizSidebar quiz={quizData.data} />
-      <QuizMainContent quiz={quizData.data} />
+      <QuizMainContent quiz={quizData.data} studentQuizId={1} />
     </div>
   )
 }

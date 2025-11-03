@@ -9,11 +9,12 @@ export enum ProgressStatus {
 export type ProgressType = 'lesson' | 'section'
 
 export type BaseProgress = {
-  lessonId?: number
+  // lessonId?: number
   sectionId?: number
   id: number
   status: ProgressStatus
-  completedAt: string
+  studentQuizId?: number
+  // completedAt: string
 }
 
 export type StudentProgress = BaseProgress

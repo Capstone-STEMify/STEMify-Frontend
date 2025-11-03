@@ -1,5 +1,6 @@
-import { Quiz, QuizQueryParams } from '@/features/resource/quiz/types/quiz.type'
+import { QuestionAttempt, Quiz, QuizAttempt, QuizQueryParams } from '@/features/resource/quiz/types/quiz.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
+import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
 export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
   reducerPath: 'quizApi',
@@ -7,31 +8,44 @@ export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
   baseUrl: '/quizzes'
 }).injectEndpoints({
   endpoints: (builder) => ({
-    getStudentQuizById: builder.query<Quiz, number>({
+    getStudentQuizById: builder.query<ApiSuccessResponse<QuizAttempt>, number>({
       query: (id: number) => ({
-        url: `/quizzes/${id}/student-view`
+        url: `/student-quizzes/${id}`
       }),
       providesTags: (result, error, id) => [{ type: 'Quiz', id }]
     }),
-    getStudentQuizByClassroom: builder.query<Quiz[], { classroomId: number }>({
+    getStudentQuizByClassroom: builder.query<
+      ApiSuccessResponse<PaginatedResult<QuizAttempt[]>>,
+      { classroomId: number }
+    >({
       query: ({ classroomId }) => ({
-        url: `/classrooms/${classroomId}/quizzes/student-view`
+        url: `/student-quizzes`,
+        params: { classroomId }
       })
     }),
-    createQuizAttempt: builder.mutation<void, { quizId: number }>({
-      query: ({ quizId }) => ({
-        url: `/quizzes/${quizId}/attempts`,
-        method: 'POST'
+    createQuizAttempt: builder.mutation<any, { studentQuizId: number }>({
+      query: ({ studentQuizId }) => ({
+        url: `/quiz-attempts`,
+        method: 'POST',
+        body: {
+          studentQuizId
+        }
       }),
-      invalidatesTags: (result, error, { quizId }) => [{ type: 'Quiz', id: quizId }]
+      invalidatesTags: (result, error, { studentQuizId }) => [{ type: 'Quiz', id: studentQuizId }]
     }),
-    updateQuizAttempt: builder.mutation<void, { quizId: number; attemptData: any }>({
-      query: ({ quizId, attemptData }) => ({
-        url: `/quizzes/${quizId}/attempts`,
-        method: 'PUT',
-        body: attemptData
+    updateQuizAttempt: builder.mutation<
+      any,
+      {
+        studentQuizId: number
+        questionAttempts: QuestionAttempt[]
+      }
+    >({
+      query: ({ studentQuizId, questionAttempts }) => ({
+        url: `/quiz-attempts/${studentQuizId}`,
+        method: 'PATCH',
+        body: { questionAttempts }
       }),
-      invalidatesTags: (result, error, { quizId }) => [{ type: 'Quiz', id: quizId }]
+      invalidatesTags: (result, error, { studentQuizId }) => [{ type: 'Quiz', id: studentQuizId }]
     })
   })
 })
