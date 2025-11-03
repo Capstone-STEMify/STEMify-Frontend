@@ -9,7 +9,7 @@ export default function AssignmentDetail() {
       <div className='mx-auto max-w-7xl'>
         <AssignmentDetailHeader />
 
-        <Tabs defaultValue='not-review' className='mt-6'>
+        <Tabs defaultValue='not-reviewed' className='mt-6'>
           <TabsList className='w-full justify-start rounded-none border-b bg-transparent p-0'>
             <TabsTrigger
               value='reviewed'
@@ -27,10 +27,10 @@ export default function AssignmentDetail() {
           </TabsList>
 
           <TabsContent value='reviewed' className='mt-6'>
-            <AssignmentTable/>
+            <AssignmentTable filter="reviewed" />
           </TabsContent>
           <TabsContent value='not-reviewed' className='mt-6'>
-            <AssignmentTable/>
+            <AssignmentTable filter="not-reviewed" />
           </TabsContent>
         </Tabs>
       </div>
