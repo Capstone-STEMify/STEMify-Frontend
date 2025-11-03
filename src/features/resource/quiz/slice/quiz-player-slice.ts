@@ -21,6 +21,14 @@ export const quizPlayerSlice = createSlice({
   name: 'quizPlayer',
   initialState,
   reducers: {
+    // ✅ THÊM ACTION ĐỂ SET QUESTIONS
+    initializeQuiz: (state, action: PayloadAction<{ questions: Question[]; timeLimitMinutes?: number }>) => {
+      state.questions = action.payload.questions
+      state.timeRemaining = (action.payload.timeLimitMinutes || 100) * 60
+      state.currentQuestionIndex = 0
+      state.isSubmitted = false
+      state.userAnswers = {}
+    },
     setCurrentQuestionIndex: (state, action: PayloadAction<number>) => {
       state.currentQuestionIndex = action.payload
     },
@@ -63,6 +71,7 @@ export const quizPlayerSlice = createSlice({
 })
 
 export const {
+  initializeQuiz, // ✅ Export action mới
   setCurrentQuestionIndex,
   setUserAnswer,
   toggleUserAnswer,

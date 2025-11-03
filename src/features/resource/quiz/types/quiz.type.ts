@@ -18,3 +18,30 @@ export type Quiz = {
 export type QuizQueryParams = {
   sectionId?: number
 } & SearchPaginatedRequestParams
+
+export type QuizAttempt = {
+  id: number
+  quizId: number
+  studentId: number
+  status: QuizAttemptStatus
+  assignedAt: string
+  dueDate: string
+  attemptCount: number
+  attempts: Attempt[]
+}
+
+export type Attempt = {
+  id: number
+  studentQuizId: number
+  startedAt: string
+  totalScore: number
+  status: string
+  attemptNumber: number
+  questionAttempts: any[]
+}
+
+export enum QuizAttemptStatus {
+  IN_PROGRESS = 'InProgress',
+  PASSED = 'Passed',
+  FAILED = 'Failed'
+}

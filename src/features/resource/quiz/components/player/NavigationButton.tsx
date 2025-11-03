@@ -21,45 +21,55 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
   const isLastQuestion = currentQuestionIndex === questions.length - 1
 
   return (
-    <div className={`mt-6 flex items-center justify-between gap-2 md:mt-8 md:gap-4 ${isMobile ? 'flex-col' : ''}`}>
+    <div className={`mt-8 flex items-center justify-between gap-4 ${isMobile ? 'flex-col' : ''}`}>
+      {/* Previous Button */}
       <Button
         onClick={() => dispatch(goToPreviousQuestion())}
         disabled={isFirstQuestion}
-        variant='secondary'
-        className={`flex items-center gap-2 px-4 py-2 font-semibold md:px-6 md:py-3 ${
-          isMobile ? 'w-full justify-center text-sm' : ''
+        variant='outline'
+        size='lg'
+        className={`group border-2 border-gray-300 bg-white font-semibold shadow-md transition-all hover:border-indigo-400 hover:bg-indigo-50 hover:shadow-lg disabled:opacity-30 ${
+          isMobile ? 'w-full justify-center' : 'px-6'
         }`}
       >
-        <ChevronLeft className='h-4 w-4 md:h-5 md:w-5' />
+        <ChevronLeft className='mr-2 h-5 w-5 transition-transform group-hover:-translate-x-1' />
         <span className='hidden sm:inline'>Câu trước</span>
         <span className='sm:hidden'>Trước</span>
       </Button>
 
-      <div className={`text-foreground/60 text-xs md:text-sm ${isMobile ? 'order-first' : ''}`}>
-        Câu {currentQuestionIndex + 1} / {questions.length}
+      {/* Progress Indicator */}
+      <div className={`flex flex-col items-center gap-1 ${isMobile ? 'order-first w-full' : ''}`}>
+        <span className='text-sm font-medium text-gray-500'>Câu hỏi</span>
+        <div className='flex items-center gap-2'>
+          <span className='text-2xl font-bold text-indigo-600'>{currentQuestionIndex + 1}</span>
+          <span className='text-gray-400'>/</span>
+          <span className='text-lg font-semibold text-gray-600'>{questions.length}</span>
+        </div>
       </div>
 
+      {/* Next/Submit Button */}
       {isLastQuestion ? (
         <Button
           onClick={() => dispatch(submitQuiz())}
-          className={`flex items-center gap-2 bg-amber-400 px-4 py-2 font-semibold shadow-lg md:px-6 md:py-3 ${
-            isMobile ? 'w-full justify-center text-sm' : ''
+          size='lg'
+          className={`group bg-gradient-to-r from-amber-500 to-orange-500 font-bold shadow-lg transition-all hover:from-amber-600 hover:to-orange-600 hover:shadow-xl ${
+            isMobile ? 'w-full justify-center' : 'px-8'
           }`}
         >
-          <Send className='h-4 w-4 md:h-5 md:w-5' />
+          <Send className='mr-2 h-5 w-5 transition-transform group-hover:translate-x-1' />
           Nộp bài
         </Button>
       ) : (
         <Button
           onClick={() => dispatch(goToNextQuestion())}
-          variant='secondary'
-          className={`flex items-center gap-2 px-4 py-2 font-semibold md:px-6 md:py-3 ${
-            isMobile ? 'w-full justify-center text-sm' : ''
+          size='lg'
+          className={`group bg-gradient-to-r from-indigo-600 to-purple-600 font-semibold shadow-lg transition-all hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl ${
+            isMobile ? 'w-full justify-center' : 'px-6'
           }`}
         >
           <span className='hidden sm:inline'>Câu tiếp</span>
           <span className='sm:hidden'>Tiếp</span>
-          <ChevronRight className='h-4 w-4 md:h-5 md:w-5' />
+          <ChevronRight className='ml-2 h-5 w-5 transition-transform group-hover:translate-x-1' />
         </Button>
       )}
     </div>
