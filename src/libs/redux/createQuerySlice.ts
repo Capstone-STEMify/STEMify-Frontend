@@ -5,7 +5,7 @@ export interface SliceQueryParams {
   pageNumber: number
   pageSize: number
   search?: string
-  orderBy?: BaseOrderBy
+  orderBy?: string | BaseOrderBy
   status?: string
   [key: string]: any
   sortDirection?: 'Asc' | 'Desc'

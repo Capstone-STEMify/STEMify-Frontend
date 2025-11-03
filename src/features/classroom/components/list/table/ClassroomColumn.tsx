@@ -6,8 +6,12 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDateV2 } from '@/utils/index'
 import { ColumnDef } from '@tanstack/react-table'
 import { GraduationCap, Users } from 'lucide-react'
+import { useLocale } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
+  const router = useRouter()
+  const locale = useLocale()
   return [
     createSelectColumn<Classroom>(),
     {
@@ -15,6 +19,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
       header: 'Curriculum',
       cell: ({ row }) => {
         const curriculum = row.original.curriculum
+        const classroomId = row.original.id
         return (
           <div className='flex items-center gap-3 py-4'>
             {curriculum.imageUrl ? (
@@ -29,7 +34,14 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
               </div>
             )}
             <div className='flex flex-col'>
-              <p className='font-medium'>{curriculum.title}</p>
+              <p
+                className='cursor-pointer font-medium hover:underline'
+                onClick={() => {
+                  router.push(`/${locale}/organization/classroom/${classroomId}`)
+                }}
+              >
+                {curriculum.title}
+              </p>
               <p className='mt-1 text-xs text-gray-600'>Number of courses: {curriculum.courseCount}</p>
             </div>
           </div>
@@ -39,6 +51,11 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
     {
       accessorKey: 'classCode',
       header: 'Class Code'
+    },
+    {
+      accessorKey: 'id',
+      header: '',
+      cell: ({ row }) => {}
     },
 
     {

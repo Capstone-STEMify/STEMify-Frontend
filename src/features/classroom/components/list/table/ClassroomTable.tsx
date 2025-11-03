@@ -45,6 +45,11 @@ export default function ClassroomTable() {
       label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
       value: value
     }))
+  const sortOptions = [
+    { label: 'Upcoming', value: 'upcoming' },
+    { label: 'In Progress', value: 'inprogress' },
+    { label: 'End Soon', value: 'endsoon' }
+  ]
 
   const curriculumOptions = getOptions(curriculumData?.data.items, 'title', 'imageUrl', 'courseCount')
 
@@ -95,6 +100,14 @@ export default function ClassroomTable() {
             value={queryParams.status?.toString() ?? ClassroomStatus.PENDING}
             onChange={(val) => dispatch(setParam({ key: 'status', value: val as ClassroomStatus }))}
             options={statusOptions}
+          />
+          <SSelect
+            placeholder='Sort by'
+            value={queryParams.orderBy ?? 'upcoming'}
+            onChange={(val) =>
+              dispatch(setParam({ key: 'orderBy', value: val as 'upcoming' | 'inprogress' | 'endsoon' }))
+            }
+            options={sortOptions}
           />
         </div>
       </div>

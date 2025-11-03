@@ -41,7 +41,7 @@ export type SearchPaginatedRequestParams = {
   pageNumber?: number
   pageSize?: number
   search?: string
-  orderBy?: BaseOrderBy
+  orderBy?: string | BaseOrderBy
   status?: string
   sortDirection?: 'Asc' | 'Desc'
 }

@@ -28,6 +28,7 @@ export type Classroom = {
 
 export type ClassroomSliceParams = {
   status?: ClassroomStatus
+  orderBy?: 'upcoming' | 'inprogress' | 'endsoon'
 } & SliceQueryParams
 
 // Pending, InProgress, Completed, Deleted

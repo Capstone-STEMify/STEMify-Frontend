@@ -55,7 +55,12 @@ export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationS
       header: tc('tableHeader.price'),
       cell: ({ row }) => {
         const raw = row.original.netAmount
-        return <div>{raw} đ </div>
+        const formatted = new Intl.NumberFormat('vi-VN', {
+          style: 'currency',
+          currency: 'VND'
+        }).format(raw)
+
+        return <div className='py-4 font-semibold'>{formatted}</div>
       }
     },
     {

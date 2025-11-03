@@ -189,7 +189,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
         status: SubscriptionStatus.PENDING,
         // TODO: replace with actual organization ID
         // organizationId: getCurrentUserOrganizationId(),
-        organizationId: 1,
+        organizationId: undefined,
         pageSize: 20,
         pageNumber: 1
       })

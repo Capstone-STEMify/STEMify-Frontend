@@ -7,13 +7,14 @@ import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 
 export default function Step4AdminAccounts() {
-  const { openModal } = useModal()
+  const { openModal, closeModal } = useModal()
   const router = useRouter()
   const locale = useLocale()
 
   const handleOpenModal = () => {
     openModal('success', {
       onClose: () => {
+        closeModal()
         router.push(`/${locale}/admin/organization-subscription`)
       }
     })
