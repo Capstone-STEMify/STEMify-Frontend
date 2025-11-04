@@ -56,7 +56,9 @@
       "quickView": "Quick View",
       "goToCourse": "Go to Course",
       "addToCart": "Add To Cart",
-      "signUpFree": "Sign Up For Free"
+      "signUpFree": "Sign Up For Free",
+      "createOrganization": "Create Organization",
+      "createSubscription": "Create Subscription"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

@@ -56,7 +56,9 @@
       "quickView": "Xem Nhanh",
       "goToCourse": "Đi đến Khóa học",
       "shop": "MUA NGAY",
-      "signUpFree": "Đăng Ký Miễn Phí"
+      "signUpFree": "Đăng Ký Miễn Phí",
+      "createOrganization": "Tạo Tổ Chức",
+      "createSubscription": "Tạo Gói Đăng Ký"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",
