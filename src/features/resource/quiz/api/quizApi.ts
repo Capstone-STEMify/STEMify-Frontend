@@ -1,4 +1,4 @@
-import { QuestionAttempt, Quiz, QuizAttempt, QuizQueryParams } from '@/features/resource/quiz/types/quiz.type'
+import { QuestionAttemptQuery, Quiz, QuizAttempt, QuizQueryParams } from '@/features/resource/quiz/types/quiz.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
@@ -37,7 +37,7 @@ export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
       any,
       {
         quizAttemptId: number
-        questionAttempts: QuestionAttempt[]
+        questionAttempts: QuestionAttemptQuery[]
       }
     >({
       query: ({ quizAttemptId, questionAttempts }) => ({
