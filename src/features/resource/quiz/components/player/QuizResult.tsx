@@ -5,9 +5,10 @@ import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
 import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { resetQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { resetQuiz, setQuizAttemptId } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
 import { Progress } from '@/components/shadcn/progress'
+import { useCreateQuizAttemptMutation } from '@/features/resource/quiz/api/quizApi'
 
 type QuizResultProps = {
   quiz: Quiz
@@ -15,8 +16,9 @@ type QuizResultProps = {
 
 export default function QuizResult({ quiz }: QuizResultProps) {
   const dispatch = useAppDispatch()
-  const { userAnswers } = useAppSelector((state) => state.quizPlayer)
+  const { userAnswers, studentQuizId } = useAppSelector((state) => state.quizPlayer)
   const questions = quiz.questions
+  const [reAttemptQuiz] = useCreateQuizAttemptMutation()
 
   const correctAnswersCount = questions.filter((q) => {
     const chosen = userAnswers[q.id] ?? []
@@ -27,6 +29,14 @@ export default function QuizResult({ quiz }: QuizResultProps) {
 
   const scorePercent = Math.round((correctAnswersCount / questions.length) * 100)
   const isPassed = scorePercent >= 70
+
+  const handleRetryAttemptQuiz = async () => {
+    const res = await reAttemptQuiz({ studentQuizId: studentQuizId! }).unwrap()
+    if (res) {
+      dispatch(setQuizAttemptId(res.data.id))
+      dispatch(resetQuiz())
+    }
+  }
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 p-6'>
@@ -182,7 +192,7 @@ export default function QuizResult({ quiz }: QuizResultProps) {
             size='lg'
             variant='outline'
             className='group border-2 border-indigo-300 bg-white py-6 text-lg font-bold text-indigo-600 shadow-xl transition-all hover:border-indigo-400 hover:bg-indigo-50 hover:shadow-2xl'
-            onClick={() => dispatch(resetQuiz())}
+            onClick={handleRetryAttemptQuiz}
           >
             <RotateCcw className='mr-2 h-5 w-5 transition-transform group-hover:rotate-180' />
             Làm lại bài quiz

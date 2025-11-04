@@ -52,7 +52,7 @@ export default function ClassroomList() {
   }))
 
   return (
-    <div className='space-y-5 pt-4'>
+    <div className='mb-10 space-y-5 pt-4'>
       {/* Header */}
 
       <div className='flex gap-3'>

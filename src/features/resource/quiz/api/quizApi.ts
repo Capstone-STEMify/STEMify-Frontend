@@ -36,16 +36,16 @@ export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
     updateQuizAttempt: builder.mutation<
       any,
       {
-        studentQuizId: number
+        quizAttemptId: number
         questionAttempts: QuestionAttempt[]
       }
     >({
-      query: ({ studentQuizId, questionAttempts }) => ({
-        url: `/quiz-attempts/${studentQuizId}`,
+      query: ({ quizAttemptId, questionAttempts }) => ({
+        url: `/quiz-attempts/${quizAttemptId}`,
         method: 'PATCH',
         body: { questionAttempts }
       }),
-      invalidatesTags: (result, error, { studentQuizId }) => [{ type: 'Quiz', id: studentQuizId }]
+      invalidatesTags: (result, error, { quizAttemptId }) => [{ type: 'Quiz', id: quizAttemptId }]
     })
   })
 })
