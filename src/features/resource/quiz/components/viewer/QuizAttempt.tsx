@@ -27,14 +27,6 @@ export default function QuizAttempt({ studentQuizId }: QuizAttemptProps) {
     skip: !studentQuizId
   })
 
-  const [expandedAttempts, setExpandedAttempts] = useState<number[]>([])
-
-  const toggleAttempt = (attemptId: number) => {
-    setExpandedAttempts((prev) =>
-      prev.includes(attemptId) ? prev.filter((id) => id !== attemptId) : [...prev, attemptId]
-    )
-  }
-
   if (isLoadingStudentQuiz) {
     return (
       <div className='space-y-4'>
@@ -154,17 +146,13 @@ export default function QuizAttempt({ studentQuizId }: QuizAttemptProps) {
 
         <div className='space-y-3'>
           {completedAttempts.map((attempt) => {
-            const isExpanded = expandedAttempts.includes(attempt.id)
             const totalQuestions = attempt.questionAttempts.length
             const correctAnswers = attempt.questionAttempts.filter((qa) => qa.isCorrect).length
 
             return (
-              <Card key={attempt.id} className='border-gray-200 shadow-sm transition-shadow hover:shadow-md'>
+              <Card key={attempt.id}>
                 <CardContent className='p-0'>
-                  <div
-                    className='flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50'
-                    onClick={() => toggleAttempt(attempt.id)}
-                  >
+                  <div className='flex items-center justify-between p-4'>
                     <div className='flex flex-1 items-center gap-4'>
                       <div className='flex h-12 w-12 items-center justify-center rounded-full bg-blue-100'>
                         <span className='text-lg font-bold text-blue-700'>#{attempt.attemptNumber}</span>
@@ -191,18 +179,11 @@ export default function QuizAttempt({ studentQuizId }: QuizAttemptProps) {
                         </div>
                       </div>
 
-                      <div className='flex items-center gap-3'>
+                      <div className='mr-5 flex items-center gap-3'>
                         <div className='text-right'>
                           <p className='text-sm text-gray-600'>Score</p>
                           <p className='text-2xl font-bold text-gray-900'>{attempt.totalScore}%</p>
                         </div>
-                        <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
-                          {isExpanded ? (
-                            <ChevronUp className='h-5 w-5 text-gray-600' />
-                          ) : (
-                            <ChevronDown className='h-5 w-5 text-gray-600' />
-                          )}
-                        </Button>
                       </div>
                     </div>
                   </div>
