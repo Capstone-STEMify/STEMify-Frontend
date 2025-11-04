@@ -12,6 +12,8 @@ import { supabase } from '@/libs/supabase/client'
 import { useExportAssembly } from '@/features/creator-3d/hooks/creator-3d-helper'
 import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
 import { toast } from 'sonner'
+import { useCreateEmulatorMutation, useSearchEmulationsQuery } from '@/features/emulator/api/emulatorApi'
+import { fileToBase64 } from '@/utils/index'
 
 interface ModelItem {
   id: number
@@ -28,57 +30,34 @@ const categories = ['Tất cả', 'Hình học', 'Cảm biến', 'Robot', 'Phư�
 export default function StrawLabProject() {
   const exportAssemblyFn = useExportAssembly()
   const [showCreateDialog, setShowCreateDialog] = useState(false)
-  const [creating, setCreating] = useState(false)
   const locale = useLocale()
   const [selectedCategory, setSelectedCategory] = useState('Tất cả')
-  const [favorites, setFavorites] = useState<Set<number>>(new Set())
   const router = useRouter()
-  const [models, setModels] = useState<ModelItem[]>([])
 
-  const [loading, setLoading] = useState(true)
+  const { data, isLoading } = useSearchEmulationsQuery({})
+  const emulations = data?.data.items || []
 
-  useEffect(() => {
-    const fetchModels = async () => {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('assembly_data')
-        .select('id, name, description, category, image_url, rating, is_available')
-        .order('created_at', { ascending: false })
+  const [createEmulation, { isLoading: isCreating }] = useCreateEmulatorMutation()
 
-      if (error) {
-        console.error('Error fetching models:', error)
-        setLoading(false)
-        return
-      }
-
-      setModels(data || [])
-      setLoading(false)
-    }
-
-    fetchModels()
-  }, [])
-
-  const filteredModels =
-    selectedCategory === 'Tất cả' ? models : models.filter((model) => model.category === selectedCategory)
-
-  const handleNavigate = (id: number) => {
+  const handleNavigate = (id: string) => {
     router.push(`/${locale}/workspace-3d/${id}`)
   }
-  const toggleFavorite = (id: number) => {
-    const newFavorites = new Set(favorites)
-    if (newFavorites.has(id)) {
-      newFavorites.delete(id)
-    } else {
-      newFavorites.add(id)
-    }
-    setFavorites(newFavorites)
+
+  if (emulations.length === 0) {
+    return (
+      <SEmpty
+        title='Không tìm thấy mô hình nào'
+        description='Hãy thử lại sau'
+        icon={<Bot className='h-8 w-8 text-white' />}
+      />
+    )
   }
 
-  if (loading) return <div className='py-10 text-center text-gray-500'>Đang tải danh sách mô hình...</div>
+  if (isLoading) return <div className='py-10 text-center text-gray-500'>Đang tải danh sách mô hình...</div>
   return (
     <div>
       {/* Main Content with rounded background */}
-      <main className='bg-light container mx-auto p-4'>
+      <main className='bg-light min-h-screen'>
         <div>
           {/* Tab Navigation */}
           <div className='mb-6'>
@@ -110,29 +89,19 @@ export default function StrawLabProject() {
 
           {/* Models Grid */}
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
-            {filteredModels.map((model) => (
+            {emulations.map((e) => (
               <Card
-                key={model.id}
+                key={e.emulationId}
                 className='group transform cursor-pointer overflow-hidden border-0 bg-white p-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-blue-200'
                 onClick={() => {
-                  if (model.is_available) handleNavigate(model.id)
+                  handleNavigate(e.emulationId)
                 }}
               >
                 <CardContent className='p-0'>
                   <div className='relative aspect-[4/3] w-full overflow-hidden rounded-t-lg'>
-                    <button
-                      onClick={() => toggleFavorite(model.id)}
-                      className='absolute top-2 right-2 z-10 rounded-full bg-white/20 p-1 backdrop-blur-sm transition-colors hover:bg-white/30'
-                    >
-                      <Heart
-                        className={`h-4 w-4 ${favorites.has(model.id) ? 'fill-red-500 text-red-500' : 'text-white'}`}
-                      />
-                    </button>
-
-                    {/* Image */}
                     <Image
-                      src={model.image_url || '/images/shape.png'}
-                      alt={model.name}
+                      src={e.thumbnailUrl || '/images/shape.png'}
+                      alt={e.name}
                       fill
                       className='object-cover transition-transform duration-300'
                       sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
@@ -142,64 +111,35 @@ export default function StrawLabProject() {
                   {/* Content */}
                   <div className='p-4'>
                     <h3 className='text-center text-sm font-medium text-gray-800 transition-colors group-hover:text-blue-600'>
-                      {model.name}
+                      {e.name}
                     </h3>
-                    <p className='mt-1 line-clamp-2 text-center text-xs text-gray-500'>{model.description}</p>
+                    <p className='mt-1 line-clamp-2 text-center text-xs text-gray-500'>{e.description}</p>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-
-          {/* Empty State */}
-          {filteredModels.length === 0 && (
-            <SEmpty
-              title='Không tìm thấy model nào'
-              description='Hãy liên hệ hỗ trợ'
-              icon={<Bot className='h-8 w-8 text-white' />}
-            />
-          )}
         </div>
 
         {showCreateDialog && (
           <ExportDialog
             onClose={() => setShowCreateDialog(false)}
             onExport={async (metadata) => {
-              try {
-                setCreating(true)
-                toast.info('⏳ Đang tạo workspace mới...')
+              toast.info('⏳ Đang tạo workspace mới...')
 
-                // 🧱 export dữ liệu rỗng
-                const emptyData = exportAssemblyFn(metadata)
-
-                // 🗄️ Insert vào Supabase
-                const { data, error } = await supabase
-                  .from('assembly_data')
-                  .insert([
-                    {
-                      name: metadata.title,
-                      description: metadata.description,
-                      author: metadata.author,
-                      category: metadata.category,
-                      image_url: '/images/shape.png',
-                      is_available: true,
-                      data: emptyData
-                    }
-                  ])
-                  .select('id')
-                  .single()
-
-                if (error) throw error
-
+              const res = await createEmulation({
+                body: {
+                  name: metadata.name,
+                  description: metadata.description,
+                  visibility: 'private',
+                  definition_json: {},
+                  thumbnail_file_name: metadata.thumbnail_file_name,
+                  thumbnail_image_base64: metadata.thumbnail_image_base64
+                }
+              }).unwrap()
+              if (res) {
                 toast.success('✅ Đã tạo workspace mới!')
                 setShowCreateDialog(false)
-
-                router.push(`/${locale}/workspace-3d/${data.id}`)
-              } catch (err: any) {
-                console.error('❌ Create new workspace error:', err)
-                toast.error(err.message || 'Lỗi khi tạo workspace mới.')
-              } finally {
-                setCreating(false)
               }
             }}
           />

@@ -1,42 +1,71 @@
-import { Emulator, EmulatorCreateRequest } from '@/features/emulator/types/emulator.type'
+import {
+  Emulator,
+  EmulatorCreateRequest,
+  EmulatorResponse,
+  EmulatorSearchParams,
+  EmulatorUpdateRequest,
+  EmulatorWithThumbnail
+} from '@/features/emulator/types/emulator.type'
+import { RootState } from '@/libs/redux/store'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const emulatorApi = createApi({
   reducerPath: 'emulatorApi',
   tagTypes: ['Emulator'],
   baseQuery: fetchBaseQuery({
+    credentials: 'include',
+    prepareHeaders: async (headers, api) => {
+      const token = (api.getState() as RootState).auth.token
+      if (token) {
+        headers.set('Authorization', 'Bearer ' + token)
+      }
+
+      return headers
+    },
     baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/emulator`
   }),
-  refetchOnFocus: false,
+
   refetchOnReconnect: false,
   refetchOnMountOrArgChange: false,
   keepUnusedDataFor: 3600,
   endpoints: (builder) => ({
-    getEmulatorById: builder.query<ApiSuccessResponse<Emulator>, { emulatorId: string }>({
-      query: ({ emulatorId }) => ({
-        url: `/v1/emulations/${emulatorId}`,
+    getEmulatorById: builder.query<ApiSuccessResponse<EmulatorWithThumbnail>, { emulationId: string }>({
+      query: ({ emulationId }) => ({
+        url: `/v1/emulations/${emulationId}`,
         method: 'GET'
       }),
       providesTags: ['Emulator']
     }),
-    searchEmulations: builder.query<ApiSuccessResponse<PaginatedResult<Emulator[]>>, any>({
-      query: ({ queryParams }) => ({
+    searchEmulations: builder.query<ApiSuccessResponse<EmulatorResponse>, EmulatorSearchParams>({
+      query: (queryParams) => ({
         url: `/v1/emulations`,
         method: 'GET',
         params: queryParams
       }),
       providesTags: ['Emulator']
     }),
-    createEmulator: builder.mutation<any, { body: EmulatorCreateRequest }>({
+    createEmulator: builder.mutation<ApiSuccessResponse<EmulatorWithThumbnail>, { body: EmulatorCreateRequest }>({
       query: ({ body }) => ({
-        url: '/v1/emulations',
+        url: '/v1/emulations:draft',
         method: 'POST',
         body
       }),
-      // ⚠️ Không invalidate để tránh WebGL context lost
-      invalidatesTags: []
+      invalidatesTags: ['Emulator']
+    }),
+    updateEmulator: builder.mutation<any, { emulationId: string; body: EmulatorUpdateRequest }>({
+      query: ({ emulationId, body }) => ({
+        url: `/v1/emulations/${emulationId}`,
+        method: 'PATCH',
+        body
+      }),
+      invalidatesTags: ['Emulator']
     })
   })
 })
 
-export const { useGetEmulatorByIdQuery, useCreateEmulatorMutation } = emulatorApi
+export const {
+  useGetEmulatorByIdQuery,
+  useSearchEmulationsQuery,
+  useCreateEmulatorMutation,
+  useUpdateEmulatorMutation
+} = emulatorApi
