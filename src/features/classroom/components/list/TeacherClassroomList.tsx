@@ -6,31 +6,35 @@ import { Badge } from '@/components/shadcn/badge'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Users, BookOpen, Clock, GraduationCap } from 'lucide-react'
 import { format } from 'date-fns'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import Link from 'next/link'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import SearchBar from '@/components/shared/search/SearchBar'
 
 import SSelect from '@/components/shared/SSelect'
+import { resetParams } from '@/features/classroom/slice/classroomSlice'
 
-export default function ClassroomList() {
+export default function TeacherClassroomList() {
   const user = useAppSelector((state) => state.auth?.user)
   const queryParams = useAppSelector((state) => state.classroom)
-  const [selectedStatus, setSelectedStatus] = useState<string>('')
-
-  const classroomQueryParams = {
-    ...queryParams,
-    status: selectedStatus || undefined
-  }
+  const [selectedStatus, setSelectedStatus] = useState<'all' | ClassroomStatus>('all')
+  const dispatch = useAppDispatch()
 
   const { data, isLoading, error } = useSearchClassroomsQuery({
     ...queryParams,
-    studentId: user?.userId
+    teacherId: user?.userId,
+    orderBy: '',
+    status: selectedStatus === 'all' ? undefined : (selectedStatus as ClassroomStatus)
   })
+
   const classrooms = data?.data.items || []
+  // reset classroom store filters first time load
+  useEffect(() => {
+    dispatch(resetParams())
+  }, [dispatch])
 
   if (isLoading) {
     return (
@@ -42,17 +46,18 @@ export default function ClassroomList() {
     )
   }
 
-  if (error || !classrooms || classrooms.length === 0) {
+  if (error || !classrooms) {
     return <SEmpty title='No Classrooms Found' description="You don't have any classrooms yet." />
   }
 
-  const statusOptions = Object.values(ClassroomStatus).map((status) => ({
-    value: status,
-    label: status
-  }))
+  const statusOptions = [
+    { value: 'all', label: 'All Statuses' },
+    { value: ClassroomStatus.IN_PROGRESS, label: 'In Progress' },
+    { value: ClassroomStatus.COMPLETED, label: 'Completed' }
+  ]
 
   return (
-    <div className='space-y-5 pt-4'>
+    <div className='space-y-5 px-10 pt-4'>
       {/* Header */}
 
       <div className='flex gap-3'>
@@ -60,14 +65,18 @@ export default function ClassroomList() {
         <SSelect
           placeholder='Filter by status'
           value={selectedStatus}
-          onChange={(value) => setSelectedStatus(value)}
+          onChange={(value) => setSelectedStatus(value as ClassroomStatus | 'all')}
           options={statusOptions}
           className='w-fit'
         />
       </div>
 
+      {classrooms.length === 0 && (
+        <SEmpty title='No Classrooms Found' description="You don't have any classrooms yet." />
+      )}
+
       {/* Classroom Grid */}
-      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
         {classrooms.map((classroom) => (
           <Link key={classroom.id} href={`/classroom/${classroom.id}/overview`}>
             <Card className='group h-full cursor-pointer overflow-hidden transition-all hover:shadow-lg'>
