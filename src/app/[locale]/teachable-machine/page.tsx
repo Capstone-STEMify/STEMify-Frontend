@@ -2,5 +2,9 @@ import TeachableMachinePage from '@/features/AI-model/components/TeachableMachin
 import React from 'react'
 
 export default function page() {
-  return <TeachableMachinePage />
+  return (
+    <div className='bg-slate-50/50'>
+      <TeachableMachinePage />
+    </div>
+  )
 }

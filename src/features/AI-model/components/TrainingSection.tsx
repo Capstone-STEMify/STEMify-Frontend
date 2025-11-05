@@ -24,8 +24,8 @@ export function TrainingSection({ isTraining, trainingProgress, trainingStatus, 
   }
 
   return (
-    <Card className='mx-auto flex w-fit flex-col items-center justify-center rounded-2xl p-4 text-center'>
-      <h2 className='mb-2 text-xl font-bold'>Train Model</h2>
+    <Card className='mx-auto flex w-fit flex-col items-center justify-center rounded-2xl p-4 text-center shadow-md'>
+      <h2 className='mb-2 text-xl'>Train Model</h2>
       <p className='mb-5 opacity-90'>Bấm nút bên dưới để train model ngay trên web</p>
 
       <Button onClick={onTrain} disabled={isTraining} className='bg-sky-100 text-blue-500'>

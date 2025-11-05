@@ -7,10 +7,11 @@ import { Camera, Edit, Edit2, Trash2, Webcam } from 'lucide-react'
 interface ClassManagementProps {
   classes: string[]
   onAddNewClass: (className: string) => void
-
+  onEditClassName: (oldName: string, newName: string) => void
   classImages: Record<string, string[]>
   onOpenCamera: (className: string) => void
   onRemoveImage: (className: string, index: number) => void
+  onRemoveClass: (className: string) => void
 }
 
 export function ClassManagement({
@@ -18,9 +19,13 @@ export function ClassManagement({
   onAddNewClass,
   classImages,
   onOpenCamera,
-  onRemoveImage
+  onRemoveImage,
+  onEditClassName,
+  onRemoveClass
 }: ClassManagementProps) {
   const [newClassName, setNewClassName] = useState('')
+  const [editingClass, setEditingClass] = useState<string | null>(null)
+  const [editedName, setEditedName] = useState('')
 
   const handleAddClass = () => {
     if (newClassName.trim()) {
@@ -28,36 +33,74 @@ export function ClassManagement({
       setNewClassName('')
     }
   }
+  const handleStartEdit = (className: string) => {
+    setEditingClass(className)
+    setEditedName(className)
+  }
+
+  const handleSaveEdit = (oldName: string) => {
+    if (!editedName.trim()) return
+    if (editedName !== oldName) onEditClassName(oldName, editedName.trim())
+    setEditingClass(null)
+  }
 
   return (
-    <Card className='border-2 border-gray-200 bg-gray-50 py-4'>
+    <Card className='border-2 border-gray-200 py-4 shadow-md'>
       <CardHeader>
-        <CardTitle className='text-2xl'>1. Tạo các class</CardTitle>
+        <CardTitle className='text-2xl'>Tạo các class</CardTitle>
       </CardHeader>
       <CardContent>
         <div className='mb-5 grid grid-cols-1 gap-5 md:grid-cols-2'>
-          {classes.map((className, index) => (
-            <Card key={index} className='border-2 border-gray-200 py-4'>
+          {classes.map((className) => (
+            <Card key={className} className='border-2 border-gray-200 py-4'>
               <CardHeader>
-                <CardTitle className='flex items-center text-lg'>
-                  {className}{' '}
-                  <Button variant='ghost' className='cursor-pointer'>
-                    <Edit2 size={15} />
+                <CardTitle className='flex items-center gap-2 text-lg'>
+                  {editingClass === className ? (
+                    <Input
+                      value={editedName}
+                      autoFocus
+                      onChange={(e) => setEditedName(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSaveEdit(className)}
+                      onBlur={() => handleSaveEdit(className)}
+                      className='w-48 text-sm'
+                    />
+                  ) : (
+                    <>
+                      {className}
+                      <Button
+                        variant='ghost'
+                        size='icon'
+                        onClick={() => handleStartEdit(className)}
+                        className='ml-1 text-gray-600 hover:text-blue-600'
+                      >
+                        <Edit2 size={16} />
+                      </Button>
+                    </>
+                  )}
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    onClick={() => onRemoveClass(className)}
+                    className='text-gray-600 hover:text-red-600'
+                  >
+                    <Trash2 size={16} />
                   </Button>
                 </CardTitle>
               </CardHeader>
+
               <CardContent>
                 <div className='flex cursor-pointer gap-2.5'>
                   <div
-                    className='flex flex-col items-center gap-1 rounded-md bg-blue-50 p-3 text-blue-600'
+                    className='flex flex-col items-center gap-1 rounded-md bg-blue-50 p-3 text-blue-600 hover:bg-blue-100'
                     onClick={() => onOpenCamera(className)}
                   >
                     <Camera size={25} />
                     <p className='text-xs font-semibold'>Webcam</p>
                   </div>
                 </div>
+
                 {/* Image preview grid */}
-                <div className='mt-4 mb-4 flex gap-2.5 overflow-x-auto'>
+                <div className='mt-4 mb-2 flex gap-2.5 overflow-x-auto'>
                   {classImages[className]?.map((imageSrc, index) => (
                     <div key={index} className='relative flex-shrink-0'>
                       <img
@@ -67,9 +110,9 @@ export function ClassManagement({
                       />
                       <button
                         onClick={() => onRemoveImage(className, index)}
-                        className='absolute top-1 right-1 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-white'
+                        className='absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600'
                       >
-                        <Trash2 size={16} />
+                        <Trash2 size={14} />
                       </button>
                     </div>
                   ))}
@@ -83,6 +126,7 @@ export function ClassManagement({
           ))}
         </div>
 
+        {/* Add new class */}
         <div className='flex max-w-md gap-2.5'>
           <Input
             type='text'

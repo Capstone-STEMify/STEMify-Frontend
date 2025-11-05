@@ -7,13 +7,11 @@ interface PredictionResultsProps {
 
 export function PredictionResults({ results }: PredictionResultsProps) {
   return (
-    <Card className='border-l-4 border-[#2ed573] bg-gray-50'>
+    <Card className='bg-gray-50 p-4'>
       <CardHeader>
         <CardTitle className='text-xl'>Kết quả phân loại</CardTitle>
       </CardHeader>
       <CardContent>
-        <h4 className='mb-4 text-lg font-semibold'>Kết quả dự đoán:</h4>
-
         <div className='space-y-2.5'>
           {results.map((result, index) => {
             const percentage = (result.probability * 100).toFixed(1)

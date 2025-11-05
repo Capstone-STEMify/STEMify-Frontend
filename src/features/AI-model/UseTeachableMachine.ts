@@ -59,6 +59,32 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     [classes]
   )
 
+  // Rename class
+  const renameClass = useCallback((oldName: string, newName: string) => {
+    if (!newName.trim() || oldName === newName) return
+
+    setClasses((prev) => prev.map((c) => (c === oldName ? newName : c)))
+
+    setClassImages((prev) => {
+      const newImages = { ...prev }
+      if (prev[oldName]) {
+        newImages[newName] = prev[oldName]
+        delete newImages[oldName]
+      }
+      return newImages
+    })
+  }, [])
+
+  // Remove class
+  const removeClass = useCallback((className: string) => {
+    setClasses((prev) => prev.filter((c) => c !== className))
+    setClassImages((prev) => {
+      const newImages = { ...prev }
+      delete newImages[className]
+      return newImages
+    })
+  }, [])
+
   // Update image preview
   const updateImagePreview = useCallback((className: string, imageDataUrl: string) => {
     setClassImages((prev) => ({
@@ -472,6 +498,8 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     trainingStatus,
     predictionResults,
     addNewClass,
+    renameClass,
+    removeClass,
     updateImagePreview,
     removeImage,
     trainModel,
