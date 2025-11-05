@@ -164,8 +164,6 @@ export function useAddObject() {
     dispatch(setSelectedId(instance.id))
     dispatch(addTargetToAction({ actionId: selectedActionId, targetId: instance.id }))
 
-    console.log('✅ Added object:', instance.id, 'to action:', selectedActionId)
-
     return instance.id
   }
 }
@@ -217,6 +215,7 @@ export function exportAssembly(
   const now = new Date().toISOString()
   const actions = state.workspaceTree.actions
   const activities = state.workspaceTree.activities
+  console.log('🧩 Exporting activities activities:', activities)
   // Straws
   const straws = instances
     .filter((i) => i.category === 'straw')
@@ -310,10 +309,10 @@ export function exportAssembly(
         { id: 'pink_8_9', source: '/components/templates/StrawTypes/pink_8_9.json' },
         { id: 'orange_6_3', source: '/components/templates/StrawTypes/orange_6_3.json' },
         { id: 'yellow_3_8', source: '/components/templates/StrawTypes/yellow_3_8.json' },
-        { id: '1leg_red', source: '/components/templates/ConnectorTypes/1leg.json' },
-        { id: '2leg_red', source: '/components/templates/ConnectorTypes/2legs.json' },
-        { id: '3leg_red', source: '/components/templates/ConnectorTypes/3legs.json' },
-        { id: '5leg_red', source: '/components/templates/ConnectorTypes/5legs.json' }
+        { id: '1leg', source: '/components/templates/ConnectorTypes/1leg.json' },
+        { id: '2leg', source: '/components/templates/ConnectorTypes/2legs.json' },
+        { id: '3leg', source: '/components/templates/ConnectorTypes/3legs.json' },
+        { id: '5leg', source: '/components/templates/ConnectorTypes/5legs.json' }
       ]
     },
     instances: {

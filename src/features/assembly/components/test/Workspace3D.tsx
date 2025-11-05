@@ -8,6 +8,7 @@ import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer
 import { useParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setIsShiftPressed } from '@/features/assembly/slice/assemblySlice'
+import { useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi' // ✅ Import hook có sẵn
 
 export default function Workspace3D({
   assemblyUrl,
@@ -30,18 +31,42 @@ export default function Workspace3D({
     Record<string, { rotation: { x: number; y: number; z: number }; translation: { x: number; y: number; z: number } }>
   >({})
 
-  const { assembly, instances, currentActivity, currentStep, isLoading, error, loadAssembly, nextStep, previousStep } =
-    useAssembly()
+  // ✅ Fetch emulator data từ API
+  const {
+    data: emulatorResponse,
+    isLoading: isLoadingEmulator,
+    error: errorEmulator
+  } = useGetEmulatorByIdQuery({ emulationId: id as string }, { skip: !id })
 
-  // load assembly
-  // useEffect(() => {
-  //   assemblyUrl = assemblyUrl || (id ? `/assemblies/${id}.json` : '/assemblies/octahedron.json')
-  //   console.log('Loading assembly from URL:', assemblyUrl)
-  //   loadAssembly(assemblyUrl)
-  // }, [assemblyUrl, loadAssembly])
+  const {
+    assembly,
+    instances,
+    currentActivity,
+    currentStep,
+    isLoading: isLoadingAssembly,
+    error: errorAssembly,
+    loadAssembly,
+    nextStep,
+    previousStep
+  } = useAssembly()
+
+  // ✅ Load assembly khi có data từ API
   useEffect(() => {
-    loadAssembly(`/api/assemblies/${id}`)
-  }, [])
+    if (emulatorResponse?.data?.definitionJson) {
+      try {
+        // definitionJson có thể là string hoặc object
+        const assemblyData =
+          typeof emulatorResponse.data.definitionJson === 'string'
+            ? JSON.parse(emulatorResponse.data.definitionJson)
+            : emulatorResponse.data.definitionJson
+
+        // Load assembly với inline data
+        loadAssembly('inline', assemblyData)
+      } catch (err) {
+        console.error('Failed to parse assembly data:', err)
+      }
+    }
+  }, [emulatorResponse, loadAssembly])
 
   // sync step
   useEffect(() => {
@@ -75,20 +100,20 @@ export default function Workspace3D({
   useEffect(() => {
     if (orbitControlsRef.current) orbitControlsRef.current.enabled = !isTransforming
   }, [isTransforming])
-  const maxStep = currentActivity?.steps.length || 0
 
+  const maxStep = currentActivity?.steps.length || 0
   const clampedStep = Math.min(Math.max(stepIndex, 0), Math.max(maxStep - 1, 0))
+
   const getComponentElements = useCallback(
     (componentId: string): string[] => {
       if (!assembly?.components?.squares) return []
-
       const component = assembly.components.squares.find((c: any) => c.id === componentId)
       if (!component) return []
-
       return [...(component.elements.straws || []), ...(component.elements.connectors || [])]
     },
     [assembly]
   )
+
   const visibleInstances = useMemo(() => {
     if (!assembly || !instances || !currentActivity) {
       return { straws: [], connectors: [] }
@@ -99,7 +124,6 @@ export default function Workspace3D({
 
     const stepsUpToNow = currentActivity.steps.slice(0, Math.min(clampedStep + 1, totalSteps))
     const allowedActionIds = new Set(stepsUpToNow.map((s: any) => s.actionId))
-
     const actionsForNow = (assembly.actions || []).filter((a) => allowedActionIds.has(a.id))
 
     let showAll = false
@@ -107,7 +131,6 @@ export default function Workspace3D({
     const visibleConnectorIds = new Set<string>()
 
     for (const action of actionsForNow) {
-      // Targets can be an array of ids or 'all'
       if (action.targets) {
         if (Array.isArray(action.targets)) {
           for (const id of action.targets) {
@@ -119,7 +142,6 @@ export default function Workspace3D({
         }
       }
 
-      // Connection groups map to straw/connector pairs
       if (action.connectionGroup && assembly.connections?.[action.connectionGroup]) {
         const conns = assembly.connections[action.connectionGroup]
         for (const c of conns) {
@@ -128,7 +150,6 @@ export default function Workspace3D({
         }
       }
 
-      // Component-based actions
       if (action.type === 'transform_component' && action.component) {
         const componentElements = getComponentElements(action.component)
         for (const elementId of componentElements) {
@@ -140,7 +161,6 @@ export default function Workspace3D({
         }
       }
 
-      // 🔧 FIX: Assembly actions (both component_assembly and legacy assemble_components)
       if ((action.type === 'component_assembly' || action.type === 'assemble_components') && action.assemblyId) {
         const assemblyDef = assembly.assemblies?.[action.assemblyId]
         if (assemblyDef) {
@@ -169,7 +189,7 @@ export default function Workspace3D({
       straws: instances.filter((inst) => inst.category === 'straw' && visibleStrawIds.has(inst.id)),
       connectors: instances.filter((inst) => inst.category === 'connector' && visibleConnectorIds.has(inst.id))
     }
-  }, [assembly, instances, currentActivity, clampedStep])
+  }, [assembly, instances, currentActivity, clampedStep, getComponentElements])
 
   const strawTypeCount = useMemo(() => {
     const counts: Record<string, number> = {}
@@ -189,13 +209,16 @@ export default function Workspace3D({
     return counts
   }, [visibleInstances.connectors])
 
+  // ✅ Combine loading và error states
+  const isLoading = isLoadingEmulator || isLoadingAssembly
+  const error = errorEmulator || errorAssembly
+
   if (isLoading) return <div>Loading assembly...</div>
-  if (error) return <div>Error loading assembly: {error}</div>
+  if (error) return <div>Error loading assembly: {error?.toString()}</div>
   if (!assembly) return <div>No assembly loaded</div>
 
   return (
     <div className='relative h-[89.5vh] w-full'>
-      {/* Step Info */}
       {showUI && currentStep && (
         <StepInfoPanel
           stepIndex={stepIndex}
@@ -206,7 +229,6 @@ export default function Workspace3D({
         />
       )}
 
-      {/* Step Controller */}
       {showUI && (
         <StepController
           stepIndex={stepIndex}
@@ -223,10 +245,6 @@ export default function Workspace3D({
         />
       )}
 
-      {/* Transform Instruction */}
-      {/* {showUI && currentStep?.actionId === 'action_adjust_additional_connector_arms' && ( */}
-
-      {/* Realtime Control */}
       {showUI && (
         <RealtimeControlPanel
           assembly={assembly}
@@ -237,7 +255,6 @@ export default function Workspace3D({
         />
       )}
 
-      {/* Canvas */}
       <SceneRenderer
         maxStep={maxStep}
         assembly={assembly}

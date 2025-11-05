@@ -172,7 +172,7 @@ export interface UseAssemblyReturn {
   isOptimized: boolean
 
   // Actions
-  loadAssembly: (url: string) => Promise<void>
+  loadAssembly: (source: string, inlineData?: Assembly) => Promise<void>
   updateCameraPosition: (position: { x: number; y: number; z: number }) => void
   setCurrentActivity: (activityId: string) => void
   nextStep: () => void
@@ -368,7 +368,7 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
   //     setIsLoading(false)
   //   }
   // }, [])
-  const loadAssembly = useCallback(async (source: string) => {
+  const loadAssembly = useCallback(async (source: string, inlineData?: Assembly) => {
     setIsLoading(true)
     setError(null)
     setLoadingProgress(0)
@@ -378,16 +378,11 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
 
       let assemblyData: Assembly | null = null
 
-      // 🔹 Nếu là URL Supabase ID (vd: supabase:uuid hoặc supabase?id=...)
-      if (source.startsWith('supabase:')) {
-        const id = source.replace('supabase:', '').trim()
-        const { data, error } = await supabase.from('assembly_data').select('data').eq('id', id).single()
-
-        if (error || !data) throw new Error('Không tìm thấy assembly trong Supabase')
-        assemblyData = data.data // 👈 JSON gốc trong cột jsonb
-        console.log('Loaded from Supabase:', assemblyData)
+      // ✅ Ưu tiên dùng inline data (từ API)
+      if (inlineData) {
+        assemblyData = inlineData
       }
-      // 🔹 Nếu là file trong public như trước
+      // Fallback: fetch từ file public
       else {
         const response = await fetch(source)
         if (!response.ok) throw new Error(`Failed to load assembly: ${response.statusText}`)
@@ -397,7 +392,7 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
       // 👉 Đảm bảo assemblyData tồn tại
       if (!assemblyData) throw new Error('Empty assembly data')
 
-      // Giữ nguyên phần xử lý phía dưới:
+      // ... phần xử lý materials, templates, instances giữ nguyên
       setLoadingProgress(20)
 
       await Promise.all(
@@ -441,10 +436,8 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
             templateId: strawGroup.templateId,
             transform: instance.transform
           })
-          console.log('Instance created:', instanceData)
 
           const material = instanceData.material || resolveMaterial(instanceData.materialRef)
-          console.log('Yellow straw material:', material)
           allInstances.push({
             id: instance.id,
             templateId: strawGroup.templateId,
@@ -484,6 +477,8 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
       setLoadingProgress(90)
       setAssembly(assemblyData)
 
+      // TODO: đang hard code activity thứ 2 (index 1) để test
+      // Fix later
       if (assemblyData.activities.length > 0) {
         setCurrentActivity(assemblyData.activities[0])
         if (assemblyData.activities[0].steps.length > 0) {
@@ -645,8 +640,11 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
   const nextStep = useCallback(() => {
     if (!currentActivity || !currentStep) return
 
+    console.log('Current Step:', currentStep)
+    console.log('Current Activity:', currentActivity)
     const currentIndex = currentActivity.steps.findIndex((s: any) => s.actionId === currentStep.actionId)
     if (currentIndex < currentActivity.steps.length - 1) {
+      console.log('Next Step Index:', currentIndex + 1)
       setCurrentStep(currentActivity.steps[currentIndex + 1])
     }
   }, [currentActivity, currentStep])

@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
 import {
   addAction,
+  addStepToActivity,
   moveTargetToAction,
   removeActionWithInstances,
   removeTargetFromAllActions,
@@ -43,7 +44,8 @@ export default function WorkspaceTree() {
   const t3d = useTranslations('creator3D.right_panel')
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
-  const actions = useAppSelector((s: RootState) => s.workspaceTree.actions)
+  const { actions, activities } = useAppSelector((s: RootState) => s.workspaceTree)
+  console.log('🧩 WorkspaceTree activities:', activities)
   const instances = useAppSelector((s: RootState) => s.creatorScene.instances)
 
   const nextActionNumber = actions.length + 1
@@ -99,8 +101,8 @@ export default function WorkspaceTree() {
         }))
       }
     }
+    console.log('📁 Exported Workspace JSON:', JSON.stringify(exportData, null, 2))
 
-    console.log('Workspace JSON:', JSON.stringify(exportData, null, 2))
     alert('Workspace JSON has been logged in the console!')
   }
 
@@ -150,7 +152,7 @@ export default function WorkspaceTree() {
         const draggedData = items[draggedId]
 
         if (draggedData?.type === 'component' && targetData?.type === 'action') {
-          await dispatch(moveTargetToAction(draggedId, targetId))
+          dispatch(moveTargetToAction(draggedId, targetId))
 
           // ⚡ ép tree cập nhật lại UI và đảm bảo folder target mở
           requestAnimationFrame(() => {
@@ -177,10 +179,35 @@ export default function WorkspaceTree() {
     const newId = `action_${nextActionNumber}`
     if (type === 'highlight') {
       dispatch(addAction({ id: newId, name: `Highlight Action ${nextActionNumber}`, type }))
+      dispatch(
+        // TODO: hard code activityId tạm thời
+        addStepToActivity({
+          activityId: activities[0]?.id || newId,
+          step: {
+            title: `Highlight Step ${nextActionNumber}`,
+            actionId: newId,
+            description: '',
+            expectedResult: '',
+            hints: []
+          }
+        })
+      )
       dispatch(setSelectedAction(newId))
     }
     if (type === 'transform_arm') {
       dispatch(addAction({ id: newId, name: `Transform Action ${nextActionNumber}`, type }))
+      dispatch(
+        addStepToActivity({
+          activityId: activities[0]?.id || newId,
+          step: {
+            title: `Transform Step ${nextActionNumber}`,
+            actionId: newId,
+            description: '',
+            expectedResult: '',
+            hints: []
+          }
+        })
+      )
       dispatch(setSelectedAction(newId))
     }
   }

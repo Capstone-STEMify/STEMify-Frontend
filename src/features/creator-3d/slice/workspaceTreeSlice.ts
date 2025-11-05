@@ -218,10 +218,18 @@ export const workspaceTreeSlice = createSlice({
       }
     },
     addActivity: (state, action: PayloadAction<WorkspaceActivity>) => {
-      const exists = state.activities.find((a) => a.id === action.payload.id)
-      if (!exists) {
+      const existingIndex = state.activities.findIndex((a) => a.id === action.payload.id)
+      if (existingIndex >= 0) {
+        // ✅ REPLACE nếu đã tồn tại
+        state.activities[existingIndex] = action.payload
+      } else {
+        // ✅ THÊM MỚI nếu chưa có
         state.activities.push(action.payload)
       }
+    },
+
+    clearActivities: (state) => {
+      state.activities = []
     },
 
     resetActions: () => initialState,
@@ -246,7 +254,8 @@ export const {
   updateStep,
   removeTargetFromAllActions,
   updateActionName,
-  updateTargetOrderInAction
+  updateTargetOrderInAction,
+  clearActivities
 } = workspaceTreeSlice.actions
 
 export default workspaceTreeSlice.reducer
