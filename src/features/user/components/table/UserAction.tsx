@@ -31,6 +31,11 @@ export function useGetUserAction(): ColumnDef<User>[] {
   return [
     createSelectColumn<User>(),
     {
+      accessorKey: 'userId',
+      header: '',
+      cell: ({ row }) => {}
+    },
+    {
       accessorKey: 'imageUrl',
       header: t('image'),
       cell: ({ row }) => {

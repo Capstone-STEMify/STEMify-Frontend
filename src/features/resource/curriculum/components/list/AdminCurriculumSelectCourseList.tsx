@@ -122,7 +122,8 @@ export default function AdminCurriculumSelectCourseList({
         handlePageChange={handlePageChange}
         rowSelection={selectedIds}
         onSelectionChange={(ids) => {
-          setSelectedIds(ids)
+          console.log('Selected Course IDs:', ids)
+          setSelectedIds(ids.map((id) => Number(id)))
         }}
         disabledRowIds={courseIds}
       />
