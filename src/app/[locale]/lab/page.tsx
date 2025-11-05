@@ -19,7 +19,7 @@ export default function StemifiLabLibrary() {
         {/* strawAssemblyLibrary */}
         <CardLayout
           imageClassName='object-fit'
-          imageSrc='/images/resources/teacher-support.png'
+          imageSrc='/images/resources/lessons.png'
           href='/lab/straw-lib'
           footer={
             <Button className='group bg-blue-500'>
@@ -73,8 +73,8 @@ export default function StemifiLabLibrary() {
 
         {/* microbitWorkspace */}
         <CardLayout
-          imageSrc='/images/resources/lessons.png'
-          href='/resource/lessons'
+          imageSrc='/images/resources/sim.gif'
+          href='/lab/microbit-workspace'
           footer={
             <Button className='group bg-blue-500'>
               <span>{tc('button.exploreMicrobitWorkspace')}</span>
@@ -100,8 +100,8 @@ export default function StemifiLabLibrary() {
 
         {/* modalMaker */}
         <CardLayout
-          imageSrc='/images/resources/news.png'
-          href='/resource/activities'
+          imageSrc='/images/resources/ai_drawbridge_cover.webp'
+          href='/lab/model-maker'
           footer={
             <Button className='group bg-blue-500'>
               <span>{tc('button.exploreModalMaker')}</span>
@@ -128,7 +128,7 @@ export default function StemifiLabLibrary() {
         {/* RobotAi */}
         <CardLayout
           imageSrc='/images/resources/activities.png'
-          href='/resource/stem-kit'
+          href='/lab/microbit-ai'
           footer={
             <Button className='group bg-blue-500'>
               <span>{tc('button.exploreRobotAi')}</span>
