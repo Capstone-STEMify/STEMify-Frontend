@@ -4,6 +4,6 @@
 
 import Workspace3D from '@/features/assembly/components/test/Workspace3D'
 
-export default function Page() {
+export default function StrawLabPage() {
   return <Workspace3D />
 }

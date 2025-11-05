@@ -1,4 +1,5 @@
 'use client'
+import BackButton from '@/components/shared/button/BackButton'
 import { useSearchEmulationsQuery } from '@/features/emulator/api/emulatorApi'
 import { EmblaCarouselType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
@@ -13,7 +14,7 @@ export default function StrawLabList() {
 
   const [selected, setSelected] = useState(0)
   const [progress, setProgress] = useState(0)
-  
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'center',
     dragFree: false,
@@ -59,7 +60,11 @@ export default function StrawLabList() {
   }
 
   return (
-    <div>
+    <div className='mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8'>
+      <div className='flex gap-2'>
+        <BackButton />
+        <h1>Danh sách mô hình</h1>
+      </div>
       <div className='overflow-x-hidden overflow-y-visible py-8' ref={emblaRef}>
         <div className='flex touch-pan-y gap-10 md:gap-12'>
           {emulators.map((e, i) => {
@@ -71,7 +76,7 @@ export default function StrawLabList() {
                 className={`relative min-w-0 shrink-0 grow-0 basis-[85%] cursor-pointer px-2 sm:basis-[55%] md:basis-[42%] md:px-4 lg:basis-[33%]`}
               >
                 <div
-                  className={`group relative mx-auto aspect-square w-[74vw] max-w-[28rem] transform-gpu overflow-hidden rounded-full bg-gradient-to-br from-indigo-400 via-blue-400 to-sky-400 ring-1 ring-black/5 transition-transform duration-300 ease-out sm:w-[60vw] md:w-[28rem] ${
+                  className={`group relative mx-auto aspect-square w-[50vw] max-w-[18rem] transform-gpu overflow-hidden rounded-full bg-gradient-to-br from-indigo-400 via-blue-400 to-sky-400 ring-1 ring-black/5 transition-transform duration-300 ease-out sm:w-[40vw] md:w-[18rem] ${
                     active ? 'z-20 scale-105 shadow-2xl md:scale-110' : 'scale-95 opacity-95 shadow'
                   }`}
                 >
@@ -80,7 +85,7 @@ export default function StrawLabList() {
                     alt={e.name}
                     fill
                     className='object-cover'
-                    sizes='(max-width: 640px) 74vw, (max-width: 768px) 60vw, 28rem'
+                    sizes='(max-width: 640px) 50vw, (max-width: 768px) 40vw, 18rem'
                     priority={i === 0}
                   />
                 </div>
@@ -94,14 +99,14 @@ export default function StrawLabList() {
           })}
         </div>
       </div>
-      {/* Numbered pagination */}
-      <div className='mt-8 flex items-center justify-center gap-2 md:gap-3'>
+
+      <div className='flex items-center justify-center gap-1.5 md:gap-2'>
         {emulators.map((_, i) => (
           <button
             key={i}
             onClick={() => scrollTo(i)}
-            className={`flex h-8 min-w-8 items-center justify-center rounded-full text-sm transition-all md:h-9 md:min-w-9 md:text-base ${
-              selected === i ? 'bg-zinc-900 px-3 font-semibold text-white' : 'text-zinc-700 hover:bg-zinc-100'
+            className={`flex h-6 min-w-6 items-center justify-center rounded-full text-xs transition-all md:h-7 md:min-w-7 md:text-sm ${
+              selected === i ? 'bg-zinc-900 px-2 font-semibold text-white shadow-sm' : 'text-zinc-700 hover:bg-zinc-100'
             }`}
             aria-label={`Go to item ${i + 1}`}
           >
@@ -109,10 +114,11 @@ export default function StrawLabList() {
           </button>
         ))}
       </div>
+
       {/* Progress bar */}
-      <div className='relative mx-auto mt-4 h-2 w-[86%] max-w-xl rounded-full bg-zinc-200'>
+      <div className='relative mx-auto mt-3 h-1.5 w-[70%] max-w-md rounded-full bg-zinc-200'>
         <div
-          className='absolute inset-y-0 left-0 rounded-full bg-zinc-900'
+          className='absolute inset-y-0 left-0 rounded-full bg-zinc-900 transition-all duration-300 ease-out'
           style={{ width: `${Math.max(10, progress * 100)}%` }}
         />
       </div>
