@@ -6,6 +6,25 @@ interface PredictionResultsProps {
 }
 
 export function PredictionResults({ results }: PredictionResultsProps) {
+  const gradients = [
+    'from-sky-400 to-blue-500',
+    'from-emerald-400 to-green-500',
+    'from-amber-400 to-orange-500',
+    'from-rose-400 to-pink-500',
+    'from-violet-400 to-purple-500',
+    'from-cyan-400 to-teal-500',
+    'from-lime-400 to-green-500'
+  ]
+
+  const getColorForClass = (className: string) => {
+    let hash = 0
+    for (let i = 0; i < className.length; i++) {
+      hash = className.charCodeAt(i) + ((hash << 5) - hash)
+    }
+    const index = Math.abs(hash) % gradients.length
+    return gradients[index]
+  }
+
   return (
     <Card className='bg-gray-50 p-4'>
       <CardHeader>
@@ -16,6 +35,7 @@ export function PredictionResults({ results }: PredictionResultsProps) {
           {results.map((result, index) => {
             const percentage = (result.probability * 100).toFixed(1)
             const barWidth = percentage
+            const gradient = getColorForClass(result.className)
 
             return (
               <div key={index} className='rounded-lg bg-white p-2.5'>
@@ -25,7 +45,7 @@ export function PredictionResults({ results }: PredictionResultsProps) {
                 </div>
                 <div className='h-5 w-full overflow-hidden rounded-full bg-gray-200'>
                   <div
-                    className='h-full bg-gradient-to-r from-[#4facfe] to-[#00f2fe] transition-all duration-300'
+                    className={`h-full bg-gradient-to-r ${gradient} transition-all duration-300`}
                     style={{ width: `${barWidth}%` }}
                   />
                 </div>
