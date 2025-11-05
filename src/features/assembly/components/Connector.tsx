@@ -181,4 +181,7 @@ export const Connector3D = forwardRef<Group, Props>(
 )
 
 Connector3D.displayName = 'Connector3D'
-// useGLTF.preload('/models/connector_2legs.glb')
+useGLTF.preload('/models/connector_1leg.glb')
+useGLTF.preload('/models/connector_2legs.glb')
+useGLTF.preload('/models/connector_3legs.glb')
+useGLTF.preload('/models/connector_5legs.glb')
