@@ -215,7 +215,7 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
       {/* Header */}
       <section className='mx-auto max-w-6xl px-6 pt-10'>
         <div className='flex flex-col items-center text-center'>
-          <h1 className='text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl'>Cầu Nâng Tự Động</h1>
+          <h1 className='text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl'>IMAGE MODEL</h1>
           <p
             className={[
               'mt-3 rounded-full px-4 py-1 text-sm font-medium ring-1',
