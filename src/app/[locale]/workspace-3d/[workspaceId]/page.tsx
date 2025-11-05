@@ -4,11 +4,13 @@ import { Suspense } from 'react'
 import Creator3DHeader from '@/features/creator-3d/components/creator3d/Creator3DHeader'
 import Creator3D from '@/features/creator-3d/components/creator3d/Creator3D'
 import { useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi'
+import { useParams } from 'next/navigation'
 
 export default function Create3DPage() {
+  const { workspaceId } = useParams()
   const { data: emulatorData, isLoading: isLoadingEmulator } = useGetEmulatorByIdQuery(
     {
-      emulatorId: 'emu_190f34e7f3dc'
+      emulationId: workspaceId as string
     },
     {
       refetchOnFocus: false,

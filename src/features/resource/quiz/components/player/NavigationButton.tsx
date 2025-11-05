@@ -11,12 +11,11 @@ import { toast } from 'sonner'
 
 type NavigationButtonsProps = {
   quiz: Quiz
-  studentQuizId: number // ID của student quiz attempt
 }
 
-export default function NavigationButtons({ quiz, studentQuizId }: NavigationButtonsProps) {
+export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
   const questions = quiz.questions
-  const { currentQuestionIndex, userAnswers } = useAppSelector((state) => state.quizPlayer)
+  const { currentQuestionIndex, userAnswers, quizAttemptId } = useAppSelector((state) => state.quizPlayer)
   const dispatch = useAppDispatch()
   const isMobile = useIsMobile()
   const [submitQuizAttempt, { isLoading }] = useUpdateQuizAttemptMutation()
@@ -25,25 +24,18 @@ export default function NavigationButtons({ quiz, studentQuizId }: NavigationBut
   const isLastQuestion = currentQuestionIndex === questions.length - 1
 
   const handleSubmitQuiz = async () => {
-    try {
-      // Chuyển đổi userAnswers từ Redux state sang format API mong đợi
-      const questionAttempts = Object.entries(userAnswers).map(([questionId, answerIds]) => ({
-        questionId: Number(questionId),
-        answerIds: Array.isArray(answerIds) ? answerIds.map(Number) : [Number(answerIds)]
-      }))
+    const questionAttempts = Object.entries(userAnswers).map(([questionId, answerIds]) => ({
+      questionId: Number(questionId),
+      answerIds: Array.isArray(answerIds) ? answerIds.map(Number) : [Number(answerIds)]
+    }))
 
-      // Gọi API
-      await submitQuizAttempt({
-        studentQuizId,
-        questionAttempts
-      }).unwrap()
-
-      // Nếu thành công, dispatch action submitQuiz để chuyển sang trang kết quả
+    const result = await submitQuizAttempt({
+      quizAttemptId: quizAttemptId!,
+      questionAttempts
+    }).unwrap()
+    if (result) {
       dispatch(submitQuiz())
       toast.success('Nộp bài thành công!')
-    } catch (error) {
-      console.error('Failed to submit quiz:', error)
-      toast.error('Có lỗi xảy ra khi nộp bài. Vui lòng thử lại!')
     }
   }
 

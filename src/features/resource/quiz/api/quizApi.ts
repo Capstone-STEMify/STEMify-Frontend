@@ -1,4 +1,4 @@
-import { QuestionAttempt, Quiz, QuizAttempt, QuizQueryParams } from '@/features/resource/quiz/types/quiz.type'
+import { QuestionAttemptQuery, Quiz, QuizAttempt, QuizQueryParams } from '@/features/resource/quiz/types/quiz.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
@@ -36,16 +36,16 @@ export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
     updateQuizAttempt: builder.mutation<
       any,
       {
-        studentQuizId: number
-        questionAttempts: QuestionAttempt[]
+        quizAttemptId: number
+        questionAttempts: QuestionAttemptQuery[]
       }
     >({
-      query: ({ studentQuizId, questionAttempts }) => ({
-        url: `/quiz-attempts/${studentQuizId}`,
+      query: ({ quizAttemptId, questionAttempts }) => ({
+        url: `/quiz-attempts/${quizAttemptId}`,
         method: 'PATCH',
         body: { questionAttempts }
       }),
-      invalidatesTags: (result, error, { studentQuizId }) => [{ type: 'Quiz', id: studentQuizId }]
+      invalidatesTags: (result, error, { quizAttemptId }) => [{ type: 'Quiz', id: quizAttemptId }]
     })
   })
 })

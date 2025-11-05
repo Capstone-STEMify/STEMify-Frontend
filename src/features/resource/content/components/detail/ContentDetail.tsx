@@ -64,7 +64,7 @@ export default function ContentDetail({ sectionId, quizId }: ContentDetailProps)
       {contentData.data.items[0].contentType === ContentType.TEXT ? (
         <TiptapViewer content={normalizeMarkdown(contentData?.data.items[0].contentBody)} />
       ) : (
-        <QuizViewer quiz={contentData.data.items[0]} isShowQuestionAnswer />
+        <QuizViewer quiz={contentData.data.items[0]} isShowQuestionAnswer  />
       )}
     </div>
   )

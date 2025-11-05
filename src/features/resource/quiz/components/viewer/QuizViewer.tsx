@@ -1,8 +1,12 @@
 import { QuizContent } from '@/features/resource/content/types/content.type'
-import React from 'react'
-import { Clock, Trophy, CheckCircle, AlertCircle } from 'lucide-react'
+import React, { useEffect } from 'react'
+import { Clock, Trophy, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/shadcn/card'
-import { useCreateQuizAttemptMutation, useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
+import {
+  useCreateQuizAttemptMutation,
+  useGetQuizByIdQuery,
+  useGetStudentQuizByIdQuery
+} from '@/features/resource/quiz/api/quizApi'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Label } from '@/components/shadcn/label'
@@ -11,16 +15,26 @@ import { QuestionType } from '@/features/resource/question/types/question.type'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
+import { setQuizAttemptId, setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
+import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
 
 type QuizViewerProps = {
   quiz: QuizContent
   isShowQuestionAnswer?: boolean
+  studentQuizId?: number
 }
 
-export default function QuizViewer({ quiz, isShowQuestionAnswer }: QuizViewerProps) {
+export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }: QuizViewerProps) {
   const dispatch = useAppDispatch()
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
+
   const [createQuizAttempt, { isLoading: isCreating }] = useCreateQuizAttemptMutation()
+
+  useEffect(() => {
+    if (studentQuizId) {
+      dispatch(setStudentQuizId(studentQuizId))
+    }
+  }, [dispatch, studentQuizId])
 
   if (isLoading) {
     return (
@@ -43,11 +57,23 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer }: QuizViewerPro
     )
   }
 
+  if (!studentQuizId) {
+    return (
+      <div className='flex items-center justify-center rounded-lg border border-amber-200 bg-amber-50 p-8'>
+        <div className='text-center'>
+          <AlertCircle className='mx-auto mb-2 h-12 w-12 text-amber-500' />
+          <p className='text-lg font-medium text-amber-900'>No student quiz ID provided</p>
+        </div>
+      </div>
+    )
+  }
+
   const questions = quizData.data.questions
 
   const handleAttemptQuiz = async () => {
-    const res = await createQuizAttempt({ studentQuizId: 1 }).unwrap() //TODO: replace with actual studentQuizId
+    const res = await createQuizAttempt({ studentQuizId }).unwrap()
     if (res) {
+      dispatch(setQuizAttemptId(res.data.id))
       dispatch(setMode('quiz'))
     }
   }
@@ -224,11 +250,18 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer }: QuizViewerPro
         </div>
       ) : (
         <div className='flex justify-center'>
-          <Button onClick={handleAttemptQuiz} className='text-md bg-amber-400 px-6 py-5 font-medium'>
-            Attempt Now
+          {/* loading button when creating quiz attempt */}
+          <Button
+            onClick={handleAttemptQuiz}
+            className='text-md bg-amber-400 px-6 py-5 font-medium'
+            disabled={isCreating}
+          >
+            {isCreating ? <Loader2 className='mr-2 h-5 w-5 animate-spin' /> : 'Start Quiz'}
           </Button>
         </div>
       )}
+
+      {studentQuizId && <QuizAttempt studentQuizId={studentQuizId} />}
     </div>
   )
 }

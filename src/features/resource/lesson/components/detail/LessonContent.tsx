@@ -17,6 +17,7 @@ import { Info } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { ContentType } from '@/features/resource/content/types/content.type'
 import QuizViewer from '@/features/resource/quiz/components/viewer/QuizViewer'
+import { setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
 
 const TiptapViewer = dynamic(() => import('@/components/tiptap/TiptapViewer'), { ssr: false })
 
@@ -81,7 +82,10 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
   const lastItem = content.data.items[content.data.items.length - 1]
 
   if (lastItem.contentType === ContentType.QUIZ) {
-    return <QuizViewer quiz={lastItem} />
+    if (!currentSectionProgress || !currentSectionProgress.studentQuizId) {
+      return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
+    }
+    return <QuizViewer quiz={lastItem} studentQuizId={currentSectionProgress.studentQuizId} />
   }
 
   return (

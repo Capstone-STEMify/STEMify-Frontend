@@ -16,8 +16,10 @@ import {
   addStepToActivity,
   addTargetToAction,
   clearAction,
+  clearActivities,
   removeTargetFromAllActions,
   resetActions,
+  Step,
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
@@ -26,7 +28,11 @@ import { toast } from 'sonner'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import { useCreateEmulatorMutation, useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi'
+import {
+  useCreateEmulatorMutation,
+  useGetEmulatorByIdQuery,
+  useUpdateEmulatorMutation
+} from '@/features/emulator/api/emulatorApi'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Emulator } from '@/features/emulator/types/emulator.type'
 import { useGLTF } from '@react-three/drei'
@@ -43,8 +49,9 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
   const actions = useAppSelector((s) => s.workspaceTree.actions)
+  const activities = useAppSelector((s) => s.workspaceTree.activities)
 
-  const [createEmulator, { isLoading: isCreating }] = useCreateEmulatorMutation()
+  const [updateEmulator, { isLoading: isUpdating }] = useUpdateEmulatorMutation()
   const prevInstanceIds = useRef<string[]>([])
 
   const handleAddComponent = useCallback(
@@ -98,54 +105,31 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
     }
 
     try {
-      toast.info('💾 Đang lưu thay đổi vào Supabase...')
+      if (emulatorData) {
+        const existing = emulatorData.data
 
-      // const { data: existing, error: fetchError } = await supabase
-      //   .from('assembly_data')
-      //   .select('id, name, description, author')
-      //   .eq('id', workspaceId)
-      //   .single()
+        const exportData = exportAssemblyFn({
+          title: `Assembly ${workspaceId}`,
+          description: 'Exported from workspace',
+          author: 'STEMify User'
+        })
 
-      // if (fetchError || !existing) {
-      //   toast.error('Không tìm thấy assembly để lưu.')
-      //   return
-      // }
+        console.log('Exported assembly data:', exportData)
 
-      const existing = emulatorData!.data
+        const response = await updateEmulator({
+          emulationId: existing.emulationId,
+          body: {
+            name: `Emulator for ${existing.name}`,
+            description: `Emulator created for assembly ${existing.name}`,
+            visibility: 'private',
+            definition_json: JSON.stringify(exportData),
+            status: existing.status
+          }
+        }).unwrap()
+        toast.success('✅ Lưu dữ liệu thành công.')
+      }
 
-      // ⚙️ Export lại dữ liệu mới (scene + actions + instances)
-      const exportData = exportAssemblyFn({
-        title: `Assembly ${workspaceId}`,
-        description: 'Exported from workspace',
-        author: 'STEMify User'
-      })
-
-      const res = await createEmulator({
-        body: {
-          name: `Emulator for ${existing.name}`,
-          description: `Emulator created for assembly ${existing.name}`,
-          visibility: 'private',
-          definition_json: JSON.stringify(exportData)
-        }
-      })
-
-      console.log('Emulator creation response:', res)
-
-      // ⚙️ Cập nhật bản ghi
-      // const { error: updateError } = await supabase
-      //   .from('assembly_data')
-      //   .update({
-      //     data: exportData,
-      //     updated_at: new Date().toISOString()
-      //   })
-      //   .eq('id', workspaceId)
-
-      // if (updateError) {
-      //   console.error('Supabase update error:', updateError)
-      //   toast.error('❌ Lưu thất bại. Vui lòng thử lại.')
-      // } else {
-      //   toast.success('✅ Đã lưu thay đổi vào Supabase!')
-      // }
+      // console.log('Emulator creation response:', response)
     } catch (err) {
       console.error(err)
       toast.error('Lỗi không xác định khi lưu dữ liệu.')
@@ -160,241 +144,254 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
     }
   }, [dispatch])
 
-  const handleImportAssembly = useCallback(
-    async (id: string) => {
-      try {
-        dispatch(clearScene())
-        dispatch(clearAction())
+  const handleImportAssembly = useCallback(async (id: string) => {
+    try {
+      dispatch(clearScene())
+      dispatch(clearAction())
+      dispatch(clearActivities())
 
-        if (!emulatorData) {
-          toast.warning('Đang tải emulator...')
-          return
-        }
-
-        const existing = emulatorData.data
-        const data = existing.definitionJson ? JSON.parse(existing.definitionJson) : null
-        if (!data) throw new Error('Dữ liệu assembly không hợp lệ')
-
-        const allInstances: AssemblyInstance[] = []
-
-        // ================================
-        // 🔹 Helper: Load Template by ID
-        // ================================
-        const loadTemplateById = async (templateId: string) => {
-          const template = data.templates.components.find((t: any) => t.id === templateId || t._id === templateId)
-          if (!template) throw new Error(`Không tìm thấy templateId: ${templateId}`)
-          const res = await fetch(template.source)
-          if (!res.ok) throw new Error(`Không tải được file template: ${template.source}`)
-          return await res.json()
-        }
-
-        // 🔹 Helper: Resolve material from materialRef
-        const resolveMaterial = async (materialRef: string) => {
-          const matDef = data.templates.materials.find((m: any) => m.id === materialRef)
-          if (!matDef) return null
-          const res = await fetch(matDef.source)
-          if (!res.ok) return null
-          return await res.json()
-        }
-
-        // ================================
-        // 1️⃣ Restore Straws
-        // ================================
-        if (Array.isArray(data.instances.straws)) {
-          for (const group of data.instances.straws) {
-            const templateData = await loadTemplateById(group.templateId)
-
-            // lấy geometry & materialRef từ file JSON template
-            const baseGeo = templateData.baseGeometry
-            const endpoints = templateData.endpointTemplate || {
-              start: { localPosition: { x: -baseGeo.length / 2, y: 0, z: 0 } },
-              end: { localPosition: { x: baseGeo.length / 2, y: 0, z: 0 } }
-            }
-
-            const matData = await resolveMaterial(templateData.materialRef)
-
-            for (const inst of group.instances) {
-              allInstances.push({
-                id: inst.id,
-                templateId: group.templateId,
-                category: 'straw',
-                transform: inst.transform,
-                isVisible: true,
-                distanceToCamera: 0,
-                data: {
-                  id: inst.id,
-                  name: templateData.name,
-                  transform: inst.transform,
-                  geometry: baseGeo,
-                  endpoints,
-                  material: matData || {
-                    type: 'plastic',
-                    properties: {
-                      color: '#00aaff',
-                      flexibility: 50,
-                      opacity: 1,
-                      roughness: 0.4,
-                      metalness: 0
-                    }
-                  },
-                  physics: templateData.physics
-                },
-                arms: undefined
-              })
-            }
-          }
-        }
-
-        // ================================
-        // 2️⃣ Restore Connectors
-        // ================================
-        if (Array.isArray(data.instances.connectors)) {
-          for (const group of data.instances.connectors) {
-            const templateData = await loadTemplateById(group.templateId)
-            const matData = await resolveMaterial(templateData.materialRef)
-
-            for (const inst of group.instances) {
-              allInstances.push({
-                id: inst.id,
-                templateId: group.templateId,
-                category: 'connector',
-                transform: inst.transform,
-                isVisible: true,
-                distanceToCamera: 0,
-                data: {
-                  id: inst.id,
-                  name: templateData.name,
-                  transform: inst.transform,
-                  material: matData || {
-                    type: 'plastic',
-                    properties: {
-                      color: '#ff4444',
-                      flexibility: 50,
-                      opacity: 1,
-                      roughness: 0.5,
-                      metalness: 0
-                    }
-                  },
-                  geometry: templateData.baseGeometry || {
-                    size: { x: 2, y: 2, z: 2 },
-                    portDiameter: 0.8,
-                    shape: 'cylindrical'
-                  },
-                  ports: templateData.ports || [
-                    {
-                      id: `${inst.id}_port_0`,
-                      localPosition: { x: 0, y: 0, z: 1 },
-                      orientation: { x: 0, y: 0, z: 1 },
-                      connectionId: null,
-                      isAvailable: true,
-                      portIndex: 0
-                    }
-                  ],
-                  constraints: templateData.constraints || { maxConnections: 3, allowedAngles: [] },
-                  modelUrl: templateData.baseGeometry.modelPath
-                },
-                arms: {}
-              })
-            }
-          }
-        }
-
-        // ================================
-        // ✅ Cập nhật Redux Scene
-        // ================================
-        dispatch(setInstances(allInstances))
-
-        // ================================
-        // 🔹 Restore Actions
-        // ================================
-        dispatch(clearAction())
-        if (Array.isArray(data.actions)) {
-          for (const act of data.actions) {
-            dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
-            if (Array.isArray(act.targets)) {
-              act.targets.forEach((targetId: string) => dispatch(addTargetToAction({ actionId: act.id, targetId })))
-            }
-            if (act.type === 'transform_arm' && act.connectorArmTransforms) {
-              Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
-                dispatch(
-                  updateConnectorArms({
-                    actionId: act.id,
-                    connectorId,
-                    arms: arms as Record<string, { x: number; y: number; z: number }>
-                  })
-                )
-              })
-            }
-          }
-        }
-
-        // ================================
-        // 🔹 Restore Activities + Steps
-        // ================================
-        if (Array.isArray(data.activities)) {
-          for (const activity of data.activities) {
-            // ✅ 1️⃣ Thêm activity trước (nếu chưa có)
-            dispatch(
-              addActivity({
-                id: activity.id,
-                name: activity.name,
-                steps: [],
-                difficulty: activity.difficulty ?? 'medium',
-                description: activity.description ?? '',
-                estimatedTime: activity.estimatedTime ?? 10
-              })
-            )
-
-            // ✅ 2️⃣ Thêm các step của activity
-            if (Array.isArray(activity.steps)) {
-              for (const step of activity.steps) {
-                dispatch(addStepToActivity({ activityId: activity.id, step }))
-
-                // ✅ 3️⃣ Nếu step có actions thì xử lý tiếp
-                if (Array.isArray(step.actions)) {
-                  for (const act of step.actions) {
-                    // Thêm action
-                    dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
-
-                    // Gắn các target
-                    if (Array.isArray(act.targets)) {
-                      act.targets.forEach((targetId: string) =>
-                        dispatch(addTargetToAction({ actionId: act.id, targetId }))
-                      )
-                    }
-
-                    // Restore arms nếu có
-                    if (act.type === 'transform_arm' && act.connectorArmTransforms) {
-                      Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
-                        dispatch(
-                          updateConnectorArms({
-                            actionId: act.id,
-                            connectorId,
-                            arms: arms as Record<string, { x: number; y: number; z: number }>
-                          })
-                        )
-                      })
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        toast.success(t3d('export_success'))
-      } catch (err: any) {
-        toast.error(err.message || t3d('export_error'))
+      if (!emulatorData) {
+        toast.warning('Đang tải emulator...')
+        return
       }
-    },
-    [dispatch, emulatorData]
-  )
+
+      const existing = emulatorData.data
+      const data = existing.definitionJson ? JSON.parse(existing.definitionJson) : null
+      if (!data) throw new Error('Dữ liệu assembly không hợp lệ')
+
+      const allInstances: AssemblyInstance[] = []
+
+      // ================================
+      // 🔹 Helper: Load Template by ID
+      // ================================
+      const loadTemplateById = async (templateId: string) => {
+        console.log('templates data:', data.templates.components)
+        const template = data.templates.components.find((t: any) => t.id === templateId || t._id === templateId)
+        console.log('Loaded template:', templateId, template)
+        if (!template) throw new Error(`Không tìm thấy templateId: ${templateId}`)
+        const res = await fetch(template.source)
+        if (!res.ok) throw new Error(`Không tải được file template: ${template.source}`)
+        return await res.json()
+      }
+
+      // 🔹 Helper: Resolve material from materialRef
+      const resolveMaterial = async (materialRef: string) => {
+        const matDef = data.templates.materials.find((m: any) => m.id === materialRef)
+        if (!matDef) return null
+        const res = await fetch(matDef.source)
+        if (!res.ok) return null
+        return await res.json()
+      }
+
+      // ================================
+      // 1️⃣ Restore Straws
+      // ================================
+      if (Array.isArray(data.instances.straws)) {
+        for (const group of data.instances.straws) {
+          const templateData = await loadTemplateById(group.templateId)
+
+          // lấy geometry & materialRef từ file JSON template
+          const baseGeo = templateData.baseGeometry
+          const endpoints = templateData.endpointTemplate || {
+            start: { localPosition: { x: -baseGeo.length / 2, y: 0, z: 0 } },
+            end: { localPosition: { x: baseGeo.length / 2, y: 0, z: 0 } }
+          }
+
+          const matData = await resolveMaterial(templateData.materialRef)
+
+          for (const inst of group.instances) {
+            allInstances.push({
+              id: inst.id,
+              templateId: group.templateId,
+              category: 'straw',
+              transform: inst.transform,
+              isVisible: true,
+              distanceToCamera: 0,
+              data: {
+                id: inst.id,
+                name: templateData.name,
+                transform: inst.transform,
+                geometry: baseGeo,
+                endpoints,
+                material: matData || {
+                  type: 'plastic',
+                  properties: {
+                    color: '#00aaff',
+                    flexibility: 50,
+                    opacity: 1,
+                    roughness: 0.4,
+                    metalness: 0
+                  }
+                },
+                physics: templateData.physics
+              },
+              arms: undefined
+            })
+          }
+        }
+      }
+
+      // ================================
+      // 2️⃣ Restore Connectors
+      // ================================
+      if (Array.isArray(data.instances.connectors)) {
+        for (const group of data.instances.connectors) {
+          const templateData = await loadTemplateById(group.templateId)
+          const matData = await resolveMaterial(templateData.materialRef)
+
+          for (const inst of group.instances) {
+            allInstances.push({
+              id: inst.id,
+              templateId: group.templateId,
+              category: 'connector',
+              transform: inst.transform,
+              isVisible: true,
+              distanceToCamera: 0,
+              data: {
+                id: inst.id,
+                name: templateData.name,
+                transform: inst.transform,
+                material: matData || {
+                  type: 'plastic',
+                  properties: {
+                    color: '#ff4444',
+                    flexibility: 50,
+                    opacity: 1,
+                    roughness: 0.5,
+                    metalness: 0
+                  }
+                },
+                geometry: templateData.baseGeometry || {
+                  size: { x: 2, y: 2, z: 2 },
+                  portDiameter: 0.8,
+                  shape: 'cylindrical'
+                },
+                ports: templateData.ports || [
+                  {
+                    id: `${inst.id}_port_0`,
+                    localPosition: { x: 0, y: 0, z: 1 },
+                    orientation: { x: 0, y: 0, z: 1 },
+                    connectionId: null,
+                    isAvailable: true,
+                    portIndex: 0
+                  }
+                ],
+                constraints: templateData.constraints || { maxConnections: 3, allowedAngles: [] },
+                modelUrl: templateData.baseGeometry.modelPath
+              },
+              arms: {}
+            })
+          }
+        }
+      }
+
+      // ================================
+      // ✅ Cập nhật Redux Scene
+      // ================================
+      dispatch(setInstances(allInstances))
+
+      // ================================
+      // 🔹 Restore Actions
+      // ================================
+      dispatch(clearAction())
+      if (Array.isArray(data.actions)) {
+        for (const act of data.actions) {
+          dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
+          if (Array.isArray(act.targets)) {
+            act.targets.forEach((targetId: string) => dispatch(addTargetToAction({ actionId: act.id, targetId })))
+          }
+          if (act.type === 'transform_arm' && act.connectorArmTransforms) {
+            Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
+              dispatch(
+                updateConnectorArms({
+                  actionId: act.id,
+                  connectorId,
+                  arms: arms as Record<string, { x: number; y: number; z: number }>
+                })
+              )
+            })
+          }
+        }
+      }
+
+      // ================================
+      // 🔹 Restore Activities + Steps
+      // ================================
+      if (Array.isArray(data.activities)) {
+        for (const activity of data.activities) {
+          // const fullSteps: Step[] = []
+
+          // if (Array.isArray(activity.steps)) {
+          //   for (const step of activity.steps) {
+          //     fullSteps.push({
+          //       actionId: step.actionId + 1111,
+          //       title: step.title || 'Untitled Step',
+          //       description: step.description || '',
+          //       expectedResult: step.expectedResult || '',
+          //       hints: step.hints || []
+          //     })
+          //   }
+          // }
+
+          dispatch(
+            addActivity({
+              id: activity.id,
+              name: activity.name,
+              steps: [],
+              difficulty: activity.difficulty ?? 'medium',
+              description: activity.description ?? '',
+              estimatedTime: activity.estimatedTime ?? 10
+            })
+          )
+
+          // ✅ 2️⃣ Thêm các step của activity
+          if (Array.isArray(activity.steps)) {
+            for (const step of activity.steps) {
+              dispatch(addStepToActivity({ activityId: activity.id, step }))
+              console.log('Restoring step:', step.actionId, step.title)
+
+              // ✅ 3️⃣ Nếu step có actions thì xử lý tiếp
+              // if (Array.isArray(step.actions)) {
+              //   for (const act of step.actions) {
+              //     // Thêm action
+              //     dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
+              //     console.log('Restoring action:', act.id, act.name, act.type)
+
+              //     // Gắn các target
+              //     if (Array.isArray(act.targets)) {
+              //       act.targets.forEach((targetId: string) =>
+              //         dispatch(addTargetToAction({ actionId: act.id, targetId }))
+              //       )
+              //     }
+
+              //     // Restore arms nếu có
+              //     if (act.type === 'transform_arm' && act.connectorArmTransforms) {
+              //       Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
+              //         dispatch(
+              //           updateConnectorArms({
+              //             actionId: act.id,
+              //             connectorId,
+              //             arms: arms as Record<string, { x: number; y: number; z: number }>
+              //           })
+              //         )
+              //       })
+              //     }
+              //   }
+              // }
+            }
+          }
+        }
+      }
+
+      toast.success(t3d('export_success'))
+    } catch (err: any) {
+      toast.error(err.message || t3d('export_error'))
+    }
+  }, [])
 
   useEffect(() => {
-    if (workspaceId) {
-      handleImportAssembly(workspaceId)
-    }
-  }, [workspaceId, handleImportAssembly])
+    handleImportAssembly(workspaceId)
+  }, [])
 
   return (
     <div className='relative flex h-full w-full overflow-hidden bg-gray-100'>

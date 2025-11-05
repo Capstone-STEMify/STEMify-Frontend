@@ -68,7 +68,7 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
   const hasCourses = filteredCourseEnrollment && filteredCourseEnrollment.length > 0
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='bg-gray-50'>
       <div className='mx-auto max-w-[1920px] px-6'>
         <div className='flex gap-10'>
           {/* Main Content - Left Column */}
@@ -78,9 +78,6 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
               <h2 className='text-2xl font-bold text-gray-900'>My Classrooms</h2>
             </div>
             <ClassroomList />
-
-            {/* Separator */}
-            {(hasCurriculums || hasCourses) && <Separator className='my-0' />}
 
             {/* Curriculum Section */}
             {hasCurriculums && (
@@ -93,9 +90,6 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
                 </Accordion>
               </section>
             )}
-
-            {/* Separator */}
-            {hasCurriculums && hasCourses && <Separator className='my-0' />}
 
             {/* Courses Section */}
             {hasCourses && (
