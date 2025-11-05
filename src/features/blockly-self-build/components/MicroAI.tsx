@@ -4,8 +4,11 @@ import { useEffect, useRef, useState } from 'react'
 import * as tmImage from '@teachablemachine/image'
 import Webcam from 'react-webcam'
 import { Check } from 'lucide-react'
+import { loadModelFromZip } from '@/features/AI-model/utils/loadModelFromZip'
+import JSZip from 'jszip'
+import * as tf from '@tensorflow/tfjs'
 
-export default function MicroAI({ modelPath, modelType }: { modelPath: string; modelType: 'url' | 'file' }) {
+export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipFile?: File }) {
   // --- Refs ---
   const modelRef = useRef<tmImage.CustomMobileNet | null>(null)
   const webcamRef = useRef<Webcam | null>(null)
@@ -22,58 +25,103 @@ export default function MicroAI({ modelPath, modelType }: { modelPath: string; m
   const [error, setError] = useState<string | null>(null)
 
   // --- Logic giữ nguyên ---
-  const init = async () => {
+  const init = async (zipFile?: File) => {
     setStatus('loading')
     setPredictions([])
-
-    const MODEL_PATH = '/my-model/'
-    const modelURL = MODEL_PATH + 'model.json'
-    const metadataURL = MODEL_PATH + 'metadata.json'
+    setError(null)
 
     try {
-      const loadedModel = await tmImage.load(modelURL, metadataURL)
-      modelRef.current = loadedModel
-      setStatus('running')
-      animationFrameRef.current = window.requestAnimationFrame(loop)
-    } catch (error) {
-      console.error('Lỗi khi tải model:', error)
-      setStatus('idle')
-    }
-  }
+      if (!zipFile) throw new Error('Hãy chọn file model .zip')
 
-  const loop2 = async () => {
-    if (status !== 'running') return
-    try {
-      if (webcamRef.current?.video?.readyState === 4) {
-        const video = webcamRef.current.video as HTMLVideoElement
-        if (modelRef.current) {
-          const prediction = await modelRef.current.predict(video)
-          setPredictions(prediction)
+      // 1) Đọc zip
+      const zip = await JSZip.loadAsync(zipFile)
+      const jsonFile = zip.file('model.json')
+      const binFile = zip.file('trained-classifier.weights.bin')
+      const labelsFile = zip.file('labels.json')
+      if (!jsonFile || !binFile) {
+        throw new Error('Thiếu model.json hoặc trained-classifier.weights.bin trong zip')
+      }
 
-          if (prediction && prediction.length > 0) {
-            const best = prediction.reduce((max, p) => (p.probability > max.probability ? p : max), prediction[0])
-            if (best && best.probability >= 0.8) {
-              const command = best.className
-              const now = Date.now()
-              if (command !== lastCommandRef.current || now > cooldownRef.current) {
-                if (command === 'Boat') {
-                  sendCommandToMicrobit('Boat')
-                  lastCommandRef.current = 'Boat'
-                  cooldownRef.current = now + 2000
-                } else if (command === 'No boat') {
-                  sendCommandToMicrobit('No boat')
-                  lastCommandRef.current = 'No boat'
-                  cooldownRef.current = now + 2000
-                }
-              }
-            }
-          }
+      const classifierJsonText = await jsonFile.async('text')
+      const classifierJson = JSON.parse(classifierJsonText) // chính là topology Sequential của bạn
+      const weightData = await binFile.async('arraybuffer')
+
+      let labels: string[] = []
+      if (labelsFile) {
+        const txt = await labelsFile.async('text')
+        const obj = JSON.parse(txt)
+        labels = Array.isArray(obj.labels) ? obj.labels : []
+      }
+      const numClasses = labels.length > 0 ? labels.length : 2
+
+      // 2) Load MobileNet và tạo feature extractor = GAP(conv_pw_13_relu) => [?,256]
+      const BASE = 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json'
+      const baseModel = await tf.loadLayersModel(BASE)
+
+      // Lấy output của layer cuối khối conv_pw_13_relu
+      const conv = baseModel.getLayer('conv_pw_13_relu') // tồn tại ở MobileNet v1 0.25_224
+      // Quan trọng: dùng GAP để ra vector 256, KHÔNG flatten 7*7*256
+      const gap = tf.layers.globalAveragePooling2d({}).apply(conv.output as tf.SymbolicTensor) as tf.SymbolicTensor
+      const featureExtractor = tf.model({
+        inputs: baseModel.inputs,
+        outputs: gap
+      })
+
+      // 3) weightSpecs phải khớp hoàn toàn thứ tự / shape với .bin
+      const weightSpecs: tf.io.WeightsManifestEntry[] = [
+        { name: 'dense1/kernel', shape: [256, 32], dtype: 'float32' },
+        { name: 'dense1/bias', shape: [32], dtype: 'float32' },
+        { name: 'dense2/kernel', shape: [32, 16], dtype: 'float32' },
+        { name: 'dense2/bias', shape: [16], dtype: 'float32' },
+        { name: 'predictions/kernel', shape: [16, numClasses], dtype: 'float32' },
+        { name: 'predictions/bias', shape: [numClasses], dtype: 'float32' }
+      ]
+
+      // 4) IOHandler tự cung cấp topology + weights
+      const ioHandler: tf.io.IOHandler = {
+        load: async () => ({
+          modelTopology: classifierJson, // chính object JSON bạn đưa ở trên
+          weightSpecs,
+          weightData
+        })
+      }
+
+      // 5) Load classifier từ IOHandler
+      const classifier = await tf.loadLayersModel(ioHandler)
+      console.log('Classifier reconstructed & loaded')
+
+      // 6) Ghép featureExtractor (224x224x3 -> [?,256]) vào classifier ([?,256] -> logits)
+      const combinedOutput = classifier.apply(featureExtractor.outputs[0] as tf.SymbolicTensor) as tf.SymbolicTensor
+      const combinedModel = tf.model({
+        inputs: featureExtractor.inputs,
+        outputs: combinedOutput
+      })
+
+      // 7) Gói lại API predict như TeachableMachine
+      const wrapped = {
+        model: combinedModel,
+        async predict(video: HTMLVideoElement) {
+          return tf.tidy(() => {
+            const img = tf.browser.fromPixels(video).resizeNearestNeighbor([224, 224]).toFloat().div(255).expandDims(0) // [1,224,224,3]
+
+            const logits = combinedModel.predict(img) as tf.Tensor
+            const probs = logits.dataSync() // Float32Array
+            const names = labels.length ? labels : Array.from({ length: numClasses }, (_, i) => `Class ${i + 1}`)
+            return names
+              .map((name, i) => ({ className: name, probability: probs[i] ?? 0 }))
+              .sort((a, b) => b.probability - a.probability)
+          })
         }
       }
-    } catch (err) {
-      console.error('Lỗi trong vòng lặp dự đoán:', err)
-    } finally {
-      if (status === 'running') animationFrameRef.current = window.requestAnimationFrame(loop)
+
+      modelRef.current = wrapped as any
+      console.log('Combined model ready')
+      setStatus('running')
+      animationFrameRef.current = requestAnimationFrame(loop)
+    } catch (e: any) {
+      console.error('Lỗi khi tải model:', e)
+      setError(e?.message ?? String(e))
+      setStatus('idle')
     }
   }
 
@@ -141,7 +189,7 @@ export default function MicroAI({ modelPath, modelType }: { modelPath: string; m
       const encoder = new TextEncoder()
       await writer.write(encoder.encode(command + '\n'))
       writer.releaseLock()
-      console.log('📤 Đã gửi lệnh:', command)
+      console.log('Đã gửi lệnh:', command)
     } catch (err) {
       console.error('Lỗi khi gửi lệnh đến Micro:bit:', err)
     }
@@ -187,7 +235,7 @@ export default function MicroAI({ modelPath, modelType }: { modelPath: string; m
           <div className='mt-6 flex flex-wrap items-center justify-center gap-3'>
             {status === 'idle' && (
               <button
-                onClick={init}
+                onClick={() => init(zipFile)}
                 className='rounded-full bg-amber-400 px-6 py-3 text-white shadow-lg transition hover:bg-amber-500'
               >
                 Bắt đầu

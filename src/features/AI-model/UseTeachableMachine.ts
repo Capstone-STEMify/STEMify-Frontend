@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react'
 import * as tf from '@tensorflow/tfjs'
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
 
 export interface PredictionResult {
   className: string
@@ -375,42 +377,83 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     try {
       setTrainingStatus({ message: 'Đang chuẩn bị tải xuống model...', type: 'info' })
 
-      await model.classifier.save('downloads://trained-classifier')
+      // --- Lưu model vào bộ nhớ (thay vì auto download) ---
+      const artifacts = await model.classifier.save(
+        tf.io.withSaveHandler(async (a): Promise<tf.io.SaveResult> => {
+          return {
+            modelArtifactsInfo: {
+              dateSaved: new Date(),
+              modelTopologyType: 'JSON'
+            },
+            responses: [],
+            errors: []
+          }
+        })
+      )
 
-      setTrainingStatus({ message: 'Model classifier đã được tải xuống!', type: 'info' })
+      // artifacts ở đây là SaveResult -> model data được TensorFlow lưu sẵn vào classifer.modelArtifacts
+      const handler = await model.classifier.save(
+        tf.io.withSaveHandler(async (artifacts): Promise<tf.io.SaveResult> => {
+          const zip = new JSZip()
 
-      const modelInfo = {
-        classes,
-        modelType: 'image_classification',
-        architecture: 'MobileNet_v1_0.25_224_Transfer_Learning',
-        inputShape: [CONFIG.imageSize, CONFIG.imageSize, 3],
-        outputClasses: classes.length,
-        baseModel: BASE_MODEL_URL,
-        trainingDate: new Date().toISOString(),
-        description: 'Model được train bằng Teachable Machine',
-        usage: {
-          loadBaseModel: 'Load MobileNet từ URL trên',
-          loadClassifier: 'Load trained-classifier từ file đã tải',
-          preprocessing: 'Resize image to 224x224, normalize /255.0'
-        }
-      }
+          // Lưu model.json
+          zip.file('model.json', JSON.stringify(artifacts.modelTopology, null, 2))
 
-      downloadFile('model-info.json', JSON.stringify(modelInfo, null, 2), 'application/json')
+          // Lưu weight file
+          if (artifacts.weightData) {
+            zip.file('trained-classifier.weights.bin', artifacts.weightData)
+          }
 
-      const labelsInfo = {
-        labels: classes,
-        description: 'Class labels for the trained model'
-      }
-      downloadFile('labels.json', JSON.stringify(labelsInfo, null, 2), 'application/json')
+          // Thêm metadata
+          const modelInfo = {
+            classes,
+            modelType: 'image_classification',
+            architecture: 'MobileNet_v1_0.25_224_Transfer_Learning',
+            inputShape: [CONFIG.imageSize, CONFIG.imageSize, 3],
+            outputClasses: classes.length,
+            baseModel: BASE_MODEL_URL,
+            trainingDate: new Date().toISOString(),
+            description: 'Model được train bằng Teachable Machine',
+            usage: {
+              loadBaseModel: 'Load MobileNet từ URL trên',
+              loadClassifier: 'Load trained-classifier từ file đã tải',
+              preprocessing: 'Resize image to 224x224, normalize /255.0'
+            }
+          }
+          zip.file('model-info.json', JSON.stringify(modelInfo, null, 2))
+
+          // Thêm labels
+          const labelsInfo = {
+            labels: classes,
+            description: 'Class labels for the trained model'
+          }
+          zip.file('labels.json', JSON.stringify(labelsInfo, null, 2))
+
+          // Tạo ZIP
+          const zipBlob = await zip.generateAsync({ type: 'blob' })
+          saveAs(zipBlob, 'trained-classifier.zip')
+
+          // Return kết quả hợp lệ cho TensorFlow
+          return {
+            modelArtifactsInfo: {
+              dateSaved: new Date(),
+              modelTopologyType: 'JSON'
+            },
+            responses: [],
+            errors: []
+          }
+        })
+      )
 
       setTrainingStatus({
-        message: 'Model đã được tải xuống thành công! Bao gồm: model.json, weights.bin, model-info.json, labels.json',
+        message:
+          'Model đã được tải xuống thành công! Bao gồm: model.json, weights.bin, model-info.json, labels.json (ZIP).',
         type: 'success'
       })
     } catch (error) {
       console.error('Lỗi khi tải xuống model:', error)
       setTrainingStatus({
-        message: `Lỗi khi tải xuống model: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        message: `❌ Lỗi khi tải xuống model: ${error instanceof Error ? error.message : 'Unknown error'}`,
         type: 'error'
       })
     }

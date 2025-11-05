@@ -3,21 +3,25 @@
 import { useState, useRef } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
-import { UploadCloud, FileJson } from 'lucide-react'
+import { UploadCloud, FileArchive } from 'lucide-react'
 import { cn } from '@/utils/shadcn/utils'
 
-export default function ModelLoader({ onLoad }: { onLoad: (modelPath: string, type: 'url' | 'file') => void }) {
+interface ModelLoaderProps {
+  onLoadUrl: (url: string) => void
+  onLoadZip: (file: File) => void
+}
+
+export default function ModelLoader({ onLoadUrl, onLoadZip }: ModelLoaderProps) {
   const [modelUrl, setModelUrl] = useState('')
   const [modelFile, setModelFile] = useState<File | null>(null)
-  const [camera, setCamera] = useState('')
-  const [audio, setAudio] = useState('')
   const [isDragging, setIsDragging] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  // ✅ Chỉ chấp nhận file .zip
   const handleFileUpload = (file: File) => {
-    if (!file.name.endsWith('.json')) {
-      alert('Please upload a valid model.json file.')
+    if (!file.name.toLowerCase().endsWith('.zip')) {
+      alert('Please upload a valid model.zip file.')
       return
     }
     setModelFile(file)
@@ -32,15 +36,16 @@ export default function ModelLoader({ onLoad }: { onLoad: (modelPath: string, ty
 
   const handleReady = async () => {
     if (!modelUrl && !modelFile) {
-      alert('Please provide a model URL or upload a model file.')
+      alert('Please provide a model URL or upload a model.zip file.')
       return
     }
+
     setIsLoading(true)
     try {
-      if (modelUrl) onLoad(modelUrl.trim(), 'url')
-      else if (modelFile) {
-        const objectUrl = URL.createObjectURL(modelFile)
-        onLoad(objectUrl, 'file')
+      if (modelUrl.trim()) {
+        onLoadUrl(modelUrl.trim())
+      } else if (modelFile) {
+        onLoadZip(modelFile) // ✅ Gửi file gốc, không cần createObjectURL
       }
     } finally {
       setIsLoading(false)
@@ -49,7 +54,7 @@ export default function ModelLoader({ onLoad }: { onLoad: (modelPath: string, ty
 
   return (
     <div className='mx-auto w-full max-w-lg rounded-2xl border border-gray-200 bg-white/90 p-8 shadow-lg backdrop-blur'>
-      <h2 className='mb-4 text-center text-lg font-semibold text-gray-800'>Paste your STEMify model link</h2>
+      <h2 className='mb-4 text-center text-lg font-semibold text-gray-800'>Load your STEMify AI Model</h2>
 
       {/* Input URL */}
       <Input
@@ -60,7 +65,9 @@ export default function ModelLoader({ onLoad }: { onLoad: (modelPath: string, ty
         className='mb-5 w-full text-sm'
       />
 
-      <div className='my-3 text-center text-sm text-gray-500'>or upload your exported model.json</div>
+      <div className='my-3 text-center text-sm text-gray-500'>
+        or upload your exported <span className='font-semibold text-sky-600'>model.zip</span>
+      </div>
 
       {/* Upload Zone */}
       <div
@@ -77,19 +84,23 @@ export default function ModelLoader({ onLoad }: { onLoad: (modelPath: string, ty
         )}
       >
         <UploadCloud className='mb-3 h-8 w-8 text-gray-500' />
+
         {!modelFile ? (
           <p className='text-sm text-gray-600'>
-            Drag & drop <span className='font-medium text-sky-600'>model.json</span> file here or click to browse
+            Drag & drop your <span className='font-medium text-sky-600'>model.zip</span> file here
+            <br />
+            or click to browse
           </p>
         ) : (
           <div className='flex items-center gap-2 text-sky-600'>
-            <FileJson className='h-5 w-5' />
+            <FileArchive className='h-5 w-5' />
             <span className='text-sm font-medium'>{modelFile.name}</span>
           </div>
         )}
+
         <input
           type='file'
-          accept='.json'
+          accept='.zip'
           ref={fileInputRef}
           onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
           className='hidden'
