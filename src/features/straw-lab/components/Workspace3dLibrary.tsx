@@ -13,8 +13,9 @@ import SEmpty from '@/components/shared/empty/SEmpty'
 
 import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
 import { useCreateEmulatorMutation, useSearchEmulationsQuery } from '@/features/emulator/api/emulatorApi'
+import BackButton from '@/components/shared/button/BackButton'
 
-export default function StrawLabProject() {
+export default function Workspace3dLibrary() {
   const locale = useLocale()
   const router = useRouter()
 
@@ -60,7 +61,7 @@ export default function StrawLabProject() {
   // === Empty state ===
   if (emulations.length === 0) {
     return (
-      <main className='bg-light min-h-screen'>
+      <div className='mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8'>
         <div className='flex justify-end'>
           <Button variant='outline' size='sm' onClick={() => setShowCreateDialog(true)}>
             Create new
@@ -74,16 +75,19 @@ export default function StrawLabProject() {
         {showCreateDialog && (
           <ExportDialog onClose={() => setShowCreateDialog(false)} onExport={handleCreateEmulation} />
         )}
-      </main>
+      </div>
     )
   }
 
   // === Main content ===
   return (
-    <main className='bg-light min-h-screen'>
+    <div className='mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8'>
       {/* Header actions */}
       <div className='mb-6 flex items-center justify-between'>
-        <div className='space-x-2'></div>
+        <div className='flex gap-2'>
+          <BackButton />
+          <h1>Danh sách mô hình</h1>
+        </div>
         <Button variant='outline' size='sm' onClick={() => setShowCreateDialog(true)}>
           Create new
         </Button>
@@ -122,6 +126,6 @@ export default function StrawLabProject() {
       </div>
 
       {showCreateDialog && <ExportDialog onClose={() => setShowCreateDialog(false)} onExport={handleCreateEmulation} />}
-    </main>
+    </div>
   )
 }

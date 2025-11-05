@@ -3,7 +3,7 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import { ArrowRightIcon, BookOpenIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
-export default function LibraryPage() {
+export default function ResourceListPage() {
   const t = useTranslations('Resource')
   const tc = useTranslations('common')
   return (

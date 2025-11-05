@@ -21,6 +21,26 @@
     "stemKit": {
       "title": "STEM Kit",
       "description": "Explore our STEM Kit products designed to enhance hands-on learning experiences."
+    },
+    "strawAssemblyLibrary": {
+      "title": "Straw Lab Assembly Library",
+      "description": "Discover a variety of assembly instructions and resources for Straw Lab kits to support your STEM projects."
+    },
+    "workspace3D": {
+      "title": "Workspace 3D Models",
+      "description": "Access a collection of 3D models to enhance your STEM learning and projects."
+    },
+    "microbitWorkspace": {
+      "title": "Micro:bit Workspace",
+      "description": "Utilize our Micro:bit workspace for coding and STEM activities."
+    },
+    "modalMaker": {
+      "title": "Modal Maker",
+      "description": "Create and customize modals for your STEM projects with ease."
+    },
+    "robotAi": {
+      "title": "Robot AI",
+      "description": "Explore our Robot AI resources to enhance your understanding of robotics and artificial intelligence."
     }
   }
 }

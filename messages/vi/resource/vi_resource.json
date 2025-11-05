@@ -21,6 +21,26 @@
     "stemKit": {
       "title": "Bộ công cụ STEM",
       "description": "Khám phá các sản phẩm Bộ công cụ STEM của chúng tôi được thiết kế để nâng cao trải nghiệm học tập thực hành."
+    },
+    "strawAssemblyLibrary": {
+      "title": "Thư viện lắp ráp Straw Lab",
+      "description": "Khám phá nhiều hướng dẫn lắp ráp và tài nguyên cho các bộ kit Straw Lab để hỗ trợ các dự án STEM của bạn."
+    },
+    "workspace3D": {
+      "title": "Mô hình 3D Workspace",
+      "description": "Truy cập bộ sưu tập mô hình 3D để nâng cao việc học tập và các dự án STEM của bạn."
+    },
+    "microbitWorkspace": {
+      "title": "Workspace Micro:bit",
+      "description": "Sử dụng workspace Micro:bit của chúng tôi cho các hoạt động lập trình và STEM."
+    },
+    "modalMaker": {
+      "title": "Trình tạo Modal",
+      "description": "Tạo và tùy chỉnh các modal cho các dự án STEM của bạn một cách dễ dàng."
+    },
+    "robotAi": {
+      "title": "Robot AI",
+      "description": "Khám phá các tài nguyên Robot AI của chúng tôi để nâng cao hiểu biết của bạn về robot và trí tuệ nhân tạo."
     }
   }
 }
