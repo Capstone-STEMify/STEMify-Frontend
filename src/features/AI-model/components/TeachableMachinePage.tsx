@@ -93,7 +93,7 @@ export default function TeachableMachinePage() {
   return (
     <div className='mx-auto min-h-screen max-w-6xl bg-slate-50 py-10'>
       <div className='mb-8'>
-        <h1 className='mb-2 text-4xl font-bold text-blue-500'>Teachable Machine</h1>
+        <h1 className='mb-2 text-4xl font-bold text-blue-500'>Model Maker</h1>
         <p className='max-w-2xl text-xl font-semibold text-gray-700'>
           A fast, easy way to create machine learning models for your sites, apps, and more – no expertise or coding
           required.
