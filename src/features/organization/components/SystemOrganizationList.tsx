@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { Pencil, Trash2, ChevronDown, ChevronRight, Search, GraduationCap } from 'lucide-react'
+import { Pencil, Trash2, ChevronDown, ChevronRight, Search, GraduationCap, Building2, Send } from 'lucide-react'
 import { useDeletePlanMutation, useSearchPlanQuery } from '@/features/plan/api/planApi'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
@@ -81,12 +81,11 @@ export default function SystemOrganizationList() {
             <h1 className='mt-4 mb-4 text-3xl font-bold'>{t('list.organizationSubscriptionTitle')}</h1>
             <p className='text-muted-foreground mt-1'>{t('list.organizationSubscriptionDescription')}</p>
           </div>
-          <Button
-            className='bg-sky-500'
-            onClick={() => router.push(`/${locale}/admin/organization-subscription/create`)}
-          >
-            + {tc('button.create')}
-          </Button>
+          <div className='flex gap-2'>
+            <Button variant='outline' onClick={() => router.push(`/${locale}/admin/organization-subscription/create`)}>
+              <Building2 className='h-4 w-4' /> {tc('button.createOrganization')}
+            </Button>
+          </div>
         </div>
 
         <div className='flex items-center justify-start gap-2'>

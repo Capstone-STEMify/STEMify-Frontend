@@ -46,6 +46,21 @@ export default function OrganizationSubscriptionDetail() {
     return months > 0 ? months : 0
   }
 
+  const calculateProgressValue = (startDate: Date, endDate: Date, today: Date = new Date()): number => {
+    const start = startDate.getTime()
+    const end = endDate.getTime()
+    const current = today.getTime()
+
+    if (current <= start) return 0
+    if (current >= end) return 100
+
+    const totalDuration = end - start
+    const elapsed = current - start
+
+    const progress = (elapsed / totalDuration) * 100
+    return Math.round(progress)
+  }
+
   if (isLoadingSubscription) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
@@ -130,7 +145,10 @@ export default function OrganizationSubscriptionDetail() {
                     <span className=''>Subscription Period</span>
                   </div>
                   <Progress
-                    value={50}
+                    value={calculateProgressValue(
+                      new Date(subscription.data.startDate),
+                      new Date(subscription.data.endDate)
+                    )}
                     className='h-3 bg-white [&>div]:bg-gradient-to-r [&>div]:from-emerald-400 [&>div]:to-emerald-500'
                   />
                   <div className='flex justify-between text-xs font-semibold'>

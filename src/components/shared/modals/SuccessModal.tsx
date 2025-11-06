@@ -13,7 +13,7 @@ export default function SuccessModal({ onClose }: SuccessModalProps) {
   const { closeModal } = useModal()
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='max-w-md rounded-2xl border-0 bg-gradient-to-br from-sky-50 to-blue-50 p-8 shadow-2xl'>
+      <DialogContent className='max-w-md rounded-2xl border-0 bg-white px-16 py-8 shadow-2xl'>
         <DialogHeader className='flex flex-col items-center space-y-4 text-center'>
           <div className='flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg'>
             <CheckCircle2 className='h-10 w-10' />

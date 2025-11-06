@@ -14,8 +14,8 @@ export default function OrganizationClassroomList() {
   const { data: organizationSubscriptionData, isLoading } = useSearchSubscriptionQuery(queryParams)
 
   useEffect(() => {
-    // Assuming organizationId is obtained from some auth context
-    dispatch(setParam({ key: 'organizationId', value: 1 }))
+    // TODO: Assuming organizationId is obtained from some auth context
+    dispatch(setParam({ key: 'organizationId', value: undefined }))
   }, [dispatch])
 
   if (isLoading) {

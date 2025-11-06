@@ -45,6 +45,11 @@
       "exploreLessons": "Explore Lessons",
       "exploreActivities": "Explore Activities",
       "exploreCurriculums": "Explore Curriculums",
+      "exploreStrawLabs": "Explore Straw Labs",
+      "exploreWorkspace3D": "Explore Workspace 3D",
+      "exploreMicrobitWorkspace": "Explore Micro:bit Workspace",
+      "exploreModalMaker": "Explore Modal Maker",
+      "exploreRobotAi": "Explore Robot AI",
       "readBlogs": "Read Blogs",
       "addKit": "Add Kit",
       "print": "Print",
@@ -56,7 +61,9 @@
       "quickView": "Quick View",
       "goToCourse": "Go to Course",
       "addToCart": "Add To Cart",
-      "signUpFree": "Sign Up For Free"
+      "signUpFree": "Sign Up For Free",
+      "createOrganization": "Create Organization",
+      "createSubscription": "Create Subscription"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

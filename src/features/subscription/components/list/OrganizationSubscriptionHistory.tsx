@@ -6,7 +6,7 @@ import SSelect from '@/components/shared/SSelect'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { useSearchSubscriptionQuery } from '@/features/subscription/api/subscriptionApi'
 import { useGetOrganizationSubscriptionColumns } from '@/features/subscription/components/list/OrganizationSubscriptionColumnTable'
-import { setParam } from '@/features/subscription/slice/subscriptionSlice'
+import { setPageIndex, setParam } from '@/features/subscription/slice/subscriptionSlice'
 import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useTranslations } from 'next-intl'
@@ -52,6 +52,10 @@ export default function OrganizationSubscriptionHistory() {
       .join(' ')
     return { label, value }
   })
+
+  const handlePageChange = (newPage: number) => {
+    dispatch(setPageIndex(newPage))
+  }
 
   if (isLoading) {
     return (
@@ -159,6 +163,7 @@ export default function OrganizationSubscriptionHistory() {
         pagingParams={params}
         pagingData={subscriptionData}
         enableRowSelection={false}
+        handlePageChange={handlePageChange}
       />
     </div>
   )

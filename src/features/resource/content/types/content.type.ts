@@ -3,7 +3,8 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export enum ContentType {
   TEXT = 'Text',
-  QUIZ = 'Quiz'
+  QUIZ = 'Quiz',
+  ASSIGNMENT = 'Assignment'
 }
 
 export type BaseContent = {
@@ -31,7 +32,9 @@ export type QuizContent = BaseContent & {
   quizId: number
 }
 
-export type Content = TextContent | QuizContent
+export type AssignmentContent = BaseContent & {}
+
+export type Content = TextContent | QuizContent | AssignmentContent
 
 export type ContentQueryParams = {
   contentType?: ContentType

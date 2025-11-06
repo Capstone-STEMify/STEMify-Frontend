@@ -27,6 +27,7 @@ export type Classroom = {
 }
 
 export type ClassroomSliceParams = {
+  teacherId?: string
   status?: ClassroomStatus
 } & SliceQueryParams
 

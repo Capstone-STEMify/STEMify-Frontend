@@ -1,9 +1,9 @@
 'use client'
 
-useGLTF.preload('/models/connector_1leg.glb')
-useGLTF.preload('/models/connector_2legs.glb')
-useGLTF.preload('/models/connector_3legs.glb')
-useGLTF.preload('/models/connector_5legs.glb')
+// useGLTF.preload('/models/connector_1leg.glb')
+// useGLTF.preload('/models/connector_2legs.glb')
+// useGLTF.preload('/models/connector_3legs.glb')
+// useGLTF.preload('/models/connector_5legs.glb')
 
 import { Canvas } from '@react-three/fiber'
 import { useRef, useCallback, useState, useEffect } from 'react'

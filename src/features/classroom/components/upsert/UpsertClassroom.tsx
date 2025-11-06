@@ -24,6 +24,7 @@ import { useGetUserAction } from '@/features/user/components/table/UserAction'
 import BackButton from '@/components/shared/button/BackButton'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import { setPageIndex } from '@/features/user/slice/userSlice'
 
 type ClassroomFormData = {
   name: string
@@ -34,6 +35,7 @@ type ClassroomFormData = {
   startDate: string // ISO date string
   endDate: string // ISO date string
   teacherId: string // UUID
+  studentIds?: string[] // Array of UUIDs
 }
 
 const defaultClassroomFormData: ClassroomFormData = {
@@ -44,7 +46,8 @@ const defaultClassroomFormData: ClassroomFormData = {
   organizationSubscriptionOrderId: 1,
   startDate: new Date().toISOString(), // default là hôm nay
   endDate: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString(), // +7 ngày
-  teacherId: ''
+  teacherId: '',
+  studentIds: []
 }
 
 type UpsertClassroomProps = {
@@ -151,7 +154,8 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
       const payload = {
         ...value,
         curriculumId: Number(value.curriculumId),
-        organizationSubscriptionOrderId: Number(value.organizationSubscriptionOrderId)
+        organizationSubscriptionOrderId: Number(value.organizationSubscriptionOrderId),
+        studentIds: selectedStudentIds
       }
 
       if (isEditing) {
@@ -189,12 +193,16 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
         status: SubscriptionStatus.PENDING,
         // TODO: replace with actual organization ID
         // organizationId: getCurrentUserOrganizationId(),
-        organizationId: 1,
+        organizationId: undefined,
         pageSize: 20,
         pageNumber: 1
       })
     )
   }, [dispatch])
+
+  const handlePageChange = (newPage: number) => {
+    dispatch(setPageIndex(newPage))
+  }
 
   return (
     <div className='flex h-full flex-col'>
@@ -436,10 +444,11 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
                   enableRowSelection
                   pagingData={studentData}
                   pagingParams={searchUserQuery}
-                  // handlePageChange={handlePageChange}
+                  handlePageChange={handlePageChange}
                   rowSelection={selectedStudentIds}
-                  onSelectionChange={(ids) => {
-                    setSelectedStudentIds(ids.map(String))
+                  onSelectionChange={(userId) => {
+                    setSelectedStudentIds(userId.map((id) => id.toString()))
+                    console.log('Selected Student IDs:', userId)
                   }}
                 />
               </div>

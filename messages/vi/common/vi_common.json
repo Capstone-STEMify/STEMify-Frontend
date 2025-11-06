@@ -45,6 +45,11 @@
       "exploreLessons": "Khám Phá Các Bài Học",
       "exploreActivities": "Khám Phá Các Hoạt Động",
       "exploreCurriculums": "Khám Phá Khung Chương Trình",
+      "exploreStrawLabs": "Khám Phá Straw Labs",
+      "exploreWorkspace3D": "Khám Phá Workspace 3D",
+      "exploreMicrobitWorkspace": "Khám Phá Workspace Micro:bit",
+      "exploreModalMaker": "Khám Phá Trình Tạo Modal",
+      "exploreRobotAi": "Khám Phá Robot AI",
       "readBlogs": "Xem Blog",
       "addKit": "Thêm Bộ Kit",
       "publish": "Xuất Bản",
@@ -56,7 +61,9 @@
       "quickView": "Xem Nhanh",
       "goToCourse": "Đi đến Khóa học",
       "shop": "MUA NGAY",
-      "signUpFree": "Đăng Ký Miễn Phí"
+      "signUpFree": "Đăng Ký Miễn Phí",
+      "createOrganization": "Tạo Tổ Chức",
+      "createSubscription": "Tạo Gói Đăng Ký"
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",

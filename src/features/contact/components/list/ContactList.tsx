@@ -70,13 +70,6 @@ export default function ContactList() {
             }}
           />
         </div>
-        <Button
-          onClick={() => {
-            openModal('upsertContact')
-          }}
-        >
-          Create New
-        </Button>
       </div>
       <DataTable
         data={rows}

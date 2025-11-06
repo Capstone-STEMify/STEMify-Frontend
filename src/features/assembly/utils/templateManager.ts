@@ -141,7 +141,6 @@ export class TemplateManager {
       size: JSON.stringify(data).length
     }
 
-    console.log(`Template loaded: ${templateId} (${template.size} bytes)`)
     return template
   }
 

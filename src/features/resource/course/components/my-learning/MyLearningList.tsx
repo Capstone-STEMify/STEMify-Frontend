@@ -15,6 +15,7 @@ import { CourseCard } from '@/features/certificate/components/list/CourseCard'
 import ClassroomList from '@/features/classroom/components/list/ClassroomList'
 import { Separator } from '@/components/shadcn/separator'
 import { MyLearningSidebar } from './MyLearningSidebar'
+import { Badge } from '@/components/shadcn/badge'
 
 type MyLearningListProps = {
   studentId?: string
@@ -63,25 +64,20 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
     )
   }
 
-  const hasClassrooms = true
   const hasCurriculums = curriculumEnrollment && curriculumEnrollment.data.items.length > 0
   const hasCourses = filteredCourseEnrollment && filteredCourseEnrollment.length > 0
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='bg-gray-50'>
       <div className='mx-auto max-w-[1920px] px-6'>
         <div className='flex gap-10'>
           {/* Main Content - Left Column */}
           <div className='min-w-0 flex-1'>
             {/* Classroom Section */}
-            {hasClassrooms && (
-              <section className='py-10'>
-                <ClassroomList />
-              </section>
-            )}
-
-            {/* Separator */}
-            {hasClassrooms && (hasCurriculums || hasCourses) && <Separator className='my-0' />}
+            <div className='flex items-center justify-start gap-3'>
+              <h2 className='text-2xl font-bold text-gray-900'>My Classrooms</h2>
+            </div>
+            <ClassroomList />
 
             {/* Curriculum Section */}
             {hasCurriculums && (
@@ -94,9 +90,6 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
                 </Accordion>
               </section>
             )}
-
-            {/* Separator */}
-            {hasCurriculums && hasCourses && <Separator className='my-0' />}
 
             {/* Courses Section */}
             {hasCourses && (

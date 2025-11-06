@@ -1,13 +1,13 @@
 import { Button } from '@/components/shadcn/button'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import TiptapViewer from '@/components/tiptap/TiptapViewer'
+import AssignmentViewer from '@/features/assignment/components/detail/AssignmentViewer'
 import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
 import { ContentType, QuizContent } from '@/features/resource/content/types/content.type'
-import { useSearchQuizQuery } from '@/features/resource/quiz/api/quizApi'
 import QuizViewer from '@/features/resource/quiz/components/viewer/QuizViewer'
 import { useModal } from '@/providers/ModalProvider'
 import { normalizeMarkdown } from '@/utils/index'
-import { BookPlus, FilePlus } from 'lucide-react'
+import { BookPlus, FilePlus, UploadCloud } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useParams, useRouter } from 'next/navigation'
 
@@ -20,7 +20,6 @@ export default function ContentDetail({ sectionId, quizId }: ContentDetailProps)
   const { lessonId } = useParams()
   const t = useTranslations('content')
   const { data: contentData, isLoading } = useSearchContentQuery({ sectionId })
-  // const { data: quizData } = useSearchQuizQuery({ sectionId })
   const { closeModal, openModal } = useModal()
   const router = useRouter()
   const locale = useLocale()
@@ -35,12 +34,20 @@ export default function ContentDetail({ sectionId, quizId }: ContentDetailProps)
     router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/question`)
   }
 
+  const handleCreateAssignment = () => {
+    closeModal()
+    // route ví dụ — thay bằng route thực tế của bạn cho tạo assignment
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/assignment/create`)
+  }
+
   if (isLoading)
     return (
       <div className='flex items-center justify-center'>
         <LoadingComponent size={150} />
       </div>
     )
+
+  // Nếu không có data
   if (!contentData?.data?.items?.length || !contentData)
     return (
       <div className='flex flex-col items-center justify-center space-y-4 rounded-2xl border bg-gray-50 py-10 text-center'>
@@ -55,17 +62,30 @@ export default function ContentDetail({ sectionId, quizId }: ContentDetailProps)
             <BookPlus className='h-4 w-4' />
             {t('form.title.createQuiz')}
           </Button>
+          <Button onClick={handleCreateAssignment} className='flex items-center gap-2 bg-green-500'>
+            <UploadCloud className='h-4 w-4' />
+            {t('form.title.createAssignment') /* thêm key i18n nếu cần */}
+          </Button>
         </div>
       </div>
     )
 
-  return (
-    <div>
-      {contentData.data.items[0].contentType === ContentType.TEXT ? (
-        <TiptapViewer content={normalizeMarkdown(contentData?.data.items[0].contentBody)} />
-      ) : (
-        <QuizViewer quiz={contentData.data.items[0]} isShowQuestionAnswer />
-      )}
-    </div>
-  )
+  // Lấy item đầu (hoặc map nếu có nhiều)
+  const item = contentData.data.items[0]
+
+  // Render theo loại nội dung
+  const renderContent = () => {
+    switch (item.contentType) {
+      case ContentType.TEXT:
+        return <TiptapViewer content={normalizeMarkdown(item.contentBody)} />
+      case ContentType.QUIZ:
+        return <QuizViewer quiz={item as QuizContent} isShowQuestionAnswer />
+      case ContentType.ASSIGNMENT:
+        return <AssignmentViewer />
+      default:
+        return <div className='text-sm text-gray-500'>{t('detail.unsupportedType')}</div>
+    }
+  }
+
+  return <div>{renderContent()}</div>
 }

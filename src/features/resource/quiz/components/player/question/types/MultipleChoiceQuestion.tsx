@@ -4,6 +4,8 @@ import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { toggleUserAnswer } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { Question } from '@/features/resource/question/types/question.type'
+import { Check, X } from 'lucide-react'
+import { Badge } from '@/components/shadcn/badge'
 
 type MultipleChoiceQuestionProps = {
   question: Question
@@ -13,7 +15,7 @@ export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuest
   const dispatch = useAppDispatch()
   const { userAnswers, isSubmitted } = useAppSelector((state) => state.quizPlayer)
 
-  const selectedIds = userAnswers[question.id] ?? [] // (string|number)[]
+  const selectedIds = userAnswers[question.id] ?? []
   const selected = Array.isArray(selectedIds) ? selectedIds : []
 
   const handleToggle = (answerId: number) => {
@@ -22,24 +24,39 @@ export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuest
   }
 
   return (
-    <div className='space-y-3'>
+    <div className='space-y-4'>
+      {/* Hint Badge */}
+      <div className='mb-4 flex items-center gap-2'>
+        <Badge className='bg-purple-100 text-purple-700 hover:bg-purple-100'>💡 Chọn tất cả đáp án đúng</Badge>
+        <Badge className='bg-gray-100 text-gray-600 hover:bg-gray-100'>Đã chọn: {selected.length}</Badge>
+      </div>
+
       {question.answers.map((answer) => {
         const isChosen = selected.includes(answer.id)
         const isCorrect = answer.isCorrect
 
-        let extraClass = 'border-2'
+        let containerClass = 'group relative overflow-hidden transition-all duration-300'
+        let borderClass = 'border-2'
+
         if (isSubmitted) {
           if (isCorrect) {
-            extraClass = 'border-2 border-green-500 bg-green-50'
+            containerClass += ' border-green-500 bg-gradient-to-r from-green-50 to-emerald-50'
+            borderClass = 'border-2 border-green-500'
           } else if (isChosen && !isCorrect) {
-            extraClass = 'border-2 border-red-500 bg-red-50'
+            containerClass += ' border-red-500 bg-gradient-to-r from-red-50 to-pink-50'
+            borderClass = 'border-2 border-red-500'
           } else {
-            extraClass = 'border-2 border-border'
+            containerClass += ' border-gray-200 bg-gray-50 opacity-60'
+            borderClass = 'border-2 border-gray-200'
           }
         } else {
-          extraClass = isChosen
-            ? 'border-2 border-primary bg-primary/10'
-            : 'border-2 border-border hover:border-primary/50'
+          if (isChosen) {
+            containerClass += ' border-purple-600 bg-gradient-to-r from-purple-50 to-pink-50 shadow-lg scale-[1.02]'
+            borderClass = 'border-2 border-purple-600'
+          } else {
+            containerClass += ' border-gray-200 bg-white hover:border-purple-400 hover:shadow-md'
+            borderClass = 'border-2 border-gray-200'
+          }
         }
 
         return (
@@ -47,21 +64,42 @@ export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuest
             key={answer.id}
             onClick={() => handleToggle(answer.id)}
             variant='outline'
-            className={`h-auto w-full justify-start p-4 text-left font-medium ${extraClass}`}
+            disabled={isSubmitted}
+            className={`${containerClass} ${borderClass} h-auto w-full justify-start p-5 text-left transition-all duration-300`}
           >
+            {/* Checkbox */}
             <span
-              className={`mr-3 inline-flex h-5 w-5 items-center justify-center rounded border-2 ${
-                isChosen ? 'bg-primary border-primary text-primary-foreground' : 'border-border'
+              className={`mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border-2 transition-all duration-300 ${
+                isSubmitted
+                  ? isCorrect
+                    ? 'border-green-500 bg-green-500'
+                    : isChosen
+                      ? 'border-red-500 bg-red-500'
+                      : 'border-gray-300 bg-white'
+                  : isChosen
+                    ? 'scale-110 border-purple-600 bg-purple-600'
+                    : 'border-gray-300 bg-white group-hover:border-purple-400'
               }`}
             >
-              {isChosen && <span className='text-sm font-semibold'>✓</span>}
+              {(isChosen || (isSubmitted && isCorrect)) && <Check className='h-5 w-5 text-white' />}
             </span>
-            <span className='flex flex-col text-left'>
-              <span>{answer.content}</span>
 
-              {isSubmitted && isCorrect && <span className='text-sm font-semibold text-green-600'>(Đáp án đúng)</span>}
+            {/* Answer Content */}
+            <span className='flex flex-1 flex-col gap-1'>
+              <span className='text-base font-medium text-gray-800'>{answer.content}</span>
+
+              {/* Status Indicators */}
+              {isSubmitted && isCorrect && (
+                <span className='flex items-center gap-1 text-sm font-semibold text-green-600'>
+                  <Check className='h-4 w-4' />
+                  Đáp án đúng
+                </span>
+              )}
               {isSubmitted && isChosen && !isCorrect && (
-                <span className='text-sm font-semibold text-red-600'>(Bạn đã chọn)</span>
+                <span className='flex items-center gap-1 text-sm font-semibold text-red-600'>
+                  <X className='h-4 w-4' />
+                  Bạn đã chọn (Sai)
+                </span>
               )}
             </span>
           </Button>

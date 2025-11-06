@@ -10,6 +10,7 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { Card } from '@/components/shadcn/card'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/shadcn/button'
 
 type SystemSubscriptionTableProps = {
   organization: Organization
@@ -33,7 +34,13 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
 
   return (
     <div className='space-y-6 p-6'>
-      <h2 className='text-lg font-semibold'>Organization Subscriptions</h2>
+      <div className='flex gap-2'>
+        <h2 className='text-lg font-semibold'>Organization Subscriptions</h2>
+        <Button size='sm' variant='outline' className='rounded-full'>
+          +
+        </Button>
+      </div>
+
       {organization.subscriptions.length === 0 ? (
         <p className='text-muted-foreground text-center'>No subscriptions found for this organization.</p>
       ) : (

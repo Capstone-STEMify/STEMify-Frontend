@@ -5,7 +5,7 @@ const initialState: ClassroomSliceParams = {
   pageNumber: 1,
   pageSize: 10,
   search: '',
-  orderBy: '',
+  orderBy: 'upcoming',
   status: ClassroomStatus.PENDING
 }
 

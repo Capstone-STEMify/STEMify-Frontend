@@ -33,7 +33,9 @@ const subscriptionDefaultValues: SubscriptionFormData = {
 
 export default function Step3SubscriptionConfiguration() {
   const dispatch = useAppDispatch()
-  const { currentStep, organizationSubscriptionId, organizationId, contractId } = useAppSelector((state) => state.organizationSubscriptionForm)
+  const { currentStep, organizationSubscriptionId, organizationId, contractId } = useAppSelector(
+    (state) => state.organizationSubscriptionForm
+  )
   const { data: planData } = useGetAllPlanQuery()
   const { data: curriculumData } = useGetAllCurriculumQuery()
   const { data: subscriptionData } = useGetSubscriptionByIdQuery(organizationSubscriptionId!, {
@@ -41,7 +43,7 @@ export default function Step3SubscriptionConfiguration() {
   })
   const [createSubscription, { isLoading: isCreating }] = useCreateSubscriptionMutation()
   const [selectedBillingCycle, setSelectedBillingCycle] = useState<BillingCycle>(BillingCycle.ANNUAL)
-  const [selectedPlanBillingCycleId, setSelectedPlanBillingCycleId] = useState<number>(0)
+  const [selectedPlanBillingCycleId, setSelectedPlanBillingCycleId] = useState<number | undefined>(undefined)
   const [selectedPlanInfo, setSelectedPlanInfo] = useState<{
     id: number
     name: string
@@ -107,6 +109,7 @@ export default function Step3SubscriptionConfiguration() {
 
   const form = useAppForm({
     defaultValues: subscriptionDefaultValues,
+    validators: { onChange: subscriptionSchema },
     onSubmit: async ({ value }) => {
       if (!value.planBillingCycleId || value.planBillingCycleId === 0) {
         toast.error('Please select a plan')
@@ -372,6 +375,7 @@ export default function Step3SubscriptionConfiguration() {
                           setStartDate(date)
                           field.form.setFieldValue('startDate', date)
                         }}
+                        minDate={new Date()}
                       />
                     </div>
                   )}

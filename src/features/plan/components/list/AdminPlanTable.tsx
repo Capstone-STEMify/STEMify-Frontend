@@ -87,7 +87,7 @@ export default function AdminPlanTable() {
                           onClick={(e) => {
                             e.stopPropagation()
                             openModal('confirm', {
-                              message: 'Are you sure you want to edit this plan?',
+                              message: 'Are you sure you want to delete this plan?',
                               onConfirm: async () => {
                                 await deletePlan(plan.id)
                                 toast.success('Plan deleted successfully')
