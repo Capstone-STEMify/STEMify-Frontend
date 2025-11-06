@@ -1,8 +1,6 @@
-import AssignmentSubmissionForm, {
-  AssignmentSubmissionFormDemo
-} from '@/features/assignment/components/assignment-attempt/AssigmentAttempt'
+import { AssignmentGradingPageDemo } from '@/features/assignment/components/grading/AssignmentGrading'
 import React from 'react'
 
 export default function AAAAAA() {
-  return <AssignmentSubmissionFormDemo />
+  return <AssignmentGradingPageDemo />
 }

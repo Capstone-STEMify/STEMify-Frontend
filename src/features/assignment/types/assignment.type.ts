@@ -1,3 +1,4 @@
+// assigment
 export type Assignment = {
   id: number
   contentId: number
@@ -26,6 +27,41 @@ export enum AssignmentSubmissionStatus {
   GRADED = 'graded'
 }
 
+// assignment attempt
+export type StudentAssignment = {
+  id: number
+  assignmentId: number
+  studentId: number
+  studentSectionProgressId: number
+  assignedAt: string
+  finalScore: number | null
+  dueDate: string
+  attemptCount: number
+  maxAttemptAllowed: number
+  status: string
+}
+
+export type AssignmentAttempt = {
+  id: number
+  studentAssignmentId: number
+  teacherId: string
+  submittedAt: string | null
+  totalScore: number | null
+  feedback: string | null
+  attemptNumber: number
+  status: string
+}
+
+export type AssignmentQuestionAttempt = {
+  id: number
+  assignmentAttemptId: number
+  assignmentQuestionId: number
+  answerText: string | null
+  answerFileUrl: string | null
+  points: number | null
+}
+
+// =================== draft submission ==============
 export type AssignmentSubmission = {
   id: number
   assignmentId: number
@@ -48,4 +84,20 @@ export type SubmissionAnswer = {
   answerFileUrl: string
   feedback: string
   score: number
+}
+// =================== draft submission ==============
+
+// Rubric
+export type RubricCriterion = {
+  id: number
+  assignmentQuestionId: number
+  criterionName: string
+  maxPoints: number
+}
+
+export type RubricScore = {
+  id: number
+  assignmentQuestionAttemptId: number
+  rubricCriterionId: number
+  points: number
 }
