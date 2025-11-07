@@ -11,7 +11,7 @@ export enum ContractStatus {
 export type Contract = {
   id: number
   name: string
-  description?: string
+  description: string
   createdAt: string
   organization: Partial<Organization>
   fileUrl?: string

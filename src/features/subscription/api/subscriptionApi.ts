@@ -1,6 +1,7 @@
 import {
   OrganizationSubscription,
-  OrganizationSubscriptionSliceParams
+  OrganizationSubscriptionSliceParams,
+  SubscriptionFormData
 } from '@/features/subscription/types/subscription.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
@@ -8,15 +9,27 @@ export const subscriptionApi = createCrudApi<OrganizationSubscription, Organizat
   reducerPath: 'subscriptionApi',
   tagTypes: ['Subscription'],
   baseUrl: '/organization-subscription-orders'
+}).injectEndpoints({
+  endpoints: (builder) => ({
+    createSubscription: builder.mutation<any, SubscriptionFormData>({
+      query: (data) => ({
+        url: '/organization-subscription-orders',
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['Subscription']
+    })
+  })
 })
 
 export const {
   useGetByIdQuery: useGetSubscriptionByIdQuery,
   useSearchQuery: useSearchSubscriptionQuery,
   useGetAllQuery: useGetAllSubscriptionQuery,
-  useCreateMutation: useCreateSubscriptionMutation,
   useUpdateMutation: useUpdateSubscriptionMutation,
   useDeleteMutation: useDeleteSubscriptionMutation,
+
+  useCreateSubscriptionMutation,
 
   // lazy
   useLazyGetByIdQuery: useLazyGetSubscriptionByIdQuery,
