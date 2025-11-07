@@ -2,19 +2,11 @@
 export type Assignment = {
   id: number
   contentId: number
+  title: string
   totalScore: number
   passingScore: number
-  allowResubmission: string
-  dueDate: string
-}
-
-export type AssignmentQuestion = {
-  id: number
-  assignmentId: number
-  type: AssignmentQuestionType
-  prompt: string
-  orderIndex: number
-  maxScore: number
+  durationDays: number
+  questions: AssignmentQuestion[]
 }
 
 export enum AssignmentQuestionType {
@@ -22,43 +14,25 @@ export enum AssignmentQuestionType {
   FILE = 'File'
 }
 
+export type RubricCriterion = {
+  id: number
+  assignmentQuestionId: number
+  criterionName: string
+  maxPoints: number
+}
+
+export type AssignmentQuestion = {
+  id: number
+  type: AssignmentQuestionType
+  orderIndex: number
+  points: number
+  content: string
+  rubricCriterion: RubricCriterion[]
+}
+
 export enum AssignmentSubmissionStatus {
   SUBMITTED = 'submitted',
   GRADED = 'graded'
-}
-
-// assignment attempt
-export type StudentAssignment = {
-  id: number
-  assignmentId: number
-  studentId: number
-  studentSectionProgressId: number
-  assignedAt: string
-  finalScore: number | null
-  dueDate: string
-  attemptCount: number
-  maxAttemptAllowed: number
-  status: string
-}
-
-export type AssignmentAttempt = {
-  id: number
-  studentAssignmentId: number
-  teacherId: string
-  submittedAt: string | null
-  totalScore: number | null
-  feedback: string | null
-  attemptNumber: number
-  status: string
-}
-
-export type AssignmentQuestionAttempt = {
-  id: number
-  assignmentAttemptId: number
-  assignmentQuestionId: number
-  answerText: string | null
-  answerFileUrl: string | null
-  points: number | null
 }
 
 // =================== draft submission ==============
@@ -84,20 +58,4 @@ export type SubmissionAnswer = {
   answerFileUrl: string
   feedback: string
   score: number
-}
-// =================== draft submission ==============
-
-// Rubric
-export type RubricCriterion = {
-  id: number
-  assignmentQuestionId: number
-  criterionName: string
-  maxPoints: number
-}
-
-export type RubricScore = {
-  id: number
-  assignmentQuestionAttemptId: number
-  rubricCriterionId: number
-  points: number
 }

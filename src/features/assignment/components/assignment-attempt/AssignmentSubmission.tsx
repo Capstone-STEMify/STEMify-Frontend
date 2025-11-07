@@ -2,7 +2,12 @@ import React from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { AlertTriangle, RotateCcw } from 'lucide-react'
-import { Assignment, AssignmentSubmission, AssignmentSubmissionStatus } from '@/features/assignment/types/assignment.type'
+import {
+  Assignment,
+  AssignmentQuestionType,
+  AssignmentSubmission,
+  AssignmentSubmissionStatus
+} from '@/features/assignment/types/assignment.type'
 
 interface AssignmentSubmissionPageProps {
   assignment: Assignment
@@ -62,7 +67,7 @@ export default function AssignmentSubmissionPage({
             <div className='space-y-4'>
               <div>
                 <div className='mb-1 text-sm font-medium text-gray-700'>Due</div>
-                <div className='text-sm text-gray-900'>{formatDate(assignment.dueDate)}</div>
+                <div className='text-sm text-gray-900'>{assignment.durationDays} days</div>
               </div>
 
               <div>
@@ -123,10 +128,18 @@ export function AssignmentSubmissionPageDemo() {
   const mockAssignment: Assignment = {
     id: 1,
     contentId: 1,
+    title: 'Agile & Lean Software Development',
     totalScore: 100,
-    passingScore: 80,
-    allowResubmission: 'yes',
-    dueDate: '2024-11-24T11:59:00+07:00'
+    passingScore: 70,
+    durationDays: 7,
+    questions: {
+      id: 1,
+      type: AssignmentQuestionType.TEXT,
+      orderIndex: 1,
+      points: 10,
+      content: 'Explain the principles of Agile development.',
+      rubricCriterion: []
+    }
   }
 
   const mockSubmission: AssignmentSubmission = {
