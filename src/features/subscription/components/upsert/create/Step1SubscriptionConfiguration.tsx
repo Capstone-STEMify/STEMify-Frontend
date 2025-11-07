@@ -5,7 +5,7 @@ import z from 'zod'
 import { toast } from 'sonner'
 import { Button } from '@/components/shadcn/button'
 import { SubscriptionFormData } from '@/features/subscription/types/subscription.type'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useCreateSubscriptionMutation, useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
 import { useGetAllCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import { useGetAllPlanQuery } from '@/features/plan/api/planApi'
@@ -28,14 +28,17 @@ const subscriptionDefaultValues: SubscriptionFormData = {
   discountPercent: 0,
   maxStudentSeats: 10,
   maxTeacherSeats: 2,
-  curriculumIds: []
+  curriculumIds: [],
+  contractId: undefined,
+  contract: undefined
 }
 
-export default function Step3SubscriptionConfiguration() {
+export default function Step1SubscriptionConfiguration() {
   const dispatch = useAppDispatch()
   const { currentStep, organizationSubscriptionId, organizationId, contractId } = useAppSelector(
     (state) => state.organizationSubscriptionForm
   )
+  const fileFieldRef = useRef<any>(null)
   const { data: planData } = useGetAllPlanQuery()
   const { data: curriculumData } = useGetAllCurriculumQuery()
   const { data: subscriptionData } = useGetSubscriptionByIdQuery(organizationSubscriptionId!, {
@@ -61,6 +64,12 @@ export default function Step3SubscriptionConfiguration() {
   const [selectedCurriculumIds, setSelectedCurriculumIds] = useState<number[]>([])
 
   const subscription = subscriptionData?.data
+  const contractSchema = z.object({
+    name: z.string().min(1, 'Contract name is required'),
+    description: z.string().min(10, 'Description must be at least 10 characters'),
+    fileBase64: z.string().min(1, 'Please upload a contract file'),
+    previewUrlFromServer: z.string().optional()
+  })
   const subscriptionSchema = z.object({
     planBillingCycleId: z.number().refine((val) => val > 0, 'Please select a plan'),
     startDate: z
@@ -70,7 +79,9 @@ export default function Step3SubscriptionConfiguration() {
     discountPercent: z.number().min(0).max(100, 'Discount must be between 0 and 100'),
     maxStudentSeats: z.number().min(1, 'At least 1 student seat required'),
     maxTeacherSeats: z.number().min(1, 'At least 1 teacher seat required'),
-    curriculumIds: z.array(z.number())
+    curriculumIds: z.array(z.number()),
+    contractId: z.number().nullable(),
+    contract: contractSchema.nullable()
   })
 
   const plans = planData?.data.items ?? []
@@ -109,7 +120,10 @@ export default function Step3SubscriptionConfiguration() {
 
   const form = useAppForm({
     defaultValues: subscriptionDefaultValues,
-    validators: { onChange: subscriptionSchema },
+    // TODO: Validation
+    // validators: {
+    //   onChange: (value) => subscriptionSchema.safeParse(value)
+    // },
     onSubmit: async ({ value }) => {
       if (!value.planBillingCycleId || value.planBillingCycleId === 0) {
         toast.error('Please select a plan')
@@ -155,15 +169,16 @@ export default function Step3SubscriptionConfiguration() {
   }, [startDate, selectedBillingCycle])
 
   // Update seats when plan is selected
+  const updatePlanFields = (card: typeof selectedPlanCard) => {
+    if (!card) return
+    // form.setFieldValue('planBillingCycleId', card.planBillingCycleId)
+    // form.setFieldValue('maxStudentSeats', card.maxStudentSeats)
+    // form.setFieldValue('maxTeacherSeats', card.maxTeacherSeats)
+  }
+
   useEffect(() => {
-    if (selectedPlanCard) {
-      setSelectedPlanInfo(selectedPlanCard)
-      form.setFieldValue('planBillingCycleId', selectedPlanCard.planBillingCycleId)
-      form.setFieldValue('maxStudentSeats', selectedPlanCard.maxStudentSeats)
-      form.setFieldValue('maxTeacherSeats', selectedPlanCard.maxTeacherSeats)
-    } else {
-      setSelectedPlanInfo(null)
-    }
+    if (selectedPlanCard) updatePlanFields(selectedPlanCard)
+    else setSelectedPlanInfo(null)
   }, [selectedPlanCard?.planBillingCycleId])
 
   // Load existing subscription data
@@ -217,6 +232,73 @@ export default function Step3SubscriptionConfiguration() {
           Select a billing cycle, choose your plan, and configure the subscription details
         </p>
       </div>
+      {/* Contract Section */}
+      <Card className='border-2 border-slate-200'>
+        <CardContent className='space-y-5 p-6'>
+          <div className='space-y-1'>
+            <h3 className='text-lg font-semibold text-slate-900'>Contract Information</h3>
+            <p className='text-sm text-slate-500'>Provide contract details and upload a contract file for reference.</p>
+          </div>
+
+          {/* Row: Contract Name + Contract File */}
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+            {/* Contract Name */}
+            <div className='md:col-span-2'>
+              <form.AppField name='contract.name'>
+                {(field) => <field.TextField label='Contract Name' placeholder='Enter contract name' />}
+              </form.AppField>
+            </div>
+
+            {/* Contract File Upload */}
+            <div>
+              <form.AppField name='contract.file'>
+                {(field) => {
+                  fileFieldRef.current = field
+                  return (
+                    <div className='flex flex-col'>
+                      <label className='mb-1 text-sm font-medium text-slate-700'>Contract File (PDF)</label>
+                      <div className='flex items-center gap-2'>
+                        <input
+                          type='file'
+                          accept='.pdf'
+                          onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            if (file) field.setValue(file)
+                          }}
+                          className='block w-full max-w-[200px] cursor-pointer rounded-md border border-slate-300 bg-slate-50 px-2 py-1.5 text-xs file:mr-2 file:rounded-md file:border-0 file:bg-blue-100 file:px-2.5 file:py-1 file:text-xs file:font-medium file:text-blue-600 hover:bg-slate-100'
+                        />
+                        {form.state.values.contract?.previewUrlFromServer && (
+                          <a
+                            href={form.state.values.contract.previewUrlFromServer}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='text-xs font-medium text-blue-600 hover:underline'
+                          >
+                            Preview
+                          </a>
+                        )}
+                      </div>
+                      <p className='mt-1 text-[11px] text-slate-500'>Upload a small PDF (under 5MB)</p>
+                    </div>
+                  )
+                }}
+              </form.AppField>
+            </div>
+          </div>
+
+          {/* Description */}
+          <form.AppField name='contract.description'>
+            {(field) => (
+              <field.TextAreaField
+                label='Description'
+                placeholder='Enter contract description'
+                rows={3}
+                className='resize-none'
+              />
+            )}
+          </form.AppField>
+        </CardContent>
+      </Card>
 
       {/* Billing Cycle Selection */}
       <div className='space-y-4'>

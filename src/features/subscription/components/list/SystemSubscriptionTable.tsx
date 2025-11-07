@@ -11,6 +11,7 @@ import { Card } from '@/components/shadcn/card'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/shadcn/button'
+import { Plus } from 'lucide-react'
 
 type SystemSubscriptionTableProps = {
   organization: Organization
@@ -36,8 +37,15 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
     <div className='space-y-6 p-6'>
       <div className='flex gap-2'>
         <h2 className='text-lg font-semibold'>Organization Subscriptions</h2>
-        <Button size='sm' variant='outline' className='rounded-full'>
-          +
+        <Button
+          size='sm'
+          variant='ghost'
+          className='rounded-full'
+          onClick={() =>
+            router.push(`/${locale}/admin/organization-subscription/create?organizationId=${organization.id}`)
+          }
+        >
+          <Plus className='h-4 w-4' />
         </Button>
       </div>
 

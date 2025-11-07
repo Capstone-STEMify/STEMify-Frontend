@@ -82,7 +82,7 @@ export default function SystemOrganizationList() {
             <p className='text-muted-foreground mt-1'>{t('list.organizationSubscriptionDescription')}</p>
           </div>
           <div className='flex gap-2'>
-            <Button variant='outline' onClick={() => router.push(`/${locale}/admin/organization-subscription/create`)}>
+            <Button variant='outline' onClick={() => openModal('upsertOrganization')}>
               <Building2 className='h-4 w-4' /> {tc('button.createOrganization')}
             </Button>
           </div>

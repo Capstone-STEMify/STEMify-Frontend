@@ -63,4 +63,6 @@ export type SubscriptionFormData = {
   maxStudentSeats: number
   maxTeacherSeats: number
   curriculumIds: number[]
+  contractId?: number
+  contract?: Partial<Contract>
 }
