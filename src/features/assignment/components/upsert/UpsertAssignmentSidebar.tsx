@@ -2,10 +2,21 @@
 import React from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
+import { Save, Eye, FileText, Clock, Target, GripVertical } from 'lucide-react'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
-import { Save, Eye, FileText, Clock, Target } from 'lucide-react'
+type QuestionFormData = {
+  type: string
+  orderIndex: number
+  points: number
+  content: string
+  rubricCriterion: any[]
+}
 
 type AssignmentSidebarProps = {
+  questions: QuestionFormData[]
   totalScore: number
   totalQuestions: number
   totalCriteria: number
@@ -15,7 +26,50 @@ type AssignmentSidebarProps = {
   onPreview?: () => void
 }
 
+// Sortable Question Item Component
+function SortableQuestionItem({ question, index }: { question: QuestionFormData; index: number }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: question.orderIndex
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1
+  }
+
+  const truncateContent = (content: string, maxLength = 50) => {
+    if (content.length <= maxLength) return content
+    return content.substring(0, maxLength) + '...'
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className='flex items-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-gray-50'
+    >
+      <button
+        type='button'
+        className='cursor-grab touch-none text-gray-400 hover:text-gray-600 active:cursor-grabbing'
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className='h-4 w-4' />
+      </button>
+      <div className='min-w-0 flex-1'>
+        <div className='flex items-center gap-2'>
+          <span className='text-xs font-semibold text-gray-500'>Q{question.orderIndex}</span>
+          <span className='text-xs text-gray-600'>({question.points} pts)</span>
+        </div>
+        <p className='truncate text-sm text-gray-700'>{truncateContent(question.content) || 'Empty question'}</p>
+      </div>
+    </div>
+  )
+}
+
 export function AssignmentSidebar({
+  questions,
   totalScore,
   totalQuestions,
   totalCriteria,
@@ -40,6 +94,21 @@ export function AssignmentSidebar({
             <Eye className='h-4 w-4' />
             Preview Assignment
           </Button>
+        </CardContent>
+      </Card>
+
+      {/* Questions Order */}
+      <Card>
+        <CardHeader className='py-4'>
+          <CardTitle className='text-lg'>Questions Order</CardTitle>
+          <p className='mt-1 text-xs text-gray-500'>Drag to reorder questions</p>
+        </CardHeader>
+        <CardContent className='space-y-2 py-4'>
+          <SortableContext items={questions.map((q) => q.orderIndex)} strategy={verticalListSortingStrategy}>
+            {questions.map((question, index) => (
+              <SortableQuestionItem key={question.orderIndex} question={question} index={index} />
+            ))}
+          </SortableContext>
         </CardContent>
       </Card>
 
