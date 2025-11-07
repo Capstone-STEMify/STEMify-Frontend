@@ -12,6 +12,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/shadcn/button'
 import { Plus } from 'lucide-react'
+import { useAppDispatch } from '@/hooks/redux-hooks'
 
 type SystemSubscriptionTableProps = {
   organization: Organization
@@ -21,6 +22,7 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
   const tc = useTranslations('common')
   const router = useRouter()
   const locale = useLocale()
+  const dispatch = useAppDispatch()
 
   const getBillingCycleLabel = (cycle: BillingCycle | string) => {
     switch (cycle) {
@@ -41,9 +43,9 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
           size='sm'
           variant='ghost'
           className='rounded-full'
-          onClick={() =>
+          onClick={() => {
             router.push(`/${locale}/admin/organization-subscription/create?organizationId=${organization.id}`)
-          }
+          }}
         >
           <Plus className='h-4 w-4' />
         </Button>
