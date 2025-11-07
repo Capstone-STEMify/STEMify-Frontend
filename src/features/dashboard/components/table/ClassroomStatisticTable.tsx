@@ -17,11 +17,11 @@ export function ClassroomStatisticTable({ data }: ClassroomStatisticTableProps) 
   return (
     <Card className='rounded-xl border-none bg-white shadow-md'>
       <CardHeader className='flex flex-col items-center justify-between gap-4 py-4 md:flex-row'>
-        <CardTitle className='text-lg font-semibold'>Classroom Statistics</CardTitle> {/* Changed Title */}
+        <CardTitle className='text-lg font-semibold'>Classroom Statistics</CardTitle>
         <div className='flex w-full items-center gap-2 md:w-auto'>
           <div className='relative w-full md:w-auto'>
             <Search className='text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4' />
-            <Input type='search' placeholder='Search Classroom' className='pl-8' /> {/* Changed Placeholder */}
+            <Input type='search' placeholder='Search Classroom' className='pl-8' />
           </div>
           <Button variant='outline'>
             <Filter className='mr-2 h-4 w-4' /> Filter
@@ -34,7 +34,6 @@ export function ClassroomStatisticTable({ data }: ClassroomStatisticTableProps) 
       <CardContent>
         <Table>
           <TableHeader>
-            {/* Updated Table Headers */}
             <TableRow className='bg-gray-100'>
               <TableHead className='w-[50px]'>
                 <Checkbox />

@@ -78,7 +78,6 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
   baseUrl,
   baseQuery = customFetchBaseQueryWithErrorHandling
 }: CrudApiOptions) {
-
   const handleDynamicUrl = (url: string, params: any) => {
     let dynamicUrl = url
     const queryParams = { ...params }

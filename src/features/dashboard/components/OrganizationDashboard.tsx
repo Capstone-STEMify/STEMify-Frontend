@@ -32,7 +32,8 @@ export default function OrganizationDashboard() {
   })
 
   if (isLoading) return <div className='p-8'>Loading...</div>
-  if (error || !dashboardResponse || !dashboardResponse.data) return <div className='p-8'>Error loading dashboard data!</div>
+  if (error || !dashboardResponse || !dashboardResponse.data)
+    return <div className='p-8'>Error loading dashboard data!</div>
 
   const dashboardData: DashboardData = dashboardResponse.data
 

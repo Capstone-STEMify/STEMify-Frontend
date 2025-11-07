@@ -26,9 +26,8 @@ interface ProgressStatisticsCardProps {
 }
 
 export function ProgressStatisticsCard({ data }: ProgressStatisticsCardProps) {
-  // Transform curriculumStatistics data for the chart
   const chartData = data.curriculumStatistics.map((curriculum) => ({
-    name: curriculum.title, // Use curriculum title
+    name: curriculum.title,
     pass: curriculum.passRate,
     fail: 100 - curriculum.passRate
   }))
@@ -39,25 +38,16 @@ export function ProgressStatisticsCard({ data }: ProgressStatisticsCardProps) {
     <Card className='h-full rounded-xl border-none bg-white shadow-md'>
       <CardHeader className='flex flex-row items-center justify-between py-6'>
         <CardTitle className='text-lg font-semibold'>Curriculum Statistics</CardTitle>
-        {/* This dropdown seems local, keeping it as is */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='outline' size='sm'>
-              Jan - April <ChevronDown className='ml-2 h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>{/* ... items */}</DropdownMenuContent>
-        </DropdownMenu>
       </CardHeader>
       <CardContent>
         <div className='mb-4 flex items-center justify-end gap-4 pt-4 text-sm'>
           <div className='flex items-center'>
             <span className='mr-2 h-2.5 w-2.5 rounded-full bg-indigo-600'></span>
-            <span>Pass</span> {/* Updated label */}
+            <span>Pass</span>
           </div>
           <div className='flex items-center'>
             <span className='mr-2 h-2.5 w-2.5 rounded-full bg-indigo-100'></span>
-            <span>Fail</span> {/* Updated label */}
+            <span>Not Pass</span>
           </div>
         </div>
         <div className='h-56 w-full overflow-x-auto'>
@@ -66,8 +56,8 @@ export function ProgressStatisticsCard({ data }: ProgressStatisticsCardProps) {
               <XAxis dataKey='name' axisLine={false} tickLine={false} />
               <YAxis width={70} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
-              <Bar dataKey='pass' fill='#4F46E5' radius={[4, 4, 0, 0]} /> {/* Updated dataKey */}
-              <Bar dataKey='fail' fill='#E0E7FF' radius={[4, 4, 0, 0]} /> {/* Updated dataKey */}
+              <Bar dataKey='pass' fill='#4F46E5' radius={[4, 4, 0, 0]} />
+              <Bar dataKey='fail' fill='#E0E7FF' radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

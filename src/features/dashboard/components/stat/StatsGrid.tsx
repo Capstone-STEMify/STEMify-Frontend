@@ -10,10 +10,7 @@ function ChangeBadge({ change }: { change: number }) {
   const isPositive = change >= 0
   return (
     <div
-      className={cn(
-        'flex items-center gap-0.5 text-xs font-medium',
-        isPositive ? 'text-green-600' : 'text-red-600'
-      )}
+      className={cn('flex items-center gap-0.5 text-xs font-medium', isPositive ? 'text-green-600' : 'text-red-600')}
     >
       {isPositive ? <ArrowUp className='h-3 w-3' /> : <ArrowDown className='h-3 w-3' />}
       {Math.abs(change)}%
@@ -31,7 +28,7 @@ export function QuickStatsGrid({ data }: QuickStatsGridProps) {
 
   const stats = [
     {
-      title: 'Total Curriculums', // Changed from 'Completed Courses'
+      title: 'Total Curriculums',
       value: currentPeriod.totalCurriculum,
       change: change.totalCurriculum,
       icon: Briefcase,
@@ -47,17 +44,17 @@ export function QuickStatsGrid({ data }: QuickStatsGridProps) {
       bgColor: 'bg-green-100'
     },
     {
-      title: 'Total Classrooms', // Changed from 'Course in Progress'
+      title: 'Total Classrooms',
       value: currentPeriod.totalClassrooms,
       change: change.totalClassrooms,
-      icon: ArrowUpRight, // Re-using icon, you can change it
+      icon: ArrowUpRight,
       color: 'text-blue-600',
       bgColor: 'bg-blue-100'
     },
     {
       title: 'Community Support',
-      value: '19k+', // Static as requested
-      change: null, // No change for static value
+      value: '19k+',
+      change: null,
       icon: Users,
       color: 'text-orange-600',
       bgColor: 'bg-orange-100'

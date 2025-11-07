@@ -20,14 +20,10 @@ export const orgDashboardApi = createApi({
           params: queryParams
         }
       },
-      providesTags: (result, error, params) => [
-        { type: 'OrgDashboard', id: params.organizationId }
-      ]
+      providesTags: (result, error, params) => [{ type: 'OrgDashboard', id: params.organizationId }]
     })
   })
 })
 
-export const {
-  useSearchQuery: useSearchOrgDashboardQuery,
-  useLazySearchQuery: useLazySearchOrgDashboardQuery
-} = orgDashboardApi
+export const { useSearchQuery: useSearchOrgDashboardQuery, useLazySearchQuery: useLazySearchOrgDashboardQuery } =
+  orgDashboardApi

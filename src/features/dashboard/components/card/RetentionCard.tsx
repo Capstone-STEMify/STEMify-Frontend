@@ -15,21 +15,19 @@ interface StudentRetentionCardProps {
 export function StudentRetentionCard({ data }: StudentRetentionCardProps) {
   const { currentPeriod, previousPeriod, change } = data
 
-  // Use the percentage change of enrollments as the main metric
   const percentage = change.totalCurriculumEnrollments
   const absoluteChange = currentPeriod.totalCurriculumEnrollments - previousPeriod.totalCurriculumEnrollments
 
-  // Data for the gauge chart
   const pieData = [
-    { name: 'Change', value: Math.abs(percentage), color: percentage >= 0 ? '#4F46E5' : '#EF4444' }, // Indigo or Red
-    { name: 'Remaining', value: 100 - Math.abs(percentage), color: '#E0E7FF' } // Light Indigo
+    { name: 'Change', value: Math.abs(percentage), color: percentage >= 0 ? '#4F46E5' : '#EF4444' },
+    { name: 'Remaining', value: 100 - Math.abs(percentage), color: '#E0E7FF' }
   ]
 
   return (
     <Card className='h-full rounded-xl border-none bg-white shadow-md'>
       <CardHeader className='flex flex-row items-center justify-between pt-6'>
         <CardTitle className='flex items-center gap-2 text-lg font-semibold'>
-          Enrollment Change {/* Changed from Student Retention */}
+          Enrollment Change
           <Info className='h-4 w-4 text-gray-400' />
         </CardTitle>
         <span className='cursor-pointer text-sm text-indigo-600'>See Details</span>

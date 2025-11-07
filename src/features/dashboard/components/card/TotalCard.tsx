@@ -8,15 +8,9 @@ import { DashboardData } from '../../types/dashboard.type'
 function ChangeBadge({ change }: { change: number }) {
   const isPositive = change >= 0
   return (
-    <Badge
-      className={cn(
-        'mt-1 self-start',
-        isPositive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-      )}
-    >
+    <Badge className={cn('mt-1 self-start', isPositive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700')}>
       {isPositive ? '+' : ''}
       {change}
-      {/* Giả sử 'change' là %, nếu không, hãy xóa '%' */}
     </Badge>
   )
 }
@@ -40,16 +34,14 @@ export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
       title: 'Total Teachers',
       count: teacherPercent,
       people: totalTeachers,
-      change: change.totalTeachers, // % change
-      // <<< THAY ĐỔI: Cập nhật màu khớp với hình ảnh (Yellow)
+      change: change.totalTeachers,
       color: 'bg-yellow-400'
     },
     {
       title: 'Total Students',
       count: studentPercent,
       people: totalStudents,
-      change: change.totalStudents, // % change
-      // <<< THAY ĐỔI: Cập nhật màu khớp với hình ảnh (Blue)
+      change: change.totalStudents,
       color: 'bg-blue-500'
     }
   ]
@@ -99,11 +91,9 @@ export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
         </div>
 
         <div className='relative mt-8 mb-6 w-full md:mt-6 md:mb-2'>
-          {/* <<< THAY ĐỔI: Sử dụng 'style' để đặt vị trí 'left' động */}
           <span className='absolute -top-5 left-0 text-sm font-semibold text-gray-700'>{rate1Label}</span>
           <span
             className='absolute -top-5 text-sm font-semibold text-gray-700'
-            // Đặt vị trí 'left' dựa trên tỷ lệ % của giáo viên
             style={{ left: `${Math.round(teacherPercent)}%` }}
           >
             {rate2Label}
@@ -125,12 +115,7 @@ export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
               </div>
               <div className='flex items-center gap-2'>
                 <span className='font-medium text-gray-500'>{rate.people} People</span>
-                <span
-                  className={cn(
-                    'flex items-center text-xs',
-                    rate.change >= 0 ? 'text-green-600' : 'text-red-600'
-                  )}
-                >
+                <span className={cn('flex items-center text-xs', rate.change >= 0 ? 'text-green-600' : 'text-red-600')}>
                   {rate.change >= 0 ? <ArrowUp className='h-3 w-3' /> : <ArrowDown className='h-3 w-3' />}
                   {rate.change}%
                 </span>
