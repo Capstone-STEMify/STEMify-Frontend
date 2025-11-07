@@ -32,5 +32,5 @@ export type AssignmentAttempt = {
 }
 
 export type StudentAssignmentQueryParam = {
-  classroomId: string
+  classroomId: number
 } & SearchPaginatedRequestParams
