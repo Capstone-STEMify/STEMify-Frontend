@@ -1,4 +1,3 @@
-'use client'
 import React, { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
@@ -20,7 +19,29 @@ import {
   AlignRight,
   Link2Off
 } from 'lucide-react'
-import { Assignment, AssignmentQuestion, AssignmentQuestionType } from '@/features/assignment/types/assignment.type'
+
+export type Assignment = {
+  id: number
+  contentId: number
+  totalScore: number
+  passingScore: number
+  allowResubmission: string
+  dueDate: string
+}
+
+export type AssignmentQuestion = {
+  id: number
+  assignmentId: number
+  type: AssignmentQuestionType
+  prompt: string
+  orderIndex: number
+  maxScore: number
+}
+
+export enum AssignmentQuestionType {
+  TEXT = 'Text',
+  FILE = 'File'
+}
 
 interface AssignmentSubmissionFormProps {
   assignment: Assignment
@@ -48,6 +69,18 @@ export default function AssignmentSubmissionForm({
   const [projectTitle, setProjectTitle] = useState('')
   const [answers, setAnswers] = useState<Record<number, string>>({})
 
+  const formatDeadline = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+      timeZoneName: 'short'
+    })
+  }
+
   const handleAnswerChange = (questionId: number, value: string) => {
     setAnswers((prev) => ({
       ...prev,
@@ -72,7 +105,7 @@ export default function AssignmentSubmissionForm({
       <div>
         <h1 className='mb-4 text-3xl font-normal'>{title}</h1>
         <div className='text-sm text-gray-600'>
-          <span className='font-semibold'>Deadline</span> {assignment.durationDays} days
+          <span className='font-semibold'>Deadline</span> {formatDeadline(assignment.dueDate)}
         </div>
       </div>
 
@@ -157,7 +190,7 @@ export default function AssignmentSubmissionForm({
           {questions.map((question, index) => (
             <div key={question.id} className='space-y-4'>
               <div className='space-y-2'>
-                <h3 className='text-base font-normal text-gray-900'>{question.content}</h3>
+                <h3 className='text-base font-normal text-gray-900'>{question.prompt}</h3>
 
                 {/* Instructions/Steps if this is a multi-step question */}
                 {question.orderIndex === 0 && (
@@ -281,26 +314,18 @@ export function AssignmentSubmissionFormDemo() {
     contentId: 1,
     totalScore: 100,
     passingScore: 80,
-    durationDays: 7,
-    title: 'Sample Assignment',
-    questions: {
-      id: 1,
-      type: AssignmentQuestionType.TEXT,
-      orderIndex: 1,
-      points: 50,
-      content: 'Explain the principles of Agile development.',
-      rubricCriterion: []
-    }
+    allowResubmission: 'yes',
+    dueDate: '2024-11-24T11:59:00+07:00'
   }
 
   const mockQuestions: AssignmentQuestion[] = [
     {
       id: 1,
+      assignmentId: 1,
       type: AssignmentQuestionType.TEXT,
-      content: 'What software development methodology would you suggest for this situation and why?',
+      prompt: 'What software development methodology would you suggest for this situation and why?',
       orderIndex: 0,
-      points: 100,
-      rubricCriterion: []
+      maxScore: 100
     }
   ]
 

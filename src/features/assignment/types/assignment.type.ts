@@ -1,4 +1,6 @@
-// assigment
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
+
+// =================== Assignment Types ===================
 export type Assignment = {
   id: number
   contentId: number
@@ -30,12 +32,37 @@ export type AssignmentQuestion = {
   rubricCriterion: RubricCriterion[]
 }
 
+// =================== Create/Update DTOs ===================
+// Used for API requests (no IDs)
+export type CreateAssignmentDto = {
+  sectionId: number
+  title: string
+  passingScore: number
+  durationDays: number
+  questions: CreateAssignmentQuestionDto[]
+}
+
+export type CreateAssignmentQuestionDto = {
+  type: AssignmentQuestionType
+  orderIndex: number
+  points: number
+  content: string
+  rubricCriterion: CreateRubricCriterionDto[]
+}
+
+export type CreateRubricCriterionDto = {
+  criterionName: string
+  maxPoints: number
+}
+
+export type UpdateAssignmentDto = CreateAssignmentDto
+
+// =================== Submission Types ===================
 export enum AssignmentSubmissionStatus {
   SUBMITTED = 'submitted',
   GRADED = 'graded'
 }
 
-// =================== draft submission ==============
 export type AssignmentSubmission = {
   id: number
   assignmentId: number
@@ -59,3 +86,6 @@ export type SubmissionAnswer = {
   feedback: string
   score: number
 }
+
+// =================== Query Params ===================
+export type AssignmentQueryParams = {} & SearchPaginatedRequestParams
