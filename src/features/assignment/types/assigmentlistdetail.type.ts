@@ -15,7 +15,7 @@ export type StudentStatistic = {
   studentName: string
   imageUrl: string
   status: 'Submitted' | 'Pending' | 'UnderReview' | 'Graded' | string
-  lastSubmittedAt: string // ISO 8601 date string
+  lastSubmittedAt: string
   attempts: AssignmentAttempt[]
 }
 
@@ -23,12 +23,33 @@ export type AssignmentAttempt = {
   id: number
   studentAssignmentId: number
   teacherId: string
-  submittedAt: string // ISO 8601 date string
+  submittedAt: string
   totalScore: number
   status: 'UnderReview' | 'Graded' | 'Draft' | 'Submitted' | string
   feedback: string
   attemptNumber: number
-  questionAttempts: []
+  questionAttempts: QuestionAttempt[]
+}
+
+export type StudentAssignmentDetail = {
+  id: number
+  assignmentId: number
+  studentId: string
+  status: string
+  assignedAt: string
+  dueDate: string
+  attemptCount: number
+  attempts: AssignmentAttempt[]
+}
+
+export type QuestionAttempt = {
+  id: number
+  assignmentAttemptId: number
+  assignmentQuestionId: number
+  answerText: string
+  answerFileUrl: string
+  points: number
+  rubricScore: []
 }
 
 export type StudentAssignmentQueryParam = {

@@ -16,6 +16,7 @@ import { useSearchStudentAssignmentQuery } from '../../api/studentAssignmentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { AssignmentStatistics } from '../../types/assigmentlistdetail.type'
 import { format } from 'date-fns'
+import Link from 'next/link'
 
 export function AssignmentList() {
   const getAccuracyColor = (accuracy: number | null): string => {
@@ -46,8 +47,8 @@ export function AssignmentList() {
                 Quiz name <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
-            <TableHead className='w-[180px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
+            <TableHead className='w-[180px] text-center'>
+              <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
                 Learners <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
@@ -77,11 +78,6 @@ export function AssignmentList() {
           {assignments.map((assignment) => {
             const extraLearners = assignment.studentStatistics.length > 3 ? assignment.studentStatistics.length - 3 : 0
 
-            const assignedDate =
-              assignment.studentStatistics.length > 0
-                ? format(new Date(assignment.studentStatistics[0].lastSubmittedAt), 'MMM dd, yyyy')
-                : 'N/A'
-
             return (
               <TableRow key={assignment.assignmentId}>
                 <TableCell>
@@ -93,15 +89,20 @@ export function AssignmentList() {
                   </div>
                 </TableCell>
                 <TableCell className='font-medium'>
-                  <label htmlFor={`asm-${assignment.assignmentId}`} className='cursor-pointer text-gray-800'>
-                    {assignment.assignmentTitle}
-                  </label>
-                  <div className='mt-1 flex items-center text-xs text-gray-500'>
-                    <span className='font-semibold'>{assignment.totalQuestions} Questions</span>
-                  </div>
+                  <Link href={`/assignment/${assignment.assignmentId}`}>
+                    <label
+                      htmlFor={`asm-${assignment.assignmentId}`}
+                      className='cursor-pointer text-gray-800 hover:text-blue-500 hover:underline'
+                    >
+                      {assignment.assignmentTitle}
+                    </label>
+                    <div className='mt-1 flex items-center text-xs text-gray-500'>
+                      <span className='font-semibold'>{assignment.totalQuestions} Questions</span>
+                    </div>
+                  </Link>
                 </TableCell>
                 <TableCell>
-                  <div className='flex items-center'>
+                  <div className='flex items-center justify-center'>
                     <div className='flex -space-x-2'>
                       {assignment.studentStatistics.slice(0, 3).map((student) => (
                         <Avatar key={student.studentId} className='h-7 w-7 border-2 border-white'>
