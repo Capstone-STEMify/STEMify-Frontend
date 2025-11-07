@@ -2,10 +2,14 @@ import React, { useState, useRef } from 'react'
 import { Upload, X, FileSpreadsheet } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { goBack } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
+import { useUploadCSVBulkMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
 
 interface UploadedFile {
   name: string
   size?: number
+  file: File
 }
 export interface UploadCSVProps {
   organizationSubscriptionOrderId?: number
@@ -18,6 +22,33 @@ export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSV
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null)
   const [urlInput, setUrlInput] = useState<string>('')
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const dispatch = useAppDispatch()
+
+  const [uploadCSVBulk] = useUploadCSVBulkMutation()
+
+  const handleSubmit = async (file: File) => {
+    const reader = new FileReader()
+
+    reader.onload = async (event) => {
+      const csvBase64: string = await new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = (e) => resolve((e.target?.result as string).split(',')[1])
+        reader.onerror = () => reject('Failed to read CSV')
+        reader.readAsDataURL(file)
+      })
+
+      // TODO: Fix Organization ID and Subscription Order ID
+      const payload = {
+        organization_id: 1,
+        body: {
+          csv_data: csvBase64,
+          file_name: file.name,
+          subscription_order_id: organizationSubscriptionOrderId ?? 12
+        }
+      }
+      await uploadCSVBulk(payload).unwrap()
+    }
+  }
 
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -60,7 +91,7 @@ export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSV
       return
     }
 
-    setUploadedFile({ name: file.name, size: file.size })
+    setUploadedFile({ name: file.name, size: file.size, file })
     setIsUploading(true)
     setUploadProgress(0)
 
@@ -89,7 +120,7 @@ export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSV
         if (prev >= 100) {
           clearInterval(interval)
           setIsUploading(false)
-          setUploadedFile({ name: 'projectname.csv', size: 12345 })
+          setUploadedFile({ name: 'projectname.csv', size: 12345, file: new File([], 'projectname.csv') })
           return 100
         }
         return prev + 10
@@ -118,6 +149,17 @@ export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSV
   return (
     <div className='flex items-center justify-center p-4'>
       <div className='w-full'>
+        <div className='mb-4 rounded-lg border border-blue-100 bg-blue-50/60 p-5 shadow-sm transition-all hover:shadow-md'>
+          <h3 className='flex items-center gap-2 text-base font-semibold text-blue-700'>
+            <span className='inline-flex h-2 w-2 rounded-full bg-blue-500' />
+            Create Organization Account(s)
+          </h3>
+
+          <p className='mt-1 text-sm leading-relaxed text-slate-600'>
+            New accounts will be created for this organization. The account will automatically be assigned a valid
+            license from this subscription.
+          </p>
+        </div>
         <div
           className={`rounded-lg border-2 border-dashed p-8 text-center transition-all ${
             isDragging
@@ -192,8 +234,8 @@ export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSV
         </div>
 
         {/* URL Upload Section */}
-        <div className='mt-6'>
-          <p className='mb-3 text-center text-sm text-gray-600'>Or upload from URL</p>
+        <div className='mt-4'>
+          <p className='mb-2 text-center text-sm text-gray-600'>Or upload from URL</p>
           <div className='flex gap-2'>
             <Input
               type='text'
@@ -202,13 +244,6 @@ export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSV
               onChange={(e) => setUrlInput(e.target.value)}
               className='flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none'
             />
-            <Button
-              onClick={handleUrlUpload}
-              disabled={!urlInput}
-              className='transition-colorshover:bg-sky-600 rounded-lg bg-sky-500 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed'
-            >
-              Upload
-            </Button>
           </div>
         </div>
 
@@ -253,6 +288,29 @@ export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSV
             </div>
           </div>
         )}
+
+        {/* Submit */}
+        <div className='mt-5 flex justify-between'>
+          <Button variant='outline' onClick={() => dispatch(goBack())}>
+            Back
+          </Button>
+          <div className='flex w-full justify-end gap-2'>
+            <Button
+              onClick={(e) => {
+                e.preventDefault()
+                console.log('Clicked Add button')
+                if (uploadedFile) {
+                  console.log('Uploading file:', uploadedFile.file)
+                  handleSubmit(uploadedFile.file)
+                }
+              }}
+              disabled={!uploadedFile}
+              className='bg-sky-500 hover:bg-sky-600'
+            >
+              Add
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   )

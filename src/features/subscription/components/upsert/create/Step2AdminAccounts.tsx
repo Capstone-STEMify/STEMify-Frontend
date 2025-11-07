@@ -1,6 +1,8 @@
 'use client'
 
+import { Button } from '@/components/shadcn/button'
 import ManualEntryTab from '@/features/license-assignment/components/modal/ManualEntryTab'
+import UploadCSV from '@/features/license-assignment/components/modal/UploadCSV'
 import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
 import { useModal } from '@/providers/ModalProvider'
 import { useLocale } from 'next-intl'
@@ -22,12 +24,14 @@ export default function Step2AdminAccounts() {
 
   return (
     <div>
-      <ManualEntryTab
+      {/* <ManualEntryTab
         isStep={true}
         openModal={handleOpenModal}
         userType={LicenseAssignmentType.ORGANIZATION_ADMIN}
         labelButton='Finish'
-      />
+      /> */}
+      <UploadCSV organizationSubscriptionOrderId={1} />
+      
     </div>
   )
 }

@@ -1,7 +1,8 @@
 import {
   LicenseAssignment,
   LicenseAssignmentCreatePayload,
-  LicenseAssignmentSliceParams
+  LicenseAssignmentSliceParams,
+  UploadBulkCsvInvitation
 } from '@/features/license-assignment/types/licenseAssignment'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
@@ -14,6 +15,13 @@ export const licenseAssignmentApi = createCrudApi<LicenseAssignment, LicenseAssi
     createLicenseAssignmentBulk: builder.mutation<void, { body: LicenseAssignmentCreatePayload[] }>({
       query: ({ body }) => ({
         url: `/license-assignments/bulk`,
+        method: 'POST',
+        body
+      })
+    }),
+    uploadCSVBulk: builder.mutation<void, { organization_id: number; body: UploadBulkCsvInvitation }>({
+      query: ({ organization_id, body }) => ({
+        url: `/organizations/${organization_id}/bulk-invitations/upload`,
         method: 'POST',
         body
       })
@@ -33,5 +41,6 @@ export const {
   // lazy
   useLazyGetByIdQuery: useLazyGetLicenseAssignmentByIdQuery,
   useLazySearchQuery: useLazySearchLicenseAssignmentQuery,
-  useLazyGetAllQuery: useLazyGetAllLicenseAssignmentQuery
+  useLazyGetAllQuery: useLazyGetAllLicenseAssignmentQuery,
+  useUploadCSVBulkMutation: useUploadCSVBulkMutation
 } = licenseAssignmentApi
