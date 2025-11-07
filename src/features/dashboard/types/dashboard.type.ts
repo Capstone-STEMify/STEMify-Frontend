@@ -1,6 +1,21 @@
 import { SearchPaginatedRequestParams } from "@/types/baseModel";
 
-export type DashboardStatistics = {
+export type DashboardResponse = {
+  data: DashboardData;
+  isSucceeded: boolean;
+  message: string;
+  statusCode: number;
+}
+
+export type DashboardData = {
+  currentPeriod: PeriodStatistics;
+  previousPeriod: PeriodStatistics;
+  change: ChangeStatistics;
+  curriculumStatistics: CurriculumStatistic[];
+  classroomStatistics: ClassroomStatistic[];
+}
+
+export type PeriodStatistics = {
   totalCurriculum: number;
   totalClassrooms: number;
   totalStudents: number;
@@ -9,9 +24,6 @@ export type DashboardStatistics = {
   totalCurriculumEnrollments: number;
   totalCurriculumCertificates: number;
   passRate: number;
-  change: ChangeStatistics;
-  curriculumStatistic: CurriculumStatistic[];
-  classroomStatistic: ClassroomStatistic[];
 }
 
 export type ChangeStatistics = {
@@ -19,10 +31,11 @@ export type ChangeStatistics = {
   totalClassrooms: number;
   totalStudents: number;
   totalTeachers: number;
+  totalUsers: number;
   totalCurriculumEnrollments: number;
   totalCurriculumCertificates: number;
   passRate: number;
-}
+} // percentage change compared to previous period
 
 export type CurriculumStatistic = {
   id: number;
@@ -40,6 +53,8 @@ export type ClassroomStatistic = {
   averageScore: number;
 }
 
+
 export type DashboardStatisticQueryParam = {
   organizationId: number
-} & SearchPaginatedRequestParams
+  period: string
+} & SearchPaginatedRequestParams;

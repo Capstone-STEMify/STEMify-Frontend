@@ -1,19 +1,33 @@
-import { createCrudApi } from '@/libs/redux/baseApi'
-import { DashboardStatisticQueryParam, DashboardStatistics } from '../types/dashboard.type'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { customFetchBaseQueryWithErrorHandling } from '@/libs/redux/baseApi'
+import { ApiSuccessResponse } from '@/types/baseModel'
+import { DashboardData, DashboardStatisticQueryParam } from '../types/dashboard.type'
 
-export const orgDashboardApi = createCrudApi<DashboardStatistics, DashboardStatisticQueryParam>({
+export const orgDashboardApi = createApi({
   reducerPath: 'orgDashboardApi',
+  baseQuery: customFetchBaseQueryWithErrorHandling,
   tagTypes: ['OrgDashboard'],
-  baseUrl: '/student-quizzes'
+  endpoints: (builder) => ({
+    search: builder.query<ApiSuccessResponse<DashboardData>, DashboardStatisticQueryParam>({
+      query: (params) => {
+        const { organizationId, ...queryParams } = params
+
+        const dynamicUrl = `/organizations/${organizationId}/dashboard`
+
+        return {
+          url: dynamicUrl,
+          method: 'GET',
+          params: queryParams
+        }
+      },
+      providesTags: (result, error, params) => [
+        { type: 'OrgDashboard', id: params.organizationId }
+      ]
+    })
+  })
 })
 
 export const {
-  useGetByIdQuery: useGetOrgDashboardQuery,
   useSearchQuery: useSearchOrgDashboardQuery,
-  useGetAllQuery: useGetAllOrgDashboardQuery,
-
-  // lazy
-  useLazyGetByIdQuery: useLazyGetOrgDashboardByIdQuery,
-  useLazySearchQuery: useLazySearchOrgDashboardQuery,
-  useLazyGetAllQuery: useLazyGetAllOrgDashboardQuery
+  useLazySearchQuery: useLazySearchOrgDashboardQuery
 } = orgDashboardApi

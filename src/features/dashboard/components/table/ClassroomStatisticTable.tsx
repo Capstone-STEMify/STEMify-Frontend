@@ -3,19 +3,25 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/shadcn/input'
 import { Button } from '@/components/shadcn/button'
 import { Checkbox } from '@/components/shadcn/checkbox'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Search, Filter, Download } from 'lucide-react'
-import { Student, studentData } from '../../api/data'
+import { ClassroomStatistic, DashboardData } from '../../types/dashboard.type'
 
-export function StudentListTable() {
+// Define props interface
+interface ClassroomStatisticTableProps {
+  data: DashboardData
+}
+
+export function ClassroomStatisticTable({ data }: ClassroomStatisticTableProps) {
+  const classrooms = data.classroomStatistics
+
   return (
     <Card className='rounded-xl border-none bg-white shadow-md'>
       <CardHeader className='flex flex-col items-center justify-between gap-4 py-4 md:flex-row'>
-        <CardTitle className='text-lg font-semibold'>Total Student List</CardTitle>
+        <CardTitle className='text-lg font-semibold'>Classroom Statistics</CardTitle> {/* Changed Title */}
         <div className='flex w-full items-center gap-2 md:w-auto'>
           <div className='relative w-full md:w-auto'>
             <Search className='text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4' />
-            <Input type='search' placeholder='Search Student' className='pl-8' />
+            <Input type='search' placeholder='Search Classroom' className='pl-8' /> {/* Changed Placeholder */}
           </div>
           <Button variant='outline'>
             <Filter className='mr-2 h-4 w-4' /> Filter
@@ -28,38 +34,30 @@ export function StudentListTable() {
       <CardContent>
         <Table>
           <TableHeader>
+            {/* Updated Table Headers */}
             <TableRow className='bg-gray-100'>
               <TableHead className='w-[50px]'>
                 <Checkbox />
               </TableHead>
-              <TableHead>Student Id</TableHead>
+              <TableHead>Classroom Id</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Position</TableHead>
-              <TableHead>Department</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Phone Number</TableHead>
+              <TableHead>Pass Rate</TableHead>
+              <TableHead>Average Score</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {studentData.map((student: Student) => (
-              <TableRow key={student.id}>
+            {/* Map over classroomStatistics data */}
+            {classrooms.map((classroom: ClassroomStatistic) => (
+              <TableRow key={classroom.id}>
                 <TableCell>
                   <Checkbox />
                 </TableCell>
-                <TableCell className='font-medium'>{student.id}</TableCell>
+                <TableCell className='font-medium'>{classroom.id}</TableCell>
                 <TableCell>
-                  <div className='flex items-center gap-2'>
-                    <Avatar className='h-8 w-8'>
-                      <AvatarImage src={student.avatar} />
-                      <AvatarFallback>{student.name.slice(0, 2)}</AvatarFallback>
-                    </Avatar>
-                    <span className='font-medium'>{student.name}</span>
-                  </div>
+                  <span className='font-medium'>{classroom.name}</span>
                 </TableCell>
-                <TableCell>{student.position}</TableCell>
-                <TableCell>{student.department}</TableCell>
-                <TableCell>{student.email}</TableCell>
-                <TableCell>{student.phone}</TableCell>
+                <TableCell>{classroom.passRate}%</TableCell>
+                <TableCell>{classroom.averageScore}</TableCell>
               </TableRow>
             ))}
           </TableBody>
