@@ -2,6 +2,7 @@
 import { Button } from '@/components/shadcn/button'
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
 import ContentDetail from '@/features/resource/content/components/detail/ContentDetail'
 import { ContentType } from '@/features/resource/content/types/content.type'
@@ -24,16 +25,28 @@ export default function ContentDetailModal({ sectionId }: ContentDetailModalProp
 
   const handleEditContent = () => {
     closeModal()
-    if (!contentData?.data?.items?.length) {
+    const item = contentData?.data?.items?.[0]
+    if (!item) {
       router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}`)
-    } else if (contentData.data.items[0].contentType === ContentType.TEXT) {
-      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${contentData.data.items[0].id}`)
-    } else if (contentData.data.items[0].contentType === ContentType.QUIZ) {
-      router.push(
-        `/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${contentData.data.items[0].quizId}/question`
-      )
+      return
+    }
+    if (item.contentType === ContentType.TEXT) {
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${item.id}`)
+      return
+    }
+    if (item.contentType === ContentType.QUIZ) {
+      const quizId = (item as any).quizId
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
+      return
+    }
+    if (item.contentType === ContentType.ASSIGNMENT) {
+      const assignmentId = (item as any).assignmentId
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/assignment/${assignmentId}`)
+      return
     }
   }
+
+  const item = contentData?.data?.items?.[0]
 
   return (
     <Dialog open onOpenChange={closeModal}>
@@ -41,20 +54,22 @@ export default function ContentDetailModal({ sectionId }: ContentDetailModalProp
         <DialogTitle className='flex items-center justify-between'>
           <div>{t('detail.title')}</div>
           <div className='mr-5'>
-            <Button variant={'outline'} className='hover:bg-gray-200' onClick={handleEditContent}>
-              {!contentData?.data?.items?.length ? tc('button.create') : tc('button.update')}
-            </Button>
+            {contentData?.data?.items?.length ? (
+              <Button variant={'outline'} className='hover:bg-gray-200' onClick={handleEditContent}>
+                {tc('button.update')}
+              </Button>
+            ) : null}
           </div>
         </DialogTitle>
         <hr />
 
         <ScrollArea className='h-[60vh] w-[70vw] max-w-6xl'>
-          {contentData &&
-          contentData.data.items.length > 0 &&
-          contentData.data.items[0].contentType === ContentType.QUIZ ? (
-            <ContentDetail sectionId={sectionId} quizId={contentData.data.items[0].quizId} />
+          {isLoading ? (
+            <div className='flex items-center justify-center'>
+              <LoadingComponent size={150} />
+            </div>
           ) : (
-            <ContentDetail sectionId={sectionId} />
+            <ContentDetail item={item} sectionId={sectionId} />
           )}
         </ScrollArea>
       </DialogContent>

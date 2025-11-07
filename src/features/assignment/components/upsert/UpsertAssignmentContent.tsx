@@ -27,27 +27,17 @@ export type AssignmentFormData = {
   }[]
 }
 
-type CreateAssignmentPageProps = {
-  sectionId: number
+type UpsertAssignmentProps = {
   initialData?: Assignment
-  onSubmit?: (data: AssignmentFormData) => void
-  onCancel?: () => void
-  onSaveDraft?: (data: AssignmentFormData) => void
-  onPreview?: (data: AssignmentFormData) => void
 }
 
-export default function CreateAssignmentPage({
-  sectionId,
-  initialData,
-  onSubmit,
-  onCancel,
-  onSaveDraft,
-  onPreview
-}: CreateAssignmentPageProps) {
+export default function UpsertAssignment({ initialData }: UpsertAssignmentProps) {
+  // const { sectionId } = useParams()
+  const sectionId = 1 // Temporary hardcoded value for testing
   const [formData, setFormData] = useState<AssignmentFormData>(
     initialData
       ? {
-          sectionId,
+          sectionId: Number(sectionId),
           title: initialData.title,
           passingScore: initialData.passingScore,
           durationDays: initialData.durationDays,
@@ -172,16 +162,11 @@ export default function CreateAssignmentPage({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit?.(formData)
   }
 
-  const handleSaveDraft = () => {
-    onSaveDraft?.(formData)
-  }
+  const handleSaveDraft = () => {}
 
-  const handlePreview = () => {
-    onPreview?.(formData)
-  }
+  const handlePreview = () => {}
 
   const totalScore = calculateTotalScore()
   const totalCriteria = calculateTotalCriteria()
@@ -429,7 +414,7 @@ export default function CreateAssignmentPage({
 
               {/* Form Actions */}
               <div className='flex justify-end gap-3 border-t pt-4'>
-                <Button type='button' variant='outline' onClick={onCancel}>
+                <Button type='button' variant='outline' onClick={() => {}}>
                   Cancel
                 </Button>
                 <Button type='submit' className='bg-blue-600 hover:bg-blue-700'>

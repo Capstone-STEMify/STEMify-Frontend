@@ -32,7 +32,13 @@ export type QuizContent = BaseContent & {
   quizId: number
 }
 
-export type AssignmentContent = BaseContent & {}
+export type AssignmentContent = BaseContent & {
+  totalMarks: number
+  passingMarks: number
+  durationDays: number
+  assignmentId: number
+  assignmentTitle: string
+}
 
 export type Content = TextContent | QuizContent | AssignmentContent
 
