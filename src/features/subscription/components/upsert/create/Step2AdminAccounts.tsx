@@ -6,7 +6,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 
-export default function Step4AdminAccounts() {
+export default function Step2AdminAccounts() {
   const { openModal, closeModal } = useModal()
   const router = useRouter()
   const locale = useLocale()

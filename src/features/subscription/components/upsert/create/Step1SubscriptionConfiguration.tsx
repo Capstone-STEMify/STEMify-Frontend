@@ -1,10 +1,10 @@
 'use client'
-
-import { useAppForm } from '@/components/shared/form/items'
-import z from 'zod'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/shadcn/command'
+import { Badge } from '@/components/shadcn/badge'
+import { CheckIcon, ChevronsUpDown, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/shadcn/button'
-import { SubscriptionFormData } from '@/features/subscription/types/subscription.type'
 import { useEffect, useState } from 'react'
 import { useCreateSubscriptionMutation, useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
 import { useGetAllCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
@@ -21,29 +21,29 @@ import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { Card, CardContent } from '@/components/shadcn/card'
+import { useParams, useSearchParams } from 'next/navigation'
+import { SubscriptionFormData } from '@/features/subscription/types/subscription.type'
+import { fileToBase64 } from '@/utils/index'
 
-const subscriptionDefaultValues: SubscriptionFormData = {
-  planBillingCycleId: 0,
-  startDate: null,
-  discountPercent: 0,
-  maxStudentSeats: 10,
-  maxTeacherSeats: 2,
-  curriculumIds: []
-}
-
-export default function Step3SubscriptionConfiguration() {
+export default function Step1SubscriptionConfiguration() {
+  const searchQuery = useSearchParams()
+  const organizationId = searchQuery.get('organizationId')
+  const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
-  const { currentStep, organizationSubscriptionId, organizationId, contractId } = useAppSelector(
+  const { currentStep, organizationSubscriptionId, contractId } = useAppSelector(
     (state) => state.organizationSubscriptionForm
   )
+
   const { data: planData } = useGetAllPlanQuery()
   const { data: curriculumData } = useGetAllCurriculumQuery()
   const { data: subscriptionData } = useGetSubscriptionByIdQuery(organizationSubscriptionId!, {
     skip: !organizationSubscriptionId
   })
   const [createSubscription, { isLoading: isCreating }] = useCreateSubscriptionMutation()
+
+  // ✅ Tất cả form state dùng useState
   const [selectedBillingCycle, setSelectedBillingCycle] = useState<BillingCycle>(BillingCycle.ANNUAL)
-  const [selectedPlanBillingCycleId, setSelectedPlanBillingCycleId] = useState<number | undefined>(undefined)
+  const [selectedPlanBillingCycleId, setSelectedPlanBillingCycleId] = useState<number>(0)
   const [selectedPlanInfo, setSelectedPlanInfo] = useState<{
     id: number
     name: string
@@ -55,31 +55,26 @@ export default function Step3SubscriptionConfiguration() {
     planBillingCycleId: number
     curriculums: any[]
   } | null>(null)
+
   const [startDate, setStartDate] = useState<Date | null>(null)
   const [endDate, setEndDate] = useState<Date | null>(null)
   const [discountPercent, setDiscountPercent] = useState<number>(0)
+  const [maxStudentSeats, setMaxStudentSeats] = useState<number>(10)
+  const [maxTeacherSeats, setMaxTeacherSeats] = useState<number>(2)
   const [selectedCurriculumIds, setSelectedCurriculumIds] = useState<number[]>([])
 
-  const subscription = subscriptionData?.data
-  const subscriptionSchema = z.object({
-    planBillingCycleId: z.number().refine((val) => val > 0, 'Please select a plan'),
-    startDate: z
-      .date()
-      .nullable()
-      .refine((val) => val !== null, 'Start date is required'),
-    discountPercent: z.number().min(0).max(100, 'Discount must be between 0 and 100'),
-    maxStudentSeats: z.number().min(1, 'At least 1 student seat required'),
-    maxTeacherSeats: z.number().min(1, 'At least 1 teacher seat required'),
-    curriculumIds: z.array(z.number())
-  })
+  // Contract fields
+  const [contractName, setContractName] = useState<string>('')
+  const [contractDescription, setContractDescription] = useState<string>('')
+  const [contractFile, setContractFile] = useState<File | null>(null)
 
+  const subscription = subscriptionData?.data
   const plans = planData?.data.items ?? []
 
   // Filter plans and create plan cards based on selected billing cycle
   const planCards = plans
     .map((plan) => {
       const billingCycleData = plan.planBillingCycles.find((cycle) => cycle.billingCycle === selectedBillingCycle)
-
       if (!billingCycleData) return null
 
       return {
@@ -102,46 +97,11 @@ export default function Step3SubscriptionConfiguration() {
       value: String(curriculum.id)
     })) || []
 
-  // Get selected curriculums details
   const selectedCurriculums = curriculumData?.data.items.filter((curriculum) =>
     selectedCurriculumIds.includes(curriculum.id)
   )
 
-  const form = useAppForm({
-    defaultValues: subscriptionDefaultValues,
-    validators: { onChange: subscriptionSchema },
-    onSubmit: async ({ value }) => {
-      if (!value.planBillingCycleId || value.planBillingCycleId === 0) {
-        toast.error('Please select a plan')
-        return
-      }
-
-      const payload = {
-        planBillingCycleId: value.planBillingCycleId,
-        contractId: contractId,
-        organizationId: organizationId,
-        startDate: value.startDate ? value.startDate.toISOString().split('T')[0] : undefined,
-        discountPercent: value.discountPercent,
-        maxStudentSeats: value.maxStudentSeats,
-        maxTeacherSeats: value.maxTeacherSeats,
-        curriculumIds: value.curriculumIds
-      }
-
-      try {
-        const res = await createSubscription(payload).unwrap()
-        if (res) {
-          toast.success('Subscription configured successfully!')
-          dispatch(setOrganizationSubscriptionId(res.data.id))
-          dispatch(goNext())
-        }
-      } catch (error: any) {
-        toast.error(error?.data?.message || 'Failed to create subscription')
-      }
-    }
-  })
-
-  const selectedPlanCard = planCards.find((card) => card?.planBillingCycleId === selectedPlanBillingCycleId)
-
+  // Auto-calculate end date
   useEffect(() => {
     if (startDate) {
       const end = new Date(startDate)
@@ -153,18 +113,6 @@ export default function Step3SubscriptionConfiguration() {
       setEndDate(null)
     }
   }, [startDate, selectedBillingCycle])
-
-  // Update seats when plan is selected
-  useEffect(() => {
-    if (selectedPlanCard) {
-      setSelectedPlanInfo(selectedPlanCard)
-      form.setFieldValue('planBillingCycleId', selectedPlanCard.planBillingCycleId)
-      form.setFieldValue('maxStudentSeats', selectedPlanCard.maxStudentSeats)
-      form.setFieldValue('maxTeacherSeats', selectedPlanCard.maxTeacherSeats)
-    } else {
-      setSelectedPlanInfo(null)
-    }
-  }, [selectedPlanCard?.planBillingCycleId])
 
   // Load existing subscription data
   useEffect(() => {
@@ -178,21 +126,21 @@ export default function Step3SubscriptionConfiguration() {
       }
 
       setSelectedPlanBillingCycleId(subscription.planBillingCycleId)
+
+      // Find and set plan info
+      const selectedCard = planCards.find((card) => card?.planBillingCycleId === subscription.planBillingCycleId)
+      if (selectedCard) {
+        setSelectedPlanInfo(selectedCard)
+      }
+
       const existingStartDate = subscription.startDate ? new Date(subscription.startDate) : null
       setStartDate(existingStartDate)
       setDiscountPercent(subscription.discountPercent)
+      setMaxStudentSeats(subscription.maxStudentSeats)
+      setMaxTeacherSeats(subscription.maxTeacherSeats)
 
       const curriculumIds = subscription.curriculums.filter((c) => c.id).map((c) => c.id as number)
       setSelectedCurriculumIds(curriculumIds)
-
-      form.reset({
-        planBillingCycleId: subscription.planBillingCycleId,
-        startDate: existingStartDate,
-        discountPercent: subscription.discountPercent,
-        maxStudentSeats: subscription.maxStudentSeats,
-        maxTeacherSeats: subscription.maxTeacherSeats,
-        curriculumIds: curriculumIds
-      })
     }
   }, [subscription, organizationSubscriptionId, plans])
 
@@ -202,14 +150,50 @@ export default function Step3SubscriptionConfiguration() {
     return selectedPlanInfo.price * (1 - discountPercent / 100)
   }
 
+  // ✅ Handle submit với useState
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    // Validation
+    if (!selectedPlanBillingCycleId || selectedPlanBillingCycleId === 0) {
+      toast.error('Please select a plan')
+      return
+    }
+
+    if (!startDate) {
+      toast.error('Please select a start date')
+      return
+    }
+
+    const payload: SubscriptionFormData = {
+      planBillingCycleId: selectedPlanBillingCycleId,
+      startDate: startDate.toISOString().split('T')[0],
+      discountPercent: discountPercent,
+      maxStudentSeats: maxStudentSeats,
+      maxTeacherSeats: maxTeacherSeats,
+      curriculumIds: selectedCurriculumIds,
+      organizationId: Number(organizationId),
+      contract: {
+        name: contractName,
+        description: contractDescription,
+        file: contractFile ? await fileToBase64(contractFile) : undefined
+      }
+    }
+
+    try {
+      const res = await createSubscription(payload).unwrap()
+      if (res) {
+        toast.success('Subscription configured successfully!')
+        dispatch(setOrganizationSubscriptionId(res.data.id))
+        dispatch(goNext())
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || 'Failed to create subscription')
+    }
+  }
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        form.handleSubmit()
-      }}
-      className='space-y-8'
-    >
+    <form onSubmit={handleSubmit} className='space-y-8'>
       {/* Header Section */}
       <div className='space-y-1'>
         <h2 className='text-2xl font-bold text-slate-900'>Configure Subscription</h2>
@@ -217,6 +201,56 @@ export default function Step3SubscriptionConfiguration() {
           Select a billing cycle, choose your plan, and configure the subscription details
         </p>
       </div>
+
+      {/* Contract Section */}
+      <Card className='border-2 border-slate-200'>
+        <CardContent className='space-y-5 p-6'>
+          <div className='space-y-1'>
+            <h3 className='text-lg font-semibold text-slate-900'>Contract Information</h3>
+            <p className='text-sm text-slate-500'>Provide contract details and upload a contract file for reference.</p>
+          </div>
+
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+            {/* Contract Name */}
+            <div className='md:col-span-2'>
+              <Label className='text-sm font-medium text-slate-700'>Contract Name</Label>
+              <Input
+                value={contractName}
+                onChange={(e) => setContractName(e.target.value)}
+                placeholder='Enter contract name'
+                className='mt-1'
+              />
+            </div>
+
+            {/* Contract File Upload */}
+            <div>
+              <Label className='text-sm font-medium text-slate-700'>Contract File (PDF)</Label>
+              <input
+                type='file'
+                accept='.pdf'
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) setContractFile(file)
+                }}
+                className='mt-1 block w-full cursor-pointer rounded-md border border-slate-300 bg-slate-50 px-2 py-1.5 text-xs file:mr-2 file:rounded-md file:border-0 file:bg-blue-100 file:px-2.5 file:py-1 file:text-xs file:font-medium file:text-blue-600 hover:bg-slate-100'
+              />
+              <p className='mt-1 text-[11px] text-slate-500'>Upload a small PDF (under 5MB)</p>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <Label className='text-sm font-medium text-slate-700'>Description</Label>
+            <textarea
+              value={contractDescription}
+              onChange={(e) => setContractDescription(e.target.value)}
+              placeholder='Enter contract description'
+              rows={3}
+              className='mt-1 w-full resize-none rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none'
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Billing Cycle Selection */}
       <div className='space-y-4'>
@@ -233,7 +267,6 @@ export default function Step3SubscriptionConfiguration() {
                 setSelectedBillingCycle(BillingCycle.SEMIANNUAL)
                 setSelectedPlanBillingCycleId(0)
                 setSelectedPlanInfo(null)
-                form.setFieldValue('planBillingCycleId', 0)
               }}
               className={cn(
                 'rounded-md px-6 py-2.5 text-sm font-medium transition-all duration-200',
@@ -250,7 +283,6 @@ export default function Step3SubscriptionConfiguration() {
                 setSelectedBillingCycle(BillingCycle.ANNUAL)
                 setSelectedPlanBillingCycleId(0)
                 setSelectedPlanInfo(null)
-                form.setFieldValue('planBillingCycleId', 0)
               }}
               className={cn(
                 'rounded-md px-6 py-2.5 text-sm font-medium transition-all duration-200',
@@ -304,11 +336,13 @@ export default function Step3SubscriptionConfiguration() {
                   )}
                   onClick={() => {
                     setSelectedPlanBillingCycleId(plan.planBillingCycleId)
+                    setSelectedPlanInfo(plan)
+                    setMaxStudentSeats(plan.maxStudentSeats)
+                    setMaxTeacherSeats(plan.maxTeacherSeats)
                   }}
                 >
                   <CardContent className='p-5'>
                     <div className='space-y-4'>
-                      {/* Header with check */}
                       <div className='flex items-start justify-between'>
                         <div className='flex-1'>
                           <h3 className='text-lg font-bold text-slate-900'>{plan.name}</h3>
@@ -323,7 +357,6 @@ export default function Step3SubscriptionConfiguration() {
                         )}
                       </div>
 
-                      {/* Price */}
                       <div className='border-t border-slate-200 pt-3'>
                         <div className='flex items-baseline gap-1'>
                           <span className='text-3xl font-bold text-blue-600'>${plan.price.toLocaleString()}</span>
@@ -333,7 +366,6 @@ export default function Step3SubscriptionConfiguration() {
                         </div>
                       </div>
 
-                      {/* Features */}
                       <div className='space-y-2 border-t border-slate-200 pt-3'>
                         <div className='flex items-center gap-2 text-sm'>
                           <GraduationCap className='h-4 w-4 text-slate-400' />
@@ -366,20 +398,15 @@ export default function Step3SubscriptionConfiguration() {
               <Label className='text-base font-semibold text-slate-900'>Subscription Period</Label>
 
               <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                <form.AppField name='startDate'>
-                  {(field) => (
-                    <div className='space-y-2'>
-                      <field.DatePickerField
-                        label='Start Date'
-                        onChange={(date: Date | null) => {
-                          setStartDate(date)
-                          field.form.setFieldValue('startDate', date)
-                        }}
-                        minDate={new Date()}
-                      />
-                    </div>
-                  )}
-                </form.AppField>
+                <div className='space-y-2'>
+                  <Label className='text-sm font-medium text-slate-700'>Start Date</Label>
+                  <Input
+                    type='date'
+                    value={startDate ? startDate.toISOString().split('T')[0] : ''}
+                    onChange={(e) => setStartDate(e.target.value ? new Date(e.target.value) : null)}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
 
                 <div className='space-y-2'>
                   <Label className='text-sm font-medium text-slate-700'>End Date</Label>
@@ -404,29 +431,112 @@ export default function Step3SubscriptionConfiguration() {
               </div>
             </div>
 
-            {/* Divider */}
             <div className='border-t border-slate-200'></div>
 
-            {/* Curriculum Selection & Details */}
+            {/* Curriculum Selection */}
             <div className='space-y-4'>
               <div className='flex items-center gap-2'>
                 <BookOpen className='h-5 w-5 text-slate-600' />
                 <Label className='text-base font-semibold text-slate-900'>Curriculum Selection</Label>
               </div>
 
-              <form.AppField name='curriculumIds'>
-                {(field) => (
-                  <field.DropdownMultipleCheckboxField
-                    label='Select Curriculums'
-                    options={curriculumOptions}
-                    onChange={(value: string[]) => {
-                      const ids = value.map(Number)
-                      setSelectedCurriculumIds(ids)
-                      field.form.setFieldValue('curriculumIds', ids)
-                    }}
-                  />
+              <div className='space-y-2'>
+                <Label className='text-sm font-medium text-slate-700'>Select Curriculums</Label>
+
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant='outline'
+                      role='combobox'
+                      aria-expanded={open}
+                      className='h-auto min-h-[40px] w-full justify-between py-2'
+                    >
+                      {selectedCurriculumIds.length > 0 ? (
+                        <div className='flex flex-wrap gap-1'>
+                          {selectedCurriculumIds.map((id) => {
+                            const curriculum = curriculumData?.data.items.find((c) => c.id === id)
+                            return curriculum ? (
+                              <Badge
+                                key={id}
+                                variant='secondary'
+                                className='mr-1 mb-1'
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setSelectedCurriculumIds(selectedCurriculumIds.filter((cId) => cId !== id))
+                                }}
+                              >
+                                {curriculum.title}
+                                <X className='ml-1 h-3 w-3 cursor-pointer' />
+                              </Badge>
+                            ) : null
+                          })}
+                        </div>
+                      ) : (
+                        <span className='text-slate-500'>Select curriculums...</span>
+                      )}
+                      <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className='w-full p-0' align='start'>
+                    <Command>
+                      <CommandInput placeholder='Search curriculum...' />
+                      <CommandEmpty>No curriculum found.</CommandEmpty>
+                      <CommandGroup className='max-h-64 overflow-auto'>
+                        {curriculumData?.data.items.map((curriculum) => {
+                          const isSelected = selectedCurriculumIds.includes(curriculum.id)
+                          return (
+                            <CommandItem
+                              key={curriculum.id}
+                              onSelect={() => {
+                                if (isSelected) {
+                                  setSelectedCurriculumIds(selectedCurriculumIds.filter((id) => id !== curriculum.id))
+                                } else {
+                                  setSelectedCurriculumIds([...selectedCurriculumIds, curriculum.id])
+                                }
+                              }}
+                              className='cursor-pointer'
+                            >
+                              <div className='flex flex-1 items-center gap-2'>
+                                <div
+                                  className={cn(
+                                    'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
+                                    isSelected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
+                                  )}
+                                >
+                                  <CheckIcon className='h-4 w-4' />
+                                </div>
+                                {curriculum.imageUrl ? (
+                                  <img
+                                    src={curriculum.imageUrl}
+                                    alt={curriculum.title}
+                                    className='h-8 w-8 rounded object-cover'
+                                  />
+                                ) : (
+                                  <div className='flex h-8 w-8 items-center justify-center rounded bg-gradient-to-br from-sky-100 to-sky-300'>
+                                    <GraduationCap className='h-4 w-4 text-blue-600' />
+                                  </div>
+                                )}
+                                <div className='flex flex-col'>
+                                  <span className='text-sm font-medium'>{curriculum.title}</span>
+                                  <span className='text-xs text-slate-500'>
+                                    {curriculum.courseCount} course{curriculum.courseCount !== 1 ? 's' : ''}
+                                  </span>
+                                </div>
+                              </div>
+                            </CommandItem>
+                          )
+                        })}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                {selectedCurriculumIds.length > 0 && (
+                  <p className='mt-1 text-xs text-slate-500'>
+                    {selectedCurriculumIds.length} curriculum{selectedCurriculumIds.length !== 1 ? 's' : ''} selected
+                  </p>
                 )}
-              </form.AppField>
+              </div>
 
               {/* Selected Curriculums Display */}
               {selectedCurriculums && selectedCurriculums.length > 0 && (
@@ -436,8 +546,19 @@ export default function Step3SubscriptionConfiguration() {
                     {selectedCurriculums.map((curriculum) => (
                       <div
                         key={curriculum.id}
-                        className='flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3'
+                        className='group relative flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3'
                       >
+                        {/* Remove button */}
+                        <button
+                          type='button'
+                          onClick={() =>
+                            setSelectedCurriculumIds(selectedCurriculumIds.filter((id) => id !== curriculum.id))
+                          }
+                          className='absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-600'
+                        >
+                          <X className='h-3 w-3' />
+                        </button>
+
                         {curriculum.imageUrl ? (
                           <img
                             src={curriculum.imageUrl}
@@ -462,7 +583,6 @@ export default function Step3SubscriptionConfiguration() {
               )}
             </div>
 
-            {/* Divider */}
             <div className='border-t border-slate-300'></div>
 
             {/* Plan Overview Display */}
@@ -476,14 +596,12 @@ export default function Step3SubscriptionConfiguration() {
                     </div>
                   </div>
 
-                  {/* Plan Details Grid */}
                   <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                    {/* Student Seats */}
                     <div className='rounded-lg border border-slate-200 bg-gradient-to-br from-green-50 to-emerald-50 p-4'>
                       <div className='flex items-start justify-between'>
                         <div>
                           <p className='text-xs font-medium text-slate-600'>Student Seats</p>
-                          <p className='mt-1 text-2xl font-bold text-green-600'>{selectedPlanInfo.maxStudentSeats}</p>
+                          <p className='mt-1 text-2xl font-bold text-green-600'>{maxStudentSeats}</p>
                           <p className='text-xs text-slate-500'>maximum capacity</p>
                         </div>
                         <div className='flex h-10 w-10 items-center justify-center rounded-full bg-green-100'>
@@ -492,12 +610,11 @@ export default function Step3SubscriptionConfiguration() {
                       </div>
                     </div>
 
-                    {/* Teacher Seats */}
                     <div className='rounded-lg border border-slate-200 bg-gradient-to-br from-orange-50 to-amber-50 p-4'>
                       <div className='flex items-start justify-between'>
                         <div>
                           <p className='text-xs font-medium text-slate-600'>Teacher Seats</p>
-                          <p className='mt-1 text-2xl font-bold text-orange-600'>{selectedPlanInfo.maxTeacherSeats}</p>
+                          <p className='mt-1 text-2xl font-bold text-orange-600'>{maxTeacherSeats}</p>
                           <p className='text-xs text-slate-500'>maximum capacity</p>
                         </div>
                         <div className='flex h-10 w-10 items-center justify-center rounded-full bg-orange-100'>
@@ -507,7 +624,6 @@ export default function Step3SubscriptionConfiguration() {
                     </div>
                   </div>
 
-                  {/* Description */}
                   {selectedPlanInfo.description && (
                     <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
                       <p className='text-xs font-medium text-slate-600'>Plan Description</p>
@@ -515,34 +631,25 @@ export default function Step3SubscriptionConfiguration() {
                     </div>
                   )}
                 </div>
+                <div className='border-t border-slate-300'></div>
               </>
             )}
-            <div className='border-t border-slate-300'></div>
 
             {/* Discount and Final Price */}
             <div className='space-y-4'>
               <Label className='text-base font-semibold text-slate-900'>Pricing</Label>
 
-              {/* Discount Input */}
-              <form.AppField name='discountPercent'>
-                {(field) => (
-                  <div className='space-y-2'>
-                    <field.TextField
-                      type='number'
-                      label='Discount (%)'
-                      min={0}
-                      max={100}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const value = Number(e.target.value)
-                        setDiscountPercent(value)
-                        field.form.setFieldValue('discountPercent', value)
-                      }}
-                    />
-                  </div>
-                )}
-              </form.AppField>
+              <div className='space-y-2'>
+                <Label className='text-sm font-medium text-slate-700'>Discount (%)</Label>
+                <Input
+                  type='number'
+                  min={0}
+                  max={100}
+                  value={discountPercent}
+                  onChange={(e) => setDiscountPercent(Number(e.target.value))}
+                />
+              </div>
 
-              {/* Price Summary */}
               {selectedPlanInfo && (
                 <div className='mt-4 space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-4'>
                   <div className='flex justify-between text-sm'>
@@ -568,29 +675,6 @@ export default function Step3SubscriptionConfiguration() {
         </CardContent>
       </Card>
 
-      {/* Error Display */}
-      {Object.keys(form.state.errors).length > 0 && form.state.isSubmitted && (
-        <Card className='border-2 border-red-200 bg-red-50'>
-          <CardContent className='p-4'>
-            <h3 className='text-sm font-semibold text-red-800'>Please fix the following errors:</h3>
-            <ul className='mt-2 space-y-1 text-sm text-red-700'>
-              {Object.entries(form.state.errors).map(([field, errorObj], i) => {
-                const message =
-                  typeof errorObj === 'string' ? errorObj : (errorObj as any)?.message || JSON.stringify(errorObj)
-                return (
-                  <li key={i} className='flex items-start gap-2'>
-                    <span className='mt-0.5 text-red-500'>•</span>
-                    <span>
-                      <strong className='font-medium'>{field}:</strong> {message}
-                    </span>
-                  </li>
-                )
-              })}
-            </ul>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Navigation */}
       <div className='flex items-center justify-between border-t-2 border-slate-200 pt-6'>
         <Button
@@ -607,18 +691,16 @@ export default function Step3SubscriptionConfiguration() {
           Step <span className='text-slate-900'>{currentStep}</span> of <span className='text-slate-900'>4</span>
         </div>
 
-        <form.AppForm>
-          <form.SubmitButton className='px-6'>
-            {isCreating ? (
-              <span className='flex items-center gap-2'>
-                <span className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent'></span>
-                Creating...
-              </span>
-            ) : (
-              'Next'
-            )}
-          </form.SubmitButton>
-        </form.AppForm>
+        <Button type='submit' className='px-6' disabled={isCreating}>
+          {isCreating ? (
+            <span className='flex items-center gap-2'>
+              <span className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent'></span>
+              Creating...
+            </span>
+          ) : (
+            'Next'
+          )}
+        </Button>
       </div>
     </form>
   )

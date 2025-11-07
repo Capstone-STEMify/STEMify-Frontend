@@ -30,7 +30,7 @@ export interface OrganizationSubscription {
   createdDate: string
   organization: Partial<Organization>
   curriculums: Partial<Curriculum>[]
-  contract: Contract
+  contract: Partial<Contract>
   planBillingCycle: BillingCycle
 }
 
@@ -57,10 +57,12 @@ export type OrganizationSubscriptionSliceParams = {
 } & SliceQueryParams
 
 export type SubscriptionFormData = {
+  organizationId: number
   planBillingCycleId: number
-  startDate: Date | null
+  startDate: string
   discountPercent: number
   maxStudentSeats: number
   maxTeacherSeats: number
   curriculumIds: number[]
+  contract: Partial<Contract>
 }

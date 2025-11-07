@@ -10,7 +10,8 @@
       "title": {
         "create": "Create Reading Content",
         "update": "Update Content",
-        "createQuiz": "Create Quiz"
+        "createQuiz": "Create Quiz",
+        "createAssignment": "Create Assignment"
       }
     }
   }

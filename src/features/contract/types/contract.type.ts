@@ -14,7 +14,9 @@ export type Contract = {
   description: string
   createdAt: string
   organization: Partial<Organization>
-  fileUrl: string
+  fileUrl?: string
+  file?: string
+  previewUrlFromServer?: string
   status: ContractStatus
 }
 
