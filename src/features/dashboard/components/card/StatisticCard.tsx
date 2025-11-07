@@ -5,53 +5,59 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recha
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/components/shadcn/dropdown-menu'
 import { Button } from '@/components/shadcn/button'
 import { ChevronDown } from 'lucide-react'
-import { progressData } from '../../api/data'
+import { DashboardData } from '../../types/dashboard.type'
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className='rounded-md bg-gray-900 p-2 text-white shadow-lg'>
-        <p className='font-semibold'>High Retention</p>
-        <p className='text-sm'>{`${payload[0].value}%`}</p>
+        <p className='font-semibold'>{label}</p>
+        <p className='text-sm text-indigo-300'>{`Pass: ${payload[0].value}%`}</p>
+        <p className='text-sm text-indigo-100'>{`Not Pass: ${payload[1].value}%`}</p>
       </div>
     )
   }
   return null
 }
 
-export function ProgressStatisticsCard() {
+// Define props interface
+interface ProgressStatisticsCardProps {
+  data: DashboardData
+}
+
+export function ProgressStatisticsCard({ data }: ProgressStatisticsCardProps) {
+  const chartData = data.curriculumStatistics.map((curriculum) => ({
+    name: curriculum.title,
+    pass: curriculum.passRate,
+    fail: 100 - curriculum.passRate
+  }))
+
+  const minChartWidth = chartData.length * 80
+
   return (
     <Card className='h-full rounded-xl border-none bg-white shadow-md'>
       <CardHeader className='flex flex-row items-center justify-between py-6'>
-        <CardTitle className='text-lg font-semibold'>Progress Statistics</CardTitle>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='outline' size='sm'>
-              Jan - April <ChevronDown className='ml-2 h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>{/* ... items */}</DropdownMenuContent>
-        </DropdownMenu>
+        <CardTitle className='text-lg font-semibold'>Curriculum Statistics</CardTitle>
       </CardHeader>
       <CardContent>
         <div className='mb-4 flex items-center justify-end gap-4 pt-4 text-sm'>
           <div className='flex items-center'>
             <span className='mr-2 h-2.5 w-2.5 rounded-full bg-indigo-600'></span>
-            <span>Retention</span>
+            <span>Pass</span>
           </div>
           <div className='flex items-center'>
             <span className='mr-2 h-2.5 w-2.5 rounded-full bg-indigo-100'></span>
-            <span>Dropped</span>
+            <span>Not Pass</span>
           </div>
         </div>
-        <div className='h-56 w-full'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <BarChart data={progressData} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>
+        <div className='h-56 w-full overflow-x-auto'>
+          <ResponsiveContainer width='100%' height='100%' minWidth={minChartWidth}>
+            <BarChart data={chartData} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>
               <XAxis dataKey='name' axisLine={false} tickLine={false} />
-              <YAxis axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} />
+              <YAxis width={70} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
-              <Bar dataKey='retention' fill='#4F46E5' radius={[4, 4, 0, 0]} />
-              <Bar dataKey='dropped' fill='#E0E7FF' radius={[4, 4, 0, 0]} />
+              <Bar dataKey='pass' fill='#4F46E5' radius={[4, 4, 0, 0]} />
+              <Bar dataKey='fail' fill='#E0E7FF' radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

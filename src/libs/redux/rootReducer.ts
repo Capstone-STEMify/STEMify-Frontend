@@ -68,6 +68,7 @@ import { lessonDetailSlice } from '@/features/resource/lesson/slice/lessonDetail
 import { quizEditorSlice } from '@/features/resource/question/slice/quizEditorSlice'
 import { organizationSlice } from '@/features/organization/slice/organizationSlice'
 import { classroomSlice } from '@/features/classroom/slice/classroomSlice'
+import { orgDashboardApi } from '@/features/dashboard/api/OrgDashboardApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -142,5 +143,6 @@ export const rootReducer = combineReducers({
   [licenseAssignmentApi.reducerPath]: licenseAssignmentApi.reducer,
   [studentQuizApi.reducerPath]: studentQuizApi.reducer,
   [organizationApi.reducerPath]: organizationApi.reducer,
-  [classroomApi.reducerPath]: classroomApi.reducer
+  [classroomApi.reducerPath]: classroomApi.reducer,
+  [orgDashboardApi.reducerPath]: orgDashboardApi.reducer
 })
