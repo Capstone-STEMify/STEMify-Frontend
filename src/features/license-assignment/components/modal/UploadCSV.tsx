@@ -28,26 +28,23 @@ export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSV
 
   const handleSubmit = async (file: File) => {
     const reader = new FileReader()
-
     reader.onload = async (event) => {
-      const csvBase64: string = await new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = (e) => resolve((e.target?.result as string).split(',')[1])
-        reader.onerror = () => reject('Failed to read CSV')
-        reader.readAsDataURL(file)
-      })
+      const csvBase64 = (event.target?.result as string).split(',')[1]
 
-      // TODO: Fix Organization ID and Subscription Order ID
       const payload = {
         organization_id: 1,
         body: {
+          organization_id: 1,
           csv_data: csvBase64,
           file_name: file.name,
           subscription_order_id: organizationSubscriptionOrderId ?? 12
         }
       }
-      await uploadCSVBulk(payload).unwrap()
+
+      const res = await uploadCSVBulk(payload).unwrap()
     }
+
+    reader.readAsDataURL(file)
   }
 
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
@@ -297,8 +294,6 @@ export default function UploadCSV({ organizationSubscriptionOrderId }: UploadCSV
           <div className='flex w-full justify-end gap-2'>
             <Button
               onClick={(e) => {
-                e.preventDefault()
-                console.log('Clicked Add button')
                 if (uploadedFile) {
                   console.log('Uploading file:', uploadedFile.file)
                   handleSubmit(uploadedFile.file)
