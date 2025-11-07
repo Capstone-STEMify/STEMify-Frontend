@@ -1,18 +1,66 @@
 'use client'
 
 import { Card, CardContent } from '@/components/shadcn/card'
-import { Briefcase, Award, ArrowUpRight, Users } from 'lucide-react'
-import { LineChart, Line, ResponsiveContainer } from 'recharts'
-import { quickStatsData } from '../../api/data'
+import { Briefcase, Award, ArrowUpRight, Users, ArrowUp, ArrowDown } from 'lucide-react'
+import { cn } from '@/shadcn/utils'
+import { DashboardData } from '../../types/dashboard.type'
 
-const stats = [
-  { title: 'Completed Courses', value: '155+', icon: Briefcase, color: 'text-indigo-600', bgColor: 'bg-indigo-100' },
-  { title: 'Earned Certificate', value: '40+', icon: Award, color: 'text-green-600', bgColor: 'bg-green-100' },
-  { title: 'Course in Progress', value: '27+', icon: ArrowUpRight, color: 'text-blue-600', bgColor: 'bg-blue-100' },
-  { title: 'Community Support', value: '19k+', icon: Users, color: 'text-orange-600', bgColor: 'bg-orange-100' }
-]
+// Helper component to show change
+function ChangeBadge({ change }: { change: number }) {
+  const isPositive = change >= 0
+  return (
+    <div
+      className={cn('flex items-center gap-0.5 text-xs font-medium', isPositive ? 'text-green-600' : 'text-red-600')}
+    >
+      {isPositive ? <ArrowUp className='h-3 w-3' /> : <ArrowDown className='h-3 w-3' />}
+      {Math.abs(change)}%
+    </div>
+  )
+}
 
-export function QuickStatsGrid() {
+// Define props interface
+interface QuickStatsGridProps {
+  data: DashboardData
+}
+
+export function QuickStatsGrid({ data }: QuickStatsGridProps) {
+  const { currentPeriod, change } = data
+
+  const stats = [
+    {
+      title: 'Total Curriculums',
+      value: currentPeriod.totalCurriculum,
+      change: change.totalCurriculum,
+      icon: Briefcase,
+      color: 'text-indigo-600',
+      bgColor: 'bg-indigo-100'
+    },
+    {
+      title: 'Earned Certificate',
+      value: currentPeriod.totalCurriculumCertificates,
+      change: change.totalCurriculumCertificates,
+      icon: Award,
+      color: 'text-green-600',
+      bgColor: 'bg-green-100'
+    },
+    {
+      title: 'Total Classrooms',
+      value: currentPeriod.totalClassrooms,
+      change: change.totalClassrooms,
+      icon: ArrowUpRight,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-100'
+    },
+    {
+      title: 'Community Support',
+      value: '19k+',
+      change: null,
+      icon: Users,
+      color: 'text-orange-600',
+      bgColor: 'bg-orange-100'
+    }
+  ]
+
   return (
     <div className='grid grid-cols-2 gap-6'>
       {stats.map((stat) => (
@@ -22,19 +70,8 @@ export function QuickStatsGrid() {
               <div className={`rounded-lg p-2 ${stat.bgColor}`}>
                 <stat.icon className={`h-4 w-4 ${stat.color}`} />
               </div>
-              <div className='h-10 w-20'>
-                <ResponsiveContainer width='100%' height='100%'>
-                  <LineChart data={quickStatsData}>
-                    <Line
-                      type='monotone'
-                      dataKey='value'
-                      stroke={stat.color.split('-')[0].replace('text-', '')}
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
+              {/* Replace chart with ChangeBadge */}
+              {stat.change !== null ? <ChangeBadge change={stat.change} /> : <div className='h-5' />}
             </div>
             <h3 className='mt-4 text-2xl font-semibold'>{stat.value}</h3>
             <p className='text-sm text-gray-500'>{stat.title}</p>
