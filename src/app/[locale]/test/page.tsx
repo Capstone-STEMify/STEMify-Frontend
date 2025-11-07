@@ -1,4 +1,4 @@
-import UpsertAssignment from '@/features/assignment/components/upsert/UpsertAssignmentContent'
+import UpsertAssignment from '@/features/assignment/components/upsert/UpsertAssignment'
 import React from 'react'
 
 export default function AAAAAA() {
