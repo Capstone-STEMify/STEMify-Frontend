@@ -8,7 +8,7 @@ import { Button } from '@/components/shadcn/button'
 import { useEffect, useState } from 'react'
 import { useCreateSubscriptionMutation, useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
 import { useGetAllCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
-import { useGetAllPlanQuery } from '@/features/plan/api/planApi'
+import { useGetAllPlanQuery, useSearchPlanQuery } from '@/features/plan/api/planApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import {
   goBack,
@@ -19,11 +19,12 @@ import { Check, Calendar, Users, GraduationCap, Tag, BookOpen } from 'lucide-rea
 import { cn } from '@/utils/shadcn/utils'
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
-import { BillingCycle } from '@/features/plan/types/plan.type'
+import { BillingCycle, PlanStatus } from '@/features/plan/types/plan.type'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { useParams, useSearchParams } from 'next/navigation'
 import { SubscriptionFormData } from '@/features/subscription/types/subscription.type'
 import { fileToBase64 } from '@/utils/index'
+import { useSelector } from 'react-redux'
 
 export default function Step1SubscriptionConfiguration() {
   const searchQuery = useSearchParams()
@@ -34,7 +35,8 @@ export default function Step1SubscriptionConfiguration() {
     (state) => state.organizationSubscriptionForm
   )
 
-  const { data: planData } = useGetAllPlanQuery()
+  const planSliceParams = useAppSelector((state) => state.plan)
+  const { data: planData } = useSearchPlanQuery({ ...planSliceParams, status: PlanStatus.PUBLISHED })
   const { data: curriculumData } = useGetAllCurriculumQuery()
   const { data: subscriptionData } = useGetSubscriptionByIdQuery(organizationSubscriptionId!, {
     skip: !organizationSubscriptionId
@@ -227,7 +229,7 @@ export default function Step1SubscriptionConfiguration() {
               <Label className='text-sm font-medium text-slate-700'>Contract File (PDF)</Label>
               <input
                 type='file'
-                accept='.pdf'
+                accept='.pdf, .docx, .doc'
                 onChange={(e) => {
                   const file = e.target.files?.[0]
                   if (file) setContractFile(file)
