@@ -2,10 +2,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Textarea } from '@/components/shadcn/textarea'
-import { Download, Printer, Share2, HelpCircle, ExternalLink } from 'lucide-react'
+import { Download, Printer, Share2, HelpCircle } from 'lucide-react'
 import { Submission } from '../table/AssignmentTable'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { Input } from '@/components/shadcn/input'
 import { useGetStudentAssignmentByIdQuery } from '@/features/assignment/api/studentAssignmentApi'
 
 interface SubmissionReviewDialogProps {
@@ -97,49 +96,39 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
         <div className='my-10 text-center text-red-500'>Failed to load submission details.</div>
       ) : (
         <>
-          <div className='my-10 space-y-8'>
-            <h3 className='text-xl font-semibold'>Student's Submissions</h3>
-            {attemptData &&
-              attemptData.questionAttempts.map((question, index) => (
-                <div key={question.id} className='rounded-lg border p-6'>
-                  <h4 className='text-lg font-semibold'>Question {index + 1}</h4>
+          <div className='my-10 grid grid-cols-1 rounded-lg border md:grid-cols-2'>
+            <div className='p-6 md:border-r'>
+              <h3 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>PROMPT</h3>
+              <div className='prose prose-sm max-w-none text-gray-700'>
+                <p>
+                  Select a public website that you use enough to be familiar with what a typical user may want to do.
+                  This website should not require the peer reviewer to sign up for an account...
+                </p>
+              </div>
+            </div>
 
-                  <div className='mt-4'>
-                    <label className='text-xs font-semibold tracking-wider text-gray-400 uppercase'>
-                      Student's Answer
+            <div className='p-6'>
+              <h3 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>RUBRIC</h3>
+              <div className='space-y-6'>
+                <div>
+                  <p className='text-sm font-medium'>Is the quality attribute clearly identified?</p>
+                  <div className='mt-2 space-y-2'>
+                    <label className='flex items-center gap-2 rounded-md border p-3 text-sm'>
+                      <input type='radio' name='rubric1' className='form-radio' disabled />
+                      <span>
+                        <b>0 points</b> No
+                      </span>
                     </label>
-                    <p className='mt-1 text-sm text-gray-700'>{question.answerText || 'No text answer provided.'}</p>
-                  </div>
-
-                  {question.answerFileUrl && (
-                    <div className='mt-4'>
-                      <label className='text-xs font-semibold tracking-wider text-gray-400 uppercase'>
-                        Submitted File
-                      </label>
-                      <Button variant='link' className='p-0 text-sm' asChild>
-                        <a href={question.answerFileUrl} target='_blank' rel='noopener noreferrer'>
-                          View Submitted File <ExternalLink className='ml-1 h-3 w-3' />
-                        </a>
-                      </Button>
-                    </div>
-                  )}
-
-                  <div className='mt-6 border-t pt-4'>
-                    <label htmlFor={`points-${question.id}`} className='text-sm font-medium'>
-                      Points
+                    <label className='flex items-center gap-2 rounded-md border border-blue-300 bg-blue-50 p-3 text-sm'>
+                      <input type='radio' name='rubric1' className='form-radio' defaultChecked disabled />
+                      <span>
+                        <b>1 point</b> Yes
+                      </span>
                     </label>
-                    <div className='flex items-center gap-2'>
-                      <Input
-                        id={`points-${question.id}`}
-                        type='number'
-                        defaultValue={question.points}
-                        className='w-24'
-                        disabled={isReviewed}
-                      />
-                    </div>
                   </div>
                 </div>
-              ))}
+              </div>
+            </div>
           </div>
 
           <div className='mt-8 border-t pt-6'>
