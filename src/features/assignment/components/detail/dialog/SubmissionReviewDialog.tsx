@@ -98,7 +98,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
         <>
           <div className='my-10 grid grid-cols-1 rounded-lg border md:grid-cols-2'>
             <div className='p-6 md:border-r'>
-              <h3 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>PROMPT</h3>
+              <h3 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Answer</h3>
               <div className='prose prose-sm max-w-none text-gray-700'>
                 <p>
                   Select a public website that you use enough to be familiar with what a typical user may want to do.
