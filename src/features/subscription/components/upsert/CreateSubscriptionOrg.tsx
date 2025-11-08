@@ -6,8 +6,8 @@ import { Card } from '@/components/shadcn/card'
 import { Check } from 'lucide-react'
 import {} from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import Step1SubscriptionConfiguration from '@/features/subscription/components/upsert/create/Step1SubscriptionConfiguration'
-import Step2AdminAccounts from '@/features/subscription/components/upsert/create/Step2AdminAccounts'
+import Step1SubscriptionConfiguration from '@/features/subscription/components/upsert/Step1SubscriptionConfiguration'
+import Step2AdminAccounts from '@/features/subscription/components/upsert/Step2AdminAccounts'
 
 export default function CreateOrganizationSubscription() {
   const { currentStep } = useAppSelector((state) => state.organizationSubscriptionForm)

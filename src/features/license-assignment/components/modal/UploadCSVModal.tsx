@@ -1,23 +1,86 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
+import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
 import UploadCSV from '@/features/license-assignment/components/modal/UploadCSV'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import ManualEntryTab from '@/features/license-assignment/components/modal/ManualEntryTab'
+import { useUploadCSVBulkMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
+import { toast } from 'sonner'
 
 export type UploadCSVModalProps = {
   organizationSubscriptionOrderId?: number
 }
 
+interface UploadedFile {
+  name: string
+  size?: number
+  file: File
+}
+
 export default function UploadCSVModal({ organizationSubscriptionOrderId }: UploadCSVModalProps) {
   const { closeModal } = useModal()
+  const [activeTab, setActiveTab] = useState('csv')
+  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null)
+  const [uploadCSVBulk, { isLoading }] = useUploadCSVBulkMutation()
+
+  const handleFileChange = (file: File | null) => {
+    if (file) {
+      setUploadedFile({
+        name: file.name,
+        size: file.size,
+        file: file
+      })
+    }
+  }
+
+  const handleRemoveFile = () => {
+    setUploadedFile(null)
+  }
+
+  const handleSubmitCSV = async () => {
+    if (!uploadedFile) {
+      toast.error('Please upload a CSV file')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = async (event) => {
+      try {
+        const csvBase64 = (event.target?.result as string).split(',')[1]
+
+        // TODO: Replace hardcoded organization_id with actual value
+        const payload = {
+          organization_id: '1', // Replace with actual organization ID
+          body: {
+            organization_id: '1', // Replace with actual organization ID
+            csv_data: csvBase64,
+            file_name: uploadedFile.file.name,
+            subscription_order_id: organizationSubscriptionOrderId?.toString() ?? '12'
+          }
+        }
+
+        const res = await uploadCSVBulk(payload).unwrap()
+        toast.success('CSV uploaded successfully!')
+        closeModal()
+      } catch (error: any) {
+        toast.error(error?.data?.message || 'Failed to upload CSV')
+      }
+    }
+
+    reader.onerror = () => {
+      toast.error('Failed to read file')
+    }
+
+    reader.readAsDataURL(uploadedFile.file)
+  }
 
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className='h-fit w-full max-w-xl'>
         <DialogTitle>Invite Users</DialogTitle>
-        <Tabs defaultValue='csv'>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className='mb-4 w-full'>
             <TabsTrigger value='csv' className='flex-1'>
               Upload CSV
@@ -27,8 +90,29 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value='csv'>
-            <UploadCSV organizationSubscriptionOrderId={organizationSubscriptionOrderId} />
+          <TabsContent value='csv' className='space-y-4'>
+            <UploadCSV onFileChange={handleFileChange} uploadedFile={uploadedFile} onRemoveFile={handleRemoveFile} />
+
+            {/* Action Buttons for CSV Tab */}
+            <div className='flex justify-end gap-2 border-t pt-4'>
+              <Button variant='outline' onClick={closeModal}>
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSubmitCSV}
+                disabled={!uploadedFile || isLoading}
+                className='bg-sky-500 hover:bg-sky-600'
+              >
+                {isLoading ? (
+                  <span className='flex items-center gap-2'>
+                    <span className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent'></span>
+                    Uploading...
+                  </span>
+                ) : (
+                  'Save'
+                )}
+              </Button>
+            </div>
           </TabsContent>
 
           <TabsContent value='manual'>

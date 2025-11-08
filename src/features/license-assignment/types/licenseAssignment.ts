@@ -36,3 +36,10 @@ export type LicenseAssignmentSliceParams = {
   status?: LicenseAssignmentStatus
   type?: LicenseAssignmentType
 } & SliceQueryParams
+
+export type UploadBulkCsvInvitation = {
+  csv_data: string
+  file_name: string
+  subscription_order_id: string
+  organization_id: string
+}

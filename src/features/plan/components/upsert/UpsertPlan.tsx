@@ -6,8 +6,10 @@ import z from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
 import { useCreatePlanMutation, useGetPlanByIdQuery, useUpdatePlanMutation } from '@/features/plan/api/planApi'
 import { useModal } from '@/providers/ModalProvider'
-import { BillingCycle } from '@/features/plan/types/plan.type'
+import { BillingCycle, PlanStatus } from '@/features/plan/types/plan.type'
 import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { setParam } from '@/features/plan/slice/planProductSlice'
 
 type PlanFormData = {
   name: string
@@ -43,6 +45,7 @@ type UpsertPlanProps = {
 export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
   const isEditing = !!planId
   const { closeModal } = useModal()
+  const dispatch = useAppDispatch()
 
   // ✅ Schema validation
   const planSchema = z.object({
@@ -78,6 +81,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         await updatePlan({ id: planId!, body: payload }).unwrap()
       } else {
         await createPlan(payload).unwrap()
+        dispatch(setParam({ key: 'status', value: PlanStatus.DRAFT }))
       }
 
       toast.success(`Plan ${isEditing ? 'updated' : 'created'} successfully`)
