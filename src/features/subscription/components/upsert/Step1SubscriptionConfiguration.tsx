@@ -12,7 +12,7 @@ import {
 } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 import { BillingCycle, PlanStatus } from '@/features/plan/types/plan.type'
 import { Card, CardContent } from '@/components/shadcn/card'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { SubscriptionFormData } from '@/features/subscription/types/subscription.type'
 import { fileToBase64 } from '@/utils/index'
 
@@ -26,8 +26,7 @@ import PlanOverview from './PlanOverview'
 import PricingSummary from './PricingSummary'
 
 export default function Step1SubscriptionConfiguration() {
-  const searchQuery = useSearchParams()
-  const organizationId = searchQuery.get('organizationId')
+  const {organizationId} = useParams()
   const dispatch = useAppDispatch()
   const { currentStep, organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
 

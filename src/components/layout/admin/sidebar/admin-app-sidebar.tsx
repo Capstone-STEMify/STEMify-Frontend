@@ -86,7 +86,7 @@ const data = {
     },
     {
       title: 'side_bar.organizationSubscription',
-      url: '/admin/organization-subscription',
+      url: '/admin/organization',
       icon: IconBuilding
     },
     {

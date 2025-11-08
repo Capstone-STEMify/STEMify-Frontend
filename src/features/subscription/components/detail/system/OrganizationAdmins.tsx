@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
@@ -9,8 +9,9 @@ import { Skeleton } from '@/components/shadcn/skeleton'
 import { formatDateV2 } from '@/utils/index'
 import { useModal } from '@/providers/ModalProvider'
 import { cn } from '@/utils/shadcn/utils'
-import { PlanStatus } from '@/features/plan/types/plan.type'
 import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { resetParams, setParam } from '@/features/license-assignment/slice/licenseAssignmentSlice'
 
 type OrganizationAdminsProps = {
   organizationSubscriptionOrderId?: number
@@ -20,14 +21,14 @@ type StatusFilter = LicenseAssignmentStatus.ACTIVE | LicenseAssignmentStatus.PEN
 
 export default function OrganizationAdmins({ organizationSubscriptionOrderId }: OrganizationAdminsProps) {
   const { openModal } = useModal()
+  const dispatch = useAppDispatch()
   const [statusFilter, setStatusFilter] = useState<StatusFilter>(LicenseAssignmentStatus.ACTIVE)
 
+  const licenseParams = useAppSelector((state) => state.licenseAssignment)
   const { data, isLoading } = useSearchLicenseAssignmentQuery(
     {
-      organizationSubscriptionOrderId: organizationSubscriptionOrderId!,
-      pageNumber: 1,
-      pageSize: 10,
-      status: LicenseAssignmentStatus.ACTIVE
+      ...licenseParams,
+      organizationSubscriptionOrderId: organizationSubscriptionOrderId!
     },
     { skip: !organizationSubscriptionOrderId }
   )
@@ -35,17 +36,9 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
   const licenseAssignments = data?.data.items || []
   const totalCount = data?.data.totalCount || 0
 
-  // Client-side filtering (if API doesn't support filtering)
-  const filteredAssignments = licenseAssignments.filter((assignment) => {
-    // Adjust this logic based on your data structure
-    return assignment.status?.toLowerCase() === statusFilter
-  })
-
-  // Count by status
-  const statusCounts = {
-    active: licenseAssignments.filter((a) => a.status === LicenseAssignmentStatus.ACTIVE).length,
-    pending: licenseAssignments.filter((a) => a.status === LicenseAssignmentStatus.PENDING).length
-  }
+  useEffect(() => {
+    dispatch(resetParams())
+  }, [dispatch])
 
   if (isLoading) {
     return (
@@ -104,54 +97,52 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
         <div className='border-b px-5'>
           <div className='flex items-center gap-6'>
             <button
-              onClick={() => setStatusFilter(LicenseAssignmentStatus.ACTIVE)}
+              onClick={() => {
+                setStatusFilter(LicenseAssignmentStatus.ACTIVE)
+                dispatch(setParam({ key: 'status', value: LicenseAssignmentStatus.ACTIVE }))
+              }}
               className={cn(
                 'relative flex items-center gap-2 py-3 text-sm font-medium transition-colors',
-                statusFilter === LicenseAssignmentStatus.ACTIVE ? 'text-blue-600' : 'text-slate-600 hover:text-slate-900'
+                statusFilter === LicenseAssignmentStatus.ACTIVE
+                  ? 'text-blue-600'
+                  : 'text-slate-600 hover:text-slate-900'
               )}
             >
               <CheckCircle2 size={16} />
               <span>Active</span>
-              <div className='flex h-5 min-w-[20px] items-center justify-center rounded-full bg-slate-100 px-1.5 text-xs font-semibold text-slate-700'>
-                {statusCounts.active}
-              </div>
-              {statusFilter === LicenseAssignmentStatus.ACTIVE && <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-blue-600'></div>}
+              {statusFilter === LicenseAssignmentStatus.ACTIVE && (
+                <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-blue-600'></div>
+              )}
             </button>
 
             <button
-              onClick={() => setStatusFilter(LicenseAssignmentStatus.PENDING)}
+              onClick={() => {
+                setStatusFilter(LicenseAssignmentStatus.PENDING)
+                dispatch(setParam({ key: 'status', value: LicenseAssignmentStatus.PENDING }))
+              }}
               className={cn(
                 'relative flex items-center gap-2 py-3 text-sm font-medium transition-colors',
-                statusFilter === LicenseAssignmentStatus.PENDING ? 'text-blue-600' : 'text-slate-600 hover:text-slate-900'
+                statusFilter === LicenseAssignmentStatus.PENDING
+                  ? 'text-blue-600'
+                  : 'text-slate-600 hover:text-slate-900'
               )}
             >
               <Clock size={16} />
               <span>Pending</span>
-              <div className='flex h-5 min-w-[20px] items-center justify-center rounded-full bg-slate-100 px-1.5 text-xs font-semibold text-slate-700'>
-                {statusCounts.pending}
-              </div>
-              {statusFilter === LicenseAssignmentStatus.PENDING && <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-blue-600'></div>}
+              {statusFilter === LicenseAssignmentStatus.PENDING && (
+                <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-blue-600'></div>
+              )}
             </button>
           </div>
         </div>
 
         {/* Table Content */}
-        {filteredAssignments.length === 0 ? (
+        {licenseAssignments.length === 0 ? (
           <div className='flex flex-col items-center justify-center py-12 text-center'>
             <div className='mb-3 rounded-full bg-gray-100 p-4'>
               <User size={24} className='text-gray-400' />
             </div>
             <p className='text-muted-foreground text-sm'>No {statusFilter} license assignments</p>
-            <Button
-              variant='link'
-              className='mt-2'
-              size='sm'
-              onClick={() =>
-                openModal('uploadCSV', { organizationSubscriptionOrderId: organizationSubscriptionOrderId })
-              }
-            >
-              Assign your first license
-            </Button>
           </div>
         ) : (
           <div className='m-4 rounded-xl border-2 border-gray-200'>
@@ -182,7 +173,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredAssignments.map((assignment) => {
+                {licenseAssignments.map((assignment) => {
                   const statusInfo = getStatusBadge(assignment.status || 'pending')
                   return (
                     <TableRow key={assignment.id} className='hover:bg-gray-50/50'>

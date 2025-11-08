@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import UploadCSV from '@/features/license-assignment/components/modal/UploadCSV'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { goBack } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 import { useUploadCSVBulkMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { toast } from 'sonner'
 
@@ -22,6 +22,8 @@ export default function Step2AdminAccounts() {
   const locale = useLocale()
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null)
   const [uploadCSVBulk, { isLoading }] = useUploadCSVBulkMutation()
+  const { organizationId } = useParams()
+  const { organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
 
   const handleFileChange = (file: File | null) => {
     if (file) {
@@ -49,12 +51,12 @@ export default function Step2AdminAccounts() {
         const csvBase64 = (event.target?.result as string).split(',')[1]
 
         const payload = {
-          organization_id: 1,
+          organization_id: String(organizationId),
           body: {
-            organization_id: 1,
+            organization_id: String(organizationId),
             csv_data: csvBase64,
             file_name: uploadedFile.file.name,
-            subscription_order_id: 12 // Replace with actual ID
+            subscription_order_id: String(organizationSubscriptionId)
           }
         }
 

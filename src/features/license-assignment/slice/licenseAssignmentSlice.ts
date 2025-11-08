@@ -1,4 +1,7 @@
-import { LicenseAssignmentSliceParams } from '@/features/license-assignment/types/licenseAssignment'
+import {
+  LicenseAssignmentSliceParams,
+  LicenseAssignmentStatus
+} from '@/features/license-assignment/types/licenseAssignment'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: LicenseAssignmentSliceParams = {
@@ -6,7 +9,7 @@ const initialState: LicenseAssignmentSliceParams = {
   pageSize: 10,
   search: '',
   orderBy: '',
-  status: undefined,
+  status: LicenseAssignmentStatus.ACTIVE,
   type: undefined,
   organizationSubscriptionOrderId: undefined,
   userId: undefined

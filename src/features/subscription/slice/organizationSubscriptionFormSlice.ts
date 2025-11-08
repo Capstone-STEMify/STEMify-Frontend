@@ -7,7 +7,7 @@ type OrganizationSubscriptionFormState = {
   loading: boolean
   organizationId?: number
   contractId?: number
-  organizationSubscriptionId?: number
+  organizationSubscriptionId?: string | number
 }
 
 const initialState: OrganizationSubscriptionFormState = {

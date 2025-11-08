@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/ta
 import ManualEntryTab from '@/features/license-assignment/components/modal/ManualEntryTab'
 import { useUploadCSVBulkMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { toast } from 'sonner'
+import { useParams } from 'next/navigation'
 
 export type UploadCSVModalProps = {
   organizationSubscriptionOrderId?: number
@@ -24,6 +25,7 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
   const [activeTab, setActiveTab] = useState('csv')
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null)
   const [uploadCSVBulk, { isLoading }] = useUploadCSVBulkMutation()
+  const { organizationId } = useParams()
 
   const handleFileChange = (file: File | null) => {
     if (file) {
@@ -52,12 +54,12 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
 
         // TODO: Replace hardcoded organization_id with actual value
         const payload = {
-          organization_id: '1', // Replace with actual organization ID
+          organization_id: String(organizationId), // Replace with actual organization ID
           body: {
-            organization_id: '1', // Replace with actual organization ID
+            organization_id: String(organizationId), // Replace with actual organization ID
             csv_data: csvBase64,
             file_name: uploadedFile.file.name,
-            subscription_order_id: organizationSubscriptionOrderId?.toString() ?? '12'
+            subscription_order_id: String(organizationSubscriptionOrderId)
           }
         }
 

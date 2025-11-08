@@ -44,7 +44,7 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
           variant='ghost'
           className='rounded-full'
           onClick={() => {
-            router.push(`/${locale}/admin/organization-subscription/create?organizationId=${organization.id}`)
+            router.push(`/${locale}/admin/organization/${organization.id}/create-subscription`)
           }}
         >
           <Plus className='h-4 w-4' />
@@ -78,7 +78,9 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
                 >
                   <TableCell
                     className='cursor-pointer font-medium text-blue-600 hover:underline'
-                    onClick={() => router.push(`/${locale}/admin/organization-subscription/${subscription.id}`)}
+                    onClick={() =>
+                      router.push(`/${locale}/admin/organization/${organization.id}/subscription/${subscription.id}`)
+                    }
                   >
                     {subscription.planName}
                   </TableCell>
