@@ -12,7 +12,7 @@ import { useDeletePlanMutation, useSearchPlanQuery, useUpdatePlanMutation } from
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { resetParams, setParam } from '@/features/plan/slice/planProductSlice'
+import { resetParams, setPageIndex, setParam } from '@/features/plan/slice/planProductSlice'
 import SSelect from '@/components/shared/SSelect'
 import { PlanStatus } from '@/features/plan/types/plan.type'
 import {
@@ -25,6 +25,7 @@ import {
 } from '@/components/shadcn/dropdown-menu'
 import Loading from 'app/[locale]/loading'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { SPagination } from '@/components/shared/SPagination'
 
 export default function AdminPlanTable() {
   const { openModal } = useModal()
@@ -54,6 +55,9 @@ export default function AdminPlanTable() {
     updatePlan({ id: planId, body: { status: PlanStatus.PUBLISHED } }).unwrap()
     dispatch(setParam({ key: 'status', value: PlanStatus.PUBLISHED }))
     toast.success('Plan published successfully')
+  }
+  const handlePageChange = (newPage: number) => {
+    dispatch(setPageIndex(newPage))
   }
   if (isFetching || !data) {
     return (
@@ -189,7 +193,7 @@ export default function AdminPlanTable() {
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     updatePlan({ id: plan.id, body: { status: PlanStatus.PUBLISHED } }).unwrap()
-                                    toast.success('Plan restored to published status')
+                                    toast.success('Plan restored successfully')
                                   }}
                                 >
                                   Restore
@@ -220,6 +224,14 @@ export default function AdminPlanTable() {
             </TableBody>
           </Table>
         </div>
+        {data?.data?.totalPages > 1 && (
+          <SPagination
+            pageNumber={planSliceParams.pageNumber!}
+            totalPages={data.data.totalPages}
+            onPageChanged={handlePageChange}
+            className='pb-6'
+          />
+        )}
       </div>
     </div>
   )

@@ -3,7 +3,7 @@ import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 
 const initialState: PlanSliceParams = {
   pageNumber: 1,
-  pageSize: 5,
+  pageSize: 10,
   search: '',
   orderBy: '',
   status: PlanStatus.PUBLISHED
