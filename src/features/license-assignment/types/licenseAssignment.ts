@@ -40,5 +40,6 @@ export type LicenseAssignmentSliceParams = {
 export type UploadBulkCsvInvitation = {
   csv_data: string
   file_name: string
-  subscription_order_id: number
+  subscription_order_id: string
+  organization_id: string
 }
