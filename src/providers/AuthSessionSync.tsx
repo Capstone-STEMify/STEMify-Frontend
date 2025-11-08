@@ -15,8 +15,13 @@ export default function AuthSessionSync() {
 
   useEffect(() => {
     if (!data) return
-    dispatch(setUser(data.user))
+    console.log('Session data changed:', data.user)
     dispatch(setToken(data.accessToken))
   }, [data, dispatch])
+  useEffect(() => {
+    if (!userData) return
+    console.log('Fetched user data:', userData)
+    dispatch(setUser(userData))
+  }, [userData, dispatch])
   return null
 }
