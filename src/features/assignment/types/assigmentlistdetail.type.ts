@@ -49,7 +49,13 @@ export type QuestionAttempt = {
   answerText: string
   answerFileUrl: string
   points: number
-  rubricScore: []
+  rubricScore: RubricCriterion[]
+}
+
+export type RubricCriterion = {
+  rubricCriterionId: number
+  criterionName: string
+  maxPoints: number
 }
 
 export type StudentAssignmentQueryParam = {

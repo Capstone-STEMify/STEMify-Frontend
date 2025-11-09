@@ -50,7 +50,6 @@ const statusVariantMap: Record<SubmissionStatus, 'default' | 'secondary' | 'dest
 }
 
 function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: string): Submission[] {
-  // (Hàm map giữ nguyên)
   return students.map((student) => {
     const latestAttempt = student.attempts.length > 0 ? student.attempts[0] : null
     
@@ -153,7 +152,7 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
         }}
       >
         <DialogTitle></DialogTitle>
-        <DialogContent className='max-w-5xl p-0'>
+        <DialogContent className='p-0'>
           {openSubmission && (
             <SubmissionReviewDialog
               submission={openSubmission}

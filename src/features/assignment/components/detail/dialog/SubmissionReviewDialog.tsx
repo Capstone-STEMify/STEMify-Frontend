@@ -2,10 +2,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Textarea } from '@/components/shadcn/textarea'
-import { Download, Printer, Share2, HelpCircle } from 'lucide-react'
+import { Download, Printer, Share2, HelpCircle, ExternalLink } from 'lucide-react' 
 import { Submission } from '../table/AssignmentTable'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useGetStudentAssignmentByIdQuery } from '@/features/assignment/api/studentAssignmentApi'
+import { Input } from '@/components/shadcn/input' 
 
 interface SubmissionReviewDialogProps {
   submission: Submission
@@ -27,7 +28,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
   const feedback = attemptData ? attemptData.feedback : submission.comment
 
   return (
-    <div className='max-h-[90vh] overflow-y-auto p-6 md:p-8'>
+    <div className='max-h-[90vh] w-5xl overflow-y-auto p-6 md:p-8'>
       <header className='flex flex-col justify-between sm:flex-row sm:items-start'>
         <div className='flex items-center gap-3'>
           <Avatar className='h-12 w-12'>
@@ -96,41 +97,72 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
         <div className='my-10 text-center text-red-500'>Failed to load submission details.</div>
       ) : (
         <>
-          <div className='my-10 grid grid-cols-1 rounded-lg border md:grid-cols-2'>
-            <div className='p-6 md:border-r'>
-              <h3 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Answer</h3>
-              <div className='prose prose-sm max-w-none text-gray-700'>
-                <p>
-                  Select a public website that you use enough to be familiar with what a typical user may want to do.
-                  This website should not require the peer reviewer to sign up for an account...
-                </p>
-              </div>
-            </div>
+          <div className='my-10 space-y-8'>
+            {attemptData &&
+              attemptData.questionAttempts.map((question, index) => (
+                <div key={question.id} className='rounded-lg border'>
+                  <h3 className='border-b bg-gray-50 px-6 py-3 text-lg font-semibold'>Question {index + 1}</h3>
 
-            <div className='p-6'>
-              <h3 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>RUBRIC</h3>
-              <div className='space-y-6'>
-                <div>
-                  <p className='text-sm font-medium'>Is the quality attribute clearly identified?</p>
-                  <div className='mt-2 space-y-2'>
-                    <label className='flex items-center gap-2 rounded-md border p-3 text-sm'>
-                      <input type='radio' name='rubric1' className='form-radio' disabled />
-                      <span>
-                        <b>0 points</b> No
-                      </span>
-                    </label>
-                    <label className='flex items-center gap-2 rounded-md border border-blue-300 bg-blue-50 p-3 text-sm'>
-                      <input type='radio' name='rubric1' className='form-radio' defaultChecked disabled />
-                      <span>
-                        <b>1 point</b> Yes
-                      </span>
-                    </label>
+                  <div className='grid grid-cols-1 md:grid-cols-2'>
+                    <div className='p-6 md:border-r'>
+                      <h4 className='mb-4 text-xs font-semibold tracking-wider uppercase'>Answer</h4>
+                      <div className='prose prose-sm max-w-none text-gray-400'>
+                        <p>{question.answerText || 'No text answer provided.'}</p>
+                      </div>
+
+                      {question.answerFileUrl && (
+                        <div className='mt-6'>
+                          <h5 className='mb-2 text-sm font-medium text-gray-600'>Submitted File</h5>
+                          <Button variant='link' className='p-0 text-sm' asChild>
+                            <a href={question.answerFileUrl} target='_blank' rel='noopener noreferrer'>
+                              View Submitted File <ExternalLink className='ml-1 h-3 w-3' />
+                            </a>
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className='p-6'>
+                      <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Rubric</h4>
+                      <div className='space-y-6'>
+                        {question.rubricScore.length > 0 ? (
+                          question.rubricScore.map((criterion) => (
+                            <div key={criterion.rubricCriterionId}>
+                              <p className='text-sm font-medium'>
+                                {criterion.criterionName}
+                              </p>
+                              <div className='mt-2 flex items-center gap-1'>
+                                <Input
+                                  type='number'
+                                  placeholder='Score'
+                                  className='w-24'
+                                  max={criterion.maxPoints}
+                                  disabled={isReviewed}
+                                />
+                                <span className='ml-2 text-xs text-gray-500 italic'>
+                                  (Max Points: {criterion.maxPoints})
+                                </span>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className='text-sm text-gray-500'>No rubric criteria for this question.</p>
+                        )}
+
+                        <div className='mt-6 border-t pt-4'>
+                          <p
+                            className='text-sm font-medium text-gray-700'
+                          >
+                            Total Points for Question: {question.points}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              ))}
           </div>
-
+          
           <div className='mt-8 border-t pt-6'>
             <h3 className='text-lg font-semibold'>Comments</h3>
 
@@ -144,9 +176,6 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
                   Comments left for the learner are visible only to that learner and the person who left the comment.
                 </p>
                 <div className='flex items-start gap-3'>
-                  <Avatar>
-                    <AvatarFallback>AD</AvatarFallback>
-                  </Avatar>
                   <Textarea
                     placeholder='Share your thoughts...'
                     className='flex-1'
