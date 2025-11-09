@@ -3,9 +3,8 @@ import { Organization, OrganizationStatus } from '@/features/organization/types/
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { Curriculum } from '@/features/resource/curriculum/types/curriculum.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
-import { Subscript } from 'lucide-react'
 
-export interface OrganizationSubscription {
+export type OrganizationSubscription = {
   id: number
   organizationId: number
   planBillingCycleId: number
@@ -65,4 +64,14 @@ export type SubscriptionFormData = {
   maxTeacherSeats: number
   curriculumIds: number[]
   contract: Partial<Contract>
+}
+
+export type UpdateSubscriptionFormData = {
+  discountPercent: number
+  status: SubscriptionStatus
+  startDate: string
+  endDate: string
+  maxStudentSeats: number
+  maxTeacherSeats: number
+  curriculumIds: number[]
 }

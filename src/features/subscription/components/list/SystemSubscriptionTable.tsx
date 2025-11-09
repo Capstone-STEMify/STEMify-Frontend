@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/shadcn/button'
 import { Edit2, Plus, Trash2 } from 'lucide-react'
 import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useModal } from '@/providers/ModalProvider'
 
 type SystemSubscriptionTableProps = {
   organization: Organization
@@ -23,6 +24,7 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
   const router = useRouter()
   const locale = useLocale()
   const dispatch = useAppDispatch()
+  const { openModal } = useModal()
 
   const getBillingCycleLabel = (cycle: BillingCycle | string) => {
     switch (cycle) {
@@ -118,7 +120,10 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
                   </TableCell>
                   <TableCell className=''>
                     <div className='flex items-center space-x-1'>
-                      <button className='p-1'>
+                      <button
+                        className='p-1'
+                        onClick={() => openModal('upsertSubscription', { subscriptionId: subscription.id })}
+                      >
                         <Edit2 className='h-3.5 w-3.5' />
                       </button>
                       <button className='p-1'>

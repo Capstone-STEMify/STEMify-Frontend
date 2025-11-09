@@ -2,18 +2,19 @@
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/shadcn/sheet'
 import { useModal } from '@/providers/ModalProvider'
-import UpsertPlan from '@/features/plan/components/upsert/UpsertPlan'
+import UpsertSystemSubsctiption from '@/features/subscription/components/upsert/UpdateSubscription'
 
-export default function UpsertSystemSubsctiptionSheet({ planId }: { planId: number }) {
+export default function UpdateSubsctiptionSheet({ subscriptionId }: { subscriptionId: number }) {
   const { closeModal } = useModal()
+  console.log('subscriptionId', subscriptionId)
 
   return (
     <Sheet open onOpenChange={(open) => !open && closeModal()}>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>{planId ? 'Edit Plan' : 'Create New Plan'}</SheetTitle>
+          <SheetTitle> Edit Subscription </SheetTitle>
         </SheetHeader>
-        <UpsertPlan planId={planId} />
+        <UpsertSystemSubsctiption subscriptionId={subscriptionId} />
       </SheetContent>
     </Sheet>
   )
