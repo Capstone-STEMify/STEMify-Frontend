@@ -134,7 +134,8 @@
       "lastModified": "Last Modified",
       "grossAmount": "Gross Amount",
       "studentSeats": "Student Seats",
-      "teacherSeats": "Teacher Seats"
+      "teacherSeats": "Teacher Seats",
+      "action": "Action"
     },
     "paging": {
       "previous": "Previous",
