@@ -50,7 +50,7 @@ export enum SubscriptionStatus {
 }
 
 export type OrganizationSubscriptionSliceParams = {
-  organizationId?: number
+  organizationId?: number | null
   contractId?: number
   parentSubscriptionId?: number
   status?: SubscriptionStatus
