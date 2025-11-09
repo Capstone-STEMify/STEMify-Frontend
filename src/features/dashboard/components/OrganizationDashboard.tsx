@@ -16,22 +16,33 @@ import {
 } from '@/components/shadcn/dropdown-menu'
 import { ChevronDown } from 'lucide-react'
 import { DashboardData } from '../types/dashboard.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 type Period = 'Month' | 'Quarter' | 'Year'
 
 export default function OrganizationDashboard() {
   const [period, setPeriod] = useState<Period>('Month')
+  const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
   const {
     data: dashboardResponse,
     isLoading,
     error
-  } = useSearchOrgDashboardQuery({
-    organizationId: 1,
-    period: period
-  })
+  } = useSearchOrgDashboardQuery(
+    {
+      organizationId: organizationId!,
+      period: period
+    },
+    { skip: !organizationId }
+  )
 
-  if (isLoading) return <div className='p-8'>Loading...</div>
+  if (isLoading)
+    return (
+      <div className='flex h-screen w-full items-center justify-center'>
+        <LoadingComponent />
+      </div>
+    )
   if (error || !dashboardResponse || !dashboardResponse.data)
     return <div className='p-8'>Error loading dashboard data!</div>
 
