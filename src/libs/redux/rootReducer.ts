@@ -70,6 +70,7 @@ import { organizationSlice } from '@/features/organization/slice/organizationSli
 import { classroomSlice } from '@/features/classroom/slice/classroomSlice'
 import { orgDashboardApi } from '@/features/dashboard/api/OrgDashboardApi'
 import { studentAssignmentApi } from '@/features/assignment/api/studentAssignmentApi'
+import { assignmentApi } from '@/features/assignment/api/assignmentApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -147,4 +148,5 @@ export const rootReducer = combineReducers({
   [classroomApi.reducerPath]: classroomApi.reducer,
   [orgDashboardApi.reducerPath]: orgDashboardApi.reducer,
   [studentAssignmentApi.reducerPath]: studentAssignmentApi.reducer
+  [assignmentApi.reducerPath]: assignmentApi.reducer
 })

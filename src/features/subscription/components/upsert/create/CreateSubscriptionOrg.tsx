@@ -4,21 +4,17 @@ import type React from 'react'
 
 import { Card } from '@/components/shadcn/card'
 import { Check } from 'lucide-react'
-import Step1OrganizationCreation from '@/features/subscription/components/upsert/create/Step1OrganizationCreation'
-import Step2ContractCreation from '@/features/subscription/components/upsert/create/Step2ContractCreation'
-import Step3SubscriptionConfiguration from '@/features/subscription/components/upsert/create/Step3SubscriptionConfiguration'
-import Step4AdminAccounts from '@/features/subscription/components/upsert/create/Step4AdminAccounts'
 import {} from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import Step1SubscriptionConfiguration from '@/features/subscription/components/upsert/create/Step1SubscriptionConfiguration'
+import Step2AdminAccounts from '@/features/subscription/components/upsert/create/Step2AdminAccounts'
 
 export default function CreateOrganizationSubscription() {
   const { currentStep } = useAppSelector((state) => state.organizationSubscriptionForm)
 
   const steps = [
-    { number: 1, title: 'Create Organization', description: 'Organization details' },
-    { number: 2, title: 'Create Contract', description: 'Set up contract details' },
-    { number: 3, title: 'Configure Subscription', description: 'Select plan and options' },
-    { number: 4, title: 'Add Admin Accounts', description: 'Grant access to admins' }
+    { number: 1, title: 'Configure Subscription', description: 'Select plan and options' },
+    { number: 2, title: 'Create Admin Accounts', description: 'Grant access to admins' }
   ]
 
   return (
@@ -77,10 +73,8 @@ export default function CreateOrganizationSubscription() {
 
         {/* Form Content */}
         <Card className='p-8'>
-          {currentStep === 1 && <Step1OrganizationCreation />}
-          {currentStep === 2 && <Step2ContractCreation />}
-          {currentStep === 3 && <Step3SubscriptionConfiguration />}
-          {currentStep === 4 && <Step4AdminAccounts />}
+          {currentStep === 1 && <Step1SubscriptionConfiguration />}
+          {currentStep === 2 && <Step2AdminAccounts />}
         </Card>
       </div>
     </div>

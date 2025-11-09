@@ -10,7 +10,8 @@
       "title": {
         "create": "Tạo nội dung bài học",
         "update": "Cập nhật nội dung",
-        "createQuiz": "Tạo Quiz"
+        "createQuiz": "Tạo Quiz",
+        "createAssignment": "Tạo Bài Thực Hành"
       }
     }
   }

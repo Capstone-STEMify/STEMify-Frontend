@@ -3,7 +3,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import TiptapViewer from '@/components/tiptap/TiptapViewer'
 import AssignmentViewer from '@/features/assignment/components/detail/AssignmentViewer'
 import { useSearchContentQuery } from '@/features/resource/content/api/contentApi'
-import { ContentType, QuizContent } from '@/features/resource/content/types/content.type'
+import { Content, ContentType, QuizContent } from '@/features/resource/content/types/content.type'
 import QuizViewer from '@/features/resource/quiz/components/viewer/QuizViewer'
 import { useModal } from '@/providers/ModalProvider'
 import { normalizeMarkdown } from '@/utils/index'
@@ -12,14 +12,14 @@ import { useLocale, useTranslations } from 'next-intl'
 import { useParams, useRouter } from 'next/navigation'
 
 type ContentDetailProps = {
-  sectionId: number
-  quizId?: number
+  sectionId?: number
+  item?: Content
 }
 
-export default function ContentDetail({ sectionId, quizId }: ContentDetailProps) {
+export default function ContentDetail({ item, sectionId }: ContentDetailProps) {
   const { lessonId } = useParams()
   const t = useTranslations('content')
-  const { data: contentData, isLoading } = useSearchContentQuery({ sectionId })
+  // const { data: contentData, isLoading } = useSearchContentQuery({ sectionId: sectionId }, { skip: !item?.id })
   const { closeModal, openModal } = useModal()
   const router = useRouter()
   const locale = useLocale()
@@ -36,19 +36,11 @@ export default function ContentDetail({ sectionId, quizId }: ContentDetailProps)
 
   const handleCreateAssignment = () => {
     closeModal()
-    // route ví dụ — thay bằng route thực tế của bạn cho tạo assignment
-    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/assignment/create`)
+    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/assignment`)
   }
 
-  if (isLoading)
-    return (
-      <div className='flex items-center justify-center'>
-        <LoadingComponent size={150} />
-      </div>
-    )
-
   // Nếu không có data
-  if (!contentData?.data?.items?.length || !contentData)
+  if (!item)
     return (
       <div className='flex flex-col items-center justify-center space-y-4 rounded-2xl border bg-gray-50 py-10 text-center'>
         <h3 className='text-lg font-semibold text-gray-800'>{t('detail.noData')}</h3>
@@ -64,14 +56,11 @@ export default function ContentDetail({ sectionId, quizId }: ContentDetailProps)
           </Button>
           <Button onClick={handleCreateAssignment} className='flex items-center gap-2 bg-green-500'>
             <UploadCloud className='h-4 w-4' />
-            {t('form.title.createAssignment') /* thêm key i18n nếu cần */}
+            {t('form.title.createAssignment')}
           </Button>
         </div>
       </div>
     )
-
-  // Lấy item đầu (hoặc map nếu có nhiều)
-  const item = contentData.data.items[0]
 
   // Render theo loại nội dung
   const renderContent = () => {

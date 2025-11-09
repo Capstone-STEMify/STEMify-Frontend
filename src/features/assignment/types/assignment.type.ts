@@ -1,19 +1,14 @@
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
+
+// =================== Assignment Types ===================
 export type Assignment = {
   id: number
   contentId: number
+  title: string
   totalScore: number
   passingScore: number
-  allowResubmission: string
-  dueDate: string
-}
-
-export type AssignmentQuestion = {
-  id: number
-  assignmentId: number
-  type: AssignmentQuestionType
-  prompt: string
-  orderIndex: number
-  maxScore: number
+  durationDays: number
+  questions: AssignmentQuestion[]
 }
 
 export enum AssignmentQuestionType {
@@ -21,6 +16,48 @@ export enum AssignmentQuestionType {
   FILE = 'File'
 }
 
+export type RubricCriterion = {
+  id: number
+  assignmentQuestionId: number
+  criterionName: string
+  maxPoints: number
+}
+
+export type AssignmentQuestion = {
+  id: number
+  type: AssignmentQuestionType
+  orderIndex: number
+  points: number
+  content: string
+  rubricCriterion: RubricCriterion[]
+}
+
+// =================== Create/Update DTOs ===================
+// Used for API requests (no IDs)
+export type CreateAssignmentDto = {
+  sectionId: number
+  title: string
+  passingScore: number
+  durationDays: number
+  questions: CreateAssignmentQuestionDto[]
+}
+
+export type CreateAssignmentQuestionDto = {
+  type: AssignmentQuestionType
+  orderIndex: number
+  points: number
+  content: string
+  rubricCriterion: CreateRubricCriterionDto[]
+}
+
+export type CreateRubricCriterionDto = {
+  criterionName: string
+  maxPoints: number
+}
+
+export type UpdateAssignmentDto = CreateAssignmentDto
+
+// =================== Submission Types ===================
 export enum AssignmentSubmissionStatus {
   SUBMITTED = 'submitted',
   GRADED = 'graded'
@@ -49,3 +86,6 @@ export type SubmissionAnswer = {
   feedback: string
   score: number
 }
+
+// =================== Query Params ===================
+export type AssignmentQueryParams = {} & SearchPaginatedRequestParams

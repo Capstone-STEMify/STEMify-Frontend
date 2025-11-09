@@ -1,5 +1,6 @@
 import { Button } from '@/components/shadcn/button'
 import { useAppForm } from '@/components/shared/form/items'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import {
   useCreateOrganizationMutation,
   useGetAllOrganizationTypesQuery,
@@ -24,19 +25,24 @@ const organizationDefaultValues: OrganizationFormData = {
   imageUrl: ''
 }
 
-export default function Step1OrganizationCreation() {
-  const dispatch = useAppDispatch()
-  const searchParams = useSearchParams()
-  const organizationId = searchParams.get('organizationId')
+type UpsertOrganizationProps = {
+  organizationId?: number
+  onSuccess?: () => void
+}
 
-  const { currentStep } = useAppSelector((state) => state.organizationSubscriptionForm)
+export default function UpsertOrganization({ organizationId, onSuccess }: UpsertOrganizationProps) {
+  const dispatch = useAppDispatch()
+
   const imageFieldRef = useRef<any>(null)
 
-  const { data: orgData } = useGetOrganizationByIdQuery(Number(1), {
+  const { data: orgData, isLoading: isOrgLoading } = useGetOrganizationByIdQuery(Number(1), {
     skip: !organizationId
   })
 
-  const { data: orgTypesData, isLoading } = useGetAllOrganizationTypesQuery({ pageNumber: 1, pageSize: 50 })
+  const { data: orgTypesData, isLoading: isOrgTypesLoading } = useGetAllOrganizationTypesQuery({
+    pageNumber: 1,
+    pageSize: 50
+  })
   const [createOrg, { isLoading: isCreating, isError: isCreateError }] = useCreateOrganizationMutation()
   const [updateOrg, { isLoading: isUpdating, isError: isUpdateError }] = useUpdateOrganizationMutation()
 
@@ -72,17 +78,13 @@ export default function Step1OrganizationCreation() {
         image: imageBase64
       }
       if (organizationId) {
-        const res = await updateOrg({ id: Number(organizationId), body: payload }).unwrap()
-        if (res) {
-          dispatch(setOrganizationId(res.data.id))
-          dispatch(goNext())
-        }
+        await updateOrg({ id: Number(organizationId), body: payload }).unwrap()
+        toast.success('Organization updated successfully')
+        onSuccess?.()
       } else {
-        const res = await createOrg(payload).unwrap()
-        if (res) {
-          dispatch(setOrganizationId(res.data.id))
-          dispatch(goNext())
-        }
+        await createOrg(payload).unwrap()
+        toast.success('Organization created successfully')
+        onSuccess?.()
       }
       if (!isCreateError || !isUpdateError) {
       }
@@ -104,6 +106,14 @@ export default function Step1OrganizationCreation() {
       })
     }
   }, [organizationId, orgData, form])
+
+  if ((organizationId && (!orgData || isOrgLoading)) || isOrgTypesLoading) {
+    return (
+      <div className='flex h-screen items-center justify-center text-lg font-semibold text-gray-600'>
+        <LoadingComponent />
+      </div>
+    )
+  }
 
   return (
     <form
@@ -129,7 +139,7 @@ export default function Step1OrganizationCreation() {
               label='Organization Type'
               placeholder='Select Organization Type'
               options={organizationTypesOptions}
-              disabled={isLoading}
+              disabled={isOrgTypesLoading}
             />
           )}
         </form.AppField>
@@ -156,16 +166,9 @@ export default function Step1OrganizationCreation() {
         </div>
       )} */}
 
-      {/* Navigation */}
-      <div className='mt-5 flex items-center justify-between'>
-        <Button variant='outline' onClick={() => dispatch(goBack())} disabled={currentStep === 1}>
-          Back
-        </Button>
-
-        <div className='text-sm text-slate-600'>Step {currentStep} of 4</div>
-
+      <div className='mt-5 flex items-center justify-end'>
         <form.AppForm>
-          <form.SubmitButton loading={isCreating || isUpdating}>Next</form.SubmitButton>
+          <form.SubmitButton loading={isCreating || isUpdating}>Save</form.SubmitButton>
         </form.AppForm>
       </div>
     </form>

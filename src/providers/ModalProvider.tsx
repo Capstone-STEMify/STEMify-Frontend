@@ -35,6 +35,7 @@ import UpsertPlanSheet from '@/features/plan/components/sheet/UpsertPlanSheet'
 import UpsertClassroomModal from '@/features/classroom/components/upsert/UpsertClassroomModal'
 import SuccessModal from '@/components/shared/modals/SuccessModal'
 import AddPeopleModal from '@/features/user/components/modal/AddPeopleModal'
+import UpsertOrganizationModal from '@/features/organization/components/UpsertOrganizationModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -86,6 +87,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertComponent' && <UpsertComponentModal {...modalProps} />}
       {modalType === 'upsertPlan' && <UpsertPlanSheet {...modalProps} />}
       {modalType === 'upsertClassroom' && <UpsertClassroomModal {...modalProps} />}
+      {modalType === 'upsertOrganization' && <UpsertOrganizationModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}

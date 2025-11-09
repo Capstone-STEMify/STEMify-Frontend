@@ -57,7 +57,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
     )
   }
 
-  if (!studentQuizId) {
+  if (!studentQuizId && !isShowQuestionAnswer) {
     return (
       <div className='flex items-center justify-center rounded-lg border border-amber-200 bg-amber-50 p-8'>
         <div className='text-center'>
@@ -71,6 +71,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
   const questions = quizData.data.questions
 
   const handleAttemptQuiz = async () => {
+    if (!studentQuizId) return
     const res = await createQuizAttempt({ studentQuizId }).unwrap()
     if (res) {
       dispatch(setQuizAttemptId(res.data.id))
