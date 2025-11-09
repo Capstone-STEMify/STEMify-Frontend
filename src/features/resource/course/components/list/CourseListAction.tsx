@@ -25,7 +25,7 @@ export default function CourseListAction() {
   const [statusActive, setStatusActive] = useState(false)
   const [search, setSearch] = useState<string>('')
   const { status } = useSession()
-  const role = useAppSelector((state) => state.auth.user?.role)
+  const role = useAppSelector((state) => state.auth.user?.userRole)
 
   useEffect(() => {
     if (status === 'authenticated' && (role === UserRole.ADMIN || role === UserRole.STAFF)) {
