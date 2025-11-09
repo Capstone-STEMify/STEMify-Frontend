@@ -1,109 +1,107 @@
 import { Button } from '@/components/shadcn/button'
 import StemifyLogo from '@/components/shared/StemifyLogo'
-import { CheckCircle2, ArrowRight, Users, Sparkles } from 'lucide-react'
+import { ArrowRight, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
 export default function InvitationSuccessPage() {
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50 p-4'>
-      <div className='w-full max-w-2xl'>
-        {/* Main Card */}
-        <div className='overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl'>
-          <div className='px-8 py-4 text-center'>
-            <div className='flex justify-center'>
-              <div className=''>
-                <StemifyLogo className='' />
-              </div>
-            </div>
-
-            <h1 className='mb-3 text-3xl font-bold text-gray-900'>Chào mừng bạn đến với Stemify! 🎉</h1>
-
-            <p className='mx-auto max-w-md text-lg text-gray-600'>
-              Bạn đã chấp nhận lời mời thành công và giờ là thành viên của tổ chức chúng tôi
-            </p>
-          </div>
-
-          {/* Content */}
-          <div className='px-8 pb-10'>
-            {/* What's Next Section */}
-            <div className='mb-8'>
-              <h2 className='mb-4 flex items-center gap-2 text-xl font-semibold text-gray-900'>
-                <Users className='h-5 w-5 text-blue-500' />
-                Bước tiếp theo
-              </h2>
-
-              <div className='space-y-4'>
-                <div className='flex gap-4 rounded-lg border border-blue-100 bg-gradient-to-r from-blue-50 to-transparent p-4'>
-                  <div className='flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-500 text-sm font-semibold text-white'>
-                    1
-                  </div>
-                  <div>
-                    <h3 className='mb-1 font-semibold text-gray-900'>Khám phá workspace của bạn</h3>
-                    <p className='text-sm text-gray-600'>Làm quen với các lớp học, dự án và tài nguyên có sẵn</p>
-                  </div>
-                </div>
-
-                <div className='flex gap-4 rounded-lg border border-yellow-100 bg-gradient-to-r from-yellow-50 to-transparent p-4'>
-                  <div className='flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-yellow-500 text-sm font-semibold text-white'>
-                    2
-                  </div>
-                  <div>
-                    <h3 className='mb-1 font-semibold text-gray-900'>Kết nối với đồng đội</h3>
-                    <p className='text-sm text-gray-600'>Bắt đầu cộng tác với các thành viên khác trong tổ chức</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Stats */}
-            <div className='mb-8 grid grid-cols-3 gap-4 rounded-xl border border-gray-100 bg-gradient-to-br from-gray-50 to-blue-50 p-6'>
-              <div className='text-center'>
-                <div className='mb-1 text-2xl font-bold text-blue-600'>24/7</div>
-                <div className='text-xs text-gray-600'>Hỗ trợ</div>
-              </div>
-              <div className='border-x border-gray-200 text-center'>
-                <div className='mb-1 text-2xl font-bold text-green-600'>100+</div>
-                <div className='text-xs text-gray-600'>Thành viên</div>
-              </div>
-              <div className='text-center'>
-                <div className='mb-1 text-2xl font-bold text-yellow-600'>50+</div>
-                <div className='text-xs text-gray-600'>Dự án</div>
-              </div>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className='flex flex-col gap-3 sm:flex-row'>
-              <Link href='/dashboard' className='flex-1'>
-                <Button className='h-12 w-full bg-gradient-to-r from-sky-400 to-blue-500 text-base font-semibold text-white shadow-lg transition-all'>
-                  Bắt đầu ngay
-                  <ArrowRight className='ml-2 h-5 w-5' />
-                </Button>
-              </Link>
-
-              <Link href='/help' className='flex-1'>
-                <Button variant='outline' className='h-12 w-full border-2 text-base font-semibold hover:bg-gray-50'>
-                  Trung tâm trợ giúp
-                </Button>
-              </Link>
-            </div>
-
-            {/* Footer Note */}
-            <p className='mt-8 text-center text-sm text-gray-500'>
-              Bạn có thể thay đổi cài đặt tài khoản bất cứ lúc nào trong phần{' '}
-              <Link href='/settings' className='font-medium text-blue-600 hover:underline'>
-                Cài đặt
-              </Link>
-            </p>
+    <div className='bg-light flex min-h-screen items-center justify-center p-4'>
+      <div className='w-full max-w-3xl'>
+        {/* Top notification badge */}
+        <div className='mb-3 flex justify-center'>
+          <div className='inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm text-blue-700'>
+            <span className='h-2 w-2 rounded-full bg-blue-500'></span>
+            Bạn đã chấp nhận lời mời thành công
+            <Sparkles className='h-4 w-4' />
           </div>
         </div>
 
-        {/* Bottom Help Text */}
-        <p className='mt-6 text-center text-sm text-gray-500'>
-          Cần hỗ trợ?{' '}
-          <Link href='/contact' className='font-medium text-blue-600 hover:underline'>
+        {/* Logo */}
+        <div className='mb-3 flex justify-center'>
+          <StemifyLogo className='' />
+        </div>
+
+        {/* Main heading */}
+        <div className='mb-8 space-y-4 text-center'>
+          <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl'>Chào mừng đến với Stemify</h1>
+          <p className='mx-auto max-w-2xl text-lg text-gray-600'>
+            Một nền tảng học tập STEM hiện đại giúp bạn khám phá, học hỏi và phát triển. Bắt đầu ngay hôm nay và tận
+            hưởng trải nghiệm tuyệt vời.
+          </p>
+        </div>
+
+        {/* CTA buttons */}
+        <div className='mb-8 flex justify-center gap-4'>
+          <Link href='/dashboard'>
+            <Button size='lg' className='h-11 rounded-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-500 px-6'>
+              Bắt đầu ngay
+            </Button>
+          </Link>
+        </div>
+
+        {/* Features grid */}
+        <div className='mx-auto max-w-4xl'>
+          <div className='grid gap-8 sm:grid-cols-3'>
+            <div className='text-center'>
+              <div className='mb-3 flex justify-center'>
+                <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100'>
+                  <svg className='h-6 w-6 text-blue-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3 className='mb-2 font-semibold text-gray-900'>Học liệu phong phú</h3>
+              <p className='text-sm text-gray-600'>Hàng trăm bài học và dự án thực hành chất lượng cao</p>
+            </div>
+
+            <div className='text-center'>
+              <div className='mb-3 flex justify-center'>
+                <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-yellow-100'>
+                  <svg className='h-6 w-6 text-yellow-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3 className='mb-2 font-semibold text-gray-900'>Cộng đồng sôi động</h3>
+              <p className='text-sm text-gray-600'>Kết nối với hàng trăm học viên và giáo viên nhiệt huyết</p>
+            </div>
+
+            <div className='text-center'>
+              <div className='mb-3 flex justify-center'>
+                <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-green-100'>
+                  <svg className='h-6 w-6 text-green-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3 className='mb-2 font-semibold text-gray-900'>Hỗ trợ 24/7</h3>
+              <p className='text-sm text-gray-600'>Đội ngũ hỗ trợ luôn sẵn sàng giúp đỡ bạn mọi lúc</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer text */}
+        <div className='mt-8 text-center text-sm text-gray-500'>
+          Cần trợ giúp?{' '}
+          <Link href='/contact' className='font-medium text-gray-900 underline underline-offset-4 hover:text-gray-700'>
             Liên hệ với chúng tôi
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   )
