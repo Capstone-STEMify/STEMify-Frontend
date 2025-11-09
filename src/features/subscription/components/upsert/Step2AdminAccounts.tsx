@@ -62,6 +62,7 @@ export default function Step2AdminAccounts() {
 
         const res = await uploadCSVBulk(payload).unwrap()
         toast.success('CSV uploaded successfully!')
+        router.push(`/${locale}/admin/organization/${organizationId}/subscription/${organizationSubscriptionId}`)
         // Handle success (e.g., navigate to next step)
       } catch (error: any) {
         toast.error(error?.data?.message || 'Failed to upload CSV')
@@ -72,7 +73,7 @@ export default function Step2AdminAccounts() {
   }
 
   const handleSkip = () => {
-    router.push(`/${locale}/admin/organization-subscription`)
+    router.push(`/${locale}/admin/organization/${organizationId}/subscription/${organizationSubscriptionId}`)
   }
 
   return (
