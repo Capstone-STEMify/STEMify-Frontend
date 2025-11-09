@@ -18,6 +18,13 @@ export const subscriptionApi = createCrudApi<OrganizationSubscription, Organizat
         body: data
       }),
       invalidatesTags: ['Subscription']
+    }),
+    updateSubscription: builder.mutation<any, any>({
+      query: ({ subscriptionId, data }) => ({
+        url: `/organization-subscription-orders/${subscriptionId}`,
+        method: 'PATCH',
+        body: data
+      })
     })
   })
 })

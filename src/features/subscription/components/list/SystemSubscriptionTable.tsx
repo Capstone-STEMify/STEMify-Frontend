@@ -11,7 +11,7 @@ import { Card } from '@/components/shadcn/card'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/shadcn/button'
-import { Plus } from 'lucide-react'
+import { Edit2, Plus, Trash2 } from 'lucide-react'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 
 type SystemSubscriptionTableProps = {
@@ -37,17 +37,17 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
 
   return (
     <div className='space-y-6 p-6'>
-      <div className='flex gap-2'>
+      <div className='flex justify-between'>
         <h2 className='text-lg font-semibold'>Organization Subscriptions</h2>
+
         <Button
           size='sm'
-          variant='ghost'
-          className='rounded-full'
           onClick={() => {
             router.push(`/${locale}/admin/organization/${organization.id}/create-subscription`)
           }}
         >
           <Plus className='h-4 w-4' />
+          <p>Create new</p>
         </Button>
       </div>
 
@@ -67,6 +67,7 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
                 <TableHead className='font-semibold'>{tc('tableHeader.status')}</TableHead>
                 <TableHead className='font-semibold'>{tc('tableHeader.startDate')}</TableHead>
                 <TableHead className='font-semibold'>{tc('tableHeader.endDate')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.action')}</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -114,6 +115,16 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
                   </TableCell>
                   <TableCell className='text-muted-foreground text-sm'>
                     {formatDate(subscription.endDate ?? 'N/A')}
+                  </TableCell>
+                  <TableCell className=''>
+                    <div className='flex items-center space-x-1'>
+                      <button className='p-1'>
+                        <Edit2 className='h-3.5 w-3.5' />
+                      </button>
+                      <button className='p-1'>
+                        <Trash2 className='h-3.5 w-3.5 text-red-500' />
+                      </button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
