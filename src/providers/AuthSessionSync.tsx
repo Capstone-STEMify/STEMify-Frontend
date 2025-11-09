@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setToken, setUser } from '@/features/auth/authSlice'
 import { useGetUserByIdQuery } from '@/features/user/api/userApi'
+import { setSelectedOrganizationId } from '@/features/subscription/slice/selectedOrganizationSlice'
 
 export default function AuthSessionSync() {
   const { data: session } = useSession()
@@ -10,6 +11,7 @@ export default function AuthSessionSync() {
 
   const reduxToken = useAppSelector((state) => state.auth.token)
   const reduxUser = useAppSelector((state) => state.auth.user)
+  const selectedOrgId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
   const userId = session?.user.userId
   const accessToken = session?.accessToken
@@ -31,11 +33,17 @@ export default function AuthSessionSync() {
   // Sync user vào Redux
   useEffect(() => {
     if (userData && !reduxUser) {
-      dispatch(setUser(userData.data))
-      //TODO: Remove log later
-      console.log('User data synced to Redux:', userData.data)
+      const user = userData.data
+      dispatch(setUser(user))
+      console.log('User data synced to Redux:', user)
+
+      // Nếu user có organizationId → set vào global store
+      if (user.organizationId && user.organizationId !== selectedOrgId) {
+        dispatch(setSelectedOrganizationId(user.organizationId))
+        console.log('Organization ID synced:', user.organizationId)
+      }
     }
-  }, [userData, reduxUser, dispatch])
+  }, [userData, reduxUser, selectedOrgId, dispatch])
 
   return null
 }

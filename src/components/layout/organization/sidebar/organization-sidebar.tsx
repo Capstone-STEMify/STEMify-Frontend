@@ -34,6 +34,8 @@ import { usePathname } from 'next/navigation'
 import { UserRole } from '@/types/userRole'
 import { NavMain } from '@/components/layout/admin/sidebar/nav-main'
 import { NavUser } from '@/components/layout/admin/sidebar/nav-user'
+import OrganizationInfo from '@/components/layout/header/OrganizationInfo'
+import { OrganizationSwitcher } from '@/components/layout/organization/sidebar/organization-switcher'
 
 // thay /admin thành /organization
 const data = {
@@ -91,10 +93,7 @@ export function OrganizationSidebar({ user, ...props }: AppSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
-              <Link href='#'>
-                <IconInnerShadowTop className='!size-5' />
-                <span className='text-base font-semibold'>Stemify</span>
-              </Link>
+              <OrganizationSwitcher teams={[{ name: 'Org 1', plan: 'Pro' }]} />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

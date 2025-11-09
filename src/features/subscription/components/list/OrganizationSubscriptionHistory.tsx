@@ -19,8 +19,12 @@ export default function OrganizationSubscriptionHistory() {
   const t = useTranslations('subscription')
   const params = useAppSelector((state) => state.organizationSubscription)
   const dispatch = useAppDispatch()
+  const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
-  const { data: subscriptionData, isLoading } = useSearchSubscriptionQuery(params)
+  const { data: subscriptionData, isLoading } = useSearchSubscriptionQuery(
+    { ...params, organizationId },
+    { skip: !organizationId }
+  )
   const rows = React.useMemo(() => subscriptionData?.data.items ?? [], [subscriptionData])
   const columns = useGetOrganizationSubscriptionColumns()
 
