@@ -21,7 +21,7 @@ export default function Workspace3dLibrary() {
 
   const [showCreateDialog, setShowCreateDialog] = useState(false)
 
-  const { data, isLoading } = useSearchEmulationsQuery({})
+  const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
   const [createEmulation, { isLoading: isCreating }] = useCreateEmulatorMutation()
 
   const emulations = data?.data.items || []

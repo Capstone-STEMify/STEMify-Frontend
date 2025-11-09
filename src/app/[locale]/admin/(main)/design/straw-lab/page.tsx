@@ -1,4 +1,4 @@
-import StrawLabList from '@/features/straw-lab/components/StrawLabList'
+import StrawLabList from '@/features/emulator/components/straw-lab/StrawLabList'
 
 export default function CarouselPage() {
   return <StrawLabList />

@@ -7,6 +7,7 @@ import {
   IconBox,
   IconBuilding,
   IconCamera,
+  IconCell,
   IconChalkboard,
   IconChartAreaLine,
   IconDatabase,
@@ -71,6 +72,11 @@ const data = {
       title: 'side_bar.component',
       url: '/admin/component',
       icon: IconPuzzle
+    },
+    {
+      title: 'side_bar.straw_labs',
+      url: '/admin/straw-lab',
+      icon: IconCell
     }
   ],
   operationsCenter: [
