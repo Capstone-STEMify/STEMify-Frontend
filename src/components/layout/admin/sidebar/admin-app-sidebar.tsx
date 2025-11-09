@@ -170,8 +170,8 @@ const data = {
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user: {
-    username?: string | undefined
-    role?: string | undefined
+    userName?: string | undefined
+    userRole?: string | undefined
     userId?: string | undefined
   } & {
     name?: string | null | undefined
@@ -239,13 +239,13 @@ export function AdminAppSidebar({ user, ...props }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {user.role === UserRole.ADMIN && (
+        {user.userRole === UserRole.ADMIN && (
           <NavMain label='side_bar.operationCenter' items={operationsCenterWithLocale} />
         )}
         <NavMain label='side_bar.resource' items={navResourceWithLocale} />
 
         {/* <NavDesign items={navDesignWithLocale} /> */}
-        {user.role === UserRole.STAFF && <NavSecondary items={documentsWithLocale} />}
+        {user.userRole === UserRole.STAFF && <NavSecondary items={documentsWithLocale} />}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

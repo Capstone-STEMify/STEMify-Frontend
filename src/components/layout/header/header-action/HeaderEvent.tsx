@@ -8,6 +8,7 @@ import { useSearchNotificationQuery } from '@/features/notification/api/notifica
 import LanguageSwitcher from '../LanguageSwitcher'
 import { useGetCartByUserIdQuery } from '@/features/cart/api/cartApi'
 import Link from 'next/link'
+import OrganizationInfo from '@/components/layout/header/OrganizationInfo'
 
 export default function HeaderEvent() {
   const locale = useLocale()
@@ -22,6 +23,7 @@ export default function HeaderEvent() {
   return (
     <>
       <LanguageSwitcher />
+      <OrganizationInfo />
       <Popover>
         <PopoverTrigger asChild>
           <div

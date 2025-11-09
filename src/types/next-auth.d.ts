@@ -7,9 +7,10 @@ declare module 'next-auth' {
       name?: string
       email?: string
       sub?: string
-      username?: string
-      role?: string
+      userName?: string
+      userRole?: string
       userId?: string
+      organizationId?: number
     } & DefaultSession['user']
     exp?: number
   }

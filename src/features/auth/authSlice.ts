@@ -1,5 +1,5 @@
+import { User } from '@/features/user/types/user.type'
 import { createSlice } from '@reduxjs/toolkit'
-import { User } from 'next-auth'
 
 export interface AuthState {
   token: string | null

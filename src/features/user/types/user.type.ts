@@ -11,6 +11,7 @@ export type User = {
   lastName: string
   imageUrl?: string
   status: UserStatus
+  organizationId?: number
 }
 
 export type UserFormData = Omit<User, 'id'> & {
