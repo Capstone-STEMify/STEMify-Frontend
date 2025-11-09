@@ -1,4 +1,4 @@
-import StrawLabList from '@/features/straw-lab/components/StrawLabList'
+import StrawLabList from '@/features/emulator/components/straw-lab/StrawLabList'
 import React from 'react'
 
 export default function strawAssemblyLibraryPage() {
