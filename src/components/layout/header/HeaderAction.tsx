@@ -1,9 +1,5 @@
 'use client'
-import HeaderEvent from '@/components/layout/header/header-action/HeaderEvent'
-import { Button } from '@/components/shadcn/button'
-import { ArrowRightToLine, Sparkles } from 'lucide-react'
 import React from 'react'
-import { signIn } from 'next-auth/react'
 import AuthStatusMenu from '@/components/layout/header/header-action/AuthStatusMenu'
 // highlight-next-line
 import { useTranslations } from 'next-intl'

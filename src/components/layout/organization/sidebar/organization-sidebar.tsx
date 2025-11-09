@@ -1,24 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import {
-  IconBook,
-  IconBox,
-  IconCamera,
-  IconChalkboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconPuzzle,
-  IconReport,
-  IconSearch
-} from '@tabler/icons-react'
+import { IconBook, IconChalkboard, IconListDetails } from '@tabler/icons-react'
 
-import { NavDocuments } from '@/components/layout/admin/sidebar/nav-documents'
 import {
   Sidebar,
   SidebarContent,
@@ -28,10 +12,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from 'components/shadcn/sidebar'
-import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import { usePathname } from 'next/navigation'
-import { UserRole } from '@/types/userRole'
 import { NavMain } from '@/components/layout/admin/sidebar/nav-main'
 import { NavUser } from '@/components/layout/admin/sidebar/nav-user'
 import { OrganizationSwitcher } from '@/components/layout/organization/sidebar/organization-switcher'

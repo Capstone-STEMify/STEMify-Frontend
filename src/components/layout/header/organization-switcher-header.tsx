@@ -10,26 +10,39 @@ import {
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setSelectedOrganizationId, setSelectedSubscriptionOrderId } from '@/features/subscription/slice/selectedOrganizationSlice'
+import {
+  setSelectedOrganizationId,
+  setSelectedSubscriptionOrderId
+} from '@/features/subscription/slice/selectedOrganizationSlice'
 import { useSearchLicenseAssignmentQuery } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
 
 export function OrganizationSwitcherHeader() {
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.auth.user)
+  const selectedOrganizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
   const { data: licenseAssignmentData, isLoading } = useSearchLicenseAssignmentQuery(
     { userId: user?.userId, status: LicenseAssignmentStatus.ACTIVE, pageSize: 5, pageNumber: 1 },
     { skip: !user?.userId }
   )
 
-  if (isLoading || !licenseAssignmentData) {
-    return null
-  }
+  const licenseAssignments = licenseAssignmentData?.data?.items ?? []
 
-  const licenseAssignments = licenseAssignmentData.data.items
-  dispatch(setSelectedOrganizationId(licenseAssignments[0].organizationId))
-  dispatch(setSelectedSubscriptionOrderId(licenseAssignments[0].organizationSubscriptionOrderId))
+  // ✅ Chỉ gán mặc định nếu chưa có org được chọn
+  React.useEffect(() => {
+    if (licenseAssignments.length && !selectedOrganizationId) {
+      const first = licenseAssignments[0]
+      dispatch(setSelectedOrganizationId(first.organizationId))
+      dispatch(setSelectedSubscriptionOrderId(first.organizationSubscriptionOrderId))
+    }
+  }, [licenseAssignments, selectedOrganizationId, dispatch])
+
+  if (isLoading || !licenseAssignments.length) return null
+
+  // ✅ Tìm org đang được chọn (hoặc lấy org đầu tiên nếu chưa có)
+  const selectedOrg =
+    licenseAssignments.find((x) => x.organizationId === selectedOrganizationId) ?? licenseAssignments[0]
 
   return (
     <div className='relative'>
@@ -37,10 +50,10 @@ export function OrganizationSwitcherHeader() {
         <DropdownMenuTrigger asChild>
           <button className='hover:bg-accent hover:text-accent-foreground flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium shadow-sm transition-colors'>
             <div className='flex size-8 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-100 to-blue-200 text-blue-600'>
-              {licenseAssignments[0].organizationImageUrl ? (
+              {selectedOrg.organizationImageUrl ? (
                 <img
-                  src={licenseAssignments[0].organizationImageUrl}
-                  alt={licenseAssignments[0].organizationName}
+                  src={selectedOrg.organizationImageUrl}
+                  alt={selectedOrg.organizationName}
                   className='h-full w-full object-cover'
                 />
               ) : (
@@ -48,8 +61,8 @@ export function OrganizationSwitcherHeader() {
               )}
             </div>
             <div className='flex flex-col text-left leading-tight'>
-              <span className='truncate font-medium'>{licenseAssignments[0].organizationName}</span>
-              <span className='text-muted-foreground text-xs'>{licenseAssignments[0].planName}</span>
+              <span className='truncate font-medium'>{selectedOrg.organizationName}</span>
+              <span className='text-muted-foreground text-xs'>{selectedOrg.planName}</span>
             </div>
             <ChevronsUpDown className='ml-1 h-4 w-4 opacity-60' />
           </button>
@@ -62,7 +75,9 @@ export function OrganizationSwitcherHeader() {
             <DropdownMenuItem
               key={org.organizationId}
               onClick={() => dispatch(setSelectedOrganizationId(org.organizationId))}
-              className='flex cursor-pointer items-center gap-2 p-2'
+              className={`flex cursor-pointer items-center gap-2 p-2 ${
+                org.organizationId === selectedOrganizationId ? 'bg-accent/40' : ''
+              }`}
             >
               <div className='flex size-6 items-center justify-center rounded-md border'>
                 {org.organizationImageUrl ? (
