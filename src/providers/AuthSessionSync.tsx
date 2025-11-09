@@ -11,7 +11,6 @@ export default function AuthSessionSync() {
 
   const reduxToken = useAppSelector((state) => state.auth.token)
   const reduxUser = useAppSelector((state) => state.auth.user)
-  const selectedOrgId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
   const userId = session?.user.userId
   const accessToken = session?.accessToken
@@ -36,14 +35,8 @@ export default function AuthSessionSync() {
       const user = userData.data
       dispatch(setUser(user))
       console.log('User data synced to Redux:', user)
-
-      // Nếu user có organizationId → set vào global store
-      if (user.organizationId && user.organizationId !== selectedOrgId) {
-        dispatch(setSelectedOrganizationId(user.organizationId))
-        console.log('Organization ID synced:', user.organizationId)
-      }
     }
-  }, [userData, reduxUser, selectedOrgId, dispatch])
+  }, [userData, reduxUser, dispatch])
 
   return null
 }

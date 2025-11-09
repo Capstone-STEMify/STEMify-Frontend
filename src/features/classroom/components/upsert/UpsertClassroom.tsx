@@ -10,7 +10,7 @@ import {
   useGetClassroomByIdQuery,
   useUpdateClassroomMutation
 } from '@/features/classroom/api/classroomApi'
-import { useSearchSubscriptionQuery } from '@/features/subscription/api/subscriptionApi'
+import { useGetSubscriptionByIdQuery, useSearchSubscriptionQuery } from '@/features/subscription/api/subscriptionApi'
 import { useSearchUserQuery, useSearchUserV2Query } from '@/features/user/api/userApi'
 import { getOptions } from '@/utils/index'
 import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
@@ -71,8 +71,8 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
   const router = useRouter()
   const locale = useLocale()
   const [currentStep, setCurrentStep] = useState(1)
+
   const [selectedStudentIds, setSelectedStudentIds] = React.useState<string[]>([])
-  const [selectedSubscriptionId, setSelectedSubscriptionId] = useState<number | undefined>(undefined)
   const [minDate, setMinDate] = useState<Date | undefined>(undefined)
   const [maxDate, setMaxDate] = useState<Date | undefined>(undefined)
 
@@ -100,20 +100,14 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
       path: ['endDate']
     })
 
-  const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
-
   const { data: classroomData } = useGetClassroomByIdQuery(classroomId!, { skip: !isEditing })
+
+  const selectedSubscriptionId = useAppSelector((state) => state.selectedOrganization.selectedSubscriptionOrderId)
   const searchUserQuery = useAppSelector((state) => state.user)
-  const searchCurriculumQuery = useAppSelector((state) => state.curriculum)
-  const searchSubscriptionQuery = useAppSelector((state) => state.organizationSubscription)
-  const { data: curriculumData } = useSearchCurriculumQuery({
-    ...searchCurriculumQuery,
-    subscriptionOrderId: selectedSubscriptionId
+
+  const { data: organizationSubscriptionData, isLoading } = useGetSubscriptionByIdQuery(selectedSubscriptionId!, {
+    skip: !selectedSubscriptionId
   })
-  const { data: organizationSubscriptionData, isLoading } = useSearchSubscriptionQuery(
-    { ...searchSubscriptionQuery, organizationId, status: SubscriptionStatus.ACTIVE },
-    { skip: !organizationId }
-  )
   const { data: teacherData } = useSearchUserV2Query({
     ...searchUserQuery,
     license_type: LicenseAssignmentType.TEACHER,
@@ -137,18 +131,13 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
   )
 
   // Options for selects
-  const curriculumOptions = getOptions(curriculumData?.data.items, 'title', 'imageUrl', 'courseCount')
-  console.log('organizationSubscriptionData:', organizationSubscriptionData?.data.items)
-  const organizationSubscriptionOptions = getOptions(
-    organizationSubscriptionData?.data.items,
-    'planName',
+  const curriculumOptions = getOptions(
+    organizationSubscriptionData?.data.curriculums,
+    'title',
     'imageUrl',
-    undefined,
-    'status',
-    'startDate',
-    'endDate'
+    'courseCount'
   )
-  console.log('Organization Subscription Options:', organizationSubscriptionOptions)
+
   const teacherOptions = getOptions(teacherData?.data.items, 'userName', 'imageUrl', 'email')
   const gradeOptions = Object.entries(Grade).map(([key, value]) => ({
     label: value,
@@ -165,7 +154,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
       const payload = {
         ...value,
         curriculumId: Number(value.curriculumId),
-        organizationSubscriptionOrderId: Number(value.organizationSubscriptionOrderId),
+        organizationSubscriptionOrderId: selectedSubscriptionId!,
         studentIds: selectedStudentIds
       }
 
@@ -224,12 +213,10 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
         {currentStep === 1 && (
           <ClassroomBasicInfo
             form={form}
-            organizationSubscriptionOptions={organizationSubscriptionOptions}
             organizationSubscriptionData={organizationSubscriptionData}
             gradeOptions={gradeOptions}
             minDate={minDate}
             maxDate={maxDate}
-            setSelectedSubscriptionId={setSelectedSubscriptionId}
             setMinDate={setMinDate}
             setMaxDate={setMaxDate}
           />

@@ -4,24 +4,19 @@ import React from 'react'
 
 type ClassroomBasicInfoProps = {
   form: any
-  organizationSubscriptionOptions: any[]
   organizationSubscriptionData: any
   gradeOptions: { label: string; value: string }[]
   minDate: Date | undefined
   maxDate: Date | undefined
-  setSelectedSubscriptionId: (id: number) => void
   setMinDate: (date: Date | undefined) => void
   setMaxDate: (date: Date | undefined) => void
 }
 
 export default function ClassroomBasicInfo({
   form,
-  organizationSubscriptionOptions,
-  organizationSubscriptionData,
   gradeOptions,
   minDate,
   maxDate,
-  setSelectedSubscriptionId,
   setMinDate,
   setMaxDate
 }: ClassroomBasicInfoProps) {
@@ -60,26 +55,7 @@ export default function ClassroomBasicInfo({
               />
             )}
           />
-          {/* Subscription */}
-          <form.AppField
-            name='organizationSubscriptionOrderId'
-            children={(field: any) => (
-              <field.SingleSelectWithSearch
-                value={form.getFieldValue('organizationSubscriptionOrderId')?.toString()}
-                options={organizationSubscriptionOptions}
-                label='Subscription Plan'
-                placeholder='Choose subscription plan'
-                onChange={(val: string | number) => {
-                  form.setFieldValue('organizationSubscriptionOrderId', Number(val))
-                  setSelectedSubscriptionId(Number(val))
-                  const selected = organizationSubscriptionData?.data.items.find((s: { id: number; startDate: string; endDate: string }) => s.id === Number(val))
 
-                  setMinDate(selected ? new Date(selected.startDate) : undefined)
-                  setMaxDate(selected ? new Date(selected.endDate) : undefined)
-                }}
-              />
-            )}
-          />
           {/* Row 2: Dates */}
           <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
             <form.AppField

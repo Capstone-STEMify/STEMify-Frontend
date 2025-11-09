@@ -4,6 +4,10 @@ import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 export type LicenseAssignment = {
   id: number
   organizationSubscriptionOrderId: number
+  organizationId: number
+  organizationName: string
+  organizationImageUrl?: string
+  planName: string
   user: User
   status: LicenseAssignmentStatus
   assignedAt: string

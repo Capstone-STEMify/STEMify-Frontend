@@ -13,30 +13,27 @@ import {
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/shadcn/sidebar'
-import { IconInnerShadowTop } from '@tabler/icons-react'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { useGetOrganizationByIdQuery } from '@/features/organization/api/organizationApi'
-import { setSelectedOrganizationId } from '@/features/subscription/slice/selectedOrganizationSlice'
+import { setSelectedOrganizationId, setSelectedSubscriptionOrderId } from '@/features/subscription/slice/selectedOrganizationSlice'
+import { useSearchLicenseAssignmentQuery } from '@/features/license-assignment/api/licenseAssignmentApi'
+import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
 
-export function OrganizationSwitcher({
-  teams
-}: {
-  teams: {
-    name: string
-    imageUrl?: string
-    plan: string
-  }[]
-}) {
+export function OrganizationSwitcher() {
   const { isMobile } = useSidebar()
   const dispatch = useAppDispatch()
-  const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
-  const { data: organizationData, isLoading } = useGetOrganizationByIdQuery(organizationId!, { skip: !organizationId })
+  const user = useAppSelector((state) => state.auth.user)
 
-  if (isLoading || !organizationData) {
+  const { data: licenseAssignmentData, isLoading } = useSearchLicenseAssignmentQuery(
+    { userId: user?.userId, status: LicenseAssignmentStatus.ACTIVE, pageSize: 5, pageNumber: 1 },
+    { skip: !user?.userId }
+  )
+
+  if (isLoading || !licenseAssignmentData) {
     return null
   }
-  // TODO: Replace with real organization list
-  const organizations = [organizationData.data]
+  const licenseAssignments = licenseAssignmentData.data.items
+  dispatch(setSelectedOrganizationId(licenseAssignments[0].organizationId))
+  dispatch(setSelectedSubscriptionOrderId(licenseAssignments[0].organizationSubscriptionOrderId))
 
   return (
     <SidebarMenu>
@@ -48,10 +45,10 @@ export function OrganizationSwitcher({
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
               <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-100 to-blue-200 text-blue-600'>
-                {organizationData.data.imageUrl ? (
+                {licenseAssignments[0].organizationImageUrl ? (
                   <img
-                    src={organizationData.data.imageUrl}
-                    alt={organizationData.data.name}
+                    src={licenseAssignments[0].organizationImageUrl}
+                    alt={licenseAssignments[0].organizationName}
                     className='h-full w-full object-cover'
                   />
                 ) : (
@@ -59,7 +56,8 @@ export function OrganizationSwitcher({
                 )}
               </div>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium'>{organizationData.data.name}</span>
+                <span className='truncate font-medium'>{licenseAssignments[0].organizationName}</span>
+                <span className='text-muted-foreground text-xs'>{licenseAssignments[0].planName}</span>
               </div>
               <ChevronsUpDown className='ml-auto' />
             </SidebarMenuButton>
@@ -71,20 +69,27 @@ export function OrganizationSwitcher({
             sideOffset={4}
           >
             <DropdownMenuLabel className='text-muted-foreground text-xs'>Organizations</DropdownMenuLabel>
-            {organizations.map((org, index) => (
+            {licenseAssignments.map((org, index) => (
               <DropdownMenuItem
-                key={org.name}
-                onClick={() => dispatch(setSelectedOrganizationId(org.id))}
+                key={org.organizationName}
+                onClick={() => dispatch(setSelectedOrganizationId(org.organizationId))}
                 className='gap-2 p-2'
               >
                 <div className='flex size-6 items-center justify-center rounded-md border'>
-                  {org.imageUrl ? (
-                    <img src={org.imageUrl} alt={org.name} className='h-full w-full object-cover' />
+                  {org.organizationImageUrl ? (
+                    <img
+                      src={org.organizationImageUrl}
+                      alt={org.organizationName}
+                      className='h-full w-full object-cover'
+                    />
                   ) : (
                     <GraduationCap className='size-3.5 shrink-0 text-blue-600' />
                   )}
                 </div>
-                {org.name}
+                <div className='flex flex-col'>
+                  <span className='font-medium'>{org.organizationName}</span>
+                  <p className='text-muted-foreground text-xs'>{org.planName}</p>
+                </div>
               </DropdownMenuItem>
             ))}
             {/* <DropdownMenuSeparator />
