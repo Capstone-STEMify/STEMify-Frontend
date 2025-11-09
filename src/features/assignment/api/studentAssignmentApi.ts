@@ -5,7 +5,7 @@ import {
   AssignmentStatistics,
   StudentAssignmentDetail,
   StudentAssignmentQueryParam,
-  GradeSubmissionPayload // <<< THÊM
+  GradeSubmissionPayload
 } from '../types/assigmentlistdetail.type'
 
 export const studentAssignmentApi = createApi({

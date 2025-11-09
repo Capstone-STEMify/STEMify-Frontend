@@ -7,7 +7,6 @@ import { format } from 'date-fns'
 import React, { useState } from 'react'
 import { AssignmentAttempt, AssignmentStatistics, StudentStatistic } from '@/features/assignment/types/assigmentlistdetail.type'
 
-// (Các type và helper giữ nguyên)
 export type SubmissionStatus =
   | 'Not Reviewed'
   | 'Passed'
@@ -80,7 +79,6 @@ function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: stri
 }
 
 export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; filter: 'reviewed' | 'not-reviewed' }) {
-  // <<< THÊM: State để quản lý dialog
   const [openSubmission, setOpenSubmission] = useState<Submission | null>(null)
 
   const allSubmissions = mapApiToSubmissions(data.studentStatistics, data.assignmentTitle)
@@ -90,7 +88,6 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
   })
 
   const filteredSubmissions = allSubmissions.filter((s) => {
-    // (Logic filter giữ nguyên)
     const isReviewed = s.status === 'Passed' || s.status === 'Failed' || s.status === 'Graded'
     if (filter === 'reviewed') {
       return isReviewed
