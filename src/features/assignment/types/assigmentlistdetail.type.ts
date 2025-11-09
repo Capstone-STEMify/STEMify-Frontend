@@ -61,3 +61,18 @@ export type RubricCriterion = {
 export type StudentAssignmentQueryParam = {
   classroomId: number
 } & SearchPaginatedRequestParams
+
+export type RubricScorePayload = {
+  rubricCriterionId: number
+  points: number
+}
+
+export type QuestionGradePayload = {
+  assignmentQuestionAttemptId: number
+  rubricScores: RubricScorePayload[]
+}
+
+export type GradeSubmissionPayload = {
+  feedback: string
+  questionGrades: QuestionGradePayload[]
+}

@@ -4,7 +4,8 @@ import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 import {
   AssignmentStatistics,
   StudentAssignmentDetail,
-  StudentAssignmentQueryParam
+  StudentAssignmentQueryParam,
+  GradeSubmissionPayload // <<< THÊM
 } from '../types/assigmentlistdetail.type'
 
 export const studentAssignmentApi = createApi({
@@ -13,13 +14,11 @@ export const studentAssignmentApi = createApi({
   tagTypes: ['StudentAssignment', 'StudentAssignmentDetail'],
   endpoints: (builder) => ({
     search: builder.query<ApiSuccessResponse<PaginatedResult<AssignmentStatistics>>, StudentAssignmentQueryParam>({
-      query: (params) => {
-        return {
-          url: '/student-assignments',
-          method: 'GET',
-          params: params
-        }
-      },
+      query: (params) => ({
+        url: '/student-assignments',
+        method: 'GET',
+        params: params
+      }),
       providesTags: (result) =>
         result?.data
           ? [
@@ -31,10 +30,28 @@ export const studentAssignmentApi = createApi({
             ]
           : [{ type: 'StudentAssignment', id: 'LIST' }]
     }),
-
     getById: builder.query<ApiSuccessResponse<StudentAssignmentDetail>, number | string | undefined>({
       query: (id) => `/student-assignments/${id}`,
       providesTags: (result, error, id) => [{ type: 'StudentAssignmentDetail', id }]
+    }),
+
+    gradeAssignmentAttempt: builder.mutation<
+      ApiSuccessResponse<any>,
+      {
+        attemptId: number
+        studentAssignmentId: number
+        body: GradeSubmissionPayload
+      }
+    >({
+      query: ({ attemptId, body }) => ({
+        url: `/assignment-attempts/${attemptId}`,
+        method: 'PATCH',
+        body: body
+      }),
+      invalidatesTags: (result, error, { studentAssignmentId }) => [
+        { type: 'StudentAssignment', id: 'LIST' },
+        { type: 'StudentAssignmentDetail', id: studentAssignmentId }
+      ]
     })
   })
 })
@@ -43,5 +60,6 @@ export const {
   useSearchQuery: useSearchStudentAssignmentQuery,
   useLazySearchQuery: useLazySearchStudentAssignmentQuery,
   useGetByIdQuery: useGetStudentAssignmentByIdQuery,
-  useLazyGetByIdQuery: useLazyGetStudentAssignmentByIdQuery
+  useLazyGetByIdQuery: useLazyGetStudentAssignmentByIdQuery,
+  useGradeAssignmentAttemptMutation
 } = studentAssignmentApi
