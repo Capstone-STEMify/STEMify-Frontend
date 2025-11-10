@@ -11,6 +11,7 @@ export type User = {
   lastName: string
   imageUrl?: string
   status: UserStatus
+  organizationId?: number
 }
 
 export type UserFormData = Omit<User, 'id'> & {
@@ -33,6 +34,6 @@ export type UserQueryParams = {
 
 export type UserSliceParams = {
   role?: UserRole
-  organizationId?: number
-  subscriptionOrderId?: number
+  subscription_order_id?: number | null
+  license_type?: string | null
 } & SliceQueryParams

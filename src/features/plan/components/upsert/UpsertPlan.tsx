@@ -56,7 +56,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
     maxStudentSeats: z.number().min(10, 'Must be at least 1'),
     billingCycles: z.array(
       z.object({
-        billingCycle: z.enum(BillingCycle),
+        billingCycle: z.string(),
         price: z.number().min(0, 'Price must be positive')
       })
     ),
@@ -100,10 +100,12 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         maxTeacherSeats: p.maxTeacherSeats,
         maxStudentSeats: p.maxStudentSeats,
         billingCycles:
-          p.planBillingCycles?.map((bc: any) => ({
-            billingCycle: bc.billingCycle,
-            price: bc.price
-          })) ?? defaultPlanFormData.billingCycles,
+          p.planBillingCycles?.length > 0
+            ? p.planBillingCycles?.map((bc: any) => ({
+                billingCycle: bc.billingCycle,
+                price: bc.price
+              }))
+            : defaultPlanFormData.billingCycles,
         curriculumIds: p.curriculums.map((c: any) => c.id)
       })
     }

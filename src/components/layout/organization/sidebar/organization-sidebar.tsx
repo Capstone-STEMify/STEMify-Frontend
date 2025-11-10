@@ -1,24 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import {
-  IconBook,
-  IconBox,
-  IconCamera,
-  IconChalkboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconPuzzle,
-  IconReport,
-  IconSearch
-} from '@tabler/icons-react'
+import { IconBook, IconChalkboard, IconListDetails } from '@tabler/icons-react'
 
-import { NavDocuments } from '@/components/layout/admin/sidebar/nav-documents'
 import {
   Sidebar,
   SidebarContent,
@@ -28,12 +12,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from 'components/shadcn/sidebar'
-import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import { usePathname } from 'next/navigation'
-import { UserRole } from '@/types/userRole'
 import { NavMain } from '@/components/layout/admin/sidebar/nav-main'
 import { NavUser } from '@/components/layout/admin/sidebar/nav-user'
+import { OrganizationSwitcher } from '@/components/layout/organization/sidebar/organization-switcher'
 
 // thay /admin thành /organization
 const data = {
@@ -91,10 +74,7 @@ export function OrganizationSidebar({ user, ...props }: AppSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
-              <Link href='#'>
-                <IconInnerShadowTop className='!size-5' />
-                <span className='text-base font-semibold'>Stemify</span>
-              </Link>
+              <OrganizationSwitcher />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -6,12 +6,12 @@ import SSelect from '@/components/shared/SSelect'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { useSearchSubscriptionQuery } from '@/features/subscription/api/subscriptionApi'
 import { useGetOrganizationSubscriptionColumns } from '@/features/subscription/components/list/OrganizationSubscriptionColumnTable'
-import { setPageIndex, setParam } from '@/features/subscription/slice/subscriptionSlice'
+import { resetParams, setPageIndex, setParam } from '@/features/subscription/slice/subscriptionSlice'
 import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useTranslations } from 'next-intl'
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Card, CardAction, CardContent } from '@/components/shadcn/card'
 import { BarChart2, CheckCircle2, Clock, TimerOff, XCircle } from 'lucide-react'
 
@@ -19,8 +19,16 @@ export default function OrganizationSubscriptionHistory() {
   const t = useTranslations('subscription')
   const params = useAppSelector((state) => state.organizationSubscription)
   const dispatch = useAppDispatch()
+  const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
-  const { data: subscriptionData, isLoading } = useSearchSubscriptionQuery(params)
+  useEffect(() => {
+    dispatch(resetParams())
+  }, [dispatch])
+
+  const { data: subscriptionData, isLoading } = useSearchSubscriptionQuery(
+    { ...params, organizationId },
+    { skip: !organizationId }
+  )
   const rows = React.useMemo(() => subscriptionData?.data.items ?? [], [subscriptionData])
   const columns = useGetOrganizationSubscriptionColumns()
 

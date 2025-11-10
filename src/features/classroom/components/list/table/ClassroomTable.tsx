@@ -17,6 +17,7 @@ import useDebounce from '@/hooks/useDebounce'
 import { SingleSelectWithSearch } from '@/components/shared/SingleSelectWithSearch'
 import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import { getOptions } from '@/utils/index'
+import { useSearchOrgDashboardQuery } from '@/features/dashboard/api/OrgDashboardApi'
 
 export default function ClassroomTable() {
   const { openModal } = useModal()
@@ -26,8 +27,9 @@ export default function ClassroomTable() {
   const [search, setSearch] = useState<string>('')
 
   const queryParams = useAppSelector((state) => state.classroom)
+  const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
   const debouncedSearchQuery = useDebounce(search, 500)
-  const { data } = useSearchClassroomsQuery(queryParams)
+  const { data } = useSearchClassroomsQuery({ ...queryParams, organizationId: organizationId })
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
   const columns = useGetClassroomColumn()
 

@@ -4,6 +4,10 @@ import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 export type LicenseAssignment = {
   id: number
   organizationSubscriptionOrderId: number
+  organizationId: number
+  organizationName: string
+  organizationImageUrl?: string
+  planName: string
   user: User
   status: LicenseAssignmentStatus
   assignedAt: string
@@ -40,5 +44,6 @@ export type LicenseAssignmentSliceParams = {
 export type UploadBulkCsvInvitation = {
   csv_data: string
   file_name: string
-  subscription_order_id: number
+  subscription_order_id: string
+  organization_id: string
 }

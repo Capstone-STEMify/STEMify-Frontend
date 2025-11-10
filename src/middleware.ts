@@ -103,7 +103,8 @@ export default withAuth(
       [UserRole.STAFF]: `/${locale}/admin/curriculum`,
       [UserRole.STUDENT]: `/${locale}`,
       [UserRole.TEACHER]: `/${locale}`,
-      [UserRole.GUEST]: `/${locale}`
+      [UserRole.GUEST]: `/${locale}`,
+      [UserRole.ORGANIZATION_ADMIN]: `/${locale}/organization/dashboard`
     }
 
     // 🔹 Nếu user login mà ở root path -> redirect theo role

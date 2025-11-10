@@ -4,7 +4,17 @@ import { Fragment, useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { Pencil, Trash2, ChevronDown, ChevronRight, Search, GraduationCap, Building2, Send } from 'lucide-react'
+import {
+  Pencil,
+  Trash2,
+  ChevronDown,
+  ChevronRight,
+  Search,
+  GraduationCap,
+  Building2,
+  Send,
+  Archive
+} from 'lucide-react'
 import { useDeletePlanMutation, useSearchPlanQuery } from '@/features/plan/api/planApi'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
@@ -176,19 +186,19 @@ export default function SystemOrganizationList() {
                         <Button
                           variant='ghost'
                           size='sm'
-                          className='text-destructive hover:text-destructive h-8 w-8 p-0'
+                          className='h-8 w-8 p-0'
                           onClick={(e) => {
                             e.stopPropagation()
                             openModal('confirm', {
-                              message: 'Are you sure you want to delete this organization?',
+                              message: 'Are you sure you want to archive this organization?',
                               onConfirm: async () => {
                                 await deleteOrganization(organization.id)
-                                toast.success('Organization deleted successfully')
+                                toast.success('Organization archived successfully')
                               }
                             })
                           }}
                         >
-                          <Trash2 className='h-4 w-4' />
+                          <Archive className='h-4 w-4' />
                         </Button>
                       </div>
                     </TableCell>

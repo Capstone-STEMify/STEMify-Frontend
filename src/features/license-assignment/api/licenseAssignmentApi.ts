@@ -17,14 +17,16 @@ export const licenseAssignmentApi = createCrudApi<LicenseAssignment, LicenseAssi
         url: `/license-assignments/bulk`,
         method: 'POST',
         body
-      })
+      }),
+      invalidatesTags: ['Subscription', 'LicenseAssignment']
     }),
-    uploadCSVBulk: builder.mutation<void, { organization_id: number; body: UploadBulkCsvInvitation }>({
+    uploadCSVBulk: builder.mutation<void, { organization_id: string; body: UploadBulkCsvInvitation }>({
       query: ({ organization_id, body }) => ({
         url: `/organizations/${organization_id}/bulk-invitations/upload`,
         method: 'POST',
         body
-      })
+      }),
+      invalidatesTags: ['Subscription', 'LicenseAssignment']
     })
   })
 })

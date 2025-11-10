@@ -43,7 +43,11 @@ export default function ClassroomList() {
   }
 
   if (error || !classrooms || classrooms.length === 0) {
-    return <SEmpty title='No Classrooms Found' description="You don't have any classrooms yet." />
+    return (
+      <div className='mt-5 rounded-2xl border-1 border-gray-300 bg-white p-10 shadow-sm'>
+        <SEmpty title='No Classrooms Found' description="You don't have any classrooms yet." />
+      </div>
+    )
   }
 
   const statusOptions = Object.values(ClassroomStatus).map((status) => ({
