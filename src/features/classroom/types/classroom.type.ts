@@ -28,7 +28,7 @@ export type Classroom = {
 
 export type ClassroomSliceParams = {
   teacherId?: string
-  status?: ClassroomStatus
+  status?: 'upcoming' | 'inprogress' | 'completed' | 'endsoon'
 } & SliceQueryParams
 
 // Pending, InProgress, Completed, Deleted
