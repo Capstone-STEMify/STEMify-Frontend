@@ -1,10 +1,10 @@
-import ClassroomDetail from '@/features/classroom/components/detail/ClassroomDetail'
+import OrganizationClassroomDetail from '@/features/classroom/components/detail/OrganizationClassroomDetail'
 import React from 'react'
 
 export default function OrganizationClassroomPage() {
   return (
     <div>
-      <ClassroomDetail />
+      <OrganizationClassroomDetail />
     </div>
   )
 }
