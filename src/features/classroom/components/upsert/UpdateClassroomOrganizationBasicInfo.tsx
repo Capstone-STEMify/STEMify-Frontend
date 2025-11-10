@@ -80,8 +80,6 @@ export default function UpdateClassroomOrganizationBasicInfo({
         form.handleSubmit()
       }}
     >
-      <h1>Update Classroom Organization Basic Information</h1>
-      <hr />
       <div className='space-y-6'>
         <form.AppField
           name='name'
@@ -138,14 +136,16 @@ export default function UpdateClassroomOrganizationBasicInfo({
           />
         </div>
 
-        <form.AppForm>
-          <form.SubmitButton
-            loading={isUpdating}
-            className='bg-amber-custom-400 cursor-pointer rounded-lg px-6 py-2.5 font-medium text-white transition-colors hover:bg-amber-500'
-          >
-            Update
-          </form.SubmitButton>
-        </form.AppForm>
+        <div className='flex justify-end'>
+          <form.AppForm>
+            <form.SubmitButton
+              loading={isUpdating}
+              className='bg-amber-custom-400 cursor-pointer rounded-lg px-6 py-2.5 font-medium text-white transition-colors hover:bg-amber-500'
+            >
+              Update
+            </form.SubmitButton>
+          </form.AppForm>
+        </div>
       </div>
     </form>
   )

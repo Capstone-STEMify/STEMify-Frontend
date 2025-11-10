@@ -1,0 +1,10 @@
+{
+  "organization": {
+    "form": {
+      "title": {
+        "create": "Create Organization",
+        "update": "Update Organization"
+      }
+    }
+  }
+}
