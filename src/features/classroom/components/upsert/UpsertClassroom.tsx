@@ -157,7 +157,6 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
         organizationSubscriptionOrderId: selectedSubscriptionId!,
         studentIds: selectedStudentIds
       }
-
       if (isEditing) {
         await updateClassroom({ id: classroomId!, body: payload }).unwrap()
       } else {

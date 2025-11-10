@@ -7,6 +7,7 @@ import { useDebounce } from '@/components/shadcn/multiselect'
 import { setSearchTerm } from '@/features/user/slice/userSlice'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { Input } from '@/components/shadcn/input'
+import { se } from 'date-fns/locale'
 
 type ClassroomAssignSectionProps = {
   form: any
@@ -107,7 +108,6 @@ export default function ClassroomAssignSection({
             rowSelection={selectedStudentIds}
             onSelectionChange={(userId) => {
               setSelectedStudentIds(userId.map((id) => id.toString()))
-              console.log('Selected Student IDs:', userId)
             }}
           />
         </div>

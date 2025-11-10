@@ -41,16 +41,11 @@ export default function ClassroomTable() {
   })
 
   // options for status select
-  const statusOptions = Object.entries(ClassroomStatus)
-    .filter(([key]) => key.toLowerCase() !== 'deleted')
-    .map(([key, value]) => ({
-      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-      value: value
-    }))
-  const sortOptions = [
+  const statusOptions = [
     { label: 'Upcoming', value: 'upcoming' },
     { label: 'In Progress', value: 'inprogress' },
-    { label: 'End Soon', value: 'endsoon' }
+    { label: 'End Soon', value: 'endsoon' },
+    { label: 'Completed', value: 'completed' }
   ]
 
   const curriculumOptions = getOptions(curriculumData?.data.items, 'title', 'imageUrl', 'courseCount')
@@ -98,18 +93,12 @@ export default function ClassroomTable() {
         </div>
         <div className='flex gap-2'>
           <SSelect
-            placeholder='Select status'
-            value={queryParams.status?.toString() ?? ClassroomStatus.PENDING}
-            onChange={(val) => dispatch(setParam({ key: 'status', value: val as ClassroomStatus }))}
-            options={statusOptions}
-          />
-          <SSelect
-            placeholder='Sort by'
-            value={queryParams.orderBy ?? 'upcoming'}
+            placeholder='Filter by'
+            value={queryParams.status ?? 'upcoming'}
             onChange={(val) =>
-              dispatch(setParam({ key: 'orderBy', value: val as 'upcoming' | 'inprogress' | 'endsoon' }))
+              dispatch(setParam({ key: 'status', value: val as 'upcoming' | 'inprogress' | 'endsoon' | 'completed' }))
             }
-            options={sortOptions}
+            options={statusOptions}
           />
         </div>
       </div>

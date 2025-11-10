@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import { useDeleteClassroomMutation } from '@/features/classroom/api/classroomApi'
 import { Classroom, ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDateV2 } from '@/utils/index'
@@ -8,10 +9,13 @@ import { ColumnDef } from '@tanstack/react-table'
 import { GraduationCap, Users } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
   const router = useRouter()
   const locale = useLocale()
+  const [deleteClassroom] = useDeleteClassroomMutation()
+
   return [
     createSelectColumn<Classroom>(),
     {
@@ -152,8 +156,9 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
       },
       {
         label: 'Delete Class',
-        onClick: (classroom) => {
-          console.log('Delete class', classroom)
+        onClick: ({ original }) => {
+          deleteClassroom(original.id)
+          toast.success('Classroom deleted successfully')
         }
       }
     ])
