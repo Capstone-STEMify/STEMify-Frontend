@@ -37,6 +37,7 @@ import SuccessModal from '@/components/shared/modals/SuccessModal'
 import AddPeopleModal from '@/features/user/components/modal/AddPeopleModal'
 import UpsertOrganizationModal from '@/features/organization/components/UpsertOrganizationModal'
 import UpdateSubsctiptionSheet from '@/features/subscription/components/upsert/UpdateSubsctiptionSheet'
+import UpdateClassroomOrganizationModal from '@/features/classroom/components/upsert/UpdateClassroomOrganizationModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -107,9 +108,11 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
 
       {/* sheet */}
       {modalType === 'upsertContact' && <ContactDetailSheet {...modalProps} />}
-
       {modalType === 'upsertPlan' && <UpsertPlanSheet {...modalProps} />}
       {modalType === 'upsertSubscription' && <UpdateSubsctiptionSheet {...modalProps} />}
+
+      {/* classroom */}
+      {modalType === 'updateClassroomOrganization' && <UpdateClassroomOrganizationModal {...modalProps} />}
     </ModalContext.Provider>
   )
 }

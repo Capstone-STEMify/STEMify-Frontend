@@ -28,7 +28,7 @@ import Image from 'next/image'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useModal } from '@/providers/ModalProvider'
 
-export default function ClassroomDetail() {
+export default function OrganizationClassroomDetail() {
   const { openModal } = useModal()
   const { classroomId } = useParams()
   const { data, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
@@ -114,7 +114,11 @@ export default function ClassroomDetail() {
               <Button variant='outline' size='icon'>
                 <Settings className='h-4 w-4' />
               </Button>
-              <Button variant='outline' size='icon'>
+              <Button
+                variant='outline'
+                size='icon'
+                onClick={() => openModal('updateClassroomOrganization', { classroomId: classroom.id, mode: 'teacher' })}
+              >
                 <MoreVertical className='h-4 w-4' />
               </Button>
             </div>

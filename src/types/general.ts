@@ -36,6 +36,7 @@ export type ModalType =
   | 'upsertComponent'
   | 'upsertOrganization'
   | 'upsertClassroom'
+  | 'updateClassroomOrganization'
 
   // detail
   | 'lessonDetail'
@@ -57,6 +58,7 @@ export type ModalType =
   | 'upsertContact'
   | 'upsertPlan'
   | 'upsertSubscription'
+
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void

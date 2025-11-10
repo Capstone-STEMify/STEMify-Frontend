@@ -43,7 +43,7 @@ export default function StudentClassroomDetail() {
   const tt = useTranslations('toast')
   const { classroomId } = useParams()
   const auth = useAppSelector((state) => state.auth)
-  const userRole = auth.user?.role || UserRole.GUEST
+  const userRole = auth.user?.userRole || UserRole.GUEST
   const router = useRouter()
   const locale = useLocale()
 
