@@ -56,6 +56,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
         id: classroomId,
         body: payload
       })
+      onSuccess?.()
     }
   })
 

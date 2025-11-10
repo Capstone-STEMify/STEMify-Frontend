@@ -19,7 +19,8 @@ import {
   Clock,
   GraduationCap,
   Mail,
-  Edit
+  Edit,
+  Edit2
 } from 'lucide-react'
 import { format } from 'date-fns'
 import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
@@ -117,7 +118,7 @@ export default function OrganizationClassroomDetail() {
               <Button
                 variant='outline'
                 size='icon'
-                onClick={() => openModal('updateClassroomOrganization', { classroomId: classroom.id, mode: 'teacher' })}
+                onClick={() => openModal('updateClassroomOrganization', { classroomId: classroom.id, mode: 'basic' })}
               >
                 <MoreVertical className='h-4 w-4' />
               </Button>
@@ -136,9 +137,18 @@ export default function OrganizationClassroomDetail() {
             {classroom.curriculum && (
               <Card className='overflow-hidden border border-slate-200 py-4 shadow-sm'>
                 <CardHeader className='pb-4'>
-                  <CardTitle className='flex items-center gap-2 text-lg'>
-                    <BookOpen className='h-5 w-5 text-purple-500' />
-                    Curriculum
+                  <CardTitle className='flex items-center justify-between gap-2 text-lg'>
+                    <div className='flex items-center gap-2 text-lg'>
+                      <BookOpen className='h-5 w-5 text-purple-500' />
+                      Curriculum
+                    </div>
+                    <button
+                      onClick={() =>
+                        openModal('updateClassroomOrganization', { classroomId: classroom.id, mode: 'curriculum' })
+                      }
+                    >
+                      <Edit2 size={15} />
+                    </button>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -261,7 +271,16 @@ export default function OrganizationClassroomDetail() {
             {classroom.teacher && (
               <Card className='border border-slate-200 py-4 shadow-sm'>
                 <CardHeader className='pb-3'>
-                  <CardTitle className='text-base'>Teacher</CardTitle>
+                  <CardTitle className='flex justify-between text-base'>
+                    Teacher{' '}
+                    <button
+                      onClick={() =>
+                        openModal('updateClassroomOrganization', { classroomId: classroom.id, mode: 'teacher' })
+                      }
+                    >
+                      <Edit2 size={15} />
+                    </button>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className='flex items-start gap-3'>
