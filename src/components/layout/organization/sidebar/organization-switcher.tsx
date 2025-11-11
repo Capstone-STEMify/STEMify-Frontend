@@ -84,7 +84,7 @@ export function OrganizationSwitcher() {
 
             {licenseAssignments.map((org) => (
               <DropdownMenuItem
-                key={org.organizationId}
+                key={org.id}
                 onClick={() => dispatch(setSelectedOrganizationId(org.organizationId))}
                 className={`gap-2 p-2 ${org.organizationId === selectedOrganizationId ? 'bg-sidebar-accent/50' : ''}`}
               >
