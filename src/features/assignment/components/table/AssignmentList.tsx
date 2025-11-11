@@ -1,7 +1,7 @@
+'use client'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
-import { quizzes } from '@/features/quiz/api/data'
 import { ChevronUp, Mic, FileText, MoreHorizontal } from 'lucide-react'
 import {
   DropdownMenu,
@@ -12,6 +12,11 @@ import {
 import { Button } from '@/components/shadcn/button'
 import { StatusBadge } from '@/features/quiz/components/active/badge/StatusBadge'
 import { ProgressCircle } from '@/features/quiz/components/active/circle/AccuracyCircle'
+import { useSearchStudentAssignmentQuery } from '../../api/studentAssignmentApi'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { AssignmentStatistics } from '../../types/assigmentlistdetail.type'
+import { format } from 'date-fns'
+import Link from 'next/link'
 
 export function AssignmentList() {
   const getAccuracyColor = (accuracy: number | null): string => {
@@ -20,6 +25,12 @@ export function AssignmentList() {
     if (accuracy >= 70) return 'text-orange-400'
     return 'text-red-500'
   }
+
+  const { data: studentAssignmentResponse, isLoading } = useSearchStudentAssignmentQuery({ classroomId: 1 })
+
+  if (isLoading) return <LoadingComponent />
+
+  const assignments: AssignmentStatistics[] = studentAssignmentResponse?.data?.items || []
 
   return (
     <div className='mx-auto mt-4 w-full max-w-7xl rounded-lg border'>
@@ -36,29 +47,26 @@ export function AssignmentList() {
                 Quiz name <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
-            <TableHead className='w-[150px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Status <ChevronUp className='ml-1 h-3 w-3' />
-              </button>
-            </TableHead>
-            <TableHead className='w-[180px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
+            <TableHead className='w-[180px] text-center'>
+              <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
                 Learners <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Accuracy <ChevronUp className='ml-1 h-3 w-3' />
+                Submissions <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
-            <TableHead className='w-[120px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Assigned <ChevronUp className='ml-1 h-3 w-3' />
+            <TableHead className='w-[120px] text-center'>
+              <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
+                Pass Rate
+                <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
-            <TableHead className='w-[180px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Assigned by <ChevronUp className='ml-1 h-3 w-3' />
+            <TableHead className='w-[180px] text-center'>
+              <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
+                Avg Score
+                <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[80px] text-center text-xs font-semibold text-gray-500 uppercase'>
@@ -67,85 +75,82 @@ export function AssignmentList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {quizzes.map((quiz) => (
-            <TableRow key={quiz.id}>
-              <TableCell>
-                <div className='flex items-center gap-3'>
-                  <Checkbox id={`quiz-${quiz.id}`} />
-                  <div className='rounded-full bg-gray-100 p-2'>
-                    {quiz.type === 'LIVE' ? (
-                      <Mic className='h-4 w-4 text-gray-600' />
-                    ) : (
+          {assignments.map((assignment) => {
+            const extraLearners = assignment.studentStatistics.length > 3 ? assignment.studentStatistics.length - 3 : 0
+
+            return (
+              <TableRow key={assignment.assignmentId}>
+                <TableCell>
+                  <div className='flex items-center gap-3'>
+                    <Checkbox id={`asm-${assignment.assignmentId}`} />
+                    <div className='rounded-full bg-gray-100 p-2'>
                       <FileText className='h-4 w-4 text-gray-600' />
-                    )}
+                    </div>
                   </div>
-                </div>
-              </TableCell>
-              <TableCell className='font-medium'>
-                <label htmlFor={`quiz-${quiz.id}`} className='cursor-pointer text-gray-800'>
-                  {quiz.name}
-                </label>
-                <div className='mt-1 flex items-center text-xs text-gray-500'>
-                  <span className='mr-2 font-semibold'>{quiz.type}</span>
-                  {quiz.subtext && <span className='text-yellow-600'>{quiz.subtext}</span>}
-                </div>
-              </TableCell>
-              <TableCell>
-                <StatusBadge status={quiz.status} />
-              </TableCell>
-              <TableCell>
-                <div className='flex items-center'>
-                  <div className='flex -space-x-2'>
-                    {quiz.learners.slice(0, 3).map((learner) => (
-                      <Avatar key={learner.id} className='h-7 w-7 border-2 border-white'>
-                        {learner.avatarUrl ? (
-                          <AvatarImage src={learner.avatarUrl} />
-                        ) : (
-                          <AvatarFallback>{learner.initials}</AvatarFallback>
-                        )}
-                      </Avatar>
-                    ))}
+                </TableCell>
+                <TableCell className='font-medium'>
+                  <Link href={`/assignment/${assignment.assignmentId}`}>
+                    <label
+                      htmlFor={`asm-${assignment.assignmentId}`}
+                      className='cursor-pointer text-gray-800 hover:text-blue-500 hover:underline'
+                    >
+                      {assignment.assignmentTitle}
+                    </label>
+                    <div className='mt-1 flex items-center text-xs text-gray-500'>
+                      <span className='font-semibold'>{assignment.totalQuestions} Questions</span>
+                    </div>
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <div className='flex items-center justify-center'>
+                    <div className='flex -space-x-2'>
+                      {assignment.studentStatistics.slice(0, 3).map((student) => (
+                        <Avatar key={student.studentId} className='h-7 w-7 border-2 border-white'>
+                          {student.imageUrl ? (
+                            <AvatarImage src={student.imageUrl} />
+                          ) : (
+                            <AvatarFallback>{student.studentName.slice(0, 2).toUpperCase()}</AvatarFallback>
+                          )}
+                        </Avatar>
+                      ))}
+                    </div>
+                    {extraLearners > 0 && <span className='ml-2 text-sm text-gray-600'>+{extraLearners}</span>}
                   </div>
-                  {quiz.extraLearners > 0 && <span className='ml-2 text-sm text-gray-600'>+{quiz.extraLearners}</span>}
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className='flex justify-center'>
-                  <ProgressCircle
-                    value={quiz.accuracy}
-                    size={40}
-                    strokeWidth={4}
-                    className={getAccuracyColor(quiz.accuracy)}
-                  />
-                </div>
-              </TableCell>
-              <TableCell className='text-gray-600'>{quiz.assignedDate}</TableCell>
-              <TableCell>
-                <div className='flex items-center gap-2'>
-                  <Avatar className='h-7 w-7'>
-                    <AvatarImage src={quiz.assignedBy.avatarUrl} />
-                    <AvatarFallback>{quiz.assignedBy.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <span className='text-gray-800'>{quiz.assignedBy.name}</span>
-                </div>
-              </TableCell>
-              <TableCell className='text-center'>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant='ghost' className='h-8 w-8 p-0'>
-                      <span className='sr-only'>Open menu</span>
-                      <MoreHorizontal className='h-4 w-4' />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align='end'>
-                    <DropdownMenuItem>View Details</DropdownMenuItem>
-                    <DropdownMenuItem>Edit Quiz</DropdownMenuItem>
-                    <DropdownMenuItem className='text-red-500'>Delete</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+                <TableCell className='text-center text-gray-600'>{assignment.submissions}</TableCell>
+                <TableCell>
+                  <div className='flex justify-center'>
+                    <ProgressCircle
+                      value={assignment.passRate}
+                      size={40}
+                      strokeWidth={4}
+                      className={getAccuracyColor(assignment.averageScore)}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className='flex items-center justify-center gap-2'>
+                    <p className='text-gray-800'>{assignment.averageScore}</p>
+                  </div>
+                </TableCell>
+                <TableCell className='text-center'>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant='ghost' className='h-8 w-8 p-0'>
+                        <span className='sr-only'>Open menu</span>
+                        <MoreHorizontal className='h-4 w-4' />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end'>
+                      <DropdownMenuItem>View Details</DropdownMenuItem>
+                      <DropdownMenuItem>Edit Quiz</DropdownMenuItem>
+                      <DropdownMenuItem className='text-red-500'>Delete</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
     </div>

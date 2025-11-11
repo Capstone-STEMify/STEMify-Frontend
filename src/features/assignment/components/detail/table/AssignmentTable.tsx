@@ -1,10 +1,22 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/shadcn/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/shadcn/dialog'
 import { SubmissionReviewDialog } from '../dialog/SubmissionReviewDialog'
+import { format } from 'date-fns'
+import React, { useState } from 'react'
+import { AssignmentAttempt, AssignmentStatistics, StudentStatistic } from '@/features/assignment/types/assigmentlistdetail.type'
 
-export type SubmissionStatus = 'Not Reviewed' | 'Passed' | 'Failed' | 'Not Submitted'
+export type SubmissionStatus =
+  | 'Not Reviewed'
+  | 'Passed'
+  | 'Failed'
+  | 'Not Submitted'
+  | 'Submitted'
+  | 'Pending'
+  | 'UnderReview'
+  | 'Graded'
+  | string
 
 export type Submission = {
   id: string
@@ -13,7 +25,7 @@ export type Submission = {
   submittedDate: string | null
   status: SubmissionStatus
   grade: string | null
-
+  studentAssignmentId: number | null
   studentRole: string
   quizTitle: string
   quizFinishedDate: string
@@ -21,60 +33,67 @@ export type Submission = {
   accuracy: string | null
   point: number | null
   answered: string | null
-
   comment: string | null
+  attempts: AssignmentAttempt[]
 }
-
-const ALL_SUBMISSIONS: Submission[] = [
-  {
-    id: '1',
-    studentName: 'Nguyễn Văn An',
-    imageUrl: 'https://github.com/shadcn.png',
-    submittedDate: 'Oct 25, 2025',
-    status: 'Passed',
-    grade: '95/100',
-    studentRole: 'Jr UI/UX Designer',
-    quizTitle: 'UI Design Fundamentals & Best Practice',
-    quizFinishedDate: 'Oct 03, 2023 · 10:00 AM',
-    quizQuestionCount: 20,
-    accuracy: '85%',
-    point: 145,
-    answered: '19/20',
-    comment: 'Làm tốt lắm, phần phân tích màu sắc rất chi tiết.'
-  },
-  {
-    id: '2',
-    studentName: 'Trần Thị Bích',
-    imageUrl: 'https://github.com/react.png',
-    submittedDate: 'Oct 26, 2025',
-    status: 'Not Reviewed',
-    grade: null,
-    studentRole: 'Product Designer',
-    quizTitle: 'Color and Typography in UI Design',
-    quizFinishedDate: 'Oct 26, 2025 · 09:15 AM',
-    quizQuestionCount: 15,
-    accuracy: null,
-    point: null,
-    answered: null,
-    comment: null
-  }
-]
 
 const statusVariantMap: Record<SubmissionStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   Passed: 'secondary',
   Failed: 'destructive',
   'Not Reviewed': 'default',
-  'Not Submitted': 'outline'
+  'Not Submitted': 'outline',
+  Submitted: 'default',
+  Pending: 'outline',
+  UnderReview: 'default',
+  Graded: 'secondary'
 }
 
-export function AssignmentTable({ filter }: { filter: 'reviewed' | 'not-reviewed' }) {
-  const filteredSubmissions = ALL_SUBMISSIONS.filter((s) => {
-    const isReviewed = s.status === 'Passed' || s.status === 'Failed'
+function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: string): Submission[] {
+  return students.map((student) => {
+    const latestAttempt = student.attempts.length > 0 ? student.attempts[0] : null
+    
+    let grade: string | null = null
+    if (latestAttempt && (latestAttempt.status === 'Graded' || latestAttempt.status === 'Passed')) {
+      grade = `${latestAttempt.totalScore}`
+    }
+
+    return {
+      id: student.studentId,
+      studentName: student.studentName,
+      imageUrl: student.imageUrl,
+      submittedDate: student.lastSubmittedAt ? format(new Date(student.lastSubmittedAt), 'MMM dd, yyyy') : null,
+      status: student.status,
+      grade: grade,
+      comment: latestAttempt ? latestAttempt.feedback : null,
+      point: latestAttempt ? latestAttempt.totalScore : null,
+      studentAssignmentId: latestAttempt ? latestAttempt.studentAssignmentId : null,
+      attempts: student.attempts,
+      studentRole: 'Student',
+      quizTitle: assignmentTitle,
+      quizFinishedDate: student.lastSubmittedAt ? format(new Date(student.lastSubmittedAt), 'MMM dd, yyyy') : 'N/A',
+      quizQuestionCount: 0,
+      accuracy: null,
+      answered: null
+    }
+  })
+}
+
+export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; filter: 'reviewed' | 'not-reviewed' }) {
+  const [openSubmission, setOpenSubmission] = useState<Submission | null>(null)
+
+  const allSubmissions = mapApiToSubmissions(data.studentStatistics, data.assignmentTitle)
+  
+  allSubmissions.forEach((s) => {
+    s.quizQuestionCount = data.totalQuestions
+  })
+
+  const filteredSubmissions = allSubmissions.filter((s) => {
+    const isReviewed = s.status === 'Passed' || s.status === 'Failed' || s.status === 'Graded'
     if (filter === 'reviewed') {
       return isReviewed
     }
     if (filter === 'not-reviewed') {
-      return !isReviewed
+      return !isReviewed && s.status !== 'Pending' && s.status !== 'Not Submitted'
     }
     return true
   })
@@ -92,40 +111,53 @@ export function AssignmentTable({ filter }: { filter: 'reviewed' | 'not-reviewed
         </TableHeader>
         <TableBody>
           {filteredSubmissions.map((submission) => (
-            <Dialog key={submission.id}>
-              <DialogTrigger asChild>
-                <TableRow className='cursor-pointer hover:bg-gray-50'>
-                  <TableCell>
-                    <div className='flex items-center gap-3'>
-                      <Avatar>
-                        <AvatarImage src={submission.imageUrl} alt={submission.studentName} />
-                        <AvatarFallback>
-                          {submission.studentName
-                            .split(' ')
-                            .map((n) => n[0])
-                            .join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className='font-medium'>{submission.studentName}</span>
-                    </div>
-                  </TableCell>
-
-                  <TableCell>{submission.submittedDate ? submission.submittedDate : '—'}</TableCell>
-
-                  <TableCell>
-                    <Badge variant={statusVariantMap[submission.status]}>{submission.status}</Badge>
-                  </TableCell>
-
-                  <TableCell className='text-right'>{submission.grade ? submission.grade : 'N/A'}</TableCell>
-                </TableRow>
-              </DialogTrigger>
-              <DialogContent className='max-w-5xl p-0'>
-                <SubmissionReviewDialog submission={submission} />
-              </DialogContent>
-            </Dialog>
+            <TableRow
+              key={submission.id}
+              className='cursor-pointer hover:bg-gray-50'
+              onClick={() => setOpenSubmission(submission)} // <<< Mở dialog bằng state
+            >
+              <TableCell>
+                <div className='flex items-center gap-3'>
+                  <Avatar>
+                    <AvatarImage src={submission.imageUrl} alt={submission.studentName} />
+                    <AvatarFallback>
+                      {submission.studentName
+                        .split(' ')
+                        .map((n) => n[0])
+                        .join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className='font-medium'>{submission.studentName}</span>
+                </div>
+              </TableCell>
+              <TableCell>{submission.submittedDate ? submission.submittedDate : '—'}</TableCell>
+              <TableCell>
+                <Badge variant={statusVariantMap[submission.status] || 'default'}>{submission.status}</Badge>
+              </TableCell>
+              <TableCell className='text-right'>{submission.grade ? submission.grade : 'N/A'}</TableCell>
+            </TableRow>
           ))}
         </TableBody>
       </Table>
+
+      <Dialog
+        open={!!openSubmission} 
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            setOpenSubmission(null)
+          }
+        }}
+      >
+        <DialogTitle></DialogTitle>
+        <DialogContent className='p-0'>
+          {openSubmission && (
+            <SubmissionReviewDialog
+              submission={openSubmission}
+              studentAssignmentId={openSubmission.studentAssignmentId}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
