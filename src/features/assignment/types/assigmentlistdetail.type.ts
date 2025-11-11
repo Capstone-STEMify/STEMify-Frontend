@@ -76,3 +76,14 @@ export type GradeSubmissionPayload = {
   feedback: string
   questionGrades: QuestionGradePayload[]
 }
+
+export type QuestionAttemptPayload = {
+  assignmentQuestionId: number
+  answerText?: string
+  answerFile?: string
+}
+
+export type CreateAttemptPayload = {
+  studentAssignmentId: number
+  questionAttempts: QuestionAttemptPayload[]
+}

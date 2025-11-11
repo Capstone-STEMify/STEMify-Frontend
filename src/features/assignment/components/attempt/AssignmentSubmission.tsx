@@ -1,116 +1,197 @@
-import React, { useState } from 'react'
+'use client'
+import { Sparkles, FileText, UploadCloud, X, Loader2 } from 'lucide-react'
+import { useGetAssignmentByIdQuery } from '@/features/assignment/api/assignmentApi'
+import { useCreateAssignmentAttemptMutation } from '@/features/assignment/api/studentAssignmentApi'
+import { Assignment, AssignmentQuestion, AssignmentQuestionType } from '@/features/assignment/types/assignment.type'
+import { toast } from 'sonner'
+import { CreateAttemptPayload, QuestionAttemptPayload } from '@/features/assignment/types/assigmentlistdetail.type'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardContent } from '@/components/shadcn/card'
+import { Label } from '@/components/shadcn/label'
 import { Input } from '@/components/shadcn/input'
 import { Textarea } from '@/components/shadcn/textarea'
-import { Label } from '@/components/shadcn/label'
-import {
-  Sparkles,
-  Bold,
-  Italic,
-  Strikethrough,
-  Link,
-  List,
-  ListOrdered,
-  Image,
-  Code,
-  Superscript,
-  AlignLeft,
-  AlignRight,
-  Link2Off
-} from 'lucide-react'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
-export type Assignment = {
-  id: number
-  contentId: number
-  totalScore: number
-  passingScore: number
-  allowResubmission: string
-  dueDate: string
-}
+const FileInput = ({
+  file,
+  onFileChange
+}: {
+  file: File | null
+  onFileChange: (file: File | null) => void
+}) => {
+  const [isDragging, setIsDragging] = useState(false)
 
-export type AssignmentQuestion = {
-  id: number
-  assignmentId: number
-  type: AssignmentQuestionType
-  prompt: string
-  orderIndex: number
-  maxScore: number
-}
-
-export enum AssignmentQuestionType {
-  TEXT = 'Text',
-  FILE = 'File'
-}
-
-interface AssignmentSubmissionFormProps {
-  assignment: Assignment
-  questions: AssignmentQuestion[]
-  title?: string
-  onSubmit?: (data: SubmissionFormData) => void
-}
-
-export type SubmissionFormData = {
-  projectTitle: string
-  answers: {
-    questionId: number
-    answerText: string
-    answerFile?: File
-  }[]
-}
-
-export default function AssignmentSubmissionForm({
-  assignment,
-  questions,
-  title = 'Graded Assignment: Project Scenario 2',
-  onSubmit
-}: AssignmentSubmissionFormProps) {
-  const [activeTab, setActiveTab] = useState<'instructions' | 'submission' | 'discussions'>('submission')
-  const [projectTitle, setProjectTitle] = useState('')
-  const [answers, setAnswers] = useState<Record<number, string>>({})
-
-  const formatDeadline = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-      timeZoneName: 'short'
-    })
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragging(true)
   }
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const droppedFile = e.dataTransfer.files[0]
+    if (droppedFile && (droppedFile.type === 'application/pdf' || droppedFile.type === 'application/msword' || droppedFile.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+      onFileChange(droppedFile)
+    } else {
+      toast.error('Only .pdf, .doc, or .docx files are allowed.')
+    }
+  }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0]
+    if (selectedFile) {
+      onFileChange(selectedFile)
+    }
+  }
+
+  if (file) {
+    return (
+      <div className='flex h-32 w-full items-center justify-between rounded-lg border border-gray-300 bg-gray-50 p-4'>
+        <div className='flex items-center gap-3'>
+          <FileText className='h-8 w-8 flex-shrink-0 text-gray-500' />
+          <div>
+            <p className='font-medium text-gray-700'>{file.name}</p>
+            <p className='text-sm text-gray-500'>{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+          </div>
+        </div>
+        <Button variant='ghost' size='icon' onClick={() => onFileChange(null)} className='text-red-500 hover:text-red-600'>
+          <X className='h-5 w-5' />
+        </Button>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className={`relative flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed ${isDragging ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`}
+    >
+      <UploadCloud className={`h-8 w-8 ${isDragging ? 'text-blue-600' : 'text-gray-400'}`} />
+      <p className='mt-2 text-sm text-gray-600'>
+        <span className='font-semibold text-blue-600'>Click to upload</span> or drag and drop
+      </p>
+      <p className='text-xs text-gray-500'>PDF, DOC, or DOCX</p>
+      <input type='file' className='absolute h-full w-full opacity-0' onChange={handleFileChange} accept='.pdf,.doc,.docx' />
+    </div>
+  )
+}
+
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = (error) => reject(error)
+  })
+}
+
+export default function AssignmentSubmissionForm() {
+  const router = useRouter()
+  const params = useParams()
+  const user = useAppSelector((state) => state.auth?.user)
+
+  const assignmentId = params.assignmentId as string
+  const studentAssignmentId = user?.userId
+
+  const { data: assignmentData, isLoading: isLoadingAssignment } = useGetAssignmentByIdQuery(Number(assignmentId), {
+    skip: !assignmentId
+  })
+
+  const [activeTab, setActiveTab] = useState<'instructions' | 'submission' | 'discussions'>('submission')
+
+  const [createAttempt, { isLoading: isSubmitting }] = useCreateAssignmentAttemptMutation()
+
+  const [projectTitle, setProjectTitle] = useState('')
+  const [answers, setAnswers] = useState<Record<number, { text?: string; file?: File | null }>>({})
 
   const handleAnswerChange = (questionId: number, value: string) => {
     setAnswers((prev) => ({
       ...prev,
-      [questionId]: value
+      [questionId]: { ...prev[questionId], text: value }
+    }))
+  }
+  const handleFileChange = (questionId: number, file: File | null) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [questionId]: { ...prev[questionId], file: file }
     }))
   }
 
-  const handleSubmit = () => {
-    const formData: SubmissionFormData = {
-      projectTitle,
-      answers: questions.map((q) => ({
-        questionId: q.id,
-        answerText: answers[q.id] || ''
-      }))
+  const handleSubmit = async () => {
+    if (!assignmentData?.data || !studentAssignmentId) {
+      toast.error('Cannot submit assignment. Invalid data.')
+      return
     }
-    onSubmit?.(formData)
+
+    const { questions } = assignmentData.data
+    const questionAttempts: QuestionAttemptPayload[] = []
+
+    // Xử lý convert sang Base64
+    for (const question of questions) {
+      const answer = answers[question.id]
+      const attempt: QuestionAttemptPayload = {
+        assignmentQuestionId: question.id
+      }
+
+      if (question.type === AssignmentQuestionType.TEXT) {
+        attempt.answerText = answer?.text || ''
+      } else if (question.type === AssignmentQuestionType.FILE) {
+        if (answer?.file) {
+          try {
+            const base64File = await fileToBase64(answer.file)
+            attempt.answerFile = base64File
+          } catch (error) {
+            toast.error(`Failed to upload file for Question ${question.orderIndex}.`)
+            return
+          }
+        }
+      }
+      questionAttempts.push(attempt)
+    }
+
+    const payload: CreateAttemptPayload = {
+      studentAssignmentId: Number(studentAssignmentId),
+      questionAttempts: questionAttempts
+    }
+
+    try {
+      await createAttempt({ body: payload }).unwrap()
+      toast.success('Assignment submitted successfully!')
+      router.back()
+    } catch (error) {
+      toast.error('Failed to submit assignment.')
+      console.error(error)
+    }
   }
+
+  if (isLoadingAssignment) return <LoadingComponent />
+
+  console.log(assignmentData?.data, studentAssignmentId)
+
+  if (!assignmentData?.data || !studentAssignmentId) {
+    return <div className='p-6 text-center text-red-500'>Error: Assignment data or Student ID is missing.</div>
+  }
+
+  const { data: assignment } = assignmentData
+  const questions = [...assignment.questions].sort((a, b) => a.orderIndex - b.orderIndex)
 
   return (
     <div className='mx-auto max-w-5xl space-y-6 p-6'>
-      {/* Header */}
       <div>
-        <h1 className='mb-4 text-3xl font-normal'>{title}</h1>
+        <h1 className='mb-4 text-3xl font-normal'>{assignment.title}</h1>
         <div className='text-sm text-gray-600'>
-          <span className='font-semibold'>Deadline</span> {formatDeadline(assignment.dueDate)}
+          <span className='font-semibold'>Duration</span> {assignment.durationDays} days
         </div>
       </div>
 
-      {/* AI Grading Notice */}
-      <Card className='border-blue-200 bg-blue-50'>
+<Card className='border-blue-200 bg-blue-50'>
         <CardContent className='p-4'>
           <div className='flex items-start gap-3'>
             <Sparkles className='mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600' />
@@ -170,9 +251,8 @@ export default function AssignmentSubmissionForm({
       </div>
 
       {/* Submission Form */}
-      {activeTab === 'submission' && (
+      {true && ( 
         <div className='space-y-6'>
-          {/* Project Title */}
           <div className='space-y-2'>
             <Label htmlFor='project-title' className='text-base font-normal'>
               Project Title <span className='text-red-500'>*</span>
@@ -186,153 +266,47 @@ export default function AssignmentSubmissionForm({
             />
           </div>
 
-          {/* Questions */}
-          {questions.map((question, index) => (
-            <div key={question.id} className='space-y-4'>
+          {/* Questions (Refactor) */}
+          {questions.map((question) => (
+            <div key={question.id} className='space-y-4 rounded-lg border p-4 shadow-sm'>
               <div className='space-y-2'>
-                <h3 className='text-base font-normal text-gray-900'>{question.prompt}</h3>
-
-                {/* Instructions/Steps if this is a multi-step question */}
-                {question.orderIndex === 0 && (
-                  <ul className='ml-6 space-y-3 text-sm text-gray-700'>
-                    <li className='list-disc'>
-                      Step 1: Start with analyzing the scenario and <strong>identifying characteristics</strong> of this
-                      situation and <strong>specify logic</strong> behind the selection of characteristics. Example: You
-                      may identify "User Needs Unknown" as a characteristic based on statement x, y and z in the
-                      scenario.
-                    </li>
-                    <li className='list-disc'>
-                      Step 2: Map the characteristics to <strong>selection of model</strong> and{' '}
-                      <strong>provide your logic</strong> to make that conclusion. For e.g. you may say that since
-                      scenario has x and y characteristic, model A and B would be potential candidate. Additionally,
-                      since scenario has characteristic z, model A would be best option.
-                    </li>
-                  </ul>
-                )}
+                <h3 className='text-base font-normal text-gray-900'>
+                  Question {question.orderIndex} ({question.points} pts)
+                </h3>
+                <p className='text-sm text-gray-700'>{question.content}</p>
               </div>
 
-              {/* Text Editor Toolbar */}
-              <div className='rounded-lg border border-gray-300'>
-                <div className='flex flex-wrap items-center gap-1 border-b border-gray-300 bg-gray-50 p-2'>
-                  <button className='rounded p-2 hover:bg-gray-200' title='Bold'>
-                    <Bold className='h-4 w-4' />
-                  </button>
-                  <button className='rounded p-2 hover:bg-gray-200' title='Italic'>
-                    <Italic className='h-4 w-4' />
-                  </button>
-                  <button className='rounded p-2 hover:bg-gray-200' title='Strikethrough'>
-                    <Strikethrough className='h-4 w-4' />
-                  </button>
-
-                  <div className='mx-1 h-6 w-px bg-gray-300' />
-
-                  <button className='rounded p-2 hover:bg-gray-200' title='Insert link'>
-                    <Link className='h-4 w-4' />
-                  </button>
-                  <button className='rounded p-2 hover:bg-gray-200' title='Remove link'>
-                    <Link2Off className='h-4 w-4' />
-                  </button>
-
-                  <div className='mx-1 h-6 w-px bg-gray-300' />
-
-                  <button className='rounded p-2 hover:bg-gray-200' title='Bullet list'>
-                    <List className='h-4 w-4' />
-                  </button>
-                  <button className='rounded p-2 hover:bg-gray-200' title='Numbered list'>
-                    <ListOrdered className='h-4 w-4' />
-                  </button>
-
-                  <div className='mx-1 h-6 w-px bg-gray-300' />
-
-                  <button className='rounded p-2 hover:bg-gray-200' title='Insert image'>
-                    <Image className='h-4 w-4' />
-                  </button>
-
-                  <div className='mx-1 h-6 w-px bg-gray-300' />
-
-                  <button className='rounded p-2 hover:bg-gray-200' title='Code'>
-                    <Code className='h-4 w-4' />
-                  </button>
-                  <button className='rounded p-2 hover:bg-gray-200' title='Superscript'>
-                    <Superscript className='h-4 w-4' />
-                  </button>
-
-                  <div className='mx-1 h-6 w-px bg-gray-300' />
-
-                  <button className='rounded p-2 hover:bg-gray-200' title='Align left'>
-                    <AlignLeft className='h-4 w-4' />
-                  </button>
-                  <button className='rounded p-2 hover:bg-gray-200' title='Align right'>
-                    <AlignRight className='h-4 w-4' />
-                  </button>
-                </div>
-
-                {/* Text Area */}
+              {question.type === AssignmentQuestionType.TEXT ? (
                 <Textarea
-                  value={answers[question.id] || ''}
+                  value={answers[question.id]?.text || ''}
                   onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                  placeholder='Based on incremental and iterative development, adaptability to changing requirements, Agile Methodology is the'
-                  className='min-h-[200px] rounded-none rounded-b-lg border-0 focus-visible:ring-0 focus-visible:ring-offset-0'
+                  placeholder='Type your answer here...'
+                  className='min-h-[200px]'
+                  disabled={isSubmitting}
                 />
-              </div>
+              ) : (
+                <FileInput
+                  file={answers[question.id]?.file || null}
+                  onFileChange={(file) => handleFileChange(question.id, file)}
+                />
+              )}
             </div>
           ))}
 
           {/* Submit Buttons */}
           <div className='flex gap-3 pt-4'>
-            <Button variant='outline' className='border-gray-300 text-gray-700 hover:bg-gray-50'>
+            <Button variant='outline' className='border-gray-300 text-gray-700 hover:bg-gray-50' disabled={isSubmitting}>
               Save as draft
             </Button>
-            <Button onClick={handleSubmit} className='bg-blue-600 text-white hover:bg-blue-700'>
+            <Button onClick={handleSubmit} className='bg-blue-600 text-white hover:bg-blue-700' disabled={isSubmitting}>
+              {isSubmitting ? (
+                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              ) : null}
               Submit assignment
             </Button>
           </div>
         </div>
       )}
-
-      {/* Instructions Tab */}
-      {activeTab === 'instructions' && (
-        <div className='prose max-w-none'>
-          <p>View assignment instructions here...</p>
-        </div>
-      )}
-
-      {/* Discussions Tab */}
-      {activeTab === 'discussions' && (
-        <div className='prose max-w-none'>
-          <p>View and participate in discussions here...</p>
-        </div>
-      )}
     </div>
   )
-}
-
-// Example usage with mock data
-export function AssignmentSubmissionFormDemo() {
-  const mockAssignment: Assignment = {
-    id: 1,
-    contentId: 1,
-    totalScore: 100,
-    passingScore: 80,
-    allowResubmission: 'yes',
-    dueDate: '2024-11-24T11:59:00+07:00'
-  }
-
-  const mockQuestions: AssignmentQuestion[] = [
-    {
-      id: 1,
-      assignmentId: 1,
-      type: AssignmentQuestionType.TEXT,
-      prompt: 'What software development methodology would you suggest for this situation and why?',
-      orderIndex: 0,
-      maxScore: 100
-    }
-  ]
-
-  const handleSubmit = (data: SubmissionFormData) => {
-    console.log('Submission data:', data)
-    // Handle submission logic here
-  }
-
-  return <AssignmentSubmissionForm assignment={mockAssignment} questions={mockQuestions} onSubmit={handleSubmit} />
 }
