@@ -1,6 +1,6 @@
 'use client'
 
-import { useGetClassroomByIdQuery } from '@/features/classroom/api/classroomApi'
+import { useDeleteClassroomStudentsMutation, useGetClassroomByIdQuery } from '@/features/classroom/api/classroomApi'
 import { useParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
@@ -20,7 +20,8 @@ import {
   GraduationCap,
   Mail,
   Edit,
-  Edit2
+  Edit2,
+  Trash2
 } from 'lucide-react'
 import { format } from 'date-fns'
 import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
@@ -28,12 +29,24 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useModal } from '@/providers/ModalProvider'
+import { useState } from 'react'
 
 export default function OrganizationClassroomDetail() {
   const { openModal } = useModal()
   const { classroomId } = useParams()
   const { data, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
+  const [removeClassroomStudents] = useDeleteClassroomStudentsMutation()
   const classroom = data?.data
+
+  const [selectedStudents, setSelectedStudents] = useState<string[]>([])
+
+  const toggleSelect = (studentId: string) => {
+    setSelectedStudents((prev) =>
+      prev.includes(studentId) ? prev.filter((id) => id !== studentId) : [...prev, studentId]
+    )
+  }
+
+  const isSelected = (studentId: string) => selectedStudents.includes(studentId)
 
   const copyClassCode = () => {
     if (classroom?.classCode) {
@@ -191,31 +204,65 @@ export default function OrganizationClassroomDetail() {
                     <Users className='h-5 w-5 text-blue-600' />
                     Students ({classroom.numberOfStudents})
                   </CardTitle>
-                  <Button
-                    size='sm'
-                    onClick={() => {
-                      openModal('addPeople')
-                    }}
-                  >
-                    <UserPlus className='mr-2 h-4 w-4' />
-                    Add Student
-                  </Button>
+
+                  <div className='flex items-center gap-2'>
+                    {selectedStudents.length > 0 && (
+                      <span className='text-sm text-slate-500'>{selectedStudents.length} selected</span>
+                    )}
+
+                    <Button
+                      size='sm'
+                      variant={'destructive'}
+                      disabled={selectedStudents.length === 0}
+                      onClick={() =>
+                        openModal('confirm', {
+                          message: `Are you sure you want to remove ${selectedStudents.length} student(s)?`,
+                          onConfirm: async () => {
+                            // gọi API xóa ở đây, truyền selectedStudents
+                            console.log('Deleting', selectedStudents)
+                            await removeClassroomStudents({
+                              classroomId: classroom.id,
+                              studentIds: selectedStudents
+                            })
+                          }
+                        })
+                      }
+                    >
+                      <Trash2 className='mr-2 h-4 w-4' />
+                      Remove
+                    </Button>
+
+                    <Button size='sm' onClick={() => openModal('addPeople')}>
+                      <UserPlus className='mr-2 h-4 w-4' />
+                      Add Student
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
+
               <CardContent>
                 {classroom.students && classroom.students.length > 0 ? (
                   <div className='space-y-3'>
                     {classroom.students.map((student, index) => (
                       <div
-                        key={index}
-                        className='flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-slate-50'
+                        key={student.id}
+                        onClick={() => toggleSelect(student.id)}
+                        className={`flex cursor-pointer items-center gap-3 rounded-lg p-3 transition-colors ${isSelected(student.id) ? 'border border-blue-300 bg-blue-50' : 'hover:bg-slate-50'} `}
                       >
+                        <input
+                          type='checkbox'
+                          checked={isSelected(student.id)}
+                          onChange={() => toggleSelect(student.id)}
+                          className='h-4 w-4 accent-blue-600'
+                        />
+
                         <Avatar className='h-10 w-10 border-2 border-white shadow-sm'>
                           <AvatarImage src={student.imageUrl || student.ImageUrl} />
                           <AvatarFallback className='bg-gradient-to-br from-purple-100 to-blue-500 text-white'>
                             {student.name?.charAt(0).toUpperCase() || student.Name?.charAt(0).toUpperCase() || 'S'}
                           </AvatarFallback>
                         </Avatar>
+
                         <div className='flex-1'>
                           <p className='font-medium text-slate-900'>
                             {student.name || student.Name || 'Unknown Student'}
@@ -224,6 +271,7 @@ export default function OrganizationClassroomDetail() {
                             <p className='text-sm text-slate-500'>{student.email || student.Email}</p>
                           )}
                         </div>
+
                         <Button variant='ghost' size='icon'>
                           <MoreVertical className='h-4 w-4 text-slate-400' />
                         </Button>

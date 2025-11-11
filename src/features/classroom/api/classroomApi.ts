@@ -15,11 +15,11 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
       }),
       invalidatesTags: ['Classroom']
     }),
-    deleteClassroomStudents: builder.mutation<void, { classroomId: number; studentEmails: string[] }>({
-      query: ({ classroomId, studentEmails }) => ({
+    deleteClassroomStudents: builder.mutation<void, { classroomId: number; studentIds: string[] }>({
+      query: ({ classroomId, studentIds }) => ({
         url: `/classrooms/${classroomId}/classroom-students/bulk`,
         method: 'DELETE',
-        body: { studentEmails }
+        body: { studentIds }
       }),
       invalidatesTags: ['Classroom']
     }),
