@@ -2,7 +2,5 @@ import AssignmentSubmissionForm from '@/features/assignment/components/attempt/A
 import React from 'react'
 
 export default function StudentAsmPage() {
-  return (
-    <AssignmentSubmissionForm/>
-  )
+  return <AssignmentSubmissionForm />
 }

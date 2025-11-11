@@ -60,7 +60,7 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
   if (!latestAttempt) return null
 
   return (
-    <div className='max-h-[90vh] overflow-y-auto p-6 w-5xl'>
+    <div className='max-h-[90vh] w-5xl overflow-y-auto p-6'>
       {/* Header */}
       <div className='flex flex-col-reverse items-start justify-between gap-4 sm:flex-row sm:items-center'>
         <h1 className='text-3xl font-semibold'>{assignmentTitle}</h1>
@@ -98,7 +98,7 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
                   {question.answerText || 'No text answer provided.'}
                 </p>
                 {question.answerFileUrl && (
-                  <Button variant='link' className='p-0 text-sm mt-4' asChild>
+                  <Button variant='link' className='mt-4 p-0 text-sm' asChild>
                     <a href={question.answerFileUrl} target='_blank' rel='noopener noreferrer'>
                       <FileText className='mr-2 h-4 w-4' />
                       View Submitted File
@@ -131,7 +131,6 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
     </div>
   )
 }
-
 
 interface AssignmentAttemptProps {
   studentAssignmentId: number | string
@@ -176,8 +175,10 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
   const maxAttempts = 3
   const attemptsMade = studentAssignmentData.attempts.length
   const attemptsRemaining = maxAttempts - attemptsMade
-  
-  const isGraded = latestAttempt && (latestAttempt.status === 'Graded' || latestAttempt.status === 'Failed' || latestAttempt.status === 'Passed')
+
+  const isGraded =
+    latestAttempt &&
+    (latestAttempt.status === 'Graded' || latestAttempt.status === 'Failed' || latestAttempt.status === 'Passed')
 
   const isPassed = studentAssignmentData.status === 'Passed'
 
@@ -241,7 +242,9 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
               <p className='text-sm text-gray-700'>
                 To pass you need at least {passingScore}%. We keep your highest score.
               </p>
-              <p className={`text-6xl font-bold ${isPassed ? 'text-green-700' : 'text-red-700'}`}>{studentAssignmentData.finalScore}%</p>
+              <p className={`text-6xl font-bold ${isPassed ? 'text-green-700' : 'text-red-700'}`}>
+                {studentAssignmentData.finalScore}%
+              </p>
             </div>
             <div className='flex w-full flex-shrink-0 gap-3 md:w-auto'>
               <Button variant='outline' className='w-1/2 bg-white md:w-auto' onClick={() => setSubmissionOpen(true)}>
@@ -267,11 +270,8 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
       )}
 
       <Dialog open={isSubmissionOpen} onOpenChange={setSubmissionOpen}>
-        <DialogContent className='max-w-full sm:-w-[80rem] p-0'>
-          <SubmissionDetailViewer
-            assignmentTitle={assignmentTitle}
-            studentAssignmentData={studentAssignmentData}
-          />
+        <DialogContent className='sm:-w-[80rem] max-w-full p-0'>
+          <SubmissionDetailViewer assignmentTitle={assignmentTitle} studentAssignmentData={studentAssignmentData} />
         </DialogContent>
       </Dialog>
 
@@ -281,9 +281,7 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
             <DialogTitle>Teacher's Feedback</DialogTitle>
           </DialogHeader>
           <div className='py-4'>
-            <p className='text-sm text-gray-700 italic'>
-              "{latestAttempt?.feedback || 'No feedback provided.'}"
-            </p>
+            <p className='text-sm text-gray-700 italic'>"{latestAttempt?.feedback || 'No feedback provided.'}"</p>
           </div>
           <DialogFooter>
             <DialogClose asChild>

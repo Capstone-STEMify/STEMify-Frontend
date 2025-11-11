@@ -15,13 +15,7 @@ import { Input } from '@/components/shadcn/input'
 import { Textarea } from '@/components/shadcn/textarea'
 import { useAppSelector } from '@/hooks/redux-hooks'
 
-const FileInput = ({
-  file,
-  onFileChange
-}: {
-  file: File | null
-  onFileChange: (file: File | null) => void
-}) => {
+const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (file: File | null) => void }) => {
   const [isDragging, setIsDragging] = useState(false)
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -36,7 +30,12 @@ const FileInput = ({
     e.preventDefault()
     setIsDragging(false)
     const droppedFile = e.dataTransfer.files[0]
-    if (droppedFile && (droppedFile.type === 'application/pdf' || droppedFile.type === 'application/msword' || droppedFile.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+    if (
+      droppedFile &&
+      (droppedFile.type === 'application/pdf' ||
+        droppedFile.type === 'application/msword' ||
+        droppedFile.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    ) {
       onFileChange(droppedFile)
     } else {
       toast.error('Only .pdf, .doc, or .docx files are allowed.')
@@ -59,7 +58,12 @@ const FileInput = ({
             <p className='text-sm text-gray-500'>{(file.size / 1024 / 1024).toFixed(2)} MB</p>
           </div>
         </div>
-        <Button variant='ghost' size='icon' onClick={() => onFileChange(null)} className='text-red-500 hover:text-red-600'>
+        <Button
+          variant='ghost'
+          size='icon'
+          onClick={() => onFileChange(null)}
+          className='text-red-500 hover:text-red-600'
+        >
           <X className='h-5 w-5' />
         </Button>
       </div>
@@ -78,7 +82,12 @@ const FileInput = ({
         <span className='font-semibold text-blue-600'>Click to upload</span> or drag and drop
       </p>
       <p className='text-xs text-gray-500'>PDF, DOC, or DOCX</p>
-      <input type='file' className='absolute h-full w-full opacity-0' onChange={handleFileChange} accept='.pdf,.doc,.docx' />
+      <input
+        type='file'
+        className='absolute h-full w-full opacity-0'
+        onChange={handleFileChange}
+        accept='.pdf,.doc,.docx'
+      />
     </div>
   )
 }
@@ -191,7 +200,7 @@ export default function AssignmentSubmissionForm() {
         </div>
       </div>
 
-<Card className='border-blue-200 bg-blue-50'>
+      <Card className='border-blue-200 bg-blue-50'>
         <CardContent className='p-4'>
           <div className='flex items-start gap-3'>
             <Sparkles className='mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600' />
@@ -251,7 +260,7 @@ export default function AssignmentSubmissionForm() {
       </div>
 
       {/* Submission Form */}
-      {true && ( 
+      {true && (
         <div className='space-y-6'>
           <div className='space-y-2'>
             <Label htmlFor='project-title' className='text-base font-normal'>
@@ -294,13 +303,15 @@ export default function AssignmentSubmissionForm() {
 
           {/* Submit Buttons */}
           <div className='flex gap-3 pt-4'>
-            <Button variant='outline' className='border-gray-300 text-gray-700 hover:bg-gray-50' disabled={isSubmitting}>
+            <Button
+              variant='outline'
+              className='border-gray-300 text-gray-700 hover:bg-gray-50'
+              disabled={isSubmitting}
+            >
               Save as draft
             </Button>
             <Button onClick={handleSubmit} className='bg-blue-600 text-white hover:bg-blue-700' disabled={isSubmitting}>
-              {isSubmitting ? (
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-              ) : null}
+              {isSubmitting ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
               Submit assignment
             </Button>
           </div>

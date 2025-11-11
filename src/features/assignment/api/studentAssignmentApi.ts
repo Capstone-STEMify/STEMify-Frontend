@@ -65,9 +65,7 @@ export const studentAssignmentApi = createApi({
         method: 'POST',
         body: body
       }),
-      invalidatesTags: (result, error, { body }) => [
-        { type: 'StudentAssignmentDetail', id: body.studentAssignmentId }
-      ]
+      invalidatesTags: (result, error, { body }) => [{ type: 'StudentAssignmentDetail', id: body.studentAssignmentId }]
     })
   })
 })

@@ -90,7 +90,7 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
       return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
     }
     return <QuizViewer quiz={lastItem} studentQuizId={currentSectionProgress.studentQuizId} />
-  } else if (lastItem.contentType === ContentType.ASSIGNMENT){
+  } else if (lastItem.contentType === ContentType.ASSIGNMENT) {
     if (!currentSectionProgress || !currentSectionProgress.studentAssignmentId) {
       return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
     }
