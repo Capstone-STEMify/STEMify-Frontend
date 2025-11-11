@@ -26,7 +26,7 @@ import PlanOverview from './PlanOverview'
 import PricingSummary from './PricingSummary'
 
 export default function Step1SubscriptionConfiguration() {
-  const {organizationId} = useParams()
+  const { organizationId } = useParams()
   const dispatch = useAppDispatch()
   const { currentStep, organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
 
@@ -274,7 +274,7 @@ export default function Step1SubscriptionConfiguration() {
         </Button>
 
         <div className='text-sm font-medium text-slate-600'>
-          Step <span className='text-slate-900'>{currentStep}</span> of <span className='text-slate-900'>4</span>
+          Step <span className='text-slate-900'>{currentStep}</span> of <span className='text-slate-900'>2</span>
         </div>
 
         <Button type='submit' className='px-6' disabled={isCreating}>

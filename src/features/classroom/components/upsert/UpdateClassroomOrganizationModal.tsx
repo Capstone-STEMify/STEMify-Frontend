@@ -31,13 +31,13 @@ export default function UpdateClassroomOrganizationModal({
   const renderTitle = () => {
     switch (mode) {
       case 'basic':
-        return t('updateClassroom.basicInfoTitle')
+        return <h1>Update Classroom Organization Basic Information</h1>
       case 'curriculum':
-        return t('updateClassroom.curriculumTitle')
+        return <h1>Update Classroom Curriculum</h1>
       case 'teacher':
-        return t('updateClassroom.teacherTitle')
+        return <h1>Update Classroom Teacher</h1>
       case 'students':
-        return t('updateClassroom.studentsTitle')
+        return <h1>Remove Classroom Students</h1>
       default:
         return ''
     }
@@ -47,7 +47,7 @@ export default function UpdateClassroomOrganizationModal({
     switch (mode) {
       case 'basic':
         return (
-          <ScrollArea className='h-[500px] w-4xl'>
+          <ScrollArea className='w-4xl'>
             <UpdateClassroomOrganizationBasicInfo classroomId={classroomId} onSuccess={handleSuccess} />
           </ScrollArea>
         )
