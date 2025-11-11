@@ -147,6 +147,6 @@ export const rootReducer = combineReducers({
   [organizationApi.reducerPath]: organizationApi.reducer,
   [classroomApi.reducerPath]: classroomApi.reducer,
   [orgDashboardApi.reducerPath]: orgDashboardApi.reducer,
-  [studentAssignmentApi.reducerPath]: studentAssignmentApi.reducer
+  [studentAssignmentApi.reducerPath]: studentAssignmentApi.reducer,
   [assignmentApi.reducerPath]: assignmentApi.reducer
 })

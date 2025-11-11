@@ -35,6 +35,7 @@ export type StudentAssignmentDetail = {
   id: number
   assignmentId: number
   studentId: string
+  finalScore?: number
   status: string
   assignedAt: string
   dueDate: string
@@ -56,6 +57,7 @@ export type RubricCriterion = {
   rubricCriterionId: number
   criterionName: string
   maxPoints: number
+  currentPoints?: number
 }
 
 export type StudentAssignmentQueryParam = {
@@ -75,4 +77,15 @@ export type QuestionGradePayload = {
 export type GradeSubmissionPayload = {
   feedback: string
   questionGrades: QuestionGradePayload[]
+}
+
+export type QuestionAttemptPayload = {
+  assignmentQuestionId: number
+  answerText?: string
+  answerFile?: string
+}
+
+export type CreateAttemptPayload = {
+  studentAssignmentId: number
+  questionAttempts: QuestionAttemptPayload[]
 }

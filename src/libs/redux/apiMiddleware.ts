@@ -68,7 +68,7 @@ export const apiMiddlewares: Middleware[] = [
   studentQuizApi.middleware,
   organizationApi.middleware,
   classroomApi.middleware,
-  studentAssignmentApi.middleware
+  studentAssignmentApi.middleware,
   assignmentApi.middleware,
   orgDashboardApi.middleware
   // Add your custom middlewares here

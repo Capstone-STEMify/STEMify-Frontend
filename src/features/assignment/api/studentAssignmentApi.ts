@@ -5,7 +5,8 @@ import {
   AssignmentStatistics,
   StudentAssignmentDetail,
   StudentAssignmentQueryParam,
-  GradeSubmissionPayload
+  GradeSubmissionPayload,
+  CreateAttemptPayload
 } from '../types/assigmentlistdetail.type'
 
 export const studentAssignmentApi = createApi({
@@ -52,6 +53,19 @@ export const studentAssignmentApi = createApi({
         { type: 'StudentAssignment', id: 'LIST' },
         { type: 'StudentAssignmentDetail', id: studentAssignmentId }
       ]
+    }),
+    createAssignmentAttempt: builder.mutation<
+      ApiSuccessResponse<any>,
+      {
+        body: CreateAttemptPayload
+      }
+    >({
+      query: ({ body }) => ({
+        url: `/assignment-attempts`,
+        method: 'POST',
+        body: body
+      }),
+      invalidatesTags: (result, error, { body }) => [{ type: 'StudentAssignmentDetail', id: body.studentAssignmentId }]
     })
   })
 })
@@ -61,5 +75,6 @@ export const {
   useLazySearchQuery: useLazySearchStudentAssignmentQuery,
   useGetByIdQuery: useGetStudentAssignmentByIdQuery,
   useLazyGetByIdQuery: useLazyGetStudentAssignmentByIdQuery,
-  useGradeAssignmentAttemptMutation
+  useGradeAssignmentAttemptMutation,
+  useCreateAssignmentAttemptMutation
 } = studentAssignmentApi
