@@ -8,7 +8,6 @@ import Link from 'next/link'
 import { useGetStudentAssignmentByIdQuery } from '@/features/assignment/api/studentAssignmentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useGetAssignmentByIdQuery } from '../../api/assignmentApi'
-// Thêm component Dialog
 import {
   Dialog,
   DialogContent,
@@ -61,7 +60,7 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
   if (!latestAttempt) return null
 
   return (
-    <div className='max-h-[90vh] overflow-y-auto p-6'>
+    <div className='max-h-[90vh] overflow-y-auto p-6 w-5xl'>
       {/* Header */}
       <div className='flex flex-col-reverse items-start justify-between gap-4 sm:flex-row sm:items-center'>
         <h1 className='text-3xl font-semibold'>{assignmentTitle}</h1>
@@ -133,14 +132,12 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
   )
 }
 
-// --- COMPONENT CHÍNH (UI HÌNH 2) ---
 
 interface AssignmentAttemptProps {
   studentAssignmentId: number | string
 }
 
 export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAttemptProps) {
-  // State quản lý Dialog
   const [isSubmissionOpen, setSubmissionOpen] = useState(false)
   const [isFeedbackOpen, setFeedbackOpen] = useState(false)
 
@@ -160,7 +157,7 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
   )
 
   const assignmentTitle = assignmentDetail?.data?.title ?? 'Assignment'
-  const passingScore = assignmentDetail?.data?.passingScore ?? 80 // Lấy điểm đậu, mặc định là 80
+  const passingScore = assignmentDetail?.data?.passingScore ?? 80
 
   if (isLoadingStudent || (isLoadingAssignment && studentAssignmentResponse?.data?.assignmentId)) {
     return <LoadingComponent />
@@ -186,13 +183,11 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
 
   return (
     <div className='mx-auto max-w-4xl space-y-6 p-6'>
-      {/* 1. Card "Assignment details" */}
       <Card className='bg-blue-50 py-4'>
         <CardHeader>
           <CardTitle className='text-lg font-semibold'>Assignment details</CardTitle>
         </CardHeader>
         <CardContent className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-          {/* Cột trái */}
           <div className='space-y-4'>
             <div>
               <div className='mb-1 text-sm font-medium text-gray-700'>Due</div>
@@ -205,7 +200,6 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
               </div>
             )}
           </div>
-          {/* Cột phải */}
           <div className='space-y-4'>
             <div>
               <div className='mb-1 text-sm font-medium text-gray-700'>Attempts</div>
@@ -214,11 +208,10 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
               </div>
             </div>
             <div className='flex justify-end'>
-              {/* Logic Nút Attempt/Retry */}
               {attemptsMade === 0 ? (
                 <Button asChild className='bg-blue-600 text-white hover:bg-blue-700'>
                   <Link
-                    href={`/student-assignment/submit/${studentAssignmentData.assignmentId}`}
+                    href={`/student-assignment/${studentAssignmentData.assignmentId}?studentAssignmentId=${studentAssignmentData.id}`}
                   >
                     Attempt Now
                   </Link>
@@ -226,7 +219,7 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
               ) : attemptsMade > 0 && attemptsMade < maxAttempts ? (
                 <Button asChild variant='outline' className='border-blue-600 text-blue-600 hover:bg-blue-50'>
                   <Link
-                    href={`/student-assignment/submit/${studentAssignmentData.assignmentId}`}
+                    href={`/student-assignment/${studentAssignmentData.assignmentId}?studentAssignmentId=${studentAssignmentData.id}`}
                   >
                     <RotateCcw className='mr-2 h-4 w-4' />
                     Retry
@@ -262,7 +255,6 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
         </Card>
       )}
 
-      {/* 3. Card "Pending Review" - Chỉ hiển thị khi đang chờ chấm */}
       {latestAttempt && (latestAttempt.status === 'Submitted' || latestAttempt.status === 'UnderReview') && (
         <Card className='bg-yellow-50'>
           <CardContent className='p-6'>
@@ -274,12 +266,8 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
         </Card>
       )}
 
-      {/* --- DIALOGS (Ẩn) --- */}
-
-      {/* Dialog 1: View Submission (Chứa UI Hình 1) */}
       <Dialog open={isSubmissionOpen} onOpenChange={setSubmissionOpen}>
-        <DialogContent className='max-w-full sm:max-w-[80rem] p-0'>
-          {/* Render component nội bộ */}
+        <DialogContent className='max-w-full sm:-w-[80rem] p-0'>
           <SubmissionDetailViewer
             assignmentTitle={assignmentTitle}
             studentAssignmentData={studentAssignmentData}
@@ -287,7 +275,6 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
         </DialogContent>
       </Dialog>
 
-      {/* Dialog 2: See Feedback */}
       <Dialog open={isFeedbackOpen} onOpenChange={setFeedbackOpen}>
         <DialogContent>
           <DialogHeader>

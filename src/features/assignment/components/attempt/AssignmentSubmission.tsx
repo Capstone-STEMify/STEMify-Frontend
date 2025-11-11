@@ -95,10 +95,11 @@ const fileToBase64 = (file: File): Promise<string> => {
 export default function AssignmentSubmissionForm() {
   const router = useRouter()
   const params = useParams()
+  const searchParams = useSearchParams()
   const user = useAppSelector((state) => state.auth?.user)
 
   const assignmentId = params.assignmentId as string
-  const studentAssignmentId = user?.userId
+  const studentAssignmentId = searchParams.get('studentAssignmentId')
 
   const { data: assignmentData, isLoading: isLoadingAssignment } = useGetAssignmentByIdQuery(Number(assignmentId), {
     skip: !assignmentId
@@ -133,7 +134,6 @@ export default function AssignmentSubmissionForm() {
     const { questions } = assignmentData.data
     const questionAttempts: QuestionAttemptPayload[] = []
 
-    // Xử lý convert sang Base64
     for (const question of questions) {
       const answer = answers[question.id]
       const attempt: QuestionAttemptPayload = {
@@ -266,7 +266,6 @@ export default function AssignmentSubmissionForm() {
             />
           </div>
 
-          {/* Questions (Refactor) */}
           {questions.map((question) => (
             <div key={question.id} className='space-y-4 rounded-lg border p-4 shadow-sm'>
               <div className='space-y-2'>
