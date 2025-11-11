@@ -14,6 +14,7 @@ export type BaseProgress = {
   id: number
   status: ProgressStatus
   studentQuizId?: number
+  studentAssignmentId?: number
   // completedAt: string
 }
 

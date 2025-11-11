@@ -35,6 +35,7 @@ export type StudentAssignmentDetail = {
   id: number
   assignmentId: number
   studentId: string
+  finalScore?: number
   status: string
   assignedAt: string
   dueDate: string
@@ -56,6 +57,7 @@ export type RubricCriterion = {
   rubricCriterionId: number
   criterionName: string
   maxPoints: number
+  currentPoints?: number
 }
 
 export type StudentAssignmentQueryParam = {

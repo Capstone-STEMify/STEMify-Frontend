@@ -33,6 +33,7 @@ export type QuizContent = BaseContent & {
 }
 
 export type AssignmentContent = BaseContent & {
+  contentType: ContentType.ASSIGNMENT
   totalMarks: number
   passingMarks: number
   durationDays: number

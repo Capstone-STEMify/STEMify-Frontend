@@ -1,205 +1,204 @@
+'use client'
 import React from 'react'
 import { Button } from '@/components/shadcn/button'
-import { Card, CardContent } from '@/components/shadcn/card'
-import { AlertTriangle, RotateCcw } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
+import { Badge } from '@/components/shadcn/badge'
+import { ExternalLink, FileText } from 'lucide-react'
+import Link from 'next/link'
+import { useGetStudentAssignmentByIdQuery } from '@/features/assignment/api/studentAssignmentApi'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useGetAssignmentByIdQuery } from '../../api/assignmentApi'
 
-export type Assignment = {
-  id: number
-  contentId: number
-  totalScore: number
-  passingScore: number
-  allowResubmission: string
-  dueDate: string
+const formatDate = (dateString: string) => {
+  if (!dateString) return 'N/A'
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    timeZoneName: 'short'
+  })
 }
 
-export type AssignmentQuestion = {
-  id: number
-  assignmentId: number
-  type: AssignmentQuestionType
-  prompt: string
-  orderIndex: number
-  maxScore: number
+interface AssignmentAttemptProps {
+  studentAssignmentId: number | string
 }
 
-export enum AssignmentQuestionType {
-  TEXT = 'Text',
-  FILE = 'File'
+const StatusBadge = ({ status }: { status: string }) => {
+  let colorClasses = 'bg-gray-100 text-gray-800'
+  if (status === 'Passed' || status === 'Graded') {
+    colorClasses = 'bg-green-100 text-green-800'
+  } else if (status === 'Failed') {
+    colorClasses = 'bg-red-100 text-red-800'
+  } else if (status === 'Submitted' || status === 'UnderReview') {
+    colorClasses = 'bg-yellow-100 text-yellow-800'
+  }
+  return <Badge className={`capitalize ${colorClasses}`}>{status.toLowerCase()}</Badge>
 }
 
-export enum AssignmentSubmissionStatus {
-  SUBMITTED = 'submitted',
-  GRADED = 'graded'
-}
+export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAttemptProps) {
+  const {
+    data: studentAssignmentResponse,
+    isLoading: isLoadingStudent,
+    isError: isErrorStudent
+  } = useGetStudentAssignmentByIdQuery(studentAssignmentId, {
+    skip: !studentAssignmentId
+  })
 
-export type AssignmentSubmission = {
-  id: number
-  assignmentId: number
-  studentId: number
-  gradedBy: number
-  submittedAt: string
-  totalScore: number
-  feedback: string
-  attemptNumber: number
-  status: AssignmentSubmissionStatus
-  isPass: boolean
-  answers: SubmissionAnswer[]
-}
+  const {
+    data: assignmentDetail,
+  } = useGetAssignmentByIdQuery(Number(studentAssignmentResponse?.data?.assignmentId), {
+    skip: !studentAssignmentResponse?.data?.assignmentId
+  })
 
-export type SubmissionAnswer = {
-  id: number
-  submissionId: number
-  assignmentQuestionId: number
-  answerText: string
-  answerFileUrl: string
-  feedback: string
-  score: number
-}
+  const assignmentTitle = assignmentDetail?.data?.title ?? 'Assignment'
 
-interface AssignmentSubmissionPageProps {
-  assignment: Assignment
-  submission: AssignmentSubmission
-  attemptsRemaining: number
-  maxAttempts: number
-}
-
-export default function AssignmentSubmissionPage({
-  assignment,
-  submission,
-  attemptsRemaining,
-  maxAttempts
-}: AssignmentSubmissionPageProps) {
-  // Format date helper
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-      timeZoneName: 'short'
-    })
+  if (isLoadingStudent) {
+    return <LoadingComponent />
+  }
+  
+  if (isErrorStudent || !studentAssignmentResponse?.data) {
+    return <div className='p-6 text-center text-red-500'>Error loading assignment data.</div>
   }
 
-  // Calculate grade percentage
-  const gradePercentage = ((submission.totalScore / assignment.totalScore) * 100).toFixed(2)
-  const passingPercentage = ((assignment.passingScore / assignment.totalScore) * 100).toFixed(0)
+  const studentAssignmentData = studentAssignmentResponse.data
+  const latestAttempt =
+    studentAssignmentData.attempts.length > 0
+      ? [...studentAssignmentData.attempts].sort((a, b) => b.attemptNumber - a.attemptNumber)[0]
+      : null
 
-  return (
-    <div className='mx-auto max-w-4xl space-y-6 p-6'>
-      {/* Header */}
-      <div>
-        <h1 className='mb-2 text-3xl font-semibold'>Agile & Lean Software Development</h1>
-        <button className='text-sm font-medium text-blue-600 hover:underline'>Review Learning Objectives</button>
-      </div>
+  const attemptsRemaining = 3
+  const maxAttempts = 3
 
-      {/* Update Notice */}
-      <Card className='border-l-4 border-l-orange-500 bg-orange-50'>
-        <CardContent className='flex items-start gap-3 p-4'>
-          <AlertTriangle className='mt-0.5 h-5 w-5 flex-shrink-0 text-orange-600' />
-          <p className='text-sm text-orange-900'>
-            Course Staff updated this assessment. You'll see the changes when you start or edit.
-          </p>
-        </CardContent>
-      </Card>
+  if (!latestAttempt) {
+    return (
+      <div className='mx-auto max-w-4xl space-y-6 p-6'>
+        <div>
+          <h1 className='mb-2 text-3xl font-semibold'>Assignment</h1>
+          <button className='text-sm font-medium text-blue-600 hover:underline'>Review Learning Objectives</button>
+        </div>
 
-      {/* Assignment Details */}
-      <Card className='bg-blue-50'>
-        <CardContent className='p-6'>
-          <h2 className='mb-4 text-lg font-semibold'>Assignment details</h2>
-
-          <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-            {/* Left Column */}
-            <div className='space-y-4'>
-              <div>
-                <div className='mb-1 text-sm font-medium text-gray-700'>Due</div>
-                <div className='text-sm text-gray-900'>{formatDate(assignment.dueDate)}</div>
-              </div>
-
-              <div>
-                <div className='mb-1 text-sm font-medium text-gray-700'>Submitted</div>
-                <div className='text-sm text-gray-900'>{formatDate(submission.submittedAt)}</div>
-              </div>
-            </div>
-
-            {/* Right Column */}
-            <div className='space-y-4'>
-              <div>
-                <div className='mb-1 text-sm font-medium text-gray-700'>Attempts</div>
-                <div className='text-sm text-gray-900'>
-                  {attemptsRemaining} left ({maxAttempts} attempts every 8 hours)
+        <Card className='bg-blue-50'>
+          <CardContent className='p-6'>
+            <h2 className='mb-4 text-lg font-semibold'>Assignment details</h2>
+            <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+              <div className='space-y-4'>
+                <div>
+                  <div className='mb-1 text-sm font-medium text-gray-700'>Due</div>
+                  <div className='text-sm text-gray-900'>{formatDate(studentAssignmentData.dueDate)}</div>
                 </div>
               </div>
-
-              <div className='flex justify-end'>
-                <Button variant='default' className='bg-blue-600 text-white hover:bg-blue-700'>
-                  <RotateCcw className='mr-2 h-4 w-4' />
-                  Retry
-                </Button>
+              <div className='space-y-4'>
+                <div>
+                  <div className='mb-1 text-sm font-medium text-gray-700'>Attempts</div>
+                  <div className='text-sm text-gray-900'>
+                    {attemptsRemaining} left ({maxAttempts} attempts every 8 hours)
+                  </div>
+                </div>
+                <div className='flex justify-end'>
+                  <Button asChild className='bg-blue-600 text-white hover:bg-blue-700'>
+                      Attempt Now
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Grade Display */}
-      <Card className='bg-green-50'>
-        <CardContent className='p-6'>
-          <div className='flex items-start justify-between'>
-            <div>
-              <h2 className='mb-1 text-lg font-semibold'>Your grade</h2>
-              <p className='mb-4 text-sm text-gray-700'>
-                To pass you need at least {passingPercentage}%. We keep your highest score.
-              </p>
-              <div className='text-5xl font-bold text-gray-900'>{gradePercentage}%</div>
-            </div>
-
-            <div className='flex gap-3'>
-              <Button variant='outline' className='border-blue-600 text-blue-600 hover:bg-blue-50'>
-                View submission
-              </Button>
-              <Button variant='outline' className='border-blue-600 text-blue-600 hover:bg-blue-50'>
-                See feedback
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-// Example usage with mock data
-export function AssignmentAttemptDemo() {
-  const mockAssignment: Assignment = {
-    id: 1,
-    contentId: 1,
-    totalScore: 100,
-    passingScore: 80,
-    allowResubmission: 'yes',
-    dueDate: '2024-11-24T11:59:00+07:00'
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
-  const mockSubmission: AssignmentSubmission = {
-    id: 1,
-    assignmentId: 1,
-    studentId: 1,
-    gradedBy: 1,
-    submittedAt: '2025-01-19T17:32:00+07:00',
-    totalScore: 98.88,
-    feedback: 'Great work!',
-    attemptNumber: 1,
-    status: AssignmentSubmissionStatus.GRADED,
-    isPass: true,
-    answers: []
+  if (latestAttempt.status === 'Submitted' || latestAttempt.status === 'UnderReview') {
+     return (
+       <div className='mx-auto max-w-4xl space-y-6 p-6'>
+         <h1 className='mb-2 text-3xl font-semibold'>{assignmentTitle}</h1>
+         <Card className='bg-yellow-50'>
+           <CardContent className='p-6'>
+             <h2 className='mb-1 text-lg font-semibold'>Pending Review</h2>
+             <p className='text-sm text-gray-700'>
+               Your submission from {formatDate(latestAttempt.submittedAt)} is currently being reviewed.
+             </p>
+           </CardContent>
+         </Card>
+       </div>
+     )
   }
 
-  return (
-    <AssignmentSubmissionPage
-      assignment={mockAssignment}
-      submission={mockSubmission}
-      attemptsRemaining={3}
-      maxAttempts={3}
-    />
-  )
+  if (latestAttempt.status === 'Graded' || latestAttempt.status === 'Failed' || latestAttempt.status === 'Passed') {
+    return (
+      <div className='mx-auto max-w-5xl space-y-6 p-6'>
+        {/* Header */}
+        <div className='flex flex-col-reverse items-start justify-between gap-4 sm:flex-row sm:items-center'>
+          <h1 className='text-3xl font-semibold'>{assignmentTitle}</h1>
+          <div className='w-full flex-shrink-0 text-left sm:w-auto sm:text-right'>
+            <span className='text-sm text-gray-500'>Final Score</span>
+            <p className='text-4xl font-bold'>{studentAssignmentData.finalScore}</p>
+            <StatusBadge status={studentAssignmentData.status} />
+          </div>
+        </div>
+
+        {/* Overall Feedback */}
+        {latestAttempt.feedback && (
+          <Card className='py-4'>
+            <CardHeader>
+              <CardTitle className='text-lg'>Teacher's Feedback</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className='text-sm text-gray-700 italic'>"{latestAttempt.feedback}"</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Loop Questions */}
+        <div className='space-y-6'>
+          <h2 className='text-2xl font-semibold'>Submission Details</h2>
+          {latestAttempt.questionAttempts.map((question, index) => (
+            <Card key={question.id} className='overflow-hidden'>
+              <CardHeader className='border-b bg-gray-50'>
+                <CardTitle className='text-lg'>Question {index + 1}</CardTitle>
+              </CardHeader>
+              <div className='grid grid-cols-1 md:grid-cols-2'>
+                <div className='p-6 md:border-r'>
+                  <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Your Answer</h4>
+                  <p className='prose prose-sm max-w-none text-gray-700'>
+                    {question.answerText || 'No text answer provided.'}
+                  </p>
+                  {question.answerFileUrl && (
+                    <Button variant='link' className='p-0 text-sm mt-4' asChild>
+                      <a href={question.answerFileUrl} target='_blank' rel='noopener noreferrer'>
+                        <FileText className='mr-2 h-4 w-4' />
+                        View Submitted File
+                        <ExternalLink className='ml-1 h-3 w-3' />
+                      </a>
+                    </Button>
+                  )}
+                </div>
+                <div className='p-6'>
+                  <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Grading Rubric</h4>
+                  <div className='space-y-4'>
+                    {question.rubricScore.map(criterion => (
+                      <div key={criterion.rubricCriterionId} className='flex items-center justify-between'>
+                        <p className='text-sm font-medium'>{criterion.criterionName}</p>
+                        <span className='flex-shrink-0 rounded-full bg-gray-100 px-3 py-1 text-sm font-medium'>
+                          {criterion.currentPoints} / {criterion.maxPoints} pts
+                        </span>
+                      </div>
+                    ))}
+                    <div className='flex items-center justify-between border-t pt-4 font-semibold'>
+                      <span>Total for Question:</span>
+                      <span>{question.points} pts</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  
+  return <div className='p-6'>Unhandled attempt status: {latestAttempt.status}</div>
 }

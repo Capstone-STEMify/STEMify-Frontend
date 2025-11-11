@@ -66,7 +66,7 @@ export enum AssignmentSubmissionStatus {
 export type AssignmentSubmission = {
   id: number
   assignmentId: number
-  studentId: number
+  studentId: string
   gradedBy: number
   submittedAt: string
   totalScore: number
