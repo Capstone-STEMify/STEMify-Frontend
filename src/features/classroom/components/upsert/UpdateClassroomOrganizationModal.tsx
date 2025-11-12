@@ -31,13 +31,13 @@ export default function UpdateClassroomOrganizationModal({
   const renderTitle = () => {
     switch (mode) {
       case 'basic':
-        return <h1>Update Classroom Organization Basic Information</h1>
+        return <>Update Classroom Organization Basic Information</>
       case 'curriculum':
-        return <h1>Update Classroom Curriculum</h1>
+        return <>Update Classroom Curriculum</>
       case 'teacher':
-        return <h1>Update Classroom Teacher</h1>
+        return <>Update Classroom Teacher</>
       case 'students':
-        return <h1>Remove Classroom Students</h1>
+        return <>Remove Classroom Students</>
       default:
         return ''
     }
@@ -47,14 +47,23 @@ export default function UpdateClassroomOrganizationModal({
     switch (mode) {
       case 'basic':
         return (
-          <ScrollArea className='w-4xl'>
+          <div className='w-4xl'>
             <UpdateClassroomOrganizationBasicInfo classroomId={classroomId} onSuccess={handleSuccess} />
-          </ScrollArea>
+          </div>
         )
       case 'curriculum':
-        return <UpdateClassroomCurriculum classroomId={classroomId} onSuccess={handleSuccess} />
+        return (
+          <div className='w-2xl'>
+            <UpdateClassroomCurriculum classroomId={classroomId} onSuccess={handleSuccess} />
+          </div>
+        )
+
       case 'teacher':
-        return <UpdateClassroomTeacher classroomId={classroomId} onSuccess={handleSuccess} />
+        return (
+          <div className='w-2xl'>
+            <UpdateClassroomTeacher classroomId={classroomId} onSuccess={handleSuccess} />
+          </div>
+        )
       case 'students':
       default:
         return null
