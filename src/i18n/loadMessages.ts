@@ -29,6 +29,8 @@ export async function loadMessages(locale: string) {
   const subscriptionMessages = (await import(`../../messages/${locale}/subscription/${locale}_subscription.json`))
     .default
   const contactMessages = (await import(`../../messages/${locale}/contact/${locale}_contact.json`)).default
+  const organizationMessages = (await import(`../../messages/${locale}/organization/${locale}_organization.json`))
+    .default
 
   return {
     ...commonMessages,
@@ -57,6 +59,7 @@ export async function loadMessages(locale: string) {
     ...workspace3DMessages,
     ...cartMessages,
     ...subscriptionMessages,
-    ...contactMessages
+    ...contactMessages,
+    ...organizationMessages
   }
 }

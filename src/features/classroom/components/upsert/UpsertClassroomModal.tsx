@@ -1,8 +1,7 @@
-import { Dialog, DialogContent } from '@/components/shadcn/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import UpsertClassroom from '@/features/classroom/components/upsert/UpsertClassroom'
 import { useModal } from '@/providers/ModalProvider'
-import { DialogTitle } from '@radix-ui/react-dialog'
 import { useTranslations } from 'next-intl'
 import React from 'react'
 

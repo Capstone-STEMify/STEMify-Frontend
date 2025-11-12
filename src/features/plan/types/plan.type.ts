@@ -5,6 +5,7 @@ export type Plan = {
   id: number
   name: string
   description: string
+  status: PlanStatus
   accessSupportDetail: string
   curriculumCount: number
   maxTeacherSeats: number
@@ -27,5 +28,13 @@ export enum BillingCycle {
   ANNUAL = 'Annual'
 }
 
+export enum PlanStatus {
+  DRAFT = 'Draft',
+  PUBLISHED = 'Published',
+  ARCHIVED = 'Archived'
+}
+
 // Slice
-export type PlanSliceParams = {} & SliceQueryParams
+export type PlanSliceParams = {
+  status?: PlanStatus
+} & SliceQueryParams

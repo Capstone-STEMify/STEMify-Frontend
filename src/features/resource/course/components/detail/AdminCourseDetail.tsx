@@ -263,7 +263,7 @@ export default function AdminCourseDetail() {
         />
 
         {/* review Buttons (only for admin users) */}
-        {user && user.role === UserRole.ADMIN && course.data.status === CourseStatus.PENDING && (
+        {user && user.userRole === UserRole.ADMIN && course.data.status === CourseStatus.PENDING && (
           <div className='space-y-4'>
             <Button
               onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
@@ -283,7 +283,7 @@ export default function AdminCourseDetail() {
         )}
         {/* if admin user is the creator and course is in draft status */}
         {user &&
-          user.role === UserRole.ADMIN &&
+          user.userRole === UserRole.ADMIN &&
           user.userId === course.data.createdByUserId &&
           course.data.status === CourseStatus.DRAFT && (
             <div className='space-y-4'>
@@ -299,7 +299,7 @@ export default function AdminCourseDetail() {
 
         {/* if staff user is the creator and course is in draft status */}
         {user &&
-          user.role === UserRole.STAFF &&
+          user.userRole === UserRole.STAFF &&
           user.userId === course.data.createdByUserId &&
           course.data.status === CourseStatus.DRAFT && (
             <div className='space-y-4'>
@@ -314,7 +314,7 @@ export default function AdminCourseDetail() {
           )}
         {/* Pending Review Message */}
         {user &&
-          user.role === UserRole.STAFF &&
+          user.userRole === UserRole.STAFF &&
           user.userId === course.data.createdByUserId &&
           course.data.status === CourseStatus.PENDING && (
             <div className='flex w-full items-center gap-3 rounded-md border border-yellow-300 bg-yellow-50 p-2'>

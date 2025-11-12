@@ -93,7 +93,7 @@ export default function AdminCurriculumInformationSection({
         <p className='mb-4 text-gray-700'>{curriculum.description}</p>
 
         {/* Review actions (only for admin users) */}
-        {user && user.role === UserRole.ADMIN && curriculum.status === CurriculumStatus.PENDING && (
+        {user && user.userRole === UserRole.ADMIN && curriculum.status === CurriculumStatus.PENDING && (
           <div className='flex gap-3'>
             <Button
               className='cursor-pointer bg-green-600 font-semibold text-white shadow'
@@ -121,7 +121,7 @@ export default function AdminCurriculumInformationSection({
         )}
         {/* if admin user is the creator and curriculum is in draft status */}
         {user &&
-          user.role === UserRole.ADMIN &&
+          user.userRole === UserRole.ADMIN &&
           curriculum.status === CurriculumStatus.DRAFT &&
           curriculum.createdByUserId === user.userId && (
             <Button
@@ -139,7 +139,7 @@ export default function AdminCurriculumInformationSection({
 
         {/* if staff user is the creator and curriculum is in draft status, then show send request button */}
         {user &&
-          user.role === UserRole.STAFF &&
+          user.userRole === UserRole.STAFF &&
           user.userId === curriculum.createdByUserId &&
           curriculum.status === CurriculumStatus.DRAFT && (
             <Button
@@ -157,7 +157,7 @@ export default function AdminCurriculumInformationSection({
 
         {/* if staff user is the creator and curriculum is in pending status */}
         {user &&
-          user.role === UserRole.STAFF &&
+          user.userRole === UserRole.STAFF &&
           user.userId === curriculum.createdByUserId &&
           curriculum.status === CurriculumStatus.PENDING && (
             <div className='flex w-xs items-center gap-3 rounded-md border border-yellow-300 bg-yellow-50 p-2'>

@@ -8,14 +8,28 @@ import { useParams } from 'next/navigation'
 import ContractInfo from '@/features/subscription/components/detail/system/ContractInfo'
 import SubscriptionInfo from '@/features/subscription/components/detail/system/SubscriptionInfo'
 import BackButton from '@/components/shared/button/BackButton'
+import SEmpty from '@/components/shared/empty/SEmpty'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 export default function SystemSubscriptionDetail() {
   const { subscriptionId } = useParams()
-  const { data } = useGetSubscriptionByIdQuery(Number(subscriptionId))
+  const { data, isLoading } = useGetSubscriptionByIdQuery(Number(subscriptionId))
   const subscription = data?.data
 
+  if (isLoading) {
+    return (
+      <div className='flex min-h-screen items-center justify-center'>
+        <LoadingComponent />
+      </div>
+    )
+  }
+
   if (!subscription) {
-    return <div>Loading...</div>
+    return (
+      <div className='flex min-h-screen items-center justify-center'>
+        <SEmpty title='No Subscription Found' description='The subscription you are looking for does not exist.' />
+      </div>
+    )
   }
   return (
     <div className='bg-muted/30 min-h-screen p-6'>

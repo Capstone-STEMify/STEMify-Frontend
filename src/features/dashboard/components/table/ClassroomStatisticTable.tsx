@@ -15,7 +15,7 @@ export function ClassroomStatisticTable({ data }: ClassroomStatisticTableProps) 
   const classrooms = data.classroomStatistics
 
   return (
-    <Card className='rounded-xl border-none bg-white shadow-md'>
+    <Card className='rounded-xl border-none bg-white pt-4 pb-8 shadow-md'>
       <CardHeader className='flex flex-col items-center justify-between gap-4 py-4 md:flex-row'>
         <CardTitle className='text-lg font-semibold'>Classroom Statistics</CardTitle>
         <div className='flex w-full items-center gap-2 md:w-auto'>
@@ -46,19 +46,27 @@ export function ClassroomStatisticTable({ data }: ClassroomStatisticTableProps) 
           </TableHeader>
           <TableBody>
             {/* Map over classroomStatistics data */}
-            {classrooms.map((classroom: ClassroomStatistic) => (
-              <TableRow key={classroom.id}>
-                <TableCell>
-                  <Checkbox />
+            {classrooms.length > 0 ? (
+              classrooms.map((classroom: ClassroomStatistic) => (
+                <TableRow key={classroom.id}>
+                  <TableCell>
+                    <Checkbox />
+                  </TableCell>
+                  <TableCell className='font-medium'>{classroom.id}</TableCell>
+                  <TableCell>
+                    <span className='font-medium'>{classroom.name}</span>
+                  </TableCell>
+                  <TableCell>{classroom.passRate}%</TableCell>
+                  <TableCell>{classroom.averageScore}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className='py-4 text-center'>
+                  No data available
                 </TableCell>
-                <TableCell className='font-medium'>{classroom.id}</TableCell>
-                <TableCell>
-                  <span className='font-medium'>{classroom.name}</span>
-                </TableCell>
-                <TableCell>{classroom.passRate}%</TableCell>
-                <TableCell>{classroom.averageScore}</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </CardContent>

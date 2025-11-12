@@ -131,7 +131,8 @@
       "grossAmount": "Tổng Số Tiền",
       "studentSeats": "Ghế Học Sinh",
       "teacherSeats": "Ghế Giáo Viên",
-      "avatar": "Ảnh Đại Diện"
+      "avatar": "Ảnh Đại Diện",
+      "action": "Hành Động"
     },
     "paging": {
       "previous": "Trước",

@@ -1,6 +1,4 @@
 'use client'
-import { CurriculumCard } from '@/features/classroom/components/ui/CurriculumCard'
-import ClassroomCalendar from '@/features/classroom/components/ui/ClassroomCalendar'
 import ClassroomTable from '@/features/classroom/components/list/table/ClassroomTable'
 import { useSearchSubscriptionQuery } from '@/features/subscription/api/subscriptionApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
@@ -11,16 +9,6 @@ import { setParam } from '@/features/classroom/slice/classroomSlice'
 export default function OrganizationClassroomList() {
   const queryParams = useAppSelector((state) => state.organizationSubscription)
   const dispatch = useAppDispatch()
-  const { data: organizationSubscriptionData, isLoading } = useSearchSubscriptionQuery(queryParams)
-
-  useEffect(() => {
-    // TODO: Assuming organizationId is obtained from some auth context
-    dispatch(setParam({ key: 'organizationId', value: undefined }))
-  }, [dispatch])
-
-  if (isLoading) {
-    return <LoadingComponent />
-  }
 
   return (
     <main className='min-h-screen px-8'>

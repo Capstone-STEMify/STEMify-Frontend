@@ -15,11 +15,30 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
       }),
       invalidatesTags: ['Classroom']
     }),
-    deleteClassroomStudents: builder.mutation<void, { classroomId: number; studentEmails: string[] }>({
-      query: ({ classroomId, studentEmails }) => ({
+    deleteClassroomStudents: builder.mutation<void, { classroomId: number; studentIds: string[] }>({
+      query: ({ classroomId, studentIds }) => ({
         url: `/classrooms/${classroomId}/classroom-students/bulk`,
         method: 'DELETE',
-        body: { studentEmails }
+        body: { studentIds }
+      }),
+      invalidatesTags: ['Classroom']
+    }),
+
+    // PATCH: classrooms/1/curriculum
+    updateClassroomCurriculum: builder.mutation<any, { classroomId: number; curriculumId: number }>({
+      query: ({ classroomId, curriculumId }) => ({
+        url: `/classrooms/${classroomId}`,
+        method: 'PATCH',
+        body: { curriculumId }
+      }),
+      invalidatesTags: ['Classroom']
+    }),
+
+    updateTeacherClassroom: builder.mutation<any, { classroomId: number; teacherId: string }>({
+      query: ({ classroomId, teacherId }) => ({
+        url: `/classrooms/${classroomId}`,
+        method: 'PATCH',
+        body: { teacherId }
       }),
       invalidatesTags: ['Classroom']
     })
@@ -33,6 +52,9 @@ export const {
   useUpdateMutation: useUpdateClassroomMutation,
   useDeleteMutation: useDeleteClassroomMutation,
   useCreateMutation: useCreateClassroomMutation,
+
+  useUpdateClassroomCurriculumMutation,
+  useUpdateTeacherClassroomMutation,
 
   useAddClassroomStudentsMutation,
   useDeleteClassroomStudentsMutation

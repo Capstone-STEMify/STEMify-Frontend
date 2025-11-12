@@ -25,8 +25,13 @@ export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
   ],
   [UserRole.GUEST]: [
     { name: 'home', path: '/' },
-    { name: 'resources', path: '/resource' },
-    { name: 'shop', path: '/shop' }
+    { name: 'resources', path: '/resource' }
+    // { name: 'shop', path: '/shop' }
     // { name: 'strawLab', path: '/lab' }
+  ],
+  [UserRole.ORGANIZATION_ADMIN]: [
+    { name: 'home', path: '/' },
+    { name: 'resources', path: '/resource' },
+    { name: 'organizationDashboard', path: '/organization/dashboard' }
   ]
 }

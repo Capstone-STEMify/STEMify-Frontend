@@ -1,5 +1,5 @@
 import BackButton from '@/components/shared/button/BackButton'
-import CreateSubscriptionOrg from '@/features/subscription/components/upsert/create/CreateSubscriptionOrg'
+import CreateSubscriptionOrg from '@/features/subscription/components/upsert/CreateSubscriptionOrg'
 import React from 'react'
 
 export default function CreateSubscriptionOrgPage() {

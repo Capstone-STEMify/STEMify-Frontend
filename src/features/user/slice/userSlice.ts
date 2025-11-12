@@ -1,13 +1,14 @@
-
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 import { UserSliceParams } from '../types/user.type'
 
 const initialState: UserSliceParams = {
   pageNumber: 1,
-  pageSize: 5,
+  pageSize: 10,
   search: '',
   orderBy: '',
-  status: ''
+  status: '',
+  subscription_order_id: undefined,
+  license_type: undefined
 }
 
 export const userSlice = createQuerySlice('userSlice', initialState)

@@ -1,0 +1,10 @@
+{
+  "organization": {
+    "form": {
+      "title": {
+        "create": "Tạo tổ chức",
+        "update": "Cập nhật tổ chức"
+      }
+    }
+  }
+}
