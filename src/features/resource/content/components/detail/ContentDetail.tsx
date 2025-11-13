@@ -70,7 +70,7 @@ export default function ContentDetail({ item, sectionId }: ContentDetailProps) {
       case ContentType.QUIZ:
         return <QuizViewer quiz={item as QuizContent} isShowQuestionAnswer />
       case ContentType.ASSIGNMENT:
-        return <AssignmentViewer />
+        return <AssignmentViewer item={item as any}/>
       default:
         return <div className='text-sm text-gray-500'>{t('detail.unsupportedType')}</div>
     }
