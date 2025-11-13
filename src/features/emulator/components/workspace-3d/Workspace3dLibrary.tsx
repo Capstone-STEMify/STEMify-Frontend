@@ -27,7 +27,7 @@ export default function Workspace3dLibrary() {
   const emulations = data?.data.items || []
 
   // === Handlers ===
-  const handleNavigate = (id: string) => router.push(`/${locale}/workspace-3d/${id}`)
+  const handleNavigate = (id: string) => router.push(`/${locale}/lab/workspace-3d/${id}`)
 
   const handleCreateEmulation = async (metadata: any) => {
     toast.info('⏳ Đang tạo workspace mới...')

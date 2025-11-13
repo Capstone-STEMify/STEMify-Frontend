@@ -44,7 +44,7 @@ export default function StrawLabList() {
   const scrollTo = (i: number) => emblaApi?.scrollTo(i)
 
   const handleNavigate = (id: string) => {
-    router.push(`/${locale}/emulator-project/${id}`)
+    router.push(`/${locale}/lab/straw-lib/${id}`)
   }
 
   if (isLoading) {
