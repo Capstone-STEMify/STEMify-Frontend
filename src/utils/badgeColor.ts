@@ -1,114 +1,39 @@
-import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
-import { ContactStatus } from '@/features/contact/types/contact.type'
-import { ContractStatus } from '@/features/contract/types/contract.type'
-import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
-import { OrganizationStatus } from '@/features/organization/types/organization.type'
 import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
-import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
-import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
-import { LessonStatus } from '@/features/resource/lesson/types/lesson.type'
-import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
-import { UserStatus } from '@/features/user/types/user.type'
 
-export const getStatusBadgeClass = (
-  status:
-    | LessonStatus
-    | CurriculumStatus
-    | CourseStatus
-    | KitProductStatus
-    | ContactStatus
-    | OrganizationStatus
-    | LicenseAssignmentStatus
-    | SubscriptionStatus
-    | ClassroomStatus
-    | ContractStatus
-    | UserStatus
-    | undefined
-) => {
-  switch (status) {
-    // DRAFT
-    case LessonStatus.DRAFT:
-    case CurriculumStatus.DRAFT:
-    case CourseStatus.DRAFT:
-    case KitProductStatus.DRAFT:
+export const getStatusBadgeClass = (status: any) => {
+  if (!status) return 'bg-gray-100 text-gray-800 border border-gray-300'
+
+  const value = status.toString().toUpperCase()
+
+  switch (value) {
+    case 'DRAFT':
       return 'bg-gray-100 text-gray-800 border border-gray-300'
 
-    // PUBLISHED / IN_PROGRESS
-    case LessonStatus.PUBLISHED:
-    case CurriculumStatus.PUBLISHED:
-    case CourseStatus.PUBLISHED:
-    case KitProductStatus.PUBLISHED:
-    case ContactStatus.IN_PROGRESS:
-    case ClassroomStatus.IN_PROGRESS:
+    case 'PUBLISHED':
+    case 'INPROGRESS':
       return 'bg-blue-100 text-blue-800 border border-blue-300'
 
-    // ARCHIVED / EXPIRED / INACTIVE / CANCELED
-    case LessonStatus.ARCHIVED:
-    case CurriculumStatus.ARCHIVED:
-    case CourseStatus.ARCHIVED:
-    case KitProductStatus.ARCHIVED:
-    case SubscriptionStatus.EXPIRED:
-    case OrganizationStatus.INACTIVE:
-    case LicenseAssignmentStatus.EXPIRED:
-    case SubscriptionStatus.ARCHIVED:
-    case SubscriptionStatus.CANCELED:
-    case ContractStatus.ARCHIVED:
-      return 'bg-gray-100 text-gray-800 border border-gray-300'
-
-    // DELETED / EXPIRED
-    case LessonStatus.DELETED:
-    case CurriculumStatus.DELETED:
-    case CourseStatus.DELETED:
-    case SubscriptionStatus.EXPIRED:
-    case ClassroomStatus.DELETED:
-    case ContractStatus.EXPIRED:
+    case 'DELETED':
+    case 'EXPIRED':
+    case 'INACTIVE':
+    case 'CANCELED':
       return 'bg-red-100 text-red-800 border border-red-300'
 
-    // PENDING
-    case LessonStatus.PENDING:
-    case CurriculumStatus.PENDING:
-    case CourseStatus.PENDING:
-    case ContactStatus.NEW:
-    case LicenseAssignmentStatus.PENDING:
-    case SubscriptionStatus.PENDING:
-    case ClassroomStatus.PENDING:
+    case 'PENDING':
       return 'bg-yellow-100 text-yellow-800 border border-yellow-300'
 
-    // REJECTED
-    case LessonStatus.REJECTED:
-    case CurriculumStatus.REJECTED:
-    case CourseStatus.REJECTED:
-      return 'bg-red-200 text-red-900 border border-red-400'
-
-    // ACTIVE / APPROVED / RESOLVED / COMPLETED
-    case LessonStatus.APPROVED:
-    case CurriculumStatus.APPROVED:
-    case CourseStatus.APPROVED:
-    case SubscriptionStatus.ACTIVE:
-    case ContactStatus.RESOLVED:
-    case OrganizationStatus.ACTIVE:
-    case LicenseAssignmentStatus.ACTIVE:
-    case ClassroomStatus.COMPLETED:
-    case ContractStatus.ACTIVE:
+    case 'APPROVED':
+    case 'ACTIVE':
+    case 'RESOLVED':
+    case 'COMPLETED':
       return 'bg-emerald-50 text-emerald-700 border border-emerald-300'
+
+    case 'ARCHIVED':
+      return 'bg-orange-100 text-orange-800 border border-orange-300'
 
     default:
       return 'bg-gray-100 text-gray-800 border border-gray-300'
   }
-}
-
-export const getCourseStatusBadgeClass = (status?: CourseStatus): string => {
-  const map: Record<CourseStatus, string> = {
-    [CourseStatus.DRAFT]: 'bg-gray-200 text-gray-800',
-    [CourseStatus.PUBLISHED]: 'bg-blue-100 text-blue-800',
-    [CourseStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800',
-    [CourseStatus.DELETED]: 'bg-red-100 text-red-800',
-    [CourseStatus.PENDING]: 'bg-amber-100 text-amber-800',
-    [CourseStatus.REJECTED]: 'bg-red-200 text-red-900',
-    [CourseStatus.APPROVED]: 'bg-green-100 text-green-800'
-  }
-
-  return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
 }
 
 export const getLevelBadgeClass = (level: CourseLevel): string => {

@@ -90,21 +90,21 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
       {/* Extra Plan Info Section */}
       <div className='mt-6 space-y-4'>
         <h3 className='text-foreground text-lg font-semibold'>Plan Details</h3>
-        <p className='text-muted-background text-sm'>
+        <div className='text-muted-background text-sm break-words whitespace-pre-line'>
           <strong className='mb-2 flex items-center gap-2'>
             <FileText className='text-primary h-4 w-4' />
             Description:
           </strong>{' '}
           {plan.description}
-        </p>
-        <p className='text-muted-background text-sm whitespace-pre-line'>
+        </div>
+        <div className='text-muted-background text-sm break-words whitespace-pre-line'>
           <strong className='mb-2 flex items-center gap-2'>
             <Headphones className='text-primary h-4 w-4' />
             Access Support Detail:
           </strong>{' '}
           {plan.accessSupportDetail}
-        </p>
-        <p className='text-muted-background text-sm whitespace-pre-line'>
+        </div>
+        <div className='text-muted-background text-sm whitespace-pre-line'>
           <strong className='mb-2 flex items-center gap-2'>
             <BookOpen className='text-primary h-4 w-4' />
             Included Curriculums:
@@ -159,7 +159,7 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
               <span className='text-muted-foreground text-sm'>No curriculums available</span>
             </div>
           )}
-        </p>
+        </div>
       </div>
     </div>
   )
