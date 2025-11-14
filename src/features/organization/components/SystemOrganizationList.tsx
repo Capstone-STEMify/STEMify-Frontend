@@ -54,7 +54,7 @@ export default function SystemOrganizationList() {
   const { openModal } = useModal()
   const [expandedOrganizations, setExpandedOrganizations] = useState<number[]>([])
   const queryParams = useAppSelector((state) => state.organization)
-  const { data, isLoading } = useSearchOrganizationsQuery(queryParams)
+  const { data, isLoading, refetch } = useSearchOrganizationsQuery(queryParams)
   const organizations = data?.data.items || []
 
   useEffect(() => {
@@ -227,7 +227,7 @@ export default function SystemOrganizationList() {
                   {expandedOrganizations.includes(organization.id) && (
                     <TableRow>
                       <TableCell colSpan={8} className='bg-muted/30 p-0'>
-                        <SystemSubscriptionTable organization={organization} />
+                        <SystemSubscriptionTable organization={organization} refetchOrganization={refetch} />
                       </TableCell>
                     </TableRow>
                   )}

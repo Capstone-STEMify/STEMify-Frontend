@@ -14,17 +14,24 @@ import { Button } from '@/components/shadcn/button'
 import { Edit2, Plus, Trash2 } from 'lucide-react'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
+import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+import SStatusDropdown from '@/components/shared/SStatusDropdown'
+import { useUpdateSubscriptionMutation } from '@/features/subscription/api/subscriptionApi'
+import { toast } from 'sonner'
 
 type SystemSubscriptionTableProps = {
   organization: Organization
+  refetchOrganization?: () => void
 }
 
-export default function SystemSubscriptionTable({ organization }: SystemSubscriptionTableProps) {
+export default function SystemSubscriptionTable({ organization, refetchOrganization }: SystemSubscriptionTableProps) {
   const tc = useTranslations('common')
   const router = useRouter()
   const locale = useLocale()
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
+
+  const [updateSubscription] = useUpdateSubscriptionMutation()
 
   const getBillingCycleLabel = (cycle: BillingCycle | string) => {
     switch (cycle) {
@@ -35,6 +42,27 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
       default:
         return cycle
     }
+  }
+
+  const subscriptionStatusOptions = [
+    { label: 'All', value: 'all' },
+    ...Object.entries(SubscriptionStatus).map(([key, value]) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      value
+    }))
+  ]
+
+  const handleStatusChange = (subscription: any, newStatus: string) => {
+    updateSubscription({ subscriptionId: subscription.id, body: { status: newStatus as SubscriptionStatus } })
+      .unwrap()
+      .then(() => {
+        toast.success('Status updated')
+        refetchOrganization?.()
+      })
+      .catch((error) => {
+        toast.error('Failed to update status')
+        console.error(error)
+      })
   }
 
   return (
@@ -109,7 +137,13 @@ export default function SystemSubscriptionTable({ organization }: SystemSubscrip
                     </p>
                   </TableCell>
                   <TableCell>
-                    <Badge className={getStatusBadgeClass(subscription.status)}>{subscription.status ?? 'N/A'}</Badge>
+                    <SStatusDropdown
+                      value={subscription.status!}
+                      options={subscriptionStatusOptions.filter(
+                        (opt) => opt.value !== 'all' && opt.value !== SubscriptionStatus.EXPIRED
+                      )}
+                      onChange={(newStatus) => handleStatusChange(subscription, newStatus)}
+                    />{' '}
                   </TableCell>
 
                   <TableCell className='text-muted-foreground text-sm'>
