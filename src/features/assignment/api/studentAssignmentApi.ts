@@ -36,6 +36,17 @@ export const studentAssignmentApi = createApi({
       providesTags: (result, error, id) => [{ type: 'StudentAssignmentDetail', id }]
     }),
 
+    getAssignmentDetailById: builder.query<
+      ApiSuccessResponse<AssignmentStatistics>,
+      { classroomId: number; assignmentId: number }
+    >({
+      query: ({ classroomId, assignmentId }) => ({
+        url: `/classrooms/${classroomId}/assignments/${assignmentId}/student-assignments`,
+        method: 'GET'
+      }),
+      providesTags: (result, error, { assignmentId }) => [{ type: 'StudentAssignment', id: assignmentId }]
+    }),
+
     gradeAssignmentAttempt: builder.mutation<
       ApiSuccessResponse<any>,
       {
@@ -74,6 +85,7 @@ export const {
   useSearchQuery: useSearchStudentAssignmentQuery,
   useLazySearchQuery: useLazySearchStudentAssignmentQuery,
   useGetByIdQuery: useGetStudentAssignmentByIdQuery,
+  useGetAssignmentDetailByIdQuery,
   useLazyGetByIdQuery: useLazyGetStudentAssignmentByIdQuery,
   useGradeAssignmentAttemptMutation,
   useCreateAssignmentAttemptMutation

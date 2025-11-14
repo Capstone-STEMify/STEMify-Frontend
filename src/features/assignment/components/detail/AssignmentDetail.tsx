@@ -4,28 +4,31 @@ import { AssignmentDetailHeader } from './hero/AssignmentHero'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import { AssignmentTable } from './table/AssignmentTable'
 import { useParams } from 'next/navigation'
-import { useSearchStudentAssignmentQuery } from '../../api/studentAssignmentApi'
+import { useGetAssignmentDetailByIdQuery, useSearchStudentAssignmentQuery } from '../../api/studentAssignmentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { AssignmentStatistics } from '../../types/assigmentlistdetail.type'
 
 export default function AssignmentDetail() {
   const params = useParams()
-  const assignmentId = params.id as string
+  const assignmentId = params.assignmentId as string
+  const classroomId = params.classroomId as string
+
+  console.log('params', assignmentId, classroomId)
 
   const {
-    data: assignmentListResponse,
+    data: assignmentStatisticsResponse,
     isLoading,
     error
-  } = useSearchStudentAssignmentQuery(
-    { classroomId: 1 },
+  } = useGetAssignmentDetailByIdQuery(
+    { classroomId: Number(classroomId), assignmentId: Number(assignmentId) },
     {
-      skip: !assignmentId
+      skip: !assignmentId || !classroomId
     }
   )
 
-  const assignmentData: AssignmentStatistics | undefined = assignmentListResponse?.data?.items.find(
-    (a) => a.assignmentId.toString() === assignmentId
-  )
+  const assignmentData: AssignmentStatistics | undefined = assignmentStatisticsResponse?.data
+
+  console.log('data', assignmentData)
 
   if (isLoading) return <LoadingComponent />
   if (error) return <div className='p-8'>Error loading assignment data.</div>

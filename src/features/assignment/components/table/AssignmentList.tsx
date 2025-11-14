@@ -26,7 +26,9 @@ export function AssignmentList() {
     return 'text-red-500'
   }
 
-  const { data: studentAssignmentResponse, isLoading } = useSearchStudentAssignmentQuery({ classroomId: 1 })
+  const classroomId = 1
+
+  const { data: studentAssignmentResponse, isLoading } = useSearchStudentAssignmentQuery({ classroomId })
 
   if (isLoading) return <LoadingComponent />
 
@@ -89,7 +91,7 @@ export function AssignmentList() {
                   </div>
                 </TableCell>
                 <TableCell className='font-medium'>
-                  <Link href={`/assignment/${assignment.assignmentId}`}>
+                  <Link href={`assignment/${assignment.assignmentId}`}>
                     <label
                       htmlFor={`asm-${assignment.assignmentId}`}
                       className='cursor-pointer text-gray-800 hover:text-blue-500 hover:underline'
