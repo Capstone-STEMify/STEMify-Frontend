@@ -17,10 +17,13 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
   const [deleteClassroom] = useDeleteClassroomMutation()
 
   return [
-    createSelectColumn<Classroom>(),
+    // createSelectColumn<Classroom>(),
     {
       accessorKey: 'curriculum',
       header: 'Curriculum',
+      meta: {
+        className: 'border-r border-gray-200'
+      },
       cell: ({ row }) => {
         const curriculum = row.original.curriculum
         const classroomId = row.original.id
@@ -54,7 +57,10 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
     },
     {
       accessorKey: 'classCode',
-      header: 'Class Code'
+      header: 'Class Code',
+      cell: ({ row }) => {
+        return <span>{row.original.classCode}</span>
+      }
     },
     {
       accessorKey: 'id',

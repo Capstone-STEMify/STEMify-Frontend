@@ -16,7 +16,7 @@ import z from 'zod'
 import { Badge } from '@/components/shadcn/badge'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
-import { getCourseStatusBadgeClass } from '@/utils/badgeColor'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useDeleteCourseFromCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
 
 export const courseTableSchema = z.object({
@@ -128,11 +128,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       header: () => <div>{tc('tableHeader.status')}</div>,
       cell: ({ row }) => {
         const value = row.getValue<CourseStatus>('status')
-        return (
-          <Badge className={`cursor-pointer ${getCourseStatusBadgeClass(value)}`} variant='outline'>
-            {value}
-          </Badge>
-        )
+        return <Badge className={`cursor-pointer ${getStatusBadgeClass(value)}`}>{value}</Badge>
       }
     },
     {

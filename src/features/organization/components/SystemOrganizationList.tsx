@@ -20,7 +20,11 @@ import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { useDeleteOrganizationMutation, useSearchOrganizationsQuery } from '@/features/organization/api/organizationApi'
+import {
+  useDeleteOrganizationMutation,
+  useSearchOrganizationsQuery,
+  useUpdateOrganizationMutation
+} from '@/features/organization/api/organizationApi'
 import Image from 'next/image'
 import { formatDate } from '@/utils/index'
 import SystemSubscriptionTable from '@/features/subscription/components/list/SystemSubscriptionTable'
@@ -35,6 +39,7 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { SPagination } from '@/components/shared/SPagination'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import SStatusDropdown from '@/components/shared/SStatusDropdown'
 
 export default function SystemOrganizationList() {
   const t = useTranslations('subscription')
@@ -49,20 +54,13 @@ export default function SystemOrganizationList() {
   const { openModal } = useModal()
   const [expandedOrganizations, setExpandedOrganizations] = useState<number[]>([])
   const queryParams = useAppSelector((state) => state.organization)
-  const { data, isLoading } = useSearchOrganizationsQuery(queryParams)
+  const { data, isLoading, refetch } = useSearchOrganizationsQuery(queryParams)
   const organizations = data?.data.items || []
 
   useEffect(() => {
     dispatch(setSearchTerm(debouncedSearchQuery))
   }, [debouncedSearchQuery, dispatch])
-
-  const statusOptions = Object.entries(OrganizationStatus)
-    .filter(([key]) => key.toLowerCase() !== 'deleted')
-    .map(([key, value]) => ({
-      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-      value: value
-    }))
-
+  const [updateOrganization] = useUpdateOrganizationMutation()
   const [deleteOrganization] = useDeleteOrganizationMutation()
   const toggleExpand = (organizationId: number) => {
     setExpandedOrganizations((prev) =>
@@ -73,6 +71,14 @@ export default function SystemOrganizationList() {
     dispatch(setPageIndex(newPage))
   }
 
+  const organizationStatusOptions = [
+    { label: 'All', value: 'all' },
+    ...Object.entries(OrganizationStatus).map(([key, value]) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      value
+    }))
+  ]
+
   if (isLoading) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
@@ -82,6 +88,12 @@ export default function SystemOrganizationList() {
   }
   if (!data) {
     return <SEmpty title={tc('message.noData')} />
+  }
+
+  const handleStatusChange = (organization: any, newStatus: string) => {
+    updateOrganization({ id: organization.id, body: { status: newStatus as OrganizationStatus } })
+      .unwrap()
+      .then(() => toast.success('Status updated'))
   }
   return (
     <div className='my-5 px-10'>
@@ -114,8 +126,14 @@ export default function SystemOrganizationList() {
             className='w-fit'
             placeholder={t('list.placeholder.status')}
             value={queryParams.status?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'status', value: val as OrganizationStatus }))}
-            options={statusOptions}
+            onChange={(val) => {
+              if (val === 'all') {
+                dispatch(setParam({ key: 'status', value: undefined }))
+              } else {
+                dispatch(setParam({ key: 'status', value: val as OrganizationStatus }))
+              }
+            }}
+            options={organizationStatusOptions}
           />
         </div>
 
@@ -166,31 +184,33 @@ export default function SystemOrganizationList() {
                     <TableCell className='font-medium'>{organization.name}</TableCell>
                     <TableCell>{organization.organizationType}</TableCell>
                     <TableCell>
-                      <Badge className={getStatusBadgeClass(organization.status)}>{organization.status}</Badge>
+                      <SStatusDropdown
+                        value={organization.status}
+                        options={organizationStatusOptions.filter(
+                          (opt) => opt.value !== 'all' && opt.value !== OrganizationStatus.ARCHIVED
+                        )}
+                        onChange={(newStatus) => handleStatusChange(organization, newStatus)}
+                      />{' '}
                     </TableCell>
                     <TableCell>{formatDate(organization.createdDate)}</TableCell>
 
                     <TableCell>
-                      <div className='flex items-center justify-center gap-2'>
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          className='h-8 w-8 p-0'
+                      <div className='flex items-center justify-center'>
+                        <button
+                          className='h-8 w-8 hover:cursor-pointer'
                           onClick={(e) => {
                             e.stopPropagation()
                             openModal('upsertOrganization', { organizationId: organization.id })
                           }}
                         >
                           <Pencil className='h-4 w-4' />
-                        </Button>
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          className='h-8 w-8 p-0'
+                        </button>
+                        <button
+                          className='h-8 w-8 hover:cursor-pointer'
                           onClick={(e) => {
                             e.stopPropagation()
                             openModal('confirm', {
-                              message: 'Are you sure you want to archive this organization?',
+                              message: 'Are you sure you want to delete this organization?',
                               onConfirm: async () => {
                                 await deleteOrganization(organization.id)
                                 toast.success('Organization archived successfully')
@@ -198,8 +218,8 @@ export default function SystemOrganizationList() {
                             })
                           }}
                         >
-                          <Archive className='h-4 w-4' />
-                        </Button>
+                          <Trash2 className='h-4 w-4 text-red-500' />
+                        </button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -207,7 +227,7 @@ export default function SystemOrganizationList() {
                   {expandedOrganizations.includes(organization.id) && (
                     <TableRow>
                       <TableCell colSpan={8} className='bg-muted/30 p-0'>
-                        <SystemSubscriptionTable organization={organization} />
+                        <SystemSubscriptionTable organization={organization} refetchOrganization={refetch} />
                       </TableCell>
                     </TableRow>
                   )}

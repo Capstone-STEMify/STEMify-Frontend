@@ -31,7 +31,8 @@ export enum BillingCycle {
 export enum PlanStatus {
   DRAFT = 'Draft',
   PUBLISHED = 'Published',
-  ARCHIVED = 'Archived'
+  ARCHIVED = 'Archived',
+  DELETED = 'Deleted' // NOT API SUPPORTED JUST FOR FRONTEND USAGE
 }
 
 // Slice

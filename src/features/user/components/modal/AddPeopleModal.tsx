@@ -8,11 +8,13 @@ import { useModal } from '@/providers/ModalProvider'
 import { useParams } from 'next/navigation'
 import { useBulkAdd } from '@/hooks/useBulkAdd'
 import { useAddClassroomStudentsMutation } from '@/features/classroom/api/classroomApi'
-import { useSearchUserQuery } from '@/features/user/api/userApi'
+import { useSearchUserQuery, useSearchUserV2Query } from '@/features/user/api/userApi'
 import useDebounce from '@/hooks/useDebounce'
 import { Loader2, X, Search, UserPlus, Check } from 'lucide-react'
 import { UserRole } from '@/types/userRole'
 import { cn } from '@/utils/shadcn/utils'
+import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 // 🎨 Hàm tạo màu avatar từ email
 const getAvatarColor = (email: string) => {
@@ -60,11 +62,12 @@ export default function AddPeopleModal() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const debouncedKeyword = useDebounce(keyword, 300)
-
-  const { data: studentData, isLoading: isSearching } = useSearchUserQuery(
+  const selectedSubscriptionId = useAppSelector((state) => state.selectedOrganization.selectedSubscriptionOrderId)
+  const { data: studentData, isLoading: isSearching } = useSearchUserV2Query(
     {
       keyword: debouncedKeyword,
-      role: UserRole.STUDENT,
+      license_type: LicenseAssignmentType.STUDENT,
+      subscription_order_id: selectedSubscriptionId,
       pageNumber: 1,
       pageSize: 10
     },

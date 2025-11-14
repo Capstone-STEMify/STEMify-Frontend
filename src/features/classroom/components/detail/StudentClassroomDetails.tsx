@@ -224,11 +224,6 @@ export default function StudentClassroomDetail() {
                   <div className='py-12 text-center'>
                     <Users className='mx-auto mb-3 h-12 w-12 text-slate-300' />
                     <h3 className='mb-1 font-semibold text-slate-700'>No students yet</h3>
-                    <p className='mb-4 text-sm text-slate-500'>Start building your class by adding students</p>
-                    <Button className='bg-blue-600 hover:bg-blue-700'>
-                      <UserPlus className='mr-2 h-4 w-4' />
-                      Add First Student
-                    </Button>
                   </div>
                 )}
               </CardContent>

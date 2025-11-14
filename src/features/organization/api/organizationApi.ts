@@ -10,7 +10,7 @@ import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 export const organizationApi = createCrudApi<Organization, OrganizationSliceParams>({
   reducerPath: 'organizationApi',
   baseUrl: '/organizations',
-  tagTypes: ['Organization']
+  tagTypes: ['Subscription', 'Organization']
 }).injectEndpoints({
   endpoints: (build) => ({
     getAllOrganizationTypes: build.query<

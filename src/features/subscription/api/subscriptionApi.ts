@@ -9,7 +9,7 @@ import { ApiSuccessResponse } from '@/types/baseModel'
 
 export const subscriptionApi = createCrudApi<OrganizationSubscription, OrganizationSubscriptionSliceParams>({
   reducerPath: 'subscriptionApi',
-  tagTypes: ['Subscription'],
+  tagTypes: ['Subscription', 'Organization'],
   baseUrl: '/organization-subscription-orders'
 }).injectEndpoints({
   endpoints: (builder) => ({
@@ -19,17 +19,18 @@ export const subscriptionApi = createCrudApi<OrganizationSubscription, Organizat
         method: 'POST',
         body: data
       }),
-      invalidatesTags: ['Subscription']
+      invalidatesTags: ['Subscription', 'Organization']
     }),
     updateSubscription: builder.mutation<
       ApiSuccessResponse<OrganizationSubscription>,
-      { subscriptionId: number; body: UpdateSubscriptionFormData }
+      { subscriptionId: number; body: Partial<UpdateSubscriptionFormData> }
     >({
       query: ({ subscriptionId, body }) => ({
         url: `/organization-subscription-orders/${subscriptionId}`,
         method: 'PATCH',
         body
-      })
+      }),
+      invalidatesTags: ['Subscription', 'Organization']
     })
   })
 })

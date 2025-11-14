@@ -3,8 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { MoreHorizontal, UserPlus, Mail, User, Calendar, CheckCircle2, Clock } from 'lucide-react'
-import { useSearchLicenseAssignmentQuery } from '@/features/license-assignment/api/licenseAssignmentApi'
+import { UserPlus, Mail, User, Calendar, CheckCircle2, Clock, MoreVertical } from 'lucide-react'
+import {
+  useDeleteLicenseAssignmentMutation,
+  useSearchLicenseAssignmentQuery
+} from '@/features/license-assignment/api/licenseAssignmentApi'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import { formatDateV2 } from '@/utils/index'
 import { useModal } from '@/providers/ModalProvider'
@@ -12,6 +15,7 @@ import { cn } from '@/utils/shadcn/utils'
 import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setParam } from '@/features/license-assignment/slice/licenseAssignmentSlice'
+import { toast } from 'sonner'
 
 type OrganizationAdminsProps = {
   organizationSubscriptionOrderId?: number
@@ -32,6 +36,8 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
     },
     { skip: !organizationSubscriptionOrderId }
   )
+
+  const [deleteLicense] = useDeleteLicenseAssignmentMutation()
 
   const licenseAssignments = data?.data.items || []
   const totalCount = data?.data.totalCount || 0
@@ -211,9 +217,20 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                         <span className='text-sm'>{formatDateV2(new Date(assignment.assignedAt))}</span>
                       </TableCell>
                       <TableCell>
-                        <Button variant='ghost' size='icon' className='h-8 w-8'>
-                          <MoreHorizontal className='h-4 w-4' />
-                        </Button>
+                        <button
+                          className='flex h-8 w-8 items-center'
+                          onClick={() => {
+                            openModal('confirm', {
+                              message: `Are you sure you want to delete the license assignment for ${assignment.user.email}?`,
+                              onConfirm: async () => {
+                                await deleteLicense(assignment.id)
+                                toast.success('License assignment deleted successfully')
+                              }
+                            })
+                          }}
+                        >
+                          <MoreVertical className='h-4 w-4' />
+                        </button>
                       </TableCell>
                     </TableRow>
                   )

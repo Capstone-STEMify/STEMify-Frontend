@@ -214,11 +214,23 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                           onRowClick?.(row.original)
                         }}
                       >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id}>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </TableCell>
-                        ))}
+                        {row.getVisibleCells().map((cell) => {
+                          const meta = (row.original as any).__cellMeta?.[cell.column.id]
+
+                          if (meta?.skip) {
+                            return null
+                          }
+
+                          return (
+                            <TableCell
+                              key={cell.id}
+                              rowSpan={meta?.rowSpan || 1}
+                              className={` ${meta?.rowSpan > 1 ? 'pr-12 align-top' : ''} ${(cell.column.columnDef.meta as any)?.className || ''} `}
+                            >
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </TableCell>
+                          )
+                        })}
                       </TableRow>
 
                       {isExpanded && expandedContentRenderer && expandedContentRenderer(row.original) && (

@@ -43,7 +43,7 @@ export default function CurriculumList() {
 
   return (
     <div className='mx-auto mb-20 max-w-7xl sm:px-6 lg:px-8'>
-      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+      <div className='mb-30 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
         {curriculumData.data.items.map((curriculum) => (
           <CardLayout
             className='rounded-2xl border-none shadow-xl'

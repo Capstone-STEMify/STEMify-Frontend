@@ -24,9 +24,7 @@ export type AdminOrganization = {
 export enum OrganizationStatus {
   ACTIVE = 'Active',
   INACTIVE = 'Inactive',
-  ARCHIVED = 'Archived',
-  DRAFT = 'Draft',
-  DELETED = 'Deleted'
+  ARCHIVED = 'Archived'
 }
 
 export type OrganizationType = {

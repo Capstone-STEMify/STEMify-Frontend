@@ -12,6 +12,7 @@ type UpdateClassroomOrganizationBasicInfoProps = {
 const classroomDefaultValues = {
   name: '',
   grade: '',
+  classCode: '',
   description: '',
   startDate: '',
   endDate: ''
@@ -35,6 +36,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
   const basicSchema = z.object({
     name: z.string().min(1, 'Classroom name is required'),
     grade: z.string().min(1, 'Grade is required'),
+    classCode: z.string().min(1, 'Class code is required'),
     description: z.string().min(1, 'Description is required'),
     startDate: z.string().refine((val) => !isNaN(Date.parse(val)), 'Start date must be a valid ISO date string'),
     endDate: z.string().refine((val) => !isNaN(Date.parse(val)), 'End date must be a valid ISO date string')
@@ -46,6 +48,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
     onSubmit: async ({ value }) => {
       const payload = {
         name: value.name,
+        classCode: value.classCode,
         grade: value.grade,
         description: value.description,
         startDate: new Date(value.startDate).toISOString(),
@@ -66,6 +69,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
       form.reset({
         name: p.name,
         description: p.description,
+        classCode: p.classCode,
         grade: p.grade,
         startDate: p.startDate,
         endDate: p.endDate
@@ -98,13 +102,18 @@ export default function UpdateClassroomOrganizationBasicInfo({
             />
           )}
         />
-
-        <form.AppField
-          name='grade'
-          children={(field: any) => (
-            <field.SelectField label='Grade Level' placeholder='Select grade' options={gradeOptions} />
-          )}
-        />
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+          <form.AppField
+            name='grade'
+            children={(field: any) => (
+              <field.SelectField label='Grade Level' placeholder='Select grade' options={gradeOptions} />
+            )}
+          />
+          <form.AppField
+            name='classCode'
+            children={(field: any) => <field.TextField label='Class Code' placeholder='e.g., STEM-1A-2025' required />}
+          />
+        </div>
 
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
           <form.AppField
