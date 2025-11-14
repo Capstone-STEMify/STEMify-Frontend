@@ -30,17 +30,53 @@ export default function ClassroomTable() {
   const debouncedSearchQuery = useDebounce(search, 500)
   const { data } = useSearchClassroomsQuery({ ...queryParams, organizationId: organizationId })
 
-  const rows = React.useMemo(() => data?.data.items ?? [], [data])
+  // Xử lý data để merge curriculum cells
+  const rows = React.useMemo(() => {
+    const items = data?.data.items ?? []
+
+    // Sắp xếp theo curriculum.id để nhóm các classroom cùng curriculum lại
+    const sorted = [...items].sort((a, b) => a.curriculum.id - b.curriculum.id)
+
+    // Đếm số classroom cho mỗi curriculum
+    const curriculumGroups = new Map<number, number>()
+    sorted.forEach((item) => {
+      const curriculumId = item.curriculum.id
+      curriculumGroups.set(curriculumId, (curriculumGroups.get(curriculumId) || 0) + 1)
+    })
+
+    // Thêm meta data cho mỗi row để biết cell nào cần merge
+    let currentCurriculumId: number | null = null
+    let curriculumRowCount = 0
+
+    return sorted.map((item, index) => {
+      const curriculumId = item.curriculum.id
+      const isNewCurriculum = curriculumId !== currentCurriculumId
+
+      // Meta data cho curriculum cell
+      const cellMeta: any = {
+        curriculum: isNewCurriculum ? { rowSpan: curriculumGroups.get(curriculumId) || 1, skip: false } : { skip: true }
+      }
+
+      if (isNewCurriculum) {
+        currentCurriculumId = curriculumId
+        curriculumRowCount = 0
+      }
+      curriculumRowCount++
+
+      return {
+        ...item,
+        __cellMeta: cellMeta
+      }
+    })
+  }, [data])
+
   const columns = useGetClassroomColumn()
 
-  // get curriculum by organization id
-  // TODO: fix later by adding organizationId to the state
   const searchCurriculumQuery = useAppSelector((state) => state.curriculum)
   const { data: curriculumData } = useSearchCurriculumQuery({
     ...searchCurriculumQuery
   })
 
-  // options for status select
   const statusOptions = [
     { label: 'Upcoming', value: 'upcoming' },
     { label: 'In Progress', value: 'inprogress' },
