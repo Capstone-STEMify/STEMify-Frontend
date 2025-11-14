@@ -9,7 +9,12 @@ type UpsertSubscriptionProps = {
 export default function UpdateSubscription({ subscriptionId }: UpsertSubscriptionProps) {
   const { data, isLoading } = useGetSubscriptionByIdQuery(subscriptionId, { skip: !subscriptionId })
   const [updateSubscription] = useUpdateSubscriptionMutation()
-
+  const form = useAppForm({
+    defaultValues: {},
+    onSubmit: async (values) => {
+      // await updateSubscription({ subscriptionId, body: values })
+    }
+  })
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -17,13 +22,6 @@ export default function UpdateSubscription({ subscriptionId }: UpsertSubscriptio
   if (!subscriptionId) {
     return <div>No subscription Id found</div>
   }
-
-  const form = useAppForm({
-    defaultValues: {},
-    onSubmit: async (values) => {
-      // await updateSubscription({ subscriptionId, body: values })
-    }
-  })
 
   return <div>UpdateSubscription</div>
 }
