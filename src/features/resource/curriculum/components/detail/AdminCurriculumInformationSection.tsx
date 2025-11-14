@@ -93,7 +93,7 @@ export default function AdminCurriculumInformationSection({
         <p className='mb-4 text-gray-700'>{curriculum.description}</p>
 
         {/* Review actions (only for admin users) */}
-        {user && user.userRole === UserRole.ADMIN && curriculum.status === CurriculumStatus.PENDING && (
+        {/* {user && user.userRole === UserRole.ADMIN && curriculum.status === CurriculumStatus.PENDING && (
           <div className='flex gap-3'>
             <Button
               className='cursor-pointer bg-green-600 font-semibold text-white shadow'
@@ -118,10 +118,10 @@ export default function AdminCurriculumInformationSection({
               {tc('button.reject')}
             </Button>
           </div>
-        )}
+        )} */}
         {/* if admin user is the creator and curriculum is in draft status */}
         {user &&
-          user.userRole === UserRole.ADMIN &&
+          (user.userRole === UserRole.ADMIN || user.userRole === UserRole.STAFF) &&
           curriculum.status === CurriculumStatus.DRAFT &&
           curriculum.createdByUserId === user.userId && (
             <Button
@@ -138,7 +138,7 @@ export default function AdminCurriculumInformationSection({
           )}
 
         {/* if staff user is the creator and curriculum is in draft status, then show send request button */}
-        {user &&
+        {/* {user &&
           user.userRole === UserRole.STAFF &&
           user.userId === curriculum.createdByUserId &&
           curriculum.status === CurriculumStatus.DRAFT && (
@@ -153,7 +153,7 @@ export default function AdminCurriculumInformationSection({
             >
               {tc('button.publish')}
             </Button>
-          )}
+          )} */}
 
         {/* if staff user is the creator and curriculum is in pending status */}
         {user &&

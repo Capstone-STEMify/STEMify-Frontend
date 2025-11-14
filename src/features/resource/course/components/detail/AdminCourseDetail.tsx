@@ -263,7 +263,7 @@ export default function AdminCourseDetail() {
         />
 
         {/* review Buttons (only for admin users) */}
-        {user && user.userRole === UserRole.ADMIN && course.data.status === CourseStatus.PENDING && (
+        {/* {user && user.userRole === UserRole.ADMIN && course.data.status === CourseStatus.PENDING && (
           <div className='space-y-4'>
             <Button
               onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
@@ -280,25 +280,22 @@ export default function AdminCourseDetail() {
               {tc('button.reject')}
             </Button>
           </div>
+        )} */}
+        {/* if user is the creator and course is in draft status */}
+        {user && user.userId === course.data.createdByUserId && course.data.status === CourseStatus.DRAFT && (
+          <div className='space-y-4'>
+            <Button
+              onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
+              className='bg-sky-custom-600 w-full cursor-pointer font-semibold text-white shadow'
+              variant='outline'
+            >
+              {tc('button.publish')}
+            </Button>
+          </div>
         )}
-        {/* if admin user is the creator and course is in draft status */}
-        {user &&
-          user.userRole === UserRole.ADMIN &&
-          user.userId === course.data.createdByUserId &&
-          course.data.status === CourseStatus.DRAFT && (
-            <div className='space-y-4'>
-              <Button
-                onClick={() => handleUpdateCourseStatus(CourseStatus.PUBLISHED)}
-                className='bg-sky-custom-600 w-full cursor-pointer font-semibold text-white shadow'
-                variant='outline'
-              >
-                {tc('button.publish')}
-              </Button>
-            </div>
-          )}
 
         {/* if staff user is the creator and course is in draft status */}
-        {user &&
+        {/* {user &&
           user.userRole === UserRole.STAFF &&
           user.userId === course.data.createdByUserId &&
           course.data.status === CourseStatus.DRAFT && (
@@ -311,16 +308,16 @@ export default function AdminCourseDetail() {
                 {tc('button.sendRequest')}
               </Button>
             </div>
-          )}
+          )} */}
         {/* Pending Review Message */}
-        {user &&
+        {/* {user &&
           user.userRole === UserRole.STAFF &&
           user.userId === course.data.createdByUserId &&
           course.data.status === CourseStatus.PENDING && (
             <div className='flex w-full items-center gap-3 rounded-md border border-yellow-300 bg-yellow-50 p-2'>
               <p className='text-xs font-medium text-yellow-700'>{t('reviewMessage')}</p>
             </div>
-          )}
+          )} */}
 
         <ExportRSAButton courseId={course.data.id} />
       </div>
