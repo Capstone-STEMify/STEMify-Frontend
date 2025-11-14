@@ -33,6 +33,7 @@ import { LicenseAssignmentType } from '@/features/license-assignment/types/licen
 type ClassroomFormData = {
   name: string
   description?: string
+  classCode: string
   grade: string
   curriculumId: number
   organizationSubscriptionOrderId: number
@@ -45,6 +46,7 @@ type ClassroomFormData = {
 const defaultClassroomFormData: ClassroomFormData = {
   name: '',
   description: '',
+  classCode: '',
   grade: '',
   curriculumId: 1,
   organizationSubscriptionOrderId: 1,
@@ -175,6 +177,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
       const p = classroomData.data
       form.reset({
         name: p.name,
+        classCode: p.classCode,
         description: p.description,
         grade: p.grade,
         curriculumId: p.curriculum.id,

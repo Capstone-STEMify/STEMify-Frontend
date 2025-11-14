@@ -125,16 +125,15 @@ export default function OrganizationClassroomDetail() {
               </div>
             </div>
             <div className='flex gap-2'>
-              <Button variant='outline' size='icon'>
-                <Settings className='h-4 w-4' />
-              </Button>
-              <Button
-                variant='outline'
-                size='icon'
-                onClick={() => openModal('updateClassroomOrganization', { classroomId: classroom.id, mode: 'basic' })}
-              >
-                <MoreVertical className='h-4 w-4' />
-              </Button>
+              {classroom.status === ClassroomStatus.PENDING && (
+                <Button
+                  variant='outline'
+                  size='icon'
+                  onClick={() => openModal('updateClassroomOrganization', { classroomId: classroom.id, mode: 'basic' })}
+                >
+                  <MoreVertical className='h-4 w-4' />
+                </Button>
+              )}
             </div>
           </div>
 
@@ -209,28 +208,29 @@ export default function OrganizationClassroomDetail() {
                     {selectedStudents.length > 0 && (
                       <span className='text-sm text-slate-500'>{selectedStudents.length} selected</span>
                     )}
-
-                    <Button
-                      size='sm'
-                      variant={'destructive'}
-                      disabled={selectedStudents.length === 0}
-                      onClick={() =>
-                        openModal('confirm', {
-                          message: `Are you sure you want to remove ${selectedStudents.length} student(s)?`,
-                          onConfirm: async () => {
-                            // gọi API xóa ở đây, truyền selectedStudents
-                            console.log('Deleting', selectedStudents)
-                            await removeClassroomStudents({
-                              classroomId: classroom.id,
-                              studentIds: selectedStudents
-                            })
-                          }
-                        })
-                      }
-                    >
-                      <Trash2 className='mr-2 h-4 w-4' />
-                      Remove
-                    </Button>
+                    {selectedStudents.length > 0 && (
+                      <Button
+                        size='sm'
+                        variant={'destructive'}
+                        disabled={selectedStudents.length === 0}
+                        onClick={() =>
+                          openModal('confirm', {
+                            message: `Are you sure you want to remove ${selectedStudents.length} student(s)?`,
+                            onConfirm: async () => {
+                              // gọi API xóa ở đây, truyền selectedStudents
+                              console.log('Deleting', selectedStudents)
+                              await removeClassroomStudents({
+                                classroomId: classroom.id,
+                                studentIds: selectedStudents
+                              })
+                            }
+                          })
+                        }
+                      >
+                        <Trash2 className='mr-2 h-4 w-4' />
+                        Remove
+                      </Button>
+                    )}
 
                     <Button size='sm' onClick={() => openModal('addPeople')}>
                       <UserPlus className='mr-2 h-4 w-4' />

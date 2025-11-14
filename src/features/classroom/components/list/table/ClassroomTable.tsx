@@ -1,11 +1,10 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useGetClassroomColumn } from '@/features/classroom/components/list/table/ClassroomColumn'
 import { useSearchClassroomsQuery } from '@/features/classroom/api/classroomApi'
-import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import { useModal } from '@/providers/ModalProvider'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
@@ -17,7 +16,6 @@ import useDebounce from '@/hooks/useDebounce'
 import { SingleSelectWithSearch } from '@/components/shared/SingleSelectWithSearch'
 import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import { getOptions } from '@/utils/index'
-import { useSearchOrgDashboardQuery } from '@/features/dashboard/api/OrgDashboardApi'
 
 export default function ClassroomTable() {
   const { openModal } = useModal()
@@ -28,8 +26,10 @@ export default function ClassroomTable() {
 
   const queryParams = useAppSelector((state) => state.classroom)
   const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
+
   const debouncedSearchQuery = useDebounce(search, 500)
   const { data } = useSearchClassroomsQuery({ ...queryParams, organizationId: organizationId })
+
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
   const columns = useGetClassroomColumn()
 

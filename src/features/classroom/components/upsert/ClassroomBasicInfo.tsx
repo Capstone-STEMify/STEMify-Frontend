@@ -24,17 +24,21 @@ export default function ClassroomBasicInfo({
     <div className='animate-fadeIn mx-auto max-w-4xl space-y-6'>
       <div className='rounded-lg border bg-white p-6 shadow-sm'>
         <h3 className='mb-4 text-lg font-semibold text-gray-900'>Basic Information</h3>
-
-        <div className='space-y-6'>
-          {/* Row 1: Name + Grade */}
-          <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+        <form.AppField
+          name='name'
+          children={(field: any) => (
+            <field.TextField label='Classroom Name' placeholder='e.g., STEM-1A-2025' required />
+          )}
+        />
+        <div className='space-y-4'>
+          {/* Row 1: class code + Grade */}
+          <div className='mt-4 grid grid-cols-1 gap-6 md:grid-cols-2'>
             <form.AppField
-              name='name'
+              name='classCode'
               children={(field: any) => (
-                <field.TextField label='Classroom Name' placeholder='e.g., Math Class 2024' required />
+                <field.TextField label='Class Code' placeholder='e.g., STEM-1A-2025' required />
               )}
             />
-
             <form.AppField
               name='grade'
               children={(field: any) => (
