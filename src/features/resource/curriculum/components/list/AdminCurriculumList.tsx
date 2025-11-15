@@ -101,9 +101,10 @@ export default function AdminCurriculumList() {
                 }
                 items={[
                   <button
-                    onClick={() =>
+                    onClick={() => {
                       updateCurriculum({ id: curriculum.id, body: { status: CurriculumStatus.PUBLISHED } })
-                    }
+                      toast.success(tt('successMessage.update'))
+                    }}
                     className='text-sm'
                   >
                     Publish

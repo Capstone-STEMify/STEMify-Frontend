@@ -73,7 +73,7 @@ export function OrganizationSwitcherHeader() {
 
           {licenseAssignments.map((org) => (
             <DropdownMenuItem
-              key={org.organizationId}
+              key={org.id}
               onClick={() => dispatch(setSelectedOrganizationId(org.organizationId))}
               className={`flex cursor-pointer items-center gap-2 p-2 ${
                 org.organizationId === selectedOrganizationId ? 'bg-accent/40' : ''
