@@ -24,7 +24,6 @@ export default function ContentSection() {
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const auth = useAppSelector((state) => state.auth)
-  const userRole = auth.user?.role || UserRole.GUEST
 
   const lessonsQuery = useAppSelector((state) => state.lesson)
   useEffect(() => {

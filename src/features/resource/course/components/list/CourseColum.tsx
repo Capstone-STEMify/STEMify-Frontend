@@ -18,6 +18,7 @@ import Image from 'next/image'
 import { useLocale } from 'next-intl'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useDeleteCourseFromCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
+import SStatusDropdown from '@/components/shared/SStatusDropdown'
 
 export const courseTableSchema = z.object({
   id: z.number()
@@ -69,6 +70,33 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
     } catch (error) {
       toast.error(tt('errorMessage'))
     }
+  }
+
+  const statusOptions = [
+    { label: 'Draft', value: CourseStatus.DRAFT },
+    { label: 'Pending', value: CourseStatus.PENDING },
+    { label: 'Published', value: CourseStatus.PUBLISHED },
+    { label: 'Rejected', value: CourseStatus.REJECTED },
+    { label: 'Archived', value: CourseStatus.ARCHIVED },
+    { label: 'Deleted', value: CourseStatus.DELETED },
+    { label: 'Approved', value: CourseStatus.APPROVED }
+  ]
+
+  const handleStatusChange = (courseId: number, newStatus: string) => {
+    if (newStatus === CourseStatus.DELETED) {
+      openModal('confirm', {
+        message: 'Are you sure you want to delete this course?',
+        onConfirm: async () => {
+          await deleteCourse(courseId)
+          toast.success('Course deleted successfully')
+        }
+      })
+      return
+    }
+
+    updateCourseStatus({ id: courseId, body: { status: newStatus as CourseStatus } })
+      .unwrap()
+      .then(() => toast.success('Status updated'))
   }
 
   return [
@@ -127,8 +155,14 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       accessorKey: 'status',
       header: () => <div>{tc('tableHeader.status')}</div>,
       cell: ({ row }) => {
-        const value = row.getValue<CourseStatus>('status')
-        return <Badge className={`cursor-pointer ${getStatusBadgeClass(value)}`}>{value}</Badge>
+        const value = row.original.status
+        return (
+          <SStatusDropdown
+            value={value}
+            options={statusOptions}
+            onChange={(newStatus) => handleStatusChange(row.original.id, newStatus)}
+          />
+        )
       }
     },
     {

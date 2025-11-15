@@ -28,7 +28,7 @@ export default function CourseListContent() {
   const { openModal } = useModal()
   const courseParams = useAppSelector((state) => state.course)
   const auth = useAppSelector((state) => state.auth)
-  const userRole = auth.user?.role || UserRole.GUEST
+  const userRole = auth.user?.userRole || UserRole.GUEST
   const PUBLIC_ROLES = userRole === UserRole.STUDENT || userRole === UserRole.GUEST || userRole === UserRole.TEACHER
 
   useEffect(() => {

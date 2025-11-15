@@ -1,29 +1,15 @@
 import React from 'react'
 import { useTranslations } from 'next-intl'
-import { ColumnDef, Row } from '@tanstack/react-table'
+import { ColumnDef } from '@tanstack/react-table'
 import { useParams, useRouter } from 'next/navigation'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
-import { Badge } from '@/components/shadcn/badge'
 import { useDeleteLessonMutation, useUpdateLessonMutation } from '../../api/lessonApi'
 import { Lesson, LessonStatus } from '../../types/lesson.type'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
-
-const getLessonStatusBadgeClass = (status?: LessonStatus): string => {
-  const map: Record<LessonStatus, string> = {
-    [LessonStatus.DRAFT]: 'bg-gray-200 text-gray-800',
-    [LessonStatus.PUBLISHED]: 'bg-blue-100 text-blue-800',
-    [LessonStatus.ARCHIVED]: 'bg-yellow-100 text-yellow-800',
-    [LessonStatus.DELETED]: 'bg-red-100 text-red-800',
-    [LessonStatus.PENDING]: 'bg-amber-100 text-amber-800',
-    [LessonStatus.REJECTED]: 'bg-red-200 text-red-900',
-    [LessonStatus.APPROVED]: 'bg-green-100 text-green-800'
-  }
-
-  return status ? (map[status] ?? 'bg-muted text-muted-foreground') : 'bg-muted text-muted-foreground'
-}
+import SStatusDropdown from '@/components/shared/SStatusDropdown'
 
 export function useGetLessonColumn(): ColumnDef<Lesson>[] {
   const router = useRouter()
@@ -35,6 +21,7 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
   const tt = useTranslations('toast')
   const tm = useTranslations('message')
   const { courseId } = useParams()
+
   const handleDelete = async (id: number) => {
     try {
       await deleteLesson(id).unwrap()
@@ -43,6 +30,7 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
       toast.error(tt('errorMessage'))
     }
   }
+
   const handleStatusUpdate = async (id: number, title: string, status: LessonStatus) => {
     const action = status === LessonStatus.PUBLISHED ? 'publish' : 'reject'
     openModal('confirm', {
@@ -62,6 +50,32 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
 
   const handleNavigatePacingGuide = (id: number) => {
     router.push(`/${locale}/admin/lesson/${id}/pacing-guide`)
+  }
+
+  const statusOptions = [
+    { label: 'Draft', value: LessonStatus.DRAFT },
+    { label: 'Published', value: LessonStatus.PUBLISHED },
+    { label: 'Pending', value: LessonStatus.PENDING },
+    { label: 'Rejected', value: LessonStatus.REJECTED },
+    { label: 'Deleted', value: LessonStatus.DELETED },
+    { label: 'Archived', value: LessonStatus.ARCHIVED }
+  ]
+
+  const handleStatusChange = (lessonId: number, newStatus: string) => {
+    if (newStatus === LessonStatus.DELETED) {
+      openModal('confirm', {
+        message: 'Are you sure you want to delete this lesson?',
+        onConfirm: async () => {
+          await deleteLesson(lessonId)
+          toast.success('Lesson deleted successfully')
+        }
+      })
+      return
+    }
+
+    updateLessonStatus({ id: lessonId, body: { status: newStatus as LessonStatus } })
+      .unwrap()
+      .then(() => toast.success('Status updated'))
   }
 
   return [
@@ -111,9 +125,11 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
       cell: ({ row }) => {
         const value = row.getValue<LessonStatus>('status')
         return (
-          <Badge className={`cursor-pointer ${getLessonStatusBadgeClass(value)}`} variant='outline'>
-            {value}
-          </Badge>
+          <SStatusDropdown
+            value={value}
+            options={statusOptions}
+            onChange={(newStatus) => handleStatusChange(row.original.id, newStatus)}
+          />
         )
       }
     },

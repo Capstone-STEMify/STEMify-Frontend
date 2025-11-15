@@ -4,10 +4,9 @@ import { Fragment, useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { Pencil, Trash2, ChevronDown, ChevronRight, MoreHorizontal } from 'lucide-react'
+import { ChevronDown, ChevronRight, MoreHorizontal } from 'lucide-react'
 import { formatDate } from '@/utils/index'
 import AdminPricingTierTable from '@/features/plan/components/list/AdminPricingTierTable'
-import CreateSubscriptionPlanSheet from '@/features/plan/components/sheet/CreateSubscriptionPlanSheet'
 import { useDeletePlanMutation, useSearchPlanQuery, useUpdatePlanMutation } from '@/features/plan/api/planApi'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
@@ -15,13 +14,6 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setPageIndex, setParam } from '@/features/plan/slice/planProductSlice'
 import SSelect from '@/components/shared/SSelect'
 import { PlanStatus } from '@/features/plan/types/plan.type'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/shadcn/dropdown-menu'
-import Loading from 'app/[locale]/loading'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SPagination } from '@/components/shared/SPagination'
 import SStatusDropdown from '@/components/shared/SStatusDropdown'

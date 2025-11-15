@@ -9,14 +9,16 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { toast } from 'sonner'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { setPageIndex, setPageSize } from '../../slice/curriculumSlice'
-import { useDeleteCurriculumMutation, useSearchCurriculumQuery } from '../../api/curriculumApi'
-import CardHorizontal from '@/components/shared/card/CardHorizontal'
-import { CurriculumSliceParams } from '@/features/resource/curriculum/types/curriculum.type'
-import { Badge } from '@/components/shadcn/badge'
-import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { capitalizeFirst } from '@/utils/index'
+import {
+  useDeleteCurriculumMutation,
+  useSearchCurriculumQuery,
+  useUpdateCurriculumMutation
+} from '../../api/curriculumApi'
+import { CurriculumSliceParams, CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import CardLayout from '@/components/shared/card/CardLayout'
 import Link from 'next/link'
+import { SDropDown } from '@/components/shared/SDropDown'
+import { EllipsisVertical } from 'lucide-react'
 
 export default function AdminCurriculumList() {
   const t = useTranslations('curriculum')
@@ -31,6 +33,7 @@ export default function AdminCurriculumList() {
   const { data: curriculumData, isLoading } = useSearchCurriculumQuery(queryParams)
   const rows = React.useMemo(() => curriculumData?.data.items ?? [], [curriculumData])
 
+  const [updateCurriculum] = useUpdateCurriculumMutation()
   const [deleteCurriculum] = useDeleteCurriculumMutation()
 
   useEffect(() => {
@@ -73,24 +76,42 @@ export default function AdminCurriculumList() {
     <div className='mx-auto mt-5 mb-20 max-w-7xl'>
       <div className='grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4'>
         {curriculumData.data.items.map((curriculum) => (
-          <CardLayout
-            className='cursor-pointer rounded-2xl border-none bg-transparent'
-            key={curriculum.id}
-            imageSrc={curriculum.imageUrl}
-            onClick={() => router.push(`/${locale}/admin/curriculum/${curriculum.id}`)}
-          >
-            <div className='m-2 mt-1'>
-              <h2 className='line-clamp-1 text-lg font-semibold'>{curriculum.title}</h2>
-              <p className='line-clamp-4 flex-1 text-sm text-gray-600'>{curriculum.description}</p>
-              <div className='mt-auto flex items-center gap-2'></div>
-              <Link
-                href={`/${locale}/admin/curriculum/${curriculum.id}`}
-                className='mt-4 flex items-center text-sm font-medium text-sky-500 hover:underline'
-              >
-                {t('list.viewDetails')} &gt;
-              </Link>
+          <div key={curriculum.id} className='relative'>
+            <CardLayout
+              className='cursor-pointer rounded-2xl border-none bg-transparent'
+              imageSrc={curriculum.imageUrl}
+              onClick={() => router.push(`/${locale}/admin/curriculum/${curriculum.id}`)}
+            >
+              <div className='m-2 mt-1'>
+                <h2 className='line-clamp-1 text-lg font-semibold'>{curriculum.title}</h2>
+                <p className='line-clamp-4 flex-1 text-sm text-gray-600'>{curriculum.description}</p>
+                <div className='mt-auto flex items-center gap-2'></div>
+                <Link
+                  href={`/${locale}/admin/curriculum/${curriculum.id}`}
+                  className='mt-4 flex items-center text-sm font-medium text-sky-500 hover:underline'
+                >
+                  {t('list.viewDetails')} &gt;
+                </Link>
+              </div>
+            </CardLayout>
+            <div key={curriculum.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
+              <SDropDown
+                trigger={
+                  <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
+                }
+                items={[
+                  <button
+                    onClick={() =>
+                      updateCurriculum({ id: curriculum.id, body: { status: CurriculumStatus.PUBLISHED } })
+                    }
+                    className='text-sm'
+                  >
+                    Publish
+                  </button>
+                ]}
+              />
             </div>
-          </CardLayout>
+          </div>
         ))}
       </div>
 
