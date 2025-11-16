@@ -74,12 +74,8 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
 
   const statusOptions = [
     { label: 'Draft', value: CourseStatus.DRAFT },
-    { label: 'Pending', value: CourseStatus.PENDING },
     { label: 'Published', value: CourseStatus.PUBLISHED },
-    { label: 'Rejected', value: CourseStatus.REJECTED },
-    { label: 'Archived', value: CourseStatus.ARCHIVED },
-    { label: 'Deleted', value: CourseStatus.DELETED },
-    { label: 'Approved', value: CourseStatus.APPROVED }
+    { label: 'Archived', value: CourseStatus.ARCHIVED }
   ]
 
   const handleStatusChange = (courseId: number, newStatus: string) => {

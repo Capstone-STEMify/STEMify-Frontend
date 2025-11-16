@@ -65,6 +65,26 @@ export default function SystemSubscriptionTable({ organization, refetchOrganizat
       })
   }
 
+  const SubscriptionStatusOption = [
+    { label: 'Pending', value: SubscriptionStatus.PENDING },
+    { label: 'Active', value: SubscriptionStatus.ACTIVE },
+    { label: 'Archived', value: SubscriptionStatus.ARCHIVED },
+    { label: 'Cancelled', value: SubscriptionStatus.CANCELLED },
+    { label: 'Expired', value: SubscriptionStatus.EXPIRED }
+  ]
+
+  const SubscriptionStatusFlow: Record<SubscriptionStatus, SubscriptionStatus[]> = {
+    [SubscriptionStatus.PENDING]: [SubscriptionStatus.PENDING, SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELLED],
+    [SubscriptionStatus.ACTIVE]: [SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELLED, SubscriptionStatus.ARCHIVED],
+    [SubscriptionStatus.ARCHIVED]: [
+      SubscriptionStatus.ACTIVE,
+      SubscriptionStatus.ARCHIVED,
+      SubscriptionStatus.CANCELLED
+    ],
+    [SubscriptionStatus.CANCELLED]: [],
+    [SubscriptionStatus.EXPIRED]: []
+  }
+
   return (
     <div className='space-y-6 p-6'>
       <div className='flex justify-between'>
@@ -102,71 +122,76 @@ export default function SystemSubscriptionTable({ organization, refetchOrganizat
             </TableHeader>
 
             <TableBody>
-              {organization.subscriptions.map((subscription, index) => (
-                <TableRow
-                  key={subscription.id ?? index}
-                  className={`hover:bg-muted/40 border-b transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/20'}`}
-                >
-                  <TableCell
-                    className='cursor-pointer font-medium text-blue-600 hover:underline'
-                    onClick={() =>
-                      router.push(`/${locale}/admin/organization/${organization.id}/subscription/${subscription.id}`)
-                    }
+              {organization.subscriptions.map((subscription, index) => {
+                const allowedOptions = SubscriptionStatusOption.filter(
+                  (sub) =>
+                    subscription.status &&
+                    SubscriptionStatusFlow[subscription.status].includes(sub.value as SubscriptionStatus)
+                )
+                return (
+                  <TableRow
+                    key={subscription.id ?? index}
+                    className={`hover:bg-muted/40 border-b transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/20'}`}
                   >
-                    {subscription.planName}
-                  </TableCell>
-                  <TableCell>{getBillingCycleLabel(subscription.planBillingCycle ?? 'N/A')}</TableCell>
+                    <TableCell
+                      className='cursor-pointer font-medium text-blue-600 hover:underline'
+                      onClick={() =>
+                        router.push(`/${locale}/admin/organization/${organization.id}/subscription/${subscription.id}`)
+                      }
+                    >
+                      {subscription.planName}
+                    </TableCell>
+                    <TableCell>{getBillingCycleLabel(subscription.planBillingCycle ?? 'N/A')}</TableCell>
 
-                  <TableCell className='text-muted-foreground text-sm font-medium'>
-                    {formatPrice(subscription.grossAmount ?? 0) ?? '-'}
-                  </TableCell>
+                    <TableCell className='text-muted-foreground text-sm font-medium'>
+                      {formatPrice(subscription.grossAmount ?? 0) ?? '-'}
+                    </TableCell>
 
-                  <TableCell className='text-foreground text-sm font-medium'>
-                    {formatPrice(subscription.netAmount ?? 0) ?? '-'}
-                  </TableCell>
+                    <TableCell className='text-foreground text-sm font-medium'>
+                      {formatPrice(subscription.netAmount ?? 0) ?? '-'}
+                    </TableCell>
 
-                  <TableCell className='space-y-1'>
-                    <p>
-                      <span className='text-foreground font-semibold'>{subscription.maxStudentSeats ?? '-'}</span>
-                    </p>
-                  </TableCell>
+                    <TableCell className='space-y-1'>
+                      <p>
+                        <span className='text-foreground font-semibold'>{subscription.maxStudentSeats ?? '-'}</span>
+                      </p>
+                    </TableCell>
 
-                  <TableCell className='space-y-1'>
-                    <p>
-                      <span className='text-foreground font-semibold'>{subscription.maxTeacherSeats ?? '-'}</span>
-                    </p>
-                  </TableCell>
-                  <TableCell>
-                    <SStatusDropdown
-                      value={subscription.status!}
-                      options={subscriptionStatusOptions.filter(
-                        (opt) => opt.value !== 'all' && opt.value !== SubscriptionStatus.EXPIRED
-                      )}
-                      onChange={(newStatus) => handleStatusChange(subscription, newStatus)}
-                    />{' '}
-                  </TableCell>
+                    <TableCell className='space-y-1'>
+                      <p>
+                        <span className='text-foreground font-semibold'>{subscription.maxTeacherSeats ?? '-'}</span>
+                      </p>
+                    </TableCell>
+                    <TableCell>
+                      <SStatusDropdown
+                        value={subscription.status!}
+                        options={allowedOptions}
+                        onChange={(newStatus) => handleStatusChange(subscription, newStatus)}
+                      />{' '}
+                    </TableCell>
 
-                  <TableCell className='text-muted-foreground text-sm'>
-                    {formatDate(subscription.startDate ?? 'N/A')}
-                  </TableCell>
-                  <TableCell className='text-muted-foreground text-sm'>
-                    {formatDate(subscription.endDate ?? 'N/A')}
-                  </TableCell>
-                  <TableCell className=''>
-                    <div className='flex items-center space-x-1'>
-                      <button
-                        className='p-1'
-                        onClick={() => openModal('upsertSubscription', { subscriptionId: subscription.id })}
-                      >
-                        <Edit2 className='h-3.5 w-3.5' />
-                      </button>
-                      <button className='p-1'>
-                        <Trash2 className='h-3.5 w-3.5 text-red-500' />
-                      </button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell className='text-muted-foreground text-sm'>
+                      {formatDate(subscription.startDate ?? 'N/A')}
+                    </TableCell>
+                    <TableCell className='text-muted-foreground text-sm'>
+                      {formatDate(subscription.endDate ?? 'N/A')}
+                    </TableCell>
+                    <TableCell className=''>
+                      <div className='flex items-center space-x-1'>
+                        <button
+                          className='p-1'
+                          onClick={() => openModal('upsertSubscription', { subscriptionId: subscription.id })}
+                        >
+                          <Edit2 className='h-3.5 w-3.5' />
+                        </button>
+                        <button className='p-1'>
+                          <Trash2 className='h-3.5 w-3.5 text-red-500' />
+                        </button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </Card>
