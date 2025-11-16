@@ -180,9 +180,10 @@ export default function SelectComponentList({
             pagingParams={queryParams}
             handlePageChange={handlePageChange}
             rowSelection={selectedComponents.map((component) => Number(component.componentId))}
-            onSelectionChange={(ids) => {
+            onSelectionChange={(ids: string[] | number[]) => {
+              const numericIds = ids.map((id) => (typeof id === 'string' ? parseInt(id, 10) : id))
               const newSelected = rows
-                .filter((row) => ids.includes(row.id))
+                .filter((row) => numericIds.includes(row.id))
                 .map((row) => {
                   const existing = selectedComponents.find((c) => c.componentId === row.id)
                   return { componentId: row.id, quantity: existing?.quantity ?? 1 }
