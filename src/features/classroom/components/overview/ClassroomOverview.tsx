@@ -7,6 +7,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { ChevronRight, Info, TrendingUp, BookOpen, Award, Clock, CheckCircle2 } from 'lucide-react'
 import { Cell, Pie, PieChart, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts'
+import { StudentProgressStatistic } from '@/features/dashboard/components/table/StudentProgressStatistic'
 
 export default function ClassroomOverview() {
   const contentStatusData = [
@@ -397,6 +398,8 @@ export default function ClassroomOverview() {
           </div>
         </CardContent>
       </Card>
+
+      <StudentProgressStatistic/>
     </div>
   )
 }
