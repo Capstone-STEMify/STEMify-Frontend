@@ -53,7 +53,14 @@ export default function SystemSubscriptionTable({ organization, refetchOrganizat
   ]
 
   const handleStatusChange = (subscription: any, newStatus: string) => {
-    updateSubscription({ subscriptionId: subscription.id, body: { status: newStatus as SubscriptionStatus } })
+    updateSubscription({
+      subscriptionId: subscription.id,
+      body: {
+        status: newStatus as SubscriptionStatus,
+        // add curriculumIds to avoid removing them unintentionally (for grpc compatibility)
+        curriculumIds: subscription.curriculumIds || []
+      }
+    })
       .unwrap()
       .then(() => {
         toast.success('Status updated')
