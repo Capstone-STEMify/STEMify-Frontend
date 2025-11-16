@@ -21,10 +21,6 @@ const defaultKit: KitFormData = {
   name: '',
   description: '',
   images: [],
-  stockQuantity: 1,
-  isPreorder: false,
-  price: 1000,
-  sku: '',
   ageRangeId: '1',
   weight: 0,
   dimensions: ''
@@ -42,10 +38,6 @@ async function CreateKitJsonPayload(data: KitFormData, userId: string) {
     name: data.name,
     description: data.description,
     images: imagesPayload,
-    stockQuantity: data.stockQuantity,
-    isPreOrder: data.isPreorder ?? false,
-    price: data.price,
-    sku: data.sku,
     ageRangeId: parseInt(data.ageRangeId),
     weight: data.weight,
     dimensions: data.dimensions ?? '',
@@ -58,10 +50,6 @@ async function PatchKitJsonPayload(oldData: KitFormData, newData: KitFormData): 
 
   if (oldData.name !== newData.name) patchData.name = newData.name
   if (oldData.description !== newData.description) patchData.description = newData.description
-  if (oldData.stockQuantity !== newData.stockQuantity) patchData.stockQuantity = newData.stockQuantity
-  if (oldData.isPreorder !== newData.isPreorder) patchData.isPreOrder = newData.isPreorder
-  if (oldData.price !== newData.price) patchData.price = newData.price
-  if (oldData.sku !== newData.sku) patchData.sku = newData.sku
   if (oldData.ageRangeId !== newData.ageRangeId) patchData.ageRangeId = newData.ageRangeId
   if (oldData.weight !== newData.weight) patchData.weight = newData.weight
   if (oldData.dimensions !== newData.dimensions) patchData.dimensions = newData.dimensions
@@ -83,10 +71,6 @@ function mapKitToFormData(kit: Kit): KitFormData {
     name: kit.name ?? '',
     description: kit.description ?? '',
     images: [],
-    stockQuantity: kit.stockQuantity ?? 1,
-    isPreorder: kit.isPreOrder ?? false,
-    price: kit.price ?? 1000,
-    sku: kit.sku ?? '',
     ageRangeId: kit.ageRangeId?.toString() ?? '1',
     weight: kit.weight ?? 0,
     dimensions: kit.dimensions ?? ''
@@ -161,24 +145,12 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
       }}
     >
       {/* Name & SKU */}
-      <div className='flex gap-6'>
-        <form.AppField
-          name='name'
-          children={(field) => (
-            <field.TextField label={t('form.fields.name.label')} placeholder={t('form.fields.name.placeholder')} />
-          )}
-        />
-        <form.AppField
-          name='sku'
-          children={(field) => (
-            <field.TextField
-              disabled={!!kitId}
-              label={t('form.fields.sku.label')}
-              placeholder={t('form.fields.sku.placeholder')}
-            />
-          )}
-        />
-      </div>
+      <form.AppField
+        name='name'
+        children={(field) => (
+          <field.TextField label={t('form.fields.name.label')} placeholder={t('form.fields.name.placeholder')} />
+        )}
+      />
 
       <form.AppField
         name='description'
@@ -209,40 +181,6 @@ export default function UpsertKit({ kitId, onSuccess }: UpsertKitProps) {
             <field.TextField
               label={t('form.fields.dimensions.label')}
               placeholder={t('form.fields.dimensions.placeholder')}
-            />
-          )}
-        />
-      </div>
-      {/* Stock Quantity & IsPreOrder */}
-      <div className='flex gap-6'>
-        <form.AppField
-          name='stockQuantity'
-          children={(field) => (
-            <field.TextField
-              type='number'
-              min={0}
-              label={t('form.fields.stockQuantity.label')}
-              placeholder={t('form.fields.stockQuantity.placeholder')}
-            />
-          )}
-        />
-        {/* <form.AppField
-          name='isPreorder'
-          children={(field) => (
-            <field.SwitchField
-              label={t('form.fields.isPreorder.label')}
-              className='mt-5 data-[state=checked]:bg-blue-500'
-            />
-          )}
-        /> */}
-        <form.AppField
-          name='price'
-          children={(field) => (
-            <field.TextField
-              type='number'
-              min={1000}
-              label={t('form.fields.price.label')}
-              placeholder={t('form.fields.price.placeholder')}
             />
           )}
         />
