@@ -134,6 +134,7 @@ export default function Step1SubscriptionConfiguration() {
     setSelectedBillingCycle(cycle)
     setSelectedPlanBillingCycleId(0)
     setSelectedPlanInfo(null)
+    setSelectedCurriculumIds([]) // Reset curriculum selection
   }
 
   const handlePlanSelect = (plan: any) => {
@@ -141,6 +142,9 @@ export default function Step1SubscriptionConfiguration() {
     setSelectedPlanInfo(plan)
     setMaxStudentSeats(plan.maxStudentSeats)
     setMaxTeacherSeats(plan.maxTeacherSeats)
+
+    // Reset curriculum selection when plan changes
+    setSelectedCurriculumIds([])
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -153,6 +157,22 @@ export default function Step1SubscriptionConfiguration() {
 
     if (!startDate) {
       toast.error('Please select a start date')
+      return
+    }
+
+    // Validate curriculum selection
+    if (!selectedPlanInfo) {
+      toast.error('Please select a plan first')
+      return
+    }
+
+    if (selectedCurriculumIds.length === 0) {
+      toast.error('Please select at least one curriculum')
+      return
+    }
+
+    if (selectedCurriculumIds.length > selectedPlanInfo.curriculumCount) {
+      toast.error(`You can only select up to ${selectedPlanInfo.curriculumCount} curriculum(s)`)
       return
     }
 
@@ -231,6 +251,7 @@ export default function Step1SubscriptionConfiguration() {
                 curriculums={selectedPlanInfo.curriculums}
                 selectedCurriculumIds={selectedCurriculumIds}
                 onCurriculumChange={setSelectedCurriculumIds}
+                maxSelection={selectedPlanInfo.curriculumCount}
               />
             )}
 
