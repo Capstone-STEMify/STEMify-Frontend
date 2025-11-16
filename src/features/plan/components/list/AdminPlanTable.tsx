@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { ChevronDown, ChevronRight, MoreHorizontal } from 'lucide-react'
+import { ChevronDown, ChevronRight, Edit2, MoreHorizontal } from 'lucide-react'
 import { formatDate } from '@/utils/index'
 import AdminPricingTierTable from '@/features/plan/components/list/AdminPricingTierTable'
 import { useDeletePlanMutation, useSearchPlanQuery, useUpdatePlanMutation } from '@/features/plan/api/planApi'
@@ -17,6 +17,12 @@ import { PlanStatus } from '@/features/plan/types/plan.type'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { SPagination } from '@/components/shared/SPagination'
 import SStatusDropdown from '@/components/shared/SStatusDropdown'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/shadcn/dropdown-menu'
 
 export default function AdminPlanTable() {
   const { openModal } = useModal()
@@ -44,12 +50,6 @@ export default function AdminPlanTable() {
     }))
   ]
 
-  const handlePublishPlan = (planId: number) => {
-    // Implement publish plan logic here
-    updatePlan({ id: planId, body: { status: PlanStatus.PUBLISHED } }).unwrap()
-    dispatch(setParam({ key: 'status', value: PlanStatus.PUBLISHED }))
-    toast.success('Plan published successfully')
-  }
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
@@ -70,7 +70,7 @@ export default function AdminPlanTable() {
   ]
 
   const PlanStatusFlow: Record<PlanStatus, PlanStatus[]> = {
-    [PlanStatus.DRAFT]: [PlanStatus.DRAFT, PlanStatus.PUBLISHED, PlanStatus.DELETED],
+    [PlanStatus.DRAFT]: [PlanStatus.DRAFT, PlanStatus.PUBLISHED],
     [PlanStatus.PUBLISHED]: [PlanStatus.PUBLISHED, PlanStatus.ARCHIVED],
     [PlanStatus.ARCHIVED]: [PlanStatus.PUBLISHED, PlanStatus.ARCHIVED],
     [PlanStatus.DELETED]: []
@@ -91,6 +91,13 @@ export default function AdminPlanTable() {
     updatePlan({ id: plan.id, body: { status: newStatus as PlanStatus } })
       .unwrap()
       .then(() => toast.success('Status updated'))
+  }
+
+  const handlePublishPlan = (planId: number) => {
+    // Implement publish plan logic here
+    updatePlan({ id: planId, body: { status: PlanStatus.PUBLISHED } }).unwrap()
+    dispatch(setParam({ key: 'status', value: PlanStatus.PUBLISHED }))
+    toast.success('Plan published successfully')
   }
 
   return (
@@ -132,6 +139,7 @@ export default function AdminPlanTable() {
                 <TableHead>Status</TableHead>
                 <TableHead>Curriculums</TableHead>
                 <TableHead>Created Date</TableHead>
+                <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -165,6 +173,48 @@ export default function AdminPlanTable() {
                           <Badge className='bg-emerald-700 text-white'>{plan.curriculumCount}</Badge>
                         </TableCell>
                         <TableCell className='text-muted-foreground text-sm'>{formatDate(plan.createdAt)}</TableCell>
+                        <TableCell className='text-right'>
+                          <div className='flex items-center justify-end gap-2'>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant='ghost' className='h-8 w-8 p-0'>
+                                  <span className='sr-only'>Open menu</span>
+                                  <MoreHorizontal className='h-4 w-4' />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align='end'>
+                                {plan.status != PlanStatus.ARCHIVED && (
+                                  <DropdownMenuItem
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      openModal('upsertPlan', { planId: plan.id })
+                                    }}
+                                  >
+                                    Update
+                                  </DropdownMenuItem>
+                                )}
+
+                                {plan.status == PlanStatus.DRAFT && (
+                                  <DropdownMenuItem
+                                    className='text-red-500 hover:bg-red-100'
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      openModal('confirm', {
+                                        message: 'Are you sure you want to delete this plan?',
+                                        onConfirm: async () => {
+                                          await deletePlan(plan.id)
+                                          toast.success('Plan deleted successfully')
+                                        }
+                                      })
+                                    }}
+                                  >
+                                    Delete
+                                  </DropdownMenuItem>
+                                )}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        </TableCell>
                       </TableRow>
 
                       {expandedPlans.includes(plan.id) && (

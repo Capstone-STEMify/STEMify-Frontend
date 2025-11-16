@@ -10,18 +10,12 @@ import {
   useGetClassroomByIdQuery,
   useUpdateClassroomMutation
 } from '@/features/classroom/api/classroomApi'
-import { useGetSubscriptionByIdQuery, useSearchSubscriptionQuery } from '@/features/subscription/api/subscriptionApi'
-import { useSearchUserQuery, useSearchUserV2Query } from '@/features/user/api/userApi'
+import { useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
+import { useSearchUserV2Query } from '@/features/user/api/userApi'
 import { getOptions } from '@/utils/index'
-import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { Grade } from '@/features/classroom/types/classroom.type'
-import { setMultipleParams, setParam } from '@/features/subscription/slice/subscriptionSlice'
-import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
-import { DataTable } from '@/components/shared/data-table/data-table'
-import { UserRole } from '@/types/userRole'
 import { useGetUserAction } from '@/features/user/components/table/UserAction'
-import BackButton from '@/components/shared/button/BackButton'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { setPageIndex } from '@/features/user/slice/userSlice'
@@ -37,6 +31,7 @@ type ClassroomFormData = {
   grade: string
   curriculumId: number
   organizationSubscriptionOrderId: number
+  durationWeeks: string // '4' | '6' | '8' | '10' | 'custom'
   startDate: string // ISO date string
   endDate: string // ISO date string
   teacherId: string // UUID
@@ -50,6 +45,7 @@ const defaultClassroomFormData: ClassroomFormData = {
   grade: '',
   curriculumId: 1,
   organizationSubscriptionOrderId: 1,
+  durationWeeks: '8',
   startDate: new Date().toISOString(), // default là hôm nay
   endDate: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString(), // +7 ngày
   teacherId: '',
@@ -175,6 +171,19 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
   useEffect(() => {
     if (isEditing && classroomData?.data) {
       const p = classroomData.data
+
+      let durationWeeks = 'custom'
+      if (p.startDate && p.endDate) {
+        const start = new Date(p.startDate)
+        const end = new Date(p.endDate)
+        const diffTime = Math.abs(end.getTime() - start.getTime())
+        const diffWeeks = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7))
+
+        if ([4, 6, 8, 10].includes(diffWeeks)) {
+          durationWeeks = diffWeeks.toString()
+        }
+      }
+
       form.reset({
         name: p.name,
         classCode: p.classCode,
@@ -182,6 +191,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
         grade: p.grade,
         curriculumId: p.curriculum.id,
         organizationSubscriptionOrderId: p.organizationSubscriptionOrderId,
+        durationWeeks: durationWeeks,
         startDate: p.startDate,
         endDate: p.endDate,
         teacherId: p.teacher.id
