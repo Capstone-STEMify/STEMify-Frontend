@@ -19,7 +19,7 @@ export default function CreateOrganizationSubscription() {
 
   return (
     <div className=''>
-      <div className='mx-auto max-w-5xl'>
+      <div className='mx-auto h-[90vh] max-w-5xl'>
         {/* Header */}
         <div className='mb-8 text-center'>
           <h1 className='mb-2 text-3xl font-bold text-slate-900'>Create Organization Subscription</h1>

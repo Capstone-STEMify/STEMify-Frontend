@@ -1,4 +1,4 @@
-import ClassroomCourseList from '@/features/resource/course/components/list/ClassroomCourseList'
+import ClassroomCourseList from '@/features/classroom/components/detail/ClassroomCourseList'
 import React from 'react'
 
 export default function ClassroomCoursePage() {

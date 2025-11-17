@@ -1,7 +1,6 @@
 'use client'
-import { useEffect, useState } from 'react'
 import ClassroomSubHeaderClient from './ClassroomSubHeaderClient'
-import { Classroom } from '@/features/classroom/types/classroom.type'
+import { useGetClassroomByIdQuery } from '@/features/classroom/api/classroomApi'
 
 interface ClassroomSubHeaderServerProps {
   classroomId: number
@@ -9,18 +8,15 @@ interface ClassroomSubHeaderServerProps {
 }
 
 export default function ClassroomSubHeaderServer({ classroomId, locale }: ClassroomSubHeaderServerProps) {
-  const [classroom, setClassroom] = useState<Classroom | null>(null)
+  const { data: classroomData, isLoading } = useGetClassroomByIdQuery(classroomId)
 
-  useEffect(() => {
-    async function load() {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classrooms/${classroomId}`)
-      const data = await res.json()
-      setClassroom(data.data)
-    }
-    load()
-  }, [classroomId])
+  if (isLoading || !classroomData?.data) return
 
-  if (!classroom) return <div>Loading...</div>
-
-  return <ClassroomSubHeaderClient locale={locale} classroom={classroom} curriculumId={classroom.curriculum?.id} />
+  return (
+    <ClassroomSubHeaderClient
+      locale={locale}
+      classroom={classroomData?.data}
+      curriculumId={classroomData?.data?.curriculum?.id}
+    />
+  )
 }

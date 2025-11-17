@@ -49,7 +49,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
   const { closeModal } = useModal()
   const dispatch = useAppDispatch()
 
-  const { data: planData } = useGetPlanByIdQuery(planId!, { skip: !isEditing })
+  const { data: planData, isLoading: isPlanLoading } = useGetPlanByIdQuery(planId!, { skip: !isEditing })
   const { data: curriculumData } = useSearchCurriculumQuery({ pageNumber: 1, pageSize: 50 })
   const [createPlan, { isLoading: isCreating }] = useCreatePlanMutation()
   const [updatePlan, { isLoading: isUpdating }] = useUpdatePlanMutation()
@@ -95,7 +95,6 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         await updatePlan({ id: planId!, body: payload }).unwrap()
       } else {
         await createPlan(payload).unwrap()
-        dispatch(setParam({ key: 'status', value: PlanStatus.DRAFT }))
       }
 
       toast.success(`Plan ${isEditing ? 'updated' : 'created'} successfully`)

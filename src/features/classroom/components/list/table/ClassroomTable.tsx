@@ -130,7 +130,7 @@ export default function ClassroomTable() {
         <div className='flex gap-2'>
           <SSelect
             placeholder='Filter by'
-            value={queryParams.status ?? 'upcoming'}
+            value={queryParams.status ?? ''}
             onChange={(val) =>
               dispatch(setParam({ key: 'status', value: val as 'upcoming' | 'inprogress' | 'endsoon' | 'completed' }))
             }

@@ -27,7 +27,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import {
   useCreateCurriculumEnrollmentMutation,
   useSearchCurriculumEnrollmentQuery
@@ -43,6 +43,7 @@ export default function StudentClassroomDetail() {
   const tt = useTranslations('toast')
   const { classroomId } = useParams()
   const auth = useAppSelector((state) => state.auth)
+  const currentRole = useAppSelector((state) => state.selectedOrganization.currentRole)
   const userRole = auth.user?.userRole || UserRole.GUEST
   const router = useRouter()
   const locale = useLocale()
@@ -58,7 +59,7 @@ export default function StudentClassroomDetail() {
       pageNumber: 1,
       pageSize: 20
     },
-    { skip: !auth.user?.userId || !classroom?.curriculum.id || userRole !== UserRole.STUDENT }
+    { skip: !auth.user?.userId || !classroom?.curriculum.id || currentRole !== LicenseType.STUDENT }
   )
   const [createEnrollment, { data: createEnrollmentResponse }] = useCreateCurriculumEnrollmentMutation()
 
