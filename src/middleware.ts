@@ -99,6 +99,10 @@ export default withAuth(
     const systemRole = token?.role as UserRole | undefined
     console.log('🔑 Middleware detected role:', systemRole)
     let currentRole: EffectiveRole = UserRole.GUEST
+
+    if (systemRole === UserRole.ADMIN || systemRole === UserRole.STAFF) {
+      currentRole = systemRole
+    }
     if (systemRole === UserRole.MEMBER && token.organizations && token.organizations.length > 0) {
       const firstOrg = token.organizations[0]
       const activeSub = firstOrg.subscriptions.find((s) => s.isActive)
