@@ -5,8 +5,9 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Label } from '@/components/shadcn/label'
-import { CheckIcon, ChevronsUpDown, X, BookOpen, GraduationCap } from 'lucide-react'
+import { CheckIcon, ChevronsUpDown, X, BookOpen, GraduationCap, AlertCircle } from 'lucide-react'
 import { cn } from '@/utils/shadcn/utils'
+import { toast } from 'sonner'
 
 interface Curriculum {
   id: number
@@ -19,22 +20,57 @@ interface CurriculumSelectorProps {
   curriculums: Curriculum[]
   selectedCurriculumIds: number[]
   onCurriculumChange: (ids: number[]) => void
+  maxSelection: number // Curriculum count from plan
 }
 
 export default function CurriculumSelector({
   curriculums,
   selectedCurriculumIds,
-  onCurriculumChange
+  onCurriculumChange,
+  maxSelection
 }: CurriculumSelectorProps) {
   const [open, setOpen] = useState(false)
 
   const selectedCurriculums = curriculums.filter((curriculum) => selectedCurriculumIds.includes(curriculum.id))
+  const isMaxReached = selectedCurriculumIds.length >= maxSelection
+
+  const handleSelect = (curriculumId: number) => {
+    const isSelected = selectedCurriculumIds.includes(curriculumId)
+
+    if (isSelected) {
+      // Remove curriculum
+      onCurriculumChange(selectedCurriculumIds.filter((id) => id !== curriculumId))
+    } else {
+      // Add curriculum - check if max reached
+      if (selectedCurriculumIds.length >= maxSelection) {
+        toast.error(`You can only select up to ${maxSelection} curriculum(s)`)
+        return
+      }
+      onCurriculumChange([...selectedCurriculumIds, curriculumId])
+    }
+  }
 
   return (
     <div className='space-y-4'>
-      <div className='flex items-center gap-2'>
-        <BookOpen className='h-5 w-5 text-slate-600' />
-        <Label className='text-base font-semibold text-slate-900'>Curriculum Selection</Label>
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center gap-2'>
+          <BookOpen className='h-5 w-5 text-slate-600' />
+          <Label className='text-base font-semibold text-slate-900'>
+            Curriculum Selection <span className='text-red-500'>*</span>
+          </Label>
+        </div>
+        <div className='text-sm text-slate-500'>
+          {selectedCurriculumIds.length} / {maxSelection} selected
+        </div>
+      </div>
+
+      {/* Info message */}
+      <div className='flex items-start gap-2 rounded-lg bg-blue-50 p-3 text-sm text-blue-700'>
+        <AlertCircle className='mt-0.5 h-4 w-4 flex-shrink-0' />
+        <p>
+          You can select up to <span className='font-semibold'>{maxSelection}</span> curriculum(s) based on your
+          selected plan.
+        </p>
       </div>
 
       <div className='space-y-2'>
@@ -81,17 +117,14 @@ export default function CurriculumSelector({
               <CommandGroup className='max-h-64 overflow-auto'>
                 {curriculums.map((curriculum) => {
                   const isSelected = selectedCurriculumIds.includes(curriculum.id)
+                  const isDisabled = !isSelected && isMaxReached
+
                   return (
                     <CommandItem
                       key={curriculum.id}
-                      onSelect={() => {
-                        if (isSelected) {
-                          onCurriculumChange(selectedCurriculumIds.filter((id) => id !== curriculum.id))
-                        } else {
-                          onCurriculumChange([...selectedCurriculumIds, curriculum.id])
-                        }
-                      }}
-                      className='cursor-pointer'
+                      onSelect={() => handleSelect(curriculum.id)}
+                      className={cn('cursor-pointer', isDisabled && 'cursor-not-allowed opacity-50')}
+                      disabled={isDisabled}
                     >
                       <div className='flex flex-1 items-center gap-2'>
                         <div
@@ -127,12 +160,6 @@ export default function CurriculumSelector({
             </Command>
           </PopoverContent>
         </Popover>
-
-        {selectedCurriculumIds.length > 0 && (
-          <p className='mt-1 text-xs text-slate-500'>
-            {selectedCurriculumIds.length} curriculum{selectedCurriculumIds.length !== 1 ? 's' : ''} selected
-          </p>
-        )}
       </div>
 
       {/* Selected Curriculums Display */}

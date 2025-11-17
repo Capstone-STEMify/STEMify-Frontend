@@ -1,5 +1,6 @@
 import { Classroom, ClassroomSchedule, ClassroomSliceParams } from '@/features/classroom/types/classroom.type'
-import { createCrudApi } from '@/libs/redux/baseApi'
+import { createCrudApi, customFetchBaseQueryWithErrorHandling } from '@/libs/redux/baseApi'
+import { RootState } from '@/libs/redux/store'
 import { ApiSuccessResponse } from '@/types/baseModel'
 
 export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({

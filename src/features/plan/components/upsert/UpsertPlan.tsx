@@ -15,6 +15,7 @@ type PlanFormData = {
   name: string
   description: string
   accessSupportDetail: string
+  curriculumCount: number
   maxTeacherSeats: number
   maxStudentSeats: number
   billingCycles: {
@@ -28,6 +29,7 @@ const defaultPlanFormData: PlanFormData = {
   name: '',
   description: '',
   accessSupportDetail: '',
+  curriculumCount: 1,
   maxTeacherSeats: 10,
   maxStudentSeats: 100,
   billingCycles: [
@@ -47,26 +49,38 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
   const { closeModal } = useModal()
   const dispatch = useAppDispatch()
 
-  // ✅ Schema validation
-  const planSchema = z.object({
-    name: z.string().min(1, 'Plan name is required'),
-    description: z.string().min(10, 'Description must be at least 10 characters'),
-    accessSupportDetail: z.string().min(10, 'Access support detail must be at least 10 characters'),
-    maxTeacherSeats: z.number().min(1, 'Must be at least 1'),
-    maxStudentSeats: z.number().min(10, 'Must be at least 1'),
-    billingCycles: z.array(
-      z.object({
-        billingCycle: z.string(),
-        price: z.number().min(0, 'Price must be positive')
-      })
-    ),
-    curriculumIds: z.array(z.number()).min(1, 'Select at least one curriculum')
-  })
-
   const { data: planData } = useGetPlanByIdQuery(planId!, { skip: !isEditing })
   const { data: curriculumData } = useSearchCurriculumQuery({ pageNumber: 1, pageSize: 50 })
   const [createPlan, { isLoading: isCreating }] = useCreatePlanMutation()
   const [updatePlan, { isLoading: isUpdating }] = useUpdatePlanMutation()
+
+  // ✅ Schema validation
+  const planSchema = z
+    .object({
+      name: z.string().min(1, 'Plan name is required'),
+      description: z.string().min(10, 'Description must be at least 10 characters'),
+      accessSupportDetail: z.string().min(10, 'Access support detail must be at least 10 characters'),
+      curriculumCount: z.number().min(1, 'Must be at least 1'),
+      maxTeacherSeats: z.number().min(1, 'Must be at least 1'),
+      maxStudentSeats: z.number().min(10, 'Must be at least 10'),
+      billingCycles: z.array(
+        z.object({
+          billingCycle: z.string(),
+          price: z.number().min(0, 'Price must be positive')
+        })
+      ),
+      curriculumIds: z.array(z.number()).min(1, 'Select at least one curriculum')
+    })
+    .superRefine((data, ctx) => {
+      // Validate: curriculumCount phải <= số curriculum available được chọn
+      if (data.curriculumCount > data.curriculumIds.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Curriculum count (${data.curriculumCount}) cannot exceed the number of available curriculums selected (${data.curriculumIds.length})`,
+          path: ['curriculumCount']
+        })
+      }
+    })
 
   const form = useAppForm({
     defaultValues: defaultPlanFormData,
@@ -97,6 +111,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         name: p.name,
         description: p.description,
         accessSupportDetail: p.accessSupportDetail,
+        curriculumCount: p.curriculumCount,
         maxTeacherSeats: p.maxTeacherSeats,
         maxStudentSeats: p.maxStudentSeats,
         billingCycles:
@@ -159,6 +174,23 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         />
       </div>
 
+      <form.AppField
+        name={'curriculumCount'}
+        children={(field) => (
+          <div>
+            <field.TextField
+              type='number'
+              label='Curriculum Count'
+              placeholder='Number of curriculums user can select when purchasing'
+              className='flex-1'
+            />
+            <p className='mt-1 text-sm text-gray-600'>
+              Must be ≤ {form.state.values.curriculumIds.length || 0} (available curriculums selected)
+            </p>
+          </div>
+        )}
+      />
+
       {/* Billing Cycles */}
       <div className='rounded-lg border p-3'>
         <h3>Billing Cycles</h3>
@@ -183,8 +215,8 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
       <form.AppField name='curriculumIds'>
         {(field) => (
           <field.DropdownMultipleCheckboxField
-            label='Curriculums'
-            description='Select one or more curriculums for this plan'
+            label='Available Curriculums'
+            description='Select curriculums that will be available in this plan'
             options={
               curriculumData?.data?.items?.map((c) => ({
                 label: `${c.title} (${c.code})`,
