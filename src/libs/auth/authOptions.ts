@@ -64,22 +64,43 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ account }) {
-      console.log('SignIn callback', { account })
+      // console.log('SignIn callback', { account })
       return true
     },
     async jwt({ token, account, profile }) {
       if (account?.access_token) {
+        // console.log('JWT callback', { profile })
         token.accessToken = account.access_token
         token.idToken = account.id_token
-
+        token.role = profile?.role || UserRole.GUEST
         try {
-          const decoded: any = jwtDecode(account.access_token)
-          token.role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'Guest'
-          token.username = decoded['preferred_username'] ?? 'unknown'
-          token.userId = decoded['sub'] ?? 'unknown'
-        } catch (error) {
-          console.error('Failed to decode access token:', error)
+          token.organizations = JSON.parse((profile as any).organizations || '[]')
+          console.log('Parsed organizations:', token.organizations)
+        } catch (err) {
+          console.error('Failed to parse organizations JSON:', err)
+          token.organizations = []
         }
+        // console.log('Token debug:', token)
+
+        //   try {
+        //     const decoded: any = jwtDecode(account.access_token)
+        //     token.role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'Guest'
+        //     token.preferred_username = decoded['preferred_username'] ?? 'unknown'
+        //     token.sub = decoded['sub'] ?? 'unknown'
+
+        //     // Optional: parse organizations if present in the token
+        //     const rawOrganizations = decoded['organizations']
+        //     if (rawOrganizations) {
+        //       try {
+        //         token.organizations = JSON.parse(rawOrganizations) // array of { id, subscriptions }
+        //       } catch (err) {
+        //         console.error('Failed to parse organizations JSON:', err)
+        //         token.organizations = []
+        //       }
+        //     }
+        //   } catch (error) {
+        //     console.error('Failed to decode access token:', error)
+        //   }
       }
 
       return token
@@ -89,8 +110,12 @@ export const authOptions: NextAuthOptions = {
         session.accessToken = token.accessToken!
         session.user.userRole = token.role!
         session.user.userName = token.username!
-        session.user.userId = token.userId!
+        session.user.userId = token.sub!
         session.exp = token.exp!
+        session.user.email = token.email!
+
+        session.user.organizations = token.organizations ?? []
+        // console.log('Session callback', JSON.stringify(session, null, 2))
       }
       return session
     }

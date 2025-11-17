@@ -7,21 +7,13 @@ import { setSelectedOrganizationId } from '@/features/subscription/slice/selecte
 
 export default function AuthSessionSync() {
   const { data: session } = useSession()
-  const user = session?.user
   const dispatch = useAppDispatch()
 
   const reduxToken = useAppSelector((state) => state.auth.token)
   const reduxUser = useAppSelector((state) => state.auth.user)
 
-  const userId = session?.user.userId
+  const user = session?.user
   const accessToken = session?.accessToken
-
-  // Chỉ fetch nếu: có userId && reduxToken && Redux chưa có user
-  const shouldFetchUser = !!userId && !!reduxToken && !reduxUser
-
-  // const { data: userData } = useGetUserByIdQuery(userId!, {
-  //   skip: !shouldFetchUser
-  // })
 
   // Sync token vào Redux nếu khác hoặc chưa có
   useEffect(() => {
@@ -29,15 +21,6 @@ export default function AuthSessionSync() {
       dispatch(setToken(accessToken))
     }
   }, [accessToken, reduxToken, dispatch])
-
-  // Sync user vào Redux
-  // useEffect(() => {
-  //   if (userData && !reduxUser) {
-  //     const user = userData.data
-  //     dispatch(setUser(user))
-  //     console.log('User data synced to Redux:', user)
-  //   }
-  // }, [userData, reduxUser, dispatch])
 
   useEffect(() => {
     if (user) {
