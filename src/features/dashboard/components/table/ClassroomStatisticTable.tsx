@@ -38,7 +38,8 @@ export function ClassroomStatisticTable({ data }: ClassroomStatisticTableProps) 
               <TableHead className='w-[50px]'>
                 <Checkbox />
               </TableHead>
-              <TableHead>Classroom Id</TableHead>
+              <TableHead>Curriculum Code</TableHead>
+              <TableHead>Curriculum Title</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Pass Rate</TableHead>
               <TableHead>Average Score</TableHead>
@@ -52,7 +53,8 @@ export function ClassroomStatisticTable({ data }: ClassroomStatisticTableProps) 
                   <TableCell>
                     <Checkbox />
                   </TableCell>
-                  <TableCell className='font-medium'>{classroom.id}</TableCell>
+                  <TableCell className='font-medium'>{classroom.curriculumCode}</TableCell>
+                  <TableCell className='font-medium'>{classroom.curriculumTitle}</TableCell>
                   <TableCell>
                     <span className='font-medium'>{classroom.name}</span>
                   </TableCell>
