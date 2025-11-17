@@ -1,10 +1,9 @@
 'use client'
 
 import StemifyLogo from '@/components/shared/StemifyLogo'
-import { setSelectedSubscriptionOrderId } from '@/features/subscription/slice/selectedOrganizationSlice'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
-import { navRoutes, resolveEffectiveRole } from '@/utils/navRoutes'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { EffectiveRole, HeaderRole, LicenseType, UserRole } from '@/types/userRole'
+import { navRoutes } from '@/utils/navRoutes'
 // highlight-start
 import { useLocale, useTranslations } from 'next-intl'
 // Sử dụng các import tiêu chuẩn của Next.js
@@ -15,32 +14,28 @@ import { useEffect } from 'react'
 
 export default function HeaderNavigation() {
   const pathname = usePathname()
-  const dispatch = useAppDispatch()
   const t = useTranslations('Header')
   // highlight-next-line
   const locale = useLocale() // Lấy ngôn ngữ hiện tại
 
+  // Lấy user và currentLicenseType từ Redux
   const user = useAppSelector((state) => state.auth.user)
-  const organizations = user?.organizations ?? []
-  console.log('HeaderNavigation - current user:', user)
-  const selectedSubscriptionId = useAppSelector((state) => state.selectedOrganization.selectedSubscriptionOrderId)
+  const currentRole = useAppSelector((state) => state.selectedOrganization.currentRole)
 
-  useEffect(() => {
-    console.log('[HeaderNavigation] useEffect triggered')
-    if (!selectedSubscriptionId && user?.organizations?.length) {
-      console.log('Setting default subscription for user organizations', user.organizations)
-      for (const org of user.organizations) {
-        const activeSub = org.subscriptions.find((sub) => sub.isActive)
-        if (activeSub) {
-          dispatch(setSelectedSubscriptionOrderId(activeSub.id))
-          break
-        }
-      }
-    }
-  }, [selectedSubscriptionId, organizations, dispatch])
+  // Xác định effectiveRole
+  // Nêu userRole là MEMBER thì effectiveRole là currentLicenseType
+  const isHeaderLicenseType = (role: any): role is LicenseType.STUDENT | LicenseType.TEACHER => {
+    return role === LicenseType.STUDENT || role === LicenseType.TEACHER
+  }
 
-  const effectiveRole = resolveEffectiveRole(user, selectedSubscriptionId)
-  const navItems = navRoutes[effectiveRole]
+  // Default
+  let headerRole: HeaderRole = UserRole.GUEST
+
+  if (user?.userRole === UserRole.MEMBER && currentRole && isHeaderLicenseType(currentRole)) {
+    headerRole = currentRole
+  }
+
+  const navItems = navRoutes[headerRole] ?? []
 
   return (
     <div className='flex h-20 items-center gap-10'>

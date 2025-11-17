@@ -23,6 +23,9 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
 import { useRouter } from 'next/navigation'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { logout } from '@/features/auth/authSlice'
+import { persistor } from '@/libs/redux/store'
 
 function MenuItem({
   children,
@@ -58,6 +61,7 @@ export default function AuthStatusMenu() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const locale = useLocale()
+  const dispatch = useAppDispatch()
 
   if (status === 'loading') {
     return (
@@ -75,8 +79,8 @@ export default function AuthStatusMenu() {
         credentials: 'include'
       })
 
-      localStorage.clear()
-      sessionStorage.clear()
+      dispatch(logout())
+      persistor.purge()
 
       await signOut({ callbackUrl: '/' })
     } catch (error) {
