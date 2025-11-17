@@ -1,8 +1,15 @@
 export enum UserRole {
   ADMIN = 'Admin',
-  STUDENT = 'Student',
-  TEACHER = 'Teacher',
   STAFF = 'Staff',
   GUEST = 'Guest',
-  ORGANIZATION_ADMIN = 'OrganizationAdmin'
+  MEMBER = 'Member'
 }
+
+export enum LicenseType {
+  ORGANIZATION_ADMIN = 'OrganizationAdmin',
+  TEACHER = 'Teacher',
+  STUDENT = 'Student'
+}
+
+export type HeaderRole = UserRole.GUEST | LicenseType.STUDENT | LicenseType.TEACHER
+export type EffectiveRole = UserRole.ADMIN | UserRole.STAFF | UserRole.GUEST | LicenseType

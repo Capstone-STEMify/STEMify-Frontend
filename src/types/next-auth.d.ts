@@ -1,3 +1,4 @@
+import { UserOrganization } from '@/features/user/types/user.type'
 import { DefaultSession } from 'next-auth'
 
 declare module 'next-auth' {
@@ -10,7 +11,7 @@ declare module 'next-auth' {
       userName?: string
       userRole?: string
       userId?: string
-      organizationId?: number
+      organizations?: UserOrganization[]
     } & DefaultSession['user']
     exp?: number
   }
@@ -25,6 +26,7 @@ declare module 'next-auth' {
     username?: string
     role?: string
     userId?: string
+    organizations?: string
   }
 }
 
@@ -36,5 +38,6 @@ declare module 'next-auth/jwt' {
     accessToken?: string
     idToken?: string
     exp?: number
+    organizations?: UserOrganization[]
   }
 }

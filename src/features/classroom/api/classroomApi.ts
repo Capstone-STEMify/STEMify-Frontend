@@ -6,25 +6,7 @@ import { ApiSuccessResponse } from '@/types/baseModel'
 export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
   reducerPath: 'classroomApi',
   baseUrl: '/classrooms',
-  tagTypes: ['Classroom'],
-  baseQuery: async (args, api, extra) => {
-    const activeOrg = (api.getState() as RootState).selectedOrganization.selectedOrganizationId
-    const activeSub = (api.getState() as RootState).selectedOrganization.selectedSubscriptionOrderId
-
-    let headers: Record<string, string> = {}
-    if (activeOrg) headers['X-Active-Organization'] = String(activeOrg)
-    if (activeSub) headers['X-Active-Subscription'] = String(activeSub)
-
-    // gọi baseQuery gốc
-    return customFetchBaseQueryWithErrorHandling(
-      {
-        ...(typeof args === 'string' ? { url: args } : args),
-        headers: { ...headers, ...(typeof args === 'string' ? {} : args.headers) }
-      },
-      api,
-      extra
-    )
-  }
+  tagTypes: ['Classroom']
 }).injectEndpoints({
   endpoints: (builder) => ({
     addClassroomStudents: builder.mutation<void, { classroomId: number; studentEmails: string[] }>({
