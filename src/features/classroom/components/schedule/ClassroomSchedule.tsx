@@ -50,11 +50,15 @@ export function ClassroomSchedule({ classroomId, className }: ClassroomScheduleP
                     Week {scheduleItem.weekNumber}
                   </td>
                   <td className='bg-white p-3'>
-                    <div className='flex flex-wrap gap-2'>
+                    <div className='flex gap-2 overflow-x-auto'>
                       {scheduleItem.lessonSchedule.map((lesson) => (
                         <div
                           key={lesson.lessonId}
-                          className='min-w-[160px] flex-1 rounded border border-gray-300 bg-white p-3 hover:border-sky-300 hover:shadow-sm'
+                          style={{
+                            flex: `0 0 ${lesson.duration * 8}px`, // scale duration → chiều dài
+                            minWidth: '120px' // để card không quá nhỏ
+                          }}
+                          className='rounded border border-gray-300 bg-white p-3 hover:border-sky-300 hover:shadow-sm'
                         >
                           <p className='mb-1 line-clamp-2 text-sm font-medium text-gray-900'>{lesson.lessonTitle}</p>
                           <p className='text-xs text-gray-500'>{lesson.duration} phút</p>
