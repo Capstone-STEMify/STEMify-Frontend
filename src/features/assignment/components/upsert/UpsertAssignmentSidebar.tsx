@@ -60,7 +60,9 @@ function SortableQuestionItem({ question, index }: { question: QuestionFormData;
       <div className='min-w-0 flex-1'>
         <div className='flex items-center gap-2'>
           <span className='text-xs font-semibold text-gray-500'>Q{question.orderIndex}</span>
-          <span className='text-xs text-gray-600'>({question.points} pts)</span>
+          <span className='text-xs text-gray-600'>
+            ({question.rubricCriterion.reduce((acc, curr) => acc + curr.maxPoints, 0)} pts)
+          </span>
         </div>
         <p className='truncate text-sm text-gray-700'>{truncateContent(question.content) || 'Empty question'}</p>
       </div>
@@ -80,23 +82,6 @@ export function AssignmentSidebar({
 }: AssignmentSidebarProps) {
   return (
     <div className='sticky top-6 space-y-4'>
-      {/* Quick Actions */}
-      <Card>
-        <CardHeader className='py-4'>
-          <CardTitle className='text-lg'>Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-2 py-4'>
-          <Button onClick={onSaveDraft} variant='outline' className='w-full justify-start gap-2'>
-            <Save className='h-4 w-4' />
-            Save as Draft
-          </Button>
-          <Button onClick={onPreview} variant='outline' className='w-full justify-start gap-2'>
-            <Eye className='h-4 w-4' />
-            Preview Assignment
-          </Button>
-        </CardContent>
-      </Card>
-
       {/* Questions Order */}
       <Card>
         <CardHeader className='py-4'>
@@ -117,11 +102,11 @@ export function AssignmentSidebar({
         <CardHeader className='py-4'>
           <CardTitle className='text-lg'>Assignment Summary</CardTitle>
         </CardHeader>
-        <CardContent className='space-y-4 py-4'>
+        <CardContent className='space-y-4 pb-4'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-2 text-gray-700'>
               <Target className='h-4 w-4' />
-              <span className='text-sm'>Total Score</span>
+              <span className='text-sm'>Total Points</span>
             </div>
             <span className='text-lg font-semibold'>{totalScore}</span>
           </div>
@@ -132,14 +117,6 @@ export function AssignmentSidebar({
               <span className='text-sm'>Questions</span>
             </div>
             <span className='font-semibold'>{totalQuestions}</span>
-          </div>
-
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-2 text-gray-700'>
-              <FileText className='h-4 w-4' />
-              <span className='text-sm'>Rubric Criteria</span>
-            </div>
-            <span className='font-semibold'>{totalCriteria}</span>
           </div>
 
           <div className='flex items-center justify-between'>
@@ -162,10 +139,10 @@ export function AssignmentSidebar({
 
       {/* Tips */}
       <Card className='border-blue-200 bg-blue-50'>
-        <CardHeader className='py-4'>
+        <CardHeader className='pt-4'>
           <CardTitle className='text-lg'>Tips</CardTitle>
         </CardHeader>
-        <CardContent className='py-4'>
+        <CardContent className='pb-4'>
           <ul className='space-y-2 text-sm text-gray-700'>
             <li className='flex gap-2'>
               <span className='text-blue-600'>•</span>

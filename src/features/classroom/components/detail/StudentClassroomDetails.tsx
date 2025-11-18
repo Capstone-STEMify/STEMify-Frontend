@@ -44,7 +44,6 @@ export default function StudentClassroomDetail() {
   const { classroomId } = useParams()
   const auth = useAppSelector((state) => state.auth)
   const currentRole = useAppSelector((state) => state.selectedOrganization.currentRole)
-  const userRole = auth.user?.userRole || UserRole.GUEST
   const router = useRouter()
   const locale = useLocale()
 

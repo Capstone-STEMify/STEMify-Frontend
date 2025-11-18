@@ -13,7 +13,7 @@ export type Assignment = {
 
 export enum AssignmentQuestionType {
   TEXT = 'Text',
-  FILE = 'File'
+  FILE = 'FileUpload'
 }
 
 export type RubricCriterion = {

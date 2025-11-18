@@ -26,6 +26,7 @@ import { useRouter } from 'next/navigation'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { logout } from '@/features/auth/authSlice'
 import { persistor } from '@/libs/redux/store'
+import { clearSelectedOrganization } from '@/features/subscription/slice/selectedOrganizationSlice'
 
 function MenuItem({
   children,
@@ -79,10 +80,12 @@ export default function AuthStatusMenu() {
         credentials: 'include'
       })
 
+      await signOut({ redirect: false })
       dispatch(logout())
+      dispatch(clearSelectedOrganization())
       persistor.purge()
 
-      await signOut({ callbackUrl: '/' })
+      router.push(`/${locale}/`)
     } catch (error) {
       console.error('Logout failed:', error)
     }

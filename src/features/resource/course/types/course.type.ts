@@ -22,7 +22,10 @@ export type Course = {
   lastModifiedDate?: string
   reviewedAt?: string
   ageRangeLabel: string
-  lessonIds: number[]
+  lessons: {
+    id: number,
+    title: string,
+  }[]
   topicNames: string[]
   skillNames: string[]
   standardNames: string[]

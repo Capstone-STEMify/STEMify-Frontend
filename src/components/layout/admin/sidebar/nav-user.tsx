@@ -18,6 +18,10 @@ import { useLocale } from 'next-intl'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { logout } from '@/features/auth/authSlice'
+import { clearSelectedOrganization } from '@/features/subscription/slice/selectedOrganizationSlice'
+import { persistor } from '@/libs/redux/store'
 export function NavUser({
   user
 }: {
@@ -30,6 +34,8 @@ export function NavUser({
   const locale = useLocale()
   const t = useTranslations('Admin')
   const { isMobile } = useSidebar()
+  const dispatch = useAppDispatch()
+
   const handleSignOut = async () => {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/account/logout`, {
@@ -37,10 +43,10 @@ export function NavUser({
         credentials: 'include'
       })
 
-      localStorage.clear()
-      sessionStorage.clear()
-
       await signOut({ callbackUrl: '/' })
+      dispatch(logout())
+      dispatch(clearSelectedOrganization())
+      persistor.purge()
     } catch (error) {
       console.error('Logout failed:', error)
     }

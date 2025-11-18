@@ -96,7 +96,6 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
           <div className='border-border bg-card sticky top-0 z-10 flex items-center justify-between border-b p-4'>
             <div className='flex items-center gap-2'>
               <h2 className='text-foreground font-semibold'>Quiz Settings</h2>
-              {isDirty && <span className='text-xs text-orange-500'>● Unsaved</span>}
             </div>
             <Button variant='ghost' size='icon' onClick={() => setCollapsed(true)}>
               <ChevronLeft className='h-4 w-4' />
@@ -169,47 +168,6 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
               </div>
             </div>
 
-            <Separator />
-
-            {/* Questions */}
-            <div>
-              <div className='mb-3 flex items-center justify-between'>
-                <Label>Questions ({quiz.totalQuestions})</Label>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={onAddQuestion}
-                  disabled={!quizId}
-                  className='h-8 px-2'
-                  title={!quizId ? 'Save quiz info first' : 'Add new question'}
-                >
-                  <Plus className='h-4 w-4' />
-                </Button>
-              </div>
-
-              {quiz.questions.length > 0 && (
-                <div className='space-y-2'>
-                  {quiz.questions.map((question, index) => (
-                    <button
-                      key={question.id}
-                      onClick={() => handleQuestionSelect(Number(question.id))}
-                      className={cn(
-                        'w-full rounded-lg border p-3 text-left transition-all',
-                        selectedQuestionId === question.id
-                          ? 'border-primary bg-primary/10'
-                          : 'border-border hover:border-primary/50 hover:bg-muted'
-                      )}
-                    >
-                      <div className='text-sm font-medium'>Question {index + 1}</div>
-                      <div className='text-muted-foreground mt-1 truncate text-xs'>
-                        {question.content || 'Empty question'}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
             {/* Save Quiz Info */}
             <div className='mt-6 border-t pt-4'>
               <Button onClick={handleSaveQuiz} className='w-full bg-blue-400' disabled={isSavingQuiz}>
@@ -217,6 +175,48 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                 {isSavingQuiz ? 'Saving...' : quizId ? 'Update Quiz Info' : 'Create Quiz'}
               </Button>
             </div>
+            <Separator />
+
+            {/* Questions */}
+            {quizId && (
+              <div>
+                <div className='mb-3 flex items-center justify-between'>
+                  <Label>Questions ({quiz.totalQuestions})</Label>
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={onAddQuestion}
+                    disabled={!quizId}
+                    className='h-8 px-2'
+                    title={!quizId ? 'Save quiz info first' : 'Add new question'}
+                  >
+                    <Plus className='h-4 w-4' />
+                  </Button>
+                </div>
+
+                {quiz.questions.length > 0 && (
+                  <div className='space-y-2'>
+                    {quiz.questions.map((question, index) => (
+                      <button
+                        key={question.id}
+                        onClick={() => handleQuestionSelect(Number(question.id))}
+                        className={cn(
+                          'w-full rounded-lg border p-3 text-left transition-all',
+                          selectedQuestionId === question.id
+                            ? 'border-primary bg-slate-50'
+                            : 'border-border hover:border-primary/50 hover:bg-muted bg-slate-50'
+                        )}
+                      >
+                        <div className='text-sm font-medium'>Question {index + 1}</div>
+                        <div className='text-muted-foreground mt-1 text-xs whitespace-pre-line'>
+                          {question.content || 'Empty question'}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </ScrollArea>

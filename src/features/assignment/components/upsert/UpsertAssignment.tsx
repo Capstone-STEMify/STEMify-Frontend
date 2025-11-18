@@ -29,6 +29,7 @@ import {
   useUpdateAssignmentMutation
 } from '@/features/assignment/api/assignmentApi'
 import { useParams } from 'next/navigation'
+import BackButton from '@/components/shared/button/BackButton'
 
 const defaultFormValues: CreateAssignmentDto = {
   sectionId: 1,
@@ -39,7 +40,7 @@ const defaultFormValues: CreateAssignmentDto = {
     {
       type: AssignmentQuestionType.TEXT,
       orderIndex: 1,
-      points: 50,
+      points: 5,
       content: '',
       rubricCriterion: []
     }
@@ -186,7 +187,7 @@ function AssignmentForm({
     const newQuestion = {
       type: AssignmentQuestionType.TEXT,
       orderIndex: questions.length + 1,
-      points: 50,
+      points: 5,
       content: '',
       rubricCriterion: []
     }
@@ -294,7 +295,10 @@ function AssignmentForm({
             {/* Main Content */}
             <div className='space-y-6 lg:col-span-2'>
               <div>
-                <h1 className='text-3xl font-semibold'>{isEditing ? 'Edit Assignment' : 'Create Assignment'}</h1>
+                <div className='flex gap-4'>
+                  <BackButton />
+                  <h1 className='text-3xl font-semibold'>{isEditing ? 'Edit Assignment' : 'Create Assignment'}</h1>
+                </div>
                 <p className='mt-1 text-gray-600'>
                   Create and configure your assignment with questions and rubric criteria
                 </p>
@@ -337,7 +341,12 @@ function AssignmentForm({
                       <form.AppField
                         name='durationDays'
                         children={(field) => (
-                          <field.TextField type='number' label='Duration (Days)' placeholder='e.g. 3' min={1} />
+                          <field.TextField
+                            type='number'
+                            label='Deadline (days after enrollment)'
+                            placeholder='e.g. 3'
+                            min={1}
+                          />
                         )}
                       />
                     </div>
@@ -355,10 +364,9 @@ function AssignmentForm({
                   </div>
                   {questions.map((question, questionIndex) => (
                     <Card key={`question-${questionIndex}`}>
-                      <CardHeader className='py-4'>
+                      <CardHeader className='pt-4'>
                         <div className='flex items-start justify-between gap-4'>
                           <div className='flex flex-1 items-center gap-2'>
-                            <GripVertical className='h-5 w-5 text-gray-400' />
                             <CardTitle className='text-lg'>Question {question.orderIndex}</CardTitle>
                           </div>
                           <Button
@@ -383,7 +391,7 @@ function AssignmentForm({
                             <form.AppField name={`questions[${questionIndex}].type`}>
                               {(field) => (
                                 <Select
-                                  value={field.state.value}
+                                  value={field.state.value ?? AssignmentQuestionType.TEXT}
                                   onValueChange={(value: AssignmentQuestionType) => field.handleChange(value)}
                                 >
                                   <SelectTrigger id={`question-type-${questionIndex}`}>
@@ -397,13 +405,6 @@ function AssignmentForm({
                               )}
                             </form.AppField>
                           </div>
-
-                          <form.AppField
-                            name={`questions[${questionIndex}].points`}
-                            children={(field) => (
-                              <field.TextField type='number' label='Points' placeholder='e.g. 50' min={1} />
-                            )}
-                          />
                         </div>
 
                         {/* Question Content */}

@@ -225,7 +225,7 @@ export const QuestionCard = ({ question, isSelected }: QuestionCardProps) => {
       style={style}
       className={cn(
         'cursor-pointer p-6 transition-all',
-        isSelected ? 'ring-primary shadow-lg ring-2' : 'hover:shadow-md',
+        isSelected ? 'shadow-lg' : 'hover:shadow-md',
         isDragging && 'opacity-50'
       )}
       onClick={handleSelect}
@@ -331,7 +331,7 @@ export const QuestionCard = ({ question, isSelected }: QuestionCardProps) => {
           </div>
 
           <div>
-            <Label>Explanation (Optional)</Label>
+            <Label className='mb-2'>Explanation (Optional)</Label>
             <Textarea
               value={question.answerExplanation}
               onChange={(e) => handleUpdate({ ...question, answerExplanation: e.target.value })}

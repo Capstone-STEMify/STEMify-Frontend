@@ -15,7 +15,7 @@ export default function StatsSection({ course }: StatsSectionProps) {
   const statsData = [
     {
       icon: BookOpen,
-      value: course.lessonIds.length,
+      value: course.lessons.length,
       title: `${t('details.stats.lesson')}`,
       subtitle: `${t('details.stats.lesson_description')}`,
       iconColor: 'text-blue-600',

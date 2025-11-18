@@ -115,7 +115,7 @@ export default withAuth(
       [UserRole.ADMIN]: `/${locale}/admin/curriculum`,
       [UserRole.STAFF]: `/${locale}/admin/curriculum`,
       [LicenseType.ORGANIZATION_ADMIN]: `/${locale}/organization/dashboard`,
-      [UserRole.GUEST]: `/${locale}/home`,
+      [UserRole.GUEST]: `/${locale}`,
       [LicenseType.STUDENT]: `/${locale}`,
       [LicenseType.TEACHER]: `/${locale}`
     }
