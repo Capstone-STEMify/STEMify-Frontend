@@ -73,7 +73,7 @@ export default function ClassroomList() {
       {/* Classroom Grid */}
       <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
         {classrooms.map((classroom) => (
-          <Link key={classroom.id} href={`/classroom/${classroom.id}/overview`}>
+          <Link key={classroom.id} href={`/classroom/${classroom.id}`}>
             <Card className='group h-full cursor-pointer overflow-hidden transition-all hover:shadow-lg'>
               {/* Image Header */}
               <div className='relative h-32 w-full overflow-hidden bg-gradient-to-br from-sky-200 to-blue-500'>

@@ -10,7 +10,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { toast } from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import BackButton from '@/components/shared/button/BackButton'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
@@ -53,7 +53,7 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
 
   const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
-  const userRole = auth.user?.role || UserRole.GUEST
+  const userRole = useAppSelector((state) => state.selectedOrganization.currentRole)
   const [createEnrollment, { data: enroll }] = useCreateCourseEnrollmentMutation()
   const [updateEnrollment] = useUpdateCourseEnrollmentMutation()
 
@@ -104,7 +104,7 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
               />
             </div>
 
-            {userRole === UserRole.TEACHER || enrollmentStatus === EnrollmentStatus.IN_PROGRESS ? (
+            {userRole === LicenseType.TEACHER || enrollmentStatus === EnrollmentStatus.IN_PROGRESS ? (
               <div className='flex flex-col gap-4 sm:flex-row'>
                 <Button
                   onClick={() => {

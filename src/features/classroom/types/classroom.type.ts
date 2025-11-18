@@ -22,7 +22,8 @@ export type Classroom = {
   status: ClassroomStatus
   numberOfStudents: number
   students: any[]
-  curriculum: Pick<Curriculum, 'id' | 'title' | 'description' | 'imageUrl' | 'courseCount' | 'code'>
+  curriculum: Curriculum
+  // curriculum: Pick<Curriculum, 'id' | 'title' | 'description' | 'imageUrl' | 'courseCount' | 'code'>
   organizationSubscriptionOrderId: number
 }
 
