@@ -57,17 +57,6 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
     )
   }
 
-  if (!studentQuizId && !isShowQuestionAnswer) {
-    return (
-      <div className='flex items-center justify-center rounded-lg border border-amber-200 bg-amber-50 p-8'>
-        <div className='text-center'>
-          <AlertCircle className='mx-auto mb-2 h-12 w-12 text-amber-500' />
-          <p className='text-lg font-medium text-amber-900'>No student quiz ID provided</p>
-        </div>
-      </div>
-    )
-  }
-
   const questions = quizData.data.questions
 
   const handleAttemptQuiz = async () => {

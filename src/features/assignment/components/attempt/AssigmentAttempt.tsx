@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
-import { ExternalLink, FileText, RotateCcw } from 'lucide-react'
+import { CheckCircle, Clock, ExternalLink, FileText, Loader2, RotateCcw, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import { useGetStudentAssignmentByIdQuery } from '@/features/assignment/api/studentAssignmentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
@@ -133,10 +133,11 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
 }
 
 interface AssignmentAttemptProps {
-  studentAssignmentId: number | string
+  studentAssignmentId?: number | string
+  assignmentId: number
 }
 
-export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAttemptProps) {
+export default function AssignmentAttempt({ studentAssignmentId, assignmentId }: AssignmentAttemptProps) {
   const [isSubmissionOpen, setSubmissionOpen] = useState(false)
   const [isFeedbackOpen, setFeedbackOpen] = useState(false)
 
@@ -148,12 +149,9 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
     skip: !studentAssignmentId
   })
 
-  const { data: assignmentDetail, isLoading: isLoadingAssignment } = useGetAssignmentByIdQuery(
-    Number(studentAssignmentResponse?.data?.assignmentId),
-    {
-      skip: !studentAssignmentResponse?.data?.assignmentId
-    }
-  )
+  const { data: assignmentDetail, isLoading: isLoadingAssignment } = useGetAssignmentByIdQuery(assignmentId, {
+    skip: !assignmentId
+  })
 
   const assignmentTitle = assignmentDetail?.data?.title ?? 'Assignment'
   const passingScore = assignmentDetail?.data?.passingScore ?? 80
@@ -163,7 +161,55 @@ export default function AssignmentAttempt({ studentAssignmentId }: AssignmentAtt
   }
 
   if (isErrorStudent || !studentAssignmentResponse?.data) {
-    return <div className='p-6 text-center text-red-500'>Error loading assignment data.</div>
+    return (
+      <div className='space-y-4 p-8'>
+        <div className='space-y-2 text-center'>
+          <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{assignmentDetail?.data?.title}</h1>
+        </div>
+
+        {/* Quiz Stats Card */}
+        <Card className='border-gray-200 shadow-sm'>
+          <CardContent className='p-0'>
+            <div className='grid grid-cols-4 divide-x divide-gray-200'>
+              <div className='flex flex-col items-center justify-center gap-2 p-6'>
+                <div className='rounded-full bg-amber-100 p-3'>
+                  <Trophy className='h-6 w-6 text-amber-600' />
+                </div>
+                <p className='text-sm font-medium text-gray-600'>Total Marks</p>
+                <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.totalScore}</p>
+              </div>
+              <div className='flex flex-col items-center justify-center gap-2 p-6'>
+                <div className='rounded-full bg-green-100 p-3'>
+                  <CheckCircle className='h-6 w-6 text-green-600' />
+                </div>
+                <p className='text-sm font-medium text-gray-600'>Passing Marks</p>
+                <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.passingScore}</p>
+              </div>
+              <div className='flex flex-col items-center justify-center gap-2 p-6'>
+                <div className='rounded-full bg-sky-100 p-3'>
+                  <Clock className='h-6 w-6 text-sky-600' />
+                </div>
+                <p className='text-sm font-medium text-gray-600'>Time Limit</p>
+                <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.durationDays} days</p>
+              </div>
+              <div className='flex flex-col items-center justify-center gap-2 p-6'>
+                <div className='rounded-full bg-sky-100 p-3'>
+                  <Clock className='h-6 w-6 text-sky-600' />
+                </div>
+                <p className='text-sm font-medium text-gray-600'>Question Length</p>
+                <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.questions.length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <div className='flex justify-center'>
+          {/* loading button when creating quiz attempt */}
+          <Button asChild className='bg-blue-600 text-white hover:bg-blue-700'>
+            <Link href={`/student-assignment/${assignmentDetail?.data?.id}`}>Attempt Now</Link>
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   const studentAssignmentData = studentAssignmentResponse.data
