@@ -167,7 +167,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
           <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{assignmentDetail?.data?.title}</h1>
         </div>
 
-        {/* Quiz Stats Card */}
+        {/* Asm Stats Card */}
         <Card className='border-gray-200 shadow-sm'>
           <CardContent className='p-0'>
             <div className='grid grid-cols-4 divide-x divide-gray-200'>
@@ -232,7 +232,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
     <div className='mx-auto max-w-4xl space-y-6 p-6'>
       <Card className='bg-blue-50 py-4'>
         <CardHeader>
-          <CardTitle className='text-lg font-semibold'>Assignment details</CardTitle>
+          <CardTitle className='text-lg font-semibold'>{assignmentTitle}</CardTitle>
         </CardHeader>
         <CardContent className='grid grid-cols-1 gap-6 md:grid-cols-2'>
           <div className='space-y-4'>
@@ -251,7 +251,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
             <div>
               <div className='mb-1 text-sm font-medium text-gray-700'>Attempts</div>
               <div className='text-sm text-gray-900'>
-                {attemptsRemaining} left ({maxAttempts} attempts every 8 hours)
+                {attemptsRemaining} left ({maxAttempts} attempts allowed)
               </div>
             </div>
             <div className='flex justify-end'>

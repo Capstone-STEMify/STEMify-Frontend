@@ -47,7 +47,7 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
         disabled={isFirstQuestion || isLoading}
         variant='outline'
         size='lg'
-        className={`group border-2 border-gray-300 bg-white font-semibold shadow-md transition-all hover:border-indigo-400 hover:bg-indigo-50 hover:shadow-lg disabled:opacity-30 ${
+        className={`group border-2 border-gray-300 bg-white font-semibold shadow-md transition-all hover:bg-sky-50 hover:shadow-lg disabled:opacity-30 ${
           isMobile ? 'w-full justify-center' : 'px-6'
         }`}
       >
@@ -60,7 +60,7 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
       <div className={`flex flex-col items-center gap-1 ${isMobile ? 'order-first w-full' : ''}`}>
         <span className='text-sm font-medium text-gray-500'>Câu hỏi</span>
         <div className='flex items-center gap-2'>
-          <span className='text-2xl font-bold text-indigo-600'>{currentQuestionIndex + 1}</span>
+          <span className='text-lg font-semibold text-gray-600'>{currentQuestionIndex + 1}</span>
           <span className='text-gray-400'>/</span>
           <span className='text-lg font-semibold text-gray-600'>{questions.length}</span>
         </div>
@@ -72,9 +72,7 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
           onClick={handleSubmitQuiz}
           disabled={isLoading}
           size='lg'
-          className={`group bg-gradient-to-r from-amber-500 to-orange-500 font-bold shadow-lg transition-all hover:from-amber-600 hover:to-orange-600 hover:shadow-xl disabled:opacity-50 ${
-            isMobile ? 'w-full justify-center' : 'px-8'
-          }`}
+          className={` ${isMobile ? 'w-full justify-center' : 'px-8'}`}
         >
           {isLoading ? (
             <>
@@ -93,9 +91,7 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
           onClick={() => dispatch(goToNextQuestion())}
           disabled={isLoading}
           size='lg'
-          className={`group bg-gradient-to-r from-indigo-600 to-purple-600 font-semibold shadow-lg transition-all hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl ${
-            isMobile ? 'w-full justify-center' : 'px-6'
-          }`}
+          className={`bg-sky-100 text-blue-600 ${isMobile ? 'w-full justify-center' : 'px-6'}`}
         >
           <span className='hidden sm:inline'>Câu tiếp</span>
           <span className='sm:hidden'>Tiếp</span>

@@ -37,10 +37,6 @@ export default function QuizPlayerContainer() {
     )
   }
 
-  if (isSubmitted) {
-    return <QuizResult quiz={quizData.data} />
-  }
-
   return (
     <div className='flex h-screen overflow-hidden bg-white'>
       <QuizSidebar quiz={quizData.data} />

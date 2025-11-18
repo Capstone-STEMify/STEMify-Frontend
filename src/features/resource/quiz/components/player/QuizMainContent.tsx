@@ -22,23 +22,16 @@ export default function QuizMainContent({ quiz }: QuizMainContentProps) {
         isMobile ? 'px-4 pt-24 pb-6' : 'p-12'
       }`}
     >
-      {/* Decorative background elements */}
-      <div className='pointer-events-none absolute inset-0 overflow-hidden'>
-        <div className='absolute -top-32 -left-32 h-64 w-64 rounded-full bg-gradient-to-br from-indigo-200/30 to-purple-200/30 blur-3xl' />
-        <div className='absolute top-1/4 -right-32 h-96 w-96 rounded-full bg-gradient-to-br from-blue-200/20 to-cyan-200/20 blur-3xl' />
-        <div className='absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-gradient-to-br from-purple-200/25 to-pink-200/25 blur-3xl' />
-      </div>
-
       {/* Content */}
-      <div className='relative z-10 flex flex-1 flex-col'>
+      <div className='relative z-10 flex flex-col'>
         {/* Question Card */}
-        <div className='mb-8 flex flex-1 items-center justify-center'>
+        <div className='flex flex-1 justify-center'>
           <QuestionCard question={currentQuestion} />
         </div>
 
         {/* Navigation */}
         <div className='mx-auto w-full max-w-3xl'>
-          <NavigationButtons quiz={quiz}  />
+          <NavigationButtons quiz={quiz} />
         </div>
       </div>
     </main>

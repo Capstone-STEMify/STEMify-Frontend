@@ -8,9 +8,20 @@ import Link from 'next/link'
 import { CurriculumEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
 import { Progress } from '@/components/shadcn/progress'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useLocale, useTranslations } from 'next-intl'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { set } from 'zod'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/shadcn/dropdown-menu'
+import {
+  useCreateCourseEnrollmentMutation,
+  useDeleteCourseEnrollmentMutation
+} from '@/features/enrollment/api/courseEnrollmentApi'
+import { toast } from 'sonner'
 
 interface SpecializationCardProps {
   curriculum: CurriculumEnrollment
@@ -21,6 +32,28 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
   const locale = useLocale()
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const tt = useTranslations('toast')
+  const auth = useAppSelector((state) => state.auth)
+
+  const [deleteCourseEnrollment] = useDeleteCourseEnrollmentMutation()
+  const [createEnrollment, { data: enroll }] = useCreateCourseEnrollmentMutation()
+
+  const handleUnerollFromCourse = (courseEnrollmentId: number) => {
+    deleteCourseEnrollment(courseEnrollmentId).unwrap()
+  }
+  const handleCourseEnrollment = (courseId: number, curriculumEnrollmentId: number) => {
+    createEnrollment({
+      curriculumEnrollmentId: curriculumEnrollmentId,
+      courseId: courseId,
+      studentId: auth?.user?.userId,
+      status: EnrollmentStatus.IN_PROGRESS
+    })
+    router.push(`/resource/course/${courseId}/learn`)
+
+    toast.success(tt('successMessage.enroll'), {
+      description: `${tt('successMessage.enrollDes', { title: enroll?.data.courseTitle || '' })}`
+    })
+  }
 
   return (
     <AccordionItem value={itemValue} className='border-b-0'>
@@ -102,7 +135,9 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                     <p
                       className='cursor-pointer font-semibold text-gray-900 hover:underline'
                       onClick={() => {
-                        router.push(`/${locale}/resource/course/${course.courseId}/learn?enrollmentId=${course.id}`)
+                        if (course.status)
+                          router.push(`/${locale}/resource/course/${course.courseId}/learn?enrollmentId=${course.id}`)
+                        else router.push(`/${locale}/resource/course/${course.courseId}`)
                       }}
                     >
                       {course.courseTitle}
@@ -131,7 +166,37 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
                     )}
                   </div>
                 </div>
-                <MoreHorizontal className='h-5 w-5 cursor-pointer text-gray-500' />
+                <div className='flex items-center gap-4'>
+                  {course.status == EnrollmentStatus.IN_PROGRESS && (
+                    <Button
+                      className='bg-sky-100 text-blue-600'
+                      onClick={() => {
+                        router.push(`/${locale}/resource/course/${course.courseId}/learn?enrollmentId=${course.id}`)
+                      }}
+                    >
+                      Resume
+                    </Button>
+                  )}
+                  {!course.status && (
+                    <Button onClick={() => handleCourseEnrollment(course.courseId, curriculum.id)}>Get Started</Button>
+                  )}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button type='button'>
+                        <MoreHorizontal className='ml-4 h-5 w-5 flex-shrink-0 cursor-pointer text-gray-500 hover:text-gray-700' />
+                      </button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent align='start' className='w-32'>
+                      <DropdownMenuItem
+                        className='text-red-600 focus:text-red-700'
+                        onClick={() => handleUnerollFromCourse(course.id)}
+                      >
+                        Unenroll
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
             ))}
           </div>

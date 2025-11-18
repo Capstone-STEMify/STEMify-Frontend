@@ -1,12 +1,8 @@
 import { QuizContent } from '@/features/resource/content/types/content.type'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Clock, Trophy, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/shadcn/card'
-import {
-  useCreateQuizAttemptMutation,
-  useGetQuizByIdQuery,
-  useGetStudentQuizByIdQuery
-} from '@/features/resource/quiz/api/quizApi'
+import { useCreateQuizAttemptMutation, useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Label } from '@/components/shadcn/label'
@@ -17,6 +13,7 @@ import { useAppDispatch } from '@/hooks/redux-hooks'
 import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
 import { setQuizAttemptId, setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
 import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
+import { Attempt } from '@/features/resource/quiz/types/quiz.type'
 
 type QuizViewerProps = {
   quiz: QuizContent
@@ -27,6 +24,7 @@ type QuizViewerProps = {
 export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }: QuizViewerProps) {
   const dispatch = useAppDispatch()
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
+  const [selectedAttempt, setSelectedAttempt] = useState<Attempt | null>(null)
 
   const [createQuizAttempt, { isLoading: isCreating }] = useCreateQuizAttemptMutation()
 
@@ -251,7 +249,13 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
         </div>
       )}
 
-      {studentQuizId && <QuizAttempt studentQuizId={studentQuizId} />}
+      {studentQuizId && (
+        <QuizAttempt
+          studentQuizId={studentQuizId}
+          selectedAttempt={selectedAttempt}
+          onSelectAttempt={setSelectedAttempt}
+        />
+      )}
     </div>
   )
 }

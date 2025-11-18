@@ -226,35 +226,8 @@ export default function AssignmentSubmissionForm() {
       {/* Tabs */}
       <div className='border-b border-gray-200'>
         <div className='flex gap-6'>
-          <button
-            onClick={() => setActiveTab('instructions')}
-            className={`border-b-2 px-1 pb-3 transition-colors ${
-              activeTab === 'instructions'
-                ? 'border-blue-600 font-medium text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Instructions
-          </button>
-          <button
-            onClick={() => setActiveTab('submission')}
-            className={`border-b-2 px-1 pb-3 transition-colors ${
-              activeTab === 'submission'
-                ? 'border-blue-600 font-medium text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
-          >
+          <button className='border-b-2 border-blue-600 px-1 pb-3 font-medium text-blue-600 transition-colors'>
             My submission
-          </button>
-          <button
-            onClick={() => setActiveTab('discussions')}
-            className={`border-b-2 px-1 pb-3 transition-colors ${
-              activeTab === 'discussions'
-                ? 'border-blue-600 font-medium text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Discussions
           </button>
         </div>
       </div>
@@ -270,7 +243,7 @@ export default function AssignmentSubmissionForm() {
               id='project-title'
               value={projectTitle}
               onChange={(e) => setProjectTitle(e.target.value)}
-              placeholder='fpt'
+              placeholder='Project title'
               className='max-w-2xl'
             />
           </div>
