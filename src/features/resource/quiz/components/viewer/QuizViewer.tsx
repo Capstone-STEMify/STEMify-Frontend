@@ -11,7 +11,7 @@ import { QuestionType } from '@/features/resource/question/types/question.type'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
-import { setQuizAttemptId, setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { setQuizAttemptId, setSelectedQuiz, setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
 import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
 import { Attempt } from '@/features/resource/quiz/types/quiz.type'
 import { LicenseType, UserRole } from '@/types/userRole'
@@ -36,8 +36,11 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
   useEffect(() => {
     if (studentQuizId) {
       dispatch(setStudentQuizId(studentQuizId))
+      if (quizData?.data) {
+        dispatch(setSelectedQuiz(quizData.data))
+      }
     }
-  }, [dispatch, studentQuizId])
+  }, [dispatch, studentQuizId, quizData?.data])
 
   if (isLoading) {
     return (
@@ -67,6 +70,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
     const res = await createQuizAttempt({ studentQuizId }).unwrap()
     if (res) {
       dispatch(setQuizAttemptId(res.data.id))
+      dispatch(setStudentQuizId(studentQuizId))
       dispatch(setMode('quiz'))
     }
   }

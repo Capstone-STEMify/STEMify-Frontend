@@ -264,9 +264,7 @@ export default function OrganizationClassroomDetail() {
                         </Avatar>
 
                         <div className='flex-1'>
-                          <p className='font-medium text-slate-900'>
-                            {student.name || student.Name || 'Unknown Student'}
-                          </p>
+                          <p className='font-medium text-slate-900'>{student.name || student.email || student.Email}</p>
                           {(student.email || student.Email) && (
                             <p className='text-sm text-slate-500'>{student.email || student.Email}</p>
                           )}
@@ -342,7 +340,9 @@ export default function OrganizationClassroomDetail() {
                       </AvatarFallback>
                     </Avatar>
                     <div className='min-w-0 flex-1'>
-                      <p className='mb-1 font-semibold text-slate-900'>{classroom.teacher.Name}</p>
+                      <p className='mb-1 font-semibold text-slate-900'>
+                        {classroom.teacher.Name || classroom.teacher.Email}
+                      </p>
                       <div className='flex items-center gap-1.5 text-sm text-slate-600'>
                         <Mail className='h-3.5 w-3.5' />
                         <p className='truncate'>{classroom.teacher.Email}</p>

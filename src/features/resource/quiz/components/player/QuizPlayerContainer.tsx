@@ -8,39 +8,38 @@ import QuizSidebar from '@/features/resource/quiz/components/player/QuizSidebar'
 import QuizMainContent from '@/features/resource/quiz/components/player/QuizMainContent'
 import { useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { initializeQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import SEmpty from '@/components/shared/empty/SEmpty'
 
 export default function QuizPlayerContainer() {
   const dispatch = useAppDispatch()
   const { isSubmitted } = useAppSelector((state) => state.quizPlayer)
   const isMobile = useIsMobile()
-  const { data: quizData, isLoading } = useGetQuizByIdQuery(1)
+  const selectedQuiz = useAppSelector((state) => state.quizPlayer.selectedQuiz)
 
   useEffect(() => {
-    if (quizData?.data) {
+    if (selectedQuiz) {
       dispatch(
         initializeQuiz({
-          questions: quizData.data.questions,
-          timeLimitMinutes: quizData.data.timeLimitMinutes
+          questions: selectedQuiz.questions,
+          timeLimitMinutes: selectedQuiz.timeLimitMinutes
         })
       )
     }
-  }, [quizData, dispatch])
+  }, [selectedQuiz, dispatch])
 
-  if (isLoading || !quizData) {
+  if (!selectedQuiz) {
     return (
-      <div className='flex h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-indigo-50'>
-        <div className='text-center'>
-          <div className='mb-4 inline-block h-16 w-16 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600' />
-          <p className='text-lg font-semibold text-gray-600'>Đang tải quiz...</p>
-        </div>
+      <div className='flex h-screen items-center justify-center'>
+        <SEmpty title='Quiz not found.' />
       </div>
     )
   }
 
   return (
     <div className='flex h-screen overflow-hidden bg-white'>
-      <QuizSidebar quiz={quizData.data} />
-      <QuizMainContent quiz={quizData.data} />
+      <QuizSidebar quiz={selectedQuiz} />
+      <QuizMainContent quiz={selectedQuiz} />
     </div>
   )
 }

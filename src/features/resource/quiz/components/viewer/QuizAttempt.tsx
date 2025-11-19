@@ -27,9 +27,7 @@ type QuizAttemptProps = {
 }
 
 export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAttempt }: QuizAttemptProps) {
-  const { data: studentQuiz, isLoading: isLoadingStudentQuiz } = useGetStudentQuizByIdQuery(studentQuizId!, {
-    skip: !studentQuizId
-  })
+  const { data: studentQuiz, isLoading: isLoadingStudentQuiz, refetch } = useGetStudentQuizByIdQuery(studentQuizId)
 
   if (isLoadingStudentQuiz) {
     return (
