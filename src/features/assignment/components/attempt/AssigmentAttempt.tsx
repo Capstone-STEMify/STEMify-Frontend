@@ -17,10 +17,11 @@ import {
   DialogClose,
   DialogFooter
 } from '@/components/shadcn/dialog'
-import { StudentAssignmentDetail } from '../../types/assigmentlistdetail.type'
+import { StudentAssignmentDetail, StudentAssignmentStatus } from '../../types/assigmentlistdetail.type'
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { setSelectedAssignment, setSelectedStudentAssignment } from '@/features/assignment/slice/studentAssignmentSlice'
+import { Separator } from 'radix-ui'
 
 // --- Helper Functions ---
 
@@ -65,14 +66,15 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
   return (
     <div className='max-h-[90vh] w-5xl overflow-y-auto p-6'>
       {/* Header */}
-      <div className='flex flex-col-reverse items-start justify-between gap-4 sm:flex-row sm:items-center'>
-        <h1 className='text-3xl font-semibold'>{assignmentTitle}</h1>
-        <div className='w-full flex-shrink-0 text-left sm:w-auto sm:text-right'>
-          <span className='text-sm text-gray-500'>Final Score</span>
-          <p className='text-4xl font-bold'>{studentAssignmentData.finalScore}</p>
-          <StatusBadge status={studentAssignmentData.status} />
-        </div>
+      <div className='flex flex-col items-start justify-between gap-2 text-sm'>
+        <h1 className='mb-2 text-2xl font-semibold'>{assignmentTitle}</h1>
+        <p>Submitted: {formatDate(latestAttempt.submittedAt)}</p>
+        <p>
+          Status: <StatusBadge status={studentAssignmentData.status} />
+        </p>
+        <p>Final Score: {studentAssignmentData.finalScore}%</p>
       </div>
+      <hr className='my-6' />
 
       {/* Overall Feedback */}
       {latestAttempt.feedback && (
@@ -88,10 +90,10 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
 
       {/* Loop Questions */}
       <div className='mt-6 space-y-6'>
-        <h2 className='text-2xl font-semibold'>Submission Details</h2>
+        <h2 className='text-xl font-semibold'>Submission Details</h2>
         {latestAttempt.questionAttempts.map((question, index) => (
           <Card key={question.id} className='overflow-hidden'>
-            <CardHeader className='border-b bg-gray-50'>
+            <CardHeader className='flex items-center border-b bg-gray-50'>
               <CardTitle className='text-lg'>Question {index + 1}</CardTitle>
             </CardHeader>
             <div className='grid grid-cols-1 md:grid-cols-2'>
@@ -235,10 +237,11 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
   const attemptsRemaining = maxAttempts - attemptsMade
 
   const isGraded =
-    latestAttempt &&
-    (latestAttempt.status === 'Graded' || latestAttempt.status === 'Failed' || latestAttempt.status === 'Passed')
+    studentAssignmentData &&
+    (studentAssignmentData.status === StudentAssignmentStatus.PASSED ||
+      studentAssignmentData.status === StudentAssignmentStatus.FAILED)
 
-  const isPassed = studentAssignmentData.status === 'Passed'
+  const isPassed = studentAssignmentData.status === StudentAssignmentStatus.PASSED
 
   return (
     <div className='mx-auto max-w-4xl space-y-6 p-6'>
@@ -296,7 +299,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
               <p className='text-sm text-gray-700'>
                 To pass you need at least {passingScore}%. We keep your highest score.
               </p>
-              <p className={`text-6xl font-bold ${isPassed ? 'text-green-700' : 'text-red-700'}`}>
+              <p className={`text-4xl font-bold ${isPassed ? 'text-green-700' : 'text-red-700'}`}>
                 {studentAssignmentData.finalScore}%
               </p>
             </div>
@@ -312,7 +315,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
         </Card>
       )}
 
-      {latestAttempt && (latestAttempt.status === 'Submitted' || latestAttempt.status === 'UnderReview') && (
+      {latestAttempt && studentAssignmentData.status === StudentAssignmentStatus.SUBMITTED && (
         <Card className='bg-yellow-50'>
           <CardContent className='p-6'>
             <h2 className='mb-1 text-lg font-semibold'>Pending Review</h2>
