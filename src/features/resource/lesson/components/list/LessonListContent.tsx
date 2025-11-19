@@ -13,7 +13,7 @@ import { setPageIndex, setPageSize } from '@/features/resource/lesson/slice/less
 import { LessonQueryParams, LessonStatus } from '@/features/resource/lesson/types/lesson.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
 import { EllipsisVertical } from 'lucide-react'
@@ -33,9 +33,9 @@ export default function LessonListContent() {
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const tm = useTranslations('message')
-  const role = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
 
-  const PUBLIC_ROLES = UserRole.STUDENT || UserRole.GUEST || UserRole.TEACHER
+  const PUBLIC_ROLES = LicenseType.STUDENT || UserRole.GUEST || LicenseType.TEACHER
 
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
@@ -65,7 +65,7 @@ export default function LessonListContent() {
     dispatch(setPageIndex(newPage))
   }
 
-  const isReadOnly = role === UserRole.STUDENT || role === UserRole.GUEST || role === UserRole.TEACHER
+  const isReadOnly = role === LicenseType.STUDENT || role === UserRole.GUEST || role === LicenseType.TEACHER
 
   const handleDelete = async (e: React.MouseEvent, lessonId: number) => {
     e.stopPropagation()

@@ -18,6 +18,9 @@ import {
   DialogFooter
 } from '@/components/shadcn/dialog'
 import { StudentAssignmentDetail } from '../../types/assigmentlistdetail.type'
+import { useParams, useRouter } from 'next/navigation'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { setSelectedAssignment, setSelectedStudentAssignment } from '@/features/assignment/slice/studentAssignmentSlice'
 
 // --- Helper Functions ---
 
@@ -140,6 +143,9 @@ interface AssignmentAttemptProps {
 export default function AssignmentAttempt({ studentAssignmentId, assignmentId }: AssignmentAttemptProps) {
   const [isSubmissionOpen, setSubmissionOpen] = useState(false)
   const [isFeedbackOpen, setFeedbackOpen] = useState(false)
+  const { lessonId } = useParams()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const {
     data: studentAssignmentResponse,
@@ -155,6 +161,12 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
 
   const assignmentTitle = assignmentDetail?.data?.title ?? 'Assignment'
   const passingScore = assignmentDetail?.data?.passingScore ?? 80
+
+  const handleAttemptAssignment = () => {
+    dispatch(setSelectedAssignment(assignmentDetail?.data!))
+    dispatch(setSelectedStudentAssignment(studentAssignmentResponse?.data!))
+    router.push(`${lessonId}/assignment/${assignmentId}`)
+  }
 
   if (isLoadingStudent || (isLoadingAssignment && studentAssignmentResponse?.data?.assignmentId)) {
     return <LoadingComponent />
@@ -256,21 +268,17 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
             </div>
             <div className='flex justify-end'>
               {attemptsMade === 0 ? (
-                <Button asChild className='bg-blue-600 text-white hover:bg-blue-700'>
-                  <Link
-                    href={`/student-assignment/${studentAssignmentData.assignmentId}?studentAssignmentId=${studentAssignmentData.id}`}
-                  >
-                    Attempt Now
-                  </Link>
+                <Button onClick={handleAttemptAssignment} className='bg-blue-500 text-white hover:bg-blue-600'>
+                  Attempt Now
                 </Button>
               ) : attemptsMade > 0 && attemptsMade < maxAttempts ? (
-                <Button asChild variant='outline' className='border-blue-600 text-blue-600 hover:bg-blue-50'>
-                  <Link
-                    href={`/student-assignment/${studentAssignmentData.assignmentId}?studentAssignmentId=${studentAssignmentData.id}`}
-                  >
-                    <RotateCcw className='mr-2 h-4 w-4' />
-                    Retry
-                  </Link>
+                <Button
+                  onClick={handleAttemptAssignment}
+                  variant='outline'
+                  className='border-blue-600 text-blue-600 hover:bg-blue-50'
+                >
+                  <RotateCcw className='mr-2 h-4 w-4' />
+                  Retry
                 </Button>
               ) : null}
             </div>
