@@ -25,17 +25,11 @@ export default function ProductFilterSidebar({ className }: ProductFilterSidebar
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce(search, 500)
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000000])
-  const debouncedPrice = useDebounce(priceRange, 500)
   const { data: ageRanges } = useGetAllAgeRangeQuery()
 
   useEffect(() => {
     dispatch(setSearchTerm(debouncedSearch))
   }, [debouncedSearch, dispatch])
-
-  useEffect(() => {
-    dispatch(setMultipleParams({ minPrice: debouncedPrice[0], maxPrice: debouncedPrice[1] }))
-  }, [debouncedPrice, dispatch])
 
   const sortOptions = [
     { value: 'createdDateDesc', orderBy: 'createdDate', sortDirection: 'Desc', label: t('sortOptions.newest') },
@@ -49,10 +43,6 @@ export default function ProductFilterSidebar({ className }: ProductFilterSidebar
 
   const handleSearchChange = (value: string) => {
     setSearch(value)
-  }
-
-  const handlePriceChange = (range: [number, number]) => {
-    setPriceRange(range)
   }
 
   return (
@@ -84,7 +74,7 @@ export default function ProductFilterSidebar({ className }: ProductFilterSidebar
       <hr className='mb-4' />
 
       {/* Price Slider */}
-      <div className='space-y-3'>
+      {/* <div className='space-y-3'>
         <Label className='text-sm font-medium text-gray-600'>{t('priceRange')}</Label>
         <Slider
           value={priceRange}
@@ -98,10 +88,10 @@ export default function ProductFilterSidebar({ className }: ProductFilterSidebar
           <span>{(filters.maxPrice ?? 5000000).toLocaleString('vi-VN')} VND</span>
         </div>
       </div>
-      <hr className='mb-4' />
+      <hr className='mb-4' /> */}
 
       {/* Sort */}
-      <div className='flex items-center gap-3 space-y-2'>
+      {/* <div className='flex items-center gap-3 space-y-2'>
         <Label className='text-sm font-medium text-gray-600'>{t('sort')}</Label>
         <Select
           value={
@@ -128,10 +118,10 @@ export default function ProductFilterSidebar({ className }: ProductFilterSidebar
           </SelectContent>
         </Select>
       </div>
-      <hr className='mb-4' />
+      <hr className='mb-4' /> */}
 
       {/* Status */}
-      <div className='space-y-2'>
+      {/* <div className='space-y-2'>
         <Label className='text-sm font-medium text-gray-600'>{t('status')}</Label>
         <div className='space-y-2 pl-1'>
           <RadioGroup
@@ -160,7 +150,7 @@ export default function ProductFilterSidebar({ className }: ProductFilterSidebar
           </RadioGroup>
         </div>
       </div>
-      <hr className='mb-4' />
+      <hr className='mb-4' /> */}
 
       {/* Age (Radio) */}
       <div className='space-y-2'>

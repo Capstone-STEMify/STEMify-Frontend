@@ -51,6 +51,8 @@ export type ClassroomStatistic = {
   name: string
   passRate: number
   averageScore: number
+  curriculumCode: string
+  curriculumTitle: string
 }
 
 export type DashboardStatisticQueryParam = {

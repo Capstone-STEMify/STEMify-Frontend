@@ -1,8 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { Question } from '@/features/resource/question/types/question.type'
+import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 
 interface QuizPlayerState {
   studentQuizId?: number
+  selectedQuiz?: Quiz
   quizAttemptId?: number
   questions: Question[]
   currentQuestionIndex: number
@@ -13,6 +15,7 @@ interface QuizPlayerState {
 
 const initialState: QuizPlayerState = {
   studentQuizId: undefined,
+  selectedQuiz: undefined,
   quizAttemptId: undefined,
   questions: [],
   currentQuestionIndex: 0,
@@ -30,6 +33,9 @@ export const quizPlayerSlice = createSlice({
     },
     setQuizAttemptId: (state, action: PayloadAction<number>) => {
       state.quizAttemptId = action.payload
+    },
+    setSelectedQuiz: (state, action: PayloadAction<Quiz>) => {
+      state.selectedQuiz = action.payload
     },
     initializeQuiz: (state, action: PayloadAction<{ questions: Question[]; timeLimitMinutes?: number }>) => {
       state.questions = action.payload.questions
@@ -82,6 +88,7 @@ export const quizPlayerSlice = createSlice({
 export const {
   setStudentQuizId,
   setQuizAttemptId,
+  setSelectedQuiz,
   initializeQuiz,
   setCurrentQuestionIndex,
   setUserAnswer,

@@ -35,6 +35,7 @@ export type CourseEnrollment = {
   certificateId?: number
   progressPercentage: number
   verificationCode?: string
+  curriculumEnrollmentId?: number
 }
 
 export type CurriculumEnrollment = {

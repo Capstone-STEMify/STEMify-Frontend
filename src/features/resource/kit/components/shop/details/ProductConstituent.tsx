@@ -24,7 +24,7 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn,
   const { openModal } = useModal()
 
   const user = useAppSelector((state) => state.auth?.user)
-  const role = user?.role
+  const role = user?.userRole
   const isEditable = role === UserRole.ADMIN || role === UserRole.STAFF
 
   const [deleteComponentFromKit] = useDeleteKitComponentsMutation()

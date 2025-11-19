@@ -5,7 +5,7 @@ const initialState: ClassroomSliceParams = {
   pageNumber: 1,
   pageSize: 10,
   search: '',
-  status: 'upcoming'
+  status: undefined
 }
 
 export const classroomSlice = createQuerySlice('classroomSlice', initialState)

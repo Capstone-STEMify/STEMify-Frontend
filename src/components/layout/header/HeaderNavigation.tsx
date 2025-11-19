@@ -2,22 +2,40 @@
 
 import StemifyLogo from '@/components/shared/StemifyLogo'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
+import { EffectiveRole, HeaderRole, LicenseType, UserRole } from '@/types/userRole'
 import { navRoutes } from '@/utils/navRoutes'
 // highlight-start
 import { useLocale, useTranslations } from 'next-intl'
 // Sử dụng các import tiêu chuẩn của Next.js
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 // highlight-end
 
 export default function HeaderNavigation() {
   const pathname = usePathname()
-  const userRole = useAppSelector((state) => state.auth.user?.userRole) || UserRole.GUEST
-  const navItems = navRoutes[userRole as UserRole]
   const t = useTranslations('Header')
   // highlight-next-line
   const locale = useLocale() // Lấy ngôn ngữ hiện tại
+
+  // Lấy user và currentLicenseType từ Redux
+  const user = useAppSelector((state) => state.auth.user)
+  const currentRole = useAppSelector((state) => state.selectedOrganization.currentRole)
+
+  // Xác định effectiveRole
+  // Nêu userRole là MEMBER thì effectiveRole là currentLicenseType
+  const isHeaderLicenseType = (role: any): role is LicenseType.STUDENT | LicenseType.TEACHER => {
+    return role === LicenseType.STUDENT || role === LicenseType.TEACHER
+  }
+
+  // Default
+  let headerRole: HeaderRole = UserRole.GUEST
+
+  if (user?.userRole === UserRole.MEMBER && currentRole && isHeaderLicenseType(currentRole)) {
+    headerRole = currentRole
+  }
+
+  const navItems = navRoutes[headerRole] ?? []
 
   return (
     <div className='flex h-20 items-center gap-10'>

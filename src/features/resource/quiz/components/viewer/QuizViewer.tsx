@@ -1,22 +1,20 @@
 import { QuizContent } from '@/features/resource/content/types/content.type'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Clock, Trophy, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/shadcn/card'
-import {
-  useCreateQuizAttemptMutation,
-  useGetQuizByIdQuery,
-  useGetStudentQuizByIdQuery
-} from '@/features/resource/quiz/api/quizApi'
+import { useCreateQuizAttemptMutation, useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Label } from '@/components/shadcn/label'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import { QuestionType } from '@/features/resource/question/types/question.type'
 import { Button } from '@/components/shadcn/button'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
-import { setQuizAttemptId, setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { setQuizAttemptId, setSelectedQuiz, setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
 import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
+import { Attempt } from '@/features/resource/quiz/types/quiz.type'
+import { LicenseType, UserRole } from '@/types/userRole'
 
 type QuizViewerProps = {
   quiz: QuizContent
@@ -27,14 +25,22 @@ type QuizViewerProps = {
 export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }: QuizViewerProps) {
   const dispatch = useAppDispatch()
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
+  const [selectedAttempt, setSelectedAttempt] = useState<Attempt | null>(null)
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
+  if (role === LicenseType.TEACHER) {
+    isShowQuestionAnswer = true
+  }
 
   const [createQuizAttempt, { isLoading: isCreating }] = useCreateQuizAttemptMutation()
 
   useEffect(() => {
     if (studentQuizId) {
       dispatch(setStudentQuizId(studentQuizId))
+      if (quizData?.data) {
+        dispatch(setSelectedQuiz(quizData.data))
+      }
     }
-  }, [dispatch, studentQuizId])
+  }, [dispatch, studentQuizId, quizData?.data])
 
   if (isLoading) {
     return (
@@ -57,17 +63,6 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
     )
   }
 
-  if (!studentQuizId && !isShowQuestionAnswer) {
-    return (
-      <div className='flex items-center justify-center rounded-lg border border-amber-200 bg-amber-50 p-8'>
-        <div className='text-center'>
-          <AlertCircle className='mx-auto mb-2 h-12 w-12 text-amber-500' />
-          <p className='text-lg font-medium text-amber-900'>No student quiz ID provided</p>
-        </div>
-      </div>
-    )
-  }
-
   const questions = quizData.data.questions
 
   const handleAttemptQuiz = async () => {
@@ -75,6 +70,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
     const res = await createQuizAttempt({ studentQuizId }).unwrap()
     if (res) {
       dispatch(setQuizAttemptId(res.data.id))
+      dispatch(setStudentQuizId(studentQuizId))
       dispatch(setMode('quiz'))
     }
   }
@@ -262,7 +258,13 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
         </div>
       )}
 
-      {studentQuizId && <QuizAttempt studentQuizId={studentQuizId} />}
+      {studentQuizId && (
+        <QuizAttempt
+          studentQuizId={studentQuizId}
+          selectedAttempt={selectedAttempt}
+          onSelectAttempt={setSelectedAttempt}
+        />
+      )}
     </div>
   )
 }

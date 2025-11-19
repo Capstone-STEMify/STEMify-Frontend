@@ -48,7 +48,7 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
   return (
     <aside className='hidden w-80 flex-col gap-6 overflow-y-auto border-r bg-gradient-to-b from-slate-50 to-white p-6 shadow-lg md:flex'>
       {/* Header */}
-      <div className='rounded-2xl p-6 shadow-xl'>
+      <div className='rounded-2xl p-6 shadow-md'>
         <div className='mb-2 flex items-center gap-2'>
           <BookOpen className='h-6 w-6' />
           <h1 className='text-2xl font-bold'>Quiz Challenge</h1>
@@ -65,36 +65,17 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
             </div>
             <span className='font-semibold text-gray-700'>Thời gian còn lại</span>
           </div>
-          <div className='text-4xl font-bold'>{formatTime(timeLeft)}</div>
-          <div className='mt-3 h-2 w-full overflow-hidden rounded-full bg-black'>
+          <div className='text-3xl font-bold'>{formatTime(timeLeft)}</div>
+          <div className='mt-3 h-2 w-full overflow-hidden rounded-full bg-sky-200'>
             <div className='h-full' style={{ width: `${timeProgressPercent}%` }} />
           </div>
         </div>
       </Card>
 
-      {/* Stats Grid */}
-      <div className='grid grid-cols-2 gap-4'>
-        <Card className='p-4 shadow-md transition-all hover:shadow-lg'>
-          <div className='mb-2 flex items-center gap-2'>
-            <Target className='h-4 w-4' />
-            <p className='text-xs font-medium text-gray-600'>Tổng số câu</p>
-          </div>
-          <p className='text-3xl font-bold'>{questions.length}</p>
-        </Card>
-
-        <Card className='p-4 shadow-md transition-all hover:shadow-lg'>
-          <div className='mb-2 flex items-center gap-2'>
-            <TrendingUp className='h-4 w-4' />
-            <p className='text-xs font-medium text-gray-600'>Đã trả lời</p>
-          </div>
-          <p className='text-3xl font-bold'>{answeredCount}</p>
-        </Card>
-      </div>
-
       {/* Question Navigation */}
       <div>
         <p className='mb-4 font-semibold text-gray-700'>Chọn câu hỏi</p>
-        <div className='grid grid-cols-5 gap-2'>
+        <div className='grid grid-cols-6 gap-1'>
           {questions.map((q, index) => {
             const isAnswered = userAnswers[q.id] !== undefined
             const isCurrent = index === currentQuestionIndex
@@ -105,9 +86,9 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
                 onClick={() => dispatch(setCurrentQuestionIndex(index))}
                 variant='outline'
                 size='sm'
-                className={`relative aspect-square overflow-hidden border-2 font-bold transition-all duration-300 ${
+                className={`relative aspect-square overflow-hidden border-1 font-bold transition-all duration-300 ${
                   isCurrent
-                    ? 'scale-110 shadow-lg'
+                    ? 'bg-sky-50 shadow-lg'
                     : isAnswered
                       ? 'border-green-400 bg-green-50 text-green-700 hover:bg-green-100'
                       : 'border-gray-300 bg-white hover:border-blue-400 hover:bg-blue-50'
@@ -122,20 +103,6 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
           })}
         </div>
       </div>
-
-      {/* Progress */}
-      <Card className='mt-auto rounded-2xl p-5 shadow-md'>
-        <div className='mb-3 flex items-center justify-between'>
-          <span className='text-sm font-semibold text-gray-600'>Tiến độ hoàn thành</span>
-          <span className='text-lg font-bold'>
-            {currentQuestionIndex + 1}/{questions.length}
-          </span>
-        </div>
-        <div className='h-3 w-full overflow-hidden rounded-full bg-gray-200'>
-          <div className='h-full bg-black' style={{ width: `${progressPercent}%` }} />
-        </div>
-        <p className='mt-2 text-center text-sm font-medium text-gray-600'>{Math.round(progressPercent)}%</p>
-      </Card>
     </aside>
   )
 }

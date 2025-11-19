@@ -22,7 +22,8 @@ export type Classroom = {
   status: ClassroomStatus
   numberOfStudents: number
   students: any[]
-  curriculum: Pick<Curriculum, 'id' | 'title' | 'description' | 'imageUrl' | 'courseCount' | 'code'>
+  curriculum: Curriculum
+  // curriculum: Pick<Curriculum, 'id' | 'title' | 'description' | 'imageUrl' | 'courseCount' | 'code'>
   organizationSubscriptionOrderId: number
 }
 
@@ -85,3 +86,29 @@ export type StudentProgressParams = {
   classroomId: number
   courseId: number
 }
+// =============== CLASSROOM SCHEDULE TYPE ===============
+
+export type ClassroomSchedule = {
+  minutesPerWeek: number
+  totalWeeks: number
+  courseSchedule: CourseSchedule[]
+}
+
+export type CourseSchedule = {
+  courseId: number
+  courseTitle: string
+  scheduleItems: ScheduleItem[]
+}
+
+export type ScheduleItem = {
+  weekNumber: number
+  lessonSchedule: LessonSchedule[]
+}
+
+export type LessonSchedule = {
+  lessonId: number
+  lessonTitle: string
+  duration: number
+}
+
+// =============== CLASSROOM SCHEDULE TYPE ===============

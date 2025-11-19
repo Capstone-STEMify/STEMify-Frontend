@@ -25,10 +25,10 @@ export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuest
 
   return (
     <div className='space-y-4'>
+      <p className='text-lg font-medium text-gray-900'>{question.content}</p>
       {/* Hint Badge */}
       <div className='mb-4 flex items-center gap-2'>
-        <Badge className='bg-purple-100 text-purple-700 hover:bg-purple-100'>💡 Chọn tất cả đáp án đúng</Badge>
-        <Badge className='bg-gray-100 text-gray-600 hover:bg-gray-100'>Đã chọn: {selected.length}</Badge>
+        <Badge className='bg-sky-50 text-blue-500'>Chọn tất cả đáp án đúng</Badge>
       </div>
 
       {question.answers.map((answer) => {
@@ -51,11 +51,11 @@ export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuest
           }
         } else {
           if (isChosen) {
-            containerClass += ' border-purple-600 bg-gradient-to-r from-purple-50 to-pink-50 shadow-lg scale-[1.02]'
-            borderClass = 'border-2 border-purple-600'
+            containerClass += ' border-sky-400 bg-gradient-to-r from-sky-50 to-cyan-50'
+            borderClass = 'border-1 border-sky-400'
           } else {
-            containerClass += ' border-gray-200 bg-white hover:border-purple-400 hover:shadow-md'
-            borderClass = 'border-2 border-gray-200'
+            containerClass += ' border-gray-200 bg-white hover:border-sky-400 '
+            borderClass = 'border-1 border-gray-200'
           }
         }
 
@@ -69,7 +69,7 @@ export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuest
           >
             {/* Checkbox */}
             <span
-              className={`mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border-2 transition-all duration-300 ${
+              className={`mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 transition-all duration-300 ${
                 isSubmitted
                   ? isCorrect
                     ? 'border-green-500 bg-green-500'
@@ -77,8 +77,8 @@ export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuest
                       ? 'border-red-500 bg-red-500'
                       : 'border-gray-300 bg-white'
                   : isChosen
-                    ? 'scale-110 border-purple-600 bg-purple-600'
-                    : 'border-gray-300 bg-white group-hover:border-purple-400'
+                    ? 'border-sky-500 bg-sky-500'
+                    : 'border-gray-300 bg-white group-hover:border-sky-400'
               }`}
             >
               {(isChosen || (isSubmitted && isCorrect)) && <Check className='h-5 w-5 text-white' />}

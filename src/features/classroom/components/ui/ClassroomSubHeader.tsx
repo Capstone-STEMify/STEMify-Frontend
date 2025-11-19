@@ -11,25 +11,27 @@ import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { Classroom } from '@/features/classroom/types/classroom.type'
 import { format } from 'date-fns'
+import { ClassroomNavItems } from 'app/[locale]/classroom/[classroomId]/page'
 
 interface Props {
-  locale: string
   curriculumId?: number
   classroom: Classroom
+  currentTab: ClassroomNavItems
+  setCurrentTab: (tab: ClassroomNavItems) => void
 }
 
-export default function ClassroomSubHeaderClient({ locale, classroom, curriculumId }: Props) {
+export default function ClassroomSubHeader({ classroom, curriculumId, currentTab, setCurrentTab }: Props) {
   const t = useTranslations('Header')
   const pathname = usePathname()
 
-  const subNavItems = [
-    { name: 'overview', href: `/${locale}/classroom/${classroom.id}/overview` },
+  const subNavItems: { name: string; currentTab: ClassroomNavItems }[] = [
+    { name: 'overview', currentTab: 'overview' },
     {
       name: 'course',
-      href: `/${locale}/classroom/${classroom.id}/course${curriculumId ? `?curriculumId=${curriculumId}` : ''}`
+      currentTab: 'course'
     },
-    { name: 'quiz', href: `/${locale}/classroom/${classroom.id}/quiz` },
-    { name: 'assignment', href: `/${locale}/classroom/${classroom.id}/assignment` }
+    { name: 'quiz', currentTab: 'quiz' },
+    { name: 'assignment', currentTab: 'assignment' }
   ]
 
   return (
@@ -98,11 +100,11 @@ export default function ClassroomSubHeaderClient({ locale, classroom, curriculum
         {/* Bottom Row - Navigation Tabs */}
         <nav className='flex items-center gap-6'>
           {subNavItems.map((item) => {
-            const isActive = pathname.startsWith(item.href.split('?')[0])
+            const isActive = currentTab === item.currentTab
             return (
-              <Link
+              <div
                 key={item.name}
-                href={item.href}
+                onClick={() => setCurrentTab(item.currentTab)}
                 className={cn(
                   'relative flex h-12 items-center px-1 text-sm font-semibold transition-colors duration-200',
                   isActive ? 'text-slate-900' : 'text-slate-600 hover:text-slate-900'
@@ -110,7 +112,7 @@ export default function ClassroomSubHeaderClient({ locale, classroom, curriculum
               >
                 {t(item.name)}
                 {isActive && <span className='absolute right-0 bottom-0 left-0 h-0.5 rounded-t-full bg-blue-600' />}
-              </Link>
+              </div>
             )
           })}
         </nav>

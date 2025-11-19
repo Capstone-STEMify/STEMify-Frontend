@@ -6,7 +6,7 @@ const initialState: PlanSliceParams = {
   pageSize: 10,
   search: '',
   orderBy: '',
-  status: PlanStatus.PUBLISHED
+  status: undefined
 }
 
 export const planSlice = createQuerySlice('planSlice', initialState)

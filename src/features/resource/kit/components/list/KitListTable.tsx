@@ -103,8 +103,8 @@ export default function KitListTable({ onSuccess, kitId }: KitListTableProps) {
         handlePageChange={handlePageChange}
         rowSelection={selectedId !== undefined ? [selectedId] : []}
         onSelectionChange={(ids) => {
-          const firstId = Array.from(ids)[0]
-          setSelectedId(firstId ?? undefined)
+          const firstId = Array.from(ids as number[])[0]
+          setSelectedId(Number(firstId) ?? undefined)
         }}
         disabledRowIds={kitId ? [kitId] : undefined}
       />

@@ -137,21 +137,10 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
               <p className='text-sm text-gray-500'>Score: {learner.totalScore}</p>
             </div>
           </div>
-          <div className='flex items-center gap-2'>
-            <Button variant='outline' size='icon'>
-              <Printer className='h-4 w-4' />
-            </Button>
-            <Button variant='outline' size='icon'>
-              <Download className='h-4 w-4' />
-            </Button>
-            <Button variant='outline' size='icon'>
-              <Share className='h-4 w-4' />
-            </Button>
-          </div>
         </div>
 
         <div className='flex-1 overflow-y-auto p-8'>
-          <div className='my-6 space-y-2'>
+          <div className='mb-6 space-y-2'>
             <div className='flex items-start justify-between'>
               <h3 className='max-w-md text-2xl font-bold'>{quiz.quizName}</h3>
               <div className='flex items-center gap-6 text-sm'>
@@ -197,11 +186,11 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
           <div className='mb-6 flex items-center gap-4 text-xs text-gray-600'>
             <span className='flex items-center gap-1.5'>
               <div className='h-2 w-2 rounded-full bg-green-500' />
-              Correct {} - 72%
+              Correct {} - {Math.round((learner.totalCorrectAnswers! / quiz.totalQuestions) * 100)}%
             </span>
             <span className='flex items-center gap-1.5'>
               <div className='h-2 w-2 rounded-full bg-red-500' />
-              Incorrect 2 - 12%
+              Incorrect {} - {Math.round((learner.totalIncorrectAnswers! / quiz.totalQuestions) * 100)}%
             </span>
           </div>
           <div className='w-full'>
@@ -219,7 +208,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                       {question.status}
                     </Badge>
                   </div>
-                  <div className='flex items-center gap-4 text-sm font-normal text-gray-600'>
+                  <div className='flex items-center gap-4 text-xs font-normal text-gray-600'>
                     <span className='flex items-center gap-1.5 rounded-md bg-gray-100 p-2 font-semibold'>
                       <Layers className='h-4 w-4' /> {question.questionType}
                     </span>
@@ -234,14 +223,12 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                 <div className='space-y-4 pl-12 text-base'>
                   <p className='break-words'>{question.questionTitle}</p>
 
-                  {question.status === 'incorrect' && (
-                    <div className='mt-4 rounded-r-md border-l-4 border-green-500 bg-green-50 p-4'>
-                      <p className='text-xs font-semibold text-green-800'>CORRECT ANSWER</p>
-                      <p className='font-medium text-green-900'>
-                        {question.learnerAnswer ?? question.answerStatistics?.[0]?.content}
-                      </p>
-                    </div>
-                  )}
+                  <div className='mt-4 rounded-r-md border-l-4 border-green-500 bg-green-50 p-4'>
+                    <p className='text-xs font-semibold text-green-800'>CORRECT ANSWER</p>
+                    <p className='font-medium text-green-900'>
+                      {question.learnerAnswer ?? question.answerStatistics?.[0]?.content}
+                    </p>
+                  </div>
                 </div>
               )
 

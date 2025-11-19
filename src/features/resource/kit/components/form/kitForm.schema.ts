@@ -5,10 +5,6 @@ export const buildKitSchema = (tv: (key: string, values?: any) => string) =>
     name: z.string().min(3, tv('kit.name', { length: 3 })),
     description: z.string().min(5, tv('kit.description', { length: 5 })),
     images: z.array(z.instanceof(File)).max(10, tv('kit.images', { count: 10 })),
-    stockQuantity: z.number().min(0, tv('kit.stockQuantity', { min: 0 })),
-    isPreorder: z.boolean().optional(),
-    price: z.number().min(0, tv('kit.price', { min: 0 })),
-    sku: z.string().min(3, tv('kit.sku', { length: 3 })),
     ageRangeId: z.string().min(1, tv('course.ageRangeId')),
     weight: z.number().min(0, tv('kit.weight', { min: 0 })),
     dimensions: z.string().optional()

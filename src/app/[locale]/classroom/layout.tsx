@@ -5,7 +5,7 @@ export default async function ClassroomListLayout({ children }: Readonly<{ child
     <div>
       <Header />
       <div className='pt-20'>
-        <main className='container mx-auto'>{children}</main>
+        <main>{children}</main>
       </div>
     </div>
   )

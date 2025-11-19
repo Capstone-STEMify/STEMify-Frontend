@@ -1,7 +1,7 @@
 'use client'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Label } from '@/components/shadcn/label'
-import { Tag, GraduationCap, Users, Check } from 'lucide-react'
+import { Tag, GraduationCap, Users, Check, Book } from 'lucide-react'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { cn } from '@/utils/shadcn/utils'
 
@@ -89,6 +89,12 @@ export default function PlanSelector({
                     </div>
 
                     <div className='space-y-2 border-t border-slate-200 pt-3'>
+                      <div className='flex items-center gap-2 text-sm'>
+                        <Book className='h-4 w-4 text-slate-400' />
+                        <span className='text-slate-600'>
+                          <span className='font-semibold text-slate-900'>{plan.curriculumCount}</span> curriculum(s)
+                        </span>
+                      </div>
                       <div className='flex items-center gap-2 text-sm'>
                         <GraduationCap className='h-4 w-4 text-slate-400' />
                         <span className='text-slate-600'>

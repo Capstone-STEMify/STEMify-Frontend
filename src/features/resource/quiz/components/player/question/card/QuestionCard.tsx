@@ -46,43 +46,9 @@ export default function QuestionCard({ question }: QuestionCardProps) {
   const isAnswered = userAnswers[question.id] !== undefined
 
   return (
-    <div className='animate-in fade-in-0 slide-in-from-bottom-4 w-full max-w-3xl duration-500'>
-      {/* Header Section */}
-      <div className='mb-6 flex items-center justify-between md:mb-8'>
-        <div className='flex items-center gap-3'>
-          <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-xl font-bold text-white shadow-lg'>
-            {currentQuestionIndex + 1}
-          </div>
-          <Badge
-            className={`${getQuestionTypeColor(question.questionType)} border-none px-4 py-1 text-white shadow-md`}
-          >
-            {getQuestionTypeLabel(question.questionType)}
-          </Badge>
-        </div>
-
-        {isAnswered && (
-          <div className='flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-sm font-semibold text-green-600'>
-            <CheckCircle2 className='h-4 w-4' />
-            Đã trả lời
-          </div>
-        )}
-      </div>
-
-      {/* Question Content */}
-      <div className='mb-6 md:mb-8'>
-        <h2 className='bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-2xl leading-tight font-bold text-transparent md:text-3xl lg:text-4xl'>
-          {question.content}
-        </h2>
-        {question.points > 0 && (
-          <div className='mt-4 flex items-center gap-2 text-amber-600'>
-            <Award className='h-5 w-5' />
-            <span className='font-semibold'>{question.points} điểm</span>
-          </div>
-        )}
-      </div>
-
+    <div className='animate-in fade-in-0 slide-in-from-bottom-4 w-full max-w-4xl duration-500'>
       {/* Question Type Component */}
-      <Card className='overflow-hidden border-2 border-gray-100 bg-white shadow-xl transition-all hover:shadow-2xl'>
+      <Card className='overflow-hidden border-2 border-gray-100 bg-white shadow-xl transition-all'>
         <div className='p-6 md:p-8'>
           {question.questionType === QuestionType.TRUE_FALSE && <TrueFalseQuestion question={question} />}
           {question.questionType === QuestionType.SINGLE_CHOICE && <SingleChoiceQuestion question={question} />}

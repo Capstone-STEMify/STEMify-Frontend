@@ -22,13 +22,18 @@ export type Course = {
   lastModifiedDate?: string
   reviewedAt?: string
   ageRangeLabel: string
-  lessonIds: number[]
+  lessons: {
+    id: number
+    title: string
+  }[]
+  lessonCount?: number
   topicNames: string[]
   skillNames: string[]
   standardNames: string[]
   courseOrderIndex?: number
   kitId?: number
   price: number
+  totalDuration?: number
 }
 
 export enum CourseStatus {

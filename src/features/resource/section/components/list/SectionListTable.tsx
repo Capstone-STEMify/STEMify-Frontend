@@ -10,7 +10,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { useUpdateLessonSectionOrderMutation } from '@/features/resource/lesson/api/lessonApi'
 import { toast } from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 
 type SectionListTableProps = {
   lessonId: number
@@ -23,7 +23,7 @@ export default function SectionListTable({ lessonId }: SectionListTableProps) {
   const { openModal } = useModal()
   const columns = useGetSectionTableColumn()
   const [orderedSectionIds, setOrderedSectionIds] = React.useState<number[]>([])
-  const userRole = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
+  const userRole = useAppSelector((state) => state.selectedOrganization.currentRole) || UserRole.GUEST
   console.log('userRole', userRole)
 
   const queryParams: SectionQueryParams = {
@@ -76,7 +76,7 @@ export default function SectionListTable({ lessonId }: SectionListTableProps) {
         </div>
       </div>
 
-      {userRole === UserRole.TEACHER ? (
+      {userRole === LicenseType.TEACHER ? (
         <DataTable data={rows} columns={columns} enableRowSelection pagingData={data} />
       ) : (
         <DataTable

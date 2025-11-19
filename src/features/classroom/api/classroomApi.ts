@@ -1,10 +1,12 @@
 import {
   Classroom,
+  ClassroomSchedule,
   ClassroomSliceParams,
   StudentProgressData,
   StudentProgressParams
 } from '@/features/classroom/types/classroom.type'
-import { createCrudApi } from '@/libs/redux/baseApi'
+import { createCrudApi, customFetchBaseQueryWithErrorHandling } from '@/libs/redux/baseApi'
+import { RootState } from '@/libs/redux/store'
 import { ApiSuccessResponse } from '@/types/baseModel'
 
 export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
@@ -54,6 +56,9 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
         url: `/classrooms/${classroomId}/student-progress`,
         method: 'GET',
         params: { courseId }
+    getClassroomSchedule: builder.query<ApiSuccessResponse<ClassroomSchedule>, { classroomId: number }>({
+      query: ({ classroomId }) => ({
+        url: `/classrooms/${classroomId}/schedule`
       })
     })
   })
@@ -66,6 +71,8 @@ export const {
   useUpdateMutation: useUpdateClassroomMutation,
   useDeleteMutation: useDeleteClassroomMutation,
   useCreateMutation: useCreateClassroomMutation,
+
+  useGetClassroomScheduleQuery,
 
   useUpdateClassroomCurriculumMutation,
   useUpdateTeacherClassroomMutation,

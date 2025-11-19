@@ -25,9 +25,7 @@ export default function TeacherClassroomList() {
 
   const { data, isLoading, error } = useSearchClassroomsQuery({
     ...queryParams,
-    teacherId: user?.userId,
-    orderBy: '',
-    status: selectedStatus === 'all' ? undefined : (selectedStatus as ClassroomStatus)
+    teacherId: user?.userId
   })
 
   const classrooms = data?.data.items || []
@@ -50,11 +48,10 @@ export default function TeacherClassroomList() {
     return <SEmpty title='No Classrooms Found' description="You don't have any classrooms yet." />
   }
 
-  const statusOptions = [
-    { value: 'all', label: 'All Statuses' },
-    { value: ClassroomStatus.IN_PROGRESS, label: 'In Progress' },
-    { value: ClassroomStatus.COMPLETED, label: 'Completed' }
-  ]
+  const statusOptions = Object.values(ClassroomStatus).map((status) => ({
+    value: status,
+    label: status
+  }))
 
   return (
     <div className='space-y-5 px-10 pt-4'>
@@ -78,7 +75,7 @@ export default function TeacherClassroomList() {
       {/* Classroom Grid */}
       <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
         {classrooms.map((classroom) => (
-          <Link key={classroom.id} href={`/classroom/${classroom.id}/overview`}>
+          <Link key={classroom.id} href={`/classroom/${classroom.id}`}>
             <Card className='group h-full cursor-pointer overflow-hidden transition-all hover:shadow-lg'>
               {/* Image Header */}
               <div className='relative h-32 w-full overflow-hidden bg-gradient-to-br from-sky-200 to-blue-500'>

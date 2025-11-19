@@ -1,5 +1,5 @@
 import { useGetStudentQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import {
@@ -11,21 +11,23 @@ import {
   Trophy,
   Target,
   TrendingUp,
-  ChevronDown,
-  ChevronUp
+  Eye,
+  ArrowLeft
 } from 'lucide-react'
-import { QuizAttemptStatus } from '@/features/resource/quiz/types/quiz.type'
+import { QuizAttemptStatus, Attempt } from '@/features/resource/quiz/types/quiz.type'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
+import QuizResult from '@/features/resource/quiz/components/player/QuizResult'
 
 type QuizAttemptProps = {
   studentQuizId: number
+  selectedAttempt: Attempt | null
+  onSelectAttempt: (attempt: Attempt | null) => void
 }
 
-export default function QuizAttempt({ studentQuizId }: QuizAttemptProps) {
-  const { data: studentQuiz, isLoading: isLoadingStudentQuiz } = useGetStudentQuizByIdQuery(studentQuizId!, {
-    skip: !studentQuizId
-  })
+export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAttempt }: QuizAttemptProps) {
+  const { data: studentQuiz, isLoading: isLoadingStudentQuiz, refetch } = useGetStudentQuizByIdQuery(studentQuizId)
 
   if (isLoadingStudentQuiz) {
     return (
@@ -50,6 +52,19 @@ export default function QuizAttempt({ studentQuizId }: QuizAttemptProps) {
 
   const quizData = studentQuiz.data
   const completedAttempts = quizData.attempts.filter((a) => a.status !== QuizAttemptStatus.IN_PROGRESS)
+
+  // Nếu đang xem một attempt cụ thể, render QuizResult thay thế toàn bộ
+  if (selectedAttempt && quizData.quizId) {
+    return (
+      <div className='space-y-4'>
+        <Button variant='outline' onClick={() => onSelectAttempt(null)} className='mb-4'>
+          <ArrowLeft className='mr-2 h-4 w-4' />
+          Quay lại danh sách
+        </Button>
+        <QuizResult quizId={quizData.quizId} studentQuizAttempt={selectedAttempt} />
+      </div>
+    )
+  }
 
   const getStatusBadge = (status: QuizAttemptStatus) => {
     switch (status) {
@@ -99,98 +114,72 @@ export default function QuizAttempt({ studentQuizId }: QuizAttemptProps) {
   return (
     <div className='space-y-6'>
       {/* Overall Summary Card */}
-      <Card className='border-gray-200 shadow-sm'>
-        <CardContent className='p-6'>
-          <h2 className='mb-4 text-xl font-semibold text-gray-900'>Quiz Summary</h2>
-          <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
-            <div className='flex flex-col gap-2'>
-              <div className='flex items-center gap-2 text-sm text-gray-600'>
-                <Target className='h-4 w-4' />
-                <span>Final Score</span>
-              </div>
-              <p className='text-2xl font-bold text-gray-900'>{quizData.finalScore}%</p>
-            </div>
-            <div className='flex flex-col gap-2'>
-              <div className='flex items-center gap-2 text-sm text-gray-600'>
-                <TrendingUp className='h-4 w-4' />
-                <span>Status</span>
-              </div>
-              <div>{getStatusBadge(quizData.status)}</div>
-            </div>
-            <div className='flex flex-col gap-2'>
-              <div className='flex items-center gap-2 text-sm text-gray-600'>
-                <Trophy className='h-4 w-4' />
-                <span>Attempts</span>
-              </div>
-              <p className='text-2xl font-bold text-gray-900'>{quizData.attemptCount}</p>
-            </div>
-            <div className='flex flex-col gap-2'>
-              <div className='flex items-center gap-2 text-sm text-gray-600'>
-                <Calendar className='h-4 w-4' />
-                <span>Due Date</span>
-              </div>
-              <p className='text-sm font-medium text-gray-900'>{formatDate(quizData.dueDate)}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {completedAttempts.length > 0 && (
+        <Card className='border-gray-200 bg-sky-100 shadow-sm'>
+          <CardContent className='p-6'>
+            <p className='text-xl font-semibold text-gray-900'>Your final score: {quizData.finalScore}%</p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Attempts History */}
       <div className='space-y-4'>
         <div className='flex items-center gap-2 border-b border-gray-200 pb-3'>
           <h2 className='text-xl font-semibold text-gray-900'>Attempt History</h2>
-          <span className='rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700'>
+          <span className='rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700'>
             {completedAttempts.length}
           </span>
         </div>
 
-        <div className='space-y-3'>
-          {completedAttempts.map((attempt) => {
-            const totalQuestions = attempt.questionAttempts.length
-            const correctAnswers = attempt.questionAttempts.filter((qa) => qa.isCorrect).length
-
-            return (
-              <Card key={attempt.id}>
-                <CardContent className='p-0'>
-                  <div className='flex items-center justify-between p-4'>
-                    <div className='flex flex-1 items-center gap-4'>
-                      <div className='flex h-12 w-12 items-center justify-center rounded-full bg-blue-100'>
-                        <span className='text-lg font-bold text-blue-700'>#{attempt.attemptNumber}</span>
+        <div className='rounded-md border'>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Status</TableHead>
+                <TableHead>Score</TableHead>
+                <TableHead>Correct Answers</TableHead>
+                <TableHead>Duration</TableHead>
+                <TableHead>Submitted At</TableHead>
+                <TableHead></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {completedAttempts.map((attempt) => {
+                const totalQuestions = attempt.questionAttempts.length
+                const correctAnswers = attempt.questionAttempts.filter((qa) => qa.isCorrect).length
+                return (
+                  <TableRow key={attempt.id}>
+                    <TableCell>{getStatusBadge(attempt.status)}</TableCell>
+                    <TableCell className='text-right'>
+                      <span className='flex items-center gap-1.5 text-sm text-gray-600'>{attempt.totalScore}%</span>
+                    </TableCell>
+                    <TableCell>
+                      <div className='flex items-center gap-1.5 text-sm text-gray-600'>
+                        {correctAnswers}/{totalQuestions}
                       </div>
-
-                      <div className='flex-1'>
-                        <div className='mb-1 flex items-center gap-2'>
-                          <h3 className='font-semibold text-gray-900'>Attempt {attempt.attemptNumber}</h3>
-                          {getStatusBadge(attempt.status)}
-                        </div>
-                        <div className='flex flex-wrap items-center gap-3 text-sm text-gray-600'>
-                          <span className='flex items-center gap-1'>
-                            <Clock className='h-3.5 w-3.5' />
-                            {formatDate(attempt.startedAt)}
-                          </span>
-                          <span className='flex items-center gap-1'>
-                            <Target className='h-3.5 w-3.5' />
-                            {correctAnswers}/{totalQuestions} correct
-                          </span>
-                          <span className='flex items-center gap-1'>
-                            <TrendingUp className='h-3.5 w-3.5' />
-                            Duration: {calculateDuration(attempt.startedAt, attempt.completedAt)}
-                          </span>
-                        </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className='flex items-center gap-1.5 text-sm text-gray-600'>
+                        {calculateDuration(attempt.startedAt, attempt.completedAt)}
                       </div>
-
-                      <div className='mr-5 flex items-center gap-3'>
-                        <div className='text-right'>
-                          <p className='text-sm text-gray-600'>Score</p>
-                          <p className='text-2xl font-bold text-gray-900'>{attempt.totalScore}%</p>
-                        </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className='flex items-center gap-1.5 text-sm text-gray-600'>
+                        <Clock className='h-3.5 w-3.5' />
+                        {formatDate(attempt.completedAt)}
                       </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
+                    </TableCell>
+                    <TableCell className='text-right'>
+                      <Eye
+                        className='h-5 w-5 cursor-pointer text-gray-400 hover:text-gray-600'
+                        onClick={() => onSelectAttempt(attempt)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
         </div>
 
         {completedAttempts.length === 0 && (

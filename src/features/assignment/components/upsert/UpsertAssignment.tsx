@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'sonner'
 import z from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
@@ -29,6 +29,7 @@ import {
   useUpdateAssignmentMutation
 } from '@/features/assignment/api/assignmentApi'
 import { useParams } from 'next/navigation'
+import BackButton from '@/components/shared/button/BackButton'
 
 const defaultFormValues: CreateAssignmentDto = {
   sectionId: 1,
@@ -39,7 +40,7 @@ const defaultFormValues: CreateAssignmentDto = {
     {
       type: AssignmentQuestionType.TEXT,
       orderIndex: 1,
-      points: 50,
+      points: 5,
       content: '',
       rubricCriterion: []
     }
@@ -53,6 +54,9 @@ type UpsertAssignmentProps = {
 export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
   const { sectionId, assignmentId } = useParams()
   const isEditing = !!assignmentId
+
+  // ✅ Force re-render state
+  const [forceUpdate, setForceUpdate] = useState(0)
 
   // ✅ Schema validation for entire form including questions
   const assignmentSchema = z.object({
@@ -106,6 +110,28 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     return { ...defaultFormValues, sectionId: Number(sectionId) }
   }
 
+  // ✅ Form with correct initial values
+  const form = useAppForm({
+    defaultValues: getInitialValues(),
+    // validators: { onChange: assignmentSchema as any },
+    onSubmit: async ({ value }) => {
+      try {
+        const payload: CreateAssignmentDto = { ...value, sectionId: Number(sectionId) }
+
+        if (isEditing) {
+          // await updateAssignment({ id: assignmentId, body: payload }).unwrap()
+        } else {
+          await createAssignment(payload).unwrap()
+        }
+
+        toast.success(`Assignment ${isEditing ? 'updated' : 'created'} successfully`)
+        onSuccess?.()
+      } catch (error) {
+        toast.error(`Failed to ${isEditing ? 'update' : 'create'} assignment`)
+      }
+    }
+  })
+
   // ✅ Wait for data to load before rendering form
   if (isEditing && isLoading) {
     return (
@@ -118,96 +144,41 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     )
   }
 
-  return (
-    <AssignmentForm
-      initialValues={getInitialValues()}
-      isEditing={isEditing}
-      assignmentId={Number(assignmentId)}
-      sectionId={Number(sectionId)}
-      onSuccess={onSuccess}
-      assignmentSchema={assignmentSchema}
-    />
-  )
-}
-
-// ✅ Separate component to ensure form gets correct initial values
-type AssignmentFormProps = {
-  initialValues: CreateAssignmentDto
-  isEditing: boolean
-  assignmentId: number
-  sectionId: number
-  onSuccess?: () => void
-  assignmentSchema: any
-}
-
-function AssignmentForm({
-  initialValues,
-  isEditing,
-  assignmentId,
-  sectionId,
-  onSuccess,
-  assignmentSchema
-}: AssignmentFormProps) {
-  const [createAssignment, { isLoading: isCreating }] = useCreateAssignmentMutation()
-  const [updateAssignment, { isLoading: isUpdating }] = useUpdateAssignmentMutation()
-
-  const [questions, setQuestions] = useState(initialValues.questions)
-
-  // ✅ Form with correct initial values
-  const form = useAppForm({
-    defaultValues: initialValues,
-    // validators: { onChange: assignmentSchema as any },
-    onSubmit: async ({ value }) => {
-      try {
-        const payload: CreateAssignmentDto = { ...value, sectionId }
-
-        await createAssignment(payload).unwrap()
-
-        // if (isEditing) {
-        //   await updateAssignment({ id: assignmentId, body: payload }).unwrap()
-        // } else {
-        //   await createAssignment(payload).unwrap()
-        // }
-
-        toast.success(`Assignment ${isEditing ? 'updated' : 'created'} successfully`)
-        onSuccess?.()
-      } catch (error) {
-        toast.error(`Failed to ${isEditing ? 'update' : 'create'} assignment`)
-      }
-    }
-  })
-
-  React.useEffect(() => {
-    form.setFieldValue('questions', questions)
-  }, [questions])
-
-  // ✅ Helper functions using form state
+  // ✅ Helper functions using form state directly
   const addQuestion = () => {
+    const currentQuestions = form.state.values.questions
     const newQuestion = {
       type: AssignmentQuestionType.TEXT,
-      orderIndex: questions.length + 1,
-      points: 50,
+      orderIndex: currentQuestions.length + 1,
+      points: 5,
       content: '',
       rubricCriterion: []
     }
-    setQuestions([...questions, newQuestion])
-    console.log('Added question, new length:', questions.length + 1)
+
+    form.setFieldValue('questions', [...currentQuestions, newQuestion])
+    setForceUpdate((prev) => prev + 1) // Force re-render
+    console.log('Added question, new length:', currentQuestions.length + 1)
   }
 
   const removeQuestion = (index: number) => {
-    if (questions.length === 1) {
+    const currentQuestions = form.state.values.questions
+    if (currentQuestions.length === 1) {
       toast.error('At least one question is required')
       return
     }
 
-    const filteredQuestions = questions.filter((_, i) => i !== index).map((q, i) => ({ ...q, orderIndex: i + 1 }))
+    const filteredQuestions = currentQuestions
+      .filter((_, i) => i !== index)
+      .map((q, i) => ({ ...q, orderIndex: i + 1 }))
 
-    setQuestions(filteredQuestions)
+    form.setFieldValue('questions', filteredQuestions)
+    setForceUpdate((prev) => prev + 1) // Force re-render
     console.log('Removed question at index:', index, 'new length:', filteredQuestions.length)
   }
 
   const addRubricCriterion = (questionIndex: number) => {
-    const updatedQuestions = questions.map((q, i) => {
+    const currentQuestions = form.state.values.questions
+    const updatedQuestions = currentQuestions.map((q, i) => {
       if (i === questionIndex) {
         return {
           ...q,
@@ -223,12 +194,14 @@ function AssignmentForm({
       return q
     })
 
-    setQuestions(updatedQuestions)
+    form.setFieldValue('questions', updatedQuestions)
+    setForceUpdate((prev) => prev + 1) // Force re-render
     console.log('Added criterion to question:', questionIndex)
   }
 
   const removeRubricCriterion = (questionIndex: number, criterionIndex: number) => {
-    const updatedQuestions = questions.map((q, i) => {
+    const currentQuestions = form.state.values.questions
+    const updatedQuestions = currentQuestions.map((q, i) => {
       if (i === questionIndex) {
         return {
           ...q,
@@ -238,16 +211,17 @@ function AssignmentForm({
       return q
     })
 
-    setQuestions(updatedQuestions)
+    form.setFieldValue('questions', updatedQuestions)
+    setForceUpdate((prev) => prev + 1) // Force re-render
     console.log('Removed criterion:', criterionIndex, 'from question:', questionIndex)
   }
 
   const calculateTotalScore = () => {
-    return questions.reduce((sum, q) => sum + (q.points || 0), 0)
+    return form.state.values.questions.reduce((sum, q) => sum + (q.points || 0), 0)
   }
 
   const calculateTotalCriteria = () => {
-    return questions.reduce((sum, q) => sum + q.rubricCriterion.length, 0)
+    return form.state.values.questions.reduce((sum, q) => sum + q.rubricCriterion.length, 0)
   }
 
   // ✅ Drag and drop
@@ -262,15 +236,17 @@ function AssignmentForm({
     const { active, over } = event
 
     if (over && active.id !== over.id) {
-      const oldIndex = questions.findIndex((q) => q.orderIndex === active.id)
-      const newIndex = questions.findIndex((q) => q.orderIndex === over.id)
+      const currentQuestions = form.state.values.questions
+      const oldIndex = currentQuestions.findIndex((q) => q.orderIndex === active.id)
+      const newIndex = currentQuestions.findIndex((q) => q.orderIndex === over.id)
 
-      const reorderedQuestions = arrayMove(questions, oldIndex, newIndex).map((q, i) => ({
+      const reorderedQuestions = arrayMove(currentQuestions, oldIndex, newIndex).map((q, i) => ({
         ...q,
         orderIndex: i + 1
       }))
 
-      setQuestions(reorderedQuestions)
+      form.setFieldValue('questions', reorderedQuestions)
+      setForceUpdate((prev) => prev + 1) // Force re-render
       toast.success('Questions reordered successfully')
     }
   }
@@ -285,6 +261,7 @@ function AssignmentForm({
 
   const totalScore = calculateTotalScore()
   const totalCriteria = calculateTotalCriteria()
+  const questions = form.state.values.questions
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -294,7 +271,10 @@ function AssignmentForm({
             {/* Main Content */}
             <div className='space-y-6 lg:col-span-2'>
               <div>
-                <h1 className='text-3xl font-semibold'>{isEditing ? 'Edit Assignment' : 'Create Assignment'}</h1>
+                <div className='flex gap-4'>
+                  <BackButton />
+                  <h1 className='text-3xl font-semibold'>{isEditing ? 'Edit Assignment' : 'Create Assignment'}</h1>
+                </div>
                 <p className='mt-1 text-gray-600'>
                   Create and configure your assignment with questions and rubric criteria
                 </p>
@@ -337,7 +317,12 @@ function AssignmentForm({
                       <form.AppField
                         name='durationDays'
                         children={(field) => (
-                          <field.TextField type='number' label='Duration (Days)' placeholder='e.g. 3' min={1} />
+                          <field.TextField
+                            type='number'
+                            label='Deadline (days after enrollment)'
+                            placeholder='e.g. 3'
+                            min={1}
+                          />
                         )}
                       />
                     </div>
@@ -355,10 +340,9 @@ function AssignmentForm({
                   </div>
                   {questions.map((question, questionIndex) => (
                     <Card key={`question-${questionIndex}`}>
-                      <CardHeader className='py-4'>
+                      <CardHeader className='pt-4'>
                         <div className='flex items-start justify-between gap-4'>
                           <div className='flex flex-1 items-center gap-2'>
-                            <GripVertical className='h-5 w-5 text-gray-400' />
                             <CardTitle className='text-lg'>Question {question.orderIndex}</CardTitle>
                           </div>
                           <Button
@@ -367,7 +351,7 @@ function AssignmentForm({
                             size='icon'
                             onClick={() => removeQuestion(questionIndex)}
                             className='text-red-600 hover:bg-red-50 hover:text-red-700'
-                            disabled={form.state.values.questions.length === 1}
+                            disabled={questions.length === 1}
                           >
                             <Trash2 className='h-4 w-4' />
                           </Button>
@@ -383,7 +367,7 @@ function AssignmentForm({
                             <form.AppField name={`questions[${questionIndex}].type`}>
                               {(field) => (
                                 <Select
-                                  value={field.state.value}
+                                  value={field.state.value ?? AssignmentQuestionType.TEXT}
                                   onValueChange={(value: AssignmentQuestionType) => field.handleChange(value)}
                                 >
                                   <SelectTrigger id={`question-type-${questionIndex}`}>
@@ -397,13 +381,6 @@ function AssignmentForm({
                               )}
                             </form.AppField>
                           </div>
-
-                          <form.AppField
-                            name={`questions[${questionIndex}].points`}
-                            children={(field) => (
-                              <field.TextField type='number' label='Points' placeholder='e.g. 50' min={1} />
-                            )}
-                          />
                         </div>
 
                         {/* Question Content */}

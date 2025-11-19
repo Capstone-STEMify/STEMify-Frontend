@@ -67,7 +67,8 @@ import { withAuth } from 'next-auth/middleware'
 import { getToken } from 'next-auth/jwt'
 import createMiddleware from 'next-intl/middleware'
 import { routing } from './i18n/routing'
-import { UserRole } from '@/types/userRole'
+import { EffectiveRole, LicenseType, UserRole } from '@/types/userRole'
+import { User } from 'lucide-react'
 
 const intlMiddleware = createMiddleware(routing)
 
@@ -95,23 +96,36 @@ export default withAuth(
       return NextResponse.redirect(new URL(`/${locale}/api/auth/signin`, req.url))
     }
 
-    const role = token?.role as UserRole | undefined
-    console.log('🔑 Middleware detected role:', role)
+    const systemRole = token?.role as UserRole | undefined
+    console.log('🔑 Middleware detected role:', systemRole)
+    let currentRole: EffectiveRole = UserRole.GUEST
 
-    const roleRedirectMap: Record<UserRole, string> = {
+    if (systemRole === UserRole.ADMIN || systemRole === UserRole.STAFF) {
+      currentRole = systemRole
+    }
+    if (systemRole === UserRole.MEMBER && token.organizations && token.organizations.length > 0) {
+      const firstOrg = token.organizations[0]
+      const activeSub = firstOrg.subscriptions.find((s) => s.isActive)
+      if (activeSub) {
+        currentRole = activeSub.role
+      }
+    }
+
+    const roleRedirectMap: Record<EffectiveRole, string> = {
       [UserRole.ADMIN]: `/${locale}/admin/curriculum`,
       [UserRole.STAFF]: `/${locale}/admin/curriculum`,
-      [UserRole.STUDENT]: `/${locale}`,
-      [UserRole.TEACHER]: `/${locale}`,
+      [LicenseType.ORGANIZATION_ADMIN]: `/${locale}/organization/dashboard`,
       [UserRole.GUEST]: `/${locale}`,
-      [UserRole.ORGANIZATION_ADMIN]: `/${locale}/organization/dashboard`
+      [LicenseType.STUDENT]: `/${locale}`,
+      [LicenseType.TEACHER]: `/${locale}`
     }
 
     // 🔹 Nếu user login mà ở root path -> redirect theo role
     if (pathname === `/${locale}` || pathname === `/${locale}/`) {
-      const target = roleRedirectMap[role ?? UserRole.GUEST]
-      if (target && target !== pathname) {
-        return NextResponse.redirect(new URL(target, req.url))
+      const target = roleRedirectMap[currentRole]
+      const targetUrl = new URL(target, req.url)
+      if (target && targetUrl.toString() !== req.url) {
+        return NextResponse.redirect(targetUrl)
       }
     }
 
@@ -119,12 +133,12 @@ export default withAuth(
     const isAdminArea = pathname.startsWith(`/${locale}/admin`)
     const isLearningArea = pathname.startsWith(`/${locale}/learning`)
 
-    if (isAdminArea && ![UserRole.ADMIN, UserRole.STAFF].includes(role!)) {
+    if (isAdminArea && ![UserRole.ADMIN, UserRole.STAFF].includes(systemRole!)) {
       return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url))
     }
 
     // ❌ Không phải student (hoặc staff/admin) mà vào learning
-    if (isLearningArea && ![UserRole.STUDENT, UserRole.STAFF, UserRole.ADMIN].includes(role!)) {
+    if (isLearningArea && ![UserRole.MEMBER, UserRole.STAFF, UserRole.ADMIN].includes(systemRole!)) {
       return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url))
     }
 

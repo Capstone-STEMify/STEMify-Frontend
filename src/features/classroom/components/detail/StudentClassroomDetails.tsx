@@ -27,7 +27,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import {
   useCreateCurriculumEnrollmentMutation,
   useSearchCurriculumEnrollmentQuery
@@ -35,31 +35,25 @@ import {
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { signIn } from 'next-auth/react'
-import { EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
+import { CurriculumEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
 import { toast } from 'sonner'
+import { ClassroomNavItems } from 'app/[locale]/classroom/[classroomId]/page'
 
-export default function StudentClassroomDetail() {
+export type StudentClassroomDetailProps = {
+  curriculumEnrollment?: CurriculumEnrollment
+  setCurrentTab: (tab: ClassroomNavItems) => void
+}
+export default function StudentClassroomDetail({ curriculumEnrollment, setCurrentTab }: StudentClassroomDetailProps) {
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const { classroomId } = useParams()
   const auth = useAppSelector((state) => state.auth)
-  const userRole = auth.user?.userRole || UserRole.GUEST
   const router = useRouter()
   const locale = useLocale()
 
   const { data, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
   const classroom = data?.data
 
-  const { data: curriculumEnrollment } = useSearchCurriculumEnrollmentQuery(
-    {
-      curriculumId: classroom?.curriculum.id,
-      studentId: auth?.user?.userId || '',
-      classroomId: Number(classroomId),
-      pageNumber: 1,
-      pageSize: 20
-    },
-    { skip: !auth.user?.userId || !classroom?.curriculum.id || userRole !== UserRole.STUDENT }
-  )
   const [createEnrollment, { data: createEnrollmentResponse }] = useCreateCurriculumEnrollmentMutation()
 
   const copyClassCode = () => {
@@ -162,14 +156,10 @@ export default function StudentClassroomDetail() {
                       </div>
                     </div>
                   </div>
-                  {curriculumEnrollment?.data.items[0] ? (
+                  {curriculumEnrollment ? (
                     <Button
                       className='mt-4'
-                      onClick={() =>
-                        router.push(
-                          `/${locale}/classroom/${classroom.id}/course?curriculumId=${classroom.curriculum.id}`
-                        )
-                      }
+                       onClick={() => setCurrentTab('course')}
                     >
                       Continue Learning
                     </Button>

@@ -1,17 +1,29 @@
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 
 export type User = {
   userId: string
   email: string
   userName: string
-  userRole: UserRole
+  userRole: UserRole //'Admin' | 'Staff' | 'Member' | 'Guest'
   firstName: string
   lastName: string
   imageUrl?: string
   status: UserStatus
-  organizationId?: number
+  organizations?: UserOrganization[]
+}
+
+export type OrganizationSubscription = {
+  id: number
+  role: LicenseType
+  properties: Record<string, any>
+  isActive: boolean
+}
+
+export type UserOrganization = {
+  id: number // Organization ID
+  subscriptions: OrganizationSubscription[]
 }
 
 export type UserFormData = Omit<User, 'id'> & {

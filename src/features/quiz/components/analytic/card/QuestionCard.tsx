@@ -84,12 +84,9 @@ export function QuestionCard({ data, totalQuestion }: QuestionCardProps) {
                   Question {questions.questionId} of {totalQuestion}
                 </span>
               </div>
-              <div className='flex items-center gap-4 text-sm text-gray-600'>
-                <span className='flex items-center gap-1.5 rounded-md bg-gray-100 p-2 font-bold'>
+              <div className='flex items-center gap-4 text-xs text-gray-600'>
+                <span className='flex items-center gap-1.5 rounded-md bg-gray-100 p-2 font-semibold'>
                   <Layers className='h-4 w-4' /> {questions.questionType}
-                </span>
-                <span className='flex items-center gap-1.5'>
-                  <Clock className='h-4 w-4' /> Avg. time 32s
                 </span>
                 <span className='flex items-center gap-1.5'>
                   <Star className='h-4 w-4 text-yellow-500' /> {questions.point} point

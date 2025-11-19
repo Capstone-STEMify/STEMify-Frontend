@@ -86,15 +86,14 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
   console.log('id', currentSectionProgress?.studentAssignmentId)
 
   if (lastItem.contentType === ContentType.QUIZ) {
-    if (!currentSectionProgress || !currentSectionProgress.studentQuizId) {
-      return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
-    }
-    return <QuizViewer quiz={lastItem} studentQuizId={currentSectionProgress.studentQuizId} />
+    return <QuizViewer quiz={lastItem} studentQuizId={currentSectionProgress?.studentQuizId} />
   } else if (lastItem.contentType === ContentType.ASSIGNMENT) {
-    if (!currentSectionProgress || !currentSectionProgress.studentAssignmentId) {
-      return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
-    }
-    return <AssignmentAttempt studentAssignmentId={currentSectionProgress.studentAssignmentId} />
+    return (
+      <AssignmentAttempt
+        studentAssignmentId={currentSectionProgress?.studentAssignmentId}
+        assignmentId={lastItem.assignmentId}
+      />
+    )
   }
 
   return (

@@ -9,7 +9,6 @@ type AssignmentViewerProps = {
 }
 
 export default function AssignmentViewer({ item }: AssignmentViewerProps) {
-
   const {
     data: assignmentData,
     isLoading,
@@ -47,7 +46,7 @@ export default function AssignmentViewer({ item }: AssignmentViewerProps) {
         <InfoCard title='Total Score' value={assignment.totalScore} />
         <InfoCard title='Passing Score' value={assignment.passingScore} />
         <InfoCard
-          title='Duration'
+          title='Deadline (Days from enrollment)'
           value={`${assignment.durationDays} ${daysUnit(assignment.durationDays)}`}
         />
       </div>
@@ -56,17 +55,16 @@ export default function AssignmentViewer({ item }: AssignmentViewerProps) {
         <h3 className='mb-4 text-xl font-semibold text-gray-700'>Questions</h3>
         <div className='space-y-6'>
           {assignment.questions.map((question, index) => (
-            <div key={question.id} className='overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm flex'>
+            <div
+              key={question.id}
+              className='flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm'
+            >
               <div className='w-1/2 p-5'>
                 <div className='mb-3 flex flex-wrap items-center justify-between gap-2'>
-                  <span className='text-lg font-semibold text-gray-900'>
-                    Question {index + 1}
-                  </span>
+                  <span className='text-lg font-semibold text-gray-900'>Question {index + 1}</span>
                   <span
                     className={`inline-flex items-center rounded-full px-3 py-0.5 text-sm font-medium ${
-                      question.type === 'Text'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-green-100 text-green-800'
+                      question.type === 'Text' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
                     }`}
                   >
                     {question.type === 'Text' ? (
@@ -86,12 +84,15 @@ export default function AssignmentViewer({ item }: AssignmentViewerProps) {
 
               {/* Rubric Criteria */}
               {question.rubricCriterion && question.rubricCriterion.length > 0 && (
-                <div className='border-t border-gray-200 bg-gray-50 px-5 py-4 w-1/2'>
+                <div className='w-1/2 border-t border-gray-200 bg-gray-50 px-5 py-4'>
                   <h5 className='mb-2 text-sm font-semibold text-gray-600'>Rubric</h5>
                   <ul className='list-inside list-disc space-y-1 pl-2'>
                     {question.rubricCriterion.map((criterion) => (
                       <li key={criterion.id} className='text-sm text-gray-600'>
-                        {criterion.criterionName} <span className='italic'>(max: {criterion.maxPoints} {pointsUnit(criterion.maxPoints)})</span>
+                        {criterion.criterionName}{' '}
+                        <span className='italic'>
+                          (max: {criterion.maxPoints} {pointsUnit(criterion.maxPoints)})
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -107,7 +108,7 @@ export default function AssignmentViewer({ item }: AssignmentViewerProps) {
 
 const InfoCard = ({ title, value }: { title: string; value: string | number }) => (
   <div className='rounded-md bg-white p-4 text-center shadow-sm'>
-    <h4 className='mb-1 text-sm font-medium uppercase text-gray-500'>{title}</h4>
+    <h4 className='mb-1 text-sm font-medium text-gray-500 uppercase'>{title}</h4>
     <p className='text-xl font-semibold text-gray-900'>{value}</p>
   </div>
 )

@@ -7,7 +7,7 @@ import { Content, ContentType, QuizContent } from '@/features/resource/content/t
 import QuizViewer from '@/features/resource/quiz/components/viewer/QuizViewer'
 import { useModal } from '@/providers/ModalProvider'
 import { normalizeMarkdown } from '@/utils/index'
-import { BookPlus, FilePlus, UploadCloud } from 'lucide-react'
+import { BookOpen, ClipboardList, FileText } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useParams, useRouter } from 'next/navigation'
 
@@ -45,19 +45,36 @@ export default function ContentDetail({ item, sectionId }: ContentDetailProps) {
       <div className='flex flex-col items-center justify-center space-y-4 rounded-2xl border bg-gray-50 py-10 text-center'>
         <h3 className='text-lg font-semibold text-gray-800'>{t('detail.noData')}</h3>
         <p className='text-gray-500'>{t('detail.noDataDetail')}</p>
-        <div className='flex gap-2'>
-          <Button onClick={handleCreateContent} className='bg-amber-custom-400 flex items-center gap-2'>
-            <FilePlus className='h-4 w-4' />
-            {t('form.title.create')}
-          </Button>
-          <Button onClick={handleCreateQuiz} className='bg-sky-custom-300 flex items-center gap-2'>
-            <BookPlus className='h-4 w-4' />
-            {t('form.title.createQuiz')}
-          </Button>
-          <Button onClick={handleCreateAssignment} className='flex items-center gap-2 bg-green-500'>
-            <UploadCloud className='h-4 w-4' />
-            {t('form.title.createAssignment')}
-          </Button>
+        <div className='flex w-full max-w-md flex-col gap-3 px-4'>
+          <button
+            onClick={handleCreateContent}
+            className='hover:border-amber-custom-400 flex items-center gap-3 rounded-lg border bg-white p-4 transition-all hover:bg-amber-50 hover:shadow-md'
+          >
+            <div className='bg-amber-custom-400 flex h-10 w-10 items-center justify-center rounded-lg'>
+              <BookOpen className='h-5 w-5 text-white' />
+            </div>
+            <span className='font-medium text-gray-800'>{t('form.title.create')}</span>
+          </button>
+
+          <button
+            onClick={handleCreateQuiz}
+            className='hover:border-sky-custom-300 flex items-center gap-3 rounded-lg border bg-white p-4 transition-all hover:bg-sky-50 hover:shadow-md'
+          >
+            <div className='bg-sky-custom-300 flex h-10 w-10 items-center justify-center rounded-lg'>
+              <ClipboardList className='h-5 w-5 text-white' />
+            </div>
+            <span className='font-medium text-gray-800'>{t('form.title.createQuiz')}</span>
+          </button>
+
+          <button
+            onClick={handleCreateAssignment}
+            className='flex items-center gap-3 rounded-lg border bg-white p-4 transition-all hover:border-green-500 hover:bg-green-50 hover:shadow-md'
+          >
+            <div className='flex h-10 w-10 items-center justify-center rounded-lg bg-green-500'>
+              <FileText className='h-5 w-5 text-white' />
+            </div>
+            <span className='font-medium text-gray-800'>{t('form.title.createAssignment')}</span>
+          </button>
         </div>
       </div>
     )
@@ -70,7 +87,7 @@ export default function ContentDetail({ item, sectionId }: ContentDetailProps) {
       case ContentType.QUIZ:
         return <QuizViewer quiz={item as QuizContent} isShowQuestionAnswer />
       case ContentType.ASSIGNMENT:
-        return <AssignmentViewer item={item as any}/>
+        return <AssignmentViewer item={item as any} />
       default:
         return <div className='text-sm text-gray-500'>{t('detail.unsupportedType')}</div>
     }

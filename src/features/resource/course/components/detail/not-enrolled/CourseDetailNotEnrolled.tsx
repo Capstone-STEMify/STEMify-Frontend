@@ -18,7 +18,6 @@ import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/course
 export default function CourseDetailNotEnrolled() {
   const auth = useAppSelector((state) => state.auth)
   const studentId = auth?.user?.userId
-  const userRole = auth?.user?.role || UserRole.GUEST
   const tc = useTranslations('common.message')
 
   const { courseId } = useParams()

@@ -19,6 +19,12 @@ const customFetchBaseQuery = fetchBaseQuery({
       headers.set('Authorization', 'Bearer ' + token)
     }
 
+    const activeOrg = (api.getState() as RootState).selectedOrganization.selectedOrganizationId
+    const activeSub = (api.getState() as RootState).selectedOrganization.selectedSubscriptionOrderId
+
+    if (activeOrg) headers.set('X-Active-Organization', String(activeOrg))
+    if (activeSub) headers.set('X-Active-Subscription', String(activeSub))
+
     return headers
   }
 })
