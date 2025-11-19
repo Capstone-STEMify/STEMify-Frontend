@@ -112,6 +112,24 @@ export default function UploadCSV({ onFileChange, uploadedFile: externalFile, on
     return `${(bytes / 1024).toFixed(0)} KB`
   }
 
+  const handleDownloadTemplate = () => {
+    const csvContent = `email,firstName,lastName,role,license_type,class_id,external_id
+myltse180@gmail.com,My,Lam Tieu,OrganizationAdmin,OrganizationLic,STEM03,S003
+tieumy lam@gmail.com,Rosie,Shine,Teacher,TeacherLic,STEM04,S004
+datkk1120@gmail.com,Leo,kk,Student,StudentLic,STEM05,S005
+dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'organization_accounts_template.csv')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div className='w-full'>
       <div className='mb-4 rounded-lg border border-blue-100 bg-blue-50/60 p-5 shadow-sm transition-all hover:shadow-md'>
@@ -124,6 +142,17 @@ export default function UploadCSV({ onFileChange, uploadedFile: externalFile, on
           New accounts will be created for this organization. The account will automatically be assigned a valid license
           from this subscription.
         </p>
+      </div>
+
+      {/* Download CSV Template */}
+      <div className='my-4 flex items-center justify-center'>
+        <button
+          onClick={handleDownloadTemplate}
+          className='flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700'
+        >
+          <FileSpreadsheet className='h-4 w-4' />
+          Download CSV Template
+        </button>
       </div>
 
       <div

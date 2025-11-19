@@ -16,7 +16,6 @@ export default function AuthSessionSync() {
   const reduxToken = useAppSelector((state) => state.auth.token)
   const reduxUser = useAppSelector((state) => state.auth.user)
   const reduxCurrentRole = useAppSelector((state) => state.selectedOrganization.currentRole)
-  console.log('AuthSessionSync render:', { reduxUser, reduxToken, reduxCurrentRole })
   const reduxSelectedOrganizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
   const reduxSelectedSubscriptionOrderId = useAppSelector(
     (state) => state.selectedOrganization.selectedSubscriptionOrderId
