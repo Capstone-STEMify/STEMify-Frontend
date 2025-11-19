@@ -5,18 +5,29 @@ import { Textarea } from '@/components/shadcn/textarea'
 import { Download, Printer, Share2, HelpCircle, ExternalLink } from 'lucide-react'
 import { Submission } from '../table/AssignmentTable'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { useGetStudentAssignmentByIdQuery, useGradeAssignmentAttemptMutation } from '@/features/assignment/api/studentAssignmentApi'
+import {
+  useGetStudentAssignmentByIdQuery,
+  useGradeAssignmentAttemptMutation
+} from '@/features/assignment/api/studentAssignmentApi'
 import { Input } from '@/components/shadcn/input'
 import { useState, useEffect } from 'react'
-import { GradeSubmissionPayload, QuestionGradePayload, RubricScorePayload } from '@/features/assignment/types/assigmentlistdetail.type'
+import {
+  GradeSubmissionPayload,
+  QuestionGradePayload,
+  RubricScorePayload
+} from '@/features/assignment/types/assigmentlistdetail.type'
 
-import { toast } from 'sonner' 
+import { toast } from 'sonner'
+import { useModal } from '@/providers/ModalProvider'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 interface SubmissionReviewDialogProps {
   submission: Submission
   studentAssignmentId: number | null
 }
 
 export function SubmissionReviewDialog({ submission, studentAssignmentId }: SubmissionReviewDialogProps) {
+  const { closeModal } = useModal()
+
   const {
     data: detailResponse,
     isLoading,
@@ -40,7 +51,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       setFeedbackText(feedback)
     }
   }, [feedback])
-  
+
   const handleScoreChange = (qAttemptId: number, criterionId: number, points: string) => {
     if (points === '') {
       setScores((prev) => ({
@@ -100,6 +111,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       }).unwrap()
 
       toast.success('Review submitted successfully!')
+      closeModal()
     } catch (err) {
       toast.error('Failed to submit review.')
       console.error(err)
@@ -120,32 +132,16 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
             </AvatarFallback>
           </Avatar>
           <div>
-            <h2 className='flex items-center gap-2 text-lg font-semibold'>
-              {submission.studentName}
-              <Badge variant='outline' className='text-xs font-normal'>
-                {submission.studentRole.split(' ')[0]}
-              </Badge>
-            </h2>
+            <h2 className='flex items-center gap-2 text-lg font-semibold'>{submission.studentName}</h2>
             <p className='text-sm text-gray-500'>{submission.studentRole}</p>
           </div>
-        </div>
-        <div className='mt-4 flex items-center gap-2 sm:mt-0'>
-          <Button variant='ghost' size='icon'>
-            <Download className='h-5 w-5' />
-          </Button>
-          <Button variant='ghost' size='icon'>
-            <Printer className='h-5 w-5' />
-          </Button>
-          <Button variant='ghost' size='icon'>
-            <Share2 className='h-5 w-5' />
-          </Button>
         </div>
       </header>
 
       <div className='mt-6'>
         <h1 className='text-3xl font-bold'>{submission.quizTitle}</h1>
         <div className='mt-2 flex items-center gap-4 text-sm text-gray-500'>
-          <span>Finished: {submission.quizFinishedDate}</span>
+          <span>Submitted: {submission.quizFinishedDate}</span>
           <span className='flex items-center gap-1.5'>
             <HelpCircle className='h-4 w-4' />
             {submission.quizQuestionCount} Questions
@@ -156,16 +152,14 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       {isReviewed && (
         <div className='mt-6 grid grid-cols-3 gap-4 border-b pb-6'>
           <div>
-            <span className='text-sm text-gray-500'>Accuracy</span>
-            <p className='text-2xl font-semibold text-green-600'>{submission.accuracy || 'N/A'}</p>
+            <span className='text-sm text-gray-500'>Score</span>
+            <p className='text-2xl font-semibold text-green-600'>{totalScore || '-'}%</p>
           </div>
           <div>
-            <span className='text-sm text-gray-500'>Point</span>
-            <p className='text-2xl font-semibold text-yellow-600'>{isLoading ? '...' : totalScore}</p>
-          </div>
-          <div>
-            <span className='text-sm text-gray-500'>Answered</span>
-            <p className='text-2xl font-semibold'>{submission.answered || 'N/A'}</p>
+            <span className='text-sm text-gray-500'>Status</span>
+            <div>
+              <Badge className={getStatusBadgeClass(submission.status)}>{submission.status}</Badge>
+            </div>
           </div>
         </div>
       )}
@@ -202,14 +196,17 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
                     </div>
 
                     <div className='p-6'>
-                      <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Rubric</h4>
+                      <div className='flex justify-between'>
+                        <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Rubric</h4>
+                        <p className='text-xs text-gray-800'>
+                          {question.rubricScore.reduce((sum, c) => sum + c.maxPoints, 0)} Points
+                        </p>
+                      </div>
                       <div className='space-y-6'>
                         {question.rubricScore.length > 0 ? (
                           question.rubricScore.map((criterion) => (
                             <div key={criterion.rubricCriterionId}>
-                              <p className='text-sm font-medium'>
-                                {criterion.criterionName}
-                              </p>
+                              <p className='text-sm font-medium'>{criterion.criterionName}</p>
                               <div className='mt-2 flex items-center gap-1'>
                                 <Input
                                   type='number'
@@ -238,7 +235,15 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
 
                         <div className='mt-6 border-t pt-4'>
                           <p className='text-sm font-medium text-gray-700'>
-                            Total Points for Question: {question.points}
+                            Total Points for Question:{' '}
+                            {question.rubricScore.reduce((sum, c) => {
+                              const score =
+                                scores[question.id]?.[c.rubricCriterionId] !== undefined
+                                  ? scores[question.id][c.rubricCriterionId] || 0
+                                  : 0
+                              return sum + score
+                            }, 0)}{' '}
+                            / {question.rubricScore.reduce((sum, c) => sum + c.maxPoints, 0)}
                           </p>
                         </div>
                       </div>
@@ -247,12 +252,12 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
                 </div>
               ))}
           </div>
-          
+
           <div className='mt-8 border-t pt-6'>
             <h3 className='text-lg font-semibold'>Comments</h3>
 
             {isReviewed ? (
-              <div className='mt-4 rounded-md border bg-gray-50 p-4'>
+              <div className='mt-4 rounded-md border bg-sky-50 p-4'>
                 <p className='text-sm text-gray-700 italic'>{feedback || 'No comment left.'}</p>
               </div>
             ) : (
@@ -271,8 +276,8 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
                   />
                 </div>
                 <div className='mt-4 flex justify-end gap-2'>
-                  <Button variant='outline' disabled={isGrading}>
-                    Save Draft
+                  <Button variant='outline' disabled={isGrading} onAbort={closeModal}>
+                    Cancel
                   </Button>
                   <Button onClick={handleSubmitReview} disabled={isGrading}>
                     {isGrading ? 'Submitting...' : 'Submit Review'}

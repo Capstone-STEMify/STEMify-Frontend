@@ -5,7 +5,13 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/
 import { SubmissionReviewDialog } from '../dialog/SubmissionReviewDialog'
 import { format } from 'date-fns'
 import React, { useState } from 'react'
-import { AssignmentAttempt, AssignmentStatistics, StudentStatistic } from '@/features/assignment/types/assigmentlistdetail.type'
+import {
+  AssignmentAttempt,
+  AssignmentStatistics,
+  StudentStatistic
+} from '@/features/assignment/types/assigmentlistdetail.type'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { formatDate } from '@/utils/index'
 
 export type SubmissionStatus =
   | 'Not Reviewed'
@@ -37,21 +43,10 @@ export type Submission = {
   attempts: AssignmentAttempt[]
 }
 
-const statusVariantMap: Record<SubmissionStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  Passed: 'secondary',
-  Failed: 'destructive',
-  'Not Reviewed': 'default',
-  'Not Submitted': 'outline',
-  Submitted: 'default',
-  Pending: 'outline',
-  UnderReview: 'default',
-  Graded: 'secondary'
-}
-
 function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: string): Submission[] {
   return students.map((student) => {
     const latestAttempt = student.attempts.length > 0 ? student.attempts[0] : null
-    
+
     let grade: string | null = null
     if (latestAttempt && (latestAttempt.status === 'Graded' || latestAttempt.status === 'Passed')) {
       grade = `${latestAttempt.totalScore}`
@@ -61,7 +56,7 @@ function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: stri
       id: student.studentId,
       studentName: student.studentName,
       imageUrl: student.imageUrl,
-      submittedDate: student.lastSubmittedAt ? format(new Date(student.lastSubmittedAt), 'MMM dd, yyyy') : null,
+      submittedDate: student.lastSubmittedAt ? formatDate(student.lastSubmittedAt, { showTime: true }) : '-',
       status: student.status,
       grade: grade,
       comment: latestAttempt ? latestAttempt.feedback : null,
@@ -70,7 +65,7 @@ function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: stri
       attempts: student.attempts,
       studentRole: 'Student',
       quizTitle: assignmentTitle,
-      quizFinishedDate: student.lastSubmittedAt ? format(new Date(student.lastSubmittedAt), 'MMM dd, yyyy') : 'N/A',
+      quizFinishedDate: student.lastSubmittedAt ? formatDate(student.lastSubmittedAt, { showTime: true }) : '-',
       quizQuestionCount: 0,
       accuracy: null,
       answered: null
@@ -82,7 +77,7 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
   const [openSubmission, setOpenSubmission] = useState<Submission | null>(null)
 
   const allSubmissions = mapApiToSubmissions(data.studentStatistics, data.assignmentTitle)
-  
+
   allSubmissions.forEach((s) => {
     s.quizQuestionCount = data.totalQuestions
   })
@@ -104,44 +99,52 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
         <TableHeader>
           <TableRow className='bg-gray-200'>
             <TableHead className='w-[300px]'>Student Name</TableHead>
-            <TableHead>Submitted Date</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead className='text-right'>Grade</TableHead>
+            <TableHead>Grade</TableHead>
+            <TableHead>Submitted Date</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredSubmissions.map((submission) => (
-            <TableRow
-              key={submission.id}
-              className='cursor-pointer hover:bg-gray-50'
-              onClick={() => setOpenSubmission(submission)} // <<< Mở dialog bằng state
-            >
-              <TableCell>
-                <div className='flex items-center gap-3'>
-                  <Avatar>
-                    <AvatarImage src={submission.imageUrl} alt={submission.studentName} />
-                    <AvatarFallback>
-                      {submission.studentName
-                        .split(' ')
-                        .map((n) => n[0])
-                        .join('')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className='font-medium'>{submission.studentName}</span>
-                </div>
+          {filteredSubmissions.length > 0 ? (
+            filteredSubmissions.map((submission) => (
+              <TableRow
+                key={submission.id}
+                className='cursor-pointer hover:bg-gray-50'
+                onClick={() => setOpenSubmission(submission)} // <<< Mở dialog bằng state
+              >
+                <TableCell>
+                  <div className='flex items-center gap-3'>
+                    <Avatar>
+                      <AvatarImage src={submission.imageUrl} alt={submission.studentName} />
+                      <AvatarFallback>
+                        {submission.studentName
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className='font-medium'>{submission.studentName}</span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge className={getStatusBadgeClass(submission.status)}>{submission.status}</Badge>
+                </TableCell>
+                <TableCell>{submission.grade ? submission.grade : 'N/A'}</TableCell>
+                <TableCell>{submission.submittedDate ? submission.submittedDate : '—'}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4} className='py-6 text-center text-sm text-gray-500'>
+                No submissions found.
               </TableCell>
-              <TableCell>{submission.submittedDate ? submission.submittedDate : '—'}</TableCell>
-              <TableCell>
-                <Badge variant={statusVariantMap[submission.status] || 'default'}>{submission.status}</Badge>
-              </TableCell>
-              <TableCell className='text-right'>{submission.grade ? submission.grade : 'N/A'}</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
 
       <Dialog
-        open={!!openSubmission} 
+        open={!!openSubmission}
         onOpenChange={(isOpen) => {
           if (!isOpen) {
             setOpenSubmission(null)

@@ -31,26 +31,10 @@ export function AssignmentDetailHeader({ data }: { data: AssignmentStatistics })
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className='flex items-center gap-2'>
-          <Button variant='outline'>
-            <Share2 className='mr-2 h-4 w-4' /> Share
-          </Button>
-          <Button variant='outline' size='icon'>
-            <MoreHorizontal className='h-4 w-4' />
-          </Button>
-        </div>
       </div>
 
       <div className='flex flex-col gap-6 md:flex-row'>
         <div className='flex-grow'>
-          <div className='mb-2 flex items-center gap-2'>
-            <Badge variant='outline' className='text-gray-600'>
-              <Clock className='mr-1.5 h-3 w-3' /> LIVE
-            </Badge>
-            <Badge variant='outline' className='border-green-200 bg-green-50 text-green-600'>
-              <CheckCircle className='mr-1.5 h-3 w-3' /> Completed
-            </Badge>
-          </div>
           <h1 className='flex items-center gap-2 text-2xl font-bold'>
             {data.assignmentTitle}
             <Edit2 className='h-5 w-5 cursor-pointer text-gray-400' />

@@ -13,9 +13,9 @@ export type Classroom = {
   endDate: string
   teacher: {
     id: string
-    Name: string
-    Email: string
-    ImageUrl: string
+    name: string
+    email: string
+    imageUrl: string
     userName: string
   }
   classCode: string
