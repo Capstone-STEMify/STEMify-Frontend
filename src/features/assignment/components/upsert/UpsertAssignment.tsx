@@ -28,8 +28,10 @@ import {
   useGetAssignmentByIdQuery,
   useUpdateAssignmentMutation
 } from '@/features/assignment/api/assignmentApi'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import BackButton from '@/components/shared/button/BackButton'
+import { useStore } from '@tanstack/react-store'
+import { useLocale } from 'next-intl'
 
 const defaultFormValues: CreateAssignmentDto = {
   sectionId: 1,
@@ -52,9 +54,10 @@ type UpsertAssignmentProps = {
 }
 
 export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
-  const { sectionId, assignmentId } = useParams()
+  const { lessonId, sectionId, assignmentId } = useParams()
   const isEditing = !!assignmentId
-
+  const router = useRouter()
+  const locale = useLocale()
   // ✅ Force re-render state
   const [forceUpdate, setForceUpdate] = useState(0)
 
@@ -116,21 +119,52 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     // validators: { onChange: assignmentSchema as any },
     onSubmit: async ({ value }) => {
       try {
-        const payload: CreateAssignmentDto = { ...value, sectionId: Number(sectionId) }
-
         if (isEditing) {
-          // await updateAssignment({ id: assignmentId, body: payload }).unwrap()
+          if (!assignmentData?.data?.contentId) {
+            toast.error('Assignment content ID is missing')
+            return
+          }
+          const updatePayload = {
+            ...value,
+            sectionId: Number(sectionId),
+            contentId: assignmentData.data.contentId
+          }
+          toast.info('Update functionality coming soon')
+          // await updateAssignment({ id: Number(assignmentId), body: updatePayload }).unwrap()
         } else {
-          await createAssignment(payload).unwrap()
+          const payload: CreateAssignmentDto = { ...value, sectionId: Number(sectionId) }
+          const res = await createAssignment(payload).unwrap()
+          router.push(`${locale}/admin/lesson/${lessonId}/section/${sectionId}/assignment/${res.data.id}`)
+          toast.success(`Assignment created successfully`)
         }
 
-        toast.success(`Assignment ${isEditing ? 'updated' : 'created'} successfully`)
         onSuccess?.()
       } catch (error) {
         toast.error(`Failed to ${isEditing ? 'update' : 'create'} assignment`)
       }
     }
   })
+
+  // ✅ Subscribe to form values using useStore - ALWAYS call this hook
+  const questions = useStore(form.store, (state) => state.values.questions)
+  const passingScore = useStore(form.store, (state) => state.values.passingScore)
+  const durationDays = useStore(form.store, (state) => state.values.durationDays)
+
+  // ✅ Drag and drop sensors - ALWAYS call these hooks
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  )
+
+  // ✅ Calculate derived values
+  const totalScore = questions.reduce(
+    (sum, q) => sum + q.rubricCriterion.reduce((acc, curr) => acc + (curr.maxPoints || 0), 0),
+    0
+  )
+
+  const totalCriteria = questions.reduce((sum, q) => sum + q.rubricCriterion.length, 0)
 
   // ✅ Wait for data to load before rendering form
   if (isEditing && isLoading) {
@@ -156,7 +190,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     }
 
     form.setFieldValue('questions', [...currentQuestions, newQuestion])
-    setForceUpdate((prev) => prev + 1) // Force re-render
     console.log('Added question, new length:', currentQuestions.length + 1)
   }
 
@@ -172,7 +205,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
       .map((q, i) => ({ ...q, orderIndex: i + 1 }))
 
     form.setFieldValue('questions', filteredQuestions)
-    setForceUpdate((prev) => prev + 1) // Force re-render
     console.log('Removed question at index:', index, 'new length:', filteredQuestions.length)
   }
 
@@ -195,7 +227,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     })
 
     form.setFieldValue('questions', updatedQuestions)
-    setForceUpdate((prev) => prev + 1) // Force re-render
     console.log('Added criterion to question:', questionIndex)
   }
 
@@ -212,25 +243,8 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     })
 
     form.setFieldValue('questions', updatedQuestions)
-    setForceUpdate((prev) => prev + 1) // Force re-render
     console.log('Removed criterion:', criterionIndex, 'from question:', questionIndex)
   }
-
-  const calculateTotalScore = () => {
-    return form.state.values.questions.reduce((sum, q) => sum + (q.points || 0), 0)
-  }
-
-  const calculateTotalCriteria = () => {
-    return form.state.values.questions.reduce((sum, q) => sum + q.rubricCriterion.length, 0)
-  }
-
-  // ✅ Drag and drop
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
-    })
-  )
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -246,7 +260,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
       }))
 
       form.setFieldValue('questions', reorderedQuestions)
-      setForceUpdate((prev) => prev + 1) // Force re-render
       toast.success('Questions reordered successfully')
     }
   }
@@ -258,10 +271,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
   const handlePreview = () => {
     toast.info('Preview functionality coming soon')
   }
-
-  const totalScore = calculateTotalScore()
-  const totalCriteria = calculateTotalCriteria()
-  const questions = form.state.values.questions
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -479,8 +488,8 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                 totalScore={totalScore}
                 totalQuestions={questions.length}
                 totalCriteria={totalCriteria}
-                passingScore={form.state.values.passingScore}
-                durationDays={form.state.values.durationDays}
+                passingScore={passingScore}
+                durationDays={durationDays}
                 onSaveDraft={handleSaveDraft}
                 onPreview={handlePreview}
               />

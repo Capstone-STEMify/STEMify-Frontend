@@ -56,6 +56,9 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
         url: `/classrooms/${classroomId}/student-progress`,
         method: 'GET',
         params: { courseId }
+      })
+    }),
+
     getClassroomSchedule: builder.query<ApiSuccessResponse<ClassroomSchedule>, { classroomId: number }>({
       query: ({ classroomId }) => ({
         url: `/classrooms/${classroomId}/schedule`
