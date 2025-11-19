@@ -9,11 +9,15 @@ import { Label } from '@/components/shadcn/label'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import { QuestionType } from '@/features/resource/question/types/question.type'
 import { Button } from '@/components/shadcn/button'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
+import { setQuizAttemptId, setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { setMode, setQuizId } from '@/features/resource/lesson/slice/lessonDetailSlice'
 import { setQuizAttemptId, setSelectedQuiz, setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
 import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
 import { Attempt } from '@/features/resource/quiz/types/quiz.type'
+import { LicenseType, UserRole } from '@/types/userRole'
 
 type QuizViewerProps = {
   quiz: QuizContent
@@ -25,6 +29,10 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
   const dispatch = useAppDispatch()
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
   const [selectedAttempt, setSelectedAttempt] = useState<Attempt | null>(null)
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
+  if (role === LicenseType.TEACHER) {
+    isShowQuestionAnswer = true
+  }
 
   const [createQuizAttempt, { isLoading: isCreating }] = useCreateQuizAttemptMutation()
 
