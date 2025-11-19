@@ -1,5 +1,11 @@
-import { Classroom, ClassroomSliceParams } from '@/features/classroom/types/classroom.type'
+import {
+  Classroom,
+  ClassroomSliceParams,
+  StudentProgressData,
+  StudentProgressParams
+} from '@/features/classroom/types/classroom.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
+import { ApiSuccessResponse } from '@/types/baseModel'
 
 export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
   reducerPath: 'classroomApi',
@@ -41,6 +47,14 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
         body: { teacherId }
       }),
       invalidatesTags: ['Classroom']
+    }),
+
+    getClassroomStudentProgress: builder.query<ApiSuccessResponse<StudentProgressData>, StudentProgressParams>({
+      query: ({ classroomId, courseId }) => ({
+        url: `/classrooms/${classroomId}/student-progress`,
+        method: 'GET',
+        params: { courseId }
+      })
     })
   })
 })
@@ -57,5 +71,7 @@ export const {
   useUpdateTeacherClassroomMutation,
 
   useAddClassroomStudentsMutation,
-  useDeleteClassroomStudentsMutation
+  useDeleteClassroomStudentsMutation,
+
+  useGetClassroomStudentProgressQuery
 } = classroomApi

@@ -8,6 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChevronRight, Info, TrendingUp, BookOpen, Award, Clock, CheckCircle2 } from 'lucide-react'
 import { Cell, Pie, PieChart, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts'
 import { StudentProgressStatistic } from '@/features/dashboard/components/table/StudentProgressStatistic'
+import { useParams } from 'next/navigation'
+import { useGetClassroomByIdQuery } from '../../api/classroomApi'
+import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 
 export default function ClassroomOverview() {
   const contentStatusData = [
@@ -49,6 +52,22 @@ export default function ClassroomOverview() {
       avatar: ''
     }
   ]
+
+  const params = useParams()
+  const classroomId = Number(params.classroomId)
+
+  const { data: classroomRes, isLoading: isLoadingClassroom } = useGetClassroomByIdQuery(classroomId, {
+    skip: !classroomId
+  })
+
+  const classroom = classroomRes?.data
+  const curriculumId = classroom?.curriculum?.id
+
+  const { data: curriculumRes, isLoading: isLoadingCurriculum } = useGetCurriculumByIdQuery(curriculumId!, {
+    skip: !curriculumId
+  })
+
+  const courses = curriculumRes?.data?.courses || []
 
   return (
     <div className='container mx-auto px-6 pb-8'>
@@ -399,7 +418,7 @@ export default function ClassroomOverview() {
         </CardContent>
       </Card>
 
-      <StudentProgressStatistic/>
+      <StudentProgressStatistic classroomId={classroomId} courses={courses} />
     </div>
   )
 }

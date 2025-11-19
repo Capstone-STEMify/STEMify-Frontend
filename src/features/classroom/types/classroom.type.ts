@@ -47,3 +47,41 @@ export enum Grade {
   GRADE_5 = 'Grade 5',
   GRADE_6 = 'Grade 6'
 }
+
+export type SectionProgress = {
+  id: number
+  sectionId: number
+  status: 'NotStarted' | 'InProgress' | 'Completed' | string
+}
+
+export type LessonProgress = {
+  id: number
+  lessonId: number
+  status: string
+  sectionProgresses: SectionProgress[]
+}
+
+export type StudentProgressItem = {
+  studentId: string
+  studentName: string
+  courseEnrollmentId: number
+  lessonProgresses: LessonProgress[]
+}
+
+export type LessonStructure = {
+  lessonId: number
+  lessonTitle: string
+  sectionIds: number[]
+}
+
+export type StudentProgressData = {
+  courseId: number
+  classroomId: number
+  lessons: LessonStructure[]
+  StudentProgress: StudentProgressItem[]
+}
+
+export type StudentProgressParams = {
+  classroomId: number
+  courseId: number
+}
