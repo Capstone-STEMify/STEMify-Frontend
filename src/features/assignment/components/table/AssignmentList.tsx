@@ -17,18 +17,27 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { AssignmentStatistics } from '../../types/assigmentlistdetail.type'
 import { format } from 'date-fns'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import { skip } from 'node:test'
 
 export function AssignmentList() {
+  const locale = useLocale()
+
   const getAccuracyColor = (accuracy: number | null): string => {
     if (accuracy === null) return 'text-gray-400'
     if (accuracy >= 90) return 'text-green-500'
     if (accuracy >= 70) return 'text-orange-400'
     return 'text-red-500'
   }
+  const { classroomId } = useParams()
 
-  const classroomId = 1
-
-  const { data: studentAssignmentResponse, isLoading } = useSearchStudentAssignmentQuery({ classroomId })
+  const { data: studentAssignmentResponse, isLoading } = useSearchStudentAssignmentQuery(
+    {
+      classroomId: Number(classroomId)
+    },
+    { skip: !classroomId }
+  )
 
   if (isLoading) return <LoadingComponent />
 
@@ -46,7 +55,7 @@ export function AssignmentList() {
             </TableHead>
             <TableHead className='min-w-[250px]'>
               <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Quiz name <ChevronUp className='ml-1 h-3 w-3' />
+                Assignment name <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[180px] text-center'>
@@ -91,7 +100,7 @@ export function AssignmentList() {
                   </div>
                 </TableCell>
                 <TableCell className='font-medium'>
-                  <Link href={`assignment/${assignment.assignmentId}`}>
+                  <Link href={`/${locale}/classroom/${classroomId}/assignment/${assignment.assignmentId}`}>
                     <label
                       htmlFor={`asm-${assignment.assignmentId}`}
                       className='cursor-pointer text-gray-800 hover:text-blue-500 hover:underline'

@@ -28,7 +28,7 @@ export function QuizDetailHeader({ data }: QuizDetailHeaderProps) {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/${locale}/classroom/${classroomId}/quiz`}>Quiz</BreadcrumbLink>
+              <BreadcrumbLink href={`/${locale}/classroom/${classroomId}`}>Quiz</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

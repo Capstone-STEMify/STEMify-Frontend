@@ -27,7 +27,7 @@ export function AnswerGridTable({ data, studentData, questionData }: AnswerGridT
     <>
       <div className='overflow-hidden rounded-lg border'>
         <div className='relative overflow-x-auto'>
-          <Table className='min-w-[2000px]'>
+          <Table>
             <TableHeader>
               <TableRow className='bg-gray-50 hover:bg-gray-50'>
                 <TableHead className='sticky left-0 z-10 w-[350px] bg-inherit'>Learner</TableHead>

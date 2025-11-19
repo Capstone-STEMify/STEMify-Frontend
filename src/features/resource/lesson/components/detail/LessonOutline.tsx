@@ -5,7 +5,7 @@ import { cn } from '@/utils/shadcn/utils'
 import { Check, GraduationCap, Lock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
 
@@ -29,8 +29,8 @@ export default function LessonOutline({ sectionData, sectionStatus }: LessonOutl
   )
 
   const isLoggedIn = !!userData
-  const role = userData?.user?.role
-  const isVisibleSection = role === UserRole.TEACHER || role === UserRole.ADMIN || role === UserRole.STAFF
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
+  const isVisibleSection = role === LicenseType.TEACHER || role === UserRole.ADMIN || role === UserRole.STAFF
 
   return (
     <div className='px-4'>

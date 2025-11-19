@@ -11,15 +11,19 @@ import {
 import { CheckCircle, Clock, Edit2, MoreHorizontal, Share2, BookOpen } from 'lucide-react'
 import { ProgressCircle } from '@/features/quiz/components/active/circle/AccuracyCircle'
 import { AssignmentStatistics } from '@/features/assignment/types/assigmentlistdetail.type'
+import { useLocale } from 'next-intl'
+import { useParams } from 'next/navigation'
 
 export function AssignmentDetailHeader({ data }: { data: AssignmentStatistics }) {
+  const locale = useLocale()
+  const { classroomId } = useParams()
   return (
     <div>
       <div className='mb-4 flex items-center justify-between'>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/assignment'>Assignment</BreadcrumbLink>
+              <BreadcrumbLink href={`/${locale}/classroom/${classroomId}`}>Assignment</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

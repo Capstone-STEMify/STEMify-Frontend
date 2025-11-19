@@ -8,6 +8,7 @@ import { goToNextQuestion, goToPreviousQuestion, submitQuiz } from '@/features/r
 import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 import { useUpdateQuizAttemptMutation } from '@/features/resource/quiz/api/quizApi'
 import { toast } from 'sonner'
+import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
 
 type NavigationButtonsProps = {
   quiz: Quiz
@@ -35,6 +36,7 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
     }).unwrap()
     if (result) {
       dispatch(submitQuiz())
+      dispatch(setMode('normal'))
       toast.success('Nộp bài thành công!')
     }
   }

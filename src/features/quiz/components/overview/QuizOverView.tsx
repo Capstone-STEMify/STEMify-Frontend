@@ -16,7 +16,7 @@ export default function QuizOverview({ data }: QuizOverviewProps) {
   return (
     <div className='min-h-screen'>
       <div className='mx-auto max-w-7xl'>
-        <QuizOverviewToolbar />
+        {/* <QuizOverviewToolbar /> */}
         <QuizCardGrid data={data} />
       </div>
     </div>

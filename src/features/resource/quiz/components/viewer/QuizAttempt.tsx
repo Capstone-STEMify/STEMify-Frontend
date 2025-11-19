@@ -128,7 +128,7 @@ export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAt
       <div className='space-y-4'>
         <div className='flex items-center gap-2 border-b border-gray-200 pb-3'>
           <h2 className='text-xl font-semibold text-gray-900'>Attempt History</h2>
-          <span className='rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700'>
+          <span className='rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700'>
             {completedAttempts.length}
           </span>
         </div>
