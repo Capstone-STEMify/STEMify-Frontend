@@ -59,12 +59,14 @@ export default function AuthSessionSync() {
       (!reduxSelectedOrganizationId || !reduxSelectedSubscriptionOrderId || !reduxCurrentRole)
     ) {
       const firstOrg = reduxUser.organizations[0]
-      const activeSub = firstOrg.subscriptions.find((s) => s.isActive) || firstOrg.subscriptions[0]
+      const activeSub = firstOrg.subscriptions.find((s) => s.isActive)
 
-      dispatch(setSelectedOrganizationId(firstOrg.id))
-      dispatch(setSelectedSubscriptionOrderId(activeSub.id))
-      dispatch(setCurrentRole(activeSub.role)) // Đây là LicenseType
-      console.log('Default organization selected:', firstOrg, activeSub, activeSub.role)
+      if (activeSub) {
+        dispatch(setSelectedOrganizationId(firstOrg.id))
+        dispatch(setSelectedSubscriptionOrderId(activeSub.id))
+        dispatch(setCurrentRole(activeSub.role)) // Đây là LicenseType
+        console.log('Default organization selected:', firstOrg, activeSub, activeSub.role)
+      }
     }
   }, [reduxUser, reduxSelectedOrganizationId, reduxSelectedSubscriptionOrderId, reduxCurrentRole, dispatch])
 

@@ -37,6 +37,7 @@ export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
       any,
       {
         quizAttemptId: number
+        studentQuizId: number
         questionAttempts: QuestionAttemptQuery[]
       }
     >({
@@ -45,7 +46,7 @@ export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
         method: 'PATCH',
         body: { questionAttempts }
       }),
-      invalidatesTags: (result, error, { quizAttemptId }) => [{ type: 'Quiz', id: quizAttemptId }]
+      invalidatesTags: (result, error, { studentQuizId }) => [{ type: 'Quiz', id: studentQuizId }]
     })
   })
 })

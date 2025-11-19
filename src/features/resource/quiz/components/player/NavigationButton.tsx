@@ -9,6 +9,7 @@ import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 import { useUpdateQuizAttemptMutation } from '@/features/resource/quiz/api/quizApi'
 import { toast } from 'sonner'
 import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
+import { useGetStudentQuizByIdQuery } from '@/features/quiz/api/studentQuizApi'
 
 type NavigationButtonsProps = {
   quiz: Quiz
@@ -16,7 +17,9 @@ type NavigationButtonsProps = {
 
 export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
   const questions = quiz.questions
-  const { currentQuestionIndex, userAnswers, quizAttemptId } = useAppSelector((state) => state.quizPlayer)
+  const { currentQuestionIndex, userAnswers, quizAttemptId, studentQuizId } = useAppSelector(
+    (state) => state.quizPlayer
+  )
   const dispatch = useAppDispatch()
   const isMobile = useIsMobile()
   const [submitQuizAttempt, { isLoading }] = useUpdateQuizAttemptMutation()
@@ -32,6 +35,7 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
 
     const result = await submitQuizAttempt({
       quizAttemptId: quizAttemptId!,
+      studentQuizId: studentQuizId!,
       questionAttempts
     }).unwrap()
     if (result) {
