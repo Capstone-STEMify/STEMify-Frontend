@@ -45,7 +45,7 @@ export type Submission = {
 
 function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: string): Submission[] {
   return students.map((student) => {
-    const latestAttempt = student.attempts.length > 0 ? student.attempts[0] : null
+    const latestAttempt = student.attempts.length > 0 ? student.attempts[student.attempts.length - 1] : null
 
     let grade: string | null = null
     if (latestAttempt && (latestAttempt.status === 'Graded' || latestAttempt.status === 'Passed')) {
@@ -57,7 +57,7 @@ function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: stri
       studentName: student.studentName,
       imageUrl: student.imageUrl,
       submittedDate: student.lastSubmittedAt ? formatDate(student.lastSubmittedAt, { showTime: true }) : '-',
-      status: student.status,
+      status: latestAttempt ? latestAttempt.status : 'Not Submitted',
       grade: grade,
       comment: latestAttempt ? latestAttempt.feedback : null,
       point: latestAttempt ? latestAttempt.totalScore : null,
@@ -77,6 +77,7 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
   const [openSubmission, setOpenSubmission] = useState<Submission | null>(null)
 
   const allSubmissions = mapApiToSubmissions(data.studentStatistics, data.assignmentTitle)
+  console.log('allSubmissions', allSubmissions)
 
   allSubmissions.forEach((s) => {
     s.quizQuestionCount = data.totalQuestions
@@ -88,7 +89,7 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
       return isReviewed
     }
     if (filter === 'not-reviewed') {
-      return !isReviewed && s.status !== 'Pending' && s.status !== 'Not Submitted'
+      return !isReviewed
     }
     return true
   })

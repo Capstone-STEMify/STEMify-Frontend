@@ -48,7 +48,8 @@ export enum StudentAssignmentStatus {
   PASSED = 'Passed',
   FAILED = 'Failed',
   EXPIRED = 'Expired',
-  ASSIGNED = 'Assigned'
+  ASSIGNED = 'Assigned',
+  UNDER_REVIEW = 'UnderReview'
 }
 
 export type QuestionAttempt = {

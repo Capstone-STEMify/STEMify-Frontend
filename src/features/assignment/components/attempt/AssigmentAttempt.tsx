@@ -70,9 +70,9 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
         <h1 className='mb-2 text-2xl font-semibold'>{assignmentTitle}</h1>
         <p>Submitted: {formatDate(latestAttempt.submittedAt)}</p>
         <p>
-          Status: <StatusBadge status={studentAssignmentData.status} />
+          Status: <StatusBadge status={latestAttempt.status} />
         </p>
-        <p>Final Score: {studentAssignmentData.finalScore}%</p>
+        <p>Final Score: {latestAttempt.totalScore}%</p>
       </div>
       <hr className='my-6' />
 
@@ -237,11 +237,10 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
   const attemptsRemaining = maxAttempts - attemptsMade
 
   const isGraded =
-    studentAssignmentData &&
-    (studentAssignmentData.status === StudentAssignmentStatus.PASSED ||
-      studentAssignmentData.status === StudentAssignmentStatus.FAILED)
+    latestAttempt &&
+    (latestAttempt.status === StudentAssignmentStatus.PASSED || latestAttempt.status === StudentAssignmentStatus.FAILED)
 
-  const isPassed = studentAssignmentData.status === StudentAssignmentStatus.PASSED
+  const isPassed = latestAttempt && latestAttempt.status === StudentAssignmentStatus.PASSED
 
   return (
     <div className='mx-auto max-w-4xl space-y-6 p-6'>
@@ -315,7 +314,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
         </Card>
       )}
 
-      {latestAttempt && studentAssignmentData.status === StudentAssignmentStatus.SUBMITTED && (
+      {latestAttempt && latestAttempt.status === StudentAssignmentStatus.UNDER_REVIEW && (
         <Card className='bg-yellow-50'>
           <CardContent className='p-6'>
             <h2 className='mb-1 text-lg font-semibold'>Pending Review</h2>
