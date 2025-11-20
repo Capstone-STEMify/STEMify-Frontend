@@ -108,6 +108,8 @@ export default function AssignmentSubmissionForm() {
   const locale = useLocale()
   const { selectedAssignment, selectedStudentAssignment } = useAppSelector((state) => state.studentAssignmentSelected)
 
+  console.log(selectedAssignment, selectedStudentAssignment)
+
   const [createAttempt, { isLoading: isSubmitting }] = useCreateAssignmentAttemptMutation()
   const [projectTitle, setProjectTitle] = useState('')
   const [answers, setAnswers] = useState<Record<number, { text?: string; file?: File | null }>>({})

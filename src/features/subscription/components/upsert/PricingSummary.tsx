@@ -29,7 +29,7 @@ export default function PricingSummary({ basePrice, discountPercent, onDiscountC
       <div className='mt-4 space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-4'>
         <div className='flex justify-between text-sm'>
           <span className='font-medium text-slate-700'>Total Amount</span>
-          <span className='font-semibold text-slate-900'>${basePrice.toLocaleString()}</span>
+          <span className='font-semibold text-slate-900'>{basePrice.toLocaleString()} VND</span>
         </div>
 
         <div className='flex justify-between text-sm'>
@@ -39,7 +39,7 @@ export default function PricingSummary({ basePrice, discountPercent, onDiscountC
 
         <div className='flex justify-between border-t border-slate-200 pt-2 text-base'>
           <span className='font-semibold text-slate-900'>Final Amount</span>
-          <span className='font-bold text-blue-600'>${finalPrice.toLocaleString()}</span>
+          <span className='font-bold text-blue-600'>{finalPrice.toLocaleString()} VND</span>
         </div>
       </div>
     </div>

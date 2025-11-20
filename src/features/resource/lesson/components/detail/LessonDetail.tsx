@@ -59,6 +59,8 @@ export default function LessonDetail() {
     }
   )
 
+  console.log('sectionStatus', sectionStatus)
+
   useEffect(() => {
     dispatch(clearLesson())
   }, [])
