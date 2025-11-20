@@ -59,6 +59,8 @@ export default function LessonDetail() {
     }
   )
 
+  console.log('sectionStatus', sectionStatus)
+
   useEffect(() => {
     if (sectionData.length > 0) {
       const firstSection = [...sectionData].sort((a, b) => a.orderIndex - b.orderIndex)[0]

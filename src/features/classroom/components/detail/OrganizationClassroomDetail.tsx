@@ -331,9 +331,9 @@ export default function OrganizationClassroomDetail() {
                 <CardContent>
                   <div className='flex items-start gap-3'>
                     <Avatar className='h-12 w-12 border-2 border-white shadow-md'>
-                      <AvatarImage src={classroom.teacher.ImageUrl} />
+                      <AvatarImage src={classroom.teacher.imageUrl} />
                       <AvatarFallback className='bg-gradient-to-br from-amber-100 to-amber-500 font-semibold text-white'>
-                        {classroom.teacher.Name.split(' ')
+                        {classroom.teacher.name.split(' ')
                           .map((n) => n[0])
                           .join('')
                           .toUpperCase()}
@@ -341,11 +341,11 @@ export default function OrganizationClassroomDetail() {
                     </Avatar>
                     <div className='min-w-0 flex-1'>
                       <p className='mb-1 font-semibold text-slate-900'>
-                        {classroom.teacher.Name || classroom.teacher.Email}
+                        {classroom.teacher.name || classroom.teacher.email}
                       </p>
                       <div className='flex items-center gap-1.5 text-sm text-slate-600'>
                         <Mail className='h-3.5 w-3.5' />
-                        <p className='truncate'>{classroom.teacher.Email}</p>
+                        <p className='truncate'>{classroom.teacher.email}</p>
                       </div>
                     </div>
                   </div>

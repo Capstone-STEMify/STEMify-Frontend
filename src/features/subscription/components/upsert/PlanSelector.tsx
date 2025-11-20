@@ -81,7 +81,7 @@ export default function PlanSelector({
 
                     <div className='border-t border-slate-200 pt-3'>
                       <div className='flex items-baseline gap-1'>
-                        <span className='text-3xl font-bold text-blue-600'>${plan.price.toLocaleString()}</span>
+                        <span className='text-3xl font-bold text-blue-600'>{plan.price.toLocaleString()} VND</span>
                         <span className='text-sm text-slate-500'>
                           /{selectedBillingCycle === BillingCycle.ANNUAL ? 'year' : '6 months'}
                         </span>
