@@ -2,6 +2,7 @@ import { Button } from '@/components/shadcn/button'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { ArrowRightIcon, BookOpenIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
 
 export default function StemifiLabLibrary() {
   const t = useTranslations('Resource')
@@ -72,31 +73,32 @@ export default function StemifiLabLibrary() {
         </CardLayout>
 
         {/* microbitWorkspace */}
-        <CardLayout
-          imageSrc='/images/resources/sim.gif'
-          href='/lab/microbit-workspace'
-          footer={
-            <Button className='group bg-blue-500'>
-              <span>{tc('button.exploreMicrobitWorkspace')}</span>
-              <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
-            </Button>
-          }
-        >
-          <div className='my-1 flex h-full flex-col justify-between px-2'>
-            <div className='space-y-3'>
-              {/* Header with icon */}
-              <div className='flex items-center space-x-2'>
-                <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
-                  <BookOpenIcon className='h-4 w-4 text-blue-600' />
+        <Link href='http://localhost:3232/index.html#' target='_blank' rel='noopener noreferrer'>
+          <CardLayout
+            imageSrc='/images/resources/sim.gif'
+            footer={
+              <Button className='group bg-blue-500'>
+                <span>{tc('button.exploreMicrobitWorkspace')}</span>
+                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
+              </Button>
+            }
+          >
+            <div className='my-1 flex h-full flex-col justify-between px-2'>
+              <div className='space-y-3'>
+                {/* Header with icon */}
+                <div className='flex items-center space-x-2'>
+                  <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
+                    <BookOpenIcon className='h-4 w-4 text-blue-600' />
+                  </div>
+                  <h2 className='text-xl font-bold text-gray-900'>{t('microbitWorkspace.title')}</h2>
                 </div>
-                <h2 className='text-xl font-bold text-gray-900'>{t('microbitWorkspace.title')}</h2>
-              </div>
 
-              {/* Description */}
-              <p className='text-sm leading-relaxed text-gray-600'>{t('microbitWorkspace.description')}</p>
+                {/* Description */}
+                <p className='text-sm leading-relaxed text-gray-600'>{t('microbitWorkspace.description')}</p>
+              </div>
             </div>
-          </div>
-        </CardLayout>
+          </CardLayout>
+        </Link>
 
         {/* modalMaker */}
         <CardLayout

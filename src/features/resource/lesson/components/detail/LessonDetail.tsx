@@ -16,7 +16,7 @@ import { useTranslations } from 'next-intl'
 import PrintPreviewModal from '@/components/shared/modals/PrintPreviewModal'
 import LessonPrintableContent from './LessonPrintableContent'
 import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
-import { setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
+import { clearLesson, setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
 import QuizPlayerContainer from '@/features/resource/quiz/components/player/QuizPlayerContainer'
 
 export default function LessonDetail() {
@@ -58,6 +58,10 @@ export default function LessonDetail() {
       skip: !enrollmentId
     }
   )
+
+  useEffect(() => {
+    dispatch(clearLesson())
+  }, [])
 
   useEffect(() => {
     if (sectionData.length > 0) {

@@ -25,3 +25,10 @@ export type StudentProgressQuery = {
   lessonId?: number
   sectionId?: number
 } & SearchPaginatedRequestParams
+
+export type UpdateSectionStudentProgress = {
+  sectionId: number
+  enrollmentId: number
+  lessonId: number
+  status: ProgressStatus
+}

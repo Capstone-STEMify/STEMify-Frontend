@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { set } from 'zod'
 
 type LessonDetailSlice = {
   mode?: 'normal' | 'quiz'
@@ -30,10 +29,15 @@ export const lessonDetailSlice = createSlice({
     },
     setIsPrintModalOpen: (state, action) => {
       state.isPrintModalOpen = action.payload
+    },
+    clearLesson: (state) => {
+      state.mode = 'normal'
+      state.selectedSectionId = undefined
+      state.quizId = undefined
+      state.isPrintModalOpen = false
     }
   }
 })
 
-export const { setMode, setQuizId, setSelectedSectionId, setIsPrintModalOpen } = lessonDetailSlice.actions
-
+export const { setMode, setQuizId, setSelectedSectionId, setIsPrintModalOpen, clearLesson } = lessonDetailSlice.actions
 export default lessonDetailSlice.reducer
