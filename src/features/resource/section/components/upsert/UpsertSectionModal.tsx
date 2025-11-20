@@ -33,8 +33,8 @@ export default function UpsertSectionModal({ lessonId, sectionId, onConfirm }: C
               ) : (
                 <div>
                   {t('form.title.create')}{' '}
-                  <Button variant={'ghost'} onClick={() => {}}>
-                    <Sparkles size={15} />
+                  <Button variant='ghost' onClick={() => {}}>
+                    <Sparkles size={18} className='text-purple-400' />
                   </Button>
                 </div>
               )}

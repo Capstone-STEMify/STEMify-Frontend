@@ -4,7 +4,9 @@
       "title": "Trình tạo lắp ráp 3D",
       "subtitle": "Tạo các bài học lắp ráp 3D tương tác cho học sinh",
       "preview": "Xem trước mô hình 3D",
-      "save": "Lưu mô hình"
+      "save": "Lưu mô hình",
+      "export": "Xuất mô hình",
+      "import": "Nhập mô hình"
     },
     "main_content": {
       "move": "Di Chuyển",

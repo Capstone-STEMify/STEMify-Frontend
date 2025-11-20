@@ -4,7 +4,9 @@
       "title": "3D Creator",
       "subtitle": "Create and customize your own 3D models",
       "preview": "Preview 3D Model",
-      "save": "Save Model"
+      "save": "Save Model",
+      "export": "Export Model",
+      "import": "Import Model"
     },
     "main_content": {
       "move": "Move",
