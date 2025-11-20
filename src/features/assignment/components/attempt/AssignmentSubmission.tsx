@@ -1,11 +1,9 @@
 'use client'
 import { Sparkles, FileText, UploadCloud, X, Loader2 } from 'lucide-react'
-import { useGetAssignmentByIdQuery } from '@/features/assignment/api/assignmentApi'
 import { useCreateAssignmentAttemptMutation } from '@/features/assignment/api/studentAssignmentApi'
 import { Assignment, AssignmentQuestion, AssignmentQuestionType } from '@/features/assignment/types/assignment.type'
 import { toast } from 'sonner'
 import { CreateAttemptPayload, QuestionAttemptPayload } from '@/features/assignment/types/assigmentlistdetail.type'
-import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -14,6 +12,10 @@ import { Label } from '@/components/shadcn/label'
 import { Input } from '@/components/shadcn/input'
 import { Textarea } from '@/components/shadcn/textarea'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import BackButton from '@/components/shared/button/BackButton'
+import SEmpty from '@/components/shared/empty/SEmpty'
+import { formatDate, formatDateV2 } from '@/utils/index'
+import { useLocale } from 'next-intl'
 
 const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (file: File | null) => void }) => {
   const [isDragging, setIsDragging] = useState(false)
@@ -103,21 +105,10 @@ const fileToBase64 = (file: File): Promise<string> => {
 
 export default function AssignmentSubmissionForm() {
   const router = useRouter()
-  const params = useParams()
-  const searchParams = useSearchParams()
-  const user = useAppSelector((state) => state.auth?.user)
-
-  const assignmentId = params.assignmentId as string
-  const studentAssignmentId = searchParams.get('studentAssignmentId')
-
-  const { data: assignmentData, isLoading: isLoadingAssignment } = useGetAssignmentByIdQuery(Number(assignmentId), {
-    skip: !assignmentId
-  })
-
-  const [activeTab, setActiveTab] = useState<'instructions' | 'submission' | 'discussions'>('submission')
+  const locale = useLocale()
+  const { selectedAssignment, selectedStudentAssignment } = useAppSelector((state) => state.studentAssignmentSelected)
 
   const [createAttempt, { isLoading: isSubmitting }] = useCreateAssignmentAttemptMutation()
-
   const [projectTitle, setProjectTitle] = useState('')
   const [answers, setAnswers] = useState<Record<number, { text?: string; file?: File | null }>>({})
 
@@ -135,12 +126,12 @@ export default function AssignmentSubmissionForm() {
   }
 
   const handleSubmit = async () => {
-    if (!assignmentData?.data || !studentAssignmentId) {
+    if (!selectedAssignment || !selectedStudentAssignment) {
       toast.error('Cannot submit assignment. Invalid data.')
       return
     }
 
-    const { questions } = assignmentData.data
+    const questions = selectedAssignment.questions
     const questionAttempts: QuestionAttemptPayload[] = []
 
     for (const question of questions) {
@@ -166,7 +157,7 @@ export default function AssignmentSubmissionForm() {
     }
 
     const payload: CreateAttemptPayload = {
-      studentAssignmentId: Number(studentAssignmentId),
+      studentAssignmentId: Number(selectedStudentAssignment.id),
       questionAttempts: questionAttempts
     }
 
@@ -180,23 +171,26 @@ export default function AssignmentSubmissionForm() {
     }
   }
 
-  if (isLoadingAssignment) return <LoadingComponent />
-
-  console.log(assignmentData?.data, studentAssignmentId)
-
-  if (!assignmentData?.data || !studentAssignmentId) {
-    return <div className='p-6 text-center text-red-500'>Error: Assignment data or Student ID is missing.</div>
+  if (!selectedAssignment || !selectedStudentAssignment) {
+    return (
+      <div>
+        <SEmpty title='No assignment found. Please select an assignment.' />
+      </div>
+    )
   }
 
-  const { data: assignment } = assignmentData
-  const questions = [...assignment.questions].sort((a, b) => a.orderIndex - b.orderIndex)
+  const questions = [...selectedAssignment.questions].sort((a, b) => a.orderIndex - b.orderIndex)
 
   return (
     <div className='mx-auto max-w-5xl space-y-6 p-6'>
       <div>
-        <h1 className='mb-4 text-3xl font-normal'>{assignment.title}</h1>
+        <div className='flex gap-4'>
+          <BackButton />
+          <h1 className='mb-4 text-3xl font-normal'>{selectedAssignment.title}</h1>
+        </div>
         <div className='text-sm text-gray-600'>
-          <span className='font-semibold'>Duration</span> {assignment.durationDays} days
+          <span className='font-semibold'>Deadline</span>{' '}
+          {formatDate(selectedStudentAssignment.dueDate, { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' })}
         </div>
       </div>
 
@@ -281,7 +275,7 @@ export default function AssignmentSubmissionForm() {
               className='border-gray-300 text-gray-700 hover:bg-gray-50'
               disabled={isSubmitting}
             >
-              Save as draft
+              Cancel
             </Button>
             <Button onClick={handleSubmit} className='bg-blue-600 text-white hover:bg-blue-700' disabled={isSubmitting}>
               {isSubmitting ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}

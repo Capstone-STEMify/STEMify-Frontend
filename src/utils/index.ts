@@ -38,16 +38,46 @@ export function getDaysRemaining(endDateStr: string): number {
  * @description This function formats a date string into a more readable format, e.g., "Jan 1, 2023".
  * @example formatDate('2023-01-01') ==> 'Jan 1, 2023'
  */
-export const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-    // hour: '2-digit',
-    // minute: '2-digit',
-    // second: '2-digit',
-    // hour12: false
-    // timeZoneName: 'short'
+export type DateFormatPattern = 'dd/MM/yyyy' | 'MM/dd/yyyy' | 'yyyy-MM-dd'
+export interface FormatDateOptions {
+  locale?: 'en' | 'vi'
+  showTime?: boolean
+  pattern?: DateFormatPattern
+  year?: 'numeric' | '2-digit'
+  month?: 'numeric' | '2-digit' | 'short' | 'long'
+  day?: 'numeric' | '2-digit'
+}
+export const formatDate = (dateString: string, options: FormatDateOptions = {}) => {
+  const { locale = 'en', showTime = false, pattern, year = 'numeric', month = 'short', day = 'numeric' } = options
+
+  const date = new Date(dateString)
+
+  // --- 1. Nếu có pattern → custom formatting ---
+  if (pattern) {
+    const dd = String(date.getDate()).padStart(2, '0')
+    const MM = String(date.getMonth() + 1).padStart(2, '0')
+    const yyyy = date.getFullYear()
+
+    switch (pattern) {
+      case 'dd/MM/yyyy':
+        return `${dd}/${MM}/${yyyy}`
+      case 'MM/dd/yyyy':
+        return `${MM}/${dd}/${yyyy}`
+      case 'yyyy-MM-dd':
+        return `${yyyy}-${MM}-${dd}`
+    }
+  }
+
+  // --- 2. Locale formatting ---
+  return date.toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-US', {
+    year,
+    month,
+    day,
+    ...(showTime && {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    })
   })
 }
 

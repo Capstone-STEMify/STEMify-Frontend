@@ -24,10 +24,7 @@ export const assignmentApi = createCrudApi<Assignment, AssignmentQueryParams>({
     }),
 
     // Override update mutation with proper DTO type
-    updateAssignment: builder.mutation<
-      ApiSuccessResponse<Assignment>,
-      { id: number | string; body: UpdateAssignmentDto }
-    >({
+    updateAssignment: builder.mutation<ApiSuccessResponse<Assignment>, { id: number; body: UpdateAssignmentDto }>({
       query: ({ id, body }) => ({
         url: `/assignments/${id}`,
         method: 'PATCH',

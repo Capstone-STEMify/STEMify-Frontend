@@ -36,11 +36,20 @@ export type StudentAssignmentDetail = {
   assignmentId: number
   studentId: string
   finalScore?: number
-  status: string
+  status: StudentAssignmentStatus
   assignedAt: string
   dueDate: string
   attemptCount: number
   attempts: AssignmentAttempt[]
+}
+
+export enum StudentAssignmentStatus {
+  SUBMITTED = 'Submitted',
+  PASSED = 'Passed',
+  FAILED = 'Failed',
+  EXPIRED = 'Expired',
+  ASSIGNED = 'Assigned',
+  UNDER_REVIEW = 'UnderReview'
 }
 
 export type QuestionAttempt = {

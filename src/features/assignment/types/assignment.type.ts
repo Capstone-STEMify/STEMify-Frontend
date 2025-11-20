@@ -55,7 +55,22 @@ export type CreateRubricCriterionDto = {
   maxPoints: number
 }
 
-export type UpdateAssignmentDto = CreateAssignmentDto
+// ================== Update DTOs ===================
+export type UpdateAssignmentDto = {
+  contentId: number
+  title: string
+  passingScore: number
+  durationDays: number
+  questions: UpdateAssignmentQuestionDto[]
+}
+
+export type UpdateAssignmentQuestionDto = {
+  id?: number
+  type: string
+  orderIndex: number
+  points: number
+  content: string
+}
 
 // =================== Submission Types ===================
 export enum AssignmentSubmissionStatus {

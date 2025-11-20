@@ -12,7 +12,10 @@ type QuestionFormData = {
   orderIndex: number
   points: number
   content: string
-  rubricCriterion: any[]
+  rubricCriterion: Array<{
+    criterionName: string
+    maxPoints: number
+  }>
 }
 
 type AssignmentSidebarProps = {
@@ -43,6 +46,9 @@ function SortableQuestionItem({ question, index }: { question: QuestionFormData;
     return content.substring(0, maxLength) + '...'
   }
 
+  // ✅ Calculate total points from rubric criteria
+  const questionPoints = question.rubricCriterion.reduce((acc, curr) => acc + (curr.maxPoints || 0), 0)
+
   return (
     <div
       ref={setNodeRef}
@@ -60,9 +66,7 @@ function SortableQuestionItem({ question, index }: { question: QuestionFormData;
       <div className='min-w-0 flex-1'>
         <div className='flex items-center gap-2'>
           <span className='text-xs font-semibold text-gray-500'>Q{question.orderIndex}</span>
-          <span className='text-xs text-gray-600'>
-            ({question.rubricCriterion.reduce((acc, curr) => acc + curr.maxPoints, 0)} pts)
-          </span>
+          <span className='text-xs text-gray-600'>({questionPoints} pts)</span>
         </div>
         <p className='truncate text-sm text-gray-700'>{truncateContent(question.content) || 'Empty question'}</p>
       </div>

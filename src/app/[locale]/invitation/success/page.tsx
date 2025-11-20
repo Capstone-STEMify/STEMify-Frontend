@@ -32,7 +32,7 @@ export default function InvitationSuccessPage() {
 
         {/* CTA buttons */}
         <div className='mb-8 flex justify-center gap-4'>
-          <Link href='/dashboard'>
+          <Link href='/'>
             <Button size='lg' className='h-11 rounded-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-500 px-6'>
               Bắt đầu ngay
             </Button>
