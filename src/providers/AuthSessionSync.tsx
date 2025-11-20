@@ -50,12 +50,13 @@ export default function AuthSessionSync() {
     }
 
     // Nếu là MEMBER thì xử lý theo org/subscription
+    console.log({ reduxSelectedOrganizationId, reduxSelectedSubscriptionOrderId, reduxCurrentRole })
     if (
       reduxUser.userRole === UserRole.MEMBER &&
       reduxUser.organizations &&
       reduxUser.organizations?.length > 0 &&
-      reduxUser.organizations[0].subscriptions?.length > 0 &&
-      (!reduxSelectedOrganizationId || !reduxSelectedSubscriptionOrderId || !reduxCurrentRole)
+      reduxUser.organizations[0].subscriptions?.length > 0
+      // (!reduxSelectedOrganizationId || !reduxSelectedSubscriptionOrderId || !reduxCurrentRole)
     ) {
       const firstOrg = reduxUser.organizations[0]
       const activeSub = firstOrg.subscriptions.find((s) => s.isActive)
