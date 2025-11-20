@@ -24,6 +24,7 @@ const TiptapViewer = dynamic(() => import('@/components/tiptap/TiptapViewer'), {
 
 type LessonContentProps = {
   token: string | null
+  sectionId?: number
   lessonId: number
   sectionStatus?: ApiSuccessResponse<PaginatedResult<StudentProgress>>
   enrollmentId?: number
@@ -51,10 +52,6 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
 
   const currentSectionProgress = sectionStatus?.data.items.find((item) => item.sectionId === sectionId)
 
-  if (!content || content.data.items.length === 0) {
-    return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
-  }
-
   if (fetchingContent) {
     return (
       <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
@@ -67,11 +64,15 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
     return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
   }
 
+  if (!content || content.data.items.length === 0) {
+    return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
+  }
+
   const handleCompleteSection = async () => {
     try {
       if (enrollmentId) {
-        await completeSection({ enrollmentId, lessonId, sectionId }).unwrap()
-        dispatch(studentProgressSlice.actions.setSelectedSectionStatus(ProgressStatus.COMPLETED))
+        await completeSection({ enrollmentId, lessonId, sectionId, status: ProgressStatus.COMPLETED }).unwrap()
+        // dispatch(studentProgressSlice.actions.setSelectedSectionStatus(ProgressStatus.COMPLETED))
         toast.success(tt('successMessage.sectionComplete'))
       }
     } catch (err: any) {
@@ -79,11 +80,10 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
     }
   }
 
-  if (!content || content.data.items.length === 0) return null
-
   const lastItem = content.data.items[content.data.items.length - 1]
 
   console.log('id', currentSectionProgress?.studentAssignmentId)
+  console.log({ lastItem })
 
   if (lastItem.contentType === ContentType.QUIZ) {
     return <QuizViewer quiz={lastItem} studentQuizId={currentSectionProgress?.studentQuizId} />
@@ -98,16 +98,23 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
 
   return (
     <div className='relative flex min-h-[650px] flex-col gap-6 p-6'>
-      {/* Content with conditional blur */}
+      {/* Content */}
       <div className={`flex-1 ${!isLoggedIn ? 'blur-xs' : ''}`}>
-        <div key={lastItem.id} className='prose mx-auto w-full flex-1'>
-          <ScrollArea className='h-[650px]'>
-            <TiptapViewer content={normalizeMarkdown(lastItem.contentBody)} />
-          </ScrollArea>
-        </div>
+        <ScrollArea className='h-full'>
+          <TiptapViewer content={normalizeMarkdown(lastItem.contentBody)} />
+        </ScrollArea>
       </div>
 
-      {/* Login overlay when not logged in */}
+      {/* Complete section button */}
+      {isLoggedIn && currentSectionProgress?.status === ProgressStatus.IN_PROGRESS && (
+        <div className='flex justify-end'>
+          <Button className='bg-amber-custom-400' onClick={handleCompleteSection} disabled={isLoading}>
+            {isLoading ? 'Completing...' : 'Mark as Complete'}
+          </Button>
+        </div>
+      )}
+
+      {/* Login overlay */}
       {!isLoggedIn && (
         <div className='absolute inset-0 flex items-center justify-center bg-white/80'>
           <div className='bg-sky-custom-300 flex max-w-md flex-col items-center gap-4 rounded-lg p-6 text-white shadow-lg'>
@@ -123,15 +130,6 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
               {t('requestSignIn.button')}
             </Button>
           </div>
-        </div>
-      )}
-
-      {/* Complete section button - only show if logged in */}
-      {isLoggedIn && currentSectionProgress?.status === ProgressStatus.IN_PROGRESS && (
-        <div className='mt-auto self-end'>
-          <Button className='bg-amber-custom-400' onClick={handleCompleteSection} disabled={isLoading}>
-            {isLoading ? 'Completing...' : 'Mark as Complete'}
-          </Button>
         </div>
       )}
     </div>

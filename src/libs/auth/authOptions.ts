@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ account }) {
-      // console.log('SignIn callback', { account })
+      console.log('SignIn callback', { account })
       return true
     },
     async jwt({ token, account, profile }) {

@@ -5,7 +5,7 @@ import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/course
 import CourseDetailEnrolled from '@/features/resource/course/components/detail/enrolled/CourseDetailEnrolled'
 import CourseDetailNotEnrolled from '@/features/resource/course/components/detail/not-enrolled/CourseDetailNotEnrolled'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { useParams } from 'next/navigation'
 
 export default function CourseDetail() {
@@ -13,9 +13,8 @@ export default function CourseDetail() {
   const courseIdParam = param?.courseId
   const courseId = courseIdParam ? Number(courseIdParam) : undefined
 
-  const auth = useAppSelector((state) => state.auth)
-  const studentId = auth?.user?.userId
-  const userRole = auth?.user?.role || UserRole.GUEST
+  const userRole = useAppSelector((state) => state.selectedOrganization.currentRole)
+  const studentId = useAppSelector((state) => state.auth.user?.userId)
 
   const { data, isLoading, error } = useSearchCourseEnrollmentQuery(
     { pageNumber: 1, pageSize: 10, courseId, studentId },
@@ -40,7 +39,7 @@ export default function CourseDetail() {
     return <CourseDetailEnrolled courseId={Number(courseId)} enrollmentId={firstEnrollment.id} />
   }
 
-  if (userRole === UserRole.TEACHER) {
+  if (userRole === LicenseType.TEACHER) {
     return <CourseDetailEnrolled courseId={Number(courseId)} enrollmentId={firstEnrollment} />
   }
 

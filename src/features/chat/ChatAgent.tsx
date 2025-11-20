@@ -6,7 +6,7 @@ import { AiFillMessage, AiOutlineSend } from 'react-icons/ai'
 import { FaSpinner } from 'react-icons/fa'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
-import { useGetCourseRecommendedAiMutation, useGetGeneralChatAiMutation } from '@/features/chat/api/chatAgentApi'
+import { useGetCourseRecommendedAiMutation, useGetGeneralChatAiMutation } from '@/features/chat/api/agentApi'
 import { formatAgentResponse } from '@/utils/formatAgentResponse'
 import SSelect from '@/components/shared/SSelect'
 

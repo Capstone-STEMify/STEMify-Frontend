@@ -47,7 +47,9 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   const progressMap = lessonProgressData?.data?.items?.reduce(
     (acc, progress) => {
       if ('lessonId' in progress && progress.lessonId !== undefined) {
-        acc[progress.lessonId] = progress.status
+        if (typeof progress.lessonId === 'number') {
+          acc[progress.lessonId] = progress.status
+        }
       }
       return acc
     },
@@ -85,55 +87,57 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   return (
     <ScrollArea className='h-[600px] px-5 select-none'>
       <div className='mt-5 grid h-fit grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 md:grid-cols-3'>
-        {lessonData.data.items.map((lesson) => (
-          <div key={lesson.id} className='relative flex gap-1'>
-            <Link
-              href={`/resource/lesson/${lesson.id}`}
-              onClick={() => handleSelectLesson(lesson.id)}
-              className='flex w-fit flex-col justify-between'
-            >
-              <CardLayout
-                imageSrc={lesson.imageUrl || '/images/fallback.png'}
-                badge={
-                  progressMap?.[lesson.id] && (
-                    <Badge className='bg-gray-50/80 text-gray-800 backdrop-blur-md'>{progressMap[lesson.id]}</Badge>
-                  )
-                }
-                footer={
-                  <div>
-                    <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
-                    <Badge className='bg-red-300'>{formatDuration(lesson.duration)}</Badge>
-                  </div>
-                }
+        {lessonData.data.items.map((lesson) => {
+          return (
+            <div key={lesson.id} className='relative flex gap-1'>
+              <Link
+                href={`/resource/lesson/${lesson.id}`}
+                onClick={() => handleSelectLesson(lesson.id)}
+                className='flex w-fit flex-col justify-between'
               >
-                <div>
-                  <p className='text-muted-foreground text-xs font-medium'>{t('details.lesson.cardTitle')}</p>
-                  <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
-                  <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
-                </div>
-              </CardLayout>
-            </Link>
+                <CardLayout
+                  imageSrc={lesson.imageUrl || '/images/fallback.png'}
+                  badge={
+                    progressMap?.[lesson.id] && (
+                      <Badge className='bg-gray-50/80 text-gray-800 backdrop-blur-md'>{progressMap[lesson.id]}</Badge>
+                    )
+                  }
+                  footer={
+                    <div className='flex items-center justify-between gap-2'>
+                      <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
+                      <Badge className='bg-red-300'>{formatDuration(lesson.duration)}</Badge>
+                    </div>
+                  }
+                >
+                  <div>
+                    <p className='text-muted-foreground text-xs font-medium'>{t('details.lesson.cardTitle')}</p>
+                    <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+                    <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
+                  </div>
+                </CardLayout>
+              </Link>
 
-            <div key={lesson.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
-              <SDropDown
-                trigger={
-                  <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
-                }
-                items={[
-                  <p key='view' className='text-sm'>
-                    {tc('button.view')}
-                  </p>,
-                  <p key='add-to-course' className='text-sm'>
-                    {tc('button.add')}
-                  </p>,
-                  <p key='share' className='text-sm'>
-                    {tc('button.share')}
-                  </p>
-                ]}
-              />
+              <div key={lesson.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
+                <SDropDown
+                  trigger={
+                    <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
+                  }
+                  items={[
+                    <p key='view' className='text-sm'>
+                      {tc('button.view')}
+                    </p>,
+                    <p key='add-to-course' className='text-sm'>
+                      {tc('button.add')}
+                    </p>,
+                    <p key='share' className='text-sm'>
+                      {tc('button.share')}
+                    </p>
+                  ]}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {lessonData.data.totalPages > 1 && (

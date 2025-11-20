@@ -20,7 +20,6 @@ export type ClassroomNavItems = 'overview' | 'course' | 'quiz' | 'assignment'
 export default function ClassroomDetailPage() {
   const { classroomId } = useParams()
   const auth = useAppSelector((state) => state.auth)
-  const locale = useLocale()
   const currentRole = useAppSelector((state) => state.selectedOrganization.currentRole)
   const [currentTab, setCurrentTab] = React.useState<ClassroomNavItems>('overview')
 
@@ -60,7 +59,7 @@ export default function ClassroomDetailPage() {
         <div>
           <ClassroomCourseList
             curriculum={classroomData.data.curriculum}
-            curriculumEnrollmentId={curriculumEnrollment?.data.items[0].id}
+            curriculumEnrollment={curriculumEnrollment?.data.items[0]}
             isStudentView={currentRole === LicenseType.STUDENT}
           />
         </div>

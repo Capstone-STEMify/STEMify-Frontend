@@ -1,4 +1,3 @@
-import { CurriculumEnrollmentSliceParams } from '@/features/enrollment/types/enrollment.type'
 import { OrganizationSubscriptionSliceParams } from '@/features/subscription/types/subscription.type'
 import { createQuerySlice } from '@/libs/redux/createQuerySlice'
 

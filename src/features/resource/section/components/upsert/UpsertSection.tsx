@@ -147,7 +147,7 @@ export default function UpsertSection({
 
   return (
     <form
-      className='space-y-8 md:p-4'
+      className='space-y-8 md:px-4'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()

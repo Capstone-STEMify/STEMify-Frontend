@@ -13,20 +13,7 @@ type CourseActionProps = {
 export default function CourseAction({ course }: CourseActionProps) {
   const t = useTranslations('course')
   const tc = useTranslations('common')
-  const userRole = useAppSelector((state) => state.auth.user?.role)
-  const [updateCourseStatus] = useUpdateCourseMutation()
-  const handleUpdateCourseStatus = async (status: CourseStatus) => {
-    try {
-      await updateCourseStatus({
-        id: course.id,
-        body: {
-          status
-        }
-      }).unwrap()
-    } catch (error) {
-      console.error('Failed to update course status:', error)
-    }
-  }
+
   return (
     <section className='mt-3 flex flex-col items-center'>
       <div className='h-[0.1px] w-52 bg-gray-300'></div>

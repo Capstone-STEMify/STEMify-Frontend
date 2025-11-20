@@ -50,7 +50,6 @@ export default function AuthSessionSync() {
     }
 
     // Nếu là MEMBER thì xử lý theo org/subscription
-    console.log({ reduxSelectedOrganizationId, reduxSelectedSubscriptionOrderId, reduxCurrentRole })
     if (
       reduxUser.userRole === UserRole.MEMBER &&
       reduxUser.organizations &&
@@ -65,7 +64,6 @@ export default function AuthSessionSync() {
         dispatch(setSelectedOrganizationId(firstOrg.id))
         dispatch(setSelectedSubscriptionOrderId(activeSub.id))
         dispatch(setCurrentRole(activeSub.role)) // Đây là LicenseType
-        console.log('Default organization selected:', firstOrg, activeSub, activeSub.role)
       }
     }
   }, [reduxUser, reduxSelectedOrganizationId, reduxSelectedSubscriptionOrderId, reduxCurrentRole, dispatch])

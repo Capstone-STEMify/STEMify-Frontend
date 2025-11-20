@@ -4,7 +4,6 @@ import { categoryApi } from '@/features/resource/category/api/categoryApi'
 import { categorySlice } from '@/features/resource/category/slice/categorySlice'
 import { courseApi } from '@/features/resource/course/api/courseApi'
 import { courseSlice } from '@/features/resource/course/slice/courseSlice'
-import { courseEnrollmentSlice } from '@/features/enrollment/slice/courseEnrollmentSlice'
 import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
 import { lessonSlice } from '@/features/resource/lesson/slice/lessonSlice'
 import { sectionApi } from '@/features/resource/section/api/sectionApi'
@@ -42,8 +41,7 @@ import { componentSlice } from '@/features/kit-components/slice/componentSlice'
 import { componentApi } from '@/features/kit-components/api/kitComponentApi'
 import { courseEnrollmentApi } from '@/features/enrollment/api/courseEnrollmentApi'
 import { curriculumEnrollmentApi } from '@/features/enrollment/api/curriculumEnrollmentApi'
-import { curriculumEnrollmentSlice } from '@/features/enrollment/slice/curriculumEnrollmentSlice'
-import { chatAgentApi } from '@/features/chat/api/chatAgentApi'
+import { agentApi } from '@/features/chat/api/agentApi'
 import { certificateApi } from '@/features/certificate/api/certificateApi'
 import { cartApi } from '@/features/cart/api/cartApi'
 import { quizPlayerSlice } from '@/features/resource/quiz/slice/quiz-player-slice'
@@ -73,6 +71,7 @@ import { studentAssignmentApi } from '@/features/assignment/api/studentAssignmen
 import { assignmentApi } from '@/features/assignment/api/assignmentApi'
 import selectedOrganizationSlice from '@/features/subscription/slice/selectedOrganizationSlice'
 import { studentAssignmentSelectedSlice } from '@/features/assignment/slice/studentAssignmentSlice'
+import { enrollmentSlice } from '@/features/enrollment/slice/enrollmentSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -84,8 +83,6 @@ export const rootReducer = combineReducers({
   category: categorySlice.reducer,
   skill: skillSlice.reducer,
   standard: standardSlice.reducer,
-  courseEnrollment: courseEnrollmentSlice.reducer,
-  curriculumEnrollment: curriculumEnrollmentSlice.reducer,
   notification: notificationSlice.reducer,
   studentProgress: studentProgressSlice.reducer,
   notificationRealtime: notificationRealtimeSlice.reducer,
@@ -116,6 +113,7 @@ export const rootReducer = combineReducers({
   classroom: classroomSlice.reducer,
   selectedOrganization: selectedOrganizationSlice,
   studentAssignmentSelected: studentAssignmentSelectedSlice.reducer,
+  enrollment: enrollmentSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -137,7 +135,7 @@ export const rootReducer = combineReducers({
   [kitProductApi.reducerPath]: kitProductApi.reducer,
   [planApi.reducerPath]: planApi.reducer,
   [componentApi.reducerPath]: componentApi.reducer,
-  [chatAgentApi.reducerPath]: chatAgentApi.reducer,
+  [agentApi.reducerPath]: agentApi.reducer,
   [certificateApi.reducerPath]: certificateApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
   [contactApi.reducerPath]: contactApi.reducer,

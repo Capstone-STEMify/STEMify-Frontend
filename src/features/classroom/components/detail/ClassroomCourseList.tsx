@@ -17,37 +17,32 @@ import {
   useSearchCourseEnrollmentQuery
 } from '@/features/enrollment/api/courseEnrollmentApi'
 import { is } from 'date-fns/locale'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { toast } from 'sonner'
 import { useTranslations } from 'next-intl'
+import { useDispatch } from 'react-redux'
+import { setCourseEnrollmentId } from '@/features/enrollment/slice/enrollmentSlice'
 
 type ClassroomCourseListProps = {
+  curriculumEnrollment?: CurriculumEnrollment
   curriculum: Curriculum
-  curriculumEnrollmentId?: number
   isStudentView?: boolean
 }
 export default function ClassroomCourseList({
   curriculum,
-  curriculumEnrollmentId,
+  curriculumEnrollment,
   isStudentView
 }: ClassroomCourseListProps) {
   const { classroomId } = useParams()
   const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
   const tt = useTranslations('toast')
+  const dispatch = useAppDispatch()
 
-  const { data: courseEnrollmentData } = useSearchCourseEnrollmentQuery(
-    {
-      curriculumEnrollmentId: curriculumEnrollmentId,
-      pageNumber: 1,
-      pageSize: 10
-    },
-    { skip: !curriculumEnrollmentId }
-  )
   const [createEnrollment, { data: enroll }] = useCreateCourseEnrollmentMutation()
 
   const courses = curriculum.courses || []
-  const courseEnrollments = courseEnrollmentData?.data?.items || []
+  const courseEnrollments = curriculumEnrollment?.courseEnrollments || []
   const enrollmentMap = new Map<number, CourseEnrollment>()
   courseEnrollments.forEach((enrollment) => {
     enrollmentMap.set(enrollment.courseId, enrollment)
@@ -55,11 +50,13 @@ export default function ClassroomCourseList({
 
   const handleCourseEnrollment = (courseId: number) => {
     createEnrollment({
-      curriculumEnrollmentId: curriculumEnrollmentId,
+      curriculumEnrollmentId: curriculumEnrollment?.id,
       courseId: courseId,
       studentId: auth?.user?.userId,
       status: EnrollmentStatus.IN_PROGRESS
     })
+
+    dispatch(setCourseEnrollmentId(enroll?.data.id || null))
     router.push(`/resource/course/${courseId}/learn`)
 
     toast.success(tt('successMessage.enroll'), {
@@ -107,7 +104,10 @@ export default function ClassroomCourseList({
                     <div className='flex w-full items-center gap-2 border-t border-slate-100 pt-2'>
                       {enrollment ? (
                         <Button
-                          onClick={() => router.push(`/resource/course/${course.id}/learn`)}
+                          onClick={() => {
+                            dispatch(setCourseEnrollmentId(enrollment.id))
+                            router.push(`/resource/course/${course.id}/learn`)
+                          }}
                           size='sm'
                           className='w-full bg-slate-100 text-blue-500'
                         >
