@@ -90,6 +90,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertPlan' && <UpsertPlanSheet {...modalProps} />}
       {modalType === 'upsertClassroom' && <UpsertClassroomModal {...modalProps} />}
       {modalType === 'upsertOrganization' && <UpsertOrganizationModal {...modalProps} />}
+      {modalType === 'upsertEmulator' && <div>Emulator Upsert Modal Placeholder</div>}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}
