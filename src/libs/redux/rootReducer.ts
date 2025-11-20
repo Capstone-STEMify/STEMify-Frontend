@@ -41,7 +41,7 @@ import { componentSlice } from '@/features/kit-components/slice/componentSlice'
 import { componentApi } from '@/features/kit-components/api/kitComponentApi'
 import { courseEnrollmentApi } from '@/features/enrollment/api/courseEnrollmentApi'
 import { curriculumEnrollmentApi } from '@/features/enrollment/api/curriculumEnrollmentApi'
-import { chatAgentApi } from '@/features/chat/api/chatAgentApi'
+import { agentApi } from '@/features/chat/api/agentApi'
 import { certificateApi } from '@/features/certificate/api/certificateApi'
 import { cartApi } from '@/features/cart/api/cartApi'
 import { quizPlayerSlice } from '@/features/resource/quiz/slice/quiz-player-slice'
@@ -135,7 +135,7 @@ export const rootReducer = combineReducers({
   [kitProductApi.reducerPath]: kitProductApi.reducer,
   [planApi.reducerPath]: planApi.reducer,
   [componentApi.reducerPath]: componentApi.reducer,
-  [chatAgentApi.reducerPath]: chatAgentApi.reducer,
+  [agentApi.reducerPath]: agentApi.reducer,
   [certificateApi.reducerPath]: certificateApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
   [contactApi.reducerPath]: contactApi.reducer,

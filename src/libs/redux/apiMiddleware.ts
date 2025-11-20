@@ -18,7 +18,7 @@ import { planApi } from '@/features/plan/api/planApi'
 import { componentApi } from '@/features/kit-components/api/kitComponentApi'
 import { courseEnrollmentApi } from '@/features/enrollment/api/courseEnrollmentApi'
 import { curriculumEnrollmentApi } from '@/features/enrollment/api/curriculumEnrollmentApi'
-import { chatAgentApi } from '@/features/chat/api/chatAgentApi'
+import { agentApi } from '@/features/chat/api/agentApi'
 import { certificateApi } from '@/features/certificate/api/certificateApi'
 import { cartApi } from '@/features/cart/api/cartApi'
 import { contactApi } from '@/features/contact/api/contactApi'
@@ -55,7 +55,7 @@ export const apiMiddlewares: Middleware[] = [
   kitProductApi.middleware,
   planApi.middleware,
   componentApi.middleware,
-  chatAgentApi.middleware,
+  agentApi.middleware,
   certificateApi.middleware,
   cartApi.middleware,
   contactApi.middleware,
