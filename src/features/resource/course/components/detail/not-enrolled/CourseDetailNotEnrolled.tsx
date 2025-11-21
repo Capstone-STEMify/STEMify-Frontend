@@ -21,7 +21,7 @@ export default function CourseDetailNotEnrolled() {
   const tc = useTranslations('common.message')
 
   const { courseId } = useParams()
-  const params = useAppSelector((state) => state.courseEnrollment)
+  const params = useAppSelector((state) => state.courseEnrollment) as { pageNumber?: number; pageSize?: number } | undefined
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const {
     data: LearningOutcome,
@@ -34,7 +34,7 @@ export default function CourseDetailNotEnrolled() {
     isLoading: enrollmentLoading,
     error: enrollmentError
   } = useSearchCourseEnrollmentQuery(
-    { courseId: Number(courseId), studentId, pageNumber: params.pageNumber, pageSize: params.pageSize },
+    { courseId: Number(courseId), studentId, pageNumber: params?.pageNumber ?? 1, pageSize: params?.pageSize ?? 10 },
     { skip: !studentId }
   )
 

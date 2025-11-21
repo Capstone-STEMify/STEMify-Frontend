@@ -9,7 +9,7 @@ import { ChevronRight, Info, TrendingUp, BookOpen, Award, Clock, CheckCircle2 } 
 import { Cell, Pie, PieChart, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts'
 import { StudentProgressStatistic } from '@/features/dashboard/components/table/StudentProgressStatistic'
 import { useParams } from 'next/navigation'
-import { useGetClassroomByIdQuery } from '../../api/classroomApi'
+import { useGetClassroomByIdQuery, useGetClassroomStatisticsQuery } from '../../api/classroomApi'
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 
 export default function ClassroomOverview() {
@@ -29,30 +29,6 @@ export default function ClassroomOverview() {
     { rank: 3, name: 'Friza Dipo', role: 'Jr Animation', points: 75, avatar: '' }
   ]
 
-  const ungradedQuizzes = [
-    {
-      id: 1,
-      title: 'How to be great and good UI/UX designer',
-      questions: '6 open ended',
-      learner: 'Adit Irwan',
-      avatar: ''
-    },
-    {
-      id: 2,
-      title: 'Applications, tools, and plugins to make yo...',
-      questions: '10 open ended',
-      learner: 'Arif Brata',
-      avatar: ''
-    },
-    {
-      id: 3,
-      title: 'Great designer must know the best for clie...',
-      questions: '3 open ended',
-      learner: 'Andhi Irwandi',
-      avatar: ''
-    }
-  ]
-
   const params = useParams()
   const classroomId = Number(params.classroomId)
 
@@ -67,10 +43,18 @@ export default function ClassroomOverview() {
     skip: !curriculumId
   })
 
+  const { data: statsRes, isLoading: isLoadingStats } = useGetClassroomStatisticsQuery(
+    { classroomId },
+    {
+      skip: !classroomId
+    }
+  )
+
+  const ungradedAssignments = statsRes?.data?.ungradedAssignments || []
   const courses = curriculumRes?.data?.courses || []
 
   return (
-    <div className='container mx-auto px-6 pb-8'>
+    <div className='container mx-auto p-6 pb-8'>
       {/* Header Section */}
       <div className='mb-10'>
         <div className='mb-3 flex items-center gap-3'>
@@ -84,179 +68,6 @@ export default function ClassroomOverview() {
             <p className='mt-1 text-slate-600'>Track learning progress and quiz performance</p>
           </div>
         </div>
-      </div>
-
-      {/* Top Cards Grid */}
-      <div className='mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
-        {/* Most Issued Content */}
-        <Card className='bg-gradient-to-br from-white to-slate-50/50 py-4 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
-          <CardHeader className='pb-4'>
-            <div className='flex items-center justify-between'>
-              <CardTitle className='flex items-center gap-2 text-base font-semibold'>
-                <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100'>
-                  <BookOpen className='h-4 w-4 text-orange-600' />
-                </div>
-                Most issued content
-              </CardTitle>
-              <Badge variant='secondary' className='border-0 bg-slate-100 text-xs text-slate-600'>
-                This week
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className='space-y-5'>
-              <div className='flex items-start gap-3 rounded-xl border border-orange-100 bg-gradient-to-r from-orange-50 to-red-50 p-3'>
-                <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-red-500 shadow-md'>
-                  <BookOpen className='h-5 w-5 text-white' />
-                </div>
-                <div className='min-w-0 flex-1'>
-                  <p className='truncate text-sm font-semibold text-slate-700'>How to be great UI/UX desig...</p>
-                  <p className='mt-1 flex items-center gap-1 text-xs font-medium text-red-600'>
-                    <span>🔥</span> 48 issues last week
-                  </p>
-                </div>
-              </div>
-              <div className='flex items-end justify-between'>
-                <div>
-                  <p className='bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-4xl font-bold text-transparent'>
-                    16
-                  </p>
-                  <p className='mt-1 text-sm text-slate-500'>Issues this week</p>
-                </div>
-                <div className='h-16 w-28 rounded-lg bg-gradient-to-br from-orange-50 to-transparent p-2'>
-                  <ResponsiveContainer width='100%' height='100%'>
-                    <LineChart data={trendData}>
-                      <Line type='monotone' dataKey='value' stroke='#ea580c' strokeWidth={3} dot={false} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-            <Button
-              variant='ghost'
-              className='mt-5 w-full text-sm font-medium text-orange-600 hover:bg-orange-50 hover:text-orange-700'
-              size='sm'
-            >
-              See all issued contents
-              <ChevronRight className='ml-1 h-4 w-4' />
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Assignment */}
-        <Card className='bg-gradient-to-br from-white to-blue-50/30 py-4 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
-          <CardHeader className='pb-4'>
-            <CardTitle className='flex items-center gap-2 text-base font-semibold'>
-              <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
-                <CheckCircle2 className='h-4 w-4 text-blue-600' />
-              </div>
-              Assignment
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className='space-y-5'>
-              <div className='rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4'>
-                <div className='mb-3 flex items-end gap-3'>
-                  <p className='bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-4xl font-bold text-transparent'>
-                    80
-                  </p>
-                  <p className='mb-2 text-sm font-medium text-slate-600'>submitted</p>
-                  <p className='mb-2 ml-auto text-sm text-slate-500'>100 remaining</p>
-                </div>
-                <div className='relative'>
-                  <Progress value={44} className='h-3 bg-slate-200' />
-                  <div
-                    className='absolute top-0 left-0 h-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500'
-                    style={{ width: '44%' }}
-                  />
-                </div>
-                <p className='mt-2 text-xs font-medium text-slate-600'>40 Assignment in total</p>
-              </div>
-              <div className='pt-2'>
-                <Button
-                  variant='ghost'
-                  className='w-full justify-between font-medium text-blue-600 hover:bg-blue-50 hover:text-blue-700'
-                >
-                  <div className='flex items-center gap-2'>
-                    <BookOpen className='h-4 w-4' />
-                    <span className='text-sm'>See all assignment</span>
-                  </div>
-                  <ChevronRight className='h-4 w-4' />
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Top Learner */}
-        <Card className='bg-gradient-to-br from-white to-amber-50/30 py-4 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
-          <CardHeader className='pb-4'>
-            <CardTitle className='flex items-center gap-2 text-base font-semibold'>
-              <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100'>
-                <Award className='h-4 w-4 text-amber-600' />
-              </div>
-              Top Learner
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className='space-y-3'>
-              {topLearners.map((learner) => (
-                <div
-                  key={learner.rank}
-                  className={`flex items-center gap-3 rounded-xl p-3 transition-all duration-200 hover:scale-[1.02] ${
-                    learner.rank === 1
-                      ? 'border border-amber-200 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-sm'
-                      : 'bg-slate-50 hover:bg-slate-100'
-                  }`}
-                >
-                  <div
-                    className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                      learner.rank === 1
-                        ? 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white shadow-md'
-                        : learner.rank === 2
-                          ? 'bg-gradient-to-br from-slate-300 to-slate-400 text-white'
-                          : 'bg-gradient-to-br from-orange-300 to-orange-400 text-white'
-                    }`}
-                  >
-                    #{learner.rank}
-                  </div>
-                  <Avatar className='h-10 w-10 border-2 border-white shadow-sm'>
-                    <AvatarImage src={learner.avatar} />
-                    <AvatarFallback className='bg-gradient-to-br from-blue-100 to-indigo-100 text-sm font-semibold text-blue-700'>
-                      {learner.name
-                        .split(' ')
-                        .map((n) => n[0])
-                        .join('')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className='min-w-0 flex-1'>
-                    <p className='truncate text-sm font-semibold text-slate-700'>{learner.name}</p>
-                    <p className='text-xs text-slate-500'>{learner.role}</p>
-                  </div>
-                  <Badge
-                    variant='secondary'
-                    className={`gap-1 border-0 font-semibold ${
-                      learner.rank === 1
-                        ? 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700'
-                        : 'bg-slate-100 text-slate-700'
-                    }`}
-                  >
-                    <span className='text-yellow-500'>★</span>
-                    {learner.points}pts
-                  </Badge>
-                </div>
-              ))}
-            </div>
-            <Button
-              variant='link'
-              className='mt-5 w-full text-sm font-medium text-amber-600 hover:text-amber-700'
-              size='sm'
-            >
-              View all learners
-              <ChevronRight className='ml-1 h-4 w-4' />
-            </Button>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Middle Section */}
@@ -346,17 +157,17 @@ export default function ClassroomOverview() {
         </Card>
       </div>
 
-      {/* Ungraded Quiz */}
-      <Card className='border-0 bg-gradient-to-br from-white to-slate-50/50 shadow-lg shadow-slate-200/50'>
+      {/* Ungraded Assignment */}
+      <Card className='border-0 bg-gradient-to-br from-white to-slate-50/50 shadow-lg shadow-slate-200/50 p-4'>
         <CardHeader className='pb-4'>
           <div className='flex items-center justify-between'>
             <CardTitle className='flex items-center gap-2 text-base font-semibold'>
               <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-rose-100'>
                 <Clock className='h-4 w-4 text-rose-600' />
               </div>
-              Ungraded Quiz
+              Ungraded Assignment
               <Badge variant='secondary' className='ml-2 border-0 bg-rose-100 text-rose-700'>
-                {ungradedQuizzes.length} pending
+                {ungradedAssignments.length} pending
               </Badge>
             </CardTitle>
           </div>
@@ -366,52 +177,50 @@ export default function ClassroomOverview() {
             <Table>
               <TableHeader>
                 <TableRow className='bg-slate-50 hover:bg-slate-50'>
-                  <TableHead className='w-16 font-semibold text-slate-700'>#</TableHead>
-                  <TableHead className='font-semibold text-slate-700'>Quiz title</TableHead>
-                  <TableHead className='font-semibold text-slate-700'>Questions</TableHead>
+                  <TableHead className='w-16 font-semibold text-slate-700'>Id</TableHead>
+                  <TableHead className='font-semibold text-slate-700'>Assignment title</TableHead>
                   <TableHead className='font-semibold text-slate-700'>Learner</TableHead>
                   <TableHead className='text-right font-semibold text-slate-700'>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {ungradedQuizzes.map((quiz) => (
-                  <TableRow key={quiz.id} className='transition-colors hover:bg-slate-50'>
-                    <TableCell className='font-semibold text-slate-600'>{quiz.id}</TableCell>
-                    <TableCell className='max-w-xs'>
-                      <p className='truncate font-medium text-slate-700'>{quiz.title}</p>
-                    </TableCell>
-                    <TableCell>
-                      <div className='flex items-center gap-2 text-slate-600'>
-                        <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50'>
-                          <BookOpen className='h-4 w-4 text-blue-600' />
+                {ungradedAssignments.length > 0 ? (
+                  ungradedAssignments.map((assignment) => (
+                    <TableRow key={assignment.studentAssignmentId} className='transition-colors hover:bg-slate-50'>
+                      <TableCell className='font-semibold text-slate-600'>{assignment.studentAssignmentId}</TableCell>
+                      <TableCell className='max-w-xs'>
+                        <p className='truncate font-medium text-slate-700'>{assignment.assignmentTitle}</p>
+                      </TableCell>
+                      <TableCell>
+                        <div className='flex items-center gap-2'>
+                          <Avatar className='h-8 w-8 border-2 border-white shadow-sm'>
+                            <AvatarFallback className='bg-gradient-to-br from-indigo-100 to-purple-100 text-xs font-semibold text-indigo-700'>
+                              {assignment.studentName
+                                .split(' ')
+                                .map((n) => n[0])
+                                .join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className='text-sm font-medium text-slate-700'>{assignment.studentName}</span>
                         </div>
-                        <span className='text-sm font-medium'>{quiz.questions}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className='flex items-center gap-2'>
-                        <Avatar className='h-8 w-8 border-2 border-white shadow-sm'>
-                          <AvatarImage src={quiz.avatar} />
-                          <AvatarFallback className='bg-gradient-to-br from-indigo-100 to-purple-100 text-xs font-semibold text-indigo-700'>
-                            {quiz.learner
-                              .split(' ')
-                              .map((n) => n[0])
-                              .join('')}
-                          </AvatarFallback>
-                        </Avatar>
-                        <span className='text-sm font-medium text-slate-700'>{quiz.learner}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className='text-right'>
-                      <Button
-                        size='sm'
-                        className='bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md transition-all hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg'
-                      >
-                        Grade Now
-                      </Button>
+                      </TableCell>
+                      <TableCell className='text-right'>
+                        <Button
+                          size='sm'
+                          className='bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md transition-all hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg'
+                        >
+                          Grade Now
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} className='h-24 text-center text-slate-500'>
+                      No pending assignments to grade.
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </div>

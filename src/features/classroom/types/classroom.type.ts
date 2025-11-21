@@ -111,4 +111,24 @@ export type LessonSchedule = {
   duration: number
 }
 
-// =============== CLASSROOM SCHEDULE TYPE ===============
+// =============== CLASSROOM DASHBOARD TYPE ===============
+
+export type Statistic = {
+    averageScore: number;
+    submissions: number;
+    passRate: number;
+}
+
+export type UngradedAssignment = {
+    studentAssignmentId: number;
+    studentName: string;
+    assignmentTitle: string;
+}
+
+export type ClassroomStatisticData = {
+    quizStatistic: Statistic;
+    assignmentStatistic: Statistic;
+    ungradedAssignments: UngradedAssignment[];
+}
+
+
