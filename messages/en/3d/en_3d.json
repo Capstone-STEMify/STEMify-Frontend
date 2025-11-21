@@ -69,5 +69,13 @@
         "delete": "Delete"
       }
     }
+  },
+  "workspace3D": {
+    "list": {
+      "title": "Straw Labs List"
+    },
+    "button": {
+      "create": "New Workspace"
+    }
   }
 }

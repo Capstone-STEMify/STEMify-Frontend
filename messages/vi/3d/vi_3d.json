@@ -69,5 +69,13 @@
         "delete": "Xóa"
       }
     }
+  },
+  "workspace3D": {
+    "list": {
+      "title": "Danh sách Mô hình 3D"
+    },
+    "button": {
+      "create": "Workspace Mới"
+    }
   }
 }

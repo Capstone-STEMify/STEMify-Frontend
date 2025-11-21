@@ -23,8 +23,7 @@ export async function loadMessages(locale: string) {
   const contentMessages = (await import(`../../messages/${locale}/lesson/${locale}_content.json`)).default
   const planMessages = (await import(`../../messages/${locale}/product/${locale}_plan.json`)).default
   const componentMessages = (await import(`../../messages/${locale}/product/${locale}_component.json`)).default
-  const creator3DMessages = (await import(`../../messages/${locale}/3d/${locale}_creator.json`)).default
-  const workspace3DMessages = (await import(`../../messages/${locale}/3d/${locale}_workspace.json`)).default
+  const workspace3DMessages = (await import(`../../messages/${locale}/3d/${locale}_3d.json`)).default
   const cartMessages = (await import(`../../messages/${locale}/product/${locale}_cart.json`)).default
   const subscriptionMessages = (await import(`../../messages/${locale}/subscription/${locale}_subscription.json`))
     .default
@@ -55,7 +54,6 @@ export async function loadMessages(locale: string) {
     ...contentMessages,
     ...planMessages,
     ...componentMessages,
-    ...creator3DMessages,
     ...workspace3DMessages,
     ...cartMessages,
     ...subscriptionMessages,

@@ -11,7 +11,7 @@ export type Emulator = {
   success: boolean
   name: string
   slug: string
-  visibility: string
+  visibility: 'public' | 'private'
   description: string
   version: string
   status: EmulatorStatus

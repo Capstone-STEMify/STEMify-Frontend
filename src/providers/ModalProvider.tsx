@@ -38,6 +38,7 @@ import AddPeopleModal from '@/features/user/components/modal/AddPeopleModal'
 import UpsertOrganizationModal from '@/features/organization/components/UpsertOrganizationModal'
 import UpdateSubsctiptionSheet from '@/features/subscription/components/upsert/UpdateSubsctiptionSheet'
 import UpdateClassroomOrganizationModal from '@/features/classroom/components/upsert/UpdateClassroomOrganizationModal'
+import { UpsertEmulator } from '@/features/creator-3d/components/creator3d/ExportDialog'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -90,7 +91,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertPlan' && <UpsertPlanSheet {...modalProps} />}
       {modalType === 'upsertClassroom' && <UpsertClassroomModal {...modalProps} />}
       {modalType === 'upsertOrganization' && <UpsertOrganizationModal {...modalProps} />}
-      {modalType === 'upsertEmulator' && <div>Emulator Upsert Modal Placeholder</div>}
+      {modalType === 'upsertEmulator' && <UpsertEmulator {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}

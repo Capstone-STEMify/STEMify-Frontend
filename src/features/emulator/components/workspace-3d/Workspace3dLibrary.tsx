@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { Bot, MoreVertical } from 'lucide-react'
 
@@ -11,27 +11,22 @@ import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import SEmpty from '@/components/shared/empty/SEmpty'
 
-import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
-import {
-  useCreateEmulatorMutation,
-  useSearchEmulationsQuery,
-  useUpdateEmulatorMutation
-} from '@/features/emulator/api/emulatorApi'
+import { useSearchEmulationsQuery, useUpdateEmulatorMutation } from '@/features/emulator/api/emulatorApi'
 import BackButton from '@/components/shared/button/BackButton'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { EmulatorStatus } from '@/features/emulator/types/emulator.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function Workspace3dLibrary() {
+  const { openModal } = useModal()
   const locale = useLocale()
   const router = useRouter()
+  const t3d = useTranslations('workspace3D')
 
   const userId = useAppSelector((state) => state.auth.user?.userId)
 
-  const [showCreateDialog, setShowCreateDialog] = useState(false)
-
   const { data, isLoading } = useSearchEmulationsQuery({ page: 1, userId: userId })
-  const [createEmulation] = useCreateEmulatorMutation()
   const [updateEmulation] = useUpdateEmulatorMutation()
 
   const emulations = data?.data.items || []
@@ -40,51 +35,35 @@ export default function Workspace3dLibrary() {
   const handleNavigate = (id: string) => router.push(`/${locale}/lab/workspace-3d/${id}`)
 
   const handlePublishEmulation = async (id: string) => {
-    await updateEmulation({
-      emulationId: id,
-      body: {
-        status: EmulatorStatus.PUBLISHED
-      }
-    }).unwrap()
-
-    toast.success('Đã publish mô hình!')
-  }
-
-  const handleCreateEmulation = async (metadata: any) => {
-    toast.info('⏳ Đang tạo workspace mới...')
-
     try {
-      const res = await createEmulation({
+      await updateEmulation({
+        emulationId: id,
         body: {
-          name: metadata.name,
-          description: metadata.description,
-          visibility: 'private',
-          definition_json: {},
-          userId: userId!,
-          thumbnail_file_name: metadata.thumbnail_file_name,
-          thumbnail_image_base64: metadata.thumbnail_image_base64
+          status: EmulatorStatus.PUBLISHED
         }
       }).unwrap()
 
-      if (res) {
-        toast.success('✅ Đã tạo workspace mới!')
-        setShowCreateDialog(false)
-      }
+      toast.success('Đã publish mô hình!')
     } catch (error) {
-      toast.error('❌ Tạo workspace thất bại.')
+      toast.error('❌ Publish thất bại')
       console.error(error)
     }
   }
 
   const handleDeleteEmulation = async (id: string) => {
-    await updateEmulation({
-      emulationId: id,
-      body: {
-        status: EmulatorStatus.ARCHIVED
-      }
-    }).unwrap()
+    try {
+      await updateEmulation({
+        emulationId: id,
+        body: {
+          status: EmulatorStatus.ARCHIVED
+        }
+      }).unwrap()
 
-    toast.success('Đã xóa mô hình!')
+      toast.success('Đã xóa mô hình!')
+    } catch (error) {
+      toast.error('❌ Xóa thất bại')
+      console.error(error)
+    }
   }
 
   if (isLoading) {
@@ -96,8 +75,8 @@ export default function Workspace3dLibrary() {
     return (
       <div className='mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8'>
         <div className='flex justify-end'>
-          <Button variant='outline' size='sm' onClick={() => setShowCreateDialog(true)}>
-            Create new
+          <Button variant='outline' size='sm' onClick={() => openModal('upsertEmulator')}>
+            {t3d('button.create')}
           </Button>
         </div>
         <SEmpty
@@ -105,9 +84,6 @@ export default function Workspace3dLibrary() {
           description='Hãy thử lại sau'
           icon={<Bot className='h-8 w-8 text-white' />}
         />
-        {showCreateDialog && (
-          <ExportDialog onClose={() => setShowCreateDialog(false)} onExport={handleCreateEmulation} />
-        )}
       </div>
     )
   }
@@ -121,8 +97,8 @@ export default function Workspace3dLibrary() {
           <BackButton />
           <h1>Danh sách mô hình</h1>
         </div>
-        <Button variant='outline' size='sm' onClick={() => setShowCreateDialog(true)}>
-          Create new
+        <Button variant='outline' size='sm' onClick={() => openModal('upsertEmulator')}>
+          {t3d('button.create')}
         </Button>
       </div>
 
@@ -145,7 +121,6 @@ export default function Workspace3dLibrary() {
                   sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
                 />
 
-                {/* ⭐ Nút 3 chấm ở góc phải */}
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -160,6 +135,12 @@ export default function Workspace3dLibrary() {
                   {/* Popover menu */}
                   <PopoverContent className='w-32 p-2' align='end' sideOffset={4} onClick={(e) => e.stopPropagation()}>
                     <div className='flex flex-col gap-1 text-sm'>
+                      <button
+                        className='rounded px-2 py-1 text-left hover:bg-gray-100'
+                        onClick={() => openModal('upsertEmulator', { emulationId: e.emulationId })}
+                      >
+                        Update
+                      </button>
                       <button
                         className='rounded px-2 py-1 text-left hover:bg-gray-100'
                         onClick={() => handlePublishEmulation(e.emulationId)}
@@ -188,8 +169,6 @@ export default function Workspace3dLibrary() {
           </Card>
         ))}
       </div>
-
-      {showCreateDialog && <ExportDialog onClose={() => setShowCreateDialog(false)} onExport={handleCreateEmulation} />}
     </div>
   )
 }

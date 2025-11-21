@@ -1,40 +1,55 @@
 'use client'
 
-import { useState } from 'react'
+import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
+import {
+  useGetEmulatorByIdQuery,
+  useCreateEmulatorMutation,
+  useUpdateEmulatorMutation
+} from '@/features/emulator/api/emulatorApi'
+import { EmulatorStatus } from '@/features/emulator/types/emulator.type'
+import { useModal } from '@/providers/ModalProvider'
+import { fileToBase64 } from '@/utils/index'
+import { useEffect, useState } from 'react'
+import { X } from 'lucide-react'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
-/** Utility: convert File → Base64 (remove prefix) */
-export function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => {
-      const base64 = (reader.result as string).split(',')[1]
-      resolve(base64)
-    }
-    reader.onerror = reject
-  })
+interface UpsertEmulatorProps {
+  emulationId?: string
 }
 
-interface ExportDialogProps {
-  onClose: () => void
-  onExport: (data: {
-    name: string
-    description: string
-    visibility: string
-    definition_json: any
-    thumbnail_image_base64?: string
-    thumbnail_file_name?: string
-  }) => void
-}
+export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
+  const { closeModal } = useModal()
+  const isUpdate = Boolean(emulationId)
+  const userId = useAppSelector((state) => state.auth.user?.userId)
 
-export function ExportDialog({ onClose, onExport }: ExportDialogProps) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  console.log('description in UpsertEmulator:', description)
   const [visibility, setVisibility] = useState<'public' | 'private'>('public')
   const [thumbnailBase64, setThumbnailBase64] = useState<string | undefined>()
   const [thumbnailFileName, setThumbnailFileName] = useState<string | undefined>()
+  const [existingThumbnailUrl, setExistingThumbnailUrl] = useState<string | undefined>()
 
-  const definition_json = {} // placeholder — bạn có thể truyền dữ liệu thật từ exportAssembly
+  const { data, isLoading } = useGetEmulatorByIdQuery({ emulationId: emulationId || '' }, { skip: !emulationId })
+
+  const [createEmulator, { isLoading: isCreating }] = useCreateEmulatorMutation()
+  const [updateEmulator, { isLoading: isUpdating }] = useUpdateEmulatorMutation()
+
+  // Prefill data khi edit
+  useEffect(() => {
+    if (!isUpdate || !data?.data) return
+    const item = data.data
+    console.log('Fetched emulator data for editing:', item)
+
+    setName(item.name || '')
+    setDescription(item.description || '')
+    setVisibility(item.visibility)
+
+    // Lưu URL thumbnail hiện tại
+    if (item.thumbnailUrl) {
+      setExistingThumbnailUrl(item.thumbnailUrl)
+    }
+  }, [data, isUpdate])
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -44,114 +59,219 @@ export function ExportDialog({ onClose, onExport }: ExportDialogProps) {
       const base64 = await fileToBase64(file)
       setThumbnailBase64(base64)
       setThumbnailFileName(file.name)
+      // Clear existing thumbnail khi upload mới
+      setExistingThumbnailUrl(undefined)
     } catch (err) {
-      console.error('❌ Error converting file:', err)
+      console.error('Error converting file:', err)
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!name.trim() || !description.trim()) return
-
-    onExport({
-      name: name.trim(),
-      description: description.trim(),
-      visibility,
-      definition_json,
-      thumbnail_image_base64: thumbnailBase64,
-      thumbnail_file_name: thumbnailFileName
-    })
+  const handleRemoveThumbnail = () => {
+    setThumbnailBase64(undefined)
+    setThumbnailFileName(undefined)
+    setExistingThumbnailUrl(undefined)
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    try {
+      if (isUpdate && emulationId) {
+        // Update existing emulator
+        const updatePayload: any = {
+          name,
+          description,
+          visibility,
+          definition_json: ''
+        }
+
+        // Chỉ gửi thumbnail nếu có file mới
+        if (thumbnailBase64 && thumbnailFileName) {
+          updatePayload.thumbnail_image_base64 = thumbnailBase64
+          updatePayload.thumbnail_file_name = thumbnailFileName
+        }
+
+        await updateEmulator({
+          emulationId,
+          body: updatePayload
+        }).unwrap()
+      } else {
+        // Create new emulator
+        await createEmulator({
+          body: {
+            name,
+            description,
+            visibility,
+            definition_json: '',
+            thumbnail_image_base64: thumbnailBase64,
+            thumbnail_file_name: thumbnailFileName,
+            userId: userId || ''
+          }
+        }).unwrap()
+      }
+
+      closeModal()
+    } catch (error) {
+      console.error('Error saving emulator:', error)
+    }
+  }
+
+  const isSubmitting = isCreating || isUpdating
+
+  // Hiển thị thumbnail: ưu tiên file mới upload, sau đó mới đến existing
+  const displayThumbnail = thumbnailBase64 ? `data:image/*;base64,${thumbnailBase64}` : existingThumbnailUrl
+  const hasThumbnail = Boolean(displayThumbnail)
+
   return (
-    <div className='bg-opacity-60 fixed inset-0 z-50 flex items-center justify-center bg-black'>
-      <div className='mx-4 w-full max-w-lg rounded-2xl bg-white shadow-2xl'>
-        <div className='border-b px-6 py-4'>
-          <h2 className='text-lg font-semibold text-gray-900'>Create Emulator</h2>
-          <p className='text-sm text-gray-500'>Fill in details to export your 3D assembly as an emulator.</p>
-        </div>
-
-        <form onSubmit={handleSubmit} className='space-y-5 p-6'>
-          {/* Name */}
-          <div>
-            <label className='mb-1 block text-sm font-medium text-gray-700'>Name</label>
-            <input
-              type='text'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder='Octahedron Assembly Lab'
-              className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400'
-              required
-            />
+    <Dialog open onOpenChange={closeModal}>
+      <DialogContent className='p-0'>
+        {/* Header */}
+        <div className='w-3xl'>
+          <div className='border-b px-6 py-4'>
+            <DialogTitle className='text-lg font-semibold text-gray-900'>
+              {isUpdate ? 'Edit Emulator' : 'Create Emulator'}
+            </DialogTitle>
+            <p className='mt-1 text-sm text-gray-500'>
+              {isUpdate ? 'Update your emulator details' : 'Fill in details to export your 3D assembly as an emulator'}
+            </p>
           </div>
 
-          {/* Description */}
-          <div>
-            <label className='mb-1 block text-sm font-medium text-gray-700'>Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder='Short intro...'
-              rows={3}
-              className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400'
-              required
-            />
-          </div>
+          {isLoading ? (
+            <div className='flex items-center justify-center p-12'>
+              <div className='h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent'></div>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className='max-h-[calc(90vh-120px)] overflow-y-auto'>
+              <div className='grid grid-cols-1 gap-6 p-6 lg:grid-cols-2'>
+                {/* Left Column - Form Fields */}
+                <div className='space-y-4'>
+                  {/* Name */}
+                  <div>
+                    <label className='mb-1.5 block text-sm font-medium text-gray-700'>Name</label>
+                    <input
+                      type='text'
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder='Octahedron Assembly Lab'
+                      className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none'
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
 
-          {/* Visibility */}
-          <div>
-            <label className='mb-1 block text-sm font-medium text-gray-700'>Visibility</label>
-            <select
-              value={visibility}
-              onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
-              className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400'
-            >
-              <option value='public'>Public</option>
-              <option value='private'>Private</option>
-            </select>
-          </div>
+                  {/* Description */}
+                  <div>
+                    <label className='mb-1.5 block text-sm font-medium text-gray-700'>Description</label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder='Short intro...'
+                      rows={4}
+                      className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none'
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
 
-          {/* Thumbnail Upload */}
-          <div>
-            <label className='mb-1 block text-sm font-medium text-gray-700'>Thumbnail Image</label>
-            <input
-              type='file'
-              accept='image/*'
-              onChange={handleFileChange}
-              className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400'
-            />
+                  {/* Visibility */}
+                  <div>
+                    <label className='mb-1.5 block text-sm font-medium text-gray-700'>Visibility</label>
+                    <select
+                      value={visibility}
+                      onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
+                      className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none'
+                      disabled={isSubmitting}
+                    >
+                      <option value='public'>Public</option>
+                      <option value='private'>Private</option>
+                    </select>
+                  </div>
+                </div>
 
-            {thumbnailBase64 && (
-              <div className='mt-3'>
-                <p className='text-xs text-gray-500'>{thumbnailFileName}</p>
-                {/* Thêm prefix để preview */}
-                <img
-                  src={`data:image/*;base64,${thumbnailBase64}`}
-                  alt='Preview'
-                  className='mt-2 h-40 w-full rounded-md object-cover shadow'
-                />
+                {/* Right Column - Thumbnail */}
+                <div>
+                  <label className='mb-1.5 block text-sm font-medium text-gray-700'>Thumbnail Image</label>
+
+                  {hasThumbnail ? (
+                    <div className='relative'>
+                      <img
+                        src={displayThumbnail}
+                        alt='Preview'
+                        className='h-64 w-full rounded-md object-cover shadow-sm'
+                      />
+                      <button
+                        type='button'
+                        onClick={handleRemoveThumbnail}
+                        disabled={isSubmitting}
+                        className='absolute top-2 right-2 rounded-full bg-red-500 p-1.5 text-white shadow-md transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50'
+                      >
+                        <X className='h-4 w-4' />
+                      </button>
+                      {thumbnailFileName && <p className='mt-2 text-xs text-gray-500'>{thumbnailFileName}</p>}
+                    </div>
+                  ) : (
+                    <div className='flex h-64 w-full flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-50'>
+                      <input
+                        id='thumbnail-upload'
+                        type='file'
+                        accept='image/*'
+                        onChange={handleFileChange}
+                        className='hidden'
+                        disabled={isSubmitting}
+                      />
+                      <label
+                        htmlFor='thumbnail-upload'
+                        className='flex cursor-pointer flex-col items-center justify-center space-y-2'
+                      >
+                        <svg className='h-12 w-12 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            strokeWidth={2}
+                            d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
+                          />
+                        </svg>
+                        <span className='text-sm text-gray-600'>Click to upload image</span>
+                        <span className='text-xs text-gray-400'>PNG, JPG, GIF up to 10MB</span>
+                      </label>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
 
-          {/* Buttons */}
-          <div className='flex gap-3 pt-2'>
-            <button
-              type='button'
-              onClick={onClose}
-              className='flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
-            >
-              Cancel
-            </button>
-            <button
-              type='submit'
-              className='flex-1 rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700'
-            >
-              Export
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+              {/* Footer Buttons */}
+              <div className='border-t bg-gray-50 px-6 py-4'>
+                <div className='flex gap-3'>
+                  <button
+                    type='button'
+                    onClick={closeModal}
+                    disabled={isSubmitting}
+                    className='flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50'
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type='submit'
+                    disabled={isSubmitting}
+                    className='flex-1 rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50'
+                  >
+                    {isSubmitting ? (
+                      <span className='flex items-center justify-center gap-2'>
+                        <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent'></div>
+                        {isUpdate ? 'Updating...' : 'Creating...'}
+                      </span>
+                    ) : isUpdate ? (
+                      'Update'
+                    ) : (
+                      'Export'
+                    )}
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
