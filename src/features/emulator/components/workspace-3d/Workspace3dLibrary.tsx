@@ -5,15 +5,21 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { toast } from 'sonner'
-import { Bot } from 'lucide-react'
+import { Bot, MoreVertical } from 'lucide-react'
 
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import SEmpty from '@/components/shared/empty/SEmpty'
 
 import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
-import { useCreateEmulatorMutation, useSearchEmulationsQuery } from '@/features/emulator/api/emulatorApi'
+import {
+  useCreateEmulatorMutation,
+  useSearchEmulationsQuery,
+  useUpdateEmulatorMutation
+} from '@/features/emulator/api/emulatorApi'
 import BackButton from '@/components/shared/button/BackButton'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
+import { EmulatorStatus } from '@/features/emulator/types/emulator.type'
 
 export default function Workspace3dLibrary() {
   const locale = useLocale()
@@ -22,12 +28,24 @@ export default function Workspace3dLibrary() {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
 
   const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
-  const [createEmulation, { isLoading: isCreating }] = useCreateEmulatorMutation()
+  const [createEmulation] = useCreateEmulatorMutation()
+  const [updateEmulation] = useUpdateEmulatorMutation()
 
   const emulations = data?.data.items || []
 
   // === Handlers ===
   const handleNavigate = (id: string) => router.push(`/${locale}/lab/workspace-3d/${id}`)
+
+  const handlePublishEmulation = async (id: string) => {
+    await updateEmulation({
+      emulationId: id,
+      body: {
+        status: EmulatorStatus.PUBLISHED
+      }
+    }).unwrap()
+
+    toast.success('Đã publish mô hình!')
+  }
 
   const handleCreateEmulation = async (metadata: any) => {
     toast.info('⏳ Đang tạo workspace mới...')
@@ -52,6 +70,17 @@ export default function Workspace3dLibrary() {
       toast.error('❌ Tạo workspace thất bại.')
       console.error(error)
     }
+  }
+
+  const handleDeleteEmulation = async (id: string) => {
+    await updateEmulation({
+      emulationId: id,
+      body: {
+        status: EmulatorStatus.ARCHIVED
+      }
+    }).unwrap()
+
+    toast.success('Đã xóa mô hình!')
   }
 
   if (isLoading) {
@@ -99,7 +128,7 @@ export default function Workspace3dLibrary() {
           <Card
             key={e.emulationId}
             onClick={() => handleNavigate(e.emulationId)}
-            className='group cursor-pointer overflow-hidden border-0 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-blue-200'
+            className='group cursor-pointer overflow-hidden border-0 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-blue-200'
           >
             <CardContent className='p-0'>
               {/* Thumbnail */}
@@ -111,6 +140,37 @@ export default function Workspace3dLibrary() {
                   className='object-cover transition-transform duration-300 group-hover:scale-105'
                   sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
                 />
+
+                {/* ⭐ Nút 3 chấm ở góc phải */}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant='ghost'
+                      className='absolute top-2 right-2 h-7 w-7 rounded-full bg-white/80 p-1 shadow-sm backdrop-blur-md hover:bg-white'
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <MoreVertical className='h-4 w-4 text-gray-700' />
+                    </Button>
+                  </PopoverTrigger>
+
+                  {/* Popover menu */}
+                  <PopoverContent className='w-32 p-2' align='end' sideOffset={4} onClick={(e) => e.stopPropagation()}>
+                    <div className='flex flex-col gap-1 text-sm'>
+                      <button
+                        className='rounded px-2 py-1 text-left hover:bg-gray-100'
+                        onClick={() => handlePublishEmulation(e.emulationId)}
+                      >
+                        Publish
+                      </button>
+                      <button
+                        className='rounded px-2 py-1 text-left text-red-500 hover:bg-gray-100'
+                        onClick={() => handleDeleteEmulation(e.emulationId)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               {/* Content */}

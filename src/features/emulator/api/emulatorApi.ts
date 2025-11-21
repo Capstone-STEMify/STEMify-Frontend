@@ -52,7 +52,7 @@ export const emulatorApi = createApi({
       }),
       invalidatesTags: ['Emulator']
     }),
-    updateEmulator: builder.mutation<any, { emulationId: string; body: EmulatorUpdateRequest }>({
+    updateEmulator: builder.mutation<any, { emulationId: string; body: Partial<EmulatorUpdateRequest> }>({
       query: ({ emulationId, body }) => ({
         url: `/v1/emulations/${emulationId}`,
         method: 'PATCH',
