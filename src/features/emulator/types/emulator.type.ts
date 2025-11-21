@@ -3,6 +3,7 @@ export type EmulatorSearchParams = {
   limit?: number
   search?: string
   difficulty?: string
+  userId?: string
 }
 
 export type Emulator = {
@@ -40,6 +41,7 @@ export type EmulatorCreateRequest = {
   definition_json: any
   thumbnail_image_base64?: string
   thumbnail_file_name?: string
+  userId: string
 }
 
 // draft, review, published, archived

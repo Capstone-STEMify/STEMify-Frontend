@@ -20,14 +20,17 @@ import {
 import BackButton from '@/components/shared/button/BackButton'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { EmulatorStatus } from '@/features/emulator/types/emulator.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 export default function Workspace3dLibrary() {
   const locale = useLocale()
   const router = useRouter()
 
+  const userId = useAppSelector((state) => state.auth.user?.userId)
+
   const [showCreateDialog, setShowCreateDialog] = useState(false)
 
-  const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
+  const { data, isLoading } = useSearchEmulationsQuery({ page: 1, userId: userId })
   const [createEmulation] = useCreateEmulatorMutation()
   const [updateEmulation] = useUpdateEmulatorMutation()
 
@@ -57,6 +60,7 @@ export default function Workspace3dLibrary() {
           description: metadata.description,
           visibility: 'private',
           definition_json: {},
+          userId: userId!,
           thumbnail_file_name: metadata.thumbnail_file_name,
           thumbnail_image_base64: metadata.thumbnail_image_base64
         }
