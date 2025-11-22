@@ -67,14 +67,14 @@
       "submitting": "Đang Gửi..."
     },
     "message": {
-      "courseCreateSuccess": "Khóa học đã được tạo thành công!",
-      "courseCreateError": "Đã xảy ra lỗi khi tạo khóa học. Vui lòng thử lại.",
-      "curriculumCreateSuccess": "Chương trình học đã được tạo thành công!",
-      "curriculumUpdateSuccess": "Chương trình học đã được cập nhật thành công!",
-      "curriculumDeleteSuccess": "Chương trình học đã được xóa thành công!",
-      "curriculumCreateError": "Đã xảy ra lỗi khi tạo chương trình học. Vui lòng thử lại.",
-      "curriculumUpdateError": "Đã xảy ra lỗi khi cập nhật chương trình học. Vui lòng thử lại.",
-      "curriculumDeleteError": "Đã xảy ra lỗi khi xóa chương trình học. Vui lòng thử lại.",
+      "courseCreateSuccess": "Khóa học được tạo thành công!",
+      "courseCreateError": "xảy ra lỗi khi tạo khóa học. Vui lòng thử lại.",
+      "curriculumCreateSuccess": "Chương trình học được tạo thành công!",
+      "curriculumUpdateSuccess": "Chương trình học được cập nhật thành công!",
+      "curriculumDeleteSuccess": "Chương trình học được xóa thành công!",
+      "curriculumCreateError": "xảy ra lỗi khi tạo chương trình học. Vui lòng thử lại.",
+      "curriculumUpdateError": "xảy ra lỗi khi cập nhật chương trình học. Vui lòng thử lại.",
+      "curriculumDeleteError": "xảy ra lỗi khi xóa chương trình học. Vui lòng thử lại.",
       "printPreview": "BẢN XEM TRƯỚC",
       "learnTitle": "Sau khi hoàn thành khóa học, bạn sẽ: "
     },
@@ -140,14 +140,34 @@
       "next": "Tiếp",
       "of": "của",
       "row": "hàng ",
-      "select": "đã chọn"
+      "select": "chọn"
     },
     "unit": {
       "minute": "phút",
       "age": "tuổi"
     },
     "badge": {
-      "selected": "Đã Chọn"
+      "selected": "Chọn"
+    },
+    "status": {
+      "active": "Hoạt Động",
+      "inactive": "Không Hoạt Động",
+      "pending": "Chờ Xét Duyệt",
+      "approved": "Phê Duyệt",
+      "rejected": "Từ Chối",
+      "draft": "Bản Nháp",
+      "published": "Xuất Bản",
+      "unpublished": "Chưa Xuất Bản",
+      "archived": "Lưu Trữ",
+      "inProgress": "Đang Tiến Hành",
+      "submitted": "Gửi",
+      "deleted": "Xóa",
+      "expired": "Hết Hạn",
+      "cancelled": "Hủy",
+      "failed": "Thất Bại",
+      "resolved": "Giải Quyết",
+      "completed": "Hoàn Thành",
+      "passed": "Đạt"
     }
   }
 }

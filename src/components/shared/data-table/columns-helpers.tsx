@@ -13,8 +13,7 @@ import {
 } from '@/components/shadcn/dropdown-menu'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Button } from '@/components/shadcn/button'
-import { useSortable } from '@dnd-kit/sortable'
-import { IconGripVertical } from '@tabler/icons-react'
+import { useTranslations } from 'next-intl'
 
 export type ActionItem<T> = {
   label: string
@@ -60,7 +59,8 @@ export function sortableHeader(label: string) {
   }
 }
 
-export function createActionsColumnFromItems<T>(items: ActionItem<T>[], label = 'Actions'): ColumnDef<T> {
+export function createActionsColumnFromItems<T>(items: ActionItem<T>[], label = 'action'): ColumnDef<T> {
+  const tc = useTranslations('common.tableHeader')
   return {
     id: 'actions',
     enableHiding: false,
@@ -75,7 +75,7 @@ export function createActionsColumnFromItems<T>(items: ActionItem<T>[], label = 
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>{label}</DropdownMenuLabel>
+            <DropdownMenuLabel>{tc(label)}</DropdownMenuLabel>
             {visible.map((i, idx) => (
               <React.Fragment key={idx}>
                 {i.separatorBefore && <DropdownMenuSeparator />}

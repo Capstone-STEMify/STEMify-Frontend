@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 export const formatDuration = (minutes: number) => {
   if (typeof minutes !== 'number' || isNaN(minutes) || minutes <= 0) return '00:00'
   const h = Math.floor(minutes / 60)
@@ -162,4 +164,12 @@ export const formatPrice = (price: number) => {
     currency: 'VND',
     minimumFractionDigits: 0
   }).format(price)
+}
+
+export const useStatusTranslation = () => {
+  const tc = useTranslations('common.status')
+
+  return (status: string) => {
+    return tc(status.toLowerCase())
+  }
 }

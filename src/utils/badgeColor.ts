@@ -1,42 +1,28 @@
 import { CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
 
-export const getStatusBadgeClass = (status: any) => {
-  if (!status) return 'bg-gray-100 text-gray-800 border border-gray-300'
+export const statusColors: Record<string, string> = {
+  DRAFT: 'bg-gray-100 text-gray-800 border border-gray-300',
+  PENDING: 'bg-yellow-100 text-yellow-800 border border-yellow-300',
 
-  const value = status.toString().toUpperCase()
+  PUBLISHED: 'bg-blue-100 text-blue-800 border border-blue-300',
+  SUBMITTED: 'bg-blue-100 text-blue-800 border border-blue-300',
+  INPROGRESS: 'bg-blue-100 text-blue-800 border border-blue-300',
 
-  switch (value) {
-    case 'DRAFT':
-      return 'bg-gray-100 text-gray-800 border border-gray-300'
+  APPROVED: 'bg-emerald-50 text-emerald-700 border border-emerald-300',
+  ACTIVE: 'bg-emerald-50 text-emerald-700 border border-emerald-300',
+  COMPLETED: 'bg-emerald-50 text-emerald-700 border border-emerald-300',
+  PASSED: 'bg-emerald-50 text-emerald-700 border border-emerald-300',
 
-    case 'PUBLISHED':
-    case 'INPROGRESS':
-    case 'SUBMITTED':
-      return 'bg-blue-100 text-blue-800 border border-blue-300'
+  REJECTED: 'bg-red-100 text-red-800 border border-red-300',
+  FAILED: 'bg-red-100 text-red-800 border border-red-300',
+  CANCELLED: 'bg-red-100 text-red-800 border border-red-300',
 
-    case 'DELETED':
-    case 'EXPIRED':
-    case 'INACTIVE':
-    case 'CANCELLED':
-    case 'FAILED':
-      return 'bg-red-100 text-red-800 border border-red-300'
+  ARCHIVED: 'bg-orange-100 text-orange-800 border border-orange-300'
+}
 
-    case 'PENDING':
-      return 'bg-yellow-100 text-yellow-800 border border-yellow-300'
-
-    case 'APPROVED':
-    case 'ACTIVE':
-    case 'RESOLVED':
-    case 'COMPLETED':
-    case 'PASSED':
-      return 'bg-emerald-50 text-emerald-700 border border-emerald-300'
-
-    case 'ARCHIVED':
-      return 'bg-orange-100 text-orange-800 border border-orange-300'
-
-    default:
-      return 'bg-gray-100 text-gray-800 border border-gray-300'
-  }
+export const getStatusBadgeClass = (status?: string) => {
+  const key = status?.toUpperCase()
+  return statusColors[key ?? ''] ?? 'bg-gray-100 text-gray-800 border border-gray-300'
 }
 
 export const getLevelBadgeClass = (level: CourseLevel): string => {

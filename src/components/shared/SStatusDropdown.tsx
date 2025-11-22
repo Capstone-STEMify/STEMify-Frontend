@@ -8,7 +8,9 @@ import {
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { useStatusTranslation } from '@/utils/index'
 import { ChevronDown } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 type StatusOption = {
   label: string
@@ -22,6 +24,7 @@ type SStatusDropdownProps = {
 }
 
 export default function SStatusDropdown({ value, options, onChange }: SStatusDropdownProps) {
+  const translateStatus = useStatusTranslation()
   const current = options.find((o) => o.value === value)
 
   return (
@@ -29,7 +32,7 @@ export default function SStatusDropdown({ value, options, onChange }: SStatusDro
       <DropdownMenuTrigger asChild>
         <button className='flex items-center gap-1 outline-none'>
           <Badge className={`flex cursor-pointer items-center gap-1 select-none ${getStatusBadgeClass(value as any)} `}>
-            {current?.label ?? value}
+            {current ? translateStatus(current.label) : value}
             <ChevronDown className='h-3 w-3 opacity-70' />
           </Badge>
         </button>
@@ -49,7 +52,7 @@ export default function SStatusDropdown({ value, options, onChange }: SStatusDro
               }}
               className={`my-1 flex cursor-pointer items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-blue-100 ${isActive ? 'bg-blue-50' : ''} `}
             >
-              <Badge className={getStatusBadgeClass(opt.value)}>{opt.label}</Badge>
+              <Badge className={getStatusBadgeClass(opt.value)}>{translateStatus(opt.label)}</Badge>
             </DropdownMenuItem>
           )
         })}

@@ -151,6 +151,26 @@
     },
     "badge": {
       "selected": "Selected"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived",
+      "unpublished": "Unpublished",
+      "inProgress": "In Progress",
+      "submitted": "Submitted",
+      "deleted": "Deleted",
+      "expired": "Expired",
+      "cancelled": "Cancelled",
+      "failed": "Failed",
+      "resolved": "Resolved",
+      "completed": "Completed",
+      "passed": "Passed"
     }
   }
 }
