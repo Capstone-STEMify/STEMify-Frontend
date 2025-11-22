@@ -5,29 +5,15 @@ import { Progress } from '@/components/shadcn/progress'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { ChevronRight, Info, TrendingUp, BookOpen, Award, Clock, CheckCircle2 } from 'lucide-react'
-import { Cell, Pie, PieChart, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts'
+import { ChevronRight, Info, TrendingUp, Clock, CheckCircle2, BookOpenCheck, FileQuestion } from 'lucide-react'
+import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
 import { StudentProgressStatistic } from '@/features/dashboard/components/table/StudentProgressStatistic'
 import { useParams } from 'next/navigation'
 import { useGetClassroomByIdQuery, useGetClassroomStatisticsQuery } from '../../api/classroomApi'
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
+import Loading from 'app/[locale]/loading'
 
 export default function ClassroomOverview() {
-  const contentStatusData = [
-    { name: 'Passed', value: 84, color: '#10b981' },
-    { name: 'Failed', value: 6, color: '#ef4444' },
-    { name: 'Overdue', value: 5, color: '#f59e0b' },
-    { name: 'In Progress', value: 3, color: '#3b82f6' },
-    { name: 'Not Started', value: 2, color: '#6b7280' }
-  ]
-
-  const trendData = [{ value: 12 }, { value: 14 }, { value: 13 }, { value: 15 }, { value: 16 }]
-
-  const topLearners = [
-    { rank: 1, name: 'Mon Bagstion', role: 'Jr UI/UX Designer', points: 100, avatar: '' },
-    { rank: 2, name: 'Fauzon Ardhionsy', role: 'Jr UI/UX Designer', points: 80, avatar: '' },
-    { rank: 3, name: 'Friza Dipo', role: 'Jr Animation', points: 75, avatar: '' }
-  ]
 
   const params = useParams()
   const classroomId = Number(params.classroomId)
@@ -52,6 +38,20 @@ export default function ClassroomOverview() {
 
   const ungradedAssignments = statsRes?.data?.ungradedAssignments || []
   const courses = curriculumRes?.data?.courses || []
+
+  const PassRate = statsRes?.data.quizStatistic.passRate || 0
+  const NotPassRate = 100 - (statsRes?.data.quizStatistic.passRate || 0)
+
+    const contentStatusData = [
+    { name: 'Passed', value: PassRate, color: '#10b981' },
+    { name: 'Not Passed', value: statsRes?.data.quizStatistic.submissions ? NotPassRate : 0, color: '#ef4444' },
+  ]
+
+  if (isLoadingClassroom || isLoadingCurriculum || isLoadingStats) {
+    return (
+      <Loading/>
+    )
+  }
 
   return (
     <div className='container mx-auto p-6 pb-8'>
@@ -80,16 +80,8 @@ export default function ClassroomOverview() {
                 <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100'>
                   <TrendingUp className='h-4 w-4 text-purple-600' />
                 </div>
-                Learning Content
+                Quiz Statistic
               </CardTitle>
-              <Button
-                variant='ghost'
-                size='sm'
-                className='text-xs text-purple-600 hover:bg-purple-50 hover:text-purple-700'
-              >
-                By status
-                <ChevronRight className='ml-1 h-4 w-4' />
-              </Button>
             </div>
           </CardHeader>
           <CardContent>
@@ -114,9 +106,9 @@ export default function ClassroomOverview() {
                 </ResponsiveContainer>
                 <div className='absolute inset-0 flex items-center justify-center'>
                   <div className='text-center'>
-                    <p className='mb-1 text-xs font-medium text-slate-500'>Total Contents</p>
-                    <p className='bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-4xl font-bold text-transparent'>
-                      140
+                    <p className='mb-1 text-xs font-medium text-slate-500'>Total Submissions</p>
+                    <p className='text-sky-500 bg-clip-text text-4xl font-bold'>
+                      {statsRes?.data.quizStatistic.submissions || 0}
                     </p>
                   </div>
                 </div>
@@ -135,22 +127,32 @@ export default function ClassroomOverview() {
         </Card>
 
         {/* Stats Card */}
-        <Card className='bg-gradient-to-br from-white to-emerald-50/20 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
+        <Card className='py-4 bg-gradient-to-br from-white to-emerald-50/20 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
+          <CardHeader>
+            <div className='flex items-center justify-between'>
+              <CardTitle className='flex items-center gap-2 text-base font-semibold'>
+                <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100'>
+                  <FileQuestion className='h-4 w-4 text-purple-600' />
+                </div>
+                Assignment Statistic
+              </CardTitle>
+            </div>
+          </CardHeader>
           <CardContent className='flex h-full min-h-[300px] flex-col items-center justify-center gap-6 p-8'>
             <div className='grid w-full grid-cols-2 gap-6'>
               <div className='rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-teal-50 p-6 text-center'>
                 <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20'>
                   <CheckCircle2 className='h-6 w-6 text-white' />
                 </div>
-                <p className='text-3xl font-bold text-emerald-700'>94%</p>
-                <p className='mt-2 text-sm text-slate-600'>Completion Rate</p>
+                <p className='text-3xl font-bold text-emerald-700'>{statsRes?.data.assignmentStatistic.passRate}%</p>
+                <p className='mt-2 text-sm text-slate-600'>Pass Rate</p>
               </div>
               <div className='rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 text-center'>
                 <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20'>
-                  <Clock className='h-6 w-6 text-white' />
+                  <BookOpenCheck className='h-6 w-6 text-white' />
                 </div>
-                <p className='text-3xl font-bold text-blue-700'>24h</p>
-                <p className='mt-2 text-sm text-slate-600'>Avg Response Time</p>
+                <p className='text-3xl font-bold text-blue-700'>{statsRes?.data.assignmentStatistic.submissions}</p>
+                <p className='mt-2 text-sm text-slate-600'>Submissions</p>
               </div>
             </div>
           </CardContent>
