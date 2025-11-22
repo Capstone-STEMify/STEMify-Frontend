@@ -44,9 +44,8 @@ import SStatusDropdown from '@/components/shared/SStatusDropdown'
 export default function SystemOrganizationList() {
   const t = useTranslations('subscription')
   const tc = useTranslations('common')
-  const tList = useTranslations('curriculum.list')
-  const router = useRouter()
-  const locale = useLocale()
+  const tt = useTranslations('toast')
+
   const dispatch = useAppDispatch()
   const [search, setSearch] = useState<string>('')
   const debouncedSearchQuery = useDebounce(search, 500)
@@ -93,7 +92,7 @@ export default function SystemOrganizationList() {
   const handleStatusChange = (organization: any, newStatus: string) => {
     updateOrganization({ id: organization.id, body: { status: newStatus as OrganizationStatus } })
       .unwrap()
-      .then(() => toast.success('Status updated'))
+      .then(() => toast.success(tt('successMessage.update', { title: newStatus })))
   }
   return (
     <div className='my-5 px-10'>

@@ -71,11 +71,31 @@
     }
   },
   "workspace3D": {
+    "loading": "Loading Workspace...",
     "list": {
-      "title": "Straw Labs List"
+      "title": "3D Model List"
     },
     "button": {
       "create": "New Workspace"
+    },
+    "upsert": {
+      "createTitle": "Create New 3D Model",
+      "updateTitle": "Update 3D Model",
+      "createDescription": "Fill in details to create a new 3D model",
+      "updateDescription": "Update your 3D model details",
+      "nameLabel": "Model Name",
+      "namePlaceholder": "Enter model name",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Enter model description",
+      "visibilityLabel": "Visibility",
+      "publicOption": "Public",
+      "privateOption": "Private",
+      "thumbnailLabel": "Thumbnail Image",
+      "thumbnailPlaceholder": "Upload a thumbnail image",
+      "thumbnailSize": "up to 10MB",
+      "createButton": "Create Model",
+      "updateButton": "Update Model",
+      "cancelButton": "Cancel"
     }
   }
 }

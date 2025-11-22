@@ -63,7 +63,8 @@
       "shop": "MUA NGAY",
       "signUpFree": "Đăng Ký Miễn Phí",
       "createOrganization": "Tạo Tổ Chức",
-      "createSubscription": "Tạo Gói Đăng Ký"
+      "createSubscription": "Tạo Gói Đăng Ký",
+      "submitting": "Đang Gửi..."
     },
     "message": {
       "courseCreateSuccess": "Khóa học đã được tạo thành công!",

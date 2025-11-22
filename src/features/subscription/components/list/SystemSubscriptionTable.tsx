@@ -26,6 +26,7 @@ type SystemSubscriptionTableProps = {
 
 export default function SystemSubscriptionTable({ organization, refetchOrganization }: SystemSubscriptionTableProps) {
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const router = useRouter()
   const locale = useLocale()
   const dispatch = useAppDispatch()
@@ -63,7 +64,7 @@ export default function SystemSubscriptionTable({ organization, refetchOrganizat
     })
       .unwrap()
       .then(() => {
-        toast.success('Status updated')
+        toast.success(tt('successMessage.update', { title: newStatus }))
         refetchOrganization?.()
       })
       .catch((error) => {

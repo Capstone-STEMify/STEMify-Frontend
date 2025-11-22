@@ -92,7 +92,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
 
     updateCourseStatus({ id: courseId, body: { status: newStatus as CourseStatus } })
       .unwrap()
-      .then(() => toast.success('Status updated'))
+      .then(() => toast.success(tt('successMessage.update', { title: newStatus })))
   }
 
   return [

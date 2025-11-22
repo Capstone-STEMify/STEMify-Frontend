@@ -62,6 +62,13 @@
       "description": "Mô tả không được để trống",
       "duration": "Thời lượng phải là một số không âm",
       "lessonId": "ID bài học phải là một số dương"
+    },
+    "component": {
+      "name": "Tên thành phần không được để trống",
+      "type": "Loại thành phần là bắt buộc",
+      "imageSize": "Tối đa {size}MB được phép",
+      "imageUrl": "Ảnh thành phần là bắt buộc",
+      "image": "Tệp ảnh không hợp lệ"
     }
   }
 }

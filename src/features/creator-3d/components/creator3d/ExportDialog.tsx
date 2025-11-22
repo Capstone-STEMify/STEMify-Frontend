@@ -6,18 +6,21 @@ import {
   useCreateEmulatorMutation,
   useUpdateEmulatorMutation
 } from '@/features/emulator/api/emulatorApi'
-import { EmulatorStatus } from '@/features/emulator/types/emulator.type'
 import { useModal } from '@/providers/ModalProvider'
 import { fileToBase64 } from '@/utils/index'
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import { useTranslations } from 'next-intl'
 
 interface UpsertEmulatorProps {
   emulationId?: string
 }
 
 export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
+  const t = useTranslations('common')
+  const t3d = useTranslations('workspace3D')
+
   const { closeModal } = useModal()
   const isUpdate = Boolean(emulationId)
   const userId = useAppSelector((state) => state.auth.user?.userId)
@@ -45,7 +48,6 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
     setDescription(item.description || '')
     setVisibility(item.visibility)
 
-    // Lưu URL thumbnail hiện tại
     if (item.thumbnailUrl) {
       setExistingThumbnailUrl(item.thumbnailUrl)
     }
@@ -59,7 +61,6 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
       const base64 = await fileToBase64(file)
       setThumbnailBase64(base64)
       setThumbnailFileName(file.name)
-      // Clear existing thumbnail khi upload mới
       setExistingThumbnailUrl(undefined)
     } catch (err) {
       console.error('Error converting file:', err)
@@ -129,10 +130,10 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
         <div className='w-3xl'>
           <div className='border-b px-6 py-4'>
             <DialogTitle className='text-lg font-semibold text-gray-900'>
-              {isUpdate ? 'Edit Emulator' : 'Create Emulator'}
+              {isUpdate ? t3d('upsert.updateTitle') : t3d('upsert.createTitle')}
             </DialogTitle>
             <p className='mt-1 text-sm text-gray-500'>
-              {isUpdate ? 'Update your emulator details' : 'Fill in details to export your 3D assembly as an emulator'}
+              {isUpdate ? t3d('upsert.updateDescription') : t3d('upsert.createDescription')}
             </p>
           </div>
 
@@ -147,12 +148,12 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
                 <div className='space-y-4'>
                   {/* Name */}
                   <div>
-                    <label className='mb-1.5 block text-sm font-medium text-gray-700'>Name</label>
+                    <label className='mb-1.5 block text-sm font-medium text-gray-700'>{t3d('upsert.nameLabel')}</label>
                     <input
                       type='text'
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder='Octahedron Assembly Lab'
+                      placeholder={t3d('upsert.namePlaceholder')}
                       className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none'
                       required
                       disabled={isSubmitting}
@@ -161,11 +162,13 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
 
                   {/* Description */}
                   <div>
-                    <label className='mb-1.5 block text-sm font-medium text-gray-700'>Description</label>
+                    <label className='mb-1.5 block text-sm font-medium text-gray-700'>
+                      {t3d('upsert.descriptionLabel')}
+                    </label>
                     <textarea
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      placeholder='Short intro...'
+                      placeholder={t3d('upsert.descriptionPlaceholder')}
                       rows={4}
                       className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none'
                       required
@@ -175,22 +178,26 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
 
                   {/* Visibility */}
                   <div>
-                    <label className='mb-1.5 block text-sm font-medium text-gray-700'>Visibility</label>
+                    <label className='mb-1.5 block text-sm font-medium text-gray-700'>
+                      {t3d('upsert.visibilityLabel')}
+                    </label>
                     <select
                       value={visibility}
                       onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
                       className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none'
                       disabled={isSubmitting}
                     >
-                      <option value='public'>Public</option>
-                      <option value='private'>Private</option>
+                      <option value='public'>{t3d('upsert.publicOption')}</option>
+                      <option value='private'>{t3d('upsert.privateOption')}</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Right Column - Thumbnail */}
                 <div>
-                  <label className='mb-1.5 block text-sm font-medium text-gray-700'>Thumbnail Image</label>
+                  <label className='mb-1.5 block text-sm font-medium text-gray-700'>
+                    {t3d('upsert.thumbnailLabel')}
+                  </label>
 
                   {hasThumbnail ? (
                     <div className='relative'>
@@ -231,8 +238,8 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
                             d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
                           />
                         </svg>
-                        <span className='text-sm text-gray-600'>Click to upload image</span>
-                        <span className='text-xs text-gray-400'>PNG, JPG, GIF up to 10MB</span>
+                        <span className='text-sm text-gray-600'>{t3d('upsert.thumbnailPlaceholder')}</span>
+                        <span className='text-xs text-gray-400'>PNG, JPG, GIF {t3d('upsert.thumbnailSize')}</span>
                       </label>
                     </div>
                   )}
@@ -248,7 +255,7 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
                     disabled={isSubmitting}
                     className='flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50'
                   >
-                    Cancel
+                    {t('button.cancel')}
                   </button>
                   <button
                     type='submit'
@@ -261,9 +268,9 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
                         {isUpdate ? 'Updating...' : 'Creating...'}
                       </span>
                     ) : isUpdate ? (
-                      'Update'
+                      <div>{t3d('upsert.updateButton')}</div>
                     ) : (
-                      'Export'
+                      <div>{t3d('upsert.createButton')}</div>
                     )}
                   </button>
                 </div>

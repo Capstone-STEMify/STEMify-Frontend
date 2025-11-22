@@ -23,8 +23,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu'
+import { useTranslations } from 'next-intl'
 
 export default function AdminPlanTable() {
+  const tt = useTranslations('toast')
   const { openModal } = useModal()
   const [expandedPlans, setExpandedPlans] = useState<number[]>([])
   const dispatch = useAppDispatch()
@@ -90,7 +92,7 @@ export default function AdminPlanTable() {
 
     updatePlan({ id: plan.id, body: { status: newStatus as PlanStatus } })
       .unwrap()
-      .then(() => toast.success('Status updated'))
+      .then(() => toast.success(tt('successMessage.update', { title: newStatus })))
   }
 
   const handlePublishPlan = (planId: number) => {

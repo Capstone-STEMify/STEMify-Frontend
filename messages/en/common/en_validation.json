@@ -62,6 +62,13 @@
       "description": "Description is required",
       "duration": "Duration must be a non-negative number",
       "lessonId": "Lesson ID must be a positive number"
+    },
+    "component": {
+      "name": "Component name is required",
+      "type": "Component type is required",
+      "imageSize": "Max {size}MB allowed",
+      "imageUrl": "Component image is required",
+      "image": "Invalid image file"
     }
   }
 }

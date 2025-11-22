@@ -71,11 +71,31 @@
     }
   },
   "workspace3D": {
+    "loading": "Đang tải Workspace...",
     "list": {
       "title": "Danh sách Mô hình 3D"
     },
     "button": {
       "create": "Workspace Mới"
+    },
+    "upsert": {
+      "createTitle": "Tạo Workspace 3D Mới",
+      "updateTitle": "Cập nhật Workspace 3D",
+      "createDescription": "Điền thông tin để tạo workspace 3D mới",
+      "updateDescription": "Cập nhật thông tin workspace 3D",
+      "nameLabel": "Tên Workspace",
+      "namePlaceholder": "Nhập tên workspace",
+      "descriptionLabel": "Mô tả",
+      "descriptionPlaceholder": "Nhập mô tả workspace",
+      "visibilityLabel": "Chế độ hiển thị",
+      "publicOption": "Công khai",
+      "privateOption": "Riêng tư",
+      "thumbnailLabel": "Ảnh đại diện",
+      "thumbnailPlaceholder": "Chọn ảnh đại diện",
+      "thumbnailSize": "kích thước tối đa 10MB",
+      "createButton": "Tạo Workspace",
+      "updateButton": "Cập nhật Workspace",
+      "cancelButton": "Hủy bỏ"
     }
   }
 }

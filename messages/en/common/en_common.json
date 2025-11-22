@@ -63,7 +63,8 @@
       "addToCart": "Add To Cart",
       "signUpFree": "Sign Up For Free",
       "createOrganization": "Create Organization",
-      "createSubscription": "Create Subscription"
+      "createSubscription": "Create Subscription",
+      "submitting": "Submitting..."
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

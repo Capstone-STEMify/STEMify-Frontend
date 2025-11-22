@@ -22,6 +22,7 @@ export default function Workspace3dLibrary() {
   const { openModal } = useModal()
   const locale = useLocale()
   const router = useRouter()
+  const t = useTranslations('common')
   const t3d = useTranslations('workspace3D')
 
   const userId = useAppSelector((state) => state.auth.user?.userId)
@@ -67,7 +68,7 @@ export default function Workspace3dLibrary() {
   }
 
   if (isLoading) {
-    return <div className='py-10 text-center text-gray-500'>Đang tải danh sách mô hình...</div>
+    return <div className='py-10 text-center text-gray-500'>{t3d('loading')}</div>
   }
 
   // === Empty state ===
@@ -95,10 +96,10 @@ export default function Workspace3dLibrary() {
       <div className='mb-6 flex items-center justify-between'>
         <div className='flex gap-2'>
           <BackButton />
-          <h1>Danh sách mô hình</h1>
+          <h1>{t3d('list.title')}</h1>
         </div>
         <Button variant='outline' size='sm' onClick={() => openModal('upsertEmulator')}>
-          {t3d('button.create')}
+          {t('button.create')}
         </Button>
       </div>
 
@@ -139,19 +140,19 @@ export default function Workspace3dLibrary() {
                         className='rounded px-2 py-1 text-left hover:bg-gray-100'
                         onClick={() => openModal('upsertEmulator', { emulationId: e.emulationId })}
                       >
-                        Update
+                        {t('button.update')}
                       </button>
                       <button
                         className='rounded px-2 py-1 text-left hover:bg-gray-100'
                         onClick={() => handlePublishEmulation(e.emulationId)}
                       >
-                        Publish
+                        {t('button.publish')}
                       </button>
                       <button
                         className='rounded px-2 py-1 text-left text-red-500 hover:bg-gray-100'
                         onClick={() => handleDeleteEmulation(e.emulationId)}
                       >
-                        Delete
+                        {t('button.delete')}
                       </button>
                     </div>
                   </PopoverContent>
