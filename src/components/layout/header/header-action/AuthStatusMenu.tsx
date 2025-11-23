@@ -80,12 +80,12 @@ export default function AuthStatusMenu() {
         credentials: 'include'
       })
 
+      localStorage.removeItem('stemify_user_id')
+      localStorage.removeItem('stemify_access_token')
       await signOut({ redirect: false })
       dispatch(logout())
       dispatch(clearSelectedOrganization())
       persistor.purge()
-      localStorage.removeItem('stemify_user_id')
-      localStorage.removeItem('stemify_access_token')
 
       router.push(`/${locale}/`)
     } catch (error) {

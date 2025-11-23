@@ -13,8 +13,8 @@ export default function SSOPage() {
     window.parent.postMessage(
       {
         source: 'stemify-sso',
-        token,
-        userId
+        token: token ?? null,
+        userId: userId ?? null
       },
       '*' // hoặc "https://microbit.stemify.com" để tăng bảo mật
     )
