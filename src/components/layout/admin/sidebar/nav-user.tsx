@@ -47,6 +47,8 @@ export function NavUser({
       dispatch(logout())
       dispatch(clearSelectedOrganization())
       persistor.purge()
+      localStorage.removeItem('stemify_user_id')
+      localStorage.removeItem('stemify_access_token')
     } catch (error) {
       console.error('Logout failed:', error)
     }

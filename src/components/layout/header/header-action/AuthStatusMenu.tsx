@@ -84,6 +84,8 @@ export default function AuthStatusMenu() {
       dispatch(logout())
       dispatch(clearSelectedOrganization())
       persistor.purge()
+      localStorage.removeItem('stemify_user_id')
+      localStorage.removeItem('stemify_access_token')
 
       router.push(`/${locale}/`)
     } catch (error) {
