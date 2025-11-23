@@ -69,6 +69,37 @@
       "imageSize": "Tối đa {size}MB được phép",
       "imageUrl": "Ảnh thành phần là bắt buộc",
       "image": "Tệp ảnh không hợp lệ"
+    },
+    "organization": {
+      "name": "Tên tổ chức không được để trống",
+      "description": "Mô tả phải có ít nhất 10 ký tự",
+      "type": "Loại tổ chức không được để trống",
+      "imageSize": "Tối đa {size}MB được phép",
+      "imageUrl": "Ảnh tổ chức là bắt buộc"
+    },
+    "plan": {
+      "name": "Tên gói là bắt buộc",
+      "description": "Mô tả phải có ít nhất {min} ký tự",
+      "price": "Giá phải là một số không âm",
+      "billingCycle": "Chu kỳ thanh toán là bắt buộc",
+      "accessSupportDetail": "Chi tiết hỗ trợ truy cập phải có ít nhất {min} ký tự",
+      "curriculumCount": "Số lượng chương trình giảng dạy ít nhất là {min}",
+      "maxTeacherSeats": "Số chỗ giáo viên tối đa ít nhất là {min}",
+      "maxStudentSeats": "Số chỗ học sinh tối đa ít nhất là {min}",
+      "curriculumIds": "Chọn ít nhất một chương trình giảng dạy",
+      "curriculumCountExceed": "Số lượng chương trình giảng dạy ({curriculumCount}) không được vượt quá số chương trình giảng dạy đã chọn ({selectedCurriculums})"
+    },
+    "subscription": {
+      "plan": "Chọn một gói",
+      "startDate": "Ngày bắt đầu là bắt buộc",
+      "seats": "Số chỗ phải ít nhất là 10",
+      "pricePlan": "Kế hoạch giá là bắt buộc",
+      "expiredDate": "Ngày hết hạn phải là một ngày hợp lệ trong tương lai",
+      "curriculumIds": "Chọn ít nhất một chương trình giảng dạy",
+      "allowCurriculumExceed": "Bạn chỉ có thể chọn tối đa {curriculumCount} chương trình giảng dạy"
+    },
+    "uploadCSV": {
+      "required": "Hãy tải lên một tệp CSV"
     }
   }
 }

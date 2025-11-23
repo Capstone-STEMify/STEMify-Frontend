@@ -41,6 +41,7 @@
       "addAnotherKit": "Khóa học đã có bộ kit. Bạn có muốn thay thế bằng bộ mới?",
       "removeItemFromCart": "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?",
       "clearCart": "Bạn có chắc chắn muốn xóa giỏ hàng không?"
-    }
+    },
+    "unauthorized": "Truy cập không được phép."
   }
 }

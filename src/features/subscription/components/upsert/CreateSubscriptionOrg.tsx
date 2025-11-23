@@ -8,21 +8,24 @@ import {} from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import Step1SubscriptionConfiguration from '@/features/subscription/components/upsert/Step1SubscriptionConfiguration'
 import Step2AdminAccounts from '@/features/subscription/components/upsert/Step2AdminAccounts'
+import { useTranslations } from 'next-intl'
 
 export default function CreateOrganizationSubscription() {
+  const to = useTranslations('organization.subscription')
+
   const { currentStep } = useAppSelector((state) => state.organizationSubscriptionForm)
 
   const steps = [
-    { number: 1, title: 'Configure Subscription', description: 'Select plan and options' },
-    { number: 2, title: 'Create Admin Accounts', description: 'Grant access to admins' }
+    { number: 1, title: to('step1.title'), description: to('step1.description') },
+    { number: 2, title: to('step2.title'), description: to('step2.description') }
   ]
 
   return (
     <div className='mx-auto max-w-5xl'>
       {/* Header */}
       <div className='mb-8 text-center'>
-        <h1 className='mb-2 text-3xl font-bold text-slate-900'>Create Organization Subscription</h1>
-        <p className='text-slate-600'>Follow the steps to set up your organization</p>
+        <h1 className='mb-2 text-3xl font-bold text-slate-900'>{to('header')}</h1>
+        <p className='text-slate-600'>{to('subHeader')}</p>
       </div>
 
       {/* Step Indicator */}

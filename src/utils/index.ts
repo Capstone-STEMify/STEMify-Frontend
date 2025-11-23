@@ -54,6 +54,9 @@ export const formatDate = (dateString: string, options: FormatDateOptions = {}) 
 
   const date = new Date(dateString)
 
+  if (isNaN(date.getTime())) {
+    return 'N/A'
+  }
   // --- 1. Nếu có pattern → custom formatting ---
   if (pattern) {
     const dd = String(date.getDate()).padStart(2, '0')
@@ -70,7 +73,6 @@ export const formatDate = (dateString: string, options: FormatDateOptions = {}) 
     }
   }
 
-  // --- 2. Locale formatting ---
   return date.toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-US', {
     year,
     month,

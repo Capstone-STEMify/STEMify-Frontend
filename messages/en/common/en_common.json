@@ -64,7 +64,14 @@
       "signUpFree": "Sign Up For Free",
       "createOrganization": "Create Organization",
       "createSubscription": "Create Subscription",
-      "submitting": "Submitting..."
+      "submitting": "Submitting...",
+      "createUser": "Create User",
+      "next": "Next",
+      "step": "Step",
+      "skip": "Skip",
+      "assignLicense": "Assign License",
+      "clearAll": "Clear All",
+      "sendInvitations": "Send Invitations"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -136,7 +143,8 @@
       "grossAmount": "Gross Amount",
       "studentSeats": "Student Seats",
       "teacherSeats": "Teacher Seats",
-      "action": "Action"
+      "action": "Action",
+      "createPlan": "Create Plan"
     },
     "paging": {
       "previous": "Previous",
@@ -153,6 +161,8 @@
       "selected": "Selected"
     },
     "status": {
+      "all": "All",
+      "statusLabel": "Status",
       "active": "Active",
       "inactive": "Inactive",
       "pending": "Pending",
@@ -170,7 +180,16 @@
       "failed": "Failed",
       "resolved": "Resolved",
       "completed": "Completed",
-      "passed": "Passed"
+      "passed": "Passed",
+      "suspended": "Suspended"
+    },
+    "accountType": {
+      "accountTypeLabel": "Account Type",
+      "admin": "Admin",
+      "guest": "Guest",
+      "staff": "Staff",
+      "member": "Member",
+      "organization_admin": "Organization Admin"
     }
   }
 }

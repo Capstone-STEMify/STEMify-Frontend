@@ -24,8 +24,14 @@ import SubscriptionPeriod from './SubscriptionPeriod'
 import CurriculumSelector from './CurriculumSelector'
 import PlanOverview from './PlanOverview'
 import PricingSummary from './PricingSummary'
+import { useTranslations } from 'next-intl'
 
 export default function Step1SubscriptionConfiguration() {
+  const tc = useTranslations('common')
+  const tv = useTranslations('validation.subscription')
+  const to = useTranslations('organization.subscription')
+  const tt = useTranslations('toast')
+
   const { organizationId } = useParams()
   const dispatch = useAppDispatch()
   const { currentStep, organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
@@ -151,28 +157,28 @@ export default function Step1SubscriptionConfiguration() {
     e.preventDefault()
 
     if (!selectedPlanBillingCycleId || selectedPlanBillingCycleId === 0) {
-      toast.error('Please select a plan')
+      toast.error(tv('plan'))
       return
     }
 
     if (!startDate) {
-      toast.error('Please select a start date')
+      toast.error(tv('startDate'))
       return
     }
 
     // Validate curriculum selection
     if (!selectedPlanInfo) {
-      toast.error('Please select a plan first')
+      toast.error(tv('plan'))
       return
     }
 
     if (selectedCurriculumIds.length === 0) {
-      toast.error('Please select at least one curriculum')
+      toast.error(tv('curriculumIds'))
       return
     }
 
     if (selectedCurriculumIds.length > selectedPlanInfo.curriculumCount) {
-      toast.error(`You can only select up to ${selectedPlanInfo.curriculumCount} curriculum(s)`)
+      toast.error(tv('allowCurriculumExceed', { curriculumCount: selectedPlanInfo.curriculumCount }))
       return
     }
 
@@ -191,15 +197,11 @@ export default function Step1SubscriptionConfiguration() {
       }
     }
 
-    try {
-      const res = await createSubscription(payload).unwrap()
-      if (res) {
-        toast.success('Subscription configured successfully!')
-        dispatch(setOrganizationSubscriptionId(res.data.id))
-        dispatch(goNext())
-      }
-    } catch (error: any) {
-      toast.error(error?.data?.message || 'Failed to create subscription')
+    const res = await createSubscription(payload).unwrap()
+    if (res) {
+      toast.success(tt('successMessage.create', { title: res.data.planName }))
+      dispatch(setOrganizationSubscriptionId(res.data.id))
+      dispatch(goNext())
     }
   }
 
@@ -207,10 +209,8 @@ export default function Step1SubscriptionConfiguration() {
     <form onSubmit={handleSubmit} className='space-y-8'>
       {/* Header Section */}
       <div className='space-y-1'>
-        <h2 className='text-2xl font-bold text-slate-900'>Configure Subscription</h2>
-        <p className='text-sm text-slate-500'>
-          Select a billing cycle, choose your plan, and configure the subscription details
-        </p>
+        <h2 className='text-2xl font-bold text-slate-900'>{to('create.header')}</h2>
+        <p className='text-sm text-slate-500'>{to('create.description')}</p>
       </div>
 
       {/* Contract Section */}
@@ -291,21 +291,22 @@ export default function Step1SubscriptionConfiguration() {
           disabled={currentStep === 1}
           className='px-6'
         >
-          Back
+          {tc('button.back')}{' '}
         </Button>
 
         <div className='text-sm font-medium text-slate-600'>
-          Step <span className='text-slate-900'>{currentStep}</span> of <span className='text-slate-900'>2</span>
+          {tc('button.step')} <span className='text-slate-900'>{currentStep}</span>/
+          <span className='text-slate-900'>2</span>
         </div>
 
         <Button type='submit' className='px-6' disabled={isCreating}>
           {isCreating ? (
             <span className='flex items-center gap-2'>
               <span className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent'></span>
-              Creating...
+              {tc('button.submitting')}
             </span>
           ) : (
-            'Next'
+            tc('button.next')
           )}
         </Button>
       </div>

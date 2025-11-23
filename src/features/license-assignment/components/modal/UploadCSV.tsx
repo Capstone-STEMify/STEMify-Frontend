@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Upload, X, FileSpreadsheet } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { toast } from 'sonner'
 
 interface UploadedFile {
   name: string
@@ -14,11 +16,14 @@ export interface UploadCSVProps {
 }
 
 export default function UploadCSV({ onFileChange, uploadedFile: externalFile, onRemoveFile }: UploadCSVProps) {
+  const to = useTranslations('organization.license')
+  const tc = useTranslations('common')
+  const tv = useTranslations('validation')
+
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
   const [isUploading, setIsUploading] = useState<boolean>(false)
   const [internalFile, setInternalFile] = useState<UploadedFile | null>(null)
-  const [urlInput, setUrlInput] = useState<string>('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Use external file if provided, otherwise use internal state
@@ -61,7 +66,7 @@ export default function UploadCSV({ onFileChange, uploadedFile: externalFile, on
 
   const handleFileUpload = (file: File) => {
     if (!file.name.endsWith('.csv')) {
-      alert('Please upload a CSV file')
+      toast.error(tv('uploadCSV.required'))
       return
     }
 
@@ -135,13 +140,10 @@ dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
       <div className='mb-4 rounded-lg border border-blue-100 bg-blue-50/60 p-5 shadow-sm transition-all hover:shadow-md'>
         <h3 className='flex items-center gap-2 text-base font-semibold text-blue-700'>
           <span className='inline-flex h-2 w-2 rounded-full bg-blue-500' />
-          Create Organization Account(s)
+          {to('header')}
         </h3>
 
-        <p className='mt-1 text-sm leading-relaxed text-slate-600'>
-          New accounts will be created for this organization. The account will automatically be assigned a valid license
-          from this subscription.
-        </p>
+        <p className='mt-1 text-sm leading-relaxed text-slate-600'>{to('description')}</p>
       </div>
 
       {/* Download CSV Template */}
@@ -151,7 +153,7 @@ dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
           className='flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700'
         >
           <FileSpreadsheet className='h-4 w-4' />
-          Download CSV Template
+          {to('downloadCSVTemplate')}
         </button>
       </div>
 
@@ -190,9 +192,9 @@ dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
                 <span className='text-sm font-semibold text-blue-600'>{uploadProgress}%</span>
               </div>
             </div>
-            <p className='mb-3 text-sm text-gray-600'>Uploading file...</p>
+            <p className='mb-3 text-sm text-gray-600'>{to('uploading')}</p>
             <button onClick={handleCancel} className='text-sm text-blue-600 hover:text-blue-700'>
-              Cancel
+              {tc('button.cancel')}
             </button>
           </div>
         ) : uploadedFile ? (
@@ -206,9 +208,9 @@ dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
               onClick={() => fileInputRef.current?.click()}
               className='mb-1 text-sm font-medium text-blue-600 hover:text-blue-700'
             >
-              Select a CSV file to upload
+              {to('uploadCSV')}
             </button>
-            <p className='text-xs text-gray-500'>or drag and drop it here</p>
+            <p className='text-xs text-gray-500'>{to('dragAndDrop')}</p>
             <input ref={fileInputRef} type='file' accept='.csv' onChange={handleFileSelect} className='hidden' />
           </div>
         ) : (
@@ -220,9 +222,9 @@ dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
               onClick={() => fileInputRef.current?.click()}
               className='mb-1 text-sm font-medium text-blue-600 hover:text-blue-700'
             >
-              Select a CSV file to upload
+              {to('uploadCSV')}
             </button>
-            <p className='text-xs text-gray-500'>or drag and drop it here</p>
+            <p className='text-xs text-gray-500'>{to('dragAndDrop')}</p>
             <input ref={fileInputRef} type='file' accept='.csv' onChange={handleFileSelect} className='hidden' />
           </div>
         )}

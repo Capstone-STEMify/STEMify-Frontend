@@ -69,6 +69,37 @@
       "imageSize": "Max {size}MB allowed",
       "imageUrl": "Component image is required",
       "image": "Invalid image file"
+    },
+    "organization": {
+      "name": "Organization name is required",
+      "description": "Description must be at least 10 characters",
+      "type": "Organization type is required",
+      "imageSize": "Max {size}MB allowed",
+      "imageUrl": "Organization image is required"
+    },
+    "plan": {
+      "name": "Plan name is required",
+      "description": "Description must be at least {min} characters long",
+      "price": "Price must be a non-negative number",
+      "billingCycle": "Billing cycle is required",
+      "accessSupportDetail": "Access support detail must be at least {min} characters long",
+      "curriculumCount": "Curriculum count must be at least {min}",
+      "maxTeacherSeats": "Maximum teacher seats must be at least {min}",
+      "maxStudentSeats": "Maximum student seats must be at least {min}",
+      "curriculumIds": "Select at least one curriculum",
+      "curriculumCountExceed": "Curriculum count ({curriculumCount}) cannot exceed the number of available curriculums selected ({selectedCurriculums})"
+    },
+    "subscription": {
+      "plan": "Select a plan",
+      "startDate": "Start date is required",
+      "seats": "Seats must be at least 10",
+      "pricePlan": "Price plan is required",
+      "expiredDate": "Expired date must be a valid future date",
+      "curriculumIds": "Select at least one curriculum",
+      "allowCurriculumExceed": "You can only select up to {curriculumCount} curriculum(s)"
+    },
+    "uploadCSV": {
+      "required": "Please upload a CSV"
     }
   }
 }

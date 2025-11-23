@@ -1,12 +1,10 @@
 'use client'
 
-import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Organization } from '@/features/organization/types/organization.type'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { formatDate, formatPrice } from '@/utils/index'
 import React from 'react'
-import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { Card } from '@/components/shadcn/card'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
@@ -27,6 +25,8 @@ type SystemSubscriptionTableProps = {
 export default function SystemSubscriptionTable({ organization, refetchOrganization }: SystemSubscriptionTableProps) {
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const to = useTranslations('organization.subscription')
+
   const router = useRouter()
   const locale = useLocale()
   const dispatch = useAppDispatch()
@@ -96,7 +96,7 @@ export default function SystemSubscriptionTable({ organization, refetchOrganizat
   return (
     <div className='space-y-6 p-6'>
       <div className='flex justify-between'>
-        <h2 className='text-lg font-semibold'>Organization Subscriptions</h2>
+        <h2 className='text-lg font-semibold'>{to('title')}</h2>
 
         <Button
           size='sm'
@@ -105,12 +105,12 @@ export default function SystemSubscriptionTable({ organization, refetchOrganizat
           }}
         >
           <Plus className='h-4 w-4' />
-          <p>Create new</p>
+          <p>{tc('button.createSubscription')}</p>
         </Button>
       </div>
 
       {organization.subscriptions.length === 0 ? (
-        <p className='text-muted-foreground text-center'>No subscriptions found for this organization.</p>
+        <p className='text-muted-foreground text-center'>{to('noData')}</p>
       ) : (
         <Card className=''>
           <Table>

@@ -26,7 +26,7 @@ import {
   useUpdateOrganizationMutation
 } from '@/features/organization/api/organizationApi'
 import Image from 'next/image'
-import { formatDate } from '@/utils/index'
+import { formatDate, useStatusTranslation } from '@/utils/index'
 import SystemSubscriptionTable from '@/features/subscription/components/list/SystemSubscriptionTable'
 import SearchBar from '@/components/shared/search/SearchBar'
 import { Input } from '@/components/shadcn/input'
@@ -45,6 +45,7 @@ export default function SystemOrganizationList() {
   const t = useTranslations('subscription')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const translateStatus = useStatusTranslation()
 
   const dispatch = useAppDispatch()
   const [search, setSearch] = useState<string>('')
@@ -70,7 +71,16 @@ export default function SystemOrganizationList() {
     dispatch(setPageIndex(newPage))
   }
 
+  // translate to multilingual options
   const organizationStatusOptions = [
+    { label: tc('status.all'), value: 'all' },
+    ...Object.entries(OrganizationStatus).map(([key, value]) => ({
+      label: translateStatus(key),
+      value
+    }))
+  ]
+
+  const organizationStatusOptionsNotTranslated = [
     { label: 'All', value: 'all' },
     ...Object.entries(OrganizationStatus).map(([key, value]) => ({
       label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
@@ -185,7 +195,7 @@ export default function SystemOrganizationList() {
                     <TableCell>
                       <SStatusDropdown
                         value={organization.status}
-                        options={organizationStatusOptions.filter(
+                        options={organizationStatusOptionsNotTranslated.filter(
                           (opt) => opt.value !== 'all' && opt.value !== OrganizationStatus.ARCHIVED
                         )}
                         onChange={(newStatus) => handleStatusChange(organization, newStatus)}

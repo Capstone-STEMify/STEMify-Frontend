@@ -9,7 +9,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { BillingCycle, PlanStatus } from '@/features/plan/types/plan.type'
 import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import { useAppDispatch } from '@/hooks/redux-hooks'
-import { setParam } from '@/features/plan/slice/planProductSlice'
+import { useTranslations } from 'next-intl'
 
 type PlanFormData = {
   name: string
@@ -45,6 +45,9 @@ type UpsertPlanProps = {
 }
 
 export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
+  const tv = useTranslations('validation.plan')
+  const tp = useTranslations('plan.form')
+
   const isEditing = !!planId
   const { closeModal } = useModal()
   const dispatch = useAppDispatch()
@@ -57,26 +60,28 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
   // ✅ Schema validation
   const planSchema = z
     .object({
-      name: z.string().min(1, 'Plan name is required'),
-      description: z.string().min(10, 'Description must be at least 10 characters'),
-      accessSupportDetail: z.string().min(10, 'Access support detail must be at least 10 characters'),
-      curriculumCount: z.number().min(1, 'Must be at least 1'),
-      maxTeacherSeats: z.number().min(1, 'Must be at least 1'),
-      maxStudentSeats: z.number().min(10, 'Must be at least 10'),
+      name: z.string().min(1, tv('name')),
+      description: z.string().min(10, tv('description', { min: 10 })),
+      accessSupportDetail: z.string().min(10, tv('accessSupportDetail', { min: 10 })),
+      curriculumCount: z.number().min(1, tv('curriculumCount', { min: 1 })),
+      maxTeacherSeats: z.number().min(1, tv('maxTeacherSeats', { min: 1 })),
+      maxStudentSeats: z.number().min(10, tv('maxStudentSeats', { min: 10 })),
       billingCycles: z.array(
         z.object({
           billingCycle: z.string(),
-          price: z.number().min(0, 'Price must be positive')
+          price: z.number().min(0, tv('billingCycle'))
         })
       ),
-      curriculumIds: z.array(z.number()).min(1, 'Select at least one curriculum')
+      curriculumIds: z.array(z.number()).min(1, tv('curriculumIds', { min: 1 }))
     })
     .superRefine((data, ctx) => {
-      // Validate: curriculumCount phải <= số curriculum available được chọn
       if (data.curriculumCount > data.curriculumIds.length) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: `Curriculum count (${data.curriculumCount}) cannot exceed the number of available curriculums selected (${data.curriculumIds.length})`,
+          message: tv('curriculumCountExceed', {
+            curriculumCount: data.curriculumCount,
+            selectedCurriculums: data.curriculumIds.length
+          }),
           path: ['curriculumCount']
         })
       }
@@ -97,7 +102,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         await createPlan(payload).unwrap()
       }
 
-      toast.success(`Plan ${isEditing ? 'updated' : 'created'} successfully`)
+      toast.success(` ${isEditing ? tp('form.successUpdate') : tp('form.successCreate')}`)
       closeModal()
       onSuccess && onSuccess()
     }
@@ -135,15 +140,15 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
     >
       <form.AppField
         name='name'
-        children={(field) => <field.TextField label='Plan Name' placeholder='Enter plan name' />}
+        children={(field) => <field.TextField label={tp('name.label')} placeholder={tp('name.placeholder')} />}
       />
 
       <form.AppField
         name='description'
         children={(field) => (
           <field.TextAreaField
-            label='Description'
-            placeholder='Enter plan description'
+            label={tp('description.label')}
+            placeholder={tp('description.placeholder')}
             rows={3}
             className='resize-none'
           />
@@ -154,61 +159,34 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         name='accessSupportDetail'
         children={(field) => (
           <field.TextAreaField
-            label='Access Support Detail'
-            placeholder='Explain support and access details'
+            label={tp('accessSupportDetail.label')}
+            placeholder={tp('accessSupportDetail.placeholder')}
             rows={3}
             className='resize-none'
           />
         )}
       />
 
-      <div className='grid grid-cols-2 gap-4'>
-        <form.AppField
-          name='maxTeacherSeats'
-          children={(field) => <field.TextField type='number' label='Max Teacher Seats' placeholder='e.g. 100' />}
-        />
-        <form.AppField
-          name='maxStudentSeats'
-          children={(field) => <field.TextField type='number' label='Max Student Seats' placeholder='e.g. 100' />}
-        />
-      </div>
-
       <form.AppField
-        name={'curriculumCount'}
+        name='maxTeacherSeats'
         children={(field) => (
-          <div>
-            <field.TextField
-              type='number'
-              label='Curriculum Count'
-              placeholder='Number of curriculums user can select when purchasing'
-              className='flex-1'
-            />
-            <p className='mt-1 text-sm text-gray-600'>
-              Must be ≤ {form.state.values.curriculumIds.length || 0} (available curriculums selected)
-            </p>
-          </div>
+          <field.TextField
+            type='number'
+            label={tp('maxTeacherSeats.label')}
+            placeholder={tp('maxTeacherSeats.placeholder')}
+          />
         )}
       />
-
-      {/* Billing Cycles */}
-      <div className='rounded-lg border p-3'>
-        <h3>Billing Cycles</h3>
-
-        {form.state.values.billingCycles.map((cycle, index) => (
-          <div key={index} className='mb-3 items-center gap-3'>
-            <span className='w-32 text-sm font-medium text-gray-600'>
-              {cycle.billingCycle === 'Semiannual' ? 'Price for Semiannual (6 months)' : 'Price for Annual (12 months)'}
-            </span>
-
-            <form.AppField
-              name={`billingCycles[${index}].price`}
-              children={(field) => (
-                <field.TextField type='number' label='' placeholder='Enter price' className='flex-1' />
-              )}
-            />
-          </div>
-        ))}
-      </div>
+      <form.AppField
+        name='maxStudentSeats'
+        children={(field) => (
+          <field.TextField
+            type='number'
+            label={tp('maxStudentSeats.label')}
+            placeholder={tp('maxStudentSeats.placeholder')}
+          />
+        )}
+      />
 
       {/* === Curriculum Checkbox Group === */}
       <form.AppField name='curriculumIds'>
@@ -225,6 +203,50 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
           />
         )}
       </form.AppField>
+
+      <form.AppField
+        name={'curriculumCount'}
+        children={(field) => (
+          <div>
+            <field.TextField
+              type='number'
+              label={tp('curriculumCount.label')}
+              placeholder={tp('curriculumCount.placeholder')}
+              className='flex-1'
+            />
+            <p className='mt-1 text-sm text-gray-600'>
+              {tp('curriculumCount.required', { count: form.state.values.curriculumIds.length || 0 })}
+            </p>
+          </div>
+        )}
+      />
+
+      {/* Billing Cycles */}
+      <div className='rounded-lg border p-3'>
+        <h3>{tp('billingCycles.label')}</h3>
+
+        {form.state.values.billingCycles.map((cycle, index) => (
+          <div key={index} className='mb-3 items-center gap-3'>
+            <span className='w-32 text-sm font-medium text-gray-600'>
+              {cycle.billingCycle === 'Semiannual'
+                ? tp('billingCycles.semiannualPrice')
+                : tp('billingCycles.annualPrice')}
+            </span>
+
+            <form.AppField
+              name={`billingCycles[${index}].price`}
+              children={(field) => (
+                <field.TextField
+                  type='number'
+                  label=''
+                  placeholder={tp('billingCycles.pricePlaceholder')}
+                  className='flex-1'
+                />
+              )}
+            />
+          </div>
+        ))}
+      </div>
 
       <div className='flex justify-end'>
         <form.AppForm>

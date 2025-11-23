@@ -12,6 +12,7 @@ import { useGetPlanByIdQuery } from '@/features/plan/api/planApi'
 import { goBack, goNext, setOrganizationId } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { fileToBase64 } from '@/utils/index'
+import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
@@ -31,7 +32,8 @@ type UpsertOrganizationProps = {
 }
 
 export default function UpsertOrganization({ organizationId, onSuccess }: UpsertOrganizationProps) {
-  const dispatch = useAppDispatch()
+  const tv = useTranslations('validation')
+  const tOrganization = useTranslations('organization')
 
   const imageFieldRef = useRef<any>(null)
 
@@ -50,16 +52,16 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
   const organizationTypesOptions = orgTypes.map((type) => ({ label: type.name, value: String(type.id) }))
 
   const organizationSchema = z.object({
-    name: z.string().min(1, 'Organization name is required'),
-    description: z.string().min(10, 'Description must be at least 10 characters'),
+    name: z.string().min(1, tv('organization.name')),
+    description: z.string().min(10, tv('organization.description')),
     organizationTypeId: z
       .string()
-      .min(1, 'Select organization type')
-      .refine((val) => val !== '0', 'Select organization type'),
+      .min(1, tv('organization.type'))
+      .refine((val) => val !== '0', tv('organization.type')),
     image: z
       .union([z.instanceof(File), z.null()])
-      .refine((file) => file === null || file.size > 0, 'Image file is required')
-      .refine((file) => file === null || file.size < 5 * 1024 * 1024, 'Image file must be less than 5MB'),
+      .refine((file) => file === null || file.size > 0, tv('organization.imageUrl'))
+      .refine((file) => file === null || file.size < 5 * 1024 * 1024, tv('organization.imageSize', { size: 5 })),
     imagePreviewUrl: z.string().optional()
   })
 
@@ -131,13 +133,15 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
       </form.AppField>
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
         <form.AppField name='name'>
-          {(field) => <field.TextField label='Organization Name' placeholder='Enter name' />}
+          {(field) => (
+            <field.TextField label={tOrganization('name')} placeholder={tOrganization('form.placeholder.name')} />
+          )}
         </form.AppField>
         <form.AppField name='organizationTypeId'>
           {(field) => (
             <field.SelectField
-              label='Organization Type'
-              placeholder='Select Organization Type'
+              label={tOrganization('type')}
+              placeholder={tOrganization('type')}
               options={organizationTypesOptions}
               disabled={isOrgTypesLoading}
             />

@@ -3,19 +3,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { UserPlus, Mail, User, Calendar, CheckCircle2, Clock, MoreVertical } from 'lucide-react'
+import { UserPlus, Mail, User, Calendar, CheckCircle2, Clock, MoreVertical, Trash2 } from 'lucide-react'
 import {
   useDeleteLicenseAssignmentMutation,
   useSearchLicenseAssignmentQuery
 } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { Skeleton } from '@/components/shadcn/skeleton'
-import { formatDateV2 } from '@/utils/index'
+import { formatDate, formatDateV2, useStatusTranslation } from '@/utils/index'
 import { useModal } from '@/providers/ModalProvider'
 import { cn } from '@/utils/shadcn/utils'
 import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setParam } from '@/features/license-assignment/slice/licenseAssignmentSlice'
 import { toast } from 'sonner'
+import { useLocale, useTranslations } from 'next-intl'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 
 type OrganizationAdminsProps = {
   organizationSubscriptionOrderId?: number
@@ -24,6 +26,12 @@ type OrganizationAdminsProps = {
 type StatusFilter = LicenseAssignmentStatus.ACTIVE | LicenseAssignmentStatus.PENDING
 
 export default function OrganizationAdmins({ organizationSubscriptionOrderId }: OrganizationAdminsProps) {
+  const tc = useTranslations('common')
+  const to = useTranslations('organization.detail')
+  const tt = useTranslations('toast')
+  const statusTranslate = useStatusTranslation()
+
+  const locale = useLocale()
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const [statusFilter, setStatusFilter] = useState<StatusFilter>(LicenseAssignmentStatus.ACTIVE)
@@ -72,22 +80,16 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
     return config[type as keyof typeof config] || 'bg-gray-100 text-gray-700'
   }
 
-  const getStatusBadge = (status: string) => {
-    const config = {
-      active: { className: 'bg-green-100 text-green-700', label: 'Active' },
-      pending: { className: 'bg-yellow-100 text-yellow-700', label: 'Pending' }
-    }
-    return config[status?.toLowerCase() as keyof typeof config] || config.pending
-  }
-
   return (
     <Card className='py-4'>
       <CardContent className='p-0'>
         {/* Header */}
         <div className='flex items-center justify-between border-b px-5 pb-4'>
           <div>
-            <CardTitle className='text-lg font-semibold'>License Assignments</CardTitle>
-            <p className='text-muted-foreground mt-0.5 text-sm'>{totalCount} members</p>
+            <CardTitle className='text-lg font-semibold'>{to('license.header')}</CardTitle>
+            <p className='text-muted-foreground mt-0.5 text-sm'>
+              {totalCount} {to('license.member')}
+            </p>
           </div>
           <Button
             size='sm'
@@ -95,7 +97,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
             onClick={() => openModal('uploadCSV', { organizationSubscriptionOrderId: organizationSubscriptionOrderId })}
           >
             <UserPlus size={16} />
-            Assign License
+            {tc('button.assignLicense')}
           </Button>
         </div>
 
@@ -115,7 +117,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
               )}
             >
               <CheckCircle2 size={16} />
-              <span>Active</span>
+              <span>{to('license.active')}</span>
               {statusFilter === LicenseAssignmentStatus.ACTIVE && (
                 <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-blue-600'></div>
               )}
@@ -134,7 +136,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
               )}
             >
               <Clock size={16} />
-              <span>Pending</span>
+              <span>{to('license.pending')}</span>
               {statusFilter === LicenseAssignmentStatus.PENDING && (
                 <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-blue-600'></div>
               )}
@@ -148,7 +150,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
             <div className='mb-3 rounded-full bg-gray-100 p-4'>
               <User size={24} className='text-gray-400' />
             </div>
-            <p className='text-muted-foreground text-sm'>No {statusFilter} license assignments</p>
+            <p className='text-muted-foreground text-sm'>{to('license.noActive')}</p>
           </div>
         ) : (
           <div className='m-4 rounded-xl border-2 border-gray-200'>
@@ -164,15 +166,15 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                   <TableHead className='w-[20%]'>
                     <div className='flex items-center gap-1.5'>
                       <User size={14} />
-                      <span>Name</span>
+                      <span>{to('license.name')}</span>
                     </div>
                   </TableHead>
-                  <TableHead className='w-[15%]'>Role</TableHead>
-                  <TableHead className='w-[12%]'>Status</TableHead>
+                  <TableHead className='w-[15%]'>{to('license.role')}</TableHead>
+                  <TableHead className='w-[12%]'>{to('license.status')}</TableHead>
                   <TableHead className='w-[13%]'>
                     <div className='flex items-center gap-1.5'>
                       <Calendar size={14} />
-                      <span>Assigned</span>
+                      <span>{to('license.assignedAt')}</span>
                     </div>
                   </TableHead>
                   <TableHead className='w-[5%]'></TableHead>
@@ -180,7 +182,6 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
               </TableHeader>
               <TableBody>
                 {licenseAssignments.map((assignment) => {
-                  const statusInfo = getStatusBadge(assignment.status || 'pending')
                   return (
                     <TableRow key={assignment.id} className='hover:bg-gray-50/50'>
                       <TableCell>
@@ -199,37 +200,45 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                                 {assignment.user.firstName} {assignment.user.lastName}
                               </span>
                               {assignment.user.userRole && (
-                                <span className='text-muted-foreground text-xs'>{assignment.user.userRole}</span>
+                                <span className='text-muted-foreground text-xs'>
+                                  {tc(`accountType.${assignment.user.userRole.toLowerCase()}`)}
+                                </span>
                               )}
                             </>
                           ) : (
-                            <span className='text-muted-foreground italic'>Not set</span>
+                            <span className='text-muted-foreground italic'>{to('license.notSet')}</span>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge className={`${getTypeBadge(assignment.type)} text-xs`}>{assignment.type}</Badge>
+                        <Badge className={`${getTypeBadge(assignment.type)} text-xs`}>
+                          {tc(`accountType.${assignment.type.toLowerCase()}`)}
+                        </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge className={`${statusInfo.className} text-xs`}>{statusInfo.label}</Badge>
+                        <Badge className={`${getStatusBadgeClass(assignment.status)} text-xs`}>
+                          {statusTranslate(assignment.status)}
+                        </Badge>
                       </TableCell>
                       <TableCell>
-                        <span className='text-sm'>{formatDateV2(new Date(assignment.assignedAt))}</span>
+                        <span className='text-sm'>
+                          {formatDate(assignment.assignedAt, { locale: locale as 'en' | 'vi' })}
+                        </span>
                       </TableCell>
                       <TableCell>
                         <button
                           className='flex h-8 w-8 items-center'
                           onClick={() => {
                             openModal('confirm', {
-                              message: `Are you sure you want to delete the license assignment for ${assignment.user.email}?`,
+                              message: `${tt('confirmMessage.delete', { title: assignment.user.email })}`,
                               onConfirm: async () => {
                                 await deleteLicense(assignment.id)
-                                toast.success('License assignment deleted successfully')
+                                toast.success(tt('successMessage.delete'))
                               }
                             })
                           }}
                         >
-                          <MoreVertical className='h-4 w-4' />
+                          <Trash2 className='h-4 w-4 text-red-600' />
                         </button>
                       </TableCell>
                     </TableRow>

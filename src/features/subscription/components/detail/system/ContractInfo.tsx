@@ -9,13 +9,18 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Calendar, FileText, Building2 } from 'lucide-react'
-import { formatDateV2 } from '@/utils/index'
+import { formatDate, formatDateV2, useStatusTranslation } from '@/utils/index'
+import { useLocale, useTranslations } from 'next-intl'
 
 type ContractInfoProps = {
   contractId?: number
 }
 
 export default function ContractInfo({ contractId }: ContractInfoProps) {
+  const translateStatus = useStatusTranslation()
+  const locale = useLocale()
+  const to = useTranslations('organization.detail')
+
   const { data, isLoading } = useGetContractByIdQuery(contractId!, { skip: !contractId })
   const contract = data?.data
 
@@ -38,7 +43,7 @@ export default function ContractInfo({ contractId }: ContractInfoProps) {
     return (
       <Card>
         <CardContent>
-          <p className='text-muted-foreground text-center text-sm'>No contract data available.</p>
+          <p className='text-muted-foreground text-center text-sm'>{to('contract.noContract')}</p>
         </CardContent>
       </Card>
     )
@@ -48,8 +53,8 @@ export default function ContractInfo({ contractId }: ContractInfoProps) {
       {/* Header */}
       <CardHeader className='pb-3'>
         <div className='flex items-center justify-between'>
-          <CardTitle className='text-base font-semibold'>Contract Information</CardTitle>
-          <Badge className={getStatusBadgeClass(contract.status)}>{contract.status}</Badge>
+          <CardTitle className='text-base font-semibold'>{to('contract.header')}</CardTitle>
+          <Badge className={getStatusBadgeClass(contract.status)}>{translateStatus(contract.status)}</Badge>
         </div>
       </CardHeader>
 
@@ -57,36 +62,36 @@ export default function ContractInfo({ contractId }: ContractInfoProps) {
       <CardContent className='space-y-3 text-sm'>
         {/* Contract name */}
         <div>
-          <p className='text-muted-foreground mb-1 text-xs'>Contract Name</p>
-          <p className='line-clamp-1 font-medium'>{contract.name}</p>
+          <p className='mb-0.5 text-sm font-medium'>{to('contract.name')}</p>
+          <p className='line-clamp-1'>{contract.name}</p>
         </div>
 
         {/* Description */}
         {contract.description && (
           <div>
-            <p className='text-muted-foreground mb-1 text-xs'>Description</p>
+            <p className='mb-0.5 text-sm font-medium'>{to('contract.description')}</p>
             <p className='line-clamp-2'>{contract.description}</p>
           </div>
         )}
 
         {/* Created date */}
         <div className='flex justify-between'>
-          <span className='text-muted-foreground flex items-center gap-1'>
+          <span className='flex gap-1 text-sm font-medium'>
             <Calendar size={14} />
-            Created
+            {to('contract.createdAt')}
           </span>
-          <span>{formatDateV2(new Date(contract.createdAt))}</span>
+          <span>{formatDate(contract.createdAt, { locale: locale as 'en' | 'vi' })}</span>
         </div>
 
         {/* View file (if available) */}
         {contract.fileUrl ? (
-          <Button asChild variant='outline' size='sm' className='mt-2 w-full p-6'>
+          <Button asChild variant='outline' size='sm' className='mt-2 w-full py-5'>
             <Link href={contract.fileUrl} target='_blank' className='flex items-center gap-1'>
-              <FileText size={14} /> View Contract File
+              <FileText size={14} /> {to('contract.viewFile')}
             </Link>
           </Button>
         ) : (
-          <div className='text-muted-foreground text-center text-xs italic'>No contract file uploaded</div>
+          <div className='text-muted-foreground text-center text-xs italic'>{to('contract.noContractFile')}</div>
         )}
       </CardContent>
     </Card>

@@ -64,7 +64,15 @@
       "signUpFree": "Đăng Ký Miễn Phí",
       "createOrganization": "Tạo Tổ Chức",
       "createSubscription": "Tạo Gói Đăng Ký",
-      "submitting": "Đang Gửi..."
+      "submitting": "Đang Gửi...",
+      "createUser": "Tạo Người Dùng",
+      "createPlan": "Tạo Gói",
+      "next": "Tiếp",
+      "step": "Bước",
+      "skip": "Bỏ Qua",
+      "assignLicense": "Gán Giấy Phép",
+      "clearAll": "Xóa Tất Cả",
+      "sendInvitations": "Gửi Lời Mời"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",
@@ -150,7 +158,9 @@
       "selected": "Chọn"
     },
     "status": {
-      "active": "Hoạt Động",
+      "all": "Tất Cả",
+      "statusLabel": "Trạng Thái",
+      "active": "Đang Hoạt Động",
       "inactive": "Không Hoạt Động",
       "pending": "Chờ Xét Duyệt",
       "approved": "Phê Duyệt",
@@ -161,13 +171,24 @@
       "archived": "Lưu Trữ",
       "inProgress": "Đang Tiến Hành",
       "submitted": "Gửi",
-      "deleted": "Xóa",
+      "deleted": "Đã Xóa",
       "expired": "Hết Hạn",
       "cancelled": "Hủy",
       "failed": "Thất Bại",
       "resolved": "Giải Quyết",
       "completed": "Hoàn Thành",
-      "passed": "Đạt"
+      "passed": "Đạt",
+      "suspended": "Tạm Ngưng"
+    },
+    "accountType": {
+      "accountTypeLabel": "Loại Tài Khoản",
+      "admin": "Quản Trị Viên",
+      "guest": "Khách",
+      "staff": "Nhân Viên",
+      "member": "Thành Viên",
+      "teacher": "Giáo Viên",
+      "student": "Học Sinh",
+      "organization_admin": "Quản Trị Viên Tổ Chức"
     }
   }
 }

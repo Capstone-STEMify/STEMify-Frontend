@@ -1,6 +1,58 @@
 {
   "plan": {
+    "update": "Update Plan",
+    "create": "Create New Plan",
+    "delete": "Delete Plan",
+    "detail": {
+      "title": "Plan Detail",
+      "description": "Plan description",
+      "accessSupportDetail": "Access & Support Detail",
+      "noBillingCycles": "No billing cycles available.",
+      "includedCurriculums": "Included Curriculums"
+    },
+    "form": {
+      "name": {
+        "label": "Plan Name",
+        "placeholder": "Enter plan name"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Enter plan description"
+      },
+      "accessSupportDetail": {
+        "label": "Access & Support Detail",
+        "placeholder": "Enter access and support details"
+      },
+      "maxStudentSeats": {
+        "label": "Max Student Seats",
+        "placeholder": "Enter maximum number of student seats"
+      },
+      "maxTeacherSeats": {
+        "label": "Max Teacher Seats",
+        "placeholder": "Enter maximum number of teacher seats"
+      },
+      "curriculumCount": {
+        "label": "Allowed Curriculum Count",
+        "required": "Must be ≤ {count} (available curriculums selected)",
+        "placeholder": "Enter allowed curriculum count"
+      },
+      "billingCycles": {
+        "label": "Billing Cycles",
+        "semiannualPrice": "Price for Semiannual (6 months)",
+        "annualPrice": "Price for Annual (12 months)"
+      },
+      "availableCurriculums": {
+        "label": "Available Curriculums",
+        "description": "Select curriculums that will be available in this plan",
+        "selectPlaceholder": "Select curriculums",
+        "pricePlaceholder": "Enter price"
+      },
+      "successCreate": "Plan created successfully!",
+      "successUpdate": "Plan updated successfully!"
+    },
     "list": {
+      "header": "Plan Management",
+      "headerDescription": "Manage your subscription plans here.",
       "title": "Upgrade your plan",
       "description": "Choose the plan that best fits your needs and unlock the full potential of Stemify for your educational journey.",
       "selectButton": "Choose Plan",
