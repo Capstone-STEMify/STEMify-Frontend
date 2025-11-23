@@ -7,11 +7,13 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDateV2 } from '@/utils/index'
 import { ColumnDef } from '@tanstack/react-table'
 import { GraduationCap, Users } from 'lucide-react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
+  const tc = useTranslations('common')
+
   const router = useRouter()
   const locale = useLocale()
   const [deleteClassroom] = useDeleteClassroomMutation()
@@ -20,7 +22,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
     // createSelectColumn<Classroom>(),
     {
       accessorKey: 'curriculum',
-      header: 'Curriculum',
+      header: tc('tableHeader.curriculum'),
       meta: {
         className: 'border-r border-gray-200'
       },
@@ -49,7 +51,9 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
               >
                 {curriculum.title}
               </p>
-              <p className='mt-1 text-xs text-gray-600'>Number of courses: {curriculum.courseCount}</p>
+              <p className='mt-1 text-xs text-gray-600'>
+                {tc('tableHeader.numberOfCourses')}: {curriculum.courseCount}
+              </p>
             </div>
           </div>
         )
@@ -57,7 +61,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
     },
     {
       accessorKey: 'classCode',
-      header: 'Class Code',
+      header: tc('tableHeader.classCode'),
       cell: ({ row }) => {
         return <span>{row.original.classCode}</span>
       }
@@ -70,25 +74,25 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
 
     {
       accessorKey: 'grade',
-      header: 'Grade'
+      header: tc('tableHeader.grade')
     },
 
     {
       accessorKey: 'teacherNameAndEmail',
-      header: () => <p className='text-center'>Teacher</p>,
+      header: () => <p className='text-center'>{tc('tableHeader.teacher')}</p>,
       cell: ({ row }) => {
         const teacher = row.original.teacher
         return (
           <div className='flex flex-col items-center'>
-            <span className='font-medium'>{teacher.Name}</span>
-            <span className='text-muted-foreground text-sm'>{teacher.Email}</span>
+            <span className='font-medium'>{teacher.name}</span>
+            <span className='text-muted-foreground text-sm'>{teacher.email}</span>
           </div>
         )
       }
     },
     {
       accessorKey: 'numberOfStudents',
-      header: 'No. Students',
+      header: tc('tableHeader.numberOfStudents'),
       cell: ({ row }) => {
         const numberOfStudents = row.original.numberOfStudents
 
@@ -125,7 +129,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: tc('tableHeader.status'),
       cell: ({ row }) => {
         const status = row.original.status
         return <Badge className={`${getStatusBadgeClass(status)} font-medium`}>{status}</Badge>
@@ -133,7 +137,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
     },
     {
       accessorKey: 'startDate',
-      header: 'Start Date',
+      header: tc('tableHeader.startDate'),
       cell: ({ row }) => {
         const startDate = row.original.startDate
         return <span>{formatDateV2(new Date(startDate))}</span>
@@ -141,7 +145,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
     },
     {
       accessorKey: 'endDate',
-      header: 'End Date',
+      header: tc('tableHeader.endDate'),
       cell: ({ row }) => {
         const endDate = row.original.endDate
         return <span>{formatDateV2(new Date(endDate))}</span>
@@ -149,19 +153,19 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
     },
     createActionsColumnFromItems<Classroom>([
       {
-        label: 'View Details',
+        label: tc('button.view'),
         onClick: (classroom) => {
           console.log('View details of', classroom)
         }
       },
       {
-        label: 'Edit Class',
+        label: tc('button.update'),
         onClick: (classroom) => {
           console.log('Edit class', classroom)
         }
       },
       {
-        label: 'Delete Class',
+        label: tc('button.delete'),
         onClick: ({ original }) => {
           deleteClassroom(original.id)
           toast.success('Classroom deleted successfully')

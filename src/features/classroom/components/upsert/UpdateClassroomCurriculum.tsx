@@ -8,6 +8,7 @@ import { Grade } from '@/features/classroom/types/classroom.type'
 import { useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { getOptions } from '@/utils/index'
+import { useTranslations } from 'next-intl'
 import React, { useEffect, useState } from 'react'
 import z from 'zod'
 
@@ -21,6 +22,8 @@ const curriculumDefaultValues = {
 }
 
 export default function UpdateClassroomCurriculum({ classroomId, onSuccess }: UpdateClassroomCurriculumProps) {
+  const tc = useTranslations('common')
+
   const selectedSubscriptionId = useAppSelector((state) => state.selectedOrganization.selectedSubscriptionOrderId)
 
   const { data: organizationSubscriptionData, isLoading } = useGetSubscriptionByIdQuery(selectedSubscriptionId!, {
@@ -88,7 +91,7 @@ export default function UpdateClassroomCurriculum({ classroomId, onSuccess }: Up
               loading={isUpdating}
               className='bg-amber-custom-400 cursor-pointer rounded-lg px-6 py-2.5 font-medium text-white transition-colors hover:bg-amber-500'
             >
-              Update
+              {tc('button.update')}
             </form.SubmitButton>
           </form.AppForm>
         </div>

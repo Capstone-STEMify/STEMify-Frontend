@@ -12,6 +12,7 @@ import { Check, ChevronsUpDown } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
+import { useTranslations } from 'next-intl'
 
 type Option = {
   value: number | string
@@ -31,6 +32,7 @@ type Props = {
 }
 
 export function SingleSelectWithSearch({ options, value, onChange, placeholder = 'Select...', label }: Props) {
+  const tc = useTranslations('common')
   const [open, setOpen] = useState(false)
 
   const selected = options.find((opt) => opt.value === value)
@@ -77,8 +79,8 @@ export function SingleSelectWithSearch({ options, value, onChange, placeholder =
           style={{ width: 'var(--radix-popover-trigger-width)' }}
         >
           <Command className='rounded-lg border-0'>
-            <CommandInput placeholder='Search...' className='h-10 border-b' />
-            <CommandEmpty className='py-6 text-center text-sm text-gray-500'>No result found.</CommandEmpty>
+            <CommandInput placeholder={tc('search.placeholder')} className='h-10 border-b' />
+            <CommandEmpty className='py-6 text-center text-sm text-gray-500'>{tc('search.noResults')}</CommandEmpty>
             <CommandList className='max-h-[300px]'>
               <CommandGroup>
                 {options.map((opt) => (

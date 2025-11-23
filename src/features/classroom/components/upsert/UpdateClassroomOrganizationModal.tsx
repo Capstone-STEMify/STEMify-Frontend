@@ -19,7 +19,7 @@ export default function UpdateClassroomOrganizationModal({
   mode
 }: UpdateClassroomOrganizationModalProps) {
   const { closeModal } = useModal()
-  const t = useTranslations('curriculum')
+  const tClassroom = useTranslations('classroom')
 
   const handleSuccess = () => {
     if (typeof onConfirm === 'function') {
@@ -31,13 +31,13 @@ export default function UpdateClassroomOrganizationModal({
   const renderTitle = () => {
     switch (mode) {
       case 'basic':
-        return <>Update Classroom Organization Basic Information</>
+        return <>{tClassroom('update.basicInfo')}</>
       case 'curriculum':
-        return <>Update Classroom Curriculum</>
+        return <>{tClassroom('update.curriculum')}</>
       case 'teacher':
-        return <>Update Classroom Teacher</>
+        return <>{tClassroom('update.teacher')}</>
       case 'students':
-        return <>Remove Classroom Students</>
+        return <>{tClassroom('update.students')}</>
       default:
         return ''
     }

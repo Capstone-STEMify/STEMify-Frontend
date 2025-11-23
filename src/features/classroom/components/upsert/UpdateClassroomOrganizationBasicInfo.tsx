@@ -12,24 +12,21 @@ import { CalendarIcon } from 'lucide-react'
 import { format, parse } from 'date-fns'
 import { cn } from '@/utils/shadcn/utils'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 
 type UpdateClassroomOrganizationBasicInfoProps = {
   classroomId: number
   onSuccess?: () => void
 }
 
-const DURATION_OPTIONS = [
-  { label: '4 Weeks', value: '4' },
-  { label: '6 Weeks', value: '6' },
-  { label: '8 Weeks', value: '8' },
-  { label: '10 Weeks', value: '10' },
-  { label: 'Custom', value: 'custom' }
-]
-
 export default function UpdateClassroomOrganizationBasicInfo({
   classroomId,
   onSuccess
 }: UpdateClassroomOrganizationBasicInfoProps) {
+  const tc = useTranslations('common')
+  const tClassroom = useTranslations('classroom')
+  const tt = useTranslations('toast')
+
   const [name, setName] = useState('')
   const [classCode, setClassCode] = useState('')
   const [grade, setGrade] = useState('')
@@ -43,6 +40,14 @@ export default function UpdateClassroomOrganizationBasicInfo({
 
   const isCustomDuration = durationWeeks === 'custom'
 
+  const DURATION_OPTIONS = [
+    { label: `4 ${tClassroom('update.basicInfo.weeks')}`, value: '4' },
+    { label: `6 ${tClassroom('update.basicInfo.weeks')}`, value: '6' },
+    { label: `8 ${tClassroom('update.basicInfo.weeks')}`, value: '8' },
+    { label: `10 ${tClassroom('update.basicInfo.weeks')}`, value: '10' },
+    { label: tClassroom('update.basicInfo.custom'), value: 'custom' }
+  ]
+
   const gradeOptions = Object.entries(Grade).map(([key, value]) => ({
     label: value,
     value: value
@@ -52,8 +57,6 @@ export default function UpdateClassroomOrganizationBasicInfo({
   useEffect(() => {
     if (classroomData?.data) {
       const p = classroomData.data
-      console.log('API Grade:', p.grade)
-      console.log('Select Options:', gradeOptions)
 
       setName(p.name)
       setClassCode(p.classCode)
@@ -93,7 +96,6 @@ export default function UpdateClassroomOrganizationBasicInfo({
             setDurationWeeks('custom')
           }
         } catch (error) {
-          console.error('Error calculating duration:', error)
           setDurationWeeks('custom')
         }
       }
@@ -120,24 +122,20 @@ export default function UpdateClassroomOrganizationBasicInfo({
       return
     }
 
-    try {
-      await updateClassroom({
-        id: classroomId,
-        body: {
-          name,
-          classCode,
-          grade,
-          description,
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString()
-        }
-      }).unwrap()
+    const res = await updateClassroom({
+      id: classroomId,
+      body: {
+        name,
+        classCode,
+        grade,
+        description,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString()
+      }
+    }).unwrap()
 
-      toast.success('Classroom updated successfully')
-      onSuccess?.()
-    } catch (error) {
-      toast.error('Failed to update classroom')
-    }
+    toast.success(tt('successMessage.update', { title: res.data.name }))
+    onSuccess?.()
   }
 
   if (isLoading) {
@@ -149,7 +147,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
       {/* Classroom Name */}
       <div className='space-y-2'>
         <Label htmlFor='name' className='text-sm font-medium text-gray-900'>
-          Classroom Name <span className='text-red-500'>*</span>
+          {tClassroom('update.basicInfo.className')} <span className='text-red-500'>*</span>
         </Label>
         <Input
           id='name'
@@ -164,11 +162,11 @@ export default function UpdateClassroomOrganizationBasicInfo({
       {/* Description */}
       <div className='space-y-2'>
         <Label htmlFor='description' className='text-sm font-medium text-gray-900'>
-          Description
+          {tClassroom('update.basicInfo.description')}
         </Label>
         <Textarea
           id='description'
-          placeholder='Brief description of this classroom...'
+          placeholder={tClassroom('update.basicInfo.descriptionPlaceholder')}
           rows={3}
           className='resize-none'
           value={description}
@@ -180,11 +178,11 @@ export default function UpdateClassroomOrganizationBasicInfo({
       <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
         <div className='space-y-2'>
           <Label htmlFor='grade' className='text-sm font-medium text-gray-900'>
-            Grade Level <span className='text-red-500'>*</span>
+            {tClassroom('update.basicInfo.gradeLevel')} <span className='text-red-500'>*</span>
           </Label>
           <Select key={grade} value={grade} onValueChange={setGrade}>
             <SelectTrigger className='h-11'>
-              <SelectValue placeholder='Select grade' />
+              <SelectValue placeholder={tClassroom('update.basicInfo.selectGrade')} />
             </SelectTrigger>
             <SelectContent>
               {gradeOptions.map((option) => (
@@ -198,7 +196,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
 
         <div className='space-y-2'>
           <Label htmlFor='classCode' className='text-sm font-medium text-gray-900'>
-            Class Code <span className='text-red-500'>*</span>
+            {tClassroom('update.basicInfo.classCode')} <span className='text-red-500'>*</span>
           </Label>
           <Input
             id='classCode'
@@ -214,11 +212,11 @@ export default function UpdateClassroomOrganizationBasicInfo({
       {/* Duration */}
       <div className='space-y-2'>
         <Label htmlFor='duration' className='text-sm font-medium text-gray-900'>
-          Duration <span className='text-red-500'>*</span>
+          {tClassroom('update.basicInfo.duration')} <span className='text-red-500'>*</span>
         </Label>
         <Select key={durationWeeks} value={durationWeeks} onValueChange={setDurationWeeks}>
           <SelectTrigger className='h-11 md:w-1/2'>
-            <SelectValue placeholder='Select duration' />
+            <SelectValue placeholder={tClassroom('update.basicInfo.selectDuration')} />
           </SelectTrigger>
           <SelectContent>
             {DURATION_OPTIONS.map((option) => (
@@ -235,7 +233,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
         {/* Start Date */}
         <div className='space-y-2'>
           <Label className='text-sm font-medium text-gray-900'>
-            Start Date <span className='text-red-500'>*</span>
+            {tClassroom('update.basicInfo.startDate')} <span className='text-red-500'>*</span>
           </Label>
           <Popover>
             <PopoverTrigger asChild>
@@ -256,7 +254,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
         {/* End Date */}
         <div className='space-y-2'>
           <Label className='text-sm font-medium text-gray-900'>
-            End Date <span className='text-red-500'>*</span>
+            {tClassroom('update.basicInfo.endDate')} <span className='text-red-500'>*</span>
           </Label>
           <Popover>
             <PopoverTrigger asChild>
@@ -283,7 +281,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
       {/* Submit Button */}
       <div className='flex justify-end border-t pt-6'>
         <Button type='submit' disabled={isUpdating} className='bg-amber-500 px-8 hover:bg-amber-600'>
-          {isUpdating ? 'Updating...' : 'Update'}
+          {isUpdating ? tc('button.submitting') : tc('button.update')}
         </Button>
       </div>
     </form>

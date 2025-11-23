@@ -8,6 +8,7 @@ import { setSearchTerm } from '@/features/user/slice/userSlice'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { Input } from '@/components/shadcn/input'
 import { se } from 'date-fns/locale'
+import { useTranslations } from 'next-intl'
 
 type ClassroomAssignSectionProps = {
   form: any
@@ -34,6 +35,8 @@ export default function ClassroomAssignSection({
   handlePageChange,
   setSelectedStudentIds
 }: ClassroomAssignSectionProps) {
+  const tClassroom = useTranslations('classroom.create.step2')
+
   const [search, setSearch] = useState<string>('')
   const debouncedSearchQuery = useDebounce(search, 500)
   const dispatch = useAppDispatch()
@@ -46,7 +49,7 @@ export default function ClassroomAssignSection({
     <div className='animate-fadeIn mx-auto max-w-6xl space-y-6'>
       {/* Curriculum & Teacher Section */}
       <div className='rounded-lg border bg-white p-6 shadow-sm'>
-        <h3 className='mb-4 text-lg font-semibold text-gray-900'>Curriculum & Teacher</h3>
+        <h3 className='mb-4 text-lg font-semibold text-gray-900'>{tClassroom('curriculumAndTeacher')}</h3>
 
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
           <form.AppField
@@ -55,8 +58,8 @@ export default function ClassroomAssignSection({
               <field.SingleSelectWithSearch
                 value={form.getFieldValue('curriculumId')?.toString()}
                 options={curriculumOptions}
-                label='Curriculum'
-                placeholder='Choose curriculum'
+                label={tClassroom('curriculum')}
+                placeholder={tClassroom('chooseCurriculum')}
                 onChange={(val: any) => form.setFieldValue('curriculumId', Number(val))}
               />
             )}
@@ -68,8 +71,8 @@ export default function ClassroomAssignSection({
               <field.SingleSelectWithSearch
                 value={form.getFieldValue('teacherId')}
                 options={teacherOptions}
-                label='Teacher'
-                placeholder='Choose teacher'
+                label={tClassroom('teacher')}
+                placeholder={tClassroom('chooseTeacher')}
                 onChange={(val: any) => form.setFieldValue('teacherId', val)}
               />
             )}
@@ -81,16 +84,16 @@ export default function ClassroomAssignSection({
       <div className='rounded-lg border bg-white p-6 shadow-sm'>
         <div className='mb-4 flex items-center justify-between'>
           <div>
-            <h3 className='text-lg font-semibold text-gray-900'>Students</h3>
-            <p className='mt-1 text-sm text-gray-500'>Select students for this classroom</p>
+            <h3 className='text-lg font-semibold text-gray-900'>{tClassroom('students')}</h3>
+            <p className='mt-1 text-sm text-gray-500'>{tClassroom('selectStudents')}</p>
           </div>
           <div className='text-sm text-gray-600'>
-            <span className='font-medium'>{selectedStudentIds.length}</span> selected
+            <span className='font-medium'>{selectedStudentIds.length}</span> {tClassroom('selected')}
           </div>
         </div>
         <Input
           type='text'
-          placeholder='Search students...'
+          placeholder={tClassroom('searchStudent')}
           className='mb-4 w-[350px]'
           value={search}
           onChange={(e) => setSearch(e.target.value)}

@@ -30,6 +30,7 @@ export async function loadMessages(locale: string) {
   const contactMessages = (await import(`../../messages/${locale}/contact/${locale}_contact.json`)).default
   const organizationMessages = (await import(`../../messages/${locale}/organization/${locale}_organization.json`))
     .default
+  const classroomMessages = (await import(`../../messages/${locale}/classroom/${locale}_classroom.json`)).default
 
   return {
     ...commonMessages,
@@ -58,6 +59,7 @@ export async function loadMessages(locale: string) {
     ...cartMessages,
     ...subscriptionMessages,
     ...contactMessages,
-    ...organizationMessages
+    ...organizationMessages,
+    ...classroomMessages
   }
 }

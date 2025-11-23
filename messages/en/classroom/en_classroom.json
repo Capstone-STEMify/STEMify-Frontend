@@ -1,0 +1,92 @@
+{
+  "classroom": {
+    "list": {
+      "header": "Classroom List",
+      "searchPlaceholder": "Search...",
+      "selectCurriculumPlaceholder": "Select curriculum",
+      "courses": "courses"
+    },
+    "update": {
+      "basicInfo": {
+        "label": "Update Classroom Basic Information",
+        "weeks": "weeks",
+        "custom": "custom",
+        "classCode": "Class Code",
+        "className": "Class Name",
+        "description": "Description",
+        "descriptionPlaceholder": "Brief description of this classroom...",
+        "gradeLevel": "Grade Level",
+        "duration": "Duration",
+        "selectDuration": "Select Duration",
+        "startDate": "Start Date",
+        "endDate": "End Date"
+      },
+      "curriculum": "Update Classroom Curriculum",
+      "teacher": "Update Classroom Teacher",
+      "students": "Update Classroom Students"
+    },
+    "detail": {
+      "notFound": "Classroom not found.",
+      "notFoundSubtext": "The classroom you're looking for doesn't exist.",
+      "backToClassrooms": "Back to Classrooms",
+      "header": "Classroom Details",
+      "selected": "Selected",
+      "students": {
+        "label": "Students",
+        "noStudent": "No students enrolled yet.",
+        "noStudentSubtext": "Start building your class by adding students"
+      },
+      "courses": "Courses",
+      "curriculum": {
+        "label": "Curriculum"
+      },
+      "classCode": {
+        "label": "Class Code",
+        "description": "Share this code with students to join the classroom",
+        "copySuccess": "Class code copied to clipboard!"
+      },
+      "teacher": "Teacher",
+      "meet": "Meet",
+      "quickStats": {
+        "label": "Quick Stats",
+        "createdDate": "Created Date",
+        "lastUpdated": "Last Updated",
+        "duration": "Duration"
+      }
+    },
+    "create": {
+      "header": "Create New Classroom",
+      "subheader": "Follow the steps below to set up your classroom",
+      "step1": {
+        "title": "Classroom Information",
+        "subtitle": "Basic classroom details",
+        "basicInfo": "Basic Information",
+        "className": "Class Name",
+        "classCode": "Class Code",
+        "description": "Description",
+        "descriptionPlaceholder": "Brief description of this classroom...",
+        "gradeLevel": "Grade Level",
+        "selectGrade": "Select Grade",
+        "duration": "Duration",
+        "selectDuration": "Select Duration",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "weeks": "Weeks",
+        "custom": "Custom"
+      },
+      "step2": {
+        "title": "Assignments",
+        "subtitle": "Assign curriculum, teacher & students",
+        "curriculumAndTeacher": "Curriculum & Teacher",
+        "curriculum": "Curriculum",
+        "chooseCurriculum": "Choose Curriculum",
+        "teacher": "Teacher",
+        "chooseTeacher": "Choose Teacher",
+        "students": "Students",
+        "selected": "Selected",
+        "selectStudents": "Select Students for the Classroom",
+        "searchStudent": "Search students by name or email"
+      }
+    }
+  }
+}

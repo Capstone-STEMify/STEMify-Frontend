@@ -1,0 +1,92 @@
+{
+  "classroom": {
+    "list": {
+      "header": "Danh sách lớp học",
+      "searchPlaceholder": "Tìm kiếm...",
+      "selectCurriculumPlaceholder": "Chọn chương trình học",
+      "courses": "khóa học"
+    },
+    "update": {
+      "basicInfo": {
+        "label": "Cập nhật thông tin cơ bản của lớp học",
+        "weeks": "tuần",
+        "custom": "tùy chỉnh",
+        "classCode": "Mã lớp học",
+        "className": "Tên lớp học",
+        "description": "Mô tả",
+        "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
+        "gradeLevel": "Cấp lớp",
+        "duration": "Thời lượng",
+        "selectDuration": "Chọn thời lượng",
+        "startDate": "Ngày bắt đầu",
+        "endDate": "Ngày kết thúc"
+      },
+      "curriculum": "Cập nhật chương trình học của lớp học",
+      "teacher": "Cập nhật giáo viên của lớp học",
+      "students": "Cập nhật học sinh của lớp học"
+    },
+    "detail": {
+      "notFound": "Không tìm thấy lớp học.",
+      "notFoundSubtext": "Lớp học bạn đang tìm kiếm không tồn tại.",
+      "backToClassrooms": "Quay lại Lớp học",
+      "header": "Chi tiết lớp học",
+      "selected": "Đã chọn",
+      "students": {
+        "label": "Học sinh",
+        "noStudent": "Chưa có học sinh nào đăng ký.",
+        "noStudentSubtext": "Bắt đầu xây dựng lớp học của bạn bằng cách thêm học sinh"
+      },
+      "courses": "Khóa học",
+      "curriculum": {
+        "label": "Chương trình học"
+      },
+      "classCode": {
+        "label": "Mã lớp học",
+        "description": "Chia sẻ mã này với học sinh để tham gia lớp học",
+        "copySuccess": "Mã lớp học đã được sao chép vào clipboard!"
+      },
+      "teacher": "Giáo viên",
+      "meet": "Gặp gỡ",
+      "quickStats": {
+        "label": "Thống kê nhanh",
+        "createdDate": "Ngày tạo",
+        "lastUpdated": "Cập nhật lần cuối",
+        "duration": "Thời lượng"
+      }
+    },
+    "create": {
+      "header": "Tạo lớp học mới",
+      "subheader": "Làm theo các bước dưới đây để thiết lập lớp học của bạn",
+      "step1": {
+        "title": "Thông tin lớp học",
+        "subtitle": "Chi tiết cơ bản về lớp học",
+        "basicInfo": "Thông tin cơ bản",
+        "className": "Tên lớp học",
+        "classCode": "Mã lớp học",
+        "description": "Mô tả",
+        "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
+        "gradeLevel": "Cấp lớp",
+        "selectGrade": "Chọn cấp lớp",
+        "duration": "Thời lượng",
+        "selectDuration": "Chọn thời lượng",
+        "startDate": "Ngày bắt đầu",
+        "endDate": "Ngày kết thúc",
+        "weeks": "Tuần",
+        "custom": "Tùy chỉnh"
+      },
+      "step2": {
+        "title": "Bài tập",
+        "subtitle": "Chỉ định chương trình học, giáo viên & học sinh",
+        "curriculumAndTeacher": "Chương trình học & Giáo viên",
+        "curriculum": "Chương trình học",
+        "chooseCurriculum": "Chọn chương trình học",
+        "teacher": "Giáo viên",
+        "chooseTeacher": "Chọn giáo viên",
+        "students": "Học sinh",
+        "selected": "Đã chọn",
+        "selectStudents": "Chọn học sinh cho lớp học",
+        "searchStudent": "Tìm kiếm học sinh theo tên hoặc email"
+      }
+    }
+  }
+}

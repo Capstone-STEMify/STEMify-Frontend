@@ -2,11 +2,7 @@
 
 import React from 'react'
 import BackButton from '@/components/shared/button/BackButton'
-
-const STEPS = [
-  { id: 1, title: 'Classroom Information', description: 'Basic classroom details' },
-  { id: 2, title: 'Assignments', description: 'Assign curriculum, teacher & students' }
-]
+import { useTranslations } from 'next-intl'
 
 type ClassroomStepIndicatorProps = {
   currentStep: number
@@ -14,20 +10,22 @@ type ClassroomStepIndicatorProps = {
 }
 
 export default function ClassroomStepIndicator({ currentStep, isEditing }: ClassroomStepIndicatorProps) {
+  const tClassroom = useTranslations('classroom')
+
+  const STEPS = [
+    { id: 1, title: tClassroom('create.step1.title'), description: tClassroom('create.step1.subtitle') },
+    { id: 2, title: tClassroom('create.step2.title'), description: tClassroom('create.step2.subtitle') }
+  ]
   return (
     <div className='border-b bg-gradient-to-b from-gray-50 to-white px-6 py-5'>
-      <div className='mx-auto max-w-3xl'>
+      <div className='mx-auto max-w-6xl'>
         <div className='mb-10 flex items-center justify-between'>
           <BackButton />
 
           <div className='absolute left-1/2 -translate-x-1/2 text-center'>
-            <h2 className='text-2xl font-bold text-gray-900'>
-              {isEditing ? 'Edit Classroom' : 'Create New Classroom'}
-            </h2>
-            <p className='mt-1 text-sm text-gray-500'>Follow the steps below to set up your classroom</p>
+            <h2 className='text-2xl font-bold text-gray-900'>{tClassroom('create.header')}</h2>
+            <p className='mt-1 text-sm text-gray-500'>{tClassroom('create.subheader')}</p>
           </div>
-
-          <div className='w-[100px]'>{/* Spacer for balance */}</div>
         </div>
 
         {/* Line Container */}
@@ -72,14 +70,10 @@ export default function ClassroomStepIndicator({ currentStep, isEditing }: Class
               </div>
 
               {/* Step Info */}
-              <div className='mt-3 text-center' style={{ minWidth: '120px' }}>
+              <div className='mt-3 text-center' style={{ minWidth: '500px' }}>
                 <p
                   className={`text-sm font-semibold transition-colors ${
-                    currentStep === step.id
-                      ? 'text-sky-600'
-                      : currentStep > step.id
-                        ? 'text-blue-500'
-                        : 'text-gray-500'
+                    currentStep === step.id ? 'text-sky-600' : currentStep > step.id ? 'text-blue-500' : 'text-gray-500'
                   }`}
                 >
                   {step.title}

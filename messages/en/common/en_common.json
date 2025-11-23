@@ -1,5 +1,9 @@
 {
   "common": {
+    "search": {
+      "placeholder": "Search...",
+      "noResults": "No results found."
+    },
     "button": {
       "create": "Create New",
       "update": "Update",
@@ -71,7 +75,10 @@
       "skip": "Skip",
       "assignLicense": "Assign License",
       "clearAll": "Clear All",
-      "sendInvitations": "Send Invitations"
+      "sendInvitations": "Send Invitations",
+      "clearFilters": "Clear Filters",
+      "createClassroom": "Create Classroom",
+      "addStudents": "Add Students"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -133,8 +140,6 @@
       "pricePlan": "Price Plan",
       "expiredDate": "Expired Date",
       "curriculums": "Curriculums",
-      "accountType": "Account Type",
-      "assignedDate": "Assigned Date",
       "downloadFile": "Download File",
       "planName": "Plan Name",
       "planBillingCycle": "Plan Billing Cycle",
@@ -144,7 +149,15 @@
       "studentSeats": "Student Seats",
       "teacherSeats": "Teacher Seats",
       "action": "Action",
-      "createPlan": "Create Plan"
+      "createPlan": "Create Plan",
+      "curriculum": "Curriculum",
+      "classCode": "Class Code",
+      "grade": "Grade",
+      "teacher": "Teacher",
+      "numberOfStudents": "No. Students",
+      "numberOfCourses": "No. Courses",
+      "accountType": "Account Type",
+      "assignedDate": "Assigned Date"
     },
     "paging": {
       "previous": "Previous",
@@ -162,6 +175,7 @@
     },
     "status": {
       "all": "All",
+      "filterBy": "Filter By",
       "statusLabel": "Status",
       "active": "Active",
       "inactive": "Inactive",
@@ -181,13 +195,18 @@
       "resolved": "Resolved",
       "completed": "Completed",
       "passed": "Passed",
-      "suspended": "Suspended"
+      "suspended": "Suspended",
+      "upcoming": "Upcoming",
+      "endsoon": "End Soon",
+      "inprogress": "In Progress"
     },
     "accountType": {
       "accountTypeLabel": "Account Type",
       "admin": "Admin",
       "guest": "Guest",
       "staff": "Staff",
+      "student": "Student",
+      "teacher": "Teacher",
       "member": "Member",
       "organization_admin": "Organization Admin"
     }

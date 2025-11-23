@@ -1,5 +1,9 @@
 {
   "common": {
+    "search": {
+      "placeholder": "Tìm kiếm...",
+      "noResults": "Không tìm thấy kết quả."
+    },
     "button": {
       "create": "Tạo Mới",
       "update": "Cập Nhật",
@@ -72,7 +76,10 @@
       "skip": "Bỏ Qua",
       "assignLicense": "Gán Giấy Phép",
       "clearAll": "Xóa Tất Cả",
-      "sendInvitations": "Gửi Lời Mời"
+      "sendInvitations": "Gửi Lời Mời",
+      "clearFilters": "Xóa Bộ Lọc",
+      "createClassroom": "Tạo Lớp Học",
+      "addStudents": "Thêm Học Sinh"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",
@@ -141,7 +148,16 @@
       "studentSeats": "Ghế Học Sinh",
       "teacherSeats": "Ghế Giáo Viên",
       "avatar": "Ảnh Đại Diện",
-      "action": "Hành Động"
+      "action": "Hành Động",
+      "createPlan": "Tạo Gói",
+      "curriculum": "Chương Trình Học",
+      "classCode": "Mã Lớp Học",
+      "grade": "Lớp",
+      "teacher": "Giáo Viên",
+      "numberOfStudents": "Số Học Sinh",
+      "numberOfCourses": "Số Khóa Học",
+      "accountType": "Loại Tài Khoản",
+      "assignedDate": "Ngày Gán"
     },
     "paging": {
       "previous": "Trước",
@@ -159,6 +175,7 @@
     },
     "status": {
       "all": "Tất Cả",
+      "filterBy": "Lọc Theo",
       "statusLabel": "Trạng Thái",
       "active": "Đang Hoạt Động",
       "inactive": "Không Hoạt Động",
@@ -178,7 +195,10 @@
       "resolved": "Giải Quyết",
       "completed": "Hoàn Thành",
       "passed": "Đạt",
-      "suspended": "Tạm Ngưng"
+      "suspended": "Tạm Ngưng",
+      "upcoming": "Sắp Diễn Ra",
+      "endsoon": "Kết Thúc Sớm",
+      "inprogress": "Đang Diễn Ra"
     },
     "accountType": {
       "accountTypeLabel": "Loại Tài Khoản",
