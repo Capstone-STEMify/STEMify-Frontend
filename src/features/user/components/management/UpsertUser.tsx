@@ -7,13 +7,13 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } from '../../api/userApi'
 import { useTranslations } from 'next-intl'
 import { parseWithZod } from '@conform-to/zod/v4'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 
 const defaultUserData = {
   email: '',
   userName: '',
   password: '',
-  role: UserRole.STUDENT,
+  role: UserRole.STAFF,
   firstName: '',
   lastName: ''
 }
@@ -110,10 +110,10 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
     return <LoadingComponent />
   }
 
-  // remove guest role from options
+  // only staff and admin
   const roleOptions = Object.values(UserRole)
     .map((role) => ({ value: role, label: role }))
-    .filter((role) => role.value !== UserRole.GUEST)
+    .filter((option) => option.value === UserRole.STAFF || option.value === UserRole.ADMIN)
 
   return (
     <form

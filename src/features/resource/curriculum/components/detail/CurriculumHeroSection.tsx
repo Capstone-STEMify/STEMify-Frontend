@@ -8,7 +8,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { toast } from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import BackButton from '@/components/shared/button/BackButton'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useUpdateCourseMutation } from '@/features/resource/course/api/courseApi'
@@ -20,6 +20,7 @@ import {
   useUpdateCurriculumEnrollmentMutation
 } from '@/features/enrollment/api/curriculumEnrollmentApi'
 import { EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
+import { use } from 'matter'
 
 interface HeroSectionProps {
   curriculum: Curriculum | undefined
@@ -57,17 +58,15 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
 
   const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
-  const userRole = auth.user?.role || UserRole.GUEST
+  const userRole = useAppSelector((state) => state.selectedOrganization.currentRole)
   const params = useAppSelector((state) => state.curriculumEnrollment)
 
   const { data: curriculumEnrollment } = useSearchCurriculumEnrollmentQuery(
     {
       curriculumId: curriculum?.id,
-      studentId: auth?.user?.userId || '',
-      pageNumber: params.pageNumber,
-      pageSize: params.pageSize
+      studentId: auth?.user?.userId || ''
     },
-    { skip: !auth.user?.userId || !curriculum?.id || userRole !== UserRole.STUDENT }
+    { skip: !auth.user?.userId || !curriculum?.id || userRole !== LicenseType.STUDENT }
   )
 
   const [createEnrollment, { data: createEnrollmentResponse }] = useCreateCurriculumEnrollmentMutation()
@@ -163,7 +162,8 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
             </div>
 
             {/* if user is guest or student without enrollment */}
-            {userRole === UserRole.GUEST || (userRole === UserRole.STUDENT && !curriculumEnrollment?.data.items[0]) ? (
+            {userRole === UserRole.GUEST ||
+            (userRole === LicenseType.STUDENT && !curriculumEnrollment?.data.items[0]) ? (
               <div>
                 <div className='mt-6 flex flex-col gap-4 sm:flex-row'>
                   <Button

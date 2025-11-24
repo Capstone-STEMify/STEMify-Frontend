@@ -15,7 +15,7 @@ export default async function CodeLab({
   return (
     <div>
       <Header />
-      <div className='bg-light mx-auto mt-20 w-full py-8'>{children}</div>
+      <div className='bg-light mx-auto mt-20 w-full'>{children}</div>
     </div>
   )
 }

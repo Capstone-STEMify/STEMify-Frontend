@@ -4,6 +4,7 @@ import { Label } from '@/components/shadcn/label'
 import { Tag, GraduationCap, Users, Check, Book } from 'lucide-react'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { cn } from '@/utils/shadcn/utils'
+import { useTranslations } from 'next-intl'
 
 interface PlanCardData {
   id: number
@@ -30,12 +31,13 @@ export default function PlanSelector({
   selectedBillingCycle,
   onPlanSelect
 }: PlanSelectorProps) {
+  const to = useTranslations('organization.subscription.create')
   return (
     <div className='space-y-4'>
       <div className='flex items-center gap-2'>
         <Tag className='h-5 w-5 text-slate-600' />
         <Label className='text-base font-semibold text-slate-900'>
-          Select Plan <span className='text-red-500'>*</span>
+          {to('plan.label')} <span className='text-red-500'>*</span>
         </Label>
       </div>
 
@@ -83,7 +85,7 @@ export default function PlanSelector({
                       <div className='flex items-baseline gap-1'>
                         <span className='text-3xl font-bold text-blue-600'>{plan.price.toLocaleString()} VND</span>
                         <span className='text-sm text-slate-500'>
-                          /{selectedBillingCycle === BillingCycle.ANNUAL ? 'year' : '6 months'}
+                          /{selectedBillingCycle === BillingCycle.ANNUAL ? to('plan.annual') : to('plan.semiAnnual')}
                         </span>
                       </div>
                     </div>
@@ -92,19 +94,22 @@ export default function PlanSelector({
                       <div className='flex items-center gap-2 text-sm'>
                         <Book className='h-4 w-4 text-slate-400' />
                         <span className='text-slate-600'>
-                          <span className='font-semibold text-slate-900'>{plan.curriculumCount}</span> curriculum(s)
+                          <span className='font-semibold text-slate-900'>{plan.curriculumCount}</span>{' '}
+                          {to('plan.curriculum')}
                         </span>
                       </div>
                       <div className='flex items-center gap-2 text-sm'>
                         <GraduationCap className='h-4 w-4 text-slate-400' />
                         <span className='text-slate-600'>
-                          <span className='font-semibold text-slate-900'>{plan.maxStudentSeats}</span> student seats
+                          <span className='font-semibold text-slate-900'>{plan.maxStudentSeats}</span>{' '}
+                          {to('plan.studentSeat')}
                         </span>
                       </div>
                       <div className='flex items-center gap-2 text-sm'>
                         <Users className='h-4 w-4 text-slate-400' />
                         <span className='text-slate-600'>
-                          <span className='font-semibold text-slate-900'>{plan.maxTeacherSeats}</span> teacher seats
+                          <span className='font-semibold text-slate-900'>{plan.maxTeacherSeats}</span>{' '}
+                          {to('plan.teacherSeat')}
                         </span>
                       </div>
                     </div>

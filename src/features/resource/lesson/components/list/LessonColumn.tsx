@@ -75,7 +75,7 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
 
     updateLessonStatus({ id: lessonId, body: { status: newStatus as LessonStatus } })
       .unwrap()
-      .then(() => toast.success('Status updated'))
+      .then(() => toast.success(tt('successMessage.update', { title: newStatus })))
   }
 
   return [

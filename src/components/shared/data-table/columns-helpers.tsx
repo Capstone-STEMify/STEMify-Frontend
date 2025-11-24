@@ -13,8 +13,7 @@ import {
 } from '@/components/shadcn/dropdown-menu'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Button } from '@/components/shadcn/button'
-import { useSortable } from '@dnd-kit/sortable'
-import { IconGripVertical } from '@tabler/icons-react'
+import { useTranslations } from 'next-intl'
 
 export type ActionItem<T> = {
   label: string
@@ -60,38 +59,43 @@ export function sortableHeader(label: string) {
   }
 }
 
-export function createActionsColumnFromItems<T>(items: ActionItem<T>[], label = 'Actions'): ColumnDef<T> {
+function ActionsCell<T>({ row, items, label }: { row: Row<T>; items: ActionItem<T>[]; label: string }) {
+  const tc = useTranslations('common.tableHeader')
+
+  const visible = items.filter((i) => !i.hidden?.(row))
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant='ghost' className='h-8 w-8 p-0'>
+          <span className='sr-only'>Open menu</span>
+          <MoreHorizontal className='h-4 w-4' />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align='end'>
+        <DropdownMenuLabel>{tc(label)}</DropdownMenuLabel>
+        {visible.map((i, idx) => (
+          <React.Fragment key={idx}>
+            {i.separatorBefore && <DropdownMenuSeparator />}
+            <DropdownMenuItem
+              className={i.danger ? 'text-red-600' : undefined}
+              disabled={i.disabled?.(row)}
+              onClick={() => i.onClick?.(row)}
+            >
+              {i.label}
+            </DropdownMenuItem>
+          </React.Fragment>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+export function createActionsColumnFromItems<T>(items: ActionItem<T>[], label = 'action'): ColumnDef<T> {
   return {
     id: 'actions',
     enableHiding: false,
-    cell: ({ row }) => {
-      const visible = items.filter((i) => !i.hidden?.(row))
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='ghost' className='h-8 w-8 p-0'>
-              <span className='sr-only'>Open menu</span>
-              <MoreHorizontal className='h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>{label}</DropdownMenuLabel>
-            {visible.map((i, idx) => (
-              <React.Fragment key={idx}>
-                {i.separatorBefore && <DropdownMenuSeparator />}
-                <DropdownMenuItem
-                  className={i.danger ? 'text-red-600' : undefined}
-                  disabled={i.disabled?.(row)}
-                  onClick={() => i.onClick?.(row)}
-                >
-                  {i.label}
-                </DropdownMenuItem>
-              </React.Fragment>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    }
+    cell: ({ row }) => <ActionsCell row={row} items={items} label={label} />
   }
 }
 

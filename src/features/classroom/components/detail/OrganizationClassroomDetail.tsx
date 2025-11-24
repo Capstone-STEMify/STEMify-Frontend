@@ -12,14 +12,10 @@ import {
   Users,
   BookOpen,
   Copy,
-  Settings,
   UserPlus,
   MoreVertical,
   ArrowLeft,
-  Clock,
   GraduationCap,
-  Mail,
-  Edit,
   Edit2,
   Trash2
 } from 'lucide-react'
@@ -30,8 +26,16 @@ import Image from 'next/image'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useModal } from '@/providers/ModalProvider'
 import { useState } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
+import { toast } from 'sonner'
+import { formatDate, useStatusTranslation } from '@/utils/index'
 
 export default function OrganizationClassroomDetail() {
+  const tClassroom = useTranslations('classroom')
+  const tc = useTranslations('common')
+  const statusTranslations = useStatusTranslation()
+  const locale = useLocale()
+
   const { openModal } = useModal()
   const { classroomId } = useParams()
   const { data, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
@@ -51,7 +55,7 @@ export default function OrganizationClassroomDetail() {
   const copyClassCode = () => {
     if (classroom?.classCode) {
       navigator.clipboard.writeText(classroom.classCode)
-      // You can add a toast notification here
+      toast.success(tClassroom('detail.classCode.copySuccess'))
     }
   }
 
@@ -77,10 +81,10 @@ export default function OrganizationClassroomDetail() {
     return (
       <div className='flex min-h-screen items-center justify-center bg-slate-50/50'>
         <div className='text-center'>
-          <h2 className='mb-2 text-2xl font-bold text-slate-900'>Classroom not found</h2>
-          <p className='mb-6 text-slate-600'>The classroom you're looking for doesn't exist.</p>
+          <h2 className='mb-2 text-2xl font-bold text-slate-900'>{tClassroom('detail.notFound')}</h2>
+          <p className='mb-6 text-slate-600'>{tClassroom('detail.notFoundSubtext')}</p>
           <Link href='/organization/classroom'>
-            <Button>Back to Classrooms</Button>
+            <Button>{tClassroom('detail.backToClassrooms')}</Button>
           </Link>
         </div>
       </div>
@@ -94,7 +98,7 @@ export default function OrganizationClassroomDetail() {
         <Link href='/organization/classroom'>
           <Button variant='ghost' className='mb-6 -ml-2'>
             <ArrowLeft className='mr-2 h-4 w-4' />
-            Back to Classrooms
+            {tClassroom('detail.backToClassrooms')}
           </Button>
         </Link>
 
@@ -104,7 +108,9 @@ export default function OrganizationClassroomDetail() {
             <div className='flex-1'>
               <div className='mb-2 flex items-center gap-3'>
                 <h1 className='text-4xl font-bold text-slate-900'>{classroom.name}</h1>
-                <Badge className={`border ${getStatusBadgeClass(classroom.status)}`}>{classroom.status}</Badge>
+                <Badge className={`border ${getStatusBadgeClass(classroom.status)}`}>
+                  {statusTranslations(classroom.status)}
+                </Badge>
               </div>
               <div className='flex items-center gap-4 text-slate-600'>
                 <div className='flex items-center gap-2'>
@@ -113,13 +119,15 @@ export default function OrganizationClassroomDetail() {
                 </div>
                 <div className='flex items-center gap-2'>
                   <Users className='h-4 w-4' />
-                  <span className='text-sm font-medium'>{classroom.numberOfStudents} Students</span>
+                  <span className='text-sm font-medium'>
+                    {classroom.numberOfStudents} {tClassroom('detail.students.label')}
+                  </span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <Calendar className='h-4 w-4' />
                   <span className='text-sm'>
-                    {format(new Date(classroom.startDate), 'MMM dd, yyyy')} -{' '}
-                    {format(new Date(classroom.endDate), 'MMM dd, yyyy')}
+                    {formatDate(classroom.startDate, { locale: locale as 'en' | 'vi' })} -{' '}
+                    {formatDate(classroom.endDate, { locale: locale as 'en' | 'vi' })}
                   </span>
                 </div>
               </div>
@@ -152,7 +160,7 @@ export default function OrganizationClassroomDetail() {
                   <CardTitle className='flex items-center justify-between gap-2 text-lg'>
                     <div className='flex items-center gap-2 text-lg'>
                       <BookOpen className='h-5 w-5 text-purple-500' />
-                      Curriculum
+                      {tClassroom('detail.curriculum.label')}
                     </div>
                     <button
                       onClick={() =>
@@ -186,7 +194,9 @@ export default function OrganizationClassroomDetail() {
                       <div className='flex items-center gap-4 text-sm'>
                         <div className='flex items-center gap-1.5 text-slate-600'>
                           <BookOpen className='h-4 w-4' />
-                          <span>{classroom.curriculum.courseCount} Courses</span>
+                          <span>
+                            {classroom.curriculum.courseCount} {tClassroom('detail.courses')}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -201,12 +211,14 @@ export default function OrganizationClassroomDetail() {
                 <div className='flex items-center justify-between'>
                   <CardTitle className='flex items-center gap-2 text-lg'>
                     <Users className='h-5 w-5 text-blue-600' />
-                    Students ({classroom.numberOfStudents})
+                    {tClassroom('detail.students.label')} ({classroom.numberOfStudents})
                   </CardTitle>
 
                   <div className='flex items-center gap-2'>
                     {selectedStudents.length > 0 && (
-                      <span className='text-sm text-slate-500'>{selectedStudents.length} selected</span>
+                      <span className='text-sm text-slate-500'>
+                        {selectedStudents.length} {tClassroom('detail.selected')}
+                      </span>
                     )}
                     {selectedStudents.length > 0 && (
                       <Button
@@ -228,13 +240,13 @@ export default function OrganizationClassroomDetail() {
                         }
                       >
                         <Trash2 className='mr-2 h-4 w-4' />
-                        Remove
+                        {tc('button.remove')}
                       </Button>
                     )}
 
                     <Button size='sm' onClick={() => openModal('addPeople')}>
                       <UserPlus className='mr-2 h-4 w-4' />
-                      Add Student
+                      {tc('button.addStudents')}
                     </Button>
                   </div>
                 </div>
@@ -253,7 +265,7 @@ export default function OrganizationClassroomDetail() {
                           type='checkbox'
                           checked={isSelected(student.id)}
                           onChange={() => toggleSelect(student.id)}
-                          className='h-4 w-4 accent-blue-600'
+                          className='hidden h-4 w-4 accent-blue-600'
                         />
 
                         <Avatar className='h-10 w-10 border-2 border-white shadow-sm'>
@@ -269,21 +281,17 @@ export default function OrganizationClassroomDetail() {
                             <p className='text-sm text-slate-500'>{student.email || student.Email}</p>
                           )}
                         </div>
-
-                        <Button variant='ghost' size='icon'>
-                          <MoreVertical className='h-4 w-4 text-slate-400' />
-                        </Button>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className='py-12 text-center'>
                     <Users className='mx-auto mb-3 h-12 w-12 text-slate-300' />
-                    <h3 className='mb-1 font-semibold text-slate-700'>No students yet</h3>
-                    <p className='mb-4 text-sm text-slate-500'>Start building your class by adding students</p>
+                    <h3 className='mb-1 font-semibold text-slate-700'>{tc('classroom.detail.students.noStudent')}</h3>
+                    <p className='mb-4 text-sm text-slate-500'>{tc('classroom.detail.students.noStudentSubtext')}</p>
                     <Button>
                       <UserPlus className='mr-2 h-4 w-4' />
-                      Add First Student
+                      {tc('button.addStudents')}
                     </Button>
                   </div>
                 )}
@@ -296,7 +304,7 @@ export default function OrganizationClassroomDetail() {
             {/* Class Code Card */}
             <Card className='border border-slate-200 py-4 shadow-sm'>
               <CardHeader className='pb-3'>
-                <CardTitle className='text-base'>Class Code</CardTitle>
+                <CardTitle className='text-base'>{tClassroom('detail.classCode.label')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className='space-y-3'>
@@ -308,7 +316,7 @@ export default function OrganizationClassroomDetail() {
                       <Copy className='h-4 w-4' />
                     </Button>
                   </div>
-                  <p className='text-center text-xs text-slate-500'>Share this code with students to join the class</p>
+                  <p className='text-center text-xs text-slate-500'>{tClassroom('detail.classCode.description')}</p>
                 </div>
               </CardContent>
             </Card>
@@ -318,7 +326,7 @@ export default function OrganizationClassroomDetail() {
               <Card className='border border-slate-200 py-4 shadow-sm'>
                 <CardHeader className='pb-3'>
                   <CardTitle className='flex justify-between text-base'>
-                    Teacher{' '}
+                    {tClassroom('detail.teacher')}
                     <button
                       onClick={() =>
                         openModal('updateClassroomOrganization', { classroomId: classroom.id, mode: 'teacher' })
@@ -328,7 +336,7 @@ export default function OrganizationClassroomDetail() {
                     </button>
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                {/* <CardContent>
                   <div className='flex items-start gap-3'>
                     <Avatar className='h-12 w-12 border-2 border-white shadow-md'>
                       <AvatarImage src={classroom.teacher.imageUrl} />
@@ -349,7 +357,7 @@ export default function OrganizationClassroomDetail() {
                       </div>
                     </div>
                   </div>
-                </CardContent>
+                </CardContent> */}
               </Card>
             )}
 
@@ -367,7 +375,7 @@ export default function OrganizationClassroomDetail() {
                           />
                         </svg>
                       </div>
-                      <span className='font-semibold text-slate-900'>Meet</span>
+                      <span className='font-semibold text-slate-900'>{tClassroom('detail.meet.label')}</span>
                     </div>
                     <Button variant='ghost' size='icon' className='h-8 w-8'>
                       <MoreVertical className='h-4 w-4 text-slate-600' />
@@ -375,15 +383,8 @@ export default function OrganizationClassroomDetail() {
                   </div>
 
                   <Button className='w-full border-2 border-slate-300 bg-white text-blue-600 hover:bg-slate-50'>
-                    Join
+                    {tClassroom('detail.meet.joinButton')}
                   </Button>
-
-                  <div className='flex items-center gap-2 text-sm text-slate-600'>
-                    <svg viewBox='0 0 24 24' className='h-4 w-4' fill='currentColor'>
-                      <path d='M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z' />
-                    </svg>
-                    <span>Visible to students</span>
-                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -391,25 +392,23 @@ export default function OrganizationClassroomDetail() {
             {/* Quick Stats Card */}
             <Card className='border border-slate-200 py-4 shadow-sm'>
               <CardHeader className='pb-3'>
-                <CardTitle className='text-base'>Quick Stats</CardTitle>
+                <CardTitle className='text-base'>{tClassroom('detail.quickStats.label')}</CardTitle>
               </CardHeader>
               <CardContent className='space-y-4'>
                 <div className='flex items-center justify-between'>
-                  <span className='text-sm text-slate-600'>Created</span>
+                  <span className='text-sm text-slate-600'>{tClassroom('detail.quickStats.createdDate')}</span>
                   <span className='text-sm font-medium text-slate-900'>
-                    {format(new Date(classroom.createdAt), 'MMM dd, yyyy')}
+                    {formatDate(classroom.createdAt, { locale: locale as 'en' | 'vi' })}
                   </span>
                 </div>
-                <Separator />
                 <div className='flex items-center justify-between'>
-                  <span className='text-sm text-slate-600'>Last Updated</span>
+                  <span className='text-sm text-slate-600'>{tClassroom('detail.quickStats.lastUpdated')}</span>
                   <span className='text-sm font-medium text-slate-900'>
-                    {format(new Date(classroom.updatedAt), 'MMM dd, yyyy')}
+                    {formatDate(classroom.updatedAt, { locale: locale as 'en' | 'vi' })}
                   </span>
                 </div>
-                <Separator />
                 <div className='flex items-center justify-between'>
-                  <span className='text-sm text-slate-600'>Duration</span>
+                  <span className='text-sm text-slate-600'>{tClassroom('detail.quickStats.duration')}</span>
                   <span className='text-sm font-medium text-slate-900'>
                     {Math.ceil(
                       (new Date(classroom.endDate).getTime() - new Date(classroom.startDate).getTime()) /

@@ -28,11 +28,11 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
   const curriculumEnrollParams = useAppSelector((state) => state.curriculumEnrollment)
 
   const { data: courseEnrollment, isLoading: isLoadingCourseEnrollment } = useSearchCourseEnrollmentQuery(
-    { studentId, ...courseEnrollParams },
+    { studentId },
     { skip: !studentId }
   )
   const { data: curriculumEnrollment, isLoading: isLoadingCurriculumEnrollment } = useSearchCurriculumEnrollmentQuery(
-    { studentId, ...curriculumEnrollParams },
+    { studentId },
     { skip: !studentId }
   )
 

@@ -9,6 +9,7 @@ import ManualEntryTab from '@/features/license-assignment/components/modal/Manua
 import { useUploadCSVBulkMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { toast } from 'sonner'
 import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 export type UploadCSVModalProps = {
   organizationSubscriptionOrderId?: number
@@ -21,6 +22,9 @@ interface UploadedFile {
 }
 
 export default function UploadCSVModal({ organizationSubscriptionOrderId }: UploadCSVModalProps) {
+  const tc = useTranslations('common')
+  const to = useTranslations('organization.license')
+
   const { closeModal } = useModal()
   const [activeTab, setActiveTab] = useState('csv')
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null)
@@ -43,7 +47,7 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
 
   const handleSubmitCSV = async () => {
     if (!uploadedFile) {
-      toast.error('Please upload a CSV file')
+      toast.error(to('pleaseUploadCSV'))
       return
     }
 
@@ -52,11 +56,10 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
       try {
         const csvBase64 = (event.target?.result as string).split(',')[1]
 
-        // TODO: Replace hardcoded organization_id with actual value
         const payload = {
-          organization_id: String(organizationId), // Replace with actual organization ID
+          organization_id: String(organizationId),
           body: {
-            organization_id: String(organizationId), // Replace with actual organization ID
+            organization_id: String(organizationId),
             csv_data: csvBase64,
             file_name: uploadedFile.file.name,
             subscription_order_id: String(organizationSubscriptionOrderId)
@@ -64,7 +67,7 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
         }
 
         const res = await uploadCSVBulk(payload).unwrap()
-        toast.success('CSV uploaded successfully!')
+        toast.success(to('uploadSuccess'))
         closeModal()
       } catch (error: any) {
         toast.error(error?.data?.message || 'Failed to upload CSV')
@@ -81,14 +84,14 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className='h-fit w-full max-w-xl'>
-        <DialogTitle>Invite Users</DialogTitle>
+        <DialogTitle>{to('inviteUsers')}</DialogTitle>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className='mb-4 w-full'>
             <TabsTrigger value='csv' className='flex-1'>
-              Upload CSV
+              {to('uploadCSV')}
             </TabsTrigger>
             <TabsTrigger value='manual' className='flex-1'>
-              Enter Emails
+              {to('enterEmails')}
             </TabsTrigger>
           </TabsList>
 
@@ -98,7 +101,7 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
             {/* Action Buttons for CSV Tab */}
             <div className='flex justify-end gap-2 border-t pt-4'>
               <Button variant='outline' onClick={closeModal}>
-                Cancel
+                {tc('button.cancel')}
               </Button>
               <Button
                 onClick={handleSubmitCSV}
@@ -108,10 +111,10 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
                 {isLoading ? (
                   <span className='flex items-center gap-2'>
                     <span className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent'></span>
-                    Uploading...
+                    {tc('button.submitting')}
                   </span>
                 ) : (
-                  'Save'
+                  tc('button.save')
                 )}
               </Button>
             </div>

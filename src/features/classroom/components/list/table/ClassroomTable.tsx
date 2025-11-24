@@ -7,7 +7,7 @@ import { useGetClassroomColumn } from '@/features/classroom/components/list/tabl
 import { useSearchClassroomsQuery } from '@/features/classroom/api/classroomApi'
 import { useModal } from '@/providers/ModalProvider'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Input } from '@/components/shadcn/input'
 import SSelect from '@/components/shared/SSelect'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
@@ -18,7 +18,9 @@ import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/cur
 import { getOptions } from '@/utils/index'
 
 export default function ClassroomTable() {
-  const { openModal } = useModal()
+  const tClassroom = useTranslations('classroom')
+  const tc = useTranslations('common')
+
   const router = useRouter()
   const locale = useLocale()
   const dispatch = useAppDispatch()
@@ -78,13 +80,16 @@ export default function ClassroomTable() {
   })
 
   const statusOptions = [
-    { label: 'Upcoming', value: 'upcoming' },
-    { label: 'In Progress', value: 'inprogress' },
-    { label: 'End Soon', value: 'endsoon' },
-    { label: 'Completed', value: 'completed' }
+    { label: tc('status.upcoming'), value: 'upcoming' },
+    { label: tc('status.inprogress'), value: 'inprogress' },
+    { label: tc('status.endsoon'), value: 'endsoon' },
+    { label: tc('status.completed'), value: 'completed' }
   ]
 
-  const curriculumOptions = getOptions(curriculumData?.data.items, 'title', 'imageUrl', 'courseCount')
+  const curriculumOptions = getOptions(curriculumData?.data.items, 'title', 'imageUrl', 'courseCount').map((opt) => ({
+    ...opt,
+    subLabel: opt.subLabel ? `${opt.subLabel} ${tClassroom('list.courses')}` : undefined
+  }))
 
   useEffect(() => {
     dispatch(setSearchTerm(debouncedSearchQuery))
@@ -95,17 +100,17 @@ export default function ClassroomTable() {
       {/* Header */}
       <div className='flex items-center justify-between'>
         <div>
-          <h1 className='text-2xl font-bold'>Classroom List</h1>
+          <h1 className='text-2xl font-bold'>{tClassroom('list.header')}</h1>
         </div>
         <div className='flex gap-2'>
           <Button variant='outline' onClick={() => dispatch(resetParams())} className='hover:bg-slate-100'>
-            Clear Filter
+            {tc('button.clearFilters')}
           </Button>
           <Button
             className='bg-sky-600 text-white hover:bg-sky-700'
             onClick={() => router.push(`/${locale}/organization/classroom/create`)}
           >
-            + Create class
+            + {tc('button.createClassroom')}
           </Button>
         </div>
       </div>
@@ -115,7 +120,7 @@ export default function ClassroomTable() {
         <div className='flex gap-2'>
           <Input
             type='text'
-            placeholder='Search...'
+            placeholder={tClassroom('list.searchPlaceholder')}
             onChange={(e) => setSearch(e.target.value)}
             className='w-80 bg-white py-4.5'
             style={{ width: '320px' }}
@@ -123,13 +128,13 @@ export default function ClassroomTable() {
           <SingleSelectWithSearch
             value={queryParams.curriculumId?.toString() ?? ''}
             options={curriculumOptions}
-            placeholder='Select curriculum'
+            placeholder={tClassroom('list.selectCurriculumPlaceholder')}
             onChange={(val) => dispatch(setParam({ key: 'curriculumId', value: Number(val) }))}
           />
         </div>
         <div className='flex gap-2'>
           <SSelect
-            placeholder='Filter by'
+            placeholder={tc('status.filterBy')}
             value={queryParams.status ?? ''}
             onChange={(val) =>
               dispatch(setParam({ key: 'status', value: val as 'upcoming' | 'inprogress' | 'endsoon' | 'completed' }))

@@ -1,5 +1,9 @@
 {
   "common": {
+    "search": {
+      "placeholder": "Search...",
+      "noResults": "No results found."
+    },
     "button": {
       "create": "Create New",
       "update": "Update",
@@ -71,6 +75,17 @@
       "month": "Month",
       "quarter": "Quarter",
       "year": "Year"
+      "submitting": "Submitting...",
+      "createUser": "Create User",
+      "next": "Next",
+      "step": "Step",
+      "skip": "Skip",
+      "assignLicense": "Assign License",
+      "clearAll": "Clear All",
+      "sendInvitations": "Send Invitations",
+      "clearFilters": "Clear Filters",
+      "createClassroom": "Create Classroom",
+      "addStudents": "Add Students"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -132,8 +147,6 @@
       "pricePlan": "Price Plan",
       "expiredDate": "Expired Date",
       "curriculums": "Curriculums",
-      "accountType": "Account Type",
-      "assignedDate": "Assigned Date",
       "downloadFile": "Download File",
       "planName": "Plan Name",
       "planBillingCycle": "Plan Billing Cycle",
@@ -142,7 +155,16 @@
       "grossAmount": "Gross Amount",
       "studentSeats": "Student Seats",
       "teacherSeats": "Teacher Seats",
-      "action": "Action"
+      "action": "Action",
+      "createPlan": "Create Plan",
+      "curriculum": "Curriculum",
+      "classCode": "Class Code",
+      "grade": "Grade",
+      "teacher": "Teacher",
+      "numberOfStudents": "No. Students",
+      "numberOfCourses": "No. Courses",
+      "accountType": "Account Type",
+      "assignedDate": "Assigned Date"
     },
     "paging": {
       "previous": "Previous",
@@ -157,6 +179,43 @@
     },
     "badge": {
       "selected": "Selected"
+    },
+    "status": {
+      "all": "All",
+      "filterBy": "Filter By",
+      "statusLabel": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived",
+      "unpublished": "Unpublished",
+      "inProgress": "In Progress",
+      "submitted": "Submitted",
+      "deleted": "Deleted",
+      "expired": "Expired",
+      "cancelled": "Cancelled",
+      "failed": "Failed",
+      "resolved": "Resolved",
+      "completed": "Completed",
+      "passed": "Passed",
+      "suspended": "Suspended",
+      "upcoming": "Upcoming",
+      "endsoon": "End Soon",
+      "inprogress": "In Progress"
+    },
+    "accountType": {
+      "accountTypeLabel": "Account Type",
+      "admin": "Admin",
+      "guest": "Guest",
+      "staff": "Staff",
+      "student": "Student",
+      "teacher": "Teacher",
+      "member": "Member",
+      "organization_admin": "Organization Admin"
     }
   }
 }

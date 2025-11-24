@@ -66,6 +66,14 @@ export type CourseEnrollmentQueryParams = {
   courseId?: number
 } & SearchPaginatedRequestParams
 
+export type CurriculumEnrollmentQueryParams = {
+  studentId?: string
+  curriculumId?: number
+  certificateId?: number
+  verificationCode?: string
+  classroomId?: number
+} & SearchPaginatedRequestParams
+
 // Slice
 export type CourseEnrollmentSliceParams = {
   studentId?: string

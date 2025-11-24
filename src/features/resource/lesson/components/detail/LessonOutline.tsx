@@ -17,6 +17,8 @@ type LessonOutlineProps = {
 export default function LessonOutline({ sectionData, sectionStatus }: LessonOutlineProps) {
   const dispatch = useAppDispatch()
   const { selectedSectionId } = useAppSelector((state) => state.lessonDetail)
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
+
   const t = useTranslations('LessonDetails')
   const { data: userData } = useSession()
 
@@ -29,7 +31,6 @@ export default function LessonOutline({ sectionData, sectionStatus }: LessonOutl
   )
 
   const isLoggedIn = !!userData
-  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
   const isVisibleSection = role === LicenseType.TEACHER || role === UserRole.ADMIN || role === UserRole.STAFF
 
   return (

@@ -25,7 +25,7 @@ export function OrganizationSwitcher() {
   const selectedOrganizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
   const { data: licenseAssignmentData, isLoading } = useSearchLicenseAssignmentQuery(
-    { userId: user?.userId, status: LicenseAssignmentStatus.ACTIVE, pageSize: 5, pageNumber: 1 },
+    { userId: user?.userId, status: LicenseAssignmentStatus.ACTIVE, pageSize: 10, pageNumber: 1 },
     { skip: !user?.userId }
   )
 

@@ -15,6 +15,7 @@ import { UserRole } from '@/types/userRole'
 import { cn } from '@/utils/shadcn/utils'
 import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
 import { useAppSelector } from '@/hooks/redux-hooks'
+import { useTranslations } from 'next-intl'
 
 // 🎨 Hàm tạo màu avatar từ email
 const getAvatarColor = (email: string) => {
@@ -50,6 +51,9 @@ const UserAvatar = ({ email, userName }: { email: string; userName: string }) =>
 }
 
 export default function AddPeopleModal() {
+  const tClassroom = useTranslations('classroom')
+  const tc = useTranslations('common')
+
   const { closeModal } = useModal()
   const { classroomId } = useParams()
   const [addStudents, { isLoading }] = useAddClassroomStudentsMutation()
@@ -171,15 +175,13 @@ export default function AddPeopleModal() {
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
             <UserPlus className='h-5 w-5' />
-            Add Students
+            {tClassroom('update.students.addStudents')}
           </DialogTitle>
         </DialogHeader>
 
         <div className='space-y-2'>
-          <label className='text-sm font-medium text-gray-700'>Student Emails</label>
-          <p className='text-xs text-gray-500'>
-            Search by name or email, or paste multiple emails separated by commas, spaces, or semicolons
-          </p>
+          <label className='text-sm font-medium text-gray-700'>{tClassroom('update.students.studentEmail')}</label>
+          <p className='text-xs text-gray-500'>{tClassroom('update.students.studentEmailSubtext')}</p>
 
           <div className='relative' ref={dropdownRef}>
             {/* Input Container */}
@@ -224,7 +226,7 @@ export default function AddPeopleModal() {
                   }}
                   onKeyDown={handleKeyDown}
                   onPaste={handlePaste}
-                  placeholder={studentEmails.length === 0 ? 'Search or type email...' : ''}
+                  placeholder={studentEmails.length === 0 ? tClassroom('update.students.searchStudent') : ''}
                   className='h-auto flex-1 border-none p-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0'
                 />
               </div>
@@ -236,7 +238,7 @@ export default function AddPeopleModal() {
                 {isSearching ? (
                   <div className='flex items-center justify-center p-8 text-sm text-gray-500'>
                     <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                    Searching students...
+                    {tClassroom('update.students.searchingStudents')}
                   </div>
                 ) : students.length > 0 ? (
                   <ul className='py-1'>
@@ -276,8 +278,10 @@ export default function AddPeopleModal() {
                   </ul>
                 ) : debouncedKeyword.trim() ? (
                   <div className='p-8 text-center'>
-                    <div className='text-sm text-gray-500'>No students found for "{debouncedKeyword}"</div>
-                    <div className='mt-1 text-xs text-gray-400'>Try a different search or paste email directly</div>
+                    <div className='text-sm text-gray-500'>
+                      {tc('update.students.noStudentFound')} "{debouncedKeyword}"
+                    </div>
+                    <div className='mt-1 text-xs text-gray-400'>{tc('update.students.noStudentFoundSubtext')}</div>
                   </div>
                 ) : null}
               </div>
@@ -287,7 +291,7 @@ export default function AddPeopleModal() {
           {/* Counter */}
           {studentEmails.length > 0 && (
             <div className='text-xs text-gray-500'>
-              {studentEmails.length} student{studentEmails.length !== 1 ? 's' : ''} selected
+              {studentEmails.length} {tClassroom('update.students.students')} {tClassroom('update.students.selected')}
             </div>
           )}
         </div>
@@ -295,18 +299,18 @@ export default function AddPeopleModal() {
         <DialogFooter className='mt-6 flex justify-between sm:justify-between'>
           <Button variant='outline' onClick={clearAll} disabled={!studentEmails.length} className='gap-2'>
             <X className='h-4 w-4' />
-            Clear All
+            {tc('button.clearAll')}
           </Button>
           <Button onClick={handleSubmit} disabled={!studentEmails.length || isLoading} className='gap-2'>
             {isLoading ? (
               <>
                 <Loader2 className='h-4 w-4 animate-spin' />
-                Adding...
+                {tc('button.submitting')}...
               </>
             ) : (
               <>
                 <UserPlus className='h-4 w-4' />
-                Add {studentEmails.length} Student{studentEmails.length !== 1 ? 's' : ''}
+                Add {studentEmails.length} {tClassroom('update.students.students')}
               </>
             )}
           </Button>

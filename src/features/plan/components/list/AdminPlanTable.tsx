@@ -23,8 +23,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu'
+import { useLocale, useTranslations } from 'next-intl'
+import { title } from 'process'
 
 export default function AdminPlanTable() {
+  const tt = useTranslations('toast')
+  const tc = useTranslations('common')
+  const tp = useTranslations('plan')
+
+  const locale = useLocale()
+
   const { openModal } = useModal()
   const [expandedPlans, setExpandedPlans] = useState<number[]>([])
   const dispatch = useAppDispatch()
@@ -79,10 +87,10 @@ export default function AdminPlanTable() {
   const handleStatusChange = (plan: any, newStatus: string) => {
     if (newStatus === PlanStatus.DELETED) {
       openModal('confirm', {
-        message: 'Are you sure you want to delete this plan?',
+        message: tt('confirmMessage.delete', { title: plan.name }),
         onConfirm: async () => {
           await deletePlan(plan.id)
-          toast.success('Plan deleted successfully')
+          toast.success(tt('successMessage.delete'))
         }
       })
       return
@@ -90,7 +98,7 @@ export default function AdminPlanTable() {
 
     updatePlan({ id: plan.id, body: { status: newStatus as PlanStatus } })
       .unwrap()
-      .then(() => toast.success('Status updated'))
+      .then(() => toast.success(tt('successMessage.update', { title: newStatus })))
   }
 
   const handlePublishPlan = (planId: number) => {
@@ -105,12 +113,12 @@ export default function AdminPlanTable() {
       <div className='mx-auto max-w-7xl space-y-6'>
         <div className='flex items-center justify-between'>
           <div>
-            <h1 className='text-foreground text-3xl font-bold'>Plan Management</h1>
-            <p className='text-muted-foreground mt-1'>Manage subscription plans and pricing tiers</p>
+            <h1 className='text-foreground'>{tp('list.header')}</h1>
+            <p className='text-muted-foreground mt-1'>{tp('list.headerDescription')}</p>
           </div>
           <div className='flex gap-4'>
             <SSelect
-              placeholder='status'
+              placeholder={tc('status.statusLabel')}
               value={planSliceParams.status?.toString() ?? ''}
               onChange={(val) => {
                 if (val === 'all') {
@@ -122,7 +130,7 @@ export default function AdminPlanTable() {
               options={statusOptions.filter((opt) => opt.value !== PlanStatus.DELETED)}
             />
             <Button onClick={() => openModal('upsertPlan')} className='bg-blue-500'>
-              Create New Plan
+              {tc('button.createPlan')}
             </Button>
           </div>
 
@@ -134,12 +142,12 @@ export default function AdminPlanTable() {
             <TableHeader>
               <TableRow>
                 <TableHead className='w-[50px]'></TableHead>
-                <TableHead>Plan Name</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Curriculums</TableHead>
-                <TableHead>Created Date</TableHead>
-                <TableHead>Action</TableHead>
+                <TableHead>{tc('tableHeader.planName')}</TableHead>
+                <TableHead>{tc('tableHeader.description')}</TableHead>
+                <TableHead>{tc('tableHeader.status')}</TableHead>
+                <TableHead>{tc('tableHeader.curriculums')}</TableHead>
+                <TableHead>{tc('tableHeader.createdAt')}</TableHead>
+                <TableHead>{tc('tableHeader.action')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -172,7 +180,9 @@ export default function AdminPlanTable() {
                         <TableCell>
                           <Badge className='bg-emerald-700 text-white'>{plan.curriculumCount}</Badge>
                         </TableCell>
-                        <TableCell className='text-muted-foreground text-sm'>{formatDate(plan.createdAt)}</TableCell>
+                        <TableCell className='text-muted-foreground text-sm'>
+                          {formatDate(plan.createdAt, { locale: locale as 'en' | 'vi' })}
+                        </TableCell>
                         <TableCell className='text-right'>
                           <div className='flex items-center justify-end gap-2'>
                             <DropdownMenu>
@@ -190,7 +200,7 @@ export default function AdminPlanTable() {
                                       openModal('upsertPlan', { planId: plan.id })
                                     }}
                                   >
-                                    Update
+                                    {tp('update')}
                                   </DropdownMenuItem>
                                 )}
 
@@ -200,15 +210,15 @@ export default function AdminPlanTable() {
                                     onClick={(e) => {
                                       e.stopPropagation()
                                       openModal('confirm', {
-                                        message: 'Are you sure you want to delete this plan?',
+                                        message: tt('confirmMessage.delete', { title: plan.name }),
                                         onConfirm: async () => {
                                           await deletePlan(plan.id)
-                                          toast.success('Plan deleted successfully')
+                                          toast.success(tt('successMessage.delete'))
                                         }
                                       })
                                     }}
                                   >
-                                    Delete
+                                    {tp('delete')}
                                   </DropdownMenuItem>
                                 )}
                               </DropdownMenuContent>
@@ -230,7 +240,7 @@ export default function AdminPlanTable() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} className='text-muted-foreground py-4 text-center'>
-                    No plans available.
+                    {tp('list.noData')}
                   </TableCell>
                 </TableRow>
               )}

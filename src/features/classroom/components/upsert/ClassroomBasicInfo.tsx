@@ -11,6 +11,7 @@ import { Button } from '@/components/shadcn/button'
 import { CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/utils/shadcn/utils'
+import { useTranslations } from 'next-intl'
 
 type ClassroomBasicInfoProps = {
   form: any
@@ -18,26 +19,19 @@ type ClassroomBasicInfoProps = {
   gradeOptions: { label: string; value: string }[]
   minDate: Date | undefined
   maxDate: Date | undefined
-  setMinDate: (date: Date | undefined) => void
-  setMaxDate: (date: Date | undefined) => void
 }
 
-const DURATION_OPTIONS = [
-  { label: '4 Weeks', value: '4' },
-  { label: '6 Weeks', value: '6' },
-  { label: '8 Weeks', value: '8' },
-  { label: '10 Weeks', value: '10' },
-  { label: 'Custom', value: 'custom' }
-]
+export default function ClassroomBasicInfo({ form, gradeOptions, minDate, maxDate }: ClassroomBasicInfoProps) {
+  const tClassroom = useTranslations('classroom.create.step1')
 
-export default function ClassroomBasicInfo({
-  form,
-  gradeOptions,
-  minDate,
-  maxDate,
-  setMinDate,
-  setMaxDate
-}: ClassroomBasicInfoProps) {
+  const DURATION_OPTIONS = [
+    { label: `4 ${tClassroom('weeks')}`, value: '4' },
+    { label: `6 ${tClassroom('weeks')}`, value: '6' },
+    { label: `8 ${tClassroom('weeks')}`, value: '8' },
+    { label: `10 ${tClassroom('weeks')}`, value: '10' },
+    { label: `${tClassroom('custom')}`, value: 'custom' }
+  ]
+
   const [name, setName] = useState('')
   const [classCode, setClassCode] = useState('')
   const [grade, setGrade] = useState('')
@@ -114,15 +108,15 @@ export default function ClassroomBasicInfo({
   }, [endDate])
 
   return (
-    <div className='animate-fadeIn mx-auto max-w-4xl space-y-6'>
+    <div className='animate-fadeIn mx-auto max-w-6xl space-y-6'>
       <div className='rounded-lg border bg-white p-6 shadow-sm'>
-        <h3 className='mb-4 text-lg font-semibold text-gray-900'>Basic Information</h3>
+        <h3 className='mb-4 text-lg font-semibold text-gray-900'>{tClassroom('basicInfo')}</h3>
 
         <div className='space-y-4'>
           {/* Classroom Name */}
           <div className='space-y-2'>
             <Label htmlFor='name'>
-              Classroom Name <span className='text-red-500'>*</span>
+              {tClassroom('className')} <span className='text-red-500'>*</span>
             </Label>
             <Input id='name' placeholder='e.g., STEM-1A-2025' value={name} onChange={(e) => setName(e.target.value)} />
           </div>
@@ -131,7 +125,7 @@ export default function ClassroomBasicInfo({
           <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
             <div className='space-y-2'>
               <Label htmlFor='classCode'>
-                Class Code <span className='text-red-500'>*</span>
+                {tClassroom('classCode')} <span className='text-red-500'>*</span>
               </Label>
               <Input
                 id='classCode'
@@ -143,11 +137,11 @@ export default function ClassroomBasicInfo({
 
             <div className='space-y-2'>
               <Label htmlFor='grade'>
-                Grade Level <span className='text-red-500'>*</span>
+                {tClassroom('gradeLevel')} <span className='text-red-500'>*</span>
               </Label>
               <Select value={grade} onValueChange={setGrade}>
                 <SelectTrigger>
-                  <SelectValue placeholder='Select grade' />
+                  <SelectValue placeholder={tClassroom('selectGrade')} />
                 </SelectTrigger>
                 <SelectContent>
                   {gradeOptions.map((option) => (
@@ -162,10 +156,10 @@ export default function ClassroomBasicInfo({
 
           {/* Description */}
           <div className='space-y-2'>
-            <Label htmlFor='description'>Description</Label>
+            <Label htmlFor='description'>{tClassroom('description')}</Label>
             <Textarea
               id='description'
-              placeholder='Brief description of this classroom...'
+              placeholder={tClassroom('descriptionPlaceholder')}
               rows={4}
               className='resize-none'
               value={description}
@@ -176,11 +170,11 @@ export default function ClassroomBasicInfo({
           {/* Duration Dropdown */}
           <div className='space-y-2'>
             <Label htmlFor='duration'>
-              Duration <span className='text-red-500'>*</span>
+              {tClassroom('duration')} <span className='text-red-500'>*</span>
             </Label>
             <Select value={durationWeeks} onValueChange={setDurationWeeks}>
               <SelectTrigger>
-                <SelectValue placeholder='Select duration' />
+                <SelectValue placeholder={tClassroom('selectDuration')} />
               </SelectTrigger>
               <SelectContent>
                 {DURATION_OPTIONS.map((option) => (
@@ -197,7 +191,7 @@ export default function ClassroomBasicInfo({
             {/* Start Date */}
             <div className='space-y-2'>
               <Label>
-                Start Date <span className='text-red-500'>*</span>
+                {tClassroom('startDate')} <span className='text-red-500'>*</span>
               </Label>
               <Popover>
                 <PopoverTrigger asChild>
@@ -229,7 +223,7 @@ export default function ClassroomBasicInfo({
             {/* End Date */}
             <div className='space-y-2'>
               <Label>
-                End Date <span className='text-red-500'>*</span>
+                {tClassroom('endDate')} <span className='text-red-500'>*</span>
               </Label>
               <Popover>
                 <PopoverTrigger asChild>

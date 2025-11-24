@@ -27,7 +27,6 @@ export default function TrueFalseQuestion({ question }: TrueFalseQuestionProps) 
         const isTrue = ans.content === 'True'
 
         let containerClass = 'group relative overflow-hidden transition-all duration-300'
-        let bgClass = ''
 
         if (isSubmitted) {
           if (isCorrect) {

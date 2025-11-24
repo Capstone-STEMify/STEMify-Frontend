@@ -4,7 +4,9 @@
       "title": "Trình tạo lắp ráp 3D",
       "subtitle": "Tạo các bài học lắp ráp 3D tương tác cho học sinh",
       "preview": "Xem trước mô hình 3D",
-      "save": "Lưu mô hình"
+      "save": "Lưu mô hình",
+      "export": "Xuất mô hình",
+      "import": "Nhập mô hình"
     },
     "main_content": {
       "move": "Di Chuyển",
@@ -66,6 +68,34 @@
         "reset_transform": "Đặt lại",
         "delete": "Xóa"
       }
+    }
+  },
+  "workspace3D": {
+    "loading": "Đang tải Workspace...",
+    "list": {
+      "title": "Danh sách Mô hình 3D"
+    },
+    "button": {
+      "create": "Workspace Mới"
+    },
+    "upsert": {
+      "createTitle": "Tạo Workspace 3D Mới",
+      "updateTitle": "Cập nhật Workspace 3D",
+      "createDescription": "Điền thông tin để tạo workspace 3D mới",
+      "updateDescription": "Cập nhật thông tin workspace 3D",
+      "nameLabel": "Tên Workspace",
+      "namePlaceholder": "Nhập tên workspace",
+      "descriptionLabel": "Mô tả",
+      "descriptionPlaceholder": "Nhập mô tả workspace",
+      "visibilityLabel": "Chế độ hiển thị",
+      "publicOption": "Công khai",
+      "privateOption": "Riêng tư",
+      "thumbnailLabel": "Ảnh đại diện",
+      "thumbnailPlaceholder": "Chọn ảnh đại diện",
+      "thumbnailSize": "kích thước tối đa 10MB",
+      "createButton": "Tạo Workspace",
+      "updateButton": "Cập nhật Workspace",
+      "cancelButton": "Hủy bỏ"
     }
   }
 }

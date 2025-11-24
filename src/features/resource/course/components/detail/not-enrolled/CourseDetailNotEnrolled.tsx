@@ -33,10 +33,7 @@ export default function CourseDetailNotEnrolled() {
     data: enrollmentData,
     isLoading: enrollmentLoading,
     error: enrollmentError
-  } = useSearchCourseEnrollmentQuery(
-    { courseId: Number(courseId), studentId, pageNumber: params?.pageNumber ?? 1, pageSize: params?.pageSize ?? 10 },
-    { skip: !studentId }
-  )
+  } = useSearchCourseEnrollmentQuery({ courseId: Number(courseId), studentId }, { skip: !studentId })
 
   if (isLoading || outcomeLoading || outcomeFetching || enrollmentLoading)
     return (

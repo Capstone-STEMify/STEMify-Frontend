@@ -7,14 +7,19 @@ import { Separator } from '@/components/shadcn/separator'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import { useGetOrganizationByIdQuery } from '@/features/organization/api/organizationApi'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { formatDateV2 } from '@/utils/index'
+import { formatDate, formatDateV2, useStatusTranslation } from '@/utils/index'
 import { Building2, Calendar, GraduationCap } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
 
 type OrganizationInfoProps = {
   organizationId: number
 }
 
 export default function OrganizationInfo({ organizationId }: OrganizationInfoProps) {
+  const locale = useLocale()
+  const to = useTranslations('organization.detail')
+  const translateStatus = useStatusTranslation()
+
   const { data, isLoading } = useGetOrganizationByIdQuery(organizationId, { skip: !organizationId })
   const organization = data?.data
 
@@ -36,7 +41,7 @@ export default function OrganizationInfo({ organizationId }: OrganizationInfoPro
     return (
       <Card>
         <CardContent>
-          <p className='text-muted-foreground text-center text-sm'>No organization data available.</p>
+          <p className='text-muted-foreground text-center text-sm'>{to('noData')}</p>
         </CardContent>
       </Card>
     )
@@ -63,7 +68,7 @@ export default function OrganizationInfo({ organizationId }: OrganizationInfoPro
           <div className='flex-1'>
             <CardTitle className='line-clamp-1 text-base font-semibold'>{organization.name}</CardTitle>
             <Badge className={`${getStatusBadgeClass(organization.status)} mt-1 px-2 py-0.5 text-[11px]`}>
-              {organization.status}
+              {translateStatus(organization.status)}
             </Badge>
           </div>
         </div>
@@ -78,27 +83,29 @@ export default function OrganizationInfo({ organizationId }: OrganizationInfoPro
           <div className='flex justify-between'>
             <span className='text-muted-foreground flex items-center gap-1'>
               <Building2 size={14} />
-              Type
+              {to('organizationType')}
             </span>
             <span className='font-medium'>{organization.organizationType}</span>
           </div>
           <div className='flex justify-between'>
             <span className='text-muted-foreground flex items-center gap-1'>
               <Calendar size={14} />
-              Created
+              {to('createdAt')}
             </span>
-            <span>{formatDateV2(new Date(organization.createdDate))}</span>
+            <span>{formatDate(organization.createdDate, { locale: locale as 'en' | 'vi' })}</span>
           </div>
-          <div className='flex justify-between'>
+          {/* <div className='flex justify-between'>
             <span className='text-muted-foreground flex items-center gap-1'>
               <Calendar size={14} />
-              Updated
+              {to('updatedAt')}
             </span>
-            <span>{formatDateV2(new Date(organization.lastModifiedDate ?? organization.createdDate))}</span>
-          </div>
+            <span>{formatDate(organization.createdDate, { locale: locale as 'en' | 'vi' })}</span>
+          </div> */}
           <div className='flex justify-between'>
-            <span className='text-muted-foreground'>Subscriptions</span>
-            <span className='font-medium'>{organization.subscriptions.length} packages</span>
+            <span className='text-muted-foreground'>{to('subscription.label')}</span>
+            <span className='font-medium'>
+              {organization.subscriptions.length} {to('package')}
+            </span>
           </div>
         </div>
       </CardContent>

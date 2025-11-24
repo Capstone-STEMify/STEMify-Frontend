@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 
 type EnrollmentState = {
   courseEnrollmentId: number | null
+  curriculumEnrollmentId: number | null
 }
 
 const intinialState: EnrollmentState = {
-  courseEnrollmentId: null
+  courseEnrollmentId: null,
+  curriculumEnrollmentId: null
 }
 export const enrollmentSlice = createSlice({
   name: 'enrollment',
@@ -13,8 +15,11 @@ export const enrollmentSlice = createSlice({
   reducers: {
     setCourseEnrollmentId: (state, action) => {
       state.courseEnrollmentId = action.payload
+    },
+    setCurriculumEnrollmentId: (state, action) => {
+      state.curriculumEnrollmentId = action.payload
     }
   }
 })
 
-export const { setCourseEnrollmentId } = enrollmentSlice.actions
+export const { setCourseEnrollmentId, setCurriculumEnrollmentId } = enrollmentSlice.actions

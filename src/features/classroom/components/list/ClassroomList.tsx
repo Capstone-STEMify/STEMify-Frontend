@@ -15,8 +15,11 @@ import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import SearchBar from '@/components/shared/search/SearchBar'
 
 import SSelect from '@/components/shared/SSelect'
+import { useTranslations } from 'next-intl'
 
 export default function ClassroomList() {
+  const tClassroom = useTranslations('classroom')
+
   const user = useAppSelector((state) => state.auth?.user)
   const queryParams = useAppSelector((state) => state.classroom)
   const [selectedStatus, setSelectedStatus] = useState<string>('')

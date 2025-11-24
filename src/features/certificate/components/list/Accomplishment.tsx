@@ -20,15 +20,15 @@ export default function Accomplishment() {
   const { specializations, courses } = accomplishmentsData
   const dispatch = useAppDispatch()
 
-  const courseEnrollParams = useAppSelector((state) => state.courseEnrollment)
-  const curriculumEnrollParams = useAppSelector((state) => state.curriculumEnrollment)
+  // const courseEnrollParams = useAppSelector((state) => state.courseEnrollment)
+  // const curriculumEnrollParams = useAppSelector((state) => state.curriculumEnrollment)
 
   const { data: courseEnrollment, isLoading: isLoadingCourseEnrollment } = useSearchCourseEnrollmentQuery(
-    { studentId, ...courseEnrollParams },
+    { studentId },
     { skip: !studentId }
   )
   const { data: curriculumEnrollment, isLoading: isLoadingCurriculumEnrollment } = useSearchCurriculumEnrollmentQuery(
-    { studentId, ...curriculumEnrollParams },
+    { studentId },
     { skip: !studentId }
   )
 

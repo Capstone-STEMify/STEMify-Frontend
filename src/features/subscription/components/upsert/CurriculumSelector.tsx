@@ -8,6 +8,7 @@ import { Label } from '@/components/shadcn/label'
 import { CheckIcon, ChevronsUpDown, X, BookOpen, GraduationCap, AlertCircle } from 'lucide-react'
 import { cn } from '@/utils/shadcn/utils'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 
 interface Curriculum {
   id: number
@@ -29,6 +30,7 @@ export default function CurriculumSelector({
   onCurriculumChange,
   maxSelection
 }: CurriculumSelectorProps) {
+  const to = useTranslations('organization.subscription.create')
   const [open, setOpen] = useState(false)
 
   const selectedCurriculums = curriculums.filter((curriculum) => selectedCurriculumIds.includes(curriculum.id))
@@ -56,26 +58,22 @@ export default function CurriculumSelector({
         <div className='flex items-center gap-2'>
           <BookOpen className='h-5 w-5 text-slate-600' />
           <Label className='text-base font-semibold text-slate-900'>
-            Curriculum Selection <span className='text-red-500'>*</span>
+            {to('curriculumSelection.header')} <span className='text-red-500'>*</span>
           </Label>
         </div>
         <div className='text-sm text-slate-500'>
-          {selectedCurriculumIds.length} / {maxSelection} selected
+          {selectedCurriculumIds.length} / {maxSelection} {to('curriculumSelection.selected')}
         </div>
       </div>
 
       {/* Info message */}
       <div className='flex items-start gap-2 rounded-lg bg-blue-50 p-3 text-sm text-blue-700'>
         <AlertCircle className='mt-0.5 h-4 w-4 flex-shrink-0' />
-        <p>
-          You can select up to <span className='font-semibold'>{maxSelection}</span> curriculum(s) based on your
-          selected plan.
-        </p>
+        <p>{to('curriculumSelection.description', { maxCurriculums: maxSelection })}</p>
       </div>
 
       <div className='space-y-2'>
-        <Label className='text-sm font-medium text-slate-700'>Select Curriculums</Label>
-
+        <Label className='text-sm font-medium text-slate-700'>{to('curriculumSelection.label')}</Label>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -105,15 +103,15 @@ export default function CurriculumSelector({
                   })}
                 </div>
               ) : (
-                <span className='text-slate-500'>Select curriculums...</span>
+                <span className='text-slate-500'>{to('curriculumSelection.placeholder')}</span>
               )}
               <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
             </Button>
           </PopoverTrigger>
           <PopoverContent className='w-full p-0' align='start'>
             <Command>
-              <CommandInput placeholder='Search curriculum...' />
-              <CommandEmpty>No curriculum found.</CommandEmpty>
+              <CommandInput placeholder={to('curriculumSelection.searchCurriculum')} />
+              <CommandEmpty>{to('curriculumSelection.noData')}</CommandEmpty>
               <CommandGroup className='max-h-64 overflow-auto'>
                 {curriculums.map((curriculum) => {
                   const isSelected = selectedCurriculumIds.includes(curriculum.id)
@@ -148,9 +146,6 @@ export default function CurriculumSelector({
                         )}
                         <div className='flex flex-col'>
                           <span className='text-sm font-medium'>{curriculum.title}</span>
-                          <span className='text-xs text-slate-500'>
-                            {curriculum.courseCount} course{curriculum.courseCount !== 1 ? 's' : ''}
-                          </span>
                         </div>
                       </div>
                     </CommandItem>
@@ -165,7 +160,7 @@ export default function CurriculumSelector({
       {/* Selected Curriculums Display */}
       {selectedCurriculums.length > 0 && (
         <div className='mt-4 space-y-3'>
-          <Label className='text-sm font-medium text-slate-700'>Selected Curriculums</Label>
+          <Label className='text-sm font-medium text-slate-700'>{to('curriculumSelection.selectedCurriculums')}</Label>
           <div className='grid grid-cols-1 gap-3 md:grid-cols-3'>
             {selectedCurriculums.map((curriculum) => (
               <div
@@ -194,9 +189,6 @@ export default function CurriculumSelector({
                 )}
                 <div className='flex flex-col'>
                   <p className='font-medium text-slate-900'>{curriculum.title}</p>
-                  <p className='text-xs text-slate-500'>
-                    {curriculum.courseCount} course{curriculum.courseCount !== 1 ? 's' : ''}
-                  </p>
                 </div>
               </div>
             ))}

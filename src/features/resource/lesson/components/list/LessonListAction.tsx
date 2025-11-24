@@ -25,7 +25,7 @@ export default function LessonListAction() {
   const [search, setSearch] = useState<string>('')
 
   const { status } = useSession()
-  const role = useAppSelector((state) => state.auth.user?.role)
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
 
   const canSeeStatus = status === 'authenticated' && (role === UserRole.STAFF || role === UserRole.ADMIN)
 

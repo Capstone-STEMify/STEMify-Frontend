@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 export const formatDuration = (minutes: number) => {
   if (typeof minutes !== 'number' || isNaN(minutes) || minutes <= 0) return '00:00'
   const h = Math.floor(minutes / 60)
@@ -52,6 +54,9 @@ export const formatDate = (dateString: string, options: FormatDateOptions = {}) 
 
   const date = new Date(dateString)
 
+  if (isNaN(date.getTime())) {
+    return 'N/A'
+  }
   // --- 1. Nếu có pattern → custom formatting ---
   if (pattern) {
     const dd = String(date.getDate()).padStart(2, '0')
@@ -68,7 +73,6 @@ export const formatDate = (dateString: string, options: FormatDateOptions = {}) 
     }
   }
 
-  // --- 2. Locale formatting ---
   return date.toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-US', {
     year,
     month,
@@ -162,4 +166,12 @@ export const formatPrice = (price: number) => {
     currency: 'VND',
     minimumFractionDigits: 0
   }).format(price)
+}
+
+export const useStatusTranslation = () => {
+  const tc = useTranslations('common.status')
+
+  return (status: string) => {
+    return tc(status.toLowerCase())
+  }
 }

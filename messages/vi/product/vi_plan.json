@@ -1,6 +1,58 @@
 {
   "plan": {
+    "update": "Cập nhật gói",
+    "create": "Tạo gói mới",
+    "delete": "Xóa gói",
+    "detail": {
+      "title": "Chi tiết gói",
+      "description": "Mô tả gói",
+      "accessSupportDetail": "Chi tiết truy cập & hỗ trợ",
+      "noBillingCycles": "Không có chu kỳ thanh toán cho gói này.",
+      "includedCurriculums": "Chương trình giảng dạy bao gồm"
+    },
+    "form": {
+      "name": {
+        "label": "Tên gói",
+        "placeholder": "Nhập tên gói"
+      },
+      "description": {
+        "label": "Mô tả",
+        "placeholder": "Nhập mô tả gói"
+      },
+      "accessSupportDetail": {
+        "label": "Chi tiết truy cập & hỗ trợ",
+        "placeholder": "Nhập chi tiết truy cập và hỗ trợ"
+      },
+      "maxStudentSeats": {
+        "label": "Số chỗ học sinh tối đa",
+        "placeholder": "Nhập số chỗ học sinh tối đa"
+      },
+      "maxTeacherSeats": {
+        "label": "Số chỗ giáo viên tối đa",
+        "placeholder": "Nhập số chỗ giáo viên tối đa"
+      },
+      "curriculumCount": {
+        "label": "Số lượng chương trình giảng dạy được phép",
+        "required": "Phải ≤ {count} (các chương trình giảng dạy có sẵn được chọn)",
+        "placeholder": "Nhập số lượng chương trình giảng dạy được phép"
+      },
+      "billingCycles": {
+        "label": "Chu kỳ thanh toán",
+        "semiannualPrice": "Giá cho nửa năm (6 tháng)",
+        "annualPrice": "Giá cho cả năm (12 tháng)",
+        "pricePlaceholder": "Nhập giá"
+      },
+      "availableCurriculums": {
+        "label": "Chương trình giảng dạy có sẵn",
+        "description": "Chọn các chương trình giảng dạy sẽ có trong gói này",
+        "selectPlaceholder": "Chọn chương trình giảng dạy"
+      },
+      "successCreate": "Tạo gói thành công!",
+      "successUpdate": "Cập nhật gói thành công!"
+    },
     "list": {
+      "header": "Quản lý gói",
+      "headerDescription": "Quản lý các gói đăng ký của bạn tại đây.",
       "title": "Nâng cấp gói của bạn",
       "description": "Chọn gói phù hợp nhất với nhu cầu của bạn và mở khóa toàn bộ tiềm năng của Stemify cho hành trình chinh phục STEM của bạn.",
       "selectButton": "Chọn gói",

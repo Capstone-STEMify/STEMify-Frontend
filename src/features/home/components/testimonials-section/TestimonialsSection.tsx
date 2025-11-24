@@ -4,14 +4,14 @@ import { useTranslations } from 'next-intl'
 import React from 'react'
 
 // src/data/mockData.js
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 
 export const feedbackData = [
   {
     src: 'https://images.unsplash.com/photo-1549068106-b024baf5062d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
     name: 'Le Nhan',
     date: 'July 15, 2024',
-    role: UserRole.STUDENT,
+    role: LicenseType.STUDENT,
     title: 'Hấp dẫn và toàn diện',
     rating: 5,
     description:
@@ -31,7 +31,7 @@ export const feedbackData = [
     src: 'https://github.com/evilrabbit.png',
     name: 'Dat Tran',
     date: 'August 20, 2024',
-    role: UserRole.TEACHER,
+    role: LicenseType.TEACHER,
     title: 'Khuyến khích cho lớp học',
     rating: 5,
     description:

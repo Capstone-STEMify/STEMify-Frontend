@@ -1,10 +1,6 @@
 'use client'
 import ClassroomTable from '@/features/classroom/components/list/table/ClassroomTable'
-import { useSearchSubscriptionQuery } from '@/features/subscription/api/subscriptionApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { useEffect } from 'react'
-import { setParam } from '@/features/classroom/slice/classroomSlice'
 
 export default function OrganizationClassroomList() {
   const queryParams = useAppSelector((state) => state.organizationSubscription)

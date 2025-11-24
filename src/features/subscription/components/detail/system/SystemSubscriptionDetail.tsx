@@ -10,8 +10,11 @@ import SubscriptionInfo from '@/features/subscription/components/detail/system/S
 import BackButton from '@/components/shared/button/BackButton'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useTranslations } from 'next-intl'
 
 export default function SystemSubscriptionDetail() {
+  const to = useTranslations('organization.detail')
+
   const { subscriptionId } = useParams()
   const { data, isLoading } = useGetSubscriptionByIdQuery(Number(subscriptionId))
   const subscription = data?.data
@@ -27,7 +30,7 @@ export default function SystemSubscriptionDetail() {
   if (!subscription) {
     return (
       <div className='flex min-h-screen items-center justify-center'>
-        <SEmpty title='No Subscription Found' description='The subscription you are looking for does not exist.' />
+        <SEmpty title={to('noSubscription')} />
       </div>
     )
   }
@@ -36,7 +39,7 @@ export default function SystemSubscriptionDetail() {
       <div className='mx-auto max-w-7xl'>
         <div className='mb-6 flex items-center justify-start gap-4'>
           <BackButton />
-          <h1 className='text-2xl font-semibold'>Organization Details</h1>
+          <h1 className='text-2xl font-semibold'>{to('header')}</h1>
         </div>
 
         <div className='grid gap-6 lg:grid-cols-[320px_1fr]'>

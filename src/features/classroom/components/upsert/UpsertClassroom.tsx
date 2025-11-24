@@ -17,7 +17,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { Grade } from '@/features/classroom/types/classroom.type'
 import { useGetUserAction } from '@/features/user/components/table/UserAction'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { setPageIndex } from '@/features/user/slice/userSlice'
 import ClassroomStepIndicator from './ClassroomStepIndicator'
 import ClassroomBasicInfo from './ClassroomBasicInfo'
@@ -63,6 +63,9 @@ const STEPS = [
 ]
 
 export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassroomProps) {
+  const tc = useTranslations('common')
+  const tt = useTranslations('toast')
+
   const isEditing = !!classroomId
   const { closeModal } = useModal()
   const dispatch = useAppDispatch()
@@ -156,15 +159,16 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
         studentIds: selectedStudentIds
       }
       if (isEditing) {
-        await updateClassroom({ id: classroomId!, body: payload }).unwrap()
+        const result = await updateClassroom({ id: classroomId!, body: payload }).unwrap()
+        toast.success(tt('successMessage.update', { title: result.data.name }))
       } else {
-        await createClassroom(payload).unwrap()
+        const result = await createClassroom(payload).unwrap()
+        toast.success(tt('successMessage.create', { title: result.data.name }))
       }
 
-      toast.success(`Classroom ${isEditing ? 'updated' : 'created'} successfully`)
       router.push(`/${locale}/organization/classroom`)
       closeModal()
-      onSuccess && onSuccess()
+      onSuccess?.()
     }
   })
 
@@ -204,7 +208,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
   }
 
   return (
-    <div className='flex h-full flex-col'>
+    <div>
       {/* Step Indicator */}
       <ClassroomStepIndicator currentStep={currentStep} isEditing={isEditing} />
 
@@ -229,8 +233,6 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
             gradeOptions={gradeOptions}
             minDate={minDate}
             maxDate={maxDate}
-            setMinDate={setMinDate}
-            setMaxDate={setMaxDate}
           />
         )}
 
@@ -251,7 +253,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
         )}
 
         {/* Action Buttons */}
-        <div className='mx-auto mt-6 flex max-w-6xl items-center justify-between border-t pt-6'>
+        <div className='mx-auto mt-6 flex max-w-6xl items-center justify-between pt-6'>
           <button
             type='button'
             onClick={() => setCurrentStep(1)}
@@ -260,7 +262,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
             } `}
             disabled={currentStep === 1}
           >
-            ← Back
+            ← {tc('button.back')}
           </button>
 
           <div className='flex gap-3'>
@@ -269,7 +271,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
                 type='submit'
                 className='bg-amber-custom-400 rounded-lg px-6 py-2.5 font-medium text-white transition-colors hover:bg-amber-500'
               >
-                Continue →
+                {tc('button.next')} →
               </button>
             ) : (
               <form.AppForm>
@@ -277,7 +279,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
                   loading={isCreating || isUpdating}
                   className='bg-amber-custom-400 cursor-pointer rounded-lg px-6 py-2.5 font-medium text-white transition-colors hover:bg-amber-500'
                 >
-                  {isEditing ? 'Update' : 'Create'} Classroom
+                  {isEditing ? tc('button.update') : tc('button.create')} Classroom
                 </form.SubmitButton>
               </form.AppForm>
             )}

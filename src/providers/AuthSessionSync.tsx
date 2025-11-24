@@ -29,6 +29,8 @@ export default function AuthSessionSync() {
     if (accessToken && user) {
       if (accessToken !== reduxToken) {
         dispatch(setToken(accessToken))
+        localStorage.setItem('stemify_user_id', user.userId!)
+        localStorage.setItem('stemify_access_token', accessToken)
       }
 
       if (!reduxUser || user.userId !== reduxUser.userId) {

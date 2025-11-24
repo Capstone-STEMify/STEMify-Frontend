@@ -37,6 +37,8 @@ export type ModalType =
   | 'upsertOrganization'
   | 'upsertClassroom'
   | 'updateClassroomOrganization'
+  | 'upsertEmulator'
+  | 'upsertEmulator'
 
   // detail
   | 'lessonDetail'

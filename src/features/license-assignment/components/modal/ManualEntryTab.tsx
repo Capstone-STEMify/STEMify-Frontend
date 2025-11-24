@@ -8,6 +8,7 @@ import { LicenseAssignmentType } from '@/features/license-assignment/types/licen
 import { goBack } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
+import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { KeyboardEvent, useState } from 'react'
 import { toast } from 'sonner'
@@ -27,6 +28,9 @@ export default function ManualEntryTab({
   labelButton,
   organizationSubscriptionOrderId
 }: ManualEntryTabProps) {
+  const to = useTranslations('organization.license')
+  const tc = useTranslations('common')
+
   const dispatch = useAppDispatch()
   const { organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
   const [emailList, setEmailList] = useState<string[]>([])
@@ -87,7 +91,7 @@ export default function ManualEntryTab({
       }))
     }).unwrap()
 
-    toast.success('Send invitations successfully')
+    toast.success(to('uploadSuccess'))
     openModal?.()
   }
 
@@ -108,7 +112,7 @@ export default function ManualEntryTab({
         </div>
       ) : (
         <div className='space-y-1'>
-          <label className='block text-sm font-medium'>User Type</label>
+          <label className='block text-sm font-medium'>{to('userType')}</label>
           <Select value={type} onValueChange={(val) => setType(val as LicenseAssignmentType)}>
             <SelectTrigger className='w-full'>
               <SelectValue placeholder='Select user type' />
@@ -116,10 +120,7 @@ export default function ManualEntryTab({
             <SelectContent>
               {Object.entries(LicenseAssignmentType).map(([key, value]) => (
                 <SelectItem key={key} value={value}>
-                  {key
-                    .replace(/_/g, ' ')
-                    .toLowerCase()
-                    .replace(/\b\w/g, (c) => c.toUpperCase())}
+                  {tc(`accountType.${key.toLowerCase()}`)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -156,7 +157,7 @@ export default function ManualEntryTab({
       <div className='flex justify-between'>
         {isStep ? (
           <Button variant='outline' onClick={() => dispatch(goBack())}>
-            Back
+            {tc('button.back')}
           </Button>
         ) : null}
         <div className='flex w-full justify-end gap-2'>
@@ -166,11 +167,11 @@ export default function ManualEntryTab({
             disabled={emailList.length === 0}
             className='border-gray-300 text-gray-700 hover:bg-gray-100'
           >
-            Clear All
+            {tc('button.clearAll')}
           </Button>
 
           <Button onClick={handleSubmit} disabled={emailList.length === 0} className='bg-sky-500 hover:bg-sky-600'>
-            {labelButton || 'Send Invitations'}
+            {labelButton || tc('button.sendInvitations')}
           </Button>
         </div>
       </div>

@@ -4,7 +4,6 @@ import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
-import { ExportDialog } from '@/features/creator-3d/components/creator3d/ExportDialog'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 import { CreatorWorkspace } from '@/features/creator-3d/components/creator-workspace/CreatorWorkspace'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
@@ -50,9 +49,14 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
   const exportAssemblyFn = useExportAssembly()
   const actions = useAppSelector((s) => s.workspaceTree.actions)
   const activities = useAppSelector((s) => s.workspaceTree.activities)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [updateEmulator, { isLoading: isUpdating }] = useUpdateEmulatorMutation()
   const prevInstanceIds = useRef<string[]>([])
+
+  const handleClickImportJSON = () => {
+    fileInputRef.current?.click()
+  }
 
   const handleAddComponent = useCallback(
     (template: ComponentTemplate) => {
@@ -114,8 +118,6 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
           author: 'STEMify User'
         })
 
-        console.log('Exported assembly data:', exportData)
-
         const response = await updateEmulator({
           emulationId: existing.emulationId,
           body: {
@@ -137,12 +139,6 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
   }, [workspaceId, exportAssemblyFn])
 
   // Handle clear scene
-  const handleClearScene = useCallback(() => {
-    if (confirm('Are you sure you want to clear the entire scene? This action cannot be undone.')) {
-      dispatch(clearScene())
-      dispatch(resetActions())
-    }
-  }, [dispatch])
 
   const handleImportAssembly = useCallback(async (id: string) => {
     try {
@@ -389,6 +385,202 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
     }
   }, [])
 
+  // Tách logic import thành hàm riêng để tái sử dụng
+  const importAssemblyFromJSON = useCallback(
+    async (data: any) => {
+      const allInstances: AssemblyInstance[] = []
+
+      // Helper: Load Template by ID
+      const loadTemplateById = async (templateId: string) => {
+        const template = data.templates.components.find((t: any) => t.id === templateId || t._id === templateId)
+        if (!template) throw new Error(`Không tìm thấy templateId: ${templateId}`)
+        const res = await fetch(template.source)
+        if (!res.ok) throw new Error(`Không tải được file template: ${template.source}`)
+        return await res.json()
+      }
+
+      // Helper: Resolve material
+      const resolveMaterial = async (materialRef: string) => {
+        const matDef = data.templates.materials.find((m: any) => m.id === materialRef)
+        if (!matDef) return null
+        const res = await fetch(matDef.source)
+        if (!res.ok) return null
+        return await res.json()
+      }
+
+      // 1️⃣ Restore Straws
+      if (Array.isArray(data.instances.straws)) {
+        for (const group of data.instances.straws) {
+          const templateData = await loadTemplateById(group.templateId)
+          const baseGeo = templateData.baseGeometry
+          const endpoints = templateData.endpointTemplate || {
+            start: { localPosition: { x: -baseGeo.length / 2, y: 0, z: 0 } },
+            end: { localPosition: { x: baseGeo.length / 2, y: 0, z: 0 } }
+          }
+          const matData = await resolveMaterial(templateData.materialRef)
+
+          for (const inst of group.instances) {
+            allInstances.push({
+              id: inst.id,
+              templateId: group.templateId,
+              category: 'straw',
+              transform: inst.transform,
+              isVisible: true,
+              distanceToCamera: 0,
+              data: {
+                id: inst.id,
+                name: templateData.name,
+                transform: inst.transform,
+                geometry: baseGeo,
+                endpoints,
+                material: matData || {
+                  type: 'plastic',
+                  properties: {
+                    color: '#00aaff',
+                    flexibility: 50,
+                    opacity: 1,
+                    roughness: 0.4,
+                    metalness: 0
+                  }
+                },
+                physics: templateData.physics
+              },
+              arms: undefined
+            })
+          }
+        }
+      }
+
+      // 2️⃣ Restore Connectors
+      if (Array.isArray(data.instances.connectors)) {
+        for (const group of data.instances.connectors) {
+          const templateData = await loadTemplateById(group.templateId)
+          const matData = await resolveMaterial(templateData.materialRef)
+
+          for (const inst of group.instances) {
+            allInstances.push({
+              id: inst.id,
+              templateId: group.templateId,
+              category: 'connector',
+              transform: inst.transform,
+              isVisible: true,
+              distanceToCamera: 0,
+              data: {
+                id: inst.id,
+                name: templateData.name,
+                transform: inst.transform,
+                material: matData || {
+                  type: 'plastic',
+                  properties: {
+                    color: '#ff4444',
+                    flexibility: 50,
+                    opacity: 1,
+                    roughness: 0.5,
+                    metalness: 0
+                  }
+                },
+                geometry: templateData.baseGeometry || {
+                  size: { x: 2, y: 2, z: 2 },
+                  portDiameter: 0.8,
+                  shape: 'cylindrical'
+                },
+                ports: templateData.ports || [],
+                constraints: templateData.constraints || { maxConnections: 3, allowedAngles: [] },
+                modelUrl: templateData.baseGeometry.modelPath
+              },
+              arms: {}
+            })
+          }
+        }
+      }
+
+      // ✅ Update Redux Scene
+      dispatch(setInstances(allInstances))
+
+      // 🔹 Restore Actions
+      if (Array.isArray(data.actions)) {
+        for (const act of data.actions) {
+          dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
+          if (Array.isArray(act.targets)) {
+            act.targets.forEach((targetId: string) => dispatch(addTargetToAction({ actionId: act.id, targetId })))
+          }
+          if (act.type === 'transform_arm' && act.connectorArmTransforms) {
+            Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
+              dispatch(
+                updateConnectorArms({
+                  actionId: act.id,
+                  connectorId,
+                  arms: arms as Record<string, { x: number; y: number; z: number }>
+                })
+              )
+            })
+          }
+        }
+      }
+
+      // 🔹 Restore Activities
+      if (Array.isArray(data.activities)) {
+        for (const activity of data.activities) {
+          dispatch(
+            addActivity({
+              id: activity.id,
+              name: activity.name,
+              steps: [],
+              difficulty: activity.difficulty ?? 'medium',
+              description: activity.description ?? '',
+              estimatedTime: activity.estimatedTime ?? 10
+            })
+          )
+
+          if (Array.isArray(activity.steps)) {
+            for (const step of activity.steps) {
+              dispatch(addStepToActivity({ activityId: activity.id, step }))
+            }
+          }
+        }
+      }
+    },
+    [dispatch]
+  )
+
+  // Thêm vào Creator3D component
+  const handleFileSelect = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+
+      try {
+        const text = await file.text()
+        const jsonData = JSON.parse(text)
+
+        // Validate JSON structure
+        if (!jsonData.instances || !jsonData.templates) {
+          toast.error('❌ File JSON không đúng định dạng!')
+          return
+        }
+
+        // Clear scene trước khi import
+        dispatch(clearScene())
+        dispatch(clearAction())
+        dispatch(clearActivities())
+
+        // Import data
+        await importAssemblyFromJSON(jsonData)
+
+        toast.success('✅ Import JSON thành công!')
+
+        // Reset input để có thể import lại cùng file
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''
+        }
+      } catch (err: any) {
+        console.error('Import error:', err)
+        toast.error(`❌ Lỗi khi import: ${err.message}`)
+      }
+    },
+    [dispatch]
+  )
+
   useEffect(() => {
     handleImportAssembly(workspaceId)
   }, [])
@@ -417,13 +609,25 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
         />
 
         {/* Action Buttons */}
-        <SceneActions onSave={handleSaveAssembly} onClear={handleClearScene} hasObjects={instances.length > 0} />
+        <SceneActions
+          onSave={handleSaveAssembly}
+          onImportJSON={handleClickImportJSON}
+          hasObjects={instances.length > 0}
+        />
       </div>
 
       {/* Object Inspector */}
       <div className='h-full w-80 flex-shrink-0 bg-white'>
         <WorkspacePanel />
       </div>
+
+      <input
+        ref={fileInputRef}
+        type='file'
+        accept='application/json'
+        style={{ display: 'none' }}
+        onChange={handleFileSelect}
+      />
     </div>
   )
 }

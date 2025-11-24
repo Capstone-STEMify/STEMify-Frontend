@@ -8,12 +8,15 @@ import SAvatar from '@/components/shared/SAvatar'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/shadcn/hover-card'
 import Image from 'next/image'
 import { BookOpen, FileText, GraduationCap, Headphones, Users } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 type AdminPricingTierTableProps = {
   plan: Plan
 }
 
 export default function AdminPricingTierTable({ plan }: AdminPricingTierTableProps) {
+  const tp = useTranslations('plan')
+  const tc = useTranslations('common')
   const getBillingCycleLabel = (cycle: BillingCycle) => {
     switch (cycle) {
       case BillingCycle.SEMIANNUAL:
@@ -35,10 +38,10 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
         <Table>
           <TableHeader className='bg-muted/70 border-b'>
             <TableRow>
-              <TableHead className='text-foreground font-semibold'>Billing Cycle</TableHead>
-              <TableHead className='text-foreground font-semibold'>Price</TableHead>
-              <TableHead className='text-foreground font-semibold'>Teacher Seats</TableHead>
-              <TableHead className='text-foreground font-semibold'>Student Seats</TableHead>
+              <TableHead className='text-foreground font-semibold'>{tc('tableHeader.planBillingCycle')}</TableHead>
+              <TableHead className='text-foreground font-semibold'>{tc('tableHeader.price')}</TableHead>
+              <TableHead className='text-foreground font-semibold'>{tc('tableHeader.teacherSeats')}</TableHead>
+              <TableHead className='text-foreground font-semibold'>{tc('tableHeader.studentSeats')}</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -79,7 +82,7 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
             {plan.planBillingCycles.length === 0 && (
               <TableRow>
                 <TableCell colSpan={9} className='text-muted-foreground py-6 text-center text-sm italic'>
-                  No billing cycles available for this plan.
+                  {tp('detail.noBillingCycles')}
                 </TableCell>
               </TableRow>
             )}
@@ -89,25 +92,25 @@ export default function AdminPricingTierTable({ plan }: AdminPricingTierTablePro
 
       {/* Extra Plan Info Section */}
       <div className='mt-6 space-y-4'>
-        <h3 className='text-foreground text-lg font-semibold'>Plan Details</h3>
+        <h3 className='text-foreground text-lg font-semibold'>{tp('detail.title')}</h3>
         <div className='text-muted-background text-sm break-words whitespace-pre-line'>
           <strong className='mb-2 flex items-center gap-2'>
             <FileText className='text-primary h-4 w-4' />
-            Description:
+            {tp('detail.description')}:
           </strong>{' '}
           {plan.description}
         </div>
         <div className='text-muted-background text-sm break-words whitespace-pre-line'>
           <strong className='mb-2 flex items-center gap-2'>
             <Headphones className='text-primary h-4 w-4' />
-            Access Support Detail:
+            {tp('detail.accessSupportDetail')}:
           </strong>{' '}
           {plan.accessSupportDetail}
         </div>
         <div className='text-muted-background text-sm whitespace-pre-line'>
           <strong className='mb-2 flex items-center gap-2'>
             <BookOpen className='text-primary h-4 w-4' />
-            Included Curriculums:
+            {tp('detail.includedCurriculums')}:
           </strong>{' '}
           {plan.curriculums.length > 0 ? (
             <ul className='space-y-2'>

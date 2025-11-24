@@ -1,7 +1,11 @@
-import { CurriculumEnrollment, CurriculumEnrollmentSliceParams } from '@/features/enrollment/types/enrollment.type'
+import {
+  CurriculumEnrollment,
+  CurriculumEnrollmentQueryParams,
+  CurriculumEnrollmentSliceParams
+} from '@/features/enrollment/types/enrollment.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 
-export const curriculumEnrollmentApi = createCrudApi<CurriculumEnrollment, CurriculumEnrollmentSliceParams>({
+export const curriculumEnrollmentApi = createCrudApi<CurriculumEnrollment, CurriculumEnrollmentQueryParams>({
   reducerPath: 'curriculumEnrollmentApi',
   tagTypes: ['CurriculumEnrollment'],
   baseUrl: '/curriculum-enrollments'

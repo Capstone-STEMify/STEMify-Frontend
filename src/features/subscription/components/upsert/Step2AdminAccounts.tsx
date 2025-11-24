@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { goBack } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
 import { useUploadCSVBulkMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { useParams, useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 
 interface UploadedFile {
@@ -17,6 +17,8 @@ interface UploadedFile {
 }
 
 export default function Step2AdminAccounts() {
+  const tc = useTranslations('common')
+
   const dispatch = useAppDispatch()
   const router = useRouter()
   const locale = useLocale()
@@ -84,11 +86,11 @@ export default function Step2AdminAccounts() {
         {/* Action Buttons */}
         <div className='mt-5 flex justify-between'>
           <Button variant='outline' onClick={() => dispatch(goBack())}>
-            Back
+            {tc('button.back')}
           </Button>
           <div className='flex w-full justify-end gap-2'>
             <Button variant='outline' onClick={handleSkip}>
-              Skip
+              {tc('button.skip')}
             </Button>
             <Button
               onClick={handleSubmit}
@@ -98,10 +100,10 @@ export default function Step2AdminAccounts() {
               {isLoading ? (
                 <span className='flex items-center gap-2'>
                   <span className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent'></span>
-                  Uploading...
+                  {tc('button.submitting')}
                 </span>
               ) : (
-                'Add'
+                tc('button.add')
               )}
             </Button>
           </div>

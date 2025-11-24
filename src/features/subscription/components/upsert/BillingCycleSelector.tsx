@@ -3,6 +3,7 @@ import { Calendar } from 'lucide-react'
 import { Label } from '@/components/shadcn/label'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { cn } from '@/utils/shadcn/utils'
+import { useTranslations } from 'next-intl'
 
 interface BillingCycleSelectorProps {
   selectedBillingCycle: BillingCycle
@@ -13,11 +14,12 @@ export default function BillingCycleSelector({
   selectedBillingCycle,
   onBillingCycleChange
 }: BillingCycleSelectorProps) {
+  const to = useTranslations('organization.subscription.create.plan.billingCycle')
   return (
     <div className='space-y-4'>
       <div className='flex items-center gap-2'>
         <Calendar className='h-5 w-5 text-slate-600' />
-        <Label className='text-base font-semibold text-slate-900'>Billing Cycle</Label>
+        <Label className='text-base font-semibold text-slate-900'>{to('label')}</Label>
       </div>
 
       <div className='flex items-center gap-4'>
@@ -32,7 +34,7 @@ export default function BillingCycleSelector({
                 : 'text-slate-600 hover:text-slate-900'
             )}
           >
-            Semiannual
+            {to('semiAnnual')}
           </button>
           <button
             type='button'
@@ -44,13 +46,13 @@ export default function BillingCycleSelector({
                 : 'text-slate-600 hover:text-slate-900'
             )}
           >
-            Annual
+            {to('annual')}
           </button>
         </div>
         <div className='flex items-center gap-2 rounded-md bg-blue-50 px-3 py-1.5'>
           <div className='h-2 w-2 rounded-full bg-blue-500'></div>
           <span className='text-xs font-medium text-blue-700'>
-            {selectedBillingCycle === BillingCycle.ANNUAL ? '12 months' : '6 months'} billing period
+            {selectedBillingCycle === BillingCycle.ANNUAL ? to('annualDescription') : to('semiAnnualDescription')}
           </span>
         </div>
       </div>

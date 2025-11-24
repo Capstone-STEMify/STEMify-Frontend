@@ -9,13 +9,9 @@ export default function MakeCodeLink() {
   }
 
   return (
-    <Link
-      href={`http://localhost:3232/index.html#home?userId=${currentUser.id}`}
-      target='_blank' // mở tab mới
-      rel='noopener noreferrer'
-      className='rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700'
-    >
-      🚀 Mở MakeCode (Link)
-    </Link>
+    <iframe
+      src='http://localhost:3232/index.html#?embed=0'
+      style={{ width: '100%', height: '800px', border: 'none' }}
+    ></iframe>
   )
 }

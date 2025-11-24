@@ -1,9 +1,9 @@
 {
-    "message": {
-        "user": "You must accept the terms and conditions",
-        "ageRange": "Are you sure you want to delete age range",
-        "category": "Are you sure you want to delete topic",
-        "confirmDelMessage": "Are you sure to delete \"{title}\" ?",
-        "disable": "Are you sure you want to disable user \"{title}\" ?"
-    }
+  "message": {
+    "user": "You must accept the terms and conditions",
+    "ageRange": "Are you sure you want to delete age range",
+    "category": "Are you sure you want to delete topic",
+    "confirmDelMessage": "Are you sure to delete \"{title}\" ?",
+    "disable": "Are you sure you want to disable user \"{title}\" ?"
+  }
 }
