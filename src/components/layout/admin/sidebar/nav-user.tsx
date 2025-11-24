@@ -22,6 +22,7 @@ import { useAppDispatch } from '@/hooks/redux-hooks'
 import { logout } from '@/features/auth/authSlice'
 import { clearSelectedOrganization } from '@/features/subscription/slice/selectedOrganizationSlice'
 import { persistor } from '@/libs/redux/store'
+import { useRouter } from 'next/navigation'
 export function NavUser({
   user
 }: {
@@ -35,6 +36,7 @@ export function NavUser({
   const t = useTranslations('Admin')
   const { isMobile } = useSidebar()
   const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const handleSignOut = async () => {
     try {
@@ -42,13 +44,14 @@ export function NavUser({
         method: 'GET',
         credentials: 'include'
       })
-      
       localStorage.removeItem('stemify_user_id')
       localStorage.removeItem('stemify_access_token')
-      await signOut({ callbackUrl: '/' })
+
+      await signOut({ redirect: false })
       dispatch(logout())
       dispatch(clearSelectedOrganization())
       persistor.purge()
+      router.push(`/${locale}/`)
     } catch (error) {
       console.error('Logout failed:', error)
     }
