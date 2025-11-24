@@ -101,6 +101,7 @@ export default function AdminCurriculumList() {
                 }
                 items={[
                   <button
+                    key='draft'
                     onClick={() => {
                       updateCurriculum({ id: curriculum.id, body: { status: CurriculumStatus.PUBLISHED } })
                       toast.success(tt('successMessage.update', { title: CurriculumStatus.PUBLISHED }))

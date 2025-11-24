@@ -104,7 +104,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
 
       toast.success(` ${isEditing ? tp('form.successUpdate') : tp('form.successCreate')}`)
       closeModal()
-      onSuccess && onSuccess()
+       onSuccess?.()
     }
   })
 

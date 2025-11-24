@@ -3,7 +3,7 @@ import { Checkbox } from '@/components/shadcn/checkbox'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Textarea } from '@/components/shadcn/textarea'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
 import { Check, GraduationCap, Pencil, Plus, Trash, Trash2 } from 'lucide-react'
 import { useState } from 'react'
@@ -19,7 +19,7 @@ export default function QuizBlockComponent({ node, updateAttributes, editor }: N
     }[]
   }
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const role = useAppSelector((state) => state.auth.user?.role)
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
   const editable = editor?.isEditable
 
   const optionsArray = Array.isArray(options) ? options : []
@@ -111,7 +111,7 @@ export default function QuizBlockComponent({ node, updateAttributes, editor }: N
             <Plus size={16} className='mr-1' /> Thêm lựa chọn
           </Button>
         </div>
-      ) : role === UserRole.STAFF || role === UserRole.ADMIN || role === UserRole.TEACHER ? (
+      ) : role === UserRole.STAFF || role === UserRole.ADMIN || role === LicenseType.TEACHER ? (
         <div>
           <div className='bg-sky-custom-100/50 flex items-center gap-2 rounded-t-3xl p-4'>
             <Pencil size={16} />

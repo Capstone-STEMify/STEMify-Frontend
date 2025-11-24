@@ -1,5 +1,5 @@
 import SAvatar from '@/components/shared/SAvatar'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { Star } from 'lucide-react'
 import React from 'react'
 
@@ -7,7 +7,7 @@ type FeedbackCardProps = {
   src?: string
   name?: string
   date?: string
-  role?: UserRole
+  role?: LicenseType | UserRole
   title?: string
   rating?: number
   description?: string
@@ -22,7 +22,7 @@ export default function FeedbackCard({ name, src, date, title, role, rating, des
     rating = 5
     description =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum. Donec in efficitur ipsum, sed dapibus eros.'
-    role = UserRole.TEACHER
+    role = LicenseType.TEACHER
   }
   return (
     <div className='shadow-6 my-10 flex w-full max-w-md flex-col gap-2 rounded-xl bg-white p-5 duration-150 hover:scale-105 hover:duration-150 dark:bg-neutral-900 dark:text-white'>

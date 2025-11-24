@@ -23,7 +23,6 @@ export default function SingleChoiceQuestion({ question }: SingleChoiceQuestionP
 
         let containerClass = 'group relative overflow-hidden transition-all duration-300'
         let borderClass = 'border-2'
-        let bgClass = ''
         let hoverClass = 'hover:border-indigo-400 hover:shadow-md'
 
         if (isSubmitted) {

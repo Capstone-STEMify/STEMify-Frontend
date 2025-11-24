@@ -168,7 +168,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
 
       router.push(`/${locale}/organization/classroom`)
       closeModal()
-      onSuccess && onSuccess()
+      onSuccess?.()
     }
   })
 

@@ -8,8 +8,6 @@ export default async function AccomplishmentLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const role = UserRole.STUDENT
-
   return (
     <div>
       <Header />

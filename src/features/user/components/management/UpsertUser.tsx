@@ -7,13 +7,13 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } from '../../api/userApi'
 import { useTranslations } from 'next-intl'
 import { parseWithZod } from '@conform-to/zod/v4'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 
 const defaultUserData = {
   email: '',
   userName: '',
   password: '',
-  role: UserRole.STUDENT,
+  role: LicenseType.STUDENT,
   firstName: '',
   lastName: ''
 }
@@ -44,7 +44,7 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
     email: z.string().email(tv('user.email')),
     userName: z.string().min(3, tv('user.userName', { length: 3 })),
     password: z.string().min(6, tv('user.password', { length: 6 })),
-    role: z.enum(UserRole),
+    role: z.enum(LicenseType),
     firstName: z.string().min(1, tv('user.firstName')),
     lastName: z.string().min(1, tv('user.lastName'))
   })

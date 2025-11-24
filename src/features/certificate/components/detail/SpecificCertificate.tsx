@@ -13,11 +13,11 @@ import SEmpty from '@/components/shared/empty/SEmpty'
 const SpecificCertificatePage = () => {
   const { verificationCode } = useParams()
   const code = Array.isArray(verificationCode) ? verificationCode[0] : verificationCode
-  const curriculumEnrollParams = useAppSelector((state) => state.curriculumEnrollment)
+  const curriculumEnrollParams = useAppSelector((state) => state.enrollment.curriculumEnrollmentId)
   const user = useAppSelector((state) => state.auth.user)
 
   const { data: curriculumEnrollment, isLoading: isLoadingCurriculumEnrollment } = useSearchCurriculumEnrollmentQuery(
-    { studentId: user?.userId, verificationCode: code ?? '', ...curriculumEnrollParams },
+    { studentId: user?.userId, verificationCode: code ?? '', pageNumber: 1, pageSize: 10 },
     { skip: !user?.userId }
   )
   const { data: curriculumData } = useGetCurriculumByIdQuery(

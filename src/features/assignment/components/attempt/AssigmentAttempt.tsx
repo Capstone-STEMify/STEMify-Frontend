@@ -165,8 +165,11 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
   const passingScore = assignmentDetail?.data?.passingScore ?? 80
 
   const handleAttemptAssignment = () => {
-    dispatch(setSelectedAssignment(assignmentDetail?.data!))
-    dispatch(setSelectedStudentAssignment(studentAssignmentResponse?.data!))
+    if (!assignmentDetail?.data || !studentAssignmentResponse?.data) return
+
+    dispatch(setSelectedAssignment(assignmentDetail.data))
+    dispatch(setSelectedStudentAssignment(studentAssignmentResponse.data))
+
     router.push(`${lessonId}/assignment/${assignmentId}`)
   }
 

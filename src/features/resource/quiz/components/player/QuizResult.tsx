@@ -19,6 +19,7 @@ type QuizResultProps = {
 
 export default function QuizResult({ quizId, studentQuizAttempt }: QuizResultProps) {
   const dispatch = useAppDispatch()
+  const [reAttemptQuiz] = useCreateQuizAttemptMutation()
 
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quizId)
   if (isLoading) {
@@ -28,7 +29,6 @@ export default function QuizResult({ quizId, studentQuizAttempt }: QuizResultPro
       </div>
     )
   }
-  const [reAttemptQuiz] = useCreateQuizAttemptMutation()
 
   const questions = quizData?.data?.questions ?? []
 
