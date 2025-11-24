@@ -375,7 +375,7 @@ export default function OrganizationClassroomDetail() {
                           />
                         </svg>
                       </div>
-                      <span className='font-semibold text-slate-900'>{tClassroom('detail.meet')}</span>
+                      <span className='font-semibold text-slate-900'>{tClassroom('detail.meet.label')}</span>
                     </div>
                     <Button variant='ghost' size='icon' className='h-8 w-8'>
                       <MoreVertical className='h-4 w-4 text-slate-600' />
@@ -383,7 +383,7 @@ export default function OrganizationClassroomDetail() {
                   </div>
 
                   <Button className='w-full border-2 border-slate-300 bg-white text-blue-600 hover:bg-slate-50'>
-                    Join
+                    {tClassroom('detail.meet.joinButton')}
                   </Button>
                 </div>
               </CardContent>

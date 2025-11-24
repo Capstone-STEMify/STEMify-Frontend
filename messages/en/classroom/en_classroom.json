@@ -23,7 +23,17 @@
       },
       "curriculum": "Update Classroom Curriculum",
       "teacher": "Update Classroom Teacher",
-      "students": "Update Classroom Students"
+      "students": {
+        "addStudents": "Add Students to Classroom",
+        "studentEmail": "Student Email",
+        "searchStudent": "Search students by email",
+        "studentEmailSubtext": "Search by name or email, or paste multiple emails separated by commas, spaces, or semicolons",
+        "students": "student(s)",
+        "selected": "selected",
+        "searchingStudents": "Searching students...",
+        "noStudentFound": "No students found for",
+        "noStudentFoundSubtext": "Try a different search or paste email directly"
+      }
     },
     "detail": {
       "notFound": "Classroom not found.",
@@ -46,7 +56,10 @@
         "copySuccess": "Class code copied to clipboard!"
       },
       "teacher": "Teacher",
-      "meet": "Meet",
+      "meet": {
+        "label": "Meet",
+        "joinButton": "Join Meeting"
+      },
       "quickStats": {
         "label": "Quick Stats",
         "createdDate": "Created Date",

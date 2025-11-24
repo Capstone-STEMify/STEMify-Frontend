@@ -23,7 +23,17 @@
       },
       "curriculum": "Cập nhật chương trình học của lớp học",
       "teacher": "Cập nhật giáo viên của lớp học",
-      "students": "Cập nhật học sinh của lớp học"
+      "students": {
+        "addStudents": "Thêm học sinh vào lớp học",
+        "studentEmail": "Email học sinh",
+        "searchStudent": "Tìm kiếm học sinh theo  email",
+        "studentEmailSubtext": "Tìm kiếm theo tên hoặc email, hoặc dán nhiều email được phân tách bằng dấu phẩy, dấu cách hoặc dấu chấm phẩy",
+        "students": "học sinh",
+        "selected": "đã chọn",
+        "searchingStudents": "Đang tìm kiếm học sinh...",
+        "noStudentFound": "Không tìm thấy học sinh cho",
+        "noStudentFoundSubtext": "Thử tìm kiếm khác hoặc dán email trực tiếp"
+      }
     },
     "detail": {
       "notFound": "Không tìm thấy lớp học.",
@@ -46,7 +56,10 @@
         "copySuccess": "Mã lớp học đã được sao chép vào clipboard!"
       },
       "teacher": "Giáo viên",
-      "meet": "Gặp gỡ",
+      "meet": {
+        "label": "Họp",
+        "joinButton": "Tham gia cuộc họp"
+      },
       "quickStats": {
         "label": "Thống kê nhanh",
         "createdDate": "Ngày tạo",
