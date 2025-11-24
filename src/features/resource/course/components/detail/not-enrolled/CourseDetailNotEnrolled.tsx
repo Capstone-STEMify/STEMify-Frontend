@@ -21,7 +21,7 @@ export default function CourseDetailNotEnrolled() {
   const tc = useTranslations('common.message')
 
   const { courseId } = useParams()
-  const params = useAppSelector((state) => state.courseEnrollment)
+  const params = useAppSelector((state) => state.courseEnrollment) as { pageNumber?: number; pageSize?: number } | undefined
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const {
     data: LearningOutcome,

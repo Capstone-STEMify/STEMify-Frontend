@@ -70,7 +70,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
     switch (sectionProg.status) {
       case 'Completed':
       case 'Passed':
-        return <CheckCircle2 className='mx-auto h-4 w-4 text-teal-500' />
+        return <CheckCircle2 className='mx-auto h-4 w-4 text-green-500' />
       case 'InProgress':
         return <Clock className='mx-auto h-4 w-4 text-blue-500' />
       case 'Failed':
@@ -81,7 +81,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
   }
 
   return (
-    <div className='rounded-xl border bg-white p-4 shadow-sm md:p-8'>
+    <div className='rounded-xl border bg-white p-4 shadow-sm md:p-8 mt-8'>
       <header className='mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
         <div className='flex items-center gap-4'>
           <h2 className='text-2xl font-semibold'>Students</h2>
@@ -152,7 +152,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
                   <TableHead
                     colSpan={Math.max(currentLesson.sectionIds.length, 1)}
-                    className='h-[88px] bg-teal-500 p-0 align-middle'
+                    className='h-[88px] bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 align-middle'
                   >
                     <div className='flex h-full w-full items-center px-2'>
                       <Select value={currentLessonId} onValueChange={setCurrentLessonId}>
