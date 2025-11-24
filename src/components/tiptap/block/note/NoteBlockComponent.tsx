@@ -1,6 +1,6 @@
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { ChevronDown, ChevronUp, GraduationCap, GraduationCapIcon, Pencil } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { Textarea } from '@/components/shadcn/textarea'
@@ -9,11 +9,11 @@ import { Label } from '@/components/shadcn/label'
 
 export default function NoteBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
   const { title, content } = node.attrs as { title: string; content: string }
-  const role = useAppSelector((state) => state.auth.user?.role)
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
   const editable = editor?.isEditable
   const [expanded, setExpanded] = useState(true)
 
-  if (role === UserRole.STUDENT) {
+  if (role === LicenseType.STUDENT) {
     return null // student không được thấy note
   }
 

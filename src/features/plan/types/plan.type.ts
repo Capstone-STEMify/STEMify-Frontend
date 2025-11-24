@@ -1,43 +1,41 @@
+import { Curriculum } from '@/features/resource/curriculum/types/curriculum.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 
-export type PlanProduct = {
+export type Plan = {
   id: number
   name: string
   description: string
-  imageUrl?: string
-  price: number
-  durationInDays: number
+  status: PlanStatus
+  accessSupportDetail: string
+  curriculumCount: number
+  maxTeacherSeats: number
+  maxStudentSeats: number
   createdAt: string
-  updatedAt?: string
-  status: PlanProductStatus
-  audienceType: AudienceType
+  updatedAt: string
+  curriculums: Partial<Curriculum>[]
+  planBillingCycles: PlanBillingCycle[]
+}
+export type PlanBillingCycle = {
+  id: number
+  planId: number
   billingCycle: BillingCycle
-  createdByUserId: string
-  minSeats: number
-  maxSeats: number
-  pricePerSeat: number
-  autoRenew: boolean
-  freeTrialDays?: number
-}
-// Slice
-export type PlanProductSliceParams = {
-  audienceType?: AudienceType
-} & SliceQueryParams
-
-export enum AudienceType {
-  INDIVIDUAL = 'Individual',
-  BUSINESS = 'Business',
-  ENTERPRISE = 'Enterprise'
-}
-
-export enum PlanProductStatus {
-  DRAFT = 'Draft',
-  PUBLISHED = 'Published',
-  ARCHIVED = 'Archived'
+  price: number
+  isAddOn: boolean
 }
 
 export enum BillingCycle {
-  MONTHLY = 'Monthly',
-  QUARTERLY = 'Quarterly',
-  YEARLY = 'Yearly'
+  SEMIANNUAL = 'Semiannual',
+  ANNUAL = 'Annual'
 }
+
+export enum PlanStatus {
+  DRAFT = 'Draft',
+  PUBLISHED = 'Published',
+  ARCHIVED = 'Archived',
+  DELETED = 'Deleted' // NOT API SUPPORTED JUST FOR FRONTEND USAGE
+}
+
+// Slice
+export type PlanSliceParams = {
+  status?: PlanStatus
+} & SliceQueryParams

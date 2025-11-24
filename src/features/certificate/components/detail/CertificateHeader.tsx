@@ -13,15 +13,16 @@ import {
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { useState } from 'react'
-import { Course } from '@/features/resource/course/types/course.type'
+import { CourseEnrollment } from '@/features/enrollment/types/enrollment.type'
+import { usePathname } from 'next/navigation'
 
 interface CertificateHeaderProps {
-  studentName: string
-  completionDate: string
-  studyDuration: string
-  specializationName: string
-  specializationUrl: string
-  // courses: Course[]
+  certificateUrl: string
+  userName: string
+  issuedDate: string
+  title: string
+  userImageUrl?: string
+  courseEnrollments: CourseEnrollment[]
 }
 
 const LinkedInIcon = () => (
@@ -110,20 +111,20 @@ const XIcon = () => (
 )
 
 const CertificateHeader = ({
-  studentName,
-  completionDate,
-  studyDuration,
-  specializationName,
-  specializationUrl
-  // courses
+  certificateUrl,
+  userName,
+  issuedDate,
+  title,
+  userImageUrl,
+  courseEnrollments
 }: CertificateHeaderProps) => {
   const [copyButtonText, setCopyButtonText] = useState('COPY')
 
-  const shareUrl = 'https://coursera.org/share/36284ba25812eb1d4203c'
-  const shareText = `I just completed the ${specializationName} specialization on Coursera!`
+  const shareText = `I just completed the ${title} specialization on Stemify!`
+  const fullUrl = typeof window !== 'undefined' ? window.location.href : ''
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(shareUrl).then(() => {
+    navigator.clipboard.writeText(fullUrl).then(() => {
       setCopyButtonText('COPIED!')
       setTimeout(() => {
         setCopyButtonText('COPY')
@@ -135,27 +136,27 @@ const CertificateHeader = ({
     {
       name: 'LinkedIn',
       icon: <LinkedInIcon />,
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(fullUrl)}`
     },
     {
       name: 'Email',
       icon: <EmailIcon />,
-      url: `mailto:?subject=Check out my Coursera Certificate&body=${encodeURIComponent(shareText + ' ' + shareUrl)}`
+      url: `mailto:?subject=Check out my Stemify Certificate&body=${encodeURIComponent(shareText + ' ' + fullUrl)}`
     },
     {
       name: 'WhatsApp',
       icon: <WhatsAppIcon />,
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + fullUrl)}`
     },
     {
       name: 'Facebook',
       icon: <FacebookIcon />,
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`
     },
     {
       name: 'X',
       icon: <XIcon />,
-      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`
+      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(fullUrl)}&text=${encodeURIComponent(shareText)}`
     }
   ]
 
@@ -168,7 +169,7 @@ const CertificateHeader = ({
               <div className='relative'>
                 <div className='flex h-16 w-16 items-center justify-center rounded-full bg-gray-200'>
                   <Image
-                    src={'/images/Rosie.jpg'}
+                    src={userImageUrl ?? ''}
                     width={64}
                     height={64}
                     alt='User Image'
@@ -179,34 +180,32 @@ const CertificateHeader = ({
               </div>
               <div className='pt-1'>
                 <p className='text-lg text-gray-700'>
-                  Completed by <span className='font-bold text-gray-900'>{studentName}</span>
+                  Completed by <span className='font-bold text-gray-900'>{userName}</span>
                 </p>
-                <h1 className='mt-1 text-3xl font-bold text-gray-900'>{completionDate}</h1>
+                <h1 className='mt-1 text-3xl font-bold text-gray-900'>{issuedDate}</h1>
               </div>
             </div>
-            <p className='mt-3 ml-20 text-sm text-gray-500'>{studyDuration}</p>
             <p className='mt-6 text-base text-gray-700'>
-              {studentName}'s account is verified. Coursera certifies their successful completion of University of
-              California, Irvine{' '}
-              <Link href={specializationUrl} className='font-semibold text-blue-600 hover:underline'>
-                {specializationName}
+              {userName}'s account is verified. Stemify certifies their successful completion of {title}{' '}
+              <Link href={'#'} className='font-semibold text-blue-600 hover:underline'>
+                {title}
               </Link>{' '}
               Specialization.
             </p>
             <div className='mt-6'>
               <h3 className='font-bold text-gray-800'>Course Certificates Completed</h3>
-              {/* <div className='mt-2 space-y-1 text-gray-700'>
-                {courses.map((course) => (
-                  <p key={course.title}>{course.title}</p>
+              <div className='mt-2 space-y-1 text-gray-700'>
+                {courseEnrollments?.map((courseEnrollment) => (
+                  <p key={courseEnrollment.id}>{courseEnrollment.courseTitle}</p>
                 ))}
-              </div> */}
+              </div>
             </div>
           </div>
 
           <div className='flex w-full flex-col items-center lg:w-auto lg:max-w-md lg:items-end'>
             <div className='w-full rounded-md border bg-gray-50 p-2 shadow-sm'>
               <Image
-                src='/certificate-placeholder.png'
+                src={certificateUrl ?? ''}
                 alt='Certificate Thumbnail'
                 width={500}
                 height={350}
@@ -236,7 +235,7 @@ const CertificateHeader = ({
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
           <DialogTitle className='text-2xl font-bold'>Share this page</DialogTitle>
-          <DialogDescription>Show your friends what they can learn on Coursera</DialogDescription>
+          <DialogDescription>Show your friends what they can learn on Stemify</DialogDescription>
         </DialogHeader>
         <div className='flex items-center justify-around py-4'>
           {socialPlatforms.map((platform) => (
@@ -253,7 +252,7 @@ const CertificateHeader = ({
           ))}
         </div>
         <div className='flex items-center space-x-2'>
-          <Input id='link' defaultValue={shareUrl} readOnly />
+          <Input id='link' defaultValue={fullUrl} readOnly />
           <Button type='submit' size='sm' className='bg-blue-500 px-3' onClick={handleCopy}>
             <span className='sr-only'>Copy</span>
             {copyButtonText}

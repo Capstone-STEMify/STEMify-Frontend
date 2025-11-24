@@ -1,34 +1,41 @@
-import { UserRole } from '@/types/userRole'
+import { HeaderRole, LicenseType, UserRole } from '@/types/userRole'
 
-export const navRoutes: Record<UserRole, { name: string; path: string }[]> = {
-  [UserRole.ADMIN]: [
-    { name: 'home', path: '/' },
-    { name: 'resources', path: '/resource' },
-    { name: 'dashboard', path: '/admin/dashboard' }
-  ],
-  [UserRole.STUDENT]: [
-    { name: 'home', path: '/' },
-    { name: 'resources', path: '/resource' },
-    { name: 'shop', path: '/shop' },
-    { name: 'myLearning', path: '/my-learning' },
-    { name: 'strawLab', path: '/straw-lab' }
-  ],
-  [UserRole.TEACHER]: [
-    { name: 'home', path: '/' },
-    { name: 'resources', path: '/resource' },
-    { name: 'shop', path: '/shop' },
-    { name: 'myLearning', path: '/my-learning' },
-    { name: 'strawLab', path: '/straw-lab' }
-  ],
-  [UserRole.STAFF]: [
-    { name: 'home', path: '/' },
-    { name: 'resources', path: '/resource' },
-    { name: 'strawLab', path: '/straw-lab' }
-  ],
+export const navRoutes: Record<HeaderRole, { name: string; path: string }[]> = {
   [UserRole.GUEST]: [
     { name: 'home', path: '/' },
+    { name: 'resources', path: '/resource' }
+  ],
+  [LicenseType.STUDENT]: [
+    { name: 'home', path: '/' },
     { name: 'resources', path: '/resource' },
-    { name: 'shop', path: '/shop' }
-    // { name: 'strawLab', path: '/straw-lab' }
+    { name: 'myLearning', path: '/my-learning' },
+    { name: 'strawLab', path: '/lab' }
+  ],
+  [LicenseType.TEACHER]: [
+    { name: 'home', path: '/' },
+    { name: 'resources', path: '/resource' },
+    { name: 'classroom', path: '/classroom' },
+    { name: 'strawLab', path: '/lab' }
   ]
+  // [UserRole.ADMIN]: [
+  //   { name: 'home', path: '/' },
+  //   { name: 'resources', path: '/resource' },
+  //   { name: 'dashboard', path: '/admin/dashboard' }
+  // ],
+  // [UserRole.STAFF]: [
+  //   { name: 'home', path: '/' },
+  //   { name: 'resources', path: '/resource' },
+  //   { name: 'strawLab', path: '/lab' }
+  // ],
+
+  // [UserRole.MEMBER]: [
+  //   { name: 'home', path: '/' },
+  //   { name: 'resources', path: '/resource' }
+  // ],
+
+  //   [LicenseType.ORGANIZATION_ADMIN]: [
+  //     { name: 'home', path: '/' },
+  //     { name: 'resources', path: '/resource' },
+  //     { name: 'organizationDashboard', path: '/organization/dashboard' }
+  //   ]
 }

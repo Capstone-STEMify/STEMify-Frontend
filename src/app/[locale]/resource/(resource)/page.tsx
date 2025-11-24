@@ -3,7 +3,7 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import { ArrowRightIcon, BookOpenIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
-export default function LibraryPage() {
+export default function ResourceListPage() {
   const t = useTranslations('Resource')
   const tc = useTranslations('common')
   return (
@@ -20,7 +20,6 @@ export default function LibraryPage() {
           {/* Curriculum */}
           <CardLayout
             imageClassName='object-fit'
-            
             imageSrc='/images/resources/teacher-support.png'
             href='/resource/curriculums'
             footer={
@@ -100,7 +99,7 @@ export default function LibraryPage() {
           </CardLayout>
 
           <CardLayout
-            imageSrc='/images/resources/activities.png'
+            imageSrc='/images/resources/news.png'
             href='/resource/activities'
             footer={
               <Button className='group bg-blue-500'>
@@ -126,8 +125,8 @@ export default function LibraryPage() {
           </CardLayout>
 
           <CardLayout
-            imageSrc='/images/resources/news.png'
-            href='/resource/news'
+            imageSrc='/images/resources/activities.png'
+            href='/resource/stem-kit'
             footer={
               <Button className='group bg-blue-500'>
                 <span>{tc('button.readBlogs')}</span>
@@ -142,11 +141,11 @@ export default function LibraryPage() {
                   <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
                     <BookOpenIcon className='h-4 w-4 text-blue-600' />
                   </div>
-                  <h2 className='text-xl font-bold text-gray-900'>{t('news.title')}</h2>
+                  <h2 className='text-xl font-bold text-gray-900'>{t('stemKit.title')}</h2>
                 </div>
 
                 {/* Description */}
-                <p className='text-sm leading-relaxed text-gray-600'>{t('news.description')}</p>
+                <p className='text-sm leading-relaxed text-gray-600'>{t('stemKit.description')}</p>
               </div>
             </div>
           </CardLayout>

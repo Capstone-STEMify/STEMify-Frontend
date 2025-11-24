@@ -8,8 +8,10 @@
     },
     "form": {
       "title": {
-        "create": "Tạo nội dung",
-        "update": "Cập nhật nội dung"
+        "create": "Tạo nội dung bài học",
+        "update": "Cập nhật nội dung",
+        "createQuiz": "Tạo Quiz",
+        "createAssignment": "Tạo Bài Thực Hành"
       }
     }
   }

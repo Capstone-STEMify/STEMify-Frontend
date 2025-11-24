@@ -18,9 +18,29 @@
       "title": "Curriculums",
       "description": "Integrated curriculum for today’s STEM educators and tomorrow’s STEM leaders"
     },
-    "news": {
-      "title": "News and Blogs",
-      "description": "Stay updated with the latest news, trends, and insights in STEM education through our blogs and articles."
+    "stemKit": {
+      "title": "STEM Kit",
+      "description": "Explore our STEM Kit products designed to enhance hands-on learning experiences."
+    },
+    "strawAssemblyLibrary": {
+      "title": "Straw Assembly Library",
+      "description": "Access a collection of 3D models to enhance your STEM learning and projects."
+    },
+    "workspace3D": {
+      "title": "3D Workspace",
+      "description": "Create and manipulate 3D models for your STEM projects in our 3D workspace."
+    },
+    "microbitWorkspace": {
+      "title": "Micro:bit Workspace",
+      "description": "Utilize our Micro:bit workspace for coding and STEM activities."
+    },
+    "modalMaker": {
+      "title": "Modal Maker",
+      "description": "Create and customize modals for your STEM projects with ease."
+    },
+    "robotAi": {
+      "title": "Robot AI",
+      "description": "Explore our Robot AI resources to enhance your understanding of robotics and artificial intelligence."
     }
   }
 }

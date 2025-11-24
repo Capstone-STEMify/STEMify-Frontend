@@ -21,7 +21,6 @@ export default async function LessonStaffLayout({
             <SBreadcrumb />
           </div>
           <div className='flex flex-1'>
-            {/* <ResourceManageSidebar role={role} /> */}
             <SidebarInset>{children}</SidebarInset>
           </div>
         </div>

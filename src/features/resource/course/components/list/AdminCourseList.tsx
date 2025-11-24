@@ -15,7 +15,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { capitalizeFirst } from '@/utils/index'
 import { SPagination } from '@/components/shared/SPagination'
 import { LayoutGrid, TableIcon } from 'lucide-react'
-import { getCourseStatusBadgeClass, getLevelBadgeClass } from '@/utils/badgeColor'
+import { getLevelBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
 import STabs from '@/components/shared/STabs'
 import { useGetCourseColumn } from '@/features/resource/course/components/list/CourseColum'
 import { useModal } from '@/providers/ModalProvider'
@@ -110,7 +110,7 @@ export default function AdminCourseList() {
                       <CardLayout
                         imageSrc={course.imageUrl}
                         badge={
-                          <Badge className={`${getCourseStatusBadgeClass(course.status)}`}>
+                          <Badge className={`${getStatusBadgeClass(course.status)}`}>
                             {capitalizeFirst(course.status)}
                           </Badge>
                         }

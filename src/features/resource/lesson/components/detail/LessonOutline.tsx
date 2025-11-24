@@ -5,21 +5,20 @@ import { cn } from '@/utils/shadcn/utils'
 import { Check, GraduationCap, Lock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
 
 type LessonOutlineProps = {
   sectionData?: Section[]
-  selectedSectionId: number | null
-  onSelectSection: (sectionId: number) => void
   sectionStatus?: ApiSuccessResponse<PaginatedResult<StudentProgress>>
 }
 
-export default function LessonOutline({
-  sectionData,
-  selectedSectionId,
-  onSelectSection,
-  sectionStatus
-}: LessonOutlineProps) {
+export default function LessonOutline({ sectionData, sectionStatus }: LessonOutlineProps) {
+  const dispatch = useAppDispatch()
+  const { selectedSectionId } = useAppSelector((state) => state.lessonDetail)
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
+
   const t = useTranslations('LessonDetails')
   const { data: userData } = useSession()
 
@@ -32,8 +31,7 @@ export default function LessonOutline({
   )
 
   const isLoggedIn = !!userData
-  const role = userData?.user?.role
-  const isVisibleSection = role === UserRole.TEACHER || role === UserRole.ADMIN || role === UserRole.STAFF
+  const isVisibleSection = role === LicenseType.TEACHER || role === UserRole.ADMIN || role === UserRole.STAFF
 
   return (
     <div className='px-4'>
@@ -62,7 +60,7 @@ export default function LessonOutline({
                 )}
                 onClick={() => {
                   if (isLoggedIn) {
-                    onSelectSection(sec.id)
+                    dispatch(setSelectedSectionId(sec.id))
                   }
                 }}
               >

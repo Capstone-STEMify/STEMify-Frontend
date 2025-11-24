@@ -174,29 +174,16 @@ export default function UpsertCurriculum({ curriculumId, onSuccess }: UpsertCurr
             )}
           />
           <form.AppField
-            name='price'
+            name='title'
             children={(field) => (
               <field.TextField
-                type='number'
-                min={1000}
-                defaultValue={1000}
-                label={t('form.fields.price.label')}
-                placeholder={t('form.fields.price.placeholder')}
+                label={t('form.fields.name.label')}
+                placeholder={t('form.fields.name.placeholder')}
                 className='rounded-lg border-gray-300'
               />
             )}
           />
         </div>
-        <form.AppField
-          name='title'
-          children={(field) => (
-            <field.TextField
-              label={t('form.fields.name.label')}
-              placeholder={t('form.fields.name.placeholder')}
-              className='rounded-lg border-gray-300'
-            />
-          )}
-        />
 
         <form.AppField
           name='description'

@@ -8,7 +8,7 @@ import Link from 'next/link'
 
 export default function LinkButtonBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
   const { label, url } = node.attrs as { label: string; url: string }
-  const role = useAppSelector((state) => state.auth.user?.role)
+  const role = useAppSelector((state) => state.selectedOrganization.currentRole)
   const editable = editor?.isEditable
 
   return (

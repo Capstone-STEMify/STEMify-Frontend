@@ -1,0 +1,47 @@
+{
+  "subscription": {
+    "list": {
+      "organizationTitle": "Danh sách tổ chức",
+      "searchPlaceholder": "Tìm kiếm tổ chức theo tên...",
+      "subscriptionTitle": "Danh sách gói đăng ký",
+      "subscriptionHistoryTitle": "Lịch sử đăng ký",
+      "organizationSubscriptionTitle": "Quản lý đăng ký tổ chức",
+      "organizationSubscriptionDescription": "Duyệt và quản lý tất cả các đăng ký tổ chức đã đăng ký trên nền tảng.",
+      "placeholder": {
+        "search": "Tìm kiếm tổ chức theo tên...",
+        "status": "Lọc theo trạng thái"
+      }
+    },
+    "detail": {
+      "title": "Thông tin tổ chức",
+      "currentPlan": "Gói hiện tại",
+      "StartDate": "Ngày bắt đầu",
+      "ExpiredDate": "Ngày hết hạn",
+      "totalSeats": "Tổng số người dùng",
+      "usedSeats": "Số người dùng đã kích hoạt",
+      "image": "Hình ảnh",
+      "name": "Tên tổ chức",
+      "organizationType": "Loại tổ chức",
+      "contactEmail": "Email liên hệ",
+      "contactPhone": "Số điện thoại liên hệ",
+      "contactName": "Tên người liên hệ",
+      "role": "Vai trò"
+    },
+    "form": {
+      "title": {
+        "create": "Tạo tổ chức",
+        "edit": "Chỉnh sửa tổ chức",
+        "plan": "Gói",
+        "seats": "Số người dùng",
+        "organizationInfor": "Thông tin tổ chức",
+        "name": "Tên tổ chức",
+        "organizationType": "Loại tổ chức",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "adminAccount": "Tài khoản quản trị"
+      }
+    }
+  }
+}

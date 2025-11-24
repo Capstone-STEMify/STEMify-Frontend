@@ -1,0 +1,47 @@
+{
+  "subscription": {
+    "list": {
+      "organizationTitle": "Organization List",
+      "searchPlaceholder": "Search organizations by name...",
+      "subscriptionTitle": "Subscription List",
+      "subscriptionHistoryTitle": "Subscription History",
+      "organizationSubscriptionTitle": "Organization Subscription Management",
+      "organizationSubscriptionDescription": "Browse and manage all organization subscriptions registered on the platform.",
+      "placeholder": {
+        "search": "Search organizations by name...",
+        "status": "Filter by status"
+      }
+    },
+    "detail": {
+      "title": "Organization Details",
+      "currentPlan": "Current Plan",
+      "StartDate": "Start Date",
+      "ExpiredDate": "Expired Date",
+      "totalSeats": "Total Seats",
+      "usedSeats": "Used Seats",
+      "image": "Image",
+      "name": "Organization Name",
+      "organizationType": "Organization Type",
+      "contactEmail": "Contact Email",
+      "contactPhone": "Contact Phone",
+      "contactName": "Contact Name",
+      "role": "Role"
+    },
+    "form": {
+      "title": {
+        "create": "Create Organization",
+        "edit": "Edit Organization",
+        "plan": "Plan",
+        "seats": "Seats",
+        "organizationInfor": "Organization Information",
+        "name": "Organization Name",
+        "organizationType": "Organization Type",
+        "email": "Email",
+        "phone": "Phone",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "adminAccount": "Admin Account"
+      }
+    }
+  }
+}

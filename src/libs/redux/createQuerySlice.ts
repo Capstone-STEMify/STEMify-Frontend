@@ -28,8 +28,13 @@ export function createQuerySlice<T extends SliceQueryParams>(name: string, initi
       },
       setParam(state, action: PayloadAction<{ key: keyof T; value: any }>) {
         const { key, value } = action.payload
-        const draft = state as unknown as T
-        draft[key] = value
+
+        if (value === undefined || value === null) {
+          delete (state as any)[key]
+        } else {
+          ;(state as any)[key] = value
+        }
+
         state.pageNumber = 1
       },
       setMultipleParams(state, action: PayloadAction<Partial<T>>) {

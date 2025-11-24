@@ -1,9 +1,9 @@
 {
-    "message": {
-        "user": "Bạn phải chấp nhận các điều khoản và điều kiện",
-        "ageRange": "Bạn có chắc chắn muốn xóa độ tuổi này không",
-        "category": "Bạn có chắc chắn muốn xóa chủ đề này không",
-        "confirmDelMessage": "Bạn có chắc chắn muốn xóa \"{title}\" ?",
-        "disable": "Bạn có chắc chắn muốn vô hiệu hóa người dùng \"{title}\" không?"
-    }
+  "message": {
+    "user": "Bạn phải chấp nhận các điều khoản và điều kiện",
+    "ageRange": "Bạn có chắc chắn muốn xóa độ tuổi này không",
+    "category": "Bạn có chắc chắn muốn xóa chủ đề này không",
+    "confirmDelMessage": "Bạn có chắc chắn muốn xóa \"{title}\" ?",
+    "disable": "Bạn có chắc chắn muốn vô hiệu hóa người dùng \"{title}\" không?"
+  }
 }

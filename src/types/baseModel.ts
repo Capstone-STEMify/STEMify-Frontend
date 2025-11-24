@@ -34,14 +34,23 @@ export type ApiErrorResponse = {
 } & ApiResponse
 
 // Request params
-export type BaseOrderBy = 'createdDate' | 'title' | '' | 'orderindex' | 'price' | 'name'
+export type BaseOrderBy =
+  | 'createdDate'
+  | 'title'
+  | ''
+  | 'orderindex'
+  | 'price'
+  | 'name'
+  | 'upcoming'
+  | 'inprogress'
+  | 'endsoon'
 export type SortDirection = 'Asc' | 'Desc'
 
 export type SearchPaginatedRequestParams = {
   pageNumber?: number
   pageSize?: number
   search?: string
-  orderBy?: BaseOrderBy
+  orderBy?: string | BaseOrderBy
   status?: string
   sortDirection?: 'Asc' | 'Desc'
 }

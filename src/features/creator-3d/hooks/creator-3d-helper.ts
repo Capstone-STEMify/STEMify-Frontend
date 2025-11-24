@@ -11,7 +11,7 @@ import { addInstance, setSelectedId } from '@/features/creator-3d/slice/creatorS
 import { addTargetToAction } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 
 export function createInstanceFromTemplate(
@@ -103,11 +103,35 @@ export function useAddObject() {
   const dispatch = useAppDispatch()
   const selectedActionId = useAppSelector((s) => s.workspaceTree.selectedActionId)
   const actions = useAppSelector((s) => s.workspaceTree.actions)
+  const instances = useAppSelector((s) => s.creatorScene.instances)
 
   const counters = useRef<{ [key: string]: number }>({
     straw: 0,
     connector: 0
   })
+
+  // 🔄 Sync counters với instances hiện có (chạy mỗi khi instances thay đổi)
+  useEffect(() => {
+    const maxCounters: { [key: string]: number } = {
+      straw: 0,
+      connector: 0
+    }
+
+    instances.forEach((instance) => {
+      // Parse ID format: "straw_5" hoặc "connector_3"
+      const match = instance.id.match(/^(straw|connector)_(\d+)$/)
+      if (match) {
+        const [, prefix, numStr] = match
+        const num = parseInt(numStr, 10)
+        if (!isNaN(num)) {
+          maxCounters[prefix] = Math.max(maxCounters[prefix] || 0, num)
+        }
+      }
+    })
+
+    // Cập nhật counters để ID tiếp theo luôn lớn hơn max hiện tại
+    counters.current = maxCounters
+  }, [instances])
 
   const generateId = useCallback((prefix: string) => {
     counters.current[prefix] = (counters.current[prefix] ?? 0) + 1
@@ -115,7 +139,7 @@ export function useAddObject() {
   }, [])
 
   return (template: ComponentTemplate, position: { x: number; y: number; z: number }) => {
-    const instance = createInstanceFromTemplate(template, position, generateId)
+    // Validation
     if (!selectedActionId) {
       toast.error('⚠️ Please select an Action in Workspace Tree before adding a component.')
       return null
@@ -131,6 +155,11 @@ export function useAddObject() {
       toast.error('⚠️ Transform Arm Action chỉ chấp nhận Connector.')
       return null
     }
+
+    // Create instance
+    const instance = createInstanceFromTemplate(template, position, generateId)
+
+    // Dispatch actions
     dispatch(addInstance(instance))
     dispatch(setSelectedId(instance.id))
     dispatch(addTargetToAction({ actionId: selectedActionId, targetId: instance.id }))
@@ -185,7 +214,8 @@ export function exportAssembly(
   const instances = state.creatorScene.instances
   const now = new Date().toISOString()
   const actions = state.workspaceTree.actions
-
+  const activities = state.workspaceTree.activities
+  console.log('🧩 Exporting activities activities:', activities)
   // Straws
   const straws = instances
     .filter((i) => i.category === 'straw')
@@ -243,58 +273,19 @@ export function exportAssembly(
     ...(a.type === 'rotate_highlight' && { rotationSpeed: a.rotationSpeed })
   }))
 
-  const steps = exportedActions.map((a) => {
-    if (a.type === 'highlight') {
-      return {
-        actionId: a.id,
-        title: `Highlight: ${a.name}`,
-        description: `Highlights targets: ${
-          Array.isArray(a.targets) ? a.targets.join(', ') : a.targets === 'all' ? 'all' : ''
-        }`,
-        expectedResult: 'Targets are highlighted',
-        hints: ['Notice the highlighted components']
-      }
-    }
+  const exportedActivities = activities.map((activity) => ({
+    id: activity.id,
+    name: activity.name,
+    description: activity.description,
+    difficulty: activity.difficulty,
+    estimatedTime: activity.estimatedTime,
+    steps: activity.steps.map((step) => ({
+      ...step, // title, description, expectedResult, hints
+      actionId: step.actionId // đảm bảo liên kết action
+    }))
+  }))
 
-    if (a.type === 'transform_arm') {
-      return {
-        actionId: a.id,
-        title: `Adjust Arms: ${a.name}`,
-        description: 'Connector arms should rotate as exported',
-        expectedResult: 'Arms are rotated according to saved values',
-        hints: ['Check connector arms rotations']
-      }
-    }
-
-    if (a.type === 'rotate_highlight') {
-      return {
-        actionId: a.id,
-        title: `Rotate Highlight: ${a.name}`,
-        description: 'Rotates while highlighting',
-        expectedResult: 'Rotation + highlight effect works',
-        hints: ['Observe the spinning highlight']
-      }
-    }
-
-    return {
-      actionId: a.id,
-      title: a.name,
-      description: 'Run this action',
-      expectedResult: 'Effect is applied',
-      hints: []
-    }
-  })
-
-  const activities = [
-    {
-      id: 'custom_assembly',
-      name: metadata.title,
-      description: metadata.description,
-      difficulty: 'beginner',
-      estimatedTime: 600,
-      steps
-    }
-  ]
+  console.log('🧩 Exported Assembly Activities:', exportedActivities)
 
   return {
     metadata: {
@@ -318,10 +309,10 @@ export function exportAssembly(
         { id: 'pink_8_9', source: '/components/templates/StrawTypes/pink_8_9.json' },
         { id: 'orange_6_3', source: '/components/templates/StrawTypes/orange_6_3.json' },
         { id: 'yellow_3_8', source: '/components/templates/StrawTypes/yellow_3_8.json' },
-        { id: '1leg_red', source: '/components/templates/ConnectorTypes/1leg.json' },
-        { id: '2leg_red', source: '/components/templates/ConnectorTypes/2legs.json' },
-        { id: '3leg_red', source: '/components/templates/ConnectorTypes/3legs.json' },
-        { id: '5leg_red', source: '/components/templates/ConnectorTypes/5legs.json' }
+        { id: '1leg', source: '/components/templates/ConnectorTypes/1leg.json' },
+        { id: '2leg', source: '/components/templates/ConnectorTypes/2legs.json' },
+        { id: '3leg', source: '/components/templates/ConnectorTypes/3legs.json' },
+        { id: '5leg', source: '/components/templates/ConnectorTypes/5legs.json' }
       ]
     },
     instances: {
@@ -329,7 +320,7 @@ export function exportAssembly(
       connectors: connectorInstances
     },
     actions: exportedActions,
-    activities,
+    activities: exportedActivities,
     scene: INITIAL_SCENE
   }
 }

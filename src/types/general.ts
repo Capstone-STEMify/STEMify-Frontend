@@ -18,6 +18,7 @@ export type ModalType =
   | 'enroll'
   | 'editImage'
   | 'information'
+  | 'success'
 
   // upsert
   | 'upsertCourse'
@@ -33,10 +34,18 @@ export type ModalType =
   | 'upsertContent'
   | 'upsertKit'
   | 'upsertComponent'
+  | 'upsertOrganization'
+  | 'upsertClassroom'
+  | 'updateClassroomOrganization'
+  | 'upsertEmulator'
+  | 'upsertEmulator'
 
   // detail
   | 'lessonDetail'
   | 'contentDetail'
+
+  // organization
+  | 'uploadCSV'
 
   // orther
   | 'pacingGuide'
@@ -44,6 +53,14 @@ export type ModalType =
   | 'kitListTableModal'
   | 'selectComponentListModal'
   | 'upsertAssembly'
+  | 'quizAI'
+  | 'addPeople'
+
+  // sheet
+  | 'upsertContact'
+  | 'upsertPlan'
+  | 'upsertSubscription'
+
 export interface ModalContextType {
   openModal: (type: ModalType, props?: any) => void
   closeModal: () => void

@@ -43,7 +43,7 @@ export default function CurriculumList() {
 
   return (
     <div className='mx-auto mb-20 max-w-7xl sm:px-6 lg:px-8'>
-      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+      <div className='mb-30 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
         {curriculumData.data.items.map((curriculum) => (
           <CardLayout
             className='rounded-2xl border-none shadow-xl'
@@ -66,9 +66,6 @@ export default function CurriculumList() {
 
               <p className='line-clamp-4 text-sm text-gray-600'>{curriculum.description}</p>
               <div className='mt-auto flex items-center gap-2'></div>
-              <p className='mt-1 text-lg font-bold text-sky-500'>
-                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(curriculum.price)}
-              </p>
               <Link
                 href={`/resource/curriculum/${curriculum.id}`}
                 className='mt-4 flex items-center text-sm font-medium text-sky-500 hover:underline'

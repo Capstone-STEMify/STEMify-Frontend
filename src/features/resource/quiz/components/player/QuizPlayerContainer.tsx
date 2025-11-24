@@ -1,0 +1,45 @@
+'use client'
+
+import { useEffect } from 'react'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import QuizResult from '@/features/resource/quiz/components/player/QuizResult'
+import QuizSidebar from '@/features/resource/quiz/components/player/QuizSidebar'
+import QuizMainContent from '@/features/resource/quiz/components/player/QuizMainContent'
+import { useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
+import { initializeQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import SEmpty from '@/components/shared/empty/SEmpty'
+
+export default function QuizPlayerContainer() {
+  const dispatch = useAppDispatch()
+  const { isSubmitted } = useAppSelector((state) => state.quizPlayer)
+  const isMobile = useIsMobile()
+  const selectedQuiz = useAppSelector((state) => state.quizPlayer.selectedQuiz)
+
+  useEffect(() => {
+    if (selectedQuiz) {
+      dispatch(
+        initializeQuiz({
+          questions: selectedQuiz.questions,
+          timeLimitMinutes: selectedQuiz.timeLimitMinutes
+        })
+      )
+    }
+  }, [selectedQuiz, dispatch])
+
+  if (!selectedQuiz) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <SEmpty title='Quiz not found.' />
+      </div>
+    )
+  }
+
+  return (
+    <div className='flex h-screen overflow-hidden bg-white'>
+      <QuizSidebar quiz={selectedQuiz} />
+      <QuizMainContent quiz={selectedQuiz} />
+    </div>
+  )
+}

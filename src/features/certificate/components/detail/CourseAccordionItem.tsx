@@ -7,59 +7,43 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 interface CourseAccordionItemProps {
-  course: CourseEnrollment
-  university: string
+  courseEnrollment: CourseEnrollment
   studentName: string
   itemValue: string
 }
 
-export const CourseAccordionItem = ({ course, university, studentName, itemValue }: CourseAccordionItemProps) => {
+export const CourseAccordionItem = ({ courseEnrollment, studentName, itemValue }: CourseAccordionItemProps) => {
   return (
     <AccordionItem value={itemValue} className='border-b-0'>
-      <Card className='overflow-hidden shadow-sm transition-all hover:shadow-md'>
-        <AccordionTrigger className='p-4 text-left hover:no-underline'>
-          <div className='flex w-full items-center justify-between'>
-            <div className='flex items-center gap-4'>
-              <CheckCircle2 className='h-6 w-6 flex-shrink-0 text-green-600' />
-              <Image
-                src='/HomeFiles/window.png'
-                alt='University Logo'
-                width={64}
-                height={64}
-                className='hidden sm:block'
-              />
-              <div>
-                <h4 className='font-bold text-gray-900'>{course.courseTitle}</h4>
-                <p className='text-sm text-gray-500'>Course • Grade: 95%</p>
-              </div>
-            </div>
-            <div className='ml-4 hidden items-center gap-4 md:flex'>
-              <Link
-                href='#'
-                className='rounded-md border border-blue-600 px-3 py-1.5 text-sm font-semibold text-blue-600 hover:bg-blue-50'
-              >
-                View certificate
-              </Link>
-              <MoreHorizontal className='h-5 w-5 cursor-pointer text-gray-500' />
-            </div>
-          </div>
-        </AccordionTrigger>
-
-        <AccordionContent>
-          <div className='border-t bg-gray-50/50 px-6 pt-6'>
-            <h3 className='mb-4 text-2xl text-blue-700'>{course.courseTitle}</h3>
-            <p className='mt-2 text-sm text-gray-700'>Stemify</p>
-
-            <div className='mt-4 space-y-1 text-sm text-gray-800'>
-              <p>
-                Completed by {studentName} by <span className='font-semibold'>{course.completedAt}</span>
-              </p>
-              <p>
-                Grade Achieved: <span className='font-semibold'>95%</span>
+      <Card className='overflow-hidden p-4 shadow-sm transition-all hover:shadow-md'>
+        <div className='flex w-full items-center justify-between'>
+          <div className='flex items-center gap-4'>
+            <CheckCircle2 className='h-6 w-6 flex-shrink-0 text-green-600' />
+            <Image
+              src={courseEnrollment.coverImageUrl ?? ''}
+              alt='Course Logo'
+              width={64}
+              height={64}
+              className='hidden sm:block'
+            />
+            <div>
+              <h4 className='font-bold text-gray-900'>{courseEnrollment.courseTitle}</h4>
+              <p className='text-sm text-gray-500'>Course • Grade Achieved: {courseEnrollment.finalScore ?? 0}%</p>
+              <p className='text-sm text-gray-500'>
+                Completed by <span>{studentName}</span> on{' '}
+                <span>{new Date(courseEnrollment.completedAt).toLocaleDateString()}</span>
               </p>
             </div>
           </div>
-        </AccordionContent>
+          <div className='ml-4 hidden items-center gap-4 md:flex'>
+            <Link
+              href='#'
+              className='rounded-md border border-blue-600 px-3 py-1.5 text-sm font-semibold text-blue-600 hover:bg-blue-50'
+            >
+              View certificate
+            </Link>
+          </div>
+        </div>
       </Card>
     </AccordionItem>
   )

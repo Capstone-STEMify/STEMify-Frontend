@@ -1,5 +1,4 @@
-import { metadata } from '../layout' 
-import { UserRole } from '@/types/userRole'
+import { metadata } from '../layout'
 import Header from '@/components/layout/Header'
 
 metadata.title = 'My Learning'
@@ -8,8 +7,6 @@ export default async function MyLearningLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const role = UserRole.STUDENT
-
   return (
     <div>
       <Header />

@@ -1,0 +1,163 @@
+{
+  "organization": {
+    "name": "Organization",
+    "type": "Organization Type",
+    "description": "Description",
+    "image": "Organization Image",
+    "imageSize": "Image must be less than 5MB",
+    "detail": {
+      "noData": "No organization data available.",
+      "noSubscription": "No subscriptions found for this organization.",
+      "header": "Organization Details",
+      "organizationType": "Organization Type",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "package": "Package(s)",
+      "contract": {
+        "noContract": "No contract found.",
+        "header": "Contract Information",
+        "noContractFile": "No contract file uploaded.",
+        "name": "Contract Name",
+        "description": "Contract Description",
+        "createdAt": "Created At",
+        "viewFile": "View Contract File"
+      },
+      "subscription": {
+        "label": "Subscription(s)",
+        "header": "Subscription Details",
+        "studentSeats": "Student Seats",
+        "teacherSeats": "Teacher Seats",
+        "totalSeats": "Total Seats",
+        "billingCycle": "Billing Cycle",
+        "grossAmount": "Gross Amount",
+        "netAmount": "Net Amount",
+        "discount": "Discount",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "annual": "Annual",
+        "semiAnnual": "Semi-Annual",
+        "includeCurriculum": "Included Curriculum(s)",
+        "course": "Course(s)"
+      },
+      "license": {
+        "label": "License(s)",
+        "header": "License Details",
+        "totalLicenses": "Total Licenses",
+        "usedLicenses": "Used Licenses",
+        "availableLicenses": "Available Licenses",
+        "member": "Member(s)",
+        "active": "Active",
+        "pending": "Pending",
+        "noActive": "No Active license assignments",
+        "name": "Name",
+        "role": "Role",
+        "status": "Status",
+        "assignedAt": "Assigned At",
+        "notSet": "Not set"
+      }
+    },
+    "form": {
+      "title": {
+        "create": "Create Organization",
+        "update": "Update Organization"
+      },
+      "placeholder": {
+        "name": "Enter name",
+        "type": "Select Organization Type",
+        "description": "Enter description"
+      }
+    },
+    "subscription": {
+      "header": "Create Organization Subscription",
+      "subHeader": "Follow the steps to set up your organization",
+      "step1": {
+        "title": "Configure Subscription",
+        "description": "Select plan and options"
+      },
+      "step2": {
+        "title": "Create Admin Accounts",
+        "description": "Grant access to admins"
+      },
+      "title": "Subscriptions",
+      "noData": "No subscriptions found for this organization.",
+      "create": {
+        "header": "Configure Subscription",
+        "description": "Select a billing cycle, choose your plan, and configure the subscription details",
+        "contract": {
+          "header": "Contract Information",
+          "headerDescription": "Provide the contract details for this subscription",
+          "name": {
+            "label": "Contract Name",
+            "placeholder": "Enter contract name"
+          },
+          "contractFile": {
+            "label": "Contract File (PDF)",
+            "placeholder": "Upload contract file",
+            "description": "Upload a small PDF (under 5MB)"
+          },
+          "description": {
+            "label": "Contract Description",
+            "placeholder": "Enter contract description"
+          }
+        },
+        "plan": {
+          "billingCycle": {
+            "label": "Billing Cycle",
+            "semiAnnual": "Semi-Annual",
+            "semiAnnualDescription": "6 months billing period",
+            "annual": "Annual",
+            "annualDescription": "12 months billing period"
+          },
+          "label": "Select Plan",
+          "annual": "Year",
+          "semiAnnual": "6 months",
+          "curriculum": "Curriculum(s)",
+          "studentSeat": "Student Seat(s)",
+          "teacherSeat": "Teacher Seat(s)"
+        },
+        "period": {
+          "header": "Subscription Period",
+          "startDate": "Start Date",
+          "endDate": "End Date",
+          "endDateDescription": "Automatically calculated based on start date and billing cycle"
+        },
+        "curriculumSelection": {
+          "header": "Curriculum Selection",
+          "selected": "Selected ",
+          "selectedCurriculums": "Selected Curriculum(s)",
+          "description": "You can select up to {maxCurriculums} curriculum(s) based on your selected plan.",
+          "label": "Select Curriculum(s)",
+          "placeholder": "Select curriculum...",
+          "searchCurriculum": "Search...",
+          "noData": "No curriculum found."
+        },
+        "planOverview": {
+          "header": "Plan Overview",
+          "studentSeats": "Student Seats",
+          "teacherSeats": "Teacher Seats",
+          "maximumCapacity": "Maximum Capacity",
+          "planDescription": "Plan Description",
+          "pricing": {
+            "header": "Pricing Details",
+            "discount": "Discount",
+            "totalAmount": "Total Amount",
+            "finalAmount": "Final Amount"
+          }
+        }
+      }
+    },
+    "license": {
+      "header": "Create Organization Account(s)",
+      "subHeader": "New accounts will be created for this organization. The account will automatically be assigned a valid license from this subscription.",
+      "downloadCSVTemplate": "Download CSV Template",
+      "uploadCSV": "Select a CSV file to upload",
+      "dragAndDrop": "Drag and drop your CSV file here",
+      "uploading": "Uploading...",
+      "inviteUsers": "Invite Users",
+      "enterEmails": "Enter Emails",
+      "pleaseUploadCSV": "Please upload a CSV file",
+      "uploadSuccess": "Users have been successfully invited and licenses assigned!",
+      "userType": "User Type"
+    }
+  }
+}

@@ -64,10 +64,11 @@ export class StreamingLoader {
 
     // Update progress tracking
     this.loadingProgress.totalChunks = this.chunks.size
-    this.loadingProgress.totalSize = Array.from(this.chunks.values())
-      .reduce((total, chunk) => total + chunk.size, 0)
+    this.loadingProgress.totalSize = Array.from(this.chunks.values()).reduce((total, chunk) => total + chunk.size, 0)
 
-    console.log(`Registered ${chunks.length} chunks for streaming (${this.formatBytes(this.loadingProgress.totalSize)})`)
+    console.log(
+      `Registered ${chunks.length} chunks for streaming (${this.formatBytes(this.loadingProgress.totalSize)})`
+    )
   }
 
   /**
@@ -92,9 +93,7 @@ export class StreamingLoader {
 
     // Load dependencies first
     if (chunk.dependencies) {
-      await Promise.all(
-        chunk.dependencies.map(depId => this.loadChunk(depId))
-      )
+      await Promise.all(chunk.dependencies.map((depId) => this.loadChunk(depId)))
     }
 
     // Start loading
@@ -103,7 +102,6 @@ export class StreamingLoader {
 
     try {
       const startTime = Date.now()
-      console.log(`⬇️ Loading chunk: ${chunkId} (${this.formatBytes(chunk.size)})`)
 
       let data: any
 
@@ -134,7 +132,7 @@ export class StreamingLoader {
       chunk.loadedData = data
       chunk.loadedAt = Date.now()
       chunk.lastAccessedAt = Date.now()
-      
+
       this.addToCache(chunkId, data, chunk.size)
 
       // Update progress
@@ -144,7 +142,6 @@ export class StreamingLoader {
       this.notifyProgress()
 
       return data
-
     } catch (error) {
       console.error(`Failed to load chunk: ${chunkId}`, error)
       throw error
@@ -203,7 +200,7 @@ export class StreamingLoader {
   private addToCache(key: string, data: any, size: number): void {
     // Check cache size limit
     const maxCacheSize = this.config.cacheSize * 1024 * 1024 // Convert MB to bytes
-    
+
     while (this.cacheSize + size > maxCacheSize && this.cache.size > 0) {
       this.evictLRU()
     }
@@ -264,7 +261,7 @@ export class StreamingLoader {
     const elapsed = Date.now() - (this.loadingProgress as any).startTime || Date.now()
     const rate = this.loadingProgress.loadedSize / elapsed // bytes per ms
     const remaining = this.loadingProgress.totalSize - this.loadingProgress.loadedSize
-    
+
     this.loadingProgress.estimatedTimeRemaining = remaining / rate
   }
 
@@ -291,7 +288,7 @@ export class StreamingLoader {
     const sizes = ['B', 'KB', 'MB', 'GB']
     if (bytes === 0) return '0 B'
     const i = Math.floor(Math.log(bytes) / Math.log(1024))
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i]
+    return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i]
   }
 
   /**

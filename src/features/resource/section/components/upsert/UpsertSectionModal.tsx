@@ -5,6 +5,8 @@ import { useModal } from '../../../../../providers/ModalProvider'
 import UpsertSection from '@/features/resource/section/components/upsert/UpsertSection'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { useTranslations } from 'next-intl'
+import { Sparkles } from 'lucide-react'
+import { Button } from '@/components/shadcn/button'
 interface ConfirmModalProps {
   lessonId: number
   sectionId: number
@@ -23,8 +25,21 @@ export default function UpsertSectionModal({ lessonId, sectionId, onConfirm }: C
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className='flex w-full flex-col lg:w-[660px]'>
-        <DialogHeader className='shrink-0'>
-          <DialogTitle>{sectionId ? t('form.title.update') : t('form.title.create')}</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>
+            <div>
+              {sectionId ? (
+                t('form.title.update')
+              ) : (
+                <div>
+                  {t('form.title.create')}{' '}
+                  <Button variant='ghost' onClick={() => {}}>
+                    <Sparkles size={18} className='text-purple-400' />
+                  </Button>
+                </div>
+              )}
+            </div>
+          </DialogTitle>
         </DialogHeader>
         <hr />
         <div>

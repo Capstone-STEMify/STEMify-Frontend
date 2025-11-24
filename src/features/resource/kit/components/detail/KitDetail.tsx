@@ -85,6 +85,9 @@ export default function KitDetail() {
           <div className='flex flex-col'>
             <div className='mb-2 flex items-center gap-2'>
               <h2 className='text-4xl font-bold tracking-tight'>{kitData.data.name}</h2>
+              <span className='mx-2'>
+                <Badge className={getStatusBadgeClass(kitData.data.status)}>{kitData.data.status}</Badge>
+              </span>
               <span className='cursor-pointer text-blue-500'>
                 <SquarePen
                   onClick={() => {
@@ -103,29 +106,7 @@ export default function KitDetail() {
                 />
               </span>
             </div>
-            <div className='flex items-center gap-1 text-yellow-500'>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} size={16} fill='currentColor' stroke='none' />
-              ))}
-              <span className='ml-2 text-gray-700'>
-                {10} {t('list.reviews')}
-              </span>
-              <span className='mx-2'>
-                <Badge className={getStatusBadgeClass(kitData.data.status)}>{kitData.data.status}</Badge>
-              </span>
-            </div>
             <hr className='mx-auto my-4 w-full border-gray-300' />
-            <p>
-              <span className='font-medium'>{t('list.sku')}:</span> {kitData.data.sku}
-            </p>
-            <p>
-              <span className='font-medium'>{t('list.availability')}:</span>{' '}
-              {kitData.data.stockQuantity > 0 ? t('list.available') : t('list.outOfStock')}
-              <span className='ml-2 text-gray-500'>
-                ( {kitData.data.stockQuantity} {t('list.items')})
-              </span>
-            </p>
-
             <p>
               <span className='font-medium'>{t('detail.weight')}:</span> {kitData.data.weight} grams
             </p>
@@ -134,13 +115,6 @@ export default function KitDetail() {
             </p>
             <p className='mt-2 font-medium'>{t('detail.descriptionLabel')}:</p>
             <p className='leading-relaxed text-gray-700'>{kitData.data.description}</p>
-
-            <div className='mt-2 flex items-center gap-3'>
-              <span className='text-xl font-bold text-red-600'>
-                {t('detail.price')}:{' '}
-                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(kitData.data.price)}
-              </span>
-            </div>
 
             {kitData.data.status === KitProductStatus.DRAFT && (
               <Button

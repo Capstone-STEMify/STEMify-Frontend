@@ -17,12 +17,17 @@ export function MyLearning() {
   const studentId = auth.user?.userId
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }} className='bg-gray-50'>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      className='bg-slate-100/50'
+    >
       <MyLearningHero course={course} studentId={studentId} />
 
       {/* Course Content Section */}
-      <section className='bg-slate-50 py-12'>
-        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <section className='bg-slate-100/50'>
+        <div className='mx-auto w-full px-4 sm:px-6 lg:px-8'>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

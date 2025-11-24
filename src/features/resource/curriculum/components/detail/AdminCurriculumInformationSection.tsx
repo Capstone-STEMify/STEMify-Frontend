@@ -93,7 +93,7 @@ export default function AdminCurriculumInformationSection({
         <p className='mb-4 text-gray-700'>{curriculum.description}</p>
 
         {/* Review actions (only for admin users) */}
-        {user && user.role === UserRole.ADMIN && curriculum.status === CurriculumStatus.PENDING && (
+        {/* {user && user.userRole === UserRole.ADMIN && curriculum.status === CurriculumStatus.PENDING && (
           <div className='flex gap-3'>
             <Button
               className='cursor-pointer bg-green-600 font-semibold text-white shadow'
@@ -118,10 +118,10 @@ export default function AdminCurriculumInformationSection({
               {tc('button.reject')}
             </Button>
           </div>
-        )}
+        )} */}
         {/* if admin user is the creator and curriculum is in draft status */}
         {user &&
-          user.role === UserRole.ADMIN &&
+          (user.userRole === UserRole.ADMIN || user.userRole === UserRole.STAFF) &&
           curriculum.status === CurriculumStatus.DRAFT &&
           curriculum.createdByUserId === user.userId && (
             <Button
@@ -138,8 +138,8 @@ export default function AdminCurriculumInformationSection({
           )}
 
         {/* if staff user is the creator and curriculum is in draft status, then show send request button */}
-        {user &&
-          user.role === UserRole.STAFF &&
+        {/* {user &&
+          user.userRole === UserRole.STAFF &&
           user.userId === curriculum.createdByUserId &&
           curriculum.status === CurriculumStatus.DRAFT && (
             <Button
@@ -153,11 +153,11 @@ export default function AdminCurriculumInformationSection({
             >
               {tc('button.publish')}
             </Button>
-          )}
+          )} */}
 
         {/* if staff user is the creator and curriculum is in pending status */}
         {user &&
-          user.role === UserRole.STAFF &&
+          user.userRole === UserRole.STAFF &&
           user.userId === curriculum.createdByUserId &&
           curriculum.status === CurriculumStatus.PENDING && (
             <div className='flex w-xs items-center gap-3 rounded-md border border-yellow-300 bg-yellow-50 p-2'>
@@ -175,15 +175,6 @@ export default function AdminCurriculumInformationSection({
             fill
             className='object-cover'
           />
-        </div>
-        <div className='flex items-center justify-center gap-2 pt-4'>
-          <span className='text-2xl font-bold text-red-600 italic'>{t('details.price')}:</span>
-          <span className='text-2xl font-bold text-red-600 italic'>
-            {new Intl.NumberFormat('vi-VN', {
-              style: 'currency',
-              currency: 'VND'
-            }).format(curriculum.price)}
-          </span>
         </div>
       </div>
     </div>

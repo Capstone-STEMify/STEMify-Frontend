@@ -4,5 +4,17 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  "editor.wordWrap": "on"
+  "editor.wordWrap": "on",
+  "files.exclude": {
+    // "**/node_modules": true,
+    "**/dist": true,
+    "**/.next": true,
+    "**/build": true
+  },
+  "search.exclude": {
+    // "**/node_modules": true,
+    "**/dist": true,
+    "**/.next": true,
+    "**/build": true
+  }
 }

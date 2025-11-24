@@ -8,7 +8,6 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import Image from 'next/image'
 import { Button } from '@/components/shadcn/button'
 import { useGetUserByIdQuery } from '@/features/user/api/userApi'
-import { use } from 'matter'
 import { useTranslations } from 'next-intl'
 
 export default function ProfileDetails() {
@@ -25,7 +24,7 @@ export default function ProfileDetails() {
     username: '',
     email: '',
     firstName: userData?.data.firstName || '',
-    lastName: userData?.data.lastName ||'',
+    lastName: userData?.data.lastName || '',
     website: '',
     bio: ''
   })
@@ -109,7 +108,7 @@ export default function ProfileDetails() {
                   type='text'
                   id='username'
                   name='username'
-                  value={session?.user?.username || ''}
+                  value={session?.user?.userName || ''}
                   placeholder={t('placeholders.username')}
                   readOnly
                 />

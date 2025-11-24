@@ -11,7 +11,7 @@ import { setPageIndex, setPageSize } from '@/features/resource/course/slice/cour
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import Link from 'next/link'
 import { useEffect } from 'react'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
 import { capitalizeFirst } from '@/utils/index'
 import { useTranslations } from 'next-intl'
@@ -27,9 +27,9 @@ export default function CourseListContent() {
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
   const courseParams = useAppSelector((state) => state.course)
-  const auth = useAppSelector((state) => state.auth)
-  const userRole = auth.user?.role || UserRole.GUEST
-  const PUBLIC_ROLES = userRole === UserRole.STUDENT || userRole === UserRole.GUEST || userRole === UserRole.TEACHER
+  const userRole = useAppSelector((state) => state.selectedOrganization.currentRole)
+  const PUBLIC_ROLES =
+    userRole === LicenseType.STUDENT || userRole === UserRole.GUEST || userRole === LicenseType.TEACHER
 
   useEffect(() => {
     dispatch(setPageSize(12))
@@ -105,9 +105,6 @@ export default function CourseListContent() {
                   <p className='text-muted-foreground text-sm font-medium'>{course.code}</p>
                   <h3 className='text-md line-clamp-1 font-semibold text-gray-900'>{course.title}</h3>
                   <p className='line-clamp-2 text-sm text-gray-600'>{course.description}</p>
-                  <p className='text-md mt-1 font-semibold text-sky-500'>
-                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(course.price)}
-                  </p>
                 </div>
               </CardLayout>
             </Link>

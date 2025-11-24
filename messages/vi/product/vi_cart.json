@@ -1,0 +1,26 @@
+{
+  "cart": {
+    "list": {
+      "title": "Giỏ Hàng",
+      "noData": "Giỏ hàng của bạn đang trống",
+      "noDataDescription": "Thêm một số sản phẩm để bắt đầu!",
+      "continueShopping": "← Tiếp Tục Mua Sắm",
+      "itemsInCart": "sản phẩm trong giỏ hàng của bạn",
+      "quantity": "Số Lượng",
+      "moveToWishlist": "Chuyển đến Danh Sách Yêu Thích",
+      "productTotal": "Tổng Sản Phẩm",
+      "shipping": "Vận Chuyển",
+      "free": "Miễn Phí",
+      "discount": "Giảm Giá",
+      "enterCode": "Nhập mã",
+      "apply": "Áp Dụng",
+      "checkout": "Thanh Toán",
+      "removeAll": "Xóa Tất Cả",
+      "total": "Tổng Cộng",
+      "byClickingCheckout": "Bằng cách đặt hàng, bạn đồng ý với",
+      "agreeTerms": "Điều Khoản & Điều Kiện",
+      "privacyNotice": "Thông Báo Bảo Mật",
+      "youMayAlsoLike": "Bạn cũng có thể thích"
+    }
+  }
+}

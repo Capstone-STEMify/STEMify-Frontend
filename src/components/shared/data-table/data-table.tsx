@@ -42,11 +42,13 @@ export type DataTableProps<TData extends { id: string | number }, TValue> = {
   pagingData?: any
   pagingParams?: any
   rowSelection?: (string | number)[]
-  onSelectionChange?: (ids: number[]) => void
+  onSelectionChange?: (ids: number[] | string[]) => void
   handlePageChange?: (page: number) => void
   enableDnd?: boolean
   onReorder?: (newData: TData[]) => void
   disabledRowIds?: (string | number)[]
+  onRowClick?: (row: TData) => void
+  expandedContentRenderer?: (row: TData) => React.ReactNode
 }
 
 function DraggableRow<TData extends { id: string | number }>({ row }: { row: Row<TData> }) {
@@ -87,7 +89,9 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   handlePageChange,
   enableDnd,
   onReorder,
-  disabledRowIds
+  disabledRowIds,
+  onRowClick,
+  expandedContentRenderer
 }: DataTableProps<TData, TValue>) {
   const tc = useTranslations('common')
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -95,6 +99,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [localData, setLocalData] = React.useState(data)
   const [internalRowSelection, setInternalRowSelection] = React.useState<Record<string | number, boolean>>({})
+  const [expandedRowId, setExpandedRowId] = React.useState<number | null>(null)
 
   React.useEffect(() => {
     setLocalData(data)
@@ -129,12 +134,9 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   })
 
   React.useEffect(() => {
-    const selectedIds = Object.keys(internalRowSelection)
-      .filter((key) => internalRowSelection[key as any])
-      .map((id) => Number(id))
-      .filter((id) => !isNaN(id))
+    const selectedIds = Object.keys(internalRowSelection).filter((key) => internalRowSelection[key as any])
     onSelectionChange?.(selectedIds)
-  }, [table.getState().rowSelection])
+  }, [internalRowSelection])
 
   const handleDragEnd = React.useCallback(
     (event: DragEndEvent) => {
@@ -199,16 +201,47 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => {
                   const isDisabled = disabledRowIds?.includes(row.original.id)
+                  const isExpanded = expandedRowId === row.original.id
+
                   return (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                      className={isDisabled ? 'pointer-events-none bg-blue-50 opacity-60' : ''}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                      ))}
-                    </TableRow>
+                    <React.Fragment key={row.id}>
+                      <TableRow
+                        data-state={row.getIsSelected() && 'selected'}
+                        className={isDisabled ? 'pointer-events-none bg-blue-50 opacity-60' : ''}
+                        onClick={() => {
+                          if (isDisabled) return
+                          setExpandedRowId(isExpanded ? null : (row.original.id as number))
+                          onRowClick?.(row.original)
+                        }}
+                      >
+                        {row.getVisibleCells().map((cell) => {
+                          const meta = (row.original as any).__cellMeta?.[cell.column.id]
+
+                          if (meta?.skip) {
+                            return null
+                          }
+
+                          return (
+                            <TableCell
+                              key={cell.id}
+                              rowSpan={meta?.rowSpan || 1}
+                              className={` ${meta?.rowSpan > 1 ? 'pr-12 align-top' : ''} ${(cell.column.columnDef.meta as any)?.className || ''} `}
+                            >
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </TableCell>
+                          )
+                        })}
+                      </TableRow>
+
+                      {isExpanded && expandedContentRenderer && expandedContentRenderer(row.original) && (
+                        <TableRow className='bg-slate-50'>
+                          <TableCell colSpan={row.getVisibleCells().length}>
+                            {/* Nội dung mở rộng — bạn có thể render curriculum tại đây */}
+                            {expandedContentRenderer?.(row.original)}
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </React.Fragment>
                   )
                 })
               ) : (

@@ -28,6 +28,17 @@ import KitListTableModal from '@/features/resource/kit/components/list/KitListTa
 import InformationModal from '@/components/shared/modals/InformationModal'
 import UpsertComponentModal from '@/features/kit-components/components/upsert/UpsertComponentModal'
 import SelectComponentListModal from '@/features/kit-components/components/list/SelectComponentListModal'
+import UploadCSVModal from '@/features/license-assignment/components/modal/UploadCSVModal'
+import QuizAIModal from '@/features/resource/quiz/components/modal/QuizAIModal'
+import ContactDetailSheet from '@/features/contact/components/detail/ContactDetailSheet'
+import UpsertPlanSheet from '@/features/plan/components/sheet/UpsertPlanSheet'
+import UpsertClassroomModal from '@/features/classroom/components/upsert/UpsertClassroomModal'
+import SuccessModal from '@/components/shared/modals/SuccessModal'
+import AddPeopleModal from '@/features/user/components/modal/AddPeopleModal'
+import UpsertOrganizationModal from '@/features/organization/components/UpsertOrganizationModal'
+import UpdateSubsctiptionSheet from '@/features/subscription/components/upsert/UpdateSubsctiptionSheet'
+import UpdateClassroomOrganizationModal from '@/features/classroom/components/upsert/UpdateClassroomOrganizationModal'
+import { UpsertEmulator } from '@/features/creator-3d/components/creator3d/ExportDialog'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -61,6 +72,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'enroll' && <EnrollModal {...modalProps} />}
       {modalType === 'editImage' && <EditImageModal {...modalProps} />}
       {modalType === 'information' && <InformationModal {...modalProps} />}
+      {modalType === 'success' && <SuccessModal {...modalProps} />}
 
       {/* upsert */}
       {modalType === 'upsertLesson' && <UpsertLessonModal {...modalProps} />}
@@ -76,18 +88,33 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertContent' && <UpsertContentModal {...modalProps} />}
       {modalType === 'upsertKit' && <UpsertKitModal {...modalProps} />}
       {modalType === 'upsertComponent' && <UpsertComponentModal {...modalProps} />}
+      {modalType === 'upsertPlan' && <UpsertPlanSheet {...modalProps} />}
+      {modalType === 'upsertClassroom' && <UpsertClassroomModal {...modalProps} />}
+      {modalType === 'upsertOrganization' && <UpsertOrganizationModal {...modalProps} />}
+      {modalType === 'upsertEmulator' && <UpsertEmulator {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}
       {modalType === 'contentDetail' && <ContentDetailModal {...modalProps} />}
+
+      {/* organization */}
+      {modalType === 'uploadCSV' && <UploadCSVModal {...modalProps} />}
 
       {/* other */}
       {modalType === 'pacingGuide' && <PacingGuideModal {...modalProps} />}
       {modalType === 'curriculumSelectCourseListModal' && <CurriculumSelectCourseListModal {...modalProps} />}
       {modalType === 'kitListTableModal' && <KitListTableModal {...modalProps} />}
       {modalType === 'selectComponentListModal' && <SelectComponentListModal {...modalProps} />}
-      
+      {modalType === 'quizAI' && <QuizAIModal {...modalProps} />}
+      {modalType === 'addPeople' && <AddPeopleModal {...modalProps} />}
 
+      {/* sheet */}
+      {modalType === 'upsertContact' && <ContactDetailSheet {...modalProps} />}
+      {modalType === 'upsertPlan' && <UpsertPlanSheet {...modalProps} />}
+      {modalType === 'upsertSubscription' && <UpdateSubsctiptionSheet {...modalProps} />}
+
+      {/* classroom */}
+      {modalType === 'updateClassroomOrganization' && <UpdateClassroomOrganizationModal {...modalProps} />}
     </ModalContext.Provider>
   )
 }

@@ -16,8 +16,9 @@ import z from 'zod'
 import { Badge } from '@/components/shadcn/badge'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
-import { getCourseStatusBadgeClass } from '@/utils/badgeColor'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useDeleteCourseFromCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
+import SStatusDropdown from '@/components/shared/SStatusDropdown'
 
 export const courseTableSchema = z.object({
   id: z.number()
@@ -71,11 +72,35 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
     }
   }
 
+  const statusOptions = [
+    { label: 'Draft', value: CourseStatus.DRAFT },
+    { label: 'Published', value: CourseStatus.PUBLISHED },
+    { label: 'Archived', value: CourseStatus.ARCHIVED }
+  ]
+
+  const handleStatusChange = (courseId: number, newStatus: string) => {
+    if (newStatus === CourseStatus.DELETED) {
+      openModal('confirm', {
+        message: 'Are you sure you want to delete this course?',
+        onConfirm: async () => {
+          await deleteCourse(courseId)
+          toast.success('Course deleted successfully')
+        }
+      })
+      return
+    }
+
+    updateCourseStatus({ id: courseId, body: { status: newStatus as CourseStatus } })
+      .unwrap()
+      .then(() => toast.success(tt('successMessage.update', { title: newStatus })))
+  }
+
   return [
     createSelectColumn<Course>(),
     {
       accessorKey: 'code',
       header: tc('tableHeader.code'),
+      enableSorting: true,
       cell: ({ row }) => row.getValue('code')
     },
     {
@@ -126,11 +151,13 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       accessorKey: 'status',
       header: () => <div>{tc('tableHeader.status')}</div>,
       cell: ({ row }) => {
-        const value = row.getValue<CourseStatus>('status')
+        const value = row.original.status
         return (
-          <Badge className={`cursor-pointer ${getCourseStatusBadgeClass(value)}`} variant='outline'>
-            {value}
-          </Badge>
+          <SStatusDropdown
+            value={value}
+            options={statusOptions}
+            onChange={(newStatus) => handleStatusChange(row.original.id, newStatus)}
+          />
         )
       }
     },

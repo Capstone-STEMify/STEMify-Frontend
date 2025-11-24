@@ -1,0 +1,26 @@
+{
+  "cart": {
+    "list": {
+      "title": "Shopping Cart",
+      "noData": "Your cart is empty",
+      "noDataDescription": "Add some items to get started!",
+      "continueShopping": "← Continue Shopping",
+      "itemsInCart": "item(s) in your cart",
+      "quantity": "Quantity",
+      "moveToWishlist": "Move to Wishlist",
+      "productTotal": "Product Total",
+      "shipping": "Shipping",
+      "free": "Free",
+      "discount": "Discount",
+      "enterCode": "Enter code",
+      "apply": "Apply",
+      "checkout": "Checkout",
+      "removeAll": "Remove All",
+      "total": "Total",
+      "byClickingCheckout": "By placing your order you agree to the website",
+      "agreeTerms": "Terms & Conditions",
+      "privacyNotice": "Privacy notice",
+      "youMayAlsoLike": "You may also like"
+    }
+  }
+}

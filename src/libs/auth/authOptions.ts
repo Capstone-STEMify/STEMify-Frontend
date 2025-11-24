@@ -1,5 +1,4 @@
 import { jwtDecode } from 'jwt-decode'
-
 import type { NextAuthOptions } from 'next-auth'
 import type { OAuthConfig } from 'next-auth/providers/oauth'
 import NextAuth, { type Profile } from 'next-auth'
@@ -34,8 +33,8 @@ const oidcProvider: OAuthConfig<OIDCProfile> = {
   token: {
     url: `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/connect/token`,
     params: {
-      grant_type: 'authorization_code',
-      client_id: process.env.NEXT_PUBLIC_CLIENT_ID
+      grant_type: 'authorization_code'
+      // client_id: process.env.NEXT_PUBLIC_CLIENT_ID
       // redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI
     }
   },
@@ -64,44 +63,59 @@ export const authOptions: NextAuthOptions = {
   providers: [oidcProvider],
   secret: process.env.AUTH_SECRET,
   callbacks: {
-    async signIn({ user, account, profile, credentials, email }) {
-      console.log('SignIn Callback:', { user, account, profile, credentials, email })
-      if (user && (user as any).role === UserRole.ADMIN) {
-        return '/admin'
-      }
+    async signIn({ account }) {
+      console.log('SignIn callback', { account })
       return true
     },
-
     async jwt({ token, account, profile }) {
       if (account?.access_token) {
+        // console.log('JWT callback', { profile })
         token.accessToken = account.access_token
         token.idToken = account.id_token
-
-        if (profile) {
-          token.username = profile.username
-          token.userId = profile.userId
-          token.role = profile.role
-        }
-
+        token.role = profile?.role || UserRole.GUEST
         try {
-          const decoded: any = jwtDecode(account.access_token)
-          token.role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'Guest'
-          token.username = decoded['preferred_username'] ?? 'unknown'
-          token.userId = decoded['sub'] ?? 'unknown'
-        } catch (error) {
-          console.error('Failed to decode access token:', error)
+          token.organizations = JSON.parse((profile as any).organizations || '[]')
+          console.log('Parsed organizations:', token.organizations)
+        } catch (err) {
+          console.error('Failed to parse organizations JSON:', err)
+          token.organizations = []
         }
+        // console.log('Token debug:', token)
+
+        //   try {
+        //     const decoded: any = jwtDecode(account.access_token)
+        //     token.role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'Guest'
+        //     token.preferred_username = decoded['preferred_username'] ?? 'unknown'
+        //     token.sub = decoded['sub'] ?? 'unknown'
+
+        //     // Optional: parse organizations if present in the token
+        //     const rawOrganizations = decoded['organizations']
+        //     if (rawOrganizations) {
+        //       try {
+        //         token.organizations = JSON.parse(rawOrganizations) // array of { id, subscriptions }
+        //       } catch (err) {
+        //         console.error('Failed to parse organizations JSON:', err)
+        //         token.organizations = []
+        //       }
+        //     }
+        //   } catch (error) {
+        //     console.error('Failed to decode access token:', error)
+        //   }
       }
 
       return token
     },
-
     async session({ session, token }) {
       if (token) {
         session.accessToken = token.accessToken!
-        session.user.role = token.role!
-        session.user.username = token.username!
-        session.user.userId = token.userId!
+        session.user.userRole = token.role!
+        session.user.userName = token.username!
+        session.user.userId = token.sub!
+        session.exp = token.exp!
+        session.user.email = token.email!
+
+        session.user.organizations = token.organizations ?? []
+        // console.log('Session callback', JSON.stringify(session, null, 2))
       }
       return session
     }

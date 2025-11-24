@@ -18,7 +18,6 @@ import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/course
 export default function CourseDetailNotEnrolled() {
   const auth = useAppSelector((state) => state.auth)
   const studentId = auth?.user?.userId
-  const userRole = auth?.user?.role || UserRole.GUEST
   const tc = useTranslations('common.message')
 
   const { courseId } = useParams()
@@ -34,10 +33,7 @@ export default function CourseDetailNotEnrolled() {
     data: enrollmentData,
     isLoading: enrollmentLoading,
     error: enrollmentError
-  } = useSearchCourseEnrollmentQuery(
-    { courseId: Number(courseId), studentId, pageNumber: params.pageNumber, pageSize: params.pageSize },
-    { skip: !studentId }
-  )
+  } = useSearchCourseEnrollmentQuery({ courseId: Number(courseId), studentId }, { skip: !studentId })
 
   if (isLoading || outcomeLoading || outcomeFetching || enrollmentLoading)
     return (

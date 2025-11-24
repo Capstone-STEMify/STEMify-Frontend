@@ -8,7 +8,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { toast } from 'sonner'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import BackButton from '@/components/shared/button/BackButton'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useUpdateCourseMutation } from '@/features/resource/course/api/courseApi'
@@ -20,6 +20,7 @@ import {
   useUpdateCurriculumEnrollmentMutation
 } from '@/features/enrollment/api/curriculumEnrollmentApi'
 import { EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
+import { use } from 'matter'
 
 interface HeroSectionProps {
   curriculum: Curriculum | undefined
@@ -57,17 +58,15 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
 
   const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
-  const userRole = auth.user?.role || UserRole.GUEST
+  const userRole = useAppSelector((state) => state.selectedOrganization.currentRole)
   const params = useAppSelector((state) => state.curriculumEnrollment)
 
   const { data: curriculumEnrollment } = useSearchCurriculumEnrollmentQuery(
     {
       curriculumId: curriculum?.id,
-      studentId: auth?.user?.userId || '',
-      pageNumber: params.pageNumber,
-      pageSize: params.pageSize
+      studentId: auth?.user?.userId || ''
     },
-    { skip: !auth.user?.userId || !curriculum?.id }
+    { skip: !auth.user?.userId || !curriculum?.id || userRole !== LicenseType.STUDENT }
   )
 
   const [createEnrollment, { data: createEnrollmentResponse }] = useCreateCurriculumEnrollmentMutation()
@@ -98,13 +97,14 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
       signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
       return
     }
-    if (curriculum?.id && curriculumEnrollment?.data.items[0]) {
-      updateEnrollment({
-        id: curriculumEnrollment.data.items[0].id,
-        body: { curriculumId: curriculum.id, status: EnrollmentStatus.IN_PROGRESS }
+    if (curriculum?.id) {
+      createEnrollment({
+        curriculumId: curriculum.id,
+        studentId: auth?.user?.userId,
+        status: EnrollmentStatus.IN_PROGRESS
       })
       toast.success(tt('successMessage.enroll'), {
-        description: `${tt('successMessage.enrollDes', { title: updateEnrollmentResponse?.data.curriculumTitle || '' })}`
+        description: `${tt('successMessage.enrollDes', { title: createEnrollmentResponse?.data.curriculumTitle || '' })}`
       })
       router.push(`/${locale}/resource/course/${curriculum?.courses[0].id}/learn`)
     }
@@ -162,22 +162,15 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
             </div>
 
             {/* if user is guest or student without enrollment */}
-            {userRole === UserRole.GUEST || (userRole === UserRole.STUDENT && !curriculumEnrollment?.data.items[0]) ? (
+            {userRole === UserRole.GUEST ||
+            (userRole === LicenseType.STUDENT && !curriculumEnrollment?.data.items[0]) ? (
               <div>
-                <div className='mt-2 flex items-center gap-3'>
-                  <span className='text-2xl font-bold text-gray-700'>
-                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-                      curriculum?.price ?? 0
-                    )}
-                  </span>
-                </div>
                 <div className='mt-6 flex flex-col gap-4 sm:flex-row'>
                   <Button
-                    onClick={handleAddToCart}
+                    onClick={handleEnroll}
                     className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
                   >
-                    <ShoppingCartIcon className='h-5 w-5' />
-                    {tc('button.addToCart')}
+                    {tc('button.enroll')}
                   </Button>
                   <Button className='text-sky-custom-600 border-sky-custom-600 w-fit cursor-pointer rounded-4xl border bg-white py-6 text-lg'>
                     <Heart className='h-5 w-5' />
@@ -187,26 +180,13 @@ export default function CurriculumHeroSection({ curriculum, token }: HeroSection
               </div>
             ) : (
               <div className='flex items-center gap-5'>
-                {userRole === UserRole.STUDENT &&
-                curriculumEnrollment?.data.items[0]?.status === EnrollmentStatus.NOT_STARTED ? (
-                  <Button
-                    onClick={handleEnroll}
-                    className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
-                  >
-                    <ArrowRightFromLine className='h-5 w-5' />
-                    {tc('button.enroll')}
-                  </Button>
-                ) : (
-                  <>
-                    <Button
-                      onClick={() => router.push(`/${locale}/resource/course/${curriculum?.courses[0].id}/learn`)}
-                      className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
-                    >
-                      <ArrowRightFromLine className='h-5 w-5' />
-                      {tc('button.goToCourse')}
-                    </Button>
-                  </>
-                )}
+                <Button
+                  onClick={() => router.push(`/${locale}/resource/course/${curriculum?.courses[0].id}/learn`)}
+                  className='bg-sky-custom-600 w-fit cursor-pointer rounded-4xl py-6 text-lg text-white'
+                >
+                  <ArrowRightFromLine className='h-5 w-5' />
+                  {tc('button.goToCourse')}
+                </Button>
                 <p className='text-sm text-green-700 italic'>{t('details.alreadyEnrolled')}</p>
               </div>
             )}

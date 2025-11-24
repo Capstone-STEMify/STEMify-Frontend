@@ -23,7 +23,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
   const t = useTranslations('LessonDetails')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
-  const role = useAppSelector((state) => state.auth.user?.role)
+  const role = useAppSelector((state) => state.auth.user?.userRole)
   const user = useAppSelector((state) => state.auth.user)
 
   const [updateLesson] = useUpdateLessonMutation()
@@ -179,7 +179,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
 
           <div>
             {/* review Buttons (only for admin users) */}
-            {user && user.role === UserRole.ADMIN && lesson.status === LessonStatus.PENDING && (
+            {/* {user && user.userRole === UserRole.ADMIN && lesson.status === LessonStatus.PENDING && (
               <div className='space-y-4'>
                 <Button
                   onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.PUBLISHED)}
@@ -196,27 +196,24 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                   {tc('button.reject')}
                 </Button>
               </div>
+            )} */}
+
+            {/* if user is the creator and course is in draft status */}
+            {user && user.userId === lesson.createdByUserId && lesson.status === LessonStatus.DRAFT && (
+              <div className='space-y-4'>
+                <Button
+                  onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.PUBLISHED)}
+                  className='bg-sky-custom-600 w-full cursor-pointer font-semibold text-white shadow'
+                  variant='outline'
+                >
+                  {tc('button.publish')}
+                </Button>
+              </div>
             )}
 
-            {/* if admin user is the creator and course is in draft status */}
-            {user &&
-              user.role === UserRole.ADMIN &&
-              user.userId === lesson.createdByUserId &&
-              lesson.status === LessonStatus.DRAFT && (
-                <div className='space-y-4'>
-                  <Button
-                    onClick={() => handleUpdateLessonStatus(lesson.id, LessonStatus.PUBLISHED)}
-                    className='bg-sky-custom-600 w-full cursor-pointer font-semibold text-white shadow'
-                    variant='outline'
-                  >
-                    {tc('button.publish')}
-                  </Button>
-                </div>
-              )}
-
             {/* if staff user is the creator and course is in draft status */}
-            {user &&
-              user.role === UserRole.STAFF &&
+            {/* {user &&
+              user.userRole === UserRole.STAFF &&
               user.userId === lesson.createdByUserId &&
               lesson.status === LessonStatus.DRAFT && (
                 <div className='space-y-4'>
@@ -228,17 +225,17 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
                     {tc('button.sendRequest')}
                   </Button>
                 </div>
-              )}
+              )} */}
 
             {/* Pending Review Message */}
-            {user &&
-              user.role === UserRole.STAFF &&
+            {/* {user &&
+              user.userRole === UserRole.STAFF &&
               user.userId === lesson.createdByUserId &&
               lesson.status === LessonStatus.PENDING && (
                 <div className='flex w-full items-center gap-3 rounded-md border border-yellow-300 bg-yellow-50 p-2'>
                   <p className='text-xs font-medium text-yellow-700'>{t('reviewMessage')}</p>
                 </div>
-              )}
+              )} */}
           </div>
         </div>
       </div>

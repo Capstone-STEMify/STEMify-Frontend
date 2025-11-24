@@ -13,8 +13,8 @@ import { usePathname } from 'next/navigation'
 
 export default function HeaderNavigationMobile() {
   const pathname = usePathname()
-  const userRole = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
-  const navItems = navRoutes[userRole as UserRole]
+  const userRole = useAppSelector((state) => state.auth.user?.userRole) || UserRole.GUEST
+  const navItems = navRoutes[userRole as keyof typeof navRoutes]
   const t = useTranslations('Header')
   const locale = useLocale()
 

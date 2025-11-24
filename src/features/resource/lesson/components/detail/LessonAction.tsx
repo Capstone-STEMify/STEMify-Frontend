@@ -6,15 +6,16 @@ import { Bookmark, Plus, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { studentProgressSlice } from '@/features/student-progress/slice/studentProgressSlice'
 import { useTranslations } from 'next-intl'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
+import { setIsPrintModalOpen } from '@/features/resource/lesson/slice/lessonDetailSlice'
 
-export default function LessonAction({ lessonId, onPrintClick }: { lessonId: number; onPrintClick: () => void }) {
+export default function LessonAction({ lessonId }: { lessonId: number }) {
   const t = useTranslations('LessonDetails')
   const tt = useTranslations('toast')
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
-  const userRole = useAppSelector((state) => state.auth.user?.role) || UserRole.GUEST
+  const userRole = useAppSelector((state) => state.selectedOrganization.currentRole)
   const lessonStatus = useAppSelector((state) => state.studentProgress.selectedLessonStatus)
   const enrollmentId = useAppSelector((state) => state.studentProgress.selectedEnrollmentId)
   const [startLesson, { isLoading }] = useUpdateLessonStudentProgressMutation()
@@ -34,7 +35,7 @@ export default function LessonAction({ lessonId, onPrintClick }: { lessonId: num
     <section className='mt-3 mb-5 flex flex-col items-center'>
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
 
-      {userRole === UserRole.TEACHER && (
+      {userRole === LicenseType.TEACHER && (
         <Button
           variant='outline'
           size='default'
@@ -42,7 +43,7 @@ export default function LessonAction({ lessonId, onPrintClick }: { lessonId: num
           // onClick={() => {
           //   openModal('pacingGuide')
           // }}
-          onClick={onPrintClick}
+          onClick={() => dispatch(setIsPrintModalOpen(true))}
         >
           DOWNLOAD AND PRINT
         </Button>

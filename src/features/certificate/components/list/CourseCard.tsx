@@ -7,6 +7,12 @@ import Image from 'next/image'
 import { Progress } from '@/components/shadcn/progress'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/shadcn/dropdown-menu'
 
 interface CourseCardProps {
   course: CourseEnrollment
@@ -38,8 +44,8 @@ export const CourseCard = ({ course }: CourseCardProps) => {
               {course.courseTitle}
             </h3>
             <p className='mt-1 text-sm text-gray-600'>{course.status}</p>
-            <Progress value={50} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
-            <span className='text-sm font-medium text-gray-700'>45%</span>
+            <Progress value={course.progressPercentage} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
+            <span className='text-sm font-medium text-gray-700'>{course.progressPercentage ?? 0}%</span>
             {course.status === EnrollmentStatus.COMPLETED && (
               <p className='mt-1 text-sm text-gray-600'>
                 {/* fix later */}
@@ -57,7 +63,22 @@ export const CourseCard = ({ course }: CourseCardProps) => {
             View Certificate
           </Button>
         ) : (
-          <MoreHorizontal className='ml-4 h-5 w-5 flex-shrink-0 cursor-pointer text-gray-500' />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button type='button'>
+                <MoreHorizontal className='ml-4 h-5 w-5 flex-shrink-0 cursor-pointer text-gray-500 hover:text-gray-700' />
+              </button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align='end' className='w-32'>
+              <DropdownMenuItem
+                className='text-red-600 focus:text-red-700'
+                onClick={() => console.log('Unenroll clicked')}
+              >
+                Unenroll
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </CardContent>
     </Card>

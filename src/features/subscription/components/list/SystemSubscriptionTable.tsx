@@ -1,0 +1,209 @@
+'use client'
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
+import { Organization } from '@/features/organization/types/organization.type'
+import { BillingCycle } from '@/features/plan/types/plan.type'
+import { formatDate, formatPrice } from '@/utils/index'
+import React from 'react'
+import { Card } from '@/components/shadcn/card'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/shadcn/button'
+import { Edit2, Plus, Trash2 } from 'lucide-react'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useModal } from '@/providers/ModalProvider'
+import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+import SStatusDropdown from '@/components/shared/SStatusDropdown'
+import { useUpdateSubscriptionMutation } from '@/features/subscription/api/subscriptionApi'
+import { toast } from 'sonner'
+
+type SystemSubscriptionTableProps = {
+  organization: Organization
+  refetchOrganization?: () => void
+}
+
+export default function SystemSubscriptionTable({ organization, refetchOrganization }: SystemSubscriptionTableProps) {
+  const tc = useTranslations('common')
+  const tt = useTranslations('toast')
+  const to = useTranslations('organization.subscription')
+
+  const router = useRouter()
+  const locale = useLocale()
+  const dispatch = useAppDispatch()
+  const { openModal } = useModal()
+
+  const [updateSubscription] = useUpdateSubscriptionMutation()
+
+  const getBillingCycleLabel = (cycle: BillingCycle | string) => {
+    switch (cycle) {
+      case BillingCycle.SEMIANNUAL:
+        return '6 Months'
+      case BillingCycle.ANNUAL:
+        return '12 Months'
+      default:
+        return cycle
+    }
+  }
+
+  const subscriptionStatusOptions = [
+    { label: 'All', value: 'all' },
+    ...Object.entries(SubscriptionStatus).map(([key, value]) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      value
+    }))
+  ]
+
+  const handleStatusChange = (subscription: any, newStatus: string) => {
+    updateSubscription({
+      subscriptionId: subscription.id,
+      body: {
+        status: newStatus as SubscriptionStatus,
+        // add curriculumIds to avoid removing them unintentionally (for grpc compatibility)
+        curriculumIds: subscription.curriculumIds || []
+      }
+    })
+      .unwrap()
+      .then(() => {
+        toast.success(tt('successMessage.update', { title: newStatus }))
+        refetchOrganization?.()
+      })
+      .catch((error) => {
+        toast.error('Failed to update status')
+        console.error(error)
+      })
+  }
+
+  const SubscriptionStatusOption = [
+    { label: 'Pending', value: SubscriptionStatus.PENDING },
+    { label: 'Active', value: SubscriptionStatus.ACTIVE },
+    { label: 'Archived', value: SubscriptionStatus.ARCHIVED },
+    { label: 'Cancelled', value: SubscriptionStatus.CANCELLED },
+    { label: 'Expired', value: SubscriptionStatus.EXPIRED }
+  ]
+
+  const SubscriptionStatusFlow: Record<SubscriptionStatus, SubscriptionStatus[]> = {
+    [SubscriptionStatus.PENDING]: [SubscriptionStatus.PENDING, SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELLED],
+    [SubscriptionStatus.ACTIVE]: [SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELLED, SubscriptionStatus.ARCHIVED],
+    [SubscriptionStatus.ARCHIVED]: [
+      SubscriptionStatus.ACTIVE,
+      SubscriptionStatus.ARCHIVED,
+      SubscriptionStatus.CANCELLED
+    ],
+    [SubscriptionStatus.CANCELLED]: [],
+    [SubscriptionStatus.EXPIRED]: []
+  }
+
+  return (
+    <div className='space-y-6 p-6'>
+      <div className='flex justify-between'>
+        <h2 className='text-lg font-semibold'>{to('title')}</h2>
+
+        <Button
+          size='sm'
+          onClick={() => {
+            router.push(`/${locale}/admin/organization/${organization.id}/create-subscription`)
+          }}
+        >
+          <Plus className='h-4 w-4' />
+          <p>{tc('button.createSubscription')}</p>
+        </Button>
+      </div>
+
+      {organization.subscriptions.length === 0 ? (
+        <p className='text-muted-foreground text-center'>{to('noData')}</p>
+      ) : (
+        <Card className=''>
+          <Table>
+            <TableHeader className='border-b'>
+              <TableRow className='bg-muted/60 text-foreground'>
+                <TableHead className='font-semibold'>{tc('tableHeader.planName')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.planBillingCycle')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.grossAmount')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.netAmount')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.studentSeats')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.teacherSeats')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.status')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.startDate')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.endDate')}</TableHead>
+                <TableHead className='font-semibold'>{tc('tableHeader.action')}</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {organization.subscriptions.map((subscription, index) => {
+                const allowedOptions = SubscriptionStatusOption.filter(
+                  (sub) =>
+                    subscription.status &&
+                    SubscriptionStatusFlow[subscription.status].includes(sub.value as SubscriptionStatus)
+                )
+                return (
+                  <TableRow
+                    key={subscription.id ?? index}
+                    className={`hover:bg-muted/40 border-b transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/20'}`}
+                  >
+                    <TableCell
+                      className='cursor-pointer font-medium text-blue-600 hover:underline'
+                      onClick={() =>
+                        router.push(`/${locale}/admin/organization/${organization.id}/subscription/${subscription.id}`)
+                      }
+                    >
+                      {subscription.planName}
+                    </TableCell>
+                    <TableCell>{getBillingCycleLabel(subscription.planBillingCycle ?? 'N/A')}</TableCell>
+
+                    <TableCell className='text-muted-foreground text-sm font-medium'>
+                      {formatPrice(subscription.grossAmount ?? 0) ?? '-'}
+                    </TableCell>
+
+                    <TableCell className='text-foreground text-sm font-medium'>
+                      {formatPrice(subscription.netAmount ?? 0) ?? '-'}
+                    </TableCell>
+
+                    <TableCell className='space-y-1'>
+                      <p>
+                        <span className='text-foreground font-semibold'>{subscription.maxStudentSeats ?? '-'}</span>
+                      </p>
+                    </TableCell>
+
+                    <TableCell className='space-y-1'>
+                      <p>
+                        <span className='text-foreground font-semibold'>{subscription.maxTeacherSeats ?? '-'}</span>
+                      </p>
+                    </TableCell>
+                    <TableCell>
+                      <SStatusDropdown
+                        value={subscription.status!}
+                        options={allowedOptions}
+                        onChange={(newStatus) => handleStatusChange(subscription, newStatus)}
+                      />{' '}
+                    </TableCell>
+
+                    <TableCell className='text-muted-foreground text-sm'>
+                      {formatDate(subscription.startDate ?? 'N/A')}
+                    </TableCell>
+                    <TableCell className='text-muted-foreground text-sm'>
+                      {formatDate(subscription.endDate ?? 'N/A')}
+                    </TableCell>
+                    <TableCell className=''>
+                      <div className='flex items-center space-x-1'>
+                        <button
+                          className='p-1'
+                          onClick={() => openModal('upsertSubscription', { subscriptionId: subscription.id })}
+                        >
+                          <Edit2 className='h-3.5 w-3.5' />
+                        </button>
+                        <button className='p-1'>
+                          <Trash2 className='h-3.5 w-3.5 text-red-500' />
+                        </button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </Card>
+      )}
+    </div>
+  )
+}

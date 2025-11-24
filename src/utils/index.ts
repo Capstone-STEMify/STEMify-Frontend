@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 export const formatDuration = (minutes: number) => {
   if (typeof minutes !== 'number' || isNaN(minutes) || minutes <= 0) return '00:00'
   const h = Math.floor(minutes / 60)
@@ -38,20 +40,61 @@ export function getDaysRemaining(endDateStr: string): number {
  * @description This function formats a date string into a more readable format, e.g., "Jan 1, 2023".
  * @example formatDate('2023-01-01') ==> 'Jan 1, 2023'
  */
-export const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-    timeZoneName: 'short'
+export type DateFormatPattern = 'dd/MM/yyyy' | 'MM/dd/yyyy' | 'yyyy-MM-dd'
+export interface FormatDateOptions {
+  locale?: 'en' | 'vi'
+  showTime?: boolean
+  pattern?: DateFormatPattern
+  year?: 'numeric' | '2-digit'
+  month?: 'numeric' | '2-digit' | 'short' | 'long'
+  day?: 'numeric' | '2-digit'
+}
+export const formatDate = (dateString: string, options: FormatDateOptions = {}) => {
+  const { locale = 'en', showTime = false, pattern, year = 'numeric', month = 'short', day = 'numeric' } = options
+
+  const date = new Date(dateString)
+
+  if (isNaN(date.getTime())) {
+    return 'N/A'
+  }
+  // --- 1. Nếu có pattern → custom formatting ---
+  if (pattern) {
+    const dd = String(date.getDate()).padStart(2, '0')
+    const MM = String(date.getMonth() + 1).padStart(2, '0')
+    const yyyy = date.getFullYear()
+
+    switch (pattern) {
+      case 'dd/MM/yyyy':
+        return `${dd}/${MM}/${yyyy}`
+      case 'MM/dd/yyyy':
+        return `${MM}/${dd}/${yyyy}`
+      case 'yyyy-MM-dd':
+        return `${yyyy}-${MM}-${dd}`
+    }
+  }
+
+  return date.toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-US', {
+    year,
+    month,
+    day,
+    ...(showTime && {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    })
   })
 }
 
-/**
+export function formatDateV2(date: Date | undefined) {
+  if (!date) {
+    return ''
+  }
+  return date.toLocaleDateString('en-SG', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  })
+} /**
  *
  * Get label from options based on id
  * @param id
@@ -74,10 +117,28 @@ export const getLabel = (id: number | undefined, options: { value: string; label
  * ==> [{ value: '1', label: 'Math' }, { value: '2', label: 'Science' }]
  * @description Converts an array of objects into an array of options with value and label properties.
  */
-export const getOptions = (data: any[] | undefined, labelKey: string): { value: string; label: string }[] =>
+export const getOptions = (
+  data: any[] | undefined,
+  labelKey: string,
+  imageKey?: string,
+  subLabelKey?: string,
+  statusKey?: string,
+  startDateKey?: string,
+  endDateKey?: string
+): { value: string; label: string; imageUrl?: string; subLabel?: string; status?: string; date?: string }[] =>
   data?.map((item) => ({
-    value: item.id.toString(),
-    label: item[labelKey]
+    value: item.id ? item.id.toString() : item.userId ? item.userId.toString() : '',
+    label: item[labelKey],
+    imageUrl: imageKey ? item[imageKey] : undefined,
+    subLabel: subLabelKey ? item[subLabelKey] : undefined,
+    status: statusKey ? item[statusKey] : undefined,
+    date:
+      startDateKey && endDateKey
+        ? 'Start Date: ' +
+          (item[startDateKey] ? new Date(item[startDateKey]).toLocaleDateString() : 'N/A') +
+          ' - End Date: ' +
+          (item[endDateKey] ? new Date(item[endDateKey]).toLocaleDateString() : 'N/A')
+        : undefined
   })) || []
 
 export function fileToBase64(file: File): Promise<string> {
@@ -97,4 +158,20 @@ export const capitalizeFirst = (text: string) =>
 
 export function normalizeMarkdown(text: string): string {
   return text.replace(/\\n/g, '\n')
+}
+
+export const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+    minimumFractionDigits: 0
+  }).format(price)
+}
+
+export const useStatusTranslation = () => {
+  const tc = useTranslations('common.status')
+
+  return (status: string) => {
+    return tc(status.toLowerCase())
+  }
 }

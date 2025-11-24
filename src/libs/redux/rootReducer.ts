@@ -4,7 +4,6 @@ import { categoryApi } from '@/features/resource/category/api/categoryApi'
 import { categorySlice } from '@/features/resource/category/slice/categorySlice'
 import { courseApi } from '@/features/resource/course/api/courseApi'
 import { courseSlice } from '@/features/resource/course/slice/courseSlice'
-import { courseEnrollmentSlice } from '@/features/enrollment/slice/courseEnrollmentSlice'
 import { lessonApi } from '@/features/resource/lesson/api/lessonApi'
 import { lessonSlice } from '@/features/resource/lesson/slice/lessonSlice'
 import { sectionApi } from '@/features/resource/section/api/sectionApi'
@@ -37,16 +36,42 @@ import { lessonAssetSelectionSlice } from '@/features/resource/lesson-asset/slic
 import { tiptapSlice } from '@/components/tiptap/slice/tiptapSlice'
 import { assemblySlice } from '@/features/assembly/slice/assemblySlice'
 import { planApi } from '@/features/plan/api/planApi'
-import { planProductSlice } from '@/features/plan/slice/planProductSlice'
 import { workspaceTreeSlice } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { componentSlice } from '@/features/kit-components/slice/componentSlice'
 import { componentApi } from '@/features/kit-components/api/kitComponentApi'
 import { courseEnrollmentApi } from '@/features/enrollment/api/courseEnrollmentApi'
 import { curriculumEnrollmentApi } from '@/features/enrollment/api/curriculumEnrollmentApi'
-import { curriculumEnrollmentSlice } from '@/features/enrollment/slice/curriculumEnrollmentSlice'
-import { selectionObjectSlice } from '@/features/creator-3d/slice/selectionObjectSlice'
-import { chatAgentApi } from '@/features/chat/api/chatAgentApi'
+import { agentApi } from '@/features/chat/api/agentApi'
 import { certificateApi } from '@/features/certificate/api/certificateApi'
+import { cartApi } from '@/features/cart/api/cartApi'
+import { quizPlayerSlice } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { contactSlice } from '@/features/contact/slice/contactSlice'
+import { contactApi } from '@/features/contact/api/contactApi'
+import { contractSlice } from '@/features/contract/slice/contractSlice'
+import { contractApi } from '@/features/contract/api/contractApi'
+import { jobRoleApi } from '@/features/job-role/api/jobRoleApi'
+import { planSlice } from '@/features/plan/slice/planProductSlice'
+import { quizApi } from '@/features/resource/quiz/api/quizApi'
+import { emulatorApi } from '@/features/emulator/api/emulatorApi'
+import { organizationSubscriptionSlice } from '@/features/subscription/slice/subscriptionSlice'
+import { subscriptionApi } from '@/features/subscription/api/subscriptionApi'
+import { licenseAssignmentSlice } from '@/features/license-assignment/slice/licenseAssignmentSlice'
+import { licenseAssignmentApi } from '@/features/license-assignment/api/licenseAssignmentApi'
+import { studentQuizApi } from '@/features/quiz/api/studentQuizApi'
+import { quizSelectedSlice } from '@/features/quiz/slice/studentQuizSlice'
+import { organizationApi } from '@/features/organization/api/organizationApi'
+import { organizationSubscriptionFormSlice } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
+import { classroomApi } from '@/features/classroom/api/classroomApi'
+import { lessonDetailSlice } from '@/features/resource/lesson/slice/lessonDetailSlice'
+import { quizEditorSlice } from '@/features/resource/question/slice/quizEditorSlice'
+import { organizationSlice } from '@/features/organization/slice/organizationSlice'
+import { classroomSlice } from '@/features/classroom/slice/classroomSlice'
+import { orgDashboardApi } from '@/features/dashboard/api/OrgDashboardApi'
+import { studentAssignmentApi } from '@/features/assignment/api/studentAssignmentApi'
+import { assignmentApi } from '@/features/assignment/api/assignmentApi'
+import selectedOrganizationSlice from '@/features/subscription/slice/selectedOrganizationSlice'
+import { studentAssignmentSelectedSlice } from '@/features/assignment/slice/studentAssignmentSlice'
+import { enrollmentSlice } from '@/features/enrollment/slice/enrollmentSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -58,8 +83,6 @@ export const rootReducer = combineReducers({
   category: categorySlice.reducer,
   skill: skillSlice.reducer,
   standard: standardSlice.reducer,
-  courseEnrollment: courseEnrollmentSlice.reducer,
-  curriculumEnrollment: curriculumEnrollmentSlice.reducer,
   notification: notificationSlice.reducer,
   studentProgress: studentProgressSlice.reducer,
   notificationRealtime: notificationRealtimeSlice.reducer,
@@ -73,10 +96,24 @@ export const rootReducer = combineReducers({
   lessonAssetSelection: lessonAssetSelectionSlice.reducer,
   tiptap: tiptapSlice.reducer,
   assembly: assemblySlice.reducer,
-  planProduct: planProductSlice.reducer,
+  plan: planSlice.reducer,
   workspaceTree: workspaceTreeSlice.reducer,
   component: componentSlice.reducer,
-  selectObject: selectionObjectSlice.reducer,
+  quizPlayer: quizPlayerSlice.reducer,
+  quizSelected: quizSelectedSlice.reducer,
+  contact: contactSlice.reducer,
+  contract: contractSlice.reducer,
+  quizEditor: quizEditorSlice.reducer,
+  planProduct: planSlice.reducer,
+  organizationSubscription: organizationSubscriptionSlice.reducer,
+  licenseAssignment: licenseAssignmentSlice.reducer,
+  organizationSubscriptionForm: organizationSubscriptionFormSlice.reducer,
+  lessonDetail: lessonDetailSlice.reducer,
+  organization: organizationSlice.reducer,
+  classroom: classroomSlice.reducer,
+  selectedOrganization: selectedOrganizationSlice,
+  studentAssignmentSelected: studentAssignmentSelectedSlice.reducer,
+  enrollment: enrollmentSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -98,6 +135,20 @@ export const rootReducer = combineReducers({
   [kitProductApi.reducerPath]: kitProductApi.reducer,
   [planApi.reducerPath]: planApi.reducer,
   [componentApi.reducerPath]: componentApi.reducer,
-  [chatAgentApi.reducerPath]: chatAgentApi.reducer,
-  [certificateApi.reducerPath]: certificateApi.reducer
+  [agentApi.reducerPath]: agentApi.reducer,
+  [certificateApi.reducerPath]: certificateApi.reducer,
+  [cartApi.reducerPath]: cartApi.reducer,
+  [contactApi.reducerPath]: contactApi.reducer,
+  [contractApi.reducerPath]: contractApi.reducer,
+  [jobRoleApi.reducerPath]: jobRoleApi.reducer,
+  [quizApi.reducerPath]: quizApi.reducer,
+  [emulatorApi.reducerPath]: emulatorApi.reducer,
+  [subscriptionApi.reducerPath]: subscriptionApi.reducer,
+  [licenseAssignmentApi.reducerPath]: licenseAssignmentApi.reducer,
+  [studentQuizApi.reducerPath]: studentQuizApi.reducer,
+  [organizationApi.reducerPath]: organizationApi.reducer,
+  [classroomApi.reducerPath]: classroomApi.reducer,
+  [orgDashboardApi.reducerPath]: orgDashboardApi.reducer,
+  [studentAssignmentApi.reducerPath]: studentAssignmentApi.reducer,
+  [assignmentApi.reducerPath]: assignmentApi.reducer
 })

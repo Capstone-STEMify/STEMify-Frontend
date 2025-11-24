@@ -1,25 +1,67 @@
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '@/components/shadcn/sheet'
+'use client'
+
+import React from 'react'
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+  SheetClose
+} from '@/components/shadcn/sheet'
+import { Button } from '@/components/shadcn/button'
 
 type SSheetProps = {
-  isOpen: boolean
-  setOpen: (open: boolean) => void
-  trigger: React.ReactNode
-  content: React.ReactNode
   title: string
+  description?: string
+  triggerLabel?: string
+  triggerIcon?: React.ReactNode
+  children: React.ReactNode
+  onSubmit?: () => void
+  submitLabel?: string
+  cancelLabel?: string
+  triggerClassName?: string
 }
 
-export default function SSheet({ isOpen, setOpen, trigger, content, title }: SSheetProps) {
+export default function SSheet({
+  title,
+  description,
+  triggerLabel = 'Open Sheet',
+  triggerIcon,
+  children,
+  onSubmit,
+  submitLabel = 'Save',
+  cancelLabel = 'Close',
+  triggerClassName
+}: SSheetProps) {
   return (
-    <div className='mb-4 flex lg:hidden'>
-      <Sheet open={isOpen} onOpenChange={setOpen}>
-        <SheetTrigger asChild>{trigger}</SheetTrigger>
-        <SheetContent side='left' className='w-[80vw] sm:w-[400px]'>
-          <SheetHeader>
-            <SheetTitle className='text-lg'>{title}</SheetTitle>
-          </SheetHeader>
-          {content}
-        </SheetContent>
-      </Sheet>
-    </div>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant='outline' size='sm' className={triggerClassName}>
+          {triggerIcon}
+          {triggerLabel}
+        </Button>
+      </SheetTrigger>
+
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>{title}</SheetTitle>
+          {description && <SheetDescription>{description}</SheetDescription>}
+        </SheetHeader>
+
+        <div className='grid flex-1 auto-rows-min gap-6 px-4 py-4'>{children}</div>
+
+        <SheetFooter>
+          <Button type='submit' onClick={onSubmit}>
+            {submitLabel}
+          </Button>
+          <SheetClose asChild>
+            <Button variant='outline'>{cancelLabel}</Button>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   )
 }

@@ -19,6 +19,12 @@ const customFetchBaseQuery = fetchBaseQuery({
       headers.set('Authorization', 'Bearer ' + token)
     }
 
+    const activeOrg = (api.getState() as RootState).selectedOrganization.selectedOrganizationId
+    const activeSub = (api.getState() as RootState).selectedOrganization.selectedSubscriptionOrderId
+
+    if (activeOrg) headers.set('X-Active-Organization', String(activeOrg))
+    if (activeSub) headers.set('X-Active-Subscription', String(activeSub))
+
     return headers
   }
 })
@@ -78,6 +84,22 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
   baseUrl,
   baseQuery = customFetchBaseQueryWithErrorHandling
 }: CrudApiOptions) {
+  const handleDynamicUrl = (url: string, params: any) => {
+    let dynamicUrl = url
+    const queryParams = { ...params }
+    const pathParams = url.match(/\{[^\}]+\}/g) || []
+
+    pathParams.forEach((placeholder) => {
+      const key = placeholder.substring(1, placeholder.length - 1)
+      if (key in queryParams) {
+        dynamicUrl = dynamicUrl.replace(placeholder, String(queryParams[key as keyof P]))
+        delete queryParams[key as keyof P]
+      }
+    })
+
+    return { dynamicUrl, queryParams }
+  }
+
   return createApi({
     reducerPath,
 
@@ -94,21 +116,28 @@ export function createCrudApi<T, P extends SearchPaginatedRequestParams>({
 
       // GET: classrooms
       getAll: builder.query<ApiSuccessResponse<PaginatedResult<T>>, void | SearchPaginatedRequestParams>({
-        query: (params) => ({ url: baseUrl, params }),
+        query: (params) => {
+          const { dynamicUrl, queryParams } = handleDynamicUrl(baseUrl, params || {})
+          return { url: dynamicUrl, params: queryParams }
+        },
         providesTags: tagTypes
       }),
 
       // GET: search/classrooms?sort=nameAsc&pageNumber=1&pageSize=3&search=steam
       search: builder.query<ApiSuccessResponse<PaginatedResult<T>>, P>({
-        query: (params) => ({
-          url: baseUrl,
-          method: 'GET',
-          params: {
-            pageNumber: params.pageNumber ?? 1,
-            pageSize: params.pageSize ?? 10,
-            ...params
+        query: (params) => {
+          const { dynamicUrl, queryParams } = handleDynamicUrl(baseUrl, params)
+
+          return {
+            url: dynamicUrl,
+            method: 'GET',
+            params: {
+              pageNumber: queryParams.pageNumber ?? 1,
+              pageSize: queryParams.pageSize ?? 10,
+              ...queryParams
+            }
           }
-        }),
+        },
         providesTags: tagTypes
       }),
       // POST: classrooms/2

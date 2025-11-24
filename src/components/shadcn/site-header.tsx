@@ -1,4 +1,5 @@
 import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
+import BackButton from '@/components/shared/button/BackButton'
 import { Button } from 'components/shadcn/button'
 import { Separator } from 'components/shadcn/separator'
 import { SidebarTrigger } from 'components/shadcn/sidebar'

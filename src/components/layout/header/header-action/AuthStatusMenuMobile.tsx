@@ -21,6 +21,10 @@ import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { logout } from '@/features/auth/authSlice'
+import { persistor } from '@/libs/redux/store'
+import { clearSelectedOrganization } from '@/features/subscription/slice/selectedOrganizationSlice'
 
 function MenuItem({
   children,
@@ -54,6 +58,7 @@ function MenuItem({
 export default function AuthStatusMenuMobile() {
   const t = useTranslations('Header')
   const { data: session, status } = useSession()
+  const dispatch = useAppDispatch()
 
   if (status === 'loading') {
     return (
@@ -70,11 +75,12 @@ export default function AuthStatusMenuMobile() {
         method: 'GET',
         credentials: 'include'
       })
-
-      localStorage.clear()
-      sessionStorage.clear()
-
+      localStorage.removeItem('stemify_user_id')
+      localStorage.removeItem('stemify_access_token')
       await signOut({ callbackUrl: '/' })
+      dispatch(logout())
+      dispatch(clearSelectedOrganization())
+      persistor.purge()
     } catch (error) {
       console.error('Logout failed:', error)
     }

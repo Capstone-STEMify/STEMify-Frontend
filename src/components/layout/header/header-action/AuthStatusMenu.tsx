@@ -13,14 +13,20 @@ import {
   Repeat,
   Settings,
   User as UserIcon,
-  Sparkles
+  Sparkles,
+  Gem
 } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
+import { useRouter } from 'next/navigation'
+import { useAppDispatch } from '@/hooks/redux-hooks'
+import { logout } from '@/features/auth/authSlice'
+import { persistor } from '@/libs/redux/store'
+import { clearSelectedOrganization } from '@/features/subscription/slice/selectedOrganizationSlice'
 
 function MenuItem({
   children,
@@ -54,6 +60,9 @@ function MenuItem({
 export default function AuthStatusMenu() {
   const t = useTranslations('Header')
   const { data: session, status } = useSession()
+  const router = useRouter()
+  const locale = useLocale()
+  const dispatch = useAppDispatch()
 
   if (status === 'loading') {
     return (
@@ -71,10 +80,14 @@ export default function AuthStatusMenu() {
         credentials: 'include'
       })
 
-      localStorage.clear()
-      sessionStorage.clear()
+      localStorage.removeItem('stemify_user_id')
+      localStorage.removeItem('stemify_access_token')
+      await signOut({ redirect: false })
+      dispatch(logout())
+      dispatch(clearSelectedOrganization())
+      persistor.purge()
 
-      await signOut({ callbackUrl: '/' })
+      router.push(`/${locale}/`)
     } catch (error) {
       console.error('Logout failed:', error)
     }
@@ -139,6 +152,14 @@ export default function AuthStatusMenu() {
         </div>
       ) : (
         <div className='flex gap-2'>
+          <Button
+            size='lg'
+            className='border-1 border-purple-500 bg-white text-purple-500'
+            onClick={() => router.push(`/${locale}/plans`)}
+          >
+            <Gem size={14} />
+            Upgrade
+          </Button>
           <LanguageSwitcher />
 
           <Button

@@ -1,5 +1,10 @@
 'use client'
 
+// useGLTF.preload('/models/connector_1leg.glb')
+// useGLTF.preload('/models/connector_2legs.glb')
+// useGLTF.preload('/models/connector_3legs.glb')
+// useGLTF.preload('/models/connector_5legs.glb')
+
 import { Canvas } from '@react-three/fiber'
 import { useRef, useCallback, useState, useEffect } from 'react'
 import { CreatorToolbar } from '@/features/creator-3d/components/creator-workspace/CreatorToolbar'
@@ -8,7 +13,14 @@ import SceneTopRight from '@/features/creator-3d/components/creator-workspace/Sc
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { addInstance, redo, setDraggingTemplate, setSelectedId, undo } from '@/features/creator-3d/slice/creatorSceneSlice'
+import {
+  addInstance,
+  removeInstance,
+  setDraggingTemplate,
+  setSelectedId
+} from '@/features/creator-3d/slice/creatorSceneSlice'
+import { syncRedo, syncUndo } from '@/features/creator-3d/slice/createSceneThunk'
+import { useGLTF } from '@react-three/drei'
 
 interface CreatorWorkspaceProps {
   onObjectSelect: (objectId: string | null) => void
@@ -26,10 +38,11 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
   const [isDragOver, setIsDragOver] = useState(false)
   const transformControlsRef = useRef<any>(null)
   const orbitControlsRef = useRef<any>(null)
+
   const handleDragEnd = () => {
     dispatch(setDraggingTemplate(null))
   }
-  // Handle drop from palette
+
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault()
@@ -37,13 +50,7 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
 
       if (!dragSource) return
 
-      // Hiện tại: đặt tại origin (0,0,0).
-      // Sau này có thể raycast để lấy vị trí thực trong 3D.
       const position = { x: 0, y: 0, z: 0 }
-
-      // category trong AssemblyInstance là 'straw' | 'connector'
-      const category = dragSource.category as 'straw' | 'connector'
-
       onObjectAdd(dragSource, position)
       handleDragEnd()
     },
@@ -61,17 +68,17 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // ⌨️ Ctrl + Z → Undo
+      // ⌨️ Ctrl + Z → Undo (synced)
       if (e.ctrlKey && e.key.toLowerCase() === 'z') {
         e.preventDefault()
-        dispatch(undo())
+        dispatch(syncUndo())
         return
       }
 
-      // ⌨️ Ctrl + Y → Redo
+      // ⌨️ Ctrl + Y → Redo (synced)
       if (e.ctrlKey && e.key.toLowerCase() === 'y') {
         e.preventDefault()
-        dispatch(redo())
+        dispatch(syncRedo())
         return
       }
 
@@ -103,6 +110,13 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
         dispatch(addInstance(newCopy))
         dispatch(setSelectedId(newCopy.id))
         console.log('📎 Pasted object:', newCopy.id)
+        return
+      }
+
+      if ((e.key === 'Delete' || e.key === 'Backspace') && selectedId) {
+        e.preventDefault()
+        dispatch(removeInstance(selectedId))
+        console.log('🗑️ Deleted object:', selectedId)
         return
       }
     }
@@ -143,7 +157,6 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
           />
         </Canvas>
       </div>
-      {/* Toolbar */}
       <CreatorToolbar />
       <SceneTopRight />
     </div>

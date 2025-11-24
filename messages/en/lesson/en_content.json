@@ -8,8 +8,10 @@
     },
     "form": {
       "title": {
-        "create": "Create Content",
-        "update": "Update Content"
+        "create": "Create Reading Content",
+        "update": "Update Content",
+        "createQuiz": "Create Quiz",
+        "createAssignment": "Create Assignment"
       }
     }
   }

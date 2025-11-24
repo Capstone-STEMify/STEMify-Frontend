@@ -10,6 +10,9 @@ import { TextField } from '@/components/shared/form/items/text-field'
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import MultiImageField from '@/components/shared/form/items/multi-image-field'
 import SwitchField from '@/components/shared/form/items/switch-field'
+import { DropdownMultipleCheckboxField } from '@/components/shared/form/items/dropdown-multiple-checkbox-field'
+import { DatePickerField } from '@/components/shared/form/items/date-picker-field'
+import { SingleSelectWithSearch } from '@/components/shared/SingleSelectWithSearch'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts()
 
@@ -17,6 +20,7 @@ export const { useAppForm } = createFormHook({
   fieldComponents: {
     TextField,
     TextAreaField,
+    DatePickerField,
     SelectField,
     CheckboxField,
     MultipleCheckboxField,
@@ -24,7 +28,9 @@ export const { useAppForm } = createFormHook({
     ImageField,
     FileField,
     MultiImageField,
-    SwitchField
+    SwitchField,
+    DropdownMultipleCheckboxField,
+    SingleSelectWithSearch
   },
   formComponents: {
     SubmitButton
