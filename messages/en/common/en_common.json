@@ -63,7 +63,14 @@
       "addToCart": "Add To Cart",
       "signUpFree": "Sign Up For Free",
       "createOrganization": "Create Organization",
-      "createSubscription": "Create Subscription"
+      "createSubscription": "Create Subscription",
+      "grade": "Grade Now",
+      "filter": "Add Filter",
+      "search": "Search...",
+      "export": "Export",
+      "month": "Month",
+      "quarter": "Quarter",
+      "year": "Year"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
