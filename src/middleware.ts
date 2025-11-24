@@ -78,11 +78,11 @@ export default withAuth(
     const locale = pathname.split('/')[1] || 'vi'
 
     // --- Chọn NEXTAUTH_URL động theo domain ---
-    if (host.includes('robotsteam.com.vn')) {
-      process.env.NEXTAUTH_URL = 'https://robotsteam.com.vn'
-    } else if (host.includes('stemifi.com')) {
-      process.env.NEXTAUTH_URL = 'https://www.stemifi.com'
-    }
+    // if (host.includes('robotsteam.com.vn')) {
+    //   process.env.NEXTAUTH_URL = 'https://robotsteam.com.vn'
+    // } else if (host.includes('stemifi.com')) {
+    //   process.env.NEXTAUTH_URL = 'https://www.stemifi.com'
+    // }
 
     // 🔹 Lấy token từ cookie
     const token = await getToken({ req, secret: process.env.AUTH_SECRET })
