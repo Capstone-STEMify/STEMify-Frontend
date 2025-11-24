@@ -1,8 +1,8 @@
+import { UserRole } from '@/types/userRole'
 import React from 'react'
-import { Role } from '../../types/user.type'
 
 interface RoleBadgeProps {
-  role: Role
+  role: UserRole
 }
 
 const roleColors = {
@@ -39,7 +39,7 @@ export function RoleBadge({ role }: RoleBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${colors.bg} ${colors.text} ${colors.border}`}
+      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${colors.bg} ${colors.text} ${colors.border}`}
     >
       {role}
     </span>

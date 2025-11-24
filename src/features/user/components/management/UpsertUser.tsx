@@ -13,7 +13,7 @@ const defaultUserData = {
   email: '',
   userName: '',
   password: '',
-  role: LicenseType.STUDENT,
+  role: UserRole.STAFF,
   firstName: '',
   lastName: ''
 }
@@ -44,7 +44,7 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
     email: z.string().email(tv('user.email')),
     userName: z.string().min(3, tv('user.userName', { length: 3 })),
     password: z.string().min(6, tv('user.password', { length: 6 })),
-    role: z.enum(LicenseType),
+    role: z.enum(UserRole),
     firstName: z.string().min(1, tv('user.firstName')),
     lastName: z.string().min(1, tv('user.lastName'))
   })
@@ -110,10 +110,10 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
     return <LoadingComponent />
   }
 
-  // remove guest role from options
+  // only staff and admin
   const roleOptions = Object.values(UserRole)
     .map((role) => ({ value: role, label: role }))
-    .filter((role) => role.value !== UserRole.GUEST)
+    .filter((option) => option.value === UserRole.STAFF || option.value === UserRole.ADMIN)
 
   return (
     <form
