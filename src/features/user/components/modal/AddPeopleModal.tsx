@@ -171,7 +171,7 @@ export default function AddPeopleModal() {
 
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent className='max-w-2xl'>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
             <UserPlus className='h-5 w-5' />
@@ -179,7 +179,7 @@ export default function AddPeopleModal() {
           </DialogTitle>
         </DialogHeader>
 
-        <div className='space-y-2'>
+        <div className='min-w-[450px] space-y-2'>
           <label className='text-sm font-medium text-gray-700'>{tClassroom('update.students.studentEmail')}</label>
           <p className='text-xs text-gray-500'>{tClassroom('update.students.studentEmailSubtext')}</p>
 
@@ -310,7 +310,7 @@ export default function AddPeopleModal() {
             ) : (
               <>
                 <UserPlus className='h-4 w-4' />
-                Add {studentEmails.length} {tClassroom('update.students.students')}
+                {tc('button.add')} {studentEmails.length} {tClassroom('update.students.students')}
               </>
             )}
           </Button>

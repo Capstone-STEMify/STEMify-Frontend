@@ -104,7 +104,7 @@ export default function ClassroomCourseList({
                 footer={
                   isStudentView && (
                     <div className='flex w-full items-center gap-2 border-t border-slate-100 pt-2'>
-                      {enrollment ? (
+                      {enrollment?.status ? (
                         <Button
                           onClick={() => {
                             dispatch(setCourseEnrollmentId(enrollment.id))

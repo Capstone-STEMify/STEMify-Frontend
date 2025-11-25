@@ -30,6 +30,7 @@ export type QuizContent = BaseContent & {
   passingMarks: number
   timeLimitInMinutes: number
   quizId: number
+  maxAttempt?: number
 }
 
 export type AssignmentContent = BaseContent & {

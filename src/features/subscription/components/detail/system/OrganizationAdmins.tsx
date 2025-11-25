@@ -206,7 +206,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                               )}
                             </>
                           ) : (
-                            <span className='text-muted-foreground italic'>{to('license.notSet')}</span>
+                            <span className='text-muted-foreground italic'>-</span>
                           )}
                         </div>
                       </TableCell>

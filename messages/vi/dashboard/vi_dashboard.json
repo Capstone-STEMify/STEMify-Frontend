@@ -2,12 +2,12 @@
   "dashboard": {
     "classroom": {
       "submission": "Bài nộp",
-      "passRate": "Tỷ lệ qua môn",
+      "passRate": "Tỷ lệ hoàn thành",
       "passed": "Đạt",
       "failed": "Không đạt",
       "score": "Điểm trung bình",
       "overview": {
-        "title": "Tổng quan Bảng điều khiển",
+        "title": "Tổng quan lớp học",
         "subTitle": "Theo dõi tiến trình học tập và hiệu suất làm bài",
         "quizStat": "Thống kê Quiz",
         "asmStat": "Thống kê Bài tập",
@@ -43,15 +43,15 @@
         "overviewTab": "Tổng quan",
         "activeTab": "Đang hoạt động",
         "overview": {
-          "enroll": "Đã ghi danh",
-          "accuracy": "Độ chính xác",
+          "enroll": "học sinh tham gia",
+          "accuracy": "Điểm trung bình",
           "completeRate": "Tỷ lệ hoàn thành",
           "question": "Câu hỏi"
         },
         "active": {
           "name": "Tên Quiz",
           "learner": "Học viên",
-          "accuracy": "Độ chính xác",
+          "accuracy": "Điểm trung bình",
           "date": "Hạn nộp",
           "action": "Thao tác"
         }
@@ -72,7 +72,7 @@
       "passed": "Đạt",
       "failed": "Không đạt",
       "score": "Điểm trung bình",
-      "passRate": "Tỷ lệ qua môn",
+      "passRate": "Tỷ lệ hoàn thành",
       "totalCurriculum": "Số Chương trình học",
       "totalClass": "Số lớp học",
       "cert": "Chứng chỉ đã nhận",

@@ -27,7 +27,7 @@
         "addStudents": "Thêm học sinh vào lớp học",
         "studentEmail": "Email học sinh",
         "searchStudent": "Tìm kiếm học sinh theo  email",
-        "studentEmailSubtext": "Tìm kiếm theo tên hoặc email, hoặc dán nhiều email được phân tách bằng dấu phẩy, dấu cách hoặc dấu chấm phẩy",
+        "studentEmailSubtext": "Tìm kiếm học sinh theo tên hoặc email",
         "students": "học sinh",
         "selected": "đã chọn",
         "searchingStudents": "Đang tìm kiếm học sinh...",
@@ -43,7 +43,7 @@
       "selected": "Đã chọn",
       "students": {
         "label": "Học sinh",
-        "noStudent": "Chưa có học sinh nào đăng ký.",
+        "noStudent": "Chưa có học sinh nào.",
         "noStudentSubtext": "Bắt đầu xây dựng lớp học của bạn bằng cách thêm học sinh"
       },
       "courses": "Khóa học",
@@ -61,7 +61,7 @@
         "joinButton": "Tham gia cuộc họp"
       },
       "quickStats": {
-        "label": "Thống kê nhanh",
+        "label": "Thông tin",
         "createdDate": "Ngày tạo",
         "lastUpdated": "Cập nhật lần cuối",
         "duration": "Thời lượng"

@@ -12,6 +12,7 @@ export type Quiz = {
   contentId: number
   timeLimitMinutes: number
   totalQuestions: number
+  maxAttempt?: number
   questions: Question[]
 }
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
+import { Grid, LayoutGrid, Table } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 interface QuizNavigationProps {
@@ -14,8 +15,12 @@ export function QuizNavigation({ activeTab, onTabChange }: QuizNavigationProps) 
     <div className='mb-6'>
       <Tabs value={activeTab} onValueChange={onTabChange} className='mt-4'>
         <TabsList>
-          <TabsTrigger value='overview'>{t('overviewTab')}</TabsTrigger>
-          <TabsTrigger value='active'>{t('activeTab')}</TabsTrigger>
+          <TabsTrigger value='overview'>
+            <LayoutGrid />
+          </TabsTrigger>
+          <TabsTrigger value='active'>
+            <Table />
+          </TabsTrigger>
           {/* <TabsTrigger value='progress' disabled>
             Progress
           </TabsTrigger> */}

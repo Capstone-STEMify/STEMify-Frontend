@@ -114,7 +114,7 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
               <TableRow
                 key={submission.id}
                 className='cursor-pointer hover:bg-gray-50'
-                onClick={() => setOpenSubmission(submission)} // <<< Mở dialog bằng state
+                onClick={() => submission.status !== 'Not Submitted' && setOpenSubmission(submission)} // <<< Mở dialog bằng state
               >
                 <TableCell>
                   <div className='flex items-center gap-3'>

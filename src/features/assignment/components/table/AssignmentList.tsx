@@ -46,7 +46,7 @@ export function AssignmentList() {
   const assignments: AssignmentStatistics[] = studentAssignmentResponse?.data?.items || []
 
   return (
-    <div className='mx-auto mt-4 w-full max-w-7xl rounded-lg border'>
+    <div className='mx-auto mt-10 w-full max-w-7xl rounded-lg border'>
       <Table>
         <TableHeader>
           <TableRow className='bg-gray-50/50 hover:bg-gray-50'>
@@ -81,9 +81,6 @@ export function AssignmentList() {
                 {t('score')}
                 <ChevronUp className='ml-1 h-3 w-3' />
               </button>
-            </TableHead>
-            <TableHead className='w-[80px] text-center text-xs font-semibold text-gray-500 uppercase'>
-              {t('assignment.action')}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -147,21 +144,6 @@ export function AssignmentList() {
                   <div className='flex items-center justify-center gap-2'>
                     <p className='text-gray-800'>{assignment.averageScore}</p>
                   </div>
-                </TableCell>
-                <TableCell className='text-center'>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant='ghost' className='h-8 w-8 p-0'>
-                        <span className='sr-only'>Open menu</span>
-                        <MoreHorizontal className='h-4 w-4' />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align='end'>
-                      <DropdownMenuItem>{tc('button.view')}</DropdownMenuItem>
-                      <DropdownMenuItem>{tc('button.update')}</DropdownMenuItem>
-                      <DropdownMenuItem className='text-red-500'>{tc('button.delete')}</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             )

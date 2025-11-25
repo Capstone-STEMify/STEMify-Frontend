@@ -46,8 +46,8 @@
         "usedLicenses": "Đã sử dụng suất sử dụng",
         "member": "Thành viên",
         "active": "Đang hoạt động",
-        "pending": "Chờ xử lý",
-        "noActive": "Không có suất sử dụng nào đang hoạt động.",
+        "pending": "Chưa xác nhận",
+        "noActive": "Không có tài khoản nào đang hoạt động.",
         "name": "Tên",
         "role": "Vai trò",
         "status": "Trạng thái",
@@ -155,7 +155,7 @@
       "inviteUsers": "Mời người dùng",
       "enterEmails": "Nhập email",
       "pleaseUploadCSV": "Vui lòng tải lên tệp CSV",
-      "uploadSuccess": "Người dùng đã được mời thành công và giấy phép đã được cấp!",
+      "uploadSuccess": "Đã gửi lời mời thành công!",
       "userType": "Loại người dùng"
     }
   }

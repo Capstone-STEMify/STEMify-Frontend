@@ -134,7 +134,7 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
         } else {
           const payload: CreateAssignmentDto = { ...value, sectionId: Number(sectionId) }
           const res = await createAssignment(payload).unwrap()
-          router.push(`${locale}/admin/lesson/${lessonId}/section/${sectionId}/assignment/${res.data.id}`)
+          router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/assignment/${res.data.id}`)
           toast.success(`Assignment created successfully`)
         }
 

@@ -81,7 +81,7 @@
       "next": "Tiếp",
       "step": "Bước",
       "skip": "Bỏ Qua",
-      "assignLicense": "Gán Giấy Phép",
+      "assignLicense": "Tạo tài khoản tổ chức",
       "clearAll": "Xóa Tất Cả",
       "sendInvitations": "Gửi Lời Mời",
       "clearFilters": "Xóa Bộ Lọc",
@@ -194,7 +194,7 @@
       "statusLabel": "Trạng Thái",
       "active": "Đang Hoạt Động",
       "inactive": "Không Hoạt Động",
-      "pending": "Chờ Xét Duyệt",
+      "pending": "Chưa Xác Nhận",
       "approved": "Phê Duyệt",
       "rejected": "Từ Chối",
       "draft": "Bản Nháp",
@@ -223,7 +223,8 @@
       "member": "Thành Viên",
       "teacher": "Giáo Viên",
       "student": "Học Sinh",
-      "organization_admin": "Quản Trị Viên Tổ Chức"
+      "organization_admin": "Quản Trị Viên Tổ Chức",
+      "organizationadmin": "Quản Trị Viên Tổ Chức"
     }
   }
 }
