@@ -88,7 +88,12 @@
       "addStudents": "Add Students",
       "reviewed": "Reviewed",
       "notReviewed": "Not Reviewed",
-      "submitReview": "Submit Review"
+      "submitReview": "Submit Review",
+      "attempt": "Attempt Now",
+      "retry": "Retry",
+      "viewSub": "View Submission",
+      "seeFeedback": "See Feedback",
+      "close": "Close"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

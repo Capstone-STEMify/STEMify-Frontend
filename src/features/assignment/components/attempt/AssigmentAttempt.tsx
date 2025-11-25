@@ -22,6 +22,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { setSelectedAssignment, setSelectedStudentAssignment } from '@/features/assignment/slice/studentAssignmentSlice'
 import { Separator } from 'radix-ui'
+import { useTranslations } from 'next-intl'
 
 // --- Helper Functions ---
 
@@ -143,6 +144,10 @@ interface AssignmentAttemptProps {
 }
 
 export default function AssignmentAttempt({ studentAssignmentId, assignmentId }: AssignmentAttemptProps) {
+
+  const t = useTranslations('assignment.student')
+  const tc = useTranslations('common')
+
   const [isSubmissionOpen, setSubmissionOpen] = useState(false)
   const [isFeedbackOpen, setFeedbackOpen] = useState(false)
   const { lessonId } = useParams()
@@ -192,28 +197,28 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
                 <div className='rounded-full bg-amber-100 p-3'>
                   <Trophy className='h-6 w-6 text-amber-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Total Marks</p>
+                <p className='text-sm font-medium text-gray-600'>{t('firstAttempt.totalMark')}</p>
                 <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.totalScore}</p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-green-100 p-3'>
                   <CheckCircle className='h-6 w-6 text-green-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Passing Marks</p>
+                <p className='text-sm font-medium text-gray-600'>{t('firstAttempt.passingMark')}</p>
                 <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.passingScore}</p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-sky-100 p-3'>
                   <Clock className='h-6 w-6 text-sky-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Time Limit</p>
-                <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.durationDays} days</p>
+                <p className='text-sm font-medium text-gray-600'>{t('firstAttempt.time')}</p>
+                <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.durationDays} {t('firstAttempt.day')}</p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-sky-100 p-3'>
                   <Clock className='h-6 w-6 text-sky-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Question Length</p>
+                <p className='text-sm font-medium text-gray-600'>{t('firstAttempt.quesLength')}</p>
                 <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.questions.length}</p>
               </div>
             </div>
@@ -222,7 +227,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
         <div className='flex justify-center'>
           {/* loading button when creating quiz attempt */}
           <Button asChild className='bg-blue-600 text-white hover:bg-blue-700'>
-            <Link href={`/student-assignment/${assignmentDetail?.data?.id}`}>Attempt Now</Link>
+            <Link href={`/student-assignment/${assignmentDetail?.data?.id}`}>{tc('button.attempt')}</Link>
           </Button>
         </div>
       </div>
@@ -254,27 +259,27 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
         <CardContent className='grid grid-cols-1 gap-6 md:grid-cols-2'>
           <div className='space-y-4'>
             <div>
-              <div className='mb-1 text-sm font-medium text-gray-700'>Due</div>
+              <div className='mb-1 text-sm font-medium text-gray-700'>{t('alreadyAttempted.due')}</div>
               <div className='text-sm text-gray-900'>{formatDate(studentAssignmentData.dueDate)}</div>
             </div>
             {latestAttempt && (
               <div>
-                <div className='mb-1 text-sm font-medium text-gray-700'>Submitted</div>
+                <div className='mb-1 text-sm font-medium text-gray-700'>{t('alreadyAttempted.submitted')}</div>
                 <div className='text-sm text-gray-900'>{formatDate(latestAttempt.submittedAt)}</div>
               </div>
             )}
           </div>
           <div className='space-y-4'>
             <div>
-              <div className='mb-1 text-sm font-medium text-gray-700'>Attempts</div>
+              <div className='mb-1 text-sm font-medium text-gray-700'>{t('alreadyAttempted.attempt')}</div>
               <div className='text-sm text-gray-900'>
-                {attemptsRemaining} left ({maxAttempts} attempts allowed)
+                {attemptsRemaining} {t('alreadyAttempted.left')} ({maxAttempts} {t('alreadyAttempted.allow')})
               </div>
             </div>
             <div className='flex justify-end'>
               {attemptsMade === 0 ? (
                 <Button onClick={handleAttemptAssignment} className='bg-blue-500 text-white hover:bg-blue-600'>
-                  Attempt Now
+                  {tc('button.attempt')}
                 </Button>
               ) : attemptsMade > 0 && attemptsMade < maxAttempts ? (
                 <Button
@@ -283,7 +288,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
                   className='border-blue-600 text-blue-600 hover:bg-blue-50'
                 >
                   <RotateCcw className='mr-2 h-4 w-4' />
-                  Retry
+                  {tc('button.retry')}
                 </Button>
               ) : null}
             </div>
@@ -294,12 +299,12 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
       {isGraded && (
         <Card className={isPassed ? 'bg-green-50 py-4' : 'bg-red-50 py-4'}>
           <CardHeader>
-            <CardTitle className='text-lg font-semibold'>Your grade</CardTitle>
+            <CardTitle className='text-lg font-semibold'>{t('graded.title')}</CardTitle>
           </CardHeader>
           <CardContent className='flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between'>
             <div>
               <p className='text-sm text-gray-700'>
-                To pass you need at least {passingScore}%. We keep your highest score.
+                {t('graded.description', {passingScore: passingScore})}
               </p>
               <p className={`text-4xl font-bold ${isPassed ? 'text-green-700' : 'text-red-700'}`}>
                 {studentAssignmentData.finalScore}%
@@ -307,10 +312,10 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
             </div>
             <div className='flex w-full flex-shrink-0 gap-3 md:w-auto'>
               <Button variant='outline' className='w-1/2 bg-white md:w-auto' onClick={() => setSubmissionOpen(true)}>
-                View submission
+                {tc('button.viewSub')}
               </Button>
               <Button variant='outline' className='w-1/2 bg-white md:w-auto' onClick={() => setFeedbackOpen(true)}>
-                See feedback
+                {tc('button.seeFeedback')}
               </Button>
             </div>
           </CardContent>
@@ -320,9 +325,9 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
       {latestAttempt && latestAttempt.status === StudentAssignmentStatus.UNDER_REVIEW && (
         <Card className='bg-yellow-50'>
           <CardContent className='p-6'>
-            <h2 className='mb-1 text-lg font-semibold'>Pending Review</h2>
+            <h2 className='mb-1 text-lg font-semibold'>{t('alreadyAttempted.pending')}</h2>
             <p className='text-sm text-gray-700'>
-              Your submission from {formatDate(latestAttempt.submittedAt)} is currently being reviewed.
+              {t('alreadyAttempted.description', {date: formatDate(latestAttempt.submittedAt)})}
             </p>
           </CardContent>
         </Card>
@@ -337,14 +342,14 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
       <Dialog open={isFeedbackOpen} onOpenChange={setFeedbackOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Teacher's Feedback</DialogTitle>
+            <DialogTitle>{t('alreadyAttempted.title')}</DialogTitle>
           </DialogHeader>
           <div className='py-4'>
             <p className='text-sm text-gray-700 italic'>"{latestAttempt?.feedback || 'No feedback provided.'}"</p>
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button type='button'>Close</Button>
+              <Button type='button'>{tc('button.close')}</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

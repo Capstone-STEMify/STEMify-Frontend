@@ -89,7 +89,12 @@
       "addStudents": "Thêm Học Sinh",
       "reviewed": "Đã đánh giá",
       "notReviewed": "Chưa đánh giá",
-      "submitReview": "Gửi Đánh Giá"
+      "submitReview": "Gửi Đánh Giá",
+      "attempt": "Làm Ngay",
+      "retry": "Thử Lại",
+      "viewSub": "Xem Bài Nộp",
+      "seeFeedback": "Xem Phản Hồi",
+      "close": "Đóng"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

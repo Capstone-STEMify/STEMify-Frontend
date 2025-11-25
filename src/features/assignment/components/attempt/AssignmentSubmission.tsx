@@ -15,7 +15,7 @@ import { useAppSelector } from '@/hooks/redux-hooks'
 import BackButton from '@/components/shared/button/BackButton'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { formatDate, formatDateV2 } from '@/utils/index'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (file: File | null) => void }) => {
   const [isDragging, setIsDragging] = useState(false)
@@ -104,6 +104,10 @@ const fileToBase64 = (file: File): Promise<string> => {
 }
 
 export default function AssignmentSubmissionForm() {
+
+  const t = useTranslations('assignment')
+  const tc = useTranslations('common')
+
   const router = useRouter()
   const locale = useLocale()
   const { selectedAssignment, selectedStudentAssignment } = useAppSelector((state) => state.studentAssignmentSelected)
@@ -191,7 +195,7 @@ export default function AssignmentSubmissionForm() {
           <h1 className='mb-4 text-3xl font-normal'>{selectedAssignment.title}</h1>
         </div>
         <div className='text-sm text-gray-600'>
-          <span className='font-semibold'>Deadline</span>{' '}
+          <span className='font-semibold'>{t('student.doAsm.deadline')}</span>{' '}
           {formatDate(selectedStudentAssignment.dueDate, { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' })}
         </div>
       </div>
@@ -201,16 +205,14 @@ export default function AssignmentSubmissionForm() {
           <div className='flex items-start gap-3'>
             <Sparkles className='mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600' />
             <div className='flex-1'>
-              <h3 className='mb-2 font-semibold text-gray-900'>AI Grading</h3>
+              <h3 className='mb-2 font-semibold text-gray-900'>{t('student.doAsm.AIGrading')}</h3>
               <p className='mb-2 text-sm text-gray-700'>
-                After submitting your assignment and completing your required peer reviews, you'll receive an
-                AI-generated grade based on the assignment rubrics. You'll then have the option to have your assignment
-                reviewed by your peers instead.
+                {t('student.doAsm.description')}
               </p>
               <p className='text-xs text-gray-600'>
-                Your data will be used in accordance with{' '}
+                {t('student.doAsm.subDes')}{' '}
                 <a href='#' className='text-blue-600 hover:underline'>
-                  Coursera's Privacy Notice
+                  {t('student.doAsm.subDesLink')}
                 </a>
                 .
               </p>
@@ -223,7 +225,7 @@ export default function AssignmentSubmissionForm() {
       <div className='border-b border-gray-200'>
         <div className='flex gap-6'>
           <button className='border-b-2 border-blue-600 px-1 pb-3 font-medium text-blue-600 transition-colors'>
-            My submission
+            {t('student.doAsm.mySub')}
           </button>
         </div>
       </div>
@@ -233,13 +235,13 @@ export default function AssignmentSubmissionForm() {
         <div className='space-y-6'>
           <div className='space-y-2'>
             <Label htmlFor='project-title' className='text-base font-normal'>
-              Project Title <span className='text-red-500'>*</span>
+              {t('student.doAsm.projectTitle')} <span className='text-red-500'>*</span>
             </Label>
             <Input
               id='project-title'
               value={projectTitle}
               onChange={(e) => setProjectTitle(e.target.value)}
-              placeholder='Project title'
+              placeholder={t('student.doAsm.projectTitle')}
               className='max-w-2xl'
             />
           </div>
@@ -248,7 +250,7 @@ export default function AssignmentSubmissionForm() {
             <div key={question.id} className='space-y-4 rounded-lg border p-4 shadow-sm'>
               <div className='space-y-2'>
                 <h3 className='text-base font-normal text-gray-900'>
-                  Question {question.orderIndex} ({question.points} pts)
+                  {t('teacher.modal.question')} {question.orderIndex} ({question.points} {t('teacher.modal.point')})
                 </h3>
                 <p className='text-sm text-gray-700'>{question.content}</p>
               </div>
@@ -257,7 +259,7 @@ export default function AssignmentSubmissionForm() {
                 <Textarea
                   value={answers[question.id]?.text || ''}
                   onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                  placeholder='Type your answer here...'
+                  placeholder={t('student.doAsm.placeholder')}
                   className='min-h-[200px]'
                   disabled={isSubmitting}
                 />
@@ -272,16 +274,9 @@ export default function AssignmentSubmissionForm() {
 
           {/* Submit Buttons */}
           <div className='flex gap-3 pt-4'>
-            <Button
-              variant='outline'
-              className='border-gray-300 text-gray-700 hover:bg-gray-50'
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
             <Button onClick={handleSubmit} className='bg-blue-600 text-white hover:bg-blue-700' disabled={isSubmitting}>
               {isSubmitting ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
-              Submit assignment
+              {tc('button.submit')}
             </Button>
           </div>
         </div>

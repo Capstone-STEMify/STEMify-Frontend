@@ -4,7 +4,7 @@
             "title": "Bài tập",
             "question": "Câu hỏi",
             "score": "Điểm trung bình",
-            "passRate": "Tỉ lệ đạt",
+            "passRate": "Tỷ lệ đạt",
             "submission": "Bài nộp",
             "table": {
                 "name": "Tên học sinh",
@@ -27,10 +27,43 @@
                 "max": "Điểm tối đa",
                 "total": "Tổng điểm cho câu hỏi",
                 "comment": "Nhận xét",
-                "commentSubTitle": "Những nhận xét để lại cho học viên chỉ hiển thị với học viên đó và người để lại nhận xét.",
+                "commentSubTitle": "Các nhận xét dành cho học viên chỉ được hiển thị với học viên đó và người đã để lại nhận xét.",
                 "commentPlaceholder": "Chia sẻ suy nghĩ của bạn..."
             }
         },
-        "staff": {}
+        "student": {
+            "firstAttempt": {
+                "totalMark": "Tổng điểm",
+                "passingMark": "Điểm đạt",
+                "time": "Giới hạn thời gian",
+                "day": "ngày",
+                "quesLength": "Số lượng câu hỏi"
+            },
+            "alreadyAttempted": {
+                "due": "Hạn",
+                "submitted": "Đã nộp",
+                "attempt": "Lượt làm",
+                "left": "còn",
+                "allow": "lượt cho phép",
+                "pending": "Đang chờ đánh giá",
+                "description": "Bài nộp của bạn từ {date} hiện đang được xem xét.",
+                "title": "Phản hồi của giáo viên"
+            },
+            "graded": {
+                "title": "Điểm của bạn",
+                "description": "Để đạt, bạn cần ít nhất {passingScore}%. Chúng tôi giữ lại điểm cao nhất của bạn."
+            },
+            "doAsm": {
+                "deadline": "Hạn nộp",
+                "deadline2": "Hạn nộp (Tính từ ngày đăng ký)",
+                "AIGrading": "Chấm điểm bằng AI",
+                "description": "Sau khi bạn nộp bài và hoàn thành phần đánh giá chéo bắt buộc, bạn sẽ nhận được điểm do AI chấm dựa trên rubric của bài tập. Sau đó, bạn có thể chọn để bài tập được đánh giá bởi các bạn học khác.",
+                "subDes": "Dữ liệu của bạn sẽ được sử dụng theo",
+                "subDesLink": "Thông báo Quyền riêng tư của chúng tôi",
+                "mySub": "Bài nộp của tôi",
+                "projectTitle": "Tiêu đề dự án",
+                "placeholder": "Nhập câu trả lời của bạn..."
+            }
+        }
     }
 }
