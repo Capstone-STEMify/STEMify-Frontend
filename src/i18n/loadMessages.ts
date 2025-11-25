@@ -30,7 +30,7 @@ export async function loadMessages(locale: string) {
   const contactMessages = (await import(`../../messages/${locale}/contact/${locale}_contact.json`)).default
   const organizationMessages = (await import(`../../messages/${locale}/organization/${locale}_organization.json`))
     .default
-  const dashboardMessages = (await import(`../../messages/${locale}/dashboard/${locale}_dashboard.json`))
+  const dashboardMessages = await import(`../../messages/${locale}/dashboard/${locale}_dashboard.json`)
   const classroomMessages = (await import(`../../messages/${locale}/classroom/${locale}_classroom.json`)).default
   const assignmentMessages = (await import(`../../messages/${locale}/assignment/${locale}_assignment.json`)).default
   const quizMessages = (await import(`../../messages/${locale}/quiz/${locale}_quiz.json`)).default
