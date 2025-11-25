@@ -1,69 +1,69 @@
 {
-    "assignment": {
-        "teacher": {
-            "title": "Assignment",
-            "question": "Question(s)",
-            "score": "Avg. Score",
-            "passRate": "Pass Rate",
-            "submission": "Submissions",
-            "table": {
-                "name": "Student Name",
-                "status": "Status",
-                "grade": "Grade",
-                "date": "Submitted Date",
-                "noSubmission": "No submissions found."
-            },
-            "modal": {
-                "student": "Student",
-                "submit": "Submitted",
-                "question": "Question",
-                "status": "Status",
-                "answer": "Answer",
-                "noAnswer": "No text answer provided.",
-                "submitFile": "Submitted File",
-                "viewFile": "View Submitted File",
-                "rubric": "Rubric",
-                "point": "Points",
-                "max": "Max Points",
-                "total": "Total Points for Question",
-                "comment": "Comment",
-                "commentSubTitle": "Comments left for the learner are visible only to that learner and the person who left the comment.",
-                "commentPlaceholder": "Share your thoughts..."
-            }
-        },
-        "student": {
-            "firstAttempt": {
-                "totalMark": "Total Marks",
-                "passingMark": "Passing Marks",
-                "time": "Time Limit",
-                "day": "day(s)",
-                "quesLength": "Number of Questions"
-            },
-            "alreadyAttempted": {
-                "due": "Due to",
-                "submitted": "Submitted",
-                "attempt": "Attempts",
-                "left": "left",
-                "allow": "attempts allowed",
-                "pending": "Pending Review",
-                "description": "Your submission from {date} is currently being reviewed.",
-                "title": "Teacher's Feedback"
-            },
-            "graded": {
-                "title": "Your Grade",
-                "description": "To pass you need at least {passingScore}%. We keep your highest score."
-            },
-            "doAsm": {
-                "deadline": "Deadline",
-                "deadline2": "Deadline (Days from enrollment)",
-                "AIGrading": "AI Grading",
-                "description": "After submitting your assignment and completing your required peer reviews, you'll receive an AI-generated grade based on the assignment rubrics. You'll then have the option to have your assignment reviewed by your peers instead.",
-                "subDes": "Your data will be used in accordance with",
-                "subDesLink": "Our Privacy Notice",
-                "mySub": "My Submission",
-                "projectTitle": "Project Title",
-                "placeholder": "Type your answer here..."
-            }
-        }
+  "assignment": {
+    "teacher": {
+      "title": "Assignment",
+      "question": "Question(s)",
+      "score": "Avg. Score",
+      "passRate": "Pass Rate",
+      "submission": "Submissions",
+      "table": {
+        "name": "Student Name",
+        "status": "Status",
+        "grade": "Grade",
+        "date": "Submitted Date",
+        "noSubmission": "No submissions found."
+      },
+      "modal": {
+        "student": "Student",
+        "submit": "Submitted",
+        "question": "Question",
+        "status": "Status",
+        "answer": "Answer",
+        "noAnswer": "No text answer provided.",
+        "submitFile": "Submitted File",
+        "viewFile": "View Submitted File",
+        "rubric": "Rubric",
+        "point": "Points",
+        "max": "Max Points",
+        "total": "Total Points for Question",
+        "comment": "Comment",
+        "commentSubTitle": "Comments left for the learner are visible only to that learner and the person who left the comment.",
+        "commentPlaceholder": "Share your thoughts..."
+      }
+    },
+    "student": {
+      "firstAttempt": {
+        "totalMark": "Total Marks",
+        "passingMark": "Passing Marks",
+        "time": "Time Limit",
+        "day": "day(s)",
+        "quesLength": "Number of Questions"
+      },
+      "alreadyAttempted": {
+        "due": "Due to",
+        "submitted": "Submitted",
+        "attempt": "Attempts",
+        "left": "left",
+        "allow": "attempts allowed",
+        "pending": "Pending Review",
+        "description": "Your submission from {date} is currently being reviewed.",
+        "title": "Teacher's Feedback"
+      },
+      "graded": {
+        "title": "Your Grade",
+        "description": "To pass you need at least {passingScore}%. We keep your highest score."
+      },
+      "doAsm": {
+        "deadline": "Deadline",
+        "deadline2": "Deadline (Days from enrollment)",
+        "AIGrading": "AI Grading",
+        "description": "After submitting your assignment and completing your required peer reviews, you'll receive an AI-generated grade based on the assignment rubrics. You'll then have the option to have your assignment reviewed by your peers instead.",
+        "subDes": "Your data will be used in accordance with",
+        "subDesLink": "Our Privacy Notice",
+        "mySub": "My Submission",
+        "projectTitle": "Project Title",
+        "placeholder": "Type your answer here..."
+      }
     }
+  }
 }

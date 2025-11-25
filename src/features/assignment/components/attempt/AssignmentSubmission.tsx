@@ -104,7 +104,6 @@ const fileToBase64 = (file: File): Promise<string> => {
 }
 
 export default function AssignmentSubmissionForm() {
-
   const t = useTranslations('assignment')
   const tc = useTranslations('common')
 
@@ -206,9 +205,7 @@ export default function AssignmentSubmissionForm() {
             <Sparkles className='mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600' />
             <div className='flex-1'>
               <h3 className='mb-2 font-semibold text-gray-900'>{t('student.doAsm.AIGrading')}</h3>
-              <p className='mb-2 text-sm text-gray-700'>
-                {t('student.doAsm.description')}
-              </p>
+              <p className='mb-2 text-sm text-gray-700'>{t('student.doAsm.description')}</p>
               <p className='text-xs text-gray-600'>
                 {t('student.doAsm.subDes')}{' '}
                 <a href='#' className='text-blue-600 hover:underline'>

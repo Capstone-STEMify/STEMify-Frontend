@@ -18,7 +18,7 @@ export function AssignmentDetailHeader({ data }: { data: AssignmentStatistics })
   const locale = useLocale()
   const { classroomId } = useParams()
 
-  const t = useTranslations("assignment.teacher")
+  const t = useTranslations('assignment.teacher')
   return (
     <div>
       <div className='mb-4 flex items-center justify-between'>
@@ -46,7 +46,9 @@ export function AssignmentDetailHeader({ data }: { data: AssignmentStatistics })
               <BookOpen className='h-4 w-4' /> {t('title')}
             </span>
             <span>•</span>
-            <span>{data.totalQuestions} {t('question')}</span>
+            <span>
+              {data.totalQuestions} {t('question')}
+            </span>
           </div>
 
           {/* Stats */}

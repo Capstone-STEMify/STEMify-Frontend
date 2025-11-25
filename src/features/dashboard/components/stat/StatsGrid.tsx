@@ -27,7 +27,6 @@ interface QuickStatsGridProps {
 export function QuickStatsGrid({ data }: QuickStatsGridProps) {
   const { currentPeriod, change } = data
 
-  
   const t = useTranslations('dashboard.organization')
   const tc = useTranslations('common')
 

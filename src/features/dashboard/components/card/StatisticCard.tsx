@@ -19,20 +19,13 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 }
 
 const CustomXAxisTick = (props: any) => {
-  const { x, y, payload } = props;
-  
-  const words = payload.value.split(' ');
-  
+  const { x, y, payload } = props
+
+  const words = payload.value.split(' ')
+
   return (
     <g transform={`translate(${x},${y})`}>
-      <text 
-        x={0} 
-        y={0} 
-        dy={16} 
-        textAnchor="middle" 
-        fill="#666" 
-        fontSize={12}
-      >
+      <text x={0} y={0} dy={16} textAnchor='middle' fill='#666' fontSize={12}>
         {words.map((word: string, index: number) => (
           <tspan key={index} x={0} dy={index === 0 ? 0 : 14}>
             {word}
@@ -40,7 +33,7 @@ const CustomXAxisTick = (props: any) => {
         ))}
       </text>
     </g>
-  );
+  )
 }
 
 // Define props interface
@@ -76,20 +69,11 @@ export function ProgressStatisticsCard({ data }: ProgressStatisticsCardProps) {
             <span>{t('failed')}</span>
           </div>
         </div>
-        
+
         <div className='h-64 w-full overflow-x-auto pb-4'>
           <ResponsiveContainer width='100%' height='100%' minWidth={minChartWidth}>
-            <BarChart 
-              data={chartData} 
-              margin={{ top: 20, right: 0, left: -20, bottom: 20 }}
-            >
-              <XAxis 
-                dataKey='name' 
-                axisLine={false} 
-                tickLine={false} 
-                interval={0}
-                tick={<CustomXAxisTick />}
-              />
+            <BarChart data={chartData} margin={{ top: 20, right: 0, left: -20, bottom: 20 }}>
+              <XAxis dataKey='name' axisLine={false} tickLine={false} interval={0} tick={<CustomXAxisTick />} />
               <YAxis width={70} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
               <Bar dataKey='pass' fill='#4F46E5' radius={[4, 4, 0, 0]} />

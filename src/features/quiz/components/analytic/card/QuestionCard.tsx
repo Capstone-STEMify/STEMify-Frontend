@@ -17,40 +17,40 @@ type StatisticBoxProps = {
 const StatisticsBox = ({ statisticData }: StatisticBoxProps) => {
   const t = useTranslations('quiz.teacher')
   return (
-  <div className='space-y-4 rounded-lg border p-6'>
-    <h3 className='text-base font-semibold'>{t('questionTab.statistic')}</h3>
-    <div className='flex items-center gap-3'>
-      <div className='rounded-full bg-green-100 p-1.5'>
-        <Check className='h-4 w-4 text-green-600' />
+    <div className='space-y-4 rounded-lg border p-6'>
+      <h3 className='text-base font-semibold'>{t('questionTab.statistic')}</h3>
+      <div className='flex items-center gap-3'>
+        <div className='rounded-full bg-green-100 p-1.5'>
+          <Check className='h-4 w-4 text-green-600' />
+        </div>
+        <div>
+          <span className='text-sm text-gray-500'>{t('answerTable.correct')}</span>
+          <p className='font-semibold'>{statisticData.totalCorrectAnswers}</p>
+        </div>
       </div>
-      <div>
-        <span className='text-sm text-gray-500'>{t('answerTable.correct')}</span>
-        <p className='font-semibold'>{statisticData.totalCorrectAnswers}</p>
+      <div className='flex items-center gap-3'>
+        <div className='rounded-full bg-red-100 p-1.5'>
+          <X className='h-4 w-4 text-red-600' />
+        </div>
+        <div>
+          <span className='text-sm text-gray-500'>{t('answerTable.incorrect')}</span>
+          <p className='font-semibold'>{statisticData.totalIncorrectAnswers}</p>
+        </div>
+      </div>
+      <div className='flex items-center gap-3'>
+        <ProgressCircle
+          value={statisticData.correctRate}
+          size={28}
+          className='text-green-500'
+          strokeWidth={3}
+          showPercentageText={false}
+        />
+        <div>
+          <span className='text-sm text-gray-500'>{t('answerTable.accuracy')}</span>
+          <p className='font-semibold'>{statisticData.correctRate}</p>
+        </div>
       </div>
     </div>
-    <div className='flex items-center gap-3'>
-      <div className='rounded-full bg-red-100 p-1.5'>
-        <X className='h-4 w-4 text-red-600' />
-      </div>
-      <div>
-        <span className='text-sm text-gray-500'>{t('answerTable.incorrect')}</span>
-        <p className='font-semibold'>{statisticData.totalIncorrectAnswers}</p>
-      </div>
-    </div>
-    <div className='flex items-center gap-3'>
-      <ProgressCircle
-        value={statisticData.correctRate}
-        size={28}
-        className='text-green-500'
-        strokeWidth={3}
-        showPercentageText={false}
-      />
-      <div>
-        <span className='text-sm text-gray-500'>{t('answerTable.accuracy')}</span>
-        <p className='font-semibold'>{statisticData.correctRate}</p>
-      </div>
-    </div>
-  </div>
   )
 }
 
@@ -68,13 +68,15 @@ const AnswerOption = ({
   const t = useTranslations('quiz.teacher')
   return (
     <div>
-    <p className='mb-1.5 text-sm font-medium'>{label}</p>
-    <Progress value={percentage} className={`h-2 ${isCorrect ? '[&>div]:bg-teal-500' : ''}`} />
-    <div className='mt-1.5 flex items-center justify-between'>
-      <span className='text-xs text-gray-500'>{responses} {t('questionTab.resp')}.</span>
-      <span className='text-xs text-gray-500'>{percentage}%</span>
+      <p className='mb-1.5 text-sm font-medium'>{label}</p>
+      <Progress value={percentage} className={`h-2 ${isCorrect ? '[&>div]:bg-teal-500' : ''}`} />
+      <div className='mt-1.5 flex items-center justify-between'>
+        <span className='text-xs text-gray-500'>
+          {responses} {t('questionTab.resp')}.
+        </span>
+        <span className='text-xs text-gray-500'>{percentage}%</span>
+      </div>
     </div>
-  </div>
   )
 }
 

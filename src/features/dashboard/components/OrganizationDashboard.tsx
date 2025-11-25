@@ -61,12 +61,12 @@ export default function OrganizationDashboard() {
         {/* Period Selector Dropdown */}
         <div className='mb-6 flex justify-end'>
           <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant='outline'>
-                  {tc(periodLabelMap[period])}
-                  <ChevronDown className='ml-2 h-4 w-4' />
-                </Button>
-              </DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
+              <Button variant='outline'>
+                {tc(periodLabelMap[period])}
+                <ChevronDown className='ml-2 h-4 w-4' />
+              </Button>
+            </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onClick={() => setPeriod('Month')}>{tc('button.month')}</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setPeriod('Quarter')}>{tc('button.quarter')}</DropdownMenuItem>

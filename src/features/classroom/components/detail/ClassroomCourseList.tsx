@@ -33,7 +33,6 @@ export default function ClassroomCourseList({
   curriculumEnrollment,
   isStudentView
 }: ClassroomCourseListProps) {
-
   const t = useTranslations('dashboard.classroom.course')
   const tc = useTranslations('common')
   const { classroomId } = useParams()
@@ -137,7 +136,9 @@ export default function ClassroomCourseList({
                     </div>
                     <div className='mb-1 flex items-center gap-2'>
                       <GraduationCap className='h-4 w-4 text-amber-600' />
-                      <p className='text-xs font-semibold text-slate-700'>{course.lessonCount} {t('lessons')}</p>
+                      <p className='text-xs font-semibold text-slate-700'>
+                        {course.lessonCount} {t('lessons')}
+                      </p>
                     </div>
                   </div>
 

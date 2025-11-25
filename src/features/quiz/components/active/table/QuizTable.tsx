@@ -18,7 +18,6 @@ type QuizTableProps = {
 }
 
 export function QuizTable({ data }: QuizTableProps) {
-
   const t = useTranslations('dashboard.classroom')
   const tc = useTranslations('common')
 
@@ -40,10 +39,14 @@ export function QuizTable({ data }: QuizTableProps) {
               </div>
             </TableHead>
             <TableHead className='min-w-[250px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>{t('quiz.active.name')}</button>
+              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
+                {t('quiz.active.name')}
+              </button>
             </TableHead>
             <TableHead className='w-[180px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>{t('quiz.active.learner')}</button>
+              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
+                {t('quiz.active.learner')}
+              </button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>

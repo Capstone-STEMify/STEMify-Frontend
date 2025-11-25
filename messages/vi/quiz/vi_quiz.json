@@ -1,34 +1,34 @@
 {
-    "quiz": {
-        "teacher": {
-            "tab": {
-                "question": "Câu hỏi",
-                "overview": "Tổng quan"
-            },
-            "header": {
-                "quiz": "Bài kiểm tra",
-                "question": "Câu hỏi",
-                "passRate": "Tỉ lệ vượt qua",
-                "submission": "Bài nộp",
-                "time": "Thời gian",
-                "mins": "phút"
-            },
-            "answerTable": {
-                "head": "Học viên",
-                "point": "điểm:",
-                "accuracy": "Độ chính xác",
-                "answered": "Đã trả lời",
-                "question": "Câu hỏi",
-                "correct": "Đúng",
-                "incorrect": "Sai",
-                "correctAnswer": "Đáp án đúng"
-            },
-            "questionTab": {
-                "description": "Tab này hiển thị dữ liệu tổng hợp từ tất cả lượt làm bài của học viên.",
-                "statistic": "Thống kê",
-                "resp": "lượt trả lời"
-            }
-        },
-        "student": {}
-    }
+  "quiz": {
+    "teacher": {
+      "tab": {
+        "question": "Câu hỏi",
+        "overview": "Tổng quan"
+      },
+      "header": {
+        "quiz": "Bài kiểm tra",
+        "question": "Câu hỏi",
+        "passRate": "Tỉ lệ vượt qua",
+        "submission": "Bài nộp",
+        "time": "Thời gian",
+        "mins": "phút"
+      },
+      "answerTable": {
+        "head": "Học viên",
+        "point": "điểm:",
+        "accuracy": "Độ chính xác",
+        "answered": "Đã trả lời",
+        "question": "Câu hỏi",
+        "correct": "Đúng",
+        "incorrect": "Sai",
+        "correctAnswer": "Đáp án đúng"
+      },
+      "questionTab": {
+        "description": "Tab này hiển thị dữ liệu tổng hợp từ tất cả lượt làm bài của học viên.",
+        "statistic": "Thống kê",
+        "resp": "lượt trả lời"
+      }
+    },
+    "student": {}
+  }
 }

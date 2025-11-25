@@ -138,7 +138,9 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                   {learner.status}
                 </Badge>
               </h2>
-              <p className='text-sm text-gray-500'>{t('point')} {learner.totalScore}</p>
+              <p className='text-sm text-gray-500'>
+                {t('point')} {learner.totalScore}
+              </p>
             </div>
           </div>
         </div>

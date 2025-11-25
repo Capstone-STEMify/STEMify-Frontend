@@ -15,7 +15,6 @@ import Loading from 'app/[locale]/loading'
 import { useTranslations } from 'next-intl'
 
 export default function ClassroomOverview() {
-
   const t = useTranslations('dashboard.classroom')
   const tc = useTranslations('common')
 
@@ -46,15 +45,13 @@ export default function ClassroomOverview() {
   const PassRate = statsRes?.data.quizStatistic.passRate || 0
   const NotPassRate = 100 - (statsRes?.data.quizStatistic.passRate || 0)
 
-    const contentStatusData = [
+  const contentStatusData = [
     { name: t('passed'), value: PassRate, color: '#10b981' },
-    { name: t('failed'), value: statsRes?.data.quizStatistic.submissions ? NotPassRate : 0, color: '#ef4444' },
+    { name: t('failed'), value: statsRes?.data.quizStatistic.submissions ? NotPassRate : 0, color: '#ef4444' }
   ]
 
   if (isLoadingClassroom || isLoadingCurriculum || isLoadingStats) {
-    return (
-      <Loading/>
-    )
+    return <Loading />
   }
 
   return (
@@ -66,7 +63,7 @@ export default function ClassroomOverview() {
             <TrendingUp className='h-6 w-6 text-white' />
           </div>
           <div>
-            <h1 className='bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent pb-2'>
+            <h1 className='bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text pb-2 text-4xl font-bold text-transparent'>
               {t('overview.title')}
             </h1>
             <p className='mt-1 text-slate-600'>{t('overview.subTitle')}</p>
@@ -111,7 +108,7 @@ export default function ClassroomOverview() {
                 <div className='absolute inset-0 flex items-center justify-center'>
                   <div className='text-center'>
                     <p className='mb-1 text-xs font-medium text-slate-500'>{t('submission')}</p>
-                    <p className='text-sky-500 bg-clip-text text-4xl font-bold'>
+                    <p className='bg-clip-text text-4xl font-bold text-sky-500'>
                       {statsRes?.data.quizStatistic.submissions || 0}
                     </p>
                   </div>
@@ -131,7 +128,7 @@ export default function ClassroomOverview() {
         </Card>
 
         {/* Stats Card */}
-        <Card className='py-4 bg-gradient-to-br from-white to-emerald-50/20 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
+        <Card className='bg-gradient-to-br from-white to-emerald-50/20 py-4 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
           <CardHeader>
             <div className='flex items-center justify-between'>
               <CardTitle className='flex items-center gap-2 text-base font-semibold'>
@@ -164,7 +161,7 @@ export default function ClassroomOverview() {
       </div>
 
       {/* Ungraded Assignment */}
-      <Card className='border-0 bg-gradient-to-br from-white to-slate-50/50 shadow-lg shadow-slate-200/50 p-4'>
+      <Card className='border-0 bg-gradient-to-br from-white to-slate-50/50 p-4 shadow-lg shadow-slate-200/50'>
         <CardHeader className='pb-4'>
           <div className='flex items-center justify-between'>
             <CardTitle className='flex items-center gap-2 text-base font-semibold'>
@@ -186,7 +183,9 @@ export default function ClassroomOverview() {
                   <TableHead className='w-16 font-semibold text-slate-700'>{t('overview.ungraded.id')}</TableHead>
                   <TableHead className='font-semibold text-slate-700'>{t('overview.ungraded.asmTitle')}</TableHead>
                   <TableHead className='font-semibold text-slate-700'>{t('overview.ungraded.learner')}</TableHead>
-                  <TableHead className='text-right font-semibold text-slate-700'>{t('overview.ungraded.action')}</TableHead>
+                  <TableHead className='text-right font-semibold text-slate-700'>
+                    {t('overview.ungraded.action')}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

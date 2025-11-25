@@ -10,7 +10,6 @@ type AssignmentViewerProps = {
 }
 
 export default function AssignmentViewer({ item }: AssignmentViewerProps) {
-
   const t = useTranslations('assignment')
   const tc = useTranslations('common')
   const {
@@ -65,7 +64,9 @@ export default function AssignmentViewer({ item }: AssignmentViewerProps) {
             >
               <div className='w-1/2 p-5'>
                 <div className='mb-3 flex flex-wrap items-center justify-between gap-2'>
-                  <span className='text-lg font-semibold text-gray-900'>{t('teacher.question')} {index + 1}</span>
+                  <span className='text-lg font-semibold text-gray-900'>
+                    {t('teacher.question')} {index + 1}
+                  </span>
                   <span
                     className={`inline-flex items-center rounded-full px-3 py-0.5 text-sm font-medium ${
                       question.type === 'Text' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'

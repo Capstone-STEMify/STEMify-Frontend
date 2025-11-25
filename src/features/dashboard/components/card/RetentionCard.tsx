@@ -14,7 +14,6 @@ interface StudentRetentionCardProps {
 }
 
 export function StudentRetentionCard({ data }: StudentRetentionCardProps) {
-
   const t = useTranslations('dashboard.organization')
   const tc = useTranslations('common')
   const { currentPeriod, previousPeriod, change } = data

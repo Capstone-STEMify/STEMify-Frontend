@@ -79,7 +79,9 @@ export function QuizCard({ quiz }: QuizCardProps) {
           {/* <span>Edited {quiz.lastEdited}</span> */}
           <div className='flex items-center gap-1.5 font-bold text-black'>
             <BookOpen className='h-3 w-3' />
-            <span>{quiz.totalQuestions} {t('question')}</span>
+            <span>
+              {quiz.totalQuestions} {t('question')}
+            </span>
           </div>
         </div>
         <Button variant='ghost' size='icon' className='h-7 w-7'>

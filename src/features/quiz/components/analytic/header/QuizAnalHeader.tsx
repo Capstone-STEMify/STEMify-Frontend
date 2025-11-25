@@ -53,7 +53,9 @@ export function QuizDetailHeader({ data }: QuizDetailHeaderProps) {
               <BookOpen className='h-4 w-4' /> {t('header.quiz')}
             </span>
             <span>•</span>
-            <span>{data.totalQuestions} {t('header.question')}</span>
+            <span>
+              {data.totalQuestions} {t('header.question')}
+            </span>
           </div>
 
           {/* Stats */}
@@ -90,7 +92,9 @@ export function QuizDetailHeader({ data }: QuizDetailHeaderProps) {
             </div>
             <div>
               <span className='text-xs text-gray-500'>{t('header.time')}</span>
-              <p className='text-sm font-semibold'>{data.timeLimitMinutes} {t('header.mins')}</p>
+              <p className='text-sm font-semibold'>
+                {data.timeLimitMinutes} {t('header.mins')}
+              </p>
             </div>
           </div>
         </div>

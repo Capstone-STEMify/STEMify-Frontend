@@ -144,7 +144,6 @@ interface AssignmentAttemptProps {
 }
 
 export default function AssignmentAttempt({ studentAssignmentId, assignmentId }: AssignmentAttemptProps) {
-
   const t = useTranslations('assignment.student')
   const tc = useTranslations('common')
 
@@ -212,7 +211,9 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
                   <Clock className='h-6 w-6 text-sky-600' />
                 </div>
                 <p className='text-sm font-medium text-gray-600'>{t('firstAttempt.time')}</p>
-                <p className='text-2xl font-bold text-gray-900'>{assignmentDetail?.data?.durationDays} {t('firstAttempt.day')}</p>
+                <p className='text-2xl font-bold text-gray-900'>
+                  {assignmentDetail?.data?.durationDays} {t('firstAttempt.day')}
+                </p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-sky-100 p-3'>
@@ -303,9 +304,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
           </CardHeader>
           <CardContent className='flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between'>
             <div>
-              <p className='text-sm text-gray-700'>
-                {t('graded.description', {passingScore: passingScore})}
-              </p>
+              <p className='text-sm text-gray-700'>{t('graded.description', { passingScore: passingScore })}</p>
               <p className={`text-4xl font-bold ${isPassed ? 'text-green-700' : 'text-red-700'}`}>
                 {studentAssignmentData.finalScore}%
               </p>
@@ -327,7 +326,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
           <CardContent className='p-6'>
             <h2 className='mb-1 text-lg font-semibold'>{t('alreadyAttempted.pending')}</h2>
             <p className='text-sm text-gray-700'>
-              {t('alreadyAttempted.description', {date: formatDate(latestAttempt.submittedAt)})}
+              {t('alreadyAttempted.description', { date: formatDate(latestAttempt.submittedAt) })}
             </p>
           </CardContent>
         </Card>

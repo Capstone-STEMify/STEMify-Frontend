@@ -145,7 +145,9 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       <div className='mt-6'>
         <h1 className='text-3xl font-bold'>{submission.quizTitle}</h1>
         <div className='mt-2 flex items-center gap-4 text-sm text-gray-500'>
-          <span>{t('modal.submit')}: {submission.quizFinishedDate}</span>
+          <span>
+            {t('modal.submit')}: {submission.quizFinishedDate}
+          </span>
           <span className='flex items-center gap-1.5'>
             <HelpCircle className='h-4 w-4' />
             {submission.quizQuestionCount} {t('question')}
@@ -178,11 +180,15 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
             {attemptData &&
               attemptData.questionAttempts.map((question, index) => (
                 <div key={question.id} className='rounded-lg border'>
-                  <h3 className='border-b bg-gray-50 px-6 py-3 text-lg font-semibold'>{t('modal.question')} {index + 1}</h3>
+                  <h3 className='border-b bg-gray-50 px-6 py-3 text-lg font-semibold'>
+                    {t('modal.question')} {index + 1}
+                  </h3>
 
                   <div className='grid grid-cols-1 md:grid-cols-2'>
                     <div className='p-6 md:border-r'>
-                      <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>{t('modal.answer')}</h4>
+                      <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>
+                        {t('modal.answer')}
+                      </h4>
                       <div className='prose prose-sm max-w-none text-gray-700'>
                         <p>{question.answerText || t('modal.noAnswer')}</p>
                       </div>
@@ -201,7 +207,9 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
 
                     <div className='p-6'>
                       <div className='flex justify-between'>
-                        <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>{t('modal.rubric')}</h4>
+                        <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>
+                          {t('modal.rubric')}
+                        </h4>
                         <p className='text-xs text-gray-800'>
                           {question.rubricScore.reduce((sum, c) => sum + c.maxPoints, 0)} {t('modal.point')}
                         </p>
@@ -266,9 +274,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
               </div>
             ) : (
               <div className='mt-4'>
-                <p className='mb-3 text-sm text-gray-500'>
-                  {t('modal.commentSubTitle')}
-                </p>
+                <p className='mb-3 text-sm text-gray-500'>{t('modal.commentSubTitle')}</p>
                 <div className='flex items-start gap-3'>
                   <Textarea
                     placeholder={t('modal.commentPlaceholder')}

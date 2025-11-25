@@ -110,7 +110,9 @@ export function AssignmentList() {
                       {assignment.assignmentTitle}
                     </label>
                     <div className='mt-1 flex items-center text-xs text-gray-500'>
-                      <span className='font-semibold'>{assignment.totalQuestions} {t('assignment.question')}</span>
+                      <span className='font-semibold'>
+                        {assignment.totalQuestions} {t('assignment.question')}
+                      </span>
                     </div>
                   </Link>
                 </TableCell>

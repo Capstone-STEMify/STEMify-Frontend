@@ -1,99 +1,99 @@
 {
-    "dashboard": {
-        "classroom": {
-        "submission": "Submissions",
-        "passRate": "Pass Rate",
-        "passed": "Passed",
-        "failed": "Not Passed",
-        "score": "Average Score",
-            "overview": {
-                "title": "Dashboard Overview",
-                "subTitle": "Track learning progress and quiz performance",
-                "quizStat": "Quiz Statistic",
-                "asmStat": "Assignment Statistic",
-                "ungraded": {
-                    "title": "Ungraded Assignment",
-                    "pending": "pending",
-                    "noAsm": "No pending assignments to grade.",
-                    "id": "Id",
-                    "asmTitle": "Assignment Title",
-                    "learner": "Learner",
-                    "action": "Action"
-                },
-                "progress": {
-                    "title": "Student Progress",
-                    "lesson": "Lessons in",
-                    "sort": "Sort by:",
-                    "disName": "Display Name",
-                    "noLesson": "No lessons found for this course.",
-                    "firstName": "First Name",
-                    "lastName": "Last Name"
-                }
-            },
-            "course": {
-                "title": "Course",
-                "lessons": "lessons",
-                "schedule": "Classroom Schedule",
-                "duration": "Duration/weeks:",
-                "min": "phút",
-                "week": "Week",
-                "totalWeek": "Total Weeks"
-            },
-            "quiz": {
-                "overviewTab": "Overview",
-                "activeTab": "Active",
-                "overview": {
-                    "enroll": "Enrolled",
-                    "accuracy": "Accuracy",
-                    "completeRate": "Completion Rate",
-                    "question": "Question(s)"
-                },
-                "active": {
-                    "name": "Quiz Name",
-                    "learner": "Learners",
-                    "accuracy": "Accuracy",
-                    "date": "Due Date",
-                    "action": "Actions"
-                }
-            },
-            "assignment": {
-                "learner": "Learners",
-                "name": "Assignment Name",
-                "action": "Actions",
-                "question": "Question(s)"
-            }
+  "dashboard": {
+    "classroom": {
+      "submission": "Submissions",
+      "passRate": "Pass Rate",
+      "passed": "Passed",
+      "failed": "Not Passed",
+      "score": "Average Score",
+      "overview": {
+        "title": "Dashboard Overview",
+        "subTitle": "Track learning progress and quiz performance",
+        "quizStat": "Quiz Statistic",
+        "asmStat": "Assignment Statistic",
+        "ungraded": {
+          "title": "Ungraded Assignment",
+          "pending": "pending",
+          "noAsm": "No pending assignments to grade.",
+          "id": "Id",
+          "asmTitle": "Assignment Title",
+          "learner": "Learner",
+          "action": "Action"
         },
-        "organization": {
-            "heroSec": {
-                "hi": "Hello",
-                "title": "What do you want to track today with your organization?",
-                "subTitle": "Understand organization, track progress, and manage your organization successfully."
-            },
-            "passed": "Passed",
-            "failed": "Not Passed",
-            "score": "Average Score",
-            "passRate": "Pass Rate",
-            "totalCurriculum": "Total Curriculums",
-            "totalClass": "Total classrooms",
-            "cert": "Earned Certificate",
-            "sup": "Community Support",
-            "user": "Total Users",
-            "teacher": "Total Teachers",
-            "student": "Total Students",
-            "people": "People",
-            "enrollment": "Enrollment Change",
-            "feedback": "Feedback",
-            "feedbackDetail": "student suggested more frequent communication and feedback from management",
-            "change": "Change",
-            "curriculumStat": {
-                "title": "Curriculum Statistics"
-            },
-            "classroomStat": {
-                "title": "Classroom Statistics",
-                "code": "Curriculum Code",
-                "currTitle": "Curriculum Title",
-                "name": "Name"
-            }
+        "progress": {
+          "title": "Student Progress",
+          "lesson": "Lessons in",
+          "sort": "Sort by:",
+          "disName": "Display Name",
+          "noLesson": "No lessons found for this course.",
+          "firstName": "First Name",
+          "lastName": "Last Name"
         }
+      },
+      "course": {
+        "title": "Course",
+        "lessons": "lessons",
+        "schedule": "Classroom Schedule",
+        "duration": "Duration/weeks:",
+        "min": "phút",
+        "week": "Week",
+        "totalWeek": "Total Weeks"
+      },
+      "quiz": {
+        "overviewTab": "Overview",
+        "activeTab": "Active",
+        "overview": {
+          "enroll": "Enrolled",
+          "accuracy": "Accuracy",
+          "completeRate": "Completion Rate",
+          "question": "Question(s)"
+        },
+        "active": {
+          "name": "Quiz Name",
+          "learner": "Learners",
+          "accuracy": "Accuracy",
+          "date": "Due Date",
+          "action": "Actions"
+        }
+      },
+      "assignment": {
+        "learner": "Learners",
+        "name": "Assignment Name",
+        "action": "Actions",
+        "question": "Question(s)"
+      }
+    },
+    "organization": {
+      "heroSec": {
+        "hi": "Hello",
+        "title": "What do you want to track today with your organization?",
+        "subTitle": "Understand organization, track progress, and manage your organization successfully."
+      },
+      "passed": "Passed",
+      "failed": "Not Passed",
+      "score": "Average Score",
+      "passRate": "Pass Rate",
+      "totalCurriculum": "Total Curriculums",
+      "totalClass": "Total classrooms",
+      "cert": "Earned Certificate",
+      "sup": "Community Support",
+      "user": "Total Users",
+      "teacher": "Total Teachers",
+      "student": "Total Students",
+      "people": "People",
+      "enrollment": "Enrollment Change",
+      "feedback": "Feedback",
+      "feedbackDetail": "student suggested more frequent communication and feedback from management",
+      "change": "Change",
+      "curriculumStat": {
+        "title": "Curriculum Statistics"
+      },
+      "classroomStat": {
+        "title": "Classroom Statistics",
+        "code": "Curriculum Code",
+        "currTitle": "Curriculum Title",
+        "name": "Name"
+      }
     }
+  }
 }

@@ -8,7 +8,6 @@ interface ClassroomScheduleProps {
 }
 
 export function ClassroomSchedule({ classroomId, className }: ClassroomScheduleProps) {
-
   const t = useTranslations('dashboard.classroom.course')
   const tc = useTranslations('common')
   const { data, isLoading, error } = useGetClassroomScheduleQuery({ classroomId })
@@ -29,7 +28,9 @@ export function ClassroomSchedule({ classroomId, className }: ClassroomScheduleP
       <div className='flex gap-8 rounded-lg bg-sky-50 px-4 py-3 text-sm'>
         <div>
           <span className='font-medium text-gray-700'>{t('duration')}</span>{' '}
-          <span className='font-semibold text-sky-700'>{schedule.minutesPerWeek} {t('min')}</span>
+          <span className='font-semibold text-sky-700'>
+            {schedule.minutesPerWeek} {t('min')}
+          </span>
         </div>
         <div>
           <span className='font-medium text-gray-700'>{t('totalWeek')}:</span>{' '}
