@@ -1,5 +1,7 @@
+'use client'
 import { Button } from '@/components/shadcn/button'
 import CardLayout from '@/components/shared/card/CardLayout'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { ArrowRightIcon, BookOpenIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -7,6 +9,11 @@ import Link from 'next/link'
 export default function StemifiLabLibrary() {
   const t = useTranslations('Resource')
   const tc = useTranslations('common')
+  const { token, user } = useAppSelector((state) => state.auth)
+  const userId = user?.userId
+  const redirectUrl =
+    process.env.NEXT_PUBLIC_MICROBIT_URL ?? 'https://white-cliff-0cc49e300.3.azurestaticapps.net/index.html'
+
   return (
     <div className='mx-auto max-w-7xl'>
       {/* Header */}
@@ -73,32 +80,53 @@ export default function StemifiLabLibrary() {
         </CardLayout>
 
         {/* microbitWorkspace */}
-        <Link href='http://localhost:3232/index.html#' target='_blank' rel='noopener noreferrer'>
-          <CardLayout
-            imageSrc='/images/resources/sim.gif'
-            footer={
-              <Button className='group bg-blue-500'>
-                <span>{tc('button.exploreMicrobitWorkspace')}</span>
-                <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
-              </Button>
-            }
-          >
-            <div className='my-1 flex h-full flex-col justify-between px-2'>
-              <div className='space-y-3'>
-                {/* Header with icon */}
-                <div className='flex items-center space-x-2'>
-                  <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
-                    <BookOpenIcon className='h-4 w-4 text-blue-600' />
-                  </div>
-                  <h2 className='text-xl font-bold text-gray-900'>{t('microbitWorkspace.title')}</h2>
-                </div>
+        <CardLayout
+          imageSrc='/images/resources/sim.gif'
+          onClick={() => {
+            const win = window.open('about:blank')
+            if (!win) return
 
-                {/* Description */}
-                <p className='text-sm leading-relaxed text-gray-600'>{t('microbitWorkspace.description')}</p>
+            win.document.open()
+            win.document.write(`
+              <script>
+                const REDIRECT_URL = "${redirectUrl}";
+                window.addEventListener("message", function(event) {
+                  // Save into window.name (cross-domain safe)
+                  window.name = JSON.stringify(event.data);
+                  window.location.href = REDIRECT_URL;
+                });
+              </script>
+            `)
+            win.document.close()
+
+            // Delay để tab mới load xong script
+            setTimeout(() => {
+              console.log('Sending SSO message:', token, userId)
+              win.postMessage({ source: 'stemify-sso', token, userId }, '*')
+            }, 150)
+          }}
+          footer={
+            <Button className='group bg-blue-500'>
+              <span>{tc('button.exploreMicrobitWorkspace')}</span>
+              <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
+            </Button>
+          }
+        >
+          <div className='my-1 flex h-full flex-col justify-between px-2'>
+            <div className='space-y-3'>
+              {/* Header with icon */}
+              <div className='flex items-center space-x-2'>
+                <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
+                  <BookOpenIcon className='h-4 w-4 text-blue-600' />
+                </div>
+                <h2 className='text-xl font-bold text-gray-900'>{t('microbitWorkspace.title')}</h2>
               </div>
+
+              {/* Description */}
+              <p className='text-sm leading-relaxed text-gray-600'>{t('microbitWorkspace.description')}</p>
             </div>
-          </CardLayout>
-        </Link>
+          </div>
+        </CardLayout>
 
         {/* modalMaker */}
         <CardLayout
