@@ -33,6 +33,7 @@ export async function loadMessages(locale: string) {
   const dashboardMessages = (await import(`../../messages/${locale}/dashboard/${locale}_dashboard.json`))
   const classroomMessages = (await import(`../../messages/${locale}/classroom/${locale}_classroom.json`)).default
   const assignmentMessages = (await import(`../../messages/${locale}/assignment/${locale}_assignment.json`)).default
+  const quizMessages = (await import(`../../messages/${locale}/quiz/${locale}_quiz.json`)).default
 
   return {
     ...commonMessages,
@@ -64,6 +65,7 @@ export async function loadMessages(locale: string) {
     ...organizationMessages,
     ...dashboardMessages,
     ...classroomMessages,
-    ...assignmentMessages
+    ...assignmentMessages,
+    ...quizMessages
   }
 }

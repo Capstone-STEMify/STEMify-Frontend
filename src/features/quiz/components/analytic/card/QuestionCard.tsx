@@ -3,6 +3,7 @@ import { Progress } from '@/components/shadcn/progress'
 import { HelpCircle, Layers, Star, Clock, Check, X } from 'lucide-react'
 import { ProgressCircle } from '../../active/circle/AccuracyCircle'
 import { QuestionStatistic } from '@/features/quiz/types/studentQuiz.type'
+import { useTranslations } from 'next-intl'
 
 type QuestionCardProps = {
   data: QuestionStatistic[]
@@ -13,15 +14,17 @@ type StatisticBoxProps = {
   statisticData: QuestionStatistic
 }
 
-const StatisticsBox = ({ statisticData }: StatisticBoxProps) => (
+const StatisticsBox = ({ statisticData }: StatisticBoxProps) => {
+  const t = useTranslations('quiz.teacher')
+  return (
   <div className='space-y-4 rounded-lg border p-6'>
-    <h3 className='text-base font-semibold'>Statistics</h3>
+    <h3 className='text-base font-semibold'>{t('questionTab.statistic')}</h3>
     <div className='flex items-center gap-3'>
       <div className='rounded-full bg-green-100 p-1.5'>
         <Check className='h-4 w-4 text-green-600' />
       </div>
       <div>
-        <span className='text-sm text-gray-500'>Correct</span>
+        <span className='text-sm text-gray-500'>{t('answerTable.correct')}</span>
         <p className='font-semibold'>{statisticData.totalCorrectAnswers}</p>
       </div>
     </div>
@@ -30,7 +33,7 @@ const StatisticsBox = ({ statisticData }: StatisticBoxProps) => (
         <X className='h-4 w-4 text-red-600' />
       </div>
       <div>
-        <span className='text-sm text-gray-500'>Incorrect</span>
+        <span className='text-sm text-gray-500'>{t('answerTable.incorrect')}</span>
         <p className='font-semibold'>{statisticData.totalIncorrectAnswers}</p>
       </div>
     </div>
@@ -43,12 +46,13 @@ const StatisticsBox = ({ statisticData }: StatisticBoxProps) => (
         showPercentageText={false}
       />
       <div>
-        <span className='text-sm text-gray-500'>Accuracy</span>
+        <span className='text-sm text-gray-500'>{t('answerTable.accuracy')}</span>
         <p className='font-semibold'>{statisticData.correctRate}</p>
       </div>
     </div>
   </div>
-)
+  )
+}
 
 const AnswerOption = ({
   label,
@@ -60,18 +64,22 @@ const AnswerOption = ({
   percentage: number
   responses: number
   isCorrect?: boolean
-}) => (
-  <div>
+}) => {
+  const t = useTranslations('quiz.teacher')
+  return (
+    <div>
     <p className='mb-1.5 text-sm font-medium'>{label}</p>
     <Progress value={percentage} className={`h-2 ${isCorrect ? '[&>div]:bg-teal-500' : ''}`} />
     <div className='mt-1.5 flex items-center justify-between'>
-      <span className='text-xs text-gray-500'>{responses} resp.</span>
+      <span className='text-xs text-gray-500'>{responses} {t('questionTab.resp')}.</span>
       <span className='text-xs text-gray-500'>{percentage}%</span>
     </div>
   </div>
-)
+  )
+}
 
 export function QuestionCard({ data, totalQuestion }: QuestionCardProps) {
+  const t = useTranslations('quiz.teacher')
   return (
     <>
       {data.map((questions) => (
@@ -81,7 +89,7 @@ export function QuestionCard({ data, totalQuestion }: QuestionCardProps) {
               <div className='flex items-center gap-2 font-semibold'>
                 <HelpCircle className='h-5 w-5 text-gray-400' />
                 <span>
-                  Question {questions.questionId} of {totalQuestion}
+                  Q{questions.questionId} of {totalQuestion}
                 </span>
               </div>
               <div className='flex items-center gap-4 text-xs text-gray-600'>
@@ -89,7 +97,7 @@ export function QuestionCard({ data, totalQuestion }: QuestionCardProps) {
                   <Layers className='h-4 w-4' /> {questions.questionType}
                 </span>
                 <span className='flex items-center gap-1.5'>
-                  <Star className='h-4 w-4 text-yellow-500' /> {questions.point} point
+                  <Star className='h-4 w-4 text-yellow-500' /> {questions.point} {t('answerTable.point')}
                 </span>
               </div>
             </div>
