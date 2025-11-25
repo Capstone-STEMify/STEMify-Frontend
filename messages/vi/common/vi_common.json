@@ -71,7 +71,7 @@
       "grade": "Chấm Điểm",
       "filter": "Thêm Bộ Lọc",
       "search": "Tìm kiếm...",
-      "export": "Xuất",
+      "export": "Xuất File",
       "month": "Tháng",
       "quarter": "Quý",
       "year": "Năm",
@@ -86,7 +86,15 @@
       "sendInvitations": "Gửi Lời Mời",
       "clearFilters": "Xóa Bộ Lọc",
       "createClassroom": "Tạo Lớp Học",
-      "addStudents": "Thêm Học Sinh"
+      "addStudents": "Thêm Học Sinh",
+      "reviewed": "Đã đánh giá",
+      "notReviewed": "Chưa đánh giá",
+      "submitReview": "Gửi Đánh Giá",
+      "attempt": "Làm Ngay",
+      "retry": "Thử Lại",
+      "viewSub": "Xem Bài Nộp",
+      "seeFeedback": "Xem Phản Hồi",
+      "close": "Đóng"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

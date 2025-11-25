@@ -15,12 +15,7 @@ interface CurriculumCardProps {
   curriculumCode: string
 }
 
-export function CurriculumCard({
-  curriculumTitle,
-  duration,
-  curriculumCode,
-  students
-}: CurriculumCardProps) {
+export function CurriculumCard({ curriculumTitle, duration, curriculumCode, students }: CurriculumCardProps) {
   return (
     <div className={`flex h-full flex-col justify-between rounded-lg bg-white p-6`}>
       {/* Header */}
@@ -37,7 +32,9 @@ export function CurriculumCard({
       {/* Footer */}
       <div className='flex items-end justify-between'>
         {/* Button */}
-        <Button className={`bg-teal-600 rounded px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90`}>
+        <Button
+          className={`rounded bg-teal-600 px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90`}
+        >
           Enroll
         </Button>
 

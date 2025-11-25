@@ -6,6 +6,7 @@ import { GraduationCap, Info, ArrowUp, ArrowDown } from 'lucide-react'
 import { Badge } from '@/components/shadcn/badge'
 import { cn } from '@/shadcn/utils'
 import { DashboardData } from '../../types/dashboard.type'
+import { useTranslations } from 'next-intl'
 
 // Define props interface
 interface StudentRetentionCardProps {
@@ -13,6 +14,8 @@ interface StudentRetentionCardProps {
 }
 
 export function StudentRetentionCard({ data }: StudentRetentionCardProps) {
+  const t = useTranslations('dashboard.organization')
+  const tc = useTranslations('common')
   const { currentPeriod, previousPeriod, change } = data
 
   const percentage = change.totalCurriculumEnrollments
@@ -27,10 +30,10 @@ export function StudentRetentionCard({ data }: StudentRetentionCardProps) {
     <Card className='h-full rounded-xl border-none bg-white shadow-md'>
       <CardHeader className='flex flex-row items-center justify-between pt-6'>
         <CardTitle className='flex items-center gap-2 text-lg font-semibold'>
-          Enrollment Change
+          {t('enrollment')}
           <Info className='h-4 w-4 text-gray-400' />
         </CardTitle>
-        <span className='cursor-pointer text-sm text-indigo-600'>See Details</span>
+        <span className='cursor-pointer text-sm text-indigo-600'>{tc('button.view')}</span>
       </CardHeader>
       <CardContent>
         <div className='mt-4 flex items-center gap-2'>
@@ -77,7 +80,7 @@ export function StudentRetentionCard({ data }: StudentRetentionCardProps) {
               {percentage >= 0 ? '+' : ''}
               {percentage}%
             </span>
-            <span className='text-sm text-gray-500'>Change</span>
+            <span className='text-sm text-gray-500'>{t('change')}</span>
           </div>
         </div>
 
@@ -85,8 +88,7 @@ export function StudentRetentionCard({ data }: StudentRetentionCardProps) {
           <Info className='mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500' />
           <p className='text-xs text-gray-600'>
             {/* Static feedback text as per original component */}
-            <span className='font-semibold'>Feedback-</span> some student suggested more frequent communication and
-            feedback from management
+            <span className='font-semibold'>{t('feedback')} -</span> {t('feedbackDetail')}
           </p>
         </div>
       </CardContent>

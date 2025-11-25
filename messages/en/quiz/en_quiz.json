@@ -1,0 +1,34 @@
+{
+  "quiz": {
+    "teacher": {
+      "tab": {
+        "question": "Questions",
+        "overview": "Overview"
+      },
+      "header": {
+        "quiz": "Quiz",
+        "question": "Question(s)",
+        "passRate": "Pass Rate",
+        "submission": "Submission",
+        "time": "Time",
+        "mins": "min(s)"
+      },
+      "answerTable": {
+        "head": "Learner",
+        "point": "point:",
+        "accuracy": "Accuracy",
+        "answered": "Answered",
+        "question": "Questions",
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "correctAnswer": "Correct Answer"
+      },
+      "questionTab": {
+        "description": "This Tab Shows the accumulated data of all learner attempts.",
+        "statistic": "Statistic",
+        "resp": "resp"
+      }
+    },
+    "student": {}
+  }
+}

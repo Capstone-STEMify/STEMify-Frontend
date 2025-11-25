@@ -12,7 +12,7 @@ import { CheckCircle, Clock, Edit2, MoreHorizontal, Share2, BookOpen } from 'luc
 import { ProgressCircle } from '../../active/circle/AccuracyCircle'
 import { QuizStatistics } from '@/features/quiz/types/studentQuiz.type'
 import { useParams } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 type QuizDetailHeaderProps = {
   data: QuizStatistics
@@ -22,13 +22,15 @@ export function QuizDetailHeader({ data }: QuizDetailHeaderProps) {
   const { classroomId, quizId } = useParams()
   const locale = useLocale()
 
+  const t = useTranslations('quiz.teacher')
+
   return (
     <div>
       <div className='mb-4 flex items-center justify-between'>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/${locale}/classroom/${classroomId}`}>Quiz</BreadcrumbLink>
+              <BreadcrumbLink href={`/${locale}/classroom/${classroomId}`}>{t('header.quiz')}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -48,10 +50,12 @@ export function QuizDetailHeader({ data }: QuizDetailHeaderProps) {
           </div> */}
           <div className='mt-2 flex items-center gap-4 text-sm text-gray-500'>
             <span className='flex items-center gap-1.5'>
-              <BookOpen className='h-4 w-4' /> Quiz
+              <BookOpen className='h-4 w-4' /> {t('header.quiz')}
             </span>
             <span>•</span>
-            <span>{data.totalQuestions} Question(s)</span>
+            <span>
+              {data.totalQuestions} {t('header.question')}
+            </span>
           </div>
 
           {/* Stats */}
@@ -65,7 +69,7 @@ export function QuizDetailHeader({ data }: QuizDetailHeaderProps) {
                 strokeWidth={4}
               />
               <div>
-                <span className='text-xs text-gray-500'>Accuracy</span>
+                <span className='text-xs text-gray-500'>{t('answerTable.accuracy')}</span>
                 <p className='text-lg font-semibold'>{data.averageScore}%</p>
               </div>
             </div>
@@ -78,17 +82,19 @@ export function QuizDetailHeader({ data }: QuizDetailHeaderProps) {
                 strokeWidth={4}
               />
               <div>
-                <span className='text-xs text-gray-500'>Pass Rate</span>
+                <span className='text-xs text-gray-500'>{t('header.passRate')}</span>
                 <p className='text-lg font-semibold'>{data.passRate}%</p>
               </div>
             </div>
             <div className='border-r-2'>
-              <span className='text-xs text-gray-500'>Submissions</span>
+              <span className='text-xs text-gray-500'>{t('header.submission')}</span>
               <p className='text-lg font-semibold'>{data.submissions}</p>
             </div>
             <div>
-              <span className='text-xs text-gray-500'>Time</span>
-              <p className='text-sm font-semibold'>{data.timeLimitMinutes} min(s)</p>
+              <span className='text-xs text-gray-500'>{t('header.time')}</span>
+              <p className='text-sm font-semibold'>
+                {data.timeLimitMinutes} {t('header.mins')}
+              </p>
             </div>
           </div>
         </div>

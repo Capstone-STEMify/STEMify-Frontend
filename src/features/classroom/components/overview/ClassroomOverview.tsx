@@ -12,8 +12,11 @@ import { useParams } from 'next/navigation'
 import { useGetClassroomByIdQuery, useGetClassroomStatisticsQuery } from '../../api/classroomApi'
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import Loading from 'app/[locale]/loading'
+import { useTranslations } from 'next-intl'
 
 export default function ClassroomOverview() {
+  const t = useTranslations('dashboard.classroom')
+  const tc = useTranslations('common')
 
   const params = useParams()
   const classroomId = Number(params.classroomId)
@@ -42,15 +45,13 @@ export default function ClassroomOverview() {
   const PassRate = statsRes?.data.quizStatistic.passRate || 0
   const NotPassRate = 100 - (statsRes?.data.quizStatistic.passRate || 0)
 
-    const contentStatusData = [
-    { name: 'Passed', value: PassRate, color: '#10b981' },
-    { name: 'Not Passed', value: statsRes?.data.quizStatistic.submissions ? NotPassRate : 0, color: '#ef4444' },
+  const contentStatusData = [
+    { name: t('passed'), value: PassRate, color: '#10b981' },
+    { name: t('failed'), value: statsRes?.data.quizStatistic.submissions ? NotPassRate : 0, color: '#ef4444' }
   ]
 
   if (isLoadingClassroom || isLoadingCurriculum || isLoadingStats) {
-    return (
-      <Loading/>
-    )
+    return <Loading />
   }
 
   return (
@@ -62,10 +63,10 @@ export default function ClassroomOverview() {
             <TrendingUp className='h-6 w-6 text-white' />
           </div>
           <div>
-            <h1 className='bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent'>
-              Dashboard Overview
+            <h1 className='bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text pb-2 text-4xl font-bold text-transparent'>
+              {t('overview.title')}
             </h1>
-            <p className='mt-1 text-slate-600'>Track learning progress and quiz performance</p>
+            <p className='mt-1 text-slate-600'>{t('overview.subTitle')}</p>
           </div>
         </div>
       </div>
@@ -80,7 +81,7 @@ export default function ClassroomOverview() {
                 <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100'>
                   <TrendingUp className='h-4 w-4 text-purple-600' />
                 </div>
-                Quiz Statistic
+                {t('overview.quizStat')}
               </CardTitle>
             </div>
           </CardHeader>
@@ -106,8 +107,8 @@ export default function ClassroomOverview() {
                 </ResponsiveContainer>
                 <div className='absolute inset-0 flex items-center justify-center'>
                   <div className='text-center'>
-                    <p className='mb-1 text-xs font-medium text-slate-500'>Total Submissions</p>
-                    <p className='text-sky-500 bg-clip-text text-4xl font-bold'>
+                    <p className='mb-1 text-xs font-medium text-slate-500'>{t('submission')}</p>
+                    <p className='bg-clip-text text-4xl font-bold text-sky-500'>
                       {statsRes?.data.quizStatistic.submissions || 0}
                     </p>
                   </div>
@@ -127,14 +128,14 @@ export default function ClassroomOverview() {
         </Card>
 
         {/* Stats Card */}
-        <Card className='py-4 bg-gradient-to-br from-white to-emerald-50/20 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
+        <Card className='bg-gradient-to-br from-white to-emerald-50/20 py-4 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
           <CardHeader>
             <div className='flex items-center justify-between'>
               <CardTitle className='flex items-center gap-2 text-base font-semibold'>
                 <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100'>
                   <FileQuestion className='h-4 w-4 text-purple-600' />
                 </div>
-                Assignment Statistic
+                {t('overview.asmStat')}
               </CardTitle>
             </div>
           </CardHeader>
@@ -145,14 +146,14 @@ export default function ClassroomOverview() {
                   <CheckCircle2 className='h-6 w-6 text-white' />
                 </div>
                 <p className='text-3xl font-bold text-emerald-700'>{statsRes?.data.assignmentStatistic.passRate}%</p>
-                <p className='mt-2 text-sm text-slate-600'>Pass Rate</p>
+                <p className='mt-2 text-sm text-slate-600'>{t('passRate')}</p>
               </div>
               <div className='rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 text-center'>
                 <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20'>
                   <BookOpenCheck className='h-6 w-6 text-white' />
                 </div>
                 <p className='text-3xl font-bold text-blue-700'>{statsRes?.data.assignmentStatistic.submissions}</p>
-                <p className='mt-2 text-sm text-slate-600'>Submissions</p>
+                <p className='mt-2 text-sm text-slate-600'>{t('submission')}</p>
               </div>
             </div>
           </CardContent>
@@ -160,16 +161,16 @@ export default function ClassroomOverview() {
       </div>
 
       {/* Ungraded Assignment */}
-      <Card className='border-0 bg-gradient-to-br from-white to-slate-50/50 shadow-lg shadow-slate-200/50 p-4'>
+      <Card className='border-0 bg-gradient-to-br from-white to-slate-50/50 p-4 shadow-lg shadow-slate-200/50'>
         <CardHeader className='pb-4'>
           <div className='flex items-center justify-between'>
             <CardTitle className='flex items-center gap-2 text-base font-semibold'>
               <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-rose-100'>
                 <Clock className='h-4 w-4 text-rose-600' />
               </div>
-              Ungraded Assignment
+              {t('overview.ungraded.title')}
               <Badge variant='secondary' className='ml-2 border-0 bg-rose-100 text-rose-700'>
-                {ungradedAssignments.length} pending
+                {ungradedAssignments.length} {t('overview.ungraded.pending')}
               </Badge>
             </CardTitle>
           </div>
@@ -179,10 +180,12 @@ export default function ClassroomOverview() {
             <Table>
               <TableHeader>
                 <TableRow className='bg-slate-50 hover:bg-slate-50'>
-                  <TableHead className='w-16 font-semibold text-slate-700'>Id</TableHead>
-                  <TableHead className='font-semibold text-slate-700'>Assignment title</TableHead>
-                  <TableHead className='font-semibold text-slate-700'>Learner</TableHead>
-                  <TableHead className='text-right font-semibold text-slate-700'>Action</TableHead>
+                  <TableHead className='w-16 font-semibold text-slate-700'>{t('overview.ungraded.id')}</TableHead>
+                  <TableHead className='font-semibold text-slate-700'>{t('overview.ungraded.asmTitle')}</TableHead>
+                  <TableHead className='font-semibold text-slate-700'>{t('overview.ungraded.learner')}</TableHead>
+                  <TableHead className='text-right font-semibold text-slate-700'>
+                    {t('overview.ungraded.action')}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -211,7 +214,7 @@ export default function ClassroomOverview() {
                           size='sm'
                           className='bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md transition-all hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg'
                         >
-                          Grade Now
+                          {tc('button.grade')}
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -219,7 +222,7 @@ export default function ClassroomOverview() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={4} className='h-24 text-center text-slate-500'>
-                      No pending assignments to grade.
+                      {t('overview.ungraded.noAsm')}
                     </TableCell>
                   </TableRow>
                 )}

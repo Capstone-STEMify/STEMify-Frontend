@@ -7,13 +7,14 @@ import { useParams } from 'next/navigation'
 import { useGetAssignmentDetailByIdQuery, useSearchStudentAssignmentQuery } from '../../api/studentAssignmentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { AssignmentStatistics } from '../../types/assigmentlistdetail.type'
+import { useTranslations } from 'next-intl'
 
 export default function AssignmentDetail() {
   const params = useParams()
   const assignmentId = params.assignmentId as string
   const classroomId = params.classroomId as string
 
-  console.log('params', assignmentId, classroomId)
+  const tc = useTranslations('common')
 
   const {
     data: assignmentStatisticsResponse,
@@ -27,8 +28,6 @@ export default function AssignmentDetail() {
   )
 
   const assignmentData: AssignmentStatistics | undefined = assignmentStatisticsResponse?.data
-
-  console.log('data', assignmentData)
 
   if (isLoading) return <LoadingComponent />
   if (error) return <div className='p-8'>Error loading assignment data.</div>
@@ -45,14 +44,14 @@ export default function AssignmentDetail() {
               value='reviewed'
               className='data-[state=active]:text-foreground data-[state=active]:border-b-primary w-auto flex-none rounded-none text-gray-400 data-[state=active]:border-b-2 data-[state=active]:border-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none'
             >
-              Reviewed
+              {tc('button.reviewed')}
             </TabsTrigger>
 
             <TabsTrigger
               value='not-reviewed'
               className='data-[state=active]:text-foreground data-[state=active]:border-b-primary w-auto flex-none rounded-none text-gray-400 data-[state=active]:border-b-2 data-[state=active]:border-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none'
             >
-              Not Reviewed
+              {tc('button.notReviewed')}
             </TabsTrigger>
           </TabsList>
 

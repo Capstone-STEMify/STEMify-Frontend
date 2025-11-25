@@ -12,6 +12,7 @@ import {
 } from '@/features/assignment/types/assigmentlistdetail.type'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDate } from '@/utils/index'
+import { useTranslations } from 'next-intl'
 
 export type SubmissionStatus =
   | 'Not Reviewed'
@@ -76,6 +77,8 @@ function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: stri
 export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; filter: 'reviewed' | 'not-reviewed' }) {
   const [openSubmission, setOpenSubmission] = useState<Submission | null>(null)
 
+  const t = useTranslations('assignment.teacher.table')
+
   const allSubmissions = mapApiToSubmissions(data.studentStatistics, data.assignmentTitle)
   console.log('allSubmissions', allSubmissions)
 
@@ -99,10 +102,10 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
       <Table>
         <TableHeader>
           <TableRow className='bg-gray-200'>
-            <TableHead className='w-[300px]'>Student Name</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Grade</TableHead>
-            <TableHead>Submitted Date</TableHead>
+            <TableHead className='w-[300px]'>{t('name')}</TableHead>
+            <TableHead>{t('status')}</TableHead>
+            <TableHead>{t('grade')}</TableHead>
+            <TableHead>{t('date')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -137,7 +140,7 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
           ) : (
             <TableRow>
               <TableCell colSpan={4} className='py-6 text-center text-sm text-gray-500'>
-                No submissions found.
+                {t('noSubmission')}
               </TableCell>
             </TableRow>
           )}
