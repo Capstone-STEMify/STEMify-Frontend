@@ -33,6 +33,8 @@ export default function ClassroomCourseList({
   curriculumEnrollment,
   isStudentView
 }: ClassroomCourseListProps) {
+  const t = useTranslations('dashboard.classroom.course')
+  const tc = useTranslations('common')
   const { classroomId } = useParams()
   const router = useRouter()
   const auth = useAppSelector((state) => state.auth)
@@ -70,7 +72,7 @@ export default function ClassroomCourseList({
       <div className='mb-8'>
         <div className='my-6 flex items-center justify-between'>
           <div className='flex gap-6'>
-            <h2 className='text-3xl font-bold text-slate-900'>Courses</h2>
+            <h2 className='text-3xl font-bold text-slate-900'>{t('title')}</h2>
           </div>
         </div>
       </div>
@@ -134,7 +136,9 @@ export default function ClassroomCourseList({
                     </div>
                     <div className='mb-1 flex items-center gap-2'>
                       <GraduationCap className='h-4 w-4 text-amber-600' />
-                      <p className='text-xs font-semibold text-slate-700'>{course.lessonCount} lessons</p>
+                      <p className='text-xs font-semibold text-slate-700'>
+                        {course.lessonCount} {t('lessons')}
+                      </p>
                     </div>
                   </div>
 
@@ -151,7 +155,7 @@ export default function ClassroomCourseList({
       <div className='mb-8'>
         <div className='my-6 flex items-center justify-between'>
           <div className='flex gap-6'>
-            <h2 className='text-3xl font-bold text-slate-900'>Classroom Schedule</h2>
+            <h2 className='text-3xl font-bold text-slate-900'>{t('schedule')}</h2>
           </div>
         </div>
       </div>

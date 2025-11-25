@@ -11,6 +11,8 @@ import {
   QuizStatistics,
   StudentStatistic
 } from '@/features/quiz/types/studentQuiz.type'
+import { use } from 'matter'
+import { useTranslations } from 'next-intl'
 
 type AnswerGridTableProps = {
   studentData: StudentStatistic[]
@@ -21,7 +23,7 @@ type AnswerGridTableProps = {
 export function AnswerGridTable({ data, studentData, questionData }: AnswerGridTableProps) {
   const [selectedLearner, setSelectedLearner] = useState<StudentStatistic | null>(null)
 
-  console.log('question', questionData)
+  const t = useTranslations('quiz.teacher.answerTable')
 
   return (
     <>
@@ -30,7 +32,7 @@ export function AnswerGridTable({ data, studentData, questionData }: AnswerGridT
           <Table>
             <TableHeader>
               <TableRow className='bg-gray-50 hover:bg-gray-50'>
-                <TableHead className='sticky left-0 z-10 w-[350px] bg-inherit'>Learner</TableHead>
+                <TableHead className='sticky left-0 z-10 w-[350px] bg-inherit'>{t('head')}</TableHead>
                 {questionData.map((q) => (
                   <TableHead key={q.questionId} className='min-w-[120px] p-4 text-center whitespace-nowrap'>
                     Q.{q.questionId}

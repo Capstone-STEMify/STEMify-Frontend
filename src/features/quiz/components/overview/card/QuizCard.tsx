@@ -7,12 +7,16 @@ import { cn } from '@/shadcn/utils'
 import { QuizOverview } from '@/features/quiz/api/data'
 import { ProgressCircle } from '../../active/circle/AccuracyCircle'
 import { QuizStatistics } from '@/features/quiz/types/studentQuiz.type'
+import { useTranslations } from 'next-intl'
 
 interface QuizCardProps {
   quiz: QuizStatistics
 }
 
 export function QuizCard({ quiz }: QuizCardProps) {
+  const t = useTranslations('dashboard.classroom.quiz.overview')
+  const tc = useTranslations('common')
+
   return (
     <Card className='flex flex-col overflow-hidden'>
       <div className='relative'>
@@ -20,7 +24,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
         <div className='absolute top-2 left-2 flex gap-2'>
           <Badge className='bg-black/60 text-white backdrop-blur-sm'>
             <Users className='mr-1.5 h-3 w-3' />
-            {quiz.submissions} Enrolled
+            {quiz.submissions} {t('enroll')}
           </Badge>
           {/* {quiz.status === 'Draft' && (
             <Badge variant='secondary'>
@@ -42,7 +46,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
               strokeWidth={5}
             />
             <div>
-              <p className='text-sm text-gray-500'>Accuracy</p>
+              <p className='text-sm text-gray-500'>{t('accuracy')}</p>
               <p className='text-sm font-bold'>{quiz.averageScore} %</p>
             </div>
           </div>
@@ -54,7 +58,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
               strokeWidth={5}
             />
             <div>
-              <p className='text-sm text-gray-500'>Completion Rate</p>
+              <p className='text-sm text-gray-500'>{t('completeRate')}</p>
               <p className='text-sm font-bold'>{quiz.passRate} %</p>
             </div>
           </div>
@@ -75,7 +79,9 @@ export function QuizCard({ quiz }: QuizCardProps) {
           {/* <span>Edited {quiz.lastEdited}</span> */}
           <div className='flex items-center gap-1.5 font-bold text-black'>
             <BookOpen className='h-3 w-3' />
-            <span>{quiz.totalQuestions} Question(s)</span>
+            <span>
+              {quiz.totalQuestions} {t('question')}
+            </span>
           </div>
         </div>
         <Button variant='ghost' size='icon' className='h-7 w-7'>

@@ -5,6 +5,7 @@ import { LicenseType, UserRole } from '@/types/userRole'
 export type User = {
   userId: string
   email: string
+  name: string
   userName: string
   userRole: UserRole //'Admin' | 'Staff' | 'Member' | 'Guest'
   firstName: string

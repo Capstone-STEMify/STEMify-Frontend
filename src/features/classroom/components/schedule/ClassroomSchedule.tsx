@@ -1,5 +1,6 @@
 import { useGetClassroomScheduleQuery } from '@/features/classroom/api/classroomApi'
 import { cn } from '@/utils/shadcn/utils'
+import { useTranslations } from 'next-intl'
 
 interface ClassroomScheduleProps {
   classroomId: number
@@ -7,6 +8,8 @@ interface ClassroomScheduleProps {
 }
 
 export function ClassroomSchedule({ classroomId, className }: ClassroomScheduleProps) {
+  const t = useTranslations('dashboard.classroom.course')
+  const tc = useTranslations('common')
   const { data, isLoading, error } = useGetClassroomScheduleQuery({ classroomId })
 
   if (isLoading) {
@@ -24,11 +27,13 @@ export function ClassroomSchedule({ classroomId, className }: ClassroomScheduleP
       {/* Header Info */}
       <div className='flex gap-8 rounded-lg bg-sky-50 px-4 py-3 text-sm'>
         <div>
-          <span className='font-medium text-gray-700'>Thời lượng/tuần:</span>{' '}
-          <span className='font-semibold text-sky-700'>{schedule.minutesPerWeek} phút</span>
+          <span className='font-medium text-gray-700'>{t('duration')}</span>{' '}
+          <span className='font-semibold text-sky-700'>
+            {schedule.minutesPerWeek} {t('min')}
+          </span>
         </div>
         <div>
-          <span className='font-medium text-gray-700'>Tổng số tuần:</span>{' '}
+          <span className='font-medium text-gray-700'>{t('totalWeek')}:</span>{' '}
           <span className='font-semibold text-sky-700'>{schedule.totalWeeks}</span>
         </div>
       </div>
@@ -47,7 +52,7 @@ export function ClassroomSchedule({ classroomId, className }: ClassroomScheduleP
               {courseSchedule.scheduleItems.map((scheduleItem) => (
                 <tr key={`week-${scheduleItem.weekNumber}`} className='border-t border-gray-200'>
                   <td className='w-28 bg-sky-50 px-4 py-3 text-center align-top font-medium text-sky-700'>
-                    Week {scheduleItem.weekNumber}
+                    {t('week')} {scheduleItem.weekNumber}
                   </td>
                   <td className='bg-white p-3'>
                     <div className='flex gap-2 overflow-x-auto'>

@@ -19,6 +19,7 @@ import {
 import { ProgressCircle } from '../../active/circle/AccuracyCircle'
 import { cn } from '@/shadcn/utils'
 import { QuizStatistics, StudentStatistic } from '@/features/quiz/types/studentQuiz.type'
+import { useTranslations } from 'next-intl'
 
 type Status = 'correct' | 'incorrect' | 'unanswered' | 'review'
 
@@ -88,6 +89,9 @@ const CustomAccordionItem = ({
 export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizResultPopupProps) {
   if (!learner || !isOpen) return null
 
+  const t = useTranslations('quiz.teacher.answerTable')
+  const tc = useTranslations('common')
+
   const answered = learner.totalAnswers ?? learner.questionResults.length
   const correct = learner.totalCorrectAnswers ?? learner.questionResults.filter((q) => q.isCorrect).length
   const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0
@@ -113,7 +117,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
           onClick={() => onOpenChange(false)}
         >
           <XIcon className='h-5 w-5' />
-          <span className='sr-only'>Close</span>
+          <span className='sr-only'>{tc('button.close')}</span>
         </button>
 
         <div className='flex flex-row items-start justify-between border-b p-8 pb-4'>
@@ -134,7 +138,9 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                   {learner.status}
                 </Badge>
               </h2>
-              <p className='text-sm text-gray-500'>Score: {learner.totalScore}</p>
+              <p className='text-sm text-gray-500'>
+                {t('point')} {learner.totalScore}
+              </p>
             </div>
           </div>
         </div>
@@ -145,7 +151,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
               <h3 className='max-w-md text-2xl font-bold'>{quiz.quizName}</h3>
               <div className='flex items-center gap-6 text-sm'>
                 <div>
-                  <span className='text-gray-500'>Accuracy</span>
+                  <span className='text-gray-500'>{t('accuracy')}</span>
                   <div className='mt-2 flex items-center gap-1.5 text-lg font-semibold'>
                     <ProgressCircle
                       value={accuracy}
@@ -158,11 +164,11 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                   </div>
                 </div>
                 <div>
-                  <span className='text-gray-500'>Point</span>
+                  <span className='text-gray-500'>{t('point')}</span>
                   <p className='mt-2 text-lg font-semibold'>{learner.totalScore}</p>
                 </div>
                 <div>
-                  <span className='text-gray-500'>Answered</span>
+                  <span className='text-gray-500'>{t('answered')}</span>
                   <p className='mt-2 text-lg font-semibold'>
                     {answered}/{quiz.totalQuestions}
                   </p>
@@ -171,7 +177,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
             </div>
             <div className='flex items-center gap-3 text-sm text-gray-500'>
               <span className='flex items-center gap-1.5'>
-                <HelpCircle className='h-4 w-4' /> {quiz.totalQuestions} Questions
+                <HelpCircle className='h-4 w-4' /> {quiz.totalQuestions} {t('question')}
               </span>
             </div>
           </div>
@@ -186,11 +192,11 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
           <div className='mb-6 flex items-center gap-4 text-xs text-gray-600'>
             <span className='flex items-center gap-1.5'>
               <div className='h-2 w-2 rounded-full bg-green-500' />
-              Correct {} - {Math.round((learner.totalCorrectAnswers! / quiz.totalQuestions) * 100)}%
+              {t('correct')} {} - {Math.round((learner.totalCorrectAnswers! / quiz.totalQuestions) * 100)}%
             </span>
             <span className='flex items-center gap-1.5'>
               <div className='h-2 w-2 rounded-full bg-red-500' />
-              Incorrect {} - {Math.round((learner.totalIncorrectAnswers! / quiz.totalQuestions) * 100)}%
+              {t('incorrect')} {} - {Math.round((learner.totalIncorrectAnswers! / quiz.totalQuestions) * 100)}%
             </span>
           </div>
           <div className='w-full'>
@@ -199,7 +205,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                 <div className='flex w-full items-center justify-between pr-4'>
                   <div className='flex items-center gap-3'>
                     <HelpCircle className='h-5 w-5 text-gray-400' />
-                    <span>Question {index + 1}</span>
+                    <span>Q{index + 1}</span>
                     <Badge
                       className={cn(
                         question.status === 'correct' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -213,7 +219,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                       <Layers className='h-4 w-4' /> {question.questionType}
                     </span>
                     <span className='flex items-center gap-1.5'>
-                      <Star className='h-4 w-4 text-yellow-500' /> {question.point} point
+                      <Star className='h-4 w-4 text-yellow-500' /> {question.point} {t('point')}
                     </span>
                   </div>
                 </div>
@@ -224,7 +230,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                   <p className='break-words'>{question.questionTitle}</p>
 
                   <div className='mt-4 rounded-r-md border-l-4 border-green-500 bg-green-50 p-4'>
-                    <p className='text-xs font-semibold text-green-800'>CORRECT ANSWER</p>
+                    <p className='text-xs font-semibold text-green-800'>{t('correctAnswer')}</p>
                     <p className='font-medium text-green-900'>
                       {question.learnerAnswer ?? question.answerStatistics?.[0]?.content}
                     </p>

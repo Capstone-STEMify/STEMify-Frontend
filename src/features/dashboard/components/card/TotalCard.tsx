@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import { cn } from '@/shadcn/utils'
 import { ExternalLink, GraduationCap, Info, ArrowUp, ArrowDown } from 'lucide-react'
 import { DashboardData } from '../../types/dashboard.type'
+import { useTranslations } from 'next-intl'
 
 // Helper component to show change
 function ChangeBadge({ change }: { change: number }) {
@@ -29,16 +30,19 @@ export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
   const teacherPercent = totalUsers > 0 ? (totalTeachers / totalUsers) * 100 : 0
   const studentPercent = totalUsers > 0 ? (totalStudents / totalUsers) * 100 : 0
 
+  const t = useTranslations('dashboard.organization')
+  const tc = useTranslations('common')
+
   const rates = [
     {
-      title: 'Total Teachers',
+      title: t('teacher'),
       count: teacherPercent,
       people: totalTeachers,
       change: change.totalTeachers,
       color: 'bg-yellow-400'
     },
     {
-      title: 'Total Students',
+      title: t('student'),
       count: studentPercent,
       people: totalStudents,
       change: change.totalStudents,
@@ -68,10 +72,10 @@ export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
     <Card className='h-full rounded-xl border-none bg-white shadow-sm'>
       <CardHeader className='flex flex-row items-center justify-between pt-6 pb-2'>
         <CardTitle className='flex items-center gap-2 text-lg font-semibold'>
-          Total Users
+          {t('user')}
           <Info className='h-4 w-4 text-gray-400' />
         </CardTitle>
-        <span className='cursor-pointer text-sm text-indigo-600'>See Details</span>
+        <span className='cursor-pointer text-sm text-indigo-600'>{tc('button.view')}</span>
       </CardHeader>
       <CardContent>
         <div className='mt-4 flex items-center gap-2 md:pb-8'>
