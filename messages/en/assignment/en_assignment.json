@@ -1,0 +1,36 @@
+{
+    "assignment": {
+        "teacher": {
+            "title": "Assignment",
+            "question": "Question(s)",
+            "score": "Avg. Score",
+            "passRate": "Pass Rate",
+            "submission": "Submissions",
+            "table": {
+                "name": "Student Name",
+                "status": "Status",
+                "grade": "Grade",
+                "date": "Submitted Date",
+                "noSubmission": "No submissions found."
+            },
+            "modal": {
+                "student": "Student",
+                "submit": "Submitted",
+                "question": "Question",
+                "status": "Status",
+                "answer": "Answer",
+                "noAnswer": "No text answer provided.",
+                "submitFile": "Submitted File",
+                "viewFile": "View Submitted File",
+                "rubric": "Rubric",
+                "point": "Points",
+                "max": "Max Points",
+                "total": "Total Points for Question",
+                "comment": "Comment",
+                "commentSubTitle": "Comments left for the learner are visible only to that learner and the person who left the comment.",
+                "commentPlaceholder": "Share your thoughts..."
+            }
+        },
+        "staff": {}
+    }
+}

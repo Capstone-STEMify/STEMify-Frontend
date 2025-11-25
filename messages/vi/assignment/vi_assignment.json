@@ -1,0 +1,36 @@
+{
+    "assignment": {
+        "teacher": {
+            "title": "Bài tập",
+            "question": "Câu hỏi",
+            "score": "Điểm trung bình",
+            "passRate": "Tỉ lệ đạt",
+            "submission": "Bài nộp",
+            "table": {
+                "name": "Tên học sinh",
+                "status": "Trạng thái",
+                "grade": "Điểm",
+                "date": "Ngày nộp",
+                "noSubmission": "Không tìm thấy bài nộp."
+            },
+            "modal": {
+                "student": "Học sinh",
+                "submit": "Đã nộp",
+                "question": "Câu hỏi",
+                "status": "Trạng thái",
+                "answer": "Câu trả lời",
+                "noAnswer": "Không có câu trả lời dạng văn bản.",
+                "submitFile": "Tệp đã nộp",
+                "viewFile": "Xem tệp đã nộp",
+                "rubric": "Rubric",
+                "point": "Điểm",
+                "max": "Điểm tối đa",
+                "total": "Tổng điểm cho câu hỏi",
+                "comment": "Nhận xét",
+                "commentSubTitle": "Những nhận xét để lại cho học viên chỉ hiển thị với học viên đó và người để lại nhận xét.",
+                "commentPlaceholder": "Chia sẻ suy nghĩ của bạn..."
+            }
+        },
+        "staff": {}
+    }
+}

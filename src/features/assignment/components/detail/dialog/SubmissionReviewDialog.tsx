@@ -20,6 +20,7 @@ import {
 import { toast } from 'sonner'
 import { useModal } from '@/providers/ModalProvider'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { useTranslations } from 'next-intl'
 interface SubmissionReviewDialogProps {
   submission: Submission
   studentAssignmentId: number | null
@@ -27,6 +28,9 @@ interface SubmissionReviewDialogProps {
 
 export function SubmissionReviewDialog({ submission, studentAssignmentId }: SubmissionReviewDialogProps) {
   const { closeModal } = useModal()
+
+  const t = useTranslations('assignment.teacher')
+  const tc = useTranslations('common')
 
   const {
     data: detailResponse,
@@ -141,10 +145,10 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       <div className='mt-6'>
         <h1 className='text-3xl font-bold'>{submission.quizTitle}</h1>
         <div className='mt-2 flex items-center gap-4 text-sm text-gray-500'>
-          <span>Submitted: {submission.quizFinishedDate}</span>
+          <span>{t('modal.submit')}: {submission.quizFinishedDate}</span>
           <span className='flex items-center gap-1.5'>
             <HelpCircle className='h-4 w-4' />
-            {submission.quizQuestionCount} Questions
+            {submission.quizQuestionCount} {t('question')}
           </span>
         </div>
       </div>
@@ -152,11 +156,11 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       {isReviewed && (
         <div className='mt-6 grid grid-cols-3 gap-4 border-b pb-6'>
           <div>
-            <span className='text-sm text-gray-500'>Score</span>
+            <span className='text-sm text-gray-500'>{t('modal.point')}</span>
             <p className='text-2xl font-semibold text-green-600'>{totalScore || '-'}%</p>
           </div>
           <div>
-            <span className='text-sm text-gray-500'>Status</span>
+            <span className='text-sm text-gray-500'>{t('modal.status')}</span>
             <div>
               <Badge className={getStatusBadgeClass(submission.status)}>{submission.status}</Badge>
             </div>
@@ -174,21 +178,21 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
             {attemptData &&
               attemptData.questionAttempts.map((question, index) => (
                 <div key={question.id} className='rounded-lg border'>
-                  <h3 className='border-b bg-gray-50 px-6 py-3 text-lg font-semibold'>Question {index + 1}</h3>
+                  <h3 className='border-b bg-gray-50 px-6 py-3 text-lg font-semibold'>{t('modal.question')} {index + 1}</h3>
 
                   <div className='grid grid-cols-1 md:grid-cols-2'>
                     <div className='p-6 md:border-r'>
-                      <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Answer</h4>
+                      <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>{t('modal.answer')}</h4>
                       <div className='prose prose-sm max-w-none text-gray-700'>
-                        <p>{question.answerText || 'No text answer provided.'}</p>
+                        <p>{question.answerText || t('modal.noAnswer')}</p>
                       </div>
 
                       {question.answerFileUrl && (
                         <div className='mt-6'>
-                          <h5 className='mb-2 text-sm font-medium text-gray-600'>Submitted File</h5>
+                          <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
                           <Button variant='link' className='p-0 text-sm' asChild>
                             <a href={question.answerFileUrl} target='_blank' rel='noopener noreferrer'>
-                              View Submitted File <ExternalLink className='ml-1 h-3 w-3' />
+                              {t('modal.viewFile')} <ExternalLink className='ml-1 h-3 w-3' />
                             </a>
                           </Button>
                         </div>
@@ -197,9 +201,9 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
 
                     <div className='p-6'>
                       <div className='flex justify-between'>
-                        <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Rubric</h4>
+                        <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>{t('modal.rubric')}</h4>
                         <p className='text-xs text-gray-800'>
-                          {question.rubricScore.reduce((sum, c) => sum + c.maxPoints, 0)} Points
+                          {question.rubricScore.reduce((sum, c) => sum + c.maxPoints, 0)} {t('modal.point')}
                         </p>
                       </div>
                       <div className='space-y-6'>
@@ -210,7 +214,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
                               <div className='mt-2 flex items-center gap-1'>
                                 <Input
                                   type='number'
-                                  placeholder='Score'
+                                  placeholder={t('modal.point')}
                                   className='w-24'
                                   max={criterion.maxPoints}
                                   min={0}
@@ -224,7 +228,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
                                   }
                                 />
                                 <span className='ml-2 text-xs text-gray-500 italic'>
-                                  (Max Points: {criterion.maxPoints})
+                                  ({t('modal.max')}: {criterion.maxPoints})
                                 </span>
                               </div>
                             </div>
@@ -235,7 +239,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
 
                         <div className='mt-6 border-t pt-4'>
                           <p className='text-sm font-medium text-gray-700'>
-                            Total Points for Question:{' '}
+                            {t('modal.total')}:{' '}
                             {question.rubricScore.reduce((sum, c) => {
                               const score =
                                 scores[question.id]?.[c.rubricCriterionId] !== undefined
@@ -254,7 +258,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
           </div>
 
           <div className='mt-8 border-t pt-6'>
-            <h3 className='text-lg font-semibold'>Comments</h3>
+            <h3 className='text-lg font-semibold'>{t('modal.comment')}</h3>
 
             {isReviewed ? (
               <div className='mt-4 rounded-md border bg-sky-50 p-4'>
@@ -263,11 +267,11 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
             ) : (
               <div className='mt-4'>
                 <p className='mb-3 text-sm text-gray-500'>
-                  Comments left for the learner are visible only to that learner and the person who left the comment.
+                  {t('modal.commentSubTitle')}
                 </p>
                 <div className='flex items-start gap-3'>
                   <Textarea
-                    placeholder='Share your thoughts...'
+                    placeholder={t('modal.commentPlaceholder')}
                     className='flex-1'
                     rows={4}
                     value={feedbackText}
@@ -277,10 +281,10 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
                 </div>
                 <div className='mt-4 flex justify-end gap-2'>
                   <Button variant='outline' disabled={isGrading} onAbort={closeModal}>
-                    Cancel
+                    {tc('button.cancel')}
                   </Button>
                   <Button onClick={handleSubmitReview} disabled={isGrading}>
-                    {isGrading ? 'Submitting...' : 'Submit Review'}
+                    {isGrading ? tc('button.submitting') : tc('button.submitReview')}
                   </Button>
                 </div>
               </div>

@@ -85,7 +85,10 @@
       "sendInvitations": "Send Invitations",
       "clearFilters": "Clear Filters",
       "createClassroom": "Create Classroom",
-      "addStudents": "Add Students"
+      "addStudents": "Add Students",
+      "reviewed": "Reviewed",
+      "notReviewed": "Not Reviewed",
+      "submitReview": "Submit Review"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

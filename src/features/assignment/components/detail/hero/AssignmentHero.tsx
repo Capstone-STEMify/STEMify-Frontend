@@ -11,19 +11,21 @@ import {
 import { CheckCircle, Clock, Edit2, MoreHorizontal, Share2, BookOpen } from 'lucide-react'
 import { ProgressCircle } from '@/features/quiz/components/active/circle/AccuracyCircle'
 import { AssignmentStatistics } from '@/features/assignment/types/assigmentlistdetail.type'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 
 export function AssignmentDetailHeader({ data }: { data: AssignmentStatistics }) {
   const locale = useLocale()
   const { classroomId } = useParams()
+
+  const t = useTranslations("assignment.teacher")
   return (
     <div>
       <div className='mb-4 flex items-center justify-between'>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/${locale}/classroom/${classroomId}`}>Assignment</BreadcrumbLink>
+              <BreadcrumbLink href={`/${locale}/classroom/${classroomId}`}>{t('title')}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -41,10 +43,10 @@ export function AssignmentDetailHeader({ data }: { data: AssignmentStatistics })
           </h1>
           <div className='mt-2 flex items-center gap-4 text-sm text-gray-500'>
             <span className='flex items-center gap-1.5'>
-              <BookOpen className='h-4 w-4' /> Assignment
+              <BookOpen className='h-4 w-4' /> {t('title')}
             </span>
             <span>•</span>
-            <span>{data.totalQuestions} Question(s)</span>
+            <span>{data.totalQuestions} {t('question')}</span>
           </div>
 
           {/* Stats */}
@@ -58,7 +60,7 @@ export function AssignmentDetailHeader({ data }: { data: AssignmentStatistics })
                 strokeWidth={4}
               />
               <div>
-                <span className='text-xs text-gray-500'>Avg. Score</span>
+                <span className='text-xs text-gray-500'>{t('score')}</span>
                 <p className='text-lg font-semibold'>{data.averageScore}%</p>
               </div>
             </div>
@@ -71,12 +73,12 @@ export function AssignmentDetailHeader({ data }: { data: AssignmentStatistics })
                 strokeWidth={4}
               />
               <div>
-                <span className='text-xs text-gray-500'>Pass Rate</span>
+                <span className='text-xs text-gray-500'>{t('passRate')}</span>
                 <p className='text-lg font-semibold'>{data.passRate}%</p>
               </div>
             </div>
             <div>
-              <span className='text-xs text-gray-500'>Submissions</span>
+              <span className='text-xs text-gray-500'>{t('submission')}</span>
               <p className='text-lg font-semibold'>{data.submissions}</p>
             </div>
           </div>
