@@ -64,7 +64,7 @@ export const SpecializationCard = ({ curriculum, itemValue }: SpecializationCard
               <div>
                 <Image
                   className='aspect-square rounded-sm border bg-white object-contain shadow-sm'
-                  src={curriculum.coverImageUrl ?? ''}
+                  src={curriculum.coverImageUrl ?? '/HomeFiles/learning.png'}
                   width={120}
                   height={120}
                   alt='Specialization'
