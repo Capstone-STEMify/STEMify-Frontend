@@ -71,10 +71,10 @@
       "grade": "Chấm Điểm",
       "filter": "Thêm Bộ Lọc",
       "search": "Tìm kiếm...",
-      "export": "Xuất",
+      "export": "Xuất File",
       "month": "Tháng",
       "quarter": "Quý",
-      "year": "Năm"
+      "year": "Năm",
       "submitting": "Đang Gửi...",
       "createUser": "Tạo Người Dùng",
       "createPlan": "Tạo Gói",

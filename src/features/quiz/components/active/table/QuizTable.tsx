@@ -11,12 +11,17 @@ import {
 import { Button } from '@/components/shadcn/button'
 import { ProgressCircle } from '../circle/AccuracyCircle'
 import { QuizStatistics } from '@/features/quiz/types/studentQuiz.type'
+import { useTranslations } from 'next-intl'
 
 type QuizTableProps = {
   data: QuizStatistics[]
 }
 
 export function QuizTable({ data }: QuizTableProps) {
+
+  const t = useTranslations('dashboard.classroom')
+  const tc = useTranslations('common')
+
   const getAccuracyColor = (accuracy: number | null): string => {
     if (accuracy === null) return 'text-gray-400'
     if (accuracy >= 90) return 'text-green-500'
@@ -35,28 +40,28 @@ export function QuizTable({ data }: QuizTableProps) {
               </div>
             </TableHead>
             <TableHead className='min-w-[250px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>Quiz name</button>
+              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>{t('quiz.active.name')}</button>
             </TableHead>
             <TableHead className='w-[180px]'>
-              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>Learners</button>
+              <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>{t('quiz.active.learner')}</button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Accuracy
+                {t('quiz.active.accuracy')}
               </button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center justify-center text-xs font-semibold text-gray-500 uppercase'>
-                Submissions
+                {t('submission')}
               </button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center justify-center text-xs font-semibold text-gray-500 uppercase'>
-                Due Date
+                {t('quiz.active.date')}
               </button>
             </TableHead>
             <TableHead className='w-[80px] text-center text-xs font-semibold text-gray-500 uppercase'>
-              Actions
+              {t('quiz.active.action')}
             </TableHead>
           </TableRow>
         </TableHeader>

@@ -13,6 +13,8 @@
                 "asmStat": "Assignment Statistic",
                 "ungraded": {
                     "title": "Ungraded Assignment",
+                    "pending": "pending",
+                    "noAsm": "No pending assignments to grade.",
                     "id": "Id",
                     "asmTitle": "Assignment Title",
                     "learner": "Learner",
@@ -23,6 +25,7 @@
                     "lesson": "Lessons in",
                     "sort": "Sort by:",
                     "disName": "Display Name",
+                    "noLesson": "No lessons found for this course.",
                     "firstName": "First Name",
                     "lastName": "Last Name"
                 }
@@ -31,20 +34,21 @@
                 "title": "Course",
                 "lessons": "lessons",
                 "schedule": "Classroom Schedule",
-                "duration": "Duration/weeks",
-                "week": "week",
+                "duration": "Duration/weeks:",
+                "min": "phút",
+                "week": "Week",
                 "totalWeek": "Total Weeks"
             },
             "quiz": {
+                "overviewTab": "Overview",
+                "activeTab": "Active",
                 "overview": {
-                    "overviewTab": "Overview",
                     "enroll": "Enrolled",
                     "accuracy": "Accuracy",
                     "completeRate": "Completion Rate",
                     "question": "Question(s)"
                 },
                 "active": {
-                    "activeTab": "Active",
                     "name": "Quiz Name",
                     "learner": "Learners",
                     "accuracy": "Accuracy",
@@ -61,9 +65,14 @@
         },
         "organization": {
             "heroSec": {
+                "hi": "Hello",
                 "title": "What do you want to track today with your organization?",
                 "subTitle": "Understand organization, track progress, and manage your organization successfully."
             },
+            "passed": "Passed",
+            "failed": "Not Passed",
+            "score": "Average Score",
+            "passRate": "Pass Rate",
             "totalCurriculum": "Total Curriculums",
             "totalClass": "Total classrooms",
             "cert": "Earned Certificate",
@@ -73,7 +82,8 @@
             "student": "Total Students",
             "people": "People",
             "enrollment": "Enrollment Change",
-            "detail": "See Details",
+            "feedback": "Feedback",
+            "feedbackDetail": "student suggested more frequent communication and feedback from management",
             "change": "Change",
             "curriculumStat": {
                 "title": "Curriculum Statistics"

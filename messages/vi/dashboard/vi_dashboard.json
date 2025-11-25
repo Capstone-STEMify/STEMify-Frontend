@@ -13,15 +13,18 @@
                 "asmStat": "Thống kê Bài tập",
                 "ungraded": {
                     "title": "Bài tập chưa chấm",
+                    "pending": "đang chờ",
+                    "noAsm": "Không có bài tập nào đang chờ chấm.",
                     "id": "Mã",
                     "asmTitle": "Tiêu đề bài tập",
                     "learner": "Học viên",
-                    "action": "Hành động"
+                    "action": "Thao tác"
                 },
                 "progress": {
                     "title": "Tiến độ học viên",
                     "lesson": "Bài học trong",
                     "sort": "Sắp xếp theo:",
+                    "noLesson": "Không tìm thấy bài học cho khóa học này.",
                     "disName": "Tên hiển thị",
                     "firstName": "Tên",
                     "lastName": "Họ"
@@ -31,41 +34,47 @@
                 "title": "Khóa học",
                 "lessons": "bài học",
                 "schedule": "Lịch lớp học",
-                "duration": "Thời lượng/tuần",
-                "week": "tuần",
+                "duration": "Thời lượng/tuần:",
+                "min": "phút",
+                "week": "Tuần",
                 "totalWeek": "Tổng số tuần"
             },
             "quiz": {
+                "overviewTab": "Tổng quan",
+                "activeTab": "Đang hoạt động",
                 "overview": {
-                    "overviewTab": "Tổng quan",
                     "enroll": "Đã ghi danh",
                     "accuracy": "Độ chính xác",
                     "completeRate": "Tỷ lệ hoàn thành",
                     "question": "Câu hỏi"
                 },
                 "active": {
-                    "activeTab": "Đang hoạt động",
                     "name": "Tên Quiz",
                     "learner": "Học viên",
                     "accuracy": "Độ chính xác",
                     "date": "Hạn nộp",
-                    "action": "Hành động"
+                    "action": "Thao tác"
                 }
             },
             "assignment": {
                 "learner": "Học viên",
                 "name": "Tên bài tập",
-                "action": "Hành động",
+                "action": "Thao tác",
                 "question": "Câu hỏi"
             }
         },
         "organization": {
             "heroSec": {
+                "hi": "Xin chào",
                 "title": "Hôm nay bạn muốn theo dõi điều gì trong tổ chức của mình?",
                 "subTitle": "Hiểu rõ tổ chức, theo dõi tiến độ và quản lý tổ chức hiệu quả."
             },
-            "totalCurriculum": "Tổng số Chương trình học",
-            "totalClass": "Tổng số lớp học",
+            "passed": "Đạt",
+            "failed": "Không đạt",
+            "score": "Điểm trung bình",
+            "passRate": "Tỷ lệ qua môn",
+            "totalCurriculum": "Số Chương trình học",
+            "totalClass": "Số lớp học",
             "cert": "Chứng chỉ đã nhận",
             "sup": "Hỗ trợ cộng đồng",
             "user": "Tổng số người dùng",
@@ -73,6 +82,8 @@
             "student": "Tổng số học viên",
             "people": "Mọi người",
             "enrollment": "Thay đổi ghi danh",
+            "feedback": "Phản hồi",
+            "feedbackDetail": "học viên đề xuất tăng cường giao tiếp và phản hồi thường xuyên từ ban quản lý",
             "detail": "Xem chi tiết",
             "change": "Thay đổi",
             "curriculumStat": {

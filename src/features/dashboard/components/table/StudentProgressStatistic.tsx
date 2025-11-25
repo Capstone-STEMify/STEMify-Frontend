@@ -10,6 +10,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 
 import { useGetClassroomByIdQuery, useGetClassroomStudentProgressQuery } from '@/features/classroom/api/classroomApi'
 import { StudentProgressItem } from '@/features/classroom/types/classroom.type'
+import { useTranslations } from 'next-intl'
+import Loading from 'app/[locale]/loading'
 
 interface CourseType {
   id: number
@@ -25,6 +27,10 @@ interface StudentProgressStatisticProps {
 const COLUMN_WIDTH = 'w-[70px] min-w-[70px]'
 
 export function StudentProgressStatistic({ classroomId, courses }: StudentProgressStatisticProps) {
+
+  const t = useTranslations('dashboard.classroom')
+  const tc = useTranslations('common')
+
   const [selectedCourseId, setSelectedCourseId] = React.useState<string>('')
 
   const [currentLessonId, setCurrentLessonId] = React.useState<string>('')
@@ -84,9 +90,9 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
     <div className='rounded-xl border bg-white p-4 shadow-sm md:p-8 mt-8'>
       <header className='mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
         <div className='flex items-center gap-4'>
-          <h2 className='text-2xl font-semibold'>Students</h2>
+          <h2 className='text-2xl font-semibold'>{t('overview.progress.title')}</h2>
           <div className='flex items-center gap-2 text-sm'>
-            <span>Lessons in</span>
+            <span>{t('overview.progress.lesson')}</span>
 
             <Select value={curriculum?.code || ''} disabled>
               <SelectTrigger className='w-[200px]'>
@@ -122,9 +128,9 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
       </header>
 
       {isFetching && !currentLesson ? (
-        <div className='py-10 text-center text-slate-500'>Loading data...</div>
+        <Loading/>
       ) : !currentLesson ? (
-        <div className='rounded-lg border py-10 text-center text-slate-500'>No lessons found for this course.</div>
+        <div className='rounded-lg border py-10 text-center text-slate-500'>{t('overview.progress.noLesson')}</div>
       ) : (
         <div className='overflow-hidden rounded-lg border bg-white'>
           <div className='overflow-x-auto'>
@@ -136,15 +142,15 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                     className='bg-background sticky left-0 z-20 w-[250px] min-w-[250px] border-r align-top shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]'
                   >
                     <div className='flex flex-col gap-2 px-2 py-4'>
-                      <label className='text-sm font-medium'>Sort by:</label>
+                      <label className='text-sm font-medium'>{t('overview.progress.sort')}</label>
                       <Select defaultValue='display-name'>
                         <SelectTrigger className='w-full'>
                           <SelectValue placeholder='Sort by' />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value='display-name'>Display name</SelectItem>
-                          <SelectItem value='first-name'>First name</SelectItem>
-                          <SelectItem value='last-name'>Last name</SelectItem>
+                          <SelectItem value='display-name'>{t('overview.progress.disName')}</SelectItem>
+                          <SelectItem value='first-name'>{t('overview.progress.firstName')}</SelectItem>
+                          <SelectItem value='last-name'>{t('overview.progress.lastName')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

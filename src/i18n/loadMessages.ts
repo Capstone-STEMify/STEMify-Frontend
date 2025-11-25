@@ -61,7 +61,7 @@ export async function loadMessages(locale: string) {
     ...subscriptionMessages,
     ...contactMessages,
     ...organizationMessages,
-    ...dashboardMessages
+    ...dashboardMessages,
     ...classroomMessages
   }
 }

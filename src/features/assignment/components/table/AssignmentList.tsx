@@ -18,11 +18,13 @@ import { AssignmentStatistics } from '../../types/assigmentlistdetail.type'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { skip } from 'node:test'
 
 export function AssignmentList() {
   const locale = useLocale()
+  const t = useTranslations('dashboard.classroom')
+  const tc = useTranslations('common')
 
   const getAccuracyColor = (accuracy: number | null): string => {
     if (accuracy === null) return 'text-gray-400'
@@ -55,33 +57,33 @@ export function AssignmentList() {
             </TableHead>
             <TableHead className='min-w-[250px]'>
               <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Assignment name <ChevronUp className='ml-1 h-3 w-3' />
+                {t('assignment.name')} <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[180px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Learners <ChevronUp className='ml-1 h-3 w-3' />
+                {t('assignment.learner')} <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Submissions <ChevronUp className='ml-1 h-3 w-3' />
+                {t('submission')} <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Pass Rate
+                {t('passRate')}
                 <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[180px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Avg Score
+                {t('score')}
                 <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[80px] text-center text-xs font-semibold text-gray-500 uppercase'>
-              Actions
+              {t('assignment.action')}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -108,7 +110,7 @@ export function AssignmentList() {
                       {assignment.assignmentTitle}
                     </label>
                     <div className='mt-1 flex items-center text-xs text-gray-500'>
-                      <span className='font-semibold'>{assignment.totalQuestions} Questions</span>
+                      <span className='font-semibold'>{assignment.totalQuestions} {t('assignment.question')}</span>
                     </div>
                   </Link>
                 </TableCell>
@@ -153,9 +155,9 @@ export function AssignmentList() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end'>
-                      <DropdownMenuItem>View Details</DropdownMenuItem>
-                      <DropdownMenuItem>Edit Quiz</DropdownMenuItem>
-                      <DropdownMenuItem className='text-red-500'>Delete</DropdownMenuItem>
+                      <DropdownMenuItem>{tc('button.view')}</DropdownMenuItem>
+                      <DropdownMenuItem>{tc('button.update')}</DropdownMenuItem>
+                      <DropdownMenuItem className='text-red-500'>{tc('button.delete')}</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

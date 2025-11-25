@@ -18,11 +18,18 @@ import { ChevronDown } from 'lucide-react'
 import { DashboardData } from '../types/dashboard.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useTranslations } from 'next-intl'
 
 type Period = 'Month' | 'Quarter' | 'Year'
 
 export default function OrganizationDashboard() {
+  const tc = useTranslations('common')
   const [period, setPeriod] = useState<Period>('Month')
+  const periodLabelMap: Record<Period, string> = {
+    Month: 'button.month',
+    Quarter: 'button.quarter',
+    Year: 'button.year'
+  }
   const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
   const {
@@ -54,16 +61,16 @@ export default function OrganizationDashboard() {
         {/* Period Selector Dropdown */}
         <div className='mb-6 flex justify-end'>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='outline'>
-                {period}
-                <ChevronDown className='ml-2 h-4 w-4' />
-              </Button>
-            </DropdownMenuTrigger>
+              <DropdownMenuTrigger asChild>
+                <Button variant='outline'>
+                  {tc(periodLabelMap[period])}
+                  <ChevronDown className='ml-2 h-4 w-4' />
+                </Button>
+              </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => setPeriod('Month')}>Month</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setPeriod('Quarter')}>Quarter</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setPeriod('Year')}>Year</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setPeriod('Month')}>{tc('button.month')}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setPeriod('Quarter')}>{tc('button.quarter')}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setPeriod('Year')}>{tc('button.year')}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
