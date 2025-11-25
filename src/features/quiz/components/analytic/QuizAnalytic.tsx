@@ -7,8 +7,12 @@ import { LearnerOverviewTab } from './overview/OverviewTab'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/libs/redux/store'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { useTranslations } from 'next-intl'
 
 export default function QuizAnalytic() {
+
+  const t = useTranslations('quiz.teacher.tab')
+  
   const quiz = useSelector((state: RootState) => state.quizSelected.selectedQuiz)
 
   if (!quiz) {
@@ -26,14 +30,14 @@ export default function QuizAnalytic() {
               value='questions'
               className='data-[state=active]:text-foreground data-[state=active]:border-b-primary w-auto flex-none rounded-none text-gray-400 data-[state=active]:border-b-2 data-[state=active]:border-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none'
             >
-              Questions
+              {t('question')}
             </TabsTrigger>
 
             <TabsTrigger
               value='overview'
               className='data-[state=active]:text-foreground data-[state=active]:border-b-primary w-auto flex-none rounded-none text-gray-400 data-[state=active]:border-b-2 data-[state=active]:border-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none'
             >
-              Overview
+              {t('overview')}
             </TabsTrigger>
           </TabsList>
 

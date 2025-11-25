@@ -92,15 +92,17 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
                 <div className='rounded-full bg-amber-100 p-3'>
                   <Trophy className='h-6 w-6 text-amber-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Total Marks</p>
-                <p className='text-2xl font-bold text-gray-900'>{quiz.totalMarks}</p>
+                <p className='text-sm font-medium text-gray-600'>Passing Marks</p>
+                <p className='text-2xl font-bold text-gray-900'>
+                  {quiz.passingMarks}/{quiz.totalMarks}
+                </p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-green-100 p-3'>
                   <CheckCircle className='h-6 w-6 text-green-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Passing Marks</p>
-                <p className='text-2xl font-bold text-gray-900'>{quiz.passingMarks}</p>
+                <p className='text-sm font-medium text-gray-600'>Max Attempt</p>
+                <p className='text-2xl font-bold text-gray-900'>{quiz.maxAttempt ?? '-'}</p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-sky-100 p-3'>

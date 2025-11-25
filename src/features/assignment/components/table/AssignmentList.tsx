@@ -18,11 +18,13 @@ import { AssignmentStatistics } from '../../types/assigmentlistdetail.type'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { skip } from 'node:test'
 
 export function AssignmentList() {
   const locale = useLocale()
+  const t = useTranslations('dashboard.classroom')
+  const tc = useTranslations('common')
 
   const getAccuracyColor = (accuracy: number | null): string => {
     if (accuracy === null) return 'text-gray-400'
@@ -44,7 +46,7 @@ export function AssignmentList() {
   const assignments: AssignmentStatistics[] = studentAssignmentResponse?.data?.items || []
 
   return (
-    <div className='mx-auto mt-4 w-full max-w-7xl rounded-lg border'>
+    <div className='mx-auto mt-10 w-full max-w-7xl rounded-lg border'>
       <Table>
         <TableHeader>
           <TableRow className='bg-gray-50/50 hover:bg-gray-50'>
@@ -55,33 +57,30 @@ export function AssignmentList() {
             </TableHead>
             <TableHead className='min-w-[250px]'>
               <button className='flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Assignment name <ChevronUp className='ml-1 h-3 w-3' />
+                {t('assignment.name')} <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[180px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Learners <ChevronUp className='ml-1 h-3 w-3' />
+                {t('assignment.learner')} <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Submissions <ChevronUp className='ml-1 h-3 w-3' />
+                {t('submission')} <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[120px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Pass Rate
+                {t('passRate')}
                 <ChevronUp className='ml-1 h-3 w-3' />
               </button>
             </TableHead>
             <TableHead className='w-[180px] text-center'>
               <button className='mx-auto flex items-center text-xs font-semibold text-gray-500 uppercase'>
-                Avg Score
+                {t('score')}
                 <ChevronUp className='ml-1 h-3 w-3' />
               </button>
-            </TableHead>
-            <TableHead className='w-[80px] text-center text-xs font-semibold text-gray-500 uppercase'>
-              Actions
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -108,7 +107,9 @@ export function AssignmentList() {
                       {assignment.assignmentTitle}
                     </label>
                     <div className='mt-1 flex items-center text-xs text-gray-500'>
-                      <span className='font-semibold'>{assignment.totalQuestions} Questions</span>
+                      <span className='font-semibold'>
+                        {assignment.totalQuestions} {t('assignment.question')}
+                      </span>
                     </div>
                   </Link>
                 </TableCell>
@@ -143,21 +144,6 @@ export function AssignmentList() {
                   <div className='flex items-center justify-center gap-2'>
                     <p className='text-gray-800'>{assignment.averageScore}</p>
                   </div>
-                </TableCell>
-                <TableCell className='text-center'>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant='ghost' className='h-8 w-8 p-0'>
-                        <span className='sr-only'>Open menu</span>
-                        <MoreHorizontal className='h-4 w-4' />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align='end'>
-                      <DropdownMenuItem>View Details</DropdownMenuItem>
-                      <DropdownMenuItem>Edit Quiz</DropdownMenuItem>
-                      <DropdownMenuItem className='text-red-500'>Delete</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             )

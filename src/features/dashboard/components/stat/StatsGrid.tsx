@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { Briefcase, Award, ArrowUpRight, Users, ArrowUp, ArrowDown } from 'lucide-react'
 import { cn } from '@/shadcn/utils'
 import { DashboardData } from '../../types/dashboard.type'
+import { useTranslations } from 'next-intl'
 
 // Helper component to show change
 function ChangeBadge({ change }: { change: number }) {
@@ -26,9 +27,12 @@ interface QuickStatsGridProps {
 export function QuickStatsGrid({ data }: QuickStatsGridProps) {
   const { currentPeriod, change } = data
 
+  const t = useTranslations('dashboard.organization')
+  const tc = useTranslations('common')
+
   const stats = [
     {
-      title: 'Total Curriculums',
+      title: t('totalCurriculum'),
       value: currentPeriod.totalCurriculum,
       change: change.totalCurriculum,
       icon: Briefcase,
@@ -36,7 +40,7 @@ export function QuickStatsGrid({ data }: QuickStatsGridProps) {
       bgColor: 'bg-indigo-100'
     },
     {
-      title: 'Earned Certificate',
+      title: t('cert'),
       value: currentPeriod.totalCurriculumCertificates,
       change: change.totalCurriculumCertificates,
       icon: Award,
@@ -44,7 +48,7 @@ export function QuickStatsGrid({ data }: QuickStatsGridProps) {
       bgColor: 'bg-green-100'
     },
     {
-      title: 'Total Classrooms',
+      title: t('totalClass'),
       value: currentPeriod.totalClassrooms,
       change: change.totalClassrooms,
       icon: ArrowUpRight,
@@ -52,7 +56,7 @@ export function QuickStatsGrid({ data }: QuickStatsGridProps) {
       bgColor: 'bg-blue-100'
     },
     {
-      title: 'Community Support',
+      title: t('sup'),
       value: '19k+',
       change: null,
       icon: Users,

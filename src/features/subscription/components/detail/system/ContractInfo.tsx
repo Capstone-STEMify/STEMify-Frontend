@@ -54,7 +54,7 @@ export default function ContractInfo({ contractId }: ContractInfoProps) {
       <CardHeader className='pb-3'>
         <div className='flex items-center justify-between'>
           <CardTitle className='text-base font-semibold'>{to('contract.header')}</CardTitle>
-          <Badge className={getStatusBadgeClass(contract.status)}>{translateStatus(contract.status)}</Badge>
+          {/* <Badge className={getStatusBadgeClass(contract.status)}>{translateStatus(contract.status)}</Badge> */}
         </div>
       </CardHeader>
 

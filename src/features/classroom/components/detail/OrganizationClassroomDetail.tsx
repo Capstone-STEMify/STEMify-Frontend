@@ -287,12 +287,8 @@ export default function OrganizationClassroomDetail() {
                 ) : (
                   <div className='py-12 text-center'>
                     <Users className='mx-auto mb-3 h-12 w-12 text-slate-300' />
-                    <h3 className='mb-1 font-semibold text-slate-700'>{tc('classroom.detail.students.noStudent')}</h3>
-                    <p className='mb-4 text-sm text-slate-500'>{tc('classroom.detail.students.noStudentSubtext')}</p>
-                    <Button>
-                      <UserPlus className='mr-2 h-4 w-4' />
-                      {tc('button.addStudents')}
-                    </Button>
+                    <h3 className='mb-1 font-semibold text-slate-700'>{tClassroom('detail.students.noStudent')}</h3>
+                    <p className='mb-4 text-sm text-slate-500'>{tClassroom('detail.students.noStudentSubtext')}</p>
                   </div>
                 )}
               </CardContent>
