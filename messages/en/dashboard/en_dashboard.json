@@ -10,6 +10,7 @@
         "title": "Dashboard Overview",
         "subTitle": "Track learning progress and quiz performance",
         "quizStat": "Quiz Statistic",
+        "tooltip": "Identify students with the slowest learning progress by AI.",
         "asmStat": "Assignment Statistic",
         "ungraded": {
           "title": "Ungraded Assignment",

@@ -42,7 +42,7 @@ export default function ClassroomOverview() {
   const classroom = classroomRes?.data
   const curriculumId = classroom?.curriculum?.id
 
-  const { isLoading: isLoadingCurriculum } = useGetCurriculumByIdQuery(curriculumId!, {
+  const { data: curriculumRes, isLoading: isLoadingCurriculum } = useGetCurriculumByIdQuery(curriculumId!, {
     skip: !curriculumId
   })
 
@@ -54,6 +54,7 @@ export default function ClassroomOverview() {
   )
 
   const ungradedAssignments = statsRes?.data?.ungradedAssignments || []
+  const courses = curriculumRes?.data?.courses || []
   const courseStats = statsRes?.data?.courseStats || []
 
   // --- Data Processing for Pie Charts ---
@@ -348,6 +349,8 @@ export default function ClassroomOverview() {
           </div>
         </CardContent>
       </Card>
+
+      <StudentProgressStatistic classroomId={classroomId} courses={courses} />
     </div>
   )
 }
