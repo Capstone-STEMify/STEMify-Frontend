@@ -39,7 +39,8 @@
       "billingCycles": {
         "label": "Billing Cycles",
         "semiannualPrice": "Price for Semiannual (6 months)",
-        "annualPrice": "Price for Annual (12 months)"
+        "annualPrice": "Price for Annual (12 months)",
+        "pricePlaceholder": "Enter price"
       },
       "availableCurriculums": {
         "label": "Available Curriculums",

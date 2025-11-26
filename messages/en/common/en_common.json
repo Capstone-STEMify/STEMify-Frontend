@@ -4,6 +4,11 @@
       "placeholder": "Search...",
       "noResults": "No results found."
     },
+    "select": {
+      "placeholder": "Select an option",
+      "selected": "Selected",
+      "noOptions": "No options available."
+    },
     "button": {
       "create": "Create New",
       "update": "Update",
@@ -93,7 +98,8 @@
       "retry": "Retry",
       "viewSub": "View Submission",
       "seeFeedback": "See Feedback",
-      "close": "Close"
+      "close": "Close",
+      "createPlan": "Create Plan"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

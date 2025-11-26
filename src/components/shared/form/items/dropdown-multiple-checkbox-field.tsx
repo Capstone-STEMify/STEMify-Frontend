@@ -11,6 +11,7 @@ import { useFieldContext } from '@/components/shared/form/items'
 import { FieldErrors } from './field-errors'
 import { cn } from '@/utils/shadcn/utils'
 import { on } from 'events'
+import { useTranslations } from 'next-intl'
 
 type DropdownMultipleCheckboxFieldProps = {
   label?: string
@@ -32,6 +33,7 @@ export const DropdownMultipleCheckboxField = ({
   maxHeight = '180px',
   onChange
 }: DropdownMultipleCheckboxFieldProps) => {
+  const tc = useTranslations('common.select')
   const field = useFieldContext<number[]>()
   const [open, setOpen] = useState(false)
   const selectedValues = field.state.value ?? []
@@ -50,7 +52,7 @@ export const DropdownMultipleCheckboxField = ({
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant='outline' role='combobox' aria-expanded={open} className='w-full justify-between'>
-            {selectedValues.length > 0 ? `${selectedValues.length} selected` : placeholder}
+            {selectedValues.length > 0 ? `${selectedValues.length} ${tc('selected')}` : tc('placeholder')}
             <ChevronsUpDown className='ml-2 h-4 w-4 opacity-50' />
           </Button>
         </PopoverTrigger>
