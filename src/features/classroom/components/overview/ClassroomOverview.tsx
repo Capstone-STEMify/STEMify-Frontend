@@ -1,11 +1,10 @@
 'use client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/shadcn/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Button } from '@/components/shadcn/button'
-import { Progress } from '@/components/shadcn/progress'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
+import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { ChevronRight, Info, TrendingUp, Clock, CheckCircle2, BookOpenCheck, FileQuestion } from 'lucide-react'
+import { TrendingUp, Clock, BarChart3 } from 'lucide-react'
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
 import { StudentProgressStatistic } from '@/features/dashboard/components/table/StudentProgressStatistic'
 import { useParams } from 'next/navigation'
@@ -13,6 +12,21 @@ import { useGetClassroomByIdQuery, useGetClassroomStatisticsQuery } from '../../
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import Loading from 'app/[locale]/loading'
 import { useTranslations } from 'next-intl'
+
+// ChartJS Imports
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+import { Chart } from 'react-chartjs-2'
+import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot'
+
+// Register ChartJS components
+ChartJS.register(CategoryScale, LinearScale, Title, Tooltip, Legend, BoxPlotController, BoxAndWiskers)
 
 export default function ClassroomOverview() {
   const t = useTranslations('dashboard.classroom')
@@ -28,7 +42,7 @@ export default function ClassroomOverview() {
   const classroom = classroomRes?.data
   const curriculumId = classroom?.curriculum?.id
 
-  const { data: curriculumRes, isLoading: isLoadingCurriculum } = useGetCurriculumByIdQuery(curriculumId!, {
+  const { isLoading: isLoadingCurriculum } = useGetCurriculumByIdQuery(curriculumId!, {
     skip: !curriculumId
   })
 
@@ -40,15 +54,90 @@ export default function ClassroomOverview() {
   )
 
   const ungradedAssignments = statsRes?.data?.ungradedAssignments || []
-  const courses = curriculumRes?.data?.courses || []
+  const courseStats = statsRes?.data?.courseStats || []
 
-  const PassRate = statsRes?.data.quizStatistic.passRate || 0
-  const NotPassRate = 100 - (statsRes?.data.quizStatistic.passRate || 0)
+  // --- Data Processing for Pie Charts ---
+  const quizPassRate = statsRes?.data.quizStatistic.passRate || 0
+  const quizNotPassRate = 100 - quizPassRate
+  const quizSubmissions = statsRes?.data.quizStatistic.submissions || 0
 
-  const contentStatusData = [
-    { name: t('passed'), value: PassRate, color: '#10b981' },
-    { name: t('failed'), value: statsRes?.data.quizStatistic.submissions ? NotPassRate : 0, color: '#ef4444' }
+  const asmPassRate = statsRes?.data.assignmentStatistic.passRate || 0
+  const asmNotPassRate = 100 - asmPassRate
+  const asmSubmissions = statsRes?.data.assignmentStatistic.submissions || 0
+
+  const quizStatusData = [
+    { name: t('passed'), value: quizPassRate, color: '#10b981' },
+    { name: t('failed'), value: quizSubmissions ? quizNotPassRate : 0, color: '#ef4444' }
   ]
+
+  const asmStatusData = [
+    { name: t('passed'), value: asmPassRate, color: '#3b82f6' },
+    { name: t('failed'), value: asmSubmissions ? asmNotPassRate : 0, color: '#f97316' }
+  ]
+
+  // --- Data Processing for Box Plot ---
+  const boxPlotData = {
+    labels: courseStats.map((c) => c.name),
+    datasets: [
+      {
+        label: 'Quiz Scores',
+        backgroundColor: 'rgba(16, 185, 129, 0.5)',
+        borderColor: '#10b981',
+        borderWidth: 1,
+        outlierColor: '#999999',
+        padding: 10,
+        itemRadius: 2,
+        data: courseStats.map((c) => ({
+          min: c.quizStats.min,
+          q1: c.quizStats.q1,
+          median: c.quizStats.median,
+          q3: c.quizStats.q3,
+          max: c.quizStats.max,
+          outliers: c.quizStats.outliers
+        }))
+      },
+      {
+        label: 'Assignment Scores',
+        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+        borderColor: '#3b82f6',
+        borderWidth: 1,
+        outlierColor: '#999999',
+        padding: 10,
+        itemRadius: 2,
+        data: courseStats.map((c) => ({
+          min: c.assignmentStats.min,
+          q1: c.assignmentStats.q1,
+          median: c.assignmentStats.median,
+          q3: c.assignmentStats.q3,
+          max: c.assignmentStats.max,
+          outliers: c.assignmentStats.outliers
+        }))
+      }
+    ]
+  }
+
+  const boxPlotOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top' as const
+      },
+      title: {
+        display: false,
+        text: 'Course Score Distribution'
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: any) => {
+             // Custom tooltip formatting if needed for boxplot
+             const v = context.raw;
+             return `${context.dataset.label}: Min: ${v.min}, Q1: ${v.q1}, Med: ${v.median}, Q3: ${v.q3}, Max: ${v.max}`;
+          }
+        }
+      }
+    }
+  }
 
   if (isLoadingClassroom || isLoadingCurriculum || isLoadingStats) {
     return <Loading />
@@ -73,7 +162,7 @@ export default function ClassroomOverview() {
 
       {/* Middle Section */}
       <div className='mb-8 grid gap-6 md:grid-cols-2'>
-        {/* Learning Content */}
+        {/* Performance Overview (Double Pie Chart) */}
         <Card className='bg-gradient-to-br from-white to-purple-50/20 py-4 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
           <CardHeader className='pb-4'>
             <div className='flex items-center justify-between'>
@@ -81,81 +170,109 @@ export default function ClassroomOverview() {
                 <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100'>
                   <TrendingUp className='h-4 w-4 text-purple-600' />
                 </div>
-                {t('overview.quizStat')}
+                Performance Overview
               </CardTitle>
             </div>
           </CardHeader>
           <CardContent>
-            <div className='flex items-center justify-center gap-12 py-4'>
-              <div className='relative'>
-                <ResponsiveContainer width={180} height={180}>
-                  <PieChart>
-                    <Pie
-                      data={contentStatusData}
-                      cx='50%'
-                      cy='50%'
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={3}
-                      dataKey='value'
-                    >
-                      {contentStatusData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-                <div className='absolute inset-0 flex items-center justify-center'>
-                  <div className='text-center'>
-                    <p className='mb-1 text-xs font-medium text-slate-500'>{t('submission')}</p>
-                    <p className='bg-clip-text text-4xl font-bold text-sky-500'>
-                      {statsRes?.data.quizStatistic.submissions || 0}
-                    </p>
+            <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
+              {/* Quiz Pie */}
+              <div className='flex flex-col items-center justify-center'>
+                <div className='relative h-[180px] w-[180px]'>
+                  <ResponsiveContainer width='100%' height='100%'>
+                    <PieChart>
+                      <Pie
+                        data={quizStatusData}
+                        cx='50%'
+                        cy='50%'
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={3}
+                        dataKey='value'
+                      >
+                        {quizStatusData.map((entry, index) => (
+                          <Cell key={`cell-quiz-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className='absolute inset-0 flex items-center justify-center'>
+                    <div className='text-center'>
+                      <p className='mb-1 text-xs font-medium text-slate-500'>{t('submission')}</p>
+                      <p className='bg-clip-text text-3xl font-bold text-emerald-500'>
+                        {quizSubmissions}
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <p className='mt-2 text-sm font-medium text-slate-600'>{t('overview.quizStat')}</p>
               </div>
-              <div className='space-y-3'>
-                {contentStatusData.map((item) => (
-                  <div key={item.name} className='flex items-center gap-3 text-sm'>
-                    <div className='h-4 w-4 rounded-full shadow-sm' style={{ backgroundColor: item.color }} />
-                    <span className='min-w-[90px] font-medium text-slate-600'>{item.name}</span>
-                    <span className='ml-auto font-bold text-slate-700'>{item.value}%</span>
+
+              {/* Assignment Pie */}
+              <div className='flex flex-col items-center justify-center'>
+                <div className='relative h-[180px] w-[180px]'>
+                  <ResponsiveContainer width='100%' height='100%'>
+                    <PieChart>
+                      <Pie
+                        data={asmStatusData}
+                        cx='50%'
+                        cy='50%'
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={3}
+                        dataKey='value'
+                      >
+                        {asmStatusData.map((entry, index) => (
+                          <Cell key={`cell-asm-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className='absolute inset-0 flex items-center justify-center'>
+                    <div className='text-center'>
+                      <p className='mb-1 text-xs font-medium text-slate-500'>{t('submission')}</p>
+                      <p className='bg-clip-text text-3xl font-bold text-blue-500'>
+                        {asmSubmissions}
+                      </p>
+                    </div>
                   </div>
-                ))}
+                </div>
+                <p className='mt-2 text-sm font-medium text-slate-600'>{t('overview.asmStat')}</p>
               </div>
+            </div>
+            
+            {/* Legend/Summary */}
+            <div className='mt-6 flex justify-center gap-6 text-sm'>
+                <div className='flex items-center gap-2'>
+                    <div className='h-3 w-3 rounded-full bg-emerald-500'></div>
+                    <span className='text-slate-600'>Quiz Pass</span>
+                </div>
+                 <div className='flex items-center gap-2'>
+                    <div className='h-3 w-3 rounded-full bg-blue-500'></div>
+                    <span className='text-slate-600'>Asm Pass</span>
+                </div>
+                <div className='flex items-center gap-2'>
+                    <div className='h-3 w-3 rounded-full bg-red-500'></div>
+                    <span className='text-slate-600'>Fail</span>
+                </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Stats Card */}
-        <Card className='bg-gradient-to-br from-white to-emerald-50/20 py-4 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
+        {/* Course Statistics (Box Plot) */}
+        <Card className='bg-gradient-to-br from-white to-blue-50/20 py-4 shadow-lg shadow-slate-200/50 transition-all duration-300 hover:shadow-xl'>
           <CardHeader>
             <div className='flex items-center justify-between'>
               <CardTitle className='flex items-center gap-2 text-base font-semibold'>
-                <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100'>
-                  <FileQuestion className='h-4 w-4 text-purple-600' />
+                <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
+                  <BarChart3 className='h-4 w-4 text-blue-600' />
                 </div>
-                {t('overview.asmStat')}
+                Course Analytics
               </CardTitle>
             </div>
           </CardHeader>
-          <CardContent className='flex h-full min-h-[300px] flex-col items-center justify-center gap-6 p-8'>
-            <div className='grid w-full grid-cols-2 gap-6'>
-              <div className='rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-teal-50 p-6 text-center'>
-                <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20'>
-                  <CheckCircle2 className='h-6 w-6 text-white' />
-                </div>
-                <p className='text-3xl font-bold text-emerald-700'>{statsRes?.data.assignmentStatistic.passRate}%</p>
-                <p className='mt-2 text-sm text-slate-600'>{t('passRate')}</p>
-              </div>
-              <div className='rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 text-center'>
-                <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20'>
-                  <BookOpenCheck className='h-6 w-6 text-white' />
-                </div>
-                <p className='text-3xl font-bold text-blue-700'>{statsRes?.data.assignmentStatistic.submissions}</p>
-                <p className='mt-2 text-sm text-slate-600'>{t('submission')}</p>
-              </div>
-            </div>
+          <CardContent className='flex h-[350px] flex-col items-center justify-center p-4'>
+             <Chart type='boxplot' data={boxPlotData} options={boxPlotOptions} />
           </CardContent>
         </Card>
       </div>
@@ -231,8 +348,6 @@ export default function ClassroomOverview() {
           </div>
         </CardContent>
       </Card>
-
-      <StudentProgressStatistic classroomId={classroomId} courses={courses} />
     </div>
   )
 }

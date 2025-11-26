@@ -15,7 +15,6 @@ import { formatDate } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 
 export type SubmissionStatus =
-  | 'Not Reviewed'
   | 'Passed'
   | 'Failed'
   | 'Not Submitted'

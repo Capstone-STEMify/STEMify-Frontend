@@ -11,7 +11,16 @@
         "status": "Trạng thái",
         "grade": "Điểm",
         "date": "Ngày nộp",
-        "noSubmission": "Không tìm thấy bài nộp."
+        "noSubmission": "Không tìm thấy bài nộp.",
+        "subStatus": {
+          "notSubmitted": "Chưa nộp",
+          "submitted": "Đã nộp",
+          "pending": "Đang chờ",
+          "underReview": "Đang xem xét",
+          "passed": "Đạt",
+          "failed": "Không đạt",
+          "graded": "Đã chấm điểm"
+        }
       },
       "modal": {
         "student": "Học sinh",

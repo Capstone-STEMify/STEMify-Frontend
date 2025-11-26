@@ -56,6 +56,23 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
     }
   }, [feedback])
 
+  useEffect(() => {
+    if (!attemptData || !attemptData.questionAttempts) return
+
+    const initialScores: Record<number, Record<number, number | null>> = {}
+
+    attemptData.questionAttempts.forEach((qAttempt) => {
+      initialScores[qAttempt.id] = {}
+      qAttempt.rubricScore.forEach((criterion) => {
+        // Use currentPoints from the API when present, otherwise null
+        initialScores[qAttempt.id][criterion.rubricCriterionId] =
+          (criterion as any).currentPoints ?? null
+      })
+    })
+
+    setScores(initialScores)
+  }, [attemptData])
+
   const handleScoreChange = (qAttemptId: number, criterionId: number, points: string) => {
     if (points === '') {
       setScores((prev) => ({

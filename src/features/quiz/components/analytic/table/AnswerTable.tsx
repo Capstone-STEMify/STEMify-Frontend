@@ -33,9 +33,9 @@ export function AnswerGridTable({ data, studentData, questionData }: AnswerGridT
             <TableHeader>
               <TableRow className='bg-gray-50 hover:bg-gray-50'>
                 <TableHead className='sticky left-0 z-10 w-[350px] bg-inherit'>{t('head')}</TableHead>
-                {questionData.map((q) => (
+                {questionData.map((q, index) => (
                   <TableHead key={q.questionId} className='min-w-[120px] p-4 text-center whitespace-nowrap'>
-                    Q.{q.questionId}
+                    Q.{index + 1}
                     <Badge variant='secondary' className='ml-2 font-normal'>
                       {q.correctRate}%
                     </Badge>

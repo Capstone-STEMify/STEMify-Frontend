@@ -84,14 +84,14 @@ export function QuestionCard({ data, totalQuestion }: QuestionCardProps) {
   const t = useTranslations('quiz.teacher')
   return (
     <>
-      {data.map((questions) => (
+      {data.map((questions, index) => (
         <Card key={questions.questionId}>
           <CardContent className='p-6'>
             <div className='mb-6 flex items-center justify-between'>
               <div className='flex items-center gap-2 font-semibold'>
                 <HelpCircle className='h-5 w-5 text-gray-400' />
                 <span>
-                  Q{questions.questionId} of {totalQuestion}
+                  Q{index + 1} of {totalQuestion}
                 </span>
               </div>
               <div className='flex items-center gap-4 text-xs text-gray-600'>

@@ -11,7 +11,16 @@
         "status": "Status",
         "grade": "Grade",
         "date": "Submitted Date",
-        "noSubmission": "No submissions found."
+        "noSubmission": "No submissions found.",
+        "subStatus": {
+          "notSubmitted": "Not Submitted",
+          "submitted": "Submitted",
+          "pending": "Pending",
+          "underReview": "Under Review",
+          "passed": "Passed",
+          "failed": "Failed",
+          "graded": "Graded"
+        }
       },
       "modal": {
         "student": "Student",
