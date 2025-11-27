@@ -23,9 +23,10 @@ import { format } from 'date-fns'
 type Props = {
   studentAssignmentId: number | null
   onClose: () => void
+  onSuccess?: () => void
 }
 
-export default function GradeAssignmentModal({ studentAssignmentId, onClose }: Props) {
+export default function GradeAssignmentModal({ studentAssignmentId, onClose, onSuccess }: Props) {
   // --- API QUERIES ---
   const { data: detailResponse, isLoading: isLoadingDetail } = useGetStudentAssignmentByIdQuery(
     studentAssignmentId ?? undefined,
@@ -127,6 +128,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose }: P
       await gradeAssignment({ attemptId, studentAssignmentId, body: payload }).unwrap()
       toast.success('Grading submitted')
       onClose()
+      onSuccess?.()
     } catch (err) {
       console.error(err)
       toast.error('Failed to submit grading')

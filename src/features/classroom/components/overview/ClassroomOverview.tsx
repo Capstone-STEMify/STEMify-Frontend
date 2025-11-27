@@ -42,7 +42,7 @@ export default function ClassroomOverview() {
     skip: !curriculumId
   })
 
-  const { data: statsRes, isLoading: isLoadingStats } = useGetClassroomStatisticsQuery(
+  const { data: statsRes, isLoading: isLoadingStats, refetch: refetchStats } = useGetClassroomStatisticsQuery(
     { classroomId },
     {
       skip: !classroomId
@@ -359,6 +359,9 @@ export default function ClassroomOverview() {
             <GradeAssignmentModal
               studentAssignmentId={selectedStudentAssignmentId}
               onClose={() => setSelectedStudentAssignmentId(null)}
+              onSuccess={() => {
+              refetchStats?.()
+              }}
             />
           )}
         </DialogContent>

@@ -128,7 +128,7 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
             status: existing.status
           }
         }).unwrap()
-        toast.success('✅ Lưu dữ liệu thành công.')
+        toast.success('Lưu dữ liệu thành công.')
       }
 
       // console.log('Emulator creation response:', response)
