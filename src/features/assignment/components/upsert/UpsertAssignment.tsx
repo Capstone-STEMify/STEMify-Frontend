@@ -408,7 +408,10 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                                   <form.AppField
                                     name={`questions[${questionIndex}].rubricCriterion[${criterionIndex}].criterionName`}
                                     children={(field) => (
-                                      <field.TextField label='Criterion Name' placeholder='e.g., Criteria 1' />
+                                      <field.TextField
+                                        label={ta('upsert.question.rubric.criterionName')}
+                                        placeholder='e.g., Criteria 1'
+                                      />
                                     )}
                                   />
                                 </div>
@@ -416,7 +419,12 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                                   <form.AppField
                                     name={`questions[${questionIndex}].rubricCriterion[${criterionIndex}].maxPoints`}
                                     children={(field) => (
-                                      <field.TextField type='number' label='Max Points' placeholder='e.g. 2' min={1} />
+                                      <field.TextField
+                                        type='number'
+                                        label={ta('upsert.question.rubric.maxPoints')}
+                                        placeholder='e.g. 2'
+                                        min={1}
+                                      />
                                     )}
                                   />
                                 </div>

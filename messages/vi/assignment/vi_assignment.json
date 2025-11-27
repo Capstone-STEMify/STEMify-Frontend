@@ -111,7 +111,7 @@
         "rubric": {
           "rubric": "Tiêu chí đánh giá",
           "noData": "Chưa có tiêu chí nào được thêm. Nhấn \"Thêm tiêu chí\" để bắt đầu.",
-          "criterionName": "Tên tiêu chí",
+          "criterionName": "Tiêu chí",
           "maxPoints": "Điểm tối đa"
         }
       }

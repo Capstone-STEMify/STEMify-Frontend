@@ -19,6 +19,7 @@ import CardLayout from '@/components/shared/card/CardLayout'
 import Link from 'next/link'
 import { SDropDown } from '@/components/shared/SDropDown'
 import { EllipsisVertical } from 'lucide-react'
+import { Button } from '@/components/shadcn/button'
 
 export default function AdminCurriculumList() {
   const t = useTranslations('curriculum')
@@ -97,7 +98,9 @@ export default function AdminCurriculumList() {
             <div key={curriculum.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
               <SDropDown
                 trigger={
-                  <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
+                  <button className='flex items-center justify-center rounded-full border border-gray-200 bg-white p-1'>
+                    <EllipsisVertical className='h-3 w-3 text-gray-500' />
+                  </button>
                 }
                 items={[
                   <button
