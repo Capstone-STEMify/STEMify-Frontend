@@ -1,4 +1,10 @@
-import { QuestionAttemptQuery, Quiz, QuizAttempt, QuizQueryParams } from '@/features/resource/quiz/types/quiz.type'
+import {
+  QuestionAttemptQuery,
+  Quiz,
+  QuizAttempt,
+  QuizImportResponse,
+  QuizQueryParams
+} from '@/features/resource/quiz/types/quiz.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
@@ -47,6 +53,28 @@ export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
         body: { questionAttempts }
       }),
       invalidatesTags: (result, error, { studentQuizId }) => [{ type: 'Quiz', id: studentQuizId }]
+    }),
+    getQuizCSV: builder.query<
+      ApiSuccessResponse<{
+        csvFile: string
+        fileName: string
+      }>,
+      void
+    >({
+      query: () => ({
+        url: `/quizzes/template`,
+        method: 'GET'
+      })
+    }),
+    importQuizCSV: builder.mutation<ApiSuccessResponse<QuizImportResponse>, { csvFile: string; quizId: number }>({
+      query: ({ quizId, csvFile }) => {
+        return {
+          url: `/quizzes/${quizId}/import`,
+          method: 'POST',
+          body: { csvFile }
+        }
+      },
+      invalidatesTags: [{ type: 'Quiz' }]
     })
   })
 })
@@ -67,6 +95,10 @@ export const {
   useGetStudentQuizByClassroomQuery,
   useCreateQuizAttemptMutation,
   useUpdateQuizAttemptMutation,
+
+  // csv
+  useGetQuizCSVQuery,
+  useImportQuizCSVMutation,
 
   // lazy
   useLazySearchQuery: useLazySearchQuizQuery,

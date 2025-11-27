@@ -11,10 +11,10 @@ interface QuizEditorState {
 const initialState: QuizEditorState = {
   quiz: {
     id: 0,
-    title: 'Untitled Quiz',
-    description: '',
-    totalMarks: 0,
-    passingMarks: 0,
+    title: 'Bài trắc nghiệm mẫu',
+    description: 'Mô tả bài trắc nghiệm',
+    totalMarks: 100,
+    passingMarks: 50,
     durationDays: 7,
     status: 'Draft',
     contentId: 0,

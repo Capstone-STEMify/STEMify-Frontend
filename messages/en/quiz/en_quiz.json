@@ -29,6 +29,39 @@
         "resp": "resp"
       }
     },
-    "student": {}
+    "student": {},
+    "upsert": {
+      "create": "Create Quiz",
+      "update": "Update Quiz",
+      "settings": "Quiz Settings",
+      "form": {
+        "title": "Title",
+        "description": "Description",
+        "timeLimit": "Time Limit (minutes)",
+        "totalMarks": "Total Marks",
+        "passingMarks": "Passing Marks",
+        "duration": "Duration (days)",
+        "updateQuizInfo": "Update Quiz Info",
+        "question": {
+          "question": "Question",
+          "saveQuestions": "Save Questions",
+          "multipleChoice": "Multiple Choice",
+          "trueFalse": "True / False",
+          "singleChoice": "Single Choice",
+          "enterQuestion": "Enter Question here",
+          "answer": "Answer",
+          "dragToReorder": "Drag to reorder options",
+          "addOption": "Add Option",
+          "explanation": "Explanation",
+          "optional": "Optional"
+        }
+      }
+    },
+    "import": {
+      "title": "Import Quiz",
+      "button": "Upload (CSV)",
+      "headerTitle": "Upload Quiz Questions from CSV File",
+      "headerDescription": "Upload a CSV file with the correct format to add multiple quiz questions at once."
+    }
   }
 }

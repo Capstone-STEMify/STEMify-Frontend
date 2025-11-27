@@ -28,6 +28,7 @@ import {
   selectQuestion,
   updateQuestion
 } from '@/features/resource/question/slice/quizEditorSlice'
+import { useTranslations } from 'next-intl'
 
 type QuestionCardProps = {
   question: Question
@@ -49,6 +50,7 @@ const SortableAnswer = ({
   onRemove: (answerId: number) => void
   onToggleCorrect: (answerId: number) => void
 }) => {
+  const tq = useTranslations('quiz')
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: answer.id })
 
   const style = {
@@ -100,7 +102,7 @@ const SortableAnswer = ({
             e.stopPropagation()
             onUpdate(answer.id, e.target.value)
           }}
-          placeholder={`Option ${index + 1}`}
+          placeholder={`${tq('upsert.form.question.answer')} ${index + 1}`}
           className='flex-1'
           onClick={(e) => e.stopPropagation()}
         />
@@ -123,6 +125,7 @@ const SortableAnswer = ({
 }
 
 export const QuestionCard = ({ question, isSelected }: QuestionCardProps) => {
+  const tq = useTranslations('quiz')
   const dispatch = useAppDispatch()
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: question.id })
 
@@ -238,15 +241,19 @@ export const QuestionCard = ({ question, isSelected }: QuestionCardProps) => {
         <div className='flex-1 space-y-4'>
           <div className='flex items-center justify-between'>
             <div className='flex flex-1 items-center gap-4'>
-              <Label className='text-sm font-medium'>Question {question.orderIndex}</Label>
+              <Label className='text-sm font-medium'>
+                {tq('upsert.form.question.question')} {question.orderIndex}
+              </Label>
               <Select value={question.questionType} onValueChange={(value) => handleTypeChange(value as QuestionType)}>
-                <SelectTrigger className='w-48'>
+                <SelectTrigger className='w-64'>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={QuestionType.SINGLE_CHOICE}>Single Choice</SelectItem>
-                  <SelectItem value={QuestionType.MULTIPLE_CHOICE}>Multiple Choice</SelectItem>
-                  <SelectItem value={QuestionType.TRUE_FALSE}>True/False</SelectItem>
+                  <SelectItem value={QuestionType.SINGLE_CHOICE}>{tq('upsert.form.question.singleChoice')}</SelectItem>
+                  <SelectItem value={QuestionType.MULTIPLE_CHOICE}>
+                    {tq('upsert.form.question.multipleChoice')}
+                  </SelectItem>
+                  <SelectItem value={QuestionType.TRUE_FALSE}>{tq('upsert.form.question.trueFalse')}</SelectItem>
                 </SelectContent>
               </Select>
               <Input
@@ -286,14 +293,16 @@ export const QuestionCard = ({ question, isSelected }: QuestionCardProps) => {
             <Textarea
               value={question.content}
               onChange={(e) => handleUpdate({ ...question, content: e.target.value })}
-              placeholder='Enter your question here...'
+              placeholder={tq('upsert.form.question.enterQuestion')}
               className='min-h-20'
               onClick={(e) => e.stopPropagation()}
             />
           </div>
 
           <div className='space-y-2'>
-            <Label>Answers (Drag to reorder)</Label>
+            <Label>
+              {tq('upsert.form.question.answer')} ({tq('upsert.form.question.dragToReorder')})
+            </Label>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleAnswerDragEnd}>
               <SortableContext items={question.answers.map((a) => a.id)} strategy={verticalListSortingStrategy}>
                 <RadioGroup value={question.answers.find((a) => a.isCorrect)?.id?.toString()}>
@@ -325,17 +334,19 @@ export const QuestionCard = ({ question, isSelected }: QuestionCardProps) => {
                 className='mt-2'
               >
                 <Plus className='mr-2 h-4 w-4' />
-                Add Option
+                {tq('upsert.form.question.addOption')}
               </Button>
             )}
           </div>
 
           <div>
-            <Label className='mb-2'>Explanation (Optional)</Label>
+            <Label className='mb-2'>
+              {tq('upsert.form.question.explanation')} ({tq('upsert.form.question.optional')})
+            </Label>
             <Textarea
               value={question.answerExplanation}
               onChange={(e) => handleUpdate({ ...question, answerExplanation: e.target.value })}
-              placeholder='Explain the correct answer...'
+              placeholder={tq('upsert.form.question.explanation')}
               rows={2}
               onClick={(e) => e.stopPropagation()}
             />

@@ -39,6 +39,9 @@ import UpsertOrganizationModal from '@/features/organization/components/UpsertOr
 import UpdateSubsctiptionSheet from '@/features/subscription/components/upsert/UpdateSubsctiptionSheet'
 import UpdateClassroomOrganizationModal from '@/features/classroom/components/upsert/UpdateClassroomOrganizationModal'
 import { UpsertEmulator } from '@/features/creator-3d/components/creator3d/ExportDialog'
+import ImportQuizModal from '@/features/resource/quiz/components/modal/ImportQuizModal'
+import GenericCSVUploadModal from '@/components/shared/csv/GenericCSVUploadModal'
+import QuizCSVUploadModal from '@/features/resource/quiz/components/modal/QuizCSVUploadModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -107,6 +110,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'selectComponentListModal' && <SelectComponentListModal {...modalProps} />}
       {modalType === 'quizAI' && <QuizAIModal {...modalProps} />}
       {modalType === 'addPeople' && <AddPeopleModal {...modalProps} />}
+      {modalType === 'importQuiz' && <QuizCSVUploadModal {...modalProps} />}
 
       {/* sheet */}
       {modalType === 'upsertContact' && <ContactDetailSheet {...modalProps} />}
