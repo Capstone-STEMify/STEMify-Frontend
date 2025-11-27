@@ -56,6 +56,7 @@ export type ModalType =
   | 'quizAI'
   | 'addPeople'
   | 'importQuiz'
+  | 'sectionAI'
 
   // sheet
   | 'upsertContact'

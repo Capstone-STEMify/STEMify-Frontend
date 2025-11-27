@@ -1,3 +1,4 @@
+import { LessonSectionAIResponse } from '@/features/chat/types/agent.type'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
@@ -5,7 +6,7 @@ export const agentApi = createApi({
   reducerPath: 'chatAgentApi',
   // baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_AI_URL }),
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://stemify.hopto.org/resource/api',
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
     responseHandler: async (response) => {
       const contentType = response.headers.get('content-type') || ''
       if (contentType.includes('application/json')) {
@@ -35,12 +36,9 @@ export const agentApi = createApi({
     }),
 
     // Section AI Generator
-    generateSection: builder.mutation<
-      ApiSuccessResponse<{ title: string; description: string; duration: number }>,
-      { lessonId: number; topic: string }
-    >({
+    generateSection: builder.mutation<LessonSectionAIResponse, { lesson_id: string; force_mock: boolean }>({
       query: (body) => ({
-        url: '/ai/section-generator',
+        url: '/ai/content/lesson-section',
         method: 'POST',
         body
       })

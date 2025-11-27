@@ -1,0 +1,11 @@
+{
+  "agent": {
+    "section": {
+      "title": "AI Section Generation",
+      "duration": "Duration",
+      "minutes": "minutes",
+      "accept": "Accept",
+      "generating": "Generating..."
+    }
+  }
+}
