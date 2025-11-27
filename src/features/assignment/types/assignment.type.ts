@@ -8,6 +8,7 @@ export type Assignment = {
   totalScore: number
   passingScore: number
   durationDays: number
+  cooldownHours: number
   questions: AssignmentQuestion[]
 }
 
@@ -39,6 +40,7 @@ export type CreateAssignmentDto = {
   title: string
   passingScore: number
   durationDays: number
+  cooldownHours: number
   questions: CreateAssignmentQuestionDto[]
 }
 
@@ -104,3 +106,16 @@ export type SubmissionAnswer = {
 
 // =================== Query Params ===================
 export type AssignmentQueryParams = {} & SearchPaginatedRequestParams
+
+// =================== CSV Import/Export Types ===================
+export type AssignmentImportResponse = {
+  totalRows: number
+  successCount: number
+  failureCount: number
+  errors: {
+    rowNumber: number
+    field: string
+    errorMessage: string
+    rowData: string
+  }[]
+}

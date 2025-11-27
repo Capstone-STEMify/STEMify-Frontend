@@ -1,4 +1,3 @@
-import { Button } from '@/components/shadcn/button'
 import { useAppForm } from '@/components/shared/form/items'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import {
@@ -8,12 +7,8 @@ import {
   useUpdateOrganizationMutation
 } from '@/features/organization/api/organizationApi'
 import { OrganizationFormData } from '@/features/organization/types/organization.type'
-import { useGetPlanByIdQuery } from '@/features/plan/api/planApi'
-import { goBack, goNext, setOrganizationId } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { fileToBase64 } from '@/utils/index'
 import { useTranslations } from 'next-intl'
-import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import z from 'zod'
@@ -37,7 +32,7 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
 
   const imageFieldRef = useRef<any>(null)
 
-  const { data: orgData, isLoading: isOrgLoading } = useGetOrganizationByIdQuery(Number(1), {
+  const { data: orgData, isLoading: isOrgLoading } = useGetOrganizationByIdQuery(Number(organizationId), {
     skip: !organizationId
   })
 

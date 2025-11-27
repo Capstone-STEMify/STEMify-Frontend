@@ -241,7 +241,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
       ? [...studentAssignmentData.attempts].sort((a, b) => b.attemptNumber - a.attemptNumber)[0]
       : null
 
-  const maxAttempts = 3
+  const maxAttempts = studentAssignmentData.maxAttemptAllowed
   const attemptsMade = studentAssignmentData.attempts.length
   const attemptsRemaining = maxAttempts - attemptsMade
 
@@ -250,6 +250,15 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
     (latestAttempt.status === StudentAssignmentStatus.PASSED || latestAttempt.status === StudentAssignmentStatus.FAILED)
 
   const isPassed = latestAttempt && latestAttempt.status === StudentAssignmentStatus.PASSED
+
+  // Conditions for showing retry button
+  const nextAttemptCondition =
+    studentAssignmentData.nextAttemptAvailableAt && new Date() < new Date(studentAssignmentData.nextAttemptAvailableAt)
+  const attemptMadeCondition = attemptsMade > 0 && attemptsMade < maxAttempts
+  const statusCondition = studentAssignmentData.status !== 'Passed' && studentAssignmentData.status !== 'Expired'
+
+  const retryCondition = attemptMadeCondition && statusCondition
+  const retryCondition2 = nextAttemptCondition && statusCondition
 
   return (
     <div className='mx-auto max-w-4xl space-y-6 p-6'>
@@ -272,17 +281,29 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
           </div>
           <div className='space-y-4'>
             <div>
-              <div className='mb-1 text-sm font-medium text-gray-700'>{t('alreadyAttempted.attempt')}</div>
-              <div className='text-sm text-gray-900'>
-                {attemptsRemaining} {t('alreadyAttempted.left')} ({maxAttempts} {t('alreadyAttempted.allow')})
-              </div>
+              {retryCondition || retryCondition2 ? (
+                <>
+                  {attemptsRemaining && maxAttempts ? (
+                    <>
+                      <div className='mb-1 text-sm font-medium text-gray-700'>{t('alreadyAttempted.attempt')}</div>
+                      <div className='text-sm text-gray-900'>
+                        {attemptsRemaining} {t('alreadyAttempted.left')} ({maxAttempts} {t('alreadyAttempted.allow')})
+                      </div>
+                    </>
+                  ) : studentAssignmentData.nextAttemptAvailableAt ? (
+                    <p className='text-sm text-gray-900'>
+                      {t('alreadyAttempted.nextAttempt')}: {formatDate(studentAssignmentData.nextAttemptAvailableAt)}
+                    </p>
+                  ) : null}
+                </>
+              ) : null}
             </div>
             <div className='flex justify-end'>
               {attemptsMade === 0 ? (
                 <Button onClick={handleAttemptAssignment} className='bg-blue-500 text-white hover:bg-blue-600'>
                   {tc('button.attempt')}
                 </Button>
-              ) : attemptsMade > 0 && attemptsMade < maxAttempts ? (
+              ) : retryCondition || retryCondition2 ? (
                 <Button
                   onClick={handleAttemptAssignment}
                   variant='outline'

@@ -119,7 +119,7 @@ export default function KitDetail() {
             {kitData.data.status === KitProductStatus.DRAFT && (
               <Button
                 className='bg-amber-custom-400 mt-2 w-fit px-10 text-white'
-                onClick={() => handleUpdateKitStatus(KitProductStatus.PUBLISHED)}
+                onClick={() => handleUpdateKitStatus(KitProductStatus.ACTIVE)}
               >
                 {tc('button.publish')}
               </Button>

@@ -19,12 +19,17 @@ import {
   selectQuestion,
   markAsSaved
 } from '@/features/resource/question/slice/quizEditorSlice'
+import { useTranslations } from 'next-intl'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 type QuizEditorSidebarProps = {
   onAddQuestion: () => void
 }
 
 export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => {
+  const tq = useTranslations('quiz')
+  const tt = useTranslations('toast')
+
   const { quizId, sectionId, lessonId } = useParams()
   const dispatch = useAppDispatch()
   const router = useRouter()
@@ -36,8 +41,8 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
   const [collapsed, setCollapsed] = useState(false)
   const [isSavingQuiz, setIsSavingQuiz] = useState(false)
 
-  const [createQuiz] = useCreateQuizMutation()
-  const [updateQuiz] = useUpdateQuizMutation()
+  const [createQuiz, { isLoading: isCreating }] = useCreateQuizMutation()
+  const [updateQuiz, { isLoading: isUpdating }] = useUpdateQuizMutation()
 
   const handleQuizInfoChange = (updates: Partial<typeof quiz>) => {
     dispatch(updateQuizInfo(updates))
@@ -49,32 +54,29 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
 
   const handleSaveQuiz = async () => {
     setIsSavingQuiz(true)
-    try {
-      const quizPayload = {
-        title: quiz.title,
-        description: quiz.description,
-        totalMarks: 100,
-        passingMarks: quiz.passingMarks,
-        durationDays: quiz.durationDays,
-        timeLimitMinutes: quiz.timeLimitMinutes,
-        sectionId: Number(sectionId)
-      }
 
-      if (quizId) {
-        await updateQuiz({ id: Number(quizId), body: quizPayload }).unwrap()
-        toast.success('Quiz info updated successfully')
-      } else {
-        const res = await createQuiz(quizPayload).unwrap()
-        toast.success('Quiz created successfully')
-        router.push(`/admin/lesson/${lessonId}/section/${sectionId}/quiz/${res.data.id}/question`)
-      }
-
-      dispatch(markAsSaved())
-    } catch (error) {
-      toast.error('Failed to save quiz info')
-    } finally {
-      setIsSavingQuiz(false)
+    const quizPayload = {
+      title: quiz.title,
+      description: quiz.description,
+      totalMarks: 100,
+      passingMarks: quiz.passingMarks,
+      durationDays: quiz.durationDays,
+      timeLimitMinutes: quiz.timeLimitMinutes,
+      sectionId: Number(sectionId)
     }
+
+    if (quizId) {
+      await updateQuiz({ id: Number(quizId), body: quizPayload }).unwrap()
+      toast.success(tt('successMessage.update', { title: quiz.title }))
+    } else {
+      const res = await createQuiz(quizPayload).unwrap()
+      toast.success(tt('successMessage.create', { title: quiz.title }))
+      router.push(`/admin/lesson/${lessonId}/section/${sectionId}/quiz/${res.data.id}/question`)
+    }
+
+    dispatch(markAsSaved())
+
+    setIsSavingQuiz(false)
   }
 
   if (collapsed) {
@@ -87,6 +89,14 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
     )
   }
 
+  if (isCreating) {
+    return (
+      <div className='flex h-full w-80 shrink-0 flex-col overflow-hidden border-r'>
+        <LoadingComponent />
+      </div>
+    )
+  }
+
   return (
     <aside className='border-border bg-card flex h-full w-80 shrink-0 flex-col overflow-hidden border-r'>
       {/* Toàn bộ nội dung được scroll */}
@@ -95,7 +105,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
           {/* Header */}
           <div className='border-border bg-card sticky top-0 z-10 flex items-center justify-between border-b p-4'>
             <div className='flex items-center gap-2'>
-              <h2 className='text-foreground font-semibold'>Quiz Settings</h2>
+              <h2 className='text-foreground font-semibold'>{tq('upsert.settings')}</h2>
             </div>
             <Button variant='ghost' size='icon' onClick={() => setCollapsed(true)}>
               <ChevronLeft className='h-4 w-4' />
@@ -107,21 +117,21 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
             {/* Title + Description */}
             <div className='space-y-4'>
               <div className='space-y-1'>
-                <Label htmlFor='title'>Title</Label>
+                <Label htmlFor='title'>{tq('upsert.form.title')}</Label>
                 <Input
                   id='title'
                   value={quiz.title}
                   onChange={(e) => handleQuizInfoChange({ title: e.target.value })}
-                  placeholder='Enter quiz title'
+                  placeholder={tq('upsert.form.title')}
                 />
               </div>
               <div className='space-y-1'>
-                <Label htmlFor='description'>Description</Label>
+                <Label htmlFor='description'>{tq('upsert.form.description')}</Label>
                 <Textarea
                   id='description'
                   value={quiz.description}
                   onChange={(e) => handleQuizInfoChange({ description: e.target.value })}
-                  placeholder='Enter quiz description'
+                  placeholder={tq('upsert.form.description')}
                   rows={3}
                 />
               </div>
@@ -131,7 +141,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
             <div className='grid grid-cols-2 gap-4'>
               {' '}
               <div className='space-y-1'>
-                <Label htmlFor='totalMarks'>Total Marks</Label>
+                <Label htmlFor='totalMarks'>{tq('upsert.form.totalMarks')}</Label>
                 <Input
                   id='totalMarks'
                   type='number'
@@ -140,7 +150,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                 />
               </div>
               <div className='space-y-1'>
-                <Label htmlFor='passingMarks'>Passing Marks</Label>
+                <Label htmlFor='passingMarks'>{tq('upsert.form.passingMarks')}</Label>
                 <Input
                   id='passingMarks'
                   type='number'
@@ -149,7 +159,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                 />
               </div>
               <div className='space-y-1'>
-                <Label htmlFor='timeLimit'>Time Limit (min)</Label>
+                <Label htmlFor='timeLimit'>{tq('upsert.form.timeLimit')}</Label>
                 <Input
                   id='timeLimit'
                   type='number'
@@ -158,7 +168,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                 />
               </div>
               <div className='space-y-1'>
-                <Label htmlFor='duration'>Duration (days)</Label>
+                <Label htmlFor='duration'>{tq('upsert.form.duration')}</Label>
                 <Input
                   id='duration'
                   type='number'
@@ -172,7 +182,11 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
             <div className='mt-6 border-t pt-4'>
               <Button onClick={handleSaveQuiz} className='w-full bg-blue-400' disabled={isSavingQuiz}>
                 <Save className='mr-2 h-4 w-4' />
-                {isSavingQuiz ? 'Saving...' : quizId ? 'Update Quiz Info' : 'Create Quiz'}
+                {isSavingQuiz
+                  ? tq('upsert.form.saving')
+                  : quizId
+                    ? tq('upsert.form.updateQuizInfo')
+                    : tq('upsert.create')}
               </Button>
             </div>
             <Separator />
@@ -181,7 +195,9 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
             {quizId && (
               <div>
                 <div className='mb-3 flex items-center justify-between'>
-                  <Label>Questions ({quiz.totalQuestions})</Label>
+                  <Label>
+                    {tq('upsert.form.question.question')} ({quiz.totalQuestions})
+                  </Label>
                   <Button
                     variant='ghost'
                     size='sm'
@@ -207,7 +223,9 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                             : 'border-border hover:border-primary/50 hover:bg-muted bg-slate-50'
                         )}
                       >
-                        <div className='text-sm font-medium'>Question {index + 1}</div>
+                        <div className='text-sm font-medium'>
+                          {tq('upsert.form.question.question')} {index + 1}
+                        </div>
                         <div className='text-muted-foreground mt-1 text-xs whitespace-pre-line'>
                           {question.content || 'Empty question'}
                         </div>

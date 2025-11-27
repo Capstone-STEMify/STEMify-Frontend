@@ -66,3 +66,15 @@ export type QuestionAttemptQuery = {
   questionId: number
   answerIds: number[]
 }
+
+export type QuizImportResponse = {
+  totalRows: number
+  successCount: number
+  failureCount: number
+  errors: {
+    rowNumber: number
+    field: string
+    errorMessage: string
+    rowData: string
+  }[]
+}

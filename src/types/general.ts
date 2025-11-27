@@ -39,6 +39,7 @@ export type ModalType =
   | 'updateClassroomOrganization'
   | 'upsertEmulator'
   | 'upsertEmulator'
+  | 'createAssignmentInfo'
 
   // detail
   | 'lessonDetail'
@@ -55,6 +56,9 @@ export type ModalType =
   | 'upsertAssembly'
   | 'quizAI'
   | 'addPeople'
+  | 'importQuiz'
+  | 'sectionAI'
+  | 'importAssignment'
 
   // sheet
   | 'upsertContact'

@@ -100,6 +100,14 @@
     },
     "uploadCSV": {
       "required": "Hãy tải lên một tệp CSV"
+    },
+    "assignment": {
+      "title": "Tiêu đề là bắt buộc và phải có ít nhất {length} ký tự",
+      "totalScore": "Tổng điểm phải là một số dương",
+      "passingScore": "Điểm đạt phải là một số dương và không được vượt quá tổng điểm",
+      "durationDays": "Thời gian làm bài phải là một số dương",
+      "cooldownHours": "Thời gian chờ giữa các lần làm bài phải là một số không âm",
+      "questionsMin": "Phải có ít nhất {min} câu hỏi trong bài tập"
     }
   }
 }

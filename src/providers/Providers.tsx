@@ -6,6 +6,7 @@ import { Toaster } from 'sonner'
 import StoreProvider from '@/providers/StoreProvider'
 import { ModalProvider } from '@/providers/ModalProvider'
 import { Session } from 'next-auth'
+import ChatAgent from '@/features/chat/ChatAgent'
 
 export default function Providers({
   children,
@@ -20,7 +21,7 @@ export default function Providers({
         <AuthSessionSync />
         <ModalProvider>
           {children}
-          {/* <ChatAgent /> */}
+          <ChatAgent />
         </ModalProvider>
         <Toaster />
       </StoreProvider>

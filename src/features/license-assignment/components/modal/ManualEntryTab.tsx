@@ -83,12 +83,14 @@ export default function ManualEntryTab({
   }
 
   const handleSubmit = async () => {
+    const inviteUserItems = emailList.map((email) => ({
+      email: email,
+      role: type,
+      subscription_order_id: String(organizationSubscriptionOrderId) ?? String(organizationSubscriptionId)
+    }))
     await createLicenseAssignmentBulk({
-      body: emailList.map((email) => ({
-        organizationSubscriptionOrderId: organizationSubscriptionOrderId ?? Number(organizationSubscriptionId),
-        userEmail: email,
-        type: type
-      }))
+      organization_id: String(subscriptionId),
+      users: inviteUserItems
     }).unwrap()
 
     toast.success(to('uploadSuccess'))

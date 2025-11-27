@@ -24,13 +24,29 @@ import { useTranslations } from 'next-intl'
 interface SubmissionReviewDialogProps {
   submission: Submission
   studentAssignmentId: number | null
+  onSuccess?: () => void
+  onClose?: () => void
 }
 
-export function SubmissionReviewDialog({ submission, studentAssignmentId }: SubmissionReviewDialogProps) {
+export function SubmissionReviewDialog({ submission, studentAssignmentId, onSuccess, onClose }: SubmissionReviewDialogProps) {
   const { closeModal } = useModal()
 
   const t = useTranslations('assignment.teacher')
   const tc = useTranslations('common')
+
+  // Helper function to translate submission status
+  const getStatusTranslation = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      'Passed': 'modal.subStatus.passed',
+      'Failed': 'modal.subStatus.failed',
+      'Not Submitted': 'modal.subStatus.notSubmitted',
+      'Submitted': 'modal.subStatus.submitted',
+      'Pending': 'modal.subStatus.pending',
+      'UnderReview': 'modal.subStatus.underReview',
+      'Graded': 'modal.subStatus.graded'
+    }
+    return t(statusMap[status] || 'modal.subStatus.pending')
+  }
 
   const {
     data: detailResponse,
@@ -42,10 +58,13 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
 
   const [gradeAssignment, { isLoading: isGrading }] = useGradeAssignmentAttemptMutation()
 
-  const [scores, setScores] = useState<Record<number, Record<number, number | null>>>({})
+    const [scores, setScores] = useState<Record<number, Record<number, number | null>>>({})
   const [feedbackText, setFeedbackText] = useState('')
 
-  const attemptData = detailResponse?.data ? detailResponse.data.attempts[0] : submission.attempts[0]
+  const attemptData = detailResponse?.data 
+    ? detailResponse.data.attempts[detailResponse.data.attempts.length - 1]
+    : submission.attempts[submission.attempts.length - 1]
+  
   const isReviewed = submission.status === 'Passed' || submission.status === 'Failed' || submission.status === 'Graded'
   const totalScore = attemptData ? attemptData.totalScore : submission.point
   const feedback = attemptData ? attemptData.feedback : submission.comment
@@ -55,6 +74,30 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       setFeedbackText(feedback)
     }
   }, [feedback])
+
+  useEffect(() => {
+    if (!attemptData || !attemptData.questionAttempts) return
+
+    const initialScores: Record<number, Record<number, number | null>> = {}
+
+    attemptData.questionAttempts.forEach((qAttempt) => {
+      initialScores[qAttempt.id] = {}
+      qAttempt.rubricScore.forEach((criterion) => {
+        initialScores[qAttempt.id][criterion.rubricCriterionId] =
+          (criterion as any).currentPoints ?? null
+      })
+    })
+
+    setScores(initialScores)
+  }, [attemptData?.id])
+
+  useEffect(() => {
+    if (!attemptData?.feedback) {
+      setFeedbackText('')
+    } else {
+      setFeedbackText(attemptData.feedback)
+    }
+  }, [attemptData?.id])
 
   const handleScoreChange = (qAttemptId: number, criterionId: number, points: string) => {
     if (points === '') {
@@ -115,7 +158,10 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       }).unwrap()
 
       toast.success('Review submitted successfully!')
+      // close both global modal (if used) and parent-controlled dialog
       closeModal()
+      onClose?.()
+      onSuccess?.()
     } catch (err) {
       toast.error('Failed to submit review.')
       console.error(err)
@@ -164,7 +210,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
           <div>
             <span className='text-sm text-gray-500'>{t('modal.status')}</span>
             <div>
-              <Badge className={getStatusBadgeClass(submission.status)}>{submission.status}</Badge>
+              <Badge className={getStatusBadgeClass(submission.status)}>{getStatusTranslation(submission.status)}</Badge>
             </div>
           </div>
         </div>
@@ -286,7 +332,14 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
                   />
                 </div>
                 <div className='mt-4 flex justify-end gap-2'>
-                  <Button variant='outline' disabled={isGrading} onAbort={closeModal}>
+                  <Button
+                    variant='outline'
+                    disabled={isGrading}
+                    onClick={() => {
+                      closeModal()
+                      onClose?.()
+                    }}
+                  >
                     {tc('button.cancel')}
                   </Button>
                   <Button onClick={handleSubmitReview} disabled={isGrading}>

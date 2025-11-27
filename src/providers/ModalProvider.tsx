@@ -39,6 +39,10 @@ import UpsertOrganizationModal from '@/features/organization/components/UpsertOr
 import UpdateSubsctiptionSheet from '@/features/subscription/components/upsert/UpdateSubsctiptionSheet'
 import UpdateClassroomOrganizationModal from '@/features/classroom/components/upsert/UpdateClassroomOrganizationModal'
 import { UpsertEmulator } from '@/features/creator-3d/components/creator3d/ExportDialog'
+import QuizCSVUploadModal from '@/features/resource/quiz/components/modal/QuizCSVUploadModal'
+import SectionAIModal from '@/features/chat/components/SectionAIModal'
+import AssignmentCSVUploadModal from '@/features/assignment/components/detail/modal/AssignmentCSVUploadModal'
+import CreateAssignmentInfoModal from '@/features/assignment/components/upsert/CreateAssignmentInfoModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -92,6 +96,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertClassroom' && <UpsertClassroomModal {...modalProps} />}
       {modalType === 'upsertOrganization' && <UpsertOrganizationModal {...modalProps} />}
       {modalType === 'upsertEmulator' && <UpsertEmulator {...modalProps} />}
+      {modalType === 'createAssignmentInfo' && <CreateAssignmentInfoModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}
@@ -107,6 +112,9 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'selectComponentListModal' && <SelectComponentListModal {...modalProps} />}
       {modalType === 'quizAI' && <QuizAIModal {...modalProps} />}
       {modalType === 'addPeople' && <AddPeopleModal {...modalProps} />}
+      {modalType === 'importQuiz' && <QuizCSVUploadModal {...modalProps} />}
+      {modalType === 'sectionAI' && <SectionAIModal {...modalProps} />}
+      {modalType === 'importAssignment' && <AssignmentCSVUploadModal {...modalProps} />}
 
       {/* sheet */}
       {modalType === 'upsertContact' && <ContactDetailSheet {...modalProps} />}

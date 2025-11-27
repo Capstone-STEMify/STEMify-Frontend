@@ -32,7 +32,6 @@ type LessonContentProps = {
 
 export default function LessonContent({ token, lessonId, sectionStatus, enrollmentId }: LessonContentProps) {
   const sectionId = useAppSelector((state) => state.lessonDetail.selectedSectionId)
-  console.log('selectedSectionId: ', sectionId)
   const dispatch = useAppDispatch()
 
   const t = useTranslations('LessonDetails')
@@ -81,9 +80,6 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
   }
 
   const lastItem = content.data.items[content.data.items.length - 1]
-
-  console.log('id', currentSectionProgress?.studentAssignmentId)
-  console.log({ lastItem })
 
   if (lastItem.contentType === ContentType.QUIZ) {
     return <QuizViewer quiz={lastItem} studentQuizId={currentSectionProgress?.studentQuizId} />

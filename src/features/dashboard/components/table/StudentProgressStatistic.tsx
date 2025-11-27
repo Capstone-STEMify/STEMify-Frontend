@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Download, MoreVertical, CheckCircle2, Circle, Clock, ChevronDown } from 'lucide-react'
+import { Download, MoreVertical, CheckCircle2, Circle, Clock, ChevronDown, Bot } from 'lucide-react'
 
 import { Button } from '@/components/shadcn/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
@@ -12,6 +12,7 @@ import { useGetClassroomByIdQuery, useGetClassroomStudentProgressQuery } from '@
 import { StudentProgressItem } from '@/features/classroom/types/classroom.type'
 import { useTranslations } from 'next-intl'
 import Loading from 'app/[locale]/loading'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
 
 interface CourseType {
   id: number
@@ -121,9 +122,17 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
           <Button variant='outline' size='icon'>
             <Download className='h-4 w-4' />
           </Button>
-          <Button variant='outline' size='icon'>
-            <MoreVertical className='h-4 w-4' />
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button variant='outline' size='icon'>
+            <Bot className='h-4 w-4' />
           </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{t('overview.tooltip')}</p>
+      </TooltipContent>
+    </Tooltip>
+          
         </div>
       </header>
 

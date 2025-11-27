@@ -4,6 +4,11 @@
       "placeholder": "Tìm kiếm...",
       "noResults": "Không tìm thấy kết quả."
     },
+    "select": {
+      "placeholder": "Chọn một tùy chọn",
+      "selected": "Đã chọn",
+      "noOptions": "Không có tùy chọn nào."
+    },
     "button": {
       "create": "Tạo Mới",
       "update": "Cập Nhật",
@@ -94,7 +99,9 @@
       "retry": "Thử Lại",
       "viewSub": "Xem Bài Nộp",
       "seeFeedback": "Xem Phản Hồi",
-      "close": "Đóng"
+      "close": "Đóng",
+      "addQuestion": "Thêm Câu Hỏi",
+      "addCriterion": "Thêm Tiêu Chí"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

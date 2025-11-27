@@ -20,7 +20,9 @@
       "addToCurriculum": "Đã thêm vào chương trình học thành công!",
       "removeItemFromCart": "Đã xóa sản phẩm khỏi giỏ hàng!",
       "clearCart": "Đã xóa giỏ hàng!",
-      "addToCart": "Đã thêm sản phẩm vào giỏ hàng!"
+      "addToCart": "Đã thêm sản phẩm vào giỏ hàng!",
+      "uploadCSV": "Đã tải CSV thành công",
+      "reorder": "Đã sắp xếp lại thành công"
     },
     "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "errorSpecific": {

@@ -200,18 +200,6 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
             onConfirm: () => handleRemoveCourse([original.id])
           })
         }
-      },
-      {
-        separatorBefore: true,
-        label: tc('button.approve'),
-        hidden: ({ original }) => original.status !== CourseStatus.PENDING && original.status !== CourseStatus.DRAFT,
-        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.PUBLISHED)
-      },
-      {
-        label: tc('button.reject'),
-        danger: true,
-        hidden: ({ original }) => original.status !== CourseStatus.PENDING && original.status !== CourseStatus.DRAFT,
-        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, CourseStatus.REJECTED)
       }
     ])
   ]

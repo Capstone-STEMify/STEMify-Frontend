@@ -238,16 +238,13 @@ export default function WorkspaceTree() {
             onClick={() => handleAddAction('highlight')}
             className='rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'
           >
-            (highlight)
+            Group component
           </button>
           <button
             onClick={() => handleAddAction('transform_arm')}
             className='rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'
           >
-            (transform_arm)
-          </button>
-          <button onClick={handleExport} className='rounded bg-blue-100 px-2 py-1 text-xs hover:bg-blue-200'>
-            Export JSON
+            Transform connector
           </button>
         </div>
       </div>

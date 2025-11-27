@@ -76,25 +76,25 @@
       "title": "Danh sách Mô hình 3D"
     },
     "button": {
-      "create": "Workspace Mới"
+      "create": "Tạo mô hình 3D"
     },
     "upsert": {
-      "createTitle": "Tạo Workspace 3D Mới",
-      "updateTitle": "Cập nhật Workspace 3D",
-      "createDescription": "Điền thông tin để tạo workspace 3D mới",
-      "updateDescription": "Cập nhật thông tin workspace 3D",
-      "nameLabel": "Tên Workspace",
-      "namePlaceholder": "Nhập tên workspace",
+      "createTitle": "Tạo mô hình 3D Mới",
+      "updateTitle": "Cập nhật mô hình 3D",
+      "createDescription": "Điền thông tin để tạo mô hình 3D mới",
+      "updateDescription": "Cập nhật thông tin mô hình 3D",
+      "nameLabel": "Tên mô hình",
+      "namePlaceholder": "Nhập tên mô hình",
       "descriptionLabel": "Mô tả",
-      "descriptionPlaceholder": "Nhập mô tả workspace",
+      "descriptionPlaceholder": "Nhập mô tả mô hình",
       "visibilityLabel": "Chế độ hiển thị",
       "publicOption": "Công khai",
       "privateOption": "Riêng tư",
       "thumbnailLabel": "Ảnh đại diện",
       "thumbnailPlaceholder": "Chọn ảnh đại diện",
       "thumbnailSize": "kích thước tối đa 10MB",
-      "createButton": "Tạo Workspace",
-      "updateButton": "Cập nhật Workspace",
+      "createButton": "Tạo mô hình",
+      "updateButton": "Cập nhật mô hình",
       "cancelButton": "Hủy bỏ"
     }
   }

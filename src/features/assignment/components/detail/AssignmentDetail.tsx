@@ -19,7 +19,8 @@ export default function AssignmentDetail() {
   const {
     data: assignmentStatisticsResponse,
     isLoading,
-    error
+    error,
+    refetch
   } = useGetAssignmentDetailByIdQuery(
     { classroomId: Number(classroomId), assignmentId: Number(assignmentId) },
     {
@@ -56,10 +57,10 @@ export default function AssignmentDetail() {
           </TabsList>
 
           <TabsContent value='reviewed' className='mt-6'>
-            <AssignmentTable data={assignmentData} filter='reviewed' />
+            <AssignmentTable data={assignmentData} filter='reviewed' onRefresh={() => refetch?.()} />
           </TabsContent>
           <TabsContent value='not-reviewed' className='mt-6'>
-            <AssignmentTable data={assignmentData} filter='not-reviewed' />
+            <AssignmentTable data={assignmentData} filter='not-reviewed' onRefresh={() => refetch?.()} />
           </TabsContent>
         </Tabs>
       </div>

@@ -11,7 +11,16 @@
         "status": "Trạng thái",
         "grade": "Điểm",
         "date": "Ngày nộp",
-        "noSubmission": "Không tìm thấy bài nộp."
+        "noSubmission": "Không tìm thấy bài nộp.",
+        "subStatus": {
+          "notSubmitted": "Chưa nộp",
+          "submitted": "Đã nộp",
+          "pending": "Đang chờ",
+          "underReview": "Đang xem xét",
+          "passed": "Đạt",
+          "failed": "Không đạt",
+          "graded": "Đã chấm điểm"
+        }
       },
       "modal": {
         "student": "Học sinh",
@@ -28,7 +37,16 @@
         "total": "Tổng điểm cho câu hỏi",
         "comment": "Nhận xét",
         "commentSubTitle": "Các nhận xét dành cho học viên chỉ được hiển thị với học viên đó và người đã để lại nhận xét.",
-        "commentPlaceholder": "Chia sẻ suy nghĩ của bạn..."
+        "commentPlaceholder": "Chia sẻ suy nghĩ của bạn...",
+        "subStatus": {
+          "notSubmitted": "Chưa nộp",
+          "submitted": "Đã nộp",
+          "pending": "Đang chờ",
+          "underReview": "Đang xem xét",
+          "passed": "Đạt",
+          "failed": "Không đạt",
+          "graded": "Đã chấm điểm"
+        }
       }
     },
     "student": {
@@ -46,6 +64,7 @@
         "left": "còn",
         "allow": "lượt cho phép",
         "pending": "Đang chờ đánh giá",
+        "nextAttempt": "Lượt làm tiếp theo có vào lúc",
         "description": "Bài nộp của bạn từ {date} hiện đang được xem xét.",
         "title": "Phản hồi của giáo viên"
       },
@@ -64,6 +83,45 @@
         "projectTitle": "Tiêu đề dự án",
         "placeholder": "Nhập câu trả lời của bạn..."
       }
+    },
+    "upsert": {
+      "create": "Tạo bài thực hành",
+      "createDescription": "Tạo bài thực hành mới bằng cách điền các thông tin dưới đây.",
+      "update": "Cập nhật bài thực hành",
+      "updateDescription": "Cập nhật thông tin bài thực hành bằng cách chỉnh sửa các trường dưới đây.",
+      "title": "Tiêu đề bài thực hành",
+      "titlePlaceholder": "Nhập tiêu đề bài thực hành",
+      "passingScore": "Điểm đạt",
+      "durationDays": "Hạn nộp (tính từ ngày đăng ký)",
+      "cooldownHours": "Giờ chờ",
+      "summary": "Tóm tắt",
+      "totalPoints": "Tổng điểm",
+      "duration": "Thời lượng",
+      "days": "ngày",
+      "question": {
+        "question": "Câu hỏi",
+        "questionType": "Loại câu hỏi",
+        "text": "Văn bản",
+        "content": "Nội dung câu hỏi",
+        "contentPlaceholder": "Nhập nội dung câu hỏi",
+        "questionOrder": "Thứ tự câu hỏi",
+        "questionOrderSubtitle": "Kéo để sắp xếp lại câu hỏi",
+        "emptyQuestion": "Câu hỏi trống",
+        "point": "Điểm",
+        "rubric": {
+          "rubric": "Tiêu chí đánh giá",
+          "noData": "Chưa có tiêu chí nào được thêm. Nhấn \"Thêm tiêu chí\" để bắt đầu.",
+          "criterionName": "Tiêu chí",
+          "maxPoints": "Điểm tối đa"
+        }
+      }
+    },
+    "import": {
+      "title": "Nhập bài thực hành từ CSV",
+      "onSubmit": "Nhập bài thực hành",
+      "headerTitle": "Nhập bài thực hành từ tệp CSV",
+      "headerDescription": "Tải lên tệp CSV được định dạng đúng để nhập câu hỏi và chi tiết bài thực hành một cách nhanh chóng.",
+      "templateFileName": "assignment_template.csv"
     }
   }
 }
