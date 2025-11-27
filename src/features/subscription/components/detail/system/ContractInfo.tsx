@@ -2,14 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Skeleton } from '@/components/shadcn/skeleton'
-import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { useGetContractByIdQuery } from '@/features/contract/api/contractApi'
-import { getStatusBadgeClass } from '@/utils/badgeColor'
-import Image from 'next/image'
 import Link from 'next/link'
-import { Calendar, FileText, Building2 } from 'lucide-react'
-import { formatDate, formatDateV2, useStatusTranslation } from '@/utils/index'
+import { FileText } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 
 type ContractInfoProps = {
@@ -17,7 +13,6 @@ type ContractInfoProps = {
 }
 
 export default function ContractInfo({ contractId }: ContractInfoProps) {
-  const translateStatus = useStatusTranslation()
   const locale = useLocale()
   const to = useTranslations('organization.detail')
 
@@ -73,15 +68,6 @@ export default function ContractInfo({ contractId }: ContractInfoProps) {
             <p className='line-clamp-2'>{contract.description}</p>
           </div>
         )}
-
-        {/* Created date */}
-        <div className='flex justify-between'>
-          <span className='flex gap-1 text-sm font-medium'>
-            <Calendar size={14} />
-            {to('contract.createdAt')}
-          </span>
-          <span>{formatDate(contract.createdAt, { locale: locale as 'en' | 'vi' })}</span>
-        </div>
 
         {/* View file (if available) */}
         {contract.fileUrl ? (
