@@ -25,7 +25,10 @@ interface UploadedFile {
 export default function UploadCSVModal({ organizationSubscriptionOrderId }: UploadCSVModalProps) {
   const tc = useTranslations('common')
   const to = useTranslations('organization.license')
-  const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
+  const { organizationId } = useParams()
+  const organizationIdFromStore = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
+
+  const finalOrganizationId = organizationId || organizationIdFromStore
 
   const { closeModal } = useModal()
   const [activeTab, setActiveTab] = useState('csv')
@@ -58,9 +61,9 @@ export default function UploadCSVModal({ organizationSubscriptionOrderId }: Uplo
         const csvBase64 = (event.target?.result as string).split(',')[1]
 
         const payload = {
-          organization_id: String(organizationId),
+          organization_id: String(finalOrganizationId),
           body: {
-            organization_id: String(organizationId),
+            organization_id: String(finalOrganizationId),
             csv_data: csvBase64,
             file_name: uploadedFile.file.name,
             subscription_order_id: String(organizationSubscriptionOrderId)

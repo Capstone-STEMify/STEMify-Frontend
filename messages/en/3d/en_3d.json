@@ -76,7 +76,7 @@
       "title": "3D Model List"
     },
     "button": {
-      "create": "New Workspace"
+      "create": "Create 3D Model"
     },
     "upsert": {
       "createTitle": "Create New 3D Model",
