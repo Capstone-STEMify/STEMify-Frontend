@@ -94,7 +94,7 @@ export function CameraOverlay({ inline = false, onClose, onCapture, onPredict, c
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
     const img = canvas.toDataURL('image/jpeg', 0.8)
     onCapture?.(img)
-    setCapturedImages((prev) => [...prev.slice(-9), img])
+    setCapturedImages((prev) => [...prev, img])
   }
 
   return (
@@ -119,7 +119,7 @@ export function CameraOverlay({ inline = false, onClose, onCapture, onPredict, c
         {cameraStatus}
         {currentClass && (
           <span className={cn('ml-2 font-medium', inline ? 'text-blue-600' : 'text-blue-300')}>
-            (Đang chụp cho: {currentClass})
+            (Đang chụp cho: {currentClass} | Số lượng ảnh: {capturedImages.length})
           </span>
         )}
       </div>
@@ -149,7 +149,7 @@ export function CameraOverlay({ inline = false, onClose, onCapture, onPredict, c
 
       {/* Captured images preview */}
       {capturedImages.length > 0 && !inline && (
-        <div className='absolute bottom-5 left-5 flex max-w-[200px] gap-2.5 overflow-x-auto'>
+        <div className="absolute bottom-5 left-0 right-0 mx-auto w-full px-5 flex gap-2.5 overflow-x-auto">
           {capturedImages.map((imageSrc, index) => (
             <img
               key={index}
@@ -161,6 +161,7 @@ export function CameraOverlay({ inline = false, onClose, onCapture, onPredict, c
           ))}
         </div>
       )}
+      
     </div>
   )
 }
