@@ -8,6 +8,7 @@ export type Assignment = {
   totalScore: number
   passingScore: number
   durationDays: number
+  cooldownHours: number
   questions: AssignmentQuestion[]
 }
 
@@ -39,6 +40,7 @@ export type CreateAssignmentDto = {
   title: string
   passingScore: number
   durationDays: number
+  cooldownHours: number
   questions: CreateAssignmentQuestionDto[]
 }
 

@@ -1,18 +1,18 @@
 'use client'
 import React from 'react'
-import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import GenericCSVUploadModal from '@/components/shared/csv/GenericCSVUploadModal'
-import { useGetQuizCSVQuery, useImportQuizCSVMutation } from '@/features/resource/quiz/api/quizApi'
+import { useGetAssignmentCSVQuery, useImportAssignmentCSVMutation } from '@/features/assignment/api/assignmentApi'
+import { useParams } from 'next/navigation'
 
-export default function QuizCSVUploadModal() {
-  const tq = useTranslations('quiz')
+export default function AssignmentCSVUploadModal() {
+  const ta = useTranslations('assignment')
   const tt = useTranslations('toast')
-  const { quizId } = useParams()
-  const { data } = useGetQuizCSVQuery()
-  const [importQuizCSV, { isLoading }] = useImportQuizCSVMutation()
-  const quizTemplate = data?.data
-  const decodeCSV = atob(quizTemplate?.csvFile || '')
+  const { assignmentId } = useParams()
+  const { data } = useGetAssignmentCSVQuery()
+  const [importAssignmentCSV, { isLoading }] = useImportAssignmentCSVMutation()
+  const assignmentTemplate = data?.data
+  const decodeCSV = atob(assignmentTemplate?.csvFile || '')
 
   const handleSubmit = async (file: File) => {
     const reader = new FileReader()
@@ -22,7 +22,7 @@ export default function QuizCSVUploadModal() {
         try {
           const csvBase64 = (event.target?.result as string).split(',')[1]
 
-          await importQuizCSV({ csvFile: csvBase64, quizId: Number(quizId) }).unwrap()
+          await importAssignmentCSV({ csvFile: csvBase64, assignmentId: Number(assignmentId) }).unwrap()
           resolve()
         } catch (error) {
           reject(error)
@@ -39,15 +39,15 @@ export default function QuizCSVUploadModal() {
 
   return (
     <GenericCSVUploadModal
-      title={tq('import.title')}
+      title={ta('import.title')}
       onSubmit={handleSubmit}
-      headerTitle={tq('import.headerTitle')}
-      headerDescription={tq('import.headerDescription')}
-      // isLoading={isLoading}
+      headerTitle={ta('import.headerTitle')}
+      headerDescription={ta('import.headerDescription')}
+      isLoading={isLoading}
       successMessage={tt('successMessage.uploadCSV')}
       errorMessage={tt('errorMessage')}
       templateData={decodeCSV}
-      templateFileName='quiz_template.csv'
+      templateFileName='assignment_template.csv'
     />
   )
 }

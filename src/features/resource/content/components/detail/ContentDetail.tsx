@@ -36,7 +36,7 @@ export default function ContentDetail({ item, sectionId }: ContentDetailProps) {
 
   const handleCreateAssignment = () => {
     closeModal()
-    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/assignment`)
+    openModal('createAssignmentInfo', { sectionId: Number(sectionId) })
   }
 
   // Nếu không có data

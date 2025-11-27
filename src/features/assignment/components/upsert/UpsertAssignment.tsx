@@ -4,14 +4,12 @@ import React, { useState } from 'react'
 import { toast } from 'sonner'
 import z from 'zod'
 import { useAppForm } from '@/components/shared/form/items'
-import { Assignment, AssignmentQuestionType, CreateAssignmentDto } from '@/features/assignment/types/assignment.type'
+import { AssignmentQuestionType, CreateAssignmentDto } from '@/features/assignment/types/assignment.type'
 import { AssignmentSidebar } from '@/features/assignment/components/upsert/UpsertAssignmentSidebar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Label } from '@/components/shadcn/label'
 import { Button } from '@/components/shadcn/button'
-import { Input } from '@/components/shadcn/input'
-import { Textarea } from '@/components/shadcn/textarea'
-import { Plus, Trash2, GripVertical } from 'lucide-react'
+import { Plus, Sparkles, Trash2 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import {
   DndContext,
@@ -22,7 +20,7 @@ import {
   useSensors,
   DragEndEvent
 } from '@dnd-kit/core'
-import { arrayMove, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import {
   useCreateAssignmentMutation,
   useGetAssignmentByIdQuery,
@@ -31,12 +29,16 @@ import {
 import { useParams, useRouter } from 'next/navigation'
 import BackButton from '@/components/shared/button/BackButton'
 import { useStore } from '@tanstack/react-store'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { use } from 'matter'
+import { useModal } from '@/providers/ModalProvider'
 
 const defaultFormValues: CreateAssignmentDto = {
   sectionId: 1,
   title: '',
   passingScore: 80,
+  cooldownHours: 1,
   durationDays: 3,
   questions: [
     {
@@ -54,36 +56,16 @@ type UpsertAssignmentProps = {
 }
 
 export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
+  const ta = useTranslations('assignment')
+  const tc = useTranslations('common')
+  const tt = useTranslations('toast')
+
+  const { openModal } = useModal()
+
   const { lessonId, sectionId, assignmentId } = useParams()
   const isEditing = !!assignmentId
   const router = useRouter()
   const locale = useLocale()
-  // ✅ Force re-render state
-  const [forceUpdate, setForceUpdate] = useState(0)
-
-  // ✅ Schema validation for entire form including questions
-  const assignmentSchema = z.object({
-    sectionId: z.number(),
-    title: z.string().min(1, 'Assignment title is required'),
-    passingScore: z.number().min(0, 'Must be at least 0').max(100, 'Must be at most 100'),
-    durationDays: z.number().min(1, 'Must be at least 1 day'),
-    questions: z
-      .array(
-        z.object({
-          type: z.nativeEnum(AssignmentQuestionType),
-          orderIndex: z.number(),
-          points: z.number().min(1, 'Points must be at least 1'),
-          content: z.string().min(1, 'Question content is required'),
-          rubricCriterion: z.array(
-            z.object({
-              criterionName: z.string().min(1, 'Criterion name is required'),
-              maxPoints: z.number().min(1, 'Max points must be at least 1')
-            })
-          )
-        })
-      )
-      .min(1, 'At least one question is required')
-  })
 
   const { data: assignmentData, isLoading } = useGetAssignmentByIdQuery(Number(assignmentId), { skip: !isEditing })
   const [createAssignment, { isLoading: isCreating }] = useCreateAssignmentMutation()
@@ -98,6 +80,7 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
         title: a.title,
         passingScore: a.passingScore,
         durationDays: a.durationDays,
+        cooldownHours: a.cooldownHours,
         questions: a.questions.map((q) => ({
           type: q.type,
           orderIndex: q.orderIndex,
@@ -113,10 +96,8 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     return { ...defaultFormValues, sectionId: Number(sectionId) }
   }
 
-  // ✅ Form with correct initial values
   const form = useAppForm({
     defaultValues: getInitialValues(),
-    // validators: { onChange: assignmentSchema as any },
     onSubmit: async ({ value }) => {
       try {
         if (isEditing) {
@@ -145,12 +126,11 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     }
   })
 
-  // ✅ Subscribe to form values using useStore - ALWAYS call this hook
   const questions = useStore(form.store, (state) => state.values.questions)
   const passingScore = useStore(form.store, (state) => state.values.passingScore)
   const durationDays = useStore(form.store, (state) => state.values.durationDays)
+  const cooldownHours = useStore(form.store, (state) => state.values.cooldownHours)
 
-  // ✅ Drag and drop sensors - ALWAYS call these hooks
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -158,7 +138,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     })
   )
 
-  // ✅ Calculate derived values
   const totalScore = questions.reduce(
     (sum, q) => sum + q.rubricCriterion.reduce((acc, curr) => acc + (curr.maxPoints || 0), 0),
     0
@@ -166,14 +145,10 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
 
   const totalCriteria = questions.reduce((sum, q) => sum + q.rubricCriterion.length, 0)
 
-  // ✅ Wait for data to load before rendering form
   if (isEditing && isLoading) {
     return (
       <div className='flex min-h-screen items-center justify-center bg-gray-50'>
-        <div className='text-center'>
-          <div className='mx-auto h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600'></div>
-          <p className='mt-4 text-gray-600'>Loading assignment...</p>
-        </div>
+        <LoadingComponent />
       </div>
     )
   }
@@ -190,7 +165,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     }
 
     form.setFieldValue('questions', [...currentQuestions, newQuestion])
-    console.log('Added question, new length:', currentQuestions.length + 1)
   }
 
   const removeQuestion = (index: number) => {
@@ -227,7 +201,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     })
 
     form.setFieldValue('questions', updatedQuestions)
-    console.log('Added criterion to question:', questionIndex)
   }
 
   const removeRubricCriterion = (questionIndex: number, criterionIndex: number) => {
@@ -243,7 +216,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
     })
 
     form.setFieldValue('questions', updatedQuestions)
-    console.log('Removed criterion:', criterionIndex, 'from question:', questionIndex)
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -260,16 +232,8 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
       }))
 
       form.setFieldValue('questions', reorderedQuestions)
-      toast.success('Questions reordered successfully')
+      toast.success(tt('successMessage.reorder'))
     }
-  }
-
-  const handleSaveDraft = () => {
-    toast.info('Save as draft functionality coming soon')
-  }
-
-  const handlePreview = () => {
-    toast.info('Preview functionality coming soon')
   }
 
   return (
@@ -282,10 +246,18 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
               <div>
                 <div className='flex gap-4'>
                   <BackButton />
-                  <h1 className='text-3xl font-semibold'>{isEditing ? 'Edit Assignment' : 'Create Assignment'}</h1>
+                  <div className='flex gap-5'>
+                    <h1 className='font-semibold'>{isEditing ? ta('upsert.update') : ta('upsert.create')}</h1>
+                    <button
+                      className='text-blue-500 hover:cursor-pointer'
+                      onClick={() => openModal('importAssignment')}
+                    >
+                      <Sparkles />
+                    </button>
+                  </div>
                 </div>
                 <p className='mt-1 text-gray-600'>
-                  Create and configure your assignment with questions and rubric criteria
+                  {isEditing ? ta('upsert.updateDescription') : ta('upsert.createDescription')}
                 </p>
               </div>
 
@@ -302,7 +274,7 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                     <form.AppField
                       name='title'
                       children={(field) => (
-                        <field.TextField label='Assignment Title' placeholder='Enter assignment title' />
+                        <field.TextField label={ta('upsert.title')} placeholder={ta('upsert.titlePlaceholder')} />
                       )}
                     />
 
@@ -312,7 +284,7 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                         children={(field) => (
                           <field.TextField
                             type='number'
-                            label='Passing Score (%)'
+                            label={ta('upsert.passingScore')}
                             placeholder='e.g. 80'
                             min={0}
                             max={100}
@@ -325,7 +297,7 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                         children={(field) => (
                           <field.TextField
                             type='number'
-                            label='Deadline (days after enrollment)'
+                            label={ta('upsert.durationDays')}
                             placeholder='e.g. 3'
                             min={1}
                           />
@@ -338,10 +310,10 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                 {/* Questions */}
                 <div className='space-y-4'>
                   <div className='flex items-center justify-between'>
-                    <h2 className='text-2xl font-semibold'>Questions</h2>
+                    <h2 className='text-2xl font-semibold'>{ta('upsert.question.question')}</h2>
                     <Button type='button' onClick={addQuestion} variant='outline' className='gap-2'>
                       <Plus className='h-4 w-4' />
-                      Add Question
+                      {tc('button.addQuestion')}
                     </Button>
                   </div>
                   {questions.map((question, questionIndex) => (
@@ -349,7 +321,9 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                       <CardHeader className='pt-4'>
                         <div className='flex items-start justify-between gap-4'>
                           <div className='flex flex-1 items-center gap-2'>
-                            <CardTitle className='text-lg'>Question {question.orderIndex}</CardTitle>
+                            <CardTitle className='text-lg'>
+                              {ta('upsert.question.question')} {question.orderIndex}
+                            </CardTitle>
                           </div>
                           <Button
                             type='button'
@@ -368,7 +342,7 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                         <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                           <div className='space-y-2'>
                             <Label htmlFor={`question-type-${questionIndex}`}>
-                              Question Type <span className='text-red-500'>*</span>
+                              {ta('upsert.question.questionType')} <span className='text-red-500'>*</span>
                             </Label>
                             <form.AppField name={`questions[${questionIndex}].type`}>
                               {(field) => (
@@ -380,7 +354,9 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                                     <SelectValue />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value={AssignmentQuestionType.TEXT}>Text</SelectItem>
+                                    <SelectItem value={AssignmentQuestionType.TEXT}>
+                                      {ta('upsert.question.text')}
+                                    </SelectItem>
                                     <SelectItem value={AssignmentQuestionType.FILE}>File</SelectItem>
                                   </SelectContent>
                                 </Select>
@@ -394,8 +370,8 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                           name={`questions[${questionIndex}].content`}
                           children={(field) => (
                             <field.TextAreaField
-                              label='Question Content'
-                              placeholder='Enter question content'
+                              label={ta('upsert.question.content')}
+                              placeholder={ta('upsert.question.contentPlaceholder')}
                               rows={4}
                               className='resize-none'
                             />
@@ -405,7 +381,7 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                         {/* Rubric Criteria */}
                         <div className='space-y-3 border-t pt-4'>
                           <div className='flex items-center justify-between'>
-                            <Label className='text-base font-semibold'>Rubric Criteria</Label>
+                            <Label className='text-base font-semibold'>{ta('upsert.question.rubric.rubric')}</Label>
                             <Button
                               type='button'
                               onClick={() => addRubricCriterion(questionIndex)}
@@ -414,14 +390,12 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                               className='gap-2'
                             >
                               <Plus className='h-3 w-3' />
-                              Add Criterion
+                              {tc('button.addCriterion')}
                             </Button>
                           </div>
 
                           {question.rubricCriterion.length === 0 && (
-                            <p className='text-sm text-gray-500 italic'>
-                              No rubric criteria added yet. Click "Add Criterion" to get started.
-                            </p>
+                            <p className='text-sm text-gray-500 italic'>{ta('upsert.question.rubric.noData')}</p>
                           )}
 
                           {question.rubricCriterion.map((criterion, criterionIndex) => (
@@ -434,7 +408,10 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                                   <form.AppField
                                     name={`questions[${questionIndex}].rubricCriterion[${criterionIndex}].criterionName`}
                                     children={(field) => (
-                                      <field.TextField label='Criterion Name' placeholder='e.g., Criteria 1' />
+                                      <field.TextField
+                                        label={ta('upsert.question.rubric.criterionName')}
+                                        placeholder='e.g., Criteria 1'
+                                      />
                                     )}
                                   />
                                 </div>
@@ -442,7 +419,12 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                                   <form.AppField
                                     name={`questions[${questionIndex}].rubricCriterion[${criterionIndex}].maxPoints`}
                                     children={(field) => (
-                                      <field.TextField type='number' label='Max Points' placeholder='e.g. 2' min={1} />
+                                      <field.TextField
+                                        type='number'
+                                        label={ta('upsert.question.rubric.maxPoints')}
+                                        placeholder='e.g. 2'
+                                        min={1}
+                                      />
                                     )}
                                   />
                                 </div>
@@ -467,11 +449,11 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                 {/* Form Actions */}
                 <div className='flex justify-end gap-3 border-t pt-4'>
                   <Button type='button' variant='outline' onClick={() => {}}>
-                    Cancel
+                    {tc('button.cancel')}
                   </Button>
                   <form.AppForm>
                     <form.SubmitButton loading={isCreating || isUpdating} className='cursor-pointer bg-blue-600'>
-                      {isEditing ? 'Update' : 'Create'} Assignment
+                      {isEditing ? tc('button.update') : tc('button.create')}
                     </form.SubmitButton>
                   </form.AppForm>
                 </div>
@@ -487,8 +469,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
                 totalCriteria={totalCriteria}
                 passingScore={passingScore}
                 durationDays={durationDays}
-                onSaveDraft={handleSaveDraft}
-                onPreview={handlePreview}
               />
             </div>
           </div>
