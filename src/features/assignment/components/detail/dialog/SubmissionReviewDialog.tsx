@@ -32,6 +32,20 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
   const t = useTranslations('assignment.teacher')
   const tc = useTranslations('common')
 
+  // Helper function to translate submission status
+  const getStatusTranslation = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      'Passed': 'modal.subStatus.passed',
+      'Failed': 'modal.subStatus.failed',
+      'Not Submitted': 'modal.subStatus.notSubmitted',
+      'Submitted': 'modal.subStatus.submitted',
+      'Pending': 'modal.subStatus.pending',
+      'UnderReview': 'modal.subStatus.underReview',
+      'Graded': 'modal.subStatus.graded'
+    }
+    return t(statusMap[status] || 'modal.subStatus.pending')
+  }
+
   const {
     data: detailResponse,
     isLoading,
@@ -55,6 +69,23 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       setFeedbackText(feedback)
     }
   }, [feedback])
+
+  useEffect(() => {
+    if (!attemptData || !attemptData.questionAttempts) return
+
+    const initialScores: Record<number, Record<number, number | null>> = {}
+
+    attemptData.questionAttempts.forEach((qAttempt) => {
+      initialScores[qAttempt.id] = {}
+      qAttempt.rubricScore.forEach((criterion) => {
+        // Use currentPoints from the API when present, otherwise null
+        initialScores[qAttempt.id][criterion.rubricCriterionId] =
+          (criterion as any).currentPoints ?? null
+      })
+    })
+
+    setScores(initialScores)
+  }, [attemptData])
 
   const handleScoreChange = (qAttemptId: number, criterionId: number, points: string) => {
     if (points === '') {
@@ -164,7 +195,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
           <div>
             <span className='text-sm text-gray-500'>{t('modal.status')}</span>
             <div>
-              <Badge className={getStatusBadgeClass(submission.status)}>{submission.status}</Badge>
+              <Badge className={getStatusBadgeClass(submission.status)}>{getStatusTranslation(submission.status)}</Badge>
             </div>
           </div>
         </div>

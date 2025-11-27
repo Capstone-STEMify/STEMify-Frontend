@@ -46,7 +46,8 @@ type UpsertPlanProps = {
 
 export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
   const tv = useTranslations('validation.plan')
-  const tp = useTranslations('plan.form')
+  const tp = useTranslations('plan')
+  const tt = useTranslations('toast')
 
   const isEditing = !!planId
   const { closeModal } = useModal()
@@ -102,9 +103,11 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         await createPlan(payload).unwrap()
       }
 
-      toast.success(` ${isEditing ? tp('form.successUpdate') : tp('form.successCreate')}`)
+      toast.success(
+        ` ${isEditing ? tt('successMessage.update', { title: payload.name }) : tt('successMessage.create', { title: payload.name })}`
+      )
       closeModal()
-       onSuccess?.()
+      onSuccess?.()
     }
   })
 
@@ -140,15 +143,17 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
     >
       <form.AppField
         name='name'
-        children={(field) => <field.TextField label={tp('name.label')} placeholder={tp('name.placeholder')} />}
+        children={(field) => (
+          <field.TextField label={tp('form.name.label')} placeholder={tp('form.name.placeholder')} />
+        )}
       />
 
       <form.AppField
         name='description'
         children={(field) => (
           <field.TextAreaField
-            label={tp('description.label')}
-            placeholder={tp('description.placeholder')}
+            label={tp('form.description.label')}
+            placeholder={tp('form.description.placeholder')}
             rows={3}
             className='resize-none'
           />
@@ -159,8 +164,8 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         name='accessSupportDetail'
         children={(field) => (
           <field.TextAreaField
-            label={tp('accessSupportDetail.label')}
-            placeholder={tp('accessSupportDetail.placeholder')}
+            label={tp('form.accessSupportDetail.label')}
+            placeholder={tp('form.accessSupportDetail.placeholder')}
             rows={3}
             className='resize-none'
           />
@@ -172,8 +177,8 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         children={(field) => (
           <field.TextField
             type='number'
-            label={tp('maxTeacherSeats.label')}
-            placeholder={tp('maxTeacherSeats.placeholder')}
+            label={tp('form.maxTeacherSeats.label')}
+            placeholder={tp('form.maxTeacherSeats.placeholder')}
           />
         )}
       />
@@ -182,8 +187,8 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
         children={(field) => (
           <field.TextField
             type='number'
-            label={tp('maxStudentSeats.label')}
-            placeholder={tp('maxStudentSeats.placeholder')}
+            label={tp('form.maxStudentSeats.label')}
+            placeholder={tp('form.maxStudentSeats.placeholder')}
           />
         )}
       />
@@ -192,8 +197,8 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
       <form.AppField name='curriculumIds'>
         {(field) => (
           <field.DropdownMultipleCheckboxField
-            label='Available Curriculums'
-            description='Select curriculums that will be available in this plan'
+            label={tp('form.availableCurriculums.label')}
+            description={tp('form.availableCurriculums.description')}
             options={
               curriculumData?.data?.items?.map((c) => ({
                 label: `${c.title} (${c.code})`,
@@ -210,12 +215,12 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
           <div>
             <field.TextField
               type='number'
-              label={tp('curriculumCount.label')}
-              placeholder={tp('curriculumCount.placeholder')}
+              label={tp('form.curriculumCount.label')}
+              placeholder={tp('form.curriculumCount.placeholder')}
               className='flex-1'
             />
             <p className='mt-1 text-sm text-gray-600'>
-              {tp('curriculumCount.required', { count: form.state.values.curriculumIds.length || 0 })}
+              {tp('form.curriculumCount.required', { count: form.state.values.curriculumIds.length || 0 })}
             </p>
           </div>
         )}
@@ -223,14 +228,14 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
 
       {/* Billing Cycles */}
       <div className='rounded-lg border p-3'>
-        <h3>{tp('billingCycles.label')}</h3>
+        <h3>{tp('form.billingCycles.label')}</h3>
 
         {form.state.values.billingCycles.map((cycle, index) => (
           <div key={index} className='mb-3 items-center gap-3'>
             <span className='w-32 text-sm font-medium text-gray-600'>
               {cycle.billingCycle === 'Semiannual'
-                ? tp('billingCycles.semiannualPrice')
-                : tp('billingCycles.annualPrice')}
+                ? tp('form.billingCycles.semiannualPrice')
+                : tp('form.billingCycles.annualPrice')}
             </span>
 
             <form.AppField
@@ -239,7 +244,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
                 <field.TextField
                   type='number'
                   label=''
-                  placeholder={tp('billingCycles.pricePlaceholder')}
+                  placeholder={tp('form.billingCycles.pricePlaceholder')}
                   className='flex-1'
                 />
               )}
@@ -251,7 +256,7 @@ export default function UpsertPlan({ planId, onSuccess }: UpsertPlanProps) {
       <div className='flex justify-end'>
         <form.AppForm>
           <form.SubmitButton loading={isCreating || isUpdating} className='cursor-pointer bg-blue-500'>
-            {isEditing ? 'Update' : 'Create'} Plan
+            {isEditing ? tp('update') : tp('create')}
           </form.SubmitButton>
         </form.AppForm>
       </div>

@@ -4,6 +4,11 @@
       "placeholder": "Tìm kiếm...",
       "noResults": "Không tìm thấy kết quả."
     },
+    "select": {
+      "placeholder": "Chọn một tùy chọn",
+      "selected": "Đã chọn",
+      "noOptions": "Không có tùy chọn nào."
+    },
     "button": {
       "create": "Tạo Mới",
       "update": "Cập Nhật",

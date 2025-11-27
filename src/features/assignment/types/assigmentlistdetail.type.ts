@@ -37,6 +37,7 @@ export type StudentAssignmentDetail = {
   studentId: string
   finalScore?: number
   status: StudentAssignmentStatus
+  nextAttemptAvailableAt?: string 
   assignedAt: string
   dueDate: string
   attemptCount: number

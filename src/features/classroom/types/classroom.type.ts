@@ -114,21 +114,39 @@ export type LessonSchedule = {
 // =============== CLASSROOM DASHBOARD TYPE ===============
 
 export type Statistic = {
-    averageScore: number;
-    submissions: number;
-    passRate: number;
+  averageScore: number
+  submissions: number
+  passRate: number
 }
 
 export type UngradedAssignment = {
-    studentAssignmentId: number;
-    studentName: string;
-    assignmentTitle: string;
+  studentAssignmentId: number
+  studentName: string
+  assignmentTitle: string
+}
+
+export type BoxPlotStats = {
+  mean: number
+  median: number
+  min: number
+  max: number
+  q1: number
+  q3: number
+  outliers: number[]
+}
+
+export type CourseStat = {
+  id: number
+  name: string
+  quizStats: BoxPlotStats
+  assignmentStats: BoxPlotStats
 }
 
 export type ClassroomStatisticData = {
-    quizStatistic: Statistic;
-    assignmentStatistic: Statistic;
-    ungradedAssignments: UngradedAssignment[];
+  quizStatistic: Statistic
+  assignmentStatistic: Statistic
+  ungradedAssignments: UngradedAssignment[]
+  courseStats: CourseStat[]
 }
 
 

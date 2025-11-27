@@ -87,10 +87,9 @@ const CustomAccordionItem = ({
 }
 
 export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizResultPopupProps) {
-  if (!learner || !isOpen) return null
-
   const t = useTranslations('quiz.teacher.answerTable')
   const tc = useTranslations('common')
+  if (!learner || !isOpen) return null
 
   const answered = learner.totalAnswers ?? learner.questionResults.length
   const correct = learner.totalCorrectAnswers ?? learner.questionResults.filter((q) => q.isCorrect).length

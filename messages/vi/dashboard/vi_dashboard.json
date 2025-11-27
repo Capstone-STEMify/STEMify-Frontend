@@ -10,6 +10,7 @@
         "title": "Tổng quan lớp học",
         "subTitle": "Theo dõi tiến trình học tập và hiệu suất làm bài",
         "quizStat": "Thống kê Quiz",
+        "tooltip": "Xác định học viên có tiến độ học tập chậm nhất bằng AI.",
         "asmStat": "Thống kê Bài tập",
         "ungraded": {
           "title": "Bài tập chưa chấm",
