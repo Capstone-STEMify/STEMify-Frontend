@@ -28,8 +28,11 @@ import {
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/features/resource/question/api/questionApi'
 import { toast } from 'sonner'
+import { QuestionType } from '@/features/resource/question/types/question.type'
+import { useTranslations } from 'next-intl'
 
 const QuizEditor = () => {
+  const tq = useTranslations('quiz')
   const { quizId } = useParams()
   const dispatch = useAppDispatch()
 
@@ -82,81 +85,56 @@ const QuizEditor = () => {
     dispatch(addQuestion())
   }
 
+  const normalizeQuestionType = (type: QuestionType) => {
+    return type === QuestionType.SINGLE_CHOICE ? QuestionType.MULTIPLE_CHOICE : type
+  }
+
   const handleSaveQuestions = async () => {
     setIsSavingQuestions(true)
-    try {
-      if (!quizId) {
-        toast.error('Please save quiz info first')
-        return
-      }
 
-      if (hasQuestionsInAPI) {
-        const updateQuestionsPayload = quiz.questions.map((q) => {
-          const isExistingQuestion = q.id < 1000000000000
+    if (!quizId) {
+      toast.error('Please save quiz info first')
+      return
+    }
 
-          if (isExistingQuestion) {
-            return {
-              id: q.id,
-              questionType: q.questionType,
-              content: q.content,
-              orderIndex: q.orderIndex,
-              answerExplanation: q.answerExplanation,
-              points: q.points,
-              answers: q.answers.map((a) => ({
-                id: a.id,
-                content: a.content,
-                isCorrect: a.isCorrect
-              }))
-            }
-          } else {
-            return {
-              questionType: q.questionType,
-              content: q.content,
-              orderIndex: q.orderIndex,
-              answerExplanation: q.answerExplanation,
-              points: q.points,
-              answers: q.answers.map((a) => ({
-                content: a.content,
-                isCorrect: a.isCorrect
-              }))
-            }
-          }
-        })
+    const formatQuestions = (questions: typeof quiz.questions, isUpdate: boolean) =>
+      questions.map((q) => {
+        const isExistingQuestion = isUpdate && q.id < 1000000000000
 
-        await updateQuestion({
-          quizId: Number(quizId),
-          questions: updateQuestionsPayload
-        }).unwrap()
-
-        toast.success(`${quiz.questions.length} questions updated successfully`)
-      } else {
-        const createQuestionsPayload = quiz.questions.map((q) => ({
-          questionType: q.questionType,
+        return {
+          ...(isExistingQuestion && { id: q.id }),
+          questionType: normalizeQuestionType(q.questionType),
           content: q.content,
           orderIndex: q.orderIndex,
           answerExplanation: q.answerExplanation,
           points: q.points,
           answers: q.answers.map((a) => ({
+            ...(isExistingQuestion && { id: a.id }),
             content: a.content,
             isCorrect: a.isCorrect
           }))
-        }))
+        }
+      })
 
-        await createQuestion({
-          quizId: Number(quizId),
-          questions: createQuestionsPayload
-        }).unwrap()
+    if (hasQuestionsInAPI) {
+      await updateQuestion({
+        quizId: Number(quizId),
+        questions: formatQuestions(quiz.questions, true)
+      }).unwrap()
 
-        toast.success(`${quiz.questions.length} questions created successfully`)
-      }
+      toast.success(`${quiz.questions.length} questions updated successfully`)
+    } else {
+      await createQuestion({
+        quizId: Number(quizId),
+        questions: formatQuestions(quiz.questions, false)
+      }).unwrap()
 
-      dispatch(markAsSaved())
-    } catch (error) {
-      toast.error('Failed to save questions')
-      console.error('Save questions error:', error)
-    } finally {
-      setIsSavingQuestions(false)
+      toast.success(`${quiz.questions.length} questions created successfully`)
     }
+
+    dispatch(markAsSaved())
+
+    setIsSavingQuestions(false)
   }
 
   return (
@@ -174,7 +152,7 @@ const QuizEditor = () => {
           {quizId && quiz.questions.length > 0 && (
             <Button onClick={handleSaveQuestions} disabled={isSavingQuestions} size='lg' className='bg-blue-400'>
               <FileEdit className='mr-2 h-4 w-4' />
-              {isSavingQuestions ? 'Saving...' : 'Save Questions'}
+              {isSavingQuestions ? 'Saving...' : tq('upsert.form.question.saveQuestions')}
             </Button>
           )}
         </div>

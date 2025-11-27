@@ -2,24 +2,11 @@
 
 import { Fragment, useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
-import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import {
-  Pencil,
-  Trash2,
-  ChevronDown,
-  ChevronRight,
-  Search,
-  GraduationCap,
-  Building2,
-  Send,
-  Archive
-} from 'lucide-react'
-import { useDeletePlanMutation, useSearchPlanQuery } from '@/features/plan/api/planApi'
+import { Pencil, Trash2, ChevronDown, ChevronRight, Search, GraduationCap, Building2 } from 'lucide-react'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
-import { useLocale, useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import {
   useDeleteOrganizationMutation,
   useSearchOrganizationsQuery,
@@ -28,14 +15,12 @@ import {
 import Image from 'next/image'
 import { formatDate, useStatusTranslation } from '@/utils/index'
 import SystemSubscriptionTable from '@/features/subscription/components/list/SystemSubscriptionTable'
-import SearchBar from '@/components/shared/search/SearchBar'
 import { Input } from '@/components/shadcn/input'
 import SSelect from '@/components/shared/SSelect'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setPageIndex, setParam, setSearchTerm } from '@/features/organization/slice/organizationSlice'
 import { OrganizationStatus } from '@/features/organization/types/organization.type'
 import useDebounce from '@/hooks/useDebounce'
-import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { SPagination } from '@/components/shared/SPagination'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'

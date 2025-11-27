@@ -29,6 +29,33 @@
         "resp": "lượt trả lời"
       }
     },
-    "student": {}
+    "student": {},
+    "upsert": {
+      "create": "Tạo bài kiểm tra",
+      "update": "Cập nhật bài kiểm tra",
+      "settings": "Cài đặt bài kiểm tra",
+      "form": {
+        "title": "Tiêu đề",
+        "description": "Mô tả",
+        "timeLimit": "Thời gian (phút)",
+        "totalMarks": "Tổng điểm",
+        "passingMarks": "Điểm đạt",
+        "duration": "Thời lượng (ngày)",
+        "updateQuizInfo": "Cập nhật bài trắc nghiệm",
+        "question": {
+          "question": "Câu hỏi",
+          "saveQuestions": "Lưu câu hỏi",
+          "multipleChoice": "Chọn nhiều đáp án",
+          "trueFalse": "Chọn đúng/sai",
+          "singleChoice": "Chọn một đáp",
+          "enterQuestion": "Nhập câu hỏi tại đây",
+          "answer": "Đáp án",
+          "dragToReorder": "Kéo để sắp xếp lại các lựa chọn",
+          "addOption": "Thêm lựa chọn",
+          "explanation": "Giải thích",
+          "optional": "Tùy chọn"
+        }
+      }
+    }
   }
 }
