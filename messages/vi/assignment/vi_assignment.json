@@ -37,7 +37,16 @@
         "total": "Tổng điểm cho câu hỏi",
         "comment": "Nhận xét",
         "commentSubTitle": "Các nhận xét dành cho học viên chỉ được hiển thị với học viên đó và người đã để lại nhận xét.",
-        "commentPlaceholder": "Chia sẻ suy nghĩ của bạn..."
+        "commentPlaceholder": "Chia sẻ suy nghĩ của bạn...",
+        "subStatus": {
+          "notSubmitted": "Chưa nộp",
+          "submitted": "Đã nộp",
+          "pending": "Đang chờ",
+          "underReview": "Đang xem xét",
+          "passed": "Đạt",
+          "failed": "Không đạt",
+          "graded": "Đã chấm điểm"
+        }
       }
     },
     "student": {
@@ -55,6 +64,7 @@
         "left": "còn",
         "allow": "lượt cho phép",
         "pending": "Đang chờ đánh giá",
+        "nextAttempt": "Lượt làm tiếp theo có vào lúc",
         "description": "Bài nộp của bạn từ {date} hiện đang được xem xét.",
         "title": "Phản hồi của giáo viên"
       },

@@ -78,6 +78,20 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
 
   const t = useTranslations('assignment.teacher.table')
 
+  // Helper function to translate submission status
+  const getStatusTranslation = (status: SubmissionStatus): string => {
+    const statusMap: Record<string, string> = {
+      Passed: 'subStatus.passed',
+      Failed: 'subStatus.failed',
+      'Not Submitted': 'subStatus.notSubmitted',
+      Submitted: 'subStatus.submitted',
+      Pending: 'subStatus.pending',
+      UnderReview: 'subStatus.underReview',
+      Graded: 'subStatus.graded'
+    }
+    return t(statusMap[status] || 'subStatus.pending')
+  }
+
   const allSubmissions = mapApiToSubmissions(data.studentStatistics, data.assignmentTitle)
   console.log('allSubmissions', allSubmissions)
 
@@ -130,7 +144,9 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge className={getStatusBadgeClass(submission.status)}>{submission.status}</Badge>
+                  <Badge className={getStatusBadgeClass(submission.status)}>
+                    {getStatusTranslation(submission.status)}
+                  </Badge>
                 </TableCell>
                 <TableCell>{submission.grade ? submission.grade : 'N/A'}</TableCell>
                 <TableCell>{submission.submittedDate ? submission.submittedDate : '—'}</TableCell>

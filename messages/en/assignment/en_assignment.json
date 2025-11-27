@@ -37,7 +37,16 @@
         "total": "Total Points for Question",
         "comment": "Comment",
         "commentSubTitle": "Comments left for the learner are visible only to that learner and the person who left the comment.",
-        "commentPlaceholder": "Share your thoughts..."
+        "commentPlaceholder": "Share your thoughts...",
+        "subStatus": {
+          "notSubmitted": "Not Submitted",
+          "submitted": "Submitted",
+          "pending": "Pending",
+          "underReview": "Under Review",
+          "passed": "Passed",
+          "failed": "Failed",
+          "graded": "Graded"
+        }
       }
     },
     "student": {
@@ -55,6 +64,7 @@
         "left": "left",
         "allow": "attempts allowed",
         "pending": "Pending Review",
+        "nextAttempt": "Next Attempt available at",
         "description": "Your submission from {date} is currently being reviewed.",
         "title": "Teacher's Feedback"
       },
