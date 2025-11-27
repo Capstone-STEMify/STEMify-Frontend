@@ -17,32 +17,6 @@ type QuestionCardProps = {
 export default function QuestionCard({ question }: QuestionCardProps) {
   const { isSubmitted, userAnswers, currentQuestionIndex } = useAppSelector((state) => state.quizPlayer)
 
-  const getQuestionTypeLabel = (type: QuestionType) => {
-    switch (type) {
-      case QuestionType.TRUE_FALSE:
-        return 'Đúng/Sai'
-      case QuestionType.SINGLE_CHOICE:
-        return 'Một đáp án'
-      case QuestionType.MULTIPLE_CHOICE:
-        return 'Nhiều đáp án'
-      default:
-        return type
-    }
-  }
-
-  const getQuestionTypeColor = (type: QuestionType) => {
-    switch (type) {
-      case QuestionType.TRUE_FALSE:
-        return 'bg-gradient-to-r from-blue-500 to-cyan-500'
-      case QuestionType.SINGLE_CHOICE:
-        return 'bg-gradient-to-r from-green-500 to-emerald-500'
-      case QuestionType.MULTIPLE_CHOICE:
-        return 'bg-gradient-to-r from-purple-500 to-pink-500'
-      default:
-        return 'bg-gradient-to-r from-gray-500 to-slate-500'
-    }
-  }
-
   const isAnswered = userAnswers[question.id] !== undefined
 
   return (
