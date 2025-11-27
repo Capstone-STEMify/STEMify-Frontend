@@ -56,10 +56,13 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
 
   const [gradeAssignment, { isLoading: isGrading }] = useGradeAssignmentAttemptMutation()
 
-  const [scores, setScores] = useState<Record<number, Record<number, number | null>>>({})
+    const [scores, setScores] = useState<Record<number, Record<number, number | null>>>({})
   const [feedbackText, setFeedbackText] = useState('')
 
-  const attemptData = detailResponse?.data ? detailResponse.data.attempts[0] : submission.attempts[0]
+  const attemptData = detailResponse?.data 
+    ? detailResponse.data.attempts[detailResponse.data.attempts.length - 1]
+    : submission.attempts[submission.attempts.length - 1]
+  
   const isReviewed = submission.status === 'Passed' || submission.status === 'Failed' || submission.status === 'Graded'
   const totalScore = attemptData ? attemptData.totalScore : submission.point
   const feedback = attemptData ? attemptData.feedback : submission.comment
@@ -78,14 +81,21 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
     attemptData.questionAttempts.forEach((qAttempt) => {
       initialScores[qAttempt.id] = {}
       qAttempt.rubricScore.forEach((criterion) => {
-        // Use currentPoints from the API when present, otherwise null
         initialScores[qAttempt.id][criterion.rubricCriterionId] =
           (criterion as any).currentPoints ?? null
       })
     })
 
     setScores(initialScores)
-  }, [attemptData])
+  }, [attemptData?.id])
+
+  useEffect(() => {
+    if (!attemptData?.feedback) {
+      setFeedbackText('')
+    } else {
+      setFeedbackText(attemptData.feedback)
+    }
+  }, [attemptData?.id])
 
   const handleScoreChange = (qAttemptId: number, criterionId: number, points: string) => {
     if (points === '') {

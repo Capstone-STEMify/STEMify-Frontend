@@ -241,7 +241,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
       ? [...studentAssignmentData.attempts].sort((a, b) => b.attemptNumber - a.attemptNumber)[0]
       : null
 
-  const maxAttempts = 3
+  const maxAttempts = studentAssignmentData.maxAttemptAllowed
   const attemptsMade = studentAssignmentData.attempts.length
   const attemptsRemaining = maxAttempts - attemptsMade
 
