@@ -298,9 +298,6 @@ export default function UpsertAssignment({ onSuccess }: UpsertAssignmentProps) {
               >
                 {/* Basic Information */}
                 <Card>
-                  <CardHeader className='py-4'>
-                    <CardTitle>Assignment Information</CardTitle>
-                  </CardHeader>
                   <CardContent className='space-y-4 py-4'>
                     <form.AppField
                       name='title'

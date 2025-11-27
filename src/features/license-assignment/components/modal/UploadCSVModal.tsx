@@ -10,6 +10,7 @@ import { useUploadCSVBulkMutation } from '@/features/license-assignment/api/lice
 import { toast } from 'sonner'
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 export type UploadCSVModalProps = {
   organizationSubscriptionOrderId?: number
@@ -24,12 +25,12 @@ interface UploadedFile {
 export default function UploadCSVModal({ organizationSubscriptionOrderId }: UploadCSVModalProps) {
   const tc = useTranslations('common')
   const to = useTranslations('organization.license')
+  const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
   const { closeModal } = useModal()
   const [activeTab, setActiveTab] = useState('csv')
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null)
   const [uploadCSVBulk, { isLoading }] = useUploadCSVBulkMutation()
-  const { organizationId } = useParams()
 
   const handleFileChange = (file: File | null) => {
     if (file) {

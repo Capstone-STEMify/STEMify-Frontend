@@ -3,10 +3,12 @@ import {
   AssignmentQueryParams,
   RubricCriterion,
   CreateAssignmentDto,
-  UpdateAssignmentDto
+  UpdateAssignmentDto,
+  AssignmentImportResponse
 } from '@/features/assignment/types/assignment.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { ApiSuccessResponse } from '@/types/baseModel'
+import { get } from 'http'
 
 export const assignmentApi = createCrudApi<Assignment, AssignmentQueryParams>({
   reducerPath: 'assignmentApi',
@@ -74,6 +76,31 @@ export const assignmentApi = createCrudApi<Assignment, AssignmentQueryParams>({
         method: 'DELETE'
       }),
       invalidatesTags: (result, error, id) => [{ type: 'Assignment', id }]
+    }),
+
+    // CSV
+    getAssignmentCSV: builder.query<
+      ApiSuccessResponse<{
+        csvFile: string
+        fileName: string
+      }>,
+      void
+    >({
+      query: () => ({ url: `/assignments/template` })
+    }),
+
+    importAssignmentCSV: builder.mutation<
+      ApiSuccessResponse<AssignmentImportResponse>,
+      { csvFile: string; assignmentId: number }
+    >({
+      query: ({ csvFile, assignmentId }) => {
+        return {
+          url: `/assignments/${assignmentId}/import`,
+          method: 'POST',
+          body: { csvFile }
+        }
+      },
+      invalidatesTags: [{ type: 'Assignment' }]
     })
   })
 })
@@ -90,5 +117,9 @@ export const {
   useGetRubricCriterionByIdQuery,
   useCreateRubricCriterionMutation,
   useUpdateRubricCriterionMutation,
-  useDeleteRubricCriterionMutation
+  useDeleteRubricCriterionMutation,
+
+  // CSV
+  useGetAssignmentCSVQuery,
+  useImportAssignmentCSVMutation
 } = assignmentApi

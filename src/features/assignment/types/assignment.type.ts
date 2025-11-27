@@ -104,3 +104,16 @@ export type SubmissionAnswer = {
 
 // =================== Query Params ===================
 export type AssignmentQueryParams = {} & SearchPaginatedRequestParams
+
+// =================== CSV Import/Export Types ===================
+export type AssignmentImportResponse = {
+  totalRows: number
+  successCount: number
+  failureCount: number
+  errors: {
+    rowNumber: number
+    field: string
+    errorMessage: string
+    rowData: string
+  }[]
+}

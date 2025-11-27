@@ -83,6 +83,27 @@
         "projectTitle": "Project Title",
         "placeholder": "Type your answer here..."
       }
+    },
+    "upsert": {
+      "create": "Create Assignment",
+      "createDescription": "Create a new assignment by filling out the details below.",
+      "update": "Update Assignment",
+      "updateDescription": "Update the assignment details by modifying the fields below.",
+      "assignmentTitle": "Assignment Title",
+      "assignmentTitlePlaceholder": "Enter assignment title",
+      "passingScore": "Passing Score",
+      "deadline": "Deadline (in days from enrollment)",
+      "question": {
+        "question": "Question",
+        "questionType": "Question Type",
+        "text": "Text",
+        "questionContent": "Question Content",
+        "rubric": {
+          "noData": "No rubric criteria added yet. Click \"Add Criterion\" to get started.",
+          "criterionName": "Criterion Name",
+          "maxPoints": "Max Points"
+        }
+      }
     }
   }
 }

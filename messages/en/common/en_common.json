@@ -99,7 +99,9 @@
       "viewSub": "View Submission",
       "seeFeedback": "See Feedback",
       "close": "Close",
-      "createPlan": "Create Plan"
+      "createPlan": "Create Plan",
+      "addQuestion": "Add Question",
+      "addCriterion": "Add Criterion"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
