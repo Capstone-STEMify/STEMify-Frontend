@@ -1,0 +1,11 @@
+{
+  "agent": {
+    "section": {
+      "title": "Nội dung bài học (AI)",
+      "duration": "Thời lượng",
+      "minutes": "phút",
+      "accept": "Chấp nhận",
+      "generating": "Đang tạo..."
+    }
+  }
+}

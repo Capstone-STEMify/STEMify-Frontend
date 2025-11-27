@@ -42,6 +42,7 @@ import { UpsertEmulator } from '@/features/creator-3d/components/creator3d/Expor
 import ImportQuizModal from '@/features/resource/quiz/components/modal/ImportQuizModal'
 import GenericCSVUploadModal from '@/components/shared/csv/GenericCSVUploadModal'
 import QuizCSVUploadModal from '@/features/resource/quiz/components/modal/QuizCSVUploadModal'
+import SectionAIModal from '@/features/chat/components/SectionAIModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -111,6 +112,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'quizAI' && <QuizAIModal {...modalProps} />}
       {modalType === 'addPeople' && <AddPeopleModal {...modalProps} />}
       {modalType === 'importQuiz' && <QuizCSVUploadModal {...modalProps} />}
+      {modalType === 'sectionAI' && <SectionAIModal {...modalProps} />}
 
       {/* sheet */}
       {modalType === 'upsertContact' && <ContactDetailSheet {...modalProps} />}
