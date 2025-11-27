@@ -56,6 +56,12 @@
           "optional": "Optional"
         }
       }
+    },
+    "import": {
+      "title": "Import Quiz",
+      "button": "Upload (CSV)",
+      "headerTitle": "Upload Quiz Questions from CSV File",
+      "headerDescription": "Upload a CSV file with the correct format to add multiple quiz questions at once."
     }
   }
 }

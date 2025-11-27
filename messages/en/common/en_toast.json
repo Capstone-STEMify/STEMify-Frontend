@@ -20,7 +20,8 @@
       "addToCurriculum": "Successfully added to curriculum!",
       "removeItemFromCart": "Item removed from cart!",
       "clearCart": "Cart cleared!",
-      "addToCart": "Item added to cart!"
+      "addToCart": "Item added to cart!",
+      "uploadCSV": "Upload CSV Successfully"
     },
     "errorMessage": "An error occurred. Please try again. ",
     "errorSpecific": {

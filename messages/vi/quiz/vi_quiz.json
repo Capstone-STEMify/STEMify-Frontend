@@ -56,6 +56,12 @@
           "optional": "Tùy chọn"
         }
       }
+    },
+    "import": {
+      "title": "Nhập Quiz",
+      "button": "Tải lên (CSV)",
+      "headerTitle": "Tải lên câu hỏi trắc nghiệm từ tệp CSV",
+      "headerDescription": "Tải lên tệp CSV có định dạng đúng để thêm nhiều câu hỏi trắc nghiệm cùng lúc."
     }
   }
 }

@@ -71,7 +71,7 @@ export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
         return {
           url: `/quizzes/${quizId}/import`,
           method: 'POST',
-          body: csvFile
+          body: { csvFile }
         }
       },
       invalidatesTags: [{ type: 'Quiz' }]
@@ -98,6 +98,7 @@ export const {
 
   // csv
   useGetQuizCSVQuery,
+  useImportQuizCSVMutation,
 
   // lazy
   useLazySearchQuery: useLazySearchQuizQuery,

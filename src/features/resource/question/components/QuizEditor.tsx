@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
-import { FileEdit } from 'lucide-react'
+import { FileEdit, Sparkles } from 'lucide-react'
 import {
   DndContext,
   closestCenter,
@@ -30,11 +30,13 @@ import { useCreateQuestionMutation, useUpdateQuestionMutation } from '@/features
 import { toast } from 'sonner'
 import { QuestionType } from '@/features/resource/question/types/question.type'
 import { useTranslations } from 'next-intl'
+import { useModal } from '@/providers/ModalProvider'
 
 const QuizEditor = () => {
   const tq = useTranslations('quiz')
   const { quizId } = useParams()
   const dispatch = useAppDispatch()
+  const { openModal } = useModal()
 
   // Get state from Redux
   const quiz = useAppSelector(selectQuiz)
@@ -145,7 +147,16 @@ const QuizEditor = () => {
         {/* Header cố định */}
         <div className='border-border bg-background flex shrink-0 justify-between border-b px-8 py-4'>
           <div>
-            <h2 className='text-foreground font-bold'>{quiz.title || 'Untitled Quiz'}</h2>
+            <div className='flex gap-5'>
+              <h2 className='text-foreground font-bold'>{quiz.title || 'Untitled Quiz'}</h2>
+              <Button
+                onClick={() => {
+                  openModal('importQuiz')
+                }}
+              >
+                {tq('import.button')}
+              </Button>
+            </div>
             {quiz.description && <p className='text-muted-foreground mt-1'>{quiz.description}</p>}
           </div>
           {/* Footer cố định */}
