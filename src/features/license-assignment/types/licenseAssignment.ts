@@ -18,7 +18,7 @@ export type LicenseAssignment = {
 export type LicenseAssignmentCreatePayload = {
   email: string
   role: LicenseAssignmentType
-  subscription_order_id: number
+  subscription_order_id: string
 }
 
 export enum LicenseAssignmentStatus {

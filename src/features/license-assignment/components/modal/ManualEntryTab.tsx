@@ -83,10 +83,10 @@ export default function ManualEntryTab({
   }
 
   const handleSubmit = async () => {
-    var inviteUserItems = emailList.map((email) => ({
+    const inviteUserItems = emailList.map((email) => ({
       email: email,
       role: type,
-      subscription_order_id: organizationSubscriptionOrderId ?? Number(organizationSubscriptionId)
+      subscription_order_id: String(organizationSubscriptionOrderId) ?? String(organizationSubscriptionId)
     }))
     await createLicenseAssignmentBulk({
       organization_id: String(subscriptionId),
