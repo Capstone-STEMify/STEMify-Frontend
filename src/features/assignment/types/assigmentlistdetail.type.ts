@@ -40,6 +40,7 @@ export type StudentAssignmentDetail = {
   nextAttemptAvailableAt?: string 
   assignedAt: string
   dueDate: string
+  maxAttemptAllowed: number
   attemptCount: number
   attempts: AssignmentAttempt[]
 }
