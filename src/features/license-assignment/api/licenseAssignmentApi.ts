@@ -17,9 +17,9 @@ export const licenseAssignmentApi = createCrudApi<LicenseAssignment, LicenseAssi
       { organization_id: string; users: LicenseAssignmentCreatePayload[] }
     >({
       query: ({ organization_id, users }) => ({
-        url: `/organizations/${organization_id}/invitations`,
+        url: `/organizations/${organization_id}/invitations/invite`,
         method: 'POST',
-        body: users
+        body: { users }
       }),
       invalidatesTags: ['Subscription', 'LicenseAssignment']
     }),
