@@ -37,6 +37,7 @@ export type KitSliceParams = {
 
 export enum KitProductStatus {
   DRAFT = 'Draft',
-  PUBLISHED = 'Published',
+  // PUBLISHED = 'Published',
+  ACTIVE = 'Active',
   ARCHIVED = 'Archived'
 }
