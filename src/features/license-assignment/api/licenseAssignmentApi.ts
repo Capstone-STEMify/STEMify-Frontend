@@ -12,11 +12,14 @@ export const licenseAssignmentApi = createCrudApi<LicenseAssignment, LicenseAssi
   baseUrl: '/license-assignments'
 }).injectEndpoints({
   endpoints: (builder) => ({
-    createLicenseAssignmentBulk: builder.mutation<void, { body: LicenseAssignmentCreatePayload[] }>({
-      query: ({ body }) => ({
-        url: `/license-assignments/bulk`,
+    createLicenseAssignmentBulk: builder.mutation<
+      void,
+      { organization_id: string; users: LicenseAssignmentCreatePayload[] }
+    >({
+      query: ({ organization_id, users }) => ({
+        url: `/organizations/${organization_id}/invitations`,
         method: 'POST',
-        body
+        body: users
       }),
       invalidatesTags: ['Subscription', 'LicenseAssignment']
     }),
