@@ -7,21 +7,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { TrendingUp, Clock, BarChart3 } from 'lucide-react'
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
 import { StudentProgressStatistic } from '@/features/dashboard/components/table/StudentProgressStatistic'
+import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { useParams } from 'next/navigation'
+import { useState } from 'react'
+import GradeAssignmentModal from '@/features/assignment/components/detail/dialog/GradeAssignmentModal'
 import { useGetClassroomByIdQuery, useGetClassroomStatisticsQuery } from '../../api/classroomApi'
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import Loading from 'app/[locale]/loading'
 import { useTranslations } from 'next-intl'
 
 // ChartJS Imports
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js'
+import { Chart as ChartJS, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js'
 import { Chart } from 'react-chartjs-2'
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot'
 
@@ -53,6 +49,8 @@ export default function ClassroomOverview() {
     }
   )
 
+  const [selectedStudentAssignmentId, setSelectedStudentAssignmentId] = useState<number | null>(null)
+
   const ungradedAssignments = statsRes?.data?.ungradedAssignments || []
   const courses = curriculumRes?.data?.courses || []
   const courseStats = statsRes?.data?.courseStats || []
@@ -68,12 +66,12 @@ export default function ClassroomOverview() {
 
   const quizStatusData = [
     { name: t('passed'), value: quizPassRate, color: '#10b981' },
-    { name: t('failed'), value: quizSubmissions ? quizNotPassRate : 0, color: '#ef4444' }
+    { name: t('failed'), value: quizSubmissions ? quizNotPassRate : 0, color: '#F4320B' }
   ]
 
   const asmStatusData = [
     { name: t('passed'), value: asmPassRate, color: '#3b82f6' },
-    { name: t('failed'), value: asmSubmissions ? asmNotPassRate : 0, color: '#f97316' }
+    { name: t('failed'), value: asmSubmissions ? asmNotPassRate : 0, color: '#F4320B' }
   ]
 
   // --- Data Processing for Box Plot ---
@@ -131,9 +129,9 @@ export default function ClassroomOverview() {
       tooltip: {
         callbacks: {
           label: (context: any) => {
-             // Custom tooltip formatting if needed for boxplot
-             const v = context.raw;
-             return `${context.dataset.label}: Min: ${v.min}, Q1: ${v.q1}, Med: ${v.median}, Q3: ${v.q3}, Max: ${v.max}`;
+            // Custom tooltip formatting if needed for boxplot
+            const v = context.raw
+            return `${context.dataset.label}: Min: ${v.min}, Q1: ${v.q1}, Med: ${v.median}, Q3: ${v.q3}, Max: ${v.max}`
           }
         }
       }
@@ -200,9 +198,7 @@ export default function ClassroomOverview() {
                   <div className='absolute inset-0 flex items-center justify-center'>
                     <div className='text-center'>
                       <p className='mb-1 text-xs font-medium text-slate-500'>{t('submission')}</p>
-                      <p className='bg-clip-text text-3xl font-bold text-emerald-500'>
-                        {quizSubmissions}
-                      </p>
+                      <p className='bg-clip-text text-3xl font-bold text-emerald-500'>{quizSubmissions}</p>
                     </div>
                   </div>
                 </div>
@@ -232,30 +228,28 @@ export default function ClassroomOverview() {
                   <div className='absolute inset-0 flex items-center justify-center'>
                     <div className='text-center'>
                       <p className='mb-1 text-xs font-medium text-slate-500'>{t('submission')}</p>
-                      <p className='bg-clip-text text-3xl font-bold text-blue-500'>
-                        {asmSubmissions}
-                      </p>
+                      <p className='bg-clip-text text-3xl font-bold text-blue-500'>{asmSubmissions}</p>
                     </div>
                   </div>
                 </div>
                 <p className='mt-2 text-sm font-medium text-slate-600'>{t('overview.asmStat')}</p>
               </div>
             </div>
-            
+
             {/* Legend/Summary */}
             <div className='mt-6 flex justify-center gap-6 text-sm'>
-                <div className='flex items-center gap-2'>
-                    <div className='h-3 w-3 rounded-full bg-emerald-500'></div>
-                    <span className='text-slate-600'>Quiz Pass</span>
-                </div>
-                 <div className='flex items-center gap-2'>
-                    <div className='h-3 w-3 rounded-full bg-blue-500'></div>
-                    <span className='text-slate-600'>Asm Pass</span>
-                </div>
-                <div className='flex items-center gap-2'>
-                    <div className='h-3 w-3 rounded-full bg-red-500'></div>
-                    <span className='text-slate-600'>Fail</span>
-                </div>
+              <div className='flex items-center gap-2'>
+                <div className='h-3 w-3 rounded-full bg-emerald-500'></div>
+                <span className='text-slate-600'>Quiz Pass</span>
+              </div>
+              <div className='flex items-center gap-2'>
+                <div className='h-3 w-3 rounded-full bg-blue-500'></div>
+                <span className='text-slate-600'>Asm Pass</span>
+              </div>
+              <div className='flex items-center gap-2'>
+                <div className='h-3 w-3 rounded-full bg-red-500'></div>
+                <span className='text-slate-600'>Not Pass</span>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -273,7 +267,7 @@ export default function ClassroomOverview() {
             </div>
           </CardHeader>
           <CardContent className='flex h-[350px] flex-col items-center justify-center p-4'>
-             <Chart type='boxplot' data={boxPlotData} options={boxPlotOptions} />
+            <Chart type='boxplot' data={boxPlotData} options={boxPlotOptions} />
           </CardContent>
         </Card>
       </div>
@@ -331,8 +325,9 @@ export default function ClassroomOverview() {
                         <Button
                           size='sm'
                           className='bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md transition-all hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg'
+                          onClick={() => setSelectedStudentAssignmentId(assignment.studentAssignmentId)}
                         >
-                          {tc('button.grade')}
+                          Grade Now
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -351,6 +346,23 @@ export default function ClassroomOverview() {
       </Card>
 
       <StudentProgressStatistic classroomId={classroomId} courses={courses} />
+
+      <Dialog
+        open={!!selectedStudentAssignmentId}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) setSelectedStudentAssignmentId(null)
+        }}
+      >
+        <DialogTitle />
+        <DialogContent className='w-[95%] rounded-xl p-4 sm:max-w-4xl'>
+          {selectedStudentAssignmentId && (
+            <GradeAssignmentModal
+              studentAssignmentId={selectedStudentAssignmentId}
+              onClose={() => setSelectedStudentAssignmentId(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
