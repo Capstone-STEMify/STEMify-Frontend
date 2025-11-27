@@ -89,21 +89,38 @@
       "createDescription": "Create a new assignment by filling out the details below.",
       "update": "Update Assignment",
       "updateDescription": "Update the assignment details by modifying the fields below.",
-      "assignmentTitle": "Assignment Title",
-      "assignmentTitlePlaceholder": "Enter assignment title",
+      "title": "Assignment Title",
+      "titlePlaceholder": "Enter assignment title",
       "passingScore": "Passing Score",
-      "deadline": "Deadline (in days from enrollment)",
+      "durationDays": "Deadline (in days from enrollment)",
+      "cooldownHours": "Cooldown Hours",
+      "summary": "Summary",
+      "totalPoints": "Total Points",
+      "duration": "Duration",
+      "days": "days",
       "question": {
         "question": "Question",
         "questionType": "Question Type",
         "text": "Text",
-        "questionContent": "Question Content",
+        "content": "Question Content",
+        "contentPlaceholder": "Enter question content",
+        "questionOrder": "Question Order",
+        "questionOrderSubtitle": "Drag to reorder questions",
+        "emptyQuestion": "Empty question",
+        "point": "Point(s)",
         "rubric": {
+          "rubric": "Rubric Criteria",
           "noData": "No rubric criteria added yet. Click \"Add Criterion\" to get started.",
           "criterionName": "Criterion Name",
           "maxPoints": "Max Points"
         }
       }
+    },
+    "import": {
+      "title": "Import Assignment",
+      "button": "Upload (CSV)",
+      "headerTitle": "Upload Assignment Questions from CSV File",
+      "headerDescription": "Upload a CSV file with the correct format to add multiple assignment questions at once."
     }
   }
 }

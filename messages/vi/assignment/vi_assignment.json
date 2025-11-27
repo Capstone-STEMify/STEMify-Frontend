@@ -83,6 +83,45 @@
         "projectTitle": "Tiêu đề dự án",
         "placeholder": "Nhập câu trả lời của bạn..."
       }
+    },
+    "upsert": {
+      "create": "Tạo bài thực hành",
+      "createDescription": "Tạo bài thực hành mới bằng cách điền các thông tin dưới đây.",
+      "update": "Cập nhật bài thực hành",
+      "updateDescription": "Cập nhật thông tin bài thực hành bằng cách chỉnh sửa các trường dưới đây.",
+      "title": "Tiêu đề bài thực hành",
+      "titlePlaceholder": "Nhập tiêu đề bài thực hành",
+      "passingScore": "Điểm đạt",
+      "durationDays": "Hạn nộp (tính từ ngày đăng ký)",
+      "cooldownHours": "Giờ chờ",
+      "summary": "Tóm tắt",
+      "totalPoints": "Tổng điểm",
+      "duration": "Thời lượng",
+      "days": "ngày",
+      "question": {
+        "question": "Câu hỏi",
+        "questionType": "Loại câu hỏi",
+        "text": "Văn bản",
+        "content": "Nội dung câu hỏi",
+        "contentPlaceholder": "Nhập nội dung câu hỏi",
+        "questionOrder": "Thứ tự câu hỏi",
+        "questionOrderSubtitle": "Kéo để sắp xếp lại câu hỏi",
+        "emptyQuestion": "Câu hỏi trống",
+        "point": "Điểm",
+        "rubric": {
+          "rubric": "Tiêu chí đánh giá",
+          "noData": "Chưa có tiêu chí nào được thêm. Nhấn \"Thêm tiêu chí\" để bắt đầu.",
+          "criterionName": "Tên tiêu chí",
+          "maxPoints": "Điểm tối đa"
+        }
+      }
+    },
+    "import": {
+      "title": "Nhập bài thực hành từ CSV",
+      "onSubmit": "Nhập bài thực hành",
+      "headerTitle": "Nhập bài thực hành từ tệp CSV",
+      "headerDescription": "Tải lên tệp CSV được định dạng đúng để nhập câu hỏi và chi tiết bài thực hành một cách nhanh chóng.",
+      "templateFileName": "assignment_template.csv"
     }
   }
 }

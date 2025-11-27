@@ -100,6 +100,20 @@
     },
     "uploadCSV": {
       "required": "Please upload a CSV"
+    },
+    "assignment": {
+      "title": "Title is required and must be at least {length} characters long",
+      "passingScore": "Passing score must be between 0 and 100",
+      "durationDays": "Duration (in days) must be a positive number",
+      "totalPoints": "Total points must be a positive number",
+      "question": {
+        "content": "Question content is required",
+        "point": "Point(s) must be a positive number",
+        "rubric": {
+          "criterionName": "Criterion name is required",
+          "maxPoints": "Max points must be a positive number"
+        }
+      }
     }
   }
 }

@@ -99,7 +99,9 @@
       "retry": "Thử Lại",
       "viewSub": "Xem Bài Nộp",
       "seeFeedback": "Xem Phản Hồi",
-      "close": "Đóng"
+      "close": "Đóng",
+      "addQuestion": "Thêm Câu Hỏi",
+      "addCriterion": "Thêm Tiêu Chí"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",
