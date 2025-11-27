@@ -15,6 +15,7 @@ import { setQuizAttemptId, setSelectedQuiz, setStudentQuizId } from '@/features/
 import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
 import { Attempt } from '@/features/resource/quiz/types/quiz.type'
 import { LicenseType, UserRole } from '@/types/userRole'
+import { useTranslations } from 'next-intl'
 
 type QuizViewerProps = {
   quiz: QuizContent
@@ -23,6 +24,7 @@ type QuizViewerProps = {
 }
 
 export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }: QuizViewerProps) {
+  const tq = useTranslations('quiz.detail')
   const dispatch = useAppDispatch()
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
   const [selectedAttempt, setSelectedAttempt] = useState<Attempt | null>(null)
@@ -92,7 +94,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
                 <div className='rounded-full bg-amber-100 p-3'>
                   <Trophy className='h-6 w-6 text-amber-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Passing Marks</p>
+                <p className='text-sm font-medium text-gray-600'>{tq('passingMarks')}</p>
                 <p className='text-2xl font-bold text-gray-900'>
                   {quiz.passingMarks}/{quiz.totalMarks}
                 </p>
@@ -101,21 +103,25 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
                 <div className='rounded-full bg-green-100 p-3'>
                   <CheckCircle className='h-6 w-6 text-green-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Max Attempt</p>
+                <p className='text-sm font-medium text-gray-600'>{tq('maxAttempt')}</p>
                 <p className='text-2xl font-bold text-gray-900'>{quiz.maxAttempt ?? '-'}</p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-sky-100 p-3'>
                   <Clock className='h-6 w-6 text-sky-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Time Limit</p>
-                <p className='text-2xl font-bold text-gray-900'>{quiz.timeLimitInMinutes} mins</p>
+                <p className='text-sm font-medium text-gray-600'>{tq('timeLimit')}</p>
+                <p className='text-2xl font-bold text-gray-900'>
+                  {quiz.timeLimitInMinutes} {tq('mins')}
+                </p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-sky-100 p-3'>
                   <Clock className='h-6 w-6 text-sky-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>Question Length</p>
+                <p className='text-sm font-medium text-gray-600'>
+                  {tq('question.question')} {tq('length')}
+                </p>
                 <p className='text-2xl font-bold text-gray-900'>{questions.length}</p>
               </div>
             </div>
@@ -127,7 +133,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
       {isShowQuestionAnswer ? (
         <div className='space-y-4'>
           <div className='flex items-center gap-2 border-b border-gray-200 pb-3'>
-            <h2 className='text-xl font-semibold text-gray-900'>Questions</h2>
+            <h2 className='text-xl font-semibold text-gray-900'>{tq('question.question')}</h2>
             <span className='rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700'>
               {questions.length}
             </span>
@@ -155,14 +161,16 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
                       </div>
                       <div className='flex shrink-0 items-center gap-2 rounded-full bg-purple-100 px-3 py-1'>
                         <Trophy className='h-4 w-4 text-purple-600' />
-                        <span className='text-sm font-semibold text-purple-700'>{question.points} pts</span>
+                        <span className='text-sm font-semibold text-purple-700'>
+                          {question.points} {tq('question.pts')}
+                        </span>
                       </div>
                     </div>
 
                     {/* Question Type Badge */}
                     <div className='flex items-center gap-2'>
                       <span className='inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700'>
-                        {isMultipleChoice ? 'Multiple Choice' : 'Single Choice'}
+                        {tq(`question.${question.questionType.toLowerCase()}`)}
                       </span>
                       {correctAnswers.length > 1 && (
                         <span className='text-xs text-gray-500'>({correctAnswers.length} correct answers)</span>
