@@ -19,20 +19,19 @@ import {
 import LessonTable from '@/features/resource/lesson/components/list/LessonTable'
 import { useModal } from '@/providers/ModalProvider'
 import { getLevelBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
-import { capitalizeFirst } from '@/utils/index'
+import { capitalizeFirst, useLevelTranslation, useStatusTranslation } from '@/utils/index'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
-import { UserRole } from '@/types/userRole'
 import { useLazyExportToRSAQuery } from '@/features/resource/export/api/exportApi'
 import ExportRSAButton from '@/components/shared/button/ExportRSAButton'
-import CurriculumKitList from '@/features/resource/kit/components/list/KitListSection'
 import KitListSection from '@/features/resource/kit/components/list/KitListSection'
-import { Card } from '@/components/shadcn/card'
 
 export default function AdminCourseDetail() {
   const t = useTranslations('Admin.course_details')
   const tt = useTranslations('toast')
   const tc = useTranslations('common')
+  const translateStatus = useStatusTranslation()
+  const translateLevel = useLevelTranslation()
 
   // Get current user
   const user = useAppSelector((state) => state.auth.user)
@@ -148,14 +147,14 @@ export default function AdminCourseDetail() {
         <div className='mb-4 flex flex-wrap gap-4 text-sm'>
           <span>
             {t('status')}:{' '}
-            <Badge className={getStatusBadgeClass(course.data.status)}>{capitalizeFirst(course.data.status)}</Badge>
+            <Badge className={getStatusBadgeClass(course.data.status)}>{translateStatus(course.data.status)}</Badge>
           </span>
           <span>
             {t('age')}: <Badge className='border-rose-300 bg-rose-100 text-rose-800'>{course.data.ageRangeLabel}</Badge>
           </span>
           <span>
             {t('level')}:{' '}
-            <Badge className={getLevelBadgeClass(course.data.level)}>{capitalizeFirst(course.data.level)}</Badge>
+            <Badge className={getLevelBadgeClass(course.data.level)}>{translateLevel(course.data.level)}</Badge>
           </span>
         </div>
         <hr className='mb-6 border-gray-300' />
