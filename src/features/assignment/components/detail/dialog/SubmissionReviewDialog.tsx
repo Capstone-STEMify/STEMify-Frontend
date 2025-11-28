@@ -83,8 +83,9 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
     attemptData.questionAttempts.forEach((qAttempt) => {
       initialScores[qAttempt.id] = {}
       qAttempt.rubricScore.forEach((criterion) => {
+        // accept either `currentPoints` (server-side naming) or `points` (alternate payload)
         initialScores[qAttempt.id][criterion.rubricCriterionId] =
-          (criterion as any).currentPoints ?? null
+          (criterion as any).currentPoints ?? (criterion as any).points ?? null
       })
     })
 
@@ -273,10 +274,13 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
                                   max={criterion.maxPoints}
                                   min={0}
                                   disabled={isReviewed || isGrading}
-                                  // 'null ?? ""' -> ""
-                                  // '0 ?? ""' -> 0
-                                  // '5 ?? ""' -> 5
-                                  value={scores[question.id]?.[criterion.rubricCriterionId] ?? ''}
+                                  value={
+                                    // prefer edited state, otherwise fallback to API fields
+                                    scores[question.id]?.[criterion.rubricCriterionId] ??
+                                    (criterion as any).currentPoints ??
+                                    (criterion as any).points ??
+                                    ''
+                                  }
                                   onChange={(e) =>
                                     handleScoreChange(question.id, criterion.rubricCriterionId, e.target.value)
                                   }
@@ -295,10 +299,10 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
                           <p className='text-sm font-medium text-gray-700'>
                             {t('modal.total')}:{' '}
                             {question.rubricScore.reduce((sum, c) => {
-                              const score =
-                                scores[question.id]?.[c.rubricCriterionId] !== undefined
-                                  ? scores[question.id][c.rubricCriterionId] || 0
-                                  : 0
+                              const key = c.rubricCriterionId
+                              const scoreFromState = scores[question.id]?.[key]
+                              const scoreFromApi = (c as any).currentPoints ?? (c as any).points
+                              const score = scoreFromState !== undefined ? scoreFromState || 0 : scoreFromApi ?? 0
                               return sum + score
                             }, 0)}{' '}
                             / {question.rubricScore.reduce((sum, c) => sum + c.maxPoints, 0)}

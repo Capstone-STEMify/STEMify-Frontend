@@ -69,7 +69,8 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
     attemptData.questionAttempts.forEach((qAttempt) => {
       initialScores[qAttempt.id] = {}
       qAttempt.rubricScore.forEach((criterion) => {
-        initialScores[qAttempt.id][criterion.rubricCriterionId] = (criterion as any).currentPoints ?? null
+        // accept either `currentPoints` or `points` depending on API response
+        initialScores[qAttempt.id][criterion.rubricCriterionId] = (criterion as any).currentPoints ?? (criterion as any).points ?? null
       })
     })
 
@@ -203,7 +204,14 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                 : `Question #${index + 1}`
             const questionContent = originalQuestion?.content || ''
             
-            const currentTotalScore = calculateQuestionTotal(qAttempt.id)
+            const currentTotalScore = (() => {
+              const questionScores = scores[qAttempt.id]
+              if (questionScores) {
+                return Object.values(questionScores).reduce((acc, curr) => (acc || 0) + (curr || 0), 0) || 0
+              }
+              // fallback to API values
+              return qAttempt.rubricScore.reduce((acc: number, c: any) => acc + ((c.currentPoints ?? c.points) || 0), 0)
+            })()
             const maxQuestionScore = calculateMaxPoints(qAttempt.rubricScore)
 
             return (
@@ -247,9 +255,10 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                               type="number"
                               className='h-10 w-full rounded-md border-slate-200 bg-slate-50 pr-4 text-slate-900 focus:bg-white'
                               value={
+                                // prefer edited state, otherwise fallback to API fields
                                 scores[qAttempt.id] && scores[qAttempt.id][criterion.rubricCriterionId] != null
                                   ? String(scores[qAttempt.id][criterion.rubricCriterionId])
-                                  : ''
+                                  : String((criterion as any).currentPoints ?? (criterion as any).points ?? '')
                               }
                               onChange={(e) => handleScoreChange(qAttempt.id, criterion.rubricCriterionId, e.target.value)}
                               placeholder="Nhập điểm"

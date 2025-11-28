@@ -48,7 +48,8 @@ function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: stri
     const latestAttempt = student.attempts.length > 0 ? student.attempts[student.attempts.length - 1] : null
 
     let grade: string | null = null
-    if (latestAttempt && (latestAttempt.status === 'Graded' || latestAttempt.status === 'Passed')) {
+    // Show grade for attempts that have been reviewed (Graded, Passed, or Failed)
+    if (latestAttempt && (latestAttempt.status === 'Graded' || latestAttempt.status === 'Passed' || latestAttempt.status === 'Failed')) {
       grade = `${latestAttempt.totalScore}`
     }
 
