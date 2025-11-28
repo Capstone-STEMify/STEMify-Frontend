@@ -3,18 +3,13 @@
 import { useEffect } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import QuizResult from '@/features/resource/quiz/components/player/QuizResult'
 import QuizSidebar from '@/features/resource/quiz/components/player/QuizSidebar'
 import QuizMainContent from '@/features/resource/quiz/components/player/QuizMainContent'
-import { useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { initializeQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
-import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 
 export default function QuizPlayerContainer() {
   const dispatch = useAppDispatch()
-  const { isSubmitted } = useAppSelector((state) => state.quizPlayer)
-  const isMobile = useIsMobile()
   const selectedQuiz = useAppSelector((state) => state.quizPlayer.selectedQuiz)
 
   useEffect(() => {

@@ -195,6 +195,12 @@
     "badge": {
       "selected": "Chọn"
     },
+    "level": {
+      "all": "Tất Cả Trình Độ",
+      "beginner": "Mới Bắt Đầu",
+      "intermidiate": "Trung Bình",
+      "advanced": "Nâng Cao"
+    },
     "status": {
       "all": "Tất Cả",
       "filterBy": "Lọc Theo",

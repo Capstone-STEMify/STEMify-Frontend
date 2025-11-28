@@ -223,6 +223,12 @@
       "endsoon": "End Soon",
       "inprogress": "In Progress"
     },
+    "level": {
+      "all": "All Levels",
+      "beginner": "Beginner",
+      "intermidiate": "Intermidiate",
+      "advanced": "Advanced"
+    },
     "accountType": {
       "accountTypeLabel": "Account Type",
       "admin": "Admin",

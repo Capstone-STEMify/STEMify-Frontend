@@ -62,6 +62,20 @@
       "button": "Tải lên (CSV)",
       "headerTitle": "Tải lên câu hỏi trắc nghiệm từ tệp CSV",
       "headerDescription": "Tải lên tệp CSV có định dạng đúng để thêm nhiều câu hỏi trắc nghiệm cùng lúc."
+    },
+    "detail": {
+      "passingMarks": "Điểm đạt",
+      "maxAttempt": "Số lần làm tối đa",
+      "timeLimit": "Giới hạn thời gian",
+      "mins": "phút",
+      "length": "Độ dài",
+      "question": {
+        "question": "Câu hỏi",
+        "singlechoice": "Chọn một đáp án",
+        "multiplechoice": "Chọn nhiều đáp án",
+        "truefalse": "Đúng / Sai",
+        "pts": "điểm"
+      }
     }
   }
 }

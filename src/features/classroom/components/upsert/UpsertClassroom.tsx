@@ -140,10 +140,6 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
   )
 
   const teacherOptions = getOptions(teacherData?.data.items, 'userName', 'imageUrl', 'email')
-  const gradeOptions = Object.entries(Grade).map(([key, value]) => ({
-    label: value,
-    value: value
-  }))
 
   const [createClassroom, { isLoading: isCreating }] = useCreateClassroomMutation()
   const [updateClassroom, { isLoading: isUpdating }] = useUpdateClassroomMutation()
@@ -230,7 +226,6 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
           <ClassroomBasicInfo
             form={form}
             organizationSubscriptionData={organizationSubscriptionData}
-            gradeOptions={gradeOptions}
             minDate={minDate}
             maxDate={maxDate}
           />

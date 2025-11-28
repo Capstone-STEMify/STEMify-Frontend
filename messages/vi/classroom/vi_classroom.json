@@ -79,6 +79,7 @@
         "description": "Mô tả",
         "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
         "gradeLevel": "Cấp lớp",
+        "grade": "Lớp",
         "selectGrade": "Chọn cấp lớp",
         "duration": "Thời lượng",
         "selectDuration": "Chọn thời lượng",
