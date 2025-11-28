@@ -16,6 +16,7 @@
         "description": "Description",
         "descriptionPlaceholder": "Brief description of this classroom...",
         "gradeLevel": "Grade Level",
+        "grade": "Grade",
         "duration": "Duration",
         "selectDuration": "Select Duration",
         "startDate": "Start Date",

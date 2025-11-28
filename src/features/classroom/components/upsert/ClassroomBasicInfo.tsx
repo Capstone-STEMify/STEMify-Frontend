@@ -8,21 +8,39 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Calendar } from '@/components/shadcn/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { Button } from '@/components/shadcn/button'
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, RefreshCw } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/utils/shadcn/utils'
 import { useTranslations } from 'next-intl'
+import { Grade } from '@/features/classroom/types/classroom.type'
 
 type ClassroomBasicInfoProps = {
   form: any
   organizationSubscriptionData: any
-  gradeOptions: { label: string; value: string }[]
   minDate: Date | undefined
   maxDate: Date | undefined
 }
 
-export default function ClassroomBasicInfo({ form, gradeOptions, minDate, maxDate }: ClassroomBasicInfoProps) {
+// Generate random class code like Google Meet (xxx-yyyy-zzz)
+const generateClassCode = () => {
+  const chars = 'abcdefghijklmnopqrstuvwxyz'
+  const randomString = (length: number) => {
+    let result = ''
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    return result
+  }
+  return `${randomString(3)}-${randomString(4)}-${randomString(3)}`
+}
+
+export default function ClassroomBasicInfo({ form, minDate, maxDate }: ClassroomBasicInfoProps) {
   const tClassroom = useTranslations('classroom.create.step1')
+
+  const gradeOptions = Object.values(Grade).map((g) => ({
+    label: g.replace('Grade', 'Lớp'),
+    value: g.replace('Grade', 'Lớp')
+  }))
 
   const DURATION_OPTIONS = [
     { label: `4 ${tClassroom('weeks')}`, value: '4' },
@@ -42,10 +60,21 @@ export default function ClassroomBasicInfo({ form, gradeOptions, minDate, maxDat
 
   const isCustomDuration = durationWeeks === 'custom'
 
+  // Generate initial class code
+  useEffect(() => {
+    const formClassCode = form.getFieldValue('classCode')
+    if (!formClassCode) {
+      const newCode = generateClassCode()
+      setClassCode(newCode)
+      form.setFieldValue('classCode', newCode)
+    } else {
+      setClassCode(formClassCode)
+    }
+  }, [])
+
   // Sync với form khi mount (cho trường hợp edit)
   useEffect(() => {
     const formName = form.getFieldValue('name')
-    const formClassCode = form.getFieldValue('classCode')
     const formGrade = form.getFieldValue('grade')
     const formDescription = form.getFieldValue('description')
     const formDuration = form.getFieldValue('durationWeeks')
@@ -53,7 +82,6 @@ export default function ClassroomBasicInfo({ form, gradeOptions, minDate, maxDat
     const formEndDate = form.getFieldValue('endDate')
 
     if (formName) setName(formName)
-    if (formClassCode) setClassCode(formClassCode)
     if (formGrade) setGrade(formGrade)
     if (formDescription) setDescription(formDescription)
     if (formDuration) setDurationWeeks(formDuration)
@@ -107,6 +135,12 @@ export default function ClassroomBasicInfo({ form, gradeOptions, minDate, maxDat
     }
   }, [endDate])
 
+  const handleRegenerateCode = () => {
+    const newCode = generateClassCode()
+    setClassCode(newCode)
+    form.setFieldValue('classCode', newCode)
+  }
+
   return (
     <div className='animate-fadeIn mx-auto max-w-6xl space-y-6'>
       <div className='rounded-lg border bg-white p-6 shadow-sm'>
@@ -127,12 +161,25 @@ export default function ClassroomBasicInfo({ form, gradeOptions, minDate, maxDat
               <Label htmlFor='classCode'>
                 {tClassroom('classCode')} <span className='text-red-500'>*</span>
               </Label>
-              <Input
-                id='classCode'
-                placeholder='e.g., STEM-1A-2025'
-                value={classCode}
-                onChange={(e) => setClassCode(e.target.value)}
-              />
+              <div className='flex gap-2'>
+                <Input
+                  id='classCode'
+                  placeholder='e.g., abc-defg-hij'
+                  value={classCode}
+                  readOnly
+                  className='flex-1 bg-gray-50 font-mono'
+                />
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='icon'
+                  onClick={handleRegenerateCode}
+                  title='Generate new code'
+                >
+                  <RefreshCw className='h-4 w-4' />
+                </Button>
+              </div>
+              <p className='text-xs text-gray-500'>Auto-generated code • Click refresh to generate new</p>
             </div>
 
             <div className='space-y-2'>

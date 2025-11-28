@@ -73,7 +73,15 @@ function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: stri
   })
 }
 
-export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; filter: 'reviewed' | 'not-reviewed' }) {
+export function AssignmentTable({
+  data,
+  filter,
+  onRefresh
+}: {
+  data: AssignmentStatistics
+  filter: 'reviewed' | 'not-reviewed'
+  onRefresh?: () => void
+}) {
   const [openSubmission, setOpenSubmission] = useState<Submission | null>(null)
 
   const t = useTranslations('assignment.teacher.table')
@@ -176,6 +184,8 @@ export function AssignmentTable({ data, filter }: { data: AssignmentStatistics; 
             <SubmissionReviewDialog
               submission={openSubmission}
               studentAssignmentId={openSubmission.studentAssignmentId}
+              onClose={() => setOpenSubmission(null)}
+              onSuccess={onRefresh}
             />
           )}
         </DialogContent>

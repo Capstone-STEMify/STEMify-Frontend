@@ -24,9 +24,11 @@ import { useTranslations } from 'next-intl'
 interface SubmissionReviewDialogProps {
   submission: Submission
   studentAssignmentId: number | null
+  onSuccess?: () => void
+  onClose?: () => void
 }
 
-export function SubmissionReviewDialog({ submission, studentAssignmentId }: SubmissionReviewDialogProps) {
+export function SubmissionReviewDialog({ submission, studentAssignmentId, onSuccess, onClose }: SubmissionReviewDialogProps) {
   const { closeModal } = useModal()
 
   const t = useTranslations('assignment.teacher')
@@ -156,7 +158,10 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
       }).unwrap()
 
       toast.success('Review submitted successfully!')
+      // close both global modal (if used) and parent-controlled dialog
       closeModal()
+      onClose?.()
+      onSuccess?.()
     } catch (err) {
       toast.error('Failed to submit review.')
       console.error(err)
@@ -327,7 +332,14 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId }: Subm
                   />
                 </div>
                 <div className='mt-4 flex justify-end gap-2'>
-                  <Button variant='outline' disabled={isGrading} onAbort={closeModal}>
+                  <Button
+                    variant='outline'
+                    disabled={isGrading}
+                    onClick={() => {
+                      closeModal()
+                      onClose?.()
+                    }}
+                  >
                     {tc('button.cancel')}
                   </Button>
                   <Button onClick={handleSubmitReview} disabled={isGrading}>
