@@ -175,3 +175,10 @@ export const useStatusTranslation = () => {
     return tc(status.toLowerCase())
   }
 }
+
+export const useLevelTranslation = () => {
+  const tc = useTranslations('common.level')
+  return (level: string) => {
+    return tc(level.toLowerCase())
+  }
+}
