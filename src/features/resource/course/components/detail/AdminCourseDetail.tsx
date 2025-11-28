@@ -19,7 +19,7 @@ import {
 import LessonTable from '@/features/resource/lesson/components/list/LessonTable'
 import { useModal } from '@/providers/ModalProvider'
 import { getLevelBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
-import { capitalizeFirst } from '@/utils/index'
+import { capitalizeFirst, useStatusTranslation } from '@/utils/index'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setPageIndex, setPageSize } from '@/features/resource/lesson/slice/lessonSlice'
 import { UserRole } from '@/types/userRole'
@@ -33,6 +33,7 @@ export default function AdminCourseDetail() {
   const t = useTranslations('Admin.course_details')
   const tt = useTranslations('toast')
   const tc = useTranslations('common')
+  const translateStatus = useStatusTranslation()
 
   // Get current user
   const user = useAppSelector((state) => state.auth.user)
@@ -148,7 +149,7 @@ export default function AdminCourseDetail() {
         <div className='mb-4 flex flex-wrap gap-4 text-sm'>
           <span>
             {t('status')}:{' '}
-            <Badge className={getStatusBadgeClass(course.data.status)}>{capitalizeFirst(course.data.status)}</Badge>
+            <Badge className={getStatusBadgeClass(course.data.status)}>{translateStatus(course.data.status)}</Badge>
           </span>
           <span>
             {t('age')}: <Badge className='border-rose-300 bg-rose-100 text-rose-800'>{course.data.ageRangeLabel}</Badge>
