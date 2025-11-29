@@ -4,8 +4,6 @@
     "type": "Organization Type",
     "description": "Description",
     "image": "Organization Image",
-    "noOrganization": "No organizations found",
-    "noOrganizationSubtitle": "Please create an organization before creating a subscription.",
     "imageSize": "Image must be less than 5MB",
     "detail": {
       "noData": "No organization data available.",

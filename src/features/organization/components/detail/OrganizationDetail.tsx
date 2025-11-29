@@ -3,8 +3,10 @@ import { Badge } from '@/components/shadcn/badge'
 import { SCard } from '@/components/shared/card/SCard'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import SLoading from '@/components/shared/SLoading'
 import { useDeleteOrganizationMutation, useGetOrganizationByIdQuery } from '@/features/organization/api/organizationApi'
 import SystemSubscriptionTable from '@/features/subscription/components/list/SystemSubscriptionTable'
+import UserOrganizationTable from '@/features/user/components/table/UserOrganizationTable'
 import { useModal } from '@/providers/ModalProvider'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDate, useStatusTranslation } from '@/utils/index'
@@ -30,8 +32,12 @@ export default function OrganizationDetail() {
     await deleteOrganization(id)
   }
 
+  if (isLoading) {
+    return <SLoading />
+  }
+
   if (!organization) {
-    return <SEmpty title={to('noOrganization')} />
+    return <SEmpty title={to('noData')} />
   }
   return (
     <div>
@@ -95,7 +101,11 @@ export default function OrganizationDetail() {
         </div>
       </div>
 
+      {/* Subscription List */}
       <SystemSubscriptionTable subscription={organization.data.subscriptions} />
+
+      {/* Organization User List */}
+      <UserOrganizationTable />
     </div>
   )
 }
