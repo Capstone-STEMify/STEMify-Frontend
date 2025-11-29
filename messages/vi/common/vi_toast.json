@@ -33,6 +33,7 @@
     "confirmMessage": {
       "confirmLabel": "Bạn có chắc chắn?",
       "delete": "Bạn có chắc chắn muốn xóa \"{title}\" không?",
+      "archive": "Bạn có chắc chắn muốn lưu trữ \"{title}\" không?",
       "removeCourse": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi chương trình học này không?",
       "removeKit": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi khóa học này không?",
       "removeComponent": "Bạn có chắc chắn muốn xóa thành phần khỏi bộ dụng cụ này không?",

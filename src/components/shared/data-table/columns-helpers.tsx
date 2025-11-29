@@ -22,6 +22,7 @@ export type ActionItem<T> = {
   hidden?: (row: Row<T>) => boolean
   disabled?: (row: Row<T>) => boolean
   danger?: boolean
+  archive?: boolean
 }
 
 /** Common row selection column */
@@ -78,7 +79,7 @@ function ActionsCell<T>({ row, items, label }: { row: Row<T>; items: ActionItem<
           <React.Fragment key={idx}>
             {i.separatorBefore && <DropdownMenuSeparator />}
             <DropdownMenuItem
-              className={i.danger ? 'text-red-600' : undefined}
+              className={i.danger ? 'text-red-600' : i.archive ? 'text-amber-600' : undefined}
               disabled={i.disabled?.(row)}
               onClick={() => i.onClick?.(row)}
             >
