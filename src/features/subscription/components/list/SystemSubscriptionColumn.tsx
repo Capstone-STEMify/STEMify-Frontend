@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslations } from 'next-intl'
 import { ColumnDef } from '@tanstack/react-table'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useModal } from '@/providers/ModalProvider'
 import { toast } from 'sonner'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
@@ -16,6 +16,7 @@ import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscri
 import { BillingCycle } from '@/features/plan/types/plan.type'
 
 export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscription>[] {
+  const { organizationId } = useParams()
   const router = useRouter()
   const locale = useLocale()
   const { openModal } = useModal()
@@ -37,7 +38,7 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
   }
 
   const handleNavigate = (id: number) => {
-    router.push(`/${locale}/admin/organization/${id}`)
+    router.push(`/${locale}/admin/organization/${organizationId}/subscription/${id}`)
   }
 
   const handleStatusChange = (subscription: any, newStatus: string) => {
@@ -164,7 +165,7 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
       {
         label: tc('button.view'),
         onClick: ({ original }) => {
-          router.push(`/${locale}/admin/organization/${original.id}`)
+          router.push(`/${locale}/admin/organization/${organizationId}/subscription/${original.id}`)
         }
       },
       {

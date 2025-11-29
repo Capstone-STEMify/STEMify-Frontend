@@ -44,49 +44,54 @@ export default function OrganizationDetail() {
       <div className='grid grid-cols-1 gap-12 xl:grid-cols-3'>
         <div className='xl:col-span-2'>
           {/* <h2 className='mb-2 text-sm text-gray-500 uppercase'>{organization.data.code}</h2> */}
-          <div className='flex items-center gap-2'>
-            <h1 className='mb-4 text-4xl font-bold text-gray-900'>{organization.data.name}</h1>
-            <span className='cursor-pointer text-blue-500'>
-              <SquarePen
-                onClick={() => {
-                  openModal('upsertOrganization', { organizationId: organization.data.id })
-                }}
-              />
-            </span>
-            <span className='cursor-pointer text-red-500'>
-              <Trash2
-                onClick={() => {
-                  openModal('confirm', {
-                    message: `${tt('confirmMessage.delete', { title: organization.data.name })}`,
-                    onConfirm: () => handleDelete(organization.data.id)
-                  })
-                }}
-              />
-            </span>
+          <div className='flex items-center justify-between gap-2 space-y-2'>
+            <div className='flex items-center gap-2'>
+              <h1 className='text-center text-4xl font-bold text-gray-900'>{organization.data.name}</h1>
+              <span>
+                <Badge className={getStatusBadgeClass(organization.data.status)}>
+                  {translateStatus(organization.data.status)}
+                </Badge>
+              </span>
+            </div>
+            <div className='flex items-center gap-2'>
+              <span className='cursor-pointer text-blue-500'>
+                <SquarePen
+                  onClick={() => {
+                    openModal('upsertOrganization', { organizationId: organization.data.id })
+                  }}
+                />
+              </span>
+              <span className='cursor-pointer text-red-500'>
+                <Trash2
+                  onClick={() => {
+                    openModal('confirm', {
+                      message: `${tt('confirmMessage.delete', { title: organization.data.name })}`,
+                      onConfirm: () => handleDelete(organization.data.id)
+                    })
+                  }}
+                />
+              </span>
+            </div>
           </div>
 
-          <div className='mb-4 flex flex-wrap gap-2 text-sm'>
-            <p>
-              {to('createdDate')}{' '}
-              {formatDate(organization.data.createdDate, { locale: locale as 'en' | 'vi' | undefined })}
-            </p>
-            <p>
-              {to('lastModifiedDate')}{' '}
-              {formatDate(organization.data.lastModifiedDate, { locale: locale as 'en' | 'vi' | undefined })}
-            </p>
+          <div className='text-sm text-gray-700'>
+            <div className='flex items-center gap-2'>
+              <span className='font-medium'>{to('createdDate')}:</span>
+              <span>{formatDate(organization.data.createdDate, { locale: locale as 'en' | 'vi' | undefined })}</span>
+            </div>
+
+            <div className='flex items-center gap-2'>
+              <span className='font-medium'>{to('lastModifiedDate')}:</span>
+              <span>
+                {formatDate(organization.data.lastModifiedDate, { locale: locale as 'en' | 'vi' | undefined })}
+              </span>
+            </div>
           </div>
-          <div className='mb-4 flex flex-wrap gap-4 text-sm'>
-            <span>
-              {to('status')}:{' '}
-              <Badge className={getStatusBadgeClass(organization.data.status)}>
-                {translateStatus(organization.data.status)}
-              </Badge>
-            </span>
-          </div>
-          <hr className='mb-6 border-gray-300' />
+
+          <hr className='my-3 border-gray-300' />
 
           {/* Description */}
-          <h3 className='mb-2 text-sm font-bold tracking-wide text-gray-800'>{to('description')}</h3>
+          <h3 className='text-sm font-bold tracking-wide text-gray-800'>{to('description')}</h3>
           <p className='whitespace-pre-line text-gray-700'>{organization.data.description}</p>
         </div>
 

@@ -27,7 +27,7 @@
       "plan": "Plan",
       "resource": "Resource",
       "operationCenter": "Operation Center",
-      "organizationSubscription": "Organization Subscription",
+      "organizationSubscription": "Organization",
       "contact": "Contact"
     },
     "course_management": {

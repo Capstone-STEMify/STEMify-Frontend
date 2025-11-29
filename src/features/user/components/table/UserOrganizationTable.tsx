@@ -64,7 +64,7 @@ export default function UserOrganizationTable() {
   }
 
   return (
-    <div className='px-6'>
+    <div>
       <h1 className='text-2xl text-gray-800'>User Management</h1>
       <div className='flex justify-between'>
         <div className='flex items-center justify-start gap-4 py-4'>
