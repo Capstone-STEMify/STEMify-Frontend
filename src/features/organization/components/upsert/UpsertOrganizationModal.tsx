@@ -1,6 +1,6 @@
 import { Dialog, DialogContent } from '@/components/shadcn/dialog'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
-import UpsertOrganization from '@/features/organization/components/UpsertOrganization'
+import UpsertOrganization from '@/features/organization/components/upsert/UpsertOrganization'
 import { useModal } from '@/providers/ModalProvider'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { useTranslations } from 'next-intl'

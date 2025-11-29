@@ -11,7 +11,7 @@ export type Organization = {
   status: OrganizationStatus
   createdDate: string
   lastModifiedDate: string
-  subscriptions: Partial<OrganizationSubscription>[]
+  subscriptions: OrganizationSubscription[]
 }
 
 export type AdminOrganization = {

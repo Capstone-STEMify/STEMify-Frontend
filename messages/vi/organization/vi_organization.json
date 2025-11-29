@@ -9,6 +9,8 @@
       "noData": "Không có dữ liệu tổ chức nào.",
       "noSubscription": "Không có gói đăng ký nào cho tổ chức này.",
       "header": "Chi tiết tổ chức",
+      "status": "Trạng thái",
+      "description": "Mô tả",
       "organizationType": "Loại tổ chức",
       "createdAt": "Ngày tạo",
       "updatedAt": "Ngày cập nhật",
@@ -69,6 +71,7 @@
     "subscription": {
       "header": "Tạo gói đăng ký tổ chức",
       "subHeader": "Làm theo các bước để thiết lập tổ chức của bạn",
+      "months": " tháng",
       "step1": {
         "title": "Cấu hình gói đăng ký",
         "description": "Chọn gói và các tùy chọn"
