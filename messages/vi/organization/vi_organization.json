@@ -4,6 +4,8 @@
     "type": "Loại tổ chức",
     "description": "Mô tả",
     "image": "Ảnh tổ chức",
+    "noOrganization": "Không tìm thấy tổ chức nào",
+    "noOrganizationSubtitle": "Vui lòng tạo tổ chức trước khi tạo gói đăng ký.",
     "imageSize": "Ảnh phải nhỏ hơn 5MB",
     "detail": {
       "noData": "Không có dữ liệu tổ chức nào.",
