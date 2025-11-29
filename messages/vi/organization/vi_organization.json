@@ -12,6 +12,8 @@
       "status": "Trạng thái",
       "description": "Mô tả",
       "organizationType": "Loại tổ chức",
+      "createdDate": "Ngày tạo",
+      "lastModifiedDate": "Ngày cập nhật",
       "createdAt": "Ngày tạo",
       "updatedAt": "Ngày cập nhật",
       "package": "Gói",

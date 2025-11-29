@@ -66,9 +66,12 @@ export default function OrganizationDetail() {
           </div>
 
           <div className='mb-4 flex flex-wrap gap-2 text-sm'>
-            <p>Ngày tạo: {formatDate(organization.data.createdDate, { locale: locale as 'en' | 'vi' | undefined })}</p>
             <p>
-              Chỉnh sửa gần nhất:{' '}
+              {to('createdDate')}{' '}
+              {formatDate(organization.data.createdDate, { locale: locale as 'en' | 'vi' | undefined })}
+            </p>
+            <p>
+              {to('lastModifiedDate')}{' '}
               {formatDate(organization.data.lastModifiedDate, { locale: locale as 'en' | 'vi' | undefined })}
             </p>
           </div>
