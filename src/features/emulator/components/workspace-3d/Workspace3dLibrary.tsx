@@ -27,7 +27,7 @@ export default function Workspace3dLibrary() {
 
   const userId = useAppSelector((state) => state.auth.user?.userId)
 
-  const { data, isLoading } = useSearchEmulationsQuery({ page: 1, userId: userId })
+const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
   const [updateEmulation] = useUpdateEmulatorMutation()
 
   const emulations = data?.data.items || []

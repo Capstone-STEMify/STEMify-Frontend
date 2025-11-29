@@ -157,7 +157,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
             <Table>
               <TableHeader>
                 <TableRow className='bg-gray-50/50'>
-                  <TableHead className='w-[35%]'>
+                  <TableHead className='w-[30%]'>
                     <div className='flex items-center gap-1.5'>
                       <Mail size={14} />
                       <span>Email</span>
@@ -170,13 +170,11 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                     </div>
                   </TableHead>
                   <TableHead className='w-[15%]'>{to('license.role')}</TableHead>
-                  <TableHead className='w-[12%]'>{to('license.status')}</TableHead>
                   <TableHead className='w-[13%]'>
-                    <div className='flex items-center gap-1.5'>
-                      <Calendar size={14} />
-                      <span>{to('license.assignedAt')}</span>
-                    </div>
+                    <span>{to('license.assignedAt')}</span>
                   </TableHead>
+                  <TableHead className='w-[12%]'>{to('license.status')}</TableHead>
+
                   <TableHead className='w-[5%]'></TableHead>
                 </TableRow>
               </TableHeader>
@@ -215,15 +213,16 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                           {tc(`accountType.${assignment.type.toLowerCase()}`)}
                         </Badge>
                       </TableCell>
-                      <TableCell>
-                        <Badge className={`${getStatusBadgeClass(assignment.status)} text-xs`}>
-                          {statusTranslate(assignment.status)}
-                        </Badge>
-                      </TableCell>
+
                       <TableCell>
                         <span className='text-sm'>
                           {formatDate(assignment.assignedAt, { locale: locale as 'en' | 'vi' })}
                         </span>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={`${getStatusBadgeClass(assignment.status)} text-xs`}>
+                          {statusTranslate(assignment.status)}
+                        </Badge>
                       </TableCell>
                       <TableCell>
                         <button
