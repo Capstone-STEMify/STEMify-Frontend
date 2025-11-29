@@ -17,6 +17,7 @@ import { useGetOrganizationUserAction } from '@/features/user/components/table/U
 
 export default function UserOrganizationTable() {
   const t = useTranslations('Admin.placeholder')
+  const to = useTranslations('organization.detail')
   const tCommon = useTranslations('common')
   const statusTranslate = useStatusTranslation()
   const { openModal } = useModal()
@@ -65,7 +66,7 @@ export default function UserOrganizationTable() {
 
   return (
     <div>
-      <h1 className='text-2xl text-gray-800'>User Management</h1>
+      <h2 className='text-lg font-semibold'>{to('user.title')}</h2>
       <div className='flex justify-between'>
         <div className='flex items-center justify-start gap-4 py-4'>
           <Input

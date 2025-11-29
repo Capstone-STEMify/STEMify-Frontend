@@ -58,6 +58,10 @@
         "status": "Status",
         "assignedAt": "Assigned At",
         "notSet": "Not set"
+      },
+      "user": {
+        "title": "Organization Members",
+        "noData": "No members found for this organization."
       }
     },
     "form": {
