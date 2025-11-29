@@ -15,7 +15,7 @@
       },
       "answerTable": {
         "head": "Learner",
-        "point": "point:",
+        "point": "Point:",
         "accuracy": "Accuracy",
         "answered": "Answered",
         "question": "Questions",
