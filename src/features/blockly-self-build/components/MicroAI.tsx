@@ -140,7 +140,7 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
             if (command !== lastCommandRef.current || now > cooldownRef.current) {
               await sendCommandToMicrobit(command)
               lastCommandRef.current = command
-              cooldownRef.current = now + 2000
+              cooldownRef.current = now + 1000
             }
           }
         }
