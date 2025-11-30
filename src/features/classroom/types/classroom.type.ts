@@ -1,3 +1,4 @@
+import { Course } from '@/features/resource/course/types/course.type'
 import { Curriculum } from '@/features/resource/curriculum/types/curriculum.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
@@ -22,7 +23,7 @@ export type Classroom = {
   status: ClassroomStatus
   numberOfStudents: number
   students: any[]
-  curriculum: Curriculum
+  course: Course
   // curriculum: Pick<Curriculum, 'id' | 'title' | 'description' | 'imageUrl' | 'courseCount' | 'code'>
   organizationSubscriptionOrderId: number
 }
