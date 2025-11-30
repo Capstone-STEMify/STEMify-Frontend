@@ -102,7 +102,8 @@
       "seeFeedback": "Xem Phản Hồi",
       "close": "Đóng",
       "addQuestion": "Thêm Câu Hỏi",
-      "addCriterion": "Thêm Tiêu Chí"
+      "addCriterion": "Thêm Tiêu Chí",
+      "createGroup": "Tạo Nhóm"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

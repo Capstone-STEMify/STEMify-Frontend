@@ -79,7 +79,6 @@
       "header": "Create Organization Subscription",
       "subHeader": "Follow the steps to set up your organization",
       "months": " months",
-
       "step1": {
         "title": "Configure Subscription",
         "description": "Select plan and options"
@@ -168,6 +167,11 @@
       "pleaseUploadCSV": "Please upload a CSV file",
       "uploadSuccess": "Users have been successfully invited and licenses assigned!",
       "userType": "User Type"
+    },
+    "group": {
+      "title": "Organization Student Groups",
+      "subTitle": "Manage your organization groups",
+      "noData": "No groups found for this organization."
     }
   }
 }

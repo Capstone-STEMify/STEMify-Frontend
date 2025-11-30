@@ -166,6 +166,11 @@
       "pleaseUploadCSV": "Vui lòng tải lên tệp CSV",
       "uploadSuccess": "Đã gửi lời mời thành công!",
       "userType": "Loại người dùng"
+    },
+    "group": {
+      "title": "Nhóm học sinh của tổ chức",
+      "subTitle": "Quản lý các nhóm của tổ chức bạn",
+      "noData": "Không tìm thấy nhóm nào cho tổ chức này."
     }
   }
 }

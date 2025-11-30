@@ -28,7 +28,8 @@
       "resource": "Tài nguyên",
       "operationCenter": "Hệ thống",
       "organizationSubscription": "Tổ chức",
-      "contact": "Liên hệ"
+      "contact": "Liên hệ",
+      "group": "Nhóm"
     },
     "course_management": {
       "title": "Quản lý tài nguyên",
