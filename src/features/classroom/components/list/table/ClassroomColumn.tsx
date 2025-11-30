@@ -4,7 +4,7 @@ import { createActionsColumnFromItems, createSelectColumn } from '@/components/s
 import { useDeleteClassroomMutation } from '@/features/classroom/api/classroomApi'
 import { Classroom, ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { formatDateV2 } from '@/utils/index'
+import { formatDate, formatDateV2, useStatusTranslation } from '@/utils/index'
 import { ColumnDef } from '@tanstack/react-table'
 import { GraduationCap, Users } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 
 export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
   const tc = useTranslations('common')
+  const translateStatus = useStatusTranslation()
 
   const router = useRouter()
   const locale = useLocale()
@@ -128,23 +129,21 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
       header: tc('tableHeader.status'),
       cell: ({ row }) => {
         const status = row.original.status
-        return <Badge className={`${getStatusBadgeClass(status)} font-medium`}>{status}</Badge>
+        return <Badge className={`${getStatusBadgeClass(status)} font-medium`}>{translateStatus(status)}</Badge>
       }
     },
     {
       accessorKey: 'startDate',
       header: tc('tableHeader.startDate'),
       cell: ({ row }) => {
-        const startDate = row.original.startDate
-        return <span>{formatDateV2(new Date(startDate))}</span>
+        return <span>{formatDate(row.original.startDate, { locale })}</span>
       }
     },
     {
       accessorKey: 'endDate',
       header: tc('tableHeader.endDate'),
       cell: ({ row }) => {
-        const endDate = row.original.endDate
-        return <span>{formatDateV2(new Date(endDate))}</span>
+        return <span>{formatDate(row.original.endDate, { locale })}</span>
       }
     },
     createActionsColumnFromItems<Classroom>([
