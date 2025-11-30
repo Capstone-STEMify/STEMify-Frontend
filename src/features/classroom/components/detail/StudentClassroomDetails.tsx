@@ -39,6 +39,7 @@ import { CourseEnrollment, CurriculumEnrollment, EnrollmentStatus } from '@/feat
 import { toast } from 'sonner'
 import { ClassroomNavItems } from 'app/[locale]/classroom/[classroomId]/page'
 import { setCourseEnrollmentId } from '@/features/enrollment/slice/enrollmentSlice'
+import { useCreateCourseEnrollmentMutation } from '@/features/enrollment/api/courseEnrollmentApi'
 
 export type StudentClassroomDetailProps = {
   courseEnrollment?: CourseEnrollment
@@ -56,7 +57,7 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
   const { data, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
   const classroom = data?.data
 
-  const [createEnrollment, { data: createEnrollmentResponse }] = useCreateCurriculumEnrollmentMutation()
+  const [createEnrollment, { data: createEnrollmentResponse }] = useCreateCourseEnrollmentMutation()
 
   const copyClassCode = () => {
     if (classroom?.classCode) {
@@ -71,13 +72,13 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
     }
     if (classroom?.course.id) {
       createEnrollment({
-        curriculumId: classroom?.course.id,
+        courseId: classroom?.course.id,
         studentId: auth?.user?.userId,
         status: EnrollmentStatus.IN_PROGRESS,
         classroomId: Number(classroomId)
       })
       toast.success(tt('successMessage.enroll'), {
-        description: `${tt('successMessage.enrollDes', { title: createEnrollmentResponse?.data.curriculumTitle || '' })}`
+        description: `${tt('successMessage.enrollDes', { title: createEnrollmentResponse?.data.courseTitle || '' })}`
       })
     }
   }
@@ -151,10 +152,13 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
                       </div>
                       <p className='mb-3 line-clamp-3 text-sm text-slate-600'>{classroom.course.description}</p>
                       {courseEnrollment ? (
-                        <Button className='mt-4' onClick={() => {
-                          dispatch(setCourseEnrollmentId(courseEnrollment.id))
-                          router.push(`/resource/course/${classroom.course.id}/learn`)
-                        }}>
+                        <Button
+                          className='mt-4'
+                          onClick={() => {
+                            dispatch(setCourseEnrollmentId(courseEnrollment.id))
+                            router.push(`/resource/course/${classroom.course.id}/learn`)
+                          }}
+                        >
                           Continue Learning
                         </Button>
                       ) : (
