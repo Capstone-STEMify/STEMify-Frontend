@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
 import { Users, MoreHorizontal } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
+import { useModal } from '@/providers/ModalProvider'
 
 // ===== Mock Data =====
 const mockGroups = [
@@ -113,6 +114,11 @@ const mockGroups = [
 export default function OrganizationGroupList() {
   const to = useTranslations('organization.group')
   const tc = useTranslations('common')
+  const { openModal } = useModal()
+
+  const handleCreateGroup = () => {
+    openModal('upsertGroup')
+  }
 
   return (
     <div className='px-10 py-5'>
@@ -121,7 +127,7 @@ export default function OrganizationGroupList() {
           <h1 className='text-2xl font-bold'>{to('title')}</h1>
           <p className='text-sm text-gray-600'>{to('subTitle')}</p>
         </div>
-        <Button>{tc('button.createGroup')}</Button>
+        <Button onClick={handleCreateGroup}>{tc('button.createGroup')}</Button>
       </div>
 
       <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3'>
