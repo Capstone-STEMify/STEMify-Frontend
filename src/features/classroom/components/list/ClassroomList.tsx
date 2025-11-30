@@ -80,9 +80,9 @@ export default function ClassroomList() {
             <Card className='group h-full cursor-pointer overflow-hidden transition-all hover:shadow-lg'>
               {/* Image Header */}
               <div className='relative h-32 w-full overflow-hidden bg-gradient-to-br from-sky-200 to-blue-500'>
-                {classroom.curriculum?.imageUrl ? (
+                {classroom.course?.imageUrl ? (
                   <img
-                    src={classroom.curriculum.imageUrl}
+                    src={classroom.course.imageUrl}
                     alt={classroom.name}
                     className='h-full w-full object-cover transition-transform group-hover:scale-105'
                   />
@@ -111,10 +111,10 @@ export default function ClassroomList() {
                   </div>
 
                   {/* Curriculum */}
-                  {classroom.curriculum && (
+                  {classroom.course && (
                     <div className='text-md flex items-center gap-2 text-gray-600'>
                       <BookOpen className='h-4 w-4 shrink-0 text-purple-500' />
-                      <span className='text-md line-clamp-1'>{classroom.curriculum.title}</span>
+                      <span className='text-md line-clamp-1'>{classroom.course.title}</span>
                     </div>
                   )}
 
