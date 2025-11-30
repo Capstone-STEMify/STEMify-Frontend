@@ -50,3 +50,35 @@ export type UserSliceParams = {
   subscription_order_id?: number | null
   license_type?: string | null
 } & SliceQueryParams
+
+// Organization User Types
+export type OrganizationUser = {
+  userId: string
+  email: string
+  userName: string
+  fullName: string
+  firstName: string
+  lastName: string
+  subscriptions: OrganizationUserSubscription[]
+}
+
+export type OrganizationUserSubscription = {
+  organizationUserId: string
+  organizationId: number
+  organizationRole: string
+  licenseType: string
+  licenseAssignmentId: string
+  subscriptionOrderId: number
+  isActive: boolean
+  joinedAt: string
+  classId: string
+  studentDateOfBirth: string
+  studentMajor: string
+  teacherSpecialization: string
+}
+
+export type OrganizationUserQueryParams = {
+  organizationId: number
+  pageNumber?: number
+  pageSize?: number
+}
