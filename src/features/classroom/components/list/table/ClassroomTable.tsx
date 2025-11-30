@@ -37,12 +37,12 @@ export default function ClassroomTable() {
     const items = data?.data.items ?? []
 
     // Sắp xếp theo curriculum.id để nhóm các classroom cùng curriculum lại
-    const sorted = [...items].sort((a, b) => a.curriculum.id - b.curriculum.id)
+    const sorted = [...items].sort((a, b) => a.course.id - b.course.id)
 
     // Đếm số classroom cho mỗi curriculum
     const curriculumGroups = new Map<number, number>()
     sorted.forEach((item) => {
-      const curriculumId = item.curriculum.id
+      const curriculumId = item.course.id
       curriculumGroups.set(curriculumId, (curriculumGroups.get(curriculumId) || 0) + 1)
     })
 
@@ -51,7 +51,7 @@ export default function ClassroomTable() {
     let curriculumRowCount = 0
 
     return sorted.map((item, index) => {
-      const curriculumId = item.curriculum.id
+      const curriculumId = item.course.id
       const isNewCurriculum = curriculumId !== currentCurriculumId
 
       // Meta data cho curriculum cell

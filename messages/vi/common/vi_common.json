@@ -179,7 +179,7 @@
       "grade": "Lớp",
       "teacher": "Giáo Viên",
       "numberOfStudents": "Số Học Sinh",
-      "numberOfCourses": "Số Khóa Học",
+      "numberOfLessons": "Số Bài Học",
       "accountType": "Loại Tài Khoản",
       "assignedDate": "Ngày Gán"
     },

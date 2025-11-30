@@ -180,7 +180,7 @@
       "grade": "Grade",
       "teacher": "Teacher",
       "numberOfStudents": "No. Students",
-      "numberOfCourses": "No. Courses",
+      "numberOfLessons": "No. Lessons",
       "accountType": "Account Type",
       "assignedDate": "Assigned Date"
     },

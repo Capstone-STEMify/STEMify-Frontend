@@ -27,16 +27,12 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
         className: 'border-r border-gray-200'
       },
       cell: ({ row }) => {
-        const curriculum = row.original.curriculum
+        const course = row.original.course
         const classroomId = row.original.id
         return (
           <div className='flex items-center gap-3 py-4'>
-            {curriculum.imageUrl ? (
-              <img
-                src={curriculum.imageUrl}
-                alt={curriculum.title}
-                className='h-12 w-12 flex-shrink-0 rounded object-cover'
-              />
+            {course.imageUrl ? (
+              <img src={course.imageUrl} alt={course.title} className='h-12 w-12 flex-shrink-0 rounded object-cover' />
             ) : (
               <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded bg-gradient-to-br from-sky-50 to-sky-400'>
                 <GraduationCap width={16} height={16} className='text-blue-500' />
@@ -49,10 +45,10 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
                   router.push(`/${locale}/organization/classroom/${classroomId}`)
                 }}
               >
-                {curriculum.title}
+                {course.title}
               </p>
               <p className='mt-1 text-xs text-gray-600'>
-                {tc('tableHeader.numberOfCourses')}: {curriculum.courseCount}
+                {tc('tableHeader.numberOfLessons')}: {course.lessonCount}
               </p>
             </div>
           </div>
