@@ -170,7 +170,25 @@
     "group": {
       "title": "Nhóm học sinh của tổ chức",
       "subTitle": "Quản lý các nhóm của tổ chức bạn",
-      "noData": "Không tìm thấy nhóm nào cho tổ chức này."
+      "noData": "Không tìm thấy nhóm nào cho tổ chức này.",
+      "step1": {
+        "title": "Bước 1: Chọn học sinh cho nhóm",
+        "description": "Chọn học sinh để thêm vào nhóm",
+        "numberOfStudents": "Số lượng học sinh",
+        "gradeLevel": "Cấp lớp",
+        "gradeLevelPlaceholder": "Chọn cấp lớp",
+        "studentList": "Danh sách học sinh",
+        "selected": "Đã chọn"
+      },
+      "step2": {
+        "title": "Bước 2: Tạo nhóm",
+        "numberOfStudents": "Số học sinh",
+        "studentsPerGroup": "Số học sinh mỗi nhóm",
+        "gradeLevel": "Cấp lớp",
+        "groupList": "Danh sách nhóm",
+        "name": "Tên",
+        "studentCount": "Số học sinh"
+      }
     }
   }
 }
