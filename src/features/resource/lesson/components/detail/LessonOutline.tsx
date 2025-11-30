@@ -22,8 +22,8 @@ export default function LessonOutline({ sectionData, sectionStatus }: LessonOutl
   const t = useTranslations('LessonDetails')
   const { data: userData } = useSession()
 
-  if (!sectionData || sectionData.length === 0) {
-    return <div className='flex items-center justify-center'>{t('notFound.no_section_v2')}</div>
+  const getSectionStatus = (sectionId: number) => {
+    return sectionStatus?.data.items.find((item) => item.sectionId === sectionId)?.status
   }
 
   const completedSectionIds = new Set(
@@ -32,6 +32,10 @@ export default function LessonOutline({ sectionData, sectionStatus }: LessonOutl
 
   const isLoggedIn = !!userData
   const isVisibleSection = role === LicenseType.TEACHER || role === UserRole.ADMIN || role === UserRole.STAFF
+
+  if (!sectionData || sectionData.length === 0) {
+    return <div className='flex items-center justify-center'>{t('notFound.no_section_v2')}</div>
+  }
 
   return (
     <div className='px-4'>
@@ -47,33 +51,52 @@ export default function LessonOutline({ sectionData, sectionStatus }: LessonOutl
             return true
           })
           .map((sec) => {
+            const status = getSectionStatus(sec.id)
+            const isLocked = status === ProgressStatus.LOCKED
+            const isCompleted = status === ProgressStatus.COMPLETED
             const isSelected = sec.id === selectedSectionId
-            const isCompleted = completedSectionIds.has(sec.id)
+
+            // ✅ Determine if section is clickable
+            const isClickable = isLoggedIn && !isLocked
 
             return (
               <div
                 key={sec.id}
                 className={cn(
                   'flex items-center justify-between gap-2 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors',
-                  isSelected ? 'bg-muted border-l-4 border-blue-500 font-semibold text-blue-700' : 'hover:bg-muted/60',
-                  !isLoggedIn ? 'cursor-default' : 'cursor-pointer'
+                  // ✅ Selected state styling
+                  isSelected ? 'bg-muted border-l-4 border-blue-500 font-semibold text-blue-700' : '',
+                  // ✅ Hover and cursor styling based on clickable state
+                  isClickable ? 'hover:bg-muted/60 cursor-pointer' : 'cursor-not-allowed',
+                  // ✅ Locked section styling
+                  isLocked ? 'bg-slate-50 opacity-60' : ''
                 )}
                 onClick={() => {
-                  if (isLoggedIn) {
+                  // ✅ Only allow click if section is clickable
+                  if (isClickable) {
                     dispatch(setSelectedSectionId(sec.id))
                   }
                 }}
               >
                 <div className='flex items-center gap-2'>
-                  {!isLoggedIn ? (
-                    <Lock size={16} className='text-gray-400' />
+                  {/* ✅ Icon logic: Lock for not logged in OR locked status */}
+                  {!isLoggedIn || isLocked ? (
+                    <Lock size={16} className={cn(isLocked ? 'text-orange-500' : 'text-gray-400')} />
                   ) : (
-                    isCompleted && <Check size={16} className='text-blue-500' />
+                    isCompleted && <Check size={16} className='text-green-500' />
                   )}
+
+                  {/* ✅ Teacher-only section indicator */}
                   {isVisibleSection && !sec.isVisibleToStudent && <GraduationCap size={16} className='text-blue-500' />}
-                  <div className={!isLoggedIn ? 'text-gray-500' : ''}>{sec.title}</div>
+
+                  {/* ✅ Section title with appropriate styling */}
+                  <div className={cn(!isLoggedIn && 'text-gray-500', isLocked && 'text-slate-600')}>{sec.title}</div>
                 </div>
-                <div className={cn('text-muted-foreground', !isLoggedIn && 'text-gray-400')}>{sec.duration} mins</div>
+
+                {/* ✅ Duration with appropriate styling */}
+                <div className={cn('text-muted-foreground', (!isLoggedIn || isLocked) && 'text-gray-400')}>
+                  {sec.duration} mins
+                </div>
               </div>
             )
           })}

@@ -228,7 +228,8 @@
       "suspended": "Tạm Ngưng",
       "upcoming": "Sắp Diễn Ra",
       "endsoon": "Kết Thúc Sớm",
-      "inprogress": "Đang Diễn Ra"
+      "inprogress": "Đang Diễn Ra",
+      "locked": "Khóa"
     },
     "accountType": {
       "accountTypeLabel": "Loại Tài Khoản",
