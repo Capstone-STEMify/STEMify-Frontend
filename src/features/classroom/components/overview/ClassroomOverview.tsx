@@ -20,6 +20,7 @@ import { useTranslations } from 'next-intl'
 import { Chart as ChartJS, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js'
 import { Chart } from 'react-chartjs-2'
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot'
+import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, Title, Tooltip, Legend, BoxPlotController, BoxAndWiskers)
@@ -36,13 +37,17 @@ export default function ClassroomOverview() {
   })
 
   const classroom = classroomRes?.data
-  const curriculumId = classroom?.curriculum?.id
+  const courseId = classroom?.course?.id
 
-  const { data: curriculumRes, isLoading: isLoadingCurriculum } = useGetCurriculumByIdQuery(curriculumId!, {
-    skip: !curriculumId
+  const { data: courseRes, isLoading: isLoadingCourse } = useGetCourseByIdQuery(courseId!, {
+    skip: !courseId
   })
 
-  const { data: statsRes, isLoading: isLoadingStats, refetch: refetchStats } = useGetClassroomStatisticsQuery(
+  const {
+    data: statsRes,
+    isLoading: isLoadingStats,
+    refetch: refetchStats
+  } = useGetClassroomStatisticsQuery(
     { classroomId },
     {
       skip: !classroomId
@@ -52,7 +57,7 @@ export default function ClassroomOverview() {
   const [selectedStudentAssignmentId, setSelectedStudentAssignmentId] = useState<number | null>(null)
 
   const ungradedAssignments = statsRes?.data?.ungradedAssignments || []
-  const courses = curriculumRes?.data?.courses || []
+  const lessons = courseRes?.data?.lessons || []
   const courseStats = statsRes?.data?.courseStats || []
 
   // --- Data Processing for Pie Charts ---
@@ -138,7 +143,7 @@ export default function ClassroomOverview() {
     }
   }
 
-  if (isLoadingClassroom || isLoadingCurriculum || isLoadingStats) {
+  if (isLoadingClassroom || isLoadingCourse || isLoadingStats) {
     return <Loading />
   }
 
@@ -345,7 +350,7 @@ export default function ClassroomOverview() {
         </CardContent>
       </Card>
 
-      <StudentProgressStatistic classroomId={classroomId} courses={courses} />
+      {/* <StudentProgressStatistic classroomId={classroomId} courses={lessons} /> */}
 
       <Dialog
         open={!!selectedStudentAssignmentId}
@@ -360,7 +365,7 @@ export default function ClassroomOverview() {
               studentAssignmentId={selectedStudentAssignmentId}
               onClose={() => setSelectedStudentAssignmentId(null)}
               onSuccess={() => {
-              refetchStats?.()
+                refetchStats?.()
               }}
             />
           )}

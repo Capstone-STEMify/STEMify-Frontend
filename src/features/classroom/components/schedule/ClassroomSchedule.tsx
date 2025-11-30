@@ -23,7 +23,7 @@ export function ClassroomSchedule({ classroomId, className }: ClassroomScheduleP
   const schedule = data.data
 
   return (
-    <div className={cn('w-full space-y-6', className)}>
+    <div className={cn('container mx-auto mt-5 w-full space-y-6 px-6', className)}>
       {/* Header Info */}
       <div className='flex gap-8 rounded-lg bg-sky-50 px-4 py-3 text-sm'>
         <div>

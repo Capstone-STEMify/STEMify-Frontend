@@ -3,14 +3,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { ChevronUp, Mic, FileText, MoreHorizontal } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/shadcn/dropdown-menu'
-import { Button } from '@/components/shadcn/button'
-import { StatusBadge } from '@/features/quiz/components/active/badge/StatusBadge'
 import { ProgressCircle } from '@/features/quiz/components/active/circle/AccuracyCircle'
 import { useSearchStudentAssignmentQuery } from '../../api/studentAssignmentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'

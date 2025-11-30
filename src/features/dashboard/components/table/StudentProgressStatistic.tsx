@@ -28,7 +28,6 @@ interface StudentProgressStatisticProps {
 const COLUMN_WIDTH = 'w-[70px] min-w-[70px]'
 
 export function StudentProgressStatistic({ classroomId, courses }: StudentProgressStatisticProps) {
-
   const t = useTranslations('dashboard.classroom')
   const tc = useTranslations('common')
 
@@ -88,7 +87,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
   }
 
   return (
-    <div className='rounded-xl border bg-white p-4 shadow-sm md:p-8 mt-8'>
+    <div className='mt-8 rounded-xl border bg-white p-4 shadow-sm md:p-8'>
       <header className='mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
         <div className='flex items-center gap-4'>
           <h2 className='text-2xl font-semibold'>{t('overview.progress.title')}</h2>
@@ -122,22 +121,21 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
           <Button variant='outline' size='icon'>
             <Download className='h-4 w-4' />
           </Button>
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button variant='outline' size='icon'>
-            <Bot className='h-4 w-4' />
-          </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>{t('overview.tooltip')}</p>
-      </TooltipContent>
-    </Tooltip>
-          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant='outline' size='icon'>
+                <Bot className='h-4 w-4' />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('overview.tooltip')}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </header>
 
       {isFetching && !currentLesson ? (
-        <Loading/>
+        <Loading />
       ) : !currentLesson ? (
         <div className='rounded-lg border py-10 text-center text-slate-500'>{t('overview.progress.noLesson')}</div>
       ) : (
@@ -167,7 +165,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
                   <TableHead
                     colSpan={Math.max(currentLesson.sectionIds.length, 1)}
-                    className='h-[88px] bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 align-middle'
+                    className='h-[88px] bg-gradient-to-r from-blue-500 to-indigo-600 align-middle text-white hover:from-blue-600 hover:to-indigo-700'
                   >
                     <div className='flex h-full w-full items-center px-2'>
                       <Select value={currentLessonId} onValueChange={setCurrentLessonId}>
