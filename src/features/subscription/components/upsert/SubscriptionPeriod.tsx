@@ -32,7 +32,7 @@ export default function SubscriptionPeriod({ startDate, endDate, onStartDateChan
           <Label className='text-sm font-medium text-slate-700'>{to('period.endDate')}</Label>
           <Input
             disabled
-            value={endDate ? formatDate(endDate.toISOString(), { locale: locale as 'en' | 'vi' }) : ''}
+            value={endDate ? formatDate(endDate.toISOString(), { locale }) : ''}
             placeholder={to('period.endDateDescription')}
             className='bg-slate-50 text-slate-600'
           />

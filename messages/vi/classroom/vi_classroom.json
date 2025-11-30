@@ -3,7 +3,7 @@
     "list": {
       "header": "Danh sách lớp học",
       "searchPlaceholder": "Tìm kiếm...",
-      "selectCurriculumPlaceholder": "Chọn chương trình học",
+      "selectCoursePlaceholder": "Chọn chương trình học",
       "courses": "khóa học"
     },
     "update": {

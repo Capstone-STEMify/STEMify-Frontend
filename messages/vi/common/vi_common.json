@@ -179,7 +179,7 @@
       "grade": "Lớp",
       "teacher": "Giáo Viên",
       "numberOfStudents": "Số Học Sinh",
-      "numberOfCourses": "Số Khóa Học",
+      "numberOfLessons": "Số Bài Học",
       "accountType": "Loại Tài Khoản",
       "assignedDate": "Ngày Gán"
     },
@@ -228,7 +228,8 @@
       "suspended": "Tạm Ngưng",
       "upcoming": "Sắp Diễn Ra",
       "endsoon": "Kết Thúc Sớm",
-      "inprogress": "Đang Diễn Ra"
+      "inprogress": "Đang Diễn Ra",
+      "locked": "Khóa"
     },
     "accountType": {
       "accountTypeLabel": "Loại Tài Khoản",

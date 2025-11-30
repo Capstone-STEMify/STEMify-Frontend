@@ -180,7 +180,7 @@
       "grade": "Grade",
       "teacher": "Teacher",
       "numberOfStudents": "No. Students",
-      "numberOfCourses": "No. Courses",
+      "numberOfLessons": "No. Lessons",
       "accountType": "Account Type",
       "assignedDate": "Assigned Date"
     },
@@ -223,7 +223,8 @@
       "suspended": "Suspended",
       "upcoming": "Upcoming",
       "endsoon": "End Soon",
-      "inprogress": "In Progress"
+      "inprogress": "In Progress",
+      "locked": "Locked"
     },
     "level": {
       "all": "All Levels",

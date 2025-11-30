@@ -16,16 +16,19 @@ import {
 } from '@/features/student-progress/slice/studentProgressSlice'
 import { ProgressStatus, StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { formatDuration } from '@/utils/index'
+import { formatDuration, useStatusTranslation } from '@/utils/index'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { cn } from '@/utils/shadcn/utils'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { EllipsisVertical } from 'lucide-react'
+import { Lock, CheckCircle2, Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect } from 'react'
+import { toast } from 'sonner'
 
 type CourseDetailContentProps = {
   courseId: number
-  enrollmentId?: number // Optional if not always provided
+  enrollmentId?: number
 }
 
 export default function CourseDetailContent({ courseId, enrollmentId }: CourseDetailContentProps) {
@@ -33,6 +36,8 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   const tc = useTranslations('common')
   const dispatch = useAppDispatch()
   const lessonParams = useAppSelector((state) => state.lesson)
+
+  const translateStatus = useStatusTranslation()
 
   useEffect(() => {
     dispatch(setPageSize(12))
@@ -44,6 +49,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
     isFetching
   } = useSearchLessonQuery({ ...lessonParams, courseId, orderBy: 'orderindex', sortDirection: 'Asc' })
   const { data: lessonProgressData } = useGetLessonStudentProgressQuery(enrollmentId ? { enrollmentId } : skipToken)
+
   const progressMap = lessonProgressData?.data?.items?.reduce(
     (acc, progress) => {
       if ('lessonId' in progress && progress.lessonId !== undefined) {
@@ -59,8 +65,13 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
-  const handleSelectLesson = (lessonId: number) => {
-    const status = progressMap?.[lessonId]
+
+  const handleSelectLesson = (lessonId: number, status?: ProgressStatus) => {
+    if (status === ProgressStatus.LOCKED) {
+      toast.error('This lesson is locked. Complete previous lessons to unlock it.')
+      return
+    }
+
     if (status) {
       dispatch(setSelectedLessonStatus(status))
       dispatch(setSelectedEnrollmentId(enrollmentId))
@@ -88,20 +99,30 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
     <ScrollArea className='h-[600px] px-5 select-none'>
       <div className='mt-5 grid h-fit grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 md:grid-cols-3'>
         {lessonData.data.items.map((lesson) => {
-          return (
-            <div key={lesson.id} className='relative flex gap-1'>
-              <Link
-                href={`/resource/lesson/${lesson.id}`}
-                onClick={() => handleSelectLesson(lesson.id)}
-                className='flex w-fit flex-col justify-between'
+          const status = progressMap?.[lesson.id]
+          const isLocked = status === ProgressStatus.LOCKED
+
+          if (isLocked) {
+            return (
+              <div
+                key={lesson.id}
+                className={cn(
+                  'relative flex w-fit flex-col justify-between',
+                  'cursor-not-allowed opacity-40 transition-all duration-200'
+                )}
+                onClick={() => handleSelectLesson(lesson.id, status)}
               >
+                <div className='absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-blue-400/10 backdrop-blur-[2px]'>
+                  <div className='flex flex-col items-center text-blue-900'>
+                    <div className='mb-2 rounded-full bg-blue-900 p-3'>
+                      <Lock className='h-6 w-6 text-white' />
+                    </div>
+                    <span className='text-sm font-medium'>{translateStatus(ProgressStatus.LOCKED)}</span>
+                  </div>
+                </div>
+
                 <CardLayout
                   imageSrc={lesson.imageUrl || '/images/fallback.png'}
-                  badge={
-                    progressMap?.[lesson.id] && (
-                      <Badge className='bg-gray-50/80 text-gray-800 backdrop-blur-md'>{progressMap[lesson.id]}</Badge>
-                    )
-                  }
                   footer={
                     <div className='flex items-center justify-between gap-2'>
                       <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
@@ -115,27 +136,40 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
                     <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
                   </div>
                 </CardLayout>
-              </Link>
-
-              <div key={lesson.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
-                <SDropDown
-                  trigger={
-                    <EllipsisVertical className='mt-2 h-5 w-5 text-white hover:scale-[1.1] hover:text-yellow-400' />
-                  }
-                  items={[
-                    <p key='view' className='text-sm'>
-                      {tc('button.view')}
-                    </p>,
-                    <p key='add-to-course' className='text-sm'>
-                      {tc('button.add')}
-                    </p>,
-                    <p key='share' className='text-sm'>
-                      {tc('button.share')}
-                    </p>
-                  ]}
-                />
               </div>
-            </div>
+            )
+          }
+
+          // ✅ Normal lesson card
+          return (
+            <Link
+              key={lesson.id}
+              href={`/resource/lesson/${lesson.id}`}
+              onClick={() => handleSelectLesson(lesson.id, status)}
+            >
+              <CardLayout
+                imageSrc={lesson.imageUrl || '/images/fallback.png'}
+                badge={
+                  status && (
+                    <Badge className={cn(getStatusBadgeClass(status), 'gap-1 backdrop-blur-md')}>
+                      {translateStatus(status)}
+                    </Badge>
+                  )
+                }
+                footer={
+                  <div className='flex items-center justify-between gap-2'>
+                    <Badge className='bg-sky-custom-300'>{lesson.ageRangeLabel}</Badge>
+                    <Badge className='bg-red-300'>{formatDuration(lesson.duration)}</Badge>
+                  </div>
+                }
+              >
+                <div>
+                  <p className='text-muted-foreground text-xs font-medium'>{t('details.lesson.cardTitle')}</p>
+                  <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{lesson.title}</h3>
+                  <p className='line-clamp-2 text-xs text-gray-600'>{lesson.description}</p>
+                </div>
+              </CardLayout>
+            </Link>
           )
         })}
       </div>

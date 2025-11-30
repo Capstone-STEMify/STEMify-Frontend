@@ -4,7 +4,7 @@ import { createActionsColumnFromItems, createSelectColumn } from '@/components/s
 import { useDeleteClassroomMutation } from '@/features/classroom/api/classroomApi'
 import { Classroom, ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { formatDateV2 } from '@/utils/index'
+import { formatDate, formatDateV2, useStatusTranslation } from '@/utils/index'
 import { ColumnDef } from '@tanstack/react-table'
 import { GraduationCap, Users } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 
 export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
   const tc = useTranslations('common')
+  const translateStatus = useStatusTranslation()
 
   const router = useRouter()
   const locale = useLocale()
@@ -27,16 +28,12 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
         className: 'border-r border-gray-200'
       },
       cell: ({ row }) => {
-        const curriculum = row.original.curriculum
+        const course = row.original.course
         const classroomId = row.original.id
         return (
           <div className='flex items-center gap-3 py-4'>
-            {curriculum.imageUrl ? (
-              <img
-                src={curriculum.imageUrl}
-                alt={curriculum.title}
-                className='h-12 w-12 flex-shrink-0 rounded object-cover'
-              />
+            {course.imageUrl ? (
+              <img src={course.imageUrl} alt={course.title} className='h-12 w-12 flex-shrink-0 rounded object-cover' />
             ) : (
               <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded bg-gradient-to-br from-sky-50 to-sky-400'>
                 <GraduationCap width={16} height={16} className='text-blue-500' />
@@ -49,10 +46,10 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
                   router.push(`/${locale}/organization/classroom/${classroomId}`)
                 }}
               >
-                {curriculum.title}
+                {course.title}
               </p>
               <p className='mt-1 text-xs text-gray-600'>
-                {tc('tableHeader.numberOfCourses')}: {curriculum.courseCount}
+                {tc('tableHeader.numberOfLessons')}: {course.lessonCount}
               </p>
             </div>
           </div>
@@ -132,23 +129,21 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
       header: tc('tableHeader.status'),
       cell: ({ row }) => {
         const status = row.original.status
-        return <Badge className={`${getStatusBadgeClass(status)} font-medium`}>{status}</Badge>
+        return <Badge className={`${getStatusBadgeClass(status)} font-medium`}>{translateStatus(status)}</Badge>
       }
     },
     {
       accessorKey: 'startDate',
       header: tc('tableHeader.startDate'),
       cell: ({ row }) => {
-        const startDate = row.original.startDate
-        return <span>{formatDateV2(new Date(startDate))}</span>
+        return <span>{formatDate(row.original.startDate, { locale })}</span>
       }
     },
     {
       accessorKey: 'endDate',
       header: tc('tableHeader.endDate'),
       cell: ({ row }) => {
-        const endDate = row.original.endDate
-        return <span>{formatDateV2(new Date(endDate))}</span>
+        return <span>{formatDate(row.original.endDate, { locale })}</span>
       }
     },
     createActionsColumnFromItems<Classroom>([
