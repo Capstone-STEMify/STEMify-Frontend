@@ -15,10 +15,12 @@ import { SkeletonCard } from '@/components/shared/skeleton/SkeletonCard'
 import SearchBar from '@/components/shared/search/SearchBar'
 
 import SSelect from '@/components/shared/SSelect'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { formatDate } from '@/utils/index'
 
 export default function ClassroomList() {
   const tClassroom = useTranslations('classroom')
+  const locale = useLocale()
 
   const user = useAppSelector((state) => state.auth?.user)
   const queryParams = useAppSelector((state) => state.classroom)
@@ -122,8 +124,8 @@ export default function ClassroomList() {
                   <div className='flex items-center gap-2 text-sm text-gray-500'>
                     <Clock className='h-3.5 w-3.5 shrink-0' />
                     <span>
-                      {format(new Date(classroom.startDate), 'MMM dd')} -{' '}
-                      {format(new Date(classroom.endDate), 'MMM dd, yyyy')}
+                      {formatDate(classroom.startDate, { locale: locale })} -{' '}
+                      {formatDate(classroom.endDate, { locale: locale })}
                     </span>
                   </div>
 

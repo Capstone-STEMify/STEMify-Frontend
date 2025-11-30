@@ -42,7 +42,7 @@ export function getDaysRemaining(endDateStr: string): number {
  */
 export type DateFormatPattern = 'dd/MM/yyyy' | 'MM/dd/yyyy' | 'yyyy-MM-dd'
 export interface FormatDateOptions {
-  locale?: 'en' | 'vi'
+  locale?: string
   showTime?: boolean
   pattern?: DateFormatPattern
   year?: 'numeric' | '2-digit'

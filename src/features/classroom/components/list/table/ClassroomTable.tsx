@@ -14,8 +14,8 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setParam, setSearchTerm } from '@/features/classroom/slice/classroomSlice'
 import useDebounce from '@/hooks/useDebounce'
 import { SingleSelectWithSearch } from '@/components/shared/SingleSelectWithSearch'
-import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import { getOptions } from '@/utils/index'
+import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 
 export default function ClassroomTable() {
   const tClassroom = useTranslations('classroom')
@@ -32,38 +32,36 @@ export default function ClassroomTable() {
   const debouncedSearchQuery = useDebounce(search, 500)
   const { data } = useSearchClassroomsQuery({ ...queryParams, organizationId: organizationId })
 
-  // Xử lý data để merge curriculum cells
+  // Xử lý data để merge course cells
   const rows = React.useMemo(() => {
     const items = data?.data.items ?? []
 
-    // Sắp xếp theo curriculum.id để nhóm các classroom cùng curriculum lại
     const sorted = [...items].sort((a, b) => a.course.id - b.course.id)
 
-    // Đếm số classroom cho mỗi curriculum
-    const curriculumGroups = new Map<number, number>()
+    const courseGroups = new Map<number, number>()
     sorted.forEach((item) => {
-      const curriculumId = item.course.id
-      curriculumGroups.set(curriculumId, (curriculumGroups.get(curriculumId) || 0) + 1)
+      const courseId = item.course.id
+      courseGroups.set(courseId, (courseGroups.get(courseId) || 0) + 1)
     })
 
     // Thêm meta data cho mỗi row để biết cell nào cần merge
-    let currentCurriculumId: number | null = null
-    let curriculumRowCount = 0
+    let currentcourseId: number | null = null
+    let courseRowCount = 0
 
     return sorted.map((item, index) => {
-      const curriculumId = item.course.id
-      const isNewCurriculum = curriculumId !== currentCurriculumId
+      const courseId = item.course.id
+      const isNewcourse = courseId !== currentcourseId
 
-      // Meta data cho curriculum cell
+      // Meta data cho course cell
       const cellMeta: any = {
-        curriculum: isNewCurriculum ? { rowSpan: curriculumGroups.get(curriculumId) || 1, skip: false } : { skip: true }
+        course: isNewcourse ? { rowSpan: courseGroups.get(courseId) || 1, skip: false } : { skip: true }
       }
 
-      if (isNewCurriculum) {
-        currentCurriculumId = curriculumId
-        curriculumRowCount = 0
+      if (isNewcourse) {
+        currentcourseId = courseId
+        courseRowCount = 0
       }
-      curriculumRowCount++
+      courseRowCount++
 
       return {
         ...item,
@@ -74,9 +72,9 @@ export default function ClassroomTable() {
 
   const columns = useGetClassroomColumn()
 
-  const searchCurriculumQuery = useAppSelector((state) => state.curriculum)
-  const { data: curriculumData } = useSearchCurriculumQuery({
-    ...searchCurriculumQuery
+  const searchcourseQuery = useAppSelector((state) => state.course)
+  const { data: courseData } = useSearchCourseQuery({
+    ...searchcourseQuery
   })
 
   const statusOptions = [
@@ -86,7 +84,7 @@ export default function ClassroomTable() {
     { label: tc('status.completed'), value: 'completed' }
   ]
 
-  const curriculumOptions = getOptions(curriculumData?.data.items, 'title', 'imageUrl', 'courseCount').map((opt) => ({
+  const courseOptions = getOptions(courseData?.data.items, 'title', 'imageUrl', 'courseCount').map((opt) => ({
     ...opt,
     subLabel: opt.subLabel ? `${opt.subLabel} ${tClassroom('list.courses')}` : undefined
   }))
@@ -126,10 +124,10 @@ export default function ClassroomTable() {
             style={{ width: '320px' }}
           />
           <SingleSelectWithSearch
-            value={queryParams.curriculumId?.toString() ?? ''}
-            options={curriculumOptions}
-            placeholder={tClassroom('list.selectCurriculumPlaceholder')}
-            onChange={(val) => dispatch(setParam({ key: 'curriculumId', value: Number(val) }))}
+            value={queryParams.courseId?.toString() ?? ''}
+            options={courseOptions}
+            placeholder={tClassroom('list.selectCoursePlaceholder')}
+            onChange={(val) => dispatch(setParam({ key: 'courseId', value: Number(val) }))}
           />
         </div>
         <div className='flex gap-2'>
