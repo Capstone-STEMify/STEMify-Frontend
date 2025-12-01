@@ -181,7 +181,8 @@
       "numberOfStudents": "Số Học Sinh",
       "numberOfLessons": "Số Bài Học",
       "accountType": "Loại Tài Khoản",
-      "assignedDate": "Ngày Gán"
+      "assignedDate": "Ngày Gán",
+      "course": "Khóa Học"
     },
     "paging": {
       "previous": "Trước",

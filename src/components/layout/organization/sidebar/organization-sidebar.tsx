@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { IconBook, IconChalkboard, IconListDetails, IconUsersGroup } from '@tabler/icons-react'
+import { IconBook, IconChalkboard, IconListDetails, IconReceipt, IconUsersGroup } from '@tabler/icons-react'
 
 import {
   Sidebar,
@@ -34,7 +34,7 @@ const data = {
     {
       title: 'side_bar.subscription',
       url: '/organization/subscriptions',
-      icon: IconBook
+      icon: IconReceipt
     },
     {
       title: 'side_bar.classroom',
@@ -45,6 +45,11 @@ const data = {
       title: 'side_bar.group',
       url: '/organization/group',
       icon: IconUsersGroup
+    },
+    {
+      title: 'side_bar.curriculum',
+      url: '/organization/curriculum',
+      icon: IconBook
     }
   ]
 }

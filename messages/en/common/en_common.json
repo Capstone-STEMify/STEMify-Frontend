@@ -182,7 +182,8 @@
       "numberOfStudents": "No. Students",
       "numberOfLessons": "No. Lessons",
       "accountType": "Account Type",
-      "assignedDate": "Assigned Date"
+      "assignedDate": "Assigned Date",
+      "course": "Course"
     },
     "paging": {
       "previous": "Previous",

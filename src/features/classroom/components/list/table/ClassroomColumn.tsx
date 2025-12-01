@@ -22,8 +22,8 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
   return [
     // createSelectColumn<Classroom>(),
     {
-      accessorKey: 'curriculum',
-      header: tc('tableHeader.curriculum'),
+      accessorKey: 'course',
+      header: tc('tableHeader.course'),
       meta: {
         className: 'border-r border-gray-200'
       },
