@@ -1,181 +1,163 @@
 'use client'
-import { SPagination } from '@/components/shared/SPagination'
-import { useModal } from '@/providers/ModalProvider'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import React, { useState, useMemo } from 'react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { toast } from 'sonner'
 import SEmpty from '@/components/shared/empty/SEmpty'
-
-import { CurriculumSliceParams, CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 import CardLayout from '@/components/shared/card/CardLayout'
-import Link from 'next/link'
-import { Plus, Search } from 'lucide-react'
-import { useSearchCurriculumQuery } from '@/features/resource/curriculum/api/curriculumApi'
-import {
-  setPageIndex,
-  setPageSize,
-  setParam,
-  setSearchTerm
-} from '@/features/resource/curriculum/slice/curriculumSlice'
-import { Input } from '@/components/shadcn/input'
-import SSelect from '@/components/shared/SSelect'
-import { Button } from '@/components/shadcn/button'
-import { useStatusTranslation } from '@/utils/index'
+import { formatDate, useStatusTranslation } from '@/utils/index'
+import { useGetCurriculumsByOrganizationIdQuery } from '@/features/organization/api/organizationApi'
+import { Badge } from '@/components/shadcn/badge'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { BookOpen, Calendar, GraduationCap, Filter } from 'lucide-react'
+import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
 
 export default function OrganizationCurriculumList() {
-  const t = useTranslations('curriculum')
-  const tt = useTranslations('toast')
-  const tc = useTranslations('common')
+  const t = useTranslations('organization.curriculum')
   const statusTranslate = useStatusTranslation()
   const router = useRouter()
-  const dispatch = useAppDispatch()
-  const { openModal } = useModal()
   const locale = useLocale()
 
-  const tList = useTranslations('curriculum.list')
+  const [selectedStatus, setSelectedStatus] = useState<CurriculumStatus | 'ALL'>('ALL')
 
-  const filters = useAppSelector((state) => state.curriculum)
+  const { data: curriculumData, isLoading } = useGetCurriculumsByOrganizationIdQuery({ organizationId: 3 })
 
-  const statusOptions = Object.entries(CurriculumStatus)
-    .filter(([key]) => key.toLowerCase() !== 'deleted')
-    .map(([key, value]) => ({
-      label: statusTranslate(key),
-      value: value
-    }))
+  // Filter curriculums based on selected status
+  const filteredCurriculums = useMemo(() => {
+    if (!curriculumData?.data?.curriculums) return []
 
-  const queryParams: CurriculumSliceParams = useAppSelector((state) => state.curriculum)
-  const { data: curriculumData, isLoading } = useSearchCurriculumQuery(queryParams)
-  const rows = React.useMemo(() => curriculumData?.data.items ?? [], [curriculumData])
+    if (selectedStatus === 'ALL') {
+      return curriculumData.data.curriculums
+    }
 
-  useEffect(() => {
-    dispatch(setPageSize(6))
-  }, [dispatch])
-
-  const handlePageChange = (newPage: number) => {
-    dispatch(setPageIndex(newPage))
-  }
+    return curriculumData.data.curriculums.filter((curriculum) => curriculum.status === selectedStatus)
+  }, [curriculumData, selectedStatus])
 
   if (isLoading) {
     return (
-      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
+      <div className='fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-50/80 to-indigo-50/80 backdrop-blur-xl'>
         <LoadingComponent size={150} />
       </div>
     )
   }
 
-  if (!curriculumData || curriculumData.data.items.length === 0) {
+  if (!curriculumData || curriculumData.data.curriculums.length === 0) {
     return (
-      <div className='mx-auto max-w-7xl px-5'>
-        <h1 className='text-2xl font-semibold text-gray-800'>{t('list.title')}</h1>
-
-        <div className='relative flex w-full items-center justify-start gap-4 py-4 md:flex-row'>
-          {/* Search input */}
-          <Input
-            type='text'
-            placeholder={tList('placeholder.search')}
-            value={filters.search}
-            onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-            className='max-w-[400px] flex-1 border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
-          />
-          <Search className='absolute top-6.5 left-3 h-4 w-4 text-gray-400' />
-
-          <SSelect
-            className='w-30'
-            placeholder={tList('placeholder.status')}
-            value={filters.status?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'status', value: val as CurriculumStatus }))}
-            options={statusOptions}
-            onOpen={() => {}}
-          />
-
-          {/* Create action */}
-          <Button
-            className='bg-amber-custom-400 cursor-pointer'
-            onClick={() => {
-              openModal('upsertCurriculum')
-            }}
-          >
-            <Plus className='mr-1 h-4 w-4' />
-            {tc('button.create')}
-          </Button>
-        </div>
-        <SEmpty title={t('list.noData')} description={t('list.noDataDetail')} />
+      <div className='mx-auto max-w-7xl px-5 py-12'>
+        <SEmpty title={t('noData')} />
       </div>
     )
   }
 
+  const statusOptions: Array<CurriculumStatus | 'ALL'> = [
+    'ALL',
+    CurriculumStatus.DRAFT,
+    CurriculumStatus.PUBLISHED,
+    CurriculumStatus.ARCHIVED
+  ]
+
   return (
     <div className='mx-auto max-w-7xl px-5'>
-      <h1 className='text-2xl font-semibold text-gray-800'>{t('list.title')}</h1>
-
-      <div className='relative flex w-full items-center justify-start gap-4 py-4 md:flex-row'>
-        {/* Search input */}
-        <Input
-          type='text'
-          placeholder={tList('placeholder.search')}
-          value={filters.search}
-          onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-          className='max-w-[400px] flex-1 border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
-        />
-        <Search className='absolute top-6.5 left-3 h-4 w-4 text-gray-400' />
-
-        <SSelect
-          className='w-30'
-          placeholder={tList('placeholder.status')}
-          value={filters.status?.toString() ?? ''}
-          onChange={(val) => dispatch(setParam({ key: 'status', value: val as CurriculumStatus }))}
-          options={statusOptions}
-          onOpen={() => {}}
-        />
-
-        {/* Create action */}
-        <Button
-          className='bg-amber-custom-400 cursor-pointer'
-          onClick={() => {
-            openModal('upsertCurriculum')
-          }}
-        >
-          <Plus className='mr-1 h-4 w-4' />
-          {tc('button.create')}
-        </Button>
+      {/* Header Section */}
+      <div className='mb-8'>
+        <div className='flex items-center gap-3'>
+          <div className='rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 p-3 shadow-lg'>
+            <GraduationCap className='h-7 w-7 text-white' />
+          </div>
+          <div>
+            <h1 className='text-3xl font-bold text-gray-900'>{t('title')}</h1>
+            <p className='mt-1 text-sm text-gray-600'>
+              {curriculumData.data.curriculums.length} {t('curriculum')}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className='mt-5'>
-        <div className='grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4'>
-          {curriculumData.data.items.map((curriculum) => (
+      {/* Filter Section */}
+      <div className='mb-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm'>
+        <div className='flex flex-wrap items-center gap-3'>
+          <div className='flex items-center gap-2 text-sm font-medium text-gray-700'>
+            <Filter className='h-4 w-4' />
+            <span>{t('filterByStatus')}:</span>
+          </div>
+          <div className='flex flex-wrap gap-2'>
+            {statusOptions.map((status) => (
+              <button
+                key={status}
+                onClick={() => setSelectedStatus(status)}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                  selectedStatus === status
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {status === 'ALL' ? t('all') : statusTranslate(status)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Results Count */}
+        <div className='mt-3 text-sm text-gray-600'>
+          {t('showing')} <span className='font-semibold text-gray-900'>{filteredCurriculums.length}</span>{' '}
+          {t('results')}
+        </div>
+      </div>
+
+      {/* Empty State for Filtered Results */}
+      {filteredCurriculums.length === 0 ? (
+        <div className='py-12'>
+          <SEmpty title={t('noResultsForFilter')} />
+        </div>
+      ) : (
+        /* Curriculum Grid */
+        <div className='grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          {filteredCurriculums.map((curriculum) => (
             <CardLayout
               key={curriculum.id}
-              className='cursor-pointer rounded-2xl border-none bg-transparent'
+              className='cursor-pointer hover:-translate-y-1'
               imageSrc={curriculum.imageUrl}
               onClick={() => router.push(`/${locale}/organization/curriculum/${curriculum.id}`)}
+              badge={
+                <Badge className={`${getStatusBadgeClass(curriculum.status)} shadow-sm`}>
+                  {statusTranslate(curriculum.status)}
+                </Badge>
+              }
+              action={<Badge variant={'secondary'}>{curriculum.code}</Badge>}
             >
-              <div className='m-2 mt-1'>
-                <h2 className='line-clamp-1 text-lg font-semibold'>{curriculum.title}</h2>
-                <p className='line-clamp-4 flex-1 text-sm text-gray-600'>{curriculum.description}</p>
-                <div className='mt-auto flex items-center gap-2'></div>
-                <Link
-                  href={`/${locale}/admin/curriculum/${curriculum.id}`}
-                  className='mt-4 flex items-center text-sm font-medium text-sky-500 hover:underline'
-                >
-                  {t('list.viewDetails')} &gt;
-                </Link>
+              <div>
+                {/* Title */}
+                <h2 className='mb-3 line-clamp-2 text-lg font-bold text-gray-900 transition-colors'>
+                  {curriculum.title}
+                </h2>
+
+                <div className='space-y-2'>
+                  {/* Course Count */}
+                  <div className='flex items-center gap-2 text-sm text-gray-700'>
+                    <BookOpen className='h-4 w-4 text-blue-600' />
+                    <span className='font-medium'>
+                      {curriculum.courseCount} {t('courses')}
+                    </span>
+                  </div>
+
+                  {/* Dates */}
+                  <div className='flex items-center gap-2 text-sm'>
+                    <Calendar className='h-4 w-4 text-green-600' />
+                    <span className='text-gray-600'>{t('startDate')}:</span>
+                    <span className='font-medium text-gray-900'>{formatDate(curriculum.startDate, { locale })}</span>
+                  </div>
+
+                  <div className='flex items-center gap-2 text-sm'>
+                    <Calendar className='h-4 w-4 text-red-600' />
+                    <span className='text-gray-600'>{t('endDate')}:</span>
+                    <span className='font-medium text-gray-900'>{formatDate(curriculum.endDate, { locale })}</span>
+                  </div>
+                </div>
               </div>
             </CardLayout>
           ))}
         </div>
-
-        {curriculumData?.data?.totalPages > 1 && (
-          <SPagination
-            pageNumber={curriculumData.data.pageNumber}
-            totalPages={curriculumData.data.totalPages}
-            onPageChanged={handlePageChange}
-            className='pb-6'
-          />
-        )}
-      </div>
+      )}
     </div>
   )
 }

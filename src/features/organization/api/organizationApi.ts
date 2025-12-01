@@ -1,5 +1,6 @@
 import {
   Organization,
+  OrganizationCurriculum,
   OrganizationQueryParams,
   OrganizationSliceParams,
   OrganizationType
@@ -19,6 +20,15 @@ export const organizationApi = createCrudApi<Organization, OrganizationSlicePara
     >({
       query: () => '/organization-types',
       providesTags: ['Organization']
+    }),
+    getCurriculumsByOrganizationId: build.query<
+      ApiSuccessResponse<{ curriculums: OrganizationCurriculum[] }>,
+      { organizationId: number }
+    >({
+      query: ({ organizationId }) => ({
+        url: `/organizations/${organizationId}/curriculums`
+      }),
+      providesTags: ['Organization']
     })
   })
 })
@@ -33,5 +43,8 @@ export const {
   useDeleteMutation: useDeleteOrganizationMutation,
 
   // Org types
-  useGetAllOrganizationTypesQuery
+  useGetAllOrganizationTypesQuery,
+
+  // Org Curriculums
+  useGetCurriculumsByOrganizationIdQuery
 } = organizationApi

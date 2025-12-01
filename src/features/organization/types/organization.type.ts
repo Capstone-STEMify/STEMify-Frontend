@@ -46,3 +46,31 @@ export type OrganizationFormData = {
   image: File | null
   imageUrl?: string
 }
+
+// organization curriculum
+
+export type OrganizationCurriculum = {
+  id: number
+  title: string
+  imageUrl: string
+  courseCount: number
+  startDate: string
+  endDate: string
+  code: string
+  status: string
+  courses: OrganizationCurriculumCourse[]
+}
+
+export type OrganizationCurriculumCourse = {
+  id: number
+  title: string
+  code: string
+  imageUrl: string
+  description: string
+  duration: number
+  status: string
+  level: string
+  ageRangeLabel: string
+  courseOrderIndex: number
+  lessons: any[]
+}
