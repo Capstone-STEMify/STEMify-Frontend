@@ -28,10 +28,7 @@ export enum LessonStatus {
   DRAFT = 'Draft',
   PUBLISHED = 'Published',
   ARCHIVED = 'Archived',
-  DELETED = 'Deleted',
-  PENDING = 'Pending',
-  REJECTED = 'Rejected',
-  APPROVED = 'Approved'
+  DELETED = 'Deleted'
 }
 
 // query params

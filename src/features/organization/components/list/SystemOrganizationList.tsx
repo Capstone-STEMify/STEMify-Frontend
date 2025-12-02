@@ -3,6 +3,7 @@
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SSelect from '@/components/shared/SSelect'
 import { useSearchOrganizationsQuery } from '@/features/organization/api/organizationApi'
 import { useGetOrganizationColumn } from '@/features/organization/components/list/SystemOrganizationColumn'
@@ -27,7 +28,7 @@ export default function SystemOrganizationList() {
   const queryParams = useAppSelector((state) => state.organization)
 
   const columns = useGetOrganizationColumn()
-  const { data } = useSearchOrganizationsQuery(queryParams)
+  const { data, isLoading } = useSearchOrganizationsQuery(queryParams)
 
   const organizationStatusOptions = [
     { label: tc('status.all'), value: 'all' },
@@ -41,6 +42,13 @@ export default function SystemOrganizationList() {
 
   const handlePageChange = (page: number) => {
     dispatch(setPageIndex(page))
+  }
+  if (isLoading) {
+    return (
+      <div className='flex items-center justify-center'>
+        <LoadingComponent />
+      </div>
+    )
   }
 
   return (
