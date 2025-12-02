@@ -17,18 +17,10 @@ import { SPagination } from '@/components/shared/SPagination'
 
 export default function ContentSection() {
   const t = useTranslations('course')
-  const tc = useTranslations('common')
-  const tt = useTranslations('toast')
 
-  const router = useRouter()
-  const { openModal } = useModal()
   const dispatch = useAppDispatch()
-  const auth = useAppSelector((state) => state.auth)
 
   const lessonsQuery = useAppSelector((state) => state.lesson)
-  useEffect(() => {
-    dispatch(setPageSize(8))
-  }, [dispatch])
 
   const { courseId } = useParams()
 
@@ -36,9 +28,9 @@ export default function ContentSection() {
     ...lessonsQuery,
     courseId: Number(courseId),
     orderBy: 'orderindex',
-    sortDirection: 'Asc'
+    sortDirection: 'Asc',
+    pageSize: 8
   })
-  const [sendLessonRequest] = useUpdateLessonMutation()
 
   const [items, setItems] = useState<Lesson[]>([])
 
@@ -53,7 +45,7 @@ export default function ContentSection() {
   if (!lessons?.data || lessons.data.items.length === 0) {
     return (
       <div className='bg-white py-12'>
-        <h2 className='text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+        <h2 className='text-center text-lg font-bold tracking-tight text-gray-900 sm:text-2xl'>
           {t('details.lesson.title')}
         </h2>
         <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
@@ -76,19 +68,14 @@ export default function ContentSection() {
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='mb-12 text-center'>
-          <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+          <h2 className='mb-4 text-lg font-bold tracking-tight text-gray-900 sm:text-2xl'>
             {t('details.lesson.title')}
           </h2>
-          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
+          <p className='mx-auto mb-8 max-w-xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
         </div>
 
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
           {items.map((lesson) => (
-            // <Link
-            //   href={isTeacher ? `/resource/lesson/${lesson.id}` : '#'}
-            //   className='flex w-fit flex-col justify-between'
-            //   key={lesson.id}
-            // >
             <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
               <div className='flex min-h-0 flex-1 flex-col'>
                 <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
@@ -99,7 +86,6 @@ export default function ContentSection() {
                 </div>
               </div>
             </CardLayout>
-            // </Link>
           ))}
         </div>
 
