@@ -171,6 +171,9 @@
       "title": "Nhóm học sinh của tổ chức",
       "subTitle": "Quản lý các nhóm của tổ chức bạn",
       "noData": "Không tìm thấy nhóm nào cho tổ chức này.",
+      "groupCode": "Mã nhóm:",
+      "groupName": "Tên nhóm:",
+      "numberOfStudents": "Số lượng: {quantity} học sinh",
       "step1": {
         "title": "Bước 1: Chọn học sinh cho nhóm",
         "description": "Chọn học sinh để thêm vào nhóm",

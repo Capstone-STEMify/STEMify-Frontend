@@ -140,15 +140,6 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
       }
     },
     {
-      accessorKey: 'createdByUserName',
-      header: () => <div>{tc('tableHeader.createdBy')}</div>,
-      cell: ({ row }) => {
-        const value = row.getValue<string>('createdByUserName')
-        const display = value?.trim() ? value : 'STEMify Staff'
-        return <div className='cursor-pointer'>{display}</div>
-      }
-    },
-    {
       accessorKey: 'createdDate',
       header: () => <div>{tc('tableHeader.createdDate')}</div>,
       cell: ({ row }) => {

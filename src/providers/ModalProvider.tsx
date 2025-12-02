@@ -44,6 +44,7 @@ import SectionAIModal from '@/features/chat/components/SectionAIModal'
 import AssignmentCSVUploadModal from '@/features/assignment/components/detail/modal/AssignmentCSVUploadModal'
 import CreateAssignmentInfoModal from '@/features/assignment/components/upsert/CreateAssignmentInfoModal'
 import UpsertGroupModal from '@/features/group/components/modal/UpsertGroupModal'
+import UpdateGroupModal from '@/features/group/components/modal/UpdateGroupModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -99,6 +100,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertEmulator' && <UpsertEmulator {...modalProps} />}
       {modalType === 'createAssignmentInfo' && <CreateAssignmentInfoModal {...modalProps} />}
       {modalType === 'upsertGroup' && <UpsertGroupModal {...modalProps} />}
+      {modalType === 'updateGroup' && <UpdateGroupModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}
