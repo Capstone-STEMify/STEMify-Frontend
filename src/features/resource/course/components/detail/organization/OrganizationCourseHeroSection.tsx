@@ -10,8 +10,6 @@ import { useTranslations } from 'next-intl'
 
 type OrganizationCourseHeroSectionProps = {
   course: Course
-  enrollmentStatus?: string
-  enrollmentId?: number
 }
 
 type TagGroupProps = {
@@ -42,14 +40,14 @@ export default function OrganizationCourseHeroSection({ course }: OrganizationCo
         <div className='grid items-center gap-8 lg:grid-cols-2'>
           <div className='space-y-4'>
             <BackButton />
-            <div className='mx-3 inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-800'>
+            <div className='mx-3 inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-800'>
               <CalendarFold className='mr-2 h-4 w-4' />
               {t('details.tags.ageRange')}: {course.ageRangeLabel}
             </div>
 
-            <h1 className='text-md leading-tight font-bold text-blue-800 lg:text-xl'>{course.title}</h1>
+            <h1 className='text-lg leading-tight font-bold text-blue-800 lg:text-2xl'>{course.title}</h1>
 
-            <p className='text-md leading-relaxed text-gray-600'>{course.description}</p>
+            <p className='text-lg leading-relaxed text-gray-600'>{course.description}</p>
 
             <div className='space-x-6 text-sm'>
               {/* Category */}

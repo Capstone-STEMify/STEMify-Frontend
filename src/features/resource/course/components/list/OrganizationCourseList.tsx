@@ -48,9 +48,9 @@ export default function OrganizationCourseList({ curriculumId }: OrganizationCur
                 }
               >
                 <div>
-                  <p className='text-muted-foreground text-sm font-medium'>{course.code}</p>
-                  <h3 className='text-md line-clamp-1 font-semibold text-gray-900'>{course.title}</h3>
-                  <p className='line-clamp-2 text-sm text-gray-600'>{course.description}</p>
+                  <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
+                  <h3 className='line-clamp-1 text-sm font-semibold text-gray-900'>{course.title}</h3>
+                  <p className='line-clamp-2 text-xs text-gray-600'>{course.description}</p>
                 </div>
               </CardLayout>
             </Link>

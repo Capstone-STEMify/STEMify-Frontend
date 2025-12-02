@@ -13,7 +13,7 @@ type LearningOutcome = {
 export default function LearningObjectives({ title, outcomes }: { title?: string; outcomes?: LearningOutcome[] }) {
   return (
     <div className='mx-auto max-w-7xl p-6'>
-      <h2 className='mb-8 text-2xl font-bold text-gray-800'>{title}</h2>
+      <h2 className='mb-2 text-2xl font-bold text-gray-800'>{title}</h2>
 
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
         {outcomes?.map((outcome) => (

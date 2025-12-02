@@ -21,7 +21,9 @@ export default function CourseDetailNotEnrolled() {
   const tc = useTranslations('common.message')
 
   const { courseId } = useParams()
-  const params = useAppSelector((state) => state.courseEnrollment) as { pageNumber?: number; pageSize?: number } | undefined
+  const params = useAppSelector((state) => state.courseEnrollment) as
+    | { pageNumber?: number; pageSize?: number }
+    | undefined
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const {
     data: LearningOutcome,
@@ -66,7 +68,9 @@ export default function CourseDetailNotEnrolled() {
       <div className='mt-30 sm:mt-32'>
         <LearningObjectives title={tc('learnTitle')} outcomes={LearningOutcome?.data.items} />
       </div>
-      <ContentSection />
+      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <ContentSection />
+      </div>
     </div>
   )
 }
