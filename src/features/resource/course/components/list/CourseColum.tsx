@@ -19,6 +19,7 @@ import { useLocale } from 'next-intl'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useDeleteCourseFromCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
 import SStatusDropdown from '@/components/shared/SStatusDropdown'
+import { original } from '@reduxjs/toolkit'
 
 export const courseTableSchema = z.object({
   id: z.number()
@@ -74,9 +75,17 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
 
   const statusOptions = [
     { label: 'Draft', value: CourseStatus.DRAFT },
-    { label: 'Published', value: CourseStatus.PUBLISHED },
-    { label: 'Archived', value: CourseStatus.ARCHIVED }
+    { label: 'Published', value: CourseStatus.PUBLISHED }
   ]
+  const statusFlow: Record<CourseStatus, CourseStatus[]> = {
+    [CourseStatus.DRAFT]: [CourseStatus.DRAFT, CourseStatus.PUBLISHED],
+    [CourseStatus.PUBLISHED]: [CourseStatus.PUBLISHED],
+    [CourseStatus.PENDING]: [],
+    [CourseStatus.REJECTED]: [],
+    [CourseStatus.DELETED]: [],
+    [CourseStatus.ARCHIVED]: [],
+    [CourseStatus.APPROVED]: []
+  }
 
   const handleStatusChange = (courseId: number, newStatus: string) => {
     if (newStatus === CourseStatus.DELETED) {
@@ -151,11 +160,15 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       accessorKey: 'status',
       header: () => <div>{tc('tableHeader.status')}</div>,
       cell: ({ row }) => {
-        const value = row.original.status
+        const value = row.original
+        const allowedOptions = statusOptions.filter(
+          (l) => value && statusFlow[value.status]?.includes(l.value as CourseStatus)
+        )
+
         return (
           <SStatusDropdown
-            value={value}
-            options={statusOptions}
+            value={value.status!}
+            options={allowedOptions}
             onChange={(newStatus) => handleStatusChange(row.original.id, newStatus)}
           />
         )
@@ -186,6 +199,17 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
           openModal('confirm', {
             message: tt('confirmMessage.delete', { title: original.title }),
             onConfirm: () => handleDelete(original.id)
+          })
+        }
+      },
+      {
+        label: tc('button.archive'),
+        hidden: () => curriculumId !== undefined,
+        onClick: async ({ original }) => {
+          // Open the confirmation modal for deletion
+          openModal('confirm', {
+            message: tt('confirmMessage.archive', { title: original.title }),
+            onConfirm: () => handleStatusUpdate(original.id, original.title, CourseStatus.ARCHIVED)
           })
         }
       },
