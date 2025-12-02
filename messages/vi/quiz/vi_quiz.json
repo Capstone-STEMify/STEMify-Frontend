@@ -14,6 +14,7 @@
         "mins": "phút"
       },
       "answerTable": {
+        "submitted": "Nộp vào: ",
         "head": "Học viên",
         "point": "Điểm:",
         "accuracy": "Điểm trung bình",
@@ -21,6 +22,7 @@
         "question": "Câu hỏi",
         "correct": "Đúng",
         "incorrect": "Sai",
+        "skip": "Bỏ qua",
         "correctAnswer": "Đáp án đúng"
       },
       "questionTab": {

@@ -20,6 +20,7 @@ export type StudentStatistic = {
   imageUrl: string
   totalScore: number
   status: 'Passed' | 'Failed' | string
+  completedAt: string
   totalCorrectAnswers: number
   totalIncorrectAnswers: number
   totalSkipAnswers: number

@@ -14,6 +14,7 @@
         "mins": "min(s)"
       },
       "answerTable": {
+        "submitted": "Submitted at:",
         "head": "Learner",
         "point": "Point:",
         "accuracy": "Accuracy",
@@ -21,6 +22,7 @@
         "question": "Questions",
         "correct": "Correct",
         "incorrect": "Incorrect",
+        "skip": "Skip",
         "correctAnswer": "Correct Answer"
       },
       "questionTab": {
