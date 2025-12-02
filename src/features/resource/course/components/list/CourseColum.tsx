@@ -80,11 +80,8 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
   const statusFlow: Record<CourseStatus, CourseStatus[]> = {
     [CourseStatus.DRAFT]: [CourseStatus.DRAFT, CourseStatus.PUBLISHED],
     [CourseStatus.PUBLISHED]: [CourseStatus.PUBLISHED],
-    [CourseStatus.PENDING]: [],
-    [CourseStatus.REJECTED]: [],
     [CourseStatus.DELETED]: [],
-    [CourseStatus.ARCHIVED]: [],
-    [CourseStatus.APPROVED]: []
+    [CourseStatus.ARCHIVED]: []
   }
 
   const handleStatusChange = (courseId: number, newStatus: string) => {
@@ -193,7 +190,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       {
         label: tc('button.delete'),
         danger: true,
-        hidden: () => curriculumId !== undefined,
+        hidden: ({ original }) => curriculumId !== undefined || original.status !== CourseStatus.DRAFT,
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {
@@ -204,7 +201,7 @@ export function useGetCourseColumn({ isPopup }: { isPopup?: boolean }): ColumnDe
       },
       {
         label: tc('button.archive'),
-        hidden: () => curriculumId !== undefined,
+        hidden: ({ original }) => curriculumId !== undefined || original.status !== CourseStatus.PUBLISHED,
         onClick: async ({ original }) => {
           // Open the confirmation modal for deletion
           openModal('confirm', {

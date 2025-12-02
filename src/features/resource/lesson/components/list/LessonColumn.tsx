@@ -59,11 +59,8 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
   const statusFlow: Record<LessonStatus, LessonStatus[]> = {
     [LessonStatus.DRAFT]: [LessonStatus.DRAFT, LessonStatus.PUBLISHED],
     [LessonStatus.PUBLISHED]: [LessonStatus.PUBLISHED],
-    [LessonStatus.PENDING]: [],
-    [LessonStatus.REJECTED]: [],
     [LessonStatus.DELETED]: [],
-    [LessonStatus.ARCHIVED]: [],
-    [LessonStatus.APPROVED]: []
+    [LessonStatus.ARCHIVED]: []
   }
 
   const handleStatusChange = (lessonId: number, newStatus: string) => {
@@ -168,18 +165,6 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
             onConfirm: () => handleDelete(original.id)
           })
         }
-      },
-      {
-        separatorBefore: true,
-        label: tc('button.approve'),
-        hidden: ({ original }) => original.status !== LessonStatus.PENDING && original.status !== LessonStatus.DRAFT,
-        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, LessonStatus.PUBLISHED)
-      },
-      {
-        label: tc('button.reject'),
-        danger: true,
-        hidden: ({ original }) => original.status !== LessonStatus.PENDING && original.status !== LessonStatus.DRAFT,
-        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, LessonStatus.REJECTED)
       }
     ])
   ]
