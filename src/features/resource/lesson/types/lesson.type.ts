@@ -25,13 +25,13 @@ export type Lesson = {
 }
 
 export enum LessonStatus {
-  DRAFT = 'DRAFT',
-  PUBLISHED = 'PUBLISHED',
-  ARCHIVED = 'ARCHIVED',
-  DELETED = 'DELETED',
-  PENDING = 'PENDING',
-  REJECTED = 'REJECTED',
-  APPROVED = 'APPROVED'
+  DRAFT = 'Draft',
+  PUBLISHED = 'Published',
+  ARCHIVED = 'Archived',
+  DELETED = 'Deleted',
+  PENDING = 'Pending',
+  REJECTED = 'Rejected',
+  APPROVED = 'Approved'
 }
 
 // query params
