@@ -5,7 +5,7 @@ import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useGetClassroomColumn } from '@/features/classroom/components/list/table/ClassroomColumn'
 import { useSearchClassroomsQuery } from '@/features/classroom/api/classroomApi'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { Input } from '@/components/shadcn/input'
 import SSelect from '@/components/shared/SSelect'
@@ -19,6 +19,8 @@ import { useGetOrganizationCourseClassroomColumn } from '@/features/resource/cou
 export default function OrganizationCourseClassroom() {
   const router = useRouter()
   const locale = useLocale()
+
+  const { courseId } = useParams()
 
   const tc = useTranslations('common')
   const tClassroom = useTranslations('classroom')
@@ -59,7 +61,7 @@ export default function OrganizationCourseClassroom() {
           </Button>
           <Button
             className='bg-sky-600 text-white hover:bg-sky-700'
-            onClick={() => router.push(`/${locale}/organization/classroom/create`)}
+            onClick={() => router.push(`/${locale}/organization/classroom/create?courseId=${courseId}`)}
           >
             + {tc('button.createClassroom')}
           </Button>
@@ -98,6 +100,7 @@ export default function OrganizationCourseClassroom() {
         pagingParams={queryParams}
         handlePageChange={() => {}}
         onRowClick={(val) => {
+          console.log(val)
           router.push(`/${locale}/organization/classroom/${val.id}`)
         }}
       />

@@ -104,12 +104,6 @@ export default function ClassroomTable() {
           <Button variant='outline' onClick={() => dispatch(resetParams())} className='hover:bg-slate-100'>
             {tc('button.clearFilters')}
           </Button>
-          <Button
-            className='bg-sky-600 text-white hover:bg-sky-700'
-            onClick={() => router.push(`/${locale}/organization/classroom/create`)}
-          >
-            + {tc('button.createClassroom')}
-          </Button>
         </div>
       </div>
 
