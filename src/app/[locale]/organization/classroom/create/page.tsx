@@ -1,10 +1,10 @@
-import UpsertClassroom from '@/features/classroom/components/upsert/UpsertClassroom'
+import CreateClassroom from '@/features/classroom/components/upsert/CreateClassroom'
 import React from 'react'
 
 export default function createClassroomPage() {
   return (
     <div>
-      <UpsertClassroom />
+      <CreateClassroom />
     </div>
   )
 }

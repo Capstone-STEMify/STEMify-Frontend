@@ -150,3 +150,21 @@ export type ClassroomStatisticData = {
   ungradedAssignments: UngradedAssignment[]
   courseStats: CourseStat[]
 }
+
+// CREATE CLASSROOM
+export type CreateClassroom = {
+  grade: string
+  courseId: number
+  organizationSubscriptionOrderId: number
+  description: string
+  startDate: string
+  endDate: string
+  studentGroups: ClassroomStudentGroup[]
+}
+
+export type ClassroomStudentGroup = {
+  groupCode: string
+  groupName: string
+  teacherId: string
+  studentIds: string[]
+}
