@@ -23,7 +23,6 @@ export default function LearningOutcomeTable({ curriculumId }: LearningOutcomeTa
   const { openModal } = useModal()
 
   const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
-  const dispatch = useAppDispatch()
   const queryParams: LearningOutcomeQueryParams = {
     curriculumId
   }

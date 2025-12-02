@@ -31,6 +31,7 @@ export type Classroom = {
 export type ClassroomSliceParams = {
   teacherId?: string
   status?: 'upcoming' | 'inprogress' | 'completed' | 'endsoon'
+  courseId?: number
 } & SliceQueryParams
 
 // Pending, InProgress, Completed, Deleted
@@ -149,5 +150,3 @@ export type ClassroomStatisticData = {
   ungradedAssignments: UngradedAssignment[]
   courseStats: CourseStat[]
 }
-
-

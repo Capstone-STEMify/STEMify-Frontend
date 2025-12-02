@@ -17,18 +17,10 @@ import { SPagination } from '@/components/shared/SPagination'
 
 export default function ContentSection() {
   const t = useTranslations('course')
-  const tc = useTranslations('common')
-  const tt = useTranslations('toast')
 
-  const router = useRouter()
-  const { openModal } = useModal()
   const dispatch = useAppDispatch()
-  const auth = useAppSelector((state) => state.auth)
 
   const lessonsQuery = useAppSelector((state) => state.lesson)
-  useEffect(() => {
-    dispatch(setPageSize(8))
-  }, [dispatch])
 
   const { courseId } = useParams()
 
@@ -36,9 +28,9 @@ export default function ContentSection() {
     ...lessonsQuery,
     courseId: Number(courseId),
     orderBy: 'orderindex',
-    sortDirection: 'Asc'
+    sortDirection: 'Asc',
+    pageSize: 10
   })
-  const [sendLessonRequest] = useUpdateLessonMutation()
 
   const [items, setItems] = useState<Lesson[]>([])
 
@@ -52,10 +44,8 @@ export default function ContentSection() {
 
   if (!lessons?.data || lessons.data.items.length === 0) {
     return (
-      <div className='bg-white py-12'>
-        <h2 className='text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-          {t('details.lesson.title')}
-        </h2>
+      <div className='bg-white py-5'>
+        <h2 className='text-lg font-bold tracking-tight text-gray-900 sm:text-2xl'>{t('details.lesson.title')}</h2>
         <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
             <SEmpty title={t('details.lesson.noData')} description={t('details.lesson.noDataDescription')} />
@@ -72,34 +62,28 @@ export default function ContentSection() {
       whileInView='visible'
       viewport={{ once: true }}
       variants={fadeInUp}
-      className='bg-white py-30'
+      className='bg-white py-5'
     >
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <div className='mb-12 text-center'>
-          <h2 className='mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+      <div>
+        <div className='mb-5'>
+          <h2 className='mb-2 text-lg font-bold tracking-tight text-gray-900 sm:text-2xl'>
             {t('details.lesson.title')}
           </h2>
-          <p className='mx-auto mb-8 max-w-2xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
+          <p className='max-w-xl text-lg text-gray-600'>{t('details.lesson.description')}</p>
         </div>
 
-        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5'>
           {items.map((lesson) => (
-            // <Link
-            //   href={isTeacher ? `/resource/lesson/${lesson.id}` : '#'}
-            //   className='flex w-fit flex-col justify-between'
-            //   key={lesson.id}
-            // >
             <CardLayout key={lesson.id} imageSrc={lesson.imageUrl || '/images/fallback.png'}>
               <div className='flex min-h-0 flex-1 flex-col'>
-                <h3 className='line-clamp-1 text-lg font-semibold'>{lesson.title}</h3>
-                <p className='mb-2 line-clamp-4 text-sm text-gray-600'>{lesson.description}</p>
+                <h3 className='line-clamp-1 text-base font-semibold'>{lesson.title}</h3>
+                <p className='mb-2 line-clamp-4 text-xs text-gray-600'>{lesson.description}</p>
                 <div className='mt-auto flex items-center gap-2'>
                   <Badge className='bg-blue-100 text-blue-800'>{lesson.ageRangeLabel}</Badge>
                   <Badge className='bg-green-100 text-green-800'>{formatDuration(lesson.duration)}</Badge>
                 </div>
               </div>
             </CardLayout>
-            // </Link>
           ))}
         </div>
 

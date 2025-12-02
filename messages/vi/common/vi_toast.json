@@ -22,7 +22,8 @@
       "clearCart": "Đã xóa giỏ hàng!",
       "addToCart": "Đã thêm sản phẩm vào giỏ hàng!",
       "uploadCSV": "Đã tải CSV thành công",
-      "reorder": "Đã sắp xếp lại thành công"
+      "reorder": "Đã sắp xếp lại thành công",
+      "copiedToClipboard": "Đã sao chép vào clipboard!"
     },
     "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "errorSpecific": {

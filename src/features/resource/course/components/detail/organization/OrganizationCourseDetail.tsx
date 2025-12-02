@@ -1,29 +1,28 @@
 'use client'
-import React from 'react'
+
+import React, { useState } from 'react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { BookOpen } from 'lucide-react'
 import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 import ContentSection from '@/features/resource/course/components/detail/not-enrolled/ContentSection'
 import StatsSection from '@/features/resource/course/components/detail/not-enrolled/StatSection'
-import HeroSection from '@/features/resource/course/components/detail/not-enrolled/HeroSection'
 import LearningObjectives from '@/components/shared/outcome/LearningObjectives'
 import { useSearchLearningOutcomeQuery } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
 import { useTranslations } from 'next-intl'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { UserRole } from '@/types/userRole'
 import { useParams } from 'next/navigation'
 import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
+import OrganizationCourseHeroSection from '@/features/resource/course/components/detail/organization/OrganizationCourseHeroSection'
+import OrganizationCourseClassroom from '@/features/resource/course/components/detail/organization/OrganizationCourseClassroom'
 
-export default function CourseDetailNotEnrolled() {
+export default function OrganizationCourseDetail() {
   const auth = useAppSelector((state) => state.auth)
   const studentId = auth?.user?.userId
   const tc = useTranslations('common.message')
 
   const { courseId } = useParams()
-  const params = useAppSelector((state) => state.courseEnrollment) as
-    | { pageNumber?: number; pageSize?: number }
-    | undefined
+
   const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const {
     data: LearningOutcome,
@@ -37,13 +36,17 @@ export default function CourseDetailNotEnrolled() {
     error: enrollmentError
   } = useSearchCourseEnrollmentQuery({ courseId: Number(courseId), studentId }, { skip: !studentId })
 
+  const [activeTab, setActiveTab] = useState<'lesson' | 'classroom'>('lesson')
+
   if (isLoading || outcomeLoading || outcomeFetching || enrollmentLoading)
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />
       </div>
     )
+
   if (error) return <div className='p-8 text-red-500'>Error loading course details.</div>
+
   if (!course?.data)
     return (
       <div className='flex h-screen items-center justify-center bg-white'>
@@ -56,20 +59,45 @@ export default function CourseDetailNotEnrolled() {
     )
 
   return (
-    <div className='min-h-screen bg-white'>
+    <div>
       <div className='relative'>
-        <HeroSection
-          course={course.data}
-          enrollmentStatus={enrollmentData?.data.items[0]?.status}
-          enrollmentId={enrollmentData?.data.items[0]?.id}
-        />
+        <OrganizationCourseHeroSection course={course.data} />
         <StatsSection course={course.data} />
       </div>
+
       <div className='mt-30 sm:mt-32'>
         <LearningObjectives title={tc('learnTitle')} outcomes={LearningOutcome?.data.items} />
       </div>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <ContentSection />
+
+      <hr className='mx-auto my-5 w-sm text-gray-600' />
+
+      <div className='mx-auto max-w-7xl px-4 pb-5 sm:px-6 lg:px-8'>
+        <div className='flex gap-6 border-b border-gray-200'>
+          <button
+            className={`py-2 text-lg font-medium transition-all ${activeTab === 'lesson' ? 'text-blue-600' : 'text-gray-500'} relative`}
+            onClick={() => setActiveTab('lesson')}
+          >
+            Lesson
+            {activeTab === 'lesson' && (
+              <span className='absolute bottom-0 left-0 h-[3px] w-full rounded-full bg-blue-600'></span>
+            )}
+          </button>
+
+          <button
+            className={`py-2 text-lg font-medium transition-all ${activeTab === 'classroom' ? 'text-blue-600' : 'text-gray-500'} relative`}
+            onClick={() => setActiveTab('classroom')}
+          >
+            Classroom
+            {activeTab === 'classroom' && (
+              <span className='absolute bottom-0 left-0 h-[3px] w-full rounded-full bg-blue-600'></span>
+            )}
+          </button>
+        </div>
+
+        <div>
+          {activeTab === 'lesson' && <ContentSection />}
+          {activeTab === 'classroom' && <OrganizationCourseClassroom />}
+        </div>
       </div>
     </div>
   )

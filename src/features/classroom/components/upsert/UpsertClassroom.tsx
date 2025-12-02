@@ -29,7 +29,7 @@ type ClassroomFormData = {
   description?: string
   classCode: string
   grade: string
-  curriculumId: number
+  courseId: number
   organizationSubscriptionOrderId: number
   durationWeeks: string // '4' | '6' | '8' | '10' | 'custom'
   startDate: string // ISO date string
@@ -43,7 +43,7 @@ const defaultClassroomFormData: ClassroomFormData = {
   description: '',
   classCode: '',
   grade: '',
-  curriculumId: 1,
+  courseId: 1,
   organizationSubscriptionOrderId: 1,
   durationWeeks: '8',
   startDate: new Date().toISOString(), // default là hôm nay
@@ -150,7 +150,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
     onSubmit: async ({ value }) => {
       const payload = {
         ...value,
-        curriculumId: Number(value.curriculumId),
+        courseId: Number(value.courseId),
         organizationSubscriptionOrderId: selectedSubscriptionId!,
         studentIds: selectedStudentIds
       }
@@ -189,7 +189,7 @@ export default function UpsertClassroom({ classroomId, onSuccess }: UpsertClassr
         classCode: p.classCode,
         description: p.description,
         grade: p.grade,
-        curriculumId: p.curriculum.id,
+        courseId: p.course.id,
         organizationSubscriptionOrderId: p.organizationSubscriptionOrderId,
         durationWeeks: durationWeeks,
         startDate: p.startDate,
