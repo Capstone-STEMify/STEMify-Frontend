@@ -10,6 +10,7 @@ import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import KitListSection from '@/features/resource/kit/components/list/KitListSection'
 import AdminCurriculumInformationSection from '@/features/resource/curriculum/components/detail/AdminCurriculumInformationSection'
+import OrganizationCourseList from '@/features/resource/course/components/list/OrganizationCourseList'
 
 export default function OrganizationCurriculumDetail() {
   const { curriculumId } = useParams()
@@ -44,7 +45,7 @@ export default function OrganizationCurriculumDetail() {
             <hr className='my-10' />
             <KitListSection context='curriculum' kitIds={data?.data?.kitIds || []} />
             <hr className='my-10' />
-            <AdminCurriculumCourseList curriculumId={Number(curriculumId)} courses={data?.data?.courses} />
+            <OrganizationCourseList curriculumId={Number(curriculumId)} />
           </>
         )}
       </div>

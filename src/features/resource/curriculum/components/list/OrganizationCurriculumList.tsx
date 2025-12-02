@@ -11,6 +11,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { BookOpen, Calendar, GraduationCap, Filter } from 'lucide-react'
 import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 export default function OrganizationCurriculumList() {
   const t = useTranslations('organization.curriculum')
@@ -18,10 +19,14 @@ export default function OrganizationCurriculumList() {
   const router = useRouter()
   const locale = useLocale()
 
+  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
+
   const [selectedStatus, setSelectedStatus] = useState<CurriculumStatus | 'ALL'>('ALL')
 
-  const { data: curriculumData, isLoading } = useGetCurriculumsByOrganizationIdQuery({ organizationId: 3 })
-
+  const { data: curriculumData, isLoading } = useGetCurriculumsByOrganizationIdQuery(
+    { organizationId: selectedOrganizationId! },
+    { skip: !selectedOrganizationId }
+  )
   // Filter curriculums based on selected status
   const filteredCurriculums = useMemo(() => {
     if (!curriculumData?.data?.curriculums) return []
@@ -127,7 +132,7 @@ export default function OrganizationCurriculumList() {
             >
               <div>
                 {/* Title */}
-                <h2 className='mb-3 line-clamp-2 text-lg font-bold text-gray-900 transition-colors'>
+                <h2 className='mb-1 line-clamp-2 text-lg font-bold text-gray-900 transition-colors'>
                   {curriculum.title}
                 </h2>
 
@@ -142,13 +147,11 @@ export default function OrganizationCurriculumList() {
 
                   {/* Dates */}
                   <div className='flex items-center gap-2 text-sm'>
-                    <Calendar className='h-4 w-4 text-green-600' />
                     <span className='text-gray-600'>{t('startDate')}:</span>
                     <span className='font-medium text-gray-900'>{formatDate(curriculum.startDate, { locale })}</span>
                   </div>
 
                   <div className='flex items-center gap-2 text-sm'>
-                    <Calendar className='h-4 w-4 text-red-600' />
                     <span className='text-gray-600'>{t('endDate')}:</span>
                     <span className='font-medium text-gray-900'>{formatDate(curriculum.endDate, { locale })}</span>
                   </div>

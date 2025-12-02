@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function OrganizationCurriculumPage() {
   return (
-    <div className='mt-5'>
+    <div className='my-5'>
       <OrganizationCurriculumList />
     </div>
   )
