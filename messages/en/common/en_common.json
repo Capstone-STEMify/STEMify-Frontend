@@ -241,6 +241,7 @@
       "student": "Student",
       "teacher": "Teacher",
       "member": "Member",
+      "organizationadmin": "Organization Admin",
       "organization_admin": "Organization Admin"
     }
   }

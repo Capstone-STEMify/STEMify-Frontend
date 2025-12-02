@@ -4,7 +4,7 @@ import { useGetCourseColumn } from '@/features/resource/course/components/list/C
 import { setPageSize } from '@/features/resource/course/slice/courseSlice'
 import { Course } from '@/features/resource/course/types/course.type'
 import { useUpdateCourseOrderMutation } from '@/features/resource/curriculum/api/curriculumApi'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -22,6 +22,7 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
   const tt = useTranslations('toast')
   const [localCourses, setLocalCourses] = React.useState<Course[]>(courses || [])
 
+  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
   const columns = useGetCourseColumn({ isPopup: false })
@@ -66,28 +67,29 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
           {t('list.courseListTitle')}{' '}
           <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{courses?.length}</span>
         </h2>
+        {!selectedOrganizationId && (
+          <div className='flex justify-end space-x-2'>
+            {orderedCourseIds.length > 0 && (
+              <Button className='bg-emerald-400' onClick={handleSaveOrder}>
+                <Plus className='mr-1 h-4 w-4' />
+                {tc('button.order')}
+              </Button>
+            )}
 
-        <div className='flex justify-end space-x-2'>
-          {orderedCourseIds.length > 0 && (
-            <Button className='bg-emerald-400' onClick={handleSaveOrder}>
+            <Button
+              className='bg-amber-custom-400'
+              onClick={() => {
+                openModal('curriculumSelectCourseListModal', {
+                  curriculumId,
+                  courseIds: courses?.map((course) => course.id) || []
+                })
+              }}
+            >
               <Plus className='mr-1 h-4 w-4' />
-              {tc('button.order')}
+              {t('details.addCourse')}
             </Button>
-          )}
-
-          <Button
-            className='bg-amber-custom-400'
-            onClick={() => {
-              openModal('curriculumSelectCourseListModal', {
-                curriculumId,
-                courseIds: courses?.map((course) => course.id) || []
-              })
-            }}
-          >
-            <Plus className='mr-1 h-4 w-4' />
-            {t('details.addCourse')}
-          </Button>
-        </div>
+          </div>
+        )}
       </div>
 
       <DataTable

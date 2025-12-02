@@ -21,19 +21,6 @@ type ClassroomBasicInfoProps = {
   maxDate: Date | undefined
 }
 
-// Generate random class code like Google Meet (xxx-yyyy-zzz)
-const generateClassCode = () => {
-  const chars = 'abcdefghijklmnopqrstuvwxyz'
-  const randomString = (length: number) => {
-    let result = ''
-    for (let i = 0; i < length; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length))
-    }
-    return result
-  }
-  return `${randomString(3)}-${randomString(4)}-${randomString(3)}`
-}
-
 export default function ClassroomBasicInfo({ form, minDate, maxDate }: ClassroomBasicInfoProps) {
   const tClassroom = useTranslations('classroom.create.step1')
 
@@ -51,7 +38,6 @@ export default function ClassroomBasicInfo({ form, minDate, maxDate }: Classroom
   ]
 
   const [name, setName] = useState('')
-  const [classCode, setClassCode] = useState('')
   const [grade, setGrade] = useState('')
   const [description, setDescription] = useState('')
   const [durationWeeks, setDurationWeeks] = useState('8')
@@ -59,18 +45,6 @@ export default function ClassroomBasicInfo({ form, minDate, maxDate }: Classroom
   const [endDate, setEndDate] = useState<Date | undefined>(new Date(new Date().setDate(new Date().getDate() + 56)))
 
   const isCustomDuration = durationWeeks === 'custom'
-
-  // Generate initial class code
-  useEffect(() => {
-    const formClassCode = form.getFieldValue('classCode')
-    if (!formClassCode) {
-      const newCode = generateClassCode()
-      setClassCode(newCode)
-      form.setFieldValue('classCode', newCode)
-    } else {
-      setClassCode(formClassCode)
-    }
-  }, [])
 
   // Sync với form khi mount (cho trường hợp edit)
   useEffect(() => {
@@ -108,10 +82,6 @@ export default function ClassroomBasicInfo({ form, minDate, maxDate }: Classroom
   }, [name])
 
   useEffect(() => {
-    form.setFieldValue('classCode', classCode)
-  }, [classCode])
-
-  useEffect(() => {
     form.setFieldValue('grade', grade)
   }, [grade])
 
@@ -135,51 +105,25 @@ export default function ClassroomBasicInfo({ form, minDate, maxDate }: Classroom
     }
   }, [endDate])
 
-  const handleRegenerateCode = () => {
-    const newCode = generateClassCode()
-    setClassCode(newCode)
-    form.setFieldValue('classCode', newCode)
-  }
-
   return (
     <div className='animate-fadeIn mx-auto max-w-6xl space-y-6'>
       <div className='rounded-lg border bg-white p-6 shadow-sm'>
         <h3 className='mb-4 text-lg font-semibold text-gray-900'>{tClassroom('basicInfo')}</h3>
 
         <div className='space-y-4'>
-          {/* Classroom Name */}
-          <div className='space-y-2'>
-            <Label htmlFor='name'>
-              {tClassroom('className')} <span className='text-red-500'>*</span>
-            </Label>
-            <Input id='name' placeholder='e.g., STEM-1A-2025' value={name} onChange={(e) => setName(e.target.value)} />
-          </div>
-
           {/* Row 1: class code + Grade */}
           <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+            {/* Classroom Name */}
             <div className='space-y-2'>
-              <Label htmlFor='classCode'>
-                {tClassroom('classCode')} <span className='text-red-500'>*</span>
+              <Label htmlFor='name'>
+                {tClassroom('className')} <span className='text-red-500'>*</span>
               </Label>
-              <div className='flex gap-2'>
-                <Input
-                  id='classCode'
-                  placeholder='e.g., abc-defg-hij'
-                  value={classCode}
-                  readOnly
-                  className='flex-1 bg-gray-50 font-mono'
-                />
-                <Button
-                  type='button'
-                  variant='outline'
-                  size='icon'
-                  onClick={handleRegenerateCode}
-                  title='Generate new code'
-                >
-                  <RefreshCw className='h-4 w-4' />
-                </Button>
-              </div>
-              <p className='text-xs text-gray-500'>Auto-generated code • Click refresh to generate new</p>
+              <Input
+                id='name'
+                placeholder='e.g., STEM-1A-2025'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
 
             <div className='space-y-2'>
@@ -187,7 +131,7 @@ export default function ClassroomBasicInfo({ form, minDate, maxDate }: Classroom
                 {tClassroom('gradeLevel')} <span className='text-red-500'>*</span>
               </Label>
               <Select value={grade} onValueChange={setGrade}>
-                <SelectTrigger>
+                <SelectTrigger className='w-full'>
                   <SelectValue placeholder={tClassroom('selectGrade')} />
                 </SelectTrigger>
                 <SelectContent>

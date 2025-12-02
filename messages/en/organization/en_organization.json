@@ -157,7 +157,7 @@
     },
     "license": {
       "header": "Create Organization Account(s)",
-      "subHeader": "New accounts will be created for this organization. The account will automatically be assigned a valid license from this subscription.",
+      "description": "New accounts will be created for this organization. The account will automatically be assigned a valid license from this subscription.",
       "downloadCSVTemplate": "Download CSV Template",
       "uploadCSV": "Select a CSV file to upload",
       "dragAndDrop": "Drag and drop your CSV file here",

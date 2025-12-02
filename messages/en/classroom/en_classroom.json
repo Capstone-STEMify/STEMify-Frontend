@@ -3,7 +3,7 @@
     "list": {
       "header": "Classroom List",
       "searchPlaceholder": "Search...",
-      "selectCurriculumPlaceholder": "Select curriculum",
+      "selectCoursePlaceholder": "Select course",
       "courses": "courses"
     },
     "update": {
