@@ -3,28 +3,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
-import { Input } from '@/components/shadcn/input'
 import { Progress } from '@/components/shadcn/progress'
-import {
-  CheckCircle,
-  Users,
-  GraduationCap,
-  BookOpen,
-  TrendingUp,
-  TrendingDown,
-  Search,
-  UserPlus,
-  Calendar,
-  CreditCard
-} from 'lucide-react'
+import { Users, GraduationCap, BookOpen, Calendar, CreditCard } from 'lucide-react'
 import { useModal } from '@/providers/ModalProvider'
 import { useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
 import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { formatDate } from '@/utils/index'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { useEffect } from 'react'
-import { SCard } from '@/components/shared/card/SCard'
 import CardLayout from '@/components/shared/card/CardLayout'
 import LicenseAssignmentList from '@/features/license-assignment/components/list/licenseAssignmentList'
 import { getStatusBadgeClass } from '@/utils/badgeColor'

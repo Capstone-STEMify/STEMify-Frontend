@@ -172,6 +172,9 @@
       "title": "Organization Student Groups",
       "subTitle": "Manage your organization groups",
       "noData": "No groups found for this organization.",
+      "groupCode": "Group Code:",
+      "groupName": "Group Name:",
+      "numberOfStudents": "Number of Students: {quantity}",
       "step1": {
         "title": "Step 1: Select Students",
         "description": "Choose students to include in the groups",
