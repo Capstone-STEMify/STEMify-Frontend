@@ -17,7 +17,8 @@ import {
   ArrowLeft,
   GraduationCap,
   Edit2,
-  Trash2
+  Trash2,
+  Mail
 } from 'lucide-react'
 import { format } from 'date-fns'
 import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
@@ -154,7 +155,7 @@ export default function OrganizationClassroomDetail() {
           {/* Left Column - Main Info */}
           <div className='space-y-6 md:col-span-2'>
             {/* Curriculum Card */}
-            {classroom.curriculum && (
+            {classroom.course && (
               <Card className='overflow-hidden border border-slate-200 py-4 shadow-sm'>
                 <CardHeader className='pb-4'>
                   <CardTitle className='flex items-center justify-between gap-2 text-lg'>
@@ -173,11 +174,11 @@ export default function OrganizationClassroomDetail() {
                 </CardHeader>
                 <CardContent>
                   <div className='flex gap-4'>
-                    {classroom.curriculum.imageUrl && (
+                    {classroom.course.imageUrl && (
                       <div className='relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-lg bg-slate-100'>
                         <Image
-                          src={classroom.curriculum.imageUrl}
-                          alt={classroom.curriculum.title}
+                          src={classroom.course.imageUrl}
+                          alt={classroom.course.title}
                           fill
                           className='object-cover'
                         />
@@ -185,20 +186,12 @@ export default function OrganizationClassroomDetail() {
                     )}
                     <div className='flex-1'>
                       <div className='mb-2 flex items-start justify-between gap-2'>
-                        <h3 className='text-xl font-bold text-slate-900'>{classroom.curriculum.title}</h3>
+                        <h3 className='text-xl font-bold text-slate-900'>{classroom.course.title}</h3>
                         <Badge variant='secondary' className='border-0 bg-emerald-100 text-emerald-700'>
-                          {classroom.curriculum.code}
+                          {classroom.course.code}
                         </Badge>
                       </div>
-                      <p className='mb-3 text-sm text-slate-600'>{classroom.curriculum.description}</p>
-                      <div className='flex items-center gap-4 text-sm'>
-                        <div className='flex items-center gap-1.5 text-slate-600'>
-                          <BookOpen className='h-4 w-4' />
-                          <span>
-                            {classroom.curriculum.courseCount} {tClassroom('detail.courses')}
-                          </span>
-                        </div>
-                      </div>
+                      <p className='mb-3 text-sm text-slate-600'>{classroom.course.description}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -332,12 +325,13 @@ export default function OrganizationClassroomDetail() {
                     </button>
                   </CardTitle>
                 </CardHeader>
-                {/* <CardContent>
+                <CardContent>
                   <div className='flex items-start gap-3'>
                     <Avatar className='h-12 w-12 border-2 border-white shadow-md'>
                       <AvatarImage src={classroom.teacher.imageUrl} />
                       <AvatarFallback className='bg-gradient-to-br from-amber-100 to-amber-500 font-semibold text-white'>
-                        {classroom.teacher.name.split(' ')
+                        {classroom.teacher.name
+                          .split(' ')
                           .map((n) => n[0])
                           .join('')
                           .toUpperCase()}
@@ -353,7 +347,7 @@ export default function OrganizationClassroomDetail() {
                       </div>
                     </div>
                   </div>
-                </CardContent> */}
+                </CardContent>
               </Card>
             )}
 

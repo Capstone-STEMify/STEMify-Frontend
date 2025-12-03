@@ -148,28 +148,26 @@ export type ClassroomStatisticData = {
   quizStatistic: Statistic
   assignmentStatistic: Statistic
   ungradedAssignments: UngradedAssignment[]
-  courseStats: CourseStat[]
+  courseStats: CourseStat
 }
 
 // =============== STUDENT CLASSROOM DETAIL TYPE ===============
 export interface StudentDetailResponse {
-  studentId: string;
-  studentName: string;
-  studentEmail: string;
-  studentImageUrl: string;
-  courseEnrollmentStatus: "InProgress" | "Enrolled" | "NotEnrolled";
-  averageAssignmentScore: number;
-  averageQuizScore: number;
-  totalQuizzesTaken: number;
-  totalAssignmentsSubmitted: number;
+  studentId: string
+  studentName: string
+  studentEmail: string
+  studentImageUrl: string
+  courseEnrollmentStatus: 'InProgress' | 'Enrolled' | 'NotEnrolled'
+  averageAssignmentScore: number
+  averageQuizScore: number
+  totalQuizzesTaken: number
+  totalAssignmentsSubmitted: number
 }
 
 export type StudentClassroomParams = {
   classroomId: number
   studentId: string
 }
-
-
 
 // CREATE CLASSROOM
 export type CreateClassroom = {
