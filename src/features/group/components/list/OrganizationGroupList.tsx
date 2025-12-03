@@ -1,5 +1,5 @@
 'use client'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Users, MoreHorizontal, Copy, Trash2, Pencil } from 'lucide-react'
@@ -9,9 +9,13 @@ import { useDeleteGroupMutation, useSearchGroupByOrganizationIdQuery } from '@/f
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { toast } from 'sonner'
 import { Group } from '@/features/group/types/group.type'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
+import { useRouter } from 'next/navigation'
 
 export default function OrganizationGroupList() {
   const { openModal } = useModal()
+  const router = useRouter()
+  const locale = useLocale()
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const to = useTranslations('organization.group')
@@ -39,6 +43,11 @@ export default function OrganizationGroupList() {
     })
   }
 
+  const handleNavigate = (groupId: number) => {
+    // Navigate to group detail page
+    router.push(`/${locale}/organization/group/${groupId}`)
+  }
+
   return (
     <div className='px-10 py-5'>
       <div className='mb-6 flex flex-wrap items-center justify-between gap-3'>
@@ -50,7 +59,11 @@ export default function OrganizationGroupList() {
 
       <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3'>
         {data?.data.items.map((group) => (
-          <Card key={group.id} className='min-h-[100px] transition hover:shadow-md'>
+          <Card
+            key={group.id}
+            className='min-h-[100px] transition hover:shadow-md'
+            onClick={() => handleNavigate(group.id)}
+          >
             <CardContent className='p-5'>
               <div className='flex min-w-0 items-center justify-between gap-3'>
                 {/* LEFT AREA */}
@@ -60,34 +73,51 @@ export default function OrganizationGroupList() {
                   </div>
 
                   <div>
-                    <div className='flex min-w-0 items-center gap-2'>
-                      <h3 className='truncate text-base font-medium'>
-                        {to('groupName')} {group.name}
-                      </h3>
-                      <div className='ml-2 flex items-center gap-1 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-600'>
-                        <Users className='h-4 w-4' />
-                        {group.studentCount}
+                    <div className='flex items-center gap-2'>
+                      <h3 className='truncate text-base font-medium'>{group.name}</h3>
+                      <div className='mt-1 flex -space-x-2'>
+                        {group.students.slice(0, 3).map((s, i) => {
+                          const initials = s.fullName
+                            .split(' ')
+                            .filter(Boolean)
+                            .map((n) => n[0])
+                            .join('')
+                            .toUpperCase()
+
+                          return (
+                            <Avatar
+                              key={s.organizationUserId}
+                              className='h-8 w-8 border-2 border-white ring-1 ring-gray-200'
+                              style={{ zIndex: 10 - i }}
+                            >
+                              {/* Không dùng AvatarImage vì không có URL ảnh */}
+                              <AvatarFallback className='bg-gray-100 text-xs font-medium'>{initials}</AvatarFallback>
+                            </Avatar>
+                          )
+                        })}
+
+                        {group.students.length > 3 && (
+                          <div className='flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gray-100 ring-1 ring-gray-200'>
+                            <span className='text-xs font-medium'>+{group.students.length - 3}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <button onClick={() => handleCopyGroupCode(group.code)}>
-                      <Badge variant='secondary' className='mt-2 gap-2 text-xs'>
+
+                    <button className='mt-0.5' onClick={() => handleCopyGroupCode(group.code)}>
+                      <Badge variant='secondary' className='text-xs'>
                         {group.code}
-                        <Copy className='h-4 w-4' />
+                        <Copy className='ml-1 inline-block h-3 w-3' />
                       </Badge>
                     </button>
+                    {/* AVATAR LIST */}
                   </div>
                 </div>
 
                 {/* MENU BTN */}
-                <div className='flex gap-2'>
-                  <button className='rounded-full p-1 hover:bg-gray-100' onClick={() => openModal('updateGroup')}>
-                    <Pencil className='h-5 w-5 text-sky-500' />
-                  </button>
-
-                  <button className='rounded-full p-1 hover:bg-gray-100' onClick={() => handleDeleteGroup(group)}>
-                    <Trash2 className='h-5 w-5 text-red-500' />
-                  </button>
-                </div>
+                <button className='rounded-full p-1 hover:bg-gray-100'>
+                  <MoreHorizontal className='h-5 w-5 text-gray-400' />
+                </button>
               </div>
             </CardContent>
           </Card>
