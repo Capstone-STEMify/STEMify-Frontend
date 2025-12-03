@@ -10,6 +10,8 @@
     "delete": "Xóa",
     "disable": "Vô hiệu hóa",
     "name": "Tên",
+    "studentName": "Tên học sinh",
+    "action": "Thao tác",
     "code": "Mã",
     "image": "Hình ảnh",
     "noImage": "Không có hình",

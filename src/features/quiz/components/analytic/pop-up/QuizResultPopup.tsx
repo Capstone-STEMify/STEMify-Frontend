@@ -20,6 +20,7 @@ import { ProgressCircle } from '../../active/circle/AccuracyCircle'
 import { cn } from '@/shadcn/utils'
 import { QuizStatistics, StudentStatistic } from '@/features/quiz/types/studentQuiz.type'
 import { useTranslations } from 'next-intl'
+import { formatDate } from '@/features/assignment/components/attempt/AssigmentAttempt'
 
 type Status = 'correct' | 'incorrect' | 'unanswered' | 'review'
 
@@ -138,7 +139,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                 </Badge>
               </h2>
               <p className='text-sm text-gray-500'>
-                {t('point')} {learner.totalScore}
+                {t('submitted')} {formatDate(learner.completedAt)}
               </p>
             </div>
           </div>
@@ -191,11 +192,15 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
           <div className='mb-6 flex items-center gap-4 text-xs text-gray-600'>
             <span className='flex items-center gap-1.5'>
               <div className='h-2 w-2 rounded-full bg-green-500' />
-              {t('correct')} {} - {Math.round((learner.totalCorrectAnswers! / quiz.totalQuestions) * 100)}%
+              {t('correct')} {} - {learner.totalCorrectAnswers} {t('question')}
             </span>
             <span className='flex items-center gap-1.5'>
               <div className='h-2 w-2 rounded-full bg-red-500' />
-              {t('incorrect')} {} - {Math.round((learner.totalIncorrectAnswers! / quiz.totalQuestions) * 100)}%
+              {t('incorrect')} {} - {learner.totalIncorrectAnswers} {t('question')}
+            </span>
+            <span className='flex items-center gap-1.5'>
+              <div className='h-2 w-2 rounded-full bg-gray-600' />
+              {t('skip')} {} - {learner.totalSkipAnswers} {t('question')}
             </span>
           </div>
           <div className='w-full'>
@@ -207,7 +212,7 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                     <span>Q{index + 1}</span>
                     <Badge
                       className={cn(
-                        question.status === 'correct' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        question.status === 'correct' ? 'bg-green-100 text-green-800' : question.status === 'incorrect' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
                       )}
                     >
                       {question.status}

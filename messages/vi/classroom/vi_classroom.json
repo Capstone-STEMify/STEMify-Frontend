@@ -81,6 +81,23 @@
       "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
       "groupList": "Danh sách nhóm",
       "grade": "Khối"
+    },
+    "studentClassroom": {
+      "list": {
+        "title": "Danh sách học sinh",
+        "description": "Quản lý các học sinh hiện có trong lớp học này.",
+        "number": "Sĩ số:",
+        "placeholder": "Chưa có học sinh nào trong lớp này."
+      },
+      "detail": {
+        "title": "Hồ sơ học tập",
+        "description": "Chi tiết tiến độ và kết quả học tập trong lớp.",
+        "quizScore": "Điểm Quiz trung bình",
+        "asmScore": "Điểm Bài Tập trung bình",
+        "quizTotal": "Tổng số bài kiểm tra",
+        "asmTotal": "Tổng số Bài Tập",
+        "submitted": "đã nộp"
+      }
     }
   }
 }

@@ -4,6 +4,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { AssignmentList } from '@/features/assignment/components/table/AssignmentList'
 import { useGetClassroomByIdQuery } from '@/features/classroom/api/classroomApi'
 import StudentClassroomDetail from '@/features/classroom/components/detail/StudentClassroomDetails'
+import StudentClassList from '@/features/classroom/components/list/StudentClassList'
 import ClassroomOverview from '@/features/classroom/components/overview/ClassroomOverview'
 import { ClassroomSchedule } from '@/features/classroom/components/schedule/ClassroomSchedule'
 import ClassroomSubHeader from '@/features/classroom/components/ui/ClassroomSubHeader'
@@ -14,7 +15,7 @@ import { LicenseType } from '@/types/userRole'
 import { useParams } from 'next/navigation'
 import React from 'react'
 
-export type ClassroomNavItems = 'overview' | 'course' | 'quiz' | 'assignment'
+export type ClassroomNavItems = 'overview' | 'course' | 'quiz' | 'assignment' | 'student'
 
 export default function ClassroomDetailPage() {
   const { classroomId } = useParams()
@@ -64,6 +65,11 @@ export default function ClassroomDetailPage() {
       {currentTab === 'assignment' ? (
         <div>
           <AssignmentList />
+        </div>
+      ) : null}
+      {currentTab === 'student' ? (
+        <div>
+          <StudentClassList/>
         </div>
       ) : null}
     </div>

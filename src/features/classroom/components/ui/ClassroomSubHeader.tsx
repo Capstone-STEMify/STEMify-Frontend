@@ -31,7 +31,8 @@ export default function ClassroomSubHeader({ classroom, curriculumId, currentTab
       currentTab: 'course'
     },
     { name: 'quiz', currentTab: 'quiz' },
-    { name: 'assignment', currentTab: 'assignment' }
+    { name: 'assignment', currentTab: 'assignment' },
+    { name: 'student', currentTab: 'student' }
   ]
 
   return (

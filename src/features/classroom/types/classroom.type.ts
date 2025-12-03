@@ -151,6 +151,26 @@ export type ClassroomStatisticData = {
   courseStats: CourseStat[]
 }
 
+// =============== STUDENT CLASSROOM DETAIL TYPE ===============
+export interface StudentDetailResponse {
+  studentId: string;
+  studentName: string;
+  studentEmail: string;
+  studentImageUrl: string;
+  courseEnrollmentStatus: "InProgress" | "Enrolled" | "NotEnrolled";
+  averageAssignmentScore: number;
+  averageQuizScore: number;
+  totalQuizzesTaken: number;
+  totalAssignmentsSubmitted: number;
+}
+
+export type StudentClassroomParams = {
+  classroomId: number
+  studentId: string
+}
+
+
+
 // CREATE CLASSROOM
 export type CreateClassroom = {
   grade: string
