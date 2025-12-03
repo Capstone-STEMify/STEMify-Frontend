@@ -142,6 +142,18 @@ export type CourseStat = {
   name: string
   quizStats: BoxPlotStats
   assignmentStats: BoxPlotStats
+  studentScoreHistogram: StudentScoreHistogram
+}
+
+export type HistogramBin = {
+  rangeStart: number
+  rangeEnd: number
+  count: number
+}
+
+export type StudentScoreHistogram = {
+  bins: HistogramBin[]
+  totalStudents: number
 }
 
 export type ClassroomStatisticData = {

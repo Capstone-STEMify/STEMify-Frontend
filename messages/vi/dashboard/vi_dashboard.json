@@ -10,8 +10,21 @@
         "title": "Tổng quan lớp học",
         "subTitle": "Theo dõi tiến trình học tập và hiệu suất làm bài",
         "quizStat": "Thống kê Quiz",
+        "performance": "Tổng quan về hiệu suất",
         "tooltip": "Xác định học viên có tiến độ học tập chậm nhất bằng AI.",
         "asmStat": "Thống kê Bài tập",
+        "legendSummary": {
+          "quizPass": "Quiz đạt",
+          "asmPass": "Bài tập đạt",
+          "notPass": "Chưa đạt"
+        },
+        "histogram": {
+          "title": "Histogram Khóa học",
+          "studentCount": "Số lượng học sinh đạt",
+          "scoreDistribution": "Phân phối điểm số học sinh",
+          "number": "Số lượng học sinh",
+          "scoreRange": "Khoảng điểm"
+        },
         "ungraded": {
           "title": "Bài tập chưa chấm",
           "pending": "đang chờ",
