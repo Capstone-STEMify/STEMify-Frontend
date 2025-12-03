@@ -101,6 +101,23 @@
         "selectStudents": "Chọn học sinh cho lớp học",
         "searchStudent": "Tìm kiếm học sinh theo tên hoặc email"
       }
+    },
+    "studentClassroom": {
+      "list": {
+        "title": "Danh sách học sinh",
+        "description": "Quản lý các học sinh hiện có trong lớp học này.",
+        "number": "Sĩ số:",
+        "placeholder": "Chưa có học sinh nào trong lớp này."
+      },
+      "detail": {
+        "title": "Hồ sơ học tập",
+        "description": "Chi tiết tiến độ và kết quả học tập trong lớp.",
+        "quizScore": "Điểm Quiz trung bình",
+        "asmScore": "Điểm Bài Tập trung bình",
+        "quizTotal": "Tổng số bài kiểm tra",
+        "asmTotal": "Tổng số Bài Tập",
+        "submitted": "đã nộp"
+      }
     }
   }
 }

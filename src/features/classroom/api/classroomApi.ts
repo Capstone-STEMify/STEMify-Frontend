@@ -3,6 +3,8 @@ import {
   ClassroomSchedule,
   ClassroomSliceParams,
   ClassroomStatisticData,
+  StudentClassroomParams,
+  StudentDetailResponse,
   StudentProgressData,
   StudentProgressParams
 } from '@/features/classroom/types/classroom.type'
@@ -69,6 +71,11 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
       query: ({classroomId}) => ({
         url: `/classrooms/${classroomId}/statistic`
       })
+    }),
+    getClassroomStudentDetail: builder.query<ApiSuccessResponse<StudentDetailResponse>, StudentClassroomParams>({
+      query: ({classroomId, studentId}) => ({
+        url: `/classrooms/${classroomId}/classroom-students/${studentId}`
+      })
     })
   })
 })
@@ -90,5 +97,7 @@ export const {
   useDeleteClassroomStudentsMutation,
 
   useGetClassroomStudentProgressQuery,
-  useGetClassroomStatisticsQuery
+  useGetClassroomStatisticsQuery,
+
+  useGetClassroomStudentDetailQuery,
 } = classroomApi

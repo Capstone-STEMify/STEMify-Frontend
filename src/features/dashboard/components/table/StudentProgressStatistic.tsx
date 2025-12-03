@@ -17,7 +17,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/too
 interface CourseType {
   id: number
   title: string
-  code: string
 }
 
 interface StudentProgressStatisticProps {
@@ -38,7 +37,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
   const { data: classroomRes } = useGetClassroomByIdQuery(classroomId, {
     skip: !classroomId
   })
-  const curriculum = classroomRes?.data?.curriculum
+  const curriculum = classroomRes?.data?.course
 
   React.useEffect(() => {
     if (courses.length > 0 && !selectedCourseId) {
@@ -110,7 +109,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
               <SelectContent>
                 {courses.map((course) => (
                   <SelectItem key={course.id} value={String(course.id)}>
-                    {course.title} ({course.code})
+                    {course.title}
                   </SelectItem>
                 ))}
               </SelectContent>
