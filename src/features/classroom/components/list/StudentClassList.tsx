@@ -54,7 +54,7 @@ export default function StudentClassList() {
   if (isLoading) return <LoadingComponent />
 
   return (
-    <div className='mx-auto mt-10 w-full max-w-7xl space-y-4'>
+    <div className='mx-auto my-10 w-full max-w-7xl space-y-4'>
       <div className='flex items-center justify-between'>
         <div>
           <h2 className='text-xl font-bold tracking-tight'>{t('list.title')}</h2>
