@@ -175,6 +175,10 @@
       "groupCode": "Group Code:",
       "groupName": "Group Name:",
       "numberOfStudents": "Number of Students: {quantity}",
+      "groupList": "Group List",
+      "createdDate": "Created Date",
+      "totalStudents": "Total Students",
+      "attendance": "Attendance",
       "step1": {
         "title": "Step 1: Select Students",
         "description": "Choose students to include in the groups",

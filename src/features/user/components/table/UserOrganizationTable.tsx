@@ -14,23 +14,21 @@ import SSelect from '@/components/shared/SSelect'
 import { UserRole } from '@/types/userRole'
 import { useStatusTranslation } from '@/utils/index'
 import { useGetOrganizationUserAction } from '@/features/user/components/table/UserOrganizationAction'
+import { useParams } from 'next/navigation'
 
 export default function UserOrganizationTable() {
   const t = useTranslations('Admin.placeholder')
   const to = useTranslations('organization.detail')
   const tCommon = useTranslations('common')
   const statusTranslate = useStatusTranslation()
-  const { openModal } = useModal()
-
+  const { organizationId } = useParams()
   const columns = useGetOrganizationUserAction()
   const dispatch = useAppDispatch()
-  const { status, data: session } = useSession()
 
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
   const userParams = useAppSelector((state) => state.user)
-  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
 
   const searchParams: UserSliceParams = {
     ...userParams,
@@ -39,8 +37,8 @@ export default function UserOrganizationTable() {
   }
 
   const { data } = useGetOrganizationUserQuery(
-    { organizationId: selectedOrganizationId!, pageSize: 20 },
-    { skip: !selectedOrganizationId }
+    { organizationId: Number(organizationId), pageSize: 20 },
+    { skip: !organizationId }
   )
 
   const rows = React.useMemo(
