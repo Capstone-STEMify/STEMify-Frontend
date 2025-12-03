@@ -80,22 +80,22 @@ export function useGetOrganizationUserAction(): ColumnDef<User>[] {
     },
     {
       accessorKey: 'userRole',
-      header: t('userRole'),
-      cell: ({ row }) => {
-        const role = row.original.userRole
-        return <div>{tc(`accountType.${role.toLowerCase()}`)}</div>
-      }
+      header: t('userRole')
+      // cell: ({ row }) => {
+      //   const role = row.original.userRole
+      //   return <div>{tc(`accountType.${role}`)}</div>
+      // }
     },
     {
       accessorKey: 'status',
-      header: t('status'),
-      cell: ({ row }) => {
-        return (
-          <Badge className={`${getStatusBadgeClass(row.original.status)}`}>
-            {translationStatus(row.original.status)}
-          </Badge>
-        )
-      }
+      header: t('status')
+      // cell: ({ row }) => {
+      //   return (
+      //     <Badge className={`${getStatusBadgeClass(row.original.status)}`}>
+      //       {translationStatus(row.original.status)}
+      //     </Badge>
+      //   )
+      // }
     },
     createActionsColumnFromItems<User>([
       {

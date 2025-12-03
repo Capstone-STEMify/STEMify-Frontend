@@ -70,37 +70,17 @@
     "create": {
       "header": "Tạo lớp học mới",
       "subheader": "Làm theo các bước dưới đây để thiết lập lớp học của bạn",
-      "step1": {
-        "title": "Thông tin lớp học",
-        "subtitle": "Chi tiết cơ bản về lớp học",
-        "basicInfo": "Thông tin cơ bản",
-        "className": "Tên lớp học",
-        "classCode": "Mã lớp học",
-        "description": "Mô tả",
-        "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
-        "gradeLevel": "Cấp lớp",
-        "grade": "Lớp",
-        "selectGrade": "Chọn cấp lớp",
-        "duration": "Thời lượng",
-        "selectDuration": "Chọn thời lượng",
-        "startDate": "Ngày bắt đầu",
-        "endDate": "Ngày kết thúc",
-        "weeks": "Tuần",
-        "custom": "Tùy chỉnh"
-      },
-      "step2": {
-        "title": "Bài tập",
-        "subtitle": "Chỉ định chương trình học, giáo viên & học sinh",
-        "curriculumAndTeacher": "Chương trình học & Giáo viên",
-        "curriculum": "Chương trình học",
-        "chooseCurriculum": "Chọn chương trình học",
-        "teacher": "Giáo viên",
-        "chooseTeacher": "Chọn giáo viên",
-        "students": "Học sinh",
-        "selected": "Đã chọn",
-        "selectStudents": "Chọn học sinh cho lớp học",
-        "searchStudent": "Tìm kiếm học sinh theo tên hoặc email"
-      }
+      "basicInfo": "Thông tin cơ bản",
+      "duration": "Thời lượng",
+      "selectDuration": "Chọn thời lượng",
+      "startDate": "Ngày bắt đầu",
+      "endDate": "Ngày kết thúc",
+      "weeks": "Tuần",
+      "custom": "Tùy chỉnh",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
+      "groupList": "Danh sách nhóm",
+      "grade": "Khối"
     },
     "studentClassroom": {
       "list": {

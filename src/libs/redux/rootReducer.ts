@@ -73,6 +73,7 @@ import selectedOrganizationSlice from '@/features/subscription/slice/selectedOrg
 import { studentAssignmentSelectedSlice } from '@/features/assignment/slice/studentAssignmentSlice'
 import { enrollmentSlice } from '@/features/enrollment/slice/enrollmentSlice'
 import { groupApi } from '@/features/group/api/groupApi'
+import { organizationSpecialSlice } from '@/features/organization/slice/organizationSpecialSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -115,6 +116,7 @@ export const rootReducer = combineReducers({
   selectedOrganization: selectedOrganizationSlice,
   studentAssignmentSelected: studentAssignmentSelectedSlice.reducer,
   enrollment: enrollmentSlice.reducer,
+  organizationSpecial: organizationSpecialSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,

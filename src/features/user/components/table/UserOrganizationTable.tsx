@@ -3,7 +3,7 @@ import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useModal } from '@/providers/ModalProvider'
 import React, { useState } from 'react'
-import { useSearchUserQuery } from '../../api/userApi'
+import { useGetOrganizationUserQuery, useSearchUserQuery } from '../../api/userApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { UserSliceParams, UserStatus } from '../../types/user.type'
 import { useTranslations } from 'next-intl'
@@ -30,6 +30,7 @@ export default function UserOrganizationTable() {
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
   const userParams = useAppSelector((state) => state.user)
+  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
 
   const searchParams: UserSliceParams = {
     ...userParams,
@@ -37,7 +38,10 @@ export default function UserOrganizationTable() {
     pageNumber: userParams.pageNumber ?? 0
   }
 
-  const { data } = useSearchUserQuery(searchParams, { skip: status !== 'authenticated' })
+  const { data } = useGetOrganizationUserQuery(
+    { organizationId: selectedOrganizationId!, pageSize: 20 },
+    { skip: !selectedOrganizationId }
+  )
 
   const rows = React.useMemo(
     () =>

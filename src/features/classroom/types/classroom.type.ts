@@ -43,12 +43,12 @@ export enum ClassroomStatus {
 }
 
 export enum Grade {
-  GRADE_1 = 'Grade 1',
-  GRADE_2 = 'Grade 2',
-  GRADE_3 = 'Grade 3',
-  GRADE_4 = 'Grade 4',
-  GRADE_5 = 'Grade 5',
-  GRADE_6 = 'Grade 6'
+  GRADE_1 = 1,
+  GRADE_2 = 2,
+  GRADE_3 = 3,
+  GRADE_4 = 4,
+  GRADE_5 = 5,
+  GRADE_6 = 6
 }
 
 export type SectionProgress = {
@@ -148,20 +148,20 @@ export type ClassroomStatisticData = {
   quizStatistic: Statistic
   assignmentStatistic: Statistic
   ungradedAssignments: UngradedAssignment[]
-  courseStats: CourseStat[]
+  courseStats: CourseStat
 }
 
 // =============== STUDENT CLASSROOM DETAIL TYPE ===============
 export interface StudentDetailResponse {
-  studentId: string;
-  studentName: string;
-  studentEmail: string;
-  studentImageUrl: string;
-  courseEnrollmentStatus: "InProgress" | "Enrolled" | "NotEnrolled";
-  averageAssignmentScore: number;
-  averageQuizScore: number;
-  totalQuizzesTaken: number;
-  totalAssignmentsSubmitted: number;
+  studentId: string
+  studentName: string
+  studentEmail: string
+  studentImageUrl: string
+  courseEnrollmentStatus: 'InProgress' | 'Enrolled' | 'NotEnrolled'
+  averageAssignmentScore: number
+  averageQuizScore: number
+  totalQuizzesTaken: number
+  totalAssignmentsSubmitted: number
 }
 
 export type StudentClassroomParams = {
@@ -169,4 +169,20 @@ export type StudentClassroomParams = {
   studentId: string
 }
 
+// CREATE CLASSROOM
+export type CreateClassroom = {
+  grade: string
+  courseId: number
+  organizationSubscriptionOrderId: number
+  description: string
+  startDate: string
+  endDate: string
+  studentGroups: ClassroomStudentGroup[]
+}
 
+export type ClassroomStudentGroup = {
+  groupCode: string
+  groupName: string
+  teacherId: string
+  studentIds: string[]
+}

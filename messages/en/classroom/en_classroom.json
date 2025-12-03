@@ -71,54 +71,34 @@
     "create": {
       "header": "Create New Classroom",
       "subheader": "Follow the steps below to set up your classroom",
-      "step1": {
-        "title": "Classroom Information",
-        "subtitle": "Basic classroom details",
-        "basicInfo": "Basic Information",
-        "className": "Class Name",
-        "classCode": "Class Code",
-        "description": "Description",
-        "descriptionPlaceholder": "Brief description of this classroom...",
-        "gradeLevel": "Grade Level",
-        "selectGrade": "Select Grade",
-        "duration": "Duration",
-        "selectDuration": "Select Duration",
-        "startDate": "Start Date",
-        "endDate": "End Date",
-        "weeks": "Weeks",
-        "custom": "Custom"
-      },
-      "step2": {
-        "title": "Assignments",
-        "subtitle": "Assign curriculum, teacher & students",
-        "curriculumAndTeacher": "Curriculum & Teacher",
-        "curriculum": "Curriculum",
-        "chooseCurriculum": "Choose Curriculum",
-        "teacher": "Teacher",
-        "chooseTeacher": "Choose Teacher",
-        "students": "Students",
-        "selected": "Selected",
-        "selectStudents": "Select Students for the Classroom",
-        "searchStudent": "Search students by name or email"
-      }
+      "basicInfo": "Basic Information",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description of this classroom...",
+      "duration": "Duration",
+      "selectDuration": "Select Duration",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "weeks": "Weeks",
+      "custom": "Custom",
+      "groupList": "Group List",
+      "grade": "Grade"
     },
-"studentClassroom": {
-  "list": {
-    "title": "Student List",
-    "description": "Manage the students currently enrolled in this classroom.",
-    "number": "Number of students:",
-    "placeholder": "There is no students in the class."
-  },
-  "detail": {
-    "title": "Learning Profile",
-    "description": "Detailed progress and academic performance in the class.",
-    "quizScore": "Avg Quiz Score",
-    "asmScore": "Avg Assignment Score",
-    "quizTotal": "Total Quizzes",
-    "asmTotal": "Total Assignments",
-    "submitted": "submitted"
-  }
-}
-
+    "studentClassroom": {
+      "list": {
+        "title": "Student List",
+        "description": "Manage the students currently enrolled in this classroom.",
+        "number": "Number of students:",
+        "placeholder": "There is no students in the class."
+      },
+      "detail": {
+        "title": "Learning Profile",
+        "description": "Detailed progress and academic performance in the class.",
+        "quizScore": "Avg Quiz Score",
+        "asmScore": "Avg Assignment Score",
+        "quizTotal": "Total Quizzes",
+        "asmTotal": "Total Assignments",
+        "submitted": "submitted"
+      }
+    }
   }
 }

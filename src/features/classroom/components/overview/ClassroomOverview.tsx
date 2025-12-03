@@ -58,7 +58,7 @@ export default function ClassroomOverview() {
 
   const ungradedAssignments = statsRes?.data?.ungradedAssignments || []
   const lessons = courseRes?.data?.lessons || []
-  const courseStats = statsRes?.data?.courseStats || []
+  const courseStats = statsRes?.data?.courseStats
 
   // --- Data Processing for Pie Charts ---
   const quizPassRate = statsRes?.data.quizStatistic.passRate || 0
@@ -81,42 +81,42 @@ export default function ClassroomOverview() {
 
   // --- Data Processing for Box Plot ---
   const boxPlotData = {
-    labels: courseStats.map((c) => c.name),
+    labels: courseStats?.name,
     datasets: [
-      {
-        label: 'Quiz Scores',
-        backgroundColor: 'rgba(16, 185, 129, 0.5)',
-        borderColor: '#10b981',
-        borderWidth: 1,
-        outlierColor: '#999999',
-        padding: 10,
-        itemRadius: 2,
-        data: courseStats.map((c) => ({
-          min: c.quizStats.min,
-          q1: c.quizStats.q1,
-          median: c.quizStats.median,
-          q3: c.quizStats.q3,
-          max: c.quizStats.max,
-          outliers: c.quizStats.outliers
-        }))
-      },
-      {
-        label: 'Assignment Scores',
-        backgroundColor: 'rgba(59, 130, 246, 0.5)',
-        borderColor: '#3b82f6',
-        borderWidth: 1,
-        outlierColor: '#999999',
-        padding: 10,
-        itemRadius: 2,
-        data: courseStats.map((c) => ({
-          min: c.assignmentStats.min,
-          q1: c.assignmentStats.q1,
-          median: c.assignmentStats.median,
-          q3: c.assignmentStats.q3,
-          max: c.assignmentStats.max,
-          outliers: c.assignmentStats.outliers
-        }))
-      }
+      // {
+      //   label: 'Quiz Scores',
+      //   backgroundColor: 'rgba(16, 185, 129, 0.5)',
+      //   borderColor: '#10b981',
+      //   borderWidth: 1,
+      //   outlierColor: '#999999',
+      //   padding: 10,
+      //   itemRadius: 2,
+      //   data: courseStats.map((c) => ({
+      //     min: c.quizStats.min,
+      //     q1: c.quizStats.q1,
+      //     median: c.quizStats.median,
+      //     q3: c.quizStats.q3,
+      //     max: c.quizStats.max,
+      //     outliers: c.quizStats.outliers
+      //   }))
+      // },
+      // {
+      //   label: 'Assignment Scores',
+      //   backgroundColor: 'rgba(59, 130, 246, 0.5)',
+      //   borderColor: '#3b82f6',
+      //   borderWidth: 1,
+      //   outlierColor: '#999999',
+      //   padding: 10,
+      //   itemRadius: 2,
+      //   data: courseStats.map((c) => ({
+      //     min: c.assignmentStats.min,
+      //     q1: c.assignmentStats.q1,
+      //     median: c.assignmentStats.median,
+      //     q3: c.assignmentStats.q3,
+      //     max: c.assignmentStats.max,
+      //     outliers: c.assignmentStats.outliers
+      //   }))
+      // }
     ]
   }
 
@@ -272,7 +272,8 @@ export default function ClassroomOverview() {
             </div>
           </CardHeader>
           <CardContent className='flex h-[350px] flex-col items-center justify-center p-4'>
-            <Chart type='boxplot' data={boxPlotData} options={boxPlotOptions} />
+            {/* TODO: Temporarily comment */}
+            {/* <Chart type='boxplot' data={boxPlotData} options={boxPlotOptions} /> */}
           </CardContent>
         </Card>
       </div>

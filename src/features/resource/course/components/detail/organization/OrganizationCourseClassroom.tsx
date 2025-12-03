@@ -15,6 +15,7 @@ import useDebounce from '@/hooks/useDebounce'
 import { getOptions } from '@/utils/index'
 import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { useGetOrganizationCourseClassroomColumn } from '@/features/resource/course/components/detail/organization/OrganizationCourseClassroomCoulum'
+import { setCourseId } from '@/features/organization/slice/organizationSpecialSlice'
 
 export default function OrganizationCourseClassroom() {
   const router = useRouter()
@@ -61,7 +62,9 @@ export default function OrganizationCourseClassroom() {
           </Button>
           <Button
             className='bg-sky-600 text-white hover:bg-sky-700'
-            onClick={() => router.push(`/${locale}/organization/classroom/create?courseId=${courseId}`)}
+            onClick={() => {
+              dispatch(setCourseId(Number(courseId)))
+              router.push(`/${locale}/organization/classroom/create`)}}
           >
             + {tc('button.createClassroom')}
           </Button>

@@ -243,6 +243,7 @@
       "member": "Member",
       "organizationadmin": "Organization Admin",
       "organization_admin": "Organization Admin"
-    }
+    },
+    "grade": "Grade"
   }
 }

@@ -242,6 +242,7 @@
       "student": "Học Sinh",
       "organization_admin": "Quản Trị Viên Tổ Chức",
       "organizationadmin": "Quản Trị Viên Tổ Chức"
-    }
+    },
+    "grade": "Khối"
   }
 }

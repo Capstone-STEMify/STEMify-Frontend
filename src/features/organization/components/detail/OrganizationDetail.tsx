@@ -46,12 +46,7 @@ export default function OrganizationDetail() {
           {/* <h2 className='mb-2 text-sm text-gray-500 uppercase'>{organization.data.code}</h2> */}
           <div className='flex items-center justify-between gap-2 space-y-2'>
             <div className='flex items-center gap-2'>
-              <h1 className='text-center text-4xl font-bold text-gray-900'>{organization.data.name}</h1>
-              <span>
-                <Badge className={getStatusBadgeClass(organization.data.status)}>
-                  {translateStatus(organization.data.status)}
-                </Badge>
-              </span>
+              <h1 className='text-4xl font-bold text-gray-900'>{organization.data.name}</h1>
             </div>
             <div className='flex items-center gap-2'>
               <span className='cursor-pointer text-blue-500'>
@@ -73,8 +68,13 @@ export default function OrganizationDetail() {
               </span>
             </div>
           </div>
+          <span>
+            <Badge className={getStatusBadgeClass(organization.data.status)}>
+              {translateStatus(organization.data.status)}
+            </Badge>
+          </span>
 
-          <div className='text-sm text-gray-700'>
+          <div className='mt-3 text-sm text-gray-700'>
             <div className='flex items-center gap-2'>
               <span className='font-medium'>{to('createdDate')}:</span>
               <span>{formatDate(organization.data.createdDate, { locale: locale as 'en' | 'vi' | undefined })}</span>

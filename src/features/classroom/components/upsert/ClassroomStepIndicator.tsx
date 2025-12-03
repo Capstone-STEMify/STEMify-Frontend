@@ -6,10 +6,9 @@ import { useTranslations } from 'next-intl'
 
 type ClassroomStepIndicatorProps = {
   currentStep: number
-  isEditing: boolean
 }
 
-export default function ClassroomStepIndicator({ currentStep, isEditing }: ClassroomStepIndicatorProps) {
+export default function ClassroomStepIndicator({ currentStep }: ClassroomStepIndicatorProps) {
   const tClassroom = useTranslations('classroom')
 
   const STEPS = [
