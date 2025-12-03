@@ -16,15 +16,15 @@ export default function StudentClassList() {
   const classroomId = Number(params.classroomId)
 
   const { data: classroomRes, isLoading: isLoadingClassroom } = useGetClassroomByIdQuery(classroomId, {
-      skip: !classroomId
-    })
-  
-    const classroom = classroomRes?.data
-    const courseId = classroom?.course?.id
-  
-    const { data: courseRes, isLoading: isLoadingCourse } = useGetCourseByIdQuery(courseId!, {
-      skip: !courseId
-    })
+    skip: !classroomId
+  })
+
+  const classroom = classroomRes?.data
+  const courseId = classroom?.course?.id
+
+  const { data: courseRes, isLoading: isLoadingCourse } = useGetCourseByIdQuery(courseId!, {
+    skip: !courseId
+  })
 
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -37,7 +37,7 @@ export default function StudentClassList() {
   }
 
   const handleRemoveStudent = (student: StudentClassItem) => {
-    console.log("Remove:", student.id)
+    console.log('Remove:', student.id)
   }
 
   const columns = useStudentClassColumns({
@@ -54,29 +54,23 @@ export default function StudentClassList() {
   if (isLoading) return <LoadingComponent />
 
   return (
-    <div className="w-full max-w-7xl mt-10 mx-auto space-y-4">
-      <div className="flex items-center justify-between">
+    <div className='mx-auto mt-10 w-full max-w-7xl space-y-4'>
+      <div className='flex items-center justify-between'>
         <div>
-          <h2 className="text-xl font-bold tracking-tight">{t('list.title')}</h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            {t('list.description')}
-          </p>
+          <h2 className='text-xl font-bold tracking-tight'>{t('list.title')}</h2>
+          <p className='text-muted-foreground mt-1 text-sm'>{t('list.description')}</p>
         </div>
-        <div className="bg-secondary/50 px-3 py-1 rounded-md text-sm font-medium">
-            {t('list.number')} {studentData.length}
+        <div className='bg-secondary/50 rounded-md px-3 py-1 text-sm font-medium'>
+          {t('list.number')} {studentData.length}
         </div>
       </div>
 
-      <DataTable
-        columns={columns}
-        data={studentData}
-        placeholder="Chưa có học sinh nào trong lớp này."
-      />
+      <DataTable columns={columns} data={studentData} placeholder='Chưa có học sinh nào trong lớp này.' />
 
       <StudentProgressStatistic classroomId={classroomId} courses={lessons} />
 
       {selectedStudentId && (
-        <StudentDetailModal 
+        <StudentDetailModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           studentId={selectedStudentId}
