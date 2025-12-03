@@ -80,7 +80,8 @@
       "endDate": "End Date",
       "weeks": "Weeks",
       "custom": "Custom",
-      "groupList": "Group List"
+      "groupList": "Group List",
+      "grade": "Grade"
     }
   }
 }

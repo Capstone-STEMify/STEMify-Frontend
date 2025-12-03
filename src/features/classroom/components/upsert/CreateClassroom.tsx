@@ -20,6 +20,7 @@ import { format } from 'date-fns'
 import { cn } from '@/utils/shadcn/utils'
 import BackButton from '@/components/shared/button/BackButton'
 import GroupTable from '@/features/group/components/list/GroupTable'
+import { Grade } from '@/features/classroom/types/classroom.type'
 
 type ClassroomFormData = {
   grade: string
@@ -62,22 +63,29 @@ export default function CreateClassroom() {
     {
       groupCode: string
       groupName: string
-      teacherId: string | null
+      teacherId: string
       studentIds: string[]
     }[]
   >([])
 
-  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
   const [minDate, setMinDate] = useState<Date | undefined>(undefined)
   const [maxDate, setMaxDate] = useState<Date | undefined>(undefined)
 
   // Form states
+  const [grade, setGrade] = useState('')
   const [description, setDescription] = useState('')
   const [durationWeeks, setDurationWeeks] = useState('8')
   const [startDate, setStartDateState] = useState<Date | undefined>(new Date())
   const [endDate, setEndDate] = useState<Date | undefined>(new Date(new Date().setDate(new Date().getDate() + 56)))
 
   const selectedSubscriptionId = useAppSelector((state) => state.selectedOrganization.selectedSubscriptionOrderId)
+
+  const GRADE_OPTIONS = Object.values(Grade)
+    .filter((v) => typeof v === 'number')
+    .map((grade) => ({
+      label: `${tc('grade')} ${grade}`,
+      value: grade.toString()
+    }))
 
   const DURATION_OPTIONS = [
     { label: `4 ${tClassroom('weeks')}`, value: '4' },
@@ -96,13 +104,9 @@ export default function CreateClassroom() {
     onSubmit: async ({ value }) => {
       const payload = {
         ...value,
-        grade: 'Grade 1-3',
         courseId: Number(value.courseId),
         organizationSubscriptionOrderId: selectedSubscriptionId!,
-        studentGroups: selectedGroups.map((group) => ({
-          ...group,
-          teacherId: group.teacherId || ''
-        }))
+        studentGroups: selectedGroups
       }
 
       const result = await createClassroom(payload).unwrap()
@@ -112,10 +116,6 @@ export default function CreateClassroom() {
       closeModal()
     }
   })
-
-  const handlePageChange = (newPage: number) => {
-    dispatch(setPageIndex(newPage))
-  }
 
   // Auto-calculate end date
   useEffect(() => {
@@ -131,7 +131,9 @@ export default function CreateClassroom() {
   }, [durationWeeks, startDate])
 
   // Sync search
-
+  useEffect(() => {
+    form.setFieldValue('grade', grade)
+  }, [grade])
   useEffect(() => {
     form.setFieldValue('description', description)
   }, [description])
@@ -169,12 +171,33 @@ export default function CreateClassroom() {
         }}
         className='flex-1 overflow-y-auto px-6 py-6'
       >
-        <div className='mx-auto max-w-6xl space-y-6'>
-          <GroupTable onGroupsChange={(groups) => setSelectedGroups(groups)} />
+        <div className='mx-auto max-w-6xl'>
+          <div className='mb-4 space-y-2'>
+            <div className='flex justify-between'>
+              <h2 className='text-lg font-semibold text-gray-900'>{tClassroom('groupList')}</h2>
+
+              <div className='flex items-center space-x-4'>
+                <Label htmlFor='grade'>{tClassroom('grade')}</Label>
+                <Select value={grade} onValueChange={setGrade}>
+                  <SelectTrigger className='w-32'>
+                    <SelectValue placeholder={tClassroom('grade')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {GRADE_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={String(option.value)}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <GroupTable onGroupsChange={(groups) => setSelectedGroups(groups)} />
+          </div>
 
           {/* Basic Information Section */}
-          <div>
-            <h3 className='mb-4 text-lg font-semibold text-gray-900'>{tClassroom('basicInfo')}</h3>
+          <div className='space-y-2'>
+            <h3 className='text-lg font-semibold text-gray-900'>{tClassroom('basicInfo')}</h3>
             <div className='space-y-4 rounded-lg border bg-white p-6 shadow-sm'>
               {/* Description */}
               <div className='space-y-2'>

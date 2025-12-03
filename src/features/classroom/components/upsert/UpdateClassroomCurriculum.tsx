@@ -1,10 +1,5 @@
 import { useAppForm } from '@/components/shared/form/items'
-import {
-  useGetClassroomByIdQuery,
-  useUpdateClassroomCurriculumMutation,
-  useUpdateClassroomMutation
-} from '@/features/classroom/api/classroomApi'
-import { Grade } from '@/features/classroom/types/classroom.type'
+import { useGetClassroomByIdQuery, useUpdateClassroomCurriculumMutation } from '@/features/classroom/api/classroomApi'
 import { useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { getOptions } from '@/utils/index'

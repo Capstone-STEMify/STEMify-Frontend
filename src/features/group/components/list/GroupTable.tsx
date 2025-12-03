@@ -11,11 +11,11 @@ import { Group } from '@/features/group/types/group.type'
 import { useTranslations } from 'next-intl'
 
 type GroupTableProps = {
-  onGroupsChange?: (
+  onGroupsChange: (
     groups: {
       groupCode: string
       groupName: string
-      teacherId: string | null
+      teacherId: string
       studentIds: string[]
     }[]
   ) => void
@@ -24,7 +24,7 @@ type GroupTableProps = {
 export default function GroupTable({ onGroupsChange }: GroupTableProps) {
   const tClassroom = useTranslations('classroom.create')
   const [selectedRows, setSelectedRows] = useState<number[]>([])
-  const [teacherAssignments, setTeacherAssignments] = useState<Record<number, string | null>>({})
+  const [teacherAssignments, setTeacherAssignments] = useState<Record<number, string>>({})
 
   const searchUserQuery = useAppSelector((state) => state.user)
   const { selectedSubscriptionOrderId, selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
@@ -51,9 +51,8 @@ export default function GroupTable({ onGroupsChange }: GroupTableProps) {
       return {
         groupCode: group.code,
         groupName: group.name,
-        teacherId: teacherAssignments[groupId] || null,
-        // studentIds: group.students.map((s) => s.userId)
-        studentIds: ['911e82f3-b889-447d-810b-e1b2ba8a6e52']
+        teacherId: teacherAssignments[groupId],
+        studentIds: group.students.map((s) => s.userId)
       }
     })
 
@@ -77,7 +76,7 @@ export default function GroupTable({ onGroupsChange }: GroupTableProps) {
     setSelectedRows(newSelectedRows)
   }
 
-  const handleTeacherChange = (groupId: number, teacherId: string | null) => {
+  const handleTeacherChange = (groupId: number, teacherId: string) => {
     setTeacherAssignments((prev) => ({
       ...prev,
       [groupId]: teacherId
@@ -91,8 +90,7 @@ export default function GroupTable({ onGroupsChange }: GroupTableProps) {
   }, [selectedRows, teacherAssignments])
 
   return (
-    <div className='w-full'>
-      <h2 className='mb-4 text-lg font-semibold text-gray-900'>{tClassroom('groupList')}</h2>
+    <div>
       <div className='rounded-md border'>
         <Table>
           <TableHeader>

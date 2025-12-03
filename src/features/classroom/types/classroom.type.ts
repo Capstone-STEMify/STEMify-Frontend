@@ -43,12 +43,12 @@ export enum ClassroomStatus {
 }
 
 export enum Grade {
-  GRADE_1 = 'Grade 1',
-  GRADE_2 = 'Grade 2',
-  GRADE_3 = 'Grade 3',
-  GRADE_4 = 'Grade 4',
-  GRADE_5 = 'Grade 5',
-  GRADE_6 = 'Grade 6'
+  GRADE_1 = 1,
+  GRADE_2 = 2,
+  GRADE_3 = 3,
+  GRADE_4 = 4,
+  GRADE_5 = 5,
+  GRADE_6 = 6
 }
 
 export type SectionProgress = {

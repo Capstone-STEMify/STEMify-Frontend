@@ -79,7 +79,8 @@
       "custom": "Tùy chỉnh",
       "description": "Mô tả",
       "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
-      "groupList": "Danh sách nhóm"
+      "groupList": "Danh sách nhóm",
+      "grade": "Khối"
     }
   }
 }

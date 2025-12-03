@@ -182,3 +182,10 @@ export const useLevelTranslation = () => {
     return tc(level.toLowerCase())
   }
 }
+
+export const useGradeTranslation = () => {
+  const tc = useTranslations('common.grade')
+  return (grade: string) => {
+    return tc(grade.toLowerCase().replace(' ', '_'))
+  }
+}
