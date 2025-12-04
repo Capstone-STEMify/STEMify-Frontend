@@ -35,7 +35,7 @@ export default function ManualEntryTab({
   const { organizationSubscriptionId } = useAppSelector((state) => state.organizationSubscriptionForm)
   const [emailList, setEmailList] = useState<string[]>([])
   const [input, setInput] = useState('')
-  const { subscriptionId } = useParams()
+  const { subscriptionId, organizationId } = useParams()
   const [type, setType] = useState<LicenseAssignmentType>(userType ?? LicenseAssignmentType.STUDENT)
 
   const [createLicenseAssignmentBulk] = useCreateLicenseAssignmentBulkMutation()
@@ -89,7 +89,7 @@ export default function ManualEntryTab({
       subscription_order_id: String(organizationSubscriptionOrderId) ?? String(organizationSubscriptionId)
     }))
     await createLicenseAssignmentBulk({
-      organization_id: String(subscriptionId),
+      organization_id: String(organizationId),
       users: inviteUserItems
     }).unwrap()
 

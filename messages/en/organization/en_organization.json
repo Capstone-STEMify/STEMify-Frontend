@@ -200,7 +200,7 @@
     },
     "curriculum": {
       "curriculum": "Curriculum",
-      "title": "Organization Curriculum List",
+      "title": "Curriculum List",
       "noData": "No curriculum found for this organization.",
       "noResultsForFilter": "No results found for the selected filter.",
       "courseCount": "{count} courses",

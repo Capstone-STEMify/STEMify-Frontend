@@ -5,6 +5,7 @@ import {
   OrganizationSliceParams,
   OrganizationType
 } from '@/features/organization/types/organization.type'
+import { Curriculum } from '@/features/resource/curriculum/types/curriculum.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
@@ -22,7 +23,7 @@ export const organizationApi = createCrudApi<Organization, OrganizationSlicePara
       providesTags: ['Organization']
     }),
     getCurriculumsByOrganizationId: build.query<
-      ApiSuccessResponse<{ curriculums: OrganizationCurriculum[] }>,
+      ApiSuccessResponse<{ curriculums: Curriculum[] }>,
       { organizationId: number }
     >({
       query: ({ organizationId }) => ({
