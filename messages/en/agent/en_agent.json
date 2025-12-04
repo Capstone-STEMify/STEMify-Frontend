@@ -8,7 +8,7 @@
       "generating": "Generating..."
     },
     "modelMaker": {
-      "title": "Modal Maker",
+      "title": "Model Maker",
       "description": "A fast, easy way to create machine learning models for your sites, apps, and more – no expertise or coding required.",
       "classCreate": "Create Classes",
       "uploaded": "Uploaded: {images} images",
