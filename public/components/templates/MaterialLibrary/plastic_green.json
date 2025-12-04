@@ -4,18 +4,18 @@
   "version": "1.0",
   "type": "plastic",
   "properties": {
-    "color": "#c1e500",
+    "color": "#b6ff1a",
     "flexibility": 15,
     "opacity": 1.0,
-    "roughness": 0.3,
+    "roughness": 0.15,
     "metalness": 0.0,
-    "transmission": 0.0,
-    "ior": 1.4,
+    "transmission": 0.05,
+    "ior": 1.46,
     "thickness": 0.1
   },
   "physics": {
-    "friction": 0.4,
-    "elasticity": 0.2,
+    "friction": 0.35,
+    "elasticity": 0.25,
     "density": 920
   },
   "lod": {
@@ -25,7 +25,7 @@
       "enableSubsurfaceScattering": true
     },
     "medium": {
-      "shaderComplexity": "pbr_simplified", 
+      "shaderComplexity": "pbr_simplified",
       "textureResolution": 512,
       "enableSubsurfaceScattering": false
     },
