@@ -71,7 +71,7 @@ export default function GroupTable({ onGroupsChange }: GroupTableProps) {
   }
 
   const handleSelectRow = (groupId: number, checked: boolean) => {
-    let newSelectedRows = checked ? [...selectedRows, groupId] : selectedRows.filter((id) => id !== groupId)
+    const newSelectedRows = checked ? [...selectedRows, groupId] : selectedRows.filter((id) => id !== groupId)
 
     setSelectedRows(newSelectedRows)
   }

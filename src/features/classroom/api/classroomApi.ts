@@ -37,11 +37,11 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
     }),
 
     // PATCH: classrooms/1/curriculum
-    updateClassroomCurriculum: builder.mutation<any, { classroomId: number; curriculumId: number }>({
-      query: ({ classroomId, curriculumId }) => ({
+    updateClassroomCourse: builder.mutation<any, { classroomId: number; courseId: number }>({
+      query: ({ classroomId, courseId }) => ({
         url: `/classrooms/${classroomId}`,
         method: 'PATCH',
-        body: { curriculumId }
+        body: { courseId }
       }),
       invalidatesTags: ['Classroom']
     }),
@@ -101,7 +101,7 @@ export const {
 
   useGetClassroomScheduleQuery,
 
-  useUpdateClassroomCurriculumMutation,
+  useUpdateClassroomCourseMutation,
   useUpdateTeacherClassroomMutation,
 
   useAddClassroomStudentsMutation,

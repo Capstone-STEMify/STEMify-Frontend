@@ -5,8 +5,10 @@ import { DataTable } from '@/components/shared/data-table/data-table'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import SLoading from '@/components/shared/SLoading'
 import { useDeleteOrganizationMutation, useGetOrganizationByIdQuery } from '@/features/organization/api/organizationApi'
+import { clearRefetchOrganization } from '@/features/organization/slice/organizationSpecialSlice'
 import SystemSubscriptionTable from '@/features/subscription/components/list/SystemSubscriptionTable'
 import UserOrganizationTable from '@/features/user/components/table/UserOrganizationTable'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDate, useStatusTranslation } from '@/utils/index'
@@ -14,23 +16,33 @@ import { SquarePen, Trash2 } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 
-export default function OrganizationDetail() {
+export default function SystemOrganizationDetail() {
   const locale = useLocale()
 
   const to = useTranslations('organization.detail')
   const tt = useTranslations('toast')
   const translateStatus = useStatusTranslation()
 
+  const dispatch = useAppDispatch()
+  const { isRefetchOrganization } = useAppSelector((state) => state.organizationSpecial)
+
   const { openModal } = useModal()
   const { organizationId } = useParams()
-  const { data: organization, isLoading } = useGetOrganizationByIdQuery(Number(organizationId))
+  const { data: organization, isLoading, refetch } = useGetOrganizationByIdQuery(Number(organizationId))
   const [deleteOrganization] = useDeleteOrganizationMutation()
 
   const handleDelete = async (id: number) => {
     await deleteOrganization(id)
   }
+
+  useEffect(() => {
+    if (isRefetchOrganization) {
+      refetch()
+      dispatch(clearRefetchOrganization())
+    }
+  }, [isRefetchOrganization])
 
   if (isLoading) {
     return <SLoading />
@@ -77,14 +89,12 @@ export default function OrganizationDetail() {
           <div className='mt-3 text-sm text-gray-700'>
             <div className='flex items-center gap-2'>
               <span className='font-medium'>{to('createdDate')}:</span>
-              <span>{formatDate(organization.data.createdDate, { locale: locale as 'en' | 'vi' | undefined })}</span>
+              <span>{formatDate(organization.data.createdDate, { locale: locale })}</span>
             </div>
 
             <div className='flex items-center gap-2'>
               <span className='font-medium'>{to('lastModifiedDate')}:</span>
-              <span>
-                {formatDate(organization.data.lastModifiedDate, { locale: locale as 'en' | 'vi' | undefined })}
-              </span>
+              <span>{formatDate(organization.data.lastModifiedDate, { locale: locale })}</span>
             </div>
           </div>
 

@@ -25,6 +25,7 @@ import CurriculumSelector from './CurriculumSelector'
 import PlanOverview from './PlanOverview'
 import PricingSummary from './PricingSummary'
 import { useTranslations } from 'next-intl'
+import { triggerRefetchOrganization } from '@/features/organization/slice/organizationSpecialSlice'
 
 export default function Step1SubscriptionConfiguration() {
   const tc = useTranslations('common')
@@ -201,6 +202,7 @@ export default function Step1SubscriptionConfiguration() {
     if (res) {
       toast.success(tt('successMessage.create', { title: res.data.planName }))
       dispatch(setOrganizationSubscriptionId(res.data.id))
+      dispatch(triggerRefetchOrganization())
       dispatch(goNext())
     }
   }
