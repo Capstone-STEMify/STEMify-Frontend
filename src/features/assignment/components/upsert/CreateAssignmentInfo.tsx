@@ -78,6 +78,7 @@ export default function CreateAssignmentInfo({ sectionId, closeModal }: CreateAs
         <div className='grid grid-cols-2 gap-6'>
           <form.AppField
             name='passingScore'
+            
             children={(field) => <field.TextField type='number' min={0} max={100} label={ta('upsert.passingScore')} />}
           />
 

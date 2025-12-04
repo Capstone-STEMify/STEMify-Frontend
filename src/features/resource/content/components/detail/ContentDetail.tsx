@@ -31,7 +31,8 @@ export default function ContentDetail({ item, sectionId }: ContentDetailProps) {
 
   const handleCreateQuiz = () => {
     closeModal()
-    router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/question`)
+    openModal('createQuiz', { sectionId: Number(sectionId) })
+    // router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/question`)
   }
 
   const handleCreateAssignment = () => {

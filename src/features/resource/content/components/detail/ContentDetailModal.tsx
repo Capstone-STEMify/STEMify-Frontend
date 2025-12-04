@@ -36,7 +36,7 @@ export default function ContentDetailModal({ sectionId }: ContentDetailModalProp
     }
     if (item.contentType === ContentType.QUIZ) {
       const quizId = (item as any).quizId
-      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}/question`)
+      router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/quiz/${quizId}`)
       return
     }
     if (item.contentType === ContentType.ASSIGNMENT) {

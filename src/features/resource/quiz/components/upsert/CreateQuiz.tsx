@@ -2,8 +2,7 @@ import { useAppForm } from '@/components/shared/form/items'
 import { QuizContent } from '@/features/resource/content/types/content.type'
 import { useCreateQuizMutation } from '@/features/resource/quiz/api/quizApi'
 import { useLocale, useTranslations } from 'next-intl'
-import { useParams } from 'next/navigation'
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 import React from 'react'
 import { toast } from 'sonner'
 import z from 'zod'
@@ -72,7 +71,7 @@ export default function CreateQuiz({ sectionId, closeModal }: CreateQuizProps) {
 
   return (
     <form
-      className='w-3xl space-y-8 md:px-4'
+      className='w-3xl space-y-8'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
@@ -92,7 +91,7 @@ export default function CreateQuiz({ sectionId, closeModal }: CreateQuizProps) {
           )}
         />
 
-        <div className='grid grid-cols-1 lg:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-5 lg:grid-cols-3'>
           <form.AppField
             name='totalMarks'
             children={(field) => <field.TextField type='number' min={1} label={tq('totalMarks')} />}
@@ -117,6 +116,12 @@ export default function CreateQuiz({ sectionId, closeModal }: CreateQuizProps) {
             name='cooldownHours'
             children={(field) => <field.TextField type='number' min={0} label={tq('cooldownHours')} />}
           />
+        </div>
+
+        <div className='flex justify-end'>
+          <form.AppForm>
+            <form.SubmitButton className='bg-amber-custom-400 py-3 text-lg'>{tc('button.save')}</form.SubmitButton>
+          </form.AppForm>
         </div>
       </div>
     </form>

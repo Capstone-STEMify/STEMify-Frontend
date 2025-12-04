@@ -41,10 +41,11 @@
         "titlePlaceholder": "Enter Quiz Title",
         "description": "Description",
         "descriptionPlaceholder": "Enter Quiz Description",
-        "timeLimit": "Time Limit (minutes)",
+        "timeLimitMinutes": "Time Limit (minutes)",
+        "durationDays": "Duration (days)",
+        "cooldownHours": "Cooldown (hours)",
         "totalMarks": "Total Marks",
         "passingMarks": "Passing Marks",
-        "duration": "Duration (days)",
         "updateQuizInfo": "Update Quiz Info",
         "question": {
           "question": "Question",

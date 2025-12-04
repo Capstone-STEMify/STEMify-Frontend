@@ -41,10 +41,11 @@
         "titlePlaceholder": "Nhập tiêu đề bài kiểm tra",
         "description": "Mô tả",
         "descriptionPlaceholder": "Nhập mô tả bài kiểm tra",
-        "timeLimit": "Thời gian (phút)",
+        "durationDays": "Thời lượng (ngày)",
+        "timeLimitMinutes": "Thời gian (phút)",
+        "cooldownHours": "Thời gian chờ (giờ)",
         "totalMarks": "Tổng điểm",
         "passingMarks": "Điểm đạt",
-        "duration": "Thời lượng (ngày)",
         "updateQuizInfo": "Cập nhật bài trắc nghiệm",
         "question": {
           "question": "Câu hỏi",

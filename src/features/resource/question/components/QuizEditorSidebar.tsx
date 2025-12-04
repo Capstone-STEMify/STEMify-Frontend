@@ -160,7 +160,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                 />
               </div>
               <div className='space-y-1'>
-                <Label htmlFor='timeLimit'>{tq('upsert.form.timeLimit')}</Label>
+                <Label htmlFor='timeLimitMinutes'>{tq('upsert.form.timeLimitMinutes')}</Label>
                 <Input
                   id='timeLimit'
                   type='number'
@@ -169,7 +169,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                 />
               </div>
               <div className='space-y-1'>
-                <Label htmlFor='duration'>{tq('upsert.form.duration')}</Label>
+                <Label htmlFor='durationDays'>{tq('upsert.form.durationDays')}</Label>
                 <Input
                   id='duration'
                   type='number'
