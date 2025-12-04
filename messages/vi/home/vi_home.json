@@ -49,5 +49,35 @@
     "title": "Bạn vẫn còn câu hỏi nào không?",
     "description": "Đặt lịch hẹn để tìm hiểu về tài liệu ngoại tuyến của chúng tôi. Chúng tôi sẽ liên hệ với bạn để chăm sóc khách hàng.",
     "emailPlaceholder": "Nhập email của bạn"
+  },
+  "footer": {
+    "infoForParents": {
+      "title": "Thông tin cho phụ huynh",
+      "description": "STEMIFY Education là nền tảng học tập STEM trực tuyến dành cho học sinh từ lớp 3–8, cung cấp các khóa học và tài nguyên giúp phát triển kỹ năng tư duy phản biện, giải quyết vấn đề và sáng tạo thông qua học tập thực hành."
+    },
+    "info": {
+      "title": "Thông tin",
+      "aboutUs": "Về chúng tôi",
+      "blog": "Blog",
+      "careers": "Cơ hội nghề nghiệp",
+      "press": "Truyền thông",
+      "contact": "Liên hệ",
+      "home": "Trang chủ"
+    },
+    "education": {
+      "title": "Giáo dục",
+      "programs": "Chương trình",
+      "team": "Đội ngũ",
+      "partners": "Đối tác",
+      "resources": "Tài nguyên"
+    },
+    "help": {
+      "title": "Trợ giúp",
+      "support": "Hỗ trợ",
+      "faqs": "Câu hỏi thường gặp",
+      "termsOfService": "Điều khoản dịch vụ",
+      "privacyPolicy": "Chính sách bảo mật",
+      "contactUs": "Liên hệ"
+    }
   }
 }
