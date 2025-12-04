@@ -103,7 +103,7 @@ export default withAuth(
     if (systemRole === UserRole.ADMIN || systemRole === UserRole.STAFF) {
       currentRole = systemRole
     }
-    if (systemRole === UserRole.MEMBER && token.organizations && token.organizations.organizations.length > 0) {
+    if (systemRole === UserRole.MEMBER && token.organizations && token.organizations.organizations?.length > 0) {
       const firstOrg = token.organizations.organizations[0]
       const activeSub = firstOrg.roles[0]
       if (activeSub) {

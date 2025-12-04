@@ -55,7 +55,7 @@ export default function AuthSessionSync() {
     if (
       reduxUser.userRole === UserRole.MEMBER &&
       reduxUser.organizations &&
-      reduxUser.organizations?.organizations.length > 0 &&
+      reduxUser.organizations?.organizations?.length > 0 &&
       reduxUser.organizations.organizations[0].roles?.length > 0
       // (!reduxSelectedOrganizationId || !reduxSelectedSubscriptionOrderId || !reduxCurrentRole)
     ) {
