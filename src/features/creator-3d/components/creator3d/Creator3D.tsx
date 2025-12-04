@@ -17,24 +17,16 @@ import {
   clearAction,
   clearActivities,
   removeTargetFromAllActions,
-  resetActions,
-  Step,
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
-import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import {
-  useCreateEmulatorMutation,
-  useGetEmulatorByIdQuery,
-  useUpdateEmulatorMutation
-} from '@/features/emulator/api/emulatorApi'
+import { useUpdateEmulatorMutation } from '@/features/emulator/api/emulatorApi'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Emulator } from '@/features/emulator/types/emulator.type'
-import { useGLTF } from '@react-three/drei'
 type Creator3DProps = {
   emulatorData: ApiSuccessResponse<Emulator> | undefined
 }
@@ -47,8 +39,6 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
   const addObject = useAddObject()
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
-  const actions = useAppSelector((s) => s.workspaceTree.actions)
-  const activities = useAppSelector((s) => s.workspaceTree.activities)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [updateEmulator, { isLoading: isUpdating }] = useUpdateEmulatorMutation()

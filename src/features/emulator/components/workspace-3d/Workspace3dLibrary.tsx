@@ -17,6 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/pop
 import { EmulatorStatus } from '@/features/emulator/types/emulator.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
+import { UserRole } from '@/types/userRole'
 
 export default function Workspace3dLibrary() {
   const { openModal } = useModal()
@@ -25,9 +26,10 @@ export default function Workspace3dLibrary() {
   const t = useTranslations('common')
   const t3d = useTranslations('workspace3D')
 
-  const userId = useAppSelector((state) => state.auth.user?.userId)
+  const userRole = useAppSelector((state) => state.auth.user?.userRole)
+  const allowRoles = [UserRole.STAFF, UserRole.ADMIN]
 
-const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
+  const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
   const [updateEmulation] = useUpdateEmulatorMutation()
 
   const emulations = data?.data.items || []
@@ -91,7 +93,7 @@ const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
 
   // === Main content ===
   return (
-    <div className='mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8'>
+    <div className='mx-auto max-w-7xl p-4 pb-16 sm:px-6 lg:px-8'>
       {/* Header actions */}
       <div className='mb-6 flex items-center justify-between'>
         <div className='flex gap-2'>
@@ -142,12 +144,14 @@ const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
                       >
                         {t('button.update')}
                       </button>
-                      <button
-                        className='rounded px-2 py-1 text-left hover:bg-gray-100'
-                        onClick={() => handlePublishEmulation(e.emulationId)}
-                      >
-                        {t('button.publish')}
-                      </button>
+                      {e.status !== EmulatorStatus.PUBLISHED && userRole && allowRoles.includes(userRole) && (
+                        <button
+                          className='rounded px-2 py-1 text-left hover:bg-gray-100'
+                          onClick={() => handlePublishEmulation(e.emulationId)}
+                        >
+                          {t('button.publish')}
+                        </button>
+                      )}
                       <button
                         className='rounded px-2 py-1 text-left text-red-500 hover:bg-gray-100'
                         onClick={() => handleDeleteEmulation(e.emulationId)}
