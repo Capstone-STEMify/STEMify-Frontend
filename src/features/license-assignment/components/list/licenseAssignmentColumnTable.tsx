@@ -13,9 +13,7 @@ import Image from 'next/image'
 
 export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignment>[] {
   const { openModal } = useModal()
-  const tm = useTranslations('message')
   const tc = useTranslations('common')
-  const tt = useTranslations('toast')
 
   return [
     createSelectColumn<LicenseAssignment>(),
@@ -67,7 +65,11 @@ export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignmen
     },
     {
       accessorKey: 'type',
-      header: tc('tableHeader.accountType')
+      header: tc('tableHeader.accountType'),
+      cell: ({ row }) => {
+        const value = row.original.type
+        return <p>{tc(`accountType.${value.toLowerCase()}`)}</p>
+      }
     },
     {
       accessorKey: 'assignedAt',
