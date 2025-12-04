@@ -10,6 +10,7 @@ import { useUpdateQuizAttemptMutation } from '@/features/resource/quiz/api/quizA
 import { toast } from 'sonner'
 import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
 import { useGetStudentQuizByIdQuery } from '@/features/quiz/api/studentQuizApi'
+import { triggerRefetchSectionProgress } from '@/features/student-progress/slice/studentProgressSlice'
 
 type NavigationButtonsProps = {
   quiz: Quiz
@@ -41,6 +42,8 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
     if (result) {
       dispatch(submitQuiz())
       dispatch(setMode('normal'))
+
+      dispatch(triggerRefetchSectionProgress())
       toast.success('Nộp bài thành công!')
     }
   }
