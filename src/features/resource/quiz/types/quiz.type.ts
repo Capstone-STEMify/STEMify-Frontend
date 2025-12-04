@@ -28,6 +28,7 @@ export type QuizAttempt = {
   finalScore: number
   assignedAt: string
   dueDate: string
+  maxAttemptAllowed: number
   attemptCount: number
   attempts: Attempt[]
 }

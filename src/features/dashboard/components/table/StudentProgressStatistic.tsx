@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Download, MoreVertical, CheckCircle2, Circle, Clock, ChevronDown, Bot } from 'lucide-react'
+import { Download, CheckCircle2, Circle, Clock, Bot, AlertTriangle, Sparkles, X, BrainCircuit } from 'lucide-react'
 
 import { Button } from '@/components/shadcn/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
@@ -13,6 +13,23 @@ import { StudentProgressItem } from '@/features/classroom/types/classroom.type'
 import { useTranslations } from 'next-intl'
 import Loading from 'app/[locale]/loading'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
+import { Badge } from '@/components/shadcn/badge'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/shadcn/dialog'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
+
+// --- TYPES MOCK ---
+type AtRiskStudentAnalysis = {
+  studentId: string
+  severity: 'High' | 'Medium'
+  reason: string
+  recommendation: string
+}
+
+type AiAnalysisResponse = {
+  classOverview: string
+  atRiskStudents: AtRiskStudentAnalysis[]
+}
 
 interface CourseType {
   id: number
@@ -28,12 +45,18 @@ const COLUMN_WIDTH = 'w-[70px] min-w-[70px]'
 
 export function StudentProgressStatistic({ classroomId, courses }: StudentProgressStatisticProps) {
   const t = useTranslations('dashboard.classroom')
-  const tc = useTranslations('common')
-
+  
+  // --- STATES ---
   const [selectedCourseId, setSelectedCourseId] = React.useState<string>('')
-
   const [currentLessonId, setCurrentLessonId] = React.useState<string>('')
+  
+  // AI States
+  const [isAnalyzing, setIsAnalyzing] = React.useState(false)
+  const [aiData, setAiData] = React.useState<AiAnalysisResponse | null>(null)
+  const [filterAtRisk, setFilterAtRisk] = React.useState(false) // State để toggle filter học sinh yếu
+  const [selectedAnalysisStudent, setSelectedAnalysisStudent] = React.useState<AtRiskStudentAnalysis | null>(null) // State cho modal chi tiết
 
+  // --- QUERIES ---
   const { data: classroomRes } = useGetClassroomByIdQuery(classroomId, {
     skip: !classroomId
   })
@@ -65,6 +88,35 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
   const currentLesson = lessons.find((l) => String(l.lessonId) === currentLessonId)
 
+  // --- MOCK API CALL ---
+  const handleAnalyzeClassroom = async () => {
+    if (students.length === 0) return
+    setIsAnalyzing(true)
+
+    // delay API
+    setTimeout(() => {
+      const atRiskMock: AtRiskStudentAnalysis[] = students.slice(0, 2).map((s, index) => ({
+        studentId: s.studentId,
+        severity: index === 0 ? 'High' : 'Medium',
+        reason: index === 0 
+          ? 'Học sinh chưa hoàn thành 3 bài tập liên tiếp và điểm Quiz trung bình dưới 50%.' 
+          : 'Học sinh có xu hướng nộp bài muộn và thời gian tương tác với bài học thấp.',
+        recommendation: index === 0
+          ? 'Cần tổ chức buổi phụ đạo 1-1 về kiến thức căn bản của bài Lesson 3.'
+          : 'Giáo viên nên nhắc nhở về kỷ luật nộp bài và khuyến khích tham gia thảo luận nhóm.'
+      }))
+
+      const mockResponse: AiAnalysisResponse = {
+        classOverview: `Lớp học đang có tiến độ tốt với 80% học sinh hoàn thành đúng hạn. Tuy nhiên, mức độ hiểu bài ở phần "Advanced Concepts" có vẻ thấp hơn trung bình. Cần chú ý nhóm học sinh có nguy cơ tụt hậu.`,
+        atRiskStudents: atRiskMock
+      }
+
+      setAiData(mockResponse)
+      setIsAnalyzing(false)
+    }, 1500)
+  }
+
+  // --- HELPERS ---
   const renderSectionStatus = (student: StudentProgressItem, lessonId: number, sectionId: number) => {
     const lessonProg = student.lessonProgresses?.find((l) => l.lessonId === lessonId)
     if (!lessonProg) return <Circle className='mx-auto h-4 w-4 text-slate-200' />
@@ -85,54 +137,112 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
     }
   }
 
+  // Filter students if toggle is on
+  const displayedStudents = React.useMemo(() => {
+    if (!filterAtRisk || !aiData) return students
+    const atRiskIds = aiData.atRiskStudents.map(s => s.studentId)
+    return students.filter(s => atRiskIds.includes(s.studentId))
+  }, [students, filterAtRisk, aiData])
+
   return (
     <div className='mt-8 rounded-xl border bg-white p-4 shadow-sm md:p-8'>
       <header className='mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
         <div className='flex items-center gap-4'>
           <h2 className='text-2xl font-semibold'>{t('overview.progress.title')}</h2>
-          <div className='flex items-center gap-2 text-sm'>
-            <span>{t('overview.progress.lesson')}</span>
+          
+          {/* AI TRIGGER BUTTON */}
+          <Button 
+            onClick={handleAnalyzeClassroom} 
+            disabled={isAnalyzing}
+            className={`gap-2 transition-all ${aiData ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border border-blue-200' : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:opacity-90'}`}
+            variant={aiData ? "outline" : "default"}
+          >
+             {isAnalyzing ? (
+               <>
+                <Clock className="h-4 w-4 animate-spin" /> Analyzing...
+               </>
+             ) : (
+               <>
+                <Sparkles className="h-4 w-4" /> {aiData ? 'Re-Analyze AI' : 'Ask AI Insights'}
+               </>
+             )}
+          </Button>
 
-            <Select value={curriculum?.code || ''} disabled>
-              <SelectTrigger className='w-[200px]'>
-                <SelectValue placeholder={curriculum?.title || 'Curriculum'} />
-              </SelectTrigger>
-              <SelectContent>
-                {curriculum && <SelectItem value={curriculum.code}>{curriculum.title}</SelectItem>}
-              </SelectContent>
-            </Select>
-
-            <Select value={selectedCourseId} onValueChange={setSelectedCourseId} disabled={courses.length === 0}>
-              <SelectTrigger className='w-[200px]'>
-                <SelectValue placeholder='Select course' />
-              </SelectTrigger>
-              <SelectContent>
-                {courses.map((course) => (
-                  <SelectItem key={course.id} value={String(course.id)}>
-                    {course.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
         </div>
+        
+        {/* FILTERS */}
         <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-2 text-sm'>
+              <Select value={curriculum?.code || ''} disabled>
+                <SelectTrigger className='w-[150px]'>
+                  <SelectValue placeholder={curriculum?.title || 'Curriculum'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {curriculum && <SelectItem value={curriculum.code}>{curriculum.title}</SelectItem>}
+                </SelectContent>
+              </Select>
+
+              <Select value={selectedCourseId} onValueChange={setSelectedCourseId} disabled={courses.length === 0}>
+                <SelectTrigger className='w-[150px]'>
+                  <SelectValue placeholder='Select course' />
+                </SelectTrigger>
+                <SelectContent>
+                  {courses.map((course) => (
+                    <SelectItem key={course.id} value={String(course.id)}>
+                      {course.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           <Button variant='outline' size='icon'>
             <Download className='h-4 w-4' />
           </Button>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant='outline' size='icon'>
-                <Bot className='h-4 w-4' />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{t('overview.tooltip')}</p>
-            </TooltipContent>
-          </Tooltip>
         </div>
       </header>
 
+      {/* --- AI RESULT SECTION --- */}
+      {aiData && (
+        <Card className="mb-6 bg-slate-50/50 border-purple-100 animate-in fade-in slide-in-from-top-4 duration-500">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-lg text-purple-900">
+              <Bot className="h-5 w-5 text-purple-600" />
+              AI Classroom Assessment
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col md:flex-row gap-6">
+              <div className="flex-1">
+                <p className="text-sm text-slate-700 leading-relaxed italic border-l-4 border-purple-300 pl-3">
+                  "{aiData.classOverview}"
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 min-w-[200px]">
+                <Button 
+                  variant={filterAtRisk ? "destructive" : "outline"}
+                  className={`justify-between group border-red-200 ${!filterAtRisk && 'text-red-600 hover:bg-red-50'}`}
+                  onClick={() => setFilterAtRisk(!filterAtRisk)}
+                >
+                  <span className="flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4" />
+                    Students at risk
+                  </span>
+                  <Badge variant={filterAtRisk ? "outline" : "destructive"} className="ml-2">
+                    {aiData.atRiskStudents.length}
+                  </Badge>
+                </Button>
+                {filterAtRisk && (
+                   <p className="text-xs text-center text-slate-500 animate-pulse">
+                     Filtering table below...
+                   </p>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* --- TABLE CONTENT --- */}
       {isFetching && !currentLesson ? (
         <Loading />
       ) : !currentLesson ? (
@@ -196,44 +306,75 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
               </TableHeader>
 
               <TableBody>
-                {students.length > 0 ? (
-                  students.map((student) => (
-                    <TableRow key={student.studentId} className='group hover:bg-slate-50/50'>
-                      <TableCell className='bg-background sticky left-0 z-10 border-r group-hover:bg-slate-50'>
-                        <Accordion type='single' collapsible className='w-full'>
-                          <AccordionItem value={student.studentId} className='border-b-0'>
-                            <AccordionTrigger className='p-2 py-4 hover:no-underline'>
-                              <div className='flex flex-col items-start text-left'>
-                                <span className='font-medium text-slate-700'>{student.studentName}</span>
-                                <span className='text-xs font-normal text-slate-400'>
-                                  ID: {student.studentId.substring(0, 6)}...
-                                </span>
-                              </div>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                              <div className='px-2 text-xs text-slate-500'>Details for {student.studentName}</div>
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      </TableCell>
+                {displayedStudents.length > 0 ? (
+                  displayedStudents.map((student) => {
+                    // Check if this student is marked as at-risk by AI
+                    const atRiskInfo = aiData?.atRiskStudents.find(s => s.studentId === student.studentId);
 
-                      {currentLesson.sectionIds.map((sectionId) => (
-                        <TableCell
-                          key={`${student.studentId}-${sectionId}`}
-                          className={`h-[70px] border-r p-2 text-center ${COLUMN_WIDTH}`}
-                        >
-                          {renderSectionStatus(student, currentLesson.lessonId, sectionId)}
+                    return (
+                      <TableRow 
+                        key={student.studentId} 
+                        className={`group hover:bg-slate-50/50 ${atRiskInfo ? 'bg-red-50/30' : ''}`}
+                      >
+                        <TableCell className={`bg-background sticky left-0 z-10 border-r group-hover:bg-slate-50 ${atRiskInfo ? 'bg-red-50/30' : ''}`}>
+                          <div className="flex items-center justify-between pr-2">
+                             <Accordion type='single' collapsible className='w-full'>
+                              <AccordionItem value={student.studentId} className='border-b-0'>
+                                <AccordionTrigger className='p-2 py-4 hover:no-underline'>
+                                  <div className='flex flex-col items-start text-left'>
+                                    <span className={`font-medium ${atRiskInfo ? 'text-red-700' : 'text-slate-700'}`}>
+                                      {student.studentName}
+                                    </span>
+                                    <span className='text-xs font-normal text-slate-400'>
+                                      ID: {student.studentId.substring(0, 6)}...
+                                    </span>
+                                  </div>
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                  <div className='px-2 text-xs text-slate-500'>Details for {student.studentName}</div>
+                                </AccordionContent>
+                              </AccordionItem>
+                            </Accordion>
+
+                            {/* RISK INDICATOR ICON */}
+                            {atRiskInfo && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button 
+                                    size="icon" 
+                                    variant="ghost" 
+                                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-full animate-in zoom-in"
+                                    onClick={() => setSelectedAnalysisStudent(atRiskInfo)}
+                                  >
+                                    <BrainCircuit className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>View AI Analysis</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            )}
+                          </div>
                         </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
+
+                        {currentLesson.sectionIds.map((sectionId) => (
+                          <TableCell
+                            key={`${student.studentId}-${sectionId}`}
+                            className={`h-[70px] border-r p-2 text-center ${COLUMN_WIDTH}`}
+                          >
+                            {renderSectionStatus(student, currentLesson.lessonId, sectionId)}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    )
+                  })
                 ) : (
                   <TableRow>
                     <TableCell
                       colSpan={currentLesson.sectionIds.length + 1}
                       className='h-24 text-center text-slate-500'
                     >
-                      No students enrolled in this class.
+                      {filterAtRisk ? 'No at-risk students found.' : 'No students enrolled in this class.'}
                     </TableCell>
                   </TableRow>
                 )}
@@ -242,6 +383,58 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
           </div>
         </div>
       )}
+
+      {/* --- STUDENT ANALYSIS MODAL --- */}
+      <Dialog open={!!selectedAnalysisStudent} onOpenChange={(open) => !open && setSelectedAnalysisStudent(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-600">
+               <AlertTriangle className="h-5 w-5" />
+               Risk Analysis
+            </DialogTitle>
+            <DialogDescription>
+              AI Assessment for <span className="font-semibold text-slate-900">{selectedAnalysisStudent?.studentId ? students.find(s => s.studentId === selectedAnalysisStudent.studentId)?.studentName : ''}</span>
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedAnalysisStudent && (
+            <div className="space-y-4 py-2">
+              <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border">
+                 <span className="text-sm font-medium text-slate-500">Risk Severity</span>
+                 <Badge variant={selectedAnalysisStudent.severity === 'High' ? 'destructive' : 'default'} className="bg-orange-500 hover:bg-orange-600">
+                   {selectedAnalysisStudent.severity} Priority
+                 </Badge>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="text-sm font-semibold flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-red-400" /> 
+                  Identified Issues
+                </h4>
+                <div className="text-sm text-slate-600 bg-red-50 p-3 rounded-md border border-red-100">
+                  {selectedAnalysisStudent.reason}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="text-sm font-semibold flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-green-400" />
+                  Recommended Action
+                </h4>
+                <div className="text-sm text-slate-600 bg-green-50 p-3 rounded-md border border-green-100">
+                  {selectedAnalysisStudent.recommendation}
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <div className="flex justify-end gap-2">
+             <Button variant="outline" onClick={() => setSelectedAnalysisStudent(null)}>Close</Button>
+             <Button className="bg-blue-600 hover:bg-blue-700">Assign Support Task</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
     </div>
   )
 }
