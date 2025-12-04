@@ -45,7 +45,6 @@ export default function WorkspaceTree() {
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
   const { actions, activities } = useAppSelector((s: RootState) => s.workspaceTree)
-  console.log('🧩 WorkspaceTree activities:', activities)
   const instances = useAppSelector((s: RootState) => s.creatorScene.instances)
 
   const nextActionNumber = actions.length + 1

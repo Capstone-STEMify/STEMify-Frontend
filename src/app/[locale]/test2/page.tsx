@@ -3,12 +3,12 @@ import React from 'react'
 export default function Page() {
   const jsonObject = {
     metadata: {
-      title: 'Assembly_emu_018899090919',
+      title: 'Assembly_emu_e3676a7ca85a',
       description: 'Exported assembly JSON',
       author: 'STEMify User',
       version: '2.0',
-      created: '2025-12-04T07:48:09.476Z',
-      lastModified: '2025-12-04T07:48:09.476Z'
+      created: '2025-12-04T08:00:41.963Z',
+      lastModified: '2025-12-04T08:00:41.963Z'
     },
     templates: {
       materials: [
@@ -93,6 +93,11 @@ export default function Page() {
                   x: 0,
                   y: 1.5707963267948966,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -108,6 +113,11 @@ export default function Page() {
                   x: 0,
                   y: 1.5707963267948966,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -123,6 +133,11 @@ export default function Page() {
                   x: 0,
                   y: 1.5707963267948966,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             }
@@ -143,6 +158,11 @@ export default function Page() {
                   x: 0,
                   y: 0.40142572795869574,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -158,6 +178,11 @@ export default function Page() {
                   x: 0,
                   y: 0.40142572795869574,
                   z: 0.011693705988362009
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -173,6 +198,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: 1.0471975511965976
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -188,6 +218,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: -1.0471975511965976
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -203,6 +238,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -218,6 +258,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -233,6 +278,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: 1.0471975511965976
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -248,6 +298,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: -1.0471975511965976
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -263,6 +318,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: -1.0471975511965976
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -278,6 +338,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: -0.5235987755982988
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -293,6 +358,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             }
@@ -313,6 +383,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -328,6 +403,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -343,6 +423,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -358,6 +443,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -373,6 +463,11 @@ export default function Page() {
                   x: 0,
                   y: -0.4537856055185257,
                   z: 0.8726646259971648
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -388,6 +483,11 @@ export default function Page() {
                   x: 0,
                   y: 0.41887902047863906,
                   z: 0.8726646259971648
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -403,6 +503,11 @@ export default function Page() {
                   x: 0,
                   y: 0.47123889803846897,
                   z: -0.9075712110370514
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -418,6 +523,11 @@ export default function Page() {
                   x: 0,
                   y: -0.4363323129985824,
                   z: -0.890117918517108
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -433,6 +543,11 @@ export default function Page() {
                   x: 0,
                   y: -0.4537856055185257,
                   z: 0.8726646259971648
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -448,6 +563,11 @@ export default function Page() {
                   x: 0,
                   y: 0.41887902047863906,
                   z: 0.8726646259971648
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -463,6 +583,11 @@ export default function Page() {
                   x: 0,
                   y: 0.47123889803846897,
                   z: -0.9075712110370514
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -478,6 +603,11 @@ export default function Page() {
                   x: 0,
                   y: -0.4363323129985824,
                   z: -0.890117918517108
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -493,6 +623,11 @@ export default function Page() {
                   x: 0,
                   y: 1.5707963267948966,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -508,6 +643,11 @@ export default function Page() {
                   x: 0,
                   y: 1.5707963267948966,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             },
@@ -523,6 +663,11 @@ export default function Page() {
                   x: 0,
                   y: 1.5707963267948966,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             }
@@ -543,6 +688,11 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: -2.2689280275926285
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
               }
             }
@@ -565,8 +715,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 1.5707963267948966
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_7',
@@ -580,8 +736,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 1.5707963267948966
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_14',
@@ -595,8 +757,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 1.5707963267948966
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_15',
@@ -610,8 +778,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 1.5707963267948966
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_18',
@@ -625,8 +799,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 1.5707963267948966
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_20',
@@ -640,8 +820,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 1.5707963267948966
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_23',
@@ -655,8 +841,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 3.141592653589793,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_27',
@@ -670,8 +862,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             }
           ]
         },
@@ -690,8 +888,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: -0.3490658503988659
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_11',
@@ -705,8 +909,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 2.8099800957108703
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_16',
@@ -720,8 +930,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: -0.03490658503988659,
                   z: -0.6108652381980153
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_19',
@@ -735,8 +951,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 3.141592653589793,
                   z: 0.4363323129985824
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_21',
@@ -750,8 +972,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_25',
@@ -765,8 +993,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 0,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_29',
@@ -780,8 +1014,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 3.141592653589793,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_30',
@@ -795,8 +1035,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 3.141592653589793,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_31',
@@ -810,8 +1056,14 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: -1.5707963267948966
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_32',
@@ -825,8 +1077,14 @@ export default function Page() {
                   x: 0,
                   y: 0,
                   z: -1.5707963267948966
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_33',
@@ -840,8 +1098,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 3.141592653589793,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_34',
@@ -855,8 +1119,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 3.141592653589793,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_35',
@@ -870,8 +1140,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: -1.0471975511965976,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_36',
@@ -885,8 +1161,14 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: 2.0943951023931953,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_37',
@@ -900,18 +1182,46 @@ export default function Page() {
                   x: 1.5707963267948966,
                   y: -2.2689280275926285,
                   z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
                 }
-              }
+              },
+              arms: {}
             },
             {
               id: 'connector_38',
               transform: {
                 position: {
-                  x: 2.874957028770967,
+                  x: 10.558742342045136,
                   y: 0,
-                  z: 21.993926994193817
+                  z: 17.134284182871355
                 },
                 rotation: {
+                  x: 0,
+                  y: 0,
+                  z: 0
+                },
+                scale: {
+                  x: 1,
+                  y: 1,
+                  z: 1
+                }
+              },
+              arms: {
+                arm_1: {
+                  x: 0,
+                  y: 0,
+                  z: 0
+                },
+                arm_2: {
+                  x: 0,
+                  y: 0,
+                  z: 0
+                },
+                arm_3: {
                   x: 0,
                   y: 0,
                   z: 0
@@ -1134,32 +1444,36 @@ export default function Page() {
             validation: null
           },
           {
-            title: 'Transform Step 12',
             actionId: 'action_12',
+            title: 'Transform Step 12',
             description: '',
             expectedResult: '',
-            hints: []
+            hints: [],
+            validation: null
           },
           {
-            title: 'Highlight Step 13',
             actionId: 'action_13',
+            title: 'Highlight Step 13',
             description: '',
             expectedResult: '',
-            hints: []
+            hints: [],
+            validation: null
           },
           {
-            title: 'Highlight Step 14',
             actionId: 'action_14',
+            title: 'Highlight Step 14',
             description: '',
             expectedResult: '',
-            hints: []
+            hints: [],
+            validation: null
           },
           {
-            title: 'Highlight Step 15',
             actionId: 'action_15',
+            title: 'Highlight Step 15',
             description: '',
             expectedResult: '',
-            hints: []
+            hints: [],
+            validation: null
           }
         ]
       }
