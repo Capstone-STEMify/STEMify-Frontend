@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, account, profile }) {
       if (account?.access_token) {
-        // console.log('JWT callback', { profile })
+        console.log('JWT callback', { profile })
         token.accessToken = account.access_token
         token.idToken = account.id_token
         token.role = profile?.role || UserRole.GUEST
@@ -78,9 +78,9 @@ export const authOptions: NextAuthOptions = {
           console.log('Parsed organizations:', token.organizations)
         } catch (err) {
           console.error('Failed to parse organizations JSON:', err)
-          token.organizations = []
+          token.organizations = undefined
         }
-        // console.log('Token debug:', token)
+        console.log('Token debug:', token)
 
         //   try {
         //     const decoded: any = jwtDecode(account.access_token)
@@ -114,7 +114,7 @@ export const authOptions: NextAuthOptions = {
         session.exp = token.exp!
         session.user.email = token.email!
 
-        session.user.organizations = token.organizations ?? []
+        session.user.organizations = token.organizations
         // console.log('Session callback', JSON.stringify(session, null, 2))
       }
       return session

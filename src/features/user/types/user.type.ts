@@ -12,19 +12,20 @@ export type User = {
   lastName: string
   imageUrl?: string
   status: UserStatus
-  organizations?: UserOrganization[]
+  organizations?: {
+    role: UserRole
+    organizations: UserOrganization[]
+  }
 }
 
 export type OrganizationSubscription = {
-  id: number
-  role: LicenseType
-  properties: Record<string, any>
-  isActive: boolean
+  subscriptionId: number
+  type: LicenseType
 }
 
 export type UserOrganization = {
   id: number // Organization ID
-  subscriptions: OrganizationSubscription[]
+  roles: OrganizationSubscription[]
 }
 
 export type UserFormData = Omit<User, 'id'> & {
