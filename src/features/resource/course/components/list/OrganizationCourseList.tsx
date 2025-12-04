@@ -1,5 +1,6 @@
 import { Badge } from '@/components/shadcn/badge'
 import CardLayout from '@/components/shared/card/CardLayout'
+import { Course } from '@/features/resource/course/types/course.type'
 import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
 import { getLevelBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
@@ -8,30 +9,24 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import React from 'react'
 type OrganizationCurriculumCourseListProps = {
-  curriculumId: number
+  courses: Course[]
 }
 
-export default function OrganizationCourseList({ curriculumId }: OrganizationCurriculumCourseListProps) {
+export default function OrganizationCourseList({ courses }: OrganizationCurriculumCourseListProps) {
   const t = useTranslations('curriculum')
-
-  const { data } = useGetCurriculumByIdQuery(curriculumId, {
-    skip: !curriculumId,
-    refetchOnMountOrArgChange: true
-  })
-
-  const course = data?.data.courses || []
+  const { curriculumId } = useParams()
 
   return (
     <div className='space-y-5'>
       <div className='flex items-center justify-between'>
         <h2 className='text-2xl font-semibold'>
           {t('list.courseListTitle')}{' '}
-          <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{course.length}</span>
+          <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{courses.length}</span>
         </h2>
       </div>
 
       <div className='grid h-fit grid-cols-1 justify-items-center gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        {course.map((course) => (
+        {courses.map((course) => (
           <div key={course.id} className='relative flex min-w-0 gap-1'>
             <Link
               href={`/organization/curriculum/${curriculumId}/course/${course.id}`}

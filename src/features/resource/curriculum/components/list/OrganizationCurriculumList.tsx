@@ -11,17 +11,20 @@ import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { BookOpen, Calendar, GraduationCap, Filter } from 'lucide-react'
 import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+import { setSelectedCurriculum } from '@/features/resource/curriculum/slice/curriculumSlice'
 
 export default function OrganizationCurriculumList() {
   const t = useTranslations('organization.curriculum')
   const statusTranslate = useStatusTranslation()
   const router = useRouter()
   const locale = useLocale()
+  const dispatch = useAppDispatch()
 
   const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
 
-  const [selectedStatus, setSelectedStatus] = useState<CurriculumStatus | 'ALL'>('ALL')
+  const [selectedStatus, setSelectedStatus] = useState<SubscriptionStatus | CurriculumStatus | 'ALL'>('ALL')
 
   const { data: curriculumData, isLoading } = useGetCurriculumsByOrganizationIdQuery(
     { organizationId: selectedOrganizationId! },
@@ -54,11 +57,12 @@ export default function OrganizationCurriculumList() {
     )
   }
 
-  const statusOptions: Array<CurriculumStatus | 'ALL'> = [
+  const statusOptions: Array<SubscriptionStatus | 'ALL'> = [
     'ALL',
-    CurriculumStatus.DRAFT,
-    CurriculumStatus.PUBLISHED,
-    CurriculumStatus.ARCHIVED
+    SubscriptionStatus.PENDING,
+    SubscriptionStatus.ACTIVE,
+    SubscriptionStatus.CANCELLED,
+    SubscriptionStatus.EXPIRED
   ]
 
   return (
@@ -122,7 +126,10 @@ export default function OrganizationCurriculumList() {
               key={curriculum.id}
               className='cursor-pointer hover:-translate-y-1'
               imageSrc={curriculum.imageUrl}
-              onClick={() => router.push(`/${locale}/organization/curriculum/${curriculum.id}`)}
+              onClick={() => {
+                dispatch(setSelectedCurriculum(curriculum))
+                router.push(`/${locale}/organization/curriculum/${curriculum.id}`)
+              }}
               badge={
                 <Badge className={`${getStatusBadgeClass(curriculum.status)} shadow-sm`}>
                   {statusTranslate(curriculum.status)}
@@ -148,12 +155,16 @@ export default function OrganizationCurriculumList() {
                   {/* Dates */}
                   <div className='flex items-center gap-2 text-sm'>
                     <span className='text-gray-600'>{t('startDate')}:</span>
-                    <span className='font-medium text-gray-900'>{formatDate(curriculum.startDate, { locale })}</span>
+                    <span className='font-medium text-gray-900'>
+                      {curriculum.startDate ? formatDate(curriculum.startDate, { locale }) : ''}
+                    </span>
                   </div>
 
                   <div className='flex items-center gap-2 text-sm'>
                     <span className='text-gray-600'>{t('endDate')}:</span>
-                    <span className='font-medium text-gray-900'>{formatDate(curriculum.endDate, { locale })}</span>
+                    <span className='font-medium text-gray-900'>
+                      {curriculum.endDate ? formatDate(curriculum.endDate, { locale }) : ''}
+                    </span>
                   </div>
                 </div>
               </div>

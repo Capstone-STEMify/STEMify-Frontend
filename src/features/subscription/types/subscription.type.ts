@@ -43,7 +43,7 @@ export type PlanBillingCycle = {
 export enum SubscriptionStatus {
   ACTIVE = 'Active',
   EXPIRED = 'Expired',
-  CANCELLED = 'Canceled',
+  CANCELLED = 'Cancelled',
   PENDING = 'Pending',
   ARCHIVED = 'Archived'
 }

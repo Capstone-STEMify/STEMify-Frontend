@@ -1,34 +1,21 @@
 'use client'
 import BackButton from '@/components/shared/button/BackButton'
-import AdminCurriculumCourseList from '@/features/resource/curriculum/components/list/AdminCurriculumCourseList'
 import LearningOutcomeTable from '@/features/resource/learning-outcome/components/list/LearningOutcomeTable'
 import { useTranslations } from 'next-intl'
-import { useParams } from 'next/navigation'
 import React from 'react'
-import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
-import SEmpty from '@/components/shared/empty/SEmpty'
-import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import KitListSection from '@/features/resource/kit/components/list/KitListSection'
-import AdminCurriculumInformationSection from '@/features/resource/curriculum/components/detail/AdminCurriculumInformationSection'
 import OrganizationCourseList from '@/features/resource/course/components/list/OrganizationCourseList'
+import OrganizationCurriculumInfoSection from '@/features/resource/curriculum/components/detail/OrganizationCurriculumInfoSection'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import SEmpty from '@/components/shared/empty/SEmpty'
 
 export default function OrganizationCurriculumDetail() {
-  const { curriculumId } = useParams()
   const t = useTranslations('curriculum')
-  const { data, isLoading } = useGetCurriculumByIdQuery(Number(curriculumId), {
-    skip: !Number(curriculumId),
-    refetchOnMountOrArgChange: true
-  })
+  const curriculum = useAppSelector((state) => state.selectedCurriculum.selectedCurriculum)
 
-  if (isLoading) {
-    return (
-      <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
-        <LoadingComponent size={150} />
-      </div>
-    )
+  if (!curriculum) {
+    return <SEmpty title={t('details.noCurriculumSelected')} description={t('details.pleaseSelectCurriculum')} />
   }
-  if (!data) return <SEmpty title='No Curriculum Found' description='Please check the curriculum and try again.' />
-
   return (
     <div>
       <div className='mx-auto min-h-screen max-w-6xl px-4 pb-8 sm:px-6 lg:px-8'>
@@ -36,18 +23,16 @@ export default function OrganizationCurriculumDetail() {
           <BackButton />
           <h1>{t('details.title')}</h1>
         </div>
-        <AdminCurriculumInformationSection curriculumId={Number(curriculumId)} curriculum={data?.data} />
+        <OrganizationCurriculumInfoSection curriculum={curriculum} />
 
-        {curriculumId && (
-          <>
-            <hr className='my-10' />
-            <LearningOutcomeTable curriculumId={Number(curriculumId)} />
-            <hr className='my-10' />
-            <KitListSection context='curriculum' kitIds={data?.data?.kitIds || []} />
-            <hr className='my-10' />
-            <OrganizationCourseList curriculumId={Number(curriculumId)} />
-          </>
-        )}
+        <>
+          <hr className='my-10' />
+          <LearningOutcomeTable curriculumId={Number(curriculum.id)} />
+          <hr className='my-10' />
+          <KitListSection context='curriculum' kitIds={curriculum.kitIds || []} />
+          <hr className='my-10' />
+          <OrganizationCourseList courses={curriculum.courses || []} />
+        </>
       </div>
     </div>
   )

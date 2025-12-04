@@ -24,7 +24,7 @@ import { userApi } from '@/features/user/api/userApi'
 import { userSlice } from '@/features/user/slice/userSlice'
 import { curriculumApi } from '@/features/resource/curriculum/api/curriculumApi'
 import { learningOutcomeApi } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
-import { curriculumSlice } from '@/features/resource/curriculum/slice/curriculumSlice'
+import { curriculumSlice, selectedCurriculumSlice } from '@/features/resource/curriculum/slice/curriculumSlice'
 import { kitProductApi } from '@/features/resource/kit/api/kitProductApi'
 import { kitProductSlice } from '@/features/resource/kit/slice/kitProductSlice'
 import { strawLabSlice } from '@/features/creator-3d/slice/strawLabSlice'
@@ -117,6 +117,7 @@ export const rootReducer = combineReducers({
   studentAssignmentSelected: studentAssignmentSelectedSlice.reducer,
   enrollment: enrollmentSlice.reducer,
   organizationSpecial: organizationSpecialSlice.reducer,
+  selectedCurriculum: selectedCurriculumSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
