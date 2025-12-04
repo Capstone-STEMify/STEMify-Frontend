@@ -226,7 +226,8 @@ export function exportAssembly(
         id: item.id,
         transform: {
           position: item.transform.position,
-          rotation: item.transform.rotation
+          rotation: item.transform.rotation,
+          scale: item.transform.scale ?? { x: 1, y: 1, z: 1 }
         }
       })
       return acc
@@ -247,8 +248,10 @@ export function exportAssembly(
         id: item.id,
         transform: {
           position: item.transform.position,
-          rotation: item.transform.rotation
-        }
+          rotation: item.transform.rotation,
+          scale: item.transform.scale ?? { x: 1, y: 1, z: 1 }
+        },
+        arms: item.arms
       })
       return acc
     }, {})

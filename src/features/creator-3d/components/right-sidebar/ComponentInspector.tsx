@@ -28,6 +28,7 @@ export function ComponentInspector() {
   const dispatch = useAppDispatch()
   const { selectedActionId, actions } = useAppSelector((s) => s.workspaceTree)
   const selectedObject = useSelectedObject()
+  console.log({ localValues, selectedObjectCategory: selectedObject?.category })
 
   const onObjectUpdate = useCallback(
     (objectId: string, updates: any) => {

@@ -1,9 +1,12 @@
+'use client'
 import React from 'react'
 import { Facebook, Instagram } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 const Footer = () => {
+  const tf = useTranslations('footer')
   return (
     <footer className="relative min-h-[400px] overflow-hidden bg-sky-400 text-white md:bg-[url('/images/footer.png')] md:bg-cover md:bg-center md:bg-no-repeat">
       <div className='absolute top-4 left-8 z-10 hidden md:block'>
@@ -18,73 +21,71 @@ const Footer = () => {
         <div className='mx-auto max-w-7xl'>
           <div className='mb-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4'>
             <div className='space-y-4'>
-              <h3 className='mb-4 text-lg font-semibold'>Information For Parents</h3>
-              <p className='text-sm leading-relaxed opacity-90'>
-                We provide nurturing environment with developmentally appropriate activities and opportunities
-              </p>
+              <h3 className='mb-4 text-lg font-semibold'>{tf('infoForParents.title')}</h3>
+              <p className='text-sm leading-relaxed opacity-90'>{tf('infoForParents.description')}</p>
             </div>
 
             <div className='space-y-3'>
-              <h3 className='mb-4 text-lg font-semibold'>Info</h3>
+              <h3 className='mb-4 text-lg font-semibold'>{tf('info.title')}</h3>
               <ul className='space-y-2 text-sm'>
                 <li>
                   <Link href='#' className='transition-colors hover:text-blue-100'>
-                    Home page
+                    {tf('info.home')}
                   </Link>
                 </li>
                 <li>
                   <Link href='#' className='transition-colors hover:text-blue-100'>
-                    About us
+                    {tf('info.aboutUs')}
                   </Link>
                 </li>
                 <li>
                   <Link href='#' className='transition-colors hover:text-blue-100'>
-                    Our news
+                    {tf('info.press')}
                   </Link>
                 </li>
               </ul>
             </div>
 
             <div className='space-y-3'>
-              <h3 className='mb-4 text-lg font-semibold'>Education</h3>
+              <h3 className='mb-4 text-lg font-semibold'>{tf('education.title')}</h3>
               <ul className='space-y-2 text-sm'>
                 <li>
                   <Link href='#' className='transition-colors hover:text-blue-100'>
-                    Our Programs
+                    {tf('education.programs')}
                   </Link>
                 </li>
                 <li>
                   <Link href='#' className='transition-colors hover:text-blue-100'>
-                    Our team
+                    {tf('education.team')}
                   </Link>
                 </li>
                 <li>
                   <Link href='#' className='transition-colors hover:text-blue-100'>
-                    Full day programs
+                    {tf('education.partners')}
                   </Link>
                 </li>
               </ul>
             </div>
 
             <div className='space-y-3'>
-              <h3 className='mb-4 text-lg font-semibold'>Help</h3>
+              <h3 className='mb-4 text-lg font-semibold'>{tf('help.title')}</h3>
               <ul className='space-y-2 text-sm'>
                 <li>
                   <Link href='#' className='transition-colors hover:text-blue-100'>
-                    Knowledge base
+                    FAQS
                   </Link>
                 </li>
                 <li>
                   <Link href='#' className='transition-colors hover:text-blue-100'>
-                    Video tutorials
+                    {tf('help.support')}
                   </Link>
                 </li>
                 <li>
                   {/* <Link href='#' className='transition-colors hover:text-blue-100'> */}
-                  Contact us:{' '}
+                  {tf('help.contactUs')}:{' '}
                   <a
                     href='https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=new'
-                    className='transition-colors hover:text-blue-500 underline'
+                    className='underline transition-colors hover:text-blue-500'
                   >
                     stemify30062025@gmail.com
                   </a>
@@ -99,10 +100,6 @@ const Footer = () => {
               <span>© 2025 STEMIFY. </span>
               <Link href='#' className='transition-colors hover:text-blue-500 hover:underline'>
                 11 Đ. T12, Long Bình, Thủ Đức, Hồ Chí Minh, Việt Nam
-              </Link>
-              <span className='mx-2'>-</span>
-              <Link href='#' className='text-yellow-300 transition-colors hover:text-yellow-200'>
-                Designed
               </Link>
             </div>
 
