@@ -108,6 +108,15 @@
       "durationDays": "Thời gian làm bài phải là một số dương",
       "cooldownHours": "Thời gian chờ giữa các lần làm bài phải là một số không âm",
       "questionsMin": "Phải có ít nhất {min} câu hỏi trong bài tập"
+    },
+    "quiz": {
+      "title": "Hãy nhập tiêu đề",
+      "description": "Hãy nhập mô tả",
+      "passingMarks": "Điểm đạt phải nằm trong khoảng từ 0 đến 100",
+      "durationDays": "Thời gian làm bài phải là một số dương",
+      "totalMarks": "Tổng điểm phải là một số dương",
+      "timeLimitMinutes": "Giới hạn thời gian (tính bằng phút) phải là một số dương",
+      "cooldownHours": "Thời gian chờ giữa các lần làm bài (tính bằng giờ) phải là một số không âm"
     }
   }
 }

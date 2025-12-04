@@ -35,10 +35,12 @@
     "upsert": {
       "create": "Tạo bài kiểm tra",
       "update": "Cập nhật bài kiểm tra",
-      "settings": "Cài đặt bài kiểm tra",
+      "settings": "Bài kiểm tra",
       "form": {
         "title": "Tiêu đề",
+        "titlePlaceholder": "Nhập tiêu đề bài kiểm tra",
         "description": "Mô tả",
+        "descriptionPlaceholder": "Nhập mô tả bài kiểm tra",
         "timeLimit": "Thời gian (phút)",
         "totalMarks": "Tổng điểm",
         "passingMarks": "Điểm đạt",

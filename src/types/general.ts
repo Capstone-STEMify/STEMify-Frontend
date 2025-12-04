@@ -42,6 +42,7 @@ export type ModalType =
   | 'createAssignmentInfo'
   | 'upsertGroup'
   | 'updateGroup'
+  | 'createQuiz'
 
   // detail
   | 'lessonDetail'

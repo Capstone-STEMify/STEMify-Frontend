@@ -45,14 +45,14 @@ export default function UpsertContent({ lessonId, sectionId, contentId }: Upsert
           sectionId
         }
       })
-      toast.success(tt('successMessage.update'))
+      toast.success(tt('successMessage.updateNoTitle'))
     } else {
       const res = await createContent({
         contentBody: editorValue,
         contentType: ContentType.TEXT,
         sectionId: sectionId
       })
-      toast.success(tt('successMessage.create'))
+      toast.success(tt('successMessage.createNoTitle'))
       router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${res.data?.data.id}`)
     }
   }

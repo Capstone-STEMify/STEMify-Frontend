@@ -45,6 +45,7 @@ import AssignmentCSVUploadModal from '@/features/assignment/components/detail/mo
 import CreateAssignmentInfoModal from '@/features/assignment/components/upsert/CreateAssignmentInfoModal'
 import UpsertGroupModal from '@/features/group/components/modal/UpsertGroupModal'
 import UpdateGroupModal from '@/features/group/components/modal/UpdateGroupModal'
+import CreateQuizModal from '@/features/resource/quiz/components/modal/CreateQuizModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -101,6 +102,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'createAssignmentInfo' && <CreateAssignmentInfoModal {...modalProps} />}
       {modalType === 'upsertGroup' && <UpsertGroupModal {...modalProps} />}
       {modalType === 'updateGroup' && <UpdateGroupModal {...modalProps} />}
+      {modalType === 'createQuiz' && <CreateQuizModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}

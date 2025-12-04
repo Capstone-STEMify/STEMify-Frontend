@@ -2,7 +2,9 @@
   "toast": {
     "successMessage": {
       "create": "Đã tạo \"{title}\" thành công!",
+      "createNoTitle": "Đã tạo thành công!",
       "update": "Đã cập nhật \"{title}\" thành công!",
+      "updateNoTitle": "Đã cập nhật thành công!",
       "delete": "Đã xóa thành công!",
       "action": "Đã {action} \"{title}\" thành công",
       "review": "Đã gửi để xét duyệt thành công!",

@@ -38,7 +38,9 @@
       "settings": "Quiz Settings",
       "form": {
         "title": "Title",
+        "titlePlaceholder": "Enter Quiz Title",
         "description": "Description",
+        "descriptionPlaceholder": "Enter Quiz Description",
         "timeLimit": "Time Limit (minutes)",
         "totalMarks": "Total Marks",
         "passingMarks": "Passing Marks",

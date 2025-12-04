@@ -2,7 +2,9 @@
   "toast": {
     "successMessage": {
       "create": "Successfully created \"{title}\"!",
+      "createNoTitle": "Successfully created!",
       "update": "Successfully updated \"{title}\"!",
+      "updateNoTitle": "Successfully updated!",
       "delete": "Successfully deleted!",
       "action": "Successfully {action} \"{title}\"",
       "review": "Successfully submitted to review!",
