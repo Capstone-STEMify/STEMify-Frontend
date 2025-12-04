@@ -21,6 +21,7 @@ export default function OrganizationSubscriptionDetail() {
   const locale = useLocale()
   const ts = useTranslations('subscription.detail')
   const to = useTranslations('organization')
+  const tc = useTranslations('common')
   const { subscriptionId } = useParams()
   const statusTranslations = useStatusTranslation()
 
@@ -77,7 +78,7 @@ export default function OrganizationSubscriptionDetail() {
           <div className='flex gap-3 lg:items-end'>
             {/* <Button className='bg-sky-400 shadow-lg'>Change Plan</Button> */}
             <Button variant='outline' className='shadow-lg'>
-              Cancel Subscription
+              {tc('button.cancelSubscription')}
             </Button>
           </div>
         </div>
@@ -113,7 +114,7 @@ export default function OrganizationSubscriptionDetail() {
                     <p className='mt-1 text-2xl font-bold'>{subscription?.data.planName}</p>
                     <p className='mt-1 text-sm'>
                       {subscription?.data.netAmount} đ/
-                      {subscription?.data.planBillingCycle}
+                      {to(`detail.subscription.currentPlan.${subscription?.data.planBillingCycle.toLowerCase()}`)}
                     </p>
                   </div>
                   <div className='rounded-xl bg-slate-50 p-4 shadow-sm backdrop-blur-sm'>

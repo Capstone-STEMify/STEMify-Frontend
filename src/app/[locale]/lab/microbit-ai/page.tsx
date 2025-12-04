@@ -10,19 +10,23 @@ export default function MicroAiPage() {
   const [ready, setReady] = useState(false)
 
   return !ready ? (
-    <ModelLoader
-      onLoadZip={(f) => {
-        setZipFile(f)
-        setModelUrl(undefined)
-        setReady(true)
-      }}
-      onLoadUrl={(u) => {
-        setModelUrl(u)
-        setZipFile(undefined)
-        setReady(true)
-      }}
-    />
+    <div className='pt-20'>
+      <ModelLoader
+        onLoadZip={(f) => {
+          setZipFile(f)
+          setModelUrl(undefined)
+          setReady(true)
+        }}
+        onLoadUrl={(u) => {
+          setModelUrl(u)
+          setZipFile(undefined)
+          setReady(true)
+        }}
+      />
+    </div>
   ) : (
-    <MicroAI zipFile={zipFile} modelUrl={modelUrl} />
+    <div className='pt-20'>
+      <MicroAI zipFile={zipFile} modelUrl={modelUrl} />
+    </div>
   )
 }
