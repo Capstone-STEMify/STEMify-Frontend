@@ -59,13 +59,13 @@ export type OrganizationUser = {
   fullName: string
   firstName: string
   lastName: string
+  organizationRole: string
   subscriptions: OrganizationUserSubscription[]
 }
 
 export type OrganizationUserSubscription = {
   organizationUserId: string
   organizationId: number
-  organizationRole: string
   licenseType: string
   licenseAssignmentId: string
   subscriptionOrderId: number

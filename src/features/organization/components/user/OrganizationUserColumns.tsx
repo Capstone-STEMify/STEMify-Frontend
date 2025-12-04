@@ -64,8 +64,8 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
         <div className="flex flex-col gap-1">
           {row.original.subscriptions.map((sub) => (
             <div key={sub.organizationUserId} className={subRowClass}>
-              <Badge variant={getRoleBadgeVariant(sub.organizationRole)} className="whitespace-nowrap">
-                {sub.organizationRole}
+              <Badge variant={getRoleBadgeVariant(row.original.organizationRole)} className="whitespace-nowrap">
+                {row.original.organizationRole}
               </Badge>
             </div>
           ))}

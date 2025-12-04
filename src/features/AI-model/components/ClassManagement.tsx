@@ -3,6 +3,7 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { useState } from 'react'
 import { Camera, Edit, Edit2, Trash2, Webcam } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 interface ClassManagementProps {
   classes: string[]
@@ -22,7 +23,10 @@ export function ClassManagement({
   onRemoveImage,
   onEditClassName,
   onRemoveClass
-}: ClassManagementProps) {
+}: ClassManagementProps) {  
+  const t = useTranslations('agent.modelMaker')
+  const tc = useTranslations('common')
+
   const [newClassName, setNewClassName] = useState('')
   const [editingClass, setEditingClass] = useState<string | null>(null)
   const [editedName, setEditedName] = useState('')
@@ -47,7 +51,7 @@ export function ClassManagement({
   return (
     <Card className='border-2 border-gray-200 py-4 shadow-md'>
       <CardHeader>
-        <CardTitle className='text-2xl'>Tạo các class</CardTitle>
+        <CardTitle className='text-2xl'>{t('classCreate')}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className='mb-5 grid grid-cols-1 gap-5 md:grid-cols-2'>
@@ -119,7 +123,7 @@ export function ClassManagement({
                 </div>
 
                 <p className='text-sm text-gray-600'>
-                  Đã upload: <span className='font-semibold'>{classImages[className]?.length || 0}</span> ảnh
+                  {t('uploaded', {images: classImages[className]?.length || 0})}
                 </p>
               </CardContent>
             </Card>
@@ -130,14 +134,14 @@ export function ClassManagement({
         <div className='flex max-w-md gap-2.5'>
           <Input
             type='text'
-            placeholder='Nhập tên class mới'
+            placeholder={t('newClass')}
             value={newClassName}
             onChange={(e) => setNewClassName(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAddClass()}
             className='flex-1 bg-white'
           />
           <Button onClick={handleAddClass} className='bg-[#4facfe] hover:bg-[#3d8bfe]'>
-            Thêm class mới
+            {tc('button.createClass')}
           </Button>
         </div>
       </CardContent>

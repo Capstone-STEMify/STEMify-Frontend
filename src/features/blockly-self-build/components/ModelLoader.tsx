@@ -3,8 +3,9 @@
 import { useState, useRef } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
-import { UploadCloud, FileArchive } from 'lucide-react'
+import { UploadCloud, FileArchive, Loader } from 'lucide-react'
 import { cn } from '@/utils/shadcn/utils'
+import { useTranslations } from 'next-intl'
 
 interface ModelLoaderProps {
   onLoadUrl: (url: string) => void
@@ -12,6 +13,8 @@ interface ModelLoaderProps {
 }
 
 export default function ModelLoader({ onLoadUrl, onLoadZip }: ModelLoaderProps) {
+  const t = useTranslations('agent.modelMaker.microbit')
+  const tc = useTranslations('common')
   const [modelUrl, setModelUrl] = useState('')
   const [modelFile, setModelFile] = useState<File | null>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -54,7 +57,7 @@ export default function ModelLoader({ onLoadUrl, onLoadZip }: ModelLoaderProps) 
 
   return (
     <div className='mx-auto w-full max-w-lg rounded-2xl border border-gray-200 bg-white/90 p-8 shadow-lg backdrop-blur'>
-      <h2 className='mb-4 text-center text-lg font-semibold text-gray-800'>Load your STEMify AI Model</h2>
+      <h2 className='mb-4 text-center text-lg font-semibold text-gray-800'>{t('title')}</h2>
 
       {/* Input URL */}
       <Input
@@ -66,7 +69,7 @@ export default function ModelLoader({ onLoadUrl, onLoadZip }: ModelLoaderProps) 
       />
 
       <div className='my-3 text-center text-sm text-gray-500'>
-        or upload your exported <span className='font-semibold text-sky-600'>model.zip</span>
+        {t('suggest')} <span className='font-semibold text-sky-600'>model.zip</span>
       </div>
 
       {/* Upload Zone */}
@@ -87,9 +90,9 @@ export default function ModelLoader({ onLoadUrl, onLoadZip }: ModelLoaderProps) 
 
         {!modelFile ? (
           <p className='text-sm text-gray-600'>
-            Drag & drop your <span className='font-medium text-sky-600'>model.zip</span> file here
+            {t('drag')}
             <br />
-            or click to browse
+            {t('click')}
           </p>
         ) : (
           <div className='flex items-center gap-2 text-sky-600'>
@@ -110,7 +113,7 @@ export default function ModelLoader({ onLoadUrl, onLoadZip }: ModelLoaderProps) 
       {/* Ready button */}
       <div className='mt-6 text-center'>
         <Button onClick={handleReady} disabled={isLoading} className='px-6 py-2'>
-          {isLoading ? 'Loading...' : 'Ready!'}
+          {isLoading ? <Loader/> : tc('button.ready')}
         </Button>
       </div>
     </div>
