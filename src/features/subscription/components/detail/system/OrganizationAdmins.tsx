@@ -3,7 +3,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import { Button } from '@/components/shadcn/button'
 import { Badge } from '@/components/shadcn/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { UserPlus, Mail, User, Calendar, CheckCircle2, Clock, MoreVertical, Trash2 } from 'lucide-react'
+import {
+  UserPlus,
+  Mail,
+  User,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  MoreVertical,
+  Trash2,
+  RefreshCcw,
+  RotateCcw,
+  RotateCw
+} from 'lucide-react'
 import {
   useDeleteLicenseAssignmentMutation,
   useSearchLicenseAssignmentQuery
@@ -31,13 +43,15 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
   const tt = useTranslations('toast')
   const statusTranslate = useStatusTranslation()
 
+  const [isRotating, setIsRotating] = useState(false)
+
   const locale = useLocale()
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const [statusFilter, setStatusFilter] = useState<StatusFilter>(LicenseAssignmentStatus.ACTIVE)
 
   const licenseParams = useAppSelector((state) => state.licenseAssignment)
-  const { data, isLoading } = useSearchLicenseAssignmentQuery(
+  const { data, isLoading, refetch } = useSearchLicenseAssignmentQuery(
     {
       ...licenseParams,
       organizationSubscriptionOrderId: organizationSubscriptionOrderId!
@@ -53,6 +67,13 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
   useEffect(() => {
     dispatch(resetParams())
   }, [dispatch])
+
+  const handleRotate = async () => {
+    setIsRotating(true)
+    refetch()
+
+    setTimeout(() => setIsRotating(false), 700)
+  }
 
   if (isLoading) {
     return (
@@ -86,7 +107,18 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
         {/* Header */}
         <div className='flex items-center justify-between border-b px-5 pb-4'>
           <div>
-            <CardTitle className='text-lg font-semibold'>{to('license.header')}</CardTitle>
+            <CardTitle className='text-lg font-semibold'>
+              <div className='flex items-center gap-2'>
+                <div>{to('license.header')}</div>
+                <button onClick={handleRotate} className='inline-flex items-center text-sm'>
+                  {isRotating ? (
+                    <RotateCw className='h-3.5 w-3.5 animate-spin' />
+                  ) : (
+                    <RotateCw className='h-3.5 w-3.5' />
+                  )}
+                </button>
+              </div>
+            </CardTitle>
             <p className='text-muted-foreground mt-0.5 text-sm'>
               {totalCount} {to('license.member')}
             </p>

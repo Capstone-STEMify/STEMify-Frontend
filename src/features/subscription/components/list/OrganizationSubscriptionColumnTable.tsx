@@ -11,10 +11,8 @@ import { useRouter } from 'next/navigation'
 import { Sparkles, Users } from 'lucide-react'
 
 export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationSubscription>[] {
-  const { openModal } = useModal()
-  const tm = useTranslations('message')
+  const t = useTranslations('subscription.list')
   const tc = useTranslations('common')
-  const tt = useTranslations('toast')
 
   const router = useRouter()
 
@@ -37,7 +35,7 @@ export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationS
                 {plan}
               </p>
             </div>
-            <p className='text-muted-foreground text-sm'>{billingCycle}</p>
+            <p className='text-muted-foreground text-sm'>{t(`${billingCycle.toLowerCase()}`)}</p>
           </div>
         )
       }
