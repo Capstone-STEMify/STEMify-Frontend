@@ -198,3 +198,18 @@ export type ClassroomStudentGroup = {
   teacherId: string
   studentIds: string[]
 }
+
+// AI Analyses
+export type AiAnalysisResponse = {
+  classOverview: string;
+  atRiskCount: number;
+  atRiskStudents: AtRiskStudentAnalysis[];
+}
+
+export type AtRiskStudentAnalysis = {
+  studentId: string;
+  studentName: string;
+  severity: 'High' | 'Medium' | 'Low';
+  reason: string;
+  recommendation: string;
+}
