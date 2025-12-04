@@ -7,8 +7,11 @@ import { Check } from 'lucide-react'
 import { loadModelFromZip } from '@/features/AI-model/utils/loadModelFromZip'
 import JSZip from 'jszip'
 import * as tf from '@tensorflow/tfjs'
+import { useTranslations } from 'next-intl'
 
 export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipFile?: File }) {
+  const t = useTranslations('agent.modelMaker.microbit')
+  const tc = useTranslations('common')
   // --- Refs ---
   const modelRef = useRef<tmImage.CustomMobileNet | null>(null)
   const webcamRef = useRef<Webcam | null>(null)
@@ -226,7 +229,7 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
                   : 'bg-slate-50 text-slate-700 ring-slate-200'
             ].join(' ')}
           >
-            {status === 'idle' && 'Nhấn "Bắt đầu" để khởi động hệ thống.'}
+            {status === 'idle' && t('instruction')}
             {status === 'loading' && 'Đang tải model & khởi động...'}
             {status === 'running' && 'Hệ thống đang hoạt động…'}
           </p>
@@ -238,7 +241,7 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
                 onClick={() => init(zipFile)}
                 className='rounded-full bg-amber-400 px-6 py-3 text-white shadow-lg transition hover:bg-amber-500'
               >
-                Bắt đầu
+                {tc('button.start')}
               </button>
             )}
             {isConnected ? (
@@ -246,14 +249,14 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
                 onClick={disconnectMicrobit}
                 className='rounded-full bg-red-600 px-6 py-3 text-white shadow-lg transition hover:bg-red-700'
               >
-                Ngắt kết nối: {deviceName ?? 'Micro:bit'}
+                {tc('button.disconnect')}: {deviceName ?? 'Micro:bit'}
               </button>
             ) : (
               <button
                 onClick={connectMicrobit}
                 className='rounded-full bg-sky-400 px-6 py-3 text-white shadow-lg transition hover:bg-sky-500'
               >
-                Kết nối Micro:bit
+                {tc('button.connect')} Micro:bit
               </button>
             )}
           </div>
@@ -268,14 +271,14 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
             <div className='lg:col-span-5'>
               <div className='rounded-[28px] border border-slate-300 bg-white p-6 shadow-sm'>
                 <div className='rounded-[22px] border border-slate-300 p-6'>
-                  <h3 className='text-3xl font-extrabold tracking-wide text-slate-900'>RESULTS!</h3>
+                  <h3 className='text-3xl font-extrabold tracking-wide text-slate-900'>{t('result')}</h3>
 
                   {status === 'loading' && (
                     <div className='mt-6 flex items-center gap-2 text-slate-600'>
                       <span className='h-2 w-2 animate-bounce rounded-full bg-slate-400 [animation-delay:-.3s]' />
                       <span className='h-2 w-2 animate-bounce rounded-full bg-slate-400 [animation-delay:-.15s]' />
                       <span className='h-2 w-2 animate-bounce rounded-full bg-slate-400' />
-                      <span className='ml-2'>Đang tải model…</span>
+                      <span className='ml-2'>{t('uploading')}</span>
                     </div>
                   )}
 
@@ -323,7 +326,7 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
                       disabled
                       title='Chỉ hiển thị UI (không thay đổi logic hiện tại)'
                     >
-                      Reset the AI recognition
+                      {t('reset')}
                     </button>
                   </div>
                 </div>
@@ -354,7 +357,7 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
                     />
                   </div>
                 </div>
-                <p className='mt-4 text-center text-sm text-slate-500'>Video được phóng to để quan sát tốt hơn.</p>
+                <p className='mt-4 text-center text-sm text-slate-500'>{t('video')}</p>
               </div>
             </div>
           </div>

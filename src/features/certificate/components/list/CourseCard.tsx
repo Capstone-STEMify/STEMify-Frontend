@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu'
+import { formatDate } from '@/utils/index'
 
 interface CourseCardProps {
   course: CourseEnrollment
@@ -49,8 +50,8 @@ export const CourseCard = ({ course }: CourseCardProps) => {
             {course.status === EnrollmentStatus.COMPLETED && (
               <p className='mt-1 text-sm text-gray-600'>
                 {/* fix later */}
-                Grade Achieved: <span className='font-semibold'>95.01%</span>
-                <span>Completed At: {course.completedAt}</span>
+                Grade Achieved: <span className='font-semibold'>95.01%</span> {' '}
+                <span>Completed At: {formatDate(course.completedAt)}</span>
               </p>
             )}
           </div>

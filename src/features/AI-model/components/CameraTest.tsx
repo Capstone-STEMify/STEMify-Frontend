@@ -7,6 +7,7 @@ import { Camera, Download } from 'lucide-react'
 import { PredictionResults } from './PredictionResults'
 import { CameraOverlay } from './CameraOverlay'
 import { cn } from '@/utils/shadcn/utils'
+import { useTranslations } from 'next-intl'
 
 interface CameraTestProps {
   onPredict: (frame: string) => void
@@ -16,6 +17,8 @@ interface CameraTestProps {
 }
 
 export function CameraTest({ onPredict, results, onDownload, model }: CameraTestProps) {
+  const t = useTranslations('agent.modelMaker.model')
+  const tc = useTranslations('common')
   const [isCameraOpen, setIsCameraOpen] = useState(false)
 
   return (
@@ -23,9 +26,9 @@ export function CameraTest({ onPredict, results, onDownload, model }: CameraTest
       <CardHeader>
         <CardTitle className='mb-2 text-xl'>
           <div className='flex justify-between'>
-            <p>Test Model</p>
+            <p>{t('testModel')}</p>
             <Button onClick={onDownload} disabled={!model} className='bg-sky-100 text-blue-500'>
-              <Download /> Export Model
+              <Download /> {t('export')}
             </Button>
           </div>
         </CardTitle>
@@ -35,15 +38,14 @@ export function CameraTest({ onPredict, results, onDownload, model }: CameraTest
         {!isCameraOpen ? (
           // === Chưa mở camera ===
           <div className='flex min-h-[200px] flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 p-5 transition-all hover:border-[#4facfe] hover:bg-blue-50/50'>
-            <p className='mb-5 text-center text-xl text-gray-700'>Sử dụng camera để test mô hình</p>
             <Button
               onClick={() => setIsCameraOpen(true)}
               className='mb-2.5 bg-sky-100 px-8 py-6 text-blue-500 hover:bg-sky-200'
             >
               <Camera className='mr-2 h-5 w-5' />
-              Mở Camera
+              {tc('button.camera')}
             </Button>
-            <p className='text-center text-sm text-gray-500'>Camera sẽ tự động phân tích hình ảnh</p>
+            <p className='text-center text-sm text-gray-500'>{t('tesDes')}</p>
           </div>
         ) : (
           // === Đã mở camera ===
@@ -63,7 +65,7 @@ export function CameraTest({ onPredict, results, onDownload, model }: CameraTest
               {results ? (
                 <PredictionResults results={results} />
               ) : (
-                <p className='text-center text-sm italic'>Đang nhận diện...</p>
+                <p className='text-center text-sm italic'>{t('identify')}</p>
               )}
             </div>
           </div>

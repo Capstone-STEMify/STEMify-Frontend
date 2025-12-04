@@ -1,11 +1,37 @@
 {
   "agent": {
     "section": {
-      "title": "Nội dung bài học (AI)",
+      "title": "Tạo Mục bằng AI",
       "duration": "Thời lượng",
       "minutes": "phút",
       "accept": "Chấp nhận",
       "generating": "Đang tạo..."
+    },
+    "modelMaker": {
+      "title": "Trình Tạo Mô Hình",
+      "description": "Một cách nhanh chóng và dễ dàng để tạo mô hình máy học cho website, ứng dụng và nhiều hơn nữa – không cần chuyên môn hay viết mã.",
+      "classCreate": "Tạo Nhóm (Class)",
+      "uploaded": "Đã tải lên: {images} ảnh",
+      "newClass": "Nhập tên nhóm mới",
+      "model": {
+        "title": "Huấn Luyện Mô Hình",
+        "description": "Nhấn nút bên dưới để huấn luyện mô hình trực tiếp trên web",
+        "testModel": "Kiểm Tra Mô Hình",
+        "tesDes": "Camera sẽ tự động phân tích hình ảnh.",
+        "export": "Xuất Mô Hình",
+        "identify": "Đang nhận diện..."
+      },
+      "microbit": {
+        "instruction": "Nhấn \"Bắt đầu\" để khởi động hệ thống.",
+        "title": "Tải Mô Hình STEMify AI của bạn",
+        "suggest": "hoặc tải lên file",
+        "drag": "Kéo & thả file model.zip vào đây",
+        "click": "hoặc nhấn để chọn file",
+        "result": "KẾT QUẢ",
+        "uploading": "Đang tải mô hình…",
+        "reset": "Đặt lại quá trình nhận diện AI",
+        "video": "Video được phóng to để dễ quan sát hơn."
+      }
     }
   }
 }
