@@ -60,22 +60,27 @@ export type OrganizationUser = {
   fullName: string
   firstName: string
   lastName: string
-  organizationRole: string
+  lastLoginAt: string
+  organizationUserId: string
+  organizationId: number
+  licenseAssignmentId: string
+  isActive: boolean
+  joinedAt: string
+  groupName: string
+  groupCode: string
+  bio: string
+  studentDateOfBirth: string
+  studentMajor: string
+  teacherSpecialization: string
   subscriptions: OrganizationUserSubscription[]
 }
 
 export type OrganizationUserSubscription = {
-  organizationUserId: string
-  organizationId: number
+  subscriptionOrderId: number
   licenseType: string
   licenseAssignmentId: string
-  subscriptionOrderId: number
   isActive: boolean
   joinedAt: string
-  classId: string
-  studentDateOfBirth: string
-  studentMajor: string
-  teacherSpecialization: string
 }
 
 export type OrganizationUserQueryParams = {
