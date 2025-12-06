@@ -41,7 +41,31 @@
         "includeCurriculum": "Chương trình giảng dạy",
         "annual": "Hàng năm",
         "semiAnnual": "Nửa năm",
-        "course": "Khóa học"
+        "course": "Khóa học",
+        "currentPlan": {
+          "title": "Gói hiện tại",
+          "packageDetails": "Chi tiết gói",
+          "pendingActivation": "Gói đăng ký này sẽ được kích hoạt vào",
+          "expiredOn": "Hết hạn vào",
+          "annual": "Hàng năm",
+          "semiAnnual": "Nửa năm",
+          "monthRemaing": "tháng còn lại",
+          "of": "trên",
+          "subscriptionPeriod": "Thời gian gói đăng ký",
+          "assignedLicenses": "Suất sử dụng đã cấp",
+          "licenseRemaing": "suất sử dụng còn lại",
+          "totalStudent": "Tổng số học sinh",
+          "seatRemaining": "suất còn lại",
+          "totalTeacher": "Tổng số giáo viên",
+          "totalCurricula": "Tổng số khung chương trình",
+          "includingCurricula": "Bao gồm {curriculum} chương trình giảng dạy"
+        },
+        "curricula": {
+          "includedCurricula": "Chương trình giảng dạy bao gồm",
+          "description": "Khóa học và tài liệu học tập có trong gói đăng ký của bạn",
+          "age": "Độ tuổi",
+          "courses": "Khóa học"
+        }
       },
       "license": {
         "label": "suất sử dụng",
@@ -56,7 +80,15 @@
         "role": "Vai trò",
         "status": "Trạng thái",
         "assignedAt": "Ngày được cấp",
-        "notSet": "Chưa đặt"
+        "notSet": "Chưa đặt",
+        "userManagement": {
+          "header": "Quản lý người dùng",
+          "description": "Quản lý người dùng và lời mời đang chờ",
+          "searchUser": "Tìm kiếm theo tên hoặc email",
+          "accountType": "Loại tài khoản",
+          "active": "Đang hoạt động",
+          "pending": "Chưa xác nhận"
+        }
       },
       "user": {
         "title": "Thành viên tổ chức",

@@ -103,7 +103,7 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
                 className='text-orange-custom-500 bg-yellow-custom-50'
               />
             </div>
-
+            {/*
             {userRole === LicenseType.TEACHER || enrollmentStatus === EnrollmentStatus.IN_PROGRESS ? (
               <div className='flex flex-col gap-4 sm:flex-row'>
                 <Button
@@ -130,7 +130,7 @@ export default function HeroSection({ course, token, enrollmentStatus, enrollmen
                   {tc('button.wishlist')}
                 </Button>
               </div>
-            )}
+            )} */}
           </div>
 
           <div className='mb-5 w-full flex-1'>

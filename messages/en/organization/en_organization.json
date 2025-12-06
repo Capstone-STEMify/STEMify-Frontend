@@ -41,7 +41,31 @@
         "annual": "Annual",
         "semiAnnual": "Semi-Annual",
         "includeCurriculum": "Included Curriculum(s)",
-        "course": "Course(s)"
+        "course": "Course(s)",
+        "currentPlan": {
+          "title": "Current Plan",
+          "packageDetails": "Package Details",
+          "pendingActivation": "This subscription will be activated on",
+          "expiredOn": "Expired On",
+          "annual": "Annual",
+          "semiAnnual": "Semi-Annual",
+          "monthRemaing": "month(s) remaining",
+          "of": "of",
+          "subscriptionPeriod": "Subscription Period",
+          "assignedLicenses": "Assigned Licenses",
+          "licenseRemaing": "license(s) remaining",
+          "totalStudent": "Total Student",
+          "seatRemaining": "seat(s) remaining",
+          "totalTeacher": "Total Teacher",
+          "totalCurricula": "Total Curricula",
+          "includingCurricula": "Including {curriculum} Curricula"
+        },
+        "curricula": {
+          "includedCurricula": "Included Curricula",
+          "description": "Courses and learning materials available in your subscription",
+          "age": "Age",
+          "courses": "Courses"
+        }
       },
       "license": {
         "label": "License(s)",
@@ -57,7 +81,15 @@
         "role": "Role",
         "status": "Status",
         "assignedAt": "Assigned At",
-        "notSet": "Not set"
+        "notSet": "Not set",
+        "userManagement": {
+          "header": "User Management",
+          "description": "Manage users and pending invitations",
+          "searchUser": "Search by name or email",
+          "accountType": "Account Type",
+          "active": "Active",
+          "pending": "Pending"
+        }
       },
       "user": {
         "title": "Organization Members",

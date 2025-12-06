@@ -24,7 +24,7 @@
       "microbit": {
         "instruction": "Press \"Start\" to boot the system.",
         "title": "Load your STEMify AI Model",
-        "suggest": "or upload your exported",
+        "suggest": "Upload your exported",
         "drag": "Drag & drop your model.zip file here",
         "click": "or click to browse",
         "result": "RESULT",

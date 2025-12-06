@@ -107,7 +107,8 @@
       "close": "Đóng",
       "addQuestion": "Thêm Câu Hỏi",
       "addCriterion": "Thêm Tiêu Chí",
-      "createGroup": "Tạo Nhóm"
+      "createGroup": "Tạo Nhóm",
+      "cancelSubscription": "Hủy Đăng Ký"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

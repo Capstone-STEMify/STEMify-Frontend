@@ -24,7 +24,7 @@
       "microbit": {
         "instruction": "Nhấn \"Bắt đầu\" để khởi động hệ thống.",
         "title": "Tải Mô Hình STEMify AI của bạn",
-        "suggest": "hoặc tải lên file",
+        "suggest": "Tải lên file",
         "drag": "Kéo & thả file model.zip vào đây",
         "click": "hoặc nhấn để chọn file",
         "result": "KẾT QUẢ",

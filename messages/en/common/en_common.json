@@ -108,7 +108,8 @@
       "createPlan": "Create Plan",
       "addQuestion": "Add Question",
       "addCriterion": "Add Criterion",
-      "createGroup": "Create Group"
+      "createGroup": "Create Group",
+      "cancelSubscription": "Cancel Subscription"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

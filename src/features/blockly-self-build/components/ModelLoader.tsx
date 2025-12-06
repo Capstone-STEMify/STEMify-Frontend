@@ -56,17 +56,8 @@ export default function ModelLoader({ onLoadUrl, onLoadZip }: ModelLoaderProps) 
   }
 
   return (
-    <div className='mx-auto w-full max-w-lg rounded-2xl border border-gray-200 bg-white/90 p-8 shadow-lg backdrop-blur'>
+    <div className='mx-auto w-full max-w-lg rounded-2xl border border-gray-200 p-8 shadow-lg backdrop-blur'>
       <h2 className='mb-4 text-center text-lg font-semibold text-gray-800'>{t('title')}</h2>
-
-      {/* Input URL */}
-      <Input
-        type='text'
-        placeholder='https://stemify.com/models/[...]'
-        value={modelUrl}
-        onChange={(e) => setModelUrl(e.target.value)}
-        className='mb-5 w-full text-sm'
-      />
 
       <div className='my-3 text-center text-sm text-gray-500'>
         {t('suggest')} <span className='font-semibold text-sky-600'>model.zip</span>
@@ -113,7 +104,7 @@ export default function ModelLoader({ onLoadUrl, onLoadZip }: ModelLoaderProps) 
       {/* Ready button */}
       <div className='mt-6 text-center'>
         <Button onClick={handleReady} disabled={isLoading} className='px-6 py-2'>
-          {isLoading ? <Loader/> : tc('button.ready')}
+          {isLoading ? <Loader /> : tc('button.ready')}
         </Button>
       </div>
     </div>

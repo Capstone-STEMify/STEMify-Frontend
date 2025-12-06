@@ -18,12 +18,16 @@ import { useModal } from '@/providers/ModalProvider'
 import { cn } from '@/utils/shadcn/utils'
 import { or } from 'ajv/dist/compile/codegen'
 import { CheckCircle, UserPlus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 export default function LicenseAssignmentList() {
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
+  const to = useTranslations('organization.detail.license.userManagement')
+  const tc = useTranslations('common')
+
   const [currentTab, setCurrentTab] = useState<LicenseAssignmentStatus>(LicenseAssignmentStatus.ACTIVE)
   const [search, setSearch] = useState<string>('')
   const debouncedSearchQuery = useDebounce(search, 500)
@@ -45,11 +49,7 @@ export default function LicenseAssignmentList() {
   }
 
   const accountTypeOptions = Object.entries(LicenseAssignmentType).map(([key, value]) => {
-    const label = key
-      .toLowerCase()
-      .split('_')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
+    const label = tc(`accountType.${key.toLowerCase()}`)
 
     return { label, value }
   })
@@ -57,7 +57,7 @@ export default function LicenseAssignmentList() {
   const statusTabs = Object.entries(LicenseAssignmentStatus)
     .filter(([key]) => key.toLowerCase() !== 'revoked' && key.toLowerCase() !== 'expired')
     .map(([key, value]) => ({
-      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      label: tc(`status.${key.toLowerCase()}`),
       value: value
     }))
 
@@ -71,15 +71,15 @@ export default function LicenseAssignmentList() {
         <CardHeader>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
             <div>
-              <CardTitle className='text-xl'>User Management</CardTitle>
-              <p className='text-muted-foreground mt-1 text-sm'>Manage users and pending invitations</p>
+              <CardTitle className='text-xl'>{to('header')}</CardTitle>
+              <p className='text-muted-foreground mt-1 text-sm'>{to('description')}</p>
             </div>
             <Button
               className='bg-sky-500'
               onClick={() => openModal('uploadCSV', { organizationSubscriptionOrderId: Number(subscriptionId) })}
             >
               <UserPlus className='mr-2 h-4 w-4' />
-              Invite Users
+              {tc('button.addStudents')}
             </Button>
           </div>
         </CardHeader>
@@ -87,10 +87,10 @@ export default function LicenseAssignmentList() {
           {/* Search and Tabs */}
           <div className='space-y-4'>
             <div className='flex gap-2'>
-              <Input placeholder='Search users...' className='w-[400px]' onChange={(e) => setSearch(e.target.value)} />
+              <Input placeholder={to('searchUser')} className='w-[400px]' onChange={(e) => setSearch(e.target.value)} />
               <SSelect
                 className='w-[150px]'
-                placeholder='Account type'
+                placeholder={to('accountType')}
                 value={params.type?.toString() ?? ''}
                 onChange={(val) => dispatch(setParam({ key: 'type', value: val as LicenseAssignmentType }))}
                 options={accountTypeOptions}

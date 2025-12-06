@@ -214,7 +214,7 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
       : -1
 
   return (
-    <main className='min-h-screen w-full bg-neutral-50'>
+    <main className='min-h-screen w-full bg-neutral-50 py-50'>
       {/* Header */}
       <section className='mx-auto max-w-6xl px-6 pt-10'>
         <div className='flex flex-col items-center text-center'>
