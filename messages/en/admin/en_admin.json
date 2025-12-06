@@ -27,8 +27,9 @@
       "plan": "Plan",
       "resource": "Resource",
       "operationCenter": "Operation Center",
-      "organizationSubscription": "Organization Subscription",
-      "contact": "Contact"
+      "organizationSubscription": "Organization",
+      "contact": "Contact",
+      "group": "Student Group"
     },
     "course_management": {
       "title": "Resource Management"

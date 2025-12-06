@@ -26,7 +26,7 @@ import { useTranslations } from 'next-intl'
 
 // --- Helper Functions ---
 
-const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string) => {
   if (!dateString) return 'N/A'
   const date = new Date(dateString)
   return date.toLocaleDateString('en-US', {

@@ -9,7 +9,11 @@
       "noData": "Không có dữ liệu tổ chức nào.",
       "noSubscription": "Không có gói đăng ký nào cho tổ chức này.",
       "header": "Chi tiết tổ chức",
+      "status": "Trạng thái",
+      "description": "Mô tả",
       "organizationType": "Loại tổ chức",
+      "createdDate": "Ngày tạo",
+      "lastModifiedDate": "Ngày cập nhật",
       "createdAt": "Ngày tạo",
       "updatedAt": "Ngày cập nhật",
       "package": "Gói",
@@ -37,7 +41,31 @@
         "includeCurriculum": "Chương trình giảng dạy",
         "annual": "Hàng năm",
         "semiAnnual": "Nửa năm",
-        "course": "Khóa học"
+        "course": "Khóa học",
+        "currentPlan": {
+          "title": "Gói hiện tại",
+          "packageDetails": "Chi tiết gói",
+          "pendingActivation": "Gói đăng ký này sẽ được kích hoạt vào",
+          "expiredOn": "Hết hạn vào",
+          "annual": "Hàng năm",
+          "semiAnnual": "Nửa năm",
+          "monthRemaing": "tháng còn lại",
+          "of": "trên",
+          "subscriptionPeriod": "Thời gian gói đăng ký",
+          "assignedLicenses": "Suất sử dụng đã cấp",
+          "licenseRemaing": "suất sử dụng còn lại",
+          "totalStudent": "Tổng số học sinh",
+          "seatRemaining": "suất còn lại",
+          "totalTeacher": "Tổng số giáo viên",
+          "totalCurricula": "Tổng số khung chương trình",
+          "includingCurricula": "Bao gồm {curriculum} chương trình giảng dạy"
+        },
+        "curricula": {
+          "includedCurricula": "Chương trình giảng dạy bao gồm",
+          "description": "Khóa học và tài liệu học tập có trong gói đăng ký của bạn",
+          "age": "Độ tuổi",
+          "courses": "Khóa học"
+        }
       },
       "license": {
         "label": "suất sử dụng",
@@ -52,7 +80,19 @@
         "role": "Vai trò",
         "status": "Trạng thái",
         "assignedAt": "Ngày được cấp",
-        "notSet": "Chưa đặt"
+        "notSet": "Chưa đặt",
+        "userManagement": {
+          "header": "Quản lý người dùng",
+          "description": "Quản lý người dùng và lời mời đang chờ",
+          "searchUser": "Tìm kiếm theo tên hoặc email",
+          "accountType": "Loại tài khoản",
+          "active": "Đang hoạt động",
+          "pending": "Chưa xác nhận"
+        }
+      },
+      "user": {
+        "title": "Thành viên tổ chức",
+        "noData": "Không tìm thấy thành viên nào cho tổ chức này."
       }
     },
     "form": {
@@ -69,6 +109,7 @@
     "subscription": {
       "header": "Tạo gói đăng ký tổ chức",
       "subHeader": "Làm theo các bước để thiết lập tổ chức của bạn",
+      "months": " tháng",
       "step1": {
         "title": "Cấu hình gói đăng ký",
         "description": "Chọn gói và các tùy chọn"
@@ -157,6 +198,50 @@
       "pleaseUploadCSV": "Vui lòng tải lên tệp CSV",
       "uploadSuccess": "Đã gửi lời mời thành công!",
       "userType": "Loại người dùng"
+    },
+    "group": {
+      "title": "Nhóm học sinh của tổ chức",
+      "subTitle": "Quản lý các nhóm của tổ chức bạn",
+      "noData": "Không tìm thấy nhóm nào cho tổ chức này.",
+      "groupCode": "Mã nhóm:",
+      "groupName": "Tên nhóm:",
+      "numberOfStudents": "Số lượng: {quantity} học sinh",
+      "groupList": "Danh sách học sinh",
+      "createdDate": "Ngày tạo",
+      "totalStudents": "Tổng số học sinh",
+      "attendance": "Tham gia",
+      "step1": {
+        "title": "Bước 1: Chọn học sinh cho nhóm",
+        "description": "Chọn học sinh để thêm vào nhóm",
+        "numberOfStudents": "Số lượng học sinh",
+        "gradeLevel": "Cấp lớp",
+        "gradeLevelPlaceholder": "Chọn cấp lớp",
+        "studentList": "Danh sách học sinh",
+        "selected": "Đã chọn"
+      },
+      "step2": {
+        "title": "Bước 2: Tạo nhóm",
+        "numberOfStudents": "Số học sinh",
+        "studentsPerGroup": "Số học sinh mỗi nhóm",
+        "gradeLevel": "Cấp lớp",
+        "groupList": "Danh sách nhóm",
+        "name": "Tên",
+        "studentCount": "Số học sinh"
+      }
+    },
+    "curriculum": {
+      "curriculum": "Khung chương trình",
+      "title": "Danh sách khung chương trình",
+      "noData": "Không tìm thấy chương trình giảng dạy nào cho tổ chức này.",
+      "noResultsForFilter": "Không tìm thấy kết quả nào cho bộ lọc đã chọn.",
+      "courseCount": "{count} khóa học",
+      "startDate": "Ngày kích hoạt",
+      "endDate": "Ngày hết hạn",
+      "courses": "Khóa học",
+      "filterByStatus": "Lọc theo trạng thái",
+      "showing": "Hiển thị",
+      "results": "kết quả",
+      "all": "Tất cả"
     }
   }
 }

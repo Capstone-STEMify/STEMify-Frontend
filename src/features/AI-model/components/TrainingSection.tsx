@@ -2,6 +2,8 @@ import { Button } from '@/components/shadcn/button'
 import { Card } from '@/components/shadcn/card'
 import { Progress } from '@/components/shadcn/progress'
 import { TrainingStatus } from '@/features/AI-model/UseTeachableMachine'
+import { Loader } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 interface TrainingSectionProps {
   isTraining: boolean
@@ -11,6 +13,8 @@ interface TrainingSectionProps {
 }
 
 export function TrainingSection({ isTraining, trainingProgress, trainingStatus, onTrain }: TrainingSectionProps) {
+  const t = useTranslations('agent.modelMaker')
+  const tc = useTranslations('common')
   const getStatusColor = (type: TrainingStatus['type']) => {
     switch (type) {
       case 'success':
@@ -26,10 +30,10 @@ export function TrainingSection({ isTraining, trainingProgress, trainingStatus, 
   return (
     <Card className='mx-auto flex w-fit flex-col items-center justify-center rounded-2xl p-4 text-center shadow-md'>
       <h2 className='mb-2 text-xl'>Train Model</h2>
-      <p className='mb-5 opacity-90'>Bấm nút bên dưới để train model ngay trên web</p>
+      <p className='mb-5 opacity-90'>{t('model.description')}</p>
 
       <Button onClick={onTrain} disabled={isTraining} className='bg-sky-100 text-blue-500'>
-        {isTraining ? 'Đang train...' : 'Train Model'}
+        {isTraining ? <Loader/> : 'Train Model'}
       </Button>
 
       <Progress value={trainingProgress} className='mt-4 h-2 w-full bg-gray-300 [&>div]:bg-blue-400' />

@@ -7,7 +7,7 @@ import storage from 'redux-persist/lib/storage'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['quizSelected', 'selectedOrganization', 'auth', 'enrollment']
+  whitelist: ['quizSelected', 'selectedOrganization', 'auth', 'enrollment', 'organizationSpecial', 'selectedCurriculum']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

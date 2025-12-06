@@ -55,17 +55,19 @@ export default function AuthSessionSync() {
     if (
       reduxUser.userRole === UserRole.MEMBER &&
       reduxUser.organizations &&
-      reduxUser.organizations?.length > 0 &&
-      reduxUser.organizations[0].subscriptions?.length > 0
+      reduxUser.organizations?.organizations?.length > 0 &&
+      reduxUser.organizations.organizations[0].roles?.length > 0
       // (!reduxSelectedOrganizationId || !reduxSelectedSubscriptionOrderId || !reduxCurrentRole)
     ) {
-      const firstOrg = reduxUser.organizations[0]
-      const activeSub = firstOrg.subscriptions.find((s) => s.isActive)
+      const firstOrg = reduxUser.organizations.organizations[0]
+      console.log('First organization:', firstOrg)
+      const activeSub = firstOrg.roles[0]
+      console.log('Active subscription:', activeSub)
 
       if (activeSub) {
         dispatch(setSelectedOrganizationId(firstOrg.id))
-        dispatch(setSelectedSubscriptionOrderId(activeSub.id))
-        dispatch(setCurrentRole(activeSub.role)) // Đây là LicenseType
+        dispatch(setSelectedSubscriptionOrderId(activeSub.subscriptionId))
+        dispatch(setCurrentRole(activeSub.type)) // Đây là LicenseType
       }
     }
   }, [reduxUser, reduxSelectedOrganizationId, reduxSelectedSubscriptionOrderId, reduxCurrentRole, dispatch])

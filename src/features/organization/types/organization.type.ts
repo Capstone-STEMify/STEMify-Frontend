@@ -11,7 +11,7 @@ export type Organization = {
   status: OrganizationStatus
   createdDate: string
   lastModifiedDate: string
-  subscriptions: Partial<OrganizationSubscription>[]
+  subscriptions: OrganizationSubscription[]
 }
 
 export type AdminOrganization = {
@@ -45,4 +45,32 @@ export type OrganizationFormData = {
   organizationTypeId: string
   image: File | null
   imageUrl?: string
+}
+
+// organization curriculum
+
+export type OrganizationCurriculum = {
+  id: number
+  title: string
+  imageUrl: string
+  courseCount: number
+  startDate: string
+  endDate: string
+  code: string
+  status: string
+  courses: OrganizationCurriculumCourse[]
+}
+
+export type OrganizationCurriculumCourse = {
+  id: number
+  title: string
+  code: string
+  imageUrl: string
+  description: string
+  duration: number
+  status: string
+  level: string
+  ageRangeLabel: string
+  courseOrderIndex: number
+  lessons: any[]
 }

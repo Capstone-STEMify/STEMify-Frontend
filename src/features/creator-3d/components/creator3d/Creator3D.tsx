@@ -17,24 +17,16 @@ import {
   clearAction,
   clearActivities,
   removeTargetFromAllActions,
-  resetActions,
-  Step,
   updateConnectorArms
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import WorkspacePanel from '@/features/creator-3d/components/right-sidebar/CreatorRightPanel'
-import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
 import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import {
-  useCreateEmulatorMutation,
-  useGetEmulatorByIdQuery,
-  useUpdateEmulatorMutation
-} from '@/features/emulator/api/emulatorApi'
+import { useUpdateEmulatorMutation } from '@/features/emulator/api/emulatorApi'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Emulator } from '@/features/emulator/types/emulator.type'
-import { useGLTF } from '@react-three/drei'
 type Creator3DProps = {
   emulatorData: ApiSuccessResponse<Emulator> | undefined
 }
@@ -47,8 +39,6 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
   const addObject = useAddObject()
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
-  const actions = useAppSelector((s) => s.workspaceTree.actions)
-  const activities = useAppSelector((s) => s.workspaceTree.activities)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [updateEmulator, { isLoading: isUpdating }] = useUpdateEmulatorMutation()
@@ -153,6 +143,7 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
 
       const existing = emulatorData.data
       const data = existing.definitionJson ? JSON.parse(existing.definitionJson) : null
+      console.log('Importing assembly data:', data.instances.connectors)
       if (!data) throw new Error('Dữ liệu assembly không hợp lệ')
 
       const allInstances: AssemblyInstance[] = []
@@ -161,9 +152,7 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
       // 🔹 Helper: Load Template by ID
       // ================================
       const loadTemplateById = async (templateId: string) => {
-        console.log('templates data:', data.templates.components)
         const template = data.templates.components.find((t: any) => t.id === templateId || t._id === templateId)
-        console.log('Loaded template:', templateId, template)
         if (!template) throw new Error(`Không tìm thấy templateId: ${templateId}`)
         const res = await fetch(template.source)
         if (!res.ok) throw new Error(`Không tải được file template: ${template.source}`)
@@ -275,7 +264,7 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
                 constraints: templateData.constraints || { maxConnections: 3, allowedAngles: [] },
                 modelUrl: templateData.baseGeometry.modelPath
               },
-              arms: {}
+              arms: inst.arms || {}
             })
           }
         }
@@ -344,7 +333,6 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
           if (Array.isArray(activity.steps)) {
             for (const step of activity.steps) {
               dispatch(addStepToActivity({ activityId: activity.id, step }))
-              console.log('Restoring step:', step.actionId, step.title)
 
               // ✅ 3️⃣ Nếu step có actions thì xử lý tiếp
               // if (Array.isArray(step.actions)) {

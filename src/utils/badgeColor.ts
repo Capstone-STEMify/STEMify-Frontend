@@ -17,6 +17,8 @@ export const statusColors: Record<string, string> = {
   FAILED: 'bg-red-100 text-red-800 border border-red-300',
   CANCELLED: 'bg-red-100 text-red-800 border border-red-300',
 
+  LOCKED: 'bg-blue-100 text-blue-800 border border-blue-300',
+
   ARCHIVED: 'bg-orange-100 text-orange-800 border border-orange-300'
 }
 
@@ -35,5 +37,36 @@ export const getLevelBadgeClass = (level: CourseLevel): string => {
       return 'bg-red-100 text-red-800 border border-red-300'
     default:
       return 'bg-gray-100 text-gray-800'
+  }
+}
+
+export const getStatusWithIcon = (status: string) => {
+  const statusUpper = status.toUpperCase()
+
+  switch (statusUpper) {
+    case 'COMPLETED':
+      return {
+        className: statusColors[statusUpper],
+        icon: 'CheckCircle2',
+        text: status
+      }
+    case 'LOCKED':
+      return {
+        className: statusColors[statusUpper],
+        icon: 'Lock',
+        text: status
+      }
+    case 'INPROGRESS':
+      return {
+        className: statusColors[statusUpper],
+        icon: 'Clock',
+        text: 'In Progress'
+      }
+    default:
+      return {
+        className: statusColors[statusUpper] ?? statusColors.DRAFT,
+        icon: null,
+        text: status
+      }
   }
 }

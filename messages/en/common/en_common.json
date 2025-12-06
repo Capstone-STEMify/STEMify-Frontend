@@ -11,9 +11,15 @@
     },
     "button": {
       "create": "Create New",
+      "createClass": "Add New Class",
+      "camera": "Open Camera",
+      "ready": "Ready",
+      "connect": "Connect to",
+      "disconnect": "Disconnect to",
       "update": "Update",
       "browse": "Browse",
       "delete": "Delete",
+      "archive": "Archive",
       "remove": "Remove",
       "approve": "Approve",
       "reject": "Reject",
@@ -62,7 +68,7 @@
       "readBlogs": "Read Blogs",
       "addKit": "Add Kit",
       "print": "Print",
-      "start": "Start Right Now",
+      "start": "Start",
       "look": "Find Out More",
       "shop": "SHOP NOW",
       "publish": "Publish",
@@ -101,7 +107,9 @@
       "close": "Close",
       "createPlan": "Create Plan",
       "addQuestion": "Add Question",
-      "addCriterion": "Add Criterion"
+      "addCriterion": "Add Criterion",
+      "createGroup": "Create Group",
+      "cancelSubscription": "Cancel Subscription"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -178,9 +186,10 @@
       "grade": "Grade",
       "teacher": "Teacher",
       "numberOfStudents": "No. Students",
-      "numberOfCourses": "No. Courses",
+      "numberOfLessons": "No. Lessons",
       "accountType": "Account Type",
-      "assignedDate": "Assigned Date"
+      "assignedDate": "Assigned Date",
+      "course": "Course"
     },
     "paging": {
       "previous": "Previous",
@@ -221,7 +230,8 @@
       "suspended": "Suspended",
       "upcoming": "Upcoming",
       "endsoon": "End Soon",
-      "inprogress": "In Progress"
+      "inprogress": "In Progress",
+      "locked": "Locked"
     },
     "level": {
       "all": "All Levels",
@@ -237,7 +247,9 @@
       "student": "Student",
       "teacher": "Teacher",
       "member": "Member",
+      "organizationadmin": "Organization Admin",
       "organization_admin": "Organization Admin"
-    }
+    },
+    "grade": "Grade"
   }
 }

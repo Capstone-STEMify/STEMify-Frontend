@@ -104,7 +104,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
                   <CheckCircle className='h-6 w-6 text-green-600' />
                 </div>
                 <p className='text-sm font-medium text-gray-600'>{tq('maxAttempt')}</p>
-                <p className='text-2xl font-bold text-gray-900'>{quiz.maxAttempt ?? '-'}</p>
+                <p className='text-2xl font-bold text-gray-900'>{quiz.maxAttempt ?? '3'}</p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-sky-100 p-3'>

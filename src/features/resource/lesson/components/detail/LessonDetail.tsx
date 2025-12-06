@@ -18,6 +18,7 @@ import LessonPrintableContent from './LessonPrintableContent'
 import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 import { clearLesson, setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
 import QuizPlayerContainer from '@/features/resource/quiz/components/player/QuizPlayerContainer'
+import { clearRefetchSectionProgress } from '@/features/student-progress/slice/studentProgressSlice'
 
 export default function LessonDetail() {
   // translations
@@ -29,6 +30,7 @@ export default function LessonDetail() {
   const userId = useAppSelector((state) => state.auth.user?.userId)
   const { selectedSectionId, mode } = useAppSelector((state) => state.lessonDetail)
   const token = useAppSelector((state) => state.auth.token)
+  const shouldRefetch = useAppSelector((state) => state.studentProgress.shouldRefetchSectionProgress)
 
   // router
   const { lessonId } = useParams()
@@ -49,7 +51,7 @@ export default function LessonDetail() {
 
   const enrollmentId = enrollment?.data.items?.[0]?.id || 0
 
-  const { data: sectionStatus } = useGetSectionStudentProgressQuery(
+  const { data: sectionStatus, refetch } = useGetSectionStudentProgressQuery(
     {
       enrollmentId: enrollmentId,
       lessonId: Number(lessonId)
@@ -58,6 +60,13 @@ export default function LessonDetail() {
       skip: !enrollmentId
     }
   )
+
+  useEffect(() => {
+    if (shouldRefetch) {
+      refetch()
+      dispatch(clearRefetchSectionProgress())
+    }
+  }, [shouldRefetch])
 
   useEffect(() => {
     dispatch(clearLesson())

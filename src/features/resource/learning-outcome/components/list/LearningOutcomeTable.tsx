@@ -11,13 +11,18 @@ import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
 import { useGetLearningOutcomeAction } from './LearningOutcomeAction'
 import { DataTable } from '@/components/shared/data-table/data-table'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 
-export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: number }) {
+type LearningOutcomeTableProps = {
+  curriculumId?: number
+}
+
+export default function LearningOutcomeTable({ curriculumId }: LearningOutcomeTableProps) {
   const t = useTranslations('LearningOutcome')
   const tc = useTranslations('common')
   const { openModal } = useModal()
-  const dispatch = useAppDispatch()
+
+  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
   const queryParams: LearningOutcomeQueryParams = {
     curriculumId
   }
@@ -51,10 +56,12 @@ export default function LearningOutcomeTable({ curriculumId }: { curriculumId?: 
           <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{learningOutcomes?.data.totalCount}</span>
         </div>
         {/* Create learning outcome */}
-        <Button size='sm' className='bg-amber-400 text-sm' onClick={handleCreate}>
-          <Plus className='mr-1 h-4 w-4' />
-          {tc('button.add')}
-        </Button>
+        {!selectedOrganizationId && (
+          <Button size='sm' className='bg-amber-400 text-sm' onClick={handleCreate}>
+            <Plus className='mr-1 h-4 w-4' />
+            {tc('button.add')}
+          </Button>
+        )}
       </div>
 
       {/* Empty learning outcomes */}

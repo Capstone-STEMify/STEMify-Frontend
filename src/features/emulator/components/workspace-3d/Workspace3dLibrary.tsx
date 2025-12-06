@@ -14,20 +14,23 @@ import SEmpty from '@/components/shared/empty/SEmpty'
 import { useSearchEmulationsQuery, useUpdateEmulatorMutation } from '@/features/emulator/api/emulatorApi'
 import BackButton from '@/components/shared/button/BackButton'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
-import { EmulatorStatus } from '@/features/emulator/types/emulator.type'
+import { EmulatorStatus, EmulatorWithThumbnail } from '@/features/emulator/types/emulator.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
+import { UserRole } from '@/types/userRole'
 
 export default function Workspace3dLibrary() {
   const { openModal } = useModal()
   const locale = useLocale()
   const router = useRouter()
   const t = useTranslations('common')
+  const tt = useTranslations('toast')
   const t3d = useTranslations('workspace3D')
 
-  const userId = useAppSelector((state) => state.auth.user?.userId)
+  const userRole = useAppSelector((state) => state.auth.user?.userRole)
+  const allowRoles = [UserRole.STAFF, UserRole.ADMIN]
 
-  const { data, isLoading } = useSearchEmulationsQuery({ page: 1, userId: userId })
+  const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
   const [updateEmulation] = useUpdateEmulatorMutation()
 
   const emulations = data?.data.items || []
@@ -51,20 +54,20 @@ export default function Workspace3dLibrary() {
     }
   }
 
-  const handleDeleteEmulation = async (id: string) => {
-    try {
-      await updateEmulation({
-        emulationId: id,
-        body: {
-          status: EmulatorStatus.ARCHIVED
-        }
-      }).unwrap()
+  const handleArchiveEmulation = async (emulator: EmulatorWithThumbnail) => {
+    openModal('confirm', {
+      message: tt('confirmMessage.archive', { title: emulator.name }),
+      onConfirm: async () => {
+        await updateEmulation({
+          emulationId: emulator.emulationId,
+          body: {
+            status: EmulatorStatus.ARCHIVED
+          }
+        }).unwrap()
 
-      toast.success('Đã xóa mô hình!')
-    } catch (error) {
-      toast.error('❌ Xóa thất bại')
-      console.error(error)
-    }
+        toast.success('Đã xóa mô hình!')
+      }
+    })
   }
 
   if (isLoading) {
@@ -91,7 +94,7 @@ export default function Workspace3dLibrary() {
 
   // === Main content ===
   return (
-    <div className='mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8'>
+    <div className='mx-auto max-w-7xl p-4 pb-16 sm:px-6 lg:px-8'>
       {/* Header actions */}
       <div className='mb-6 flex items-center justify-between'>
         <div className='flex gap-2'>
@@ -142,17 +145,19 @@ export default function Workspace3dLibrary() {
                       >
                         {t('button.update')}
                       </button>
+                      {e.status !== EmulatorStatus.PUBLISHED && userRole && allowRoles.includes(userRole) && (
+                        <button
+                          className='rounded px-2 py-1 text-left hover:bg-gray-100'
+                          onClick={() => handlePublishEmulation(e.emulationId)}
+                        >
+                          {t('button.publish')}
+                        </button>
+                      )}
                       <button
-                        className='rounded px-2 py-1 text-left hover:bg-gray-100'
-                        onClick={() => handlePublishEmulation(e.emulationId)}
+                        className='rounded px-2 py-1 text-left text-amber-500 hover:bg-amber-100'
+                        onClick={() => handleArchiveEmulation(e)}
                       >
-                        {t('button.publish')}
-                      </button>
-                      <button
-                        className='rounded px-2 py-1 text-left text-red-500 hover:bg-gray-100'
-                        onClick={() => handleDeleteEmulation(e.emulationId)}
-                      >
-                        {t('button.delete')}
+                        {t('button.archive')}
                       </button>
                     </div>
                   </PopoverContent>

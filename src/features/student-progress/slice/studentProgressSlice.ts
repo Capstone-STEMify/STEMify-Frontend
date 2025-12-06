@@ -7,6 +7,7 @@ type studentProgressState = {
   selectedLessonStatus?: ProgressStatus
   selectedSectionId?: number
   selectedSectionStatus?: ProgressStatus
+  shouldRefetchSectionProgress: boolean
 }
 
 const initialState: studentProgressState = {
@@ -14,7 +15,8 @@ const initialState: studentProgressState = {
   selectedLessonId: undefined,
   selectedLessonStatus: undefined,
   selectedSectionId: undefined,
-  selectedSectionStatus: undefined
+  selectedSectionStatus: undefined,
+  shouldRefetchSectionProgress: false
 }
 
 export const studentProgressSlice = createSlice({
@@ -35,6 +37,13 @@ export const studentProgressSlice = createSlice({
     },
     setSelectedSectionStatus: (state, action: PayloadAction<ProgressStatus | undefined>) => {
       state.selectedSectionStatus = action.payload
+    },
+
+    triggerRefetchSectionProgress(state) {
+      state.shouldRefetchSectionProgress = true
+    },
+    clearRefetchSectionProgress(state) {
+      state.shouldRefetchSectionProgress = false
     }
   }
 })
@@ -44,6 +53,8 @@ export const {
   setSelectedLessonId,
   setSelectedLessonStatus,
   setSelectedSectionId,
-  setSelectedSectionStatus
+  setSelectedSectionStatus,
+  triggerRefetchSectionProgress,
+  clearRefetchSectionProgress
 } = studentProgressSlice.actions
 export const studentProgressReducer = studentProgressSlice.reducer

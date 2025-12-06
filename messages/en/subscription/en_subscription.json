@@ -9,11 +9,26 @@
       "organizationSubscriptionDescription": "Browse and manage all organization subscriptions registered on the platform.",
       "placeholder": {
         "search": "Search organizations by name...",
-        "status": "Filter by status"
-      }
+        "status": "Filter by status",
+        "billingCycle": "Billing Cycle"
+      },
+      "total": "Total",
+      "totalDescription": "All subscriptions in system",
+      "active": "Active",
+      "activeDescription": "Currently active subscriptions",
+      "expired": "Expired",
+      "expiredDescription": "Ended or canceled subscriptions",
+      "pending": "Pending",
+      "pendingDescription": "Awaiting approval",
+      "searchSubscription": "Search subscriptions...",
+      "status": "Status",
+      "annual": "Annual",
+      "semiAnnual": "Semi-Annual"
     },
     "detail": {
       "title": "Organization Details",
+      "overview": "Subscription Overview",
+      "overViewDescription": "Manage your organization's subscription and users",
       "currentPlan": "Current Plan",
       "StartDate": "Start Date",
       "ExpiredDate": "Expired Date",

@@ -1,4 +1,4 @@
-import SystemOrganizationList from '@/features/organization/components/SystemOrganizationList'
+import SystemOrganizationList from '@/features/organization/components/list/SystemOrganizationList'
 import React from 'react'
 
 export default function OrganizationSubscriptionListPage() {

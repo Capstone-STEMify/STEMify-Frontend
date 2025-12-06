@@ -6,6 +6,32 @@
       "minutes": "minutes",
       "accept": "Accept",
       "generating": "Generating..."
+    },
+    "modelMaker": {
+      "title": "Model Maker",
+      "description": "A fast, easy way to create machine learning models for your sites, apps, and more – no expertise or coding required.",
+      "classCreate": "Create Classes",
+      "uploaded": "Uploaded: {images} images",
+      "newClass": "Enter new class name",
+      "model": {
+        "title": "Train Model",
+        "description": "Click the button below to train the model right on the web",
+        "testModel": "Test Model",
+        "tesDes": "The camera will automatically analyze the image.",
+        "export": "Export Model",
+        "identify": "Identifying..."
+      },
+      "microbit": {
+        "instruction": "Press \"Start\" to boot the system.",
+        "title": "Load your STEMify AI Model",
+        "suggest": "Upload your exported",
+        "drag": "Drag & drop your model.zip file here",
+        "click": "or click to browse",
+        "result": "RESULT",
+        "uploading": "Đang tải model…",
+        "reset": "Reset the AI recognition",
+        "video": "Video is zoomed in for better viewing."
+      }
     }
   }
 }

@@ -48,10 +48,7 @@ export default function UpdateClassroomOrganizationBasicInfo({
     { label: tClassroom('update.basicInfo.custom'), value: 'custom' }
   ]
 
-  const gradeOptions = Object.entries(Grade).map(([key, value]) => ({
-    label: value,
-    value: value
-  }))
+  const GRADE_OPTIONS = Object.values(Grade).map((grade) => ({ label: `${tc('grade')} ${grade}`, value: grade }))
 
   // Load data khi có classroomData
   useEffect(() => {
@@ -185,8 +182,8 @@ export default function UpdateClassroomOrganizationBasicInfo({
               <SelectValue placeholder={tClassroom('update.basicInfo.selectGrade')} />
             </SelectTrigger>
             <SelectContent>
-              {gradeOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+              {GRADE_OPTIONS.map((option) => (
+                <SelectItem key={String(option.value)} value={String(option.value)}>
                   {option.label}
                 </SelectItem>
               ))}

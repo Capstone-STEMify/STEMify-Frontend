@@ -26,7 +26,7 @@ import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { LicenseType, UserRole } from '@/types/userRole'
 import {
   useCreateCurriculumEnrollmentMutation,
@@ -35,26 +35,29 @@ import {
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { signIn } from 'next-auth/react'
-import { CurriculumEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
+import { CourseEnrollment, CurriculumEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
 import { toast } from 'sonner'
 import { ClassroomNavItems } from 'app/[locale]/classroom/[classroomId]/page'
+import { setCourseEnrollmentId } from '@/features/enrollment/slice/enrollmentSlice'
+import { useCreateCourseEnrollmentMutation } from '@/features/enrollment/api/courseEnrollmentApi'
 
 export type StudentClassroomDetailProps = {
-  curriculumEnrollment?: CurriculumEnrollment
+  courseEnrollment?: CourseEnrollment
   setCurrentTab: (tab: ClassroomNavItems) => void
 }
-export default function StudentClassroomDetail({ curriculumEnrollment, setCurrentTab }: StudentClassroomDetailProps) {
+export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab }: StudentClassroomDetailProps) {
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const { classroomId } = useParams()
   const auth = useAppSelector((state) => state.auth)
   const router = useRouter()
   const locale = useLocale()
+  const dispatch = useAppDispatch()
 
   const { data, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
   const classroom = data?.data
 
-  const [createEnrollment, { data: createEnrollmentResponse }] = useCreateCurriculumEnrollmentMutation()
+  const [createEnrollment, { data: createEnrollmentResponse }] = useCreateCourseEnrollmentMutation()
 
   const copyClassCode = () => {
     if (classroom?.classCode) {
@@ -67,15 +70,15 @@ export default function StudentClassroomDetail({ curriculumEnrollment, setCurren
       signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
       return
     }
-    if (classroom?.curriculum.id) {
+    if (classroom?.course.id) {
       createEnrollment({
-        curriculumId: classroom?.curriculum.id,
+        courseId: classroom?.course.id,
         studentId: auth?.user?.userId,
         status: EnrollmentStatus.IN_PROGRESS,
         classroomId: Number(classroomId)
       })
       toast.success(tt('successMessage.enroll'), {
-        description: `${tt('successMessage.enrollDes', { title: createEnrollmentResponse?.data.curriculumTitle || '' })}`
+        description: `${tt('successMessage.enrollDes', { title: createEnrollmentResponse?.data.courseTitle || '' })}`
       })
     }
   }
@@ -120,21 +123,21 @@ export default function StudentClassroomDetail({ curriculumEnrollment, setCurren
           {/* Left Column - Main Info */}
           <div className='space-y-6 md:col-span-2'>
             {/* Curriculum Card */}
-            {classroom.curriculum && (
+            {classroom.course && (
               <Card className='overflow-hidden border border-slate-200 py-4 shadow-sm'>
                 <CardHeader className='pb-4'>
                   <CardTitle className='flex items-center gap-2 text-lg'>
                     <BookOpen className='h-5 w-5 text-blue-600' />
-                    Curriculum
+                    Course
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className='flex gap-4'>
-                    {classroom.curriculum.imageUrl && (
+                    {classroom.course.imageUrl && (
                       <div className='relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-lg bg-slate-100'>
                         <Image
-                          src={classroom.curriculum.imageUrl}
-                          alt={classroom.curriculum.title}
+                          src={classroom.course.imageUrl}
+                          alt={classroom.course.title}
                           fill
                           className='object-cover'
                         />
@@ -142,29 +145,29 @@ export default function StudentClassroomDetail({ curriculumEnrollment, setCurren
                     )}
                     <div className='flex-1'>
                       <div className='mb-2 flex items-start justify-between gap-2'>
-                        <h3 className='text-xl font-bold text-slate-900'>{classroom.curriculum.title}</h3>
+                        <h3 className='text-xl font-bold text-slate-900'>{classroom.course.title}</h3>
                         <Badge variant='secondary' className='border-0 bg-emerald-100 text-emerald-700'>
-                          {classroom.curriculum.code}
+                          {classroom.course.code}
                         </Badge>
                       </div>
-                      <p className='mb-3 text-sm text-slate-600'>{classroom.curriculum.description}</p>
-                      <div className='flex items-center gap-4 text-sm'>
-                        <div className='flex items-center gap-1.5 text-slate-600'>
-                          <BookOpen className='h-4 w-4' />
-                          <span>{classroom.curriculum.courseCount} Courses</span>
-                        </div>
-                      </div>
+                      <p className='mb-3 line-clamp-3 text-sm text-slate-600'>{classroom.course.description}</p>
+                      {courseEnrollment ? (
+                        <Button
+                          className='mt-4'
+                          onClick={() => {
+                            dispatch(setCourseEnrollmentId(courseEnrollment.id))
+                            router.push(`/resource/course/${classroom.course.id}/learn`)
+                          }}
+                        >
+                          Continue Learning
+                        </Button>
+                      ) : (
+                        <Button className='mt-4' onClick={handleEnroll}>
+                          {tc('button.enroll')}
+                        </Button>
+                      )}
                     </div>
                   </div>
-                  {curriculumEnrollment ? (
-                    <Button className='mt-4' onClick={() => setCurrentTab('course')}>
-                      Continue Learning
-                    </Button>
-                  ) : (
-                    <Button className='mt-4' onClick={handleEnroll}>
-                      {tc('button.enroll')}
-                    </Button>
-                  )}
                 </CardContent>
               </Card>
             )}

@@ -16,6 +16,7 @@ import { toast } from 'sonner'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { UserRole } from '@/types/userRole'
+import { useStatusTranslation } from '@/utils/index'
 
 type AdminCurriculumInformationSectionProps = {
   curriculumId: number
@@ -30,6 +31,7 @@ export default function AdminCurriculumInformationSection({
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const t = useTranslations('curriculum')
+  const statusTranslate = useStatusTranslation()
   const { openModal } = useModal()
 
   // Get current user
@@ -85,7 +87,7 @@ export default function AdminCurriculumInformationSection({
           <p className='text-sm text-gray-700 italic'>
             By <span className='font-semibold'>{curriculum.createdByUserName || 'STEMify'}</span>
           </p>
-          <Badge className={getStatusBadgeClass(curriculum.status)}>{curriculum.status}</Badge>
+          <Badge className={getStatusBadgeClass(curriculum.status)}>{statusTranslate(curriculum.status)}</Badge>
         </div>
 
         <div className='mb-6 h-1 w-20 bg-yellow-500' />

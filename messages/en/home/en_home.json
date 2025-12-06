@@ -50,5 +50,35 @@
     "title": "Do you still have any questions?",
     "description": "Book a meeting to learn about our offline materials. We will contact you for customer care.",
     "emailPlaceholder": "Enter your email"
+  },
+  "footer": {
+    "infoForParents": {
+      "title": "Information for Parents",
+      "description": "STEMIFY Education is an online STEM learning platform for students in grades 3-8, offering courses and resources that help develop critical thinking, problem-solving, and creativity through hands-on learning."
+    },
+    "info": {
+      "title": "Information",
+      "aboutUs": "About Us",
+      "blog": "Blog",
+      "careers": "Careers",
+      "press": "Press",
+      "contact": "Contact",
+      "home": "Home"
+    },
+    "education": {
+      "title": "Education",
+      "programs": "Programs",
+      "team": "Team",
+      "partners": "Partners",
+      "resources": "Resources"
+    },
+    "help": {
+      "title": "Help",
+      "support": "Support Center",
+      "faqs": "Frequently Asked Questions",
+      "termsOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy",
+      "contactUs": "Contact Us"
+    }
   }
 }

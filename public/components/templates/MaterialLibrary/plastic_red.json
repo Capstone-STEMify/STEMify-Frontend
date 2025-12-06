@@ -1,21 +1,21 @@
 {
   "id": "plastic_red",
   "name": "Red Plastic Material",
-  "version": "1.0", 
+  "version": "1.0",
   "type": "plastic",
   "properties": {
-    "color": "#f0201c",
+    "color": "#ff2b2b",
     "flexibility": 5,
     "opacity": 1.0,
-    "roughness": 0.4,
+    "roughness": 0.15,
     "metalness": 0.0,
-    "transmission": 0.0,
-    "ior": 1.4,
+    "transmission": 0.05,
+    "ior": 1.46,
     "thickness": 0.15
   },
   "physics": {
     "friction": 0.6,
-    "elasticity": 0.1,
+    "elasticity": 0.18,
     "density": 1050
   },
   "lod": {
@@ -26,7 +26,7 @@
     },
     "medium": {
       "shaderComplexity": "pbr_simplified",
-      "textureResolution": 512, 
+      "textureResolution": 512,
       "enableSubsurfaceScattering": false
     },
     "low": {

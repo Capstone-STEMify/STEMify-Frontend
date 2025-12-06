@@ -36,6 +36,7 @@ export type CourseEnrollment = {
   progressPercentage: number
   verificationCode?: string
   curriculumEnrollmentId?: number
+  classroomId?: number
 }
 
 export type CurriculumEnrollment = {
@@ -64,6 +65,7 @@ export type CurriculumEnrollment = {
 export type CourseEnrollmentQueryParams = {
   studentId?: string
   courseId?: number
+  classroomId?: number
 } & SearchPaginatedRequestParams
 
 export type CurriculumEnrollmentQueryParams = {

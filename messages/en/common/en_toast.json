@@ -2,7 +2,9 @@
   "toast": {
     "successMessage": {
       "create": "Successfully created \"{title}\"!",
+      "createNoTitle": "Successfully created!",
       "update": "Successfully updated \"{title}\"!",
+      "updateNoTitle": "Successfully updated!",
       "delete": "Successfully deleted!",
       "action": "Successfully {action} \"{title}\"",
       "review": "Successfully submitted to review!",
@@ -22,7 +24,8 @@
       "clearCart": "Cart cleared!",
       "addToCart": "Item added to cart!",
       "uploadCSV": "Upload CSV Successfully",
-      "reorder": "Reordered Successfully"
+      "reorder": "Reordered Successfully",
+      "copiedToClipboard": "Copied to clipboard!"
     },
     "errorMessage": "An error occurred. Please try again. ",
     "errorSpecific": {
@@ -33,6 +36,7 @@
     "confirmMessage": {
       "confirmLabel": "Are you sure?",
       "delete": "Are you sure you want to delete \"{title}\"?",
+      "archive": "Are you sure you want to archive \"{title}\"?",
       "removeCourse": "Are you sure you want to remove \"{title}\" from this curriculum?",
       "removeKit": "Are you sure you want to remove \"{title}\" from this course?",
       "removeComponent": "Are you sure you want to remove component from this kit?",

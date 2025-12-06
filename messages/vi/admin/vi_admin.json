@@ -27,8 +27,9 @@
       "plan": "Gói",
       "resource": "Tài nguyên",
       "operationCenter": "Hệ thống",
-      "organizationSubscription": "Các Gói đăng ký tổ chức",
-      "contact": "Liên hệ"
+      "organizationSubscription": "Tổ chức",
+      "contact": "Liên hệ",
+      "group": "Nhóm học sinh"
     },
     "course_management": {
       "title": "Quản lý tài nguyên",

@@ -14,13 +14,15 @@
         "mins": "phút"
       },
       "answerTable": {
+        "submitted": "Nộp vào: ",
         "head": "Học viên",
-        "point": "điểm:",
+        "point": "Điểm:",
         "accuracy": "Điểm trung bình",
         "answered": "Đã trả lời",
         "question": "Câu hỏi",
         "correct": "Đúng",
         "incorrect": "Sai",
+        "skip": "Bỏ qua",
         "correctAnswer": "Đáp án đúng"
       },
       "questionTab": {
@@ -33,14 +35,17 @@
     "upsert": {
       "create": "Tạo bài kiểm tra",
       "update": "Cập nhật bài kiểm tra",
-      "settings": "Cài đặt bài kiểm tra",
+      "settings": "Bài kiểm tra",
       "form": {
         "title": "Tiêu đề",
+        "titlePlaceholder": "Nhập tiêu đề bài kiểm tra",
         "description": "Mô tả",
-        "timeLimit": "Thời gian (phút)",
+        "descriptionPlaceholder": "Nhập mô tả bài kiểm tra",
+        "durationDays": "Thời lượng (ngày)",
+        "timeLimitMinutes": "Thời gian (phút)",
+        "cooldownHours": "Thời gian chờ (giờ)",
         "totalMarks": "Tổng điểm",
         "passingMarks": "Điểm đạt",
-        "duration": "Thời lượng (ngày)",
         "updateQuizInfo": "Cập nhật bài trắc nghiệm",
         "question": {
           "question": "Câu hỏi",

@@ -3,7 +3,8 @@ import { SearchPaginatedRequestParams } from '@/types/baseModel'
 export enum ProgressStatus {
   NOT_STARTED = 'NotStarted',
   IN_PROGRESS = 'InProgress',
-  COMPLETED = 'Completed'
+  COMPLETED = 'Completed',
+  LOCKED = 'Locked'
 }
 
 export type ProgressType = 'lesson' | 'section'

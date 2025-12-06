@@ -35,7 +35,7 @@ import UpsertPlanSheet from '@/features/plan/components/sheet/UpsertPlanSheet'
 import UpsertClassroomModal from '@/features/classroom/components/upsert/UpsertClassroomModal'
 import SuccessModal from '@/components/shared/modals/SuccessModal'
 import AddPeopleModal from '@/features/user/components/modal/AddPeopleModal'
-import UpsertOrganizationModal from '@/features/organization/components/UpsertOrganizationModal'
+import UpsertOrganizationModal from '@/features/organization/components/upsert/UpsertOrganizationModal'
 import UpdateSubsctiptionSheet from '@/features/subscription/components/upsert/UpdateSubsctiptionSheet'
 import UpdateClassroomOrganizationModal from '@/features/classroom/components/upsert/UpdateClassroomOrganizationModal'
 import { UpsertEmulator } from '@/features/creator-3d/components/creator3d/ExportDialog'
@@ -43,6 +43,9 @@ import QuizCSVUploadModal from '@/features/resource/quiz/components/modal/QuizCS
 import SectionAIModal from '@/features/chat/components/SectionAIModal'
 import AssignmentCSVUploadModal from '@/features/assignment/components/detail/modal/AssignmentCSVUploadModal'
 import CreateAssignmentInfoModal from '@/features/assignment/components/upsert/CreateAssignmentInfoModal'
+import UpsertGroupModal from '@/features/group/components/modal/UpsertGroupModal'
+import UpdateGroupModal from '@/features/group/components/modal/UpdateGroupModal'
+import CreateQuizModal from '@/features/resource/quiz/components/modal/CreateQuizModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -97,6 +100,9 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertOrganization' && <UpsertOrganizationModal {...modalProps} />}
       {modalType === 'upsertEmulator' && <UpsertEmulator {...modalProps} />}
       {modalType === 'createAssignmentInfo' && <CreateAssignmentInfoModal {...modalProps} />}
+      {modalType === 'upsertGroup' && <UpsertGroupModal {...modalProps} />}
+      {modalType === 'updateGroup' && <UpdateGroupModal {...modalProps} />}
+      {modalType === 'createQuiz' && <CreateQuizModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}

@@ -6,6 +6,7 @@ import { SDropDown } from '@/components/shared/SDropDown'
 import { useUpdateCourseMutation } from '@/features/resource/course/api/courseApi'
 import { useGetKitByIdQuery, useLazyGetKitByIdQuery } from '@/features/resource/kit/api/kitProductApi'
 import { Kit } from '@/features/resource/kit/types/kit.type'
+import { useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { EllipsisVertical, Plus } from 'lucide-react'
@@ -28,6 +29,8 @@ export default function KitListSection({ context, kitId, kitIds = [] }: KitListS
   const { courseId } = useParams()
   const router = useRouter()
   const locale = useLocale()
+
+  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
 
   const isCourse = context === 'course'
   const isCurriculum = context === 'curriculum'
@@ -98,7 +101,7 @@ export default function KitListSection({ context, kitId, kitIds = [] }: KitListS
             <span className='text-sm font-normal text-gray-500 italic'> (*{t('list.singleCourseNote')})</span>
           )}
         </h2>
-        {isCourse && (
+        {isCourse && !selectedOrganizationId && (
           <Button
             className='bg-amber-custom-400'
             onClick={() => {
@@ -142,7 +145,7 @@ export default function KitListSection({ context, kitId, kitIds = [] }: KitListS
                 <h3 className='line-clamp-2 text-sm font-semibold text-gray-800'>{kit.name}</h3>
               </CardContent>
 
-              {isCourse && (
+              {isCourse && !selectedOrganizationId && (
                 <div className='absolute top-2 right-2 z-10'>
                   <SDropDown
                     trigger={<EllipsisVertical className='h-5 w-5 cursor-pointer text-yellow-400 hover:scale-110' />}

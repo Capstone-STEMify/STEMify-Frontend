@@ -40,6 +40,9 @@ export type ModalType =
   | 'upsertEmulator'
   | 'upsertEmulator'
   | 'createAssignmentInfo'
+  | 'upsertGroup'
+  | 'updateGroup'
+  | 'createQuiz'
 
   // detail
   | 'lessonDetail'

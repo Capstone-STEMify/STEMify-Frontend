@@ -14,13 +14,15 @@
         "mins": "min(s)"
       },
       "answerTable": {
+        "submitted": "Submitted at:",
         "head": "Learner",
-        "point": "point:",
+        "point": "Point:",
         "accuracy": "Accuracy",
         "answered": "Answered",
         "question": "Questions",
         "correct": "Correct",
         "incorrect": "Incorrect",
+        "skip": "Skip",
         "correctAnswer": "Correct Answer"
       },
       "questionTab": {
@@ -36,11 +38,14 @@
       "settings": "Quiz Settings",
       "form": {
         "title": "Title",
+        "titlePlaceholder": "Enter Quiz Title",
         "description": "Description",
-        "timeLimit": "Time Limit (minutes)",
+        "descriptionPlaceholder": "Enter Quiz Description",
+        "timeLimitMinutes": "Time Limit (minutes)",
+        "durationDays": "Duration (days)",
+        "cooldownHours": "Cooldown (hours)",
         "totalMarks": "Total Marks",
         "passingMarks": "Passing Marks",
-        "duration": "Duration (days)",
         "updateQuizInfo": "Update Quiz Info",
         "question": {
           "question": "Question",

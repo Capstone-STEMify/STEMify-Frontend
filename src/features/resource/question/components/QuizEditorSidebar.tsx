@@ -21,6 +21,7 @@ import {
 } from '@/features/resource/question/slice/quizEditorSlice'
 import { useTranslations } from 'next-intl'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import BackButton from '@/components/shared/button/BackButton'
 
 type QuizEditorSidebarProps = {
   onAddQuestion: () => void
@@ -36,7 +37,6 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
 
   const quiz = useAppSelector(selectQuiz)
   const selectedQuestionId = useAppSelector(selectSelectedQuestionId)
-  const isDirty = useAppSelector(selectIsDirty)
 
   const [collapsed, setCollapsed] = useState(false)
   const [isSavingQuiz, setIsSavingQuiz] = useState(false)
@@ -104,7 +104,8 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
         <div className='flex min-h-full flex-col'>
           {/* Header */}
           <div className='border-border bg-card sticky top-0 z-10 flex items-center justify-between border-b p-4'>
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-4'>
+              <BackButton />
               <h2 className='text-foreground font-semibold'>{tq('upsert.settings')}</h2>
             </div>
             <Button variant='ghost' size='icon' onClick={() => setCollapsed(true)}>
@@ -159,7 +160,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                 />
               </div>
               <div className='space-y-1'>
-                <Label htmlFor='timeLimit'>{tq('upsert.form.timeLimit')}</Label>
+                <Label htmlFor='timeLimitMinutes'>{tq('upsert.form.timeLimitMinutes')}</Label>
                 <Input
                   id='timeLimit'
                   type='number'
@@ -168,7 +169,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                 />
               </div>
               <div className='space-y-1'>
-                <Label htmlFor='duration'>{tq('upsert.form.duration')}</Label>
+                <Label htmlFor='durationDays'>{tq('upsert.form.durationDays')}</Label>
                 <Input
                   id='duration'
                   type='number'

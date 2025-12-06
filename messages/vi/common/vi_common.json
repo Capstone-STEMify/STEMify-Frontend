@@ -11,9 +11,14 @@
     },
     "button": {
       "create": "Tạo Mới",
+      "createClass": "Thêm Class mới",
+      "camera": "Mở Camera",
+      "ready": "Sẵn sàng",
+      "connect": "Kết nối",
       "update": "Cập Nhật",
       "browse": "Tải Lên",
       "delete": "Xóa",
+      "archive": "Lưu Trữ",
       "remove": "Loại bỏ",
       "approve": "Phê Duyệt",
       "reject": "Từ Chối",
@@ -64,7 +69,7 @@
       "publish": "Xuất Bản",
       "print": "In",
       "share": "Chia sẻ",
-      "start": "Bắt Đầu Ngay",
+      "start": "Bắt Đầu",
       "look": "Tìm hiểu thêm",
       "addToCart": "Thêm Vào Giỏ Hàng",
       "quickView": "Xem Nhanh",
@@ -101,7 +106,9 @@
       "seeFeedback": "Xem Phản Hồi",
       "close": "Đóng",
       "addQuestion": "Thêm Câu Hỏi",
-      "addCriterion": "Thêm Tiêu Chí"
+      "addCriterion": "Thêm Tiêu Chí",
+      "createGroup": "Tạo Nhóm",
+      "cancelSubscription": "Hủy Đăng Ký"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",
@@ -167,8 +174,8 @@
       "netAmount": "Số Tiền Sau Giảm",
       "lastModified": "Lần Chỉnh Sửa Cuối",
       "grossAmount": "Tổng Số Tiền",
-      "studentSeats": "Ghế Học Sinh",
-      "teacherSeats": "Ghế Giáo Viên",
+      "studentSeats": "Học Sinh",
+      "teacherSeats": "Giáo Viên",
       "avatar": "Ảnh Đại Diện",
       "action": "Hành Động",
       "createPlan": "Tạo Gói",
@@ -177,9 +184,10 @@
       "grade": "Lớp",
       "teacher": "Giáo Viên",
       "numberOfStudents": "Số Học Sinh",
-      "numberOfCourses": "Số Khóa Học",
+      "numberOfLessons": "Số Bài Học",
       "accountType": "Loại Tài Khoản",
-      "assignedDate": "Ngày Gán"
+      "assignedDate": "Ngày Gán",
+      "course": "Khóa Học"
     },
     "paging": {
       "previous": "Trước",
@@ -211,14 +219,14 @@
       "approved": "Phê Duyệt",
       "rejected": "Từ Chối",
       "draft": "Bản Nháp",
-      "published": "Xuất Bản",
-      "unpublished": "Chưa Xuất Bản",
+      "published": "Hoạt Động",
+      "unpublished": "Không Hoạt Động",
       "archived": "Lưu Trữ",
       "inProgress": "Đang Tiến Hành",
       "submitted": "Gửi",
       "deleted": "Đã Xóa",
       "expired": "Hết Hạn",
-      "cancelled": "Hủy",
+      "cancelled": "Đã hủy",
       "failed": "Thất Bại",
       "resolved": "Giải Quyết",
       "completed": "Hoàn Thành",
@@ -226,7 +234,8 @@
       "suspended": "Tạm Ngưng",
       "upcoming": "Sắp Diễn Ra",
       "endsoon": "Kết Thúc Sớm",
-      "inprogress": "Đang Diễn Ra"
+      "inprogress": "Đang Diễn Ra",
+      "locked": "Khóa"
     },
     "accountType": {
       "accountTypeLabel": "Loại Tài Khoản",
@@ -238,6 +247,7 @@
       "student": "Học Sinh",
       "organization_admin": "Quản Trị Viên Tổ Chức",
       "organizationadmin": "Quản Trị Viên Tổ Chức"
-    }
+    },
+    "grade": "Khối"
   }
 }

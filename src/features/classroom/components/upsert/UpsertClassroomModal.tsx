@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
-import UpsertClassroom from '@/features/classroom/components/upsert/UpsertClassroom'
+import UpsertClassroom from '@/features/classroom/components/upsert/CreateClassroom'
 import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
 import React from 'react'
@@ -26,7 +26,7 @@ export default function UpsertClassroomModal({ classroomId, onConfirm }: UpsertC
         <DialogTitle>{classroomId ? `${t('form.title.update')}` : `${t('form.title.create')}`}</DialogTitle>
         <hr />
         <ScrollArea className='h-[500px] w-4xl'>
-          <UpsertClassroom classroomId={classroomId} onSuccess={handleSuccess} />
+          {/* <UpsertClassroom classroomId={classroomId} onSuccess={handleSuccess} /> */}
         </ScrollArea>
       </DialogContent>
     </Dialog>

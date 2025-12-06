@@ -24,7 +24,7 @@ import { userApi } from '@/features/user/api/userApi'
 import { userSlice } from '@/features/user/slice/userSlice'
 import { curriculumApi } from '@/features/resource/curriculum/api/curriculumApi'
 import { learningOutcomeApi } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
-import { curriculumSlice } from '@/features/resource/curriculum/slice/curriculumSlice'
+import { curriculumSlice, selectedCurriculumSlice } from '@/features/resource/curriculum/slice/curriculumSlice'
 import { kitProductApi } from '@/features/resource/kit/api/kitProductApi'
 import { kitProductSlice } from '@/features/resource/kit/slice/kitProductSlice'
 import { strawLabSlice } from '@/features/creator-3d/slice/strawLabSlice'
@@ -72,6 +72,8 @@ import { assignmentApi } from '@/features/assignment/api/assignmentApi'
 import selectedOrganizationSlice from '@/features/subscription/slice/selectedOrganizationSlice'
 import { studentAssignmentSelectedSlice } from '@/features/assignment/slice/studentAssignmentSlice'
 import { enrollmentSlice } from '@/features/enrollment/slice/enrollmentSlice'
+import { groupApi } from '@/features/group/api/groupApi'
+import { organizationSpecialSlice } from '@/features/organization/slice/organizationSpecialSlice'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -114,6 +116,8 @@ export const rootReducer = combineReducers({
   selectedOrganization: selectedOrganizationSlice,
   studentAssignmentSelected: studentAssignmentSelectedSlice.reducer,
   enrollment: enrollmentSlice.reducer,
+  organizationSpecial: organizationSpecialSlice.reducer,
+  selectedCurriculum: selectedCurriculumSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,
@@ -150,5 +154,6 @@ export const rootReducer = combineReducers({
   [classroomApi.reducerPath]: classroomApi.reducer,
   [orgDashboardApi.reducerPath]: orgDashboardApi.reducer,
   [studentAssignmentApi.reducerPath]: studentAssignmentApi.reducer,
-  [assignmentApi.reducerPath]: assignmentApi.reducer
+  [assignmentApi.reducerPath]: assignmentApi.reducer,
+  [groupApi.reducerPath]: groupApi.reducer
 })

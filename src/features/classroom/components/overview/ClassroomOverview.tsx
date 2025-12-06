@@ -17,12 +17,13 @@ import Loading from 'app/[locale]/loading'
 import { useTranslations } from 'next-intl'
 
 // ChartJS Imports
-import { Chart as ChartJS, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js'
-import { Chart } from 'react-chartjs-2'
+import { Chart as ChartJS, CategoryScale, LinearScale, Title, Tooltip, Legend, BarElement } from 'chart.js'
+import { Bar, Chart } from 'react-chartjs-2'
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot'
+import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 
 // Register ChartJS components
-ChartJS.register(CategoryScale, LinearScale, Title, Tooltip, Legend, BoxPlotController, BoxAndWiskers)
+ChartJS.register(CategoryScale, LinearScale, Title, Tooltip, Legend, BoxPlotController, BoxAndWiskers, BarElement)
 
 export default function ClassroomOverview() {
   const t = useTranslations('dashboard.classroom')
@@ -36,13 +37,17 @@ export default function ClassroomOverview() {
   })
 
   const classroom = classroomRes?.data
-  const curriculumId = classroom?.curriculum?.id
+  const courseId = classroom?.course?.id
 
-  const { data: curriculumRes, isLoading: isLoadingCurriculum } = useGetCurriculumByIdQuery(curriculumId!, {
-    skip: !curriculumId
+  const { data: courseRes, isLoading: isLoadingCourse } = useGetCourseByIdQuery(courseId!, {
+    skip: !courseId
   })
 
-  const { data: statsRes, isLoading: isLoadingStats, refetch: refetchStats } = useGetClassroomStatisticsQuery(
+  const {
+    data: statsRes,
+    isLoading: isLoadingStats,
+    refetch: refetchStats
+  } = useGetClassroomStatisticsQuery(
     { classroomId },
     {
       skip: !classroomId
@@ -52,8 +57,8 @@ export default function ClassroomOverview() {
   const [selectedStudentAssignmentId, setSelectedStudentAssignmentId] = useState<number | null>(null)
 
   const ungradedAssignments = statsRes?.data?.ungradedAssignments || []
-  const courses = curriculumRes?.data?.courses || []
-  const courseStats = statsRes?.data?.courseStats || []
+  const lessons = courseRes?.data?.lessons || []
+  const courseStats = statsRes?.data?.courseStats
 
   // --- Data Processing for Pie Charts ---
   const quizPassRate = statsRes?.data.quizStatistic.passRate || 0
@@ -74,44 +79,110 @@ export default function ClassroomOverview() {
     { name: t('failed'), value: asmSubmissions ? asmNotPassRate : 0, color: '#F4320B' }
   ]
 
-  // --- Data Processing for Box Plot ---
-  const boxPlotData = {
-    labels: courseStats.map((c) => c.name),
+  // ---Data Processing for Histogram
+  const histogramDataRaw = statsRes?.data?.courseStats?.studentScoreHistogram
+  const bins = histogramDataRaw?.bins || []
+
+  const histogramChartData = {
+    labels: bins.map((bin) => `${bin.rangeStart}-${bin.rangeEnd}`),
     datasets: [
       {
-        label: 'Quiz Scores',
-        backgroundColor: 'rgba(16, 185, 129, 0.5)',
-        borderColor: '#10b981',
+        label: t('overview.histogram.number'),
+        data: bins.map((bin) => bin.count),
+        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+        borderColor: 'rgb(59, 130, 246)',
         borderWidth: 1,
-        outlierColor: '#999999',
-        padding: 10,
-        itemRadius: 2,
-        data: courseStats.map((c) => ({
-          min: c.quizStats.min,
-          q1: c.quizStats.q1,
-          median: c.quizStats.median,
-          q3: c.quizStats.q3,
-          max: c.quizStats.max,
-          outliers: c.quizStats.outliers
-        }))
-      },
-      {
-        label: 'Assignment Scores',
-        backgroundColor: 'rgba(59, 130, 246, 0.5)',
-        borderColor: '#3b82f6',
-        borderWidth: 1,
-        outlierColor: '#999999',
-        padding: 10,
-        itemRadius: 2,
-        data: courseStats.map((c) => ({
-          min: c.assignmentStats.min,
-          q1: c.assignmentStats.q1,
-          median: c.assignmentStats.median,
-          q3: c.assignmentStats.q3,
-          max: c.assignmentStats.max,
-          outliers: c.assignmentStats.outliers
-        }))
+        borderRadius: 4,
+        barPercentage: 0.9,
+        categoryPercentage: 0.9
       }
+    ]
+  }
+
+  const histogramOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: t('overview.histogram.scoreDistribution'),
+        font: { size: 16 }
+      },
+      tooltip: {
+        callbacks: {
+          title: (context: any) => `${t('overview.histogram.scoreRange')}: ${context[0].label}`,
+          label: (context: any) => `${t('overview.histogram.studentCount')}: ${context.raw}`
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+          precision: 0
+        },
+        title: {
+          display: true,
+          text: t('overview.histogram.studentCount')
+        },
+        grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+        }
+      },
+      x: {
+        title: {
+            display: true,
+            text: t('overview.histogram.scoreRange')
+        },
+        grid: {
+            display: false
+        }
+      }
+    }
+  }
+
+  // --- Data Processing for Box Plot ---
+  const boxPlotData = {
+    labels: courseStats?.name,
+    datasets: [
+      // {
+      //   label: 'Quiz Scores',
+      //   backgroundColor: 'rgba(16, 185, 129, 0.5)',
+      //   borderColor: '#10b981',
+      //   borderWidth: 1,
+      //   outlierColor: '#999999',
+      //   padding: 10,
+      //   itemRadius: 2,
+      //   data: courseStats.map((c) => ({
+      //     min: c.quizStats.min,
+      //     q1: c.quizStats.q1,
+      //     median: c.quizStats.median,
+      //     q3: c.quizStats.q3,
+      //     max: c.quizStats.max,
+      //     outliers: c.quizStats.outliers
+      //   }))
+      // },
+      // {
+      //   label: 'Assignment Scores',
+      //   backgroundColor: 'rgba(59, 130, 246, 0.5)',
+      //   borderColor: '#3b82f6',
+      //   borderWidth: 1,
+      //   outlierColor: '#999999',
+      //   padding: 10,
+      //   itemRadius: 2,
+      //   data: courseStats.map((c) => ({
+      //     min: c.assignmentStats.min,
+      //     q1: c.assignmentStats.q1,
+      //     median: c.assignmentStats.median,
+      //     q3: c.assignmentStats.q3,
+      //     max: c.assignmentStats.max,
+      //     outliers: c.assignmentStats.outliers
+      //   }))
+      // }
     ]
   }
 
@@ -138,7 +209,7 @@ export default function ClassroomOverview() {
     }
   }
 
-  if (isLoadingClassroom || isLoadingCurriculum || isLoadingStats) {
+  if (isLoadingClassroom || isLoadingCourse || isLoadingStats) {
     return <Loading />
   }
 
@@ -169,7 +240,7 @@ export default function ClassroomOverview() {
                 <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100'>
                   <TrendingUp className='h-4 w-4 text-purple-600' />
                 </div>
-                Performance Overview
+                {t('overview.performance')}
               </CardTitle>
             </div>
           </CardHeader>
@@ -240,15 +311,15 @@ export default function ClassroomOverview() {
             <div className='mt-6 flex justify-center gap-6 text-sm'>
               <div className='flex items-center gap-2'>
                 <div className='h-3 w-3 rounded-full bg-emerald-500'></div>
-                <span className='text-slate-600'>Quiz Pass</span>
+                <span className='text-slate-600'>{t('overview.legendSummary.quizPass')}</span>
               </div>
               <div className='flex items-center gap-2'>
                 <div className='h-3 w-3 rounded-full bg-blue-500'></div>
-                <span className='text-slate-600'>Asm Pass</span>
+                <span className='text-slate-600'>{t('overview.legendSummary.asmPass')}</span>
               </div>
               <div className='flex items-center gap-2'>
                 <div className='h-3 w-3 rounded-full bg-red-500'></div>
-                <span className='text-slate-600'>Not Pass</span>
+                <span className='text-slate-600'>{t('overview.legendSummary.notPass')}</span>
               </div>
             </div>
           </CardContent>
@@ -262,12 +333,14 @@ export default function ClassroomOverview() {
                 <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100'>
                   <BarChart3 className='h-4 w-4 text-blue-600' />
                 </div>
-                Course Analytics
+                {t('overview.histogram.title')}
               </CardTitle>
             </div>
           </CardHeader>
           <CardContent className='flex h-[350px] flex-col items-center justify-center p-4'>
-            <Chart type='boxplot' data={boxPlotData} options={boxPlotOptions} />
+            {/* TODO: Temporarily comment */}
+            {/* <Chart type='boxplot' data={boxPlotData} options={boxPlotOptions} /> */}
+            <Bar data={histogramChartData} options={histogramOptions} />
           </CardContent>
         </Card>
       </div>
@@ -345,7 +418,7 @@ export default function ClassroomOverview() {
         </CardContent>
       </Card>
 
-      <StudentProgressStatistic classroomId={classroomId} courses={courses} />
+      {/* <StudentProgressStatistic classroomId={classroomId} courses={lessons} /> */}
 
       <Dialog
         open={!!selectedStudentAssignmentId}
@@ -360,7 +433,7 @@ export default function ClassroomOverview() {
               studentAssignmentId={selectedStudentAssignmentId}
               onClose={() => setSelectedStudentAssignmentId(null)}
               onSuccess={() => {
-              refetchStats?.()
+                refetchStats?.()
               }}
             />
           )}

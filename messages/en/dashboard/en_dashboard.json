@@ -4,14 +4,27 @@
       "submission": "Submissions",
       "passRate": "Pass Rate",
       "passed": "Passed",
-      "failed": "Not Passed",
+      "failed": "Not Pass",
       "score": "Average Score",
       "overview": {
         "title": "Dashboard Overview",
         "subTitle": "Track learning progress and quiz performance",
         "quizStat": "Quiz Statistic",
+        "performance": "Performance Overview",
         "tooltip": "Identify students with the slowest learning progress by AI.",
         "asmStat": "Assignment Statistic",
+        "legendSummary": {
+          "quizPass": "Quiz Pass",
+          "asmPass": "Asm Pass",
+          "notPass": "Not Pass"
+        },
+        "histogram": {
+          "title": "Course Histogram",
+          "studentCount": "Student Count",
+          "scoreDistribution": "Score Distribution",
+          "number": "Number of Students",
+          "scoreRange": "Score Range"
+        },
         "ungraded": {
           "title": "Ungraded Assignment",
           "pending": "pending",

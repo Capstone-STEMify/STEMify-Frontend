@@ -2,7 +2,9 @@
   "toast": {
     "successMessage": {
       "create": "Đã tạo \"{title}\" thành công!",
+      "createNoTitle": "Đã tạo thành công!",
       "update": "Đã cập nhật \"{title}\" thành công!",
+      "updateNoTitle": "Đã cập nhật thành công!",
       "delete": "Đã xóa thành công!",
       "action": "Đã {action} \"{title}\" thành công",
       "review": "Đã gửi để xét duyệt thành công!",
@@ -22,7 +24,8 @@
       "clearCart": "Đã xóa giỏ hàng!",
       "addToCart": "Đã thêm sản phẩm vào giỏ hàng!",
       "uploadCSV": "Đã tải CSV thành công",
-      "reorder": "Đã sắp xếp lại thành công"
+      "reorder": "Đã sắp xếp lại thành công",
+      "copiedToClipboard": "Đã sao chép vào clipboard!"
     },
     "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "errorSpecific": {
@@ -33,6 +36,7 @@
     "confirmMessage": {
       "confirmLabel": "Bạn có chắc chắn?",
       "delete": "Bạn có chắc chắn muốn xóa \"{title}\" không?",
+      "archive": "Bạn có chắc chắn muốn lưu trữ \"{title}\" không?",
       "removeCourse": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi chương trình học này không?",
       "removeKit": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi khóa học này không?",
       "removeComponent": "Bạn có chắc chắn muốn xóa thành phần khỏi bộ dụng cụ này không?",

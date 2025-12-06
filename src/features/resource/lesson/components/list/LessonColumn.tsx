@@ -54,12 +54,14 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
 
   const statusOptions = [
     { label: 'Draft', value: LessonStatus.DRAFT },
-    { label: 'Published', value: LessonStatus.PUBLISHED },
-    { label: 'Pending', value: LessonStatus.PENDING },
-    { label: 'Rejected', value: LessonStatus.REJECTED },
-    { label: 'Deleted', value: LessonStatus.DELETED },
-    { label: 'Archived', value: LessonStatus.ARCHIVED }
+    { label: 'Published', value: LessonStatus.PUBLISHED }
   ]
+  const statusFlow: Record<LessonStatus, LessonStatus[]> = {
+    [LessonStatus.DRAFT]: [LessonStatus.DRAFT, LessonStatus.PUBLISHED],
+    [LessonStatus.PUBLISHED]: [LessonStatus.PUBLISHED],
+    [LessonStatus.DELETED]: [],
+    [LessonStatus.ARCHIVED]: []
+  }
 
   const handleStatusChange = (lessonId: number, newStatus: string) => {
     if (newStatus === LessonStatus.DELETED) {
@@ -123,23 +125,18 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
       accessorKey: 'status',
       header: () => <div>{tc('tableHeader.status')}</div>,
       cell: ({ row }) => {
-        const value = row.getValue<LessonStatus>('status')
+        const value = row.original
+        const allowedOptions = statusOptions.filter(
+          (l) => value && statusFlow[value.status]?.includes(l.value as LessonStatus)
+        )
+
         return (
           <SStatusDropdown
-            value={value}
-            options={statusOptions}
+            value={value.status!}
+            options={allowedOptions}
             onChange={(newStatus) => handleStatusChange(row.original.id, newStatus)}
           />
         )
-      }
-    },
-    {
-      accessorKey: 'createdByUserName',
-      header: () => <div>{tc('tableHeader.createdBy')}</div>,
-      cell: ({ row }) => {
-        const value = row.getValue<string>('createdByUserName')
-        const display = value?.trim() ? value : 'STEMify Staff'
-        return <div className='cursor-pointer'>{display}</div>
       }
     },
     {
@@ -168,18 +165,6 @@ export function useGetLessonColumn(): ColumnDef<Lesson>[] {
             onConfirm: () => handleDelete(original.id)
           })
         }
-      },
-      {
-        separatorBefore: true,
-        label: tc('button.approve'),
-        hidden: ({ original }) => original.status !== LessonStatus.PENDING && original.status !== LessonStatus.DRAFT,
-        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, LessonStatus.PUBLISHED)
-      },
-      {
-        label: tc('button.reject'),
-        danger: true,
-        hidden: ({ original }) => original.status !== LessonStatus.PENDING && original.status !== LessonStatus.DRAFT,
-        onClick: ({ original }) => handleStatusUpdate(original.id, original.title, LessonStatus.REJECTED)
       }
     ])
   ]

@@ -12,19 +12,20 @@ export type User = {
   lastName: string
   imageUrl?: string
   status: UserStatus
-  organizations?: UserOrganization[]
+  organizations?: {
+    role: UserRole
+    organizations: UserOrganization[]
+  }
 }
 
 export type OrganizationSubscription = {
-  id: number
-  role: LicenseType
-  properties: Record<string, any>
-  isActive: boolean
+  subscriptionId: number
+  type: LicenseType
 }
 
 export type UserOrganization = {
   id: number // Organization ID
-  subscriptions: OrganizationSubscription[]
+  roles: OrganizationSubscription[]
 }
 
 export type UserFormData = Omit<User, 'id'> & {
@@ -50,3 +51,40 @@ export type UserSliceParams = {
   subscription_order_id?: number | null
   license_type?: string | null
 } & SliceQueryParams
+
+// Organization User Types
+export type OrganizationUser = {
+  userId: string
+  email: string
+  userName: string
+  fullName: string
+  firstName: string
+  lastName: string
+  lastLoginAt: string
+  organizationUserId: string
+  organizationId: number
+  licenseAssignmentId: string
+  isActive: boolean
+  joinedAt: string
+  groupName: string
+  groupCode: string
+  bio: string
+  studentDateOfBirth: string
+  studentMajor: string
+  teacherSpecialization: string
+  subscriptions: OrganizationUserSubscription[]
+}
+
+export type OrganizationUserSubscription = {
+  subscriptionOrderId: number
+  licenseType: string
+  licenseAssignmentId: string
+  isActive: boolean
+  joinedAt: string
+}
+
+export type OrganizationUserQueryParams = {
+  organizationId: number
+  pageNumber?: number
+  pageSize?: number
+}

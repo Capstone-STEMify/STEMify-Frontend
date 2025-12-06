@@ -3,6 +3,9 @@ import {
   ClassroomSchedule,
   ClassroomSliceParams,
   ClassroomStatisticData,
+  StudentClassroomParams,
+  StudentDetailResponse,
+  CreateClassroom,
   StudentProgressData,
   StudentProgressParams
 } from '@/features/classroom/types/classroom.type'
@@ -34,11 +37,11 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
     }),
 
     // PATCH: classrooms/1/curriculum
-    updateClassroomCurriculum: builder.mutation<any, { classroomId: number; curriculumId: number }>({
-      query: ({ classroomId, curriculumId }) => ({
+    updateClassroomCourse: builder.mutation<any, { classroomId: number; courseId: number }>({
+      query: ({ classroomId, courseId }) => ({
         url: `/classrooms/${classroomId}`,
         method: 'PATCH',
-        body: { curriculumId }
+        body: { courseId }
       }),
       invalidatesTags: ['Classroom']
     }),
@@ -65,10 +68,23 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
         url: `/classrooms/${classroomId}/schedule`
       })
     }),
-    getClassroomStatistics: builder.query<ApiSuccessResponse<ClassroomStatisticData>, {classroomId: number}>({
-      query: ({classroomId}) => ({
+    getClassroomStatistics: builder.query<ApiSuccessResponse<ClassroomStatisticData>, { classroomId: number }>({
+      query: ({ classroomId }) => ({
         url: `/classrooms/${classroomId}/statistic`
       })
+    }),
+    getClassroomStudentDetail: builder.query<ApiSuccessResponse<StudentDetailResponse>, StudentClassroomParams>({
+      query: ({classroomId, studentId}) => ({
+        url: `/classrooms/${classroomId}/classroom-students/${studentId}`
+      })
+    }),
+    createClassroom: builder.mutation<ApiSuccessResponse<Classroom>, Partial<CreateClassroom>>({
+      query: (body) => ({
+        url: `/classrooms`,
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: ['Classroom']
     })
   })
 })
@@ -79,16 +95,20 @@ export const {
   useGetByIdQuery: useGetClassroomByIdQuery,
   useUpdateMutation: useUpdateClassroomMutation,
   useDeleteMutation: useDeleteClassroomMutation,
-  useCreateMutation: useCreateClassroomMutation,
+  // useCreateMutation: useCreateClassroomMutation,
+
+  useCreateClassroomMutation,
 
   useGetClassroomScheduleQuery,
 
-  useUpdateClassroomCurriculumMutation,
+  useUpdateClassroomCourseMutation,
   useUpdateTeacherClassroomMutation,
 
   useAddClassroomStudentsMutation,
   useDeleteClassroomStudentsMutation,
 
   useGetClassroomStudentProgressQuery,
-  useGetClassroomStatisticsQuery
+  useGetClassroomStatisticsQuery,
+
+  useGetClassroomStudentDetailQuery,
 } = classroomApi

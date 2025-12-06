@@ -1,7 +1,12 @@
 import { createCrudApi } from '@/libs/redux/baseApi'
-import { User, UserQueryParams, UserSliceParams } from '../types/user.type'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
-import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
+import {
+  OrganizationUser,
+  OrganizationUserQueryParams,
+  User,
+  UserQueryParams,
+  UserSliceParams
+} from '@/features/user/types/user.type'
 
 export const userApi = createCrudApi<User, UserSliceParams>({
   reducerPath: 'userApi',
@@ -16,6 +21,19 @@ export const userApi = createCrudApi<User, UserSliceParams>({
         method: 'GET',
         params: userSliceParams
       })
+    }),
+
+    // Organization User APIs
+    getOrganizationUser: builder.query<
+      ApiSuccessResponse<PaginatedResult<OrganizationUser>>,
+      OrganizationUserQueryParams
+    >({
+      query: ({ organizationId, pageNumber, pageSize }) => ({
+        url: `/organizations/${organizationId}/users`,
+        method: 'GET',
+        params: { pageNumber, pageSize }
+      }),
+      providesTags: ['User']
     })
   })
 })
@@ -32,5 +50,7 @@ export const {
   useLazySearchQuery: useLazySearchUserQuery,
   useLazyGetAllQuery: useLazyGetAllUserQuery,
   useLazyGetByIdQuery: useLazyGetUserByIdQuery,
-  useSearchUserV2Query
+  useSearchUserV2Query,
+
+  useGetOrganizationUserQuery
 } = userApi

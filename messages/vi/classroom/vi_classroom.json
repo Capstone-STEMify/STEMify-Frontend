@@ -3,7 +3,7 @@
     "list": {
       "header": "Danh sách lớp học",
       "searchPlaceholder": "Tìm kiếm...",
-      "selectCurriculumPlaceholder": "Chọn chương trình học",
+      "selectCoursePlaceholder": "Chọn chương trình học",
       "courses": "khóa học"
     },
     "update": {
@@ -70,36 +70,33 @@
     "create": {
       "header": "Tạo lớp học mới",
       "subheader": "Làm theo các bước dưới đây để thiết lập lớp học của bạn",
-      "step1": {
-        "title": "Thông tin lớp học",
-        "subtitle": "Chi tiết cơ bản về lớp học",
-        "basicInfo": "Thông tin cơ bản",
-        "className": "Tên lớp học",
-        "classCode": "Mã lớp học",
-        "description": "Mô tả",
-        "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
-        "gradeLevel": "Cấp lớp",
-        "grade": "Lớp",
-        "selectGrade": "Chọn cấp lớp",
-        "duration": "Thời lượng",
-        "selectDuration": "Chọn thời lượng",
-        "startDate": "Ngày bắt đầu",
-        "endDate": "Ngày kết thúc",
-        "weeks": "Tuần",
-        "custom": "Tùy chỉnh"
+      "basicInfo": "Thông tin cơ bản",
+      "duration": "Thời lượng",
+      "selectDuration": "Chọn thời lượng",
+      "startDate": "Ngày bắt đầu",
+      "endDate": "Ngày kết thúc",
+      "weeks": "Tuần",
+      "custom": "Tùy chỉnh",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
+      "groupList": "Danh sách nhóm",
+      "grade": "Khối"
+    },
+    "studentClassroom": {
+      "list": {
+        "title": "Danh sách học sinh",
+        "description": "Quản lý các học sinh hiện có trong lớp học này.",
+        "number": "Sĩ số:",
+        "placeholder": "Chưa có học sinh nào trong lớp này."
       },
-      "step2": {
-        "title": "Bài tập",
-        "subtitle": "Chỉ định chương trình học, giáo viên & học sinh",
-        "curriculumAndTeacher": "Chương trình học & Giáo viên",
-        "curriculum": "Chương trình học",
-        "chooseCurriculum": "Chọn chương trình học",
-        "teacher": "Giáo viên",
-        "chooseTeacher": "Chọn giáo viên",
-        "students": "Học sinh",
-        "selected": "Đã chọn",
-        "selectStudents": "Chọn học sinh cho lớp học",
-        "searchStudent": "Tìm kiếm học sinh theo tên hoặc email"
+      "detail": {
+        "title": "Hồ sơ học tập",
+        "description": "Chi tiết tiến độ và kết quả học tập trong lớp.",
+        "quizScore": "Điểm Quiz trung bình",
+        "asmScore": "Điểm Bài Tập trung bình",
+        "quizTotal": "Tổng số bài kiểm tra",
+        "asmTotal": "Tổng số Bài Tập",
+        "submitted": "đã nộp"
       }
     }
   }

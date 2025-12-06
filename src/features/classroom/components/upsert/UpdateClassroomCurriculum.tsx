@@ -1,10 +1,6 @@
 import { useAppForm } from '@/components/shared/form/items'
-import {
-  useGetClassroomByIdQuery,
-  useUpdateClassroomCurriculumMutation,
-  useUpdateClassroomMutation
-} from '@/features/classroom/api/classroomApi'
-import { Grade } from '@/features/classroom/types/classroom.type'
+import { useGetClassroomByIdQuery, useUpdateClassroomCourseMutation } from '@/features/classroom/api/classroomApi'
+import CourseDetailDescription from '@/features/resource/course/components/detail/enrolled/CourseDetailDescription'
 import { useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { getOptions } from '@/utils/index'
@@ -12,16 +8,16 @@ import { useTranslations } from 'next-intl'
 import React, { useEffect, useState } from 'react'
 import z from 'zod'
 
-type UpdateClassroomCurriculumProps = {
+type UpdateClassroomCourseProps = {
   classroomId: number
   onSuccess?: () => void
 }
 
-const curriculumDefaultValues = {
-  curriculumId: 1
+const courseDefaultValues = {
+  courseId: 1
 }
 
-export default function UpdateClassroomCurriculum({ classroomId, onSuccess }: UpdateClassroomCurriculumProps) {
+export default function UpdateClassroomCourse({ classroomId, onSuccess }: UpdateClassroomCourseProps) {
   const tc = useTranslations('common')
 
   const selectedSubscriptionId = useAppSelector((state) => state.selectedOrganization.selectedSubscriptionOrderId)
@@ -31,26 +27,21 @@ export default function UpdateClassroomCurriculum({ classroomId, onSuccess }: Up
   })
   const { data: classroomData } = useGetClassroomByIdQuery(classroomId!, { skip: !classroomId })
 
-  const [updateClassroomCurriculum, { isLoading: isUpdating }] = useUpdateClassroomCurriculumMutation()
+  const [updateClassroomCourse, { isLoading: isUpdating }] = useUpdateClassroomCourseMutation()
 
-  const curriculumOptions = getOptions(
-    organizationSubscriptionData?.data.curriculums,
-    'title',
-    'imageUrl',
-    'courseCount'
-  )
+  const courseOptions = getOptions(organizationSubscriptionData?.data.curriculums, 'title', 'imageUrl', 'lessonCount')
 
-  const curriculumSchema = z.object({
-    curriculumId: z.number().min(1, 'Curriculum is required')
+  const courseSchema = z.object({
+    courseId: z.number().min(1, 'Course is required')
   })
 
   const form = useAppForm({
-    defaultValues: curriculumDefaultValues,
-    validators: { onChange: curriculumSchema },
+    defaultValues: courseDefaultValues,
+    validators: { onChange: courseSchema },
     onSubmit: async ({ value }) => {
-      await updateClassroomCurriculum({
+      await updateClassroomCourse({
         classroomId: classroomId,
-        curriculumId: value.curriculumId
+        courseId: value.courseId
       })
       onSuccess?.()
     }
@@ -60,7 +51,7 @@ export default function UpdateClassroomCurriculum({ classroomId, onSuccess }: Up
     if (classroomData?.data) {
       const c = classroomData.data
       form.reset({
-        curriculumId: c.curriculum.id
+        courseId: c.course.id
       })
     }
   }, [classroomData, form])
@@ -74,13 +65,13 @@ export default function UpdateClassroomCurriculum({ classroomId, onSuccess }: Up
     >
       <div className='space-y-6'>
         <form.AppField
-          name='curriculumId'
+          name='courseId'
           children={(field: any) => (
             <field.SingleSelectWithSearch
-              value={form.getFieldValue('curriculumId')?.toString()}
-              options={curriculumOptions}
-              placeholder='Choose curriculum'
-              onChange={(val: any) => form.setFieldValue('curriculumId', Number(val))}
+              value={form.getFieldValue('courseId')?.toString()}
+              options={courseOptions}
+              placeholder='Choose course'
+              onChange={(val: any) => form.setFieldValue('courseId', Number(val))}
             />
           )}
         />

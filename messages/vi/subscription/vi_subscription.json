@@ -9,12 +9,27 @@
       "organizationSubscriptionDescription": "Duyệt và quản lý tất cả các đăng ký tổ chức đã đăng ký trên nền tảng.",
       "placeholder": {
         "search": "Tìm kiếm tổ chức theo tên...",
-        "status": "Lọc theo trạng thái"
-      }
+        "status": "Lọc theo trạng thái",
+        "billingCycle": "Chu kỳ"
+      },
+      "total": "Tổng cộng",
+      "totalDescription": "Tất cả gói đăng ký trong hệ thống",
+      "active": "Đang hoạt động",
+      "activeDescription": "Gói đăng ký đang hoạt động",
+      "expired": "Hết hạn",
+      "expiredDescription": "Gói đăng ký đã kết thúc hoặc bị hủy",
+      "pending": "Chờ xử lý",
+      "pendingDescription": "Đang chờ phê duyệt",
+      "searchSubscription": "Tìm kiếm gói đăng ký...",
+      "status": "Trạng thái",
+      "annual": "Hàng năm",
+      "semiAnnual": "Nửa năm"
     },
     "detail": {
       "title": "Thông tin tổ chức",
       "currentPlan": "Gói hiện tại",
+      "overview": "Tổng quan về đăng ký",
+      "overviewDescription": "Quản lý đăng ký và người dùng của tổ chức bạn",
       "StartDate": "Ngày bắt đầu",
       "ExpiredDate": "Ngày hết hạn",
       "totalSeats": "Tổng số người dùng",

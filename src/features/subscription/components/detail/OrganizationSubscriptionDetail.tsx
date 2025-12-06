@@ -3,37 +3,27 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
-import { Input } from '@/components/shadcn/input'
 import { Progress } from '@/components/shadcn/progress'
-import {
-  CheckCircle,
-  Users,
-  GraduationCap,
-  BookOpen,
-  TrendingUp,
-  TrendingDown,
-  Search,
-  UserPlus,
-  Calendar,
-  CreditCard
-} from 'lucide-react'
-import { useModal } from '@/providers/ModalProvider'
+import { Users, GraduationCap, BookOpen, Calendar, CreditCard } from 'lucide-react'
 import { useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
 import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { formatDate } from '@/utils/index'
+import { formatDate, useStatusTranslation } from '@/utils/index'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { useEffect } from 'react'
-import { SCard } from '@/components/shared/card/SCard'
 import CardLayout from '@/components/shared/card/CardLayout'
 import LicenseAssignmentList from '@/features/license-assignment/components/list/licenseAssignmentList'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import BackButton from '@/components/shared/button/BackButton'
 import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
+import { useLocale, useTranslations } from 'next-intl'
 
 export default function OrganizationSubscriptionDetail() {
-  const { openModal } = useModal()
+  const locale = useLocale()
+  const ts = useTranslations('subscription.detail')
+  const to = useTranslations('organization')
+  const tc = useTranslations('common')
   const { subscriptionId } = useParams()
+  const statusTranslations = useStatusTranslation()
 
   const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscriptionByIdQuery(Number(subscriptionId))
 
@@ -80,15 +70,15 @@ export default function OrganizationSubscriptionDetail() {
           <div>
             <div className='flex items-center gap-3'>
               <BackButton className='mt-2 bg-slate-200' />
-              <h1 className='text-foreground text-3xl font-bold tracking-tight'>Subscription Overview</h1>
+              <h1 className='text-foreground text-3xl font-bold tracking-tight'>{ts('overview')}</h1>
             </div>
-            <p className='text-muted-foreground mt-1'>Manage your organization's subscription and users</p>
+            <p className='text-muted-foreground mt-1'>{ts('overviewDescription')}</p>
           </div>
           {/* Action Buttons */}
           <div className='flex gap-3 lg:items-end'>
             {/* <Button className='bg-sky-400 shadow-lg'>Change Plan</Button> */}
             <Button variant='outline' className='shadow-lg'>
-              Cancel Subscription
+              {tc('button.cancelSubscription')}
             </Button>
           </div>
         </div>
@@ -104,14 +94,14 @@ export default function OrganizationSubscriptionDetail() {
                   </div>
                   <div>
                     <div className='flex items-center gap-2'>
-                      <h2 className='text-xl font-semibold'>Current Plan</h2>
+                      <h2 className='text-xl font-semibold'>{to('detail.subscription.currentPlan.title')}</h2>
                       <Badge className={`${getStatusBadgeClass(subscription?.data.status)}`}>
-                        <span className='mr-1'>●</span> {subscription?.data.status}
+                        <span className='mr-1'>●</span> {statusTranslations(subscription?.data.status)}
                       </Badge>
                     </div>
                     {subscription?.data.status == SubscriptionStatus.PENDING && (
                       <p className='text-sm'>
-                        This subscription will be activated on{' '}
+                        {to('detail.subscription.currentPlan.pendingActivation')}{' '}
                         <span className='font-semibold'>{formatDate(subscription.data.startDate.toString())}</span>
                       </p>
                     )}
@@ -120,29 +110,32 @@ export default function OrganizationSubscriptionDetail() {
 
                 <div className='grid gap-6 sm:grid-cols-2'>
                   <div className='rounded-xl bg-slate-50 p-4 shadow-sm backdrop-blur-sm'>
-                    <p className='text-sm font-medium'>Package Details</p>
+                    <p className='text-sm font-medium'>{to('detail.subscription.currentPlan.packageDetails')}</p>
                     <p className='mt-1 text-2xl font-bold'>{subscription?.data.planName}</p>
                     <p className='mt-1 text-sm'>
                       {subscription?.data.netAmount} đ/
-                      {subscription?.data.planBillingCycle}
+                      {to(`detail.subscription.currentPlan.${subscription?.data.planBillingCycle.toLowerCase()}`)}
                     </p>
                   </div>
                   <div className='rounded-xl bg-slate-50 p-4 shadow-sm backdrop-blur-sm'>
                     <div className='flex items-center gap-2'>
                       <Calendar className='h-4 w-4' />
-                      <p className='text-sm font-medium'>Expires On</p>
+                      <p className='text-sm font-medium'>{to('detail.subscription.currentPlan.expiredOn')}</p>
                     </div>
                     <p className='mt-1 text-2xl font-bold'>
-                      {subscription?.data.endDate ? formatDate(subscription.data.endDate.toString()) : '—'}
+                      {subscription?.data.endDate ? formatDate(subscription.data.endDate, { locale }) : '—'}
                     </p>
-                    <p className='mt-1 text-sm'>{getRemainingMonths(subscription?.data.endDate)} months remaining</p>
+                    <p className='mt-1 text-sm'>
+                      {getRemainingMonths(subscription?.data.endDate)}{' '}
+                      {to('detail.subscription.currentPlan.monthRemaing')}
+                    </p>
                   </div>
                 </div>
 
                 {/* Progress Bar */}
                 <div className='space-y-2'>
                   <div className='flex items-center justify-between text-sm font-semibold'>
-                    <span className=''>Subscription Period</span>
+                    <span className=''>{to('detail.subscription.currentPlan.subscriptionPeriod')}</span>
                   </div>
                   <Progress
                     value={calculateProgressValue(
@@ -153,9 +146,9 @@ export default function OrganizationSubscriptionDetail() {
                   />
                   <div className='flex justify-between text-xs font-semibold'>
                     <span>
-                      {subscription?.data.startDate ? formatDate(subscription.data.startDate.toString()) : '—'}
+                      {subscription?.data.startDate ? formatDate(subscription.data.startDate, { locale }) : '—'}
                     </span>
-                    <span>{subscription?.data.endDate ? formatDate(subscription.data.endDate.toString()) : '—'}</span>
+                    <span>{subscription?.data.endDate ? formatDate(subscription.data.endDate, { locale }) : '—'}</span>
                   </div>
                 </div>
               </div>
@@ -173,13 +166,16 @@ export default function OrganizationSubscriptionDetail() {
                   <Users className='h-6 w-6' />
                 </div>
               </div>
-              <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Assigned Licenses</CardTitle>
+              <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>
+                {to('detail.subscription.currentPlan.assignedLicenses')}
+              </CardTitle>
             </CardHeader>
             <CardContent className='space-y-3'>
               <p className='text-3xl font-bold'>
                 {subscription?.data.currentStudentSeats + subscription?.data.currentTeacherSeats}{' '}
                 <span className='text-muted-foreground text-lg font-normal'>
-                  of {subscription?.data.maxStudentSeats + subscription?.data.maxTeacherSeats}
+                  {to('detail.subscription.currentPlan.of')}{' '}
+                  {subscription?.data.maxStudentSeats + subscription?.data.maxTeacherSeats}
                 </span>
               </p>
               <Progress
@@ -194,7 +190,7 @@ export default function OrganizationSubscriptionDetail() {
                 {subscription?.data.maxStudentSeats +
                   subscription?.data.maxTeacherSeats -
                   (subscription?.data.currentStudentSeats + subscription?.data.currentTeacherSeats)}{' '}
-                licenses remaining
+                {to('detail.subscription.currentPlan.licenseRemaing')}
               </p>
             </CardContent>
           </Card>
@@ -207,13 +203,15 @@ export default function OrganizationSubscriptionDetail() {
                   <GraduationCap className='h-6 w-6' />
                 </div>
               </div>
-              <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Total Students</CardTitle>
+              <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>
+                {to('detail.subscription.currentPlan.totalStudent')}
+              </CardTitle>
             </CardHeader>
             <CardContent className='space-y-1'>
               <p className='text-3xl font-bold'>
                 {subscription?.data.currentStudentSeats}{' '}
                 <span className='text-muted-foreground text-lg font-normal'>
-                  of {subscription?.data.maxStudentSeats}
+                  {to('detail.subscription.currentPlan.of')} {subscription?.data.maxStudentSeats}
                 </span>
               </p>
               <Progress
@@ -221,7 +219,8 @@ export default function OrganizationSubscriptionDetail() {
                 className='h-2 bg-blue-100 [&>div]:bg-blue-600'
               />
               <p className='text-muted-foreground text-xs'>
-                {subscription?.data.maxStudentSeats - subscription?.data.currentStudentSeats} seats remaining
+                {subscription?.data.maxStudentSeats - subscription?.data.currentStudentSeats}{' '}
+                {to('detail.subscription.currentPlan.seatRemaining')}
               </p>
             </CardContent>
           </Card>
@@ -234,13 +233,15 @@ export default function OrganizationSubscriptionDetail() {
                   <Users className='h-6 w-6' />
                 </div>
               </div>
-              <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Total Teachers</CardTitle>
+              <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>
+                {to('detail.subscription.currentPlan.totalTeacher')}
+              </CardTitle>
             </CardHeader>
             <CardContent className='space-y-1'>
               <p className='text-3xl font-bold'>
                 {subscription?.data.currentTeacherSeats}{' '}
                 <span className='text-muted-foreground text-lg font-normal'>
-                  of {subscription?.data.maxTeacherSeats}
+                  {to('detail.subscription.currentPlan.of')} {subscription?.data.maxTeacherSeats}
                 </span>
               </p>
               <Progress
@@ -248,7 +249,8 @@ export default function OrganizationSubscriptionDetail() {
                 className='h-2 bg-blue-100 [&>div]:bg-blue-600'
               />
               <p className='text-muted-foreground text-xs'>
-                {subscription?.data.maxTeacherSeats - subscription?.data.currentTeacherSeats} seats remaining
+                {subscription?.data.maxTeacherSeats - subscription?.data.currentTeacherSeats}{' '}
+                {to('detail.subscription.currentPlan.seatRemaining')}
               </p>
             </CardContent>
           </Card>
@@ -261,11 +263,17 @@ export default function OrganizationSubscriptionDetail() {
                   <BookOpen className='h-6 w-6' />
                 </div>
               </div>
-              <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>Total Curricula</CardTitle>
+              <CardTitle className='text-muted-foreground mt-4 text-sm font-medium'>
+                {to('detail.subscription.currentPlan.totalCurricula')}
+              </CardTitle>
             </CardHeader>
             <CardContent className='space-y-1'>
               <p className='text-3xl font-bold'>{subscription?.data.curriculumCount}</p>
-              <p className='text-muted-foreground text-xs'>Including 10 courses</p>
+              <p className='text-muted-foreground text-xs'>
+                {to('detail.subscription.currentPlan.includingCurricula', {
+                  curriculum: subscription?.data.curriculumCount
+                })}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -276,10 +284,8 @@ export default function OrganizationSubscriptionDetail() {
         {/* Curriculum Section */}
         <Card className='py-4 shadow-lg'>
           <CardHeader>
-            <CardTitle className='text-xl'>Included Curricula</CardTitle>
-            <p className='text-muted-foreground mt-1 mb-4 text-sm'>
-              Courses and learning materials available in your subscription
-            </p>
+            <CardTitle className='text-xl'>{to('detail.subscription.curricula.includedCurricula')}</CardTitle>
+            <p className='text-muted-foreground mt-1 mb-4 text-sm'>{to('detail.subscription.curricula.description')}</p>
           </CardHeader>
           <CardContent>
             <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
@@ -290,8 +296,9 @@ export default function OrganizationSubscriptionDetail() {
                   imageSrc={curriculum.imageUrl}
                   footer={
                     <div className='flex items-center gap-2'>
-                      <Badge className='bg-sky-custom-300'>Age 6-12</Badge>
-                      <Badge className='bg-rose-100 text-rose-700'>10+ Courses</Badge>
+                      <Badge className='bg-rose-100 text-rose-700'>
+                        {curriculum.courseCount} {to('detail.subscription.curricula.courses')}
+                      </Badge>
                     </div>
                   }
                 >

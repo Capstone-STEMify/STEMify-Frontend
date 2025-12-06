@@ -89,7 +89,7 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
   })
 
   useEffect(() => {
-    if (organizationId && orgData?.data) {
+    if (organizationId && orgData?.data && orgTypes.length > 0) {
       const matchedType = orgTypes.find(
         (type) => type.name.toLowerCase() === orgData.data.organizationType.toLowerCase()
       )
@@ -102,7 +102,7 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
         imageUrl: orgData.data.imageUrl
       })
     }
-  }, [organizationId, orgData, form])
+  }, [organizationId, orgData, orgTypes, form])
 
   if ((organizationId && (!orgData || isOrgLoading)) || isOrgTypesLoading) {
     return (

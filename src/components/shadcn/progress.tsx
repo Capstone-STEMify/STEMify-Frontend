@@ -1,31 +1,27 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import * as ProgressPrimitive from "@radix-ui/react-progress"
+import * as React from 'react'
+import * as ProgressPrimitive from '@radix-ui/react-progress'
 import { cn } from '@/utils/shadcn/utils'
 
+type ProgressProps = React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> & {
+  indicatorColor?: string
+}
 
-function Progress({
-  className,
-  value,
-  ...props
-}: React.ComponentProps<typeof ProgressPrimitive.Root>) {
-  return (
+const Progress = React.forwardRef<React.ElementRef<typeof ProgressPrimitive.Root>, ProgressProps>(
+  ({ className, value, indicatorColor, ...props }, ref) => (
     <ProgressPrimitive.Root
-      data-slot="progress"
-      className={cn(
-        "bg-primary/20 relative h-2 w-full overflow-hidden rounded-full",
-        className
-      )}
+      ref={ref}
+      className={cn('bg-secondary relative h-4 w-full overflow-hidden rounded-full', className)}
       {...props}
     >
       <ProgressPrimitive.Indicator
-        data-slot="progress-indicator"
-        className="bg-primary h-full w-full flex-1 transition-all"
+        className={cn('h-full w-full flex-1 transition-all', indicatorColor || 'bg-primary')}
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
     </ProgressPrimitive.Root>
   )
-}
+)
+Progress.displayName = ProgressPrimitive.Root.displayName
 
 export { Progress }

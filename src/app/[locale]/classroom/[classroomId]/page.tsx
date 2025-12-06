@@ -3,19 +3,19 @@ import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { AssignmentList } from '@/features/assignment/components/table/AssignmentList'
 import { useGetClassroomByIdQuery } from '@/features/classroom/api/classroomApi'
-import ClassroomCourseList from '@/features/classroom/components/detail/ClassroomCourseList'
 import StudentClassroomDetail from '@/features/classroom/components/detail/StudentClassroomDetails'
+import StudentClassList from '@/features/classroom/components/list/StudentClassList'
 import ClassroomOverview from '@/features/classroom/components/overview/ClassroomOverview'
+import { ClassroomSchedule } from '@/features/classroom/components/schedule/ClassroomSchedule'
 import ClassroomSubHeader from '@/features/classroom/components/ui/ClassroomSubHeader'
-import { useSearchCurriculumEnrollmentQuery } from '@/features/enrollment/api/curriculumEnrollmentApi'
+import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 import TeacherQuiz from '@/features/quiz/components/TeacherQuiz'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { LicenseType } from '@/types/userRole'
-import { useLocale } from 'next-intl'
 import { useParams } from 'next/navigation'
 import React from 'react'
 
-export type ClassroomNavItems = 'overview' | 'course' | 'quiz' | 'assignment'
+export type ClassroomNavItems = 'overview' | 'course' | 'quiz' | 'assignment' | 'student'
 
 export default function ClassroomDetailPage() {
   const { classroomId } = useParams()
@@ -24,15 +24,15 @@ export default function ClassroomDetailPage() {
   const [currentTab, setCurrentTab] = React.useState<ClassroomNavItems>('overview')
 
   const { data: classroomData, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
-  const { data: curriculumEnrollment } = useSearchCurriculumEnrollmentQuery(
+  const { data: courseEnrollment } = useSearchCourseEnrollmentQuery(
     {
-      curriculumId: classroomData?.data.curriculum.id,
+      courseId: classroomData?.data.course.id,
       studentId: auth?.user?.userId || '',
       classroomId: Number(classroomId),
       pageNumber: 1,
       pageSize: 20
     },
-    { skip: !auth.user?.userId || !classroomData?.data.curriculum.id || currentRole !== LicenseType.STUDENT }
+    { skip: !auth.user?.userId || !classroomData?.data.course.id || currentRole !== LicenseType.STUDENT }
   )
   if (isLoading) {
     return (
@@ -50,18 +50,11 @@ export default function ClassroomDetailPage() {
       <ClassroomSubHeader classroom={classroomData?.data} currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 'overview' && currentRole === LicenseType.TEACHER ? <ClassroomOverview /> : null}
       {currentTab === 'overview' && currentRole === LicenseType.STUDENT ? (
-        <StudentClassroomDetail
-          curriculumEnrollment={curriculumEnrollment?.data.items[0]}
-          setCurrentTab={setCurrentTab}
-        />
+        <StudentClassroomDetail courseEnrollment={courseEnrollment?.data.items[0]} setCurrentTab={setCurrentTab} />
       ) : null}
       {currentTab === 'course' ? (
         <div>
-          <ClassroomCourseList
-            curriculum={classroomData.data.curriculum}
-            curriculumEnrollment={curriculumEnrollment?.data.items[0]}
-            isStudentView={currentRole === LicenseType.STUDENT}
-          />
+          <ClassroomSchedule classroomId={Number(classroomId)} />
         </div>
       ) : null}
       {currentTab === 'quiz' ? (
@@ -72,6 +65,11 @@ export default function ClassroomDetailPage() {
       {currentTab === 'assignment' ? (
         <div>
           <AssignmentList />
+        </div>
+      ) : null}
+      {currentTab === 'student' ? (
+        <div>
+          <StudentClassList/>
         </div>
       ) : null}
     </div>
