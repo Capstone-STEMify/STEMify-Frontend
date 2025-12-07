@@ -111,8 +111,8 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
         const response = await updateEmulator({
           emulationId: existing.emulationId,
           body: {
-            name: `Emulator for ${existing.name}`,
-            description: `Emulator created for assembly ${existing.name}`,
+            name: `${existing.name}`,
+            description: `${existing.description}`,
             visibility: 'private',
             definition_json: JSON.stringify(exportData),
             status: existing.status
@@ -554,8 +554,7 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
 
         // Import data
         await importAssemblyFromJSON(jsonData)
-
-        toast.success('✅ Import JSON thành công!')
+        // toast.success('✅ Import JSON thành công!')
 
         // Reset input để có thể import lại cùng file
         if (fileInputRef.current) {
@@ -563,7 +562,7 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
         }
       } catch (err: any) {
         console.error('Import error:', err)
-        toast.error(`❌ Lỗi khi import: ${err.message}`)
+        toast.error(`Lỗi khi import: ${err.message}`)
       }
     },
     [dispatch]
