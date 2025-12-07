@@ -8,12 +8,13 @@ import BackButton from '@/components/shared/button/BackButton'
 import { useParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
-import { Users, Calendar, Hash, Activity, Copy } from 'lucide-react'
+import { Users, Calendar, Hash, Copy } from 'lucide-react'
 import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
 import { toast } from 'sonner'
 
 export default function OrganizationGroupTable() {
   const { groupId } = useParams()
+  const locale = useLocale()
   const to = useTranslations('organization.group')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
@@ -135,7 +136,7 @@ export default function OrganizationGroupTable() {
                 <Calendar className='text-muted-foreground h-4 w-4' />
               </CardHeader>
               <CardContent>
-                <div className='text-sm font-medium'>{formatDate(groupData.createdAt)}</div>
+                <div className='text-sm font-medium'>{formatDate(groupData.createdAt, { locale })}</div>
               </CardContent>
             </Card>
 

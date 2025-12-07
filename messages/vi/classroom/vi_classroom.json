@@ -99,6 +99,12 @@
         "asmTotal": "Tổng số Bài Tập",
         "submitted": "đã nộp"
       }
+    },
+    "myLearning": {
+      "title": "Lớp học của tôi",
+      "noClassroom": "Bạn chưa tham gia lớp học nào.",
+      "noClassroomSubtext": "Khám phá các lớp học có sẵn và bắt đầu học ngay hôm nay!",
+      "grade": "Khối"
     }
   }
 }

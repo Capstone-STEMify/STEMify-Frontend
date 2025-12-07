@@ -1,4 +1,4 @@
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export const formatDuration = (minutes: number) => {
   if (typeof minutes !== 'number' || isNaN(minutes) || minutes <= 0) return '00:00'
@@ -50,8 +50,7 @@ export interface FormatDateOptions {
   day?: 'numeric' | '2-digit'
 }
 export const formatDate = (dateString: string, options: FormatDateOptions = {}) => {
-  const locale = useLocale()
-  const { showTime = false, pattern, year = 'numeric', month = 'short', day = 'numeric' } = options
+  const { locale, showTime = false, pattern, year = 'numeric', month = 'short', day = 'numeric' } = options
 
   const date = new Date(dateString)
 

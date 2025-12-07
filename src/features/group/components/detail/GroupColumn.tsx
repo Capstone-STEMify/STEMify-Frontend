@@ -1,5 +1,5 @@
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { toast } from 'sonner'
@@ -11,6 +11,7 @@ import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
 
 export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
   const { openModal } = useModal()
+  const locale = useLocale()
   const [deleteGroup] = useDeleteGroupMutation()
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
@@ -78,7 +79,7 @@ export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
     {
       accessorKey: 'joinedAt',
       header: tc('tableHeader.joinedAt'),
-      cell: ({ row }) => <div className='text-sm text-gray-600'>{formatDate(row.original.joinedAt)}</div>
+      cell: ({ row }) => <div className='text-sm text-gray-600'>{formatDate(row.original.joinedAt, { locale })}</div>
     },
     createActionsColumnFromItems<GroupDetailStudent>([
       // {
