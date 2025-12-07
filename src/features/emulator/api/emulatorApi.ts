@@ -74,5 +74,6 @@ export const {
   useGetEmulatorByIdQuery,
   useSearchEmulationsQuery,
   useCreateEmulatorMutation,
-  useUpdateEmulatorMutation
+  useUpdateEmulatorMutation,
+  useDeleteEmulatorMutation
 } = emulatorApi

@@ -1,11 +1,9 @@
 'use client'
 import { Button } from '@/components/shadcn/button'
-import { Card, CardContent } from '@/components/shadcn/card'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import { SPagination } from '@/components/shared/SPagination'
 import { useDeleteComponentMutation, useSearchComponentQuery } from '@/features/kit-components/api/kitComponentApi'
 import { useGetComponentColumn } from '@/features/kit-components/components/list/ComponentColumn'
 import { setPageIndex, setSearchTerm } from '@/features/kit-components/slice/componentSlice'
@@ -14,7 +12,6 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { Plus, Search } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import Image from 'next/image'
 import React from 'react'
 
 export default function ComponentList() {
@@ -72,7 +69,7 @@ export default function ComponentList() {
           data={rows}
           columns={columns}
           enableRowSelection
-          pagingData={componentData?.data}
+          pagingData={componentData}
           pagingParams={queryParams}
           handlePageChange={handlePageChange}
         />

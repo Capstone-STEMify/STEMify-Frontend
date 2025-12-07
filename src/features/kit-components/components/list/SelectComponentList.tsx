@@ -14,7 +14,6 @@ import { setPageIndex, setPageSize, setSearchTerm } from '@/features/kit-compone
 import { ComponentSliceParams, KitComponent } from '@/features/kit-components/types/kit-component.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
-import Loading from 'app/[locale]/loading'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -212,6 +211,9 @@ export default function SelectComponentList({
               id: c.componentId // map lại để dùng chung column logic
             }))}
             columns={extendedColumns}
+            pagingData={data}
+            pagingParams={queryParams}
+            handlePageChange={handlePageChange}
             enableRowSelection={false}
           />
         </TabsContent>

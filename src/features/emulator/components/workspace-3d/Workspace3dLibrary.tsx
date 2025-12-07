@@ -11,7 +11,11 @@ import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import SEmpty from '@/components/shared/empty/SEmpty'
 
-import { useSearchEmulationsQuery, useUpdateEmulatorMutation } from '@/features/emulator/api/emulatorApi'
+import {
+  useDeleteEmulatorMutation,
+  useSearchEmulationsQuery,
+  useUpdateEmulatorMutation
+} from '@/features/emulator/api/emulatorApi'
 import BackButton from '@/components/shared/button/BackButton'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { EmulatorStatus, EmulatorWithThumbnail } from '@/features/emulator/types/emulator.type'
@@ -32,6 +36,7 @@ export default function Workspace3dLibrary() {
 
   const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
   const [updateEmulation] = useUpdateEmulatorMutation()
+  const [deleteEmulation] = useDeleteEmulatorMutation()
 
   const emulations = data?.data.items || []
 
@@ -47,22 +52,19 @@ export default function Workspace3dLibrary() {
         }
       }).unwrap()
 
-      toast.success('Đã publish mô hình!')
+      toast.success('Mô hình đã được công khai!')
     } catch (error) {
-      toast.error('❌ Publish thất bại')
+      toast.error('Thất bại khi công khai mô hình.')
       console.error(error)
     }
   }
 
-  const handleArchiveEmulation = async (emulator: EmulatorWithThumbnail) => {
+  const handleDeleteEmulation = async (emulator: EmulatorWithThumbnail) => {
     openModal('confirm', {
-      message: tt('confirmMessage.archive', { title: emulator.name }),
+      message: tt('confirmMessage.delete', { title: emulator.name }),
       onConfirm: async () => {
-        await updateEmulation({
-          emulationId: emulator.emulationId,
-          body: {
-            status: EmulatorStatus.ARCHIVED
-          }
+        await deleteEmulation({
+          emulationId: emulator.emulationId
         }).unwrap()
 
         toast.success('Đã xóa mô hình!')
@@ -154,10 +156,10 @@ export default function Workspace3dLibrary() {
                         </button>
                       )}
                       <button
-                        className='rounded px-2 py-1 text-left text-amber-500 hover:bg-amber-100'
-                        onClick={() => handleArchiveEmulation(e)}
+                        className='rounded px-2 py-1 text-left text-red-500 hover:bg-red-100'
+                        onClick={() => handleDeleteEmulation(e)}
                       >
-                        {t('button.archive')}
+                        {t('button.delete')}
                       </button>
                     </div>
                   </PopoverContent>
