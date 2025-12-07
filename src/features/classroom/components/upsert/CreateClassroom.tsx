@@ -253,15 +253,17 @@ export default function CreateClassroom() {
                     <PopoverContent className='w-auto p-0'>
                       <Calendar
                         mode='single'
+                        captionLayout='dropdown'
+                        startMonth={new Date()}
+                        endMonth={new Date(2030, 11)} // December 2030
                         selected={startDate}
                         onSelect={setStartDateState}
                         disabled={(date) => {
                           const today = new Date()
                           today.setHours(0, 0, 0, 0)
-                          const effectiveMinDate = minDate && minDate > today ? minDate : today
-                          return date < effectiveMinDate || (maxDate ? date > maxDate : false)
+                          return date < today
                         }}
-                        initialFocus
+                        autoFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -290,10 +292,8 @@ export default function CreateClassroom() {
                         mode='single'
                         selected={endDate}
                         onSelect={setEndDate}
-                        disabled={(date) => {
-                          return (minDate ? date < minDate : false) || (maxDate ? date > maxDate : false)
-                        }}
-                        initialFocus
+                        disabled={true}
+                        autoFocus
                       />
                     </PopoverContent>
                   </Popover>
