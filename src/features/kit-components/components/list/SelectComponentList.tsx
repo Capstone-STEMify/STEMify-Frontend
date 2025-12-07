@@ -10,7 +10,7 @@ import {
   useUpdateKitComponentsMutation
 } from '@/features/kit-components/api/kitComponentApi'
 import { useGetComponentColumn } from '@/features/kit-components/components/list/ComponentColumn'
-import { setPageIndex, setPageSize, setSearchTerm } from '@/features/kit-components/slice/componentSlice'
+import { resetParams, setPageIndex, setPageSize, setSearchTerm } from '@/features/kit-components/slice/componentSlice'
 import { ComponentSliceParams, KitComponent } from '@/features/kit-components/types/kit-component.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
@@ -59,7 +59,7 @@ export default function SelectComponentList({
   }
 
   useEffect(() => {
-    dispatch(setPageSize(6))
+    dispatch(resetParams())
   }, [dispatch])
 
   const { data, isLoading } = useSearchComponentQuery(queryParams)

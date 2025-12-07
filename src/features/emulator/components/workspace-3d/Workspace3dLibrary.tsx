@@ -64,7 +64,8 @@ export default function Workspace3dLibrary() {
       message: tt('confirmMessage.delete', { title: emulator.name }),
       onConfirm: async () => {
         await deleteEmulation({
-          emulationId: emulator.emulationId
+          emulationId: emulator.emulationId,
+          permanent: true
         }).unwrap()
 
         toast.success('Đã xóa mô hình!')
