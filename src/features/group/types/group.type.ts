@@ -1,3 +1,4 @@
+import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export enum GroupStatus {
@@ -33,3 +34,8 @@ export type GroupQueryParams = {
   includeArchived?: boolean
   activeOnly?: boolean
 } & SearchPaginatedRequestParams
+
+export type GroupSliceParams = {
+  includeArchived?: boolean
+  activeOnly?: boolean
+} & SliceQueryParams

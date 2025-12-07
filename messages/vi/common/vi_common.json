@@ -108,7 +108,8 @@
       "addQuestion": "Thêm Câu Hỏi",
       "addCriterion": "Thêm Tiêu Chí",
       "createGroup": "Tạo Nhóm",
-      "cancelSubscription": "Hủy Đăng Ký"
+      "cancelSubscription": "Hủy Đăng Ký",
+      "removeFromGroup": "Xóa khỏi Nhóm"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",
@@ -187,7 +188,10 @@
       "numberOfLessons": "Số Bài Học",
       "accountType": "Loại Tài Khoản",
       "assignedDate": "Ngày Gán",
-      "course": "Khóa Học"
+      "course": "Khóa Học",
+      "joinedAt": "Ngày tham gia",
+      "subscription": "Gói đăng ký",
+      "student": "Học sinh"
     },
     "paging": {
       "previous": "Trước",

@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 export const formatDuration = (minutes: number) => {
   if (typeof minutes !== 'number' || isNaN(minutes) || minutes <= 0) return '00:00'
@@ -50,7 +50,8 @@ export interface FormatDateOptions {
   day?: 'numeric' | '2-digit'
 }
 export const formatDate = (dateString: string, options: FormatDateOptions = {}) => {
-  const { locale = 'en', showTime = false, pattern, year = 'numeric', month = 'short', day = 'numeric' } = options
+  const locale = useLocale()
+  const { showTime = false, pattern, year = 'numeric', month = 'short', day = 'numeric' } = options
 
   const date = new Date(dateString)
 
@@ -128,6 +129,40 @@ export const getOptions = (
 ): { value: string; label: string; imageUrl?: string; subLabel?: string; status?: string; date?: string }[] =>
   data?.map((item) => ({
     value: item.id ? item.id.toString() : item.userId ? item.userId.toString() : '',
+    label: item[labelKey],
+    imageUrl: imageKey ? item[imageKey] : undefined,
+    subLabel: subLabelKey ? item[subLabelKey] : undefined,
+    status: statusKey ? item[statusKey] : undefined,
+    date:
+      startDateKey && endDateKey
+        ? 'Start Date: ' +
+          (item[startDateKey] ? new Date(item[startDateKey]).toLocaleDateString() : 'N/A') +
+          ' - End Date: ' +
+          (item[endDateKey] ? new Date(item[endDateKey]).toLocaleDateString() : 'N/A')
+        : undefined
+  })) || []
+
+type OptionResult = {
+  value: string
+  label: string
+  imageUrl?: string
+  subLabel?: string
+  status?: string
+  date?: string
+}
+
+export const getOptionsV2 = (
+  data: any[] | undefined,
+  labelKey: string,
+  valueKey: string, // ✅ THÊM
+  imageKey?: string,
+  subLabelKey?: string,
+  statusKey?: string,
+  startDateKey?: string,
+  endDateKey?: string
+): OptionResult[] =>
+  data?.map((item) => ({
+    value: item[valueKey]?.toString() ?? '',
     label: item[labelKey],
     imageUrl: imageKey ? item[imageKey] : undefined,
     subLabel: subLabelKey ? item[subLabelKey] : undefined,

@@ -42,6 +42,7 @@
       "backToClassrooms": "Back to Classrooms",
       "header": "Classroom Details",
       "selected": "Selected",
+      "grade": "Grade",
       "students": {
         "label": "Students",
         "noStudent": "No students enrolled yet.",

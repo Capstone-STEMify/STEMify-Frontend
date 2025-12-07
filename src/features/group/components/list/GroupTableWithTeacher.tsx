@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { SingleSelectWithSearch } from '@/components/shared/SingleSelectWithSearch'
 import { useSearchGroupByOrganizationIdQuery } from '@/features/group/api/groupApi'
 import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
-import { useSearchUserV2Query } from '@/features/user/api/userApi'
+import { useGetOrganizationUserQuery, useSearchUserV2Query } from '@/features/user/api/userApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
-import { getOptions } from '@/utils/index'
+import { getOptions, getOptionsV2 } from '@/utils/index'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Group } from '@/features/group/types/group.type'
 import { useTranslations } from 'next-intl'
+import { LicenseType } from '@/types/userRole'
 
-type GroupTableProps = {
+type GroupTableWithTeacherProps = {
   onGroupsChange: (
     groups: {
       groupCode: string
@@ -21,26 +22,29 @@ type GroupTableProps = {
   ) => void
 }
 
-export default function GroupTable({ onGroupsChange }: GroupTableProps) {
-  const tClassroom = useTranslations('classroom.create')
+export default function GroupTableWithTeacher({ onGroupsChange }: GroupTableWithTeacherProps) {
   const [selectedRows, setSelectedRows] = useState<number[]>([])
   const [teacherAssignments, setTeacherAssignments] = useState<Record<number, string>>({})
 
-  const searchUserQuery = useAppSelector((state) => state.user)
-  const { selectedSubscriptionOrderId, selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
+  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
 
   const { data } = useSearchGroupByOrganizationIdQuery(
     { organizationId: selectedOrganizationId!, params: {} },
     { skip: !selectedOrganizationId }
   )
 
-  const { data: teacherData } = useSearchUserV2Query({
-    ...searchUserQuery,
-    license_type: LicenseAssignmentType.TEACHER,
-    subscription_order_id: selectedSubscriptionOrderId
-  })
+  const { data: organizationUserData } = useGetOrganizationUserQuery(
+    { organizationId: selectedOrganizationId!, role: LicenseType.TEACHER },
+    { skip: !selectedOrganizationId }
+  )
 
-  const teacherOptions = getOptions(teacherData?.data.items, 'userName', 'imageUrl', 'email')
+  const teacherOptions = getOptionsV2(
+    organizationUserData?.data.items,
+    'userName',
+    'organizationUserId',
+    'imageUrl',
+    'email'
+  )
   const groups = data?.data.items || []
 
   const emitSelectedGroups = () => {
@@ -52,7 +56,7 @@ export default function GroupTable({ onGroupsChange }: GroupTableProps) {
         groupCode: group.code,
         groupName: group.name,
         teacherId: teacherAssignments[groupId],
-        studentIds: group.students.map((s) => s.userId)
+        studentIds: group.students.map((s) => s.organizationUserId)
       }
     })
 

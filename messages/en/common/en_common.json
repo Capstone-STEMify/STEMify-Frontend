@@ -109,7 +109,8 @@
       "addQuestion": "Add Question",
       "addCriterion": "Add Criterion",
       "createGroup": "Create Group",
-      "cancelSubscription": "Cancel Subscription"
+      "cancelSubscription": "Cancel Subscription",
+      "removeFromGroup": "Remove from Group"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -189,7 +190,10 @@
       "numberOfLessons": "No. Lessons",
       "accountType": "Account Type",
       "assignedDate": "Assigned Date",
-      "course": "Course"
+      "course": "Course",
+      "joinedAt": "Joined At",
+      "subscription": "Subscription",
+      "student": "Student(s)"
     },
     "paging": {
       "previous": "Previous",

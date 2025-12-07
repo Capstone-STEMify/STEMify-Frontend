@@ -87,4 +87,5 @@ export type OrganizationUserQueryParams = {
   organizationId: number
   pageNumber?: number
   pageSize?: number
+  role?: LicenseType
 }

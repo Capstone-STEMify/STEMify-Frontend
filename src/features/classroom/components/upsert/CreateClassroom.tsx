@@ -19,7 +19,7 @@ import { CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/utils/shadcn/utils'
 import BackButton from '@/components/shared/button/BackButton'
-import GroupTable from '@/features/group/components/list/GroupTable'
+import GroupTableWithTeacher from '@/features/group/components/list/GroupTableWithTeacher'
 import { Grade } from '@/features/classroom/types/classroom.type'
 
 type ClassroomFormData = {
@@ -192,7 +192,7 @@ export default function CreateClassroom() {
                 </Select>
               </div>
             </div>
-            <GroupTable onGroupsChange={(groups) => setSelectedGroups(groups)} />
+            <GroupTableWithTeacher onGroupsChange={(groups) => setSelectedGroups(groups)} />
           </div>
 
           {/* Basic Information Section */}
@@ -288,13 +288,7 @@ export default function CreateClassroom() {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className='w-auto p-0'>
-                      <Calendar
-                        mode='single'
-                        selected={endDate}
-                        onSelect={setEndDate}
-                        disabled={true}
-                        autoFocus
-                      />
+                      <Calendar mode='single' selected={endDate} onSelect={setEndDate} disabled={true} autoFocus />
                     </PopoverContent>
                   </Popover>
                 </div>

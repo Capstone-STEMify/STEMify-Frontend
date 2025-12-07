@@ -41,6 +41,7 @@
       "backToClassrooms": "Quay lại Lớp học",
       "header": "Chi tiết lớp học",
       "selected": "Đã chọn",
+      "grade": "Khối",
       "students": {
         "label": "Học sinh",
         "noStudent": "Chưa có học sinh nào.",
