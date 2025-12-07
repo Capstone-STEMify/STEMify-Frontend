@@ -112,7 +112,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
                 </div>
                 <p className='text-sm font-medium text-gray-600'>{tq('timeLimit')}</p>
                 <p className='text-2xl font-bold text-gray-900'>
-                  {quiz.timeLimitInMinutes} {tq('mins')}
+                  {quiz.timeLimitInMinutes ? `${quiz.timeLimitInMinutes} ${tq('mins')}` : '-'}
                 </p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
