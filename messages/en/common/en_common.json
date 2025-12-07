@@ -110,7 +110,9 @@
       "addCriterion": "Add Criterion",
       "createGroup": "Create Group",
       "cancelSubscription": "Cancel Subscription",
-      "removeFromGroup": "Remove from Group"
+      "removeFromGroup": "Remove from Group",
+      "backToClassroomList": "Back to Classroom List",
+      "continueLearning": "Continue Learning"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

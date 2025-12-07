@@ -50,7 +50,7 @@ export default function ClassroomDetailPage() {
       <ClassroomSubHeader classroom={classroomData?.data} currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 'overview' && currentRole === LicenseType.TEACHER ? <ClassroomOverview /> : null}
       {currentTab === 'overview' && currentRole === LicenseType.STUDENT ? (
-        <StudentClassroomDetail courseEnrollment={courseEnrollment?.data.items[0]} setCurrentTab={setCurrentTab} />
+        <StudentClassroomDetail courseEnrollment={courseEnrollment?.data.items[0]} />
       ) : null}
       {currentTab === 'course' ? (
         <div>
@@ -69,7 +69,7 @@ export default function ClassroomDetailPage() {
       ) : null}
       {currentTab === 'student' ? (
         <div>
-          <StudentClassList/>
+          <StudentClassList />
         </div>
       ) : null}
     </div>

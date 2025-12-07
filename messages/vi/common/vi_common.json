@@ -109,7 +109,9 @@
       "addCriterion": "Thêm Tiêu Chí",
       "createGroup": "Tạo Nhóm",
       "cancelSubscription": "Hủy Đăng Ký",
-      "removeFromGroup": "Xóa khỏi Nhóm"
+      "removeFromGroup": "Xóa khỏi Nhóm",
+      "backToClassroomList": "Quay lại Danh sách Lớp học",
+      "continueLearning": "Tiếp tục Học"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

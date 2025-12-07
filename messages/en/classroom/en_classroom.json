@@ -48,7 +48,7 @@
         "noStudent": "No students enrolled yet.",
         "noStudentSubtext": "Start building your class by adding students"
       },
-      "courses": "Courses",
+      "course": "Course",
       "curriculum": {
         "label": "Curriculum"
       },

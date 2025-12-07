@@ -47,7 +47,7 @@
         "noStudent": "Chưa có học sinh nào.",
         "noStudentSubtext": "Bắt đầu xây dựng lớp học của bạn bằng cách thêm học sinh"
       },
-      "courses": "Khóa học",
+      "course": "Khóa học",
       "curriculum": {
         "label": "Chương trình học"
       },
@@ -58,7 +58,7 @@
       },
       "teacher": "Giáo viên",
       "meet": {
-        "label": "Họp",
+        "label": "Cuộc Họp",
         "joinButton": "Tham gia cuộc họp"
       },
       "quickStats": {
