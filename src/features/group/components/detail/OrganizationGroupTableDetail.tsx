@@ -8,14 +8,17 @@ import BackButton from '@/components/shared/button/BackButton'
 import { useParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
-import { Users, Calendar, Hash, Activity } from 'lucide-react'
-import { formatDate } from '@/utils/index'
+import { Users, Calendar, Hash, Activity, Copy } from 'lucide-react'
+import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
+import { toast } from 'sonner'
 
 export default function OrganizationGroupTable() {
   const { groupId } = useParams()
   const to = useTranslations('organization.group')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const columns = useGetGroupColumn()
+  const orgUserStatusTranslation = useOrgUserStatusTranslation()
   const { data, isLoading } = useGetGroupByIdQuery(Number(groupId), { skip: !groupId })
 
   const groupData = data?.data
@@ -45,6 +48,11 @@ export default function OrganizationGroupTable() {
     )
   }
 
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success(tt('successMessage.copiedToClipboard'))
+  }
+
   if (!groupData) {
     return (
       <div className='container mx-auto max-w-7xl px-4 pt-3'>
@@ -64,61 +72,85 @@ export default function OrganizationGroupTable() {
           <div className='flex flex-wrap items-center gap-3'>
             <h1 className='text-2xl font-bold'>{groupData.name}</h1>
             <Badge
-              className={groupData.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}
+              className={
+                groupData.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+              }
             >
-              {groupData.status}
+              {orgUserStatusTranslation(groupData.status)}
             </Badge>
           </div>
           <p className='mt-1 text-sm text-gray-600'>{to('subTitle')}</p>
         </div>
       </div>
-
       {/* Group Information Cards */}
-      <div className='mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4'>
-        <Card className='py-4'>
+      <div className='mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3'>
+        {/* Large Card: Statistics - Spans 1 column */}
+        <Card className='py-4 lg:col-span-1'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>{to('totalStudents')}</CardTitle>
             <Users className='text-muted-foreground h-4 w-4' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>{stats.total}</div>
-            <p className='text-muted-foreground mt-1 text-xs'>
-              {stats.active} {tc('status.active')} • {stats.inactive} {tc('status.inactive')}
-            </p>
+            <div className='mb-4 text-3xl font-bold'>{stats.total}</div>
+            <div className='space-y-2'>
+              <div className='flex items-center justify-between rounded-md border border-green-100 bg-green-50 p-2'>
+                <div className='flex items-center gap-2'>
+                  <div className='h-2 w-2 animate-pulse rounded-full bg-green-500' />
+                  <span className='text-xs font-medium text-green-900'>{orgUserStatusTranslation('active')}</span>
+                </div>
+                <span className='text-sm font-bold text-green-700'>{stats.active}</span>
+              </div>
+              <div className='flex items-center justify-between rounded-md border border-yellow-100 bg-yellow-50 p-2'>
+                <div className='flex items-center gap-2'>
+                  <div className='h-2 w-2 rounded-full bg-yellow-500' />
+                  <span className='text-xs font-medium text-yellow-700'>{orgUserStatusTranslation('inactive')}</span>
+                </div>
+                <span className='text-sm font-bold text-yellow-700'>{stats.inactive}</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className='py-4'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>{to('groupCode')}</CardTitle>
-            <Hash className='text-muted-foreground h-4 w-4' />
-          </CardHeader>
-          <CardContent>
-            <div className='font-mono text-lg font-semibold'>{groupData.code}</div>
-          </CardContent>
-        </Card>
+        {/* Right Side: Stacked Cards - Spans 2 columns */}
+        <div className='space-y-4 lg:col-span-2'>
+          <Card className='py-4'>
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>{to('groupCode')}</CardTitle>
+              <Hash className='text-muted-foreground h-4 w-4' />
+            </CardHeader>
+            <CardContent>
+              <div className='flex font-mono text-lg font-semibold'>
+                <p>{groupData.code}</p>
+                <button onClick={() => handleCopyToClipboard(groupData.code)} className='ml-2 rounded-md'>
+                  <Copy className='h-4 w-4' />
+                </button>
+              </div>
+            </CardContent>
+          </Card>
 
-        <Card className='py-4'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>{to('createdDate')}</CardTitle>
-            <Calendar className='text-muted-foreground h-4 w-4' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-sm font-medium'>{formatDate(groupData.createdAt)}</div>
-          </CardContent>
-        </Card>
+          <div className='grid grid-cols-2 gap-4'>
+            <Card className='py-4'>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                <CardTitle className='text-sm font-medium'>{to('createdDate')}</CardTitle>
+                <Calendar className='text-muted-foreground h-4 w-4' />
+              </CardHeader>
+              <CardContent>
+                <div className='text-sm font-medium'>{formatDate(groupData.createdAt)}</div>
+              </CardContent>
+            </Card>
 
-        <Card className='py-4'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>{to('updatedAt')}</CardTitle>
-            <Activity className='text-muted-foreground h-4 w-4' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-sm font-medium'>{formatDate(groupData.updatedAt)}</div>
-          </CardContent>
-        </Card>
+            <Card className='py-4'>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                <CardTitle className='text-sm font-medium'>{to('updatedAt')}</CardTitle>
+                <Calendar className='text-muted-foreground h-4 w-4' />
+              </CardHeader>
+              <CardContent>
+                <div className='text-sm font-medium'>{formatDate(groupData.updatedAt)}</div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
-
       <DataTable data={rows} columns={columns as any} />
     </div>
   )

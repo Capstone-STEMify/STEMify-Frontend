@@ -241,6 +241,10 @@
       "inprogress": "Đang Diễn Ra",
       "locked": "Khóa"
     },
+    "orgUserStatus": {
+      "active": "Đã xác thực",
+      "inactive": "Chưa xác thực"
+    },
     "accountType": {
       "accountTypeLabel": "Loại Tài Khoản",
       "admin": "Quản Trị Viên",

@@ -237,6 +237,10 @@
       "inprogress": "In Progress",
       "locked": "Locked"
     },
+    "orgUserStatus": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
     "level": {
       "all": "All Levels",
       "beginner": "Beginner",

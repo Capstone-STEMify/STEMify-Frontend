@@ -7,13 +7,14 @@ import { GroupDetailStudent } from '@/features/group/types/group.type'
 import { useDeleteGroupMutation } from '@/features/group/api/groupApi'
 import { Badge } from '@/components/shadcn/badge'
 import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
-import { formatDate } from '@/utils/index'
+import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
 
 export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
   const { openModal } = useModal()
   const [deleteGroup] = useDeleteGroupMutation()
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const orgUserStatusTranslation = useOrgUserStatusTranslation()
 
   const handleDelete = async (id: string) => {
     try {
@@ -64,8 +65,8 @@ export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
       accessorKey: 'isActive',
       header: tc('tableHeader.status'),
       cell: ({ row }) => (
-        <Badge className={row.original.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
-          {row.original.isActive ? tc('status.active') : tc('status.inactive')}
+        <Badge className={row.original.isActive ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
+          {row.original.isActive ? orgUserStatusTranslation('active') : orgUserStatusTranslation('inactive')}
         </Badge>
       )
     },

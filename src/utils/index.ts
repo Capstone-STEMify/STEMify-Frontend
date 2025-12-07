@@ -211,6 +211,13 @@ export const useStatusTranslation = () => {
   }
 }
 
+export const useOrgUserStatusTranslation = () => {
+  const tc = useTranslations('common.orgUserStatus')
+  return (status: string) => {
+    return tc(status.toLowerCase())
+  }
+}
+
 export const useLevelTranslation = () => {
   const tc = useTranslations('common.level')
   return (level: string) => {
