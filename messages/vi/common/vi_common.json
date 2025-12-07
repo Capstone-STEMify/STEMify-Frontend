@@ -112,7 +112,8 @@
       "removeFromGroup": "Xóa khỏi Nhóm",
       "backToClassroomList": "Quay lại Danh sách Lớp học",
       "continueLearning": "Tiếp tục Học",
-      "markAsComplete": "Đã Hoàn thành"
+      "markAsComplete": "Đánh dấu hoàn thành",
+      "startQuiz": "Bắt Đầu Bài Kiểm Tra"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

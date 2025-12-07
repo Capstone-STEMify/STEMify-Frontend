@@ -83,7 +83,13 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
   const lastItem = content.data.items[content.data.items.length - 1]
 
   if (lastItem.contentType === ContentType.QUIZ) {
-    return <QuizViewer quiz={lastItem} studentQuizId={currentSectionProgress?.studentQuizId} />
+    return (
+      <QuizViewer
+        quiz={lastItem}
+        studentQuizId={currentSectionProgress?.studentQuizId}
+        sectionStatus={sectionStatus?.data}
+      />
+    )
   } else if (lastItem.contentType === ContentType.ASSIGNMENT) {
     return (
       <AssignmentAttempt
@@ -105,7 +111,7 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
       {/* Complete section button */}
       {isLoggedIn && currentSectionProgress?.status === ProgressStatus.IN_PROGRESS && (
         <div className='flex justify-end'>
-          <Button className='bg-amber-custom-400' onClick={handleCompleteSection} disabled={isLoading}>
+          <Button onClick={handleCompleteSection} disabled={isLoading}>
             {isLoading ? tc('button.submitting') : tc('button.markAsComplete')}
           </Button>
         </div>

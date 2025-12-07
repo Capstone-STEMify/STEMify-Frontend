@@ -69,7 +69,7 @@ export default function MultipleChoiceQuestion({ question }: MultipleChoiceQuest
           >
             {/* Checkbox */}
             <span
-              className={`mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 transition-all duration-300 ${
+              className={`mr-4 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md border-2 transition-all duration-300 ${
                 isSubmitted
                   ? isCorrect
                     ? 'border-green-500 bg-green-500'

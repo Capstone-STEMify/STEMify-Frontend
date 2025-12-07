@@ -113,7 +113,8 @@
       "removeFromGroup": "Remove from Group",
       "backToClassroomList": "Back to Classroom List",
       "continueLearning": "Continue Learning",
-      "markAsComplete": "Mark as Complete"
+      "markAsComplete": "Mark as Complete",
+      "startQuiz": "Start Quiz"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

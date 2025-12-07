@@ -8,6 +8,7 @@ type studentProgressState = {
   selectedSectionId?: number
   selectedSectionStatus?: ProgressStatus
   shouldRefetchSectionProgress: boolean
+  isSectionDone?: boolean
 }
 
 const initialState: studentProgressState = {
@@ -16,7 +17,8 @@ const initialState: studentProgressState = {
   selectedLessonStatus: undefined,
   selectedSectionId: undefined,
   selectedSectionStatus: undefined,
-  shouldRefetchSectionProgress: false
+  shouldRefetchSectionProgress: false,
+  isSectionDone: undefined
 }
 
 export const studentProgressSlice = createSlice({
@@ -44,6 +46,9 @@ export const studentProgressSlice = createSlice({
     },
     clearRefetchSectionProgress(state) {
       state.shouldRefetchSectionProgress = false
+    },
+    setSectionDone: (state, action: PayloadAction<boolean | undefined>) => {
+      state.isSectionDone = action.payload
     }
   }
 })
@@ -55,6 +60,7 @@ export const {
   setSelectedSectionId,
   setSelectedSectionStatus,
   triggerRefetchSectionProgress,
-  clearRefetchSectionProgress
+  clearRefetchSectionProgress,
+  setSectionDone
 } = studentProgressSlice.actions
 export const studentProgressReducer = studentProgressSlice.reducer

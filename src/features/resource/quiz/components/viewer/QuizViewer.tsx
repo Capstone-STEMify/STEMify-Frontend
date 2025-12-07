@@ -16,16 +16,25 @@ import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
 import { Attempt } from '@/features/resource/quiz/types/quiz.type'
 import { LicenseType, UserRole } from '@/types/userRole'
 import { useTranslations } from 'next-intl'
+import { PaginatedResult } from '@/types/baseModel'
+import { StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 
 type QuizViewerProps = {
   quiz: QuizContent
   isShowQuestionAnswer?: boolean
   studentQuizId?: number
+  sectionStatus?: PaginatedResult<StudentProgress>
 }
 
-export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }: QuizViewerProps) {
+export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, sectionStatus }: QuizViewerProps) {
   const tq = useTranslations('quiz.detail')
+  const tc = useTranslations('common')
   const dispatch = useAppDispatch()
+  const selectedQuiz = useAppSelector((state) => state.quizPlayer.selectedQuiz)
+
+  const quizStatus = sectionStatus?.items.find((item) => item.sectionId === selectedQuiz?.id)?.status
+  console.log('Quiz Status:', quizStatus)
+
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
   const [selectedAttempt, setSelectedAttempt] = useState<Attempt | null>(null)
   const role = useAppSelector((state) => state.selectedOrganization.currentRole)
@@ -76,6 +85,8 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
       dispatch(setMode('quiz'))
     }
   }
+
+  const canStartQuiz = !isShowQuestionAnswer && quizStatus !== 'Completed' && quizStatus !== 'Locked'
 
   return (
     <div className='mx-auto max-w-4xl space-y-6 p-8'>
@@ -255,18 +266,13 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId }
             })}
           </div>
         </div>
-      ) : (
+      ) : !canStartQuiz ? (
         <div className='flex justify-center'>
-          {/* loading button when creating quiz attempt */}
-          <Button
-            onClick={handleAttemptQuiz}
-            className='text-md bg-amber-400 px-6 py-5 font-medium'
-            disabled={isCreating}
-          >
-            {isCreating ? <Loader2 className='mr-2 h-5 w-5 animate-spin' /> : 'Start Quiz'}
+          <Button onClick={handleAttemptQuiz} className='text-md px-6 py-5 font-medium' disabled={isCreating}>
+            {isCreating ? <Loader2 className='mr-2 h-5 w-5 animate-spin' /> : tc('button.startQuiz')}
           </Button>
         </div>
-      )}
+      ) : null}
 
       {studentQuizId && (
         <QuizAttempt
