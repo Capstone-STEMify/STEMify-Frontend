@@ -177,13 +177,13 @@ export default function WorkspaceTree() {
   const handleAddAction = (type: WorkspaceAction['type']) => {
     const newId = `action_${nextActionNumber}`
     if (type === 'highlight') {
-      dispatch(addAction({ id: newId, name: `Highlight Action ${nextActionNumber}`, type }))
+      dispatch(addAction({ id: newId, name: `Bước ${nextActionNumber}`, type }))
       dispatch(
         // TODO: hard code activityId tạm thời
         addStepToActivity({
           activityId: activities[0]?.id || newId,
           step: {
-            title: `Highlight Step ${nextActionNumber}`,
+            title: `Bước ${nextActionNumber}`,
             actionId: newId,
             description: '',
             expectedResult: '',
@@ -194,12 +194,12 @@ export default function WorkspaceTree() {
       dispatch(setSelectedAction(newId))
     }
     if (type === 'transform_arm') {
-      dispatch(addAction({ id: newId, name: `Transform Action ${nextActionNumber}`, type }))
+      dispatch(addAction({ id: newId, name: `Bước ${nextActionNumber}`, type }))
       dispatch(
         addStepToActivity({
           activityId: activities[0]?.id || newId,
           step: {
-            title: `Transform Step ${nextActionNumber}`,
+            title: `Bước ${nextActionNumber}`,
             actionId: newId,
             description: '',
             expectedResult: '',

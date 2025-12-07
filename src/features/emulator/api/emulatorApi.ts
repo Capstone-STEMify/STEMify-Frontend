@@ -60,10 +60,11 @@ export const emulatorApi = createApi({
       }),
       invalidatesTags: ['Emulator']
     }),
-    deleteEmulator: builder.mutation<ApiSuccessResponse<any>, { emulationId: string }>({
-      query: ({ emulationId }) => ({
+    deleteEmulator: builder.mutation<ApiSuccessResponse<any>, { emulationId: string; permanent?: boolean }>({
+      query: ({ emulationId, permanent }) => ({
         url: `/v1/emulations/${emulationId}`,
-        method: 'DELETE'
+        method: 'DELETE',
+        params: permanent ? { permanent } : undefined
       }),
       invalidatesTags: ['Emulator']
     })
