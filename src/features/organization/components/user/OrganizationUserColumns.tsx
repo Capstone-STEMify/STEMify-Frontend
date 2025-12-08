@@ -11,6 +11,7 @@ import {
 } from '@/components/shadcn/dropdown-menu'
 import { MoreHorizontal, Eye, Pencil, Trash2 } from 'lucide-react'
 import { OrganizationUser } from '@/features/user/types/user.type'
+import { useTranslations } from 'next-intl'
 
 export type OrganizationUserTableItem = OrganizationUser & {
   id: string
@@ -58,10 +59,12 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
     console.log('Delete', user.id)
   }
 
+  const tc = useTranslations('common')
+
   return [
     {
       accessorKey: 'fullName',
-      header: 'Người dùng',
+      header: tc('tableHeader.user'),
       meta: { className: 'align-top py-3' },
       cell: ({ row }) => (
         <div className='flex min-h-[32px] flex-col justify-center'>
@@ -72,7 +75,7 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
     },
     {
       id: 'license',
-      header: 'License',
+      header: tc('tableHeader.license'),
       meta: { className: 'align-top py-3' },
       cell: ({ row }) => (
         <div className='flex flex-col gap-1'>
@@ -87,8 +90,8 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
       )
     },
     {
-      id: 'classId',
-      header: 'Lớp học',
+      id: 'groupName',
+      header: tc('tableHeader.groupName'),
       meta: { className: 'align-top py-3' },
       cell: ({ row }) => (
         <div className='flex flex-col gap-1'>
@@ -104,7 +107,7 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
     },
     {
       id: 'isActive',
-      header: 'Status',
+      header: tc('tableHeader.status'),
       meta: { className: 'align-top py-3' },
       cell: ({ row }) => (
         <div className='flex flex-col gap-1'>
@@ -118,7 +121,7 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
     },
     {
       id: 'joinedAt',
-      header: 'Ngày tham gia',
+      header: tc('tableHeader.joinedAt'),
       meta: { className: 'align-top py-3' },
       cell: ({ row }) => (
         <div className='flex flex-col gap-1'>
@@ -130,7 +133,7 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
     },
     {
       id: 'actions',
-      header: () => <div className='text-right'>Action</div>,
+      header: () => <div className='text-right'>{tc('tableHeader.actions')}</div>,
       meta: { className: 'align-top py-3' },
       enableHiding: false,
       cell: ({ row }) => {
@@ -140,24 +143,24 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant='ghost' className='h-8 w-8 p-0 hover:bg-slate-200'>
-                  <span className='sr-only'>Open menu</span>
+                  <span className='sr-only'>{tc('tableHeader.menu')}</span>
                   <MoreHorizontal className='h-4 w-4' />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end'>
-                <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                <DropdownMenuLabel>{tc('button.action')}</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => handleViewDetail(user)}>
-                  <Eye className='mr-2 h-4 w-4' /> Xem chi tiết
+                  <Eye className='mr-2 h-4 w-4' /> {tc('button.view')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleUpdate(user)}>
-                  <Pencil className='mr-2 h-4 w-4' /> Cập nhật
+                  <Pencil className='mr-2 h-4 w-4' /> {tc('button.update')}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => handleDelete(user)}
                   className='text-red-600 focus:bg-red-50 focus:text-red-600'
                 >
-                  <Trash2 className='mr-2 h-4 w-4' /> Xóa người dùng
+                  <Trash2 className='mr-2 h-4 w-4' /> {tc('button.delete')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
