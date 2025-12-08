@@ -35,6 +35,7 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
   const dispatch = useAppDispatch()
 
   const t = useTranslations('LessonDetails')
+  const tc = useTranslations('common')
   const tt = useTranslations('toast')
 
   // const { data: userData, status } = useSession()
@@ -82,7 +83,13 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
   const lastItem = content.data.items[content.data.items.length - 1]
 
   if (lastItem.contentType === ContentType.QUIZ) {
-    return <QuizViewer quiz={lastItem} studentQuizId={currentSectionProgress?.studentQuizId} />
+    return (
+      <QuizViewer
+        quiz={lastItem}
+        studentQuizId={currentSectionProgress?.studentQuizId}
+        sectionStatus={sectionStatus?.data}
+      />
+    )
   } else if (lastItem.contentType === ContentType.ASSIGNMENT) {
     return (
       <AssignmentAttempt
@@ -96,7 +103,7 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
     <div className='relative flex min-h-[650px] flex-col gap-6 p-6'>
       {/* Content */}
       <div className={`flex-1 ${!isLoggedIn ? 'blur-xs' : ''}`}>
-        <ScrollArea className='h-full'>
+        <ScrollArea className='h-[600px]'>
           <TiptapViewer content={normalizeMarkdown(lastItem.contentBody)} />
         </ScrollArea>
       </div>
@@ -104,8 +111,8 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
       {/* Complete section button */}
       {isLoggedIn && currentSectionProgress?.status === ProgressStatus.IN_PROGRESS && (
         <div className='flex justify-end'>
-          <Button className='bg-amber-custom-400' onClick={handleCompleteSection} disabled={isLoading}>
-            {isLoading ? 'Completing...' : 'Mark as Complete'}
+          <Button onClick={handleCompleteSection} disabled={isLoading}>
+            {isLoading ? tc('button.submitting') : tc('button.markAsComplete')}
           </Button>
         </div>
       )}

@@ -279,9 +279,9 @@ export default function AddPeopleModal() {
                 ) : debouncedKeyword.trim() ? (
                   <div className='p-8 text-center'>
                     <div className='text-sm text-gray-500'>
-                      {tc('update.students.noStudentFound')} "{debouncedKeyword}"
+                      {tClassroom('update.students.noStudentFound')} "{debouncedKeyword}"
                     </div>
-                    <div className='mt-1 text-xs text-gray-400'>{tc('update.students.noStudentFoundSubtext')}</div>
+                    <div className='mt-1 text-xs text-gray-400'>{tClassroom('update.students.noStudentFoundSubtext')}</div>
                   </div>
                 ) : null}
               </div>

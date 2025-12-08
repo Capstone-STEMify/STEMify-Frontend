@@ -124,14 +124,14 @@ const QuizEditor = () => {
         questions: formatQuestions(quiz.questions, true)
       }).unwrap()
 
-      toast.success(`${quiz.questions.length} questions updated successfully`)
+      toast.success(`Đã tạo bài kiểm tra thành công`)
     } else {
       await createQuestion({
         quizId: Number(quizId),
         questions: formatQuestions(quiz.questions, false)
       }).unwrap()
 
-      toast.success(`${quiz.questions.length} questions created successfully`)
+      toast.success(`Đã tạo bài kiểm tra thành công`)
     }
 
     dispatch(markAsSaved())

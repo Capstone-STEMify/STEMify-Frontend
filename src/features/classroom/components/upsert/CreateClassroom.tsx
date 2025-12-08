@@ -19,7 +19,7 @@ import { CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/utils/shadcn/utils'
 import BackButton from '@/components/shared/button/BackButton'
-import GroupTable from '@/features/group/components/list/GroupTable'
+import GroupTableWithTeacher from '@/features/group/components/list/GroupTableWithTeacher'
 import { Grade } from '@/features/classroom/types/classroom.type'
 
 type ClassroomFormData = {
@@ -192,7 +192,7 @@ export default function CreateClassroom() {
                 </Select>
               </div>
             </div>
-            <GroupTable onGroupsChange={(groups) => setSelectedGroups(groups)} />
+            <GroupTableWithTeacher onGroupsChange={(groups) => setSelectedGroups(groups)} />
           </div>
 
           {/* Basic Information Section */}
@@ -253,15 +253,17 @@ export default function CreateClassroom() {
                     <PopoverContent className='w-auto p-0'>
                       <Calendar
                         mode='single'
+                        captionLayout='dropdown'
+                        startMonth={new Date()}
+                        endMonth={new Date(2030, 11)} // December 2030
                         selected={startDate}
                         onSelect={setStartDateState}
                         disabled={(date) => {
                           const today = new Date()
                           today.setHours(0, 0, 0, 0)
-                          const effectiveMinDate = minDate && minDate > today ? minDate : today
-                          return date < effectiveMinDate || (maxDate ? date > maxDate : false)
+                          return date < today
                         }}
-                        initialFocus
+                        autoFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -286,15 +288,7 @@ export default function CreateClassroom() {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className='w-auto p-0'>
-                      <Calendar
-                        mode='single'
-                        selected={endDate}
-                        onSelect={setEndDate}
-                        disabled={(date) => {
-                          return (minDate ? date < minDate : false) || (maxDate ? date > maxDate : false)
-                        }}
-                        initialFocus
-                      />
+                      <Calendar mode='single' selected={endDate} onSelect={setEndDate} disabled={true} autoFocus />
                     </PopoverContent>
                   </Popover>
                 </div>

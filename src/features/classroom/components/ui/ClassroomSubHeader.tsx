@@ -22,7 +22,6 @@ interface Props {
 
 export default function ClassroomSubHeader({ classroom, curriculumId, currentTab, setCurrentTab }: Props) {
   const t = useTranslations('Header')
-  const pathname = usePathname()
 
   const subNavItems: { name: string; currentTab: ClassroomNavItems }[] = [
     { name: 'overview', currentTab: 'overview' },

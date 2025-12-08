@@ -116,7 +116,9 @@ export default function OrganizationClassroomDetail() {
               <div className='flex items-center gap-4 text-slate-600'>
                 <div className='flex items-center gap-2'>
                   <GraduationCap className='h-4 w-4' />
-                  <span className='text-sm font-medium'>{classroom.grade}</span>
+                  <span className='text-sm font-medium'>
+                    {tClassroom('detail.grade')} {classroom.grade}
+                  </span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <Users className='h-4 w-4' />
@@ -236,11 +238,12 @@ export default function OrganizationClassroomDetail() {
                         {tc('button.remove')}
                       </Button>
                     )}
+                    {/* TODO */}
 
-                    <Button size='sm' onClick={() => openModal('addPeople')}>
+                    {/* <Button size='sm' onClick={() => openModal('addPeople')}>
                       <UserPlus className='mr-2 h-4 w-4' />
                       {tc('button.addStudents')}
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               </CardHeader>

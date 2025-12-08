@@ -5,7 +5,6 @@ import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import { Badge } from '@/components/shadcn/badge'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Users, BookOpen, Clock, GraduationCap } from 'lucide-react'
-import { format } from 'date-fns'
 import React, { useState } from 'react'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import Link from 'next/link'
@@ -16,25 +15,25 @@ import SearchBar from '@/components/shared/search/SearchBar'
 
 import SSelect from '@/components/shared/SSelect'
 import { useLocale, useTranslations } from 'next-intl'
-import { formatDate } from '@/utils/index'
+import { formatDate, useStatusTranslation } from '@/utils/index'
 
 export default function ClassroomList() {
-  const tClassroom = useTranslations('classroom')
   const locale = useLocale()
+  const statusTranslations = useStatusTranslation()
+  const tClassroom = useTranslations('classroom.myLearning')
 
-  const user = useAppSelector((state) => state.auth?.user)
+  const { selectedOrgUserId } = useAppSelector((state) => state.selectedOrganization)
+
   const queryParams = useAppSelector((state) => state.classroom)
   const [selectedStatus, setSelectedStatus] = useState<string>('')
 
-  const classroomQueryParams = {
-    ...queryParams,
-    status: selectedStatus || undefined
-  }
-
-  const { data, isLoading, error } = useSearchClassroomsQuery({
-    ...queryParams,
-    studentId: user?.userId
-  })
+  const { data, isLoading, error } = useSearchClassroomsQuery(
+    {
+      ...queryParams,
+      studentId: selectedOrgUserId
+    },
+    { skip: !selectedOrgUserId }
+  )
   const classrooms = data?.data.items || []
 
   if (isLoading) {
@@ -50,7 +49,7 @@ export default function ClassroomList() {
   if (error || !classrooms || classrooms.length === 0) {
     return (
       <div className='mt-5 rounded-2xl border-1 border-gray-300 bg-white p-10 shadow-sm'>
-        <SEmpty title='No Classrooms Found' description="You don't have any classrooms yet." />
+        <SEmpty title={tClassroom('noClassroom')} description={tClassroom('noClassroomSubtext')} />
       </div>
     )
   }
@@ -97,7 +96,7 @@ export default function ClassroomList() {
                 {/* Status Badge */}
                 <div className='absolute top-3 right-3'>
                   <Badge className={`border-0 text-xs shadow-md ${getStatusBadgeClass(classroom.status)}`}>
-                    {classroom.status}
+                    {statusTranslations(classroom.status)}
                   </Badge>
                 </div>
               </div>
@@ -108,7 +107,7 @@ export default function ClassroomList() {
                   <div className='flex items-start justify-between gap-2'>
                     <h3 className='text-md line-clamp-2 flex-1 font-bold text-gray-900'>{classroom.name}</h3>
                     <Badge variant='secondary' className='shrink-0 bg-gray-100 text-xs font-medium'>
-                      {classroom.grade}
+                      {tClassroom('grade')} {classroom.grade}
                     </Badge>
                   </div>
 

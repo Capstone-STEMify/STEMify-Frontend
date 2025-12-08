@@ -214,9 +214,9 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
       : -1
 
   return (
-    <main className='min-h-screen w-full bg-neutral-50 py-50'>
+    <main className='min-h-screen w-full bg-neutral-50'>
       {/* Header */}
-      <section className='mx-auto max-w-6xl px-6 pt-10'>
+      <section className='mx-auto max-w-6xl px-6 pt-2'>
         <div className='flex flex-col items-center text-center'>
           <h1 className='text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl'>IMAGE MODEL</h1>
           <p
@@ -265,7 +265,7 @@ export default function MicroAI({ modelUrl, zipFile }: { modelUrl?: string; zipF
 
       {/* Content: Left results, Right big video */}
       {(status === 'loading' || status === 'running') && (
-        <section className='mx-auto mt-8 max-w-6xl px-6 pb-16'>
+        <section className='mx-auto mt-8 max-w-6xl px-6'>
           <div className='grid grid-cols-1 gap-10 lg:grid-cols-12'>
             {/* LEFT: Results like mock */}
             <div className='lg:col-span-5'>

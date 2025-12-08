@@ -208,6 +208,7 @@
       "numberOfStudents": "Số lượng: {quantity} học sinh",
       "groupList": "Danh sách học sinh",
       "createdDate": "Ngày tạo",
+      "updatedAt": "Ngày cập nhật",
       "totalStudents": "Tổng số học sinh",
       "attendance": "Tham gia",
       "step1": {

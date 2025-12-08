@@ -42,12 +42,13 @@
       "backToClassrooms": "Back to Classrooms",
       "header": "Classroom Details",
       "selected": "Selected",
+      "grade": "Grade",
       "students": {
         "label": "Students",
         "noStudent": "No students enrolled yet.",
         "noStudentSubtext": "Start building your class by adding students"
       },
-      "courses": "Courses",
+      "course": "Course",
       "curriculum": {
         "label": "Curriculum"
       },
@@ -99,6 +100,12 @@
         "asmTotal": "Total Assignments",
         "submitted": "submitted"
       }
+    },
+    "myLearning": {
+      "title": "My Classrooms",
+      "noClassroom": "You are not enrolled in any classrooms yet.",
+      "noClassroomSubtext": "Explore available classrooms and start learning today!",
+      "grade": "Grade"
     }
   }
 }

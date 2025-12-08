@@ -27,7 +27,7 @@ export default function LessonDetail() {
 
   // redux
   const dispatch = useAppDispatch()
-  const userId = useAppSelector((state) => state.auth.user?.userId)
+  const { selectedOrgUserId } = useAppSelector((state) => state.selectedOrganization)
   const { selectedSectionId, mode } = useAppSelector((state) => state.lessonDetail)
   const token = useAppSelector((state) => state.auth.token)
   const shouldRefetch = useAppSelector((state) => state.studentProgress.shouldRefetchSectionProgress)
@@ -43,9 +43,9 @@ export default function LessonDetail() {
   const sectionData = sections?.data?.items ?? []
 
   const { data: enrollment } = useSearchCourseEnrollmentQuery(
-    { studentId: userId, courseId, pageNumber: 1, pageSize: 10 },
+    { studentId: selectedOrgUserId!, courseId, pageNumber: 1, pageSize: 10 },
     {
-      skip: !userId || !courseId
+      skip: !selectedOrgUserId || !courseId
     }
   )
 

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import QuizSidebar from '@/features/resource/quiz/components/player/QuizSidebar'
 import QuizMainContent from '@/features/resource/quiz/components/player/QuizMainContent'

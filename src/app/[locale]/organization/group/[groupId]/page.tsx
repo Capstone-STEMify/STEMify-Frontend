@@ -1,10 +1,10 @@
-import OrganizationGroupDetail from '@/features/group/components/detail/OrganizationGroupDetail'
+import OrganizationGroupTable from '@/features/group/components/detail/OrganizationGroupTableDetail'
 import React from 'react'
 
 export default function GroupDetailPage() {
   return (
     <div>
-      <OrganizationGroupDetail />
+      <OrganizationGroupTable />
     </div>
   )
 }
