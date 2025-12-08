@@ -206,17 +206,25 @@ export type ClassroomStudentGroup = {
   studentIds: string[]
 }
 
-// AI Analyses
-export type AiAnalysisResponse = {
-  classOverview: string
-  atRiskCount: number
-  atRiskStudents: AtRiskStudentAnalysis[]
+// =============== AI ANALYSIS TYPES ===============
+
+export type AiAnalysisRequest = {
+  classroom_id: number
+  force_mock: boolean
+  analysis_period_days: number
 }
 
-export type AtRiskStudentAnalysis = {
+export type AiStudentAnalysisResult = {
   studentId: string
-  studentName: string
-  severity: 'High' | 'Medium' | 'Low'
-  reason: string
-  recommendation: string
+  progressPercent: number
+  currentStatus: string
+  statusText: string
+  currentSection: string | null
+  interventionText: string
+}
+
+export type AiAnalysisResponse = {
+  overviewText: string
+  students: AiStudentAnalysisResult[]
+  aiInsightsText: string
 }

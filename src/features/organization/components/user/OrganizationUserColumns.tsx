@@ -148,7 +148,7 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end'>
-                <DropdownMenuLabel>{tc('button.action')}</DropdownMenuLabel>
+                <DropdownMenuLabel>{tc('button.actions')}</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => handleViewDetail(user)}>
                   <Eye className='mr-2 h-4 w-4' /> {tc('button.view')}
                 </DropdownMenuItem>
