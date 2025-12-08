@@ -212,7 +212,6 @@ export default function StudentClassroomDetail({ courseEnrollment }: StudentClas
                       <Copy className='h-4 w-4' />
                     </Button>
                   </div>
-                  <p className='text-center text-xs text-slate-500'>{tClassroom('detail.classCode.description')}</p>
                 </div>
               </CardContent>
             </Card>
@@ -248,7 +247,7 @@ export default function StudentClassroomDetail({ courseEnrollment }: StudentClas
             )}
 
             {/* Google Meet Card */}
-            <Card className='border border-slate-200 py-4 shadow-sm'>
+            {/* <Card className='border border-slate-200 py-4 shadow-sm'>
               <CardContent className='p-4'>
                 <div className='space-y-3'>
                   <div className='flex items-center justify-between'>
@@ -265,7 +264,7 @@ export default function StudentClassroomDetail({ courseEnrollment }: StudentClas
                   </Button>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>
