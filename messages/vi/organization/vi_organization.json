@@ -5,6 +5,8 @@
     "description": "Mô tả",
     "image": "Ảnh tổ chức",
     "imageSize": "Ảnh phải nhỏ hơn 5MB",
+    "lesson": "Bài học",
+    "classroom": "Lớp học",
     "detail": {
       "noData": "Không có dữ liệu tổ chức nào.",
       "noSubscription": "Không có gói đăng ký nào cho tổ chức này.",

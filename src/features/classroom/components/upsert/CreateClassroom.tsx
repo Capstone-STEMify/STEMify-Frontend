@@ -192,7 +192,7 @@ export default function CreateClassroom() {
                 </Select>
               </div>
             </div>
-            <GroupTableWithTeacher onGroupsChange={(groups) => setSelectedGroups(groups)} />
+            <GroupTableWithTeacher grade={grade} onGroupsChange={(groups) => setSelectedGroups(groups)} />
           </div>
 
           {/* Basic Information Section */}

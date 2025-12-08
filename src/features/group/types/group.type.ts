@@ -32,6 +32,7 @@ export type GroupDetailStudent = {
 
 export type GroupQueryParams = {
   includeArchived?: boolean
+  grade?: number
   activeOnly?: boolean
 } & SearchPaginatedRequestParams
 

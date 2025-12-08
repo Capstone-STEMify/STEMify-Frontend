@@ -10,8 +10,10 @@ import { Checkbox } from '@/components/shadcn/checkbox'
 import { Group } from '@/features/group/types/group.type'
 import { useTranslations } from 'next-intl'
 import { LicenseType } from '@/types/userRole'
+import { Users2 } from 'lucide-react'
 
 type GroupTableWithTeacherProps = {
+  grade: string
   onGroupsChange: (
     groups: {
       groupCode: string
@@ -22,14 +24,17 @@ type GroupTableWithTeacherProps = {
   ) => void
 }
 
-export default function GroupTableWithTeacher({ onGroupsChange }: GroupTableWithTeacherProps) {
+export default function GroupTableWithTeacher({ grade, onGroupsChange }: GroupTableWithTeacherProps) {
+  const tc = useTranslations('common')
+  const to = useTranslations('organization')
+
   const [selectedRows, setSelectedRows] = useState<number[]>([])
   const [teacherAssignments, setTeacherAssignments] = useState<Record<number, string>>({})
 
   const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
 
   const { data } = useSearchGroupByOrganizationIdQuery(
-    { organizationId: selectedOrganizationId!, params: {} },
+    { organizationId: selectedOrganizationId!, params: { grade: Number(grade) } },
     { skip: !selectedOrganizationId }
   )
 
@@ -102,16 +107,16 @@ export default function GroupTableWithTeacher({ onGroupsChange }: GroupTableWith
               <TableHead className='w-12'>
                 <Checkbox checked={isAllSelected} onCheckedChange={handleSelectAll} aria-label='Select all' />
               </TableHead>
-              <TableHead>Group Code</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Teacher</TableHead>
+              <TableHead>{tc('tableHeader.studentGroup')}</TableHead>
+              <TableHead>{tc('tableHeader.numberOfStudents')}</TableHead>
+              <TableHead>{tc('tableHeader.teacher')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {groups.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className='h-24 text-center'>
-                  No groups found.
+                  {tc('noData')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -124,18 +129,19 @@ export default function GroupTableWithTeacher({ onGroupsChange }: GroupTableWith
                       aria-label={`Select group ${group.code}`}
                     />
                   </TableCell>
-                  <TableCell className='font-medium'>{group.code}</TableCell>
+                  <TableCell className='flex flex-col'>
+                    <span className='font-medium'>{group.name}</span>
+                    <span className='text-sm text-gray-500'>{group.code}</span>
+                  </TableCell>
                   <TableCell>
-                    <div className='flex flex-col'>
-                      <span className='font-medium'>{group.name}</span>
-                      <span className='text-sm text-gray-500'>
-                        {group.studentCount} {group.studentCount === 1 ? 'student' : 'students'}
-                      </span>
+                    <div className='flex items-center gap-2'>
+                      <Users2 className='h-4 w-4' />
+                      <span className='font-medium'>{group.studentCount}</span>
                     </div>
                   </TableCell>
                   <TableCell>
                     <SingleSelectWithSearch
-                      placeholder='Select teacher'
+                      placeholder='Chọn giáo viên'
                       options={teacherOptions}
                       value={teacherAssignments[group.id] || null}
                       onChange={(val) => handleTeacherChange(group.id, val)}

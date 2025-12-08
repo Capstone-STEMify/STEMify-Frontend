@@ -1,5 +1,6 @@
 {
   "common": {
+    "noData": "Không tìm thấy",
     "breadcrumb": {
       "home": "Trang Chủ",
       "course": "Khóa Học",
@@ -223,7 +224,8 @@
       "menu": "Mở Menu",
       "score": "Điểm",
       "correctAnswer": "Đáp án đúng",
-      "submissionDate": "Ngày nộp bài"
+      "submissionDate": "Ngày nộp bài",
+      "studentGroup": "Nhóm học sinh"
     },
     "paging": {
       "previous": "Trước",

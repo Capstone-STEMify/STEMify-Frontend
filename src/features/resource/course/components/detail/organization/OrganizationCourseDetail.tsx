@@ -20,6 +20,7 @@ export default function OrganizationCourseDetail() {
   const auth = useAppSelector((state) => state.auth)
   const studentId = auth?.user?.userId
   const tc = useTranslations('common.message')
+  const to = useTranslations('organization')
 
   const { courseId } = useParams()
 
@@ -77,7 +78,7 @@ export default function OrganizationCourseDetail() {
             className={`py-2 text-lg font-medium transition-all ${activeTab === 'lesson' ? 'text-blue-600' : 'text-gray-500'} relative`}
             onClick={() => setActiveTab('lesson')}
           >
-            Lesson
+            {to('lesson')}
             {activeTab === 'lesson' && (
               <span className='absolute bottom-0 left-0 h-[3px] w-full rounded-full bg-blue-600'></span>
             )}
@@ -87,7 +88,7 @@ export default function OrganizationCourseDetail() {
             className={`py-2 text-lg font-medium transition-all ${activeTab === 'classroom' ? 'text-blue-600' : 'text-gray-500'} relative`}
             onClick={() => setActiveTab('classroom')}
           >
-            Classroom
+            {to('classroom')}
             {activeTab === 'classroom' && (
               <span className='absolute bottom-0 left-0 h-[3px] w-full rounded-full bg-blue-600'></span>
             )}

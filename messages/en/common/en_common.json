@@ -1,5 +1,6 @@
 {
   "common": {
+    "noData": "Not found",
     "breadcrumb": {
       "home": "Home",
       "resource": "Resources",
@@ -224,7 +225,8 @@
       "menu": "Open Menu",
       "score": "Score",
       "correctAnswer": "Correct Answer",
-      "submissionDate": "Submission Date"
+      "submissionDate": "Submission Date",
+      "studentGroup": "Student Group"
     },
     "paging": {
       "previous": "Previous",

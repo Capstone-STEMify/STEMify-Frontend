@@ -5,6 +5,8 @@
     "description": "Description",
     "image": "Organization Image",
     "imageSize": "Image must be less than 5MB",
+    "lesson": "Lesson",
+    "classroom": "Class",
     "detail": {
       "noData": "No organization data available.",
       "noSubscription": "No subscriptions found for this organization.",
