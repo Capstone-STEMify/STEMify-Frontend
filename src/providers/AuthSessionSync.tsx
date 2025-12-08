@@ -5,6 +5,7 @@ import { setToken, setUser } from '@/features/auth/authSlice'
 import {
   setCurrentRole,
   setSelectedOrganizationId,
+  setSelectedOrgUserId,
   setSelectedSubscriptionOrderId
 } from '@/features/subscription/slice/selectedOrganizationSlice'
 import { UserRole } from '@/types/userRole'
@@ -67,6 +68,7 @@ export default function AuthSessionSync() {
       if (activeSub) {
         dispatch(setSelectedOrganizationId(firstOrg.id))
         dispatch(setSelectedSubscriptionOrderId(activeSub.subscriptionId))
+        dispatch(setSelectedOrgUserId('e821a170-2f5a-4a37-8d15-432a03af4a43')) //hardcode
         dispatch(setCurrentRole(activeSub.type)) // Đây là LicenseType
       }
     }

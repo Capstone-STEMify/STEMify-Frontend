@@ -41,12 +41,13 @@
       "backToClassrooms": "Quay lại Lớp học",
       "header": "Chi tiết lớp học",
       "selected": "Đã chọn",
+      "grade": "Khối",
       "students": {
         "label": "Học sinh",
         "noStudent": "Chưa có học sinh nào.",
         "noStudentSubtext": "Bắt đầu xây dựng lớp học của bạn bằng cách thêm học sinh"
       },
-      "courses": "Khóa học",
+      "course": "Khóa học",
       "curriculum": {
         "label": "Chương trình học"
       },
@@ -57,7 +58,7 @@
       },
       "teacher": "Giáo viên",
       "meet": {
-        "label": "Họp",
+        "label": "Cuộc Họp",
         "joinButton": "Tham gia cuộc họp"
       },
       "quickStats": {
@@ -98,6 +99,12 @@
         "asmTotal": "Tổng số Bài Tập",
         "submitted": "đã nộp"
       }
+    },
+    "myLearning": {
+      "title": "Lớp học của tôi",
+      "noClassroom": "Bạn chưa tham gia lớp học nào.",
+      "noClassroomSubtext": "Khám phá các lớp học có sẵn và bắt đầu học ngay hôm nay!",
+      "grade": "Khối"
     }
   }
 }

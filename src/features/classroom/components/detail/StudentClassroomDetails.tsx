@@ -6,36 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
-import { Separator } from '@/components/shadcn/separator'
-import {
-  Calendar,
-  Users,
-  BookOpen,
-  Copy,
-  Settings,
-  UserPlus,
-  MoreVertical,
-  ArrowLeft,
-  Clock,
-  GraduationCap,
-  Mail,
-  Edit
-} from 'lucide-react'
-import { format } from 'date-fns'
-import { ClassroomStatus } from '@/features/classroom/types/classroom.type'
+import { Users, BookOpen, Copy, MoreVertical, Mail, Camera, Video } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { LicenseType, UserRole } from '@/types/userRole'
-import {
-  useCreateCurriculumEnrollmentMutation,
-  useSearchCurriculumEnrollmentQuery
-} from '@/features/enrollment/api/curriculumEnrollmentApi'
+
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { signIn } from 'next-auth/react'
-import { CourseEnrollment, CurriculumEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
+import { CourseEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
 import { toast } from 'sonner'
 import { ClassroomNavItems } from 'app/[locale]/classroom/[classroomId]/page'
 import { setCourseEnrollmentId } from '@/features/enrollment/slice/enrollmentSlice'
@@ -43,13 +22,13 @@ import { useCreateCourseEnrollmentMutation } from '@/features/enrollment/api/cou
 
 export type StudentClassroomDetailProps = {
   courseEnrollment?: CourseEnrollment
-  setCurrentTab: (tab: ClassroomNavItems) => void
 }
-export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab }: StudentClassroomDetailProps) {
+export default function StudentClassroomDetail({ courseEnrollment }: StudentClassroomDetailProps) {
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
+  const tClassroom = useTranslations('classroom')
   const { classroomId } = useParams()
-  const auth = useAppSelector((state) => state.auth)
+  const { selectedOrgUserId } = useAppSelector((state) => state.selectedOrganization)
   const router = useRouter()
   const locale = useLocale()
   const dispatch = useAppDispatch()
@@ -62,18 +41,18 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
   const copyClassCode = () => {
     if (classroom?.classCode) {
       navigator.clipboard.writeText(classroom.classCode)
-      // You can add a toast notification here
+      toast.success(tt('successMessage.copiedToClipboard'))
     }
   }
   const handleEnroll = () => {
-    if (!auth.user?.userId) {
+    if (!selectedOrgUserId) {
       signIn('oidc', { callbackUrl: `/`, prompt: 'login' })
       return
     }
     if (classroom?.course.id) {
       createEnrollment({
         courseId: classroom?.course.id,
-        studentId: auth?.user?.userId,
+        studentId: selectedOrgUserId,
         status: EnrollmentStatus.IN_PROGRESS,
         classroomId: Number(classroomId)
       })
@@ -105,10 +84,10 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
     return (
       <div className='flex min-h-screen items-center justify-center bg-slate-50/50'>
         <div className='text-center'>
-          <h2 className='mb-2 text-2xl font-bold text-slate-900'>Classroom not found</h2>
-          <p className='mb-6 text-slate-600'>The classroom you're looking for doesn't exist.</p>
+          <h2 className='mb-2 text-2xl font-bold text-slate-900'>{tClassroom('detail.notFound')}</h2>
+          <p className='mb-6 text-slate-600'>{tClassroom('detail.notFoundSubtext')}</p>
           <Link href='/classroom'>
-            <Button>Back to Classrooms</Button>
+            <Button>{tc('button.backToClassroomList')}</Button>
           </Link>
         </div>
       </div>
@@ -128,7 +107,7 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
                 <CardHeader className='pb-4'>
                   <CardTitle className='flex items-center gap-2 text-lg'>
                     <BookOpen className='h-5 w-5 text-blue-600' />
-                    Course
+                    {tClassroom('detail.course')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -159,7 +138,7 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
                             router.push(`/resource/course/${classroom.course.id}/learn`)
                           }}
                         >
-                          Continue Learning
+                          {tc('button.continueLearning')}
                         </Button>
                       ) : (
                         <Button className='mt-4' onClick={handleEnroll}>
@@ -178,7 +157,7 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
                 <div className='flex items-center justify-between'>
                   <CardTitle className='flex items-center gap-2 text-lg'>
                     <Users className='h-5 w-5 text-blue-600' />
-                    Students ({classroom.numberOfStudents})
+                    {tClassroom('detail.students.label')} ({classroom.numberOfStudents})
                   </CardTitle>
                 </div>
               </CardHeader>
@@ -209,7 +188,7 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
                 ) : (
                   <div className='py-12 text-center'>
                     <Users className='mx-auto mb-3 h-12 w-12 text-slate-300' />
-                    <h3 className='mb-1 font-semibold text-slate-700'>No students yet</h3>
+                    <h3 className='mb-1 font-semibold text-slate-700'>{tClassroom('detail.students.noStudent')}</h3>
                   </div>
                 )}
               </CardContent>
@@ -221,7 +200,7 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
             {/* Class Code Card */}
             <Card className='border border-slate-200 py-4 shadow-sm'>
               <CardHeader className='pb-3'>
-                <CardTitle className='text-base'>Class Code</CardTitle>
+                <CardTitle className='text-base'>{tClassroom('detail.classCode.label')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className='space-y-3'>
@@ -233,7 +212,7 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
                       <Copy className='h-4 w-4' />
                     </Button>
                   </div>
-                  <p className='text-center text-xs text-slate-500'>Share this code with students to join the class</p>
+                  <p className='text-center text-xs text-slate-500'>{tClassroom('detail.classCode.description')}</p>
                 </div>
               </CardContent>
             </Card>
@@ -242,7 +221,7 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
             {classroom.teacher && (
               <Card className='border border-slate-200 py-4 shadow-sm'>
                 <CardHeader className='pb-3'>
-                  <CardTitle className='text-base'>Teacher</CardTitle>
+                  <CardTitle className='text-base'>{tClassroom('detail.teacher')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className='flex items-start gap-3'>
@@ -275,30 +254,15 @@ export default function StudentClassroomDetail({ courseEnrollment, setCurrentTab
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <div className='flex h-8 w-8 items-center justify-center rounded bg-white'>
-                        <svg viewBox='0 0 24 24' className='h-5 w-5'>
-                          <path
-                            fill='#00832d'
-                            d='M17,13l3.7-3.7c0.7-0.7,1.9-0.2,1.9,0.7v7.9c0,0.9-1.2,1.5-1.9,0.7L17,15v4c0,1.1-0.9,2-2,2H4c-1.1,0-2-0.9-2-2V5 c0-1.1,0.9-2,2-2h11c1.1,0,2,0.9,2,2v4l3.7-3.7c0.7-0.7,1.9-0.2,1.9,0.7v7.9C22.6,13.2,21.4,13.7,17,13z'
-                          />
-                        </svg>
+                        <Video className='h-5 w-5 text-green-600' />
                       </div>
-                      <span className='font-semibold text-slate-900'>Meet</span>
+                      <span className='font-semibold text-slate-900'>{tClassroom('detail.meet.label')}</span>
                     </div>
-                    <Button variant='ghost' size='icon' className='h-8 w-8'>
-                      <MoreVertical className='h-4 w-4 text-slate-600' />
-                    </Button>
                   </div>
 
                   <Button className='w-full border-2 border-slate-300 bg-white text-blue-600 hover:bg-slate-50'>
-                    Join
+                    {tClassroom('detail.meet.joinButton')}
                   </Button>
-
-                  <div className='flex items-center gap-2 text-sm text-slate-600'>
-                    <svg viewBox='0 0 24 24' className='h-4 w-4' fill='currentColor'>
-                      <path d='M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z' />
-                    </svg>
-                    <span>Visible to students</span>
-                  </div>
                 </div>
               </CardContent>
             </Card>

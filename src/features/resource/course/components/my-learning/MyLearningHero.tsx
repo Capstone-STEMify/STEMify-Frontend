@@ -14,7 +14,7 @@ type MyLearningHeroProps = {
 }
 
 export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
-  const t = useTranslations('MyLearning')
+  const t = useTranslations('myLearning')
 
   const auth = useAppSelector((state) => state.auth)
   const { data } = useSearchCourseEnrollmentQuery(

@@ -15,7 +15,7 @@
       "removeCourseFromCurriculum": "Đã xóa khóa học khỏi chương trình học thành công!",
       "lessonStart": "Bài học đã bắt đầu!",
       "lessonStatus": "Trạng thái bài học đã được cập nhật thành {status}!",
-      "sectionComplete": "Phần đã hoàn thành!",
+      "sectionComplete": "Đã hoàn thành!",
       "addComponentToKit": "Đã thêm thành phần vào bộ dụng cụ thành công!",
       "removeComponent": "Đã xóa thành phần khỏi bộ dụng cụ thành công!",
       "updateComponentInKit": "Đã cập nhật thành phần bộ dụng cụ thành công!",

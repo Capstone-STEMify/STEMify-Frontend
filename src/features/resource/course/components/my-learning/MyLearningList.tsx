@@ -1,4 +1,3 @@
-// app/my-learning/MyLearningList.tsx
 'use client'
 
 import React, { useMemo } from 'react'
@@ -13,19 +12,15 @@ import { SpecializationCard } from '@/features/certificate/components/list/Speci
 import { useSearchCurriculumEnrollmentQuery } from '@/features/enrollment/api/curriculumEnrollmentApi'
 import { CourseCard } from '@/features/certificate/components/list/CourseCard'
 import ClassroomList from '@/features/classroom/components/list/ClassroomList'
-import { Separator } from '@/components/shadcn/separator'
 import { MyLearningSidebar } from './MyLearningSidebar'
-import { Badge } from '@/components/shadcn/badge'
 
 type MyLearningListProps = {
   studentId?: string
 }
 
 export function MyLearningList({ studentId }: MyLearningListProps) {
-  const t = useTranslations('MyLearning')
-
-  const courseEnrollParams = useAppSelector((state) => state.courseEnrollment)
-  const curriculumEnrollParams = useAppSelector((state) => state.curriculumEnrollment)
+  const t = useTranslations('myLearning')
+  const tClassroom = useTranslations('classroom.myLearning')
 
   const { data: courseEnrollment, isLoading: isLoadingCourseEnrollment } = useSearchCourseEnrollmentQuery(
     { studentId },
@@ -75,7 +70,7 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
           <div className='min-w-0 flex-1'>
             {/* Classroom Section */}
             <div className='flex items-center justify-start gap-3'>
-              <h2 className='text-2xl font-bold text-gray-900'>My Classrooms</h2>
+              <h2 className='text-2xl font-bold text-gray-900'>{tClassroom('title')}</h2>
             </div>
             <ClassroomList />
 

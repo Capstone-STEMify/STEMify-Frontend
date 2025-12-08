@@ -209,6 +209,7 @@
       "numberOfStudents": "Number of Students: {quantity}",
       "groupList": "Group List",
       "createdDate": "Created Date",
+      "updatedAt": "Updated Date",
       "totalStudents": "Total Students",
       "attendance": "Attendance",
       "step1": {

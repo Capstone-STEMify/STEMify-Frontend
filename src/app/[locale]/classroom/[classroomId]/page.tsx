@@ -19,7 +19,7 @@ export type ClassroomNavItems = 'overview' | 'course' | 'quiz' | 'assignment' | 
 
 export default function ClassroomDetailPage() {
   const { classroomId } = useParams()
-  const auth = useAppSelector((state) => state.auth)
+  const { selectedOrgUserId } = useAppSelector((state) => state.selectedOrganization)
   const currentRole = useAppSelector((state) => state.selectedOrganization.currentRole)
   const [currentTab, setCurrentTab] = React.useState<ClassroomNavItems>('overview')
 
@@ -27,12 +27,12 @@ export default function ClassroomDetailPage() {
   const { data: courseEnrollment } = useSearchCourseEnrollmentQuery(
     {
       courseId: classroomData?.data.course.id,
-      studentId: auth?.user?.userId || '',
+      studentId: selectedOrgUserId!,
       classroomId: Number(classroomId),
       pageNumber: 1,
       pageSize: 20
     },
-    { skip: !auth.user?.userId || !classroomData?.data.course.id || currentRole !== LicenseType.STUDENT }
+    { skip: !selectedOrgUserId || !classroomData?.data.course.id || currentRole !== LicenseType.STUDENT }
   )
   if (isLoading) {
     return (
@@ -50,7 +50,7 @@ export default function ClassroomDetailPage() {
       <ClassroomSubHeader classroom={classroomData?.data} currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 'overview' && currentRole === LicenseType.TEACHER ? <ClassroomOverview /> : null}
       {currentTab === 'overview' && currentRole === LicenseType.STUDENT ? (
-        <StudentClassroomDetail courseEnrollment={courseEnrollment?.data.items[0]} setCurrentTab={setCurrentTab} />
+        <StudentClassroomDetail courseEnrollment={courseEnrollment?.data.items[0]} />
       ) : null}
       {currentTab === 'course' ? (
         <div>
@@ -69,7 +69,7 @@ export default function ClassroomDetailPage() {
       ) : null}
       {currentTab === 'student' ? (
         <div>
-          <StudentClassList/>
+          <StudentClassList />
         </div>
       ) : null}
     </div>

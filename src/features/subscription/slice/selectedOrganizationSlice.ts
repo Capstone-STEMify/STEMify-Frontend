@@ -3,12 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface SelectedOrganizationState {
   selectedOrganizationId: number | null
+  selectedOrgUserId?: string | null
   selectedSubscriptionOrderId?: number | null
   currentRole?: LicenseType | UserRole.ADMIN | UserRole.STAFF | UserRole.GUEST
 }
 
 const initialState: SelectedOrganizationState = {
   selectedOrganizationId: null,
+  selectedOrgUserId: null,
   selectedSubscriptionOrderId: null,
   currentRole: UserRole.GUEST
 }
@@ -19,6 +21,9 @@ const selectedOrganizationSlice = createSlice({
   reducers: {
     setSelectedOrganizationId: (state, action: PayloadAction<number>) => {
       state.selectedOrganizationId = action.payload
+    },
+    setSelectedOrgUserId: (state, action: PayloadAction<string>) => {
+      state.selectedOrgUserId = action.payload
     },
     setSelectedSubscriptionOrderId: (state, action: PayloadAction<number>) => {
       state.selectedSubscriptionOrderId = action.payload
@@ -34,7 +39,12 @@ const selectedOrganizationSlice = createSlice({
   }
 })
 
-export const { setSelectedOrganizationId, setSelectedSubscriptionOrderId, setCurrentRole, clearSelectedOrganization } =
-  selectedOrganizationSlice.actions
+export const {
+  setSelectedOrganizationId,
+  setSelectedOrgUserId,
+  setSelectedSubscriptionOrderId,
+  setCurrentRole,
+  clearSelectedOrganization
+} = selectedOrganizationSlice.actions
 
 export default selectedOrganizationSlice.reducer

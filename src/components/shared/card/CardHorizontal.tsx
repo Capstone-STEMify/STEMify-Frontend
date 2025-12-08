@@ -46,7 +46,7 @@ export default function CardHorizontal({
         </h3>
 
         {/* Description */}
-        {description && <p className='mt-3 line-clamp-2 text-xs text-gray-500'>{description}</p>}
+        {description && <p className='mt-3 line-clamp-4 text-xs text-gray-500'>{description}</p>}
 
         {/* CTA button */}
         {/* <Button variant='outline' className='mt-4 w-fit border-blue-600 text-blue-600 hover:bg-blue-50'>

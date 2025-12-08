@@ -60,10 +60,9 @@ export default function StrawLabList() {
   }
 
   return (
-    <div className='mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8'>
+    <div className='mx-auto max-w-7xl px-4 py-8 pb-16 sm:px-6 lg:px-8'>
       <div className='flex gap-2'>
         <BackButton />
-        <h1>Danh sách mô hình</h1>
       </div>
       <div className='overflow-x-hidden overflow-y-visible py-8' ref={emblaRef}>
         <div className='flex touch-pan-y gap-10 md:gap-12'>

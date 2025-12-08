@@ -30,6 +30,7 @@ type QuizEditorSidebarProps = {
 export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => {
   const tq = useTranslations('quiz')
   const tt = useTranslations('toast')
+  const tc = useTranslations('common')
 
   const { quizId, sectionId, lessonId } = useParams()
   const dispatch = useAppDispatch()
@@ -184,7 +185,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
               <Button onClick={handleSaveQuiz} className='w-full bg-blue-400' disabled={isSavingQuiz}>
                 <Save className='mr-2 h-4 w-4' />
                 {isSavingQuiz
-                  ? tq('upsert.form.saving')
+                  ? tc('button.submitting')
                   : quizId
                     ? tq('upsert.form.updateQuizInfo')
                     : tq('upsert.create')}
@@ -205,7 +206,7 @@ export const QuizEditorSidebar = ({ onAddQuestion }: QuizEditorSidebarProps) => 
                     onClick={onAddQuestion}
                     disabled={!quizId}
                     className='h-8 px-2'
-                    title={!quizId ? 'Save quiz info first' : 'Add new question'}
+                    title={!quizId ? tc('button.save') : tc('button.addQuestion')}
                   >
                     <Plus className='h-4 w-4' />
                   </Button>

@@ -14,7 +14,7 @@ import { Textarea } from '@/components/shadcn/textarea'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import BackButton from '@/components/shared/button/BackButton'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { formatDate, formatDateV2 } from '@/utils/index'
+import { fileToBase64, formatDate, formatDateV2 } from '@/utils/index'
 import { useLocale, useTranslations } from 'next-intl'
 
 const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (file: File | null) => void }) => {
@@ -92,15 +92,6 @@ const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (f
       />
     </div>
   )
-}
-
-const fileToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = (error) => reject(error)
-  })
 }
 
 export default function AssignmentSubmissionForm() {
@@ -230,7 +221,7 @@ export default function AssignmentSubmissionForm() {
       {/* Submission Form */}
       {true && (
         <div className='space-y-6'>
-          <div className='space-y-2'>
+          {/* <div className='space-y-2'>
             <Label htmlFor='project-title' className='text-base font-normal'>
               {t('student.doAsm.projectTitle')} <span className='text-red-500'>*</span>
             </Label>
@@ -241,7 +232,7 @@ export default function AssignmentSubmissionForm() {
               placeholder={t('student.doAsm.projectTitle')}
               className='max-w-2xl'
             />
-          </div>
+          </div> */}
 
           {questions.map((question) => (
             <div key={question.id} className='space-y-4 rounded-lg border p-4 shadow-sm'>
