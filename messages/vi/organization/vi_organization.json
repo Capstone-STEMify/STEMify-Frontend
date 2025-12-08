@@ -249,7 +249,7 @@
       "description": "Duyệt và quản lý tất cả các thành viên tổ chức đã đăng ký trên nền tảng.",
       "student": "Học sinh",
       "teacher": "Giáo viên",
-      "orgAdmin": "Quản trị viên",
+      "admin": "Quản trị viên",
       "placeholder": {
         "email": "Tìm kiếm theo email...",
         "license": "Chọn vai trò"

@@ -1,35 +1,26 @@
 'use client'
 
 import * as React from 'react'
-import { Download, CheckCircle2, Circle, Clock, Bot, AlertTriangle, Sparkles, X, BrainCircuit } from 'lucide-react'
+import { Download, CheckCircle2, Circle, Clock, Bot, AlertTriangle, Sparkles, BrainCircuit } from 'lucide-react'
 
 import { Button } from '@/components/shadcn/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion'
 
-import { useGetClassroomByIdQuery, useGetClassroomStudentProgressQuery } from '@/features/classroom/api/classroomApi'
-import { StudentProgressItem } from '@/features/classroom/types/classroom.type'
+import { 
+  useAnalyzeClassroomProgressMutation,
+  useGetClassroomByIdQuery, 
+  useGetClassroomStudentProgressQuery,
+} from '@/features/classroom/api/classroomApi'
+import { StudentProgressItem, AiStudentAnalysisResult } from '@/features/classroom/types/classroom.type'
 import { useTranslations } from 'next-intl'
 import Loading from 'app/[locale]/loading'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/shadcn/dialog'
-import { ScrollArea } from '@/components/shadcn/scroll-area'
-
-// --- TYPES MOCK ---
-type AtRiskStudentAnalysis = {
-  studentId: string
-  severity: 'High' | 'Medium'
-  reason: string
-  recommendation: string
-}
-
-type AiAnalysisResponse = {
-  classOverview: string
-  atRiskStudents: AtRiskStudentAnalysis[]
-}
+import { toast } from 'sonner' // Thêm toast để báo lỗi nếu cần
 
 interface CourseType {
   id: number
@@ -51,16 +42,22 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
   const [currentLessonId, setCurrentLessonId] = React.useState<string>('')
   
   // AI States
-  const [isAnalyzing, setIsAnalyzing] = React.useState(false)
-  const [aiData, setAiData] = React.useState<AiAnalysisResponse | null>(null)
-  const [filterAtRisk, setFilterAtRisk] = React.useState(false) // State để toggle filter học sinh yếu
-  const [selectedAnalysisStudent, setSelectedAnalysisStudent] = React.useState<AtRiskStudentAnalysis | null>(null) // State cho modal chi tiết
+  const [aiData, setAiData] = React.useState<{
+    overviewText: string;
+    students: AiStudentAnalysisResult[];
+    atRiskCount: number;
+  } | null>(null)
+  
+  const [filterAtRisk, setFilterAtRisk] = React.useState(false)
+  const [selectedAnalysisStudent, setSelectedAnalysisStudent] = React.useState<AiStudentAnalysisResult | null>(null)
 
   // --- QUERIES ---
   const { data: classroomRes } = useGetClassroomByIdQuery(classroomId, {
     skip: !classroomId
   })
   const curriculum = classroomRes?.data?.course
+
+  const [analyzeTrigger, { isLoading: isAnalyzing }] = useAnalyzeClassroomProgressMutation()
 
   React.useEffect(() => {
     if (courses.length > 0 && !selectedCourseId) {
@@ -88,32 +85,33 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
   const currentLesson = lessons.find((l) => String(l.lessonId) === currentLessonId)
 
-  // --- MOCK API CALL ---
   const handleAnalyzeClassroom = async () => {
-    if (students.length === 0) return
-    setIsAnalyzing(true)
+    try {
+      const response = await analyzeTrigger({
+        classroom_id: classroomId,
+        force_mock: false,
+        analysis_period_days: 7
+      }).unwrap()
 
-    // delay API
-    setTimeout(() => {
-      const atRiskMock: AtRiskStudentAnalysis[] = students.slice(0, 2).map((s, index) => ({
-        studentId: s.studentId,
-        severity: index === 0 ? 'High' : 'Medium',
-        reason: index === 0 
-          ? 'Học sinh chưa hoàn thành 3 bài tập liên tiếp và điểm Quiz trung bình dưới 50%.' 
-          : 'Học sinh có xu hướng nộp bài muộn và thời gian tương tác với bài học thấp.',
-        recommendation: index === 0
-          ? 'Cần tổ chức buổi phụ đạo 1-1 về kiến thức căn bản của bài Lesson 3.'
-          : 'Giáo viên nên nhắc nhở về kỷ luật nộp bài và khuyến khích tham gia thảo luận nhóm.'
-      }))
+      if (response.data) {
+        const atRiskStudents = response.data.students.filter(s => s.currentStatus === 'AtRisk')
+        
+        setAiData({
+          overviewText: response.data.overviewText || response.data.aiInsightsText,
+          students: atRiskStudents,
+          atRiskCount: atRiskStudents.length
+        })
 
-      const mockResponse: AiAnalysisResponse = {
-        classOverview: `Lớp học đang có tiến độ tốt với 80% học sinh hoàn thành đúng hạn. Tuy nhiên, mức độ hiểu bài ở phần "Advanced Concepts" có vẻ thấp hơn trung bình. Cần chú ý nhóm học sinh có nguy cơ tụt hậu.`,
-        atRiskStudents: atRiskMock
+        if (atRiskStudents.length > 0) {
+          toast.success(`AI found ${atRiskStudents.length} students at risk.`)
+        } else {
+          toast.info("AI analysis complete. Great job! No students currently at risk.")
+        }
       }
-
-      setAiData(mockResponse)
-      setIsAnalyzing(false)
-    }, 1500)
+    } catch (error) {
+      console.error("AI Analysis Failed:", error)
+      toast.error("Failed to analyze progress. Please try again later.")
+    }
   }
 
   // --- HELPERS ---
@@ -137,10 +135,11 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
     }
   }
 
-  // Filter students if toggle is on
   const displayedStudents = React.useMemo(() => {
     if (!filterAtRisk || !aiData) return students
-    const atRiskIds = aiData.atRiskStudents.map(s => s.studentId)
+    
+    const atRiskIds = aiData.students.map(s => s.studentId)
+    
     return students.filter(s => atRiskIds.includes(s.studentId))
   }, [students, filterAtRisk, aiData])
 
@@ -154,7 +153,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
           <Button 
             onClick={handleAnalyzeClassroom} 
             disabled={isAnalyzing}
-            className={`gap-2 transition-all ${aiData ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border border-blue-200' : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:opacity-90'}`}
+            className={`gap-2 transition-all ${aiData ? 'bg-purple-100 text-purple-700 hover:bg-purple-200 border border-purple-200' : 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:opacity-90'}`}
             variant={aiData ? "outline" : "default"}
           >
              {isAnalyzing ? (
@@ -214,7 +213,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
             <div className="flex flex-col md:flex-row gap-6">
               <div className="flex-1">
                 <p className="text-sm text-slate-700 leading-relaxed italic border-l-4 border-purple-300 pl-3">
-                  "{aiData.classOverview}"
+                  "{aiData.overviewText}"
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-w-[200px]">
@@ -228,7 +227,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                     Students at risk
                   </span>
                   <Badge variant={filterAtRisk ? "outline" : "destructive"} className="ml-2">
-                    {aiData.atRiskStudents.length}
+                    {aiData.atRiskCount}
                   </Badge>
                 </Button>
                 {filterAtRisk && (
@@ -308,8 +307,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
               <TableBody>
                 {displayedStudents.length > 0 ? (
                   displayedStudents.map((student) => {
-                    // Check if this student is marked as at-risk by AI
-                    const atRiskInfo = aiData?.atRiskStudents.find(s => s.studentId === student.studentId);
+                    const atRiskInfo = aiData?.students.find(s => s.studentId === student.studentId);
 
                     return (
                       <TableRow 
@@ -393,7 +391,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                Risk Analysis
             </DialogTitle>
             <DialogDescription>
-              AI Assessment for <span className="font-semibold text-slate-900">{selectedAnalysisStudent?.studentId ? students.find(s => s.studentId === selectedAnalysisStudent.studentId)?.studentName : ''}</span>
+              AI Assessment for student ID: <span className="font-semibold text-slate-900">{selectedAnalysisStudent?.studentId.substring(0,8)}...</span>
             </DialogDescription>
           </DialogHeader>
           
@@ -401,8 +399,8 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
             <div className="space-y-4 py-2">
               <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border">
                  <span className="text-sm font-medium text-slate-500">Risk Severity</span>
-                 <Badge variant={selectedAnalysisStudent.severity === 'High' ? 'destructive' : 'default'} className="bg-orange-500 hover:bg-orange-600">
-                   {selectedAnalysisStudent.severity} Priority
+                 <Badge variant="destructive" className="bg-orange-500 hover:bg-orange-600">
+                   {selectedAnalysisStudent.currentStatus === 'AtRisk' ? 'High' : 'Medium'} Priority
                  </Badge>
               </div>
 
@@ -412,7 +410,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                   Identified Issues
                 </h4>
                 <div className="text-sm text-slate-600 bg-red-50 p-3 rounded-md border border-red-100">
-                  {selectedAnalysisStudent.reason}
+                  {selectedAnalysisStudent.statusText}
                 </div>
               </div>
 
@@ -422,7 +420,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                   Recommended Action
                 </h4>
                 <div className="text-sm text-slate-600 bg-green-50 p-3 rounded-md border border-green-100">
-                  {selectedAnalysisStudent.recommendation}
+                  {selectedAnalysisStudent.interventionText}
                 </div>
               </div>
             </div>
