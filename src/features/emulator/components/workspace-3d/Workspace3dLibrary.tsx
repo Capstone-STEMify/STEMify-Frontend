@@ -22,6 +22,8 @@ import { EmulatorStatus, EmulatorWithThumbnail } from '@/features/emulator/types
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { UserRole } from '@/types/userRole'
+import SearchBar from '@/components/shared/search/SearchBar'
+import SSelect from '@/components/shared/SSelect'
 
 export default function Workspace3dLibrary() {
   const { openModal } = useModal()
@@ -31,14 +33,29 @@ export default function Workspace3dLibrary() {
   const tt = useTranslations('toast')
   const t3d = useTranslations('workspace3D')
 
+  const [search, setSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
+
   const userRole = useAppSelector((state) => state.auth.user?.userRole)
   const allowRoles = [UserRole.STAFF, UserRole.ADMIN]
+  const statusQuery = statusFilter === 'all' ? undefined : statusFilter
 
-  const { data, isLoading } = useSearchEmulationsQuery({ page: 1 })
+  const { data, isLoading } = useSearchEmulationsQuery({
+    page: 1,
+    search,
+    status: statusQuery as EmulatorStatus | undefined
+  })
   const [updateEmulation] = useUpdateEmulatorMutation()
   const [deleteEmulation] = useDeleteEmulatorMutation()
 
   const emulations = data?.data.items || []
+
+  const emulationOtptions = [
+    { label: t('status.all'), value: 'all' },
+    { label: t('status.published'), value: EmulatorStatus.PUBLISHED },
+    { label: t('status.draft'), value: EmulatorStatus.DRAFT },
+    { label: t('status.archived'), value: EmulatorStatus.ARCHIVED }
+  ]
 
   // === Handlers ===
   const handleNavigate = (id: string) => router.push(`/${locale}/lab/workspace-3d/${id}`)
@@ -81,10 +98,26 @@ export default function Workspace3dLibrary() {
   if (emulations.length === 0) {
     return (
       <div className='mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8'>
-        <div className='flex justify-end'>
+        <div className='mb-6 flex items-center justify-between'>
+          <div className='flex gap-2'>
+            <BackButton />
+            <h1>{t3d('list.title')}</h1>
+          </div>
           <Button variant='outline' size='sm' onClick={() => openModal('upsertEmulator')}>
-            {t3d('button.create')}
+            {t('button.create')}
           </Button>
+        </div>
+        <div className='my-4 flex gap-4'>
+          <SearchBar onDebouncedSearch={(query) => setSearch(query)} className='w-96' />
+
+          {/* Placeholder for future filters */}
+          <SSelect
+            placeholder={t('select.placeholder')}
+            options={emulationOtptions}
+            value={statusFilter}
+            onChange={(value) => setStatusFilter(value)}
+            className='w-64'
+          />
         </div>
         <SEmpty
           title='Không tìm thấy mô hình nào'
@@ -108,9 +141,21 @@ export default function Workspace3dLibrary() {
           {t('button.create')}
         </Button>
       </div>
+      <div className='my-4 flex gap-4'>
+        <SearchBar onDebouncedSearch={(query) => setSearch(query)} className='w-96' />
+
+        {/* Placeholder for future filters */}
+        <SSelect
+          placeholder={t('select.placeholder')}
+          options={emulationOtptions}
+          value={statusFilter}
+          onChange={(value) => setStatusFilter(value)}
+          className='w-64 bg-transparent'
+        />
+      </div>
 
       {/* Model list */}
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
+      <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
         {emulations.map((e) => (
           <Card
             key={e.emulationId}
