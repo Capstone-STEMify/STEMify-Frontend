@@ -2,11 +2,14 @@
   "common": {
     "breadcrumb": {
       "home": "Trang Chủ",
+      "course": "Khóa Học",
       "courses": "Khóa Học",
       "resource": "Tài Nguyên",
+      "lesson": "Bài Học",
       "lessons": "Bài Học",
       "activities": "Hoạt Động",
       "courseDetail": "Chi Tiết Khóa Học",
+      "classroom": "Lớp Học",
       "classrooms": "Lớp Học",
       "classroomDetail": "Chi Tiết Lớp Học",
       "createClassroom": "Tạo Lớp Học"
@@ -126,7 +129,10 @@
       "continueLearning": "Tiếp tục Học",
       "markAsComplete": "Đánh dấu hoàn thành",
       "startQuiz": "Bắt Đầu Bài Kiểm Tra",
-      "contact": "Liên Hệ Ngay"
+      "contact": "Liên Hệ Ngay",
+      "exportRSA": "Xuất RSA",
+      "exporting": "Đang Xuất...",
+      "downloadAndPrint": "Tải Xuống & In"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",
@@ -213,7 +219,10 @@
       "user": "Người dùng",
       "license": "Vai trò",
       "groupName": "Nhóm",
-      "menu": "Mở Menu"
+      "menu": "Mở Menu",
+      "score": "Điểm",
+      "correctAnswer": "Đáp án đúng",
+      "submissionDate": "Ngày nộp bài"
     },
     "paging": {
       "previous": "Trước",

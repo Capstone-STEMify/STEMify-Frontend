@@ -63,7 +63,7 @@ export default function TeacherClassroomList() {
   }))
 
   return (
-    <BreadcrumbPageLayout color={'yellow'} size='md' weight='semibold' title={t('list.header')}>
+    <BreadcrumbPageLayout color={'yellow'} size='md' weight='semibold'>
       {/* Header */}
       <div className='shadow-6 mt-6 rounded-lg bg-white'>
         <div className='space-y-5 px-10 py-5'>

@@ -33,6 +33,12 @@ function resolveHref(href: string): string {
   return href
 }
 
+function isIdSegment(segment: string) {
+  return /^\d+$/.test(segment)
+}
+
+const IGNORE_SEGMENTS = ['learn', 'edit', 'view', 'preview']
+
 export default function SBreadcrumb({ title, size = 'md', color, weight }: SBreadcrumbProps) {
   const tc = useTranslations('common.breadcrumb')
   const pathname = usePathname()
@@ -41,6 +47,11 @@ export default function SBreadcrumb({ title, size = 'md', color, weight }: SBrea
     .split('/')
     .filter((segment) => segment !== locale)
     .filter(Boolean)
+    .filter(
+      (segment) =>
+        !isIdSegment(segment) && // ✅ bỏ id
+        !IGNORE_SEGMENTS.includes(segment) // ✅ bỏ learn
+    )
 
   function formatLabel(segment: string): string {
     const key = segment.replace(/-/g, '_') // nếu muốn hỗ trợ kebab-case
@@ -67,20 +78,26 @@ export default function SBreadcrumb({ title, size = 'md', color, weight }: SBrea
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {allItems.map((item) => (
+        {allItems.map((item, index) => (
           <Fragment key={item.href}>
             <BreadcrumbItem className={textVariants({ size })}>
-              {item.href === pathname ? (
-                <BreadcrumbPage className={textVariants({ color, weight })}>{title || item.label}</BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink asChild>
-                  <Link href={resolveHref(item.href)}>{item.label}</Link>
-                </BreadcrumbLink>
-              )}
+              <BreadcrumbLink asChild>
+                <Link href={resolveHref(item.href)}>{item.label}</Link>
+              </BreadcrumbLink>
             </BreadcrumbItem>
-            {item.href !== pathname && <BreadcrumbSeparator />}
+
+            {index < allItems.length - 1 && <BreadcrumbSeparator />}
           </Fragment>
         ))}
+
+        {title && (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem className={textVariants({ size })}>
+              <BreadcrumbPage className={textVariants({ color, weight })}>{title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        )}
       </BreadcrumbList>
     </Breadcrumb>
   )

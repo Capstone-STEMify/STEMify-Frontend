@@ -95,7 +95,7 @@ export default function LessonOutline({ sectionData, sectionStatus }: LessonOutl
 
                 {/* ✅ Duration with appropriate styling */}
                 <div className={cn('text-muted-foreground', (!isLoggedIn || isLocked) && 'text-gray-400')}>
-                  {sec.duration} mins
+                  {sec.duration} {t('mins')}
                 </div>
               </div>
             )

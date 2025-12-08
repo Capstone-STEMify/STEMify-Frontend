@@ -16,7 +16,7 @@ const PrintFooter = () => {
   return (
     <div className='mt-8 border-t border-gray-300 pt-4 text-xs text-gray-500'>
       <div className='flex justify-between'>
-        <span>Copyright 2025 © Strawbees AB</span>
+        <span>Copyright 2025 © STEMify </span>
         <span>Generated on {generationDate}</span>
         <span className='max-w-[200px] truncate'>{currentUrl}</span>
       </div>

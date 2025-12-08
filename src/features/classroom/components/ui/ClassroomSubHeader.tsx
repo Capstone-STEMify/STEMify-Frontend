@@ -1,28 +1,23 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { cn } from '@/utils/shadcn/utils'
 import { useLocale, useTranslations } from 'next-intl'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
-import { Button } from '@/components/shadcn/button'
-import { ArrowLeft, Calendar, GraduationCap } from 'lucide-react'
+import { Calendar, GraduationCap } from 'lucide-react'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { Classroom } from '@/features/classroom/types/classroom.type'
-import { format } from 'date-fns'
 import { ClassroomNavItems } from 'app/[locale]/classroom/[classroomId]/page'
 import { formatDate, useStatusTranslation } from '@/utils/index'
 import BackButton from '@/components/shared/button/BackButton'
 
 interface Props {
-  curriculumId?: number
   classroom: Classroom
   currentTab: ClassroomNavItems
   setCurrentTab: (tab: ClassroomNavItems) => void
 }
 
-export default function ClassroomSubHeader({ classroom, curriculumId, currentTab, setCurrentTab }: Props) {
+export default function ClassroomSubHeader({ classroom, currentTab, setCurrentTab }: Props) {
   const locale = useLocale()
   const t = useTranslations('Header')
   const statusTranslation = useStatusTranslation()

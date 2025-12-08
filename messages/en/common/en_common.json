@@ -3,10 +3,13 @@
     "breadcrumb": {
       "home": "Home",
       "resource": "Resources",
+      "lesson": "Lesson",
       "lessons": "Lessons",
       "activities": "Activities",
+      "course": "Course",
       "courses": "Courses",
       "courseDetail": "Course Detail",
+      "classroom": "Classroom",
       "classrooms": "Classrooms",
       "classroomDetail": "Classroom Detail",
       "createClassroom": "Create Classroom"
@@ -127,7 +130,10 @@
       "markAsComplete": "Mark as Complete",
       "startQuiz": "Start Quiz",
       "contact": "Contact Us",
-      "menu": "Open Menu"
+      "menu": "Open Menu",
+      "exportRSA": "Export RSA",
+      "exporting": "Exporting...",
+      "downloadAndPrint": "Download & Print"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -214,7 +220,11 @@
       "user": "User",
       "license": "License",
       "groupName": "Group",
-      "className": "Class Name"
+      "className": "Class Name",
+      "menu": "Open Menu",
+      "score": "Score",
+      "correctAnswer": "Correct Answer",
+      "submissionDate": "Submission Date"
     },
     "paging": {
       "previous": "Previous",

@@ -8,7 +8,7 @@ export default function LessonList() {
   const t = useTranslations('LessonList')
   const tc = useTranslations('common.breadcrumb')
   return (
-    <BreadcrumbPageLayout color={'yellow'} size='md' weight='semibold' title={tc('lessons')}>
+    <BreadcrumbPageLayout color={'yellow'} size='md' weight='semibold'>
       <div className='shadow-6 mt-6 rounded-lg bg-white'>
         <SListTitle title={t('title')} description={t('description')} />
         <LessonListAction />

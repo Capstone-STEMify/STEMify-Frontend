@@ -5,12 +5,10 @@ import { VariantProps } from 'class-variance-authority'
 import React from 'react'
 
 type BreadcrumbPageLayoutProps = {
-  title: string
   children: React.ReactNode
 } & VariantProps<typeof textVariants>
 
 export default function BreadcrumbPageLayout({
-  title,
   children,
   color,
   size,
@@ -22,7 +20,7 @@ export default function BreadcrumbPageLayout({
         <div className='mx-8'>
           <div className='flex items-center gap-5'>
             <BackButton />
-            <SBreadcrumb title={title} size={size} color={color} weight={weight} />
+            <SBreadcrumb size={size} color={color} weight={weight} />
           </div>
           {children}
         </div>

@@ -2,7 +2,12 @@ import { Button } from '@/components/shadcn/button'
 import { useLazyExportToRSAQuery } from '@/features/resource/export/api/exportApi'
 import { useEffect } from 'react'
 
-export default function ExportRSAButton({ courseId }: { courseId: number }) {
+type ExportRSAButtonProps = {
+  courseId: number
+  className?: string
+}
+
+export default function ExportRSAButton({ courseId, className = 'w-full' }: ExportRSAButtonProps) {
   const [triggerExport, { data: exportData, isLoading: isExporting }] = useLazyExportToRSAQuery()
 
   useEffect(() => {
@@ -35,7 +40,12 @@ export default function ExportRSAButton({ courseId }: { courseId: number }) {
   }, [exportData])
 
   return (
-    <Button disabled={isExporting} variant={'outline'} className='w-full' onClick={() => triggerExport({ courseId })}>
+    <Button
+      disabled={isExporting}
+      variant={'outline'}
+      className={className}
+      onClick={() => triggerExport({ courseId })}
+    >
       {isExporting ? 'Exporting...' : 'Export to RSA'}
     </Button>
   )

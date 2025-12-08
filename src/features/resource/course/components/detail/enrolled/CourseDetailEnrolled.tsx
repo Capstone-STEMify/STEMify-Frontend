@@ -2,10 +2,12 @@
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/shadcn/resizable'
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import BackButton from '@/components/shared/button/BackButton'
+import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useGetCourseByIdQuery } from '@/features/resource/course/api/courseApi'
 import CourseDetailContent from '@/features/resource/course/components/detail/enrolled/CourseDetailContent'
 import CourseDetailDescription from '@/features/resource/course/components/detail/enrolled/CourseDetailDescription'
+import { useTranslations } from 'next-intl'
 
 type CourseDetailEnrolledProps = {
   courseId: number
@@ -22,7 +24,7 @@ export default function CourseDetailEnrolled({ courseId, enrollmentId }: CourseD
       </div>
     )
 
-  if (!data) return <div>No Course Data</div>
+  if (!data) return <SEmpty title='Không có khóa học nào' />
   return (
     <div className='bg-light pb-20'>
       <div className='container mx-auto max-w-7xl py-6'>

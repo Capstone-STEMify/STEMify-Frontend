@@ -11,6 +11,8 @@ import { Progress } from '@/components/shadcn/progress'
 import { useCreateQuizAttemptMutation, useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { useGetStudentQuizByIdQuery } from '@/features/quiz/api/studentQuizApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import { formatDate } from '@/utils/index'
+import { useLocale, useTranslations } from 'next-intl'
 
 type QuizResultProps = {
   quizId: number
@@ -18,6 +20,10 @@ type QuizResultProps = {
 }
 
 export default function QuizResult({ quizId, studentQuizAttempt }: QuizResultProps) {
+  const locale = useLocale()
+
+  const tq = useTranslations('quiz.detail')
+
   const dispatch = useAppDispatch()
   const [reAttemptQuiz] = useCreateQuizAttemptMutation()
 
@@ -57,6 +63,19 @@ export default function QuizResult({ quizId, studentQuizAttempt }: QuizResultPro
     }
   }
 
+  const calculateDuration = (startedAt: string, completedAt?: string) => {
+    if (!completedAt) return '00:00'
+
+    const start = new Date(startedAt).getTime()
+    const end = new Date(completedAt).getTime()
+
+    const totalSeconds = Math.max(0, Math.floor((end - start) / 1000))
+    const minutes = Math.floor(totalSeconds / 60)
+    const seconds = totalSeconds % 60
+
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+  }
+
   return (
     <div className='min-h-screen p-6'>
       <div className='animate-in fade-in-0 slide-in-from-bottom-8 mx-auto w-full max-w-4xl duration-700'>
@@ -64,72 +83,41 @@ export default function QuizResult({ quizId, studentQuizAttempt }: QuizResultPro
         <Card className='mb-8 overflow-hidden border border-gray-200 bg-white shadow-sm'>
           <div className='divide-y divide-gray-200'>
             <div className='flex items-center justify-between bg-gray-50 px-6 py-3'>
-              <span className='text-sm font-medium text-gray-700'>Bắt đầu vào lúc</span>
+              <span className='text-sm font-medium text-gray-700'>{tq('startedAt')}</span>
+              <span className='text-sm text-gray-600'>{formatDate(studentQuizAttempt.startedAt, { locale })}</span>
+            </div>
+            <div className='flex items-center justify-between px-6 py-3'>
+              <span className='text-sm font-medium text-gray-700'>{tq('status')}</span>
+              <span className='text-sm text-gray-600'>{tq('complete')}</span>
+            </div>
+            <div className='flex items-center justify-between bg-gray-50 px-6 py-3'>
+              <span className='text-sm font-medium text-gray-700'>{tq('completedAt')}</span>
               <span className='text-sm text-gray-600'>
-                {new Date(studentQuizAttempt.startedAt).toLocaleString('vi-VN', {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  hour12: true
-                })}
+                {studentQuizAttempt.completedAt ? formatDate(studentQuizAttempt.completedAt, { locale }) : '-'}
               </span>
             </div>
             <div className='flex items-center justify-between px-6 py-3'>
-              <span className='text-sm font-medium text-gray-700'>Trạng thái</span>
-              <span className='text-sm text-gray-600'>Đã xong</span>
-            </div>
-            <div className='flex items-center justify-between bg-gray-50 px-6 py-3'>
-              <span className='text-sm font-medium text-gray-700'>Kết thúc lúc</span>
+              <span className='text-sm font-medium text-gray-700'>{tq('duration')}</span>
               <span className='text-sm text-gray-600'>
-                {studentQuizAttempt.completedAt
-                  ? new Date(studentQuizAttempt.completedAt).toLocaleString('vi-VN', {
-                      weekday: 'long',
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true
-                    })
-                  : '-'}
-              </span>
-            </div>
-            <div className='flex items-center justify-between px-6 py-3'>
-              <span className='text-sm font-medium text-gray-700'>Thời gian thực hiện</span>
-              <span className='text-sm text-gray-600'>
-                {(() => {
-                  if (!studentQuizAttempt.completedAt) return '-'
-                  const start = new Date(studentQuizAttempt.startedAt)
-                  const end = new Date(studentQuizAttempt.completedAt)
-                  const diffMs = end.getTime() - start.getTime()
-                  const minutes = Math.floor(diffMs / 60000)
-                  const seconds = Math.floor((diffMs % 60000) / 1000)
-                  return `${minutes} phút ${seconds} giây`
-                })()}
+                {calculateDuration(studentQuizAttempt.startedAt, studentQuizAttempt.completedAt)}
               </span>
             </div>
             <div className='flex items-center justify-between bg-gray-50 px-6 py-3'>
-              <span className='text-sm font-medium text-gray-700'>Số câu đúng</span>
+              <span className='text-sm font-medium text-gray-700'>{tq('correctAnswers')}</span>
               <span className='text-sm text-gray-600'>
                 {correctAnswersCount} / {questions.length}
               </span>
             </div>
             <div className='flex items-center justify-between px-6 py-3'>
-              <span className='text-sm font-medium text-gray-700'>Điểm</span>
-              <span className='text-sm font-semibold text-gray-900'>
-                {((correctAnswersCount / questions.length) * 10).toFixed(2)} trên {questions.length * 10},00 (
-                {scorePercent}%)
-              </span>
+              <span className='text-sm font-medium text-gray-700'>{tq('score')}</span>
+              <span className='text-sm font-semibold text-gray-900'>{scorePercent}%</span>
             </div>
           </div>
         </Card>
 
         {/* Results Summary */}
         <div className='mb-8'>
-          <h2 className='mb-6 text-2xl font-bold text-gray-800'>Chi tiết kết quả</h2>
+          <h2 className='mb-6 text-2xl font-bold text-gray-800'>{tq('resultDetail')}</h2>
           <div className='space-y-6'>
             {questions.map((question, index) => {
               const questionAttempt = studentQuizAttempt.questionAttempts?.find((qa) => qa.questionId === question.id)
@@ -147,10 +135,13 @@ export default function QuizResult({ quizId, studentQuizAttempt }: QuizResultPro
                 <Card key={index} className='overflow-hidden border border-gray-200 bg-white shadow-sm'>
                   <div className='bg-gray-50 px-6 py-3'>
                     <div className='flex items-center justify-between'>
-                      <h3 className='text-base font-semibold text-gray-700'>Câu Hỏi {index + 1}</h3>
+                      <h3 className='text-base font-semibold text-gray-700'>
+                        {tq('question.question')} {index + 1}
+                      </h3>
                       <div className='flex items-center gap-3'>
-                        <span className='text-sm text-gray-500'>{isCorrect ? 'Hoàn thành' : 'Chưa hoàn thành'}</span>
-                        <span className='text-sm text-gray-500'>Đạt điểm {isCorrect ? '1,00' : '0,00'} trên 1,00</span>
+                        <span className='text-sm text-gray-500'>{isCorrect ? tq('complete') : tq('incomplete')}</span>
+                        <span className='text-sm text-gray-500'> {isCorrect ? '1' : '0'}/1</span>
+                        {/* TODO */}
                       </div>
                     </div>
                   </div>

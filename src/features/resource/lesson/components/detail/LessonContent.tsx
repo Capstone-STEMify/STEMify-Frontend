@@ -84,18 +84,22 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
 
   if (lastItem.contentType === ContentType.QUIZ) {
     return (
-      <QuizViewer
-        quiz={lastItem}
-        studentQuizId={currentSectionProgress?.studentQuizId}
-        sectionStatus={sectionStatus?.data}
-      />
+      <ScrollArea className='h-[600px]'>
+        <QuizViewer
+          quiz={lastItem}
+          studentQuizId={currentSectionProgress?.studentQuizId}
+          sectionStatus={sectionStatus?.data}
+        />
+      </ScrollArea>
     )
   } else if (lastItem.contentType === ContentType.ASSIGNMENT) {
     return (
-      <AssignmentAttempt
-        studentAssignmentId={currentSectionProgress?.studentAssignmentId}
-        assignmentId={lastItem.assignmentId}
-      />
+      <ScrollArea className='h-[600px]'>
+        <AssignmentAttempt
+          studentAssignmentId={currentSectionProgress?.studentAssignmentId}
+          assignmentId={lastItem.assignmentId}
+        />
+      </ScrollArea>
     )
   }
 
