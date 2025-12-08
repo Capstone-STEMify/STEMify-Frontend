@@ -2,10 +2,13 @@
   "classroom": {
     "list": {
       "header": "Classroom List",
+      "description": "Manage all your existing classrooms, including class details, schedules, teachers, and enrolled students.",
       "searchPlaceholder": "Search...",
       "selectCoursePlaceholder": "Select course",
       "selectStatusPlaceholder": "Filter by status",
-      "courses": "courses"
+      "courses": "courses",
+      "noClassroom": "No classrooms found.",
+      "noClassroomSubtext": "Try adjusting your search or filter to find what you're looking for."
     },
     "update": {
       "basicInfo": {

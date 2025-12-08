@@ -1,5 +1,16 @@
 {
   "common": {
+    "breadcrumb": {
+      "home": "Home",
+      "resource": "Resources",
+      "lessons": "Lessons",
+      "activities": "Activities",
+      "courses": "Courses",
+      "courseDetail": "Course Detail",
+      "classrooms": "Classrooms",
+      "classroomDetail": "Classroom Detail",
+      "createClassroom": "Create Classroom"
+    },
     "search": {
       "placeholder": "Search...",
       "noResults": "No results found."

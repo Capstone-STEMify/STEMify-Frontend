@@ -22,7 +22,12 @@ export type Classroom = {
   classCode: string
   status: ClassroomStatus
   numberOfStudents: number
-  students: any[]
+  students: {
+    id: string
+    name: string
+    email: string
+    imageUrl: string
+  }[]
   course: Course
   // curriculum: Pick<Curriculum, 'id' | 'title' | 'description' | 'imageUrl' | 'courseCount' | 'code'>
   organizationSubscriptionOrderId: number
@@ -30,14 +35,16 @@ export type Classroom = {
 
 export type ClassroomSliceParams = {
   teacherId?: string
-  status?: 'upcoming' | 'inprogress' | 'completed' | 'endsoon'
+  status?: ClassroomStatus
   courseId?: number
 } & SliceQueryParams
 
 // Pending, InProgress, Completed, Deleted
 export enum ClassroomStatus {
+  ALL = 'all', // for filter purpose
   PENDING = 'Pending',
   IN_PROGRESS = 'InProgress',
+  UPCOMING = 'Upcoming',
   COMPLETED = 'Completed',
   DELETED = 'Deleted'
 }
@@ -201,15 +208,15 @@ export type ClassroomStudentGroup = {
 
 // AI Analyses
 export type AiAnalysisResponse = {
-  classOverview: string;
-  atRiskCount: number;
-  atRiskStudents: AtRiskStudentAnalysis[];
+  classOverview: string
+  atRiskCount: number
+  atRiskStudents: AtRiskStudentAnalysis[]
 }
 
 export type AtRiskStudentAnalysis = {
-  studentId: string;
-  studentName: string;
-  severity: 'High' | 'Medium' | 'Low';
-  reason: string;
-  recommendation: string;
+  studentId: string
+  studentName: string
+  severity: 'High' | 'Medium' | 'Low'
+  reason: string
+  recommendation: string
 }

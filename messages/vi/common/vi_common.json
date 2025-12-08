@@ -1,5 +1,16 @@
 {
   "common": {
+    "breadcrumb": {
+      "home": "Trang Chủ",
+      "courses": "Khóa Học",
+      "resource": "Tài Nguyên",
+      "lessons": "Bài Học",
+      "activities": "Hoạt Động",
+      "courseDetail": "Chi Tiết Khóa Học",
+      "classrooms": "Lớp Học",
+      "classroomDetail": "Chi Tiết Lớp Học",
+      "createClassroom": "Tạo Lớp Học"
+    },
     "search": {
       "placeholder": "Tìm kiếm...",
       "noResults": "Không tìm thấy kết quả."
@@ -256,6 +267,7 @@
       "active": "Đã xác thực",
       "inactive": "Chưa xác thực"
     },
+
     "accountType": {
       "accountTypeLabel": "Loại Tài Khoản",
       "admin": "Quản Trị Viên",

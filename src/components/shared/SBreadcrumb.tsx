@@ -9,7 +9,7 @@ import {
 } from '@/components/shadcn/breadcrumb'
 import { textVariants } from '@/utils/shadcn/variants'
 import { VariantProps } from 'class-variance-authority'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Fragment } from 'react'
@@ -34,6 +34,7 @@ function resolveHref(href: string): string {
 }
 
 export default function SBreadcrumb({ title, size = 'md', color, weight }: SBreadcrumbProps) {
+  const tc = useTranslations('common.breadcrumb')
   const pathname = usePathname()
   const locale = useLocale()
   const segments = pathname
@@ -42,6 +43,15 @@ export default function SBreadcrumb({ title, size = 'md', color, weight }: SBrea
     .filter(Boolean)
 
   function formatLabel(segment: string): string {
+    const key = segment.replace(/-/g, '_') // nếu muốn hỗ trợ kebab-case
+
+    // thử dịch
+    const translated = tc(key)
+
+    // next-intl: nếu không có key -> trả về chính key
+    if (translated !== key) return translated
+
+    // fallback: format thủ công
     return segment.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
   }
 
@@ -52,7 +62,7 @@ export default function SBreadcrumb({ title, size = 'md', color, weight }: SBrea
       href
     }
   })
-  const allItems = [{ label: 'Home', href: `/${locale}` }, ...items]
+  const allItems = [{ label: tc('home'), href: `/${locale}` }, ...items]
 
   return (
     <Breadcrumb>
