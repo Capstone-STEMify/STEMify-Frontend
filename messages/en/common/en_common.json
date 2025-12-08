@@ -134,7 +134,8 @@
       "menu": "Open Menu",
       "exportRSA": "Export RSA",
       "exporting": "Exporting...",
-      "downloadAndPrint": "Download & Print"
+      "downloadAndPrint": "Download & Print",
+      "upgrade": "Upgrade Plan"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

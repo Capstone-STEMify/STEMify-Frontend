@@ -134,7 +134,8 @@
       "actions": "Thao tác",
       "exportRSA": "Xuất RSA",
       "exporting": "Đang Xuất...",
-      "downloadAndPrint": "Tải Xuống & In"
+      "downloadAndPrint": "Tải Xuống & In",
+      "upgrade": "Nâng Cấp Gói"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

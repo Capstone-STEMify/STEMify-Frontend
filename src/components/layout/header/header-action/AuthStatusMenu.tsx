@@ -59,6 +59,7 @@ function MenuItem({
 
 export default function AuthStatusMenu() {
   const t = useTranslations('Header')
+  const tc = useTranslations('common')
   const { data: session, status } = useSession()
   const router = useRouter()
   const locale = useLocale()
@@ -158,7 +159,7 @@ export default function AuthStatusMenu() {
             onClick={() => router.push(`/${locale}/plans`)}
           >
             <Gem size={14} />
-            Upgrade
+            {tc('button.upgrade')}
           </Button>
           <LanguageSwitcher />
 
