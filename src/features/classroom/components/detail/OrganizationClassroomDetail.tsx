@@ -265,16 +265,16 @@ export default function OrganizationClassroomDetail() {
                         />
 
                         <Avatar className='h-10 w-10 border-2 border-white shadow-sm'>
-                          <AvatarImage src={student.imageUrl || student.ImageUrl} />
+                          <AvatarImage src={student.imageUrl} />
                           <AvatarFallback className='bg-gradient-to-br from-purple-100 to-blue-500 text-white'>
-                            {student.name?.charAt(0).toUpperCase() || student.Name?.charAt(0).toUpperCase() || 'S'}
+                            {student.name?.charAt(0).toUpperCase() || 'S'}
                           </AvatarFallback>
                         </Avatar>
 
                         <div className='flex-1'>
-                          <p className='font-medium text-slate-900'>{student.name || student.email || student.Email}</p>
-                          {(student.email || student.Email) && (
-                            <p className='text-sm text-slate-500'>{student.email || student.Email}</p>
+                          <p className='font-medium text-slate-900'>{student.name || student.email}</p>
+                          {(student.email) && (
+                            <p className='text-sm text-slate-500'>{student.email}</p>
                           )}
                         </div>
                       </div>
