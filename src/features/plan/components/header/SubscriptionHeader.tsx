@@ -6,8 +6,10 @@ import { setParam } from '@/features/plan/slice/planProductSlice'
 import { BillingCycle } from '@/features/plan/types/plan.type'
 import { containerVariants, itemVariants } from '@/utils/motion'
 import { useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 
 export function SubscriptionHeader() {
+  const t = useTranslations('plan.user')
   const dispatch = useAppDispatch()
   const billingCycle = useAppSelector((state) => state.plan.billingCycle)
 
@@ -27,19 +29,19 @@ export function SubscriptionHeader() {
       <motion.div variants={containerVariants} initial='hidden' animate='visible' className='flex flex-col gap-4'>
         <motion.div variants={itemVariants} className='flex items-center gap-3'>
           <div className='h-1 w-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400' />
-          <span className='text-sm font-semibold tracking-widest text-sky-500 uppercase'>Flexible Plans</span>
+          <span className='text-sm font-semibold tracking-widest text-sky-500 uppercase'>{t('subTitle')}</span>
         </motion.div>
 
         <motion.h1 variants={itemVariants} className='mb-2 text-4xl font-bold md:text-6xl'>
           <span className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent'>
-            Plans & Pricing
+            {t('title')}
           </span>
         </motion.h1>
 
         <motion.p variants={itemVariants} className='max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg'>
-          Whether your time-saving automation needs are large or small, we're here to help you scale.
+          {t('des1')}
           <span className='mt-2 block text-slate-500'>
-            Choose the perfect plan for your team and unlock unlimited potential.
+            {t('des2')}
           </span>
         </motion.p>
       </motion.div>
@@ -53,8 +55,8 @@ export function SubscriptionHeader() {
       >
         <div className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 p-1 shadow-sm backdrop-blur-md'>
           {[
-            { label: 'Semiannual', value: BillingCycle.SEMIANNUAL },
-            { label: 'Annual', value: BillingCycle.ANNUAL }
+            { label: t('semiAnnual'), value: BillingCycle.SEMIANNUAL },
+            { label: t('annual'), value: BillingCycle.ANNUAL }
           ].map((option) => (
             <button
               key={option.value}
