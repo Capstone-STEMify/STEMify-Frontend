@@ -92,7 +92,7 @@ export default function AdminCourseDetail() {
           status
         }
       }).unwrap()
-      toast.success(`${tt('successMessage.update', { title: status || '' })}`)
+      toast.success(`${tt('successMessage.updateNoTitle')}`)
     } catch (error) {
       toast.error(tt('errorMessage'))
       console.error('Failed to update course status:', error)
@@ -318,7 +318,7 @@ export default function AdminCourseDetail() {
             </div>
           )} */}
 
-        <ExportRSAButton courseId={course.data.id} />
+        {/* <ExportRSAButton courseId={course.data.id} /> */}
       </div>
       {/* Kit Section */}
       <div className='xl:col-span-3'>

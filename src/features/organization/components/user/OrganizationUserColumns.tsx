@@ -11,7 +11,8 @@ import {
 } from '@/components/shadcn/dropdown-menu'
 import { MoreHorizontal, Eye, Pencil, Trash2 } from 'lucide-react'
 import { OrganizationUser } from '@/features/user/types/user.type'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { formatDate } from '@/utils/index'
 
 export type OrganizationUserTableItem = OrganizationUser & {
   id: string
@@ -32,22 +33,6 @@ const getRoleBadgeVariant = (licenseType: string) => {
   }
 }
 
-const getActiveBadgeVariant = (isActive: boolean) => {
-  switch (isActive) {
-    case true:
-      return 'success'
-    case false:
-      return 'destructive'
-    default:
-      return 'outline'
-  }
-}
-
-const formatDate = (dateString: string) => {
-  if (!dateString) return ''
-  return new Date(dateString).toLocaleDateString('vi-VN')
-}
-
 export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableItem>[] => {
   const handleViewDetail = (user: OrganizationUserTableItem) => {
     console.log('View detail', user.id)
@@ -58,7 +43,7 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
   const handleDelete = (user: OrganizationUserTableItem) => {
     console.log('Delete', user.id)
   }
-
+  const locale = useLocale()
   const tc = useTranslations('common')
 
   return [
@@ -82,7 +67,7 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
           {row.original.subscriptions.map((sub) => (
             <div key={sub.subscriptionOrderId} className={subRowClass}>
               <Badge variant={getRoleBadgeVariant(sub.licenseType)} className='whitespace-nowrap'>
-                {sub.licenseType}
+                {tc(`accountType.${sub.licenseType.toLowerCase()}`)}
               </Badge>
             </div>
           ))}
@@ -112,8 +97,8 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
       cell: ({ row }) => (
         <div className='flex flex-col gap-1'>
           <div className={subRowClass}>
-            <Badge variant={getActiveBadgeVariant(row.original.isActive)} className='whitespace-nowrap'>
-              {row.original.isActive ? 'Active' : 'Inactive'}
+            <Badge variant={row.original.isActive ? 'success' : 'secondary'} className='whitespace-nowrap'>
+              {row.original.isActive ? tc('status.active') : tc('status.inactive')}
             </Badge>
           </div>
         </div>
@@ -126,7 +111,9 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
       cell: ({ row }) => (
         <div className='flex flex-col gap-1'>
           <div className={`${subRowClass} justify-start`}>
-            <span className='text-muted-foreground text-sm whitespace-nowrap'>{formatDate(row.original.joinedAt)}</span>
+            <span className='text-muted-foreground text-sm whitespace-nowrap'>
+              {formatDate(row.original.joinedAt, { locale })}
+            </span>
           </div>
         </div>
       )

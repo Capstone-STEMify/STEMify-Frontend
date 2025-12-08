@@ -11,6 +11,7 @@ import { usePostLessonAssetsMutation } from '@/features/resource/lesson-asset/ap
 import { fileToBase64 } from '@/utils/index'
 import { toast } from 'sonner'
 import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 interface TiptapEditorProps {
   content?: string
@@ -19,6 +20,7 @@ interface TiptapEditorProps {
 }
 
 export default function TiptapEditor({ content, onChange, children }: TiptapEditorProps) {
+  const tc = useTranslations('toast')
   const { lessonId } = useParams()
   const editor = useTiptapEditor({ content, onChange, isEditable: true })
   const [uploadFiles, { isLoading }] = usePostLessonAssetsMutation()
@@ -52,7 +54,7 @@ export default function TiptapEditor({ content, onChange, children }: TiptapEdit
       lessonId: Number(lessonId),
       body: { lessonAssets }
     }).unwrap()
-    toast.success('Uploaded files successfully')
+    toast.success(tc('successMessage.uploadFile'))
     res.data.assets.forEach((asset: any) => {
       editor.chain().focus().setImage({ src: asset.assetUrl, alt: asset.name }).run()
     })

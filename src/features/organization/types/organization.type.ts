@@ -6,6 +6,7 @@ export type Organization = {
   id: number
   name: string
   organizationType: string
+  code: string
   description: string
   imageUrl: string
   status: OrganizationStatus

@@ -1,6 +1,8 @@
 {
   "common": {
+    "loading": "Đang tải...",
     "noData": "Không tìm thấy",
+    "somethingWrong": "Đã xảy ra lỗi. Vui lòng thử lại sau.",
     "breadcrumb": {
       "home": "Trang Chủ",
       "course": "Khóa Học",
@@ -26,6 +28,8 @@
     },
     "button": {
       "create": "Tạo Mới",
+      "detail": "Chi Tiết",
+      "download": "Tải Xuống",
       "createClass": "Thêm Class mới",
       "camera": "Mở Camera",
       "ready": "Sẵn sàng",
@@ -135,7 +139,9 @@
       "exportRSA": "Xuất RSA",
       "exporting": "Đang Xuất...",
       "downloadAndPrint": "Tải Xuống & In",
-      "upgrade": "Nâng Cấp Gói"
+      "upgrade": "Nâng Cấp Gói",
+      "uploadFile": "Tải Lên Tệp",
+      "exportGLB": "Xuất GLB"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",
@@ -178,6 +184,7 @@
       "maxAge": "Tuổi tối đa",
       "actions": "Hành Động",
       "duration": "Thời Lượng",
+      "quizDuration": "Thời Gian Làm Bài",
       "empty": "Không tìm thấy kết quả.",
       "content": "Nội dung",
       "plan": "Gói",
@@ -275,6 +282,15 @@
       "endsoon": "Kết Thúc Sớm",
       "inprogress": "Đang Diễn Ra",
       "locked": "Khóa"
+    },
+    "status2": {
+      "active": "Đang Hoạt Động",
+      "inactive": "Không Hoạt Động",
+      "pending": "Chưa Diễn Ra",
+      "approved": "Phê Duyệt",
+      "rejected": "Từ Chối",
+      "cancelled": "Đã hủy",
+      "expired": "Hết Hạn"
     },
     "orgUserStatus": {
       "active": "Đã xác thực",

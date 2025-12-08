@@ -14,7 +14,7 @@ export function MyLearning() {
     { skip: !auth.token }
   )
   const course = data?.data
-  const studentId = auth.user?.userId
+  const studentId = useAppSelector((state) => state.selectedOrganization.selectedOrgUserId)
 
   return (
     <motion.div
@@ -23,7 +23,7 @@ export function MyLearning() {
       transition={{ duration: 0.8 }}
       className='bg-slate-100/50'
     >
-      <MyLearningHero course={course} studentId={studentId} />
+      {!studentId ? null : <MyLearningHero course={course} studentId={studentId} />}
 
       {/* Course Content Section */}
       <section className='bg-slate-100/50'>
@@ -42,7 +42,7 @@ export function MyLearning() {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <MyLearningList studentId={studentId} />
+            {!studentId ? null : <MyLearningList studentId={studentId} />}
           </motion.div>
         </div>
       </section>

@@ -368,8 +368,6 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
           }
         }
       }
-
-      toast.success(t3d('export_success'))
     } catch (err: any) {
       toast.error(err.message || t3d('export_error'))
     }

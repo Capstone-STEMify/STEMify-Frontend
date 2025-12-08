@@ -2,16 +2,19 @@ import { ExternalLink, HelpCircle, ListChecks, NotebookPen } from 'lucide-react'
 import React from 'react'
 import { useEditorCtx } from '@/components/tiptap/EditorContext'
 import { Button } from '@/components/shadcn/button'
+import { useTranslations } from 'next-intl'
 
 export default function TemplateContent() {
+  const tc = useTranslations('common')
+  const tContent = useTranslations('content')
   const editor = useEditorCtx()
   if (!editor) {
-    return <div className='p-4 text-sm text-red-500'>Something wrong, please contact support</div>
+    return <div className='p-4 text-sm text-red-500'>{tc('somethingWrong')}</div>
   }
 
   return (
     <div className='my-2 px-4'>
-      <h3 className='mb-3 text-sm font-semibold text-gray-700'>Insert Blocks</h3>
+      <h3 className='mb-3 text-sm font-semibold text-gray-700'>{tContent('insertBlock')}</h3>
 
       <div className='grid grid-cols-2 gap-3'>
         {/* Link Button */}
@@ -34,7 +37,7 @@ export default function TemplateContent() {
         >
           <div className='flex flex-col items-center gap-1'>
             <ExternalLink className='h-5 w-5' />
-            <span className='text-[11px]'>Button Link</span>
+            <span className='text-[11px]'>{tContent('buttonLink')}</span>
           </div>
         </Button>
 
@@ -61,7 +64,7 @@ export default function TemplateContent() {
         >
           <div className='flex flex-col items-center gap-1'>
             <ListChecks className='h-5 w-5' />
-            <span className='text-[11px]'>Step</span>
+            <span className='text-[11px]'>{tContent('step')}</span>
           </div>
         </Button>
 
@@ -88,7 +91,7 @@ export default function TemplateContent() {
         >
           <div className='flex flex-col items-center gap-1'>
             <HelpCircle className='h-5 w-5' />
-            <span className='text-[11px]'>Quiz</span>
+            <span className='text-[11px]'>{tContent('quiz')}</span>
           </div>
         </Button>
 
@@ -112,7 +115,7 @@ export default function TemplateContent() {
         >
           <div className='flex flex-col items-center gap-1'>
             <NotebookPen className='h-5 w-5' />
-            <span className='text-[11px]'>Note</span>
+            <span className='text-[11px]'>{tContent('note')}</span>
           </div>
         </Button>
       </div>

@@ -130,16 +130,16 @@ export default function ClassroomOverview() {
           text: t('overview.histogram.studentCount')
         },
         grid: {
-            color: 'rgba(0, 0, 0, 0.05)'
+          color: 'rgba(0, 0, 0, 0.05)'
         }
       },
       x: {
         title: {
-            display: true,
-            text: t('overview.histogram.scoreRange')
+          display: true,
+          text: t('overview.histogram.scoreRange')
         },
         grid: {
-            display: false
+          display: false
         }
       }
     }
@@ -400,7 +400,7 @@ export default function ClassroomOverview() {
                           className='bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md transition-all hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg'
                           onClick={() => setSelectedStudentAssignmentId(assignment.studentAssignmentId)}
                         >
-                          Grade Now
+                          {tc('button.grade')}
                         </Button>
                       </TableCell>
                     </TableRow>

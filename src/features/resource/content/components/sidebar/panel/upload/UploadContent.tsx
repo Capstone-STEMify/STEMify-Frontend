@@ -13,11 +13,15 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { fileToBase64 } from '@/utils/index'
 import { CloudUpload, Download, Trash2, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import React, { JSX, useRef } from 'react'
 import { toast } from 'sonner'
 
 export default function UploadContent() {
+  const tt = useTranslations('toast')
+  const tc = useTranslations('common')
+  const tContent = useTranslations('content')
   const { lessonId } = useParams()
   const { openModal } = useModal()
 
@@ -44,7 +48,7 @@ export default function UploadContent() {
       lessonId: Number(lessonId),
       body: { lessonAssets }
     })
-    toast.success('Uploaded files successfully')
+    toast.success(tt('successMessage.uploadFile'))
   }
 
   return (
@@ -54,7 +58,7 @@ export default function UploadContent() {
         <SearchBar />
         <input type='file' multiple ref={fileInputRef} className='hidden' onChange={handleUploadFiles} />
         <Button variant='outline' className='w-full' onClick={handleSelectFiles}>
-          <CloudUpload /> Upload files
+          <CloudUpload /> {tc('button.uploadFile')}
         </Button>
       </div>
 
@@ -65,17 +69,17 @@ export default function UploadContent() {
           className='h-full'
           items={[
             {
-              label: 'Images',
+              label: tContent('image'),
               value: 'Images',
               content: <ImageAssets />
             },
             {
-              label: 'Videos',
+              label: tContent('video'),
               value: 'Videos',
               content: <VideoAssets />
             },
             {
-              label: 'Documents',
+              label: tContent('document'),
               value: 'Documents',
               content: <DocumentAssets />
             }

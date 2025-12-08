@@ -1,6 +1,8 @@
 {
   "common": {
+    "loading": "Loading...",
     "noData": "Not found",
+    "somethingWrong": "Something went wrong, please try again later.",
     "breadcrumb": {
       "home": "Home",
       "resource": "Resources",
@@ -26,6 +28,8 @@
     },
     "button": {
       "create": "Create New",
+      "detail": "Detail",
+      "download": "Download",
       "createClass": "Add New Class",
       "camera": "Open Camera",
       "ready": "Ready",
@@ -135,7 +139,9 @@
       "exportRSA": "Export RSA",
       "exporting": "Exporting...",
       "downloadAndPrint": "Download & Print",
-      "upgrade": "Upgrade Plan"
+      "upgrade": "Upgrade Plan",
+      "uploadFile": "Upload File",
+      "exportGLB": "Export GLB"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -227,7 +233,8 @@
       "score": "Score",
       "correctAnswer": "Correct Answer",
       "submissionDate": "Submission Date",
-      "studentGroup": "Student Group"
+      "studentGroup": "Student Group",
+      "quizDuration": "Duration"
     },
     "paging": {
       "previous": "Previous",
@@ -270,6 +277,15 @@
       "endsoon": "End Soon",
       "inprogress": "In Progress",
       "locked": "Locked"
+    },
+    "status2": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
     },
     "orgUserStatus": {
       "active": "Active",

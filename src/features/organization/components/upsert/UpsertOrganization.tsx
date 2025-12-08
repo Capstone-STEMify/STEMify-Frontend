@@ -28,6 +28,8 @@ type UpsertOrganizationProps = {
 
 export default function UpsertOrganization({ organizationId, onSuccess }: UpsertOrganizationProps) {
   const tv = useTranslations('validation')
+  const tt = useTranslations('toast')
+  const tc = useTranslations('common')
   const tOrganization = useTranslations('organization')
 
   const imageFieldRef = useRef<any>(null)
@@ -76,11 +78,11 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
       }
       if (organizationId) {
         await updateOrg({ id: Number(organizationId), body: payload }).unwrap()
-        toast.success('Organization updated successfully')
+        toast.success(tt('successMessage.updateNoTitle'))
         onSuccess?.()
       } else {
         await createOrg(payload).unwrap()
-        toast.success('Organization created successfully')
+        toast.success(tt('successMessage.createNoTitle'))
         onSuccess?.()
       }
       if (!isCreateError || !isUpdateError) {
@@ -167,7 +169,7 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
 
       <div className='mt-5 flex items-center justify-end'>
         <form.AppForm>
-          <form.SubmitButton loading={isCreating || isUpdating}>Save</form.SubmitButton>
+          <form.SubmitButton loading={isCreating || isUpdating}>{tc('button.save')}</form.SubmitButton>
         </form.AppForm>
       </div>
     </form>

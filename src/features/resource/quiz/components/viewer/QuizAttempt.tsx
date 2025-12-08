@@ -132,7 +132,7 @@ export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAt
                 <TableHead>{tc('tableHeader.status')}</TableHead>
                 <TableHead>{tc('tableHeader.score')}</TableHead>
                 <TableHead>{tc('tableHeader.correctAnswer')}</TableHead>
-                <TableHead>{tc('tableHeader.duration')}</TableHead>
+                <TableHead>{tc('tableHeader.quizDuration')}</TableHead>
                 <TableHead>{tc('tableHeader.submissionDate')}</TableHead>
                 <TableHead></TableHead>
               </TableRow>

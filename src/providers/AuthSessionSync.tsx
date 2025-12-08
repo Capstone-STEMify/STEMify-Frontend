@@ -68,7 +68,7 @@ export default function AuthSessionSync() {
       if (activeSub) {
         dispatch(setSelectedOrganizationId(firstOrg.id))
         dispatch(setSelectedSubscriptionOrderId(activeSub.subscriptionId))
-        dispatch(setSelectedOrgUserId(firstOrg.organizationUserId))
+        dispatch(setSelectedOrgUserId(firstOrg.organizationUserId[0]))
         dispatch(setCurrentRole(activeSub.type)) // Đây là LicenseType
       }
     }

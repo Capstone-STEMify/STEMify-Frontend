@@ -5,13 +5,18 @@ import { setActivePanel } from '@/components/tiptap/slice/tiptapSlice'
 import { useGetLessonAssetByIdQuery } from '@/features/resource/lesson-asset/api/lessonAssetApi'
 import { getFileIcon } from '@/features/resource/lesson-asset/components/document/DocumentAssets'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { formatDate } from '@/utils/index'
 import { a } from '@react-spring/three'
-import { ArrowLeft, Download, Pencil, FileText, Video, FileSpreadsheet } from 'lucide-react'
+import { ArrowLeft, Pencil } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import React from 'react'
 
 export default function AssetDetail() {
+  const locale = useLocale()
+  const tc = useTranslations('common')
+  const tContent = useTranslations('content')
   const { lessonId } = useParams()
   const assetId = useAppSelector((state) => state.tiptap.assetId)
   const dispatch = useAppDispatch()
@@ -23,8 +28,8 @@ export default function AssetDetail() {
 
   const asset = data?.data
 
-  if (isLoading) return <div className='p-4 text-sm font-semibold'>Loading asset...</div>
-  if (!asset) return <div className='p-4 text-sm font-semibold'>No document selected</div>
+  if (isLoading) return <div className='p-4 text-sm font-semibold'>{tc('loading')}</div>
+  if (!asset) return <div className='p-4 text-sm font-semibold'>{tc('noData')}</div>
 
   const formatSize = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`
@@ -97,33 +102,33 @@ export default function AssetDetail() {
         {/* Metadata */}
         <div className='space-y-2 px-4 text-sm'>
           <div className='flex justify-between'>
-            <span className='font-semibold'>Format</span>
+            <span className='font-semibold'>{tContent('format')}</span>
             <span className='text-gray-500 uppercase'>{asset.format}</span>
           </div>
           <div className='flex justify-between'>
-            <span className='font-semibold'>Size</span>
+            <span className='font-semibold'>{tContent('size')}</span>
             <span className='text-gray-500'>{formatSize(asset.size)}</span>
           </div>
           {asset.width && asset.height && (
             <div className='flex justify-between'>
-              <span className='font-semibold'>Resolution</span>
+              <span className='font-semibold'>{tContent('resolution')}</span>
               <span className='text-gray-500'>
                 {asset.width} × {asset.height}
               </span>
             </div>
           )}
           <div className='flex justify-between'>
-            <span className='font-semibold'>Created at</span>
-            <span className='text-gray-500'>{new Date(asset.createdAt).toLocaleString()}</span>
+            <span className='font-semibold'>{tContent('createAt')}</span>
+            <span className='text-gray-500'>{formatDate(asset.createdAt, { locale })}</span>
           </div>
 
           {/* Tags */}
           <div>
             <div className='flex items-center justify-between'>
-              <span className='font-semibold'>Tags</span>
+              <span className='font-semibold'>{tContent('tag')}</span>
             </div>
             <div className='mt-2 flex flex-wrap items-center gap-2'>
-              {asset.tags.length === 0 && <span className='text-gray-500'>No tags</span>}
+              {asset.tags.length === 0 && <span className='text-gray-500'>{tContent('noTag')}</span>}
               {asset.tags.map((tag: string, i: number) => (
                 <Badge key={i} variant={'outline'}>
                   {tag}

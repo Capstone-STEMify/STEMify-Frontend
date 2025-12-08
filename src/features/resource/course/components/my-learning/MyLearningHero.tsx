@@ -10,7 +10,7 @@ import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/course
 
 type MyLearningHeroProps = {
   course?: PaginatedResult<Enrollment>
-  studentId?: string
+  studentId: string
 }
 
 export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {

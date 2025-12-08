@@ -110,7 +110,7 @@ export default function CreateClassroom() {
       }
 
       const result = await createClassroom(payload).unwrap()
-      toast.success(tt('successMessage.create', { title: result.data.name }))
+      toast.success(tt('successMessage.createNoTitle'))
 
       router.push(`/${locale}/organization/classroom`)
       closeModal()
