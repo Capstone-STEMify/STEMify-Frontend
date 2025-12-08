@@ -197,7 +197,11 @@
       "course": "Khóa Học",
       "joinedAt": "Ngày tham gia",
       "subscription": "Gói đăng ký",
-      "student": "Học sinh"
+      "student": "Học sinh",
+      "user": "Người dùng",
+      "license": "Vai trò",
+      "groupName": "Nhóm",
+      "menu": "Mở Menu"
     },
     "paging": {
       "previous": "Trước",

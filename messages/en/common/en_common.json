@@ -115,7 +115,8 @@
       "continueLearning": "Continue Learning",
       "markAsComplete": "Mark as Complete",
       "startQuiz": "Start Quiz",
-      "contact": "Contact Us"
+      "contact": "Contact Us",
+      "menu": "Open Menu"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -198,7 +199,10 @@
       "course": "Course",
       "joinedAt": "Joined At",
       "subscription": "Subscription",
-      "student": "Student(s)"
+      "student": "Student(s)",
+      "user": "User",
+      "license": "License",
+      "groupName": "Group"
     },
     "paging": {
       "previous": "Previous",
