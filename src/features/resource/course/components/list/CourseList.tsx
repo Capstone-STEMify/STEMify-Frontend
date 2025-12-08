@@ -8,7 +8,7 @@ export default function CourseList() {
   const t = useTranslations('course')
 
   return (
-    <BreadcrumbPageLayout color={'yellow'} size='md' weight='semibold' title='Courses'>
+    <BreadcrumbPageLayout color={'yellow'} size='md' weight='semibold'>
       <div className='shadow-6 mt-6 rounded-lg bg-white'>
         <SListTitle title={t('list.title')} description={t('list.description')} />
         <CourseListAction />

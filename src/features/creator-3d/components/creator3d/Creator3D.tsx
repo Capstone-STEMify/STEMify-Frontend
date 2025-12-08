@@ -27,6 +27,8 @@ import { useParams } from 'next/navigation'
 import { useUpdateEmulatorMutation } from '@/features/emulator/api/emulatorApi'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Emulator } from '@/features/emulator/types/emulator.type'
+import { buildSceneFromAssembly } from '@/features/creator-3d/hooks/buildSceneFromAssembly'
+import { exportGLB } from '@/features/creator-3d/hooks/exportGlb'
 type Creator3DProps = {
   emulatorData: ApiSuccessResponse<Emulator> | undefined
 }
@@ -531,6 +533,16 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
     [dispatch]
   )
 
+  const handleExportGLB = async () => {
+    const assembly = exportAssemblyFn({
+      title: `Assembly ${workspaceId}`,
+      description: 'Exported from workspace',
+      author: 'STEMify User'
+    })
+
+    await exportGLB(assembly, 'workspace.glb')
+  }
+
   // Thêm vào Creator3D component
   const handleFileSelect = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -599,6 +611,7 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
         <SceneActions
           onSave={handleSaveAssembly}
           onImportJSON={handleClickImportJSON}
+          onExportGLB={handleExportGLB}
           hasObjects={instances.length > 0}
         />
       </div>

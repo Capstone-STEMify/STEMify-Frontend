@@ -1,5 +1,20 @@
 {
   "common": {
+    "noData": "Không tìm thấy",
+    "breadcrumb": {
+      "home": "Trang Chủ",
+      "course": "Khóa Học",
+      "courses": "Khóa Học",
+      "resource": "Tài Nguyên",
+      "lesson": "Bài Học",
+      "lessons": "Bài Học",
+      "activities": "Hoạt Động",
+      "courseDetail": "Chi Tiết Khóa Học",
+      "classroom": "Lớp Học",
+      "classrooms": "Lớp Học",
+      "classroomDetail": "Chi Tiết Lớp Học",
+      "createClassroom": "Tạo Lớp Học"
+    },
     "search": {
       "placeholder": "Tìm kiếm...",
       "noResults": "Không tìm thấy kết quả."
@@ -115,7 +130,12 @@
       "continueLearning": "Tiếp tục Học",
       "markAsComplete": "Đánh dấu hoàn thành",
       "startQuiz": "Bắt Đầu Bài Kiểm Tra",
-      "contact": "Liên Hệ Ngay"
+      "contact": "Liên Hệ Ngay",
+      "actions": "Thao tác",
+      "exportRSA": "Xuất RSA",
+      "exporting": "Đang Xuất...",
+      "downloadAndPrint": "Tải Xuống & In",
+      "upgrade": "Nâng Cấp Gói"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",
@@ -193,11 +213,20 @@
       "numberOfStudents": "Số Học Sinh",
       "numberOfLessons": "Số Bài Học",
       "accountType": "Loại Tài Khoản",
-      "assignedDate": "Ngày Gán",
+      "assignedDate": "Ngày Tạo",
       "course": "Khóa Học",
       "joinedAt": "Ngày tham gia",
       "subscription": "Gói đăng ký",
-      "student": "Học sinh"
+      "student": "Học sinh",
+      "className": "Lớp",
+      "user": "Người dùng",
+      "license": "Vai trò",
+      "groupName": "Nhóm",
+      "menu": "Mở Menu",
+      "score": "Điểm",
+      "correctAnswer": "Đáp án đúng",
+      "submissionDate": "Ngày nộp bài",
+      "studentGroup": "Nhóm học sinh"
     },
     "paging": {
       "previous": "Trước",
@@ -251,6 +280,7 @@
       "active": "Đã xác thực",
       "inactive": "Chưa xác thực"
     },
+
     "accountType": {
       "accountTypeLabel": "Loại Tài Khoản",
       "admin": "Quản Trị Viên",

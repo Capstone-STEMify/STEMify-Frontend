@@ -5,6 +5,8 @@
     "description": "Mô tả",
     "image": "Ảnh tổ chức",
     "imageSize": "Ảnh phải nhỏ hơn 5MB",
+    "lesson": "Bài học",
+    "classroom": "Lớp học",
     "detail": {
       "noData": "Không có dữ liệu tổ chức nào.",
       "noSubscription": "Không có gói đăng ký nào cho tổ chức này.",
@@ -243,6 +245,17 @@
       "showing": "Hiển thị",
       "results": "kết quả",
       "all": "Tất cả"
+    },
+    "userTable": {
+      "title": "Quản lý người dùng trong Tổ chức",
+      "description": "Duyệt và quản lý tất cả các thành viên tổ chức đã đăng ký trên nền tảng.",
+      "student": "Học sinh",
+      "teacher": "Giáo viên",
+      "admin": "Quản trị viên",
+      "placeholder": {
+        "email": "Tìm kiếm theo email...",
+        "license": "Chọn vai trò"
+      }
     }
   }
 }

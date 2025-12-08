@@ -2,9 +2,13 @@
   "classroom": {
     "list": {
       "header": "Danh sách lớp học",
+      "description": "Quản lý tất cả các lớp học hiện có của bạn, bao gồm chi tiết lớp học, lịch trình, giáo viên và học sinh đã đăng ký.",
       "searchPlaceholder": "Tìm kiếm...",
       "selectCoursePlaceholder": "Chọn chương trình học",
-      "courses": "khóa học"
+      "selectStatusPlaceholder": "Lọc theo trạng thái",
+      "courses": "khóa học",
+      "noClassroom": "Không tìm thấy lớp học nào.",
+      "noClassroomSubtext": "Thử điều chỉnh tìm kiếm hoặc bộ lọc để tìm những gì bạn đang tìm kiếm."
     },
     "update": {
       "basicInfo": {

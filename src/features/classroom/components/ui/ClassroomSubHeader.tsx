@@ -1,27 +1,32 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { cn } from '@/utils/shadcn/utils'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
-import { Button } from '@/components/shadcn/button'
-import { ArrowLeft, Calendar, GraduationCap } from 'lucide-react'
+import { Calendar, GraduationCap } from 'lucide-react'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { Classroom } from '@/features/classroom/types/classroom.type'
-import { format } from 'date-fns'
 import { ClassroomNavItems } from 'app/[locale]/classroom/[classroomId]/page'
+import { formatDate, useStatusTranslation } from '@/utils/index'
+import BackButton from '@/components/shared/button/BackButton'
 
 interface Props {
-  curriculumId?: number
   classroom: Classroom
   currentTab: ClassroomNavItems
   setCurrentTab: (tab: ClassroomNavItems) => void
 }
 
-export default function ClassroomSubHeader({ classroom, curriculumId, currentTab, setCurrentTab }: Props) {
+export default function ClassroomSubHeader({ classroom, currentTab, setCurrentTab }: Props) {
+  const locale = useLocale()
   const t = useTranslations('Header')
+  const statusTranslation = useStatusTranslation()
+  const tClassroom = useTranslations('classroom.detail')
+
+  const MAX_VISIBLE = 2
+  const totalStudents = classroom.students.length
+  const visibleStudents = classroom.students.slice(0, MAX_VISIBLE)
+  const remaining = totalStudents - MAX_VISIBLE
 
   const subNavItems: { name: string; currentTab: ClassroomNavItems }[] = [
     { name: 'overview', currentTab: 'overview' },
@@ -41,14 +46,7 @@ export default function ClassroomSubHeader({ classroom, curriculumId, currentTab
         <div className='flex h-16 items-center justify-between border-b border-gray-100'>
           {/* Left - Classroom Info */}
           <div className='flex items-center gap-3'>
-            <Button
-              variant='ghost'
-              size='icon'
-              className='h-9 w-9 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-              onClick={() => window.history.back()}
-            >
-              <ArrowLeft className='h-5 w-5' />
-            </Button>
+            <BackButton />
             <div className='h-8 w-px bg-gray-200' />
             <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-sky-600 shadow-md'>
               <span className='text-xl font-bold text-white'>{classroom.name?.charAt(0).toUpperCase() ?? 'C'}</span>
@@ -56,37 +54,46 @@ export default function ClassroomSubHeader({ classroom, curriculumId, currentTab
             <div>
               <div className='flex items-center gap-4'>
                 <h2 className='text-lg font-bold text-slate-900'>{classroom.name ?? 'Classroom'}</h2>
-                <Badge className={`border ${getStatusBadgeClass(classroom.status)}`}>{classroom.status}</Badge>
+                <Badge className={`border ${getStatusBadgeClass(classroom.status)}`}>
+                  {statusTranslation(classroom.status)}
+                </Badge>
                 <Badge className='flex items-center gap-2 bg-sky-100 text-xs font-medium text-sky-700'>
                   <GraduationCap className='h-3 w-3' />
-                  <span className='text-xs'>{classroom.grade}</span>
+                  <span className='text-xs'>
+                    {tClassroom('grade')} {classroom.grade}
+                  </span>
                 </Badge>
               </div>
 
               <div className='mt-0.5 flex items-center gap-1.5'>
-                <span className='text-xs text-slate-500'>Students:</span>
-                <div className='flex items-center -space-x-1.5'>
-                  <Avatar className='h-6 w-6 border-2 border-white ring-1 ring-slate-200'>
-                    <AvatarImage src='' />
-                    <AvatarFallback className='bg-orange-100 text-xs font-medium text-orange-700'>ST</AvatarFallback>
-                  </Avatar>
-                  <Avatar className='h-6 w-6 border-2 border-white ring-1 ring-slate-200'>
-                    <AvatarImage src='' />
-                    <AvatarFallback className='bg-blue-100 text-xs font-medium text-blue-700'>AI</AvatarFallback>
-                  </Avatar>
-                  <Button
-                    variant='ghost'
-                    size='sm'
-                    className='h-6 w-6 rounded-full border-2 border-white bg-slate-50 p-0 text-slate-600 ring-1 ring-slate-200 hover:bg-slate-100'
+                <span className='text-xs text-slate-500'>{tClassroom('students.label')}:</span>
+                {visibleStudents.map((student, index) => (
+                  <Avatar
+                    key={student.id}
+                    className={cn('ring-0.5 h-6 w-6 border-2 border-white ring-slate-200', index > 0 && '-ml-2.5')}
                   >
-                    <span className='text-xs font-semibold'>+</span>
-                  </Button>
-                </div>
+                    <AvatarImage src={student.imageUrl} />
+                    <AvatarFallback className='bg-blue-100 text-xs font-medium text-blue-700'>
+                      {student.name
+                        .split(' ')
+                        .map((n: string) => n[0])
+                        .join('')
+                        .slice(0, 2)
+                        .toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+
+                {remaining > 0 && (
+                  <Avatar className='-ml-2.5 h-6 w-6 border-2 border-white bg-slate-200'>
+                    <AvatarFallback className='text-[10px] font-semibold text-slate-700'>+{remaining}</AvatarFallback>
+                  </Avatar>
+                )}
+
                 <div className='ml-4 flex items-center gap-2'>
                   <Calendar className='h-3 w-3' />
                   <span className='text-xs'>
-                    {format(new Date(classroom.startDate), 'MMM dd, yyyy')} -{' '}
-                    {format(new Date(classroom.endDate), 'MMM dd, yyyy')}
+                    {formatDate(classroom.startDate, { locale })} - {formatDate(classroom.endDate, { locale })}
                   </span>
                 </div>
               </div>

@@ -33,7 +33,6 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
   const selectedQuiz = useAppSelector((state) => state.quizPlayer.selectedQuiz)
 
   const quizStatus = sectionStatus?.items.find((item) => item.sectionId === selectedQuiz?.id)?.status
-  console.log('Quiz Status:', quizStatus)
 
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
   const [selectedAttempt, setSelectedAttempt] = useState<Attempt | null>(null)

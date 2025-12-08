@@ -57,21 +57,16 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
       }
     },
     {
-      accessorKey: 'classCode',
-      header: tc('tableHeader.classCode'),
+      accessorKey: 'name',
+      header: () => <p className='text-center'>{tc('tableHeader.className')}</p>,
       cell: ({ row }) => {
-        return <span>{row.original.classCode}</span>
+        return <span className='text-center'>{row.original.name}</span>
       }
     },
     {
       accessorKey: 'id',
       header: '',
       cell: ({ row }) => {}
-    },
-
-    {
-      accessorKey: 'grade',
-      header: tc('tableHeader.grade')
     },
 
     {

@@ -9,10 +9,14 @@ import { useTranslations } from 'next-intl'
 import { LicenseType, UserRole } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
 import { setIsPrintModalOpen } from '@/features/resource/lesson/slice/lessonDetailSlice'
+import ExportRSAButton from '@/components/shared/button/ExportRSAButton'
+import { useParams } from 'next/navigation'
 
 export default function LessonAction({ lessonId }: { lessonId: number }) {
+  const { courseId } = useParams()
   const t = useTranslations('LessonDetails')
   const tt = useTranslations('toast')
+  const tc = useTranslations('common')
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
   const userRole = useAppSelector((state) => state.selectedOrganization.currentRole)
@@ -35,21 +39,14 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
     <section className='mt-3 mb-5 flex flex-col items-center'>
       <div className='h-[0.1px] w-52 bg-gray-300'></div>
 
-      {userRole === LicenseType.TEACHER && (
-        <Button
-          variant='outline'
-          size='default'
-          className='mt-4 font-semibold text-black shadow-md'
-          // onClick={() => {
-          //   openModal('pacingGuide')
-          // }}
-          onClick={() => dispatch(setIsPrintModalOpen(true))}
-        >
-          DOWNLOAD AND PRINT
+      <div className='mt-4 flex items-center justify-between gap-4'>
+        <Button size='default' onClick={() => dispatch(setIsPrintModalOpen(true))}>
+          {tc('button.downloadAndPrint')}
         </Button>
-      )}
+        <ExportRSAButton courseId={Number(courseId)} className='w-fit' />
+      </div>
 
-      {lessonStatus === ProgressStatus.NOT_STARTED && (
+      {/* {lessonStatus === ProgressStatus.NOT_STARTED && (
         <div className='mt-4'>
           <Button
             size='default'
@@ -62,23 +59,9 @@ export default function LessonAction({ lessonId }: { lessonId: number }) {
             </div>
           </Button>
         </div>
-      )}
+      )} */}
 
       {/* Secondary actions */}
-      <div className='text-muted-foreground mt-6 grid w-full max-w-md grid-cols-3 gap-6 text-center text-xs'>
-        <div className='flex flex-col items-center gap-1'>
-          <Plus className='h-5 w-5' />
-          <span>{t('action.add')}</span>
-        </div>
-        <div className='flex flex-col items-center gap-1'>
-          <Bookmark className='h-5 w-5' />
-          <span>{t('action.favor')}</span>
-        </div>
-        <div className='flex flex-col items-center gap-1'>
-          <Share2 className='h-5 w-5' />
-          <span>{t('action.share')}</span>
-        </div>
-      </div>
     </section>
   )
 }

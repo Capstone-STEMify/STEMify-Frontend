@@ -8,7 +8,7 @@ import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { formatDate } from '@/utils/index'
 import { Calendar, Clock } from 'lucide-react'
 import CourseAction from '@/features/resource/course/components/detail/enrolled/CourseAction'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Course } from '@/features/resource/course/types/course.type'
 
 type CourseDetailDescriptionProps = {
@@ -17,6 +17,7 @@ type CourseDetailDescriptionProps = {
 
 export default function CourseDetailDescription({ courseData }: CourseDetailDescriptionProps) {
   const t = useTranslations('course')
+  const locale = useLocale()
 
   return (
     <div className='py-8'>
@@ -52,7 +53,7 @@ export default function CourseDetailDescription({ courseData }: CourseDetailDesc
               </div>
               <div className='flex items-center gap-1'>
                 <Calendar className='h-4 w-4' />
-                <span>{formatDate(courseData.createdDate)}</span>
+                <span>{formatDate(courseData.createdDate, { locale })}</span>
               </div>
               {/* Age Range */}
               {courseData.ageRangeLabel} {t('details.tags.age_unit')}

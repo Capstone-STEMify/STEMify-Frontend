@@ -1,5 +1,20 @@
 {
   "common": {
+    "noData": "Not found",
+    "breadcrumb": {
+      "home": "Home",
+      "resource": "Resources",
+      "lesson": "Lesson",
+      "lessons": "Lessons",
+      "activities": "Activities",
+      "course": "Course",
+      "courses": "Courses",
+      "courseDetail": "Course Detail",
+      "classroom": "Classroom",
+      "classrooms": "Classrooms",
+      "classroomDetail": "Classroom Detail",
+      "createClassroom": "Create Classroom"
+    },
     "search": {
       "placeholder": "Search...",
       "noResults": "No results found."
@@ -115,7 +130,12 @@
       "continueLearning": "Continue Learning",
       "markAsComplete": "Mark as Complete",
       "startQuiz": "Start Quiz",
-      "contact": "Contact Us"
+      "contact": "Contact Us",
+      "menu": "Open Menu",
+      "exportRSA": "Export RSA",
+      "exporting": "Exporting...",
+      "downloadAndPrint": "Download & Print",
+      "upgrade": "Upgrade Plan"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -198,7 +218,16 @@
       "course": "Course",
       "joinedAt": "Joined At",
       "subscription": "Subscription",
-      "student": "Student(s)"
+      "student": "Student(s)",
+      "user": "User",
+      "license": "License",
+      "groupName": "Group",
+      "className": "Class Name",
+      "menu": "Open Menu",
+      "score": "Score",
+      "correctAnswer": "Correct Answer",
+      "submissionDate": "Submission Date",
+      "studentGroup": "Student Group"
     },
     "paging": {
       "previous": "Previous",

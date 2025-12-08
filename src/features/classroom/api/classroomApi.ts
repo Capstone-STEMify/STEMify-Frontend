@@ -7,7 +7,9 @@ import {
   StudentDetailResponse,
   CreateClassroom,
   StudentProgressData,
-  StudentProgressParams
+  StudentProgressParams,
+  AiAnalysisResponse,
+  AiAnalysisRequest
 } from '@/features/classroom/types/classroom.type'
 import { createCrudApi, customFetchBaseQueryWithErrorHandling } from '@/libs/redux/baseApi'
 import { RootState } from '@/libs/redux/store'
@@ -85,6 +87,13 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
         body
       }),
       invalidatesTags: ['Classroom']
+    }),
+    analyzeClassroomProgress: builder.mutation<ApiSuccessResponse<AiAnalysisResponse>, AiAnalysisRequest>({
+      query: (body) => ({
+        url: `/ai/recommendations/analyze-progress`,
+        method: 'POST',
+        body
+      })
     })
   })
 })
@@ -111,4 +120,6 @@ export const {
   useGetClassroomStatisticsQuery,
 
   useGetClassroomStudentDetailQuery,
+
+  useAnalyzeClassroomProgressMutation
 } = classroomApi

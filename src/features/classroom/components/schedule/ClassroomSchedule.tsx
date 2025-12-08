@@ -1,6 +1,7 @@
 import { useGetClassroomScheduleQuery } from '@/features/classroom/api/classroomApi'
 import { cn } from '@/utils/shadcn/utils'
 import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 interface ClassroomScheduleProps {
   classroomId: number
@@ -8,8 +9,9 @@ interface ClassroomScheduleProps {
 }
 
 export function ClassroomSchedule({ classroomId, className }: ClassroomScheduleProps) {
-  const t = useTranslations('dashboard.classroom.course')
+  const router = useRouter()
   const tc = useTranslations('common')
+  const t = useTranslations('dashboard.classroom.course')
   const { data, isLoading, error } = useGetClassroomScheduleQuery({ classroomId })
 
   if (isLoading) {
@@ -42,7 +44,10 @@ export function ClassroomSchedule({ classroomId, className }: ClassroomScheduleP
       {schedule.courseSchedule.map((courseSchedule) => (
         <div key={`course-${courseSchedule.courseId}`} className='overflow-hidden rounded-lg border border-gray-200'>
           {/* Course Header */}
-          <div className='bg-sky-500 px-4 py-3'>
+          <div
+            className='bg-sky-500 px-4 py-3 hover:cursor-pointer'
+            onClick={() => router.push(`/resource/course/${courseSchedule.courseId}/learn`)}
+          >
             <h2 className='font-semibold text-white'>{courseSchedule.courseTitle}</h2>
           </div>
 

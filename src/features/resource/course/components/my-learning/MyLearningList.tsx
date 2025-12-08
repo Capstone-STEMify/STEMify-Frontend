@@ -103,7 +103,8 @@ export function MyLearningList({ studentId }: MyLearningListProps) {
           </div>
 
           {/* Sidebar - Right Column */}
-          <MyLearningSidebar studentId={studentId} />
+          {/* TODO */}
+          {/* <MyLearningSidebar studentId={studentId} /> */}
         </div>
       </div>
     </div>

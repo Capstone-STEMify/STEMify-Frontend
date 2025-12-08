@@ -1,26 +1,18 @@
 'use client'
-import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
-import { BookOpen, Clock, User, GraduationCap } from 'lucide-react'
+import { BookOpen, Clock, GraduationCap } from 'lucide-react'
 import React from 'react'
-import { getLevelBadgeClass } from '@/utils/badgeColor'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { formatDuration } from '@/utils/index'
 import { ClassroomSchedule } from '@/features/classroom/components/schedule/ClassroomSchedule'
-import { Course, CourseLevel, CourseStatus } from '@/features/resource/course/types/course.type'
 import { Curriculum } from '@/features/resource/curriculum/types/curriculum.type'
 import { CourseEnrollment, CurriculumEnrollment, EnrollmentStatus } from '@/features/enrollment/types/enrollment.type'
-import {
-  useCreateCourseEnrollmentMutation,
-  useSearchCourseEnrollmentQuery
-} from '@/features/enrollment/api/courseEnrollmentApi'
-import { is } from 'date-fns/locale'
+import { useCreateCourseEnrollmentMutation } from '@/features/enrollment/api/courseEnrollmentApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { toast } from 'sonner'
 import { useTranslations } from 'next-intl'
-import { useDispatch } from 'react-redux'
 import { setCourseEnrollmentId } from '@/features/enrollment/slice/enrollmentSlice'
 
 type ClassroomCourseListProps = {

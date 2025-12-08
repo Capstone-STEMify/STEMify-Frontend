@@ -12,10 +12,16 @@ export type User = {
   lastName: string
   imageUrl?: string
   status: UserStatus
+  isActive: boolean
   organizations?: {
     role: UserRole
     organizations: UserOrganization[]
   }
+  subscriptions: {
+    subscriptionOrderId: number
+    licenseType: LicenseType
+    joinedAt: string
+  }[]
 }
 
 export type OrganizationSubscription = {
@@ -25,6 +31,7 @@ export type OrganizationSubscription = {
 
 export type UserOrganization = {
   id: number // Organization ID
+  organizationUserId: string
   roles: OrganizationSubscription[]
 }
 
@@ -88,4 +95,5 @@ export type OrganizationUserQueryParams = {
   pageNumber?: number
   pageSize?: number
   role?: LicenseType
+  email?: string
 }

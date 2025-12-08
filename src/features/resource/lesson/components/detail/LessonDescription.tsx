@@ -9,7 +9,9 @@ import { formatDate } from '@/utils/index'
 import { Calendar, Clock } from 'lucide-react'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Lesson } from '@/features/resource/lesson/types/lesson.type'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { LicenseType } from '@/types/userRole'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 type LessonDescriptionProps = {
   lessonData?: ApiSuccessResponse<Lesson>
@@ -17,6 +19,11 @@ type LessonDescriptionProps = {
 }
 
 export default function LessonDescription({ lessonData, lessonLoading }: LessonDescriptionProps) {
+  const locale = useLocale()
+  const userRole = useAppSelector((state) => state.selectedOrganization.currentRole)
+
+  const isTeacher = userRole === LicenseType.TEACHER
+
   const t = useTranslations('LessonDetails')
   if (lessonLoading)
     return (
@@ -34,7 +41,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
   }
   return (
     <div>
-      <ScrollArea className='h-[480px]'>
+      <ScrollArea className={isTeacher ? 'h-[480px]' : 'h-[540px]'}>
         <section className='w-sm px-6'>
           <div className='relative mx-auto mb-8 aspect-square w-[160px] overflow-hidden rounded-2xl'>
             <Image
@@ -64,7 +71,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
               </div>
               <div className='flex items-center gap-1'>
                 <Calendar className='h-4 w-4' />
-                <span>{formatDate(lessonData.data.createdDate)}</span>
+                <span>{formatDate(lessonData.data.createdDate, { locale })}</span>
               </div>
               {/* Age Range */}
               {lessonData.data.ageRangeLabel} {t('lesson.age_unit')}
@@ -129,7 +136,7 @@ export default function LessonDescription({ lessonData, lessonLoading }: LessonD
           </div>
         </section>
       </ScrollArea>
-      <LessonAction lessonId={lessonData.data.id} />
+      {isTeacher && <LessonAction lessonId={lessonData.data.id} />}
     </div>
   )
 }
