@@ -19,8 +19,8 @@ import {
 import { ProgressCircle } from '../../active/circle/AccuracyCircle'
 import { cn } from '@/shadcn/utils'
 import { QuizStatistics, StudentStatistic } from '@/features/quiz/types/studentQuiz.type'
-import { useTranslations } from 'next-intl'
-import { formatDate } from '@/features/assignment/components/attempt/AssigmentAttempt'
+import { useLocale, useTranslations } from 'next-intl'
+import { formatDate, useStatusTranslation } from '@/utils/index'
 
 type Status = 'correct' | 'incorrect' | 'unanswered' | 'review'
 
@@ -89,7 +89,9 @@ const CustomAccordionItem = ({
 
 export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizResultPopupProps) {
   const t = useTranslations('quiz.teacher.answerTable')
+  const locale = useLocale()
   const tc = useTranslations('common')
+  const statusTranslate = useStatusTranslation()
   if (!learner || !isOpen) return null
 
   const answered = learner.totalAnswers ?? learner.questionResults.length
@@ -135,11 +137,11 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
               <h2 className='flex items-center gap-2 text-xl font-bold'>
                 {learner.studentName}
                 <Badge variant='outline' className='ml-2'>
-                  {learner.status}
+                  {statusTranslate(learner.status)}
                 </Badge>
               </h2>
               <p className='text-sm text-gray-500'>
-                {t('submitted')} {formatDate(learner.completedAt)}
+                {t('submitted')} {formatDate(learner.completedAt, { locale, showTime: true })}
               </p>
             </div>
           </div>
@@ -212,15 +214,19 @@ export function QuizResultPopup({ learner, quiz, isOpen, onOpenChange }: QuizRes
                     <span>Q{index + 1}</span>
                     <Badge
                       className={cn(
-                        question.status === 'correct' ? 'bg-green-100 text-green-800' : question.status === 'incorrect' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
+                        question.status === 'correct'
+                          ? 'bg-green-100 text-green-800'
+                          : question.status === 'incorrect'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-gray-100 text-gray-800'
                       )}
                     >
-                      {question.status}
+                      {statusTranslate(question.status)}
                     </Badge>
                   </div>
                   <div className='flex items-center gap-4 text-xs font-normal text-gray-600'>
                     <span className='flex items-center gap-1.5 rounded-md bg-gray-100 p-2 font-semibold'>
-                      <Layers className='h-4 w-4' /> {question.questionType}
+                      <Layers className='h-4 w-4' /> {tc(`questionType.${question.questionType.toLowerCase()}`)}
                     </span>
                     <span className='flex items-center gap-1.5'>
                       <Star className='h-4 w-4 text-yellow-500' /> {question.point} {t('point')}

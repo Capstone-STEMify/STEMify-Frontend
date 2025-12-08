@@ -273,7 +273,7 @@
       "deleted": "Đã Xóa",
       "expired": "Hết Hạn",
       "cancelled": "Đã hủy",
-      "failed": "Thất Bại",
+      "failed": "Trượt",
       "resolved": "Giải Quyết",
       "completed": "Hoàn Thành",
       "passed": "Đạt",
@@ -281,7 +281,10 @@
       "upcoming": "Sắp Diễn Ra",
       "endsoon": "Kết Thúc Sớm",
       "inprogress": "Đang Diễn Ra",
-      "locked": "Khóa"
+      "locked": "Khóa",
+      "correct": "Đúng",
+      "incorrect": "Sai",
+      "unanswered": "Chưa Trả Lời"
     },
     "status2": {
       "active": "Đang Hoạt Động",
@@ -307,6 +310,11 @@
       "student": "Học Sinh",
       "organization_admin": "Quản Trị Viên Tổ Chức",
       "organizationadmin": "Quản Trị Viên Tổ Chức"
+    },
+    "questionType": {
+      "multiplechoice": "Nhiều đáp án đúng",
+      "singlechoice": "Một đáp án đúng",
+      "truefalse": "Đúng / Sai"
     },
     "grade": "Khối"
   }

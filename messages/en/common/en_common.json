@@ -276,7 +276,10 @@
       "upcoming": "Upcoming",
       "endsoon": "End Soon",
       "inprogress": "In Progress",
-      "locked": "Locked"
+      "locked": "Locked",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "unanswered": "Unanswered"
     },
     "status2": {
       "active": "Active",
@@ -307,6 +310,11 @@
       "member": "Member",
       "organizationadmin": "Organization Admin",
       "organization_admin": "Organization Admin"
+    },
+    "questionType": {
+      "multiplechoice": "Multiple Choice",
+      "singlechoice": "Single Choice",
+      "truefalse": "True / False"
     },
     "grade": "Grade"
   }

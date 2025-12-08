@@ -100,7 +100,7 @@ export function QuizDetailHeader({ data }: QuizDetailHeaderProps) {
         </div>
         <div className='flex-shrink-0'>
           <img
-            src='https://res.cloudinary.com/dgdi9wvpz/image/upload/v1762103626/z7182619707874_f4c10a0e4c1e0069814e5c0df5322357_hl81uo.jpg'
+            src='https://res.cloudinary.com/dms8gue1c/image/upload/v1765229374/images_rce0pr.jpg'
             alt='UI Design'
             className='h-60 w-full rounded-lg object-cover md:w-120'
           />

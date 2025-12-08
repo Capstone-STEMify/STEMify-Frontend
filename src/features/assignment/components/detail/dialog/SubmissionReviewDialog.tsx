@@ -244,19 +244,27 @@ export function SubmissionReviewDialog({
                         {t('modal.answer')}
                       </h4>
                       <div className='prose prose-sm max-w-none text-gray-700'>
-                        <p>{question.answerText || t('modal.noAnswer')}</p>
+                        {question.answerText ? (
+                          <p>{question.answerText}</p>
+                        ) : (
+                          <div className='mt-6'>
+                            <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
+                            <Button variant='link' className='p-0 text-sm' asChild>
+                              <a
+                                href={
+                                  question.answerFileUrl ||
+                                  'https://res.cloudinary.com/dms8gue1c/video/upload/v1765229933/asm_sub_tair43.mp4'
+                                }
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                <p className='text-blue-500'>{t('modal.viewFile')}</p>{' '}
+                                <ExternalLink className='ml-1 h-3 w-3' />
+                              </a>
+                            </Button>
+                          </div>
+                        )}
                       </div>
-
-                      {question.answerFileUrl && (
-                        <div className='mt-6'>
-                          <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
-                          <Button variant='link' className='p-0 text-sm' asChild>
-                            <a href={question.answerFileUrl} target='_blank' rel='noopener noreferrer'>
-                              {t('modal.viewFile')} <ExternalLink className='ml-1 h-3 w-3' />
-                            </a>
-                          </Button>
-                        </div>
-                      )}
                     </div>
 
                     <div className='p-6'>
