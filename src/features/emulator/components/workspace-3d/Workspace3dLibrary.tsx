@@ -155,7 +155,7 @@ export default function Workspace3dLibrary() {
       </div>
 
       {/* Model list */}
-      <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
         {emulations.map((e) => (
           <Card
             key={e.emulationId}
@@ -173,43 +173,50 @@ export default function Workspace3dLibrary() {
                   sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
                 />
 
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant='ghost'
-                      className='absolute top-2 right-2 h-7 w-7 rounded-full bg-white/80 p-1 shadow-sm backdrop-blur-md hover:bg-white'
+                {allowRoles.includes(userRole as UserRole) && (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant='ghost'
+                        className='absolute top-2 right-2 h-7 w-7 rounded-full bg-white/80 p-1 shadow-sm backdrop-blur-md hover:bg-white'
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <MoreVertical className='h-4 w-4 text-gray-700' />
+                      </Button>
+                    </PopoverTrigger>
+
+                    {/* Popover menu */}
+                    <PopoverContent
+                      className='w-32 p-2'
+                      align='end'
+                      sideOffset={4}
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <MoreVertical className='h-4 w-4 text-gray-700' />
-                    </Button>
-                  </PopoverTrigger>
-
-                  {/* Popover menu */}
-                  <PopoverContent className='w-32 p-2' align='end' sideOffset={4} onClick={(e) => e.stopPropagation()}>
-                    <div className='flex flex-col gap-1 text-sm'>
-                      <button
-                        className='rounded px-2 py-1 text-left hover:bg-gray-100'
-                        onClick={() => openModal('upsertEmulator', { emulationId: e.emulationId })}
-                      >
-                        {t('button.update')}
-                      </button>
-                      {e.status !== EmulatorStatus.PUBLISHED && userRole && allowRoles.includes(userRole) && (
+                      <div className='flex flex-col gap-1 text-sm'>
                         <button
                           className='rounded px-2 py-1 text-left hover:bg-gray-100'
-                          onClick={() => handlePublishEmulation(e.emulationId)}
+                          onClick={() => openModal('upsertEmulator', { emulationId: e.emulationId })}
                         >
-                          {t('button.publish')}
+                          {t('button.update')}
                         </button>
-                      )}
-                      <button
-                        className='rounded px-2 py-1 text-left text-red-500 hover:bg-red-100'
-                        onClick={() => handleDeleteEmulation(e)}
-                      >
-                        {t('button.delete')}
-                      </button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                        {e.status !== EmulatorStatus.PUBLISHED && userRole && allowRoles.includes(userRole) && (
+                          <button
+                            className='rounded px-2 py-1 text-left hover:bg-gray-100'
+                            onClick={() => handlePublishEmulation(e.emulationId)}
+                          >
+                            {t('button.publish')}
+                          </button>
+                        )}
+                        <button
+                          className='rounded px-2 py-1 text-left text-red-500 hover:bg-red-100'
+                          onClick={() => handleDeleteEmulation(e)}
+                        >
+                          {t('button.delete')}
+                        </button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                )}
               </div>
 
               {/* Content */}
