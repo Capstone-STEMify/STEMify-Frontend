@@ -30,7 +30,22 @@
         "result": "KẾT QUẢ",
         "uploading": "Đang tải mô hình…",
         "reset": "Đặt lại quá trình nhận diện AI",
-        "video": "Video được phóng to để dễ quan sát hơn."
+        "video": "Video được phóng to để dễ quan sát hơn.",
+        "status": {
+          "minImagesPerClass": "Cần ít nhất {minImagesPerClass} ảnh cho mỗi class để train model tốt!\nHiện tại: {totalImages} ảnh\nCần: {missingImage} ảnh",
+          "notBalance": "Dữ liệu không cân bằng! Cần ít nhất {minImage} ảnh cho mỗi class.",
+          "dataPreparation": "Đang chuẩn bị dữ liệu...",
+          "createModel": "Đang tạo model...",
+          "trainModel": "Đang train model...",
+          "trainSuccess": "Model đã được train thành công!",
+          "trainError": "Lỗi khi train model: {error}",
+          "readyDownload": "Đang chuẩn bị tải xuống model...",
+          "downloadSuccess": "Model đã được tải xuống thành công! Bao gồm: model.json, weights.bin, model-info.json, labels.json (ZIP).",
+          "downloadError": "Lỗi khi tải xuống model: {error}",
+          "imageAnalysing": "Đang phân tích ảnh...",
+          "imageAnalyseFail": "Lỗi khi phân tích ảnh: {error}",
+          "predict": "Dự đoán: "
+        }
       }
     }
   }

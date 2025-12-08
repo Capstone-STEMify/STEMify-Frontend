@@ -30,7 +30,22 @@
         "result": "RESULT",
         "uploading": "Đang tải model…",
         "reset": "Reset the AI recognition",
-        "video": "Video is zoomed in for better viewing."
+        "video": "Video is zoomed in for better viewing.",
+        "status": {
+  "minImagesPerClass": "At least {minImagesPerClass} images per class are required to train a good model!\nCurrent: {totalImages} images\nNeeded: {missingImage} images",
+  "notBalance": "Data is unbalanced! Each class needs at least {minImage} images.",
+  "dataPreparation": "Preparing data...",
+  "createModel": "Creating model...",
+  "trainModel": "Training model...",
+  "trainSuccess": "Model has been trained successfully!",
+  "trainError": "Error during model training: {error}",
+  "readyDownload": "Preparing model download...",
+  "downloadSuccess": "Model has been downloaded successfully! Includes: model.json, weights.bin, model-info.json, labels.json (ZIP).",
+  "downloadError": "Error while downloading model: {error}",
+  "imageAnalysing": "Analyzing image...",
+  "imageAnalyseFail": "Error analyzing image: {error}",
+  "predict": "Prediction: "
+}
       }
     }
   }
