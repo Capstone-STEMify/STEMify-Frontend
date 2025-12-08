@@ -191,11 +191,12 @@
       "numberOfStudents": "Số Học Sinh",
       "numberOfLessons": "Số Bài Học",
       "accountType": "Loại Tài Khoản",
-      "assignedDate": "Ngày Gán",
+      "assignedDate": "Ngày Tạo",
       "course": "Khóa Học",
       "joinedAt": "Ngày tham gia",
       "subscription": "Gói đăng ký",
-      "student": "Học sinh"
+      "student": "Học sinh",
+      "className": "Lớp"
     },
     "paging": {
       "previous": "Trước",

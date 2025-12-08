@@ -4,6 +4,7 @@
       "header": "Classroom List",
       "searchPlaceholder": "Search...",
       "selectCoursePlaceholder": "Select course",
+      "selectStatusPlaceholder": "Filter by status",
       "courses": "courses"
     },
     "update": {

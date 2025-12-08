@@ -197,7 +197,8 @@
       "course": "Course",
       "joinedAt": "Joined At",
       "subscription": "Subscription",
-      "student": "Student(s)"
+      "student": "Student(s)",
+      "className": "Class Name"
     },
     "paging": {
       "previous": "Previous",

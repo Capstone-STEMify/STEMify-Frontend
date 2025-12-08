@@ -16,17 +16,25 @@ import SearchBar from '@/components/shared/search/SearchBar'
 
 import SSelect from '@/components/shared/SSelect'
 import { resetParams } from '@/features/classroom/slice/classroomSlice'
+import { useTranslations } from 'next-intl'
+import { useStatusTranslation } from '@/utils/index'
 
 export default function TeacherClassroomList() {
+  const t = useTranslations('classroom')
+  const statusTranslation = useStatusTranslation()
   const user = useAppSelector((state) => state.auth?.user)
   const queryParams = useAppSelector((state) => state.classroom)
   const [selectedStatus, setSelectedStatus] = useState<'all' | ClassroomStatus>('all')
   const dispatch = useAppDispatch()
+  const { selectedOrgUserId } = useAppSelector((state) => state.selectedOrganization)
 
-  const { data, isLoading, error } = useSearchClassroomsQuery({
-    ...queryParams,
-    teacherId: user?.userId
-  })
+  const { data, isLoading, error } = useSearchClassroomsQuery(
+    {
+      ...queryParams,
+      teacherId: selectedOrgUserId ?? undefined
+    },
+    { skip: !selectedOrgUserId }
+  )
 
   const classrooms = data?.data.items || []
   // reset classroom store filters first time load
@@ -50,21 +58,21 @@ export default function TeacherClassroomList() {
 
   const statusOptions = Object.values(ClassroomStatus).map((status) => ({
     value: status,
-    label: status
+    label: statusTranslation(status)
   }))
 
   return (
-    <div className='space-y-5 px-10 pt-4'>
+    <div className='shadow-6 mx-40 mt-10 mb-20 space-y-5 rounded-lg bg-white px-10 pt-10'>
       {/* Header */}
-
-      <div className='flex gap-3'>
-        <SearchBar className='w-80 rounded-lg' />
+      <h1 className='text-4xl'>{t('list.header')}</h1>
+      <div className='grid w-full grid-cols-1 items-center gap-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 md:grid-cols-2 xl:grid-cols-3'>
+        <SearchBar className='rounded-lg border-gray-300 bg-white pl-10' placeholder={t('list.searchPlaceholder')} />
         <SSelect
-          placeholder='Filter by status'
+          placeholder={t('list.selectStatusPlaceholder')}
           value={selectedStatus}
           onChange={(value) => setSelectedStatus(value as ClassroomStatus | 'all')}
           options={statusOptions}
-          className='w-fit'
+          // className='w-[200px]'
         />
       </div>
 
@@ -73,30 +81,24 @@ export default function TeacherClassroomList() {
       )}
 
       {/* Classroom Grid */}
-      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+      <div className='grid grid-cols-1 gap-10 py-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {classrooms.map((classroom) => (
           <Link key={classroom.id} href={`/classroom/${classroom.id}`}>
-            <Card className='group h-full cursor-pointer overflow-hidden transition-all hover:shadow-lg'>
+            <Card className='flex h-full flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md'>
               {/* Image Header */}
-              <div className='relative h-32 w-full overflow-hidden bg-gradient-to-br from-sky-200 to-blue-500'>
+              <div className='relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-sky-200 to-blue-500'>
                 {classroom.course?.imageUrl ? (
                   <img
                     src={classroom.course.imageUrl}
                     alt={classroom.name}
-                    className='h-full w-full object-cover transition-transform group-hover:scale-105'
+                    className='relative aspect-[4/3] w-full overflow-hidden'
+                    sizes='(max-width: 768px) 100vw, 33vw'
                   />
                 ) : (
                   <div className='flex h-full w-full items-center justify-center'>
                     <GraduationCap className='h-12 w-12 text-white/60' />
                   </div>
                 )}
-
-                {/* Status Badge */}
-                <div className='absolute top-3 right-3'>
-                  <Badge className={`border-0 text-xs shadow-md ${getStatusBadgeClass(classroom.status)}`}>
-                    {classroom.status}
-                  </Badge>
-                </div>
               </div>
 
               <CardContent className='p-4'>
@@ -104,8 +106,11 @@ export default function TeacherClassroomList() {
                   {/* Title & Grade */}
                   <div className='flex items-start justify-between gap-2'>
                     <h3 className='text-md line-clamp-2 flex-1 font-bold text-gray-900'>{classroom.name}</h3>
-                    <Badge variant='secondary' className='shrink-0 bg-gray-100 text-xs font-medium'>
-                      {classroom.grade}
+                    {/* Status Badge */}
+                    <Badge
+                      className={`border-0 text-xs text-white shadow-md ${getStatusBadgeClass(classroom.status.toLocaleLowerCase())}`}
+                    >
+                      {statusTranslation(classroom.status)}
                     </Badge>
                   </div>
 

@@ -10,7 +10,7 @@ import { User, UserStatus } from '@/features/user/types/user.type'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { useStatusTranslation } from '@/utils/index'
+import { useOrgUserStatusTranslation, useStatusTranslation } from '@/utils/index'
 
 export function useGetOrganizationUserAction(): ColumnDef<User>[] {
   const { openModal } = useModal()
@@ -80,22 +80,19 @@ export function useGetOrganizationUserAction(): ColumnDef<User>[] {
     },
     {
       accessorKey: 'userRole',
-      header: t('userRole')
-      // cell: ({ row }) => {
-      //   const role = row.original.userRole
-      //   return <div>{tc(`accountType.${role}`)}</div>
-      // }
+      header: t('userRole'),
+      cell: ({ row }) => {
+        const role = row.original.subscriptions[0].licenseType
+        return <div>{tc(`accountType.${role.toLowerCase()}`)}</div>
+      }
     },
     {
       accessorKey: 'status',
-      header: t('status')
-      // cell: ({ row }) => {
-      //   return (
-      //     <Badge className={`${getStatusBadgeClass(row.original.status)}`}>
-      //       {translationStatus(row.original.status)}
-      //     </Badge>
-      //   )
-      // }
+      header: t('status'),
+      cell: ({ row }) => {
+        const status = row.original.isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE
+        return <Badge className={getStatusBadgeClass(status)}>{translationStatus(status)}</Badge>
+      }
     },
     createActionsColumnFromItems<User>([
       {

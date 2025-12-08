@@ -4,6 +4,7 @@
       "header": "Danh sách lớp học",
       "searchPlaceholder": "Tìm kiếm...",
       "selectCoursePlaceholder": "Chọn chương trình học",
+      "selectStatusPlaceholder": "Lọc theo trạng thái",
       "courses": "khóa học"
     },
     "update": {

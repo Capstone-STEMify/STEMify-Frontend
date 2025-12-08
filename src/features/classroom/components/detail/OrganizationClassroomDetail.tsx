@@ -163,7 +163,7 @@ export default function OrganizationClassroomDetail() {
                   <CardTitle className='flex items-center justify-between gap-2 text-lg'>
                     <div className='flex items-center gap-2 text-lg'>
                       <BookOpen className='h-5 w-5 text-purple-500' />
-                      {tClassroom('detail.curriculum.label')}
+                      {tClassroom('detail.course')}
                     </div>
                     <button
                       onClick={() =>
@@ -308,7 +308,7 @@ export default function OrganizationClassroomDetail() {
                       <Copy className='h-4 w-4' />
                     </Button>
                   </div>
-                  <p className='text-center text-xs text-slate-500'>{tClassroom('detail.classCode.description')}</p>
+                  {/* <p className='text-center text-xs text-slate-500'>{tClassroom('detail.classCode.description')}</p> */}
                 </div>
               </CardContent>
             </Card>
@@ -355,7 +355,7 @@ export default function OrganizationClassroomDetail() {
             )}
 
             {/* Google Meet Card */}
-            <Card className='border border-slate-200 py-4 shadow-sm'>
+            {/* <Card className='border border-slate-200 py-4 shadow-sm'>
               <CardContent className='p-4'>
                 <div className='space-y-3'>
                   <div className='flex items-center justify-between'>
@@ -380,7 +380,7 @@ export default function OrganizationClassroomDetail() {
                   </Button>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Quick Stats Card */}
             <Card className='border border-slate-200 py-4 shadow-sm'>
@@ -403,11 +403,13 @@ export default function OrganizationClassroomDetail() {
                 <div className='flex items-center justify-between'>
                   <span className='text-sm text-slate-600'>{tClassroom('detail.quickStats.duration')}</span>
                   <span className='text-sm font-medium text-slate-900'>
-                    {Math.ceil(
-                      (new Date(classroom.endDate).getTime() - new Date(classroom.startDate).getTime()) /
-                        (1000 * 60 * 60 * 24)
-                    )}{' '}
-                    days
+                    <div className='flex items-center gap-2'>
+                      <Calendar className='h-4 w-4' />
+                      <span className='text-sm'>
+                        {formatDate(classroom.startDate, { locale: locale as 'en' | 'vi' })} -{' '}
+                        {formatDate(classroom.endDate, { locale: locale as 'en' | 'vi' })}
+                      </span>
+                    </div>
                   </span>
                 </div>
               </CardContent>
