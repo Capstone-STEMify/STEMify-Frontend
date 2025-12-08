@@ -3,6 +3,7 @@
 import { Search } from 'lucide-react'
 import React, { KeyboardEvent, memo, useEffect, useState } from 'react'
 import useDebounce from '@/hooks/useDebounce'
+import { useTranslations } from 'next-intl'
 
 type SearchBarProps = {
   className?: string
@@ -13,12 +14,13 @@ type SearchBarProps = {
 
 const SearchBar = memo(function SearchBar({
   className = '',
-  placeholder = 'Search STEMify',
+  placeholder,
   defaultValue = '',
   onDebouncedSearch
 }: SearchBarProps) {
   const [input, setInput] = useState(defaultValue)
   const debounced = useDebounce(input, 500)
+  const tc = useTranslations('common')
 
   useEffect(() => {
     if (onDebouncedSearch) onDebouncedSearch(debounced)
@@ -38,7 +40,7 @@ const SearchBar = memo(function SearchBar({
       <input
         type='text'
         value={input}
-        placeholder={placeholder}
+        placeholder={placeholder || tc('search.placeholder')}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         className='w-full bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none'
