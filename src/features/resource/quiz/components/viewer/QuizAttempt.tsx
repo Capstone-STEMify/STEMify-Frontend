@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import QuizResult from '@/features/resource/quiz/components/player/QuizResult'
 import { useLocale, useTranslations } from 'next-intl'
 import { formatDate } from '@/utils/index'
+import { cn } from '@/utils/shadcn/utils'
 
 type QuizAttemptProps = {
   studentQuizId: number
@@ -100,6 +101,8 @@ export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAt
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
   }
 
+  const isBeforeDueDate = new Date() < new Date(studentQuiz.data.dueDate)
+
   return (
     <div className='space-y-6'>
       {/* Overall Summary Card */}
@@ -162,8 +165,16 @@ export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAt
                     </TableCell>
                     <TableCell className='text-right'>
                       <Eye
-                        className='h-5 w-5 cursor-pointer text-gray-400 hover:text-gray-600'
-                        onClick={() => onSelectAttempt(attempt)}
+                        className={cn(
+                          'h-5 w-5',
+                          isBeforeDueDate
+                            ? 'cursor-not-allowed text-gray-300'
+                            : 'cursor-pointer text-gray-400 hover:text-gray-600'
+                        )}
+                        onClick={() => {
+                          if (isBeforeDueDate) return
+                          onSelectAttempt(attempt)
+                        }}
                       />
                     </TableCell>
                   </TableRow>
