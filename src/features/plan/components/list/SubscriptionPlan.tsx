@@ -9,13 +9,15 @@ import { BillingCycle, Plan } from '@/features/plan/types/plan.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { containerVariants, itemVariants } from '@/utils/motion'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 interface SubscriptionPlanProps {
   plans: Plan[]
 }
 
 export function SubscriptionPlan({ plans }: SubscriptionPlanProps) {
+  const t = useTranslations('plan.user')
+  const tc = useTranslations('common.button')
   const router = useRouter()
   const locale = useLocale()
   const billingCycle = useAppSelector((state) => state.plan.billingCycle)
@@ -47,7 +49,7 @@ export function SubscriptionPlan({ plans }: SubscriptionPlanProps) {
                 {/* Badge */}
                 {isPopular && (
                   <div className='absolute top-4 right-4 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 px-3 py-1 text-xs font-semibold text-white shadow-md'>
-                    Most Popular
+                    {t('popular')}
                   </div>
                 )}
 
@@ -73,7 +75,7 @@ export function SubscriptionPlan({ plans }: SubscriptionPlanProps) {
                     onClick={() => router.push(`/${locale}/contact`)}
                     className={`mb-8 w-full rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 py-5 font-semibold text-white shadow-md transition-transform duration-300 hover:scale-[1.02]`}
                   >
-                    Contact Us
+                    {tc('contact')}
                   </Button>
 
                   {/* Features */}

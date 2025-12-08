@@ -114,7 +114,8 @@
       "backToClassroomList": "Back to Classroom List",
       "continueLearning": "Continue Learning",
       "markAsComplete": "Mark as Complete",
-      "startQuiz": "Start Quiz"
+      "startQuiz": "Start Quiz",
+      "contact": "Contact Us"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

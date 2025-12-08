@@ -64,6 +64,16 @@
       "recommended": "RECOMMENDED",
       "choosePlanBtn": "Choose Plan",
       "month": "Month"
+    },
+    "user": {
+      "title": "Plans & Pricing",
+      "subTitle": "Flexible Plans",
+      "des1": "Whether your time-saving automation needs are large or small, we're here to help you scale.",
+      "des2": "Choose the perfect plan for your team and unlock unlimited potential.",
+      "annual": "Annual",
+      "semiAnnual": "SemiAnnual",
+      "popular": "Most Popular",
+      "support": "Support & Access"
     }
   }
 }
