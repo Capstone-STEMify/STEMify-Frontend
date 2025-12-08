@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import * as tf from '@tensorflow/tfjs'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
+import { useTranslations } from 'next-intl'
 
 export interface PredictionResult {
   className: string
@@ -36,6 +37,7 @@ const CONFIG = {
 const BASE_MODEL_URL = 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json'
 
 export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Class 2']) {
+  const t = useTranslations('agent.modelMaker.microbit.status')
   const [classes, setClasses] = useState<string[]>(initialClasses)
   const [classImages, setClassImages] = useState<Record<string, string[]>>(() => {
     const initial: Record<string, string[]> = {}
@@ -248,7 +250,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
     if (totalImages < minImagesPerClass * classes.length) {
       alert(
-        `Cần ít nhất ${minImagesPerClass} ảnh cho mỗi class để train model tốt!\nHiện tại: ${totalImages} ảnh\nCần: ${minImagesPerClass * classes.length} ảnh`
+        t('minImagesPerClass', {minImagesPerClass: minImagesPerClass, totalImages: totalImages, missingImage: minImagesPerClass * classes.length})
       )
       return
     }
@@ -261,7 +263,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     })
 
     if (!balanced) {
-      alert(`Dữ liệu không cân bằng! Cần ít nhất ${minImagesPerClass} ảnh cho mỗi class.`)
+      alert(t('notBalance', {minImage: minImagesPerClass}))//
       return
     }
 
@@ -269,19 +271,19 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
     try {
       console.log('Bắt đầu train model thật...')
-      setTrainingStatus({ message: 'Đang chuẩn bị dữ liệu...', type: 'info' })
+      setTrainingStatus({ message: t('dataPreparation'), type: 'info' })
       setTrainingProgress(10)
 
       const { images, labels } = await prepareTrainingData()
       console.log('Training data prepared:', images.shape, labels.shape)
 
-      setTrainingStatus({ message: 'Đang tạo model...', type: 'info' })
+      setTrainingStatus({ message: t('createModel'), type: 'info' })
       setTrainingProgress(20)
 
       const { featureExtractor, classifier } = await createTransferLearningModel(classes.length)
       console.log('Model created:', classifier)
 
-      setTrainingStatus({ message: 'Đang train model...', type: 'info' })
+      setTrainingStatus({ message: t('trainModel'), type: 'info' })
       setTrainingProgress(30)
 
       console.log('Extracting features...')
@@ -354,12 +356,12 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       images.dispose()
       labels.dispose()
 
-      setTrainingStatus({ message: 'Model đã được train thành công!', type: 'success' })
+      setTrainingStatus({ message: t('trainSuccess'), type: 'success' })
       setTrainingProgress(100)
     } catch (error) {
       console.error('Lỗi khi train model:', error)
       setTrainingStatus({
-        message: `Lỗi khi train model: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        message: t('trainError', {error: error instanceof Error ? error.message : 'Unknown error'}),
         type: 'error'
       })
     } finally {
@@ -375,7 +377,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     }
 
     try {
-      setTrainingStatus({ message: 'Đang chuẩn bị tải xuống model...', type: 'info' })
+      setTrainingStatus({ message: t('readyDownload'), type: 'info' })
 
       // --- Lưu model vào bộ nhớ (thay vì auto download) ---
       const artifacts = await model.classifier.save(
@@ -447,13 +449,13 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
       setTrainingStatus({
         message:
-          'Model đã được tải xuống thành công! Bao gồm: model.json, weights.bin, model-info.json, labels.json (ZIP).',
+          t('downloadSuccess'),
         type: 'success'
       })
     } catch (error) {
       console.error('Lỗi khi tải xuống model:', error)
       setTrainingStatus({
-        message: `❌ Lỗi khi tải xuống model: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        message: t('downloadError', {error: error instanceof Error ? error.message : 'Unknown error'}),
         type: 'error'
       })
     }
@@ -481,7 +483,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       }
 
       console.log('Bắt đầu phân tích ảnh...')
-      setTrainingStatus({ message: 'Đang phân tích ảnh...', type: 'info' })
+      setTrainingStatus({ message: t('imageAnalysing'), type: 'info' })
 
       try {
         const img = new Image()
@@ -514,7 +516,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
         const topResult = results[0]
         setTrainingStatus({
-          message: `Dự đoán: ${topResult.className} (${(topResult.probability * 100).toFixed(1)}%)`,
+          message: t('predict') + `${topResult.className} (${(topResult.probability * 100).toFixed(1)}%)`,
           type: 'success'
         })
 
@@ -524,7 +526,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       } catch (error) {
         console.error('Error analyzing image:', error)
         setTrainingStatus({
-          message: `Lỗi khi phân tích ảnh: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          message: t('imageAnalyseFail', {error: error instanceof Error ? error.message : 'Unknown error'}),
           type: 'error'
         })
       }

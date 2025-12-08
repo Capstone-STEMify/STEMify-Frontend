@@ -28,10 +28,10 @@ export const userApi = createCrudApi<User, UserSliceParams>({
       ApiSuccessResponse<PaginatedResult<OrganizationUser>>,
       OrganizationUserQueryParams
     >({
-      query: ({ organizationId, pageNumber, pageSize, role }) => ({
+      query: ({ organizationId, pageNumber, pageSize, role, email }) => ({
         url: `/organizations/${organizationId}/users`,
         method: 'GET',
-        params: { pageNumber, pageSize, role }
+        params: { pageNumber, pageSize, role, email }
       }),
       providesTags: ['User']
     })

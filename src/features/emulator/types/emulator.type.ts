@@ -4,6 +4,7 @@ export type EmulatorSearchParams = {
   search?: string
   difficulty?: string
   userId?: string
+  status?: EmulatorStatus
 }
 
 export type Emulator = {

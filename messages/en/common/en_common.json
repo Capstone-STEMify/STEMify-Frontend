@@ -114,7 +114,9 @@
       "backToClassroomList": "Back to Classroom List",
       "continueLearning": "Continue Learning",
       "markAsComplete": "Mark as Complete",
-      "startQuiz": "Start Quiz"
+      "startQuiz": "Start Quiz",
+      "contact": "Contact Us",
+      "menu": "Open Menu"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",
@@ -198,6 +200,9 @@
       "joinedAt": "Joined At",
       "subscription": "Subscription",
       "student": "Student(s)",
+      "user": "User",
+      "license": "License",
+      "groupName": "Group",
       "className": "Class Name"
     },
     "paging": {

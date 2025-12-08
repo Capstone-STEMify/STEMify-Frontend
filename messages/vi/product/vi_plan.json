@@ -63,6 +63,16 @@
       "recommended": "ĐỀ XUẤT",
       "choosePlanBtn": "Chọn gói",
       "month": "Tháng"
+    },
+    "user": {
+      "title": "Gói & Giá",
+      "subTitle": "Gói linh hoạt",
+      "des1": "Dù nhu cầu tự động hóa của bạn lớn hay nhỏ, chúng tôi luôn sẵn sàng hỗ trợ bạn phát triển.",
+      "des2": "Chọn gói phù hợp nhất cho đội của bạn và mở khóa tiềm năng không giới hạn.",
+      "annual": "Hàng năm",
+      "semiAnnual": "Nửa năm",
+      "popular": "Phổ biến nhất",
+      "support": "Hỗ trợ & Quyền truy cập"
     }
   }
 }
