@@ -90,12 +90,11 @@ export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
     },
 
     {
-      accessorKey: 'createdByUserName',
-      header: () => <div>{tc('tableHeader.createdBy')}</div>,
+      accessorKey: 'code',
+      header: () => <div>{tc('tableHeader.code')}</div>,
       cell: ({ row }) => {
-        const value = row.getValue<string>('createdByUserName')
-        const display = value?.trim() ? value : 'STEMify Staff'
-        return <div className='cursor-pointer'>{display}</div>
+        const value = row.original.code
+        return <div>{value}</div>
       }
     },
     {

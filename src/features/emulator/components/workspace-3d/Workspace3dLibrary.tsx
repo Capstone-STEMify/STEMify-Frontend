@@ -1,3 +1,21 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 'use client'
 
 import React, { useState } from 'react'
@@ -37,13 +55,16 @@ export default function Workspace3dLibrary() {
   const [statusFilter, setStatusFilter] = useState('all')
 
   const userRole = useAppSelector((state) => state.auth.user?.userRole)
+  const userId = useAppSelector((state) => state.auth.user?.userId)
+
   const allowRoles = [UserRole.STAFF, UserRole.ADMIN]
   const statusQuery = statusFilter === 'all' ? undefined : statusFilter
 
   const { data, isLoading } = useSearchEmulationsQuery({
     page: 1,
     search,
-    status: statusQuery as EmulatorStatus | undefined
+    status: statusQuery as EmulatorStatus | undefined,
+    userId: userId
   })
   const [updateEmulation] = useUpdateEmulatorMutation()
   const [deleteEmulation] = useDeleteEmulatorMutation()

@@ -7,12 +7,14 @@ import { PostLessonResponseBody } from '@/features/resource/lesson-asset/types/l
 import { fileToBase64 } from '@/utils/index'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
 import { ChevronLeft, ChevronRight, Loader2, Plus, Trash2, Upload, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 export default function StepBlockComponent({ node, updateAttributes, editor }: NodeViewProps) {
+  const tc = useTranslations('toast')
   const { lessonId } = useParams()
   const { steps, currentStep } = node.attrs
   const stepsArray = Array.isArray(steps) ? steps : []
@@ -70,7 +72,8 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
 
     updateStep('images', [...(step.images || []), ...uploaded])
 
-    toast.success('Uploaded files successfully')
+    toast.success(tc('successMessage.uploadFile'))
+
     event.target.value = ''
   }
 
@@ -92,7 +95,7 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
       const uploaded = await uploadLessonFiles(files)
 
       updateStep('images', [...(step.images || []), ...uploaded])
-      toast.success('Uploaded files successfully')
+      toast.success(tc('successMessage.uploadFile'))
     }
   }
 

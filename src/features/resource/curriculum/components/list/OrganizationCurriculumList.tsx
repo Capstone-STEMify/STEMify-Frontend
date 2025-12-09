@@ -17,6 +17,7 @@ import { setSelectedCurriculum } from '@/features/resource/curriculum/slice/curr
 
 export default function OrganizationCurriculumList() {
   const t = useTranslations('organization.curriculum')
+  const tc = useTranslations('common')
   const statusTranslate = useStatusTranslation()
   const router = useRouter()
   const locale = useLocale()
@@ -59,8 +60,8 @@ export default function OrganizationCurriculumList() {
 
   const statusOptions: Array<SubscriptionStatus | 'ALL'> = [
     'ALL',
-    SubscriptionStatus.PENDING,
     SubscriptionStatus.ACTIVE,
+    SubscriptionStatus.PENDING,
     SubscriptionStatus.CANCELLED,
     SubscriptionStatus.EXPIRED
   ]
@@ -100,7 +101,7 @@ export default function OrganizationCurriculumList() {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                {status === 'ALL' ? t('all') : statusTranslate(status)}
+                {status === 'ALL' ? t('all') : tc(`status2.${status.toLowerCase()}`)}
               </button>
             ))}
           </div>
@@ -132,7 +133,7 @@ export default function OrganizationCurriculumList() {
               }}
               badge={
                 <Badge className={`${getStatusBadgeClass(curriculum.status)} shadow-sm`}>
-                  {statusTranslate(curriculum.status)}
+                  {tc(`status2.${curriculum.status.toLowerCase()}`)}
                 </Badge>
               }
               action={<Badge variant={'secondary'}>{curriculum.code}</Badge>}

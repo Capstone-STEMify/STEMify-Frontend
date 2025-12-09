@@ -10,6 +10,7 @@ import { Classroom } from '@/features/classroom/types/classroom.type'
 import { ClassroomNavItems } from 'app/[locale]/classroom/[classroomId]/page'
 import { formatDate, useStatusTranslation } from '@/utils/index'
 import BackButton from '@/components/shared/button/BackButton'
+import { useAppSelector } from '@/hooks/redux-hooks'
 
 interface Props {
   classroom: Classroom
@@ -22,6 +23,7 @@ export default function ClassroomSubHeader({ classroom, currentTab, setCurrentTa
   const t = useTranslations('Header')
   const statusTranslation = useStatusTranslation()
   const tClassroom = useTranslations('classroom.detail')
+  const currentRole = useAppSelector((state) => state.selectedOrganization.currentRole)
 
   const MAX_VISIBLE = 2
   const totalStudents = classroom.students.length
@@ -38,6 +40,14 @@ export default function ClassroomSubHeader({ classroom, currentTab, setCurrentTa
     { name: 'assignment', currentTab: 'assignment' },
     { name: 'student', currentTab: 'student' }
   ]
+  const studentSubNavItems: { name: string; currentTab: ClassroomNavItems }[] = [
+    { name: 'overview', currentTab: 'overview' },
+    {
+      name: 'course',
+      currentTab: 'course'
+    }
+  ]
+  const finalSubNavItems = currentRole === 'Student' ? studentSubNavItems : subNavItems
 
   return (
     <div className='sticky top-0 z-40 border-b border-gray-200 bg-white pt-4 shadow-sm'>
@@ -106,7 +116,7 @@ export default function ClassroomSubHeader({ classroom, currentTab, setCurrentTa
 
         {/* Bottom Row - Navigation Tabs */}
         <nav className='flex items-center gap-6'>
-          {subNavItems.map((item) => {
+          {finalSubNavItems.map((item) => {
             const isActive = currentTab === item.currentTab
             return (
               <div

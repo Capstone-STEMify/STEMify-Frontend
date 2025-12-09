@@ -29,6 +29,7 @@ export default function StudentClassroomDetail({ courseEnrollment }: StudentClas
   const tClassroom = useTranslations('classroom')
   const { classroomId } = useParams()
   const { selectedOrgUserId } = useAppSelector((state) => state.selectedOrganization)
+  console.log('Selected Org User ID:', selectedOrgUserId)
   const router = useRouter()
   const locale = useLocale()
   const dispatch = useAppDispatch()

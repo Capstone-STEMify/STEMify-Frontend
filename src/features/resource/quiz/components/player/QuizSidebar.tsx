@@ -57,20 +57,22 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
       </div>
 
       {/* Timer Card */}
-      <Card className='overflow-hidden shadow-md transition-all hover:shadow-lg'>
-        <div className='p-5'>
-          <div className='mb-3 flex items-center gap-2'>
-            <div className='rounded-full border border-black p-2'>
-              <Clock className='h-4 w-4' />
+      {timeLeft > 0 && (
+        <Card className='overflow-hidden shadow-md transition-all hover:shadow-lg'>
+          <div className='p-5'>
+            <div className='mb-3 flex items-center gap-2'>
+              <div className='rounded-full border border-black p-2'>
+                <Clock className='h-4 w-4' />
+              </div>
+              <span className='font-semibold text-gray-700'>Thời gian còn lại</span>
             </div>
-            <span className='font-semibold text-gray-700'>Thời gian còn lại</span>
+            <div className='text-3xl font-bold'>{formatTime(timeLeft)}</div>
+            <div className='mt-3 h-2 w-full overflow-hidden rounded-full bg-sky-200'>
+              <div className='h-full' style={{ width: `${timeProgressPercent}%` }} />
+            </div>
           </div>
-          <div className='text-3xl font-bold'>{formatTime(timeLeft)}</div>
-          <div className='mt-3 h-2 w-full overflow-hidden rounded-full bg-sky-200'>
-            <div className='h-full' style={{ width: `${timeProgressPercent}%` }} />
-          </div>
-        </div>
-      </Card>
+        </Card>
+      )}
 
       {/* Question Navigation */}
       <div>

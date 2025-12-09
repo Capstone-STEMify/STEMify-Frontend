@@ -224,11 +224,9 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                       </TableCell>
                       <TableCell>
                         <div className='flex flex-col'>
-                          {assignment.user.firstName || assignment.user.lastName ? (
+                          {assignment.user.name ? (
                             <>
-                              <span className='font-medium'>
-                                {assignment.user.firstName} {assignment.user.lastName}
-                              </span>
+                              <span className='font-medium'>{assignment.user.name}</span>
                               {assignment.user.userRole && (
                                 <span className='text-muted-foreground text-xs'>
                                   {tc(`accountType.${assignment.user.userRole.toLowerCase()}`)}

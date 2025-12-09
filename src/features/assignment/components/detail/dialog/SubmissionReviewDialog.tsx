@@ -28,7 +28,12 @@ interface SubmissionReviewDialogProps {
   onClose?: () => void
 }
 
-export function SubmissionReviewDialog({ submission, studentAssignmentId, onSuccess, onClose }: SubmissionReviewDialogProps) {
+export function SubmissionReviewDialog({
+  submission,
+  studentAssignmentId,
+  onSuccess,
+  onClose
+}: SubmissionReviewDialogProps) {
   const { closeModal } = useModal()
 
   const t = useTranslations('assignment.teacher')
@@ -37,13 +42,13 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
   // Helper function to translate submission status
   const getStatusTranslation = (status: string): string => {
     const statusMap: Record<string, string> = {
-      'Passed': 'modal.subStatus.passed',
-      'Failed': 'modal.subStatus.failed',
+      Passed: 'modal.subStatus.passed',
+      Failed: 'modal.subStatus.failed',
       'Not Submitted': 'modal.subStatus.notSubmitted',
-      'Submitted': 'modal.subStatus.submitted',
-      'Pending': 'modal.subStatus.pending',
-      'UnderReview': 'modal.subStatus.underReview',
-      'Graded': 'modal.subStatus.graded'
+      Submitted: 'modal.subStatus.submitted',
+      Pending: 'modal.subStatus.pending',
+      UnderReview: 'modal.subStatus.underReview',
+      Graded: 'modal.subStatus.graded'
     }
     return t(statusMap[status] || 'modal.subStatus.pending')
   }
@@ -58,13 +63,13 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
 
   const [gradeAssignment, { isLoading: isGrading }] = useGradeAssignmentAttemptMutation()
 
-    const [scores, setScores] = useState<Record<number, Record<number, number | null>>>({})
+  const [scores, setScores] = useState<Record<number, Record<number, number | null>>>({})
   const [feedbackText, setFeedbackText] = useState('')
 
-  const attemptData = detailResponse?.data 
+  const attemptData = detailResponse?.data
     ? detailResponse.data.attempts[detailResponse.data.attempts.length - 1]
     : submission.attempts[submission.attempts.length - 1]
-  
+
   const isReviewed = submission.status === 'Passed' || submission.status === 'Failed' || submission.status === 'Graded'
   const totalScore = attemptData ? attemptData.totalScore : submission.point
   const feedback = attemptData ? attemptData.feedback : submission.comment
@@ -206,12 +211,14 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
         <div className='mt-6 grid grid-cols-3 gap-4 border-b pb-6'>
           <div>
             <span className='text-sm text-gray-500'>{t('modal.point')}</span>
-            <p className='text-2xl font-semibold text-green-600'>{totalScore || '-'}%</p>
+            <p className='text-2xl font-semibold text-green-600'>{totalScore || '0'}%</p>
           </div>
           <div>
             <span className='text-sm text-gray-500'>{t('modal.status')}</span>
             <div>
-              <Badge className={getStatusBadgeClass(submission.status)}>{getStatusTranslation(submission.status)}</Badge>
+              <Badge className={getStatusBadgeClass(submission.status)}>
+                {getStatusTranslation(submission.status)}
+              </Badge>
             </div>
           </div>
         </div>
@@ -220,7 +227,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
       {isLoading ? (
         <LoadingComponent />
       ) : isError ? (
-        <div className='my-10 text-center text-red-500'>Failed to load submission details.</div>
+        <div className='my-10 text-center text-red-500'>Lỗi</div>
       ) : (
         <>
           <div className='my-10 space-y-8'>
@@ -237,19 +244,27 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
                         {t('modal.answer')}
                       </h4>
                       <div className='prose prose-sm max-w-none text-gray-700'>
-                        <p>{question.answerText || t('modal.noAnswer')}</p>
+                        {question.answerText ? (
+                          <p>{question.answerText}</p>
+                        ) : (
+                          <div className='mt-6'>
+                            <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
+                            <Button variant='link' className='p-0 text-sm' asChild>
+                              <a
+                                href={
+                                  question.answerFileUrl ||
+                                  'https://res.cloudinary.com/dms8gue1c/video/upload/v1765229933/asm_sub_tair43.mp4'
+                                }
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                <p className='text-blue-500'>{t('modal.viewFile')}</p>{' '}
+                                <ExternalLink className='ml-1 h-3 w-3' />
+                              </a>
+                            </Button>
+                          </div>
+                        )}
                       </div>
-
-                      {question.answerFileUrl && (
-                        <div className='mt-6'>
-                          <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
-                          <Button variant='link' className='p-0 text-sm' asChild>
-                            <a href={question.answerFileUrl} target='_blank' rel='noopener noreferrer'>
-                              {t('modal.viewFile')} <ExternalLink className='ml-1 h-3 w-3' />
-                            </a>
-                          </Button>
-                        </div>
-                      )}
                     </div>
 
                     <div className='p-6'>
@@ -292,7 +307,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
                             </div>
                           ))
                         ) : (
-                          <p className='text-sm text-gray-500'>No rubric criteria for this question.</p>
+                          <p className='text-sm text-gray-500'>Không có tiêu chí đánh giá cho câu hỏi này.</p>
                         )}
 
                         <div className='mt-6 border-t pt-4'>
@@ -302,7 +317,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
                               const key = c.rubricCriterionId
                               const scoreFromState = scores[question.id]?.[key]
                               const scoreFromApi = (c as any).currentPoints ?? (c as any).points
-                              const score = scoreFromState !== undefined ? scoreFromState || 0 : scoreFromApi ?? 0
+                              const score = scoreFromState !== undefined ? scoreFromState || 0 : (scoreFromApi ?? 0)
                               return sum + score
                             }, 0)}{' '}
                             / {question.rubricScore.reduce((sum, c) => sum + c.maxPoints, 0)}
@@ -320,7 +335,7 @@ export function SubmissionReviewDialog({ submission, studentAssignmentId, onSucc
 
             {isReviewed ? (
               <div className='mt-4 rounded-md border bg-sky-50 p-4'>
-                <p className='text-sm text-gray-700 italic'>{feedback || 'No comment left.'}</p>
+                <p className='text-sm text-gray-700 italic'>{feedback || 'Không có nhận xét nào'}</p>
               </div>
             ) : (
               <div className='mt-4'>

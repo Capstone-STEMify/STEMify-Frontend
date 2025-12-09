@@ -13,6 +13,23 @@
         "createQuiz": "Create Quiz",
         "createAssignment": "Create Assignment"
       }
-    }
+    },
+    "guide": "Guide",
+    "upload": "Upload",
+    "templates": "Templates",
+    "image": "Image",
+    "video": "Video",
+    "document": "Document",
+    "insertBlock": "Insert Block",
+    "buttonLink": "Button Link",
+    "step": "Step",
+    "quiz": "Quiz",
+    "note": "Note",
+    "format": "Format",
+    "size": "Size",
+    "resolution": "Resolution",
+    "createAt": "Created At",
+    "tag": "Tag",
+    "noTag": "No Tag"
   }
 }

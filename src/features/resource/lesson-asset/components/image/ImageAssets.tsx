@@ -12,11 +12,14 @@ import { LessonAssetSliceParams, LessonAssetType } from '@/features/resource/les
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
 import { Download, EllipsisVertical, Info, Trash2, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 
 export default function ImageAssets() {
+  const tc = useTranslations('common')
+  const tContent = useTranslations('content')
   const editor = useEditorCtx()
   const { openModal } = useModal()
   const { lessonId } = useParams()
@@ -44,15 +47,15 @@ export default function ImageAssets() {
   }
 
   if (loadingImages) {
-    return <div className='text-sm text-gray-500'>Loading images...</div>
+    return <div className='text-sm text-gray-500'>{tContent('loading')}</div>
   }
 
   if (!data) {
-    return <div className='text-sm text-gray-500'>No images uploaded yet</div>
+    return <div className='text-sm text-gray-500'>{tContent('noData')}</div>
   }
 
   if (!editor) {
-    return <div className='p-4 text-sm text-red-500'>Something wrong, please contact support</div>
+    return <div className='p-4 text-sm text-red-500'>{tContent('somethingWrong')}</div>
   }
   return (
     <div className='flex h-full flex-col'>
@@ -104,7 +107,7 @@ export default function ImageAssets() {
                     className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-gray-100'
                     onClick={() => dispatch(setActivePanel({ panel: 'assetDetail', assetId: asset.id }))}
                   >
-                    <Info size={14} /> Details
+                    <Info size={14} /> {tc('button.detail')}
                   </div>
                   <a
                     href={asset.assetUrl}
@@ -112,7 +115,7 @@ export default function ImageAssets() {
                     className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-gray-100'
                   >
                     <Download size={14} />
-                    <span>Download</span>
+                    <span>{tc('button.download')}</span>
                   </a>
                   <div
                     onClick={() =>
@@ -123,7 +126,7 @@ export default function ImageAssets() {
                     }
                     className='flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-red-500 hover:bg-gray-100'
                   >
-                    <Trash2 size={14} /> Delete
+                    <Trash2 size={14} /> {tc('button.delete')}
                   </div>
                 </div>
               </SPopover>

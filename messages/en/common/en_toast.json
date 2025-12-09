@@ -23,6 +23,7 @@
       "removeItemFromCart": "Item removed from cart!",
       "clearCart": "Cart cleared!",
       "addToCart": "Item added to cart!",
+      "uploadFile": "Upload file(s) successfully!",
       "uploadCSV": "Upload CSV Successfully",
       "reorder": "Reordered Successfully",
       "copiedToClipboard": "Copied to clipboard!"

@@ -18,6 +18,7 @@ interface UploadedFile {
 
 export default function Step2AdminAccounts() {
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
 
   const dispatch = useAppDispatch()
   const router = useRouter()
@@ -63,7 +64,7 @@ export default function Step2AdminAccounts() {
         }
 
         const res = await uploadCSVBulk(payload).unwrap()
-        toast.success('CSV uploaded successfully!')
+        toast.success(tt('successMessage.uploadCSV'))
         router.push(`/${locale}/admin/organization/${organizationId}/subscription/${organizationSubscriptionId}`)
         // Handle success (e.g., navigate to next step)
       } catch (error: any) {

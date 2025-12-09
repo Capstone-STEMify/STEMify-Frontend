@@ -94,9 +94,9 @@ export default function OrganizationDashboard() {
         </div>
 
         {/* Third Row */}
-        <div>
+        {/* <div>
           <ClassroomStatisticTable data={dashboardData} />
-        </div>
+        </div> */}
       </div>
     </div>
   )

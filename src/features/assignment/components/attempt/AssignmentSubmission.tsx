@@ -81,14 +81,14 @@ const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (f
     >
       <UploadCloud className={`h-8 w-8 ${isDragging ? 'text-blue-600' : 'text-gray-400'}`} />
       <p className='mt-2 text-sm text-gray-600'>
-        <span className='font-semibold text-blue-600'>Click to upload</span> or drag and drop
+        <span className='font-semibold text-blue-600'>Nhấn vào để upload</span> hoặc kéo thả
       </p>
-      <p className='text-xs text-gray-500'>PDF, DOC, or DOCX</p>
+      <p className='text-xs text-gray-500'>PDF, DOC, hoặc DOCX</p>
       <input
         type='file'
         className='absolute h-full w-full opacity-0'
         onChange={handleFileChange}
-        accept='.pdf,.doc,.docx'
+        accept='.pdf,.doc,.docx, .mp4, .png, .jpg, .jpeg'
       />
     </div>
   )
@@ -159,10 +159,10 @@ export default function AssignmentSubmissionForm() {
 
     try {
       await createAttempt({ body: payload }).unwrap()
-      toast.success('Assignment submitted successfully!')
+      toast.success('Nộp bài thành công!')
       router.back()
     } catch (error) {
-      toast.error('Failed to submit assignment.')
+      toast.error('Nộp bài thất bại. Vui lòng thử lại sau.')
       console.error(error)
     }
   }
@@ -189,8 +189,8 @@ export default function AssignmentSubmissionForm() {
           {formatDate(selectedStudentAssignment.dueDate, { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' })}
         </div>
       </div>
-
-      <Card className='border-blue-200 bg-blue-50'>
+      {/* TODO */}
+      {/* <Card className='border-blue-200 bg-blue-50'>
         <CardContent className='p-4'>
           <div className='flex items-start gap-3'>
             <Sparkles className='mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600' />
@@ -207,7 +207,7 @@ export default function AssignmentSubmissionForm() {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* Tabs */}
       <div className='border-b border-gray-200'>
