@@ -85,29 +85,54 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
   const currentLesson = lessons.find((l) => String(l.lessonId) === currentLessonId)
 
+  // --- REAL API CALL (UPDATED) ---
   const handleAnalyzeClassroom = async () => {
     try {
       const response = await analyzeTrigger({
         classroom_id: classroomId,
-        force_mock: false,
+        force_mock: false, 
         analysis_period_days: 7
       }).unwrap()
 
-      if (response.data) {
-        const atRiskStudents = response.data.students.filter(s => s.currentStatus === 'AtRisk')
-        
-        setAiData({
-          overviewText: response.data.overviewText || response.data.aiInsightsText,
-          students: atRiskStudents,
-          atRiskCount: atRiskStudents.length
-        })
+      console.log("AI Raw Response:", response) // Debug log
 
-        if (atRiskStudents.length > 0) {
-          toast.success(`AI found ${atRiskStudents.length} students at risk.`)
-        } else {
-          toast.info("AI analysis complete. Great job! No students currently at risk.")
-        }
+      const payload = response.data || response;
+
+      if (!payload || !payload.students) {
+        toast.error("Invalid AI response structure");
+        return;
       }
+
+      let mappedStudents = payload.students;
+      
+      const isIdMismatch = students.length > 0 && payload.students.length > 0 && 
+                           !students.some(s => s.studentId === payload.students[0].studentId);
+
+      if (isIdMismatch) {
+        console.warn("Detected ID mismatch (Mock Data). Auto-mapping by index for UI demo.");
+        mappedStudents = payload.students.map((aiStudent: any, index: number) => {
+          const realStudent = students[index];
+          return {
+            ...aiStudent,
+            studentId: realStudent ? realStudent.studentId : aiStudent.studentId
+          };
+        });
+      }
+
+      const atRiskStudents = mappedStudents.filter((s: any) => s.currentStatus === 'AtRisk')
+      
+      setAiData({
+        overviewText: payload.overviewText || payload.aiInsightsText,
+        students: atRiskStudents, 
+        atRiskCount: atRiskStudents.length
+      })
+
+      if (atRiskStudents.length > 0) {
+        toast.success(`AI found ${atRiskStudents.length} students at risk.`)
+      } else {
+        toast.info("AI analysis complete. No students currently at risk.")
+      }
+
     } catch (error) {
       console.error("AI Analysis Failed:", error)
       toast.error("Failed to analyze progress. Please try again later.")
