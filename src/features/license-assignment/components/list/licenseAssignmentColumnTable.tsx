@@ -43,12 +43,8 @@ export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignmen
       }
     },
     {
-      accessorKey: 'user.firstName',
-      header: tc('tableHeader.firstName')
-    },
-    {
-      accessorKey: 'user.lastName',
-      header: tc('tableHeader.lastName')
+      accessorKey: 'user.name',
+      header: tc('tableHeader.name')
     },
     {
       accessorKey: 'user.email',
