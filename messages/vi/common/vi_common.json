@@ -141,7 +141,8 @@
       "downloadAndPrint": "Tải Xuống & In",
       "upgrade": "Nâng Cấp Gói",
       "uploadFile": "Tải Lên Tệp",
-      "exportGLB": "Xuất GLB"
+      "exportGLB": "Xuất GLB",
+      "restore": "Khôi Phục"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

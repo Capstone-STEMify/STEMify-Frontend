@@ -39,12 +39,16 @@ export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
   const handleStatusChange = (organization: Organization, newStatus: string) => {
     updateOrganizationStatus({ id: organization.id, body: { status: newStatus as OrganizationStatus } })
       .unwrap()
-      .then(() => toast.success(tt('successMessage.update', { title: newStatus })))
+      .then(() => toast.success(tt('successMessage.updateNoTitle')))
   }
 
   const handleArchive = async (organization: Organization) => {
     await updateOrganizationStatus({ id: organization.id, body: { status: OrganizationStatus.ARCHIVED } }).unwrap()
-    toast.success(tt('successMessage.update', { title: OrganizationStatus.ARCHIVED }))
+    toast.success(tt('successMessage.updateNoTitle'))
+  }
+  const handleRestore = async (organization: Organization) => {
+    await updateOrganizationStatus({ id: organization.id, body: { status: OrganizationStatus.ACTIVE } }).unwrap()
+    toast.success(tt('successMessage.updateNoTitle'))
   }
 
   const handleDelete = async (id: number) => {
@@ -113,7 +117,7 @@ export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
         return (
           <SStatusDropdown
             value={row.original.status}
-            options={statusOptions.filter((opt) => opt.value !== OrganizationStatus.ARCHIVED)}
+            options={statusOptions.filter((opt) => opt.value == row.original.status)}
             onChange={(newStatus) => handleStatusChange(row.original, newStatus)}
           />
         )
@@ -127,8 +131,19 @@ export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
         }
       },
       {
+        label: tc('button.restore'),
+        hidden: ({ original }) => original.status !== OrganizationStatus.ARCHIVED,
+        onClick: async ({ original }) => {
+          openModal('confirm', {
+            message: tt('confirmMessage.restore', { title: original.name }),
+            onConfirm: () => handleRestore(original)
+          })
+        }
+      },
+      {
         label: tc('button.archive'),
         archive: true,
+        hidden: ({ original }) => original.status === OrganizationStatus.ARCHIVED,
         onClick: async ({ original }) => {
           openModal('confirm', {
             message: tt('confirmMessage.archive', { title: original.name }),
@@ -139,6 +154,7 @@ export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
       {
         label: tc('button.delete'),
         danger: true,
+        hidden: ({ original }) => original.status === OrganizationStatus.ARCHIVED,
         onClick: async ({ original }) => {
           openModal('confirm', {
             message: tt('confirmMessage.delete', { title: original.name }),

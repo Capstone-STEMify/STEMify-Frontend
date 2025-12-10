@@ -141,7 +141,8 @@
       "downloadAndPrint": "Download & Print",
       "upgrade": "Upgrade Plan",
       "uploadFile": "Upload File",
-      "exportGLB": "Export GLB"
+      "exportGLB": "Export GLB",
+      "restore": "Restore"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

@@ -48,7 +48,8 @@
       "addAnotherKit": "The course already has a kit. Do you want to replace it with a new one?",
       "removeItemFromCart": "Are you sure you want to remove this item from the cart?",
       "clearCart": "Are you sure you want to clear the cart?",
-      "deleteUserEmail": "Are you sure you want to delete the user with email \"{title}\"?"
+      "deleteUserEmail": "Are you sure you want to delete the user with email \"{title}\"?",
+      "restore": "Are you sure you want to restore \"{title}\"?"
     },
     "unauthorized": "Unauthorized access."
   }
