@@ -79,3 +79,13 @@ export type QuizImportResponse = {
     rowData: string
   }[]
 }
+
+export type StudentQuizAttemptResponse = {
+  id: number
+  studentQuizId: number
+  startedAt: string
+  totalScore: number
+  status: QuizAttemptStatus
+  attemptNumber: number
+  questionAttempts: []
+}

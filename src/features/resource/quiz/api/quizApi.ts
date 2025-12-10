@@ -1,4 +1,5 @@
 import {
+  Attempt,
   QuestionAttemptQuery,
   Quiz,
   QuizAttempt,
@@ -29,7 +30,7 @@ export const quizApi = createCrudApi<Quiz, QuizQueryParams>({
         params: { classroomId }
       })
     }),
-    createQuizAttempt: builder.mutation<any, { studentQuizId: number }>({
+    createQuizAttempt: builder.mutation<ApiSuccessResponse<Attempt>, { studentQuizId: number }>({
       query: ({ studentQuizId }) => ({
         url: `/quiz-attempts`,
         method: 'POST',

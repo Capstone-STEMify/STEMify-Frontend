@@ -57,6 +57,8 @@ export const quizPlayerSlice = createSlice({
       state.userAnswers[questionId] = prev.includes(answer) ? prev.filter((a) => a !== answer) : [...prev, answer]
     },
     goToNextQuestion: (state) => {
+      console.log('Current Question Index before:', state.currentQuestionIndex)
+      console.log('Total Questions:', state.questions.length)
       if (state.currentQuestionIndex < state.questions.length - 1) {
         state.currentQuestionIndex += 1
       }
@@ -80,6 +82,8 @@ export const quizPlayerSlice = createSlice({
       state.currentQuestionIndex = 0
       state.timeRemaining = 100 * 60
       state.isSubmitted = false
+      state.questions = []
+      state.quizAttemptId = undefined
       state.userAnswers = {}
     }
   }

@@ -15,9 +15,10 @@ import { setQuizAttemptId, setSelectedQuiz, setStudentQuizId } from '@/features/
 import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
 import { Attempt } from '@/features/resource/quiz/types/quiz.type'
 import { LicenseType, UserRole } from '@/types/userRole'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { PaginatedResult } from '@/types/baseModel'
 import { StudentProgress } from '@/features/student-progress/types/studentProgress.type'
+import { useParams, useRouter } from 'next/navigation'
 
 type QuizViewerProps = {
   quiz: QuizContent
@@ -30,6 +31,10 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
   const tq = useTranslations('quiz.detail')
   const tc = useTranslations('common')
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const locale = useLocale()
+
+  const { lessonId } = useParams()
   const selectedQuiz = useAppSelector((state) => state.quizPlayer.selectedQuiz)
 
   const quizStatus = sectionStatus?.items.find((item) => item.sectionId === selectedQuiz?.id)?.status
@@ -79,9 +84,9 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
     if (!studentQuizId) return
     const res = await createQuizAttempt({ studentQuizId }).unwrap()
     if (res) {
-      dispatch(setQuizAttemptId(res.data.id))
       dispatch(setStudentQuizId(studentQuizId))
-      dispatch(setMode('quiz'))
+      router.push(`/${locale}/resource/lesson/${lessonId}/quiz/${res.data.id}`)
+      // dispatch(setMode('quiz'))
     }
   }
 

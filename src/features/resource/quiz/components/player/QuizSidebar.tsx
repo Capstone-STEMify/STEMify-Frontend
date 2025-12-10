@@ -18,7 +18,6 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
   const { currentQuestionIndex, isSubmitted, userAnswers } = useAppSelector((state) => state.quizPlayer)
   const totalTime = quiz.timeLimitMinutes * 60
   const [timeLeft, setTimeLeft] = useState(totalTime)
-  console.log('time left', timeLeft)
 
   useEffect(() => {
     if (isSubmitted) return
