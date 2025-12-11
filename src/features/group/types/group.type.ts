@@ -17,6 +17,7 @@ export type Group = {
   createdAt: string
   updatedAt: string
   students: GroupDetailStudent[]
+  studentIds?: string[]
 }
 
 export type GroupDetailStudent = {

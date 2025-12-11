@@ -62,6 +62,7 @@ export type UserSliceParams = {
 // Organization User Types
 export type OrganizationUser = {
   userId: string
+  grade?: string
   email: string
   userName: string
   fullName: string

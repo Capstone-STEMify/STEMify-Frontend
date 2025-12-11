@@ -53,6 +53,7 @@ export const {
 
   useUpdateMutation: useUpdateGroupMutation,
   useDeleteMutation: useDeleteGroupMutation,
+  useCreateMutation: useCreateGroupMutation,
 
   useSearchGroupByOrganizationIdQuery,
   useAddStudentToGroupMutation,

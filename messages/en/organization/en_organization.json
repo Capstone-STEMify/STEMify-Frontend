@@ -235,6 +235,7 @@
     },
     "curriculum": {
       "curriculum": "Curriculum",
+      "orgCurriculumDescription": "Your organization currently has access to {count} active curriculum frameworks included in your subscription. Each curriculum provides structured learning pathways, curated courses, and teaching resources designed to support STEM education across different levels. Explore the curricula below to view their courses, timelines, and details.",
       "title": "Curriculum List",
       "noData": "No curriculum found for this organization.",
       "noResultsForFilter": "No results found for the selected filter.",
