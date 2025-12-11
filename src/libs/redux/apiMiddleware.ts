@@ -35,6 +35,7 @@ import { orgDashboardApi } from '@/features/dashboard/api/OrgDashboardApi'
 import { studentAssignmentApi } from '@/features/assignment/api/studentAssignmentApi'
 import { assignmentApi } from '@/features/assignment/api/assignmentApi'
 import { groupApi } from '@/features/group/api/groupApi'
+import { systemDashboardApi } from '@/features/dashboard/api/AdminDashboardApi'
 
 export const apiMiddlewares: Middleware[] = [
   courseApi.middleware,
@@ -72,7 +73,8 @@ export const apiMiddlewares: Middleware[] = [
   studentAssignmentApi.middleware,
   assignmentApi.middleware,
   orgDashboardApi.middleware,
-  groupApi.middleware
+  groupApi.middleware,
+  systemDashboardApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]
