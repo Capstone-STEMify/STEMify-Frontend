@@ -46,6 +46,7 @@ import CreateAssignmentInfoModal from '@/features/assignment/components/upsert/C
 import UpsertGroupModal from '@/features/group/components/modal/UpsertGroupModal'
 import UpdateGroupModal from '@/features/group/components/modal/UpdateGroupModal'
 import CreateQuizModal from '@/features/resource/quiz/components/modal/CreateQuizModal'
+import { UpsertStudentGroup } from '@/features/group/components/upsert/UpsertStudentGroup'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -103,6 +104,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertGroup' && <UpsertGroupModal {...modalProps} />}
       {modalType === 'updateGroup' && <UpdateGroupModal {...modalProps} />}
       {modalType === 'createQuiz' && <CreateQuizModal {...modalProps} />}
+      {modalType === 'upsertStudentGroup' && <UpsertStudentGroup {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}
