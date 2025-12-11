@@ -1,10 +1,5 @@
 'use client'
 
-// useGLTF.preload('/models/connector_1leg.glb')
-// useGLTF.preload('/models/connector_2legs.glb')
-// useGLTF.preload('/models/connector_3legs.glb')
-// useGLTF.preload('/models/connector_5legs.glb')
-
 import { Canvas } from '@react-three/fiber'
 import { useRef, useCallback, useState, useEffect } from 'react'
 import { CreatorToolbar } from '@/features/creator-3d/components/creator-workspace/CreatorToolbar'
@@ -20,7 +15,7 @@ import {
   setSelectedId
 } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { syncRedo, syncUndo } from '@/features/creator-3d/slice/createSceneThunk'
-import { useGLTF } from '@react-three/drei'
+import { removeTargetFromAllActions } from '@/features/creator-3d/slice/workspaceTreeSlice'
 
 interface CreatorWorkspaceProps {
   onObjectSelect: (objectId: string | null) => void
@@ -69,53 +64,55 @@ export function CreatorWorkspace({ onObjectSelect, onObjectUpdate, onObjectAdd }
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // ⌨️ Ctrl + Z → Undo (synced)
-      if (e.ctrlKey && e.key.toLowerCase() === 'z') {
-        e.preventDefault()
-        dispatch(syncUndo())
-        return
-      }
+      // if (e.ctrlKey && e.key.toLowerCase() === 'z') {
+      //   e.preventDefault()
+      //   dispatch(syncUndo())
+      //   return
+      // }
 
       // ⌨️ Ctrl + Y → Redo (synced)
-      if (e.ctrlKey && e.key.toLowerCase() === 'y') {
-        e.preventDefault()
-        dispatch(syncRedo())
-        return
-      }
+      // if (e.ctrlKey && e.key.toLowerCase() === 'y') {
+      //   e.preventDefault()
+      //   dispatch(syncRedo())
+      //   return
+      // }
 
       // ⌨️ Ctrl + C → Copy
-      if (e.ctrlKey && e.key.toLowerCase() === 'c' && selectedId) {
-        e.preventDefault()
-        const copied = instances.find((i) => i.id === selectedId)
-        clipboardRef.current = copied ? JSON.parse(JSON.stringify(copied)) : null
-        console.log('📋 Copied object:', clipboardRef.current?.id)
-        return
-      }
+      // if (e.ctrlKey && e.key.toLowerCase() === 'c' && selectedId) {
+      //   e.preventDefault()
+      //   const copied = instances.find((i) => i.id === selectedId)
+      //   clipboardRef.current = copied ? JSON.parse(JSON.stringify(copied)) : null
+      //   console.log('📋 Copied object:', clipboardRef.current?.id)
+      //   return
+      // }
 
       // ⌨️ Ctrl + V → Paste
-      if (e.ctrlKey && e.key.toLowerCase() === 'v' && clipboardRef.current) {
-        e.preventDefault()
-        const base = clipboardRef.current
-        const newCopy: AssemblyInstance = {
-          ...base,
-          id: `${base.id}_copy_${Date.now()}`,
-          transform: {
-            ...base.transform,
-            position: {
-              x: base.transform.position.x + 1,
-              y: base.transform.position.y,
-              z: base.transform.position.z + 1
-            }
-          }
-        }
-        dispatch(addInstance(newCopy))
-        dispatch(setSelectedId(newCopy.id))
-        console.log('📎 Pasted object:', newCopy.id)
-        return
-      }
+      // if (e.ctrlKey && e.key.toLowerCase() === 'v' && clipboardRef.current) {
+      //   e.preventDefault()
+      //   const base = clipboardRef.current
+      //   const newCopy: AssemblyInstance = {
+      //     ...base,
+      //     id: `${base.id}_copy_${Date.now()}`,
+      //     transform: {
+      //       ...base.transform,
+      //       position: {
+      //         x: base.transform.position.x + 1,
+      //         y: base.transform.position.y,
+      //         z: base.transform.position.z + 1
+      //       }
+      //     }
+      //   }
+      //   dispatch(addInstance(newCopy))
+      //   dispatch(setSelectedId(newCopy.id))
+      //   console.log('📎 Pasted object:', newCopy.id)
+      //   return
+      // }
 
       if ((e.key === 'Delete' || e.key === 'Backspace') && selectedId) {
         e.preventDefault()
         dispatch(removeInstance(selectedId))
+        dispatch(removeTargetFromAllActions(selectedId))
+
         console.log('🗑️ Deleted object:', selectedId)
         return
       }

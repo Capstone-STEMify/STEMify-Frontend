@@ -237,10 +237,10 @@ export function exportAssembly(
     instances: instanceList
   }))
 
-  // Connectors (⚠️ KHÔNG export arms trong instance, chỉ giữ transform thôi)
   const connectors = instances
     .filter((i) => i.category === 'connector')
     .reduce<Record<string, any[]>>((acc, item) => {
+      console.log({ item })
       const templateId = item.templateId
       if (!acc[templateId]) acc[templateId] = []
       acc[templateId].push({
