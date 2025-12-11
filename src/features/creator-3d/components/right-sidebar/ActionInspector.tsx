@@ -15,19 +15,15 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
   const t3d = useTranslations('creator3D.right_panel')
   const dispatch = useAppDispatch()
   const activities = useAppSelector((s) => s.workspaceTree.activities)
-  console.log('activities', activities)
 
-  // 🔍 Tìm step tương ứng actionId
   const stepInfo = useMemo(() => {
     for (const activity of activities) {
-      console.log('activity', activity)
       const idx = activity.steps.findIndex((s) => s.actionId === selectedAction.id)
       if (idx !== -1) return { activityId: activity.id, stepIndex: idx, step: activity.steps[idx] }
     }
     return null
   }, [activities, selectedAction.id])
 
-  // ⚙️ Local state cho tất cả field
   const [localFields, setLocalFields] = useState(() => ({
     name: selectedAction.name,
     title: stepInfo?.step.title || '',
@@ -36,12 +32,10 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
     hints: stepInfo?.step.hints || []
   }))
 
-  // 🧠 Handle thay đổi field (cập nhật local state)
   const handleChange = (field: keyof typeof localFields, value: string | string[]) => {
     setLocalFields((prev) => ({ ...prev, [field]: value }))
   }
 
-  // 🧩 Khi blur, sync lên Redux
   const handleBlur = () => {
     // update name
     if (localFields.name !== selectedAction.name) {

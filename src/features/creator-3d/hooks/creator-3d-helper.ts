@@ -215,7 +215,6 @@ export function exportAssembly(
   const now = new Date().toISOString()
   const actions = state.workspaceTree.actions
   const activities = state.workspaceTree.activities
-  console.log('🧩 Exporting activities activities:', activities)
   // Straws
   const straws = instances
     .filter((i) => i.category === 'straw')
@@ -287,8 +286,6 @@ export function exportAssembly(
       actionId: step.actionId // đảm bảo liên kết action
     }))
   }))
-
-  console.log('🧩 Exported Assembly Activities:', exportedActivities)
 
   return {
     metadata: {

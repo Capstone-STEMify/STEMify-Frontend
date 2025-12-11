@@ -236,6 +236,11 @@ export const workspaceTreeSlice = createSlice({
     clearAction: (state) => {
       state.actions = []
       state.selectedActionId = null
+    },
+    resetWorkspace: (state) => {
+      state.actions = []
+      state.activities.forEach((a) => (a.steps = [])) // xoá toàn bộ step
+      state.selectedActionId = null
     }
   }
 })
@@ -255,7 +260,8 @@ export const {
   removeTargetFromAllActions,
   updateActionName,
   updateTargetOrderInAction,
-  clearActivities
+  clearActivities,
+  resetWorkspace
 } = workspaceTreeSlice.actions
 
 export default workspaceTreeSlice.reducer
