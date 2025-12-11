@@ -50,6 +50,7 @@
       }
     },
     "student": {
+      "noAsm": "No assignment found. Please select an assignment.",
       "firstAttempt": {
         "totalMark": "Total Marks",
         "passingMark": "Passing Marks",
@@ -81,7 +82,8 @@
         "subDesLink": "Our Privacy Notice",
         "mySub": "My Submission",
         "projectTitle": "Project Title",
-        "placeholder": "Type your answer here..."
+        "placeholder": "Type your answer here...",
+        "saveDraft": "Already save draft at {time}."
       }
     },
     "upsert": {

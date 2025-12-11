@@ -50,6 +50,7 @@
       }
     },
     "student": {
+      "noAsm": "Không tìm thấy bài tập nào. Thử lại sau.",
       "firstAttempt": {
         "totalMark": "Tổng điểm",
         "passingMark": "Điểm đạt",
@@ -81,7 +82,8 @@
         "subDesLink": "Thông báo Quyền riêng tư của chúng tôi",
         "mySub": "Bài nộp của tôi",
         "projectTitle": "Tiêu đề dự án",
-        "placeholder": "Nhập câu trả lời của bạn..."
+        "placeholder": "Nhập câu trả lời của bạn...",
+        "saveDraft": "Đã lưu bản nháp lúc {time}."
       }
     },
     "upsert": {

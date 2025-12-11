@@ -1,10 +1,10 @@
 'use client'
-import { Sparkles, FileText, UploadCloud, X, Loader2 } from 'lucide-react'
+import { Sparkles, FileText, UploadCloud, X, Loader2, Save } from 'lucide-react'
 import { useCreateAssignmentAttemptMutation } from '@/features/assignment/api/studentAssignmentApi'
 import { Assignment, AssignmentQuestion, AssignmentQuestionType } from '@/features/assignment/types/assignment.type'
 import { toast } from 'sonner'
 import { CreateAttemptPayload, QuestionAttemptPayload } from '@/features/assignment/types/assigmentlistdetail.type'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardContent } from '@/components/shadcn/card'
@@ -16,6 +16,7 @@ import BackButton from '@/components/shared/button/BackButton'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { fileToBase64, formatDate, formatDateV2 } from '@/utils/index'
 import { useLocale, useTranslations } from 'next-intl'
+import { set, get, del } from 'idb-keyval'
 
 const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (file: File | null) => void }) => {
   const [isDragging, setIsDragging] = useState(false)
@@ -97,6 +98,7 @@ const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (f
 export default function AssignmentSubmissionForm() {
   const t = useTranslations('assignment')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast.successMessage')
 
   const router = useRouter()
   const locale = useLocale()
@@ -107,6 +109,45 @@ export default function AssignmentSubmissionForm() {
   const [createAttempt, { isLoading: isSubmitting }] = useCreateAssignmentAttemptMutation()
   const [projectTitle, setProjectTitle] = useState('')
   const [answers, setAnswers] = useState<Record<number, { text?: string; file?: File | null }>>({})
+  const [isDataRestored, setIsDataRestored] = useState(false)
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
+
+  const storageKey = selectedStudentAssignment ? `draft_submission_${selectedStudentAssignment.id}` : null
+
+  useEffect(() => {
+    const loadDraft = async () => {
+      if (!storageKey) return
+      try {
+        const savedData = await get(storageKey)
+        if (savedData) {
+          setAnswers(savedData)
+          toast.info(tt('restoreData'), { duration: 3000 })
+        }
+      } catch (error) {
+        console.error('Failed to load draft:', error)
+      } finally {
+        setIsDataRestored(true)
+      }
+    }
+    loadDraft()
+  }, [storageKey])
+
+  useEffect(() => {
+    if (!isDataRestored || !storageKey || Object.keys(answers).length === 0) return
+
+    const saveDraft = async () => {
+      try {
+        await set(storageKey, answers)
+        setLastSaved(new Date())
+      } catch (error) {
+        console.error('Failed to save draft:', error)
+      }
+    }
+
+    const timeoutId = setTimeout(saveDraft, 1000)
+
+    return () => clearTimeout(timeoutId)
+  }, [answers, storageKey, isDataRestored])
 
   const handleAnswerChange = (questionId: number, value: string) => {
     setAnswers((prev) => ({
@@ -123,7 +164,7 @@ export default function AssignmentSubmissionForm() {
 
   const handleSubmit = async () => {
     if (!selectedAssignment || !selectedStudentAssignment) {
-      toast.error('Cannot submit assignment. Invalid data.')
+      toast.error(tt('submitAsmDataFail'))
       return
     }
 
@@ -144,7 +185,7 @@ export default function AssignmentSubmissionForm() {
             const base64File = await fileToBase64(answer.file)
             attempt.answerFile = base64File
           } catch (error) {
-            toast.error(`Failed to upload file for Question ${question.orderIndex}.`)
+            toast.error(tt('submitFileFail', { questionIndex: question.orderIndex }))
             return
           }
         }
@@ -159,10 +200,15 @@ export default function AssignmentSubmissionForm() {
 
     try {
       await createAttempt({ body: payload }).unwrap()
-      toast.success('Nộp bài thành công!')
+
+      if (storageKey) {
+        await del(storageKey)
+      }
+
+      toast.success(tt('submitAsmSuccess'))
       router.back()
     } catch (error) {
-      toast.error('Nộp bài thất bại. Vui lòng thử lại sau.')
+      toast.error(tt('submitAsmFail'))
       console.error(error)
     }
   }
@@ -170,7 +216,7 @@ export default function AssignmentSubmissionForm() {
   if (!selectedAssignment || !selectedStudentAssignment) {
     return (
       <div>
-        <SEmpty title='No assignment found. Please select an assignment.' />
+        <SEmpty title={t('student.noAsm')} />
       </div>
     )
   }
@@ -184,30 +230,22 @@ export default function AssignmentSubmissionForm() {
           <BackButton />
           <h1 className='mb-4 text-3xl font-normal'>{selectedAssignment.title}</h1>
         </div>
-        <div className='text-sm text-gray-600'>
-          <span className='font-semibold'>{t('student.doAsm.deadline')}</span>{' '}
-          {formatDate(selectedStudentAssignment.dueDate, { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' })}
+        <div className='flex items-end justify-between'>
+          <div className='text-sm text-gray-600'>
+            <span className='font-semibold'>{t('student.doAsm.deadline')}</span>{' '}
+            {formatDate(selectedStudentAssignment.dueDate, { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' })}
+          </div>
+
+          {lastSaved && (
+            <div className='flex items-center gap-1 text-xs text-green-600'>
+              <Save className='h-3 w-3' />
+              {t('student.doAsm.saveDraft', {
+                time: formatDate(lastSaved.toISOString(), { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' })
+              })}
+            </div>
+          )}
         </div>
       </div>
-      {/* TODO */}
-      {/* <Card className='border-blue-200 bg-blue-50'>
-        <CardContent className='p-4'>
-          <div className='flex items-start gap-3'>
-            <Sparkles className='mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600' />
-            <div className='flex-1'>
-              <h3 className='mb-2 font-semibold text-gray-900'>{t('student.doAsm.AIGrading')}</h3>
-              <p className='mb-2 text-sm text-gray-700'>{t('student.doAsm.description')}</p>
-              <p className='text-xs text-gray-600'>
-                {t('student.doAsm.subDes')}{' '}
-                <a href='#' className='text-blue-600 hover:underline'>
-                  {t('student.doAsm.subDesLink')}
-                </a>
-                .
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card> */}
 
       {/* Tabs */}
       <div className='border-b border-gray-200'>
@@ -221,19 +259,6 @@ export default function AssignmentSubmissionForm() {
       {/* Submission Form */}
       {true && (
         <div className='space-y-6'>
-          {/* <div className='space-y-2'>
-            <Label htmlFor='project-title' className='text-base font-normal'>
-              {t('student.doAsm.projectTitle')} <span className='text-red-500'>*</span>
-            </Label>
-            <Input
-              id='project-title'
-              value={projectTitle}
-              onChange={(e) => setProjectTitle(e.target.value)}
-              placeholder={t('student.doAsm.projectTitle')}
-              className='max-w-2xl'
-            />
-          </div> */}
-
           {questions.map((question) => (
             <div key={question.id} className='space-y-4 rounded-lg border p-4 shadow-sm'>
               <div className='space-y-2'>

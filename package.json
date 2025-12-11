@@ -101,6 +101,7 @@
     "file-saver": "^2.0.5",
     "framer-motion": "^12.23.22",
     "gsap": "^3.13.0",
+    "idb-keyval": "^6.2.2",
     "jszip": "^3.10.1",
     "jwt-decode": "^4.0.0",
     "lodash-es": "^4.17.21",
