@@ -582,6 +582,19 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
     handleImportAssembly(workspaceId)
   }, [])
 
+  // trong Creator3D
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault()
+        handleSaveAssembly()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleSaveAssembly])
+
   return (
     <div className='relative flex h-full w-full overflow-hidden bg-gray-100'>
       {/* Component Palette */}
@@ -606,12 +619,7 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
         />
 
         {/* Action Buttons */}
-        <SceneActions
-          onSave={handleSaveAssembly}
-          onImportJSON={handleClickImportJSON}
-          onExportGLB={handleExportGLB}
-          hasObjects={instances.length > 0}
-        />
+        <SceneActions onSave={handleSaveAssembly} onImportJSON={handleClickImportJSON} onExportGLB={handleExportGLB} />
       </div>
 
       {/* Object Inspector */}
