@@ -78,11 +78,11 @@ export default function UpsertUser({ id, onSuccess }: UpsertUserProps) {
             requestBody.password = password
           }
           await updateUser({ id: id!, body: requestBody }).unwrap()
-          toast.success(tt('successMessage.update'))
+          toast.success(tt('successMessage.updateNoTitle'))
         } else {
           requestBody.password = password
           await createUser(requestBody).unwrap()
-          toast.success(tt('successMessage.create'))
+          toast.success(tt('successMessage.createNoTitle'))
         }
 
         onSuccess?.()

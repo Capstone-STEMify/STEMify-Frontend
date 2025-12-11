@@ -4,15 +4,21 @@ import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import QuizSidebar from '@/features/resource/quiz/components/player/QuizSidebar'
 import QuizMainContent from '@/features/resource/quiz/components/player/QuizMainContent'
-import { initializeQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { initializeQuiz, setQuizAttemptId } from '@/features/resource/quiz/slice/quiz-player-slice'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import { useParams } from 'next/navigation'
 
 export default function QuizPlayerContainer() {
   const dispatch = useAppDispatch()
   const selectedQuiz = useAppSelector((state) => state.quizPlayer.selectedQuiz)
+  const studentQuizAttemptRedux = useAppSelector((state) => state.quizPlayer.quizAttemptId)
+  const { quizAttemptId } = useParams()
 
   useEffect(() => {
-    if (selectedQuiz) {
+    console.log('quizattemptId from redux:', studentQuizAttemptRedux)
+    console.log('selectedQuiz: ', selectedQuiz?.questions.length)
+    if (selectedQuiz && !studentQuizAttemptRedux) {
+      dispatch(setQuizAttemptId(Number(quizAttemptId)))
       dispatch(
         initializeQuiz({
           questions: selectedQuiz.questions,
@@ -20,7 +26,7 @@ export default function QuizPlayerContainer() {
         })
       )
     }
-  }, [selectedQuiz, dispatch])
+  }, [selectedQuiz, dispatch, quizAttemptId])
 
   if (!selectedQuiz) {
     return (

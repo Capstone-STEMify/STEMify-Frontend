@@ -51,41 +51,27 @@ export default function LessonDetail() {
 
   const enrollmentId = enrollment?.data.items?.[0]?.id || 0
 
-  const { data: sectionStatus, refetch } = useGetSectionStudentProgressQuery(
+  const { data: sectionStatus } = useGetSectionStudentProgressQuery(
     {
       enrollmentId: enrollmentId,
       lessonId: Number(lessonId)
     },
     {
-      skip: !enrollmentId
+      skip: !enrollmentId,
+      refetchOnMountOrArgChange: true
     }
   )
 
-  useEffect(() => {
-    if (shouldRefetch) {
-      refetch()
-      dispatch(clearRefetchSectionProgress())
-    }
-  }, [shouldRefetch])
+  // useEffect(() => {
+  //   dispatch(clearLesson())
+  // }, [])
 
   useEffect(() => {
-    dispatch(clearLesson())
-  }, [])
-
-  useEffect(() => {
-    if (sectionData.length > 0) {
+    if (!selectedSectionId && sectionData.length > 0) {
       const firstSection = [...sectionData].sort((a, b) => a.orderIndex - b.orderIndex)[0]
       dispatch(setSelectedSectionId(firstSection.id))
     }
   }, [sectionData])
-
-  if (mode === 'quiz') {
-    return (
-      <div>
-        <QuizPlayerContainer />
-      </div>
-    )
-  }
 
   return (
     <div className='bg-light pb-20'>

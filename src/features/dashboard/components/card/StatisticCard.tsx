@@ -18,23 +18,33 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null
 }
 
+const truncateLabel = (label: string, maxLength = 5) => {
+  if (!label) return ''
+  return label.length > maxLength ? label.substring(0, 4) + '...' : label
+}
+
+
 const CustomXAxisTick = (props: any) => {
   const { x, y, payload } = props
 
-  const words = payload.value.split(' ')
+  const text = truncateLabel(payload.value)
 
   return (
     <g transform={`translate(${x},${y})`}>
-      <text x={0} y={0} dy={16} textAnchor='middle' fill='#666' fontSize={12}>
-        {words.map((word: string, index: number) => (
-          <tspan key={index} x={0} dy={index === 0 ? 0 : 14}>
-            {word}
-          </tspan>
-        ))}
+      <text
+        x={0}
+        y={0}
+        dy={16}
+        textAnchor="middle"
+        fill="#666"
+        fontSize={12}
+      >
+        {text}
       </text>
     </g>
   )
 }
+
 
 // Define props interface
 interface ProgressStatisticsCardProps {

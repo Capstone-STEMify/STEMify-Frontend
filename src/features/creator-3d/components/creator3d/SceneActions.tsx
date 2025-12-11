@@ -3,7 +3,6 @@ import { useTranslations } from 'next-intl'
 interface SceneActionsProps {
   onSave: () => void
   onImportJSON?: () => void
-  hasObjects: boolean
   onExportGLB?: () => void
 }
 

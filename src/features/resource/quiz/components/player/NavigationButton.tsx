@@ -4,19 +4,30 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { ChevronLeft, ChevronRight, Send, Loader2 } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { goToNextQuestion, goToPreviousQuestion, submitQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
+import {
+  goToNextQuestion,
+  goToPreviousQuestion,
+  resetQuiz,
+  submitQuiz
+} from '@/features/resource/quiz/slice/quiz-player-slice'
 import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 import { useUpdateQuizAttemptMutation } from '@/features/resource/quiz/api/quizApi'
 import { toast } from 'sonner'
 import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
 import { useGetStudentQuizByIdQuery } from '@/features/quiz/api/studentQuizApi'
 import { triggerRefetchSectionProgress } from '@/features/student-progress/slice/studentProgressSlice'
+import { useParams, useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 type NavigationButtonsProps = {
   quiz: Quiz
 }
 
 export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
+  const { lessonId } = useParams()
+  const router = useRouter()
+  const locale = useLocale()
+
   const questions = quiz.questions
   const { currentQuestionIndex, userAnswers, quizAttemptId, studentQuizId } = useAppSelector(
     (state) => state.quizPlayer
@@ -41,10 +52,9 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
     }).unwrap()
     if (result) {
       dispatch(submitQuiz())
-      dispatch(setMode('normal'))
-
-      dispatch(triggerRefetchSectionProgress())
+      dispatch(resetQuiz())
       toast.success('Nộp bài thành công!')
+      router.push(`/${locale}/resource/lesson/${lessonId}`)
     }
   }
 
