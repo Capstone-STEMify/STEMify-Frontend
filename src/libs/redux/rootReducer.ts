@@ -75,6 +75,7 @@ import { enrollmentSlice } from '@/features/enrollment/slice/enrollmentSlice'
 import { groupApi } from '@/features/group/api/groupApi'
 import { organizationSpecialSlice } from '@/features/organization/slice/organizationSpecialSlice'
 import { groupSlice } from '@/features/group/slice/groupSlice'
+import { systemDashboardApi } from '@/features/dashboard/api/AdminDashboardApi'
 
 export const rootReducer = combineReducers({
   // Add your reducers here
@@ -157,5 +158,6 @@ export const rootReducer = combineReducers({
   [orgDashboardApi.reducerPath]: orgDashboardApi.reducer,
   [studentAssignmentApi.reducerPath]: studentAssignmentApi.reducer,
   [assignmentApi.reducerPath]: assignmentApi.reducer,
-  [groupApi.reducerPath]: groupApi.reducer
+  [groupApi.reducerPath]: groupApi.reducer,
+  [systemDashboardApi.reducerPath]: systemDashboardApi.reducer
 })

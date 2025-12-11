@@ -109,6 +109,56 @@
         "currTitle": "Tên chương trình",
         "name": "Tên"
       }
+    },
+    "admin": {
+      "title": "Bảng điều khiển hệ thống",
+      "subtitle": "Tổng quan hiệu suất hệ thống và doanh thu",
+      "period": {
+        "placeholder": "Chọn kỳ",
+        "month": "Tháng này",
+        "quarter": "Quý này",
+        "year": "Năm này"
+      },
+      "stats": {
+        "revenue": "Tổng doanh thu",
+        "compare": "So với kỳ trước",
+        "activeOrg": "Tổ chức hoạt động",
+        "growth": "Tăng trưởng",
+        "totalStudent": "Tổng học sinh",
+        "enrollment": "Lượt ghi danh",
+        "completionRate": "Tỷ lệ hoàn thành"
+      },
+      "charts": {
+        "revenueByPlan": "Doanh thu theo Gói",
+        "revenueDesc": "Phân bổ doanh thu dựa trên các gói đăng ký",
+        "planDetail": "Chi tiết gói đăng ký",
+        "planDetailDesc": "Trạng thái các gói đăng ký hiện tại",
+        "totalPlan": "Tổng gói",
+        "active": "Đang hoạt động",
+        "expired": "Đã hết hạn",
+        "noData": "Chưa có dữ liệu doanh thu"
+      },
+      "tables": {
+        "topOrg": "Top Tổ Chức",
+        "topOrgDesc": "Các tổ chức có lượng học viên lớn nhất",
+        "topCourse": "Top Khóa Học",
+        "topCourseDesc": "Các khóa học phổ biến nhất hệ thống",
+        "headers": {
+           "orgName": "Tên Tổ Chức",
+           "students": "Học sinh",
+           "enrollments": "Ghi danh",
+           "passRate": "Tỷ lệ đạt",
+           "activeSub": "Gói hoạt động",
+           "courseName": "Khóa học",
+           "classrooms": "Lớp học",
+           "avgScore": "Điểm TB",
+           "completion": "Hoàn thành"
+        },
+        "placeholders": {
+            "org": "Chưa có dữ liệu tổ chức",
+            "course": "Chưa có dữ liệu khóa học"
+        }
+      }
     }
   }
 }
