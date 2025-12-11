@@ -231,8 +231,7 @@ export const useGradeTranslation = () => {
   }
 }
 
-export const toSlug = (str: string) => str.toLowerCase().replace(/\s+/g, '');
-
+export const toSlug = (str: string) => str.toLowerCase().replace(/\s+/g, '')
 
 export function getColorByInitial(initial: string) {
   const colors = [
