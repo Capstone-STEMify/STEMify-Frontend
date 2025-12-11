@@ -27,13 +27,25 @@ export default function OrganizationSubscriptionDetail() {
 
   const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscriptionByIdQuery(Number(subscriptionId))
 
-  const getRemainingMonths = (endDate: string | undefined) => {
+  const getRemainingMonths = (endDate?: string) => {
     if (!endDate) return 0
+
     const end = new Date(endDate)
     const now = new Date()
-    const diff = end.getTime() - now.getTime()
-    const months = Math.ceil(diff / (1000 * 60 * 60 * 24 * 30))
-    return months > 0 ? months : 0
+
+    if (isNaN(end.getTime())) return 0
+    if (end <= now) return 0
+
+    let yearsDiff = end.getFullYear() - now.getFullYear()
+    let monthsDiff = end.getMonth() - now.getMonth()
+
+    let totalMonths = yearsDiff * 12 + monthsDiff
+
+    if (end.getDate() < now.getDate()) {
+      totalMonths -= 1
+    }
+
+    return totalMonths > 0 ? totalMonths : 0
   }
 
   const calculateProgressValue = (startDate: Date, endDate: Date, today: Date = new Date()): number => {
@@ -62,6 +74,10 @@ export default function OrganizationSubscriptionDetail() {
   if (!subscription?.data) {
     return <SEmpty title='Organization Subscription Not Found' />
   }
+  console.log('Start:', subscription.data.startDate, new Date(subscription.data.startDate))
+  console.log('End:', subscription.data.endDate, new Date(subscription.data.endDate))
+
+  console.log(calculateProgressValue(new Date(subscription.data.startDate), new Date(subscription.data.endDate)))
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-6'>
       <div className='mx-auto max-w-7xl space-y-8'>
