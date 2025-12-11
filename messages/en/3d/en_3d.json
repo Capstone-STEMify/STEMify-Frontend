@@ -42,17 +42,35 @@
       "connector": "Connector",
       "drag_guide": "Drag to add to scene",
       "double_click_guide": "Double-click to place at origin",
-      "select_guide": "Select & use gizmo to transform"
+      "select_guide": "Select & use gizmo to transform",
+      "bluestraw": "Blue Straw",
+      "pinkstraw": "Pink Straw",
+      "yellowstraw": "Yellow Straw",
+      "greenstraw": "Green Straw",
+      "orangestraw": "Orange Straw",
+      "1legconnector": "1 Leg Connector",
+      "2legsconnector": "2 Legs Connector",
+      "3legsconnector": "3 Legs Connector",
+      "5legsconnector": "5 Legs Connector"
     },
     "right_panel": {
       "workspace_tree": "Workspace Tree",
       "properties": "Properties",
       "delete_component": "Do you want to delete this component?",
       "select_object_or_action": "Select an object or action to edit properties",
+      "noStep": "No step linked to this action",
       "action_properties": {
         "title": "Action Properties",
         "name": "Name",
-        "type": "Type"
+        "type": "Type",
+        "step": {
+          "detail": "Step Details",
+          "title": "Title",
+          "description": "Description",
+          "expectedResult": "Expected Result",
+          "hint": "Hint",
+          "addHint": "Add Hint"
+        }
       },
       "component_properties": {
         "select_object_or_action": "Select an object or action to edit properties",

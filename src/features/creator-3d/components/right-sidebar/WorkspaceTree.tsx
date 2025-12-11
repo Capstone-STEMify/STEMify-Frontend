@@ -42,7 +42,7 @@ interface WorkspaceItem {
 
 export default function WorkspaceTree() {
   const tc = useTranslations('common')
-  const t3d = useTranslations('creator3D.right_panel')
+  const t3d = useTranslations('creator3D')
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
   const { actions, activities } = useAppSelector((s: RootState) => s.workspaceTree)
@@ -109,7 +109,7 @@ export default function WorkspaceTree() {
   const handleDeleteComponent = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
     e.stopPropagation()
     openModal('confirm', {
-      message: t3d('delete_component'),
+      message: t3d('right_panel.delete_component'),
       onConfirm: () => {
         dispatch(removeInstance(id))
         dispatch(removeTargetFromAllActions(id))
@@ -234,7 +234,7 @@ export default function WorkspaceTree() {
   return (
     <div>
       <div className='mb-2'>
-        <h2 className='text-lg font-medium'>{t3d('workspace_tree')}</h2>
+        <h2 className='text-lg font-medium'>{t3d('right_panel.workspace_tree')}</h2>
         <div className='flex flex-wrap gap-2'>
           <button
             onClick={() => handleAddAction('highlight')}

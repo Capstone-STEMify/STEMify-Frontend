@@ -230,3 +230,6 @@ export const useGradeTranslation = () => {
     return tc(grade.toLowerCase().replace(' ', '_'))
   }
 }
+
+export const toSlug = (str: string) => str.toLowerCase().replace(/\s+/g, '');
+
