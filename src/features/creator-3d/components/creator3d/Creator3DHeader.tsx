@@ -50,7 +50,6 @@ export default function Creator3DHeader() {
           </div>
         </div>
         <div className='flex items-center gap-3'>
-          <LanguageSwitcher />
           <Button className='bg-blue-600 hover:bg-blue-700' onClick={handleExportToJSON}>
             {t3d('header.export')}
           </Button>
