@@ -54,14 +54,6 @@ export function QuickStatsGrid({ data }: QuickStatsGridProps) {
       icon: ArrowUpRight,
       color: 'text-blue-600',
       bgColor: 'bg-blue-100'
-    },
-    {
-      title: t('sup'),
-      value: '19k+',
-      change: null,
-      icon: Users,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-100'
     }
   ]
 

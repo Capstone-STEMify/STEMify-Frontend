@@ -26,7 +26,12 @@
       "uploadFile": "Upload file(s) successfully!",
       "uploadCSV": "Upload CSV Successfully",
       "reorder": "Reordered Successfully",
-      "copiedToClipboard": "Copied to clipboard!"
+      "copiedToClipboard": "Copied to clipboard!",
+      "restoreData": "Your unsubmitted assignment has been restored.",
+      "submitAsmDataFail": "Cannot submit assignment. Invalid data.",
+      "submitAsmSuccess": "Submit assignment Successfully!",
+      "submitAsmFail": "Submit assignment fail. PLease try again!",
+      "submitFileFail": "ailed to upload file for Question {questionIndex}."
     },
     "errorMessage": "An error occurred. Please try again. ",
     "errorSpecific": {

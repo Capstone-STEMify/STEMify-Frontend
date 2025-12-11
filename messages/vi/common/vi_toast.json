@@ -26,7 +26,12 @@
       "uploadFile": "Đã tải tệp tin thành công!",
       "uploadCSV": "Đã tải CSV thành công",
       "reorder": "Đã sắp xếp lại thành công",
-      "copiedToClipboard": "Đã sao chép vào clipboard!"
+      "copiedToClipboard": "Đã sao chép vào clipboard!",
+      "restoreData": "Đã khôi phục bài làm chưa nộp của bạn.",
+      "submitAsmDataFail": "Không thể nộp bài. Dữ liệu không hợp lệ.",
+      "submitAsmSuccess": "Nộp bài thành công!",
+      "submitAsmFail": "Nộp bài thất bại. Vui lòng thử lại!",
+      "submitFileFail": "Tải file lên thất bại cho Câu hỏi {questionIndex}."
     },
     "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "errorSpecific": {
