@@ -18,9 +18,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null
 }
 
-const truncateLabel = (label: string, maxLength = 10) => {
+const truncateLabel = (label: string, maxLength = 5) => {
   if (!label) return ''
-  return label.length > maxLength ? label.substring(0, 1) + '...' : label
+  return label.length > maxLength ? label.substring(0, 4) + '...' : label
 }
 
 
