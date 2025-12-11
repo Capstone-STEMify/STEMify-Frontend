@@ -1,12 +1,14 @@
+import { IconCloudCheck, IconCloudOff, IconLoader2, IconRefresh } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 
 interface SceneActionsProps {
+  cloudState: 'saved' | 'saving'
   onSave: () => void
   onImportJSON?: () => void
   onExportGLB?: () => void
 }
 
-export function SceneActions({ onSave, onImportJSON, onExportGLB }: SceneActionsProps) {
+export function SceneActions({ cloudState, onSave, onImportJSON, onExportGLB }: SceneActionsProps) {
   const t3d = useTranslations('creator3D.main_content')
   const tc = useTranslations('common')
   return (
@@ -14,8 +16,10 @@ export function SceneActions({ onSave, onImportJSON, onExportGLB }: SceneActions
       <button
         onClick={onSave}
         className='rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm font-medium text-green-700 hover:bg-green-100'
+        disabled={cloudState === 'saving'}
       >
-        {t3d('save_assembly')}
+        {cloudState === 'saving' && <IconLoader2 className='animate-spin' />}
+        {cloudState === 'saved' && <IconCloudCheck className='text-green-600' />}
       </button>
 
       <button

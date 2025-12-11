@@ -1,7 +1,7 @@
 import { Button } from '@/components/shadcn/button'
 import { clearScene } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { setCameraStatus } from '@/features/creator-3d/slice/strawLabSlice'
-import { resetActions } from '@/features/creator-3d/slice/workspaceTreeSlice'
+import { resetActions, resetWorkspace } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useTranslations } from 'next-intl'
 import { useCallback } from 'react'
@@ -15,7 +15,7 @@ export default function SceneTopRight() {
   const handleClearScene = useCallback(() => {
     if (confirm('Are you sure you want to clear the entire scene? This action cannot be undone.')) {
       dispatch(clearScene())
-      dispatch(resetActions())
+      dispatch(resetWorkspace())
     }
   }, [dispatch])
 

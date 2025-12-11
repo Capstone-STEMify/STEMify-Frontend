@@ -27,7 +27,6 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  console.log('description in UpsertEmulator:', description)
   const [visibility, setVisibility] = useState<'public' | 'private'>('public')
   const [thumbnailBase64, setThumbnailBase64] = useState<string | undefined>()
   const [thumbnailFileName, setThumbnailFileName] = useState<string | undefined>()
