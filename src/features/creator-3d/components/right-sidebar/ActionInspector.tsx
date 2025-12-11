@@ -59,7 +59,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
     }
   }
 
-  if (!stepInfo) return <p className='text-sm text-gray-500'>No step linked to this action.</p>
+  if (!stepInfo) return <p className='text-sm text-gray-500'>{t3d('noStep')}</p>
 
   return (
     <div className='space-y-4'>
@@ -89,10 +89,10 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
 
       {/* Step section */}
       <div className='space-y-3 border-t pt-3'>
-        <h3 className='font-semibold text-gray-900'>Step Details</h3>
+        <h3 className='font-semibold text-gray-900'>{t3d('action_properties.step.detail')}</h3>
 
         <div>
-          <label className='text-sm font-medium'>Title</label>
+          <label className='text-sm font-medium'>{t3d('action_properties.step.title')}</label>
           <Input
             value={localFields.title}
             onChange={(e) => handleChange('title', e.target.value)}
@@ -102,7 +102,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
         </div>
 
         <div>
-          <label className='text-sm font-medium'>Description</label>
+          <label className='text-sm font-medium'>{t3d('action_properties.step.description')}</label>
           <Textarea
             value={localFields.description}
             onChange={(e) => handleChange('description', e.target.value)}
@@ -112,7 +112,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
         </div>
 
         <div>
-          <label className='text-sm font-medium'>Expected Result</label>
+          <label className='text-sm font-medium'>{t3d('action_properties.step.expectedResult')}</label>
           <Textarea
             value={localFields.expectedResult}
             onChange={(e) => handleChange('expectedResult', e.target.value)}
@@ -122,7 +122,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
         </div>
 
         <div>
-          <label className='text-sm font-medium'>Hints</label>
+          <label className='text-sm font-medium'>{t3d('action_properties.step.hint')}</label>
           {localFields.hints.map((hint, index) => (
             <Input
               key={index}
@@ -140,7 +140,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
             onClick={() => handleChange('hints', [...localFields.hints, ''])}
             className='mt-2 rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700'
           >
-            Add Hint
+            {t3d('action_properties.step.addHint')}
           </button>
         </div>
       </div>

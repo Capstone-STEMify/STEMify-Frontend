@@ -5,7 +5,7 @@
       "searchPlaceholder": "Search organizations by name...",
       "subscriptionTitle": "Subscription List",
       "subscriptionHistoryTitle": "Subscription History",
-      "organizationSubscriptionTitle": "Organization Subscription Management",
+      "organizationSubscriptionTitle": "Organization Management",
       "organizationSubscriptionDescription": "Browse and manage all organization subscriptions registered on the platform.",
       "placeholder": {
         "search": "Search organizations by name...",
