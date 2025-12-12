@@ -87,6 +87,7 @@
       "updateButton": "Cập nhật"
     },
     "user": {
+      "userManagement": "Quản lý người dùng",
       "createTitle": "Tạo người dùng",
       "editTitle": "Chỉnh sửa người dùng",
       "email": "Email",

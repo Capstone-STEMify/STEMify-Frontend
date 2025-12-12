@@ -49,15 +49,18 @@ export interface FormatDateOptions {
   month?: 'numeric' | '2-digit' | 'short' | 'long'
   day?: 'numeric' | '2-digit'
 }
-export const formatDate = (date: string | Date, options: FormatDateOptions = {}) => {
+export const formatDate = (date?: string | Date | null, options: FormatDateOptions = {}) => {
+  if (!date) return 'N/A'
+
   const { locale, showTime = false, pattern, year = 'numeric', month = 'short', day = 'numeric' } = options
 
   const d = typeof date === 'string' ? new Date(date) : date
 
-  if (isNaN(d.getTime())) {
+  if (!(d instanceof Date) || isNaN(d.getTime())) {
     return 'N/A'
   }
-  // --- 1. Nếu có pattern → custom formatting ---
+
+  // custom pattern
   if (pattern) {
     const dd = String(d.getDate()).padStart(2, '0')
     const MM = String(d.getMonth() + 1).padStart(2, '0')
@@ -73,18 +76,8 @@ export const formatDate = (date: string | Date, options: FormatDateOptions = {})
     }
   }
 
-  return date.toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-US', {
-    year,
-    month,
-    day,
-    ...(showTime && {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    })
-  })
+  return d.toLocaleDateString(locale, { year, month, day })
 }
-
 export function formatDateV2(date: Date | undefined) {
   if (!date) {
     return ''
