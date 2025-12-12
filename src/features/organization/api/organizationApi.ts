@@ -23,7 +23,7 @@ export const organizationApi = createCrudApi<Organization, OrganizationSlicePara
       providesTags: ['Organization']
     }),
     getCurriculumsByOrganizationId: build.query<
-      ApiSuccessResponse<{ curriculums: Curriculum[] }>,
+      ApiSuccessResponse<{ curriculums: OrganizationCurriculum[] }>,
       { organizationId: number }
     >({
       query: ({ organizationId }) => ({

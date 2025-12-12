@@ -78,8 +78,6 @@ export default function CreateClassroom() {
   const [startDate, setStartDateState] = useState<Date | undefined>(new Date())
   const [endDate, setEndDate] = useState<Date | undefined>(new Date(new Date().setDate(new Date().getDate() + 56)))
 
-  const selectedSubscriptionId = useAppSelector((state) => state.selectedOrganization.selectedSubscriptionOrderId)
-
   const GRADE_OPTIONS = Object.values(Grade)
     .filter((v) => typeof v === 'number')
     .map((grade) => ({
@@ -105,7 +103,6 @@ export default function CreateClassroom() {
       const payload = {
         ...value,
         courseId: Number(value.courseId),
-        organizationSubscriptionOrderId: selectedSubscriptionId!,
         studentGroups: selectedGroups
       }
 

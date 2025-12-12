@@ -246,7 +246,12 @@
       "filterByStatus": "Filter by Status",
       "showing": "Showing",
       "results": "results",
-      "all": "All"
+      "all": "All",
+      "activeSubscriptions": "Active Subscriptions",
+      "expiredSubscriptions": "Expired Subscriptions",
+      "upcomingSubscriptions": "Upcoming Subscriptions",
+      "cancelledSubscriptions": "Cancelled Subscriptions",
+      "accessPeriod": "Access Period"
     },
     "userTable": {
       "title": "Manage Users in the Organization",

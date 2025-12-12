@@ -1,7 +1,7 @@
 'use client'
 
 import { useDeleteClassroomStudentsMutation, useGetClassroomByIdQuery } from '@/features/classroom/api/classroomApi'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
@@ -36,6 +36,7 @@ export default function OrganizationClassroomDetail() {
   const tc = useTranslations('common')
   const statusTranslations = useStatusTranslation()
   const locale = useLocale()
+  const router = useRouter()
 
   const { openModal } = useModal()
   const { classroomId } = useParams()
@@ -96,12 +97,10 @@ export default function OrganizationClassroomDetail() {
     <div className='min-h-screen bg-slate-50/50'>
       <div className='container mx-auto px-6 pb-8'>
         {/* Back Button */}
-        <Link href='/organization/classroom'>
-          <Button variant='ghost' className='mb-6 -ml-2'>
-            <ArrowLeft className='mr-2 h-4 w-4' />
-            {tClassroom('detail.backToClassrooms')}
-          </Button>
-        </Link>
+        <Button variant='ghost' className='mb-6 -ml-2' onClick={() => router.back()}>
+          <ArrowLeft className='mr-2 h-4 w-4' />
+          {tClassroom('detail.backToClassrooms')}
+        </Button>
 
         {/* Header Section */}
         <div className='mb-8'>
@@ -273,9 +272,7 @@ export default function OrganizationClassroomDetail() {
 
                         <div className='flex-1'>
                           <p className='font-medium text-slate-900'>{student.name || student.email}</p>
-                          {(student.email) && (
-                            <p className='text-sm text-slate-500'>{student.email}</p>
-                          )}
+                          {student.email && <p className='text-sm text-slate-500'>{student.email}</p>}
                         </div>
                       </div>
                     ))}

@@ -49,19 +49,19 @@ export interface FormatDateOptions {
   month?: 'numeric' | '2-digit' | 'short' | 'long'
   day?: 'numeric' | '2-digit'
 }
-export const formatDate = (dateString: string, options: FormatDateOptions = {}) => {
+export const formatDate = (date: string | Date, options: FormatDateOptions = {}) => {
   const { locale, showTime = false, pattern, year = 'numeric', month = 'short', day = 'numeric' } = options
 
-  const date = new Date(dateString)
+  const d = typeof date === 'string' ? new Date(date) : date
 
-  if (isNaN(date.getTime())) {
+  if (isNaN(d.getTime())) {
     return 'N/A'
   }
   // --- 1. Nếu có pattern → custom formatting ---
   if (pattern) {
-    const dd = String(date.getDate()).padStart(2, '0')
-    const MM = String(date.getMonth() + 1).padStart(2, '0')
-    const yyyy = date.getFullYear()
+    const dd = String(d.getDate()).padStart(2, '0')
+    const MM = String(d.getMonth() + 1).padStart(2, '0')
+    const yyyy = d.getFullYear()
 
     switch (pattern) {
       case 'dd/MM/yyyy':

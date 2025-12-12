@@ -25,7 +25,7 @@
         "startDate": "Ngày bắt đầu",
         "endDate": "Ngày kết thúc"
       },
-      "curriculum": "Cập nhật chương trình học của lớp học",
+      "curriculum": "Cập nhật khóa học",
       "teacher": "Cập nhật giáo viên của lớp học",
       "students": {
         "addStudents": "Thêm học sinh vào lớp học",
