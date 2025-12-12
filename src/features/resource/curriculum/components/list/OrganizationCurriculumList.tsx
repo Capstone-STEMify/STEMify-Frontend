@@ -41,22 +41,6 @@ export default function OrganizationCurriculumList() {
   )
   const curriculums = curriculumData?.data.curriculums || []
 
-  if (isLoading) {
-    return (
-      <div className='fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-50/80 to-indigo-50/80 backdrop-blur-xl'>
-        <LoadingComponent size={150} />
-      </div>
-    )
-  }
-
-  if (!curriculumData || curriculumData.data.curriculums.length === 0) {
-    return (
-      <div className='mx-auto max-w-7xl px-5 py-12'>
-        <SEmpty title={t('noData')} />
-      </div>
-    )
-  }
-
   const statusOptions: Array<SubscriptionStatus> = [
     SubscriptionStatus.ACTIVE,
     SubscriptionStatus.PENDING,
@@ -75,7 +59,7 @@ export default function OrganizationCurriculumList() {
           <div>
             <h1 className='text-3xl font-bold text-gray-900'>{t('title')}</h1>
             <p className='mt-1 text-sm text-gray-600'>
-              {t('orgCurriculumDescription', { count: curriculumData.data.curriculums.length })}
+              {t('orgCurriculumDescription', { count: curriculumData?.data.curriculums.length || 0 })}
             </p>
           </div>
         </div>
@@ -112,7 +96,7 @@ export default function OrganizationCurriculumList() {
       </div>
 
       {/* Empty State for Filtered Results */}
-      {curriculums.length === 0 ? (
+      {!curriculumData || curriculums.length === 0 ? (
         <div className='py-12'>
           <SEmpty title={t('noResultsForFilter')} />
         </div>
