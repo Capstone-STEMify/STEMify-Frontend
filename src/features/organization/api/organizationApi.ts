@@ -24,10 +24,11 @@ export const organizationApi = createCrudApi<Organization, OrganizationSlicePara
     }),
     getCurriculumsByOrganizationId: build.query<
       ApiSuccessResponse<{ curriculums: OrganizationCurriculum[] }>,
-      { organizationId: number }
+      { organizationId: number; status?: string }
     >({
-      query: ({ organizationId }) => ({
-        url: `/organizations/${organizationId}/curriculums`
+      query: ({ organizationId, status }) => ({
+        url: `/organizations/${organizationId}/curriculums`,
+        params: status ? { status } : undefined
       }),
       providesTags: ['Organization']
     })

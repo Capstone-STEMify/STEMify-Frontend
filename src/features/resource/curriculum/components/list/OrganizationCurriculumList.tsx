@@ -36,7 +36,7 @@ export default function OrganizationCurriculumList() {
   const [selectedStatus, setSelectedStatus] = useState<SubscriptionStatus>(SubscriptionStatus.ACTIVE)
 
   const { data: curriculumData, isLoading } = useGetCurriculumsByOrganizationIdQuery(
-    { organizationId: selectedOrganizationId! },
+    { organizationId: selectedOrganizationId!, status: selectedStatus },
     { skip: !selectedOrganizationId }
   )
   const curriculums = curriculumData?.data.curriculums || []
