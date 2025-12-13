@@ -8,7 +8,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 
 export const licenseAssignmentApi = createCrudApi<LicenseAssignment, LicenseAssignmentSliceParams>({
   reducerPath: 'licenseAssignmentApi',
-  tagTypes: ['LicenseAssignment'],
+  tagTypes: ['LicenseAssignment', 'Subscription'],
   baseUrl: '/license-assignments'
 }).injectEndpoints({
   endpoints: (builder) => ({

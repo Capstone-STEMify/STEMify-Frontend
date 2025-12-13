@@ -86,6 +86,7 @@
       "updateButton": "Update"
     },
     "user": {
+      "userManagement": "User Management",
       "createTitle": "Create User",
       "editTitle": "Edit User",
       "email": "Email",

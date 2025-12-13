@@ -26,7 +26,7 @@
         "startDate": "Start Date",
         "endDate": "End Date"
       },
-      "curriculum": "Update Classroom Curriculum",
+      "curriculum": "Update Course",
       "teacher": "Update Classroom Teacher",
       "students": {
         "addStudents": "Add Students to Classroom",
@@ -86,7 +86,13 @@
       "weeks": "Weeks",
       "custom": "Custom",
       "groupList": "Group List",
-      "grade": "Grade"
+      "grade": "Grade",
+      "selectSubscription": "Select Subscription",
+      "annual": "Annual",
+      "semiAnnual": "Semi-Annual",
+      "students": "Students",
+      "teachers": "Teachers",
+      "curricula": "Curricula"
     },
     "studentClassroom": {
       "list": {

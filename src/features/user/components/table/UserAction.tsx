@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { useStatusTranslation } from '@/utils/index'
 
 export function useGetUserAction(): ColumnDef<User>[] {
   const { openModal } = useModal()
@@ -18,6 +19,8 @@ export function useGetUserAction(): ColumnDef<User>[] {
   const t = useTranslations('tableHeader')
   const tt = useTranslations('toast')
   const tm = useTranslations('message')
+  const tc = useTranslations('common')
+  const statusTranslate = useStatusTranslation()
 
   const handleDelete = async (id: string, userName: string) => {
     try {
@@ -81,7 +84,7 @@ export function useGetUserAction(): ColumnDef<User>[] {
       header: t('userRole'),
       cell: ({ row }) => {
         const role = row.original.userRole
-        return <div>{role}</div>
+        return <div>{tc(`accountType.${role}`)}</div>
       }
     },
     {
@@ -90,7 +93,7 @@ export function useGetUserAction(): ColumnDef<User>[] {
       cell: ({ row }) => {
         const value = row.original.status.toString()
         const badgeValue = value.toLocaleUpperCase() as UserStatus
-        return <Badge className={`${getStatusBadgeClass(badgeValue)}`}>{value}</Badge>
+        return <Badge className={`${getStatusBadgeClass(badgeValue)}`}>{statusTranslate(value)}</Badge>
       }
     },
     createActionsColumnFromItems<User>([

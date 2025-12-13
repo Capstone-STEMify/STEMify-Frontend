@@ -36,8 +36,8 @@ export default function OrganizationSubscriptionDetail() {
     if (isNaN(end.getTime())) return 0
     if (end <= now) return 0
 
-    let yearsDiff = end.getFullYear() - now.getFullYear()
-    let monthsDiff = end.getMonth() - now.getMonth()
+    const yearsDiff = end.getFullYear() - now.getFullYear()
+    const monthsDiff = end.getMonth() - now.getMonth()
 
     let totalMonths = yearsDiff * 12 + monthsDiff
 

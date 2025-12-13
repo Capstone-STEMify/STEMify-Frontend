@@ -49,19 +49,22 @@ export interface FormatDateOptions {
   month?: 'numeric' | '2-digit' | 'short' | 'long'
   day?: 'numeric' | '2-digit'
 }
-export const formatDate = (dateString: string, options: FormatDateOptions = {}) => {
+export const formatDate = (date?: string | Date | null, options: FormatDateOptions = {}) => {
+  if (!date) return 'N/A'
+
   const { locale, showTime = false, pattern, year = 'numeric', month = 'short', day = 'numeric' } = options
 
-  const date = new Date(dateString)
+  const d = typeof date === 'string' ? new Date(date) : date
 
-  if (isNaN(date.getTime())) {
+  if (!(d instanceof Date) || isNaN(d.getTime())) {
     return 'N/A'
   }
-  // --- 1. Nếu có pattern → custom formatting ---
+
+  // custom pattern
   if (pattern) {
-    const dd = String(date.getDate()).padStart(2, '0')
-    const MM = String(date.getMonth() + 1).padStart(2, '0')
-    const yyyy = date.getFullYear()
+    const dd = String(d.getDate()).padStart(2, '0')
+    const MM = String(d.getMonth() + 1).padStart(2, '0')
+    const yyyy = d.getFullYear()
 
     switch (pattern) {
       case 'dd/MM/yyyy':
@@ -73,18 +76,8 @@ export const formatDate = (dateString: string, options: FormatDateOptions = {}) 
     }
   }
 
-  return date.toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-US', {
-    year,
-    month,
-    day,
-    ...(showTime && {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    })
-  })
+  return d.toLocaleDateString(locale, { year, month, day })
 }
-
 export function formatDateV2(date: Date | undefined) {
   if (!date) {
     return ''

@@ -245,7 +245,12 @@
       "filterByStatus": "Lọc theo trạng thái",
       "showing": "Hiển thị",
       "results": "kết quả",
-      "all": "Tất cả"
+      "all": "Tất cả",
+      "activeSubscriptions": "Gói đang hoạt động",
+      "expiredSubscriptions": "Gói đã hết hạn",
+      "upcomingSubscriptions": "Gói sắp kích hoạt",
+      "cancelledSubscriptions": "Gói đã hủy",
+      "accessPeriod": "Thời hạn truy cập"
     },
     "userTable": {
       "title": "Quản lý người dùng trong Tổ chức",

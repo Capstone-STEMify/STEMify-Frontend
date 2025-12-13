@@ -37,7 +37,7 @@ export function UpsertStudentGroup({ studentIds }: UpsertStudentGroupProps) {
   }
 
   return (
-    <Dialog>
+    <Dialog open onOpenChange={closeModal}>
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
           <DialogTitle>Create Student Group</DialogTitle>

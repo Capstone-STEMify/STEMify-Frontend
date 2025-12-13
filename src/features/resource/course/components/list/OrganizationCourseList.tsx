@@ -1,7 +1,6 @@
 import { Badge } from '@/components/shadcn/badge'
 import CardLayout from '@/components/shared/card/CardLayout'
-import { Course } from '@/features/resource/course/types/course.type'
-import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/curriculumApi'
+import { OrganizationCurriculumCourse } from '@/features/organization/types/organization.type'
 import { getLevelBadgeClass } from '@/utils/badgeColor'
 import { capitalizeFirst } from '@/utils/index'
 import { useTranslations } from 'next-intl'
@@ -9,7 +8,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import React from 'react'
 type OrganizationCurriculumCourseListProps = {
-  courses: Course[]
+  courses: OrganizationCurriculumCourse[]
 }
 
 export default function OrganizationCourseList({ courses }: OrganizationCurriculumCourseListProps) {

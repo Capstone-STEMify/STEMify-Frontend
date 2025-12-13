@@ -378,7 +378,6 @@ export function useAssembly(options: UseAssemblyOptions = {}): UseAssemblyReturn
 
       let assemblyData: Assembly | null = null
 
-      // ✅ Ưu tiên dùng inline data (từ API)
       if (inlineData) {
         assemblyData = inlineData
       }
