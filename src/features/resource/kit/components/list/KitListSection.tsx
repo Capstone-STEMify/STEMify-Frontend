@@ -47,16 +47,8 @@ export default function KitListSection({ context, kitId, kitIds = [] }: KitListS
       setLoadingKits(true)
       const kits: Kit[] = []
       for (const id of kitIds) {
-        try {
-          const result = await triggerGetKitById(id).unwrap()
-          kits.push(result.data)
-        } catch (err: any) {
-          if (err?.status === 404) {
-            console.warn(`Kit ${id} not found (404), skipping.`)
-          } else {
-            console.error(`Error loading kit ${id}:`, err)
-          }
-        }
+        const result = await triggerGetKitById(id).unwrap()
+        kits.push(result.data)
       }
       setKits(kits)
       setLoadingKits(false)

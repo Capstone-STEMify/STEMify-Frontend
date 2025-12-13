@@ -9,6 +9,7 @@ import { setPageIndex } from '@/features/resource/kit/slice/kitProductSlice'
 import { KitSliceParams } from '@/features/resource/kit/types/kit.type'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
+import { useStatusTranslation } from '@/utils/index'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -22,6 +23,7 @@ export default function KitList() {
   const locale = useLocale()
   const { openModal } = useModal()
   const dispatch = useAppDispatch()
+  const statusTranslate = useStatusTranslation()
 
   const queryParams: KitSliceParams = useAppSelector((state) => state.kit)
   const { data: kitData, isLoading } = useSearchKitQuery(queryParams)

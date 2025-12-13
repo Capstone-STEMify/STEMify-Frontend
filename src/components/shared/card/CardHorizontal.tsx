@@ -3,6 +3,8 @@ import { Star } from 'lucide-react'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { useTranslations } from 'next-intl'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { useStatusTranslation } from '@/utils/index'
 
 type CardProductProps = {
   imageUrl: string
@@ -22,6 +24,7 @@ export default function CardHorizontal({
   onClick
 }: CardProductProps) {
   const t = useTranslations('kits.list')
+  const translateStatus = useStatusTranslation()
 
   return (
     <Card
@@ -38,11 +41,7 @@ export default function CardHorizontal({
         {/* Title */}
         <h3 className='text-md flex items-center gap-2 font-semibold text-gray-900'>
           {title}
-          {badge && (
-            <Badge variant='secondary' className='text-xs'>
-              {badge}
-            </Badge>
-          )}
+          {badge && <Badge className={getStatusBadgeClass(badge.toLowerCase())}>{translateStatus(badge)}</Badge>}
         </h3>
 
         {/* Description */}

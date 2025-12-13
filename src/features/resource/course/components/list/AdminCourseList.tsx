@@ -12,7 +12,7 @@ import { IconPlus } from '@tabler/icons-react'
 import Link from 'next/link'
 import CardLayout from '@/components/shared/card/CardLayout'
 import { Badge } from '@/components/shadcn/badge'
-import { capitalizeFirst } from '@/utils/index'
+import { capitalizeFirst, useStatusTranslation } from '@/utils/index'
 import { SPagination } from '@/components/shared/SPagination'
 import { LayoutGrid, TableIcon } from 'lucide-react'
 import { getLevelBadgeClass, getStatusBadgeClass } from '@/utils/badgeColor'
@@ -27,6 +27,7 @@ export default function AdminCourseList() {
   const router = useRouter()
   const locale = useLocale()
   const { openModal } = useModal()
+  const statusTranslation = useStatusTranslation()
 
   const courseParams = useAppSelector((state) => state.course)
 
@@ -111,14 +112,14 @@ export default function AdminCourseList() {
                         imageSrc={course.imageUrl}
                         badge={
                           <Badge className={`${getStatusBadgeClass(course.status)}`}>
-                            {capitalizeFirst(course.status)}
+                            {statusTranslation(course.status)}
                           </Badge>
                         }
                         footer={
                           <div>
                             {course.duration > 0 && (
                               <Badge className={getLevelBadgeClass(course.level)}>
-                                {capitalizeFirst(course.level)}
+                                {tc(`level.${course.level.toLowerCase()}`)}
                               </Badge>
                             )}
                           </div>

@@ -95,27 +95,29 @@ export default function AdminCurriculumList() {
                 </Link>
               </div>
             </CardLayout>
-            <div key={curriculum.id} className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
-              <SDropDown
-                trigger={
-                  <button className='flex items-center justify-center rounded-full border border-gray-200 bg-white p-1'>
-                    <EllipsisVertical className='h-3 w-3 text-gray-500' />
-                  </button>
-                }
-                items={[
-                  <button
-                    key='draft'
-                    onClick={() => {
-                      updateCurriculum({ id: curriculum.id, body: { status: CurriculumStatus.PUBLISHED } })
-                      toast.success(tt('successMessage.update', { title: CurriculumStatus.PUBLISHED }))
-                    }}
-                    className='text-sm'
-                  >
-                    Publish
-                  </button>
-                ]}
-              />
-            </div>
+            {curriculum.status === CurriculumStatus.DRAFT && (
+              <div className='absolute top-2 right-2 flex flex-col items-center justify-center gap-1'>
+                <SDropDown
+                  trigger={
+                    <button className='flex items-center justify-center rounded-full border border-gray-200 bg-white p-1'>
+                      <EllipsisVertical className='h-3 w-3 text-gray-500' />
+                    </button>
+                  }
+                  items={[
+                    <button
+                      key='draft'
+                      onClick={() => {
+                        updateCurriculum({ id: curriculum.id, body: { status: CurriculumStatus.PUBLISHED } })
+                        toast.success(tt('successMessage.updateNoTitle'))
+                      }}
+                      className='text-sm'
+                    >
+                      {tc('button.publish')}
+                    </button>
+                  ]}
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>
