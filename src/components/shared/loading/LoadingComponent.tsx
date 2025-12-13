@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
-import { DotLottieReact } from '@lottiefiles/dotlottie-react'
-import Image from 'next/image'
+import { Loader2 } from 'lucide-react'
 
 type LoadingProps = {
   size?: number
@@ -9,12 +8,12 @@ type LoadingProps = {
   text?: string
 }
 
-export default function LoadingComponent({ size = 75, textShow = true, text }: LoadingProps) {
-  // return <DotLottieReact src='/animations/loading.lottie' loop autoplay style={{ width: size, height: size }} />
+export default function LoadingComponent({ size = 32, textShow = true, text }: LoadingProps) {
   return (
-    <div className='flex flex-col items-center justify-center'>
-      <Image src='/images/loading.gif' alt='Loading Cat' width={size} height={size} />
-      {/* {textShow && <p className='mt-4 text-[#8b949e]'>{text || 'One moment please...'}</p>} */}
+    <div className='flex flex-col items-center justify-center gap-3'>
+      <Loader2 className='animate-spin text-blue-500' size={size} />
+
+      {/* {textShow && <p className='text-muted-foreground text-sm'>{text || 'One moment please...'}</p>} */}
     </div>
   )
 }

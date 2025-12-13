@@ -102,7 +102,7 @@ export default function OrganizationCurriculumList() {
         </div>
       ) : (
         /* Curriculum Grid */
-        <div className='grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-4'>
           {curriculums.map((curriculum) => {
             const displayGroup = getDominantSubscriptionGroup(curriculum.subscriptionGroups)
 

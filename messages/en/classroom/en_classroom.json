@@ -86,7 +86,13 @@
       "weeks": "Weeks",
       "custom": "Custom",
       "groupList": "Group List",
-      "grade": "Grade"
+      "grade": "Grade",
+      "selectSubscription": "Select Subscription",
+      "annual": "Annual",
+      "semiAnnual": "Semi-Annual",
+      "students": "Students",
+      "teachers": "Teachers",
+      "curricula": "Curricula"
     },
     "studentClassroom": {
       "list": {

@@ -112,8 +112,8 @@ export default withAuth(
     }
 
     const roleRedirectMap: Record<EffectiveRole, string> = {
-      [UserRole.ADMIN]: `/${locale}/admin/curriculum`,
-      [UserRole.STAFF]: `/${locale}/admin/curriculum`,
+      [UserRole.ADMIN]: `/${locale}/admin/course`,
+      [UserRole.STAFF]: `/${locale}/admin/course`,
       [LicenseType.ORGANIZATION_ADMIN]: `/${locale}/organization/dashboard`,
       [UserRole.GUEST]: `/${locale}`,
       [LicenseType.STUDENT]: `/${locale}`,

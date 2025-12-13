@@ -14,10 +14,6 @@ export default function StudentColumn(): ColumnDef<Student>[] {
   return [
     createSelectColumn<Student>(),
     {
-      accessorKey: 'avatar',
-      header: to('avatar')
-    },
-    {
       accessorKey: 'id',
       header: 'ID'
     },

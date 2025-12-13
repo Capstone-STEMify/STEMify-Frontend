@@ -85,7 +85,13 @@
       "description": "Mô tả",
       "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
       "groupList": "Danh sách nhóm",
-      "grade": "Khối"
+      "grade": "Khối",
+      "selectSubscription": "Chọn gói đăng ký",
+      "annual": "Hàng năm",
+      "semiAnnual": "Nửa năm",
+      "students": "Học sinh",
+      "teachers": "Giáo viên",
+      "curricula": "Chương trình học"
     },
     "studentClassroom": {
       "list": {

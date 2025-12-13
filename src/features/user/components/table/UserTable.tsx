@@ -18,7 +18,7 @@ import { UserRole } from '@/types/userRole'
 import { useStatusTranslation } from '@/utils/index'
 
 export default function UserTable() {
-  const t = useTranslations('Admin.placeholder')
+  const t = useTranslations('Admin')
   const tCommon = useTranslations('common')
   const statusTranslate = useStatusTranslation()
   const { openModal } = useModal()
@@ -71,11 +71,11 @@ export default function UserTable() {
 
   return (
     <div className='px-6'>
-      <h1 className='text-2xl text-gray-800'>User Management</h1>
-      <div className='flex justify-between'>
+      <h1 className='text-2xl text-gray-800'>{t('user.userManagement')}</h1>
+      <div className='flex flex-wrap items-center justify-between gap-4'>
         <div className='flex items-center justify-start gap-4 py-4'>
           <Input
-            placeholder={t('userSearch')}
+            placeholder={t('placeholder.userSearch')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className='w-[400px]'
