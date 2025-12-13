@@ -142,7 +142,8 @@
       "upgrade": "Upgrade Plan",
       "uploadFile": "Upload File",
       "exportGLB": "Export GLB",
-      "restore": "Restore"
+      "restore": "Restore",
+      "removeStudents": "Remove {student} Students"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

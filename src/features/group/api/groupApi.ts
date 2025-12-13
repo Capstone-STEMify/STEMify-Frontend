@@ -27,7 +27,7 @@ export const groupApi = createCrudApi<Group, GroupQueryParams>({
       query: ({ groupId, studentIds }) => ({
         url: `/groups/${groupId}/students`,
         method: 'POST',
-        body: studentIds
+        body: { studentIds }
       }),
       invalidatesTags: ['Group']
     }),
@@ -39,7 +39,7 @@ export const groupApi = createCrudApi<Group, GroupQueryParams>({
       query: ({ groupId, studentIds }) => ({
         url: `/groups/${groupId}/students`,
         method: 'DELETE',
-        body: studentIds
+        body: { studentIds }
       }),
       invalidatesTags: ['Group']
     })

@@ -1,9 +1,13 @@
 'use client'
 import { useLocale, useTranslations } from 'next-intl'
-import { useGetGroupByIdQuery } from '@/features/group/api/groupApi'
+import {
+  useAddStudentToGroupMutation,
+  useGetGroupByIdQuery,
+  useRemoveStudentFromGroupMutation
+} from '@/features/group/api/groupApi'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useGetGroupColumn } from '@/features/group/components/detail/GroupColumn'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import BackButton from '@/components/shared/button/BackButton'
 import { useParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
@@ -11,8 +15,13 @@ import { Badge } from '@/components/shadcn/badge'
 import { Users, Calendar, Hash, Copy } from 'lucide-react'
 import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
 import { toast } from 'sonner'
+import { Button } from '@/components/shadcn/button'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function OrganizationGroupTable() {
+  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
+
+  const { openModal } = useModal()
   const { groupId } = useParams()
   const locale = useLocale()
   const to = useTranslations('organization.group')
@@ -21,6 +30,7 @@ export default function OrganizationGroupTable() {
   const columns = useGetGroupColumn()
   const orgUserStatusTranslation = useOrgUserStatusTranslation()
   const { data, isLoading } = useGetGroupByIdQuery(Number(groupId), { skip: !groupId })
+  const [deleteStudents] = useRemoveStudentFromGroupMutation()
 
   const groupData = data?.data
 
@@ -39,6 +49,16 @@ export default function OrganizationGroupTable() {
     return { total, active, inactive }
   }, [groupData])
 
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success(tt('successMessage.copiedToClipboard'))
+  }
+
+  const handleRemoveStudents = () => {
+    deleteStudents({ groupId: Number(groupId), studentIds: selectedStudentIds })
+    setSelectedStudentIds([])
+  }
+
   if (isLoading) {
     return (
       <div className='container mx-auto max-w-7xl px-4 pt-3'>
@@ -47,11 +67,6 @@ export default function OrganizationGroupTable() {
         </div>
       </div>
     )
-  }
-
-  const handleCopyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
-    toast.success(tt('successMessage.copiedToClipboard'))
   }
 
   if (!groupData) {
@@ -152,7 +167,21 @@ export default function OrganizationGroupTable() {
           </div>
         </div>
       </div>
-      <DataTable data={rows} columns={columns as any} />
+      <div className='mb-4 flex justify-end gap-2'>
+        {selectedStudentIds.length > 0 && (
+          <Button variant={'destructive'} onClick={handleRemoveStudents}>
+            {tc('button.removeStudents', { student: selectedStudentIds.length })}
+          </Button>
+        )}
+
+        <Button onClick={() => openModal('addStudentToGroup')}>{tc('button.addStudents')}</Button>
+      </div>
+      <DataTable
+        data={rows}
+        columns={columns as any}
+        enableRowSelection
+        onSelectionChange={(ids) => setSelectedStudentIds(ids.map(String))}
+      />
     </div>
   )
 }

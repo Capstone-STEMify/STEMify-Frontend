@@ -142,7 +142,8 @@
       "upgrade": "Nâng Cấp Gói",
       "uploadFile": "Tải Lên Tệp",
       "exportGLB": "Xuất GLB",
-      "restore": "Khôi Phục"
+      "restore": "Khôi Phục",
+      "removeStudents": "Xóa {student} Học Sinh"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",
