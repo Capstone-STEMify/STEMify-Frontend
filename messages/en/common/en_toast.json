@@ -54,7 +54,8 @@
       "removeItemFromCart": "Are you sure you want to remove this item from the cart?",
       "clearCart": "Are you sure you want to clear the cart?",
       "deleteUserEmail": "Are you sure you want to delete the user with email \"{title}\"?",
-      "restore": "Are you sure you want to restore \"{title}\"?"
+      "restore": "Are you sure you want to restore \"{title}\"?",
+      "cancelledSubscriptions": "Are you sure you want to cancel this subscription?"
     },
     "unauthorized": "Unauthorized access."
   }

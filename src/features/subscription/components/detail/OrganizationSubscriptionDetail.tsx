@@ -5,7 +5,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Progress } from '@/components/shadcn/progress'
 import { Users, GraduationCap, BookOpen, Calendar, CreditCard } from 'lucide-react'
-import { useGetSubscriptionByIdQuery } from '@/features/subscription/api/subscriptionApi'
+import { useGetSubscriptionByIdQuery, useUpdateSubscriptionMutation } from '@/features/subscription/api/subscriptionApi'
 import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { formatDate, useStatusTranslation } from '@/utils/index'
@@ -16,16 +16,20 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import BackButton from '@/components/shared/button/BackButton'
 import { SubscriptionStatus } from '@/features/subscription/types/subscription.type'
 import { useLocale, useTranslations } from 'next-intl'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function OrganizationSubscriptionDetail() {
   const locale = useLocale()
   const ts = useTranslations('subscription.detail')
   const to = useTranslations('organization')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const { subscriptionId } = useParams()
   const statusTranslations = useStatusTranslation()
+  const { openModal } = useModal()
 
   const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscriptionByIdQuery(Number(subscriptionId))
+  const [updateSubscription] = useUpdateSubscriptionMutation()
 
   const getRemainingMonths = (endDate?: string) => {
     if (!endDate) return 0
@@ -63,6 +67,18 @@ export default function OrganizationSubscriptionDetail() {
     return Math.round(progress)
   }
 
+  const handleCancelSubscription = () => {
+    openModal('confirm', {
+      title: tt('confirmMessage.cancelledSubscriptions'),
+      message: tt('confirmMessage.cancelledSubscriptions'),
+      onConfirm: () =>
+        updateSubscription({
+          subscriptionId: Number(subscriptionId),
+          body: { status: SubscriptionStatus.CANCELLED }
+        })
+    })
+  }
+
   if (isLoadingSubscription) {
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
@@ -93,7 +109,7 @@ export default function OrganizationSubscriptionDetail() {
           {/* Action Buttons */}
           <div className='flex gap-3 lg:items-end'>
             {/* <Button className='bg-sky-400 shadow-lg'>Change Plan</Button> */}
-            <Button variant='outline' className='shadow-lg'>
+            <Button variant='outline' className='shadow-lg' onClick={handleCancelSubscription}>
               {tc('button.cancelSubscription')}
             </Button>
           </div>
