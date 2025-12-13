@@ -29,7 +29,7 @@ export default function OrganizationCurriculumDetail() {
           <hr className='my-10' />
           <LearningOutcomeTable curriculumId={Number(curriculum.id)} />
           <hr className='my-10' />
-          <KitListSection context='curriculum' kitIds={curriculum.kitIds || []} />
+          <KitListSection context='curriculum' kitIds={[]} />
           <hr className='my-10' />
           <OrganizationCourseList courses={curriculum.courses || []} />
         </>

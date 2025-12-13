@@ -108,6 +108,56 @@
         "currTitle": "Curriculum Title",
         "name": "Name"
       }
+    },
+    "admin": {
+      "title": "System Dashboard",
+      "subtitle": "Overview of system performance and revenue",
+      "period": {
+        "placeholder": "Select period",
+        "month": "Month",
+        "quarter": "Quarter",
+        "year": "Year"
+      },
+      "stats": {
+        "revenue": "Total Revenue",
+        "compare": "vs previous period",
+        "activeOrg": "Active Organizations",
+        "growth": "Growth",
+        "totalStudent": "Total Students",
+        "enrollment": "Enrollments",
+        "completionRate": "Completion Rate"
+      },
+      "charts": {
+        "revenueByPlan": "Revenue by Plan",
+        "revenueDesc": "Revenue distribution based on subscription plans",
+        "planDetail": "Subscription Plan Details",
+        "planDetailDesc": "Current subscription plan status",
+        "totalPlan": "Total Plans",
+        "active": "Active",
+        "expired": "Expired",
+        "noData": "No revenue data available"
+      },
+      "tables": {
+        "topOrg": "Top Organizations",
+        "topOrgDesc": "Organizations with the largest student body",
+        "topCourse": "Top Courses",
+        "topCourseDesc": "Most popular courses in the system",
+        "headers": {
+           "orgName": "Organization Name",
+           "students": "Students",
+           "enrollments": "Enrollments",
+           "passRate": "Pass Rate",
+           "activeSub": "Active Subs",
+           "courseName": "Course Name",
+           "classrooms": "Classrooms",
+           "avgScore": "Avg Score",
+           "completion": "Completion"
+        },
+        "placeholders": {
+            "org": "No organization data",
+            "course": "No course data"
+        }
+      }
     }
   }
 }

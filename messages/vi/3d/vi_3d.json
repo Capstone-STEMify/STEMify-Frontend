@@ -42,17 +42,35 @@
       "connector": "Đầu nối",
       "drag_guide": "Kéo để thêm vào cảnh",
       "double_click_guide": "Nhấp đúp để đặt tại gốc tọa độ",
-      "select_guide": "Chọn & sử dụng gizmo để biến đổi"
+      "select_guide": "Chọn & sử dụng gizmo để biến đổi",
+      "bluestraw": "Ống hút xanh dương",
+      "pinkstraw": "Ống hút hồng",
+      "yellowstraw": "Ống hút vàng",
+      "greenstraw": "Ống hút xanh lá",
+      "orangestraw": "Ống hút cam",
+      "1legconnector": "Đầu nối 1 chân",
+      "2legsconnector": "Đầu nối 2 chân",
+      "3legsconnector": "Đầu nối 3 chân",
+      "5legsconnector": "Đầu nối 5 chân"
     },
     "right_panel": {
       "workspace_tree": "Cấu trúc mô hình",
       "properties": "Thuộc tính",
       "delete_component": "Bạn có muốn xóa thành phần này không?",
       "select_object_or_action": "Chọn một vật thể hoặc hành động để chỉnh sửa thuộc tính",
+      "noStep": "Không có bước nào liên kết với hành động này",
       "action_properties": {
         "title": "Thuộc tính hành động",
         "name": "Tên",
-        "type": "Loại"
+        "type": "Loại",
+        "step": {
+          "detail": "Chi tiết bước",
+          "title": "Tiêu đề",
+          "description": "Mô tả",
+          "expectedResult": "Kết quả mong đợi",
+          "hint": "Gợi ý",
+          "addHint": "Thêm gợi ý"
+        }
       },
       "component_properties": {
         "select_object_or_action": "Chọn một vật thể hoặc hành động để chỉnh sửa thuộc tính",

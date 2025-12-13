@@ -215,7 +215,6 @@ export function exportAssembly(
   const now = new Date().toISOString()
   const actions = state.workspaceTree.actions
   const activities = state.workspaceTree.activities
-  console.log('🧩 Exporting activities activities:', activities)
   // Straws
   const straws = instances
     .filter((i) => i.category === 'straw')
@@ -238,10 +237,10 @@ export function exportAssembly(
     instances: instanceList
   }))
 
-  // Connectors (⚠️ KHÔNG export arms trong instance, chỉ giữ transform thôi)
   const connectors = instances
     .filter((i) => i.category === 'connector')
     .reduce<Record<string, any[]>>((acc, item) => {
+      console.log({ item })
       const templateId = item.templateId
       if (!acc[templateId]) acc[templateId] = []
       acc[templateId].push({
@@ -287,8 +286,6 @@ export function exportAssembly(
       actionId: step.actionId // đảm bảo liên kết action
     }))
   }))
-
-  console.log('🧩 Exported Assembly Activities:', exportedActivities)
 
   return {
     metadata: {

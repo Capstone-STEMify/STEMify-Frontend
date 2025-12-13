@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { RootState } from '@/libs/redux/store'
 import {
   addAction,
+  addActivity,
   addStepToActivity,
   moveTargetToAction,
   removeActionWithInstances,
@@ -41,7 +42,7 @@ interface WorkspaceItem {
 
 export default function WorkspaceTree() {
   const tc = useTranslations('common')
-  const t3d = useTranslations('creator3D.right_panel')
+  const t3d = useTranslations('creator3D')
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
   const { actions, activities } = useAppSelector((s: RootState) => s.workspaceTree)
@@ -108,7 +109,7 @@ export default function WorkspaceTree() {
   const handleDeleteComponent = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
     e.stopPropagation()
     openModal('confirm', {
-      message: t3d('delete_component'),
+      message: t3d('right_panel.delete_component'),
       onConfirm: () => {
         dispatch(removeInstance(id))
         dispatch(removeTargetFromAllActions(id))
@@ -176,39 +177,41 @@ export default function WorkspaceTree() {
 
   const handleAddAction = (type: WorkspaceAction['type']) => {
     const newId = `action_${nextActionNumber}`
-    if (type === 'highlight') {
-      dispatch(addAction({ id: newId, name: `Bước ${nextActionNumber}`, type }))
+
+    let activityId = activities[0]?.id
+    if (!activityId) {
+      activityId = 'activity_1'
       dispatch(
-        // TODO: hard code activityId tạm thời
-        addStepToActivity({
-          activityId: activities[0]?.id || newId,
-          step: {
-            title: `Bước ${nextActionNumber}`,
-            actionId: newId,
-            description: '',
-            expectedResult: '',
-            hints: []
-          }
+        addActivity({
+          id: activityId,
+          name: 'Activity 1',
+          steps: [],
+          difficulty: 'easy',
+          description: '',
+          estimatedTime: 10
         })
       )
-      dispatch(setSelectedAction(newId))
     }
-    if (type === 'transform_arm') {
-      dispatch(addAction({ id: newId, name: `Bước ${nextActionNumber}`, type }))
-      dispatch(
-        addStepToActivity({
-          activityId: activities[0]?.id || newId,
-          step: {
-            title: `Bước ${nextActionNumber}`,
-            actionId: newId,
-            description: '',
-            expectedResult: '',
-            hints: []
-          }
-        })
-      )
-      dispatch(setSelectedAction(newId))
-    }
+
+    // 2️⃣ Add action mới
+    dispatch(addAction({ id: newId, name: `Bước ${nextActionNumber}`, type }))
+
+    // 3️⃣ Add step cho đúng action và activity
+    dispatch(
+      addStepToActivity({
+        activityId,
+        step: {
+          title: `Bước ${nextActionNumber}`,
+          actionId: newId,
+          description: '',
+          expectedResult: '',
+          hints: []
+        }
+      })
+    )
+
+    // 4️⃣ Chọn action mới
+    dispatch(setSelectedAction(newId))
   }
 
   // 1️⃣ expand chỉ khi actions thay đổi
@@ -231,7 +234,7 @@ export default function WorkspaceTree() {
   return (
     <div>
       <div className='mb-2'>
-        <h2 className='text-lg font-medium'>{t3d('workspace_tree')}</h2>
+        <h2 className='text-lg font-medium'>{t3d('right_panel.workspace_tree')}</h2>
         <div className='flex flex-wrap gap-2'>
           <button
             onClick={() => handleAddAction('highlight')}

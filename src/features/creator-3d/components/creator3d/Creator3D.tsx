@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
+import { useCallback, useMemo, useEffect, useRef } from 'react'
 import { ComponentPalette } from '../component-palette/ComponentPalette'
 import { SceneActions } from '@/features/creator-3d/components/creator3d/SceneActions'
 import { SceneStats } from '@/features/creator-3d/components/creator3d/SceneStats'
@@ -27,8 +27,8 @@ import { useParams } from 'next/navigation'
 import { useUpdateEmulatorMutation } from '@/features/emulator/api/emulatorApi'
 import { ApiSuccessResponse } from '@/types/baseModel'
 import { Emulator } from '@/features/emulator/types/emulator.type'
-import { buildSceneFromAssembly } from '@/features/creator-3d/hooks/buildSceneFromAssembly'
 import { exportGLB } from '@/features/creator-3d/hooks/exportGlb'
+import { useAutosave } from '@/features/creator-3d/components/creator3d/useAutosave'
 type Creator3DProps = {
   emulatorData: ApiSuccessResponse<Emulator> | undefined
 }
@@ -42,6 +42,17 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { actions, activities } = useAppSelector((s) => s.workspaceTree)
+  const creatorState = useMemo(
+    () => ({
+      instances,
+      actions,
+      activities
+    }),
+    [instances, actions, activities]
+  )
+
+  const autosaveKey = `creator-autosave-${workspaceId}`
 
   const [updateEmulator, { isLoading: isUpdating }] = useUpdateEmulatorMutation()
   const prevInstanceIds = useRef<string[]>([])
@@ -120,7 +131,6 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
             status: existing.status
           }
         }).unwrap()
-        toast.success('Lưu dữ liệu thành công.')
       }
 
       // console.log('Emulator creation response:', response)
@@ -144,8 +154,8 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
       }
 
       const existing = emulatorData.data
+
       const data = existing.definitionJson ? JSON.parse(existing.definitionJson) : null
-      console.log('Importing assembly data:', data.instances.connectors)
       if (!data) throw new Error('Dữ liệu assembly không hợp lệ')
 
       const allInstances: AssemblyInstance[] = []
@@ -306,20 +316,6 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
       // ================================
       if (Array.isArray(data.activities)) {
         for (const activity of data.activities) {
-          // const fullSteps: Step[] = []
-
-          // if (Array.isArray(activity.steps)) {
-          //   for (const step of activity.steps) {
-          //     fullSteps.push({
-          //       actionId: step.actionId + 1111,
-          //       title: step.title || 'Untitled Step',
-          //       description: step.description || '',
-          //       expectedResult: step.expectedResult || '',
-          //       hints: step.hints || []
-          //     })
-          //   }
-          // }
-
           dispatch(
             addActivity({
               id: activity.id,
@@ -335,35 +331,6 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
           if (Array.isArray(activity.steps)) {
             for (const step of activity.steps) {
               dispatch(addStepToActivity({ activityId: activity.id, step }))
-
-              // ✅ 3️⃣ Nếu step có actions thì xử lý tiếp
-              // if (Array.isArray(step.actions)) {
-              //   for (const act of step.actions) {
-              //     // Thêm action
-              //     dispatch(addAction({ id: act.id, name: act.name, type: act.type }))
-              //     console.log('Restoring action:', act.id, act.name, act.type)
-
-              //     // Gắn các target
-              //     if (Array.isArray(act.targets)) {
-              //       act.targets.forEach((targetId: string) =>
-              //         dispatch(addTargetToAction({ actionId: act.id, targetId }))
-              //       )
-              //     }
-
-              //     // Restore arms nếu có
-              //     if (act.type === 'transform_arm' && act.connectorArmTransforms) {
-              //       Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
-              //         dispatch(
-              //           updateConnectorArms({
-              //             actionId: act.id,
-              //             connectorId,
-              //             arms: arms as Record<string, { x: number; y: number; z: number }>
-              //           })
-              //         )
-              //       })
-              //     }
-              //   }
-              // }
             }
           }
         }
@@ -531,6 +498,64 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
     [dispatch]
   )
 
+  const restoreFromAutosave = (data: any) => {
+    if (!data) return
+
+    // Restore instances
+    if (Array.isArray(data.instances)) {
+      dispatch(setInstances(data.instances))
+    }
+
+    // Restore actions
+    dispatch(clearAction())
+    if (Array.isArray(data.actions)) {
+      for (const act of data.actions) {
+        dispatch(addAction(act))
+
+        if (Array.isArray(act.targets)) {
+          for (const targetId of act.targets) {
+            dispatch(addTargetToAction({ actionId: act.id, targetId }))
+          }
+        }
+
+        if (act.type === 'transform_arm' && act.connectorArmTransforms) {
+          Object.entries(act.connectorArmTransforms).forEach(([connectorId, arms]) => {
+            dispatch(
+              updateConnectorArms({
+                actionId: act.id,
+                connectorId,
+                arms: arms as Record<string, { x: number; y: number; z: number }>
+              })
+            )
+          })
+        }
+      }
+    }
+
+    // Restore activities
+    dispatch(clearActivities())
+    if (Array.isArray(data.activities)) {
+      for (const activity of data.activities) {
+        dispatch(
+          addActivity({
+            id: activity.id,
+            name: activity.name,
+            steps: [],
+            difficulty: activity.difficulty ?? 'medium',
+            description: activity.description ?? '',
+            estimatedTime: activity.estimatedTime ?? 10
+          })
+        )
+
+        if (Array.isArray(activity.steps)) {
+          for (const step of activity.steps) {
+            dispatch(addStepToActivity({ activityId: activity.id, step }))
+          }
+        }
+      }
+    }
+  }
+
   const handleExportGLB = async () => {
     const assembly = exportAssemblyFn({
       title: `Assembly ${workspaceId}`,
@@ -578,9 +603,22 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
     [dispatch]
   )
 
+  const { status: cloudState, loadPromise: autosaveLoaded } = useAutosave({
+    key: autosaveKey,
+    data: creatorState,
+    onLoad: restoreFromAutosave,
+    onSyncToServer: async () => handleSaveAssembly(),
+    interval: 2000,
+    debounce: 5000
+  })
+
   useEffect(() => {
-    handleImportAssembly(workspaceId)
-  }, [])
+    autosaveLoaded.then((saved) => {
+      if (!saved) {
+        handleImportAssembly(workspaceId)
+      }
+    })
+  }, [autosaveLoaded, handleImportAssembly, workspaceId])
 
   // trong Creator3D
   useEffect(() => {
@@ -619,7 +657,12 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
         />
 
         {/* Action Buttons */}
-        <SceneActions onSave={handleSaveAssembly} onImportJSON={handleClickImportJSON} onExportGLB={handleExportGLB} />
+        <SceneActions
+          cloudState={cloudState}
+          onSave={handleSaveAssembly}
+          onImportJSON={handleClickImportJSON}
+          onExportGLB={handleExportGLB}
+        />
       </div>
 
       {/* Object Inspector */}

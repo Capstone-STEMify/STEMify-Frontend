@@ -1,3 +1,4 @@
+import { CourseLevel } from '@/features/resource/course/types/course.type'
 import { OrganizationSubscription } from '@/features/subscription/types/subscription.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
@@ -49,28 +50,33 @@ export type OrganizationFormData = {
 }
 
 // organization curriculum
-
 export type OrganizationCurriculum = {
   id: number
   title: string
+  description?: string
   imageUrl: string
   courseCount: number
-  startDate: string
-  endDate: string
   code: string
-  status: string
   courses: OrganizationCurriculumCourse[]
+  subscriptionGroups: {
+    status: string
+    subscriptions: {
+      subscriptionId: number
+      startDate: string
+      endDate: string
+    }[]
+  }[]
 }
 
 export type OrganizationCurriculumCourse = {
   id: number
   title: string
   code: string
+  level: CourseLevel
   imageUrl: string
   description: string
   duration: number
   status: string
-  level: string
   ageRangeLabel: string
   courseOrderIndex: number
   lessons: any[]

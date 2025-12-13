@@ -31,6 +31,7 @@ export type OrganizationSubscription = {
   curriculums: Partial<Curriculum>[]
   contract: Partial<Contract>
   planBillingCycle: BillingCycle
+  code: string
 }
 
 export type PlanBillingCycle = {

@@ -33,7 +33,12 @@ export default function OrganizationCourseClassroom() {
   const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
   const debouncedSearchQuery = useDebounce(search, 500)
-  const { data } = useSearchClassroomsQuery({ ...queryParams, organizationId: organizationId })
+  const { data } = useSearchClassroomsQuery({
+    ...queryParams,
+    organizationId: organizationId,
+    courseId: Number(courseId),
+    search: debouncedSearchQuery
+  })
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
   const columns = useGetOrganizationCourseClassroomColumn()
@@ -64,7 +69,8 @@ export default function OrganizationCourseClassroom() {
             className='bg-sky-600 text-white hover:bg-sky-700'
             onClick={() => {
               dispatch(setCourseId(Number(courseId)))
-              router.push(`/${locale}/organization/classroom/create`)}}
+              router.push(`/${locale}/organization/classroom/create`)
+            }}
           >
             + {tc('button.createClassroom')}
           </Button>

@@ -24,11 +24,11 @@ export function ComponentInspector() {
     name: string
     arms?: Record<string, { x?: string; y?: string; z?: string }>
   } | null>(null)
+
   const [isEditing, setIsEditing] = useState(false)
   const dispatch = useAppDispatch()
   const { selectedActionId, actions } = useAppSelector((s) => s.workspaceTree)
   const selectedObject = useSelectedObject()
-  console.log({ localValues, selectedObjectCategory: selectedObject?.category })
 
   const onObjectUpdate = useCallback(
     (objectId: string, updates: any) => {

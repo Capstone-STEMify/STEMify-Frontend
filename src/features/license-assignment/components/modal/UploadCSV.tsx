@@ -21,8 +21,6 @@ export default function UploadCSV({ onFileChange, uploadedFile: externalFile, on
   const tv = useTranslations('validation')
 
   const [isDragging, setIsDragging] = useState<boolean>(false)
-  const [uploadProgress, setUploadProgress] = useState<number>(0)
-  const [isUploading, setIsUploading] = useState<boolean>(false)
   const [internalFile, setInternalFile] = useState<UploadedFile | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -77,21 +75,6 @@ export default function UploadCSV({ onFileChange, uploadedFile: externalFile, on
     } else {
       setInternalFile(newFile)
     }
-
-    setIsUploading(true)
-    setUploadProgress(0)
-
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval)
-          setIsUploading(false)
-          return 100
-        }
-        return prev + 10
-      })
-    }, 200)
   }
 
   const handleRemoveFile = () => {
@@ -101,16 +84,9 @@ export default function UploadCSV({ onFileChange, uploadedFile: externalFile, on
       setInternalFile(null)
     }
 
-    setUploadProgress(0)
-    setIsUploading(false)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
-  }
-
-  const handleCancel = () => {
-    setIsUploading(false)
-    setUploadProgress(0)
   }
 
   const formatFileSize = (bytes: number): string => {
@@ -161,7 +137,7 @@ dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
         className={`rounded-lg border-2 border-dashed p-8 text-center transition-all ${
           isDragging
             ? 'border-blue-500 bg-blue-50'
-            : uploadedFile && !isUploading
+            : uploadedFile
               ? 'border-green-500 bg-green-50'
               : 'border-gray-300 bg-gray-50'
         }`}
@@ -170,34 +146,7 @@ dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {isUploading ? (
-          <div className='flex flex-col items-center'>
-            <div className='relative mb-4 h-16 w-16'>
-              <svg className='h-16 w-16 -rotate-90 transform'>
-                <circle cx='32' cy='32' r='28' stroke='#e5e7eb' strokeWidth='4' fill='none' />
-                <circle
-                  cx='32'
-                  cy='32'
-                  r='28'
-                  stroke='#3b82f6'
-                  strokeWidth='4'
-                  fill='none'
-                  strokeDasharray={`${2 * Math.PI * 28}`}
-                  strokeDashoffset={`${2 * Math.PI * 28 * (1 - uploadProgress / 100)}`}
-                  strokeLinecap='round'
-                  className='transition-all duration-300'
-                />
-              </svg>
-              <div className='absolute inset-0 flex items-center justify-center'>
-                <span className='text-sm font-semibold text-blue-600'>{uploadProgress}%</span>
-              </div>
-            </div>
-            <p className='mb-3 text-sm text-gray-600'>{to('uploading')}</p>
-            <button onClick={handleCancel} className='text-sm text-blue-600 hover:text-blue-700'>
-              {tc('button.cancel')}
-            </button>
-          </div>
-        ) : uploadedFile ? (
+        {uploadedFile ? (
           <div className='flex flex-col items-center'>
             <div className='mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-500'>
               <svg className='h-6 w-6 text-white' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
@@ -231,7 +180,7 @@ dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
       </div>
 
       {/* Uploaded File Display */}
-      {uploadedFile && !isUploading && (
+      {uploadedFile && (
         <div className='mt-4 flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3'>
           <div className='flex items-center gap-3'>
             <div className='flex h-8 w-8 items-center justify-center rounded bg-green-100'>
@@ -245,30 +194,6 @@ dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
           <button onClick={handleRemoveFile} className='text-gray-400 hover:text-gray-600'>
             <X size={16} />
           </button>
-        </div>
-      )}
-
-      {/* Progress Bar for URL Upload */}
-      {isUploading && uploadedFile && (
-        <div className='mt-4 rounded-lg border border-gray-200 bg-white p-3'>
-          <div className='mb-2 flex items-center justify-between'>
-            <div className='flex items-center gap-3'>
-              <div className='flex h-8 w-8 items-center justify-center rounded bg-green-100'>
-                <FileSpreadsheet className='h-5 w-5 text-green-600' />
-              </div>
-              <div>
-                <p className='text-sm font-medium text-gray-900'>{uploadedFile.name}</p>
-                {uploadedFile.size && <p className='text-xs text-gray-500'>{formatFileSize(uploadedFile.size)}</p>}
-              </div>
-            </div>
-            <span className='text-xs text-gray-500'>{uploadProgress}%</span>
-          </div>
-          <div className='h-1.5 w-full rounded-full bg-gray-200'>
-            <div
-              className='h-1.5 rounded-full bg-blue-600 transition-all duration-300'
-              style={{ width: `${uploadProgress}%` }}
-            />
-          </div>
         </div>
       )}
     </div>

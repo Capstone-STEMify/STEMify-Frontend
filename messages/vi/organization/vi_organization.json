@@ -234,6 +234,7 @@
     },
     "curriculum": {
       "curriculum": "Khung chương trình",
+      "orgCurriculumDescription": "Tổ chức của bạn hiện đang được cấp quyền truy cập vào {count} khung chương trình thuộc gói đăng ký.\nMỗi khung chương trình cung cấp lộ trình học tập rõ ràng, danh mục khóa học và tài nguyên giảng dạy nhằm hỗ trợ việc triển khai giáo dục STEM ở nhiều cấp độ. Hãy khám phá các chương trình bên dưới để xem thông tin khóa học, thời gian học và chi tiết liên quan.",
       "title": "Danh sách khung chương trình",
       "noData": "Không tìm thấy chương trình giảng dạy nào cho tổ chức này.",
       "noResultsForFilter": "Không tìm thấy kết quả nào cho bộ lọc đã chọn.",
@@ -244,7 +245,12 @@
       "filterByStatus": "Lọc theo trạng thái",
       "showing": "Hiển thị",
       "results": "kết quả",
-      "all": "Tất cả"
+      "all": "Tất cả",
+      "activeSubscriptions": "Gói đang hoạt động",
+      "expiredSubscriptions": "Gói đã hết hạn",
+      "upcomingSubscriptions": "Gói sắp kích hoạt",
+      "cancelledSubscriptions": "Gói đã hủy",
+      "accessPeriod": "Thời hạn truy cập"
     },
     "userTable": {
       "title": "Quản lý người dùng trong Tổ chức",

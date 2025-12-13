@@ -21,10 +21,10 @@ export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[
 
   return [
     {
-      accessorKey: 'classCode',
-      header: tc('tableHeader.classCode'),
+      accessorKey: 'className',
+      header: tc('tableHeader.className'),
       cell: ({ row }) => {
-        return <span>{row.original.classCode}</span>
+        return <span>{row.original.name}</span>
       }
     },
     {

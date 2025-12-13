@@ -25,7 +25,7 @@
         "startDate": "Ngày bắt đầu",
         "endDate": "Ngày kết thúc"
       },
-      "curriculum": "Cập nhật chương trình học của lớp học",
+      "curriculum": "Cập nhật khóa học",
       "teacher": "Cập nhật giáo viên của lớp học",
       "students": {
         "addStudents": "Thêm học sinh vào lớp học",
@@ -85,7 +85,13 @@
       "description": "Mô tả",
       "descriptionPlaceholder": "Mô tả ngắn gọn về lớp học này...",
       "groupList": "Danh sách nhóm",
-      "grade": "Khối"
+      "grade": "Khối",
+      "selectSubscription": "Chọn gói đăng ký",
+      "annual": "Hàng năm",
+      "semiAnnual": "Nửa năm",
+      "students": "Học sinh",
+      "teachers": "Giáo viên",
+      "curricula": "Chương trình học"
     },
     "studentClassroom": {
       "list": {
