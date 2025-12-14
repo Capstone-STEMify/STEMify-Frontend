@@ -17,6 +17,7 @@ import LearningObjectives from '../../../../../components/shared/outcome/Learnin
 import { useSearchLearningOutcomeQuery } from '@/features/resource/learning-outcome/api/learningOutcomeApi'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useTranslations } from 'next-intl'
+import CurriculumEmulatorSection from '@/features/resource/curriculum/components/detail/CurriculumEmulatorSection'
 
 export default function CurriculumDetail() {
   const { curriculumId } = useParams()
@@ -63,6 +64,9 @@ export default function CurriculumDetail() {
         {/* Course Section Carousel */}
         <div className='relative z-10 mt-8 sm:mt-12'>
           <CurriculumCourseSection courses={curriculumData?.data.courses || []} />
+        </div>
+        <div className='relative z-10 mt-8 sm:mt-12'>
+          <CurriculumEmulatorSection emulations={curriculumData?.data.emulations || []} />
         </div>
         {/* Kit Information Section */}
         <div className='relative z-10 mt-20 sm:mt-20'>

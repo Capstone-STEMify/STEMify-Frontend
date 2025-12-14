@@ -63,6 +63,7 @@
       "selectedCourses": "Selected courses",
       "searchCoursePlaceholder": "Search courses by code or title...",
       "emulatorListTitle": "Emulator List",
+      "emulatorListDescription": "Emulators provide a virtual environment that mimics the behavior of physical devices, allowing users to test and run software applications without the need for actual hardware. They are commonly used in software development, testing, and debugging processes, enabling developers to simulate different device configurations and operating systems.",
       "selectEmulationTitle": "Select Emulators",
       "selectedEmulators": "Selected emulators",
       "searchEmulatorPlaceholder": "Search emulators here...",

@@ -63,6 +63,7 @@
       "selectedCourses": "Khóa học đã chọn",
       "searchCoursePlaceholder": "Tìm kiếm khóa học theo mã hoặc tiêu đề...",
       "emulatorListTitle": "Danh Sách Mô Hình",
+      "emulatorListDescription": "Mô hình cung cấp một môi trường ảo mô phỏng hành vi của các thiết bị vật lý, cho phép người dùng thử nghiệm và chạy các ứng dụng phần mềm mà không cần phần cứng thực tế. Chúng thường được sử dụng trong quá trình phát triển phần mềm, kiểm thử và gỡ lỗi, cho phép các nhà phát triển mô phỏng các cấu hình thiết bị và hệ điều hành khác nhau.",
       "selectEmulationTitle": "Chọn Mô Hình",
       "selectedEmulators": "Mô hình đã chọn",
       "searchEmulatorPlaceholder": "Tìm kiếm mô hình ở đây...",
