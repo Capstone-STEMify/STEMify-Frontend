@@ -13,6 +13,7 @@
       "loading": "Loading curriculums...",
       "error": "An error occurred while fetching curriculums. Please try again.",
       "courseListTitle": "Courses List",
+      "emulatorListTitle": "Emulator List",
       "viewDetails": "View Details",
       "reviews": "reviews"
     },
@@ -20,9 +21,9 @@
       "title": "Curriculum Details",
       "addCourse": "Add Course",
       "price": "Price",
-      "alrealyEnrolled": "Already Enrolled"
+      "alrealyEnrolled": "Already Enrolled",
+      "addEmulator": "Add Emulator"
     },
-
     "form": {
       "title": {
         "create": "Create Curriculum",
@@ -61,6 +62,10 @@
       "selectCourseTitle": "Select Courses",
       "selectedCourses": "Selected courses",
       "searchCoursePlaceholder": "Search courses by code or title...",
+      "emulatorListTitle": "Emulator List",
+      "selectEmulationTitle": "Select Emulators",
+      "selectedEmulators": "Selected emulators",
+      "searchEmulatorPlaceholder": "Search emulators here...",
       "selectKitTitle": "Select Kits",
       "selectedKits": "Selected kits",
       "searchKitPlaceholder": "Search kits here...",

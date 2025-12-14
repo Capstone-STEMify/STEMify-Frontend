@@ -18,7 +18,7 @@ import LessonDetailModal from '@/features/resource/lesson/components/detail/Less
 import UpsertUserModal from '@/components/shared/modals/UpsertUserModal'
 import UpsertLearningOutcomeModal from '@/features/resource/learning-outcome/components/upsert/UpsertLearningOutcomeModal'
 import UpsertCurriculumModal from '@/features/resource/curriculum/components/upsert/UpsertCurriculumModal'
-import CurriculumSelectCourseListModal from '@/features/resource/curriculum/components/list/CurriculumSelectCourseListModal'
+import CurriculumSelectCourseListModal from '@/features/resource/curriculum/components/modal/CurriculumSelectCourseListModal'
 import UpsertCourseModal from '@/features/resource/course/components/modal/UpsertCourseModal'
 import ContentDetailModal from '@/features/resource/content/components/detail/ContentDetailModal'
 import UpsertContentModal from '@/features/resource/content/components/upsert/UpsertContentModal'
@@ -48,6 +48,7 @@ import UpdateGroupModal from '@/features/group/components/modal/UpdateGroupModal
 import CreateQuizModal from '@/features/resource/quiz/components/modal/CreateQuizModal'
 import { UpsertStudentGroup } from '@/features/group/components/upsert/UpsertStudentGroup'
 import AddStudentToGroupModal from '@/features/group/components/upsert/AddStudentToGroupModal'
+import CurriculumSelectEmulatorListModal from '@/features/resource/curriculum/components/modal/CurriculumSelectEmulatorListModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -118,6 +119,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {/* other */}
       {modalType === 'pacingGuide' && <PacingGuideModal {...modalProps} />}
       {modalType === 'curriculumSelectCourseListModal' && <CurriculumSelectCourseListModal {...modalProps} />}
+      {modalType === 'curriculumSelectEmulatorListModal' && <CurriculumSelectEmulatorListModal {...modalProps} />}
       {modalType === 'kitListTableModal' && <KitListTableModal {...modalProps} />}
       {modalType === 'selectComponentListModal' && <SelectComponentListModal {...modalProps} />}
       {modalType === 'quizAI' && <QuizAIModal {...modalProps} />}

@@ -10,6 +10,7 @@ import { useGetCurriculumByIdQuery } from '@/features/resource/curriculum/api/cu
 import SEmpty from '@/components/shared/empty/SEmpty'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import KitListSection from '@/features/resource/kit/components/list/KitListSection'
+import AdminCurriculumEmulatorList from '@/features/resource/curriculum/components/list/AdminCurriculumEmulatorList'
 
 export default function AdminCurriculumDetail() {
   const { curriculumId } = useParams()
@@ -45,6 +46,8 @@ export default function AdminCurriculumDetail() {
             <KitListSection context='curriculum' kitIds={data?.data?.kitIds || []} />
             <hr className='my-10' />
             <AdminCurriculumCourseList curriculumId={Number(curriculumId)} courses={data?.data?.courses} />
+            <hr className='my-10' />
+            <AdminCurriculumEmulatorList curriculumId={Number(curriculumId)} emulations={data.data.emulations} />
           </>
         )}
       </div>

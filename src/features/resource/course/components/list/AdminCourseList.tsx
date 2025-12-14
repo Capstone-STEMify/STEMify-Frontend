@@ -54,10 +54,6 @@ export default function AdminCourseList() {
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
 
-  const handleCreate = () => {
-    router.push(`/${locale}/admin/course/create`)
-  }
-
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))
   }
@@ -67,7 +63,7 @@ export default function AdminCourseList() {
     <div>
       <STabs
         className='mt-4'
-        defaultValue={'table'}
+        defaultValue={'card'}
         additionalContent={{
           leftSide: (
             <div className='flex items-center justify-between gap-3'>
@@ -87,25 +83,11 @@ export default function AdminCourseList() {
         }}
         items={[
           {
-            value: 'table',
-            label: <TableIcon className='h-4 w-4' />,
-            content: (
-              <DataTable
-                data={rows}
-                columns={columns}
-                enableRowSelection
-                pagingData={data}
-                pagingParams={queryParams}
-                handlePageChange={handlePageChange}
-              />
-            )
-          },
-          {
             value: 'card',
             label: <LayoutGrid className='h-4 w-4' />,
             content: (
               <div className='px-2'>
-                <div className='grid h-fit grid-cols-1 justify-items-center gap-10 py-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+                <div className='grid h-fit grid-cols-1 justify-items-center gap-5 py-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
                   {rows.map((course: any) => (
                     <Link key={course.id} href={`/${locale}/admin/course/${course.id}`}>
                       <CardLayout
@@ -144,6 +126,20 @@ export default function AdminCourseList() {
                   />
                 )}
               </div>
+            )
+          },
+          {
+            value: 'table',
+            label: <TableIcon className='h-4 w-4' />,
+            content: (
+              <DataTable
+                data={rows}
+                columns={columns}
+                enableRowSelection
+                pagingData={data}
+                pagingParams={queryParams}
+                handlePageChange={handlePageChange}
+              />
             )
           }
         ]}

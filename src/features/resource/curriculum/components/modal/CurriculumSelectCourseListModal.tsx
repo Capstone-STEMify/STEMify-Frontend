@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { useModal } from '@/providers/ModalProvider'
 import React from 'react'
-import AdminCurriculumSelectCourseList from '@/features/resource/curriculum/components/list/AdminCurriculumSelectCourseList'
+import AdminCurriculumSelectCourseList from '@/features/resource/curriculum/components/modal/AdminCurriculumSelectCourseList'
 import { useTranslations } from 'next-intl'
 
 interface CourseListModalProps {

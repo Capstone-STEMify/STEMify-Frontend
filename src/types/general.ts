@@ -56,6 +56,7 @@ export type ModalType =
   // orther
   | 'pacingGuide'
   | 'curriculumSelectCourseListModal'
+  | 'curriculumSelectEmulatorListModal'
   | 'kitListTableModal'
   | 'selectComponentListModal'
   | 'upsertAssembly'

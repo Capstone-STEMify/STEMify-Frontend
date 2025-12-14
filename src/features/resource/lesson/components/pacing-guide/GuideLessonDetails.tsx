@@ -10,7 +10,7 @@ import { Clock, SquarePen, Trash2 } from 'lucide-react'
 import { useModal } from '@/providers/ModalProvider'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { capitalizeFirst } from '@/utils/index'
+import { capitalizeFirst, useStatusTranslation } from '@/utils/index'
 import { SCard } from '@/components/shared/card/SCard'
 import Image from 'next/image'
 
@@ -25,6 +25,7 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
   const tt = useTranslations('toast')
   const role = useAppSelector((state) => state.auth.user?.userRole)
   const user = useAppSelector((state) => state.auth.user)
+  const statusTranslation = useStatusTranslation()
 
   const [updateLesson] = useUpdateLessonMutation()
   const [deleteLesson] = useDeleteLessonMutation()
@@ -70,10 +71,9 @@ export default function GuideLessonDetails({ lesson }: GuideLessonDetailsProps) 
           </div>
 
           <div className='mb-4 flex flex-wrap gap-2'>
-            <p className='text-sm text-gray-700 italic'>
-              By <span className='font-semibold'>{lesson.createdByUserName || 'STEMify'}</span>
-            </p>
-            <Badge className={getStatusBadgeClass(lesson.status)}>{capitalizeFirst(lesson.status)}</Badge>
+            <Badge className={getStatusBadgeClass(lesson.status)}>
+              {capitalizeFirst(statusTranslation(lesson.status))}
+            </Badge>
             <Badge className='border-amber-300 bg-amber-100 text-amber-800'>
               {tc('unit.age')} {lesson.ageRangeLabel}
             </Badge>

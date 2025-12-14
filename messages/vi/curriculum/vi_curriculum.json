@@ -13,6 +13,7 @@
       "loading": "Đang tải khung chương trình...",
       "error": "Đã xảy ra lỗi trong quá trình lấy khung chương trình. Vui lòng thử lại.",
       "courseListTitle": "Danh Sách Các Khóa Học",
+      "emulatorListTitle": "Danh Sách Mô Hình",
       "viewDetails": "Xem Chi Tiết",
       "reviews": "đánh giá"
     },
@@ -20,9 +21,9 @@
       "title": "Chi Tiết Khung Chương Trình",
       "addCourse": "Thêm Khóa Học",
       "price": "Giá",
-      "alreadyEnrolled": "Đã Đăng Ký"
+      "alreadyEnrolled": "Đã Đăng Ký",
+      "addEmulator": "Thêm Mô Hình"
     },
-
     "form": {
       "title": {
         "create": "Tạo Khung Chương Trình",
@@ -61,6 +62,10 @@
       "selectCourseTitle": "Chọn Khóa Học",
       "selectedCourses": "Khóa học đã chọn",
       "searchCoursePlaceholder": "Tìm kiếm khóa học theo mã hoặc tiêu đề...",
+      "emulatorListTitle": "Danh Sách Mô Hình",
+      "selectEmulationTitle": "Chọn Mô Hình",
+      "selectedEmulators": "Mô hình đã chọn",
+      "searchEmulatorPlaceholder": "Tìm kiếm mô hình ở đây...",
       "selectKitTitle": "Chọn Bộ Dụng Cụ Học Tập",
       "selectedKits": "Kit đã chọn",
       "searchKitPlaceholder": "Tìm kiếm bộ dụng cụ ở đây...",

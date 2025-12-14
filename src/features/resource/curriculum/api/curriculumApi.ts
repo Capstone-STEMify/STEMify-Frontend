@@ -49,6 +49,30 @@ export const curriculumApi = createCrudApi<Curriculum, CurriculumSliceParams>({
         'Curriculum',
         'Course'
       ]
+    }),
+    addEmulationToCurriculum: builder.mutation<Curriculum, { curriculumId: number; emulationIds: string[] }>({
+      query: ({ curriculumId, emulationIds }) => ({
+        url: `/curriculums/${curriculumId}/emulations`,
+        method: 'POST',
+        body: {
+          emulationIds
+        }
+      }),
+      invalidatesTags: (result, error, { curriculumId }) => [
+        { type: 'Curriculum', id: curriculumId },
+        'Curriculum',
+        'Course'
+      ]
+    }),
+    deleteEmulationFromCurriculum: builder.mutation<Curriculum, { curriculumId: number; emulationIds: string[] }>({
+      query: ({ curriculumId, emulationIds }) => ({
+        url: `/curriculums/${curriculumId}/emulations`,
+        method: 'DELETE',
+        body: {
+          emulationIds
+        }
+      }),
+      invalidatesTags: (result, error, { curriculumId }) => [{ type: 'Curriculum', id: curriculumId }, 'Curriculum']
     })
   })
 })
@@ -69,5 +93,9 @@ export const {
   // curriculum courses
   useAddCourseToCurriculumMutation,
   useDeleteCourseFromCurriculumMutation,
-  useUpdateCourseOrderMutation
+  useUpdateCourseOrderMutation,
+
+  // curriculum emulations
+  useAddEmulationToCurriculumMutation,
+  useDeleteEmulationFromCurriculumMutation
 } = curriculumApi

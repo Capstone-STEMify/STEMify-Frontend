@@ -1,6 +1,7 @@
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 import { Course } from '../../course/types/course.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
+import { EmulatorWithThumbnail } from '@/features/emulator/types/emulator.type'
 
 export type Curriculum = {
   id: number
@@ -20,6 +21,7 @@ export type Curriculum = {
   kitIds?: number[]
   price: number
   learningOutcomes: string[]
+  emulations: EmulatorWithThumbnail[]
 }
 
 export type CurriculumSliceParams = {
