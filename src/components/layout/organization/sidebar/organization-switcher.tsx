@@ -31,7 +31,7 @@ export function OrganizationSwitcher() {
 
   const licenseAssignments = licenseAssignmentData?.data?.items ?? []
 
-  // ✅ Nếu chưa chọn org nào => mặc định chọn org đầu tiên
+  // Nếu chưa chọn org nào => mặc định chọn org đầu tiên
   React.useEffect(() => {
     if (licenseAssignments.length && !selectedOrganizationId) {
       const first = licenseAssignments[0]
@@ -42,7 +42,7 @@ export function OrganizationSwitcher() {
 
   if (isLoading || !licenseAssignments.length) return null
 
-  // ✅ Organization đang được chọn
+  // Organization đang được chọn
   const selectedOrg =
     licenseAssignments.find((org) => org.organizationId === selectedOrganizationId) ?? licenseAssignments[0]
 
@@ -80,7 +80,7 @@ export function OrganizationSwitcher() {
             side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
-            <DropdownMenuLabel className='text-muted-foreground text-xs'>Organizations</DropdownMenuLabel>
+            <DropdownMenuLabel className='text-muted-foreground text-xs'>Tổ chức</DropdownMenuLabel>
 
             {licenseAssignments.map((org) => (
               <DropdownMenuItem

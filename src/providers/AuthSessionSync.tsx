@@ -70,6 +70,7 @@ export default function AuthSessionSync() {
         dispatch(setSelectedSubscriptionOrderId(activeSub.subscriptionId))
         dispatch(setSelectedOrgUserId(firstOrg.organizationUserId[0]))
         dispatch(setCurrentRole(activeSub.type)) // Đây là LicenseType
+        console.log('currentRole set to:', activeSub.type)
       }
     }
   }, [reduxUser, reduxSelectedOrganizationId, reduxSelectedSubscriptionOrderId, reduxCurrentRole, dispatch])

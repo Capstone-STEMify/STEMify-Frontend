@@ -6,7 +6,7 @@ import { useAppForm } from '@/components/shared/form/items'
 import { useModal } from '@/providers/ModalProvider'
 import { useCreateClassroomMutation } from '@/features/classroom/api/classroomApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { setPageIndex } from '@/features/user/slice/userSlice'
 import { Label } from '@/components/shadcn/label'
@@ -62,6 +62,8 @@ export default function CreateClassroom() {
   const { closeModal } = useModal()
   const router = useRouter()
   const locale = useLocale()
+  const searchParams = useSearchParams()
+  const courseId = searchParams.get('courseId')
 
   const [selectedGroups, setSelectedGroups] = useState<
     {
@@ -111,7 +113,7 @@ export default function CreateClassroom() {
     onSubmit: async ({ value }) => {
       const payload = {
         ...value,
-        courseId: Number(value.courseId),
+        courseId: Number(courseId),
         organizationSubscriptionOrderId: selectedSubscriptionId!,
         studentGroups: selectedGroups
       }
