@@ -1,6 +1,6 @@
-import Accomplishment from '@/features/certificate/components/list/Accomplishment'
+import CertificateList from '@/features/certificate/components/list/CertificateList'
 import React from 'react'
 
 export default function AccomplishmentPage() {
-  return <Accomplishment />
+  return <CertificateList />
 }
