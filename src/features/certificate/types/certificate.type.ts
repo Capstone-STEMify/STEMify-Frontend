@@ -1,24 +1,29 @@
 import { CourseEnrollment } from '@/features/enrollment/types/enrollment.type'
+import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Certificate = {
-  CertificateType: CertificateType
-  curriculumId?: number
-  courseId?: number
   id: number
   userId: string
   userName: string
   courseEnrollmentId?: number
   curriculumEnrollmentId?: number
-  issuedDate: string
-  certificateUrl: string
+  certificateType: CertificateType
+  issueDate: string
   verificationCode: string
-  courseTitle?: string
-  curriculumTitle?: string
-  courseEnrollments?: CourseEnrollment[]
-
+  certificateUrl: string
+  title: string
+  completedAt?: string
+  courseEnrollments?: CourseEnrollment[] 
+  userImageUrl?: string
 }
 
 export enum CertificateType {
-  COURSE = 'COURSE',
-  CURRICULUM = 'CURRICULUM'
+  COURSE = 'Course',
+  CURRICULUM = 'Curriculum'
 }
+
+export type CertificateQueryParams = {
+  userId?: string
+  courseEnrollmentId?: number
+  verificationCode?: string
+} & SearchPaginatedRequestParams

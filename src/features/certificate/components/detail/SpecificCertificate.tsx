@@ -1,4 +1,3 @@
-// app/certificate/page.tsx
 'use client'
 import CertificateDetails from './CertificateDetails'
 import CertificateHeader from './CertificateHeader'
@@ -10,7 +9,7 @@ import { useSearchCurriculumEnrollmentQuery } from '@/features/enrollment/api/cu
 import { useAppSelector } from '@/hooks/redux-hooks'
 import SEmpty from '@/components/shared/empty/SEmpty'
 
-const SpecificCertificatePage = () => {
+const SpecificCertificate = () => {
   const { verificationCode } = useParams()
   const code = Array.isArray(verificationCode) ? verificationCode[0] : verificationCode
   const curriculumEnrollParams = useAppSelector((state) => state.enrollment.curriculumEnrollmentId)
@@ -67,4 +66,4 @@ const SpecificCertificatePage = () => {
   )
 }
 
-export default SpecificCertificatePage
+export default SpecificCertificate
