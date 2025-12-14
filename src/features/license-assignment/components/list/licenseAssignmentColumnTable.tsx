@@ -22,7 +22,7 @@ export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignmen
       header: tc('tableHeader.image'),
       cell: ({ row }) => {
         const src = row.original.user.imageUrl
-        const alt = row.original.user.firstName.charAt(0) + row.original.user.lastName.charAt(0)
+        const alt = row.original.user.name.charAt(0)
         return (
           <div className='h-14 w-14 overflow-hidden rounded-full border'>
             {src ? (
