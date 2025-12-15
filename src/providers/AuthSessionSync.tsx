@@ -57,8 +57,8 @@ export default function AuthSessionSync() {
       reduxUser.userRole === UserRole.MEMBER &&
       reduxUser.organizations &&
       reduxUser.organizations?.organizations?.length > 0 &&
-      reduxUser.organizations.organizations[0].roles?.length > 0
-      // (!reduxSelectedOrganizationId || !reduxSelectedSubscriptionOrderId || !reduxCurrentRole)
+      reduxUser.organizations.organizations[0].roles?.length > 0 &&
+      (!reduxSelectedOrganizationId || !reduxCurrentRole)
     ) {
       const firstOrg = reduxUser.organizations.organizations[0]
       console.log('First organization:', firstOrg)

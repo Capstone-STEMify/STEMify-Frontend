@@ -1,3 +1,4 @@
+import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
 import { CourseLevel } from '@/features/resource/course/types/course.type'
 import { OrganizationSubscription } from '@/features/subscription/types/subscription.type'
 import { SliceQueryParams } from '@/libs/redux/createQuerySlice'
@@ -80,4 +81,19 @@ export type OrganizationCurriculumCourse = {
   ageRangeLabel: string
   courseOrderIndex: number
   lessons: any[]
+}
+
+export type OrganizationWithAccess = {
+  id: number
+  name: string
+  code: string
+  imageUrl?: string
+  subscriptions: {
+    id: number
+    status: string
+    licenseType: LicenseAssignmentType
+    curriculumIds: number[]
+    courseIds: number[]
+    emulatorModelIds: number[]
+  }[]
 }

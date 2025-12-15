@@ -3,7 +3,8 @@ import {
   OrganizationCurriculum,
   OrganizationQueryParams,
   OrganizationSliceParams,
-  OrganizationType
+  OrganizationType,
+  OrganizationWithAccess
 } from '@/features/organization/types/organization.type'
 import { Curriculum } from '@/features/resource/curriculum/types/curriculum.type'
 import { createCrudApi } from '@/libs/redux/baseApi'
@@ -31,6 +32,15 @@ export const organizationApi = createCrudApi<Organization, OrganizationSlicePara
         params: status ? { status } : undefined
       }),
       providesTags: ['Organization']
+    }),
+    getOrganizationsWithAccessByUserId: build.query<
+      ApiSuccessResponse<{ organizations: OrganizationWithAccess[] }>,
+      { userId: string }
+    >({
+      query: ({ userId }) => ({
+        url: `/users/${userId}/organizations/access`
+      }),
+      providesTags: ['Organization']
     })
   })
 })
@@ -48,5 +58,8 @@ export const {
   useGetAllOrganizationTypesQuery,
 
   // Org Curriculums
-  useGetCurriculumsByOrganizationIdQuery
+  useGetCurriculumsByOrganizationIdQuery,
+
+  // Orgs with access
+  useGetOrganizationsWithAccessByUserIdQuery
 } = organizationApi

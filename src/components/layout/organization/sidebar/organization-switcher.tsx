@@ -11,12 +11,8 @@ import {
 } from '@/components/shadcn/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/shadcn/sidebar'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import {
-  setSelectedOrganizationId,
-  setSelectedSubscriptionOrderId
-} from '@/features/subscription/slice/selectedOrganizationSlice'
-import { useSearchLicenseAssignmentQuery } from '@/features/license-assignment/api/licenseAssignmentApi'
-import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
+import { setSelectedOrganizationId } from '@/features/subscription/slice/selectedOrganizationSlice'
+import { useGetOrganizationsWithAccessByUserIdQuery } from '@/features/organization/api/organizationApi'
 
 export function OrganizationSwitcher() {
   const { isMobile } = useSidebar()
@@ -24,27 +20,26 @@ export function OrganizationSwitcher() {
   const user = useAppSelector((state) => state.auth.user)
   const selectedOrganizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
-  const { data: licenseAssignmentData, isLoading } = useSearchLicenseAssignmentQuery(
-    { userId: user?.userId, status: LicenseAssignmentStatus.ACTIVE, pageSize: 10, pageNumber: 1 },
-    { skip: !user?.userId }
+  const userId = user?.userId
+  const { data: organizationData, isLoading } = useGetOrganizationsWithAccessByUserIdQuery(
+    { userId: userId! },
+    { skip: !userId }
   )
 
-  const licenseAssignments = licenseAssignmentData?.data?.items ?? []
+  const organizations = organizationData?.data?.organizations ?? []
 
   // Nếu chưa chọn org nào => mặc định chọn org đầu tiên
   React.useEffect(() => {
-    if (licenseAssignments.length && !selectedOrganizationId) {
-      const first = licenseAssignments[0]
-      dispatch(setSelectedOrganizationId(first.organizationId))
+    if (organizations.length && !selectedOrganizationId) {
+      const first = organizations[0]
+      dispatch(setSelectedOrganizationId(first.id))
     }
-  }, [licenseAssignments, selectedOrganizationId, dispatch])
+  }, [organizations, selectedOrganizationId, dispatch])
 
-  if (isLoading || !licenseAssignments.length) return null
+  if (isLoading || !organizations.length) return null
 
   // Organization đang được chọn
-  const selectedOrg =
-    licenseAssignments.find((org) => org.organizationId === selectedOrganizationId) ?? licenseAssignments[0]
-
+  const selectedOrg = organizations.find((org) => org.id === selectedOrganizationId) ?? organizations[0]
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -55,19 +50,15 @@ export function OrganizationSwitcher() {
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
               <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-100 to-blue-200 text-blue-600'>
-                {selectedOrg.organizationImageUrl ? (
-                  <img
-                    src={selectedOrg.organizationImageUrl}
-                    alt={selectedOrg.organizationName}
-                    className='h-full w-full object-cover'
-                  />
+                {selectedOrg.imageUrl ? (
+                  <img src={selectedOrg.imageUrl} alt={selectedOrg.name} className='h-full w-full object-cover' />
                 ) : (
                   <GraduationCap className='size-4' />
                 )}
               </div>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium'>{selectedOrg.organizationName}</span>
-                <span className='text-muted-foreground text-xs'>{selectedOrg.planName}</span>
+                <span className='truncate font-medium'>{selectedOrg.name}</span>
+                <span className='text-muted-foreground text-xs'>Đang hoạt động</span>
               </div>
               <ChevronsUpDown className='ml-auto' />
             </SidebarMenuButton>
@@ -81,26 +72,25 @@ export function OrganizationSwitcher() {
           >
             <DropdownMenuLabel className='text-muted-foreground text-xs'>Tổ chức</DropdownMenuLabel>
 
-            {licenseAssignments.map((org) => (
+            {organizations.map((org) => (
               <DropdownMenuItem
                 key={org.id}
-                onClick={() => dispatch(setSelectedOrganizationId(org.organizationId))}
-                className={`gap-2 p-2 ${org.organizationId === selectedOrganizationId ? 'bg-sidebar-accent/50' : ''}`}
+                onClick={() => {
+                  console.log('Switching organization to:', org.id)
+                  dispatch(setSelectedOrganizationId(org.id))
+                }}
+                className={`gap-2 p-2 ${org.id === selectedOrganizationId ? 'bg-slate-100' : ''}`}
               >
                 <div className='flex size-6 items-center justify-center rounded-md border'>
-                  {org.organizationImageUrl ? (
-                    <img
-                      src={org.organizationImageUrl}
-                      alt={org.organizationName}
-                      className='h-full w-full object-cover'
-                    />
+                  {org.imageUrl ? (
+                    <img src={org.imageUrl} alt={org.name} className='h-full w-full object-cover' />
                   ) : (
                     <GraduationCap className='size-3.5 shrink-0 text-blue-600' />
                   )}
                 </div>
                 <div className='flex flex-col'>
-                  <span className='font-medium'>{org.organizationName}</span>
-                  <p className='text-muted-foreground text-xs'>{org.planName}</p>
+                  <span className='font-medium'>{org.name}</span>
+                  <p className='text-muted-foreground text-xs'>{org.subscriptions.length} gói đang hoạt động</p>
                 </div>
               </DropdownMenuItem>
             ))}
