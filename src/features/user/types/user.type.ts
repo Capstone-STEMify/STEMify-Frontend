@@ -10,6 +10,7 @@ export type User = {
   userRole: UserRole //'Admin' | 'Staff' | 'Member' | 'Guest'
   firstName: string
   lastName: string
+  fullName: string
   imageUrl?: string
   status: UserStatus
   isActive: boolean
@@ -96,5 +97,6 @@ export type OrganizationUserQueryParams = {
   pageNumber?: number
   pageSize?: number
   role?: LicenseType
-  email?: string
+  search?: string
+  status?: UserStatus
 }

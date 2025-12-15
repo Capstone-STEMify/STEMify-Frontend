@@ -11,7 +11,7 @@ import { setPageIndex, setParam } from '../../slice/userSlice'
 import useDebounce from '@/hooks/useDebounce'
 import { useSession } from 'next-auth/react'
 import SSelect from '@/components/shared/SSelect'
-import { UserRole } from '@/types/userRole'
+import { LicenseType, UserRole } from '@/types/userRole'
 import { useStatusTranslation } from '@/utils/index'
 import { useGetOrganizationUserAction } from '@/features/user/components/table/UserOrganizationAction'
 import { useParams } from 'next/navigation'
@@ -25,19 +25,21 @@ export default function UserOrganizationTable() {
   const columns = useGetOrganizationUserAction()
   const dispatch = useAppDispatch()
 
+  const [roleFilter, setRoleFilter] = useState<LicenseType | 'all'>('all')
+  const [statusFilter, setStatusFilter] = useState<UserStatus | 'all'>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
   const userParams = useAppSelector((state) => state.user)
 
-  const searchParams: UserSliceParams = {
-    ...userParams,
-    search: debouncedSearchQuery,
-    pageNumber: userParams.pageNumber ?? 0
-  }
-
   const { data } = useGetOrganizationUserQuery(
-    { organizationId: Number(organizationId), pageSize: 20 },
+    {
+      organizationId: Number(organizationId),
+      pageSize: 20,
+      search: debouncedSearchQuery?.trim() ? debouncedSearchQuery : undefined,
+      role: roleFilter === 'all' ? undefined : roleFilter,
+      status: statusFilter === 'all' ? undefined : statusFilter
+    },
     { skip: !organizationId }
   )
 
@@ -50,17 +52,29 @@ export default function UserOrganizationTable() {
     [data]
   )
 
-  const userRoleOptions = Object.entries(UserRole)
-    .filter(([key, _]) => key !== 'GUEST')
-    .map(([key, value]) => ({
-      label: tCommon(`accountType.${value.toLowerCase()}`),
+  const userRoleOptions = [
+    {
+      label: tCommon('accountType.all'),
+      value: 'all'
+    },
+    ...Object.entries(LicenseType)
+      .filter(([key]) => key !== 'GUEST')
+      .map(([_, value]) => ({
+        label: tCommon(`accountType.${value.toLowerCase()}`),
+        value
+      }))
+  ]
+
+  const statusOptions = [
+    {
+      label: tCommon('status.all'),
+      value: 'all'
+    },
+    ...Object.entries(UserStatus).map(([key, value]) => ({
+      label: statusTranslate(value),
       value: value
     }))
-
-  const statusOptions = Object.entries(UserStatus).map(([key, value]) => ({
-    label: statusTranslate(value),
-    value: value
-  }))
+  ]
 
   const handlePageChange = (page: number) => {
     dispatch(setPageIndex(page))
@@ -80,15 +94,15 @@ export default function UserOrganizationTable() {
           <SSelect
             className='w-[150px]'
             placeholder={tCommon('accountType.accountTypeLabel')}
-            value={userParams.role?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'role', value: val as UserRole }))}
+            value={roleFilter?.toString() ?? ''}
+            onChange={(val) => setRoleFilter(val as LicenseType)}
             options={userRoleOptions}
           />
           <SSelect
             className='w-[150px]'
             placeholder={tCommon('status.statusLabel')}
-            value={userParams.status?.toString() ?? ''}
-            onChange={(val) => dispatch(setParam({ key: 'status', value: val as UserStatus }))}
+            value={statusFilter}
+            onChange={(val) => setStatusFilter(val as UserStatus | 'all')}
             options={statusOptions.filter((option) => option.value !== UserStatus.DELETED)}
           />
         </div>

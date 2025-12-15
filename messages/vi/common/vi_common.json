@@ -303,8 +303,8 @@
       "active": "Đã xác thực",
       "inactive": "Chưa xác thực"
     },
-
     "accountType": {
+      "all": "Tất Cả",
       "accountTypeLabel": "Loại Tài Khoản",
       "admin": "Quản Trị Viên",
       "guest": "Khách",
