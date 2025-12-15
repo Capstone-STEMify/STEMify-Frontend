@@ -45,7 +45,7 @@ export default function OrganizationUserTable() {
     pageNumber: userParams.pageNumber ?? 1,
     pageSize: userParams.pageSize ?? 10,
     role: selectedRole,
-    email: debouncedSearchTerm || undefined
+    search: debouncedSearchTerm || undefined
   }
 
   const { data, isLoading } = useGetOrganizationUserQuery(searchParams, {

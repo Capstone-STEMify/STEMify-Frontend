@@ -10,7 +10,7 @@ import { User, UserStatus } from '@/features/user/types/user.type'
 import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { useOrgUserStatusTranslation, useStatusTranslation } from '@/utils/index'
+import { stringToHslColor, useOrgUserStatusTranslation, useStatusTranslation } from '@/utils/index'
 
 export function useGetOrganizationUserAction(): ColumnDef<User>[] {
   const { openModal } = useModal()
@@ -41,23 +41,15 @@ export function useGetOrganizationUserAction(): ColumnDef<User>[] {
       accessorKey: 'imageUrl',
       header: t('image'),
       cell: ({ row }) => {
-        const src = row.original.imageUrl
-        const alt = row.original.userName.charAt(0)
+        const alt = row.original.fullName
         return (
-          <div className='h-14 w-14 overflow-hidden rounded-full border'>
-            {src ? (
-              <Image
-                src={src}
-                alt='preview'
-                className='h-full w-full rounded-full object-cover'
-                width={56}
-                height={56}
-              />
-            ) : (
-              <div className='flex h-full w-full items-center justify-center bg-sky-100 text-xl font-semibold text-blue-400'>
-                {alt}
-              </div>
-            )}
+          <div
+            className='flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium text-white shadow-sm ring-1 ring-black/5 select-none'
+            style={{
+              backgroundColor: stringToHslColor(alt || '')
+            }}
+          >
+            {alt?.charAt(0).toUpperCase()}
           </div>
         )
       }

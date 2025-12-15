@@ -305,6 +305,7 @@
       "advanced": "Advanced"
     },
     "accountType": {
+      "all": "All",
       "accountTypeLabel": "Account Type",
       "admin": "Admin",
       "guest": "Guest",
