@@ -52,12 +52,12 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
     })
   }
 
-  const handleArchive = async (subscription: OrganizationSubscription) => {
+  const handleCancel = async (subscription: OrganizationSubscription) => {
     await updateSubscription({
       subscriptionId: subscription.id,
-      body: { status: SubscriptionStatus.ARCHIVED }
+      body: { status: SubscriptionStatus.CANCELLED }
     })
-    toast.success(tt('successMessage.update', { title: SubscriptionStatus.ARCHIVED }))
+    toast.success(tt('successMessage.updateNoTitle'))
   }
 
   const handleDelete = async (id: number) => {
@@ -74,8 +74,8 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
   ]
 
   const SubscriptionStatusFlow: Record<SubscriptionStatus, SubscriptionStatus[]> = {
-    [SubscriptionStatus.PENDING]: [SubscriptionStatus.PENDING, SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELLED],
-    [SubscriptionStatus.ACTIVE]: [SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELLED],
+    [SubscriptionStatus.PENDING]: [SubscriptionStatus.PENDING, SubscriptionStatus.ACTIVE],
+    [SubscriptionStatus.ACTIVE]: [SubscriptionStatus.ACTIVE],
     [SubscriptionStatus.ARCHIVED]: [
       SubscriptionStatus.ACTIVE,
       SubscriptionStatus.ARCHIVED,
@@ -169,22 +169,13 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
         }
       },
       {
-        label: tc('button.archive'),
-        archive: true,
-        onClick: async ({ original }) => {
-          openModal('confirm', {
-            message: tt('confirmMessage.archive', { title: original.planName }),
-            onConfirm: () => handleArchive(original)
-          })
-        }
-      },
-      {
-        label: tc('button.delete'),
+        label: tc('button.cancel'),
         danger: true,
+        hidden: ({ original }) => original.status !== SubscriptionStatus.ACTIVE,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: tt('confirmMessage.delete', { title: original.planName }),
-            onConfirm: () => handleDelete(original.id)
+            message: tt('confirmMessage.cancelledSubscriptions', { title: original.planName }),
+            onConfirm: () => handleCancel(original)
           })
         }
       }

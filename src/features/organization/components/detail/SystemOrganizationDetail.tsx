@@ -1,7 +1,5 @@
 'use client'
 import { Badge } from '@/components/shadcn/badge'
-import { SCard } from '@/components/shared/card/SCard'
-import { DataTable } from '@/components/shared/data-table/data-table'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import SLoading from '@/components/shared/SLoading'
 import { useDeleteOrganizationMutation, useGetOrganizationByIdQuery } from '@/features/organization/api/organizationApi'
@@ -65,16 +63,6 @@ export default function SystemOrganizationDetail() {
                 <SquarePen
                   onClick={() => {
                     openModal('upsertOrganization', { organizationId: organization.data.id })
-                  }}
-                />
-              </span>
-              <span className='cursor-pointer text-red-500'>
-                <Trash2
-                  onClick={() => {
-                    openModal('confirm', {
-                      message: `${tt('confirmMessage.delete', { title: organization.data.name })}`,
-                      onConfirm: () => handleDelete(organization.data.id)
-                    })
                   }}
                 />
               </span>

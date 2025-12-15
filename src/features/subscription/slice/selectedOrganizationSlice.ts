@@ -34,6 +34,7 @@ const selectedOrganizationSlice = createSlice({
     clearSelectedOrganization: (state) => {
       state.selectedOrganizationId = null
       state.selectedSubscriptionOrderId = null
+      state.selectedOrgUserId = null
       state.currentRole = UserRole.GUEST
     }
   }

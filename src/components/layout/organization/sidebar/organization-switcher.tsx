@@ -36,7 +36,6 @@ export function OrganizationSwitcher() {
     if (licenseAssignments.length && !selectedOrganizationId) {
       const first = licenseAssignments[0]
       dispatch(setSelectedOrganizationId(first.organizationId))
-      dispatch(setSelectedSubscriptionOrderId(first.organizationSubscriptionOrderId))
     }
   }, [licenseAssignments, selectedOrganizationId, dispatch])
 

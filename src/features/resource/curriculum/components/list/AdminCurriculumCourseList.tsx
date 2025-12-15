@@ -6,6 +6,7 @@ import { Course } from '@/features/resource/course/types/course.type'
 import { useUpdateCourseOrderMutation } from '@/features/resource/curriculum/api/curriculumApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
+import { UserRole } from '@/types/userRole'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import React, { useEffect } from 'react'
@@ -22,7 +23,9 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
   const tt = useTranslations('toast')
   const [localCourses, setLocalCourses] = React.useState<Course[]>(courses || [])
 
+  const { currentRole } = useAppSelector((state) => state.selectedOrganization)
   const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
+  console.log('selectedOrganizationId', selectedOrganizationId)
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
   const columns = useGetCourseColumn({ isPopup: false })
@@ -67,7 +70,7 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
           {t('list.courseListTitle')}{' '}
           <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{courses?.length}</span>
         </h2>
-        {!selectedOrganizationId && (
+        {currentRole == UserRole.STAFF || currentRole == UserRole.ADMIN ? (
           <div className='flex justify-end space-x-2'>
             {orderedCourseIds.length > 0 && (
               <Button className='bg-emerald-400' onClick={handleSaveOrder}>
@@ -89,7 +92,7 @@ export default function AdminCurriculumCourseList({ curriculumId, courses }: Adm
               {t('details.addCourse')}
             </Button>
           </div>
-        )}
+        ) : null}
       </div>
 
       <DataTable
