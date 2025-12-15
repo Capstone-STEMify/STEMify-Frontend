@@ -251,3 +251,17 @@ export function getColorByInitial(initial: string) {
   const index = (initial.charCodeAt(0) - 65) % colors.length
   return colors[index] || 'bg-gray-500'
 }
+
+export function stringToHslColor(input: string, saturation = 55, lightness = 60) {
+  const str = input.toLowerCase().trim().replace(/\s+/g, ' ')
+
+  if (!str) return `hsl(210, ${saturation}%, ${lightness}%)`
+
+  let hash = 5381
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) + hash + str.charCodeAt(i)
+  }
+
+  const hue = hash % 360
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
+}
