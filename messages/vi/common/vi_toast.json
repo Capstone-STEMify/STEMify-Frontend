@@ -57,7 +57,9 @@
       "removeItemFromCart": "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?",
       "clearCart": "Bạn có chắc chắn muốn xóa giỏ hàng không?",
       "restore": "Bạn có chắc chắn muốn khôi phục \"{title}\" không?",
-      "cancelledSubscriptions": "Bạn có chắc chắn muốn hủy đăng ký này không?"
+      "cancelledSubscriptions": "Bạn có chắc chắn muốn hủy đăng ký này không?",
+      "deactivate": "Bạn có chắc chắn muốn vô hiệu hóa \"{title}\" không?",
+      "activate": "Bạn có chắc chắn muốn kích hoạt \"{title}\" không?"
     },
     "unauthorized": "Truy cập không được phép."
   }

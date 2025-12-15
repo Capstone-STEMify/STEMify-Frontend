@@ -143,7 +143,9 @@
       "uploadFile": "Upload File",
       "exportGLB": "Export GLB",
       "restore": "Restore",
-      "removeStudents": "Remove {student} Students"
+      "removeStudents": "Remove {student} Students",
+      "deactivate": "Deactivate",
+      "activate": "Activate"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

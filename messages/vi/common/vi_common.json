@@ -143,7 +143,9 @@
       "uploadFile": "Tải Lên Tệp",
       "exportGLB": "Xuất GLB",
       "restore": "Khôi Phục",
-      "removeStudents": "Xóa {student} Học Sinh"
+      "removeStudents": "Xóa {student} Học Sinh",
+      "deactivate": "Vô Hiệu Hóa",
+      "activate": "Kích Hoạt"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

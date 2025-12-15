@@ -141,24 +141,34 @@ export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
         }
       },
       {
-        label: tc('button.archive'),
-        archive: true,
-        hidden: ({ original }) => original.status === OrganizationStatus.ARCHIVED,
+        label: tc('button.activate'),
+        hidden: ({ original }) => original.status !== OrganizationStatus.INACTIVE,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: tt('confirmMessage.archive', { title: original.name }),
-            onConfirm: () => handleArchive(original)
+            message: tt('confirmMessage.activate', { title: original.name }),
+            onConfirm: () => handleStatusChange(original, OrganizationStatus.ACTIVE)
           })
         }
       },
       {
-        label: tc('button.delete'),
+        label: tc('button.deactivate'),
         danger: true,
-        hidden: ({ original }) => original.status === OrganizationStatus.ARCHIVED,
+        hidden: ({ original }) => original.status !== OrganizationStatus.ACTIVE,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: tt('confirmMessage.delete', { title: original.name }),
-            onConfirm: () => handleDelete(original.id)
+            message: tt('confirmMessage.deactivate', { title: original.name }),
+            onConfirm: () => handleStatusChange(original, OrganizationStatus.INACTIVE)
+          })
+        }
+      },
+      {
+        label: tc('button.archive'),
+        archive: true,
+        hidden: ({ original }) => original.status !== OrganizationStatus.INACTIVE,
+        onClick: async ({ original }) => {
+          openModal('confirm', {
+            message: tt('confirmMessage.archive', { title: original.name }),
+            onConfirm: () => handleArchive(original)
           })
         }
       }

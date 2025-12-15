@@ -58,7 +58,9 @@
       "clearCart": "Are you sure you want to clear the cart?",
       "deleteUserEmail": "Are you sure you want to delete the user with email \"{title}\"?",
       "restore": "Are you sure you want to restore \"{title}\"?",
-      "cancelledSubscriptions": "Are you sure you want to cancel this subscription?"
+      "cancelledSubscriptions": "Are you sure you want to cancel this subscription?",
+      "deactivate": "Are you sure you want to deactivate \"{title}\"?",
+      "activate": "Are you sure you want to activate \"{title}\"?"
     },
     "unauthorized": "Unauthorized access."
   }
