@@ -45,13 +45,13 @@ export function UngroupedStudentList({ students, onCreateGroup, onSearchChange }
     <div className='mt-5'>
       {/* HEADER */}
       <div className='mb-4 flex items-center justify-between'>
-        <h2 className='text-lg font-semibold'>Students Without Group</h2>
+        <h2 className='text-lg font-semibold'>Học sinh chưa có nhóm</h2>
 
         <Button
           disabled={selected.length === 0}
           onClick={() => openModal('upsertStudentGroup', { studentIds: selected })}
         >
-          Create Group ({selected.length})
+          Tạo Nhóm ({selected.length})
         </Button>
       </div>
       <div className='mb-4 flex flex-wrap items-center gap-3'>

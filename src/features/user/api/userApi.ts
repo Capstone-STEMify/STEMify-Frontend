@@ -33,7 +33,7 @@ export const userApi = createCrudApi<User, UserSliceParams>({
         method: 'GET',
         params: { pageNumber, pageSize, role, email }
       }),
-      providesTags: ['User']
+      providesTags: ['OrganizationUser']
     })
   })
 })

@@ -48,6 +48,7 @@
       "removeEmulator": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi chương trình học này không?",
       "removeKit": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi khóa học này không?",
       "removeComponent": "Bạn có chắc chắn muốn xóa thành phần khỏi bộ dụng cụ này không?",
+      "removeStudentFromGroup": "Bạn có chắn chắn muốn xóa học sinh khỏi nhóm không?",
       "discard": "Bạn có chắc chắn muốn hủy bỏ các thay đổi của mình không?",
       "ask": "Bạn có chắc chắn muốn thực hiện ",
       "askStatus": "Bạn có chắc chắn muốn {action} \"{title}\" không?",

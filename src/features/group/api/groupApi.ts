@@ -29,7 +29,7 @@ export const groupApi = createCrudApi<Group, GroupQueryParams>({
         method: 'POST',
         body: { studentIds }
       }),
-      invalidatesTags: ['Group']
+      invalidatesTags: ['Group', 'OrganizationUser']
     }),
 
     removeStudentFromGroup: builder.mutation<
@@ -41,7 +41,7 @@ export const groupApi = createCrudApi<Group, GroupQueryParams>({
         method: 'DELETE',
         body: { studentIds }
       }),
-      invalidatesTags: ['Group']
+      invalidatesTags: ['Group', 'OrganizationUser']
     })
   })
 })

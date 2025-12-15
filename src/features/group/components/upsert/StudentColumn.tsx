@@ -1,29 +1,45 @@
+import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
 import { createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import { OrganizationUser } from '@/features/user/types/user.type'
 import { ColumnDef } from '@tanstack/react-table'
 import { useTranslations } from 'next-intl'
 
-type Student = {
-  id: string
-  name: string
-  email: string
-  avatar: string
-}
+export default function StudentColumn(): ColumnDef<OrganizationUser>[] {
+  const tc = useTranslations('common')
 
-export default function StudentColumn(): ColumnDef<Student>[] {
-  const to = useTranslations('common.tableHeader')
+  const getInitials = (fullName: string) => {
+    return fullName
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2)
+  }
   return [
-    createSelectColumn<Student>(),
+    createSelectColumn<OrganizationUser>(),
     {
-      accessorKey: 'id',
-      header: 'ID'
+      accessorKey: 'imageUrl',
+      header: tc('tableHeader.image'),
+      cell: ({ row }) => {
+        const student = row.original
+        return (
+          <div className='flex items-center gap-3'>
+            <Avatar className='h-10 w-10'>
+              <AvatarFallback className='bg-primary/10 text-primary font-semibold'>
+                {getInitials(student.fullName)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+        )
+      }
     },
     {
-      accessorKey: 'name',
-      header: to('name')
+      accessorKey: 'fullName',
+      header: tc('tableHeader.name')
     },
     {
       accessorKey: 'email',
-      header: to('email')
+      header: tc('tableHeader.email')
     }
   ]
 }

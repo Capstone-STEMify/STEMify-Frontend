@@ -4,22 +4,24 @@ import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { toast } from 'sonner'
 import { GroupDetailStudent } from '@/features/group/types/group.type'
-import { useDeleteGroupMutation } from '@/features/group/api/groupApi'
+import { useRemoveStudentFromGroupMutation } from '@/features/group/api/groupApi'
 import { Badge } from '@/components/shadcn/badge'
 import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
 import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
+import { useParams } from 'next/navigation'
 
 export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
   const { openModal } = useModal()
   const locale = useLocale()
-  const [deleteGroup] = useDeleteGroupMutation()
+  const [removeStudentFromGroup] = useRemoveStudentFromGroupMutation()
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const orgUserStatusTranslation = useOrgUserStatusTranslation()
+  const { groupId } = useParams()
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (studentId: string) => {
     try {
-      await deleteGroup(id).unwrap()
+      await removeStudentFromGroup({ groupId: Number(groupId), studentIds: [studentId] }).unwrap()
       toast.success(tt('successMessage.delete'))
     } catch (error) {
       toast.error(tt('errorMessage'))
@@ -71,11 +73,11 @@ export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
         </Badge>
       )
     },
-    {
-      accessorKey: 'subscriptionOrderId',
-      header: tc('tableHeader.subscription'),
-      cell: ({ row }) => <div className='font-mono text-sm'>#{row.original.subscriptionOrderId}</div>
-    },
+    // {
+    //   accessorKey: 'subscriptionOrderId',
+    //   header: tc('tableHeader.subscription'),
+    //   cell: ({ row }) => <div className='font-mono text-sm'>#{row.original.subscriptionOrderId}</div>
+    // },
     {
       accessorKey: 'joinedAt',
       header: tc('tableHeader.joinedAt'),
@@ -99,7 +101,7 @@ export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
         danger: true,
         onClick: async ({ original }) => {
           openModal('confirm', {
-            message: `${tt('confirmMessage.remove', { title: original.fullName })}`,
+            message: `${tt('confirmMessage.removeStudentFromGroup', { title: original.fullName })}`,
             onConfirm: () => handleDelete(original.organizationUserId)
           })
         }
