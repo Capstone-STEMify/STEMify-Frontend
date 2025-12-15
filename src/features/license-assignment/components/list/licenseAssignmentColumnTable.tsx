@@ -8,12 +8,13 @@ import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { CheckCircle } from 'lucide-react'
 import { LicenseAssignment } from '@/features/license-assignment/types/licenseAssignment'
-import { formatDate } from '@/utils/index'
+import { formatDate, stringToHslColor, useStatusTranslation } from '@/utils/index'
 import Image from 'next/image'
 
 export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignment>[] {
   const { openModal } = useModal()
   const tc = useTranslations('common')
+  const statusTranslations = useStatusTranslation()
 
   return [
     createSelectColumn<LicenseAssignment>(),
@@ -21,23 +22,15 @@ export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignmen
       accessorKey: 'user.imageUrl',
       header: tc('tableHeader.image'),
       cell: ({ row }) => {
-        const src = row.original.user.imageUrl
-        const alt = row.original.user.name.charAt(0)
+        const alt = row.original.user.name
         return (
-          <div className='h-14 w-14 overflow-hidden rounded-full border'>
-            {src ? (
-              <Image
-                src={src}
-                alt='preview'
-                className='h-full w-full rounded-full object-cover'
-                width={56}
-                height={56}
-              />
-            ) : (
-              <div className='flex h-full w-full items-center justify-center bg-sky-100 text-lg font-bold text-blue-500'>
-                {alt}
-              </div>
-            )}
+          <div
+            className='flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium text-white shadow-sm ring-1 ring-black/5 select-none'
+            style={{
+              backgroundColor: stringToHslColor(alt)
+            }}
+          >
+            {alt.charAt(0).toUpperCase()}
           </div>
         )
       }
@@ -56,7 +49,7 @@ export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignmen
       cell: ({ row }) => {
         const value = row.original.status.toString()
         const badgeValue = value.toLocaleUpperCase() as LicenseAssignment['status']
-        return <Badge className={`${getStatusBadgeClass(badgeValue)}`}>{value}</Badge>
+        return <Badge className={`${getStatusBadgeClass(badgeValue)}`}>{statusTranslations(value)}</Badge>
       }
     },
     {

@@ -9,10 +9,12 @@ import { Badge } from '@/components/shadcn/badge'
 import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
 import { useRouter } from 'next/navigation'
 import { Sparkles, Users } from 'lucide-react'
+import { useStatusTranslation } from '@/utils/index'
 
 export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationSubscription>[] {
   const t = useTranslations('subscription.list')
   const tc = useTranslations('common')
+  const statusTranslations = useStatusTranslation()
 
   const router = useRouter()
 
@@ -44,8 +46,8 @@ export function useGetOrganizationSubscriptionColumns(): ColumnDef<OrganizationS
       accessorKey: 'status',
       header: tc('tableHeader.status'),
       cell: ({ row }) => {
-        const value = row.getValue<SubscriptionStatus>('status')
-        return <Badge className={`${getStatusBadgeClass(value)}`}>{value}</Badge>
+        const value = row.original.status
+        return <Badge className={`${getStatusBadgeClass(value)}`}>{statusTranslations(value)}</Badge>
       }
     },
     {
