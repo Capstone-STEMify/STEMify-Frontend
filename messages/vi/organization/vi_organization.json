@@ -262,6 +262,27 @@
         "email": "Tìm kiếm theo email...",
         "license": "Chọn vai trò"
       }
+    },
+    "userDetail": {
+      "title": "Chi tiết người dùng",
+      "description": "Xem thông tin chi tiết về người dùng này.",
+      "contactInfo": "Thông tin liên hệ",
+      "email": "Địa chỉ Email",
+      "activity": "Hoạt động",
+      "joinedAt": "Ngày tham gia",
+      "lastLogin": "Đăng nhập lần cuối",
+      "never": "Chưa từng",
+      "professionalDetails": "Thông tin chuyên môn",
+      "groupName": "Tên nhóm",
+      "groupCode": "Mã nhóm",
+      "specialization": "Chuyên môn",
+      "major": "Chuyên ngành",
+      "bio": "Giới thiệu",
+      "noData": "Không tìm thấy dữ liệu người dùng.",
+      "status": {
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      }
     }
   }
 }

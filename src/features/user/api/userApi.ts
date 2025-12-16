@@ -2,6 +2,7 @@ import { createCrudApi } from '@/libs/redux/baseApi'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 import {
   OrganizationUser,
+  OrganizationUserProfile,
   OrganizationUserQueryParams,
   User,
   UserQueryParams,
@@ -34,6 +35,13 @@ export const userApi = createCrudApi<User, UserSliceParams>({
         params: { pageNumber, pageSize, role, search, status }
       })
       // providesTags: ['OrganizationUser']
+    }),
+
+    getOrganizationUserDetail: builder.query<ApiSuccessResponse<OrganizationUserProfile>, {organizationUserId: string}>({
+      query: ({organizationUserId}) => ({
+        url: `/organization-users/${organizationUserId}`,
+        method: 'GET'
+      })
     })
   })
 })
@@ -52,5 +60,6 @@ export const {
   useLazyGetByIdQuery: useLazyGetUserByIdQuery,
   useSearchUserV2Query,
 
-  useGetOrganizationUserQuery
+  useGetOrganizationUserQuery,
+  useGetOrganizationUserDetailQuery
 } = userApi

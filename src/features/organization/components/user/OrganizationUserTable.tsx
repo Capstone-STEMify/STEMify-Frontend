@@ -12,6 +12,7 @@ import { Input } from '@/components/shadcn/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { Search } from 'lucide-react'
 import { LicenseType } from '@/types/userRole'
+import { OrganizationUserDetailModal } from './OrganizationUserDetailModal'
 
 // Hook debounce
 function useDebounce<T>(value: T, delay: number): T {
@@ -38,6 +39,9 @@ export default function OrganizationUserTable() {
 
   const [selectedRole, setSelectedRole] = useState<LicenseType>(LicenseType.STUDENT)
 
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null)
+
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
   const searchParams: OrganizationUserQueryParams = {
@@ -52,7 +56,12 @@ export default function OrganizationUserTable() {
     skip: !organizationId
   })
 
-  const columns = useOrganizationUserColumns()
+  const handleViewDetail = (user: OrganizationUserTableItem) => {
+    setSelectedUserId(user.organizationUserId) 
+    setIsDetailModalOpen(true)
+  }
+
+  const columns = useOrganizationUserColumns({ onViewDetail: handleViewDetail })
 
   const visibleColumns = useMemo(() => {
     if (selectedRole !== LicenseType.STUDENT) {
@@ -119,6 +128,12 @@ export default function OrganizationUserTable() {
         pagingParams={searchParams}
         handlePageChange={handlePageChange}
         placeholder={isLoading ? 'Đang tải dữ liệu...' : 'Không có người dùng nào khớp với bộ lọc'}
+      />
+
+      <OrganizationUserDetailModal 
+        open={isDetailModalOpen}
+        onOpenChange={setIsDetailModalOpen}
+        organizationUserId={selectedUserId}
       />
     </div>
   )

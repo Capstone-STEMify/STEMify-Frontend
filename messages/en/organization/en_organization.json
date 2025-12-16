@@ -263,6 +263,27 @@
         "email": "Search by email...",
         "license": "Select License"
       }
+    },
+    "userDetail": {
+      "title": "User Details",
+      "description": "View detailed information about this user.",
+      "contactInfo": "Contact Information",
+      "email": "Email Address",
+      "activity": "Activity",
+      "joinedAt": "Joined At",
+      "lastLogin": "Last Login",
+      "never": "Never",
+      "professionalDetails": "Professional Details",
+      "groupName": "Group Name",
+      "groupCode": "Group Code",
+      "specialization": "Specialization",
+      "major": "Major",
+      "bio": "Bio",
+      "noData": "No user data found.",
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      }
     }
   }
 }
