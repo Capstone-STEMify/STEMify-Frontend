@@ -21,11 +21,11 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
   tagTypes: ['Classroom']
 }).injectEndpoints({
   endpoints: (builder) => ({
-    addClassroomStudents: builder.mutation<void, { classroomId: number; studentEmails: string[] }>({
-      query: ({ classroomId, studentEmails }) => ({
+    addClassroomStudents: builder.mutation<void, { classroomId: number; studentIds: string[] }>({
+      query: ({ classroomId, studentIds }) => ({
         url: `/classrooms/${classroomId}/classroom-students/bulk`,
         method: 'POST',
-        body: { studentEmails }
+        body: { studentIds }
       }),
       invalidatesTags: ['Classroom']
     }),
@@ -76,7 +76,7 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
       })
     }),
     getClassroomStudentDetail: builder.query<ApiSuccessResponse<StudentDetailResponse>, StudentClassroomParams>({
-      query: ({classroomId, studentId}) => ({
+      query: ({ classroomId, studentId }) => ({
         url: `/classrooms/${classroomId}/classroom-students/${studentId}`
       })
     }),

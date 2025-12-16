@@ -231,7 +231,8 @@
         "name": "Tên",
         "studentCount": "Số học sinh"
       },
-      "studentGroupInfo": "Thông tin nhóm học sinh"
+      "studentGroupInfo": "Thông tin nhóm học sinh",
+      "addStudentsToGroup": "Thêm học sinh vào nhóm"
     },
     "curriculum": {
       "curriculum": "Khung chương trình",

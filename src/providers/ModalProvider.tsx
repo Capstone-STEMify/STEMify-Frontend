@@ -49,6 +49,7 @@ import { UpsertStudentGroup } from '@/features/group/components/upsert/UpsertStu
 import AddStudentToGroupModal from '@/features/group/components/upsert/AddStudentToGroupModal'
 import CurriculumSelectEmulatorListModal from '@/features/resource/curriculum/components/modal/CurriculumSelectEmulatorListModal'
 import StudentGroupInfoModal from '@/features/group/components/modal/StudentGroupInfoModal'
+import AddStudentClassroomModal from '@/features/classroom/components/upsert/AddStudentClassroomModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -106,7 +107,8 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'updateGroup' && <UpdateGroupModal {...modalProps} />}
       {modalType === 'createQuiz' && <CreateQuizModal {...modalProps} />}
       {modalType === 'upsertStudentGroup' && <UpsertStudentGroup {...modalProps} />}
-      {modalType === 'addStudentToGroup' && <AddStudentToGroupModal {...modalProps} isUpdate />}
+      {modalType === 'addStudentToGroup' && <AddStudentToGroupModal {...modalProps} />}
+      {modalType === 'addStudentsToClassroom' && <AddStudentClassroomModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}

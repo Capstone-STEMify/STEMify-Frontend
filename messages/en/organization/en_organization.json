@@ -232,7 +232,8 @@
         "name": "Name",
         "studentCount": "Student Count"
       },
-      "studentGroupInfo": "Student Group Information"
+      "studentGroupInfo": "Student Group Information",
+      "addStudentsToGroup": "Add Students to Group"
     },
     "curriculum": {
       "curriculum": "Curriculum",
