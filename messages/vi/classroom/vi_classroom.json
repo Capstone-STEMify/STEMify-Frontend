@@ -91,7 +91,9 @@
       "semiAnnual": "Nửa năm",
       "students": "Học sinh",
       "teachers": "Giáo viên",
-      "curricula": "Chương trình học"
+      "curricula": "Chương trình học",
+      "guideText": "Hướng dẫn tạo lớp học",
+      "guide": "Khóa học có thể thuộc nhiều gói đăng ký đang hoạt động. Vui lòng chọn một gói đăng ký trước khi tạo lớp học. Gói đăng ký được chọn sẽ quyết định số lượng học sinh, giáo viên và quyền truy cập nội dung học tập. Sau khi chọn gói, hãy chọn nhóm học sinh, gán giáo viên và thiết lập thời gian lớp học. Nhấn Tạo để hoàn tất việc tạo lớp học."
     },
     "studentClassroom": {
       "list": {

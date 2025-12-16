@@ -173,14 +173,9 @@ export default function CreateClassroom() {
 
       <div className='mx-auto my-4 max-w-6xl'>
         <div className='rounded-lg border border-blue-100 bg-blue-50/60 p-5 text-center'>
-          <h3 className='mb-2 text-base font-semibold text-blue-700'>Hướng dẫn tạo lớp học</h3>
+          <h3 className='mb-2 text-base font-semibold text-blue-700'>{tClassroom('guideText')}</h3>
 
-          <div className='mx-auto max-w-3xl space-y-1 text-center text-sm text-gray-600'>
-            Khóa học có thể thuộc nhiều gói đăng ký đang hoạt động. Vui lòng chọn một gói đăng ký trước khi tạo lớp học.
-            Gói đăng ký được chọn sẽ quyết định số lượng học sinh, giáo viên và quyền truy cập nội dung học tập. Sau khi
-            chọn gói, hãy chọn nhóm học sinh, gán giáo viên và thiết lập thời gian lớp học. Nhấn Create để hoàn tất việc
-            tạo lớp học.
-          </div>
+          <div className='mx-auto max-w-3xl space-y-1 text-center text-sm text-gray-600'>{tClassroom('guide')}</div>
         </div>
       </div>
 
