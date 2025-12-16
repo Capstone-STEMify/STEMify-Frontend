@@ -43,12 +43,13 @@ import QuizCSVUploadModal from '@/features/resource/quiz/components/modal/QuizCS
 import SectionAIModal from '@/features/chat/components/SectionAIModal'
 import AssignmentCSVUploadModal from '@/features/assignment/components/detail/modal/AssignmentCSVUploadModal'
 import CreateAssignmentInfoModal from '@/features/assignment/components/upsert/CreateAssignmentInfoModal'
-import UpsertGroupModal from '@/features/group/components/modal/UpsertGroupModal'
 import UpdateGroupModal from '@/features/group/components/modal/UpdateGroupModal'
 import CreateQuizModal from '@/features/resource/quiz/components/modal/CreateQuizModal'
 import { UpsertStudentGroup } from '@/features/group/components/upsert/UpsertStudentGroup'
 import AddStudentToGroupModal from '@/features/group/components/upsert/AddStudentToGroupModal'
 import CurriculumSelectEmulatorListModal from '@/features/resource/curriculum/components/modal/CurriculumSelectEmulatorListModal'
+import StudentGroupInfoModal from '@/features/group/components/modal/StudentGroupInfoModal'
+import AddStudentClassroomModal from '@/features/classroom/components/upsert/AddStudentClassroomModal'
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
@@ -103,11 +104,11 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'upsertOrganization' && <UpsertOrganizationModal {...modalProps} />}
       {modalType === 'upsertEmulator' && <UpsertEmulator {...modalProps} />}
       {modalType === 'createAssignmentInfo' && <CreateAssignmentInfoModal {...modalProps} />}
-      {modalType === 'upsertGroup' && <UpsertGroupModal {...modalProps} />}
       {modalType === 'updateGroup' && <UpdateGroupModal {...modalProps} />}
       {modalType === 'createQuiz' && <CreateQuizModal {...modalProps} />}
       {modalType === 'upsertStudentGroup' && <UpsertStudentGroup {...modalProps} />}
-      {modalType === 'addStudentToGroup' && <AddStudentToGroupModal {...modalProps} isUpdate />}
+      {modalType === 'addStudentToGroup' && <AddStudentToGroupModal {...modalProps} />}
+      {modalType === 'addStudentsToClassroom' && <AddStudentClassroomModal {...modalProps} />}
 
       {/* detail */}
       {modalType === 'lessonDetail' && <LessonDetailModal {...modalProps} />}
@@ -127,6 +128,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modalType === 'importQuiz' && <QuizCSVUploadModal {...modalProps} />}
       {modalType === 'sectionAI' && <SectionAIModal {...modalProps} />}
       {modalType === 'importAssignment' && <AssignmentCSVUploadModal {...modalProps} />}
+      {modalType === 'studentGroupInfo' && <StudentGroupInfoModal {...modalProps} isView />}
 
       {/* sheet */}
       {modalType === 'upsertContact' && <ContactDetailSheet {...modalProps} />}

@@ -1,6 +1,7 @@
 import { Button } from '@/components/shadcn/button'
 import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { DataTable } from '@/components/shared/data-table/data-table'
+import { useAddClassroomStudentsMutation } from '@/features/classroom/api/classroomApi'
 import { useAddStudentToGroupMutation } from '@/features/group/api/groupApi'
 import StudentColumn from '@/features/group/components/upsert/StudentColumn'
 import { useGetOrganizationUserQuery } from '@/features/user/api/userApi'
@@ -12,9 +13,11 @@ import { useParams } from 'next/navigation'
 import React, { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
-export default function AddStudentToGroupModal() {
-  const to = useTranslations('organization.group')
+export default function AddStudentClassroomModal() {
+  const tClassroom = useTranslations('classroom')
   const tc = useTranslations('common')
+
+  const { classroomId } = useParams()
 
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
   const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
@@ -23,32 +26,33 @@ export default function AddStudentToGroupModal() {
   const { closeModal } = useModal()
   const { groupId } = useParams()
   const columns = StudentColumn()
-  const { data } = useGetOrganizationUserQuery(
-    { organizationId: selectedOrganizationId!, pageNumber: 1, pageSize: 50 },
+  const { data: ungroupedStudents } = useGetOrganizationUserQuery(
+    { organizationId: selectedOrganizationId!, pageNumber: 1, pageSize: 50, role: LicenseType.STUDENT },
     { skip: !selectedOrganizationId }
   )
   const rows = useMemo(
-    () => data?.data.items.map((student) => ({ ...student, id: student.organizationUserId })) ?? [],
-    [data]
+    () => ungroupedStudents?.data.items.map((student) => ({ ...student, id: student.organizationUserId })) ?? [],
+    [ungroupedStudents]
   )
 
-  const [addStudents] = useAddStudentToGroupMutation()
+  const [addStudents] = useAddClassroomStudentsMutation()
 
   const handleAddStudents = () => {
-    addStudents({ groupId: Number(groupId), studentIds: selectedStudentIds })
+    addStudents({ classroomId: Number(classroomId), studentIds: selectedStudentIds })
+    toast.success('Đã thêm học sinh vào lớp học thành công')
     closeModal()
   }
 
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent>
-        <DialogTitle>{to('addStudentsToGroup')}</DialogTitle>
+        <DialogTitle>{tClassroom('addStudentsToClassroom')}</DialogTitle>
         <div className='w-xl'>
           <DataTable
             data={rows}
             columns={columns as any}
             enableRowSelection
-            pagingData={rows}
+            pagingData={ungroupedStudents}
             pagingParams={pageNumber}
             handlePageChange={(page) => setPageNumber(page)}
             onSelectionChange={(ids) => setSelectedStudentIds(ids.map(String))}

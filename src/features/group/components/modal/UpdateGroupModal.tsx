@@ -8,7 +8,7 @@ export default function UpdateGroupModal() {
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent>
-        <DialogTitle>Update Group</DialogTitle>
+        <DialogTitle>Cập nhật nhóm học sinh</DialogTitle>
         <UpdateGroup />
       </DialogContent>
     </Dialog>

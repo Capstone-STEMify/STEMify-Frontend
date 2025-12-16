@@ -60,7 +60,8 @@
       "restore": "Are you sure you want to restore \"{title}\"?",
       "cancelledSubscriptions": "Are you sure you want to cancel this subscription?",
       "deactivate": "Are you sure you want to deactivate \"{title}\"?",
-      "activate": "Are you sure you want to activate \"{title}\"?"
+      "activate": "Are you sure you want to activate \"{title}\"?",
+      "removeStudents": "Are you sure you want to remove the {count} students from the group?"
     },
     "unauthorized": "Unauthorized access."
   }

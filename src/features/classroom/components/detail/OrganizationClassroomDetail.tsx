@@ -34,6 +34,7 @@ import { formatDate, useStatusTranslation } from '@/utils/index'
 export default function OrganizationClassroomDetail() {
   const tClassroom = useTranslations('classroom')
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const statusTranslations = useStatusTranslation()
   const locale = useLocale()
   const router = useRouter()
@@ -128,8 +129,8 @@ export default function OrganizationClassroomDetail() {
                 <div className='flex items-center gap-2'>
                   <Calendar className='h-4 w-4' />
                   <span className='text-sm'>
-                    {formatDate(classroom.startDate, { locale: locale as 'en' | 'vi' })} -{' '}
-                    {formatDate(classroom.endDate, { locale: locale as 'en' | 'vi' })}
+                    {formatDate(classroom.startDate, { locale: locale })} -{' '}
+                    {formatDate(classroom.endDate, { locale: locale })}
                   </span>
                 </div>
               </div>
@@ -221,7 +222,7 @@ export default function OrganizationClassroomDetail() {
                         disabled={selectedStudents.length === 0}
                         onClick={() =>
                           openModal('confirm', {
-                            message: `Are you sure you want to remove ${selectedStudents.length} student(s)?`,
+                            message: `${tt('confirmMessage.removeStudents', { count: selectedStudents.length })}`,
                             onConfirm: async () => {
                               // gọi API xóa ở đây, truyền selectedStudents
                               console.log('Deleting', selectedStudents)
@@ -239,10 +240,10 @@ export default function OrganizationClassroomDetail() {
                     )}
                     {/* TODO */}
 
-                    {/* <Button size='sm' onClick={() => openModal('addPeople')}>
+                    <Button size='sm' onClick={() => openModal('addStudentsToClassroom')}>
                       <UserPlus className='mr-2 h-4 w-4' />
                       {tc('button.addStudents')}
-                    </Button> */}
+                    </Button>
                   </div>
                 </div>
               </CardHeader>
@@ -351,34 +352,6 @@ export default function OrganizationClassroomDetail() {
               </Card>
             )}
 
-            {/* Google Meet Card */}
-            {/* <Card className='border border-slate-200 py-4 shadow-sm'>
-              <CardContent className='p-4'>
-                <div className='space-y-3'>
-                  <div className='flex items-center justify-between'>
-                    <div className='flex items-center gap-2'>
-                      <div className='flex h-8 w-8 items-center justify-center rounded bg-white'>
-                        <svg viewBox='0 0 24 24' className='h-5 w-5'>
-                          <path
-                            fill='#00832d'
-                            d='M17,13l3.7-3.7c0.7-0.7,1.9-0.2,1.9,0.7v7.9c0,0.9-1.2,1.5-1.9,0.7L17,15v4c0,1.1-0.9,2-2,2H4c-1.1,0-2-0.9-2-2V5 c0-1.1,0.9-2,2-2h11c1.1,0,2,0.9,2,2v4l3.7-3.7c0.7-0.7,1.9-0.2,1.9,0.7v7.9C22.6,13.2,21.4,13.7,17,13z'
-                          />
-                        </svg>
-                      </div>
-                      <span className='font-semibold text-slate-900'>{tClassroom('detail.meet.label')}</span>
-                    </div>
-                    <Button variant='ghost' size='icon' className='h-8 w-8'>
-                      <MoreVertical className='h-4 w-4 text-slate-600' />
-                    </Button>
-                  </div>
-
-                  <Button className='w-full border-2 border-slate-300 bg-white text-blue-600 hover:bg-slate-50'>
-                    {tClassroom('detail.meet.joinButton')}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card> */}
-
             {/* Quick Stats Card */}
             <Card className='border border-slate-200 py-4 shadow-sm'>
               <CardHeader className='pb-3'>
@@ -388,13 +361,13 @@ export default function OrganizationClassroomDetail() {
                 <div className='flex items-center justify-between'>
                   <span className='text-sm text-slate-600'>{tClassroom('detail.quickStats.createdDate')}</span>
                   <span className='text-sm font-medium text-slate-900'>
-                    {formatDate(classroom.createdAt, { locale: locale as 'en' | 'vi' })}
+                    {formatDate(classroom.createdAt, { locale: locale })}
                   </span>
                 </div>
                 <div className='flex items-center justify-between'>
                   <span className='text-sm text-slate-600'>{tClassroom('detail.quickStats.lastUpdated')}</span>
                   <span className='text-sm font-medium text-slate-900'>
-                    {formatDate(classroom.updatedAt, { locale: locale as 'en' | 'vi' })}
+                    {formatDate(classroom.updatedAt, { locale: locale })}
                   </span>
                 </div>
                 <div className='flex items-center justify-between'>
@@ -403,8 +376,8 @@ export default function OrganizationClassroomDetail() {
                     <div className='flex items-center gap-2'>
                       <Calendar className='h-4 w-4' />
                       <span className='text-sm'>
-                        {formatDate(classroom.startDate, { locale: locale as 'en' | 'vi' })} -{' '}
-                        {formatDate(classroom.endDate, { locale: locale as 'en' | 'vi' })}
+                        {formatDate(classroom.startDate, { locale: locale })} -{' '}
+                        {formatDate(classroom.endDate, { locale: locale })}
                       </span>
                     </div>
                   </span>

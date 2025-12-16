@@ -40,11 +40,11 @@ export type ModalType =
   | 'upsertEmulator'
   | 'upsertEmulator'
   | 'createAssignmentInfo'
-  | 'upsertGroup'
   | 'updateGroup'
   | 'createQuiz'
   | 'upsertStudentGroup'
   | 'addStudentToGroup'
+  | 'addStudentsToClassroom'
 
   // detail
   | 'lessonDetail'
@@ -65,6 +65,7 @@ export type ModalType =
   | 'importQuiz'
   | 'sectionAI'
   | 'importAssignment'
+  | 'studentGroupInfo'
 
   // sheet
   | 'upsertContact'

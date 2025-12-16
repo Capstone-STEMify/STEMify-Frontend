@@ -11,7 +11,7 @@ import {
 import { UserRole } from '@/types/userRole'
 
 export default function AuthSessionSync() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const dispatch = useAppDispatch()
 
   const reduxToken = useAppSelector((state) => state.auth.token)
@@ -22,10 +22,17 @@ export default function AuthSessionSync() {
     (state) => state.selectedOrganization.selectedSubscriptionOrderId
   )
 
+  console.log({ reduxSelectedOrganizationId })
+
   const user = session?.user
   const accessToken = session?.accessToken
 
   // Sync token vào Redux nếu khác hoặc chưa có
+  useEffect(() => {
+    if (status !== 'authenticated' || !reduxUser) return
+    // logic sync
+  }, [status, reduxUser])
+
   useEffect(() => {
     if (accessToken && user) {
       if (accessToken !== reduxToken) {
