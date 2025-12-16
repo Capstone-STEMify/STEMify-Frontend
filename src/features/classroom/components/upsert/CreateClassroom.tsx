@@ -65,6 +65,8 @@ export default function CreateClassroom() {
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
 
+  const { courseTitle } = useAppSelector((state) => state.organizationSpecial)
+
   const [selectedGroups, setSelectedGroups] = useState<
     {
       groupCode: string
@@ -165,7 +167,7 @@ export default function CreateClassroom() {
             <BackButton />
             <div className='absolute left-1/2 -translate-x-1/2 text-center'>
               <h2 className='text-2xl font-bold text-gray-900'>{tClassroom('header')}</h2>
-              <p className='mt-1 text-sm text-gray-500'>{tClassroom('subheader')}</p>
+              <p className='mt-1 text-sm text-gray-500'>{courseTitle}</p>
             </div>
           </div>
         </div>

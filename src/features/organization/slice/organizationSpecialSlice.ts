@@ -2,11 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 
 type OrganizationSpecialState = {
   courseId: number | null
+  courseTitle?: string
   isRefetchOrganization?: boolean
 }
 
 const initialState: OrganizationSpecialState = {
   courseId: null,
+  courseTitle: undefined,
   isRefetchOrganization: false
 }
 
@@ -16,6 +18,9 @@ export const organizationSpecialSlice = createSlice({
   reducers: {
     setCourseId(state, action) {
       state.courseId = action.payload
+    },
+    setCourseTitle(state, action) {
+      state.courseTitle = action.payload
     },
 
     triggerRefetchOrganization(state) {
@@ -27,4 +32,5 @@ export const organizationSpecialSlice = createSlice({
   }
 })
 
-export const { setCourseId, triggerRefetchOrganization, clearRefetchOrganization } = organizationSpecialSlice.actions
+export const { setCourseId, setCourseTitle, triggerRefetchOrganization, clearRefetchOrganization } =
+  organizationSpecialSlice.actions

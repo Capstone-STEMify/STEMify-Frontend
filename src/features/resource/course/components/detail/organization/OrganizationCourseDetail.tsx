@@ -24,29 +24,27 @@ export default function OrganizationCourseDetail() {
 
   const { courseId } = useParams()
 
-  const { data: course, error, isLoading } = useGetCourseByIdQuery(Number(courseId))
+  const { data: course, isLoading } = useGetCourseByIdQuery(Number(courseId))
   const {
     data: LearningOutcome,
     isLoading: outcomeLoading,
     isFetching: outcomeFetching
   } = useSearchLearningOutcomeQuery({ courseId: Number(courseId) })
 
-  const {
-    data: enrollmentData,
-    isLoading: enrollmentLoading,
-    error: enrollmentError
-  } = useSearchCourseEnrollmentQuery({ courseId: Number(courseId), studentId }, { skip: !studentId })
+  // const {
+  //   data: enrollmentData,
+  //   isLoading: enrollmentLoading,
+  //   error: enrollmentError
+  // } = useSearchCourseEnrollmentQuery({ courseId: Number(courseId), studentId }, { skip: !studentId })
 
   const [activeTab, setActiveTab] = useState<'lesson' | 'classroom'>('lesson')
 
-  if (isLoading || outcomeLoading || outcomeFetching || enrollmentLoading)
+  if (isLoading || outcomeLoading || outcomeFetching)
     return (
       <div className='bg-blue-custom-50/60 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl'>
         <LoadingComponent size={150} />
       </div>
     )
-
-  if (error) return <div className='p-8 text-red-500'>Error loading course details.</div>
 
   if (!course?.data)
     return (
@@ -97,7 +95,7 @@ export default function OrganizationCourseDetail() {
 
         <div>
           {activeTab === 'lesson' && <ContentSection />}
-          {activeTab === 'classroom' && <OrganizationCourseClassroom />}
+          {activeTab === 'classroom' && <OrganizationCourseClassroom courseTitle={course?.data.title} />}
         </div>
       </div>
     </div>
