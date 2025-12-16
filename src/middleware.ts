@@ -97,7 +97,6 @@ export default withAuth(
     }
 
     const systemRole = token?.role as UserRole | undefined
-    console.log('🔑 Middleware detected role:', systemRole)
     let currentRole: EffectiveRole = UserRole.GUEST
 
     if (systemRole === UserRole.ADMIN || systemRole === UserRole.STAFF) {

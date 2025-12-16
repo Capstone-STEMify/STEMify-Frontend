@@ -35,7 +35,7 @@ export default function UserTable() {
   const searchParams: UserSliceParams = {
     ...userParams,
     search: debouncedSearchQuery,
-    pageNumber: userParams.pageNumber ?? 0
+    pageNumber: userParams.pageNumber ?? 0,
   }
 
   const { data } = useSearchUserQuery(searchParams, { skip: status !== 'authenticated' })

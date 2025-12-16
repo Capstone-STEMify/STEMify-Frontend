@@ -33,10 +33,11 @@ const getRoleBadgeVariant = (licenseType: string) => {
   }
 }
 
-export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableItem>[] => {
-  const handleViewDetail = (user: OrganizationUserTableItem) => {
-    console.log('View detail', user.id)
-  }
+interface UseOrganizationUserColumnsProps {
+    onViewDetail: (user: OrganizationUserTableItem) => void;
+}
+
+export const useOrganizationUserColumns = ({ onViewDetail }: UseOrganizationUserColumnsProps): ColumnDef<OrganizationUserTableItem>[] => {
   const handleUpdate = (user: OrganizationUserTableItem) => {
     console.log('Update', user.id)
   }
@@ -136,7 +137,7 @@ export const useOrganizationUserColumns = (): ColumnDef<OrganizationUserTableIte
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end'>
                 <DropdownMenuLabel>{tc('button.actions')}</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => handleViewDetail(user)}>
+                <DropdownMenuItem onClick={() => onViewDetail(user)}>
                   <Eye className='mr-2 h-4 w-4' /> {tc('button.view')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleUpdate(user)}>

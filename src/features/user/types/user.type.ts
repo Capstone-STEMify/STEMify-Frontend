@@ -56,6 +56,7 @@ export type UserQueryParams = {
 
 export type UserSliceParams = {
   role?: UserRole
+  status?: UserStatus
   subscription_order_id?: number | null
   license_type?: string | null
 } & SliceQueryParams
@@ -100,3 +101,36 @@ export type OrganizationUserQueryParams = {
   search?: string
   status?: UserStatus
 }
+
+export interface Subscription {
+  subscriptionOrderId: number
+  licenseType: 'Teacher' | 'Student' | string
+  licenseAssignmentId: string
+  isActive: boolean
+  joinedAt: string // ISO date
+}
+
+export interface OrganizationUserProfile {
+  userId: string
+  email: string
+  userName: string
+  fullName: string
+  firstName: string
+  lastName: string
+  lastLoginAt: string | null
+  organizationUserId: string
+  organizationId: number
+  organizationRole: 'Teacher' | 'Student' | 'OrganizationAdmin' | string
+  licenseType: 'Teacher' | 'Student' | string
+  licenseAssignmentId: string
+  isActive: boolean
+  joinedAt: string
+  groupName: string
+  groupCode: string
+  bio: string
+  studentDateOfBirth: string | null
+  studentMajor: string
+  teacherSpecialization: string
+  subscriptions: Subscription[]
+}
+

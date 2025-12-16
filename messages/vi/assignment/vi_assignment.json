@@ -75,15 +75,20 @@
       },
       "doAsm": {
         "deadline": "Hạn nộp",
-        "deadline2": "Hạn nộp (Tính từ ngày đăng ký)",
-        "AIGrading": "Chấm điểm bằng AI",
-        "description": "Sau khi bạn nộp bài và hoàn thành phần đánh giá chéo bắt buộc, bạn sẽ nhận được điểm do AI chấm dựa trên rubric của bài tập. Sau đó, bạn có thể chọn để bài tập được đánh giá bởi các bạn học khác.",
-        "subDes": "Dữ liệu của bạn sẽ được sử dụng theo",
-        "subDesLink": "Thông báo Quyền riêng tư của chúng tôi",
         "mySub": "Bài nộp của tôi",
-        "projectTitle": "Tiêu đề dự án",
         "placeholder": "Nhập câu trả lời của bạn...",
-        "saveDraft": "Đã lưu bản nháp lúc {time}."
+        "saveDraft": "Đã lưu bản nháp lúc {time}",
+        "restoring": "Đang khôi phục dữ liệu bài làm...",
+        "fileError": "Chỉ chấp nhận tệp .pdf, .doc hoặc .docx.",
+        "uploadClick": "Nhấn vào để upload",
+        "uploadDrag": "hoặc kéo thả",
+        "uploadFormat": "PDF, DOC, hoặc DOCX",
+        "restoreSuccess": "Đã khôi phục bài làm chưa nộp của bạn.",
+        "submitSuccess": "Nộp bài thành công!",
+        "submitFail": "Nộp bài thất bại. Vui lòng thử lại sau.",
+        "uploadFail": "Tải lên tệp thất bại cho Câu hỏi {index}.",
+        "invalidData": "Không thể nộp bài. Dữ liệu không hợp lệ.",
+        "noAsmFound": "Không tìm thấy bài tập. Vui lòng quay lại và chọn bài tập."
       }
     },
     "upsert": {
