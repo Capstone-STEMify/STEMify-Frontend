@@ -92,7 +92,9 @@
       "semiAnnual": "Semi-Annual",
       "students": "Students",
       "teachers": "Teachers",
-      "curricula": "Curricula"
+      "curricula": "Curricula",
+      "guideText": "Creation Guide",
+      "guide": "Courses can belong to multiple active subscriptions. Please select a subscription before creating the classroom. The selected subscription will determine the number of students, teachers, and access to learning content. After selecting a subscription, choose student groups, assign teachers, and set the classroom duration. Click Create to finalize the classroom creation."
     },
     "studentClassroom": {
       "list": {

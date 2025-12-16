@@ -15,9 +15,15 @@ import useDebounce from '@/hooks/useDebounce'
 import { getOptions } from '@/utils/index'
 import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { useGetOrganizationCourseClassroomColumn } from '@/features/resource/course/components/detail/organization/OrganizationCourseClassroomCoulum'
-import { setCourseId } from '@/features/organization/slice/organizationSpecialSlice'
+import { setCourseId, setCourseTitle } from '@/features/organization/slice/organizationSpecialSlice'
+import SearchBar from '@/components/shared/search/SearchBar'
 
-export default function OrganizationCourseClassroom() {
+type OrganizationCourseClassroomProps = {
+  courseTitle?: string
+}
+
+export default function OrganizationCourseClassroom({ courseTitle }: OrganizationCourseClassroomProps) {
+  console.log({ courseTitle })
   const router = useRouter()
   const locale = useLocale()
 
@@ -37,7 +43,7 @@ export default function OrganizationCourseClassroom() {
     ...queryParams,
     organizationId: organizationId,
     courseId: Number(courseId),
-    search: debouncedSearchQuery
+    search: debouncedSearchQuery.trim() || undefined
   })
 
   const rows = React.useMemo(() => data?.data.items ?? [], [data])
@@ -49,10 +55,6 @@ export default function OrganizationCourseClassroom() {
     { label: tc('status.endsoon'), value: 'endsoon' },
     { label: tc('status.completed'), value: 'completed' }
   ]
-
-  useEffect(() => {
-    dispatch(setSearchTerm(debouncedSearchQuery))
-  }, [debouncedSearchQuery, dispatch])
 
   return (
     <div className='mt-5 space-y-6'>
@@ -69,6 +71,7 @@ export default function OrganizationCourseClassroom() {
             className='bg-sky-600 text-white hover:bg-sky-700'
             onClick={() => {
               dispatch(setCourseId(Number(courseId)))
+              dispatch(setCourseTitle(courseTitle || ''))
               router.push(`/${locale}/organization/classroom/create?courseId=${courseId}`)
             }}
           >
@@ -80,13 +83,7 @@ export default function OrganizationCourseClassroom() {
       {/* Filters */}
       <div className='flex flex-wrap items-center justify-between gap-4'>
         <div className='flex gap-2'>
-          <Input
-            type='text'
-            placeholder={tClassroom('list.searchPlaceholder')}
-            onChange={(e) => setSearch(e.target.value)}
-            className='w-80 bg-white py-4.5'
-            style={{ width: '420px' }}
-          />
+          <SearchBar className='w-96' onDebouncedSearch={(v) => setSearch(v)} />
         </div>
         <div className='flex gap-2'>
           <SSelect

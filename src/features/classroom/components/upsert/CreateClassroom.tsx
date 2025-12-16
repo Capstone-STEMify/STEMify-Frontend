@@ -65,6 +65,8 @@ export default function CreateClassroom() {
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
 
+  const { courseTitle } = useAppSelector((state) => state.organizationSpecial)
+
   const [selectedGroups, setSelectedGroups] = useState<
     {
       groupCode: string
@@ -165,7 +167,7 @@ export default function CreateClassroom() {
             <BackButton />
             <div className='absolute left-1/2 -translate-x-1/2 text-center'>
               <h2 className='text-2xl font-bold text-gray-900'>{tClassroom('header')}</h2>
-              <p className='mt-1 text-sm text-gray-500'>{tClassroom('subheader')}</p>
+              <p className='mt-1 text-sm text-gray-500'>{courseTitle}</p>
             </div>
           </div>
         </div>
@@ -173,14 +175,9 @@ export default function CreateClassroom() {
 
       <div className='mx-auto my-4 max-w-6xl'>
         <div className='rounded-lg border border-blue-100 bg-blue-50/60 p-5 text-center'>
-          <h3 className='mb-2 text-base font-semibold text-blue-700'>Hướng dẫn tạo lớp học</h3>
+          <h3 className='mb-2 text-base font-semibold text-blue-700'>{tClassroom('guideText')}</h3>
 
-          <div className='mx-auto max-w-3xl space-y-1 text-center text-sm text-gray-600'>
-            Khóa học có thể thuộc nhiều gói đăng ký đang hoạt động. Vui lòng chọn một gói đăng ký trước khi tạo lớp học.
-            Gói đăng ký được chọn sẽ quyết định số lượng học sinh, giáo viên và quyền truy cập nội dung học tập. Sau khi
-            chọn gói, hãy chọn nhóm học sinh, gán giáo viên và thiết lập thời gian lớp học. Nhấn Create để hoàn tất việc
-            tạo lớp học.
-          </div>
+          <div className='mx-auto max-w-3xl space-y-1 text-center text-sm text-gray-600'>{tClassroom('guide')}</div>
         </div>
       </div>
 
@@ -205,74 +202,19 @@ export default function CreateClassroom() {
                 return (
                   <Card
                     key={sub.id}
-                    className={`relative cursor-pointer transition-all duration-300 ${
-                      isActive ? 'hover:border-blue-300 hover:shadow-md' : 'cursor-not-allowed opacity-60'
-                    } ${
-                      isSelected ? '-translate-y-3 border-blue-500 shadow-lg shadow-blue-200/50' : 'border-gray-200'
-                    }`}
                     onClick={() => isActive && setSelectedSubscriptionId(sub.id)}
+                    className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? 'cursor-pointer hover:shadow-lg' : 'cursor-not-allowed opacity-50'} ${isSelected ? '-translate-y-1 border-blue-500 shadow-blue-200/50' : 'border-gray-200'} `}
                   >
-                    <CardContent className='space-y-4 p-5'>
-                      {/* Header */}
-                      <div className='flex items-start justify-between gap-2'>
-                        <h3 className='font-semibold text-gray-900'>{sub.planName}</h3>
-                        <Badge className={getStatusBadgeClass(sub.status)}>
-                          {statusTranslate(sub.status.toLowerCase())}
-                        </Badge>
-                      </div>
+                    {/* Left accent */}
+                    {isSelected && <div className='absolute top-0 left-0 h-full w-1 bg-blue-500' />}
 
-                      {/* Price */}
-                      <div className='flex items-baseline gap-1'>
-                        <span className='text-2xl font-bold text-gray-900'>{formatPrice(sub.netAmount)}</span>
-                      </div>
+                    <CardContent className='space-y-2 p-5'>
+                      {/* Plan name */}
+                      <h3 className='text-sm leading-snug font-semibold text-gray-900'>{sub.planName}</h3>
 
-                      {/* Period */}
-                      <div className='flex items-center gap-2 text-sm text-gray-600'>
-                        <Badge variant='outline' className='font-normal'>
-                          {tClassroom(sub.planBillingCycle.toLowerCase())}
-                        </Badge>
-                        <span className='text-xs'>
-                          {formatDate(sub.startDate, { locale })} - {formatDate(sub.endDate, { locale })}
-                        </span>
-                      </div>
-
-                      {/* Divider */}
-                      <div className='border-t border-gray-100' />
-
-                      {/* Stats */}
-                      <div className='space-y-2.5'>
-                        <div className='flex items-center justify-between text-sm'>
-                          <div className='flex items-center gap-2 text-gray-600'>
-                            <GraduationCap className='h-4 w-4' />
-                            <span>{tClassroom('students')}</span>
-                          </div>
-                          <span className='font-medium text-gray-900'>
-                            {sub.currentStudentSeats}/{sub.maxStudentSeats}
-                          </span>
-                        </div>
-
-                        <div className='flex items-center justify-between text-sm'>
-                          <div className='flex items-center gap-2 text-gray-600'>
-                            <Users className='h-4 w-4' />
-                            <span>{tClassroom('teachers')}</span>
-                          </div>
-                          <span className='font-medium text-gray-900'>
-                            {sub.currentTeacherSeats}/{sub.maxTeacherSeats}
-                          </span>
-                        </div>
-
-                        <div className='flex items-center justify-between text-sm'>
-                          <div className='flex items-center gap-2 text-gray-600'>
-                            <BookOpen className='h-4 w-4' />
-                            <span>{tClassroom('curricula')}</span>
-                          </div>
-                          <span className='font-medium text-gray-900'>{sub.curriculumCount}</span>
-                        </div>
-                      </div>
-
-                      {/* Code */}
-                      <div className='border-t border-gray-100 pt-2'>
-                        <p className='font-mono text-xs text-gray-400'>{sub.code}</p>
+                      {/* Date range */}
+                      <div className='text-xs text-gray-500'>
+                        {formatDate(sub.startDate, { locale })} – {formatDate(sub.endDate, { locale })}
                       </div>
                     </CardContent>
                   </Card>

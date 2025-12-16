@@ -15,7 +15,8 @@ const persistConfig = {
     'organizationSpecial',
     'selectedCurriculum',
     'quizPlayer',
-    'lessonDetail'
+    'lessonDetail',
+    'organizationSpecial'
   ]
 }
 
