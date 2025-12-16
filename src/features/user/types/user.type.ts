@@ -56,6 +56,7 @@ export type UserQueryParams = {
 
 export type UserSliceParams = {
   role?: UserRole
+  status?: UserStatus
   subscription_order_id?: number | null
   license_type?: string | null
 } & SliceQueryParams
