@@ -6,13 +6,17 @@ interface SelectedOrganizationState {
   selectedOrgUserId?: string | null
   selectedSubscriptionOrderId?: number | null
   currentRole?: LicenseType | UserRole.ADMIN | UserRole.STAFF | UserRole.GUEST
+  accessCourseIds?: number[]
+  accessEmulatorIds?: string[]
 }
 
 const initialState: SelectedOrganizationState = {
   selectedOrganizationId: null,
   selectedOrgUserId: null,
   selectedSubscriptionOrderId: null,
-  currentRole: UserRole.GUEST
+  currentRole: UserRole.GUEST,
+  accessCourseIds: [],
+  accessEmulatorIds: []
 }
 
 const selectedOrganizationSlice = createSlice({
@@ -31,6 +35,12 @@ const selectedOrganizationSlice = createSlice({
     setCurrentRole: (state, action: PayloadAction<LicenseType | UserRole.ADMIN | UserRole.STAFF>) => {
       state.currentRole = action.payload
     },
+    setAccessCourseIds: (state, action: PayloadAction<number[]>) => {
+      state.accessCourseIds = action.payload
+    },
+    setAccessEmulatorIds: (state, action: PayloadAction<string[]>) => {
+      state.accessEmulatorIds = action.payload
+    },
     clearSelectedOrganization: (state) => {
       state.selectedOrganizationId = null
       state.selectedSubscriptionOrderId = null
@@ -45,6 +55,8 @@ export const {
   setSelectedOrgUserId,
   setSelectedSubscriptionOrderId,
   setCurrentRole,
+  setAccessCourseIds,
+  setAccessEmulatorIds,
   clearSelectedOrganization
 } = selectedOrganizationSlice.actions
 
