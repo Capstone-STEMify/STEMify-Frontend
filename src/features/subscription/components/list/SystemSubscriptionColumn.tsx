@@ -14,6 +14,8 @@ import {
 } from '@/features/subscription/api/subscriptionApi'
 import { OrganizationSubscription, SubscriptionStatus } from '@/features/subscription/types/subscription.type'
 import { BillingCycle } from '@/features/plan/types/plan.type'
+import { Badge } from '@/components/shadcn/badge'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 
 export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscription>[] {
   const { organizationId } = useParams()
@@ -25,6 +27,8 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const to = useTranslations('organization.subscription')
+
+  const translateStatus = useStatusTranslation()
 
   const getBillingCycleLabel = (cycle: BillingCycle | string) => {
     switch (cycle) {
@@ -52,10 +56,10 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
     })
   }
 
-  const handleCancel = async (subscription: OrganizationSubscription) => {
+  const handleCancel = async (subscription: any) => {
     await updateSubscription({
       subscriptionId: subscription.id,
-      body: { status: SubscriptionStatus.CANCELLED }
+      body: { status: SubscriptionStatus.CANCELLED, curriculumIds: subscription.curriculumIds || [] }
     })
     toast.success(tt('successMessage.updateNoTitle'))
   }
@@ -63,26 +67,6 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
   const handleDelete = async (id: number) => {
     await deleteSubscription(id).unwrap()
     toast.success(tt('successMessage.delete'))
-  }
-
-  const SubscriptionStatusOption = [
-    { label: 'Pending', value: SubscriptionStatus.PENDING },
-    { label: 'Active', value: SubscriptionStatus.ACTIVE },
-    { label: 'Archived', value: SubscriptionStatus.ARCHIVED },
-    { label: 'Cancelled', value: SubscriptionStatus.CANCELLED },
-    { label: 'Expired', value: SubscriptionStatus.EXPIRED }
-  ]
-
-  const SubscriptionStatusFlow: Record<SubscriptionStatus, SubscriptionStatus[]> = {
-    [SubscriptionStatus.PENDING]: [SubscriptionStatus.PENDING, SubscriptionStatus.ACTIVE],
-    [SubscriptionStatus.ACTIVE]: [SubscriptionStatus.ACTIVE],
-    [SubscriptionStatus.ARCHIVED]: [
-      SubscriptionStatus.ACTIVE,
-      SubscriptionStatus.ARCHIVED,
-      SubscriptionStatus.CANCELLED
-    ],
-    [SubscriptionStatus.CANCELLED]: [],
-    [SubscriptionStatus.EXPIRED]: []
   }
 
   return [
@@ -147,17 +131,8 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
       accessorKey: 'status',
       header: () => <div>{tc('tableHeader.status')}</div>,
       cell: ({ row }) => {
-        const subscription = row.original
-        const allowedOptions = SubscriptionStatusOption.filter(
-          (sub) =>
-            subscription.status && SubscriptionStatusFlow[subscription.status].includes(sub.value as SubscriptionStatus)
-        )
         return (
-          <SStatusDropdown
-            value={row.original.status!}
-            options={allowedOptions}
-            onChange={(newStatus) => handleStatusChange(row.original, newStatus)}
-          />
+          <Badge className={getStatusBadgeClass(row.original.status)}>{translateStatus(row.original.status)}</Badge>
         )
       }
     },
