@@ -6,12 +6,14 @@ import { useGetGroupByIdQuery } from '@/features/group/api/groupApi'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { useGetGroupColumn } from '@/features/group/components/detail/GroupColumn'
+import { useTranslations } from 'next-intl'
 
 type StudentGroupInfoModalProps = {
   groupId: number
 }
 
 export default function StudentGroupInfoModal({ groupId }: StudentGroupInfoModalProps) {
+  const to = useTranslations('organization.group')
   const { closeModal } = useModal()
   const { data } = useGetGroupByIdQuery(Number(groupId), { skip: !groupId })
 
@@ -23,13 +25,13 @@ export default function StudentGroupInfoModal({ groupId }: StudentGroupInfoModal
       })),
     [data]
   )
-  const columns = useGetGroupColumn()
+  const columns = useGetGroupColumn({ isModal: true })
 
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent>
-        <DialogTitle>Student Group Info</DialogTitle>
-        <ScrollArea className='h-[500px] w-4xl'>
+        <DialogTitle>{to('studentGroupInfo')}</DialogTitle>
+        <ScrollArea className='xl:h-[500px] xl:w-4xl'>
           <div>
             <DataTable data={rows} columns={columns as any} />
           </div>

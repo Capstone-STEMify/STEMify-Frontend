@@ -59,7 +59,8 @@
       "restore": "Bạn có chắc chắn muốn khôi phục \"{title}\" không?",
       "cancelledSubscriptions": "Bạn có chắc chắn muốn hủy gói đăng ký này không? Sau khi hủy, người dùng sẽ không thể sử dụng các tính năng của gói.",
       "deactivate": "Bạn có chắc chắn muốn vô hiệu hóa \"{title}\" không?",
-      "activate": "Bạn có chắc chắn muốn kích hoạt \"{title}\" không?"
+      "activate": "Bạn có chắc chắn muốn kích hoạt \"{title}\" không?",
+      "removeStudents": "Bạn có chắc chắn muốn xóa {count} học sinh khỏi nhóm không?"
     },
     "unauthorized": "Truy cập không được phép."
   }

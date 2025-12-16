@@ -10,7 +10,11 @@ import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
 import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
 import { useParams } from 'next/navigation'
 
-export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
+type GroupColumnProps = {
+  isModal?: boolean
+}
+
+export function useGetGroupColumn({ isModal = false }: GroupColumnProps): ColumnDef<GroupDetailStudent>[] {
   const { openModal } = useModal()
   const locale = useLocale()
   const [removeStudentFromGroup] = useRemoveStudentFromGroupMutation()
@@ -83,29 +87,24 @@ export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
       header: tc('tableHeader.joinedAt'),
       cell: ({ row }) => <div className='text-sm text-gray-600'>{formatDate(row.original.joinedAt, { locale })}</div>
     },
-    createActionsColumnFromItems<GroupDetailStudent>([
-      // {
-      //   label: tc('button.viewDetails'),
-      //   onClick: ({ original }) => {
-      //     openModal('studentDetails', { studentId: original.organizationUserId })
-      //   }
-      // },
-      // {
-      //   label: tc('button.update'),
-      //   onClick: ({ original }) => {
-      //     openModal('upsertStudent', { id: original.organizationUserId })
-      //   }
-      // },
-      {
-        label: tc('button.removeFromGroup'),
-        danger: true,
-        onClick: async ({ original }) => {
-          openModal('confirm', {
-            message: `${tt('confirmMessage.removeStudentFromGroup', { title: original.fullName })}`,
-            onConfirm: () => handleDelete(original.organizationUserId)
-          })
-        }
-      }
-    ])
+
+    ...(!isModal
+      ? [
+          createActionsColumnFromItems<GroupDetailStudent>([
+            {
+              label: tc('button.removeFromGroup'),
+              danger: true,
+              onClick: async ({ original }) => {
+                openModal('confirm', {
+                  message: tt('confirmMessage.removeStudentFromGroup', {
+                    title: original.fullName
+                  }),
+                  onConfirm: () => handleDelete(original.organizationUserId)
+                })
+              }
+            }
+          ])
+        ]
+      : [])
   ]
 }

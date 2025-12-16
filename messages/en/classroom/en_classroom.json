@@ -118,6 +118,7 @@
       "noClassroom": "You are not enrolled in any classrooms yet.",
       "noClassroomSubtext": "Explore available classrooms and start learning today!",
       "grade": "Grade"
-    }
+    },
+    "addStudentsToClassroom": "Add Students to Classroom"
   }
 }
