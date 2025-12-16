@@ -13,7 +13,7 @@ import { skillSlice } from '@/features/resource/skill/slice/skillSlice'
 import { standardApi } from '@/features/resource/standard/api/standardApi'
 import { standardSlice } from '@/features/resource/standard/slice/standardSlice'
 import { combineReducers } from '@reduxjs/toolkit'
-import { authSlice } from '@/features/auth/authSlice'
+import { authSlice, logout } from '@/features/auth/authSlice'
 import { notificationSlice } from '@/features/notification/slice/notificationSlice'
 import { notificationApi } from '@/features/notification/api/notificationApi'
 import { contentApi } from '@/features/resource/content/api/contentApi'
@@ -77,7 +77,7 @@ import { organizationSpecialSlice } from '@/features/organization/slice/organiza
 import { groupSlice } from '@/features/group/slice/groupSlice'
 import { systemDashboardApi } from '@/features/dashboard/api/AdminDashboardApi'
 
-export const rootReducer = combineReducers({
+const appReducer = combineReducers({
   // Add your reducers here
   auth: authSlice.reducer,
   course: courseSlice.reducer,
@@ -161,3 +161,11 @@ export const rootReducer = combineReducers({
   [groupApi.reducerPath]: groupApi.reducer,
   [systemDashboardApi.reducerPath]: systemDashboardApi.reducer
 })
+
+export const rootReducer = (state: any, action: any) => {
+  if (action.type === logout.type) {
+    state = undefined
+  }
+
+  return appReducer(state, action)
+}
