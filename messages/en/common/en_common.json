@@ -283,7 +283,8 @@
       "locked": "Locked",
       "correct": "Correct",
       "incorrect": "Incorrect",
-      "unanswered": "Unanswered"
+      "unanswered": "Unanswered",
+      "disabled": "Disabled"
     },
     "status2": {
       "active": "Active",

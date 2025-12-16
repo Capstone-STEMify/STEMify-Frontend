@@ -6,6 +6,7 @@ import { useUpdateCourseOrderMutation } from '@/features/resource/curriculum/api
 import { useGetEmulatorColumn } from '@/features/resource/curriculum/components/list/EmulatorColum'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useModal } from '@/providers/ModalProvider'
+import { UserRole } from '@/types/userRole'
 import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import React, { useEffect } from 'react'
@@ -30,7 +31,7 @@ export default function AdminCurriculumEmulatorList({ curriculumId, emulations }
     [emulations]
   )
 
-  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
+  const { currentRole } = useAppSelector((state) => state.selectedOrganization)
   const dispatch = useAppDispatch()
   const { openModal } = useModal()
   const columns = useGetEmulatorColumn()
@@ -69,7 +70,7 @@ export default function AdminCurriculumEmulatorList({ curriculumId, emulations }
           {t('list.emulatorListTitle')}{' '}
           <span className='rounded bg-sky-200 px-2 text-sm text-gray-600'>{emulations?.length}</span>
         </h2>
-        {!selectedOrganizationId && (
+        {(currentRole === UserRole.ADMIN || currentRole === UserRole.STAFF) && (
           <div className='flex justify-end space-x-2'>
             {orderedCourseIds.length > 0 && (
               <Button className='bg-emerald-400' onClick={handleSaveOrder}>

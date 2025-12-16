@@ -79,6 +79,24 @@ export default function AdminCurriculumSelectEmulatorList({
     onSuccess?.()
   }
 
+  const pagingDataAdapter = React.useMemo(() => {
+    const pages = data?.data?.pagination?.pages
+    if (!pages) return undefined
+
+    return {
+      data: {
+        totalPages: pages
+      }
+    }
+  }, [data])
+
+  const pagingParamsAdapter = React.useMemo(() => {
+    return {
+      ...queryParams,
+      pageNumber: pageNumber
+    }
+  }, [queryParams, pageNumber])
+
   if (!data) return null
   return (
     <div className='space-y-3'>
@@ -107,7 +125,6 @@ export default function AdminCurriculumSelectEmulatorList({
         data={rows}
         columns={extendedColumns as any}
         enableRowSelection
-        pagingData={data}
         pagingParams={queryParams}
         handlePageChange={handlePageChange}
         rowSelection={selectedIds}
