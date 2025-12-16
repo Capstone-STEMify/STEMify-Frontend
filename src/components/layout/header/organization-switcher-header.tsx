@@ -12,8 +12,10 @@ import {
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setSelectedOrganizationId } from '@/features/subscription/slice/selectedOrganizationSlice'
 import { useGetOrganizationsWithAccessByUserIdQuery } from '@/features/organization/api/organizationApi'
+import { useSession } from 'next-auth/react'
 
 export function OrganizationSwitcherHeader() {
+  const { data: session, status } = useSession()
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.auth.user)
   const selectedOrganizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
@@ -24,20 +26,19 @@ export function OrganizationSwitcherHeader() {
     { skip: !userId }
   )
 
-  const licenseAssignments = organizationData?.data?.organizations ?? []
+  const organizations = organizationData?.data?.organizations ?? []
 
   // Chỉ gán mặc định nếu chưa có org được chọn
   React.useEffect(() => {
-    if (licenseAssignments.length && !selectedOrganizationId) {
-      const first = licenseAssignments[0]
+    if (status === 'authenticated' && organizations.length && !selectedOrganizationId) {
+      const first = organizations[0]
       dispatch(setSelectedOrganizationId(first.id))
     }
-  }, [licenseAssignments, selectedOrganizationId, dispatch])
-
-  if (isLoading || !licenseAssignments.length) return null
+  }, [status, organizations, selectedOrganizationId, dispatch])
+  if (isLoading || !organizations.length) return null
 
   // ✅ Tìm org đang được chọn (hoặc lấy org đầu tiên nếu chưa có)
-  const selectedOrg = licenseAssignments.find((x) => x.id === selectedOrganizationId) ?? licenseAssignments[0]
+  const selectedOrg = organizations.find((x) => x.id === selectedOrganizationId) ?? organizations[0]
 
   return (
     <div className='relative'>
@@ -61,7 +62,7 @@ export function OrganizationSwitcherHeader() {
         <DropdownMenuContent className='min-w-56 rounded-lg shadow-lg' align='center' side='bottom' sideOffset={6}>
           <DropdownMenuLabel className='text-muted-foreground text-xs'>Organizations</DropdownMenuLabel>
 
-          {licenseAssignments.map((org) => (
+          {organizations.map((org) => (
             <DropdownMenuItem
               key={org.id}
               onClick={() => dispatch(setSelectedOrganizationId(org.id))}

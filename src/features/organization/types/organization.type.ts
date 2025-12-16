@@ -94,6 +94,6 @@ export type OrganizationWithAccess = {
     licenseType: LicenseAssignmentType
     curriculumIds: number[]
     courseIds: number[]
-    emulatorModelIds: number[]
+    emulatorModelIds: string[]
   }[]
 }

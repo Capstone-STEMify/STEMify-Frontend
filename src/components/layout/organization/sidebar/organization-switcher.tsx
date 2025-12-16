@@ -11,10 +11,17 @@ import {
 } from '@/components/shadcn/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/shadcn/sidebar'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setSelectedOrganizationId } from '@/features/subscription/slice/selectedOrganizationSlice'
+import {
+  setAccessCourseIds,
+  setAccessEmulatorIds,
+  setSelectedOrganizationId
+} from '@/features/subscription/slice/selectedOrganizationSlice'
 import { useGetOrganizationsWithAccessByUserIdQuery } from '@/features/organization/api/organizationApi'
+import { useSession } from 'next-auth/react'
 
 export function OrganizationSwitcher() {
+  const { data: session, status } = useSession()
+
   const { isMobile } = useSidebar()
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.auth.user)
@@ -30,9 +37,21 @@ export function OrganizationSwitcher() {
 
   // Nếu chưa chọn org nào => mặc định chọn org đầu tiên
   React.useEffect(() => {
-    if (organizations.length && !selectedOrganizationId) {
+    if (status === 'authenticated' && organizations.length && !selectedOrganizationId) {
       const first = organizations[0]
       dispatch(setSelectedOrganizationId(first.id))
+      const subscriptions = first.subscriptions || []
+      // Trích courseIds và emulatorModelIds từ tất cả subscriptions
+      const allCourseIds = subscriptions.flatMap((sub) => sub.courseIds || [])
+      const allEmulatorIds = subscriptions.flatMap((sub) => sub.emulatorModelIds || [])
+
+      // Lọc unique (nếu cần)
+      const uniqueCourseIds = Array.from(new Set(allCourseIds))
+      const uniqueEmulatorIds = Array.from(new Set(allEmulatorIds))
+      console.log('Setting access IDs for organization:', uniqueEmulatorIds)
+
+      dispatch(setAccessCourseIds(uniqueCourseIds))
+      dispatch(setAccessEmulatorIds(uniqueEmulatorIds))
     }
   }, [organizations, selectedOrganizationId, dispatch])
 

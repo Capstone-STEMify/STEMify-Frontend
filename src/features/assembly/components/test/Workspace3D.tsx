@@ -5,10 +5,12 @@ import { StepInfoPanel } from './StepInfoPanel'
 import { StepController } from './StepController'
 import { RealtimeControlPanel } from './RealtimeControlPanel'
 import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setIsShiftPressed } from '@/features/assembly/slice/assemblySlice'
 import { useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi' // ✅ Import hook có sẵn
+import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context'
+import { useLocale } from 'next-intl'
 
 export default function Workspace3D({
   assemblyUrl,
@@ -24,6 +26,8 @@ export default function Workspace3D({
   const transformControlsRef = useRef<any>(null)
   const dispatch = useAppDispatch()
   const isTransforming = useAppSelector((state) => state.assembly.isTransforming)
+  const router = useRouter()
+  const locale = useLocale()
 
   const [transformMode, setTransformMode] = useState<'translate' | 'rotate'>('translate')
   const [stepIndex, setStepIndex] = useState(0)
@@ -31,7 +35,13 @@ export default function Workspace3D({
     Record<string, { rotation: { x: number; y: number; z: number }; translation: { x: number; y: number; z: number } }>
   >({})
 
-  // ✅ Fetch emulator data từ API
+  // check access
+  const { accessEmulatorIds } = useAppSelector((state) => state.selectedOrganization)
+  if (id && typeof id === 'string' && (!accessEmulatorIds || !accessEmulatorIds.includes(id))) {
+    router.push(`/${locale}/unauthorized`)
+  }
+
+  // Fetch emulator data từ API
   const {
     data: emulatorResponse,
     isLoading: isLoadingEmulator,
@@ -50,7 +60,7 @@ export default function Workspace3D({
     previousStep
   } = useAssembly()
 
-  // ✅ Load assembly khi có data từ API
+  // Load assembly khi có data từ API
   useEffect(() => {
     if (emulatorResponse?.data?.definitionJson) {
       try {
