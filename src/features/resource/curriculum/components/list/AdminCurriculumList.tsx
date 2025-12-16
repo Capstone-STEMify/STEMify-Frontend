@@ -32,14 +32,9 @@ export default function AdminCurriculumList() {
 
   const queryParams: CurriculumSliceParams = useAppSelector((state) => state.curriculum)
   const { data: curriculumData, isLoading } = useSearchCurriculumQuery(queryParams)
-  const rows = React.useMemo(() => curriculumData?.data.items ?? [], [curriculumData])
 
   const [updateCurriculum] = useUpdateCurriculumMutation()
   const [deleteCurriculum] = useDeleteCurriculumMutation()
-
-  useEffect(() => {
-    dispatch(setPageSize(6))
-  }, [dispatch])
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPageIndex(newPage))

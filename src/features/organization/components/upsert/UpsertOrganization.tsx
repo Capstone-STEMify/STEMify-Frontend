@@ -147,7 +147,14 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
       </div>
 
       <form.AppField name='description'>
-        {(field) => <field.TextAreaField label='Description' placeholder='Description' rows={5} className='max-h-40' />}
+        {(field) => (
+          <field.TextAreaField
+            label={tOrganization('description')}
+            placeholder={tOrganization('form.placeholder.description')}
+            rows={5}
+            className='max-h-40'
+          />
+        )}
       </form.AppField>
 
       {/* {Object.keys(form.state.errors).length > 0 && (

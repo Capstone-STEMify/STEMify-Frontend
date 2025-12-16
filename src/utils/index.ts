@@ -265,3 +265,14 @@ export function stringToHslColor(input: string, saturation = 55, lightness = 60)
   const hue = hash % 360
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`
 }
+
+export function getInitials(name?: string) {
+  if (!name) return '?'
+
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join('')
+}
