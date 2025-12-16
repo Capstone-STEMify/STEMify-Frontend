@@ -10,11 +10,7 @@ import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
 import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
 import { useParams } from 'next/navigation'
 
-type GroupColumnProps = {
-  isModal?: boolean
-}
-
-export function useGetGroupColumn({ isModal = false }: GroupColumnProps): ColumnDef<GroupDetailStudent>[] {
+export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
   const { openModal } = useModal()
   const locale = useLocale()
   const [removeStudentFromGroup] = useRemoveStudentFromGroupMutation()
@@ -69,6 +65,17 @@ export function useGetGroupColumn({ isModal = false }: GroupColumnProps): Column
       cell: ({ row }) => <div className='text-sm'>{row.original.email}</div>
     },
     {
+      accessorKey: 'joinedAt',
+      header: tc('tableHeader.joinedAt'),
+      cell: ({ row }) => <div className='text-sm text-gray-600'>{formatDate(row.original.joinedAt, { locale })}</div>
+    },
+
+    {
+      accessorKey: 'subscriptionOrderId',
+      header: tc('tableHeader.subscription'),
+      cell: ({ row }) => <div className='font-mono text-sm'>#{row.original.subscriptionOrderId}</div>
+    },
+    {
       accessorKey: 'isActive',
       header: tc('tableHeader.status'),
       cell: ({ row }) => (
@@ -77,34 +84,19 @@ export function useGetGroupColumn({ isModal = false }: GroupColumnProps): Column
         </Badge>
       )
     },
-    // {
-    //   accessorKey: 'subscriptionOrderId',
-    //   header: tc('tableHeader.subscription'),
-    //   cell: ({ row }) => <div className='font-mono text-sm'>#{row.original.subscriptionOrderId}</div>
-    // },
-    {
-      accessorKey: 'joinedAt',
-      header: tc('tableHeader.joinedAt'),
-      cell: ({ row }) => <div className='text-sm text-gray-600'>{formatDate(row.original.joinedAt, { locale })}</div>
-    },
-
-    ...(!isModal
-      ? [
-          createActionsColumnFromItems<GroupDetailStudent>([
-            {
-              label: tc('button.removeFromGroup'),
-              danger: true,
-              onClick: async ({ original }) => {
-                openModal('confirm', {
-                  message: tt('confirmMessage.removeStudentFromGroup', {
-                    title: original.fullName
-                  }),
-                  onConfirm: () => handleDelete(original.organizationUserId)
-                })
-              }
-            }
-          ])
-        ]
-      : [])
+    createActionsColumnFromItems<GroupDetailStudent>([
+      {
+        label: tc('button.removeFromGroup'),
+        danger: true,
+        onClick: async ({ original }) => {
+          openModal('confirm', {
+            message: tt('confirmMessage.removeStudentFromGroup', {
+              title: original.fullName
+            }),
+            onConfirm: () => handleDelete(original.organizationUserId)
+          })
+        }
+      }
+    ])
   ]
 }

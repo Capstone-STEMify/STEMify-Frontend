@@ -27,7 +27,7 @@ export default function OrganizationGroupTable() {
   const to = useTranslations('organization.group')
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
-  const columns = useGetGroupColumn({ isModal: false })
+  const columns = useGetGroupColumn()
   const orgUserStatusTranslation = useOrgUserStatusTranslation()
   const { data, isLoading } = useGetGroupByIdQuery(Number(groupId), { skip: !groupId })
   const [deleteStudents] = useRemoveStudentFromGroupMutation()

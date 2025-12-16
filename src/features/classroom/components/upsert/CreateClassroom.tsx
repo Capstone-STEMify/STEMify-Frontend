@@ -66,6 +66,8 @@ export default function CreateClassroom() {
   const courseId = searchParams.get('courseId')
 
   const { courseTitle } = useAppSelector((state) => state.organizationSpecial)
+  const { selectedCurriculum } = useAppSelector((state) => state.selectedCurriculum)
+  const subscriptions = selectedCurriculum?.subscriptionGroups || []
 
   const [selectedGroups, setSelectedGroups] = useState<
     {
@@ -75,8 +77,6 @@ export default function CreateClassroom() {
       studentIds: string[]
     }[]
   >([])
-
-  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
 
   // Form states
   const [grade, setGrade] = useState('')
@@ -103,11 +103,6 @@ export default function CreateClassroom() {
 
   const isCustomDuration = durationWeeks === 'custom'
 
-  const { data: subscriptions } = useSearchSubscriptionQuery({
-    pageNumber: 1,
-    pageSize: 10,
-    organizationId: selectedOrganizationId!
-  })
   const [createClassroom, { isLoading: isCreating }] = useCreateClassroomMutation()
 
   const form = useAppForm({
@@ -158,6 +153,15 @@ export default function CreateClassroom() {
     if (endDate) form.setFieldValue('endDate', endDate.toISOString())
   }, [endDate])
 
+  const flattenedSubscriptions = subscriptions.flatMap((group) =>
+    group.subscriptions.map((sub) => ({
+      subscriptionId: sub.subscriptionId,
+      startDate: sub.startDate,
+      endDate: sub.endDate,
+      status: group.status
+    }))
+  )
+
   return (
     <div>
       {/* Header */}
@@ -195,14 +199,13 @@ export default function CreateClassroom() {
             <Label className='text-base font-semibold'>{tClassroom('selectSubscription')}</Label>
 
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
-              {subscriptions?.data.items.map((sub) => {
+              {flattenedSubscriptions.map((sub) => {
                 const isActive = sub.status === 'Active'
-                const isSelected = selectedSubscriptionId === sub.id
-
+                const isSelected = selectedSubscriptionId === sub.subscriptionId
                 return (
                   <Card
-                    key={sub.id}
-                    onClick={() => isActive && setSelectedSubscriptionId(sub.id)}
+                    key={sub.subscriptionId}
+                    onClick={() => isActive && setSelectedSubscriptionId(sub.subscriptionId)}
                     className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? 'cursor-pointer hover:shadow-lg' : 'cursor-not-allowed opacity-50'} ${isSelected ? '-translate-y-1 border-blue-500 shadow-blue-200/50' : 'border-gray-200'} `}
                   >
                     {/* Left accent */}
@@ -210,7 +213,7 @@ export default function CreateClassroom() {
 
                     <CardContent className='space-y-2 p-5'>
                       {/* Plan name */}
-                      <h3 className='text-sm leading-snug font-semibold text-gray-900'>{sub.planName}</h3>
+                      <h3 className='text-sm leading-snug font-semibold text-gray-900'>{'TODO: plan name'}</h3>
 
                       {/* Date range */}
                       <div className='text-xs text-gray-500'>
@@ -243,7 +246,7 @@ export default function CreateClassroom() {
                 </Select>
               </div>
             </div>
-            <GroupTableWithTeacher grade={grade} onGroupsChange={(groups) => setSelectedGroups(groups)} />
+            <GroupTableWithTeacher selectedSubscriptionId={selectedSubscriptionId} grade={grade} onGroupsChange={(groups) => setSelectedGroups(groups)} />
           </div>
 
           {/* Basic Information Section */}

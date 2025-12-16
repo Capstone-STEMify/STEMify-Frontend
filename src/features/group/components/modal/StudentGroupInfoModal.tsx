@@ -4,15 +4,15 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/shadcn/dialog'
 import { useModal } from '@/providers/ModalProvider'
 import { useGetGroupByIdQuery } from '@/features/group/api/groupApi'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
-import { DataTable } from '@/components/shared/data-table/data-table'
-import { useGetGroupColumn } from '@/features/group/components/detail/GroupColumn'
 import { useTranslations } from 'next-intl'
+import StudentGroupSubscriptionTable from '@/features/group/components/modal/StudentGroupSubscriptionTable'
 
 type StudentGroupInfoModalProps = {
   groupId: number
+  selectedSubscriptionId: number | null
 }
 
-export default function StudentGroupInfoModal({ groupId }: StudentGroupInfoModalProps) {
+export default function StudentGroupInfoModal({ groupId, selectedSubscriptionId }: StudentGroupInfoModalProps) {
   const to = useTranslations('organization.group')
   const { closeModal } = useModal()
   const { data } = useGetGroupByIdQuery(Number(groupId), { skip: !groupId })
@@ -25,7 +25,6 @@ export default function StudentGroupInfoModal({ groupId }: StudentGroupInfoModal
       })),
     [data]
   )
-  const columns = useGetGroupColumn({ isModal: true })
 
   return (
     <Dialog open onOpenChange={closeModal}>
@@ -33,7 +32,7 @@ export default function StudentGroupInfoModal({ groupId }: StudentGroupInfoModal
         <DialogTitle>{to('studentGroupInfo')}</DialogTitle>
         <ScrollArea className='xl:h-[500px] xl:w-4xl'>
           <div>
-            <DataTable data={rows} columns={columns as any} />
+            <StudentGroupSubscriptionTable students={rows} selectedSubscriptionId={selectedSubscriptionId} />
           </div>
         </ScrollArea>
       </DialogContent>
