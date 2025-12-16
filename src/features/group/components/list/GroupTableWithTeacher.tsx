@@ -11,6 +11,7 @@ import { Group } from '@/features/group/types/group.type'
 import { useTranslations } from 'next-intl'
 import { LicenseType } from '@/types/userRole'
 import { Users2 } from 'lucide-react'
+import { useModal } from '@/providers/ModalProvider'
 
 type GroupTableWithTeacherProps = {
   grade: string
@@ -27,6 +28,7 @@ type GroupTableWithTeacherProps = {
 export default function GroupTableWithTeacher({ grade, onGroupsChange }: GroupTableWithTeacherProps) {
   const tc = useTranslations('common')
   const to = useTranslations('organization')
+  const { openModal } = useModal()
 
   const [selectedRows, setSelectedRows] = useState<number[]>([])
   const [teacherAssignments, setTeacherAssignments] = useState<Record<number, string>>({})
@@ -130,7 +132,12 @@ export default function GroupTableWithTeacher({ grade, onGroupsChange }: GroupTa
                     />
                   </TableCell>
                   <TableCell className='flex flex-col'>
-                    <span className='font-medium'>{group.name}</span>
+                    <span
+                      className='cursor-pointer font-medium underline'
+                      onClick={() => openModal('studentGroupInfo', { groupId: group.id })}
+                    >
+                      {group.name}
+                    </span>
                     <span className='text-sm text-gray-500'>{group.code}</span>
                   </TableCell>
                   <TableCell>
