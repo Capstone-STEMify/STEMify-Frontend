@@ -52,14 +52,6 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
 
   const currentSectionProgress = sectionStatus?.data.items.find((item) => item.sectionId === sectionId)
 
-  if (fetchingContent) {
-    return (
-      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
-        <LoadingComponent size={18} textShow={false} />
-      </div>
-    )
-  }
-
   if (!sectionId) {
     return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
   }
@@ -81,6 +73,14 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
   }
 
   const lastItem = content.data.items[content.data.items.length - 1]
+
+  if (fetchingContent && lastItem) {
+    return (
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+        <LoadingComponent size={18} textShow={false} />
+      </div>
+    )
+  }
 
   if (lastItem.contentType === ContentType.QUIZ) {
     return (

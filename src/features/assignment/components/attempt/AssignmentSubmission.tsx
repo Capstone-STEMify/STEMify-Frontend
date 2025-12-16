@@ -1,24 +1,23 @@
 'use client'
-import { Sparkles, FileText, UploadCloud, X, Loader2, Save } from 'lucide-react'
+import { FileText, UploadCloud, X, Loader2, Save } from 'lucide-react'
 import { useCreateAssignmentAttemptMutation } from '@/features/assignment/api/studentAssignmentApi'
-import { Assignment, AssignmentQuestion, AssignmentQuestionType } from '@/features/assignment/types/assignment.type'
+import { AssignmentQuestionType } from '@/features/assignment/types/assignment.type'
 import { toast } from 'sonner'
 import { CreateAttemptPayload, QuestionAttemptPayload } from '@/features/assignment/types/assigmentlistdetail.type'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/shadcn/button'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { Card, CardContent } from '@/components/shadcn/card'
-import { Label } from '@/components/shadcn/label'
-import { Input } from '@/components/shadcn/input'
+import { useRouter } from 'next/navigation'
 import { Textarea } from '@/components/shadcn/textarea'
-import { useAppSelector } from '@/hooks/redux-hooks'
+import { useAppSelector, useAppDispatch } from '@/hooks/redux-hooks'
+import { setSelectedAssignment, setSelectedStudentAssignment } from '@/features/assignment/slice/studentAssignmentSlice'
 import BackButton from '@/components/shared/button/BackButton'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { fileToBase64, formatDate, formatDateV2 } from '@/utils/index'
+import { fileToBase64, formatDate } from '@/utils/index'
 import { useLocale, useTranslations } from 'next-intl'
 import { set, get, del } from 'idb-keyval'
 
 const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (file: File | null) => void }) => {
+  const t = useTranslations('assignment.student.doAsm')
   const [isDragging, setIsDragging] = useState(false)
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -41,7 +40,7 @@ const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (f
     ) {
       onFileChange(droppedFile)
     } else {
-      toast.error('Only .pdf, .doc, or .docx files are allowed.')
+      toast.error(t('fileError'))
     }
   }
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,9 +81,9 @@ const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (f
     >
       <UploadCloud className={`h-8 w-8 ${isDragging ? 'text-blue-600' : 'text-gray-400'}`} />
       <p className='mt-2 text-sm text-gray-600'>
-        <span className='font-semibold text-blue-600'>Nhấn vào để upload</span> hoặc kéo thả
+        <span className='font-semibold text-blue-600'>{t('uploadClick')}</span> {t('uploadDrag')}
       </p>
-      <p className='text-xs text-gray-500'>PDF, DOC, hoặc DOCX</p>
+      <p className='text-xs text-gray-500'>{t('uploadFormat')}</p>
       <input
         type='file'
         className='absolute h-full w-full opacity-0'
@@ -97,22 +96,40 @@ const FileInput = ({ file, onFileChange }: { file: File | null; onFileChange: (f
 
 export default function AssignmentSubmissionForm() {
   const t = useTranslations('assignment')
+  const tStudent = useTranslations('assignment.student.doAsm')
   const tc = useTranslations('common')
-  const tt = useTranslations('toast.successMessage')
-
   const router = useRouter()
   const locale = useLocale()
+  
+  const dispatch = useAppDispatch()
   const { selectedAssignment, selectedStudentAssignment } = useAppSelector((state) => state.studentAssignmentSelected)
 
-  console.log(selectedAssignment, selectedStudentAssignment)
-
   const [createAttempt, { isLoading: isSubmitting }] = useCreateAssignmentAttemptMutation()
-  const [projectTitle, setProjectTitle] = useState('')
   const [answers, setAnswers] = useState<Record<number, { text?: string; file?: File | null }>>({})
-  const [isDataRestored, setIsDataRestored] = useState(false)
+  const [isRestoringSession, setIsRestoringSession] = useState(true)
+  const [isDraftLoaded, setIsDraftLoaded] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
 
   const storageKey = selectedStudentAssignment ? `draft_submission_${selectedStudentAssignment.id}` : null
+
+  useEffect(() => {
+    if (!selectedAssignment || !selectedStudentAssignment) {
+      try {
+        const backupData = localStorage.getItem('assignment_session_backup')
+        if (backupData) {
+          const parsedData = JSON.parse(backupData)
+          if (parsedData.assignment && parsedData.studentAssignment) {
+            dispatch(setSelectedAssignment(parsedData.assignment))
+            dispatch(setSelectedStudentAssignment(parsedData.studentAssignment))
+          }
+        }
+      } catch (error) {
+        console.error('Failed to restore assignment session:', error)
+      }
+    }
+    const timer = setTimeout(() => setIsRestoringSession(false), 500)
+    return () => clearTimeout(timer)
+  }, [selectedAssignment, selectedStudentAssignment, dispatch])
 
   useEffect(() => {
     const loadDraft = async () => {
@@ -121,19 +138,22 @@ export default function AssignmentSubmissionForm() {
         const savedData = await get(storageKey)
         if (savedData) {
           setAnswers(savedData)
-          toast.info(tt('restoreData'), { duration: 3000 })
+          toast.info(tStudent('restoreSuccess'), { duration: 3000 })
         }
       } catch (error) {
         console.error('Failed to load draft:', error)
       } finally {
-        setIsDataRestored(true)
+        setIsDraftLoaded(true)
       }
     }
-    loadDraft()
-  }, [storageKey])
+    
+    if (storageKey) {
+        loadDraft()
+    }
+  }, [storageKey, tStudent])
 
   useEffect(() => {
-    if (!isDataRestored || !storageKey || Object.keys(answers).length === 0) return
+    if (!isDraftLoaded || !storageKey || Object.keys(answers).length === 0) return
 
     const saveDraft = async () => {
       try {
@@ -145,9 +165,9 @@ export default function AssignmentSubmissionForm() {
     }
 
     const timeoutId = setTimeout(saveDraft, 1000)
-
     return () => clearTimeout(timeoutId)
-  }, [answers, storageKey, isDataRestored])
+  }, [answers, storageKey, isDraftLoaded])
+
 
   const handleAnswerChange = (questionId: number, value: string) => {
     setAnswers((prev) => ({
@@ -155,6 +175,7 @@ export default function AssignmentSubmissionForm() {
       [questionId]: { ...prev[questionId], text: value }
     }))
   }
+
   const handleFileChange = (questionId: number, file: File | null) => {
     setAnswers((prev) => ({
       ...prev,
@@ -164,7 +185,7 @@ export default function AssignmentSubmissionForm() {
 
   const handleSubmit = async () => {
     if (!selectedAssignment || !selectedStudentAssignment) {
-      toast.error(tt('submitAsmDataFail'))
+      toast.error(tStudent('invalidData'))
       return
     }
 
@@ -185,7 +206,7 @@ export default function AssignmentSubmissionForm() {
             const base64File = await fileToBase64(answer.file)
             attempt.answerFile = base64File
           } catch (error) {
-            toast.error(tt('submitFileFail', { questionIndex: question.orderIndex }))
+            toast.error(tStudent('uploadFail', { index: question.orderIndex }))
             return
           }
         }
@@ -200,23 +221,36 @@ export default function AssignmentSubmissionForm() {
 
     try {
       await createAttempt({ body: payload }).unwrap()
-
+      
       if (storageKey) {
         await del(storageKey)
       }
-
-      toast.success(tt('submitAsmSuccess'))
+      localStorage.removeItem('assignment_session_backup')
+      
+      toast.success(tStudent('submitSuccess'))
       router.back()
     } catch (error) {
-      toast.error(tt('submitAsmFail'))
+      toast.error(tStudent('submitFail'))
       console.error(error)
     }
+  }
+
+  if (isRestoringSession && (!selectedAssignment || !selectedStudentAssignment)) {
+    return (
+      <div className="flex h-64 w-full items-center justify-center flex-col gap-2">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <span className="text-sm text-gray-500">{tStudent('restoring')}</span>
+      </div>
+    )
   }
 
   if (!selectedAssignment || !selectedStudentAssignment) {
     return (
       <div>
-        <SEmpty title={t('student.noAsm')} />
+        <SEmpty title={tStudent('noAsmFound')} />
+        <div className='mt-4 flex justify-center'>
+            <BackButton />
+        </div>
       </div>
     )
   }
@@ -230,20 +264,18 @@ export default function AssignmentSubmissionForm() {
           <BackButton />
           <h1 className='mb-4 text-3xl font-normal'>{selectedAssignment.title}</h1>
         </div>
-        <div className='flex items-end justify-between'>
-          <div className='text-sm text-gray-600'>
-            <span className='font-semibold'>{t('student.doAsm.deadline')}</span>{' '}
-            {formatDate(selectedStudentAssignment.dueDate, { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' })}
-          </div>
-
-          {lastSaved && (
-            <div className='flex items-center gap-1 text-xs text-green-600'>
-              <Save className='h-3 w-3' />
-              {t('student.doAsm.saveDraft', {
-                time: formatDate(lastSaved.toISOString(), { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' })
-              })}
+        <div className='flex justify-between items-end'>
+            <div className='text-sm text-gray-600'>
+              <span className='font-semibold'>{tStudent('deadline')}</span>{' '}
+              {formatDate(selectedStudentAssignment.dueDate, { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' })}
             </div>
-          )}
+            
+            {lastSaved && (
+                <div className='flex items-center text-xs text-green-600 gap-1 animate-pulse'>
+                    <Save className="w-3 h-3" />
+                     {tStudent('saveDraft', { time: formatDate(lastSaved.toISOString(), { showTime: true, locale: locale === 'vi' ? 'vi' : 'en' }) })}
+                </div>
+            )}
         </div>
       </div>
 
@@ -251,19 +283,18 @@ export default function AssignmentSubmissionForm() {
       <div className='border-b border-gray-200'>
         <div className='flex gap-6'>
           <button className='border-b-2 border-blue-600 px-1 pb-3 font-medium text-blue-600 transition-colors'>
-            {t('student.doAsm.mySub')}
+            {tStudent('mySub')}
           </button>
         </div>
       </div>
 
       {/* Submission Form */}
-      {true && (
-        <div className='space-y-6'>
+      <div className='space-y-6'>
           {questions.map((question) => (
             <div key={question.id} className='space-y-4 rounded-lg border p-4 shadow-sm'>
               <div className='space-y-2'>
                 <h3 className='text-base font-normal text-gray-900'>
-                  {t('teacher.modal.question')} {question.orderIndex} ({question.points} {t('teacher.modal.point')})
+                   {t('teacher.modal.question')} {question.orderIndex} ({question.points} {t('teacher.modal.point')})
                 </h3>
                 <p className='text-sm text-gray-700'>{question.content}</p>
               </div>
@@ -272,7 +303,7 @@ export default function AssignmentSubmissionForm() {
                 <Textarea
                   value={answers[question.id]?.text || ''}
                   onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                  placeholder={t('student.doAsm.placeholder')}
+                  placeholder={tStudent('placeholder')}
                   className='min-h-[200px]'
                   disabled={isSubmitting}
                 />
@@ -293,7 +324,6 @@ export default function AssignmentSubmissionForm() {
             </Button>
           </div>
         </div>
-      )}
     </div>
   )
 }

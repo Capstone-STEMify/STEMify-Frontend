@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
-import { CheckCircle, Clock, ExternalLink, FileText, Loader2, RotateCcw, Trophy } from 'lucide-react'
+import { CheckCircle, Clock, ExternalLink, FileText, RotateCcw, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import { useGetStudentAssignmentByIdQuery } from '@/features/assignment/api/studentAssignmentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
@@ -13,7 +13,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogClose,
   DialogFooter
 } from '@/components/shadcn/dialog'
@@ -21,7 +20,6 @@ import { StudentAssignmentDetail, StudentAssignmentStatus } from '../../types/as
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch } from '@/hooks/redux-hooks'
 import { setSelectedAssignment, setSelectedStudentAssignment } from '@/features/assignment/slice/studentAssignmentSlice'
-import { Separator } from 'radix-ui'
 import { useTranslations } from 'next-intl'
 
 // --- Helper Functions ---
@@ -173,6 +171,15 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
 
     dispatch(setSelectedAssignment(assignmentDetail.data))
     dispatch(setSelectedStudentAssignment(studentAssignmentResponse.data))
+
+    localStorage.setItem(
+      'assignment_session_backup',
+      JSON.stringify({
+        assignment: assignmentDetail.data,
+        studentAssignment: studentAssignmentResponse.data,
+        timestamp: Date.now()
+      })
+    )
 
     router.push(`${lessonId}/assignment/${assignmentId}`)
   }
