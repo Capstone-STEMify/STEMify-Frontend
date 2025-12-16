@@ -4,6 +4,7 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
+import SearchBar from '@/components/shared/search/SearchBar'
 import SSelect from '@/components/shared/SSelect'
 import { useSearchOrganizationsQuery } from '@/features/organization/api/organizationApi'
 import { useGetOrganizationColumn } from '@/features/organization/components/list/SystemOrganizationColumn'
@@ -28,7 +29,12 @@ export default function SystemOrganizationList() {
   const queryParams = useAppSelector((state) => state.organization)
 
   const columns = useGetOrganizationColumn()
-  const { data, isLoading } = useSearchOrganizationsQuery(queryParams)
+  const { data, isLoading } = useSearchOrganizationsQuery({
+    search: search || undefined,
+    status: queryParams.status,
+    pageNumber: queryParams.pageNumber,
+    pageSize: queryParams.pageSize
+  })
 
   const organizationStatusOptions = [
     { label: tc('status.all'), value: 'all' },
@@ -69,14 +75,7 @@ export default function SystemOrganizationList() {
         <div className='flex items-center justify-start gap-2'>
           {/* Search Input */}
           <div className='relative w-100'>
-            <Input
-              type='text'
-              placeholder={t('list.placeholder.search')}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className='border-gray-300 bg-white pl-10 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
-            />
-            <Search className='absolute top-3 left-3 h-4 w-4 text-gray-400' />
+            <SearchBar className='w-96' onDebouncedSearch={(v) => setSearch(v)} />
           </div>
           <SSelect
             className='w-fit'
