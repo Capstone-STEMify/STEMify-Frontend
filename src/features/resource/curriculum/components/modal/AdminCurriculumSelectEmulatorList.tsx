@@ -3,6 +3,7 @@ import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import SearchBar from '@/components/shared/search/SearchBar'
 import { useSearchEmulationsQuery } from '@/features/emulator/api/emulatorApi'
+import { EmulatorStatus } from '@/features/emulator/types/emulator.type'
 import { useAddEmulationToCurriculumMutation } from '@/features/resource/curriculum/api/curriculumApi'
 import { useGetEmulatorColumn } from '@/features/resource/curriculum/components/list/EmulatorColum'
 import { useModal } from '@/providers/ModalProvider'
@@ -56,6 +57,7 @@ export default function AdminCurriculumSelectEmulatorList({
   const queryParams = {
     search: searchTerm,
     page: pageNumber,
+    status: EmulatorStatus.PUBLISHED,
     limit: 6
   }
 
@@ -78,6 +80,24 @@ export default function AdminCurriculumSelectEmulatorList({
     toast.success(tt('successMessage.addToCurriculum'))
     onSuccess?.()
   }
+
+  const pagingDataAdapter = React.useMemo(() => {
+    const pages = data?.data?.pagination?.pages
+    if (!pages) return undefined
+
+    return {
+      data: {
+        totalPages: pages
+      }
+    }
+  }, [data])
+
+  const pagingParamsAdapter = React.useMemo(() => {
+    return {
+      ...queryParams,
+      pageNumber: pageNumber
+    }
+  }, [queryParams, pageNumber])
 
   if (!data) return null
   return (
@@ -107,8 +127,8 @@ export default function AdminCurriculumSelectEmulatorList({
         data={rows}
         columns={extendedColumns as any}
         enableRowSelection
-        pagingData={data}
-        pagingParams={queryParams}
+        pagingData={pagingDataAdapter}
+        pagingParams={pagingParamsAdapter}
         handlePageChange={handlePageChange}
         rowSelection={selectedIds}
         onSelectionChange={(ids) => {

@@ -288,7 +288,8 @@
       "locked": "Khóa",
       "correct": "Đúng",
       "incorrect": "Sai",
-      "unanswered": "Chưa Trả Lời"
+      "unanswered": "Chưa Trả Lời",
+      "disabled": "Đã Vô Hiệu Hóa"
     },
     "status2": {
       "active": "Đang Hoạt Động",

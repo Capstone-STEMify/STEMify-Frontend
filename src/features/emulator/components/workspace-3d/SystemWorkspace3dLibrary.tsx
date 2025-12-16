@@ -1,21 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 'use client'
 
 import React, { useState } from 'react'
@@ -43,7 +25,7 @@ import { UserRole } from '@/types/userRole'
 import SearchBar from '@/components/shared/search/SearchBar'
 import SSelect from '@/components/shared/SSelect'
 
-export default function Workspace3dLibrary() {
+export default function SystemWorkspace3dLibrary() {
   const { openModal } = useModal()
   const locale = useLocale()
   const router = useRouter()
@@ -52,27 +34,35 @@ export default function Workspace3dLibrary() {
   const t3d = useTranslations('workspace3D')
 
   const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
+  const [statusFilter, setStatusFilter] = useState<EmulatorStatus>(EmulatorStatus.PUBLISHED)
 
   const userRole = useAppSelector((state) => state.auth.user?.userRole)
   const userId = useAppSelector((state) => state.auth.user?.userId)
 
-  const allowRoles = [UserRole.STAFF, UserRole.ADMIN]
-  const statusQuery = statusFilter === 'all' ? undefined : statusFilter
+  const queryParams = React.useMemo(() => {
+    const baseParams: any = {
+      search,
+      page: 1,
+      limit: 6,
+      status: statusFilter
+    }
 
-  const { data, isLoading } = useSearchEmulationsQuery({
-    page: 1,
-    search,
-    status: statusQuery as EmulatorStatus | undefined,
-    userId: userId
-  })
+    if (statusFilter === EmulatorStatus.DRAFT && userId) {
+      baseParams.userId = userId
+    }
+
+    return baseParams
+  }, [search, statusFilter, userId])
+
+  const allowRoles = [UserRole.STAFF, UserRole.ADMIN]
+
+  const { data, isLoading } = useSearchEmulationsQuery(queryParams)
   const [updateEmulation] = useUpdateEmulatorMutation()
   const [deleteEmulation] = useDeleteEmulatorMutation()
 
   const emulations = data?.data.items || []
 
-  const emulationOtptions = [
-    { label: t('status.all'), value: 'all' },
+  const emulationOptions = [
     { label: t('status.published'), value: EmulatorStatus.PUBLISHED },
     { label: t('status.draft'), value: EmulatorStatus.DRAFT },
     { label: t('status.archived'), value: EmulatorStatus.ARCHIVED }
@@ -134,9 +124,9 @@ export default function Workspace3dLibrary() {
           {/* Placeholder for future filters */}
           <SSelect
             placeholder={t('select.placeholder')}
-            options={emulationOtptions}
+            options={emulationOptions}
             value={statusFilter}
-            onChange={(value) => setStatusFilter(value)}
+            onChange={(value) => setStatusFilter(value as EmulatorStatus)}
             className='w-64'
           />
         </div>
@@ -168,9 +158,9 @@ export default function Workspace3dLibrary() {
         {/* Placeholder for future filters */}
         <SSelect
           placeholder={t('select.placeholder')}
-          options={emulationOtptions}
+          options={emulationOptions}
           value={statusFilter}
-          onChange={(value) => setStatusFilter(value)}
+          onChange={(value) => setStatusFilter(value as EmulatorStatus)}
           className='w-64 bg-transparent'
         />
       </div>

@@ -14,6 +14,8 @@ import {
   useUpdateOrganizationMutation
 } from '@/features/organization/api/organizationApi'
 import { useStatusTranslation } from '@/utils/index'
+import { Badge } from '@/components/shadcn/badge'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 
 export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
   const router = useRouter()
@@ -26,15 +28,9 @@ export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
   const statusTranslate = useStatusTranslation()
   const tm = useTranslations('message')
 
-  const handleNavigatePacingGuide = (id: number) => {
+  const handleNavigateOrganization = (id: number) => {
     router.push(`/${locale}/admin/organization/${id}`)
   }
-
-  const statusOptions = [
-    { label: OrganizationStatus.ACTIVE, value: OrganizationStatus.ACTIVE },
-    { label: OrganizationStatus.ARCHIVED, value: OrganizationStatus.ARCHIVED },
-    { label: OrganizationStatus.INACTIVE, value: OrganizationStatus.INACTIVE }
-  ]
 
   const handleStatusChange = (organization: Organization, newStatus: string) => {
     updateOrganizationStatus({ id: organization.id, body: { status: newStatus as OrganizationStatus } })
@@ -80,10 +76,10 @@ export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
       accessorKey: 'name',
       header: () => <div>{tc('tableHeader.name')}</div>,
       cell: ({ row }) => {
-        const lessonId = row.original.id
+        const organizationId = row.original.id
         return (
           <div
-            onClick={() => handleNavigatePacingGuide(lessonId)}
+            onClick={() => handleNavigateOrganization(organizationId)}
             className='cursor-pointer font-bold transition hover:opacity-80'
           >
             {row.original.name}
@@ -115,11 +111,7 @@ export function useGetOrganizationColumn(): ColumnDef<Organization>[] {
       header: () => <div>{tc('tableHeader.status')}</div>,
       cell: ({ row }) => {
         return (
-          <SStatusDropdown
-            value={row.original.status}
-            options={statusOptions.filter((opt) => opt.value == row.original.status)}
-            onChange={(newStatus) => handleStatusChange(row.original, newStatus)}
-          />
+          <Badge className={getStatusBadgeClass(row.original.status)}>{statusTranslate(row.original.status)}</Badge>
         )
       }
     },
