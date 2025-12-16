@@ -6,7 +6,7 @@ const initialState: UserSliceParams = {
   pageSize: 10,
   search: '',
   orderBy: '',
-  status: '',
+  status: undefined,
   subscription_order_id: undefined,
   license_type: undefined
 }

@@ -12,7 +12,7 @@ export default function StemifiLabLibrary() {
   const { token, user } = useAppSelector((state) => state.auth)
   const userId = user?.userId
   const redirectUrl =
-    process.env.NEXT_PUBLIC_MICROBIT_URL ?? 'https://white-cliff-0cc49e300.3.azurestaticapps.net/index.html'
+    process.env.NEXT_PUBLIC_MICROBIT_URL ?? '/'
 
   return (
     <div className='mx-auto max-w-7xl'>
