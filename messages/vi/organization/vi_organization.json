@@ -230,7 +230,8 @@
         "groupList": "Danh sách nhóm",
         "name": "Tên",
         "studentCount": "Số học sinh"
-      }
+      },
+      "studentGroupInfo": "Thông tin nhóm học sinh"
     },
     "curriculum": {
       "curriculum": "Khung chương trình",

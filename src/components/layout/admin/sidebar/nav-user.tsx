@@ -105,19 +105,7 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <Link href={`/${locale}/admin/profile`}>
-                <DropdownMenuItem>
-                  <IconUserCircle />
-                  {t('user.account')}
-                </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem>
-                <IconNotification />
-                {t('user.notifications')}
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+
             <DropdownMenuItem onClick={handleSignOut}>
               <IconLogout />
               {t('user.signOut')}

@@ -231,7 +231,8 @@
         "groupList": "Group List",
         "name": "Name",
         "studentCount": "Student Count"
-      }
+      },
+      "studentGroupInfo": "Student Group Information"
     },
     "curriculum": {
       "curriculum": "Curriculum",

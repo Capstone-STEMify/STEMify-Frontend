@@ -173,7 +173,7 @@ export default function CreateClassroom() {
         </div>
       </div>
 
-      <div className='mx-auto my-4 max-w-6xl'>
+      <div className='mx-auto my-4 max-w-6xl px-5'>
         <div className='rounded-lg border border-blue-100 bg-blue-50/60 p-5 text-center'>
           <h3 className='mb-2 text-base font-semibold text-blue-700'>{tClassroom('guideText')}</h3>
 
