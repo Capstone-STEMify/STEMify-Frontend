@@ -19,6 +19,7 @@ type QuizFormData = {
   durationDays: number
   timeLimitMinutes?: number // optional
   cooldownHours?: number // optional
+  maxAttempts?: number // optional
 }
 
 const defaultQuizData: QuizFormData = {
@@ -28,7 +29,8 @@ const defaultQuizData: QuizFormData = {
   passingMarks: 70,
   durationDays: 7,
   timeLimitMinutes: 30,
-  cooldownHours: 1
+  cooldownHours: 8,
+  maxAttempts: 3
 }
 
 export default function CreateQuiz({ sectionId, closeModal }: CreateQuizProps) {
@@ -48,7 +50,8 @@ export default function CreateQuiz({ sectionId, closeModal }: CreateQuizProps) {
     passingMarks: z.number().min(0, tv('quiz.passingMarks')),
     durationDays: z.number().min(1, tv('quiz.durationDays')),
     timeLimitMinutes: z.number().min(0, tv('quiz.timeLimitMinutes')).optional(),
-    cooldownHours: z.number().min(0, tv('quiz.cooldownHours')).optional()
+    cooldownHours: z.number().min(0, tv('quiz.cooldownHours')).optional(),
+    maxAttempts: z.number().min(1, tv('quiz.maxAttempts')).optional()
   })
 
   const [createQuiz] = useCreateQuizMutation()
@@ -99,7 +102,7 @@ export default function CreateQuiz({ sectionId, closeModal }: CreateQuizProps) {
 
           <form.AppField
             name='passingMarks'
-            children={(field) => <field.TextField type='number' min={0} label={tq('passingMarks')} />}
+            children={(field) => <field.TextField type='number' min={50} label={tq('passingMarks')} />}
           />
 
           <form.AppField
@@ -109,12 +112,17 @@ export default function CreateQuiz({ sectionId, closeModal }: CreateQuizProps) {
 
           <form.AppField
             name='timeLimitMinutes'
-            children={(field) => <field.TextField type='number' min={0} label={tq('timeLimitMinutes')} />}
+            children={(field) => <field.TextField type='number' min={20} label={tq('timeLimitMinutes')} />}
           />
 
           <form.AppField
             name='cooldownHours'
-            children={(field) => <field.TextField type='number' min={0} label={tq('cooldownHours')} />}
+            children={(field) => <field.TextField type='number' min={1} label={tq('cooldownHours')} />}
+          />
+
+          <form.AppField
+            name='maxAttempts'
+            children={(field) => <field.TextField type='number' min={1} label={tq('maxAttempts')} />}
           />
         </div>
 

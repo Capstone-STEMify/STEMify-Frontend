@@ -116,7 +116,8 @@
       "durationDays": "Thời gian làm bài phải là một số dương",
       "totalMarks": "Tổng điểm phải là một số dương",
       "timeLimitMinutes": "Giới hạn thời gian (tính bằng phút) phải là một số dương",
-      "cooldownHours": "Thời gian chờ giữa các lần làm bài (tính bằng giờ) phải là một số không âm"
+      "cooldownHours": "Thời gian chờ giữa các lần làm bài (tính bằng giờ) phải là một số không âm",
+      "maxAttempts": "Số lần làm bài tối đa phải là một số dương"
     }
   }
 }

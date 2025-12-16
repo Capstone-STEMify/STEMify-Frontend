@@ -24,6 +24,7 @@ import { clearSelectedOrganization } from '@/features/subscription/slice/selecte
 import { persistor } from '@/libs/redux/store'
 import { useRouter } from 'next/navigation'
 import { stringToHslColor } from '@/utils/index'
+import UserAvatar from '@/components/shared/UserAvatar'
 export function NavUser({
   user
 }: {
@@ -67,14 +68,7 @@ export function NavUser({
               size='lg'
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
-              <div
-                className='flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium text-white shadow-sm ring-1 ring-black/5 select-none'
-                style={{
-                  backgroundColor: stringToHslColor(user?.name || '')
-                }}
-              >
-                {user?.name?.charAt(0).toUpperCase()}
-              </div>
+              <UserAvatar fullName={user?.name || ''} size={32} />
               <div className='grid flex-1 text-left text-sm leading-tight'>
                 <span className='truncate font-medium'>{user?.name}</span>
                 <span className='text-muted-foreground truncate text-xs'>{user?.email}</span>
@@ -90,14 +84,8 @@ export function NavUser({
           >
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                <div
-                  className='flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium text-white shadow-sm ring-1 ring-black/5 select-none'
-                  style={{
-                    backgroundColor: stringToHslColor(user?.name || '')
-                  }}
-                >
-                  {user?.name?.charAt(0).toUpperCase()}
-                </div>
+                <UserAvatar fullName={user?.name || ''} size={32} />
+
                 <div className='grid flex-1 text-left text-sm leading-tight'>
                   <span className='truncate font-medium'>{user?.name}</span>
                   <span className='text-muted-foreground truncate text-xs'>{user?.email}</span>
