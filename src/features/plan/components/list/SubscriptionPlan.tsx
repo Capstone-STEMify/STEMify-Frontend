@@ -65,7 +65,7 @@ export function SubscriptionPlan({ plans }: SubscriptionPlanProps) {
                     <div className='flex items-baseline gap-2'>
                       <span className='text-3xl font-extrabold text-slate-900'>{formatPrice(price)}</span>
                       <span className='text-slate-500'>
-                        /{billingCycle === BillingCycle.ANNUAL ? 'year' : '6 months'}
+                        /{billingCycle === BillingCycle.ANNUAL ? t('annual') : t('semiAnnual')}
                       </span>
                     </div>
                   </div>
@@ -82,25 +82,25 @@ export function SubscriptionPlan({ plans }: SubscriptionPlanProps) {
                   <div className='mb-8 space-y-4'>
                     <FeatureItem
                       icon={<Check className='mt-0.5 h-5 w-5 flex-shrink-0 text-sky-500' />}
-                      title={`${plan.maxTeacherSeats} Teacher Seats`}
-                      subtitle='For educators'
+                      title={`${plan.maxTeacherSeats} ${t('teacherSeats')}`}
+                      subtitle={t('forEducators')}
                     />
                     <FeatureItem
                       icon={<Check className='mt-0.5 h-5 w-5 flex-shrink-0 text-sky-500' />}
-                      title={`${plan.maxStudentSeats} Student Seats`}
-                      subtitle='For learners'
+                      title={`${plan.maxStudentSeats} ${t('studentSeats')}`}
+                      subtitle={t('forLearners')}
                     />
                     <FeatureItem
                       icon={<Check className='mt-0.5 h-5 w-5 flex-shrink-0 text-sky-500' />}
-                      title={`${plan.curriculumCount} Curriculums`}
-                      subtitle='STEM programs included'
+                      title={`${plan.curriculumCount} ${t('curriculums')}`}
+                      subtitle={t('stemProgramsIncluded')}
                     />
                   </div>
 
                   {/* Support */}
                   <div className='mt-auto border-t border-slate-200 pt-6'>
                     <p className='mb-3 text-xs font-semibold tracking-wide text-slate-700 uppercase'>
-                      Support & Access
+                      {t('supportAndAccess')}
                     </p>
                     <div className='space-y-2 text-sm text-slate-600'>
                       {plan.accessSupportDetail.split('\n').map((line, idx) => (

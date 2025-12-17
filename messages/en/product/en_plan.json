@@ -73,7 +73,14 @@
       "annual": "Annual",
       "semiAnnual": "SemiAnnual",
       "popular": "Most Popular",
-      "support": "Support & Access"
+      "support": "Support & Access",
+      "studentSeats": "Student Seats",
+      "teacherSeats": "Teacher Seats",
+      "curriculums": "Curriculums",
+      "supportAndAccess": "Support & Access",
+      "forLearners": "For learners",
+      "forEducators": "For educators",
+      "stemProgramsIncluded": "STEM programs included"
     }
   }
 }

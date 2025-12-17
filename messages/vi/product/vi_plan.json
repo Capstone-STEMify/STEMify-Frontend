@@ -72,7 +72,14 @@
       "annual": "Hàng năm",
       "semiAnnual": "Nửa năm",
       "popular": "Phổ biến nhất",
-      "support": "Hỗ trợ & Quyền truy cập"
+      "support": "Hỗ trợ & Quyền truy cập",
+      "studentSeats": "Chỗ học sinh",
+      "teacherSeats": "Chỗ giáo viên",
+      "curriculums": "Chương trình giảng dạy",
+      "supportAndAccess": "Hỗ trợ & Quyền truy cập",
+      "forLearners": "Dành cho học sinh",
+      "forEducators": "Dành cho giáo viên",
+      "stemProgramsIncluded": "Chương trình STEM bao gồm"
     }
   }
 }

@@ -322,6 +322,14 @@
       "singlechoice": "Một đáp án đúng",
       "truefalse": "Đúng / Sai"
     },
-    "grade": "Khối"
+    "grade": "Khối",
+    "unauthorized": {
+      "title": "Truy Cập Không Được Phép",
+      "action": "Truy Cập Bị Từ Chối",
+      "message": "Bạn không có quyền truy cập trang này. Vui lòng liên hệ với quản trị viên nếu bạn cho rằng đây là một lỗi.",
+      "backHome": "Quay về Trang Chủ",
+      "signInWithAnotherAccount": "Đăng nhập bằng tài khoản khác",
+      "help": "Cần trợ giúp? Liên hệ với quản trị hệ thống của bạn để được hỗ trợ."
+    }
   }
 }

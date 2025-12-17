@@ -323,6 +323,14 @@
       "singlechoice": "Single Choice",
       "truefalse": "True / False"
     },
-    "grade": "Grade"
+    "grade": "Grade",
+    "unauthorized": {
+      "title": "Unauthorized Access",
+      "action": "Access Denied",
+      "message": " You do not have permission to access this page. Please contact your administrator if you believe this is an error.",
+      "backHome": "Go Back to Home",
+      "signInWithAnotherAccount": "Sign in with another account",
+      "help": "Need assistance? Contact your system administrator for help."
+    }
   }
 }

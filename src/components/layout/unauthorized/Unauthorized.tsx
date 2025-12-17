@@ -4,8 +4,11 @@ import { Lock, Home, Shield } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { redirect } from 'next/navigation'
 import { signIn, signOut } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 
 export default function Unauthorized() {
+  const tc = useTranslations('common.unauthorized')
+
   const goToHome = () => {
     redirect('/')
   }
@@ -40,33 +43,30 @@ export default function Unauthorized() {
             <h1 className='mb-2 text-4xl font-bold text-white'>403</h1>
             <div className='flex items-center justify-center gap-2 text-gray-300'>
               <Shield className='h-5 w-5' />
-              <span className='text-lg'>Unauthorized Access</span>
+              <span className='text-lg'>{tc('title')}</span>
             </div>
           </div>
 
           {/* Content section */}
           <div className='px-12 py-10 text-center'>
-            <h2 className='mb-4 text-2xl font-semibold text-gray-800'>Access Denied</h2>
-            <p className='mx-auto mb-8 max-w-md text-lg leading-relaxed text-gray-600'>
-              You do not have permission to access this page. Please contact your administrator if you believe this is
-              an error.
-            </p>
+            <h2 className='mb-4 text-2xl font-semibold text-gray-800'>{tc('action')}</h2>
+            <p className='mx-auto mb-8 max-w-md text-lg leading-relaxed text-gray-600'>{tc('message')}</p>
 
             {/* Action buttons */}
             <div className='mx-auto flex w-fit flex-col justify-center gap-5'>
               <Button onClick={goToHome} variant={'outline'} size={'lg'} className='mx-auto w-fit p-4 text-base'>
                 <Home className='h-5 w-5' />
-                Go back to home
+                {tc('backHome')}
               </Button>
               <Button onClick={handleSignOut} size={'lg'} className='mx-auto w-fit p-4 text-base'>
                 <Home className='h-5 w-5' />
-                Sign in with different account
+                {tc('signInWithAnotherAccount')}
               </Button>
             </div>
 
             {/* Help section */}
             <div className='mt-10 border-t border-gray-200 pt-8'>
-              <p className='text-sm text-gray-500'>Need assistance? Contact your system administrator for help.</p>
+              <p className='text-sm text-gray-500'>{tc('help')}</p>
             </div>
           </div>
         </div>
