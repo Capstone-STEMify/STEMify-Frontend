@@ -145,17 +145,26 @@ export default function OrganizationCurriculumList() {
                       <>
                         {displayGroup.subscriptions.length === 1 ? (
                           <>
-                            <div className='flex items-center gap-2 text-sm'>
-                              <span className='text-gray-600'>{t('startDate')}:</span>
+                            <div className='flex flex-col gap-2'>
+                              <span className='text-gray-600'>{t('accessPeriod')}:</span>
                               <span className='font-medium text-gray-900'>
-                                {formatDate(displayGroup.subscriptions[0].startDate, { locale })}
-                              </span>
-                            </div>
-
-                            <div className='flex items-center gap-2 text-sm'>
-                              <span className='text-gray-600'>{t('endDate')}:</span>
-                              <span className='font-medium text-gray-900'>
-                                {formatDate(displayGroup.subscriptions[0].endDate, { locale })}
+                                {formatDate(
+                                  new Date(
+                                    Math.min(...displayGroup.subscriptions.map((s) => new Date(s.startDate).getTime()))
+                                  ),
+                                  {
+                                    locale
+                                  }
+                                )}
+                                {' – '}
+                                {formatDate(
+                                  new Date(
+                                    Math.max(...displayGroup.subscriptions.map((s) => new Date(s.endDate).getTime()))
+                                  ),
+                                  {
+                                    locale
+                                  }
+                                )}
                               </span>
                             </div>
                           </>
