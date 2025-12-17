@@ -213,6 +213,12 @@
       "updatedAt": "Ngày cập nhật",
       "totalStudents": "Tổng số học sinh",
       "attendance": "Tham gia",
+      "groupStudents": "Nhóm học sinh",
+      "ungroupedStudents": "Học sinh chưa có nhóm",
+      "createStudentGroup": "Tạo nhóm học sinh",
+      "studentsWillBeAdded": "học sinh sẽ được thêm vào nhóm này",
+      "enterGroupName": "Nhập tên nhóm",
+      "enterGroupCode": "Nhập mã nhóm",
       "step1": {
         "title": "Bước 1: Chọn học sinh cho nhóm",
         "description": "Chọn học sinh để thêm vào nhóm",

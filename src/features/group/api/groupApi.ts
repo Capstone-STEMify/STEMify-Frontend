@@ -1,10 +1,11 @@
 import { Group, GroupQueryParams } from '@/features/group/types/group.type'
+import { userApi } from '@/features/user/api/userApi'
 import { createCrudApi } from '@/libs/redux/baseApi'
 import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
 export const groupApi = createCrudApi<Group, GroupQueryParams>({
   reducerPath: 'groupApi',
-  tagTypes: ['Group'],
+  tagTypes: ['Group', 'UngroupedStudent'],
   baseUrl: '/groups'
 }).injectEndpoints({
   endpoints: (builder) => ({
@@ -42,6 +43,24 @@ export const groupApi = createCrudApi<Group, GroupQueryParams>({
         body: { studentIds }
       }),
       invalidatesTags: ['Group', 'OrganizationUser']
+    }),
+
+    createOrganizationGroup: builder.mutation<
+      ApiSuccessResponse<Group>,
+      { organizationId: number; groupData: Partial<Group> }
+    >({
+      query: ({ organizationId, groupData }) => ({
+        url: `/organizations/${organizationId}/groups/with-students`,
+        method: 'POST',
+        body: groupData
+      }),
+      invalidatesTags: ['Group'],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          dispatch(userApi.util.invalidateTags([{ type: 'UngroupedStudent', id: 'LIST' }]))
+        } catch {}
+      }
     })
   })
 })
@@ -53,9 +72,9 @@ export const {
 
   useUpdateMutation: useUpdateGroupMutation,
   useDeleteMutation: useDeleteGroupMutation,
-  useCreateMutation: useCreateGroupMutation,
 
   useSearchGroupByOrganizationIdQuery,
   useAddStudentToGroupMutation,
-  useRemoveStudentFromGroupMutation
+  useRemoveStudentFromGroupMutation,
+  useCreateOrganizationGroupMutation
 } = groupApi

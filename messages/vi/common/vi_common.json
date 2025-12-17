@@ -146,7 +146,8 @@
       "restore": "Khôi Phục",
       "removeStudents": "Xóa {student} Học Sinh",
       "deactivate": "Vô Hiệu Hóa",
-      "activate": "Kích Hoạt"
+      "activate": "Kích Hoạt",
+      "revoke": "Thu Hồi"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

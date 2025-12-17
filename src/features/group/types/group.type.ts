@@ -18,6 +18,7 @@ export type Group = {
   updatedAt: string
   students: GroupDetailStudent[]
   studentIds?: string[]
+  grade: number
 }
 
 export type GroupDetailStudent = {

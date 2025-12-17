@@ -5,8 +5,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { Button } from '@/components/shadcn/button'
-import { useCreateGroupMutation } from '@/features/group/api/groupApi'
+import { useCreateOrganizationGroupMutation } from '@/features/group/api/groupApi'
 import { useModal } from '@/providers/ModalProvider'
+import { useAppSelector } from '@/hooks/redux-hooks'
+import { Grade } from '@/features/classroom/types/classroom.type'
+import { useTranslations } from 'next-intl'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 
 export interface StudentGroupPayload {
   name: string
@@ -15,58 +19,91 @@ export interface StudentGroupPayload {
 }
 
 interface UpsertStudentGroupProps {
-  studentIds: string[] // <-- danh sách student để tạo group
+  studentIds: string[]
 }
 
 export function UpsertStudentGroup({ studentIds }: UpsertStudentGroupProps) {
+  const tc = useTranslations('common')
+  const to = useTranslations('organization.group')
   const [name, setName] = useState('')
   const [code, setCode] = useState('')
-  const [createStudentGroup] = useCreateGroupMutation()
+  const [grade, setGrade] = useState('')
+  const [createStudentGroup] = useCreateOrganizationGroupMutation()
   const { closeModal } = useModal()
+  const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
+  const { user } = useAppSelector((state) => state.auth)
 
   const handleSubmit = () => {
-    if (!name.trim() || !code.trim()) return
+    if (!name.trim() || !code.trim() || !grade.trim() || !selectedOrganizationId || !user?.userId) return
 
     createStudentGroup({
-      name: name.trim(),
-      code: code.trim(),
-      studentIds: studentIds
+      organizationId: selectedOrganizationId!,
+      groupData: {
+        name: name.trim(),
+        code: code.trim(),
+        grade: Number(grade),
+        createdByUserId: user?.userId,
+        studentIds: studentIds
+      }
     })
 
     closeModal()
   }
 
+  const GRADE_OPTIONS = Object.values(Grade)
+    .filter((v) => typeof v === 'number')
+    .map((grade) => ({
+      label: `${tc('grade')} ${grade}`,
+      value: grade.toString()
+    }))
+
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
-          <DialogTitle>Create Student Group</DialogTitle>
+          <DialogTitle>{to('createStudentGroup')}</DialogTitle>
         </DialogHeader>
 
         <div className='mt-2 space-y-4'>
           {/* GROUP NAME */}
           <div className='space-y-1'>
-            <Label>Group Name</Label>
-            <Input placeholder='Enter group name...' value={name} onChange={(e) => setName(e.target.value)} />
+            <Label>{to('groupName')}</Label>
+            <Input placeholder={to('enterGroupName')} value={name} onChange={(e) => setName(e.target.value)} />
           </div>
 
           {/* GROUP CODE */}
           <div className='space-y-1'>
-            <Label>Group Code</Label>
-            <Input placeholder='Enter group code...' value={code} onChange={(e) => setCode(e.target.value)} />
+            <Label>{to('groupCode')}</Label>
+            <Input placeholder={to('enterGroupCode')} value={code} onChange={(e) => setCode(e.target.value)} />
+          </div>
+
+          <div className='space-y-1'>
+            <Label htmlFor='grade'>{tc('grade')}</Label>
+            <Select value={grade} onValueChange={setGrade}>
+              <SelectTrigger className='w-32'>
+                <SelectValue placeholder={tc('grade')} />
+              </SelectTrigger>
+              <SelectContent>
+                {GRADE_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={String(option.value)}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* DISPLAY SELECTED STUDENT COUNT */}
-          <p className='text-sm text-gray-600'>{studentIds.length} students will be added to this group.</p>
+          <p className='text-sm text-gray-600'>{studentIds.length} {to('studentsWillBeAdded')}</p>
         </div>
 
         <DialogFooter>
           <Button variant='outline' onClick={closeModal}>
-            Cancel
+            {tc('button.cancel')}
           </Button>
 
           <Button disabled={!name.trim() || !code.trim()} onClick={handleSubmit}>
-            Create Group
+            {tc('button.create')}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -32,7 +32,8 @@
       "submitAsmDataFail": "Không thể nộp bài. Dữ liệu không hợp lệ.",
       "submitAsmSuccess": "Nộp bài thành công!",
       "submitAsmFail": "Nộp bài thất bại. Vui lòng thử lại!",
-      "submitFileFail": "Tải file lên thất bại cho Câu hỏi {questionIndex}."
+      "submitFileFail": "Tải file lên thất bại cho Câu hỏi {questionIndex}.",
+      "revoke": "Đã thu hồi thành công"
     },
     "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "errorSpecific": {
@@ -60,7 +61,8 @@
       "cancelledSubscriptions": "Bạn có chắc chắn muốn hủy gói đăng ký này không? Sau khi hủy, người dùng sẽ không thể sử dụng các tính năng của gói.",
       "deactivate": "Bạn có chắc chắn muốn vô hiệu hóa \"{title}\" không?",
       "activate": "Bạn có chắc chắn muốn kích hoạt \"{title}\" không?",
-      "removeStudents": "Bạn có chắc chắn muốn xóa {count} học sinh khỏi nhóm không?"
+      "removeStudents": "Bạn có chắc chắn muốn xóa {count} học sinh khỏi nhóm không?",
+      "revokeLicenseAssignment": "Bạn có chắc chắn muốn thu hồi giấy phép này không?"
     },
     "unauthorized": "Truy cập không được phép."
   }

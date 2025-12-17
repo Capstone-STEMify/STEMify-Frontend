@@ -11,7 +11,7 @@ import {
 
 export const userApi = createCrudApi<User, UserSliceParams>({
   reducerPath: 'userApi',
-  tagTypes: ['User'],
+  tagTypes: ['User', 'UngroupedStudent'],
   baseUrl: '/users'
 }).injectEndpoints({
   endpoints: (builder) => ({
@@ -33,12 +33,15 @@ export const userApi = createCrudApi<User, UserSliceParams>({
         url: `/organizations/${organizationId}/users`,
         method: 'GET',
         params: { pageNumber, pageSize, role, search, status }
-      })
-      // providesTags: ['OrganizationUser']
+      }),
+      providesTags: [{ type: 'UngroupedStudent', id: 'LIST' }]
     }),
 
-    getOrganizationUserDetail: builder.query<ApiSuccessResponse<OrganizationUserProfile>, {organizationUserId: string}>({
-      query: ({organizationUserId}) => ({
+    getOrganizationUserDetail: builder.query<
+      ApiSuccessResponse<OrganizationUserProfile>,
+      { organizationUserId: string }
+    >({
+      query: ({ organizationUserId }) => ({
         url: `/organization-users/${organizationUserId}`,
         method: 'GET'
       })

@@ -2,19 +2,18 @@
 import { useLocale, useTranslations } from 'next-intl'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
-import { Users, MoreHorizontal, Copy, Trash2, Pencil } from 'lucide-react'
-import { Button } from '@/components/shadcn/button'
-import { useModal } from '@/providers/ModalProvider'
+import { Users, MoreHorizontal, Copy, Trash2 } from 'lucide-react'
 import { useDeleteGroupMutation, useSearchGroupByOrganizationIdQuery } from '@/features/group/api/groupApi'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { toast } from 'sonner'
 import { Group } from '@/features/group/types/group.type'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
+import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { UngroupedStudentList } from '@/features/group/components/list/UngroupedStudentList'
 import { useGetOrganizationUserQuery } from '@/features/user/api/userApi'
 import { LicenseType } from '@/types/userRole'
+import { useModal } from '@/providers/ModalProvider'
 
 export default function OrganizationGroupList() {
   const { openModal } = useModal()
@@ -33,8 +32,14 @@ export default function OrganizationGroupList() {
     { skip: !selectedOrganizationId }
   )
   const { data: ungroupedStudents } = useGetOrganizationUserQuery(
-    { organizationId: selectedOrganizationId!, pageNumber: 1, pageSize: 50, role: LicenseType.STUDENT },
-    { skip: !selectedOrganizationId }
+    {
+      organizationId: selectedOrganizationId!,
+      pageNumber: 1,
+      pageSize: 50,
+      role: LicenseType.STUDENT,
+      search: search.trim() || undefined
+    },
+    { skip: !selectedOrganizationId, refetchOnMountOrArgChange: true }
   )
   const [deleteGroup] = useDeleteGroupMutation()
 
@@ -74,7 +79,7 @@ export default function OrganizationGroupList() {
               activeTab === 'groups' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600 hover:text-gray-800'
             }`}
           >
-            Groups
+            {to('groupStudents')}
           </button>
 
           <button
@@ -85,7 +90,7 @@ export default function OrganizationGroupList() {
                 : 'text-gray-600 hover:text-gray-800'
             }`}
           >
-            Ungrouped Students
+            {to('ungroupedStudents')}
             {ungroupedStudents && ungroupedStudents?.data?.items?.length > 0 && (
               <span className='ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-600'>
                 {ungroupedStudents?.data?.items?.length}
@@ -142,7 +147,13 @@ export default function OrganizationGroupList() {
                         </div>
                       </div>
 
-                      <button className='mt-0.5' onClick={() => handleCopyGroupCode(group.code)}>
+                      <button
+                        className='mt-0.5'
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleCopyGroupCode(group.code)
+                        }}
+                      >
                         <Badge variant='secondary' className='text-xs'>
                           {group.code}
                           <Copy className='ml-1 inline-block h-3 w-3' />
@@ -153,8 +164,14 @@ export default function OrganizationGroupList() {
                   </div>
 
                   {/* MENU BTN */}
-                  <button className='rounded-full p-1 hover:bg-gray-100'>
-                    <MoreHorizontal className='h-5 w-5 text-gray-400' />
+                  <button
+                    className='rounded-full p-1 hover:bg-gray-100'
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDeleteGroup(group)
+                    }}
+                  >
+                    <Trash2 className='h-4 w-4 text-red-600' />
                   </button>
                 </div>
               </CardContent>

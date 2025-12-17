@@ -12,6 +12,9 @@ import { OrganizationUser } from '@/features/user/types/user.type'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { getColorByInitial } from '@/utils/index'
 import { useModal } from '@/providers/ModalProvider'
+import { useTranslations } from 'next-intl'
+import SearchBar from '@/components/shared/search/SearchBar'
+import useDebounce from '@/hooks/useDebounce'
 
 interface Props {
   students: OrganizationUser[]
@@ -20,8 +23,10 @@ interface Props {
 }
 
 export function UngroupedStudentList({ students, onCreateGroup, onSearchChange }: Props) {
+  const to = useTranslations('organization.group')
+  const tc = useTranslations('common')
   const [selected, setSelected] = useState<string[]>([])
-  const [groupName, setGroupName] = useState('')
+  const [search, setSearch] = useState('')
   const { openModal } = useModal()
 
   const toggleStudent = (id: string) => {
@@ -45,21 +50,16 @@ export function UngroupedStudentList({ students, onCreateGroup, onSearchChange }
     <div className='mt-5'>
       {/* HEADER */}
       <div className='mb-4 flex items-center justify-between'>
-        <h2 className='text-lg font-semibold'>Học sinh chưa có nhóm</h2>
+        <h2 className='text-lg font-semibold'>{to('ungroupedStudents')}</h2>
 
         <Button
           disabled={selected.length === 0}
           onClick={() => openModal('upsertStudentGroup', { studentIds: selected })}
         >
-          Tạo Nhóm ({selected.length})
+          {to('createStudentGroup')} ({selected.length})
         </Button>
       </div>
-      <div className='mb-4 flex flex-wrap items-center gap-3'>
-        {/* SEARCH */}
-        <div className='w-full sm:w-100'>
-          <Input placeholder='Search student...' onChange={(e) => onSearchChange(e.target.value)} />
-        </div>
-      </div>
+      <SearchBar onDebouncedSearch={(value: string) => onSearchChange(value)} className='mb-5 w-96' />
       {/* TABLE */}
       <div className='overflow-hidden rounded-lg border bg-white'>
         <Table>
@@ -68,9 +68,9 @@ export function UngroupedStudentList({ students, onCreateGroup, onSearchChange }
               <TableHead className='w-10'>
                 <Checkbox checked={selected.length === students.length} onCheckedChange={toggleSelectAll} />
               </TableHead>
-              <TableHead>Student</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Grade</TableHead>
+              <TableHead>{tc('tableHeader.student')}</TableHead>
+              <TableHead>{tc('tableHeader.email')}</TableHead>
+              <TableHead>{tc('tableHeader.grade')}</TableHead>
             </TableRow>
           </TableHeader>
 

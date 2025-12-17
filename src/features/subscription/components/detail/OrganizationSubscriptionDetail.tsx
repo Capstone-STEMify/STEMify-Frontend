@@ -90,10 +90,7 @@ export default function OrganizationSubscriptionDetail() {
   if (!subscription?.data) {
     return <SEmpty title='Organization Subscription Not Found' />
   }
-  console.log('Start:', subscription.data.startDate, new Date(subscription.data.startDate))
-  console.log('End:', subscription.data.endDate, new Date(subscription.data.endDate))
 
-  console.log(calculateProgressValue(new Date(subscription.data.startDate), new Date(subscription.data.endDate)))
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-6'>
       <div className='mx-auto max-w-7xl space-y-8'>

@@ -214,6 +214,12 @@
       "updatedAt": "Updated Date",
       "totalStudents": "Total Students",
       "attendance": "Attendance",
+      "groupStudents": "Groups",
+      "ungroupedStudents": "Ungrouped Students",
+      "createStudentGroup": "Create Student Group",
+      "studentsWillBeAdded": "students will be added to this group",
+      "enterGroupName": "Enter group name",
+      "enterGroupCode": "Enter group code",
       "step1": {
         "title": "Step 1: Select Students",
         "description": "Choose students to include in the groups",

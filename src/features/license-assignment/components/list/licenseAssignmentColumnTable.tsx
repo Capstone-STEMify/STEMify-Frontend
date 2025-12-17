@@ -1,20 +1,27 @@
 'use client'
-import { createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
 import { useTranslations } from 'next-intl'
 import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
-import { Contact, ContactStatus } from '@/features/contact/types/contact.type'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { CheckCircle } from 'lucide-react'
 import { LicenseAssignment } from '@/features/license-assignment/types/licenseAssignment'
 import { formatDate, stringToHslColor, useStatusTranslation } from '@/utils/index'
-import Image from 'next/image'
+import { useDeleteLicenseAssignmentMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
+import { toast } from 'sonner'
 
 export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignment>[] {
   const { openModal } = useModal()
   const tc = useTranslations('common')
+  const tt = useTranslations('toast')
   const statusTranslations = useStatusTranslation()
+
+  const [revokeLicenseAssignment] = useDeleteLicenseAssignmentMutation()
+
+  const handleRevoke = async (id: number) => {
+    await revokeLicenseAssignment(id).unwrap()
+    toast.success(tt('successMessage.revoke'))
+  }
 
   return [
     createSelectColumn<LicenseAssignment>(),
@@ -67,6 +74,17 @@ export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignmen
         const value = row.getValue<LicenseAssignment['assignedAt']>('assignedAt')
         return <p>{formatDate(value)}</p>
       }
-    }
+    },
+    createActionsColumnFromItems<LicenseAssignment>([
+      {
+        label: tc('button.revoke'),
+        onClick: ({ original }) => {
+          openModal('confirm', {
+            message: tt('confirmMessage.revokeLicenseAssignment'),
+            onConfirm: () => handleRevoke(original.id)
+          })
+        }
+      }
+    ])
   ]
 }

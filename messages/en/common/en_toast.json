@@ -32,7 +32,8 @@
       "submitAsmDataFail": "Cannot submit assignment. Invalid data.",
       "submitAsmSuccess": "Submit assignment Successfully!",
       "submitAsmFail": "Submit assignment fail. PLease try again!",
-      "submitFileFail": "ailed to upload file for Question {questionIndex}."
+      "submitFileFail": "ailed to upload file for Question {questionIndex}.",
+      "revoke": "Revoked Successfully"
     },
     "errorMessage": "An error occurred. Please try again. ",
     "errorSpecific": {
@@ -61,7 +62,8 @@
       "cancelledSubscriptions": "Are you sure you want to cancel this subscription?",
       "deactivate": "Are you sure you want to deactivate \"{title}\"?",
       "activate": "Are you sure you want to activate \"{title}\"?",
-      "removeStudents": "Are you sure you want to remove the {count} students from the group?"
+      "removeStudents": "Are you sure you want to remove the {count} students from the group?",
+      "revokeLicenseAssignment": "Are you sure you want to revoke this license assignment?"
     },
     "unauthorized": "Unauthorized access."
   }
