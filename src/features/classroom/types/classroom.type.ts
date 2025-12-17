@@ -211,8 +211,12 @@ export type ClassroomStudentGroup = {
 
 export type AiAnalysisRequest = {
   classroom_id: number
+  student_id?: string
   force_mock: boolean
   analysis_period_days: number
+  lang?: string
+  query?: string
+  session_id?: string
 }
 
 export type AiStudentAnalysisResult = {

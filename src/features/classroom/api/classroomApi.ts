@@ -91,10 +91,14 @@ export const classroomApi = createCrudApi<Classroom, ClassroomSliceParams>({
       }),
       invalidatesTags: ['Classroom']
     }),
-    analyzeClassroomProgress: builder.mutation<ApiSuccessResponse<AiAnalysisResponse>, AiAnalysisRequest>({
-      query: (body) => ({
-        url: `/ai/recommendations/analyze-progress`,
+    analyzeClassroomProgress: builder.mutation<
+      ApiSuccessResponse<AiAnalysisResponse>,
+      AiAnalysisRequest & { teacher_id?: string }
+    >({
+      query: ({ teacher_id, ...body }) => ({
+        url: `/ai/teacher/student-analysis`,
         method: 'POST',
+        params: teacher_id ? { teacher_id } : undefined,
         body
       })
     })
