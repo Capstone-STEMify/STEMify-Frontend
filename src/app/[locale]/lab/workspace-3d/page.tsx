@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Workspace3DLibraryPage() {
   return (
-    <div className='py-10'>
+    <div className='py-5'>
       <StudentWorkspace3dLibrary />
     </div>
   )
