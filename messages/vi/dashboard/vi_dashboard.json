@@ -41,7 +41,31 @@
           "noLesson": "Không tìm thấy bài học cho khóa học này.",
           "disName": "Tên hiển thị",
           "firstName": "Tên",
-          "lastName": "Họ"
+          "lastName": "Họ",
+          "analyzing": "Đang phân tích...",
+          "askAiInsights": "Hỏi AI Insights",
+          "reAnalyzeAi": "Phân tích lại AI",
+          "curriculum": "Chương trình học",
+          "selectCourse": "Chọn khóa học",
+          "aiClassroomAssessment": "Đánh giá lớp học AI",
+          "studentsAtRisk": "Học viên có nguy cơ",
+          "showingStudents": "Hiển thị {count} học viên",
+          "selectLesson": "Chọn bài học",
+          "section": "Phần {id}",
+          "detailsFor": "Chi tiết cho {name}",
+          "viewAiAnalysis": "Xem phân tích AI",
+          "noStudentsRisk": "Không tìm thấy học viên phù hợp với tiêu chí rủi ro.",
+          "noStudentsEnrolled": "Không có học viên nào đăng ký lớp này.",
+          "riskAnalysis": "Phân tích rủi ro",
+          "aiAssessmentForStudent": "Đánh giá AI cho học viên ID:",
+          "riskSeverity": "Mức độ rủi ro",
+          "high": "Cao",
+          "medium": "Trung bình",
+          "priority": "Ưu tiên",
+          "identifiedIssues": "Vấn đề đã xác định",
+          "recommendedAction": "Hành động được đề xuất",
+          "close": "Đóng",
+          "assignSupportTask": "Giao nhiệm vụ hỗ trợ"
         }
       },
       "course": {
@@ -75,6 +99,12 @@
         "name": "Tên bài tập",
         "action": "Thao tác",
         "question": "Câu hỏi"
+      },
+      "toast": {
+        "hasAtRisk": "Có học viên có tiến độ học tập chậm",
+        "noHasAtRisk": "Không có học viên nào có tiến độ học tập chậm",
+        "aiError": "Lỗi khi phân tích tiến độ học tập của học viên bằng AI",
+        "errorResponse": "Lỗi phản hồi từ máy chủ"
       }
     },
     "organization": {
@@ -144,19 +174,19 @@
         "topCourse": "Top Khóa Học",
         "topCourseDesc": "Các khóa học phổ biến nhất hệ thống",
         "headers": {
-           "orgName": "Tên Tổ Chức",
-           "students": "Học sinh",
-           "enrollments": "Ghi danh",
-           "passRate": "Tỷ lệ đạt",
-           "activeSub": "Gói hoạt động",
-           "courseName": "Khóa học",
-           "classrooms": "Lớp học",
-           "avgScore": "Điểm TB",
-           "completion": "Hoàn thành"
+          "orgName": "Tên Tổ Chức",
+          "students": "Học sinh",
+          "enrollments": "Ghi danh",
+          "passRate": "Tỷ lệ đạt",
+          "activeSub": "Gói hoạt động",
+          "courseName": "Khóa học",
+          "classrooms": "Lớp học",
+          "avgScore": "Điểm TB",
+          "completion": "Hoàn thành"
         },
         "placeholders": {
-            "org": "Chưa có dữ liệu tổ chức",
-            "course": "Chưa có dữ liệu khóa học"
+          "org": "Chưa có dữ liệu tổ chức",
+          "course": "Chưa có dữ liệu khóa học"
         }
       }
     }

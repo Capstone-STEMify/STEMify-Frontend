@@ -34,7 +34,7 @@ export default function OrganizationUserTable() {
 
   const organizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId) ?? 1
   const userParams = useAppSelector((state) => state.user)
-
+  const [pageNumber, setPageNumber] = useState(1)
   const [searchTerm, setSearchTerm] = useState('')
 
   const [selectedRole, setSelectedRole] = useState<LicenseType>(LicenseType.STUDENT)
@@ -46,7 +46,7 @@ export default function OrganizationUserTable() {
 
   const searchParams: OrganizationUserQueryParams = {
     organizationId,
-    pageNumber: userParams.pageNumber ?? 1,
+    pageNumber: pageNumber ?? 1,
     pageSize: userParams.pageSize ?? 10,
     role: selectedRole,
     search: debouncedSearchTerm || undefined
@@ -57,7 +57,7 @@ export default function OrganizationUserTable() {
   })
 
   const handleViewDetail = (user: OrganizationUserTableItem) => {
-    setSelectedUserId(user.organizationUserId) 
+    setSelectedUserId(user.organizationUserId)
     setIsDetailModalOpen(true)
   }
 
@@ -77,10 +77,6 @@ export default function OrganizationUserTable() {
       id: user.userId
     }))
   }, [data])
-
-  const handlePageChange = (page: number) => {
-    dispatch(setPageIndex(page))
-  }
 
   return (
     <div className='mt-4 ml-4 w-full max-w-7xl'>
@@ -126,11 +122,11 @@ export default function OrganizationUserTable() {
         data={rows}
         pagingData={data}
         pagingParams={searchParams}
-        handlePageChange={handlePageChange}
+        handlePageChange={(page) => setPageNumber(page)}
         placeholder={isLoading ? 'Đang tải dữ liệu...' : 'Không có người dùng nào khớp với bộ lọc'}
       />
 
-      <OrganizationUserDetailModal 
+      <OrganizationUserDetailModal
         open={isDetailModalOpen}
         onOpenChange={setIsDetailModalOpen}
         organizationUserId={selectedUserId}
