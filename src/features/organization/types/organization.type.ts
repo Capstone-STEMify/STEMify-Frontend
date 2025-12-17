@@ -62,6 +62,7 @@ export type OrganizationCurriculum = {
   subscriptionGroups: {
     status: string
     subscriptions: {
+      planName: string
       subscriptionId: number
       startDate: string
       endDate: string

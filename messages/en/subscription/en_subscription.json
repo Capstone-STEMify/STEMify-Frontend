@@ -1,5 +1,11 @@
 {
   "subscription": {
+    "studentNotInSubscription": "This student is not part of the selected subscription.",
+    "licenseNotice": {
+      "message": "This student group contains {count} students without a license. Please select one of the options below to continue.",
+      "optionAutoAssign": "Automatically assign licenses to students without a license (if available)",
+      "optionExclude": "Exclude students without licenses from the class"
+    },
     "list": {
       "organizationTitle": "Organization List",
       "searchPlaceholder": "Search organizations by name...",

@@ -65,7 +65,7 @@ import { classroomApi } from '@/features/classroom/api/classroomApi'
 import { lessonDetailSlice } from '@/features/resource/lesson/slice/lessonDetailSlice'
 import { quizEditorSlice } from '@/features/resource/question/slice/quizEditorSlice'
 import { organizationSlice } from '@/features/organization/slice/organizationSlice'
-import { classroomSlice } from '@/features/classroom/slice/classroomSlice'
+import { classroomSlice, createClassroomSlice } from '@/features/classroom/slice/classroomSlice'
 import { orgDashboardApi } from '@/features/dashboard/api/OrgDashboardApi'
 import { studentAssignmentApi } from '@/features/assignment/api/studentAssignmentApi'
 import { assignmentApi } from '@/features/assignment/api/assignmentApi'
@@ -121,6 +121,7 @@ const appReducer = combineReducers({
   organizationSpecial: organizationSpecialSlice.reducer,
   selectedCurriculum: selectedCurriculumSlice.reducer,
   group: groupSlice.reducer,
+  createClassroom: createClassroomSlice.reducer,
 
   // api reducers
   [courseApi.reducerPath]: courseApi.reducer,

@@ -10,12 +10,17 @@ import StudentGroupSubscriptionTable from '@/features/group/components/modal/Stu
 type StudentGroupInfoModalProps = {
   groupId: number
   selectedSubscriptionId: number | null
+  groupName?: string
 }
 
-export default function StudentGroupInfoModal({ groupId, selectedSubscriptionId }: StudentGroupInfoModalProps) {
+export default function StudentGroupInfoModal({
+  groupId,
+  selectedSubscriptionId,
+  groupName
+}: StudentGroupInfoModalProps) {
   const to = useTranslations('organization.group')
   const { closeModal } = useModal()
-  const { data } = useGetGroupByIdQuery(Number(groupId), { skip: !groupId })
+  const { data } = useGetGroupByIdQuery(groupId, { skip: !groupId })
 
   const rows = useMemo(
     () =>
@@ -29,12 +34,14 @@ export default function StudentGroupInfoModal({ groupId, selectedSubscriptionId 
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent>
-        <DialogTitle>{to('studentGroupInfo')}</DialogTitle>
-        <ScrollArea className='xl:h-[500px] xl:w-4xl'>
-          <div>
-            <StudentGroupSubscriptionTable students={rows} selectedSubscriptionId={selectedSubscriptionId} />
-          </div>
-        </ScrollArea>
+        <DialogTitle>{to('studentGroupInfo', { groupName: groupName ?? '' })}</DialogTitle>
+        <div className='overflow-y-auto sm:max-h-[300px] xl:max-h-[500px] xl:w-4xl'>
+          <StudentGroupSubscriptionTable
+            groupId={groupId}
+            students={rows}
+            selectedSubscriptionId={selectedSubscriptionId}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   )

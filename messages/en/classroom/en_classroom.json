@@ -94,7 +94,8 @@
       "teachers": "Teachers",
       "curricula": "Curricula",
       "guideText": "Creation Guide",
-      "guide": "Courses can belong to multiple active subscriptions. Please select a subscription before creating the classroom. The selected subscription will determine the number of students, teachers, and access to learning content. After selecting a subscription, choose student groups, assign teachers, and set the classroom duration. Click Create to finalize the classroom creation."
+      "singlePackageNotice": "You are creating a class for the course {courseTitle} (included in the subscription package {packageName}), which defines the number of students, teachers, and content access permissions. Please proceed to select a student group, assign teachers, and set the class duration before clicking Create.",
+      "multiplePackagesNotice": "You are creating a class for the course {courseTitle}, which is currently included in multiple active subscription packages ({packageNames}). Please select a subscription package first, as it determines the number of students, teachers, and access rights before creating the class."
     },
     "studentClassroom": {
       "list": {

@@ -1,5 +1,11 @@
 {
   "subscription": {
+    "studentNotInSubscription": "Học sinh này không thuộc gói đăng ký đã chọn.",
+    "licenseNotice": {
+      "message": "Nhóm học sinh này có {count} học sinh không có giấy phép. Vui lòng chọn một trong các tùy chọn bên dưới để tiếp tục.",
+      "optionAutoAssign": "Tự động gán giấy phép cho học sinh không có giấy phép (nếu có)",
+      "optionExclude": "Loại trừ học sinh không có giấy phép khỏi lớp học"
+    },
     "list": {
       "organizationTitle": "Danh sách tổ chức",
       "searchPlaceholder": "Tìm kiếm tổ chức theo tên...",

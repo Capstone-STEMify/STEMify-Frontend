@@ -3,17 +3,13 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { DataTable } from '@/components/shared/data-table/data-table'
-import { useGetClassroomColumn } from '@/features/classroom/components/list/table/ClassroomColumn'
 import { useSearchClassroomsQuery } from '@/features/classroom/api/classroomApi'
 import { useParams, useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { Input } from '@/components/shadcn/input'
 import SSelect from '@/components/shared/SSelect'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { resetParams, setParam, setSearchTerm } from '@/features/classroom/slice/classroomSlice'
 import useDebounce from '@/hooks/useDebounce'
-import { getOptions } from '@/utils/index'
-import { useSearchCourseQuery } from '@/features/resource/course/api/courseApi'
 import { useGetOrganizationCourseClassroomColumn } from '@/features/resource/course/components/detail/organization/OrganizationCourseClassroomCoulum'
 import { setCourseId, setCourseTitle } from '@/features/organization/slice/organizationSpecialSlice'
 import SearchBar from '@/components/shared/search/SearchBar'
@@ -23,7 +19,6 @@ type OrganizationCourseClassroomProps = {
 }
 
 export default function OrganizationCourseClassroom({ courseTitle }: OrganizationCourseClassroomProps) {
-  console.log({ courseTitle })
   const router = useRouter()
   const locale = useLocale()
 

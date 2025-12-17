@@ -27,6 +27,7 @@
       "noOptions": "Không có tùy chọn nào."
     },
     "button": {
+      "accept": "Chấp Nhận",
       "create": "Tạo Mới",
       "detail": "Chi Tiết",
       "download": "Tải Xuống",

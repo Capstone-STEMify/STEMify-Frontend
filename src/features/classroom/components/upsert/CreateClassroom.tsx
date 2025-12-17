@@ -16,7 +16,7 @@ import { Calendar } from '@/components/shadcn/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { Button } from '@/components/shadcn/button'
 import { BookOpen, CalendarIcon, Check, GraduationCap, Users } from 'lucide-react'
-import { format } from 'date-fns'
+import { format, sub } from 'date-fns'
 import { cn } from '@/utils/shadcn/utils'
 import BackButton from '@/components/shared/button/BackButton'
 import GroupTableWithTeacher from '@/features/group/components/list/GroupTableWithTeacher'
@@ -123,6 +123,15 @@ export default function CreateClassroom() {
     }
   })
 
+  useEffect(() => {
+    if (selectedCurriculum?.subscriptionGroups.find((g) => g.status === 'Active')) {
+      const firstSubscriptionGroup = selectedCurriculum.subscriptionGroups.find((g) => g.status === 'Active')
+      if (firstSubscriptionGroup) {
+        setSelectedSubscriptionId(firstSubscriptionGroup.subscriptions[0].subscriptionId)
+      }
+    }
+  }, [])
+
   // Auto-calculate end date
   useEffect(() => {
     if (durationWeeks !== 'custom' && startDate) {
@@ -156,6 +165,7 @@ export default function CreateClassroom() {
   const flattenedSubscriptions = subscriptions.flatMap((group) =>
     group.subscriptions.map((sub) => ({
       subscriptionId: sub.subscriptionId,
+      planName: sub.planName,
       startDate: sub.startDate,
       endDate: sub.endDate,
       status: group.status
@@ -180,8 +190,21 @@ export default function CreateClassroom() {
       <div className='mx-auto my-4 max-w-6xl px-5'>
         <div className='rounded-lg border border-blue-100 bg-blue-50/60 p-5 text-center'>
           <h3 className='mb-2 text-base font-semibold text-blue-700'>{tClassroom('guideText')}</h3>
-
-          <div className='mx-auto max-w-3xl space-y-1 text-center text-sm text-gray-600'>{tClassroom('guide')}</div>
+          {subscriptions.length <= 1 ? (
+            <div className='mx-auto max-w-3xl space-y-1 text-center text-sm text-gray-600'>
+              {tClassroom('singlePackageNotice', {
+                courseTitle: courseTitle || '',
+                packageName: flattenedSubscriptions[0]?.planName || 'Unnamed Plan'
+              })}
+            </div>
+          ) : (
+            <div className='mx-auto max-w-3xl space-y-1 text-center text-sm text-gray-600'>
+              {tClassroom('multiplePackagesNotice', {
+                courseTitle: courseTitle || '',
+                packageNames: flattenedSubscriptions.map((sub) => sub.planName).join(', ')
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -198,32 +221,34 @@ export default function CreateClassroom() {
           <div className='mb-4 space-y-4'>
             <Label className='text-base font-semibold'>{tClassroom('selectSubscription')}</Label>
 
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
-              {flattenedSubscriptions.map((sub) => {
-                const isActive = sub.status === 'Active'
-                const isSelected = selectedSubscriptionId === sub.subscriptionId
-                return (
-                  <Card
-                    key={sub.subscriptionId}
-                    onClick={() => isActive && setSelectedSubscriptionId(sub.subscriptionId)}
-                    className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? 'cursor-pointer hover:shadow-lg' : 'cursor-not-allowed opacity-50'} ${isSelected ? '-translate-y-1 border-blue-500 shadow-blue-200/50' : 'border-gray-200'} `}
-                  >
-                    {/* Left accent */}
-                    {isSelected && <div className='absolute top-0 left-0 h-full w-1 bg-blue-500' />}
+            {subscriptions.length > 1 && (
+              <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+                {flattenedSubscriptions.map((sub: any) => {
+                  const isActive = sub.status === 'Active'
+                  const isSelected = selectedSubscriptionId === sub.subscriptionId
+                  return (
+                    <Card
+                      key={sub.subscriptionId}
+                      onClick={() => isActive && setSelectedSubscriptionId(sub.subscriptionId)}
+                      className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? 'cursor-pointer hover:shadow-lg' : 'cursor-not-allowed opacity-50'} ${isSelected ? '-translate-y-1 border-blue-500 shadow-blue-200/50' : 'border-gray-200'} `}
+                    >
+                      {/* Left accent */}
+                      {isSelected && <div className='absolute top-0 left-0 h-full w-1 bg-blue-500' />}
 
-                    <CardContent className='space-y-2 p-5'>
-                      {/* Plan name */}
-                      <h3 className='text-sm leading-snug font-semibold text-gray-900'>{'TODO: plan name'}</h3>
+                      <CardContent className='space-y-2 p-5'>
+                        {/* Plan name */}
+                        <h3 className='text-sm leading-snug font-semibold text-gray-900'>{'TODO: plan name'}</h3>
 
-                      {/* Date range */}
-                      <div className='text-xs text-gray-500'>
-                        {formatDate(sub.startDate, { locale })} – {formatDate(sub.endDate, { locale })}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
+                        {/* Date range */}
+                        <div className='text-xs text-gray-500'>
+                          {formatDate(sub.startDate, { locale })} – {formatDate(sub.endDate, { locale })}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
           <div className='mb-4 space-y-2'>
@@ -246,7 +271,11 @@ export default function CreateClassroom() {
                 </Select>
               </div>
             </div>
-            <GroupTableWithTeacher selectedSubscriptionId={selectedSubscriptionId} grade={grade} onGroupsChange={(groups) => setSelectedGroups(groups)} />
+            <GroupTableWithTeacher
+              grade={grade}
+              onGroupsChange={(groups) => setSelectedGroups(groups)}
+              selectedSubscriptionId={selectedSubscriptionId}
+            />
           </div>
 
           {/* Basic Information Section */}

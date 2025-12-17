@@ -22,7 +22,7 @@ export default function AuthSessionSync() {
     (state) => state.selectedOrganization.selectedSubscriptionOrderId
   )
 
-  console.log({ reduxSelectedOrganizationId })
+  console.log('reduxCurrentRole:', reduxCurrentRole)
 
   const user = session?.user
   const accessToken = session?.accessToken

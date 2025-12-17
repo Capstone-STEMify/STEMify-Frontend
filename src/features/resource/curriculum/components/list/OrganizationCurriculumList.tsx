@@ -96,7 +96,11 @@ export default function OrganizationCurriculumList() {
       </div>
 
       {/* Empty State for Filtered Results */}
-      {!curriculumData || curriculums.length === 0 ? (
+      {isLoading ? (
+        <div className='py-12'>
+          <LoadingComponent size={60} />
+        </div>
+      ) : !curriculumData ? (
         <div className='py-12'>
           <SEmpty title={t('noResultsForFilter')} />
         </div>

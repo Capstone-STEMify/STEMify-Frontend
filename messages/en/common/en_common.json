@@ -27,6 +27,7 @@
       "noOptions": "No options available."
     },
     "button": {
+      "accept": "Accept",
       "create": "Create New",
       "detail": "Detail",
       "download": "Download",

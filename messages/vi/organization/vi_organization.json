@@ -231,7 +231,7 @@
         "name": "Tên",
         "studentCount": "Số học sinh"
       },
-      "studentGroupInfo": "Thông tin nhóm học sinh",
+      "studentGroupInfo": "Nhóm {groupName}",
       "addStudentsToGroup": "Thêm học sinh vào nhóm"
     },
     "curriculum": {

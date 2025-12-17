@@ -14,7 +14,7 @@ import { Users2 } from 'lucide-react'
 import { useModal } from '@/providers/ModalProvider'
 
 type GroupTableWithTeacherProps = {
-  selectedSubscriptionId: number | null
+  selectedSubscriptionId?: number | null
   grade: string
   onGroupsChange: (
     groups: {
@@ -39,6 +39,7 @@ export default function GroupTableWithTeacher({
   const [teacherAssignments, setTeacherAssignments] = useState<Record<number, string>>({})
 
   const { selectedOrganizationId } = useAppSelector((state) => state.selectedOrganization)
+  const { selectedStudentsByGroup } = useAppSelector((state) => state.createClassroom)
 
   const { data } = useSearchGroupByOrganizationIdQuery(
     { organizationId: selectedOrganizationId!, params: { grade: Number(grade) } },
@@ -58,6 +59,7 @@ export default function GroupTableWithTeacher({
     'email'
   )
   const groups = data?.data.items || []
+  console.log('Fetched groups:', groups)
 
   const emitSelectedGroups = () => {
     if (!onGroupsChange) return
@@ -68,7 +70,7 @@ export default function GroupTableWithTeacher({
         groupCode: group.code,
         groupName: group.name,
         teacherId: teacherAssignments[groupId],
-        studentIds: group.students.map((s) => s.organizationUserId)
+        studentIds: selectedStudentsByGroup[groupId] || []
       }
     })
 
@@ -103,7 +105,7 @@ export default function GroupTableWithTeacher({
 
   useEffect(() => {
     emitSelectedGroups()
-  }, [selectedRows, teacherAssignments])
+  }, [selectedRows, teacherAssignments, selectedStudentsByGroup])
 
   return (
     <div>
@@ -139,7 +141,13 @@ export default function GroupTableWithTeacher({
                   <TableCell className='flex flex-col'>
                     <span
                       className='cursor-pointer font-medium underline'
-                      onClick={() => openModal('studentGroupInfo', { groupId: group.id })}
+                      onClick={() =>
+                        openModal('studentGroupInfo', {
+                          groupId: group.id,
+                          groupName: group.name,
+                          selectedSubscriptionId: selectedSubscriptionId
+                        })
+                      }
                     >
                       {group.name}
                     </span>

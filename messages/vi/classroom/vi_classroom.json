@@ -93,7 +93,8 @@
       "teachers": "Giáo viên",
       "curricula": "Chương trình học",
       "guideText": "Hướng dẫn tạo lớp học",
-      "guide": "Khóa học có thể thuộc nhiều gói đăng ký đang hoạt động. Vui lòng chọn một gói đăng ký trước khi tạo lớp học. Gói đăng ký được chọn sẽ quyết định số lượng học sinh, giáo viên và quyền truy cập nội dung học tập. Sau khi chọn gói, hãy chọn nhóm học sinh, gán giáo viên và thiết lập thời gian lớp học. Nhấn Tạo để hoàn tất việc tạo lớp học."
+      "singlePackageNotice": "Bạn đang tạo lớp học cho khóa học {courseTitle} (thuộc gói đăng ký {packageName}), gói này sẽ quyết định số lượng học sinh, giáo viên và quyền truy cập nội dung học tập. Vui lòng chọn nhóm học sinh, gán giáo viên và thiết lập thời gian lớp học trước khi nhấn Tạo.",
+      "multiplePackagesNotice": "Bạn đang tạo lớp học cho khóa học {courseTitle}, khóa học này hiện đang nằm trong nhiều gói đăng ký đang hoạt động ({packageNames}). Vui lòng chọn một gói đăng ký trước, vì gói này sẽ quyết định số lượng học sinh, giáo viên và quyền truy cập nội dung trước khi tạo lớp học."
     },
     "studentClassroom": {
       "list": {
