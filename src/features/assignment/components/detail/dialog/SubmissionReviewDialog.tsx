@@ -163,7 +163,7 @@ export function SubmissionReviewDialog({
         body: payload
       }).unwrap()
 
-      toast.success('Review submitted successfully!')
+      toast.success('Đã gửi đánh giá thành công.')
       // close both global modal (if used) and parent-controlled dialog
       closeModal()
       onClose?.()

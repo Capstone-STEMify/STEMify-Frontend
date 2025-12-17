@@ -56,6 +56,7 @@ export type EnrollmentStats = {
 
 export type TopOrganization = {
   organizationId: number
+  organizationCode: string
   organizationName: string
   totalStudents: number
   totalEnrollments: number

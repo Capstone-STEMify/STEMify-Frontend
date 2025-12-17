@@ -15,7 +15,7 @@ import {
   RubricScorePayload
 } from '@/features/assignment/types/assigmentlistdetail.type'
 import { toast } from 'sonner'
-import { useGetUserByIdQuery } from '@/features/user/api/userApi'
+import { useGetOrganizationUserDetailQuery, useGetUserByIdQuery } from '@/features/user/api/userApi'
 import Loading from 'app/[locale]/loading'
 import { Clock, HelpCircle, X } from 'lucide-react'
 import { format } from 'date-fns'
@@ -41,8 +41,8 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
     { skip: !assignmentId }
   )
 
-  const { data: userData, isLoading: userLoading } = useGetUserByIdQuery(
-    detailResponse?.data.studentId as string | number,
+  const { data: userData, isLoading: userLoading } = useGetOrganizationUserDetailQuery(
+    { organizationUserId: detailResponse?.data.studentId as string },
     { skip: !detailResponse?.data.studentId }
   )
 

@@ -9,11 +9,13 @@ import { useModal } from '@/providers/ModalProvider'
 import { setParam, setSearchTerm } from '../../slice/curriculumSlice'
 import SSelect from '@/components/shared/SSelect'
 import { CurriculumStatus } from '@/features/resource/curriculum/types/curriculum.type'
+import { useStatusTranslation } from '@/utils/index'
 
 export default function CurriculumAction() {
   // Translations
   const tList = useTranslations('curriculum.list')
   const tc = useTranslations('common')
+  const statusTranslate = useStatusTranslation()
   // Modal
   const { openModal } = useModal()
 
@@ -24,7 +26,7 @@ export default function CurriculumAction() {
   const statusOptions = Object.entries(CurriculumStatus)
     .filter(([key]) => key.toLowerCase() !== 'deleted')
     .map(([key, value]) => ({
-      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      label: statusTranslate(value.toLowerCase()),
       value: value
     }))
 

@@ -28,6 +28,7 @@ import { logout } from '@/features/auth/authSlice'
 import { persistor } from '@/libs/redux/store'
 import { clearSelectedOrganization } from '@/features/subscription/slice/selectedOrganizationSlice'
 import { stringToHslColor } from '@/utils/index'
+import UserAvatar from '@/components/shared/UserAvatar'
 
 function MenuItem({
   children,
@@ -111,20 +112,15 @@ export default function AuthStatusMenu() {
           <SPopover
             className='w-65 rounded-xl border bg-white p-4 shadow-lg outline-none dark:border-zinc-800 dark:bg-zinc-900'
             trigger={
-              <div
-                className='flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium text-white shadow-sm ring-1 ring-black/5 select-none'
-                style={{
-                  backgroundColor: stringToHslColor(session?.user?.name || '')
-                }}
-              >
-                {session?.user?.name?.charAt(0).toUpperCase()}
+              <div>
+                <UserAvatar fullName={session?.user?.name || ''} size={32} />
               </div>
             }
             children={
               <div>
                 {/* Header: avatar + name + email */}
                 <div className='flex items-center gap-3'>
-                  <SAvatar src={session?.user?.image || 'https://github.com/shadcn.png'} />
+                  <UserAvatar fullName={session?.user?.name || ''} size={32} />
                   <div className='min-w-0'>
                     <div className='truncate text-base font-semibold'>{session?.user?.name}</div>
                     <div className='text-muted-foreground truncate text-sm'>{session?.user?.email}</div>

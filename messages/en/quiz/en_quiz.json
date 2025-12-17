@@ -44,6 +44,7 @@
         "timeLimitMinutes": "Time Limit (minutes)",
         "durationDays": "Duration (days)",
         "cooldownHours": "Cooldown (hours)",
+        "maxAttempts": "Max Attempts",
         "totalMarks": "Total Marks",
         "passingMarks": "Passing Marks",
         "updateQuizInfo": "Update Quiz Info",

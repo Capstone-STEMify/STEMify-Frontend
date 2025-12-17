@@ -11,6 +11,7 @@ import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { stringToHslColor, useOrgUserStatusTranslation, useStatusTranslation } from '@/utils/index'
+import UserAvatar from '@/components/shared/UserAvatar'
 
 export function useGetOrganizationUserAction(): ColumnDef<User>[] {
   const { openModal } = useModal()
@@ -42,16 +43,7 @@ export function useGetOrganizationUserAction(): ColumnDef<User>[] {
       header: t('image'),
       cell: ({ row }) => {
         const alt = row.original.fullName
-        return (
-          <div
-            className='flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium text-white shadow-sm ring-1 ring-black/5 select-none'
-            style={{
-              backgroundColor: stringToHslColor(alt || '')
-            }}
-          >
-            {alt?.charAt(0).toUpperCase()}
-          </div>
-        )
+        return <UserAvatar fullName={alt || ''} size={32} />
       }
     },
     {

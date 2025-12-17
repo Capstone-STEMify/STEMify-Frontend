@@ -14,6 +14,7 @@ import { Users2 } from 'lucide-react'
 import { useModal } from '@/providers/ModalProvider'
 
 type GroupTableWithTeacherProps = {
+  selectedSubscriptionId: number | null
   grade: string
   onGroupsChange: (
     groups: {
@@ -25,7 +26,11 @@ type GroupTableWithTeacherProps = {
   ) => void
 }
 
-export default function GroupTableWithTeacher({ grade, onGroupsChange }: GroupTableWithTeacherProps) {
+export default function GroupTableWithTeacher({
+  selectedSubscriptionId,
+  grade,
+  onGroupsChange
+}: GroupTableWithTeacherProps) {
   const tc = useTranslations('common')
   const to = useTranslations('organization')
   const { openModal } = useModal()

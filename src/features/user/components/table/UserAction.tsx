@@ -12,6 +12,7 @@ import Image from 'next/image'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useStatusTranslation } from '@/utils/index'
+import UserAvatar from '@/components/shared/UserAvatar'
 
 export function useGetUserAction(): ColumnDef<User>[] {
   const { openModal } = useModal()
@@ -42,25 +43,8 @@ export function useGetUserAction(): ColumnDef<User>[] {
       accessorKey: 'imageUrl',
       header: t('image'),
       cell: ({ row }) => {
-        const src = row.original.imageUrl
-        const alt = row.original.userName.charAt(0)
-        return (
-          <div className='h-14 w-14 overflow-hidden rounded-full border'>
-            {src ? (
-              <Image
-                src={src}
-                alt='preview'
-                className='h-full w-full rounded-full object-cover'
-                width={56}
-                height={56}
-              />
-            ) : (
-              <div className='flex h-full w-full items-center justify-center bg-sky-100 text-xl font-semibold text-blue-400'>
-                {alt}
-              </div>
-            )}
-          </div>
-        )
+        const alt = row.original.userName
+        return <UserAvatar fullName={alt || ''} size={32} />
       }
     },
     {

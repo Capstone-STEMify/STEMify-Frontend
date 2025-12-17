@@ -122,7 +122,8 @@
       "durationDays": "Duration (in days) must be a positive number",
       "totalMarks": "Total marks must be a positive number",
       "timeLimitMinutes": "Time limit (in minutes) must be a positive number",
-      "cooldownHours": "Cooldown period (in hours) must be a positive number"
+      "cooldownHours": "Cooldown period (in hours) must be a positive number",
+      "maxAttempts": "Maximum attempts must be a positive number"
     }
   }
 }

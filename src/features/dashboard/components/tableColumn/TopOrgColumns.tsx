@@ -18,7 +18,7 @@ export const useTopOrgColumns = (): ColumnDef<TopOrganizationTableItem>[] => {
       cell: ({ row }) => (
         <div className='flex flex-col'>
           <span className='font-semibold text-gray-900'>{row.original.organizationName}</span>
-          <span className='text-xs text-muted-foreground'>ID: {row.original.organizationId}</span>
+          <span className='text-xs text-muted-foreground'>Code: {row.original.organizationCode}</span>
         </div>
       )
     },
