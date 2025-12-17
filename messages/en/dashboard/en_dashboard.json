@@ -41,7 +41,31 @@
           "disName": "Display Name",
           "noLesson": "No lessons found for this course.",
           "firstName": "First Name",
-          "lastName": "Last Name"
+          "lastName": "Last Name",
+          "analyzing": "Analyzing...",
+          "askAiInsights": "Ask AI Insights",
+          "reAnalyzeAi": "Re-Analyze AI",
+          "curriculum": "Curriculum",
+          "selectCourse": "Select course",
+          "aiClassroomAssessment": "AI Classroom Assessment",
+          "studentsAtRisk": "Students at risk",
+          "showingStudents": "Showing {count} student(s)",
+          "selectLesson": "Select a lesson",
+          "section": "Sec {id}",
+          "detailsFor": "Details for {name}",
+          "viewAiAnalysis": "View AI Analysis",
+          "noStudentsRisk": "No students found matching risk criteria.",
+          "noStudentsEnrolled": "No students enrolled in this class.",
+          "riskAnalysis": "Risk Analysis",
+          "aiAssessmentForStudent": "AI Assessment for student ID:",
+          "riskSeverity": "Risk Severity",
+          "high": "High",
+          "medium": "Medium",
+          "priority": "Priority",
+          "identifiedIssues": "Identified Issues",
+          "recommendedAction": "Recommended Action",
+          "close": "Close",
+          "assignSupportTask": "Assign Support Task"
         }
       },
       "course": {
@@ -75,6 +99,12 @@
         "name": "Assignment Name",
         "action": "Actions",
         "question": "Question(s)"
+      },
+      "toast": {
+        "hasAtRisk": "There are learners at risk of falling behind",
+        "noHasAtRisk": "No learners are at risk of falling behind",
+        "aiError": "Error analyzing learner progress with AI",
+        "errorResponse": "Error response from server"
       }
     },
     "organization": {

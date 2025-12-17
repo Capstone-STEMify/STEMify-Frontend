@@ -8,10 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion'
 
-import { 
-  useAnalyzeClassroomProgressMutation,
-  useGetClassroomByIdQuery, 
+import {
+  useGetClassroomByIdQuery,
   useGetClassroomStudentProgressQuery,
+  useAnalyzeClassroomProgressMutation
 } from '@/features/classroom/api/classroomApi'
 import { StudentProgressItem, AiStudentAnalysisResult } from '@/features/classroom/types/classroom.type'
 import { useTranslations } from 'next-intl'
@@ -20,7 +20,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/too
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/shadcn/dialog'
-import { toast } from 'sonner' // Thêm toast để báo lỗi nếu cần
+import { toast } from 'sonner'
 
 interface CourseType {
   id: number
@@ -36,22 +36,18 @@ const COLUMN_WIDTH = 'w-[70px] min-w-[70px]'
 
 export function StudentProgressStatistic({ classroomId, courses }: StudentProgressStatisticProps) {
   const t = useTranslations('dashboard.classroom')
-  
-  // --- STATES ---
+
   const [selectedCourseId, setSelectedCourseId] = React.useState<string>('')
   const [currentLessonId, setCurrentLessonId] = React.useState<string>('')
-  
-  // AI States
+
   const [aiData, setAiData] = React.useState<{
-    overviewText: string;
-    students: AiStudentAnalysisResult[];
-    atRiskCount: number;
+    overviewText: string
+    students: AiStudentAnalysisResult[]
   } | null>(null)
-  
+
   const [filterAtRisk, setFilterAtRisk] = React.useState(false)
   const [selectedAnalysisStudent, setSelectedAnalysisStudent] = React.useState<AiStudentAnalysisResult | null>(null)
 
-  // --- QUERIES ---
   const { data: classroomRes } = useGetClassroomByIdQuery(classroomId, {
     skip: !classroomId
   })
@@ -85,61 +81,38 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
   const currentLesson = lessons.find((l) => String(l.lessonId) === currentLessonId)
 
-  // --- REAL API CALL (UPDATED) ---
   const handleAnalyzeClassroom = async () => {
     try {
       const response = await analyzeTrigger({
         classroom_id: classroomId,
-        force_mock: false, 
+        force_mock: false,
         analysis_period_days: 7
       }).unwrap()
 
-      console.log("AI Raw Response:", response) // Debug log
-
-      const payload = response.data || response;
+      const payload = response.data || response
 
       if (!payload || !payload.students) {
-        toast.error("Invalid AI response structure");
-        return;
+        toast.error(t('toast.errorResponse'))
+        return
       }
 
-      let mappedStudents = payload.students;
-      
-      const isIdMismatch = students.length > 0 && payload.students.length > 0 && 
-                           !students.some(s => s.studentId === payload.students[0].studentId);
-
-      if (isIdMismatch) {
-        console.warn("Detected ID mismatch (Mock Data). Auto-mapping by index for UI demo.");
-        mappedStudents = payload.students.map((aiStudent: any, index: number) => {
-          const realStudent = students[index];
-          return {
-            ...aiStudent,
-            studentId: realStudent ? realStudent.studentId : aiStudent.studentId
-          };
-        });
-      }
-
-      const atRiskStudents = mappedStudents.filter((s: any) => s.currentStatus === 'AtRisk')
-      
       setAiData({
         overviewText: payload.overviewText || payload.aiInsightsText,
-        students: atRiskStudents, 
-        atRiskCount: atRiskStudents.length
+        students: payload.students
       })
 
-      if (atRiskStudents.length > 0) {
-        toast.success(`AI found ${atRiskStudents.length} students at risk.`)
-      } else {
-        toast.info("AI analysis complete. No students currently at risk.")
-      }
+      const atRiskCount = payload.students.filter((s: any) => s.currentStatus === 'AtRisk').length
 
+      if (atRiskCount > 0) {
+        toast.success(t('toast.hasAtRisk'))
+      } else {
+        toast.info(t('toast.noHasAtRisk'))
+      }
     } catch (error) {
-      console.error("AI Analysis Failed:", error)
-      toast.error("Failed to analyze progress. Please try again later.")
+      toast.error(t('toast.aiError'))
     }
   }
 
-  // --- HELPERS ---
   const renderSectionStatus = (student: StudentProgressItem, lessonId: number, sectionId: number) => {
     const lessonProg = student.lessonProgresses?.find((l) => l.lessonId === lessonId)
     if (!lessonProg) return <Circle className='mx-auto h-4 w-4 text-slate-200' />
@@ -161,104 +134,109 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
   }
 
   const displayedStudents = React.useMemo(() => {
-    if (!filterAtRisk || !aiData) return students
-    
-    const atRiskIds = aiData.students.map(s => s.studentId)
-    
-    return students.filter(s => atRiskIds.includes(s.studentId))
+    if (!aiData || !filterAtRisk) return students
+
+    const aiAtRiskIds = aiData.students.filter((s) => s.currentStatus === 'AtRisk').map((s) => s.studentId)
+
+    return students.filter((s) => aiAtRiskIds.includes(s.studentId))
   }, [students, filterAtRisk, aiData])
+
+  const visibleAtRiskCount = React.useMemo(() => {
+    if (!aiData) return 0
+
+    const aiAtRiskIds = aiData.students.filter((s) => s.currentStatus === 'AtRisk').map((s) => s.studentId)
+
+    return students.filter((s) => aiAtRiskIds.includes(s.studentId)).length
+  }, [aiData, students])
 
   return (
     <div className='mt-8 rounded-xl border bg-white p-4 shadow-sm md:p-8'>
       <header className='mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
         <div className='flex items-center gap-4'>
           <h2 className='text-2xl font-semibold'>{t('overview.progress.title')}</h2>
-          
-          {/* AI TRIGGER BUTTON */}
-          <Button 
-            onClick={handleAnalyzeClassroom} 
+
+          <Button
+            onClick={handleAnalyzeClassroom}
             disabled={isAnalyzing}
-            className={`gap-2 transition-all ${aiData ? 'bg-purple-100 text-purple-700 hover:bg-purple-200 border border-purple-200' : 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:opacity-90'}`}
-            variant={aiData ? "outline" : "default"}
+            className={`gap-2 transition-all ${aiData ? 'border border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-200' : 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:opacity-90'}`}
+            variant={aiData ? 'outline' : 'default'}
           >
-             {isAnalyzing ? (
-               <>
-                <Clock className="h-4 w-4 animate-spin" /> Analyzing...
-               </>
-             ) : (
-               <>
-                <Sparkles className="h-4 w-4" /> {aiData ? 'Re-Analyze AI' : 'Ask AI Insights'}
-               </>
-             )}
+            {isAnalyzing ? (
+              <>
+                <Clock className='h-4 w-4 animate-spin' /> {t('overview.progress.analyzing')}
+              </>
+            ) : (
+              <>
+                <Sparkles className='h-4 w-4' /> {aiData ? t('overview.progress.reAnalyzeAi') : t('overview.progress.askAiInsights')}
+              </>
+            )}
           </Button>
-
         </div>
-        
-        {/* FILTERS */}
-        <div className='flex items-center gap-2'>
-            <div className='flex items-center gap-2 text-sm'>
-              <Select value={curriculum?.code || ''} disabled>
-                <SelectTrigger className='w-[150px]'>
-                  <SelectValue placeholder={curriculum?.title || 'Curriculum'} />
-                </SelectTrigger>
-                <SelectContent>
-                  {curriculum && <SelectItem value={curriculum.code}>{curriculum.title}</SelectItem>}
-                </SelectContent>
-              </Select>
 
-              <Select value={selectedCourseId} onValueChange={setSelectedCourseId} disabled={courses.length === 0}>
-                <SelectTrigger className='w-[150px]'>
-                  <SelectValue placeholder='Select course' />
-                </SelectTrigger>
-                <SelectContent>
-                  {courses.map((course) => (
-                    <SelectItem key={course.id} value={String(course.id)}>
-                      {course.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+        <div className='flex items-center gap-2'>
+          <div className='flex items-center gap-2 text-sm'>
+            <Select value={curriculum?.code || ''} disabled>
+              <SelectTrigger className='w-[150px]'>
+                <SelectValue placeholder={curriculum?.title || t('overview.progress.curriculum')} />
+              </SelectTrigger>
+              <SelectContent>
+                {curriculum && <SelectItem value={curriculum.code}>{curriculum.title}</SelectItem>}
+              </SelectContent>
+            </Select>
+
+            <Select value={selectedCourseId} onValueChange={setSelectedCourseId} disabled={courses.length === 0}>
+              <SelectTrigger className='w-[150px]'>
+                <SelectValue placeholder={t('overview.progress.selectCourse')} />
+              </SelectTrigger>
+              <SelectContent>
+                {courses.map((course) => (
+                  <SelectItem key={course.id} value={String(course.id)}>
+                    {course.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <Button variant='outline' size='icon'>
             <Download className='h-4 w-4' />
           </Button>
         </div>
       </header>
 
-      {/* --- AI RESULT SECTION --- */}
       {aiData && (
-        <Card className="mb-6 bg-slate-50/50 border-purple-100 animate-in fade-in slide-in-from-top-4 duration-500">
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-lg text-purple-900">
-              <Bot className="h-5 w-5 text-purple-600" />
-              AI Classroom Assessment
+        <Card className='animate-in fade-in slide-in-from-top-4 mb-6 border-purple-100 bg-slate-50/50 duration-500'>
+          <CardHeader className='pb-2'>
+            <CardTitle className='flex items-center gap-2 text-lg text-purple-900'>
+              <Bot className='h-5 w-5 text-purple-600' />
+              {t('overview.progress.aiClassroomAssessment')}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col md:flex-row gap-6">
-              <div className="flex-1">
-                <p className="text-sm text-slate-700 leading-relaxed italic border-l-4 border-purple-300 pl-3">
-                  "{aiData.overviewText}"
+            <div className='flex flex-col gap-6 md:flex-row'>
+              <div className='flex-1'>
+                <p className='border-l-4 border-purple-300 pl-3 text-sm leading-relaxed text-slate-700 italic'>
+                  &quot;{aiData.overviewText}&quot;
                 </p>
               </div>
-              <div className="flex flex-col gap-2 min-w-[200px]">
-                <Button 
-                  variant={filterAtRisk ? "destructive" : "outline"}
-                  className={`justify-between group border-red-200 ${!filterAtRisk && 'text-red-600 hover:bg-red-50'}`}
+              <div className='flex min-w-[200px] flex-col gap-2'>
+                <Button
+                  variant={filterAtRisk ? 'destructive' : 'outline'}
+                  className={`group justify-between border-red-200 ${!filterAtRisk && 'text-red-600 hover:bg-red-50'}`}
                   onClick={() => setFilterAtRisk(!filterAtRisk)}
                 >
-                  <span className="flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4" />
-                    Students at risk
+                  <span className='flex items-center gap-2'>
+                    <AlertTriangle className='h-4 w-4' />
+                    {t('overview.progress.studentsAtRisk')}
                   </span>
-                  <Badge variant={filterAtRisk ? "outline" : "destructive"} className="ml-2">
-                    {aiData.atRiskCount}
+
+                  <Badge variant={filterAtRisk ? null : 'destructive'} className='ml-2'>
+                    {visibleAtRiskCount}
                   </Badge>
                 </Button>
                 {filterAtRisk && (
-                   <p className="text-xs text-center text-slate-500 animate-pulse">
-                     Filtering table below...
-                   </p>
+                  <p className='animate-pulse text-center text-xs text-slate-500'>
+                    {t('overview.progress.showingStudents', { count: displayedStudents.length })}
+                  </p>
                 )}
               </div>
             </div>
@@ -266,7 +244,6 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
         </Card>
       )}
 
-      {/* --- TABLE CONTENT --- */}
       {isFetching && !currentLesson ? (
         <Loading />
       ) : !currentLesson ? (
@@ -303,7 +280,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                     <div className='flex h-full w-full items-center px-2'>
                       <Select value={currentLessonId} onValueChange={setCurrentLessonId}>
                         <SelectTrigger className='h-full w-full cursor-pointer justify-start gap-2 rounded-none border-none bg-transparent pl-4 text-lg font-semibold text-white shadow-none hover:text-white'>
-                          <SelectValue placeholder='Select a lesson' />
+                          <SelectValue placeholder={t('overview.progress.selectLesson')} />
                         </SelectTrigger>
                         <SelectContent>
                           {lessons.map((lesson) => (
@@ -323,7 +300,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                       key={sectionId}
                       className={`border-r bg-slate-50 p-2 text-center text-xs font-normal text-slate-600 ${COLUMN_WIDTH}`}
                     >
-                      Sec {sectionId}
+                      {t('overview.progress.section', { id: sectionId })}
                     </TableHead>
                   ))}
                 </TableRow>
@@ -332,16 +309,20 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
               <TableBody>
                 {displayedStudents.length > 0 ? (
                   displayedStudents.map((student) => {
-                    const atRiskInfo = aiData?.students.find(s => s.studentId === student.studentId);
+                    const atRiskInfo = aiData?.students.find(
+                      (s) => s.studentId === student.studentId && s.currentStatus === 'AtRisk'
+                    )
 
                     return (
-                      <TableRow 
-                        key={student.studentId} 
+                      <TableRow
+                        key={student.studentId}
                         className={`group hover:bg-slate-50/50 ${atRiskInfo ? 'bg-red-50/30' : ''}`}
                       >
-                        <TableCell className={`bg-background sticky left-0 z-10 border-r group-hover:bg-slate-50 ${atRiskInfo ? 'bg-red-50/30' : ''}`}>
-                          <div className="flex items-center justify-between pr-2">
-                             <Accordion type='single' collapsible className='w-full'>
+                        <TableCell
+                          className={`bg-background sticky left-0 z-10 border-r group-hover:bg-slate-50 ${atRiskInfo ? 'bg-red-50/30' : ''}`}
+                        >
+                          <div className='flex items-center justify-between pr-2'>
+                            <Accordion type='single' collapsible className='w-full'>
                               <AccordionItem value={student.studentId} className='border-b-0'>
                                 <AccordionTrigger className='p-2 py-4 hover:no-underline'>
                                   <div className='flex flex-col items-start text-left'>
@@ -354,26 +335,25 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                                   </div>
                                 </AccordionTrigger>
                                 <AccordionContent>
-                                  <div className='px-2 text-xs text-slate-500'>Details for {student.studentName}</div>
+                                  <div className='px-2 text-xs text-slate-500'>{t('overview.progress.detailsFor', { name: student.studentName })}</div>
                                 </AccordionContent>
                               </AccordionItem>
                             </Accordion>
 
-                            {/* RISK INDICATOR ICON */}
                             {atRiskInfo && (
                               <Tooltip>
                                 <TooltipTrigger asChild>
-                                  <Button 
-                                    size="icon" 
-                                    variant="ghost" 
-                                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-full animate-in zoom-in"
+                                  <Button
+                                    size='icon'
+                                    variant='ghost'
+                                    className='animate-in zoom-in h-8 w-8 rounded-full text-red-500 hover:bg-red-100 hover:text-red-700'
                                     onClick={() => setSelectedAnalysisStudent(atRiskInfo)}
                                   >
-                                    <BrainCircuit className="h-4 w-4" />
+                                    <BrainCircuit className='h-4 w-4' />
                                   </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                  <p>View AI Analysis</p>
+                                  <p>{t('overview.progress.viewAiAnalysis')}</p>
                                 </TooltipContent>
                               </Tooltip>
                             )}
@@ -397,7 +377,9 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                       colSpan={currentLesson.sectionIds.length + 1}
                       className='h-24 text-center text-slate-500'
                     >
-                      {filterAtRisk ? 'No at-risk students found.' : 'No students enrolled in this class.'}
+                      {filterAtRisk
+                        ? t('overview.progress.noStudentsRisk')
+                        : t('overview.progress.noStudentsEnrolled')}
                     </TableCell>
                   </TableRow>
                 )}
@@ -407,57 +389,60 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
         </div>
       )}
 
-      {/* --- STUDENT ANALYSIS MODAL --- */}
       <Dialog open={!!selectedAnalysisStudent} onOpenChange={(open) => !open && setSelectedAnalysisStudent(null)}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className='sm:max-w-md'>
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-red-600">
-               <AlertTriangle className="h-5 w-5" />
-               Risk Analysis
+            <DialogTitle className='flex items-center gap-2 text-red-600'>
+              <AlertTriangle className='h-5 w-5' />
+              {t('overview.progress.riskAnalysis')}
             </DialogTitle>
             <DialogDescription>
-              AI Assessment for student ID: <span className="font-semibold text-slate-900">{selectedAnalysisStudent?.studentId.substring(0,8)}...</span>
+              {t('overview.progress.aiAssessmentForStudent')}{' '}
+              <span className='font-semibold text-slate-900'>
+                {selectedAnalysisStudent?.studentId.substring(0, 8)}...
+              </span>
             </DialogDescription>
           </DialogHeader>
-          
+
           {selectedAnalysisStudent && (
-            <div className="space-y-4 py-2">
-              <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border">
-                 <span className="text-sm font-medium text-slate-500">Risk Severity</span>
-                 <Badge variant="destructive" className="bg-orange-500 hover:bg-orange-600">
-                   {selectedAnalysisStudent.currentStatus === 'AtRisk' ? 'High' : 'Medium'} Priority
-                 </Badge>
+            <div className='space-y-4 py-2'>
+              <div className='flex items-center justify-between rounded-lg border bg-slate-50 p-3'>
+                <span className='text-sm font-medium text-slate-500'>{t('overview.progress.riskSeverity')}</span>
+                <Badge variant='destructive' className='bg-orange-500 hover:bg-orange-600'>
+                  {selectedAnalysisStudent.currentStatus === 'AtRisk' ? t('overview.progress.high') : t('overview.progress.medium')} {t('overview.progress.priority')}
+                </Badge>
               </div>
 
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-red-400" /> 
-                  Identified Issues
+              <div className='space-y-2'>
+                <h4 className='flex items-center gap-2 text-sm font-semibold'>
+                  <div className='h-2 w-2 rounded-full bg-red-400' />
+                  {t('overview.progress.identifiedIssues')}
                 </h4>
-                <div className="text-sm text-slate-600 bg-red-50 p-3 rounded-md border border-red-100">
+                <div className='rounded-md border border-red-100 bg-red-50 p-3 text-sm text-slate-600'>
                   {selectedAnalysisStudent.statusText}
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-green-400" />
-                  Recommended Action
+              <div className='space-y-2'>
+                <h4 className='flex items-center gap-2 text-sm font-semibold'>
+                  <div className='h-2 w-2 rounded-full bg-green-400' />
+                  {t('overview.progress.recommendedAction')}
                 </h4>
-                <div className="text-sm text-slate-600 bg-green-50 p-3 rounded-md border border-green-100">
+                <div className='rounded-md border border-green-100 bg-green-50 p-3 text-sm text-slate-600'>
                   {selectedAnalysisStudent.interventionText}
                 </div>
               </div>
             </div>
           )}
-          
-          <div className="flex justify-end gap-2">
-             <Button variant="outline" onClick={() => setSelectedAnalysisStudent(null)}>Close</Button>
-             <Button className="bg-blue-600 hover:bg-blue-700">Assign Support Task</Button>
+
+          <div className='flex justify-end gap-2'>
+            <Button variant='outline' onClick={() => setSelectedAnalysisStudent(null)}>
+              {t('overview.progress.close')}
+            </Button>
+            <Button className='bg-blue-600 hover:bg-blue-700'>{t('overview.progress.assignSupportTask')}</Button>
           </div>
         </DialogContent>
       </Dialog>
-
     </div>
   )
 }
