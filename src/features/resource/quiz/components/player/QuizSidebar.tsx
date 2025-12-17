@@ -15,48 +15,27 @@ type QuizSidebarProps = {
 export default function QuizSidebar({ quiz }: QuizSidebarProps) {
   const dispatch = useAppDispatch()
   const questions = quiz.questions
-  const { currentQuestionIndex, isSubmitted, userAnswers } = useAppSelector((state) => state.quizPlayer)
+  const { currentQuestionIndex, userAnswers, timeRemaining } = useAppSelector((state) => state.quizPlayer)
   const totalTime = quiz.timeLimitMinutes * 60
-  const [timeLeft, setTimeLeft] = useState(totalTime)
+  const formatTime = (s: number) =>
+    `${Math.floor(s / 60)
+      .toString()
+      .padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`
 
-  useEffect(() => {
-    if (isSubmitted) return
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [isSubmitted])
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-  }
-  const answeredCount = Object.keys(userAnswers).length
-  const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100
-  const timeProgressPercent = ((totalTime - timeLeft) / totalTime) * 100
-
+  const progressPercent = ((totalTime - timeRemaining) / totalTime) * 100
   return (
     <aside className='hidden w-80 flex-col gap-6 overflow-y-auto border-r bg-gradient-to-b from-slate-50 to-white p-6 shadow-lg md:flex'>
       {/* Header */}
       <div className='rounded-2xl p-6 shadow-md'>
         <div className='mb-2 flex items-center gap-2'>
           <BookOpen className='h-6 w-6' />
-          <h1 className='text-2xl font-bold'>Quiz Challenge</h1>
+          <h1 className='text-2xl font-bold'>Bài kiểm tra trắc nghiệm</h1>
         </div>
         <p>Kiểm tra kiến thức của bạn</p>
       </div>
 
       {/* Timer Card */}
-      {timeLeft > 0 && (
+      {timeRemaining  > 0 && (
         <Card className='overflow-hidden shadow-md transition-all hover:shadow-lg'>
           <div className='p-5'>
             <div className='mb-3 flex items-center gap-2'>
@@ -65,9 +44,9 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
               </div>
               <span className='font-semibold text-gray-700'>Thời gian còn lại</span>
             </div>
-            <div className='text-3xl font-bold'>{formatTime(timeLeft)}</div>
+            <div className='text-3xl font-bold'> {formatTime(timeRemaining)}</div>
             <div className='mt-3 h-2 w-full overflow-hidden rounded-full bg-sky-200'>
-              <div className='h-full' style={{ width: `${timeProgressPercent}%` }} />
+              <div className='h-full' style={{ width: `${progressPercent}%` }} />
             </div>
           </div>
         </Card>

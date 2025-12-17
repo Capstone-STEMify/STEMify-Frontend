@@ -7,18 +7,22 @@ import QuizMainContent from '@/features/resource/quiz/components/player/QuizMain
 import { initializeQuiz, setQuizAttemptId } from '@/features/resource/quiz/slice/quiz-player-slice'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useParams } from 'next/navigation'
+import QuizTimer from '@/features/resource/quiz/components/player/question/QuizTimer'
 
 export default function QuizPlayerContainer() {
   const dispatch = useAppDispatch()
-  const selectedQuiz = useAppSelector((state) => state.quizPlayer.selectedQuiz)
-  const studentQuizAttemptRedux = useAppSelector((state) => state.quizPlayer.quizAttemptId)
+  const { selectedQuiz, quizAttemptId: reduxAttemptId, questions } = useAppSelector((state) => state.quizPlayer)
+
   const { quizAttemptId } = useParams()
 
   useEffect(() => {
-    console.log('quizattemptId from redux:', studentQuizAttemptRedux)
-    console.log('selectedQuiz: ', selectedQuiz?.questions.length)
-    if (selectedQuiz && !studentQuizAttemptRedux) {
+    if (!selectedQuiz) return
+
+    if (!reduxAttemptId) {
       dispatch(setQuizAttemptId(Number(quizAttemptId)))
+    }
+
+    if (questions.length === 0) {
       dispatch(
         initializeQuiz({
           questions: selectedQuiz.questions,
@@ -26,18 +30,19 @@ export default function QuizPlayerContainer() {
         })
       )
     }
-  }, [selectedQuiz, dispatch, quizAttemptId])
+  }, [selectedQuiz, quizAttemptId])
 
   if (!selectedQuiz) {
     return (
       <div className='flex h-screen items-center justify-center'>
-        <SEmpty title='Quiz not found.' />
+        <SEmpty title='Không tìm thấy bài kiểm tra' />
       </div>
     )
   }
 
   return (
     <div className='flex h-screen overflow-hidden bg-white'>
+      <QuizTimer />
       <QuizSidebar quiz={selectedQuiz} />
       <QuizMainContent quiz={selectedQuiz} />
     </div>
