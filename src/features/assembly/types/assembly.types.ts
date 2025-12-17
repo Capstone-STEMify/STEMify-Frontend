@@ -302,6 +302,7 @@ export interface ComponentTemplate {
   previewImageUrl?: string
   source?: string
   modelUrl?: string
+  arms?: Record<string, { x: number; y: number; z: number }[]>
 }
 
 export interface ComponentLibrary {

@@ -38,6 +38,7 @@ export default function Creator3D({ emulatorData }: Creator3DProps) {
   const t3d = useTranslations('creator3D.main_content')
   const dispatch = useAppDispatch()
   const instances = useAppSelector((s) => s.creatorScene.instances)
+  console.log('Creator3D instances', instances)
   const addObject = useAddObject()
   const selectedObject = useSelectedObject()
   const exportAssemblyFn = useExportAssembly()

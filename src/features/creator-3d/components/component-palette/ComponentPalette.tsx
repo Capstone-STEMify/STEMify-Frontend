@@ -114,7 +114,8 @@ export async function loadComponentTemplate(jsonPath: string): Promise<Component
         maxConnections: data.ports ? data.ports.length : 1,
         allowedAngles: []
       },
-      modelUrl: data.modelUrl ?? data.baseGeometry?.modelPath ?? `/models/${data.id}.glb`
+      modelUrl: data.modelUrl ?? data.baseGeometry?.modelPath ?? `/models/${data.id}.glb`,
+      numArms: data.arms?.length ?? 3
     } as Connector
 
     if (data.modelUrl || data.baseGeometry?.modelPath) {

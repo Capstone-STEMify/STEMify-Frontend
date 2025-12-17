@@ -63,6 +63,8 @@
         "title": "Action Properties",
         "name": "Name",
         "type": "Type",
+        "groupComponents": "Group Components",
+        "transformConnector": "Transform Connector",
         "step": {
           "detail": "Step Details",
           "title": "Title",

@@ -240,13 +240,13 @@ export default function WorkspaceTree() {
             onClick={() => handleAddAction('highlight')}
             className='rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'
           >
-            Group component
+            {t3d('right_panel.action_properties.groupComponents')}
           </button>
           <button
             onClick={() => handleAddAction('transform_arm')}
             className='rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200'
           >
-            Transform connector
+            {t3d('right_panel.action_properties.transformConnector')}
           </button>
         </div>
       </div>

@@ -63,6 +63,8 @@
         "title": "Thuộc tính hành động",
         "name": "Tên",
         "type": "Loại",
+        "groupComponents": "Nhóm linh kiện",
+        "transformConnector": "Nhóm xoay đầu nối",
         "step": {
           "detail": "Chi tiết bước",
           "title": "Tiêu đề",

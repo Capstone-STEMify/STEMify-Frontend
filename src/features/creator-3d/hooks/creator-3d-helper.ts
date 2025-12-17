@@ -19,6 +19,7 @@ export function createInstanceFromTemplate(
   position: { x: number; y: number; z: number },
   generateId: (prefix: string) => string
 ): AssemblyInstance {
+  console.log({ template, position })
   const id = generateId(template.type)
 
   const baseTransform: Transform = {
@@ -156,6 +157,8 @@ export function useAddObject() {
       return null
     }
 
+    console.log({ template, position })
+
     // Create instance
     const instance = createInstanceFromTemplate(template, position, generateId)
 
@@ -240,7 +243,6 @@ export function exportAssembly(
   const connectors = instances
     .filter((i) => i.category === 'connector')
     .reduce<Record<string, any[]>>((acc, item) => {
-      console.log({ item })
       const templateId = item.templateId
       if (!acc[templateId]) acc[templateId] = []
       acc[templateId].push({
