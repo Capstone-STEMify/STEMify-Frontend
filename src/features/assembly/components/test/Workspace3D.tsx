@@ -8,9 +8,10 @@ import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setIsShiftPressed } from '@/features/assembly/slice/assemblySlice'
-import { useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi' // ✅ Import hook có sẵn
+import { useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi' // Import hook có sẵn
 import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context'
 import { useLocale } from 'next-intl'
+import { UserRole } from '@/types/userRole'
 
 export default function Workspace3D({
   assemblyUrl,
@@ -28,6 +29,8 @@ export default function Workspace3D({
   const isTransforming = useAppSelector((state) => state.assembly.isTransforming)
   const router = useRouter()
   const locale = useLocale()
+  const user = useAppSelector((state) => state.auth.user)
+  const userRole = user?.userRole
 
   const [transformMode, setTransformMode] = useState<'translate' | 'rotate'>('translate')
   const [stepIndex, setStepIndex] = useState(0)
@@ -37,7 +40,13 @@ export default function Workspace3D({
 
   // check access
   const { accessEmulatorIds } = useAppSelector((state) => state.selectedOrganization)
-  if (id && typeof id === 'string' && (!accessEmulatorIds || !accessEmulatorIds.includes(id))) {
+  if (
+    id &&
+    typeof id === 'string' &&
+    (!accessEmulatorIds || !accessEmulatorIds.includes(id)) &&
+    userRole !== UserRole.ADMIN &&
+    userRole !== UserRole.STAFF
+  ) {
     router.push(`/${locale}/unauthorized`)
   }
 

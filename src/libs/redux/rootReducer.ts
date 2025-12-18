@@ -76,6 +76,7 @@ import { groupApi } from '@/features/group/api/groupApi'
 import { organizationSpecialSlice } from '@/features/organization/slice/organizationSpecialSlice'
 import { groupSlice } from '@/features/group/slice/groupSlice'
 import { systemDashboardApi } from '@/features/dashboard/api/AdminDashboardApi'
+import { aiApi } from '@/features/microbit/api/aiApi'
 
 const appReducer = combineReducers({
   // Add your reducers here
@@ -160,7 +161,8 @@ const appReducer = combineReducers({
   [studentAssignmentApi.reducerPath]: studentAssignmentApi.reducer,
   [assignmentApi.reducerPath]: assignmentApi.reducer,
   [groupApi.reducerPath]: groupApi.reducer,
-  [systemDashboardApi.reducerPath]: systemDashboardApi.reducer
+  [systemDashboardApi.reducerPath]: systemDashboardApi.reducer,
+  [aiApi.reducerPath]: aiApi.reducer
 })
 
 export const rootReducer = (state: any, action: any) => {
