@@ -1,242 +1,218 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useParams } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { 
-  Printer, 
-  Download, 
-  Play, 
-  Trash2, 
-  ThumbsUp, 
-  ThumbsDown, 
-  PlusCircle, 
-  MoreHorizontal,
-  Info,
-  ChevronLeft,
-  Menu,
-  X
+  Play, ThumbsUp, ThumbsDown, PlusCircle, Info, ChevronLeft, Menu, X, Loader2, Trash2 
 } from 'lucide-react'
 
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import { Switch } from '@/components/shadcn/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
+import { supabase } from '@/libs/supabase/client'
+import { toast } from 'sonner'
+import { useAnalyzeProjectMutation } from '@/features/microbit/api/aiApi'
+import { MicrobitEvaluateResponse } from '@/features/microbit/type/ai.type'
 
 const BASE_APP_URL = process.env.NEXT_PUBLIC_BASE_APP_URL ?? '/'
 
+interface Criteria {
+  id: string;
+  question: string;
+  result: MicrobitEvaluateResponse | null;
+  isAnalyzing: boolean;
+}
+
 export default function MicrobitReviewSubmission() {
   const params = useParams()
+  const locale = useLocale()
+  const t = useTranslations('microbit.review')
   const shareId = params?.shareId as string
+  
+  const scrollViewportRef = useRef<HTMLDivElement>(null)
 
-  const [checklistName, setChecklistName] = useState('New Checklist')
+  const [checklistName, setChecklistName] = useState(t('checklistName'))
+  const [analysisType, setAnalysisType] = useState<'comprehensive' | 'specific_question'>('specific_question')
+  const [criterias, setCriterias] = useState<Criteria[]>([
+    { id: '1', question: '', result: null, isAnalyzing: false }
+  ])
+  
   const [evaluateOnLoad, setEvaluateOnLoad] = useState(false)
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+  const [analyzeProject] = useAnalyzeProjectMutation()
 
   const safeShareId = shareId || 'unknown'
   const sandboxUrl = `${BASE_APP_URL}/#sandbox:${safeShareId}`
 
-  if (!shareId) {
-    return (
-      <div className='flex h-screen items-center justify-center bg-slate-50'>
-        <div className='flex flex-col items-center gap-4'>
-          <div className='h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent'></div>
-          <p className='text-sm font-medium text-slate-600'>Loading Project...</p>
-        </div>
-      </div>
-    )
+  useEffect(() => {
+    if (scrollViewportRef.current) {
+      const scrollContainer = scrollViewportRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        scrollContainer.scrollTo({ top: scrollContainer.scrollHeight, behavior: 'smooth' });
+      }
+    }
+  }, [criterias]);
+
+  const addCriteria = () => {
+    setCriterias([...criterias, { 
+      id: Math.random().toString(), 
+      question: '', 
+      result: null, 
+      isAnalyzing: false 
+    }])
+  }
+
+  const removeCriteria = (id: string) => {
+    if (criterias.length > 1) {
+      setCriterias(criterias.filter(c => c.id !== id))
+    }
+  }
+
+  const updateCriteriaState = (id: string, updates: Partial<Criteria>) => {
+    setCriterias(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c))
+  }
+
+  const handleSpecificEvaluate = async (criteriaId: string, question: string) => {
+    if (!shareId || !question.trim()) return
+    updateCriteriaState(criteriaId, { isAnalyzing: true })
+
+    try {
+      const { data, error } = await supabase
+        .from('microbit_shares')
+        .select('text')
+        .eq('shareId', shareId)
+        .single()
+
+      if (error) throw new Error('DB Error')
+      const projectFiles = typeof data.text === 'string' ? JSON.parse(data.text) : data.text
+
+      const response = await analyzeProject({
+        project_files: projectFiles,
+        question: question,
+        language: locale,
+        analysis_type: 'specific_question'
+      }).unwrap()
+
+      if (response && response) {
+        updateCriteriaState(criteriaId, { result: response })
+        toast.success(t('successToast'))
+      }
+    } catch (err) {
+      toast.error(t('errorToast'))
+    } finally {
+      updateCriteriaState(criteriaId, { isAnalyzing: false })
+    }
   }
 
   return (
-    <div className='flex h-screen w-full bg-white text-slate-900 font-sans overflow-hidden relative'>
+    <div className='relative flex min-h-screen w-full overflow-hidden bg-white font-sans text-slate-900 mt-22'>
       {isMobileSidebarOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-black/50 md:hidden backdrop-blur-sm transition-opacity"
-          onClick={() => setIsMobileSidebarOpen(false)}
-        />
+        <div className='fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden' onClick={() => setIsMobileSidebarOpen(false)} />
       )}
 
-      <aside 
-        className={`
-          fixed inset-y-0 left-0 z-50 bg-white border-r border-slate-200 
-          transform transition-transform duration-300 ease-in-out shadow-2xl md:shadow-none
-          /* Mobile Width */
-          w-[85vw] sm:w-[450px]
-          /* Desktop Width (Đã tăng lên) */
-          md:relative md:translate-x-0 md:flex md:flex-col
-          md:w-[500px] lg:w-[600px] xl:w-[650px] 
-          ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}
-      >
-        <div defaultValue='checklist' className='flex flex-col h-full'>
-          <div className='flex items-center justify-between px-2 pt-2 border-b border-slate-100 bg-white shrink-0'>
-            <div className='flex items-center justify-between bg-transparent p-0 h-10 gap-4'>
-              <Link href="/" className='flex items-center'>
-                 <Button variant="ghost" size="sm" className='text-slate-500 gap-1 pl-1'>
-                    <ChevronLeft className='h-4 w-4' /> <span className="hidden sm:inline">Back</span>
-                 </Button>
-              </Link>
-              <div 
-                className='rounded-none px-2 text-slate-500 font-medium'
-              >
-                Checklist
-              </div>
-            </div>
-
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => setIsMobileSidebarOpen(false)}
-              className="md:hidden text-slate-400"
-            >
-              <X className="h-5 w-5" />
-            </Button>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-[85vw] transform border-r border-slate-200 bg-white transition-transform duration-300 md:relative md:flex md:w-[500px] md:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className='flex h-full w-full flex-col overflow-hidden'>
+          
+          <div className='flex items-center justify-between border-b p-3 shrink-0 bg-white z-10'>
+            <Link href='/'><Button variant='ghost' size='sm' className='text-slate-600'><ChevronLeft className='h-4 w-4 mr-1' /> {t('back')}</Button></Link>
+            <div className='font-medium text-slate-500 text-xs uppercase tracking-widest'>{t('checklist')}</div>
+            <Button variant='ghost' size='icon' onClick={() => setIsMobileSidebarOpen(false)} className='md:hidden'><X /></Button>
           </div>
 
-          <div  className='flex-1 flex flex-col p-0 m-0 overflow-hidden'>
-            <ScrollArea className='h-full'>
-              <div className='flex flex-col gap-6 p-4'>
-                
-                <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3'>
-                  <Input 
-                    value={checklistName} 
-                    onChange={(e) => setChecklistName(e.target.value)}
-                    className='text-lg font-medium border-slate-200 focus-visible:ring-1 bg-transparent px-2 h-10 shadow-sm w-full'
-                  />
-                  <div className='flex items-center gap-1 w-full sm:w-auto justify-end'>
-                    <Button variant='outline' size='icon' className='h-9 w-9 text-slate-600 border-slate-300'>
-                      <Download className='h-4 w-4' />
-                    </Button>
-                    <Button variant='outline' size='icon' className='h-9 w-9 text-slate-600 border-slate-300'>
-                      <Printer className='h-4 w-4' />
-                    </Button>
-                    <Button className='h-9 bg-blue-700 hover:bg-blue-800 text-white gap-1 px-3 shadow-sm'>
-                      Evaluate <Play className='h-3 w-3 fill-current' />
-                    </Button>
-                  </div>
-                </div>
+          <ScrollArea ref={scrollViewportRef} className='flex-1 h-full w-full'>
+            <div className='flex flex-col gap-6 p-4 pb-20'>
+              
+              
+              <div className='flex items-center gap-2 shrink-0'>
+                <Input value={checklistName} onChange={(e) => setChecklistName(e.target.value)} className='text-base font-medium h-10 shadow-none border-slate-200 focus-visible:ring-blue-500' />
+                <Select value={analysisType} onValueChange={(v: any) => setAnalysisType(v)}>
+                  <SelectTrigger className='w-[100px] h-10 border-slate-200'><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='comprehensive'>{t('analysisType.comprehensive')}</SelectItem>
+                    <SelectItem value='specific_question'>{t('analysisType.specific_question')}</SelectItem>
+                  </SelectContent>
+                </Select>
+                {analysisType === 'comprehensive' && (
+                <Button className='bg-blue-600 hover:bg-blue-700 text-white h-10 px-3'>
+                  {t('evaluate')} <Play className='ml-2 h-3 w-3 fill-current' />
+                </Button>
+                )}
+              </div>
 
-                <div className='flex flex-col gap-2'>
-                  <div className='flex flex-col sm:flex-row items-stretch sm:items-center gap-2'>
-                    <span className='text-sm font-medium whitespace-nowrap text-slate-700 hidden sm:inline'>Ask AI:</span>
-                    <div className='flex-1 relative'>
-                      <Input 
-                        placeholder='Evaluate this code...' 
-                        className='h-9 text-sm'
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                        <Select defaultValue='na'>
-                        <SelectTrigger className='w-[80px] h-9'>
-                            <SelectValue placeholder='Score' />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value='na'>N/A</SelectItem>
-                            <SelectItem value='pass'>Pass</SelectItem>
-                            <SelectItem value='fail'>Fail</SelectItem>
-                        </SelectContent>
-                        </Select>
-                        <div className='flex sm:hidden gap-1'>
-                            <Button variant='outline' size='icon' className='h-9 w-9'><Play className='h-4 w-4'/></Button>
+              {analysisType === 'specific_question' && (
+                <div className='flex flex-col gap-10'>
+                  {criterias.map((criteria) => (
+                    <div key={criteria.id} className='flex flex-col gap-4'>
+                      <div className='flex items-center gap-3'>
+                        <span className='text-sm font-bold text-slate-700 whitespace-nowrap'>{t('askAI')}</span>
+                        <Input 
+                          placeholder={t('placeholder')} 
+                          value={criteria.question}
+                          onChange={(e) => updateCriteriaState(criteria.id, { question: e.target.value })}
+                          className='h-10 flex-1 border-slate-200' 
+                        />
+                        <Button variant='ghost' size='icon' onClick={() => removeCriteria(criteria.id)} className='text-slate-400 hover:text-red-500'>
+                          <Trash2 className='h-4 w-4' />
+                        </Button>
+                        <Button 
+                          variant='outline' size='icon' 
+                          onClick={() => handleSpecificEvaluate(criteria.id, criteria.question)}
+                          disabled={criteria.isAnalyzing}
+                          className='h-10 w-10 border-slate-200 shrink-0'
+                        >
+                          {criteria.isAnalyzing ? <Loader2 className='h-4 w-4 animate-spin' /> : <Play className='h-4 w-4 fill-slate-800' />}
+                        </Button>
+                      </div>
+
+                      {criteria.result && (
+                        <div className='space-y-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm animate-in fade-in duration-300'>
+                          <div className='flex items-start gap-2 text-[13px] text-slate-500'>
+                            <Info className='mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-500' />
+                            <span>{t('experimental')}</span>
+                          </div>
+                          <div className='whitespace-pre-wrap leading-relaxed text-slate-700 text-[15px]'>
+                            {criteria.result.analysis}
+                          </div>
+                          <div className='flex items-center justify-end gap-3 border-t border-slate-100 pt-3'>
+                            <span className='text-xs font-medium text-slate-400'>{t('helpful')}</span>
+                            <Button variant='ghost' size='icon' className='h-8 w-8 text-slate-400 hover:text-blue-600'><ThumbsUp className='h-4 w-4' /></Button>
+                            <Button variant='ghost' size='icon' className='h-8 w-8 text-slate-400 hover:text-red-600'><ThumbsDown className='h-4 w-4' /></Button>
+                          </div>
                         </div>
+                      )}
                     </div>
-                  </div>
-                  
-                  <div className='hidden sm:flex justify-end gap-2'>
-                     <Button variant='ghost' size='icon' className='h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50'>
-                        <Trash2 className='h-4 w-4' />
-                     </Button>
-                     <Button variant='outline' size='icon' className='h-8 w-8 border-slate-300'>
-                        <Play className='h-4 w-4 fill-slate-800' />
-                     </Button>
-                  </div>
-                </div>
+                  ))}
 
-                {/* 3. Feedback */}
-                <div className='border border-slate-200 rounded-lg p-3 bg-slate-50 text-sm space-y-3'>
-                  <div className='flex items-start gap-2 text-xs text-slate-500 mb-1 leading-tight'>
-                    <Info className='h-3 w-3 mt-0.5 shrink-0' />
-                    <span>Experimental: AI outputs may not be accurate.</span>
-                  </div>
-                  <div className='space-y-3 pt-1'>
-                    <p className='text-slate-700 leading-relaxed'>
-                        The code plays a melody at 120 beats per minute when the micro:bit starts, but does nothing when button A is pressed or continuously in the forever loop.
-                    </p>
-                    <p className='text-slate-700 leading-relaxed'>
-                        The &quot;on start&quot; block is used to play a melody with pauses, indicated by the dashes, at a speed of 120 beats per minute. The &quot;on button A pressed&quot; block is empty, meaning no action is taken.
-                    </p>
-                  </div>
-                  <div className='flex items-center justify-end gap-2 pt-2 border-t border-slate-200/50'>
-                    <span className='text-xs text-slate-400'>Helpful?</span>
-                    <button className='hover:bg-slate-200 p-1 rounded'><ThumbsUp className='h-4 w-4 text-slate-500' /></button>
-                    <button className='hover:bg-slate-200 p-1 rounded'><ThumbsDown className='h-4 w-4 text-slate-500' /></button>
-                  </div>
-                </div>
-
-                {/* 4. Add Criteria */}
-                <div>
-                  <Button variant='outline' className='w-full justify-center gap-2 h-10 text-blue-600 border-dashed border-blue-200 bg-blue-50/50 hover:bg-blue-50'>
-                    <PlusCircle className='h-4 w-4' /> Add Criteria
+                  <Button 
+                    variant='outline' 
+                    onClick={addCriteria}
+                    className='w-full py-4 border-dashed border-blue-200 bg-blue-50/20 text-blue-600 hover:bg-blue-50 transition-colors rounded-xl'
+                  >
+                    <PlusCircle className='mr-2 h-4 w-4' /> {t('addCriteria')}
                   </Button>
                 </div>
-
-              </div>
-            </ScrollArea>
-          </div>
+              )}
+            </div>
+          </ScrollArea>
         </div>
       </aside>
 
-      <main className='flex-1 flex flex-col bg-[#f0f2f5] overflow-hidden relative w-full'>
-        
-        <header className='h-12 bg-white border-b border-slate-200 flex items-center justify-between px-3 md:px-4 shrink-0 shadow-sm z-20'>
-          <div className='flex items-center gap-2 md:gap-3 overflow-hidden'>
-            <Button 
-                variant="ghost" 
-                size="icon" 
-                className="md:hidden -ml-2 text-slate-600"
-                onClick={() => setIsMobileSidebarOpen(true)}
-            >
-                <Menu className="h-5 w-5" />
-            </Button>
-
-            <span className='font-semibold text-blue-600 truncate'>local project</span>
+      <main className='relative flex-1 bg-slate-100'>
+        <header className='flex h-12 items-center justify-between border-b bg-white px-4 shrink-0'>
+          <div className='flex items-center gap-2'>
+            <Button variant='ghost' size='icon' className='md:hidden' onClick={() => setIsMobileSidebarOpen(true)}><Menu /></Button>
+            <span className='font-bold text-blue-600 uppercase text-[10px] tracking-widest'>{t('localProject')}</span>
           </div>
-          
-          <div className='flex items-center gap-2 md:gap-3'>
-            <div className="flex items-center gap-2">
-                <span className='hidden sm:inline text-[11px] font-bold text-blue-600 uppercase tracking-wider'>Evaluate on load</span>
-                <span className='sm:hidden text-[11px] font-bold text-blue-600 uppercase'>Auto-eval</span>
-                <Switch 
-                checked={evaluateOnLoad}
-                onCheckedChange={setEvaluateOnLoad}
-                className='data-[state=checked]:bg-blue-600 scale-75 md:scale-90'
-                />
-            </div>
-            <div className='w-px h-4 bg-slate-300 mx-1 hidden sm:block'></div>
-            <Button variant='ghost' size='icon' className='h-8 w-8 text-slate-400 hidden sm:flex'>
-               <MoreHorizontal className='h-5 w-5' />
-            </Button>
+          <div className='flex items-center gap-3'>
+             <span className='text-[10px] font-bold text-blue-600 uppercase tracking-tight'>{t('evaluateOnLoad')}</span>
+             <Switch checked={evaluateOnLoad} onCheckedChange={setEvaluateOnLoad} />
           </div>
         </header>
-
-        <div className='flex-1 relative bg-slate-100'>
-            <iframe
-              id='embed-frame'
-              src={sandboxUrl}
-              title={`Microbit Sandbox ${shareId}`}
-              className='absolute inset-0 w-full h-full border-0'
-              sandbox='allow-scripts allow-same-origin allow-forms allow-popups'
-            />
-        </div>
-
-        <div className='absolute bottom-4 right-4 md:bottom-5 md:right-5 z-30'>
-          <Button size='icon' className='rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg h-10 w-10 md:h-12 md:w-12 transition-transform hover:scale-105'>
-            <PlusCircle className='h-5 w-5 md:h-6 md:w-6 text-white' />
-          </Button>
-        </div>
-
+        <iframe src={sandboxUrl} className='h-full w-full border-0' />
       </main>
     </div>
   )

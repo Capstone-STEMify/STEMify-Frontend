@@ -1,0 +1,23 @@
+{
+  "microbit": {
+    "review": {
+  "checklistName": "Danh sách kiểm tra mới",
+  "analysisType": {
+    "comprehensive": "Toàn diện",
+    "specific_question": "Cụ thể"
+  },
+  "evaluate": "Đánh giá",
+  "askAI": "Hỏi AI:",
+  "placeholder": "Hỏi về code này...",
+  "experimental": "Thử nghiệm: Đầu ra AI có thể không chính xác.",
+  "helpful": "Hữu ích?",
+  "addCriteria": "Thêm tiêu chí",
+  "localProject": "dự án cục bộ",
+  "evaluateOnLoad": "Đánh giá khi tải",
+  "back": "Quay lại",
+  "checklist": "Danh sách kiểm tra",
+  "successToast": "Phân tích thành công",
+  "errorToast": "Lỗi khi gọi AI"
+}
+  }
+}

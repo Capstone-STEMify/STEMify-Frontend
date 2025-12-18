@@ -1,0 +1,23 @@
+{
+  "microbit" : {
+    "review": {
+  "checklistName": "New Checklist",
+  "analysisType": {
+    "comprehensive": "Comp",
+    "specific_question": "Specific"
+  },
+  "evaluate": "Evaluate",
+  "askAI": "Ask AI:",
+  "placeholder": "Ask about this code...",
+  "experimental": "Experimental: AI outputs may not be accurate.",
+  "helpful": "Helpful?",
+  "addCriteria": "Add Criteria",
+  "localProject": "local project",
+  "evaluateOnLoad": "Evaluate on load",
+  "back": "Back",
+  "checklist": "Checklist",
+  "successToast": "Analysis successful",
+  "errorToast": "Error calling AI"
+}
+  }
+}
