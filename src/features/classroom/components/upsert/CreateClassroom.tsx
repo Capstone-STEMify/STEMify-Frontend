@@ -30,13 +30,13 @@ import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { clearCreateClassroomState } from '@/features/classroom/slice/classroomSlice'
 
 type ClassroomFormData = {
-  grade: string
   description?: string
   courseId: number
   durationWeeks: string
   startDate: string
   endDate: string
   studentGroups: {
+    grade: string
     groupCode: string
     groupName: string
     teacherId: string
@@ -45,7 +45,6 @@ type ClassroomFormData = {
 }
 
 const defaultClassroomFormData: ClassroomFormData = {
-  grade: '',
   description: '',
   courseId: 1,
   durationWeeks: '8',
@@ -74,6 +73,7 @@ export default function CreateClassroom() {
 
   const [selectedGroups, setSelectedGroups] = useState<
     {
+      grade: string
       groupCode: string
       groupName: string
       teacherId: string
@@ -153,9 +153,6 @@ export default function CreateClassroom() {
   }, [durationWeeks, startDate])
 
   // Sync search
-  useEffect(() => {
-    form.setFieldValue('grade', grade)
-  }, [grade])
   useEffect(() => {
     form.setFieldValue('description', description)
   }, [description])

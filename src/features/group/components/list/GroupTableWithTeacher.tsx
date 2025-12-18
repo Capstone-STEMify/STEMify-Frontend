@@ -18,6 +18,7 @@ type GroupTableWithTeacherProps = {
   grade: string
   onGroupsChange: (
     groups: {
+      grade: string
       groupCode: string
       groupName: string
       teacherId: string
@@ -67,6 +68,7 @@ export default function GroupTableWithTeacher({
     const selected = selectedRows.map((groupId) => {
       const group = groups.find((g) => g.id === groupId)!
       return {
+        grade: grade,
         groupCode: group.code,
         groupName: group.name,
         teacherId: teacherAssignments[groupId],
