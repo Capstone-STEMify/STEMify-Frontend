@@ -33,7 +33,8 @@
       "importing_assembly": "Importing model...",
       "import_success": "Model imported successfully!",
       "import_error": "Error importing model. Please check the workspace ID and try again.",
-      "save_assembly": "Save Model"
+      "save_assembly": "Save Model",
+      "expected_result": "Expected Result"
     },
     "left_panel": {
       "title": "Components",

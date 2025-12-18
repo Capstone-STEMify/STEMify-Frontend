@@ -8,8 +8,7 @@ import { SceneRenderer } from '@/features/assembly/components/test/SceneRenderer
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setIsShiftPressed } from '@/features/assembly/slice/assemblySlice'
-import { useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi' // Import hook có sẵn
-import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context'
+import { useGetEmulatorByIdQuery } from '@/features/emulator/api/emulatorApi'
 import { useLocale } from 'next-intl'
 import { UserRole } from '@/types/userRole'
 
@@ -68,6 +67,8 @@ export default function Workspace3D({
     nextStep,
     previousStep
   } = useAssembly()
+
+  console.log('currentStep:', currentStep)
 
   // Load assembly khi có data từ API
   useEffect(() => {
@@ -211,19 +212,27 @@ export default function Workspace3D({
   }, [assembly, instances, currentActivity, clampedStep, getComponentElements])
 
   const strawTypeCount = useMemo(() => {
-    const counts: Record<string, number> = {}
+    const counts: Record<string, { count: number; instances: typeof visibleInstances.straws }> = {}
     visibleInstances.straws.forEach((inst) => {
       const templateId = inst.templateId
-      counts[templateId] = (counts[templateId] || 0) + 1
+      if (!counts[templateId]) {
+        counts[templateId] = { count: 0, instances: [] }
+      }
+      counts[templateId].count += 1
+      counts[templateId].instances.push(inst)
     })
     return counts
   }, [visibleInstances.straws])
 
   const connectorTypeCount = useMemo(() => {
-    const counts: Record<string, number> = {}
+    const counts: Record<string, { count: number; instances: typeof visibleInstances.connectors }> = {}
     visibleInstances.connectors.forEach((inst) => {
       const templateId = inst.templateId
-      counts[templateId] = (counts[templateId] || 0) + 1
+      if (!counts[templateId]) {
+        counts[templateId] = { count: 0, instances: [] }
+      }
+      counts[templateId].count += 1
+      counts[templateId].instances.push(inst)
     })
     return counts
   }, [visibleInstances.connectors])
@@ -232,17 +241,16 @@ export default function Workspace3D({
   const isLoading = isLoadingEmulator || isLoadingAssembly
   const error = errorEmulator || errorAssembly
 
-  if (isLoading) return <div>Loading assembly...</div>
-  if (error) return <div>Error loading assembly: {error?.toString()}</div>
-  if (!assembly) return <div>No assembly loaded</div>
+  if (isLoading) return <div>Đang tải...</div>
+  if (error) return <div>Lỗi khi tải lắp ráp: {error?.toString()}</div>
+  if (!assembly) return <div>Chưa có lắp ráp nào được tải</div>
 
   return (
     <div className='relative h-[89.5vh] w-full'>
       {showUI && currentStep && (
         <StepInfoPanel
           stepIndex={stepIndex}
-          stepTitle={currentStep.title}
-          stepDescription={currentStep.description}
+          currentStep={currentStep}
           strawTypeCount={strawTypeCount}
           connectorTypeCount={connectorTypeCount}
         />

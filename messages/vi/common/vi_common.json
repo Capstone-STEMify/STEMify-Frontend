@@ -147,7 +147,8 @@
       "removeStudents": "Xóa {student} Học Sinh",
       "deactivate": "Vô Hiệu Hóa",
       "activate": "Kích Hoạt",
-      "revoke": "Thu Hồi"
+      "revoke": "Thu Hồi",
+      "previous": "Trước"
     },
     "message": {
       "courseCreateSuccess": "Khóa học được tạo thành công!",

@@ -33,7 +33,8 @@
       "importing_assembly": "Đang tải mô hình...",
       "import_success": "Nhập mô hình thành công!",
       "import_error": "Lỗi khi nhập mô hình. Vui lòng kiểm tra ID workspace và thử lại.",
-      "save_assembly": "Lưu mô hình"
+      "save_assembly": "Lưu mô hình",
+      "expected_result": "Kết quả mong đợi"
     },
     "left_panel": {
       "title": "Công cụ",

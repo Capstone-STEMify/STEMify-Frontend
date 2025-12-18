@@ -147,7 +147,8 @@
       "removeStudents": "Remove {student} Students",
       "deactivate": "Deactivate",
       "activate": "Activate",
-      "revoke": "Revoke"
+      "revoke": "Revoke",
+      "previous": "Previous"
     },
     "message": {
       "courseCreateSuccess": "Course created successfully!",

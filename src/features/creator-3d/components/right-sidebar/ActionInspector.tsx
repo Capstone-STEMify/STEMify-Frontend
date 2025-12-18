@@ -49,7 +49,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
           activityId: stepInfo.activityId,
           stepIndex: stepInfo.stepIndex,
           patch: {
-            title: localFields.title,
+            title: localFields.name,
             description: localFields.description,
             expectedResult: localFields.expectedResult,
             hints: localFields.hints
@@ -91,7 +91,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
       <div className='space-y-3 border-t pt-3'>
         <h3 className='font-semibold text-gray-900'>{t3d('action_properties.step.detail')}</h3>
 
-        <div>
+        {/* <div>
           <label className='text-sm font-medium'>{t3d('action_properties.step.title')}</label>
           <Input
             value={localFields.title}
@@ -99,7 +99,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
             onBlur={handleBlur}
             className='text-sm text-gray-700'
           />
-        </div>
+        </div> */}
 
         <div>
           <label className='text-sm font-medium'>{t3d('action_properties.step.description')}</label>
@@ -121,7 +121,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
           />
         </div>
 
-        <div>
+        {/* <div>
           <label className='text-sm font-medium'>{t3d('action_properties.step.hint')}</label>
           {localFields.hints.map((hint, index) => (
             <Input
@@ -142,7 +142,7 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
           >
             {t3d('action_properties.step.addHint')}
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   )
