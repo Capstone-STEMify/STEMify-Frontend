@@ -9,6 +9,11 @@
   "comprehensiveTab": "Phân tích toàn diện",
   "specificTab": "Câu hỏi cụ thể",
   "analysisMode": "Chế độ phân tích",
+  "defaultQuestions": {
+    "explain": "Giải thích bài làm của học sinh",
+    "errors": "Bài làm của học sinh có lỗi gì không",
+    "improvements": "Học sinh nên cải thiện bài làm như nào"
+  },
   "evaluate": "Đánh giá",
   "askAI": "Hỏi AI:",
   "placeholder": "Hỏi về code này...",

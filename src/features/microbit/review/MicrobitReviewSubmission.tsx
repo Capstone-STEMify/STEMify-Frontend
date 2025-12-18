@@ -36,13 +36,15 @@ export default function MicrobitReviewSubmission() {
   const scrollViewportRef = useRef<HTMLDivElement>(null)
 
   const [checklistName, setChecklistName] = useState(t('checklistName'))
-  const [analysisType, setAnalysisType] = useState<'comprehensive' | 'specific_question'>('specific_question')
+  const [analysisType, setAnalysisType] = useState<'comprehensive' | 'specific_question'>('comprehensive')
   
   const [comprehensiveResult, setComprehensiveResult] = useState<MicrobitEvaluateResponse | null>(null)
   const [isComprehensiveAnalyzing, setIsComprehensiveAnalyzing] = useState(false)
 
   const [criterias, setCriterias] = useState<Criteria[]>([
-    { id: '1', question: '', result: null, isAnalyzing: false }
+    { id: '1', question: t('defaultQuestions.explain'), result: null, isAnalyzing: false },
+    { id: '2', question: t('defaultQuestions.errors'), result: null, isAnalyzing: false },
+    { id: '3', question: t('defaultQuestions.improvements'), result: null, isAnalyzing: false }
   ])
   
   const [evaluateOnLoad, setEvaluateOnLoad] = useState(false)
@@ -71,9 +73,7 @@ export default function MicrobitReviewSubmission() {
   }
 
   const removeCriteria = (id: string) => {
-    if (criterias.length > 1) {
-      setCriterias(criterias.filter(c => c.id !== id))
-    }
+    setCriterias(criterias.filter(c => c.id !== id))
   }
 
   const updateCriteriaState = (id: string, updates: Partial<Criteria>) => {
