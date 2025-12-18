@@ -36,6 +36,7 @@ import { studentAssignmentApi } from '@/features/assignment/api/studentAssignmen
 import { assignmentApi } from '@/features/assignment/api/assignmentApi'
 import { groupApi } from '@/features/group/api/groupApi'
 import { systemDashboardApi } from '@/features/dashboard/api/AdminDashboardApi'
+import { aiApi } from '@/features/microbit/api/aiApi'
 
 export const apiMiddlewares: Middleware[] = [
   courseApi.middleware,
@@ -74,7 +75,8 @@ export const apiMiddlewares: Middleware[] = [
   assignmentApi.middleware,
   orgDashboardApi.middleware,
   groupApi.middleware,
-  systemDashboardApi.middleware
+  systemDashboardApi.middleware,
+  aiApi.middleware
   // Add your custom middlewares here
   // Example: loggerMiddleware, errorHandlingMiddleware, etc.
 ]
