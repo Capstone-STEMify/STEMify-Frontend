@@ -9,11 +9,10 @@ import { useTranslations } from 'next-intl'
 import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
 
 type MyLearningHeroProps = {
-  course?: PaginatedResult<Enrollment>
   studentId: string
 }
 
-export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
+export function MyLearningHero({ studentId }: MyLearningHeroProps) {
   const t = useTranslations('myLearning')
 
   const auth = useAppSelector((state) => state.auth)
@@ -24,7 +23,7 @@ export function MyLearningHero({ course, studentId }: MyLearningHeroProps) {
 
   const items = data?.data?.items || []
 
-  const totalCourses = course?.items.length || 0
+  const totalCourses = items.length || 0
   const inProgressCourses = items.filter((course) => course.status === 'InProgress').length
   const completedCourses = items.filter((course) => course.status === 'Completed').length
   const cancelledCourses = items.filter((course) => course.status === 'Dropped').length
