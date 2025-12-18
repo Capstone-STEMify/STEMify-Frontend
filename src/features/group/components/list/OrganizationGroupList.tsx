@@ -122,7 +122,7 @@ export default function OrganizationGroupList() {
                         <h3 className='truncate text-base font-medium'>{group.name}</h3>
                         <div className='mt-1 flex -space-x-2'>
                           {group.students.slice(0, 3).map((s, i) => {
-                            return <UserAvatar fullName={s.fullName} size={20} key={i} />
+                            return <UserAvatar fullName={s.fullName} size={30} key={i} />
                           })}
 
                           {group.students.length > 3 && (

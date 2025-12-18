@@ -68,18 +68,18 @@ export function UpsertStudentGroup({ studentIds }: UpsertStudentGroupProps) {
           {/* GROUP NAME */}
           <div className='space-y-1'>
             <Label>{to('groupName')}</Label>
-            <Input placeholder={to('enterGroupName')} value={name} onChange={(e) => setName(e.target.value)} />
+            <Input placeholder={to('enterGroupName')} value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
 
           {/* GROUP CODE */}
           <div className='space-y-1'>
             <Label>{to('groupCode')}</Label>
-            <Input placeholder={to('enterGroupCode')} value={code} onChange={(e) => setCode(e.target.value)} />
+            <Input placeholder={to('enterGroupCode')} value={code} onChange={(e) => setCode(e.target.value)} required />
           </div>
 
           <div className='space-y-1'>
             <Label htmlFor='grade'>{tc('grade')}</Label>
-            <Select value={grade} onValueChange={setGrade}>
+            <Select value={grade} onValueChange={setGrade} required>
               <SelectTrigger className='w-32'>
                 <SelectValue placeholder={tc('grade')} />
               </SelectTrigger>
@@ -94,7 +94,9 @@ export function UpsertStudentGroup({ studentIds }: UpsertStudentGroupProps) {
           </div>
 
           {/* DISPLAY SELECTED STUDENT COUNT */}
-          <p className='text-sm text-gray-600'>{studentIds.length} {to('studentsWillBeAdded')}</p>
+          <p className='text-sm text-gray-600'>
+            {studentIds.length} {to('studentsWillBeAdded')}
+          </p>
         </div>
 
         <DialogFooter>
