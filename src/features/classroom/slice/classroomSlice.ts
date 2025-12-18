@@ -18,14 +18,12 @@ export const { setPageIndex, setPageSize, setSearchTerm, setParam, setMultiplePa
 // Create Classroom Slice
 
 type CreateClassroomSlice = {
-  // Legacy global selection (kept for backward compatibility)
-  selectedStudentIds: string[]
-  // New: per-group selected students mapping
+  missMatchActionByGroup: Record<number, 'autoAssign' | 'exclude'>
   selectedStudentsByGroup: Record<number, string[]>
 }
 
 const initialCreateClassroomState: CreateClassroomSlice = {
-  selectedStudentIds: [],
+  missMatchActionByGroup: {},
   selectedStudentsByGroup: {}
 }
 
@@ -33,18 +31,17 @@ export const createClassroomSlice = createSlice({
   name: 'createClassroomSlice',
   initialState: initialCreateClassroomState,
   reducers: {
-    setSelectedStudentIds(state, action) {
-      state.selectedStudentIds = action.payload
+    setMissMatchAction(state, action: { payload: { groupId: number; action: 'autoAssign' | 'exclude' } }) {
+      const { groupId, action: actionValue } = action.payload
+      state.missMatchActionByGroup[groupId] = actionValue
     },
     setSelectedStudentsForGroup(state, action: { payload: { groupId: number; studentIds: string[] } }) {
       const { groupId, studentIds } = action.payload
       state.selectedStudentsByGroup[groupId] = studentIds
-      // Also update legacy field to the most recent selection for compatibility
-      state.selectedStudentIds = studentIds
     },
     clearCreateClassroomState: () => initialCreateClassroomState
   }
 })
 
-export const { setSelectedStudentIds, setSelectedStudentsForGroup, clearCreateClassroomState } =
+export const { setMissMatchAction, setSelectedStudentsForGroup, clearCreateClassroomState } =
   createClassroomSlice.actions

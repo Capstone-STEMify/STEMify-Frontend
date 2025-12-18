@@ -23,8 +23,9 @@ export default function AddStudentToGroupModal() {
   const { closeModal } = useModal()
   const { groupId } = useParams()
   const columns = StudentColumn()
+  // Fetch students who are not in any group
   const { data } = useGetOrganizationUserQuery(
-    { organizationId: selectedOrganizationId!, pageNumber: 1, pageSize: 50 },
+    { organizationId: selectedOrganizationId!, pageNumber: 1, pageSize: 20, groupId: 0, role: LicenseType.STUDENT },
     { skip: !selectedOrganizationId }
   )
   const rows = useMemo(
@@ -39,17 +40,21 @@ export default function AddStudentToGroupModal() {
     closeModal()
   }
 
+  const handlePageChange = (page: number) => {
+    setPageNumber(page)
+  }
+
   return (
     <Dialog open onOpenChange={closeModal}>
-      <DialogContent>
+      <DialogContent className='max-h-[80vh] overflow-y-auto'>
         <DialogTitle>{to('addStudentsToGroup')}</DialogTitle>
-        <div className='w-xl'>
+        <div className='w-3xl'>
           <DataTable
             data={rows}
             columns={columns as any}
             enableRowSelection
-            pagingData={rows}
-            pagingParams={pageNumber}
+            pagingData={data}
+            pagingParams={{ pageNumber, pageSize: 20 }}
             handlePageChange={(page) => setPageNumber(page)}
             onSelectionChange={(ids) => setSelectedStudentIds(ids.map(String))}
           />

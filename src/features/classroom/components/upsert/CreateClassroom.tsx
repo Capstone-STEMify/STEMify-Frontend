@@ -27,15 +27,16 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { formatDate, formatPrice, useStatusTranslation } from '@/utils/index'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { clearCreateClassroomState } from '@/features/classroom/slice/classroomSlice'
 
 type ClassroomFormData = {
-  grade: string
   description?: string
   courseId: number
   durationWeeks: string
   startDate: string
   endDate: string
   studentGroups: {
+    grade: string
     groupCode: string
     groupName: string
     teacherId: string
@@ -44,7 +45,6 @@ type ClassroomFormData = {
 }
 
 const defaultClassroomFormData: ClassroomFormData = {
-  grade: '',
   description: '',
   courseId: 1,
   durationWeeks: '8',
@@ -65,12 +65,15 @@ export default function CreateClassroom() {
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
 
+  const dispatch = useAppDispatch()
+
   const { courseTitle } = useAppSelector((state) => state.organizationSpecial)
   const { selectedCurriculum } = useAppSelector((state) => state.selectedCurriculum)
   const subscriptions = selectedCurriculum?.subscriptionGroups || []
 
   const [selectedGroups, setSelectedGroups] = useState<
     {
+      grade: string
       groupCode: string
       groupName: string
       teacherId: string
@@ -116,9 +119,13 @@ export default function CreateClassroom() {
       }
 
       const result = await createClassroom(payload).unwrap()
-      toast.success(tt('successMessage.createNoTitle'))
 
-      router.push(`/${locale}/organization/classroom`)
+      if (result) {
+        dispatch(clearCreateClassroomState())
+        toast.success(tt('successMessage.createNoTitle'))
+        router.push(`/${locale}/organization/classroom`)
+      }
+
       closeModal()
     }
   })
@@ -146,9 +153,6 @@ export default function CreateClassroom() {
   }, [durationWeeks, startDate])
 
   // Sync search
-  useEffect(() => {
-    form.setFieldValue('grade', grade)
-  }, [grade])
   useEffect(() => {
     form.setFieldValue('description', description)
   }, [description])

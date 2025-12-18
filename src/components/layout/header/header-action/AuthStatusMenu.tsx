@@ -14,7 +14,8 @@ import {
   Settings,
   User as UserIcon,
   Sparkles,
-  Gem
+  Gem,
+  History
 } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useLocale, useTranslations } from 'next-intl'
@@ -135,7 +136,9 @@ export default function AuthStatusMenu() {
                     {t('profile')}
                   </MenuItem>
 
-                  <MenuItem icon={<Settings size={16} />}>{t('accountSettings')}</MenuItem>
+                  <MenuItem icon={<History size={16} />} href='/learning-history'>
+                    {t('learningHistory')}
+                  </MenuItem>
 
                   {/* Theme with chevron like screenshot */}
                   <MenuItem icon={<Palette size={16} />}>{t('theme')}</MenuItem>

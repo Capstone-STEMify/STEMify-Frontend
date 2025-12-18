@@ -5,7 +5,7 @@ import { ApiSuccessResponse, PaginatedResult } from '@/types/baseModel'
 
 export const groupApi = createCrudApi<Group, GroupQueryParams>({
   reducerPath: 'groupApi',
-  tagTypes: ['Group', 'UngroupedStudent'],
+  tagTypes: ['Group', 'UngroupedStudent', 'OrganizationUser'],
   baseUrl: '/groups'
 }).injectEndpoints({
   endpoints: (builder) => ({
@@ -18,7 +18,7 @@ export const groupApi = createCrudApi<Group, GroupQueryParams>({
         method: 'GET',
         params
       }),
-      providesTags: ['Group']
+      providesTags: ['Group', 'OrganizationUser']
     }),
 
     addStudentToGroup: builder.mutation<

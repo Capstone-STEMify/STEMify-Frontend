@@ -4,17 +4,11 @@ import { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/shadcn/dialog'
-import { Input } from '@/components/shadcn/input'
-import { Label } from '@/components/shadcn/label'
-import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
 import { OrganizationUser } from '@/features/user/types/user.type'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
-import { getColorByInitial } from '@/utils/index'
 import { useModal } from '@/providers/ModalProvider'
 import { useTranslations } from 'next-intl'
 import SearchBar from '@/components/shared/search/SearchBar'
-import useDebounce from '@/hooks/useDebounce'
+import UserAvatar from '@/components/shared/UserAvatar'
 
 interface Props {
   students: OrganizationUser[]
@@ -26,7 +20,6 @@ export function UngroupedStudentList({ students, onCreateGroup, onSearchChange }
   const to = useTranslations('organization.group')
   const tc = useTranslations('common')
   const [selected, setSelected] = useState<string[]>([])
-  const [search, setSearch] = useState('')
   const { openModal } = useModal()
 
   const toggleStudent = (id: string) => {
@@ -37,14 +30,6 @@ export function UngroupedStudentList({ students, onCreateGroup, onSearchChange }
     if (selected.length === students.length) setSelected([])
     else setSelected(students.map((s) => s.organizationUserId))
   }
-
-  const initials = (name: string) =>
-    name
-      .split(' ')
-      .filter(Boolean)
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase()
 
   return (
     <div className='mt-5'>
@@ -76,8 +61,6 @@ export function UngroupedStudentList({ students, onCreateGroup, onSearchChange }
 
           <TableBody>
             {students.map((s) => {
-              const firstLetter = initials(s.fullName)[0]
-              const bgColor = getColorByInitial(firstLetter)
               return (
                 <TableRow key={s.organizationUserId}>
                   <TableCell>
@@ -89,9 +72,7 @@ export function UngroupedStudentList({ students, onCreateGroup, onSearchChange }
 
                   <TableCell>
                     <div className='flex items-center gap-3'>
-                      <Avatar className='h-8 w-8 border'>
-                        <AvatarFallback className={`${bgColor} font-bold text-white`}>{firstLetter}</AvatarFallback>
-                      </Avatar>
+                      <UserAvatar size={30} fullName={s.fullName} />
 
                       <span className='font-medium'>{s.fullName}</span>
                     </div>
@@ -106,7 +87,7 @@ export function UngroupedStudentList({ students, onCreateGroup, onSearchChange }
             {students.length === 0 && (
               <TableRow>
                 <TableCell colSpan={3} className='py-6 text-center text-gray-500'>
-                  No ungrouped students.
+                  không có học sinh nào chưa được phân nhóm
                 </TableCell>
               </TableRow>
             )}

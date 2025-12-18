@@ -18,6 +18,7 @@ type GroupTableWithTeacherProps = {
   grade: string
   onGroupsChange: (
     groups: {
+      grade: string
       groupCode: string
       groupName: string
       teacherId: string
@@ -58,8 +59,8 @@ export default function GroupTableWithTeacher({
     'imageUrl',
     'email'
   )
-  const groups = data?.data.items || []
-  console.log('Fetched groups:', groups)
+  const allGroups = data?.data.items || []
+  const groups = allGroups.filter((group: Group) => group.studentCount > 0)
 
   const emitSelectedGroups = () => {
     if (!onGroupsChange) return
@@ -67,12 +68,15 @@ export default function GroupTableWithTeacher({
     const selected = selectedRows.map((groupId) => {
       const group = groups.find((g) => g.id === groupId)!
       return {
+        grade: grade,
         groupCode: group.code,
         groupName: group.name,
         teacherId: teacherAssignments[groupId],
         studentIds: selectedStudentsByGroup[groupId] || []
       }
     })
+
+    console.log('Emitting selected groups:', selected)
 
     onGroupsChange(selected)
   }

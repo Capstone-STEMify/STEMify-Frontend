@@ -13,6 +13,7 @@ import { MoreHorizontal, Eye, Pencil, Trash2 } from 'lucide-react'
 import { OrganizationUser } from '@/features/user/types/user.type'
 import { useLocale, useTranslations } from 'next-intl'
 import { formatDate } from '@/utils/index'
+import UserAvatar from '@/components/shared/UserAvatar'
 
 export type OrganizationUserTableItem = OrganizationUser & {
   id: string
@@ -34,10 +35,12 @@ const getRoleBadgeVariant = (licenseType: string) => {
 }
 
 interface UseOrganizationUserColumnsProps {
-    onViewDetail: (user: OrganizationUserTableItem) => void;
+  onViewDetail: (user: OrganizationUserTableItem) => void
 }
 
-export const useOrganizationUserColumns = ({ onViewDetail }: UseOrganizationUserColumnsProps): ColumnDef<OrganizationUserTableItem>[] => {
+export const useOrganizationUserColumns = ({
+  onViewDetail
+}: UseOrganizationUserColumnsProps): ColumnDef<OrganizationUserTableItem>[] => {
   const handleUpdate = (user: OrganizationUserTableItem) => {
     console.log('Update', user.id)
   }
@@ -53,9 +56,12 @@ export const useOrganizationUserColumns = ({ onViewDetail }: UseOrganizationUser
       header: tc('tableHeader.user'),
       meta: { className: 'align-top py-3' },
       cell: ({ row }) => (
-        <div className='flex min-h-[32px] flex-col justify-center'>
-          <span className='leading-tight font-semibold text-gray-900'>{row.original.fullName}</span>
-          <span className='text-muted-foreground text-xs leading-tight'>{row.original.email}</span>
+        <div className='flex items-center gap-2'>
+          <UserAvatar size={30} fullName={row.original.fullName} />
+          <div className='flex min-h-[32px] flex-col justify-center'>
+            <span className='leading-tight font-semibold text-gray-900'>{row.original.fullName}</span>
+            <span className='text-muted-foreground text-xs leading-tight'>{row.original.email}</span>
+          </div>
         </div>
       )
     },
