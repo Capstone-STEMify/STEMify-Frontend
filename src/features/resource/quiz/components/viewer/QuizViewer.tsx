@@ -1,6 +1,6 @@
 import { QuizContent } from '@/features/resource/content/types/content.type'
 import React, { useEffect, useState } from 'react'
-import { Clock, Trophy, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { Clock, Trophy, CheckCircle, AlertCircle, Loader2, Target } from 'lucide-react'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { useCreateQuizAttemptMutation, useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
 import { Checkbox } from '@/components/shadcn/checkbox'
@@ -72,7 +72,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
       <div className='flex items-center justify-center rounded-lg border border-amber-200 bg-amber-50 p-8'>
         <div className='text-center'>
           <AlertCircle className='mx-auto mb-2 h-12 w-12 text-amber-500' />
-          <p className='text-lg font-medium text-amber-900'>No quiz data available</p>
+          <p className='text-lg font-medium text-amber-900'>Không có dữ liệu bài kiểm tra</p>
         </div>
       </div>
     )
@@ -132,12 +132,12 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
                 <div className='rounded-full bg-sky-100 p-3'>
-                  <Clock className='h-6 w-6 text-sky-600' />
+                  <Target className='h-6 w-6 text-sky-600' />
                 </div>
-                <p className='text-sm font-medium text-gray-600'>
-                  {tq('question.question')} {tq('length')}
+                <p className='text-sm font-medium text-gray-600'>{tq('length')}</p>
+                <p className='text-2xl font-bold text-gray-900'>
+                  {questions.length} {tq('question.question')}
                 </p>
-                <p className='text-2xl font-bold text-gray-900'>{questions.length}</p>
               </div>
             </div>
           </CardContent>

@@ -13,9 +13,6 @@ import {
 import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 import { useUpdateQuizAttemptMutation } from '@/features/resource/quiz/api/quizApi'
 import { toast } from 'sonner'
-import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
-import { useGetStudentQuizByIdQuery } from '@/features/quiz/api/studentQuizApi'
-import { triggerRefetchSectionProgress } from '@/features/student-progress/slice/studentProgressSlice'
 import { useParams, useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 
@@ -52,7 +49,7 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
     }).unwrap()
     if (result) {
       dispatch(submitQuiz())
-      dispatch(resetQuiz())
+      // dispatch(resetQuiz())
       toast.success('Nộp bài thành công!')
       router.push(`/${locale}/resource/lesson/${lessonId}`)
     }

@@ -11,6 +11,7 @@ interface QuizPlayerState {
   currentQuestionIndex: number
 
   timeRemaining: number
+  startedAt?: number
   isSubmitted: boolean
 
   userAnswers: Record<number, (string | number)[]>
@@ -25,6 +26,7 @@ const initialState: QuizPlayerState = {
   currentQuestionIndex: 0,
 
   timeRemaining: 0,
+  startedAt: undefined,
   isSubmitted: false,
 
   userAnswers: {}
@@ -48,6 +50,7 @@ export const quizPlayerSlice = createSlice({
     /** ===== INIT – CHỈ GỌI 1 LẦN ===== */
     initializeQuiz: (state, action: PayloadAction<{ questions: Question[]; timeLimitMinutes: number }>) => {
       state.questions = action.payload.questions
+      // Mặc định set full thời gian; sẽ được hiệu chỉnh lại theo startedAt (persisted) ở container
       state.timeRemaining = action.payload.timeLimitMinutes * 60
       state.currentQuestionIndex = 0
       state.isSubmitted = false
@@ -82,6 +85,12 @@ export const quizPlayerSlice = createSlice({
     submitQuiz: (state) => {
       state.isSubmitted = true
     },
+    setTimeRemaining: (state, action: PayloadAction<number>) => {
+      state.timeRemaining = Math.max(0, action.payload)
+    },
+    setStartedAt: (state, action: PayloadAction<number | undefined>) => {
+      state.startedAt = action.payload
+    },
     decrementTime: (state) => {
       if (state.timeRemaining > 0) {
         state.timeRemaining -= 1
@@ -104,6 +113,8 @@ export const {
   goToNextQuestion,
   goToPreviousQuestion,
   submitQuiz,
+  setTimeRemaining,
+  setStartedAt,
   decrementTime,
   resetQuiz
 } = quizPlayerSlice.actions
