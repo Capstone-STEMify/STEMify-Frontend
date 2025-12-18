@@ -11,5 +11,5 @@ export enum LicenseType {
   STUDENT = 'Student'
 }
 
-export type HeaderRole = UserRole.GUEST | LicenseType.STUDENT | LicenseType.TEACHER
+export type HeaderRole = UserRole.GUEST | UserRole.ADMIN | UserRole.STAFF | LicenseType
 export type EffectiveRole = UserRole.ADMIN | UserRole.STAFF | UserRole.GUEST | LicenseType

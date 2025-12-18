@@ -25,14 +25,10 @@ export default function HeaderNavigation() {
     if (!user) return UserRole.GUEST
 
     if (user.userRole !== UserRole.MEMBER) {
-      return UserRole.GUEST
+      return user.userRole
     }
 
-    if (
-      user.userRole === UserRole.MEMBER &&
-      currentRole &&
-      (currentRole === LicenseType.STUDENT || currentRole === LicenseType.TEACHER)
-    ) {
+    if (user.userRole === UserRole.MEMBER && currentRole) {
       return currentRole
     }
 
