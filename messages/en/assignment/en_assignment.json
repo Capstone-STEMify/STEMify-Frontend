@@ -88,7 +88,8 @@
         "submitFail": "Failed to submit assignment. Please try again later.",
         "uploadFail": "Failed to upload file for Question {index}.",
         "invalidData": "Cannot submit assignment. Invalid data.",
-        "noAsmFound": "No assignment found. Please go back and select the assignment again."
+        "noAsmFound": "No assignment found. Please go back and select the assignment again.",
+        "deadline2": "Deadline"
       }
     },
     "upsert": {
