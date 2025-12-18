@@ -27,6 +27,7 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { formatDate, formatPrice, useStatusTranslation } from '@/utils/index'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { clearCreateClassroomState } from '@/features/classroom/slice/classroomSlice'
 
 type ClassroomFormData = {
   grade: string
@@ -64,6 +65,8 @@ export default function CreateClassroom() {
   const locale = useLocale()
   const searchParams = useSearchParams()
   const courseId = searchParams.get('courseId')
+
+  const dispatch = useAppDispatch()
 
   const { courseTitle } = useAppSelector((state) => state.organizationSpecial)
   const { selectedCurriculum } = useAppSelector((state) => state.selectedCurriculum)
@@ -116,9 +119,13 @@ export default function CreateClassroom() {
       }
 
       const result = await createClassroom(payload).unwrap()
-      toast.success(tt('successMessage.createNoTitle'))
 
-      router.push(`/${locale}/organization/classroom`)
+      if (result) {
+        dispatch(clearCreateClassroomState())
+        toast.success(tt('successMessage.createNoTitle'))
+        router.push(`/${locale}/organization/classroom`)
+      }
+
       closeModal()
     }
   })

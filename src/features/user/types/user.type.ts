@@ -100,6 +100,7 @@ export type OrganizationUserQueryParams = {
   role?: LicenseType
   search?: string
   status?: UserStatus
+  groupId?: number
 }
 
 export interface Subscription {
@@ -133,4 +134,3 @@ export interface OrganizationUserProfile {
   teacherSpecialization: string
   subscriptions: Subscription[]
 }
-

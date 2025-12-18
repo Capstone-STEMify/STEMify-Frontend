@@ -15,7 +15,13 @@ import { SubscriptionStatus } from '@/features/subscription/types/subscription.t
 import { setSelectedCurriculum } from '@/features/resource/curriculum/slice/curriculumSlice'
 import { OrganizationCurriculum } from '@/features/organization/types/organization.type'
 
-export function getDominantSubscriptionGroup(groups: OrganizationCurriculum['subscriptionGroups']) {
+export function getDominantSubscriptionGroup(
+  groups: OrganizationCurriculum['subscriptionGroups'],
+  targetStatus?: SubscriptionStatus
+) {
+  if (targetStatus) {
+    return groups.find((g) => g.status === targetStatus)
+  }
   return (
     groups.find((g) => g.status === 'ACTIVE') ||
     groups.find((g) => g.status === 'UPCOMING') ||
@@ -108,7 +114,7 @@ export default function OrganizationCurriculumList() {
         /* Curriculum Grid */
         <div className='grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-4'>
           {curriculums.map((curriculum) => {
-            const displayGroup = getDominantSubscriptionGroup(curriculum.subscriptionGroups)
+            const displayGroup = getDominantSubscriptionGroup(curriculum.subscriptionGroups, selectedStatus)
 
             return (
               <CardLayout

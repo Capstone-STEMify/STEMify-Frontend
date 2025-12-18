@@ -14,6 +14,7 @@ import { UngroupedStudentList } from '@/features/group/components/list/Ungrouped
 import { useGetOrganizationUserQuery } from '@/features/user/api/userApi'
 import { LicenseType } from '@/types/userRole'
 import { useModal } from '@/providers/ModalProvider'
+import UserAvatar from '@/components/shared/UserAvatar'
 
 export default function OrganizationGroupList() {
   const { openModal } = useModal()
@@ -35,9 +36,10 @@ export default function OrganizationGroupList() {
     {
       organizationId: selectedOrganizationId!,
       pageNumber: 1,
-      pageSize: 50,
+      pageSize: 20,
       role: LicenseType.STUDENT,
-      search: search.trim() || undefined
+      search: search.trim() || undefined,
+      groupId: 0
     },
     { skip: !selectedOrganizationId, refetchOnMountOrArgChange: true }
   )
@@ -93,7 +95,7 @@ export default function OrganizationGroupList() {
             {to('ungroupedStudents')}
             {ungroupedStudents && ungroupedStudents?.data?.items?.length > 0 && (
               <span className='ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-600'>
-                {ungroupedStudents?.data?.items?.length}
+                {ungroupedStudents?.data?.totalCount}
               </span>
             )}
           </button>
@@ -120,23 +122,7 @@ export default function OrganizationGroupList() {
                         <h3 className='truncate text-base font-medium'>{group.name}</h3>
                         <div className='mt-1 flex -space-x-2'>
                           {group.students.slice(0, 3).map((s, i) => {
-                            const initials = s.fullName
-                              .split(' ')
-                              .filter(Boolean)
-                              .map((n) => n[0])
-                              .join('')
-                              .toUpperCase()
-
-                            return (
-                              <Avatar
-                                key={s.organizationUserId}
-                                className='h-8 w-8 border-2 border-white ring-1 ring-gray-200'
-                                style={{ zIndex: 10 - i }}
-                              >
-                                {/* Không dùng AvatarImage vì không có URL ảnh */}
-                                <AvatarFallback className='bg-gray-100 text-xs font-medium'>{initials}</AvatarFallback>
-                              </Avatar>
-                            )
+                            return <UserAvatar fullName={s.fullName} size={30} key={i} />
                           })}
 
                           {group.students.length > 3 && (

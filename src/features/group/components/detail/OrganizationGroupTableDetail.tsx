@@ -13,7 +13,7 @@ import { useParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { Badge } from '@/components/shadcn/badge'
 import { Users, Calendar, Hash, Copy } from 'lucide-react'
-import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
+import { formatDate, useOrgUserStatusTranslation, useStatusTranslation } from '@/utils/index'
 import { toast } from 'sonner'
 import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
@@ -28,6 +28,7 @@ export default function OrganizationGroupTable() {
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const columns = useGetGroupColumn()
+  const statusTranslate = useStatusTranslation()
   const orgUserStatusTranslation = useOrgUserStatusTranslation()
   const { data, isLoading } = useGetGroupByIdQuery(Number(groupId), { skip: !groupId })
   const [deleteStudents] = useRemoveStudentFromGroupMutation()
@@ -92,7 +93,7 @@ export default function OrganizationGroupTable() {
                 groupData.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
               }
             >
-              {orgUserStatusTranslation(groupData.status)}
+              {statusTranslate(groupData.status)}
             </Badge>
           </div>
           <p className='mt-1 text-sm text-gray-600'>{to('subTitle')}</p>
