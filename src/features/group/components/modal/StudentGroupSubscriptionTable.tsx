@@ -5,17 +5,17 @@ import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table'
 import { useLocale, useTranslations } from 'next-intl'
 import { GroupDetailStudent } from '@/features/group/types/group.type'
-import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
+import { formatDate, getInitials, useOrgUserStatusTranslation } from '@/utils/index'
 import { AlertCircle } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/shadcn/tooltip'
 import { Checkbox } from '@/components/shadcn/checkbox'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Label } from '@/components/shadcn/label'
 import { Button } from '@/components/shadcn/button'
 import { useModal } from '@/providers/ModalProvider'
-import { useAppDispatch } from '@/hooks/redux-hooks'
-import { setSelectedStudentsForGroup } from '@/features/classroom/slice/classroomSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
+import { setMissMatchAction, setSelectedStudentsForGroup } from '@/features/classroom/slice/classroomSlice'
 type Props = {
   groupId: number
   students: GroupDetailStudent[]
@@ -30,20 +30,20 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
   const ts = useTranslations('subscription')
   const dispatch = useAppDispatch()
   const orgUserStatusTranslation = useOrgUserStatusTranslation()
-  const [mismatchAction, setMismatchAction] = useState<'autoAssign' | 'exclude'>('exclude')
+
+  const { missMatchAction, selectedStudentsByGroup } = useAppSelector((state) => state.createClassroom)
   const [selectedStudentGroupIds, setSelectedStudentGroupIds] = useState<string[]>([])
 
-  const getInitials = (name: string) =>
-    name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase()
+  useEffect(() => {
+    const savedStudents = selectedStudentsByGroup[groupId] || []
+    setSelectedStudentGroupIds(savedStudents)
+  }, [groupId, selectedStudentsByGroup])
 
   const mismatchedStudentIds = useMemo(() => {
     if (selectedSubscriptionId === null) return new Set<string>()
-    return new Set(students.filter((s) => s.subscriptionOrderId !== selectedSubscriptionId).map((s) => s.userId))
+    return new Set(
+      students.filter((s) => s.subscriptionOrderId !== selectedSubscriptionId).map((s) => s.organizationUserId)
+    )
   }, [students, selectedSubscriptionId])
 
   const handleCheckboxChange = (checked: boolean, studentId: string) => {
@@ -51,12 +51,12 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
   }
   // Select-all helpers
   const selectableIds = useMemo(() => {
-    const allIds = students.map((s) => s.userId)
-    if (mismatchAction === 'exclude') {
+    const allIds = students.map((s) => s.organizationUserId)
+    if (missMatchAction === 'exclude') {
       return allIds.filter((id) => !mismatchedStudentIds.has(id))
     }
     return allIds
-  }, [students, mismatchedStudentIds, mismatchAction])
+  }, [students, mismatchedStudentIds, missMatchAction])
 
   const isAllSelected = useMemo(() => {
     if (selectableIds.length === 0) return false
@@ -85,8 +85,8 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
             <p>{ts('licenseNotice.message', { count: mismatchedStudentIds.size })}</p>
 
             <RadioGroup
-              value={mismatchAction}
-              onValueChange={(val) => setMismatchAction(val as 'autoAssign' | 'exclude')}
+              value={missMatchAction}
+              onValueChange={(val) => dispatch(setMissMatchAction(val as 'autoAssign' | 'exclude'))}
               className='mt-4'
             >
               <div className='flex items-center space-x-2'>
@@ -120,7 +120,6 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
               </TableHead>
               <TableHead>{tc('tableHeader.student')}</TableHead>
               <TableHead>{tc('tableHeader.email')}</TableHead>
-              <TableHead>{tc('tableHeader.subscription')}</TableHead>
               <TableHead>{tc('tableHeader.joinedAt')}</TableHead>
               <TableHead>{tc('tableHeader.status')}</TableHead>
             </TableRow>
@@ -128,12 +127,12 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
 
           <TableBody>
             {students.map((student) => {
-              const isMismatch = mismatchedStudentIds.has(student.userId)
+              const isMismatch = mismatchedStudentIds.has(student.organizationUserId)
 
               return (
-                <TableRow key={student.userId}>
+                <TableRow key={student.organizationUserId}>
                   <TableCell className='w-10'>
-                    {mismatchAction === 'exclude' && isMismatch ? (
+                    {missMatchAction === 'exclude' && isMismatch ? (
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -171,7 +170,6 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
 
                   {/* Email */}
                   <TableCell className='text-sm'>{student.email}</TableCell>
-                  <TableCell>#{student.subscriptionOrderId}</TableCell>
 
                   {/* Joined date */}
                   <TableCell className='text-sm text-gray-600'>{formatDate(student.joinedAt, { locale })}</TableCell>

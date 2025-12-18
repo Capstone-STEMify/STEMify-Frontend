@@ -58,7 +58,8 @@ export default function GroupTableWithTeacher({
     'imageUrl',
     'email'
   )
-  const groups = data?.data.items || []
+  const allGroups = data?.data.items || []
+  const groups = allGroups.filter((group: Group) => group.studentCount > 0)
   console.log('Fetched groups:', groups)
 
   const emitSelectedGroups = () => {
