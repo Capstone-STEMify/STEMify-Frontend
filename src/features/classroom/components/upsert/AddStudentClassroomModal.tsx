@@ -29,7 +29,7 @@ export default function AddStudentClassroomModal({ classroomStudentIds }: AddStu
   const { groupId } = useParams()
   const columns = StudentColumn()
   const { data: students } = useGetOrganizationUserQuery(
-    { organizationId: selectedOrganizationId!, pageNumber: 1, pageSize: 50, role: LicenseType.STUDENT },
+    { organizationId: selectedOrganizationId!, pageNumber, pageSize: 50, role: LicenseType.STUDENT },
     { skip: !selectedOrganizationId }
   )
   const filteredStudents = useMemo(() => {
@@ -60,6 +60,10 @@ export default function AddStudentClassroomModal({ classroomStudentIds }: AddStu
     closeModal()
   }
 
+  const handlePageChange = (page: number) => {
+    setPageNumber(page)
+  }
+
   return (
     <Dialog open onOpenChange={closeModal}>
       <DialogContent className='max-h-[80vh] overflow-y-auto'>
@@ -70,8 +74,8 @@ export default function AddStudentClassroomModal({ classroomStudentIds }: AddStu
             columns={columns as any}
             enableRowSelection
             pagingData={students}
-            pagingParams={pageNumber}
-            handlePageChange={(page) => setPageNumber(page)}
+            pagingParams={{ pageNumber, pageSize: 50 }}
+            handlePageChange={(p) => handlePageChange(p)}
             onSelectionChange={(ids) => setSelectedStudentIds(ids.map(String))}
           />
 

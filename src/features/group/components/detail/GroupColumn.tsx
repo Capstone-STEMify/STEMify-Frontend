@@ -7,8 +7,9 @@ import { GroupDetailStudent } from '@/features/group/types/group.type'
 import { useRemoveStudentFromGroupMutation } from '@/features/group/api/groupApi'
 import { Badge } from '@/components/shadcn/badge'
 import { Avatar, AvatarFallback } from '@/components/shadcn/avatar'
-import { formatDate, useOrgUserStatusTranslation } from '@/utils/index'
+import { formatDate, getInitials, useOrgUserStatusTranslation } from '@/utils/index'
 import { useParams } from 'next/navigation'
+import UserAvatar from '@/components/shared/UserAvatar'
 
 export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
   const { openModal } = useModal()
@@ -28,15 +29,6 @@ export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
     }
   }
 
-  const getInitials = (fullName: string) => {
-    return fullName
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2)
-  }
-
   return [
     createSelectColumn<GroupDetailStudent>(),
     {
@@ -46,11 +38,8 @@ export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
         const student = row.original
         return (
           <div className='flex items-center gap-3'>
-            <Avatar className='h-10 w-10'>
-              <AvatarFallback className='bg-primary/10 text-primary font-semibold'>
-                {getInitials(student.fullName)}
-              </AvatarFallback>
-            </Avatar>
+            <UserAvatar size={30} fullName={student.fullName} />
+
             <div>
               <div className='font-medium'>{student.fullName}</div>
               <div className='text-sm text-gray-500'>{student.userName}</div>

@@ -9,6 +9,7 @@ import { LicenseAssignment } from '@/features/license-assignment/types/licenseAs
 import { formatDate, stringToHslColor, useStatusTranslation } from '@/utils/index'
 import { useDeleteLicenseAssignmentMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { toast } from 'sonner'
+import UserAvatar from '@/components/shared/UserAvatar'
 
 export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignment>[] {
   const { openModal } = useModal()
@@ -27,17 +28,11 @@ export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignmen
     createSelectColumn<LicenseAssignment>(),
     {
       accessorKey: 'user.imageUrl',
-      header: tc('tableHeader.image'),
+      header: tc('tableHeader.avatar'),
       cell: ({ row }) => {
-        const alt = row.original.user.name
         return (
-          <div
-            className='flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium text-white shadow-sm ring-1 ring-black/5 select-none'
-            style={{
-              backgroundColor: stringToHslColor(alt)
-            }}
-          >
-            {alt.charAt(0).toUpperCase()}
+          <div className='flex items-center justify-center'>
+            <UserAvatar size={30} fullName={row.original.user.name} />
           </div>
         )
       }
