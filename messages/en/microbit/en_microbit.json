@@ -6,6 +6,9 @@
     "comprehensive": "Comp",
     "specific_question": "Specific"
   },
+  "comprehensiveTab": "Comprehensive Analysis",
+  "specificTab": "Specific Questions",
+  "analysisMode": "Analysis Mode",
   "evaluate": "Evaluate",
   "askAI": "Ask AI:",
   "placeholder": "Ask about this code...",

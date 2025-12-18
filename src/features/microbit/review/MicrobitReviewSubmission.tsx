@@ -37,6 +37,10 @@ export default function MicrobitReviewSubmission() {
 
   const [checklistName, setChecklistName] = useState(t('checklistName'))
   const [analysisType, setAnalysisType] = useState<'comprehensive' | 'specific_question'>('specific_question')
+  
+  const [comprehensiveResult, setComprehensiveResult] = useState<MicrobitEvaluateResponse | null>(null)
+  const [isComprehensiveAnalyzing, setIsComprehensiveAnalyzing] = useState(false)
+
   const [criterias, setCriterias] = useState<Criteria[]>([
     { id: '1', question: '', result: null, isAnalyzing: false }
   ])
@@ -55,7 +59,7 @@ export default function MicrobitReviewSubmission() {
         scrollContainer.scrollTo({ top: scrollContainer.scrollHeight, behavior: 'smooth' });
       }
     }
-  }, [criterias]);
+  }, [criterias, comprehensiveResult]);
 
   const addCriteria = () => {
     setCriterias([...criterias, { 
@@ -76,17 +80,39 @@ export default function MicrobitReviewSubmission() {
     setCriterias(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c))
   }
 
+  const handleMainEvaluate = async () => {
+    if (!shareId) return
+    setIsComprehensiveAnalyzing(true)
+
+    try {
+      const { data, error } = await supabase.from('microbit_shares').select('text').eq('shareId', shareId).single()
+      if (error) throw new Error('DB Error')
+      const projectFiles = typeof data.text === 'string' ? JSON.parse(data.text) : data.text
+
+      const response = await analyzeProject({
+        project_files: projectFiles,
+        question: null,
+        language: locale,
+        analysis_type: 'comprehensive'
+      }).unwrap()
+
+      if (response) {
+        setComprehensiveResult(response)
+        toast.success(t('successToast'))
+      }
+    } catch (err) {
+      toast.error(t('errorToast'))
+    } finally {
+      setIsComprehensiveAnalyzing(false)
+    }
+  }
+
   const handleSpecificEvaluate = async (criteriaId: string, question: string) => {
     if (!shareId || !question.trim()) return
     updateCriteriaState(criteriaId, { isAnalyzing: true })
 
     try {
-      const { data, error } = await supabase
-        .from('microbit_shares')
-        .select('text')
-        .eq('shareId', shareId)
-        .single()
-
+      const { data, error } = await supabase.from('microbit_shares').select('text').eq('shareId', shareId).single()
       if (error) throw new Error('DB Error')
       const projectFiles = typeof data.text === 'string' ? JSON.parse(data.text) : data.text
 
@@ -97,7 +123,7 @@ export default function MicrobitReviewSubmission() {
         analysis_type: 'specific_question'
       }).unwrap()
 
-      if (response && response) {
+      if (response) {
         updateCriteriaState(criteriaId, { result: response })
         toast.success(t('successToast'))
       }
@@ -109,13 +135,13 @@ export default function MicrobitReviewSubmission() {
   }
 
   return (
-    <div className='relative flex min-h-screen w-full overflow-hidden bg-white font-sans text-slate-900 mt-22'>
+    <div className='relative flex h-[calc(100vh-88px)] w-full bg-white font-sans text-slate-900 mt-[88px]'>
       {isMobileSidebarOpen && (
         <div className='fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden' onClick={() => setIsMobileSidebarOpen(false)} />
       )}
 
       <aside className={`fixed inset-y-0 left-0 z-50 w-[85vw] transform border-r border-slate-200 bg-white transition-transform duration-300 md:relative md:flex md:w-[500px] md:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className='flex h-full w-full flex-col overflow-hidden'>
+        <div className='flex h-full w-full flex-col'>
           
           <div className='flex items-center justify-between border-b p-3 shrink-0 bg-white z-10'>
             <Link href='/'><Button variant='ghost' size='sm' className='text-slate-600'><ChevronLeft className='h-4 w-4 mr-1' /> {t('back')}</Button></Link>
@@ -124,27 +150,58 @@ export default function MicrobitReviewSubmission() {
           </div>
 
           <ScrollArea ref={scrollViewportRef} className='flex-1 h-full w-full'>
-            <div className='flex flex-col gap-6 p-4 pb-20'>
+            <div className='flex flex-col gap-6 p-4 pb-12'>
               
-              
-              <div className='flex items-center gap-2 shrink-0'>
-                <Input value={checklistName} onChange={(e) => setChecklistName(e.target.value)} className='text-base font-medium h-10 shadow-none border-slate-200 focus-visible:ring-blue-500' />
-                <Select value={analysisType} onValueChange={(v: any) => setAnalysisType(v)}>
-                  <SelectTrigger className='w-[100px] h-10 border-slate-200'><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value='comprehensive'>{t('analysisType.comprehensive')}</SelectItem>
-                    <SelectItem value='specific_question'>{t('analysisType.specific_question')}</SelectItem>
-                  </SelectContent>
-                </Select>
-                {analysisType === 'comprehensive' && (
-                <Button className='bg-blue-600 hover:bg-blue-700 text-white h-10 px-3'>
-                  {t('evaluate')} <Play className='ml-2 h-3 w-3 fill-current' />
-                </Button>
-                )}
+              <div className='flex flex-col gap-3'>
+                <div className='text-sm font-medium text-slate-700'>{t('analysisMode')}</div>
+                <div className='flex items-center gap-2 shrink-0'>
+                  <Input value={checklistName} onChange={(e) => setChecklistName(e.target.value)} className='text-base font-medium h-10 shadow-none border-slate-200 focus-visible:ring-blue-500' />
+                  <Select value={analysisType} onValueChange={(value) => setAnalysisType(value as 'comprehensive' | 'specific_question')}>
+                    <SelectTrigger className='w-[200px] h-10 border-slate-200 bg-blue-50 hover:bg-blue-100 transition-colors'>
+                      <div className='flex items-center gap-2'>
+                        {analysisType === 'comprehensive' ? <Info className='h-4 w-4 text-blue-600' /> : <Play className='h-4 w-4 text-green-600' />}
+                        <SelectValue />
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='comprehensive' className='cursor-pointer'>
+                        <div className='flex items-center gap-2'>
+                          {t('comprehensiveTab')}
+                        </div>
+                      </SelectItem>
+                      <SelectItem value='specific_question' className='cursor-pointer'>
+                        <div className='flex items-center gap-2'>
+                          {t('specificTab')}
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {analysisType === 'comprehensive' && (
+                  <Button 
+                    onClick={handleMainEvaluate} 
+                    disabled={isComprehensiveAnalyzing}
+                    className='bg-blue-600 hover:bg-blue-700 text-white h-10 px-3'
+                  >
+                    {isComprehensiveAnalyzing ? <Loader2 className='h-4 w-4 animate-spin' /> : <>{t('evaluate')} <Play className='ml-2 h-3 w-3 fill-current' /></>}
+                  </Button>
+                  )}
+                </div>
               </div>
 
+              {analysisType === 'comprehensive' && comprehensiveResult && (
+                <div className='space-y-4 rounded-xl border border-blue-100 bg-blue-50/30 p-5 shadow-sm animate-in fade-in duration-300'>
+                  <div className='flex items-start gap-2 text-[13px] text-blue-600'>
+                    <Info className='mt-0.5 h-3.5 w-3.5 shrink-0' />
+                    <span className='font-semibold'>{t('comprehensiveTab')}</span>
+                  </div>
+                  <div className='whitespace-pre-wrap leading-relaxed text-slate-700 text-[15px]'>
+                    {comprehensiveResult.analysis}
+                  </div>
+                </div>
+              )}
+
               {analysisType === 'specific_question' && (
-                <div className='flex flex-col gap-10'>
+                <div className='space-y-4'>
                   {criterias.map((criteria) => (
                     <div key={criteria.id} className='flex flex-col gap-4'>
                       <div className='flex items-center gap-3'>
@@ -153,7 +210,7 @@ export default function MicrobitReviewSubmission() {
                           placeholder={t('placeholder')} 
                           value={criteria.question}
                           onChange={(e) => updateCriteriaState(criteria.id, { question: e.target.value })}
-                          className='h-10 flex-1 border-slate-200' 
+                          className='h-10 flex-1 border-slate-200 shadow-none' 
                         />
                         <Button variant='ghost' size='icon' onClick={() => removeCriteria(criteria.id)} className='text-slate-400 hover:text-red-500'>
                           <Trash2 className='h-4 w-4' />

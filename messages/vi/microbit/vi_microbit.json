@@ -6,6 +6,9 @@
     "comprehensive": "Toàn diện",
     "specific_question": "Cụ thể"
   },
+  "comprehensiveTab": "Phân tích toàn diện",
+  "specificTab": "Câu hỏi cụ thể",
+  "analysisMode": "Chế độ phân tích",
   "evaluate": "Đánh giá",
   "askAI": "Hỏi AI:",
   "placeholder": "Hỏi về code này...",
