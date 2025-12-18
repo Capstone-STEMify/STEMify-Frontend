@@ -79,7 +79,7 @@ export default function OrganizationUserTable() {
   }, [data])
 
   return (
-    <div className='mt-4 ml-4 w-full max-w-7xl'>
+    <div className='container px-5'>
       {/* Header */}
       <div className='mb-4 flex items-center justify-between'>
         <div>
