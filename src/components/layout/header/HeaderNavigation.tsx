@@ -18,23 +18,28 @@ export default function HeaderNavigation() {
   // highlight-next-line
   const locale = useLocale() // Lấy ngôn ngữ hiện tại
 
-  // Lấy user và currentLicenseType từ Redux
-  const user = useAppSelector((state) => state.auth.user)
-  const currentRole = useAppSelector((state) => state.selectedOrganization.currentRole)
+  const headerRole = useAppSelector((state): HeaderRole | null => {
+    const user = state.auth.user
+    const currentRole = state.selectedOrganization.currentRole
 
-  // Xác định effectiveRole
-  // Nêu userRole là MEMBER thì effectiveRole là currentLicenseType
-  const isHeaderLicenseType = (role: any): role is LicenseType.STUDENT | LicenseType.TEACHER => {
-    return role === LicenseType.STUDENT || role === LicenseType.TEACHER
-  }
+    if (!user) return UserRole.GUEST
 
-  // Default
-  let headerRole: HeaderRole = UserRole.GUEST
+    if (user.userRole !== UserRole.MEMBER) {
+      return UserRole.GUEST
+    }
 
-  if (user?.userRole === UserRole.MEMBER && currentRole && isHeaderLicenseType(currentRole)) {
-    headerRole = currentRole
-  }
+    if (
+      user.userRole === UserRole.MEMBER &&
+      currentRole &&
+      (currentRole === LicenseType.STUDENT || currentRole === LicenseType.TEACHER)
+    ) {
+      return currentRole
+    }
 
+    // MEMBER nhưng chưa sync xong → giữ trạng thái loading
+    return null
+  })
+  if (headerRole === null) return null
   const navItems = navRoutes[headerRole] ?? []
 
   return (
