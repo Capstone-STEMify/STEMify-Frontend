@@ -69,7 +69,7 @@ const AnswerOption = ({
   return (
     <div>
       <p className='mb-1.5 text-sm font-medium'>{label}</p>
-      <Progress value={percentage} className={`h-2 ${isCorrect ? '[&>div]:bg-teal-500' : ''}`} />
+      <Progress value={percentage} className={`h-2 ${isCorrect ? '[&>div]:bg-teal-500' : '[&>div]:bg-red-500'}`} />
       <div className='mt-1.5 flex items-center justify-between'>
         <span className='text-xs text-gray-500'>
           {responses} {t('questionTab.resp')}.
