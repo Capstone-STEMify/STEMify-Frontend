@@ -3,6 +3,8 @@ import React from 'react'
 
 export default function OrganizationUserPage() {
   return (
-    <OrganizationUserTable/>
+    <div>
+      <OrganizationUserTable />
+    </div>
   )
 }
