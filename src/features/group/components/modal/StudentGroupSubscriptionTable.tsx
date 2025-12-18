@@ -31,7 +31,7 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
   const dispatch = useAppDispatch()
   const orgUserStatusTranslation = useOrgUserStatusTranslation()
 
-  const { missMatchAction, selectedStudentsByGroup } = useAppSelector((state) => state.createClassroom)
+  const { missMatchActionByGroup, selectedStudentsByGroup } = useAppSelector((state) => state.createClassroom)
   const [selectedStudentGroupIds, setSelectedStudentGroupIds] = useState<string[]>([])
 
   useEffect(() => {
@@ -52,11 +52,12 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
   // Select-all helpers
   const selectableIds = useMemo(() => {
     const allIds = students.map((s) => s.organizationUserId)
-    if (missMatchAction === 'exclude') {
+    const currentMismatchAction = missMatchActionByGroup[groupId] ?? 'exclude'
+    if (currentMismatchAction === 'exclude') {
       return allIds.filter((id) => !mismatchedStudentIds.has(id))
     }
     return allIds
-  }, [students, mismatchedStudentIds, missMatchAction])
+  }, [students, mismatchedStudentIds, missMatchActionByGroup, groupId])
 
   const isAllSelected = useMemo(() => {
     if (selectableIds.length === 0) return false
@@ -85,8 +86,10 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
             <p>{ts('licenseNotice.message', { count: mismatchedStudentIds.size })}</p>
 
             <RadioGroup
-              value={missMatchAction}
-              onValueChange={(val) => dispatch(setMissMatchAction(val as 'autoAssign' | 'exclude'))}
+              value={missMatchActionByGroup[groupId] ?? 'exclude'}
+              onValueChange={(val) =>
+                dispatch(setMissMatchAction({ groupId, action: val as 'autoAssign' | 'exclude' }))
+              }
               className='mt-4'
             >
               <div className='flex items-center space-x-2'>
@@ -132,7 +135,7 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
               return (
                 <TableRow key={student.organizationUserId}>
                   <TableCell className='w-10'>
-                    {missMatchAction === 'exclude' && isMismatch ? (
+                    {(missMatchActionByGroup[groupId] ?? 'exclude') === 'exclude' && isMismatch ? (
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>

@@ -60,7 +60,6 @@ export default function GroupTableWithTeacher({
   )
   const allGroups = data?.data.items || []
   const groups = allGroups.filter((group: Group) => group.studentCount > 0)
-  console.log('Fetched groups:', groups)
 
   const emitSelectedGroups = () => {
     if (!onGroupsChange) return
@@ -74,6 +73,8 @@ export default function GroupTableWithTeacher({
         studentIds: selectedStudentsByGroup[groupId] || []
       }
     })
+
+    console.log('Emitting selected groups:', selected)
 
     onGroupsChange(selected)
   }

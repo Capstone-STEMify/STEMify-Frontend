@@ -18,12 +18,12 @@ export const { setPageIndex, setPageSize, setSearchTerm, setParam, setMultiplePa
 // Create Classroom Slice
 
 type CreateClassroomSlice = {
-  missMatchAction?: 'autoAssign' | 'exclude'
+  missMatchActionByGroup: Record<number, 'autoAssign' | 'exclude'>
   selectedStudentsByGroup: Record<number, string[]>
 }
 
 const initialCreateClassroomState: CreateClassroomSlice = {
-  missMatchAction: 'exclude',
+  missMatchActionByGroup: {},
   selectedStudentsByGroup: {}
 }
 
@@ -31,8 +31,9 @@ export const createClassroomSlice = createSlice({
   name: 'createClassroomSlice',
   initialState: initialCreateClassroomState,
   reducers: {
-    setMissMatchAction(state, action: { payload: 'autoAssign' | 'exclude' }) {
-      state.missMatchAction = action.payload
+    setMissMatchAction(state, action: { payload: { groupId: number; action: 'autoAssign' | 'exclude' } }) {
+      const { groupId, action: actionValue } = action.payload
+      state.missMatchActionByGroup[groupId] = actionValue
     },
     setSelectedStudentsForGroup(state, action: { payload: { groupId: number; studentIds: string[] } }) {
       const { groupId, studentIds } = action.payload
