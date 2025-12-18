@@ -88,7 +88,8 @@
         "submitFail": "Nộp bài thất bại. Vui lòng thử lại sau.",
         "uploadFail": "Tải lên tệp thất bại cho Câu hỏi {index}.",
         "invalidData": "Không thể nộp bài. Dữ liệu không hợp lệ.",
-        "noAsmFound": "Không tìm thấy bài tập. Vui lòng quay lại và chọn bài tập."
+        "noAsmFound": "Không tìm thấy bài tập. Vui lòng quay lại và chọn bài tập.",
+        "deadline2": "Hạn nộp"
       }
     },
     "upsert": {

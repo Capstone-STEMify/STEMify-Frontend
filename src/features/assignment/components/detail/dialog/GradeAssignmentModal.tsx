@@ -19,6 +19,7 @@ import { useGetOrganizationUserDetailQuery, useGetUserByIdQuery } from '@/featur
 import Loading from 'app/[locale]/loading'
 import { Clock, HelpCircle, X } from 'lucide-react'
 import { format } from 'date-fns'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   studentAssignmentId: number | null
@@ -27,6 +28,8 @@ type Props = {
 }
 
 export default function GradeAssignmentModal({ studentAssignmentId, onClose, onSuccess }: Props) {
+  const t = useTranslations('dashboard.classroom')
+
   // --- API QUERIES ---
   const { data: detailResponse, isLoading: isLoadingDetail } = useGetStudentAssignmentByIdQuery(
     studentAssignmentId ?? undefined,
@@ -101,7 +104,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
 
   const handleSubmit = async () => {
     if (!attemptData || !studentAssignmentId) {
-      toast.error('Missing assignment data.')
+      toast.error(t('assignment.missingAssignmentData'))
       return
     }
 
@@ -127,12 +130,12 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
 
     try {
       await gradeAssignment({ attemptId, studentAssignmentId, body: payload }).unwrap()
-      toast.success('Grading submitted')
+      toast.success(t('assignment.gradingSubmitted'))
       onClose()
       onSuccess?.()
     } catch (err) {
       console.error(err)
-      toast.error('Failed to submit grading')
+      toast.error(t('assignment.failedToSubmitGrading'))
     }
   }
 
@@ -151,7 +154,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
   if (!attemptData)
     return (
       <div className='p-6 text-center text-red-500'>
-        Missing attempt data. <Button onClick={onClose} variant="link">Close</Button>
+        {t('assignment.missingAttemptData')} <Button onClick={onClose} variant="link">{t('assignment.close')}</Button>
       </div>
     )
 
@@ -172,7 +175,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
             </Avatar>
             <div>
               <div className='font-bold text-slate-900'>{userName}</div>
-              <div className='text-xs text-slate-500'>Student</div>
+              <div className='text-xs text-slate-500'>{t('assignment.student')}</div>
             </div>
           </div>
           <button onClick={onClose} className='rounded-full p-1 hover:bg-slate-100'>
@@ -184,10 +187,10 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
           <h1 className='text-2xl font-bold text-slate-900'>{assignmentTitle}</h1>
           <div className='mt-2 flex items-center gap-4 text-sm text-slate-500'>
             <span className='flex items-center gap-1'>
-               Submitted: <span className='font-medium text-slate-700'>{submittedDate}</span>
+               {t('assignment.submitted')} <span className='font-medium text-slate-700'>{submittedDate}</span>
             </span>
             <span className='flex items-center gap-1'>
-              <HelpCircle className='h-4 w-4' /> {totalQuestions} Questions
+              <HelpCircle className='h-4 w-4' /> {totalQuestions} {t('assignment.questions')}
             </span>
           </div>
         </div>
@@ -224,22 +227,22 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                 <div className='grid grid-cols-1 divide-y md:grid-cols-2 md:divide-x md:divide-y-0'>
                   {/* Left Column: Answer */}
                   <div className='p-6'>
-                    <div className='mb-3 text-xs font-bold uppercase text-slate-400'>CÂU TRẢ LỜI</div>
+                    <div className='mb-3 text-xs font-bold uppercase text-slate-400'>{t('assignment.answer')}</div>
                     {questionContent && (
                         <div className='mb-4 text-sm font-medium text-slate-700 italic border-l-2 border-slate-200 pl-3'>
                             {questionContent}
                         </div>
                     )}
                     <div className='text-slate-800 whitespace-pre-wrap'>
-                      {qAttempt.answerText || <span className='text-gray-400 italic'>No answer provided</span>}
+                      {qAttempt.answerText || <span className='text-gray-400 italic'>{t('assignment.noAnswerProvided')}</span>}
                     </div>
                   </div>
 
                   {/* Right Column: Rubric */}
                   <div className='flex flex-col p-6'>
                     <div className='mb-4 flex items-center justify-between'>
-                        <div className='text-xs font-bold uppercase text-slate-400'>RUBRIC</div>
-                        <div className='text-xs font-semibold text-slate-500'>{maxQuestionScore} Points</div>
+                        <div className='text-xs font-bold uppercase text-slate-400'>{t('assignment.rubric')}</div>
+                        <div className='text-xs font-semibold text-slate-500'>{maxQuestionScore} {t('assignment.points')}</div>
                     </div>
                     
                     <div className='flex-1 space-y-5'>
@@ -247,7 +250,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                         <div key={criterion.rubricCriterionId} className='space-y-1.5'>
                           <div className='flex items-center justify-between'>
                              <span className='text-sm font-medium text-slate-700'>{criterion.criterionName}</span>
-                             <span className='text-xs text-slate-400 italic'>(Điểm tối đa: {criterion.maxPoints})</span>
+                             <span className='text-xs text-slate-400 italic'>{t('assignment.maxPoints', { max: criterion.maxPoints })}</span>
                           </div>
                           
                           <div className='relative'>
@@ -261,7 +264,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                                   : String((criterion as any).currentPoints ?? (criterion as any).points ?? '')
                               }
                               onChange={(e) => handleScoreChange(qAttempt.id, criterion.rubricCriterionId, e.target.value)}
-                              placeholder="Nhập điểm"
+                              placeholder={t('assignment.enterScore')}
                               min={0}
                               max={criterion.maxPoints}
                             />
@@ -272,7 +275,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
 
                     <div className='mt-6 border-t pt-4'>
                         <div className='flex items-center justify-between text-sm'>
-                             <span className='font-medium text-slate-600'>Tổng điểm cho câu hỏi:</span>
+                             <span className='font-medium text-slate-600'>{t('assignment.totalScoreForQuestion')}</span>
                              <span className='font-bold text-slate-900'>{currentTotalScore} / {maxQuestionScore}</span>
                         </div>
                     </div>
@@ -284,15 +287,15 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
 
           {/* Feedback Section */}
           <div className='mt-8'>
-            <h3 className='mb-2 text-lg font-bold text-slate-800'>Nhận xét</h3>
+            <h3 className='mb-2 text-lg font-bold text-slate-800'>{t('assignment.feedback')}</h3>
             <p className='mb-3 text-sm text-slate-500'>
-              Các nhận xét dành cho học viên chỉ được hiển thị với học viên đó và người đã để lại nhận xét.
+              {t('assignment.feedbackDescription')}
             </p>
             <Textarea 
                 className='min-h-[120px] resize-y rounded-lg border-slate-200 p-4 text-slate-800 focus:ring-primary'
                 value={feedbackText} 
                 onChange={(e) => setFeedbackText(e.target.value)} 
-                placeholder="Chia sẻ suy nghĩ của bạn..."
+                placeholder={t('assignment.shareThoughts')}
             />
           </div>
         </div>
@@ -302,10 +305,10 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
       <div className='flex-none border-t bg-white p-4 md:px-8'>
         <div className='mx-auto flex max-w-5xl justify-end gap-3'>
           <Button variant='outline' onClick={onClose} disabled={isGrading} className="h-10 min-w-[80px]">
-            Hủy
+            {t('assignment.cancel')}
           </Button>
           <Button onClick={handleSubmit} disabled={isGrading} className="h-10 bg-blue-500 hover:bg-blue-600 text-white min-w-[120px]">
-            {isGrading ? 'Đang gửi...' : 'Gửi Đánh Giá'}
+            {isGrading ? t('assignment.submitting') : t('assignment.submitGrading')}
           </Button>
         </div>
       </div>

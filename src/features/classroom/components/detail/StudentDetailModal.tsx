@@ -11,6 +11,7 @@ import { GraduationCap, BookOpen, FileCheck, ClipboardList, Mail } from 'lucide-
 import { useGetClassroomStudentDetailQuery } from '../../api/classroomApi'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import { useTranslations } from 'next-intl'
+import { useStatusTranslation } from '@/utils/index'
 
 type Props = {
   isOpen: boolean
@@ -21,6 +22,7 @@ type Props = {
 
 export default function StudentDetailModal({ isOpen, onClose, studentId, classroomId }: Props) {
   const t = useTranslations('classroom.studentClassroom.detail')
+  const statusTranslations = useStatusTranslation()
   const { data, isLoading } = useGetClassroomStudentDetailQuery(
     { classroomId, studentId: studentId! },
     { skip: !studentId || !isOpen }
@@ -67,15 +69,12 @@ export default function StudentDetailModal({ isOpen, onClose, studentId, classro
                 <div className='flex items-center justify-between'>
                   <h3 className='text-xl font-bold text-gray-900'>{student.studentName}</h3>
                   <Badge className={`${getStatusColor(student.courseEnrollmentStatus)} text-white`}>
-                    {student.courseEnrollmentStatus}
+                    {statusTranslations(student.courseEnrollmentStatus)}
                   </Badge>
                 </div>
                 <div className='text-muted-foreground flex items-center text-sm'>
                   <Mail className='mr-2 h-3.5 w-3.5' />
                   {student.studentEmail}
-                </div>
-                <div className='text-muted-foreground w-fit rounded bg-slate-100 px-2 py-0.5 font-mono text-xs'>
-                  ID: {student.studentId.split('-')[0]}...
                 </div>
               </div>
             </div>

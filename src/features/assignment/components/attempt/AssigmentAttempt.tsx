@@ -261,7 +261,7 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
   // Conditions for showing retry button
   const nextAttemptCondition =
     studentAssignmentData.nextAttemptAvailableAt && new Date() < new Date(studentAssignmentData.nextAttemptAvailableAt)
-  const attemptMadeCondition = attemptsMade > 0 && attemptsMade < maxAttempts
+  const attemptMadeCondition = attemptsMade > 0 && (attemptsMade < maxAttempts || !maxAttempts)
   const statusCondition = studentAssignmentData.status !== 'Passed' && studentAssignmentData.status !== 'Expired'
 
   const retryCondition = attemptMadeCondition && statusCondition
