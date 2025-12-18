@@ -14,7 +14,8 @@ import {
   useAnalyzeClassroomProgressMutation
 } from '@/features/classroom/api/classroomApi'
 import { StudentProgressItem, AiStudentAnalysisResult } from '@/features/classroom/types/classroom.type'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useSession } from 'next-auth/react'
 import Loading from 'app/[locale]/loading'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/card'
@@ -36,6 +37,7 @@ const COLUMN_WIDTH = 'w-[70px] min-w-[70px]'
 
 export function StudentProgressStatistic({ classroomId, courses }: StudentProgressStatisticProps) {
   const t = useTranslations('dashboard.classroom')
+  const locale = useLocale()
 
   const [selectedCourseId, setSelectedCourseId] = React.useState<string>('')
   const [currentLessonId, setCurrentLessonId] = React.useState<string>('')
@@ -48,12 +50,66 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
   const [filterAtRisk, setFilterAtRisk] = React.useState(false)
   const [selectedAnalysisStudent, setSelectedAnalysisStudent] = React.useState<AiStudentAnalysisResult | null>(null)
 
+  const { data: session } = useSession()
   const { data: classroomRes } = useGetClassroomByIdQuery(classroomId, {
     skip: !classroomId
   })
   const curriculum = classroomRes?.data?.course
+  const organizationSubscriptionOrderId = classroomRes?.data?.organizationSubscriptionOrderId
+
+  const teacherId = React.useMemo(() => {
+    if (!session?.user?.organizations || !organizationSubscriptionOrderId) {
+      return undefined
+    }
+
+    const organizations = session.user.organizations.organizations
+    if (!organizations || organizations.length === 0) {
+      return undefined
+    }
+
+    for (const org of organizations) {
+      if (org.roles && org.roles.length > 0) {
+        const matchingRole = org.roles.find((role) => role.subscriptionId === organizationSubscriptionOrderId)
+        if (matchingRole) {
+          const orgUserId = (org as any).organizationUserId
+          if (orgUserId) {
+            if (Array.isArray(orgUserId)) {
+              return orgUserId[0] || undefined
+            }
+            return orgUserId
+          }
+        }
+      }
+    }
+
+    return undefined
+  }, [session?.user?.organizations, organizationSubscriptionOrderId])
 
   const [analyzeTrigger, { isLoading: isAnalyzing }] = useAnalyzeClassroomProgressMutation()
+
+
+  const getSessionId = (): string | undefined => {
+    if (typeof window === 'undefined' || !classroomId || !selectedCourseId) return undefined
+    const key = `ai_analysis_session_${classroomId}_${selectedCourseId}`
+    return sessionStorage.getItem(key) || undefined
+  }
+
+  const saveSessionId = (sessionId: string) => {
+    if (typeof window === 'undefined' || !classroomId || !selectedCourseId) return
+    const key = `ai_analysis_session_${classroomId}_${selectedCourseId}`
+    sessionStorage.setItem(key, sessionId)
+  }
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const oldKey = sessionStorage.key(0)
+      Object.keys(sessionStorage).forEach((key) => {
+        if (key.startsWith('ai_analysis_session_') && !key.includes(`_${classroomId}_${selectedCourseId}`)) {
+        }
+      })
+    }
+    setAiData(null)
+  }, [classroomId, selectedCourseId])
 
   React.useEffect(() => {
     if (courses.length > 0 && !selectedCourseId) {
@@ -83,10 +139,19 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
   const handleAnalyzeClassroom = async () => {
     try {
+      let currentSessionId = getSessionId()
+      if (!currentSessionId) {
+        currentSessionId = crypto.randomUUID()
+        saveSessionId(currentSessionId)
+      }
+
       const response = await analyzeTrigger({
+        teacher_id: teacherId,
         classroom_id: classroomId,
         force_mock: false,
-        analysis_period_days: 7
+        analysis_period_days: 7,
+        lang: locale,
+        session_id: currentSessionId
       }).unwrap()
 
       const payload = response.data || response
