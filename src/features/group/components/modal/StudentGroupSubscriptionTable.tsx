@@ -146,8 +146,10 @@ export default function StudentGroupSubscriptionTable({ groupId, students, selec
                       </TooltipProvider>
                     ) : (
                       <Checkbox
-                        checked={selectedStudentGroupIds.includes(student.userId)}
-                        onCheckedChange={(checked) => handleCheckboxChange(Boolean(checked), student.userId)}
+                        checked={selectedStudentGroupIds.includes(student.organizationUserId)}
+                        onCheckedChange={(checked) =>
+                          handleCheckboxChange(Boolean(checked), student.organizationUserId)
+                        }
                       />
                     )}
                   </TableCell>

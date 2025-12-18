@@ -240,7 +240,14 @@ export default function OrganizationClassroomDetail() {
                     )}
                     {/* TODO */}
 
-                    <Button size='sm' onClick={() => openModal('addStudentsToClassroom')}>
+                    <Button
+                      size='sm'
+                      onClick={() =>
+                        openModal('addStudentsToClassroom', {
+                          classroomStudentIds: classroom.students?.map((s) => s.id)
+                        })
+                      }
+                    >
                       <UserPlus className='mr-2 h-4 w-4' />
                       {tc('button.addStudents')}
                     </Button>
