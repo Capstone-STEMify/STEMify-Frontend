@@ -68,65 +68,32 @@ export const authOptions: NextAuthOptions = {
       return true
     },
     async jwt({ token, account, profile }) {
+      // console.log('account in jwt callback', account)
+      // console.log('profile in jwt callback', profile)
       if (account?.access_token) {
         token.accessToken = account.access_token
         token.idToken = account.id_token
-        
-        
-        try {
-          const decoded: any = jwtDecode(account.access_token)
-          const accessTokenRole = 
-            decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ||
-            decoded['platform_role'] ||
-            decoded['role'] ||
-            UserRole.GUEST
-          
-          let mappedRole: UserRole = UserRole.GUEST
-          if (accessTokenRole === 'Admin' || accessTokenRole === 'admin') {
-            mappedRole = UserRole.ADMIN
-          } else if (accessTokenRole === 'Staff' || accessTokenRole === 'staff') {
-            mappedRole = UserRole.STAFF
-          } else if (accessTokenRole === 'Member' || accessTokenRole === 'member') {
-            mappedRole = UserRole.MEMBER
-          }
-          
-          token.role = mappedRole
-          
-         token.name = decoded['name'] || 
-                      decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/name'] ||
-                      token.name ||
-                      'Unnamed'
-          
-          token.email = decoded['email'] || 
-                       decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/emailaddress'] ||
-                       token.email ||
-                       'no-email@example.com'
-          
-          token.preferred_username = decoded['preferred_username'] || 
-                                     decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/name'] ||
-                                     decoded['name'] ||
-                                     token.preferred_username ||
-                                     'unknown'
-          
-          token.username = decoded['preferred_username'] ||
-                          decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/name'] ||
-                          decoded['name'] ||
-                          token.username ||
-                          'unknown'
-          
-          token.sub = decoded['sub'] ?? token.sub ?? 'unknown'
-        
 
-          const rawOrganizations = decoded['organizations']
+        try {
+          token.role = profile?.role || UserRole.GUEST
+
+          token.name = profile?.name || 'Stemify User'
+
+          token.email = profile?.email || 'user@stemify.com'
+
+          token.preferred_username = profile?.email || 'user@stemify.com'
+
+          token.username = profile?.email || 'user@stemify.com'
+
+          token.sub = profile?.sub || 'unknown-id'
+
+          const rawOrganizations = profile?.organizations
           if (rawOrganizations) {
             try {
-              const parsedOrgs = typeof rawOrganizations === 'string' 
-                ? JSON.parse(rawOrganizations) 
-                : rawOrganizations
-              
+              const parsedOrgs = typeof rawOrganizations === 'string' ? JSON.parse(rawOrganizations) : rawOrganizations
+
               if (parsedOrgs && typeof parsedOrgs === 'object') {
                 token.organizations = parsedOrgs
-             
               } else {
                 token.organizations = undefined
               }
@@ -140,7 +107,6 @@ export const authOptions: NextAuthOptions = {
                 const parsed = typeof profileOrgs === 'string' ? JSON.parse(profileOrgs) : profileOrgs
                 if (parsed && typeof parsed === 'object') {
                   token.organizations = parsed
-        
                 } else {
                   token.organizations = undefined
                 }
@@ -154,21 +120,22 @@ export const authOptions: NextAuthOptions = {
         } catch (error) {
           const oidcRole = (profile as OIDCProfile)?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
           token.role = (profile as any)?.role || oidcRole || UserRole.GUEST
-          console.log('⚠️ [AUTH DEBUG] Using fallback role from profile:', token.role)
+          console.log('[AUTH DEBUG] Using fallback role from profile:', token.role)
         }
       }
 
       return token
     },
     async session({ session, token }) {
+      // console.log('Session callback', { session, token })
       if (token) {
         session.accessToken = token.accessToken!
         session.user.userRole = token.role!
         session.user.userName = (token.username || token.preferred_username || 'unknown') as string
         session.user.userId = token.sub!
         session.exp = token.exp!
-        
-       session.user.name = (token.name || session.user.name || 'Unnamed') as string
+
+        session.user.name = (token.name || session.user.name || 'Unnamed') as string
         session.user.email = (token.email || session.user.email || 'no-email@example.com') as string
 
         session.user.organizations = token.organizations

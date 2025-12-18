@@ -24,12 +24,13 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
 import { useRouter } from 'next/navigation'
-import { useAppDispatch } from '@/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { logout } from '@/features/auth/authSlice'
 import { persistor } from '@/libs/redux/store'
 import { clearSelectedOrganization } from '@/features/subscription/slice/selectedOrganizationSlice'
 import { stringToHslColor } from '@/utils/index'
 import UserAvatar from '@/components/shared/UserAvatar'
+import { LicenseType, UserRole } from '@/types/userRole'
 
 function MenuItem({
   children,
@@ -67,6 +68,8 @@ export default function AuthStatusMenu() {
   const router = useRouter()
   const locale = useLocale()
   const dispatch = useAppDispatch()
+  const userRole = session?.user?.userRole
+  const orgRole = useAppSelector((state) => state.selectedOrganization.currentRole)
 
   if (status === 'loading') {
     return (
@@ -141,7 +144,9 @@ export default function AuthStatusMenu() {
                   </MenuItem>
 
                   {/* Theme with chevron like screenshot */}
-                  <MenuItem icon={<Palette size={16} />}>{t('theme')}</MenuItem>
+                  {userRole === UserRole.ADMIN || orgRole === LicenseType.ORGANIZATION_ADMIN ? (
+                    <MenuItem icon={<Palette size={16} />}>{t('dashboard')}</MenuItem>
+                  ) : null}
 
                   <div className='my-1 h-px w-full bg-gray-200 dark:bg-zinc-800' />
 
