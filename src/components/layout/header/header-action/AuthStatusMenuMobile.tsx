@@ -16,7 +16,7 @@ import {
   Sparkles
 } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { logout } from '@/features/auth/authSlice'
 import { persistor } from '@/libs/redux/store'
 import { clearSelectedOrganization } from '@/features/subscription/slice/selectedOrganizationSlice'
+import { useRouter } from 'next/navigation'
 
 function MenuItem({
   children,
@@ -59,6 +60,8 @@ export default function AuthStatusMenuMobile() {
   const t = useTranslations('Header')
   const { data: session, status } = useSession()
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const locale = useLocale()
 
   if (status === 'loading') {
     return (
@@ -80,7 +83,8 @@ export default function AuthStatusMenuMobile() {
       await signOut({ callbackUrl: '/' })
       dispatch(logout())
       dispatch(clearSelectedOrganization())
-      persistor.purge()
+      await persistor.purge()
+      router.replace(`/${locale}/home`)
     } catch (error) {
       console.error('Logout failed:', error)
     }
