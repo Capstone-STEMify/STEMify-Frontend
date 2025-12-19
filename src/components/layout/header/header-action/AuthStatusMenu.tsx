@@ -94,7 +94,7 @@ export default function AuthStatusMenu() {
       dispatch(clearSelectedOrganization())
       await persistor.purge()
 
-      router.push(`/${locale}/`)
+      router.replace(`/${locale}/home`)
     } catch (error) {
       console.error('Logout failed:', error)
     }

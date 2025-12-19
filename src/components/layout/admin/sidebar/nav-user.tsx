@@ -43,7 +43,7 @@ export function NavUser({
   const handleSignOut = async () => {
     try {
       console.log('Signing out...')
-      router.push(`/${locale}/home`)
+      router.replace(`/${locale}/home`)
 
       await fetch(`${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/account/logout`, {
         method: 'GET',
