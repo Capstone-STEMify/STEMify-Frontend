@@ -131,8 +131,8 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
                 </p>
               </div>
               <div className='flex flex-col items-center justify-center gap-2 p-6'>
-                <div className='rounded-full bg-sky-100 p-3'>
-                  <Target className='h-6 w-6 text-sky-600' />
+                <div className='rounded-full bg-red-100 p-3'>
+                  <Target className='h-6 w-6 text-red-600' />
                 </div>
                 <p className='text-sm font-medium text-gray-600'>{tq('length')}</p>
                 <p className='text-2xl font-bold text-gray-900'>
@@ -283,6 +283,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
           studentQuizId={studentQuizId}
           selectedAttempt={selectedAttempt}
           onSelectAttempt={setSelectedAttempt}
+          totalQuestions={questions.length}
         />
       )}
     </div>
