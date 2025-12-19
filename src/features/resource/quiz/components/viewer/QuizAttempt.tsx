@@ -19,7 +19,12 @@ type QuizAttemptProps = {
   totalQuestions?: number
 }
 
-export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAttempt, totalQuestions }: QuizAttemptProps) {
+export default function QuizAttempt({
+  studentQuizId,
+  selectedAttempt,
+  onSelectAttempt,
+  totalQuestions
+}: QuizAttemptProps) {
   const locale = useLocale()
   const tc = useTranslations('common')
   const tq = useTranslations('quiz.detail')
