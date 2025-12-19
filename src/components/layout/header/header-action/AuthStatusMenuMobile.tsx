@@ -80,7 +80,7 @@ export default function AuthStatusMenuMobile() {
       await signOut({ callbackUrl: '/' })
       dispatch(logout())
       dispatch(clearSelectedOrganization())
-      persistor.purge()
+      await persistor.purge()
     } catch (error) {
       console.error('Logout failed:', error)
     }

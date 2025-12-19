@@ -1,7 +1,6 @@
 import { OrganizationSidebar } from '@/components/layout/organization/sidebar/organization-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/shadcn/sidebar'
 import { SiteHeader } from '@/components/shadcn/site-header'
-import { useAppSelector } from '@/hooks/redux-hooks'
 import { authOptions } from '@/libs/auth/authOptions'
 import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth'

@@ -84,13 +84,14 @@ export default withAuth(
     //   process.env.NEXTAUTH_URL = 'https://www.stemifi.com'
     // }
 
-    // 🔹 Lấy token từ cookie
+    // Lấy token từ cookie
     const token = await getToken({ req, secret: process.env.AUTH_SECRET })
-    // console.log('Middleware token:', token)
-    // 🔹 Nếu không có token -> next-intl middleware xử lý tiếp
+    // console.log('Middleware token exp:', token?.exp)
+    // console.log('check token expired:', token?.exp ? Date.now() - token.exp * 1000 : 'N/A')
+    // Nếu không có token -> next-intl middleware xử lý tiếp
     if (!token) return intlMiddleware(req)
 
-    // 🔹 Nếu token hết hạn
+    // Nếu token hết hạn
     if (token?.exp && Date.now() >= token.exp * 1000) {
       // console.log('Token expired → redirect to signin')
       return NextResponse.redirect(new URL(`/${locale}/api/auth/signin`, req.url))
@@ -162,15 +163,15 @@ export default withAuth(
           '/invitation/success'
         ]
 
-        const isPublic = PUBLIC_PATHS.includes(pathNoLocale)
+        // const isPublic = PUBLIC_PATHS.includes(pathNoLocale)
 
         // sử dụng khi gần ra hội đồng
-        // const isPublic =
-        //   PUBLIC_PATHS.includes(pathNoLocale) ||
-        //   (pathNoLocale.startsWith('/resource') && !pathNoLocale.startsWith('/resource/lesson/')) ||
-        //   pathNoLocale.startsWith('/shop') ||
-        //   pathNoLocale.startsWith('/plan') ||
-        //   pathNoLocale.startsWith('/shopping-basket')
+        const isPublic =
+          PUBLIC_PATHS.includes(pathNoLocale) ||
+          (pathNoLocale.startsWith('/resource') && !pathNoLocale.startsWith('/resource/lessons')) ||
+          pathNoLocale.startsWith('/stem-kit') ||
+          pathNoLocale.startsWith('/plans')
+
         return isPublic ? true : !!token
       }
     },

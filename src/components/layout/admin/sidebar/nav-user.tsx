@@ -42,6 +42,9 @@ export function NavUser({
 
   const handleSignOut = async () => {
     try {
+      console.log('Signing out...')
+      router.push(`/${locale}/home`)
+
       await fetch(`${process.env.NEXT_PUBLIC_IDENTITY_SERVER_URL}/account/logout`, {
         method: 'GET',
         credentials: 'include'
@@ -52,8 +55,7 @@ export function NavUser({
       await signOut({ redirect: false })
       dispatch(logout())
       dispatch(clearSelectedOrganization())
-      persistor.purge()
-      router.push(`/${locale}/`)
+      await persistor.purge()
     } catch (error) {
       console.error('Logout failed:', error)
     }

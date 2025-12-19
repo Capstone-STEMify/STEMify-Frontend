@@ -92,7 +92,7 @@ export default function AuthStatusMenu() {
       await signOut({ redirect: false })
       dispatch(logout())
       dispatch(clearSelectedOrganization())
-      persistor.purge()
+      await persistor.purge()
 
       router.push(`/${locale}/`)
     } catch (error) {
