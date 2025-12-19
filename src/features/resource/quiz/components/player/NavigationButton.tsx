@@ -4,12 +4,7 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { ChevronLeft, ChevronRight, Send, Loader2 } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import {
-  goToNextQuestion,
-  goToPreviousQuestion,
-  resetQuiz,
-  submitQuiz
-} from '@/features/resource/quiz/slice/quiz-player-slice'
+import { goToNextQuestion, goToPreviousQuestion, resetQuiz } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 import { useUpdateQuizAttemptMutation } from '@/features/resource/quiz/api/quizApi'
 import { toast } from 'sonner'
@@ -48,10 +43,9 @@ export default function NavigationButtons({ quiz }: NavigationButtonsProps) {
       questionAttempts
     }).unwrap()
     if (result) {
-      dispatch(submitQuiz())
-      // dispatch(resetQuiz())
+      dispatch(resetQuiz())
       toast.success('Nộp bài thành công!')
-      router.push(`/${locale}/resource/lesson/${lessonId}`)
+      router.replace(`/${locale}/resource/lesson/${lessonId}`)
     }
   }
 

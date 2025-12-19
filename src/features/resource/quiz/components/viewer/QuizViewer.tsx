@@ -11,7 +11,13 @@ import { QuestionType } from '@/features/resource/question/types/question.type'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setMode } from '@/features/resource/lesson/slice/lessonDetailSlice'
-import { setQuizAttemptId, setSelectedQuiz, setStudentQuizId } from '@/features/resource/quiz/slice/quiz-player-slice'
+import {
+  setQuizAttemptId,
+  setSelectedQuiz,
+  setStudentQuizId,
+  setStartedAt,
+  setTimeRemaining
+} from '@/features/resource/quiz/slice/quiz-player-slice'
 import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
 import { Attempt } from '@/features/resource/quiz/types/quiz.type'
 import { LicenseType, UserRole } from '@/types/userRole'
@@ -85,8 +91,19 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
     const res = await createQuizAttempt({ studentQuizId }).unwrap()
     if (res) {
       dispatch(setStudentQuizId(studentQuizId))
+
+      // Set startedAt and calculate timeRemaining from response
+      if (res.data.startedAt) {
+        const startedAtTimestamp = new Date(res.data.startedAt).getTime()
+        const timeLimitSec = (quizData?.data?.timeLimitMinutes || 0) * 60
+        const elapsed = Math.floor((Date.now() - startedAtTimestamp) / 1000)
+        const remaining = Math.max(0, timeLimitSec - elapsed)
+
+        dispatch(setStartedAt(startedAtTimestamp))
+        dispatch(setTimeRemaining(remaining))
+      }
+
       router.push(`/${locale}/resource/lesson/${lessonId}/quiz/${res.data.id}`)
-      // dispatch(setMode('quiz'))
     }
   }
 
@@ -188,7 +205,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
                         {tq(`question.${question.questionType.toLowerCase()}`)}
                       </span>
                       {correctAnswers.length > 1 && (
-                        <span className='text-xs text-gray-500'>({correctAnswers.length} correct answers)</span>
+                        <span className='text-xs text-gray-500'>({correctAnswers.length} câu đúng)</span>
                       )}
                     </div>
 
@@ -259,7 +276,7 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
                       <div className='rounded-lg bg-blue-50 p-4'>
                         <div className='mb-1.5 flex items-center gap-2'>
                           <AlertCircle className='h-4 w-4 text-blue-600' />
-                          <h4 className='text-sm font-semibold text-blue-900'>Explanation</h4>
+                          <h4 className='text-sm font-semibold text-blue-900'>Giải thích</h4>
                         </div>
                         <p className='text-sm leading-relaxed text-blue-800'>{question.answerExplanation}</p>
                       </div>

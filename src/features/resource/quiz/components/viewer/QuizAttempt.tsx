@@ -55,7 +55,6 @@ export default function QuizAttempt({
   const quizData = studentQuiz.data
   const completedAttempts = quizData.attempts.filter((a) => a.status !== QuizAttemptStatus.IN_PROGRESS)
 
-  // Nếu đang xem một attempt cụ thể, render QuizResult thay thế toàn bộ
   if (selectedAttempt && quizData.quizId) {
     return (
       <div className='space-y-4'>
