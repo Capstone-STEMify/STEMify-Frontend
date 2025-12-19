@@ -16,9 +16,10 @@ type QuizAttemptProps = {
   studentQuizId: number
   selectedAttempt: Attempt | null
   onSelectAttempt: (attempt: Attempt | null) => void
+  totalQuestions?: number
 }
 
-export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAttempt }: QuizAttemptProps) {
+export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAttempt, totalQuestions }: QuizAttemptProps) {
   const locale = useLocale()
   const tc = useTranslations('common')
   const tq = useTranslations('quiz.detail')
@@ -139,7 +140,6 @@ export default function QuizAttempt({ studentQuizId, selectedAttempt, onSelectAt
             </TableHeader>
             <TableBody>
               {completedAttempts.map((attempt) => {
-                const totalQuestions = attempt.questionAttempts.length
                 const correctAnswers = attempt.questionAttempts.filter((qa) => qa.isCorrect).length
                 return (
                   <TableRow key={attempt.id}>
