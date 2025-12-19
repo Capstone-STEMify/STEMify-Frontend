@@ -155,6 +155,7 @@ export default withAuth(
 
         const PUBLIC_PATHS = [
           '/',
+          '/home',
           '/unauthorized',
           '/api/auth/signin',
           '/plans',
