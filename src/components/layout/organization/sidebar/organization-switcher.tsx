@@ -18,12 +18,20 @@ import {
 } from '@/features/subscription/slice/selectedOrganizationSlice'
 import { useGetOrganizationsWithAccessByUserIdQuery } from '@/features/organization/api/organizationApi'
 import { useSession } from 'next-auth/react'
+import { useStatusTranslation } from '@/utils/index'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 export function OrganizationSwitcher() {
+  const t = useTranslations('organization.detail')
   const { data: session, status } = useSession()
+  const statusTranslates = useStatusTranslation()
+  const locale = useLocale()
 
   const { isMobile } = useSidebar()
   const dispatch = useAppDispatch()
+  const router = useRouter()
+
   const user = useAppSelector((state) => state.auth.user)
   const selectedOrganizationId = useAppSelector((state) => state.selectedOrganization.selectedOrganizationId)
 
@@ -77,7 +85,7 @@ export function OrganizationSwitcher() {
               </div>
               <div className='grid flex-1 text-left text-sm leading-tight'>
                 <span className='truncate font-medium'>{selectedOrg.name}</span>
-                <span className='text-muted-foreground text-xs'>Đang hoạt động</span>
+                <span className='text-muted-foreground text-xs'>{statusTranslates('active')}</span>
               </div>
               <ChevronsUpDown className='ml-auto' />
             </SidebarMenuButton>
@@ -95,8 +103,8 @@ export function OrganizationSwitcher() {
               <DropdownMenuItem
                 key={org.id}
                 onClick={() => {
-                  console.log('Switching organization to:', org.id)
                   dispatch(setSelectedOrganizationId(org.id))
+                  router.push(`/${locale}/organization/dashboard`)
                 }}
                 className={`gap-2 p-2 ${org.id === selectedOrganizationId ? 'bg-slate-100' : ''}`}
               >
@@ -109,7 +117,9 @@ export function OrganizationSwitcher() {
                 </div>
                 <div className='flex flex-col'>
                   <span className='font-medium'>{org.name}</span>
-                  <p className='text-muted-foreground text-xs'>{org.subscriptions.length} gói đang hoạt động</p>
+                  <p className='text-muted-foreground text-xs'>
+                    {org.subscriptions.length} {t('package')} {statusTranslates('active')}
+                  </p>
                 </div>
               </DropdownMenuItem>
             ))}

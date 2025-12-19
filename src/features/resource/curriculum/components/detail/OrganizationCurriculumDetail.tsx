@@ -8,6 +8,7 @@ import OrganizationCourseList from '@/features/resource/course/components/list/O
 import OrganizationCurriculumInfoSection from '@/features/resource/curriculum/components/detail/OrganizationCurriculumInfoSection'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import OrganizationEmulatorList from '@/features/resource/curriculum/components/list/OrganizationEmulatorList'
 
 export default function OrganizationCurriculumDetail() {
   const t = useTranslations('curriculum')
@@ -29,9 +30,11 @@ export default function OrganizationCurriculumDetail() {
           <hr className='my-10' />
           <LearningOutcomeTable curriculumId={Number(curriculum.id)} />
           <hr className='my-10' />
-          <KitListSection context='curriculum' kitIds={[]} />
+          <KitListSection context='curriculum' kitIds={curriculum.kitIds || []} />
           <hr className='my-10' />
           <OrganizationCourseList courses={curriculum.courses || []} />
+          <hr className='my-10' />
+          <OrganizationEmulatorList emulations={curriculum.emulations} />
         </>
       </div>
     </div>
