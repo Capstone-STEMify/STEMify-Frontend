@@ -2,12 +2,17 @@ import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher'
 import { Button } from '@/components/shadcn/button'
 import BackButton from '@/components/shared/button/BackButton'
 import { useExportAssembly } from '@/features/creator-3d/hooks/creator-3d-helper'
+import { EmulatorWithThumbnail } from '@/features/emulator/types/emulator.type'
 import { useLocale, useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import React, { useCallback } from 'react'
 import { toast } from 'sonner'
 
-export default function Creator3DHeader() {
+type Creator3DHeaderProps = {
+  emulator: EmulatorWithThumbnail
+}
+
+export default function Creator3DHeader({ emulator }: Creator3DHeaderProps) {
   const { workspaceId } = useParams()
   const locale = useLocale()
   const t3d = useTranslations('creator3D')
@@ -46,7 +51,7 @@ export default function Creator3DHeader() {
           <BackButton />
           <div>
             <h1 className='text-2xl font-bold text-gray-900'>{t3d('header.title')}</h1>
-            <p className='text-sm text-gray-600'>{t3d('header.subtitle')}</p>
+            <p className='text-sm text-gray-600'>{emulator.name}</p>
           </div>
         </div>
         <div className='flex items-center gap-3'>

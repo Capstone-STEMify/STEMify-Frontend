@@ -20,11 +20,11 @@ export default function Create3DPage() {
     }
   )
 
-  if (isLoadingEmulator || !emulatorData) return <div>Loading...</div>
+  if (isLoadingEmulator || !emulatorData) return <div>Đang tải...</div>
 
   return (
     <div className='flex h-screen w-screen flex-col overflow-hidden bg-gray-50'>
-      <Creator3DHeader />
+      <Creator3DHeader emulator={emulatorData.data} />
       {/* Main Content */}
       <div className='flex flex-1 overflow-hidden'>
         <Suspense
@@ -32,7 +32,7 @@ export default function Create3DPage() {
             <div className='flex flex-1 items-center justify-center'>
               <div className='text-center'>
                 <div className='inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]' />
-                <p className='mt-2 text-sm text-gray-600'>Loading 3D Creator...</p>
+                <p className='mt-2 text-sm text-gray-600'>Đang tải...</p>
               </div>
             </div>
           }
