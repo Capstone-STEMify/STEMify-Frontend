@@ -79,7 +79,7 @@
         "lessons": "lessons",
         "schedule": "Classroom Schedule",
         "duration": "Duration/weeks:",
-        "min": "phút",
+        "min": "min",
         "week": "Week",
         "totalWeek": "Total Weeks"
       },
@@ -200,19 +200,19 @@
         "topCourse": "Top Courses",
         "topCourseDesc": "Most popular courses in the system",
         "headers": {
-           "orgName": "Organization Name",
-           "students": "Students",
-           "enrollments": "Enrollments",
-           "passRate": "Pass Rate",
-           "activeSub": "Active Subs",
-           "courseName": "Course Name",
-           "classrooms": "Classrooms",
-           "avgScore": "Avg Score",
-           "completion": "Completion"
+          "orgName": "Organization Name",
+          "students": "Students",
+          "enrollments": "Enrollments",
+          "passRate": "Pass Rate",
+          "activeSub": "Active Subs",
+          "courseName": "Course Name",
+          "classrooms": "Classrooms",
+          "avgScore": "Avg Score",
+          "completion": "Completion"
         },
         "placeholders": {
-            "org": "No organization data",
-            "course": "No course data"
+          "org": "No organization data",
+          "course": "No course data"
         }
       }
     }
