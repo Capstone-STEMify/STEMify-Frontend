@@ -39,6 +39,7 @@ export default function Workspace3D({
 
   // check access
   const { accessEmulatorIds } = useAppSelector((state) => state.selectedOrganization)
+  console.log('accessEmulatorIds:', accessEmulatorIds)
   if (
     id &&
     typeof id === 'string' &&
