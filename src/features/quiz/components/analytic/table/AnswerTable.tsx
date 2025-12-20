@@ -37,7 +37,7 @@ export function AnswerGridTable({ data, studentData, questionData }: AnswerGridT
                   <TableHead key={q.questionId} className='min-w-[120px] p-4 text-center whitespace-nowrap'>
                     Q.{index + 1}
                     <Badge variant='secondary' className='ml-2 font-normal'>
-                      {q.correctRate}%
+                      {q.correctRate.toFixed(2)}%
                     </Badge>
                   </TableHead>
                 ))}

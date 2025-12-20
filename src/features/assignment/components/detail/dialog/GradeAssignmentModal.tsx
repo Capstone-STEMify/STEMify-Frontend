@@ -17,7 +17,7 @@ import {
 import { toast } from 'sonner'
 import { useGetOrganizationUserDetailQuery, useGetUserByIdQuery } from '@/features/user/api/userApi'
 import Loading from 'app/[locale]/loading'
-import { Clock, HelpCircle, X } from 'lucide-react'
+import { Clock, ExternalLink, HelpCircle, X } from 'lucide-react'
 import { format } from 'date-fns'
 import { useTranslations } from 'next-intl'
 
@@ -53,6 +53,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
 
   const [scores, setScores] = useState<Record<number, Record<number, number | null>>>({})
   const [feedbackText, setFeedbackText] = useState('')
+  const [imageModal, setImageModal] = useState<{ open: boolean; url: string }>({ open: false, url: '' })
 
   const questionMap = useMemo(() => {
     if (!assignmentRes?.data?.questions) return {}
@@ -209,7 +210,6 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
       <div className='flex-1 overflow-y-auto bg-gray-50/50 p-6'>
         <div className='mx-auto max-w-5xl space-y-6'>
           {attemptData.questionAttempts.map((qAttempt, index) => {
-            // Lấy thông tin câu hỏi gốc từ map
             const originalQuestion = questionMap[qAttempt.assignmentQuestionId]
             const questionTitle = originalQuestion ? `Câu hỏi ${originalQuestion.orderIndex}` : `Question #${index + 1}`
             const questionContent = originalQuestion?.content || ''
@@ -239,8 +239,43 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                       </div>
                     )}
                     <div className='whitespace-pre-wrap text-slate-800'>
-                      {qAttempt.answerText || (
-                        <span className='text-gray-400 italic'>{t('assignment.noAnswerProvided')}</span>
+                      {qAttempt.answerText ? (
+                        <p>{qAttempt.answerText}</p>
+                      ) : (
+                        <>
+                          {(() => {
+                            const isImage = qAttempt.answerFileUrl && /\.(png|jpg|jpeg)$/i.test(qAttempt.answerFileUrl)
+                            return qAttempt.answerFileUrl ? (
+                              isImage ? (
+                                <div className='mt-6'>
+                                  <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
+                                  <img
+                                    src={qAttempt.answerFileUrl}
+                                    alt="Student answer"
+                                    className="max-w-full h-auto cursor-pointer rounded-md border"
+                                    onClick={() => setImageModal({ open: true, url: qAttempt.answerFileUrl })}
+                                  />
+                                </div>
+                              ) : (
+                                <div className='mt-6'>
+                                  <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
+                                  <Button variant='link' className='p-0 text-sm' asChild>
+                                    <a
+                                      href={qAttempt.answerFileUrl}
+                                      target='_blank'
+                                      rel='noopener noreferrer'
+                                    >
+                                      <p className='text-blue-500'>{t('modal.viewFile')}</p>{' '}
+                                      <ExternalLink className='ml-1 h-3 w-3' />
+                                    </a>
+                                  </Button>
+                                </div>
+                              )
+                            ) : (
+                              <span className='text-gray-400 italic'>{t('assignment.noAnswerProvided')}</span>
+                            )
+                          })()}
+                        </>
                       )}
                     </div>
                   </div>
@@ -329,6 +364,12 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
           </Button>
         </div>
       </div>
+
+      {imageModal.open && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" onClick={() => setImageModal({ open: false, url: '' })}>
+          <img src={imageModal.url} alt="Enlarged student answer" className="max-w-[90%] max-h-[90%] object-contain" onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
     </div>
   )
 }
