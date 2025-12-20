@@ -67,7 +67,8 @@
         "pending": "Pending Review",
         "nextAttempt": "Next Attempt available at",
         "description": "Your submission from {date} is currently being reviewed.",
-        "title": "Teacher's Feedback"
+        "title": "Teacher's Feedback",
+        "noFeedback": "No feedback provided."
       },
       "graded": {
         "title": "Your Grade",
@@ -90,6 +91,21 @@
         "invalidData": "Cannot submit assignment. Invalid data.",
         "noAsmFound": "No assignment found. Please go back and select the assignment again.",
         "deadline2": "Deadline"
+      },
+      "submissionDetail": {
+        "submitted": "Submitted:",
+        "status": "Status:",
+        "finalScore": "Final Score:",
+        "teachersFeedback": "Teacher's Feedback",
+        "submissionDetails": "Submission Details",
+        "question": "Question {index}",
+        "yourAnswer": "Your Answer",
+        "noTextAnswer": "No text answer provided.",
+        "viewSubmittedFile": "View Submitted File",
+        "gradingRubric": "Grading Rubric",
+        "points": "pts",
+        "totalForQuestion": "Total for Question:",
+        "pts": "pts"
       }
     },
     "upsert": {

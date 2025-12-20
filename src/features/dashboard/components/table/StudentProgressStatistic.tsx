@@ -343,9 +343,9 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                                     <span className={`font-medium ${atRiskInfo ? 'text-red-700' : 'text-slate-700'}`}>
                                       {student.studentName}
                                     </span>
-                                    <span className='text-xs font-normal text-slate-400'>
+                                    {/* <span className='text-xs font-normal text-slate-400'>
                                       ID: {student.studentId.substring(0, 6)}...
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </AccordionTrigger>
                                 <AccordionContent>
