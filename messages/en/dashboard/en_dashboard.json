@@ -65,7 +65,13 @@
           "identifiedIssues": "Identified Issues",
           "recommendedAction": "Recommended Action",
           "close": "Close",
-          "assignSupportTask": "Assign Support Task"
+          "assignSupportTask": "Assign Support Task",
+          "course": "Course:",
+          "lessonHeader": "Lesson {index}",
+          "lessonDetailTitle": "Lesson Progress Details",
+          "lessonDetailDesc": "Section progress for {student} in {lesson}",
+          "sectionItem": "Section {index}",
+          "status": "Status"
         }
       },
       "course": {

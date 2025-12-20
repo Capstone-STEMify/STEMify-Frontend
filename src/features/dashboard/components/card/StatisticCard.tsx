@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts'
 import { DashboardData } from '../../types/dashboard.type'
 import { useTranslations } from 'next-intl'
+import { truncateLabel } from '@/utils/index'
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -17,12 +18,6 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   }
   return null
 }
-
-const truncateLabel = (label: string, maxLength = 5) => {
-  if (!label) return ''
-  return label.length > maxLength ? label.substring(0, 4) + '...' : label
-}
-
 
 const CustomXAxisTick = (props: any) => {
   const { x, y, payload } = props
