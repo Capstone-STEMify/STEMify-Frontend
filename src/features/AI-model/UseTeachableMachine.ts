@@ -25,13 +25,15 @@ interface TeachableMachineModel {
 const CONFIG = {
   imageSize: 224,
   minImagesPerClass: 5,
-  epochs: 50,
-  batchSizeMax: 2,
+  epochs: 10,
+  batchSizeMax: 16,
   validationSplit: 0.3,
   learningRate: 0.001,
   dropout1: 0.5,
   dropout2: 0.3,
-  debugLogs: true
+  debugLogs: true,
+  earlyStoppingPatience: 5, 
+  minDelta: 0.001 
 }
 
 const BASE_MODEL_URL = 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json'
@@ -171,7 +173,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     const baseModel = await tf.loadLayersModel(BASE_MODEL_URL)
     console.log('Base model loaded, layers:', baseModel.layers.length)
 
-    let featureExtractor: tf.LayersModel
+    let featureExtractor: tf.LayersModel | undefined
     for (let i = baseModel.layers.length - 1; i >= 0; i--) {
       const layer = baseModel.layers[i]
       console.log(`Layer ${i}: ${layer.name}, output shape:`, layer.outputShape)
@@ -190,13 +192,18 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       }
     }
 
-    if (!featureExtractor!) {
+    if (!featureExtractor) {
       featureExtractor = tf.model({
         inputs: baseModel.inputs,
         outputs: baseModel.layers[baseModel.layers.length - 2].output
       })
       console.log('Using fallback feature extractor')
     }
+
+
+    featureExtractor.layers.forEach((layer) => {
+      layer.trainable = false
+    })
 
     const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
     const testOutput = featureExtractor.predict(testInput) as tf.Tensor
@@ -290,30 +297,86 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       const features = featureExtractor.predict(images) as tf.Tensor
       console.log('Features shape:', features.shape)
 
-      const batchSize = features.shape[0]
+      const featureBatchSize = features.shape[0]
       const featureSize = features.shape.slice(1).reduce((a, b) => a * b, 1)
-      const processedFeatures = features.reshape([batchSize, featureSize])
+      const processedFeatures = features.reshape([featureBatchSize, featureSize])
       console.log('Reshaped features shape:', processedFeatures.shape)
 
       console.log('Training classification head...')
-      await classifier.fit(processedFeatures, labels, {
-        epochs: CONFIG.epochs,
-        batchSize: Math.min(CONFIG.batchSizeMax, processedFeatures.shape[0]),
-        validationSplit: CONFIG.validationSplit,
-        shuffle: true,
-        callbacks: {
-          onEpochEnd: async (epoch, logs) => {
-            console.log(`Epoch ${epoch + 1}: loss = ${logs?.loss.toFixed(4)}, accuracy = ${logs?.acc.toFixed(4)}`)
-            const progress = 30 + (epoch + 1) * (60 / CONFIG.epochs)
-            setTrainingProgress(progress)
-            setTrainingStatus({
-              message: `Epoch ${epoch + 1}/${CONFIG.epochs}: Accuracy ${((logs?.acc || 0) * 100).toFixed(1)}%`,
-              type: 'info'
-            })
-            await tf.nextFrame()
+      
+      let bestValLoss = Infinity
+      let patienceCounter = 0
+      let bestEpoch = 0
+      let bestWeights: tf.Tensor[] | null = null
+      let shouldStop = false
+      
+
+      const trainingBatchSize = Math.min(CONFIG.batchSizeMax, processedFeatures.shape[0])
+      
+      for (let epoch = 0; epoch < CONFIG.epochs && !shouldStop; epoch++) {
+
+        const history = await classifier.fit(processedFeatures, labels, {
+          epochs: 1,
+          batchSize: trainingBatchSize,
+          validationSplit: CONFIG.validationSplit,
+          shuffle: true,
+          verbose: 0
+        })
+        
+        const logs = history.history
+        const trainLossValue = Array.isArray(logs.loss) ? logs.loss[0] : 0
+        const trainAccValue = Array.isArray(logs.acc) ? logs.acc[0] : (Array.isArray(logs.accuracy) ? logs.accuracy[0] : 0)
+        const valLossValue = Array.isArray(logs.val_loss) ? logs.val_loss[0] : 0
+        const valAccValue = Array.isArray(logs.val_acc) ? logs.val_acc[0] : (Array.isArray(logs.val_accuracy) ? logs.val_accuracy[0] : 0)
+        
+        const trainLoss = typeof trainLossValue === 'number' ? trainLossValue : 0
+        const trainAcc = typeof trainAccValue === 'number' ? trainAccValue : 0
+        const valLoss = typeof valLossValue === 'number' ? valLossValue : 0
+        const valAcc = typeof valAccValue === 'number' ? valAccValue : 0
+        
+        console.log(
+          `Epoch ${epoch + 1}: train_loss = ${trainLoss.toFixed(4)}, train_acc = ${trainAcc.toFixed(4)}, ` +
+          `val_loss = ${valLoss.toFixed(4)}, val_acc = ${valAcc.toFixed(4)}`
+        )
+        
+        if (valLoss > 0) {
+          if (valLoss < bestValLoss - CONFIG.minDelta) {
+            bestValLoss = valLoss
+            patienceCounter = 0
+            bestEpoch = epoch + 1
+            
+            bestWeights = classifier.getWeights()
+            console.log(`Best val_loss: ${bestValLoss.toFixed(4)} at epoch ${bestEpoch}`)
+          } else {
+            patienceCounter++
+            if (patienceCounter >= CONFIG.earlyStoppingPatience) {
+              console.log(
+                `Early stopping No improvement for ${CONFIG.earlyStoppingPatience} epochs. ` +
+                `Best val_loss: ${bestValLoss.toFixed(4)} at epoch ${bestEpoch}. Restoring best weights...`
+              )
+              shouldStop = true
+              
+              if (bestWeights) {
+                classifier.setWeights(bestWeights)
+                console.log(`Restored best model weights from epoch ${bestEpoch}`)
+              }
+            }
           }
         }
-      })
+        
+        const progress = 30 + (epoch + 1) * (60 / CONFIG.epochs)
+        setTrainingProgress(progress)
+        setTrainingStatus({
+          message: `Epoch ${epoch + 1}/${CONFIG.epochs}: Train ${(trainAcc * 100).toFixed(1)}% | Val ${(valAcc * 100).toFixed(1)}%`,
+          type: 'info'
+        })
+        await tf.nextFrame()
+      }
+      
+      if (!shouldStop && bestWeights && bestEpoch < CONFIG.epochs) {
+        console.log(`Training completed. Using best model from epoch ${bestEpoch}`)
+        classifier.setWeights(bestWeights)
+      }
 
       const finalModel: TeachableMachineModel = {
         featureExtractor,
@@ -336,7 +399,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
             })
           })
 
-          return results.sort((a, b) => b.probability - a.probability)
+          return results
         },
         getTopKClasses: async function (input: tf.Tensor, k = 3) {
           const results = await this.predict(input)
