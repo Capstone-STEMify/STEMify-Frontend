@@ -48,19 +48,24 @@ export function OrganizationSwitcher() {
     if (status === 'authenticated' && organizations.length && !selectedOrganizationId) {
       const first = organizations[0]
       dispatch(setSelectedOrganizationId(first.id))
-      const subscriptions = first.subscriptions || []
-      // Trích courseIds và emulatorModelIds từ tất cả subscriptions
-      const allCourseIds = subscriptions.flatMap((sub) => sub.courseIds || [])
-      const allEmulatorIds = subscriptions.flatMap((sub) => sub.emulatorModelIds || [])
-
-      // Lọc unique (nếu cần)
-      const uniqueCourseIds = Array.from(new Set(allCourseIds))
-      const uniqueEmulatorIds = Array.from(new Set(allEmulatorIds))
-      console.log('Setting access IDs for organization:', uniqueEmulatorIds)
-
-      dispatch(setAccessCourseIds(uniqueCourseIds))
-      dispatch(setAccessEmulatorIds(uniqueEmulatorIds))
     }
+  }, [status, organizations, selectedOrganizationId, dispatch])
+
+  React.useEffect(() => {
+    const selectedOrg = organizations.find((org) => org.id === selectedOrganizationId) ?? organizations[0]
+    if (!selectedOrg) return
+    const subscriptions = selectedOrg.subscriptions || []
+    // Trích courseIds và emulatorModelIds từ tất cả subscriptions
+    const allCourseIds = subscriptions.flatMap((sub) => sub.courseIds || [])
+    const allEmulatorIds = subscriptions.flatMap((sub) => sub.emulatorModelIds || [])
+
+    // Lọc unique (nếu cần)
+    const uniqueCourseIds = Array.from(new Set(allCourseIds))
+    const uniqueEmulatorIds = Array.from(new Set(allEmulatorIds))
+    console.log('Setting access IDs for organization:', uniqueEmulatorIds)
+
+    dispatch(setAccessCourseIds(uniqueCourseIds))
+    dispatch(setAccessEmulatorIds(uniqueEmulatorIds))
   }, [organizations, selectedOrganizationId, dispatch])
 
   if (isLoading || !organizations.length) return null
