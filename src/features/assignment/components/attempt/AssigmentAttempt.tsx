@@ -8,14 +8,7 @@ import Link from 'next/link'
 import { useGetStudentAssignmentByIdQuery } from '@/features/assignment/api/studentAssignmentApi'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { useGetAssignmentByIdQuery } from '../../api/assignmentApi'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-  DialogFooter
-} from '@/components/shadcn/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogFooter } from '@/components/shadcn/dialog'
 import { StudentAssignmentDetail, StudentAssignmentStatus } from '../../types/assigmentlistdetail.type'
 import { useParams, useRouter } from 'next/navigation'
 import { useAppDispatch } from '@/hooks/redux-hooks'
@@ -26,14 +19,16 @@ import { useTranslations } from 'next-intl'
 
 export const formatDate = (dateString: string) => {
   if (!dateString) return 'N/A'
+
   const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
+
+  return date.toLocaleString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-    hour12: true,
-    timeZoneName: 'short'
+    hour12: true
   })
 }
 
@@ -55,6 +50,8 @@ type SubmissionDetailViewerProps = {
 }
 
 function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: SubmissionDetailViewerProps) {
+  const t = useTranslations('assignment.student')
+
   const latestAttempt =
     studentAssignmentData.attempts.length > 0
       ? [...studentAssignmentData.attempts].sort((a, b) => b.attemptNumber - a.attemptNumber)[0]
@@ -67,11 +64,15 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
       {/* Header */}
       <div className='flex flex-col items-start justify-between gap-2 text-sm'>
         <h1 className='mb-2 text-2xl font-semibold'>{assignmentTitle}</h1>
-        <p>Submitted: {formatDate(latestAttempt.submittedAt)}</p>
         <p>
-          Status: <StatusBadge status={latestAttempt.status} />
+          {t('submissionDetail.submitted')} {formatDate(latestAttempt.submittedAt)}
         </p>
-        <p>Final Score: {latestAttempt.totalScore}%</p>
+        <p>
+          {t('submissionDetail.status')} <StatusBadge status={latestAttempt.status} />
+        </p>
+        <p>
+          {t('submissionDetail.finalScore')} {latestAttempt.totalScore}%
+        </p>
       </div>
       <hr className='my-6' />
 
@@ -79,7 +80,7 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
       {latestAttempt.feedback && (
         <Card className='mt-6 py-4'>
           <CardHeader>
-            <CardTitle className='text-lg'>Teacher's Feedback</CardTitle>
+            <CardTitle className='text-lg'>{t('submissionDetail.teachersFeedback')}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className='text-sm text-gray-700 italic'>"{latestAttempt.feedback}"</p>
@@ -89,42 +90,48 @@ function SubmissionDetailViewer({ assignmentTitle, studentAssignmentData }: Subm
 
       {/* Loop Questions */}
       <div className='mt-6 space-y-6'>
-        <h2 className='text-xl font-semibold'>Submission Details</h2>
+        <h2 className='text-xl font-semibold'>{t('submissionDetail.submissionDetails')}</h2>
         {latestAttempt.questionAttempts.map((question, index) => (
           <Card key={question.id} className='overflow-hidden'>
             <CardHeader className='flex items-center border-b bg-gray-50'>
-              <CardTitle className='text-lg'>Question {index + 1}</CardTitle>
+              <CardTitle className='text-lg'>{t('submissionDetail.question', { index: index + 1 })}</CardTitle>
             </CardHeader>
             <div className='grid grid-cols-1 md:grid-cols-2'>
               <div className='p-6 md:border-r'>
-                <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Your Answer</h4>
+                <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>
+                  {t('submissionDetail.yourAnswer')}
+                </h4>
                 <p className='prose prose-sm max-w-none text-gray-700'>
-                  {question.answerText || 'No text answer provided.'}
+                  {question.answerText || t('submissionDetail.noTextAnswer')}
                 </p>
                 {question.answerFileUrl && (
                   <Button variant='link' className='mt-4 p-0 text-sm' asChild>
                     <a href={question.answerFileUrl} target='_blank' rel='noopener noreferrer'>
                       <FileText className='mr-2 h-4 w-4' />
-                      View Submitted File
+                      {t('submissionDetail.viewSubmittedFile')}
                       <ExternalLink className='ml-1 h-3 w-3' />
                     </a>
                   </Button>
                 )}
               </div>
               <div className='p-6'>
-                <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>Grading Rubric</h4>
+                <h4 className='mb-4 text-xs font-semibold tracking-wider text-gray-400 uppercase'>
+                  {t('submissionDetail.gradingRubric')}
+                </h4>
                 <div className='space-y-4'>
                   {question.rubricScore.map((criterion) => (
                     <div key={criterion.rubricCriterionId} className='flex items-center justify-between'>
                       <p className='text-sm font-medium'>{criterion.criterionName}</p>
                       <span className='flex-shrink-0 rounded-full bg-gray-100 px-3 py-1 text-sm font-medium'>
-                        {criterion.currentPoints} / {criterion.maxPoints} pts
+                        {criterion.currentPoints} / {criterion.maxPoints} {t('submissionDetail.points')}
                       </span>
                     </div>
                   ))}
                   <div className='flex items-center justify-between border-t pt-4 font-semibold'>
-                    <span>Total for Question:</span>
-                    <span>{question.points} pts</span>
+                    <span>{t('submissionDetail.totalForQuestion')}</span>
+                    <span>
+                      {question.points} {t('submissionDetail.pts')}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -372,7 +379,9 @@ export default function AssignmentAttempt({ studentAssignmentId, assignmentId }:
             <DialogTitle>{t('alreadyAttempted.title')}</DialogTitle>
           </DialogHeader>
           <div className='py-4'>
-            <p className='text-sm text-gray-700 italic'>"{latestAttempt?.feedback || 'No feedback provided.'}"</p>
+            <p className='text-sm text-gray-700 italic'>
+              "{latestAttempt?.feedback || t('alreadyAttempted.noFeedback')}"
+            </p>
           </div>
           <DialogFooter>
             <DialogClose asChild>

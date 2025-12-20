@@ -2,7 +2,11 @@ import { QuizContent } from '@/features/resource/content/types/content.type'
 import React, { useEffect, useState } from 'react'
 import { Clock, Trophy, CheckCircle, AlertCircle, Loader2, Target } from 'lucide-react'
 import { Card, CardContent } from '@/components/shadcn/card'
-import { useCreateQuizAttemptMutation, useGetQuizByIdQuery } from '@/features/resource/quiz/api/quizApi'
+import {
+  useCreateQuizAttemptMutation,
+  useGetQuizByIdQuery,
+  useGetStudentQuizByIdQuery
+} from '@/features/resource/quiz/api/quizApi'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group'
 import { Label } from '@/components/shadcn/label'
@@ -18,8 +22,8 @@ import {
   setStartedAt,
   setTimeRemaining
 } from '@/features/resource/quiz/slice/quiz-player-slice'
-import QuizAttempt from '@/features/resource/quiz/components/viewer/QuizAttempt'
-import { Attempt } from '@/features/resource/quiz/types/quiz.type'
+import QuizAttemptComponent from '@/features/resource/quiz/components/viewer/QuizAttempt'
+import { Attempt, QuizAttempt } from '@/features/resource/quiz/types/quiz.type'
 import { LicenseType, UserRole } from '@/types/userRole'
 import { useLocale, useTranslations } from 'next-intl'
 import { PaginatedResult } from '@/types/baseModel'
@@ -42,10 +46,26 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
 
   const { lessonId } = useParams()
   const selectedQuiz = useAppSelector((state) => state.quizPlayer.selectedQuiz)
+  const {
+    data: studentQuiz,
+    isLoading: isLoadingStudentQuiz,
+    refetch
+  } = useGetStudentQuizByIdQuery(studentQuizId!, { skip: !studentQuizId })
 
-  const quizStatus = sectionStatus?.items.find((item) => item.sectionId === selectedQuiz?.id)?.status
+  function isAllowedAttempt(studentQuiz?: QuizAttempt): boolean {
+    const now = new Date()
+    const attemptCount = studentQuiz?.attemptCount ?? 0
+    const nextAvailableAt = studentQuiz?.nextAttemptAvailableAt ? new Date(studentQuiz.nextAttemptAvailableAt) : null
+
+    if (!studentQuiz?.maxAttemptAllowed) return true
+    if (attemptCount >= studentQuiz?.maxAttemptAllowed && (!nextAvailableAt || nextAvailableAt > now)) return false
+
+    return true
+  }
+  console.log('isAllowedAttempt:', isAllowedAttempt(studentQuiz?.data))
 
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
+  console.log('Quiz data in viewer:', quizData)
   const [selectedAttempt, setSelectedAttempt] = useState<Attempt | null>(null)
   const role = useAppSelector((state) => state.selectedOrganization.currentRole)
   if (role === LicenseType.TEACHER) {
@@ -107,7 +127,8 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
     }
   }
 
-  const canStartQuiz = !isShowQuestionAnswer && quizStatus !== 'Completed' && quizStatus !== 'Locked'
+  // TODDO: fix later
+  // const canStartQuiz = !isShowQuestionAnswer && quizStatus !== 'Completed' && quizStatus !== 'Locked'
 
   return (
     <div className='mx-auto max-w-4xl space-y-6 p-8'>
@@ -160,6 +181,44 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
           </CardContent>
         </Card>
       </div>
+
+      {/* Attempt Limit Reached Card */}
+      {isAllowedAttempt(studentQuiz?.data) && !isShowQuestionAnswer ? (
+        <div className='flex justify-center'>
+          <Button onClick={handleAttemptQuiz} className='text-md px-6 py-5 font-medium' disabled={isCreating}>
+            {isCreating ? <Loader2 className='mr-2 h-5 w-5 animate-spin' /> : tc('button.startQuiz')}
+          </Button>
+        </div>
+      ) : (
+        studentQuiz && (
+          <Card className='border-orange-200 bg-orange-50 shadow-md'>
+            <CardContent className='p-6'>
+              <div className='flex items-start gap-4'>
+                <div className='rounded-full bg-orange-100 p-3'>
+                  <AlertCircle className='h-6 w-6 text-orange-600' />
+                </div>
+                <div className='flex-1 space-y-2'>
+                  <h3 className='text-lg font-semibold text-orange-900'>Đã đạt giới hạn số lần làm bài</h3>
+                  <p className='text-sm text-orange-800'>
+                    Bạn đã hoàn thành {studentQuiz.data.attemptCount}/{studentQuiz.data.maxAttemptAllowed} lần làm bài.
+                  </p>
+                  {studentQuiz.data.nextAttemptAvailableAt && (
+                    <p className='text-sm font-medium text-orange-900'>
+                      Bạn có thể làm lại lúc:{' '}
+                      <span className='font-bold'>
+                        {new Date(studentQuiz.data.nextAttemptAvailableAt).toLocaleString('vi-VN', {
+                          dateStyle: 'short',
+                          timeStyle: 'short'
+                        })}
+                      </span>
+                    </p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )
+      )}
 
       {/* Questions Section */}
       {isShowQuestionAnswer ? (
@@ -287,16 +346,10 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
             })}
           </div>
         </div>
-      ) : !canStartQuiz ? (
-        <div className='flex justify-center'>
-          <Button onClick={handleAttemptQuiz} className='text-md px-6 py-5 font-medium' disabled={isCreating}>
-            {isCreating ? <Loader2 className='mr-2 h-5 w-5 animate-spin' /> : tc('button.startQuiz')}
-          </Button>
-        </div>
       ) : null}
 
       {studentQuizId && (
-        <QuizAttempt
+        <QuizAttemptComponent
           studentQuizId={studentQuizId}
           selectedAttempt={selectedAttempt}
           onSelectAttempt={setSelectedAttempt}

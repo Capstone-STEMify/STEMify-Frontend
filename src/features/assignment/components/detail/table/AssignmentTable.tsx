@@ -49,7 +49,10 @@ function mapApiToSubmissions(students: StudentStatistic[], assignmentTitle: stri
 
     let grade: string | null = null
     // Show grade for attempts that have been reviewed (Graded, Passed, or Failed)
-    if (latestAttempt && (latestAttempt.status === 'Graded' || latestAttempt.status === 'Passed' || latestAttempt.status === 'Failed')) {
+    if (
+      latestAttempt &&
+      (latestAttempt.status === 'Graded' || latestAttempt.status === 'Passed' || latestAttempt.status === 'Failed')
+    ) {
       grade = `${latestAttempt.totalScore}`
     }
 
@@ -136,7 +139,7 @@ export function AssignmentTable({
               <TableRow
                 key={submission.id}
                 className='cursor-pointer hover:bg-gray-50'
-                onClick={() => submission.status !== 'Not Submitted' && setOpenSubmission(submission)} // <<< Mở dialog bằng state
+                onClick={() => submission.status !== 'Not Submitted' && setOpenSubmission(submission)}
               >
                 <TableCell>
                   <div className='flex items-center gap-3'>

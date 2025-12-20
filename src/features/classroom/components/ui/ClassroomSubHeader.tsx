@@ -32,10 +32,10 @@ export default function ClassroomSubHeader({ classroom, currentTab, setCurrentTa
 
   const subNavItems: { name: string; currentTab: ClassroomNavItems }[] = [
     { name: 'overview', currentTab: 'overview' },
-    {
-      name: 'course',
-      currentTab: 'course'
-    },
+    // {
+    //   name: 'course',
+    //   currentTab: 'course'
+    // },
     { name: 'quiz', currentTab: 'quiz' },
     { name: 'assignment', currentTab: 'assignment' },
     { name: 'student', currentTab: 'student' }

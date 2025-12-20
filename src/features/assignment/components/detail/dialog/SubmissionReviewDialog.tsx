@@ -65,6 +65,7 @@ export function SubmissionReviewDialog({
 
   const [scores, setScores] = useState<Record<number, Record<number, number | null>>>({})
   const [feedbackText, setFeedbackText] = useState('')
+  const [imageModal, setImageModal] = useState<{ open: boolean; url: string }>({ open: false, url: '' })
 
   const attemptData = detailResponse?.data
     ? detailResponse.data.attempts[detailResponse.data.attempts.length - 1]
@@ -247,22 +248,37 @@ export function SubmissionReviewDialog({
                         {question.answerText ? (
                           <p>{question.answerText}</p>
                         ) : (
-                          <div className='mt-6'>
-                            <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
-                            <Button variant='link' className='p-0 text-sm' asChild>
-                              <a
-                                href={
-                                  question.answerFileUrl ||
-                                  'https://res.cloudinary.com/dms8gue1c/video/upload/v1765229933/asm_sub_tair43.mp4'
-                                }
-                                target='_blank'
-                                rel='noopener noreferrer'
-                              >
-                                <p className='text-blue-500'>{t('modal.viewFile')}</p>{' '}
-                                <ExternalLink className='ml-1 h-3 w-3' />
-                              </a>
-                            </Button>
-                          </div>
+                          <>
+                            {(() => {
+                              const isImage =
+                                question.answerFileUrl && /\.(png|jpg|jpeg)$/i.test(question.answerFileUrl)
+                              return question.answerFileUrl ? (
+                                isImage ? (
+                                  <div className='mt-6'>
+                                    <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
+                                    <img
+                                      src={question.answerFileUrl}
+                                      alt='Student answer'
+                                      className='h-auto max-w-full cursor-pointer rounded-md border'
+                                      onClick={() => setImageModal({ open: true, url: question.answerFileUrl })}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className='mt-6'>
+                                    <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
+                                    <Button variant='link' className='p-0 text-sm' asChild>
+                                      <a href={question.answerFileUrl} target='_blank' rel='noopener noreferrer'>
+                                        <p className='text-blue-500'>{t('modal.viewFile')}</p>{' '}
+                                        <ExternalLink className='ml-1 h-3 w-3' />
+                                      </a>
+                                    </Button>
+                                  </div>
+                                )
+                              ) : (
+                                <span className='text-gray-400 italic'>Không có câu trả lời</span>
+                              )
+                            })()}
+                          </>
                         )}
                       </div>
                     </div>
@@ -369,6 +385,20 @@ export function SubmissionReviewDialog({
             )}
           </div>
         </>
+      )}
+
+      {imageModal.open && (
+        <div
+          className='bg-opacity-75 fixed inset-0 z-50 flex items-center justify-center bg-black'
+          onClick={() => setImageModal({ open: false, url: '' })}
+        >
+          <img
+            src={imageModal.url}
+            alt='Enlarged student answer'
+            className='max-h-[90%] max-w-[90%] object-contain'
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
       )}
     </div>
   )

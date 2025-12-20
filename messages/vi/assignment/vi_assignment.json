@@ -67,7 +67,8 @@
         "pending": "Đang chờ đánh giá",
         "nextAttempt": "Lượt làm tiếp theo có vào lúc",
         "description": "Bài nộp của bạn từ {date} hiện đang được xem xét.",
-        "title": "Phản hồi của giáo viên"
+        "title": "Phản hồi của giáo viên",
+        "noFeedback": "Chưa có phản hồi nào được cung cấp."
       },
       "graded": {
         "title": "Điểm của bạn",
@@ -90,6 +91,21 @@
         "invalidData": "Không thể nộp bài. Dữ liệu không hợp lệ.",
         "noAsmFound": "Không tìm thấy bài tập. Vui lòng quay lại và chọn bài tập.",
         "deadline2": "Hạn nộp"
+      },
+      "submissionDetail": {
+        "submitted": "Đã nộp:",
+        "status": "Trạng thái:",
+        "finalScore": "Điểm cuối cùng:",
+        "teachersFeedback": "Phản hồi của giáo viên",
+        "submissionDetails": "Chi tiết bài nộp",
+        "question": "Câu hỏi {index}",
+        "yourAnswer": "Câu trả lời của bạn",
+        "noTextAnswer": "Không có câu trả lời dạng văn bản.",
+        "viewSubmittedFile": "Xem tệp đã nộp",
+        "gradingRubric": "Tiêu chí đánh giá",
+        "points": "điểm",
+        "totalForQuestion": "Tổng cho câu hỏi:",
+        "pts": "điểm"
       }
     },
     "upsert": {

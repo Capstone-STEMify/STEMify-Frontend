@@ -17,7 +17,7 @@ import {
 import { toast } from 'sonner'
 import { useGetOrganizationUserDetailQuery, useGetUserByIdQuery } from '@/features/user/api/userApi'
 import Loading from 'app/[locale]/loading'
-import { Clock, HelpCircle, X } from 'lucide-react'
+import { Clock, ExternalLink, HelpCircle, X } from 'lucide-react'
 import { format } from 'date-fns'
 import { useTranslations } from 'next-intl'
 
@@ -53,6 +53,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
 
   const [scores, setScores] = useState<Record<number, Record<number, number | null>>>({})
   const [feedbackText, setFeedbackText] = useState('')
+  const [imageModal, setImageModal] = useState<{ open: boolean; url: string }>({ open: false, url: '' })
 
   const questionMap = useMemo(() => {
     if (!assignmentRes?.data?.questions) return {}
@@ -73,7 +74,8 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
       initialScores[qAttempt.id] = {}
       qAttempt.rubricScore.forEach((criterion) => {
         // accept either `currentPoints` or `points` depending on API response
-        initialScores[qAttempt.id][criterion.rubricCriterionId] = (criterion as any).currentPoints ?? (criterion as any).points ?? null
+        initialScores[qAttempt.id][criterion.rubricCriterionId] =
+          (criterion as any).currentPoints ?? (criterion as any).points ?? null
       })
     })
 
@@ -154,12 +156,20 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
   if (!attemptData)
     return (
       <div className='p-6 text-center text-red-500'>
-        {t('assignment.missingAttemptData')} <Button onClick={onClose} variant="link">{t('assignment.close')}</Button>
+        {t('assignment.missingAttemptData')}{' '}
+        <Button onClick={onClose} variant='link'>
+          {t('assignment.close')}
+        </Button>
       </div>
     )
 
   const userName = userData?.data ? userData.data.firstName + ' ' + userData.data.lastName : 'Student'
-  const studentInitials = userName.split(' ').map((n) => n[0]).join('').substring(0, 2).toUpperCase()
+  const studentInitials = userName
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase()
   const assignmentTitle = assignmentRes?.data?.title || 'Assignment'
   const submittedDate = attemptData.submittedAt ? new Date(attemptData.submittedAt).toLocaleString() : 'N/A'
   const totalQuestions = assignmentRes?.data?.questions?.length || 0
@@ -178,16 +188,16 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
               <div className='text-xs text-slate-500'>{t('assignment.student')}</div>
             </div>
           </div>
-          <button onClick={onClose} className='rounded-full p-1 hover:bg-slate-100'>
+          {/* <button onClick={onClose} className='rounded-full p-1 hover:bg-slate-100'>
             <X className='h-5 w-5 text-slate-500' />
-          </button>
+          </button> */}
         </div>
 
         <div className='mt-4'>
           <h1 className='text-2xl font-bold text-slate-900'>{assignmentTitle}</h1>
           <div className='mt-2 flex items-center gap-4 text-sm text-slate-500'>
             <span className='flex items-center gap-1'>
-               {t('assignment.submitted')} <span className='font-medium text-slate-700'>{submittedDate}</span>
+              {t('assignment.submitted')} <span className='font-medium text-slate-700'>{submittedDate}</span>
             </span>
             <span className='flex items-center gap-1'>
               <HelpCircle className='h-4 w-4' /> {totalQuestions} {t('assignment.questions')}
@@ -200,13 +210,10 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
       <div className='flex-1 overflow-y-auto bg-gray-50/50 p-6'>
         <div className='mx-auto max-w-5xl space-y-6'>
           {attemptData.questionAttempts.map((qAttempt, index) => {
-            // Lấy thông tin câu hỏi gốc từ map
             const originalQuestion = questionMap[qAttempt.assignmentQuestionId]
-            const questionTitle = originalQuestion 
-                ? `Câu hỏi ${originalQuestion.orderIndex}` 
-                : `Question #${index + 1}`
+            const questionTitle = originalQuestion ? `Câu hỏi ${originalQuestion.orderIndex}` : `Question #${index + 1}`
             const questionContent = originalQuestion?.content || ''
-            
+
             const currentTotalScore = (() => {
               const questionScores = scores[qAttempt.id]
               if (questionScores) {
@@ -220,42 +227,81 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
             return (
               <div key={qAttempt.id} className='overflow-hidden rounded-lg border bg-white shadow-sm'>
                 {/* Question Header */}
-                <div className='border-b bg-slate-50 px-6 py-3 text-base font-bold text-slate-800'>
-                  {questionTitle}
-                </div>
+                <div className='border-b bg-slate-50 px-6 py-3 text-base font-bold text-slate-800'>{questionTitle}</div>
 
                 <div className='grid grid-cols-1 divide-y md:grid-cols-2 md:divide-x md:divide-y-0'>
                   {/* Left Column: Answer */}
                   <div className='p-6'>
-                    <div className='mb-3 text-xs font-bold uppercase text-slate-400'>{t('assignment.answer')}</div>
+                    <div className='mb-3 text-xs font-bold text-slate-400 uppercase'>{t('assignment.answer')}</div>
                     {questionContent && (
-                        <div className='mb-4 text-sm font-medium text-slate-700 italic border-l-2 border-slate-200 pl-3'>
-                            {questionContent}
-                        </div>
+                      <div className='mb-4 border-l-2 border-slate-200 pl-3 text-sm font-medium text-slate-700 italic'>
+                        {questionContent}
+                      </div>
                     )}
-                    <div className='text-slate-800 whitespace-pre-wrap'>
-                      {qAttempt.answerText || <span className='text-gray-400 italic'>{t('assignment.noAnswerProvided')}</span>}
+                    <div className='whitespace-pre-wrap text-slate-800'>
+                      {qAttempt.answerText ? (
+                        <p>{qAttempt.answerText}</p>
+                      ) : (
+                        <>
+                          {(() => {
+                            const isImage = qAttempt.answerFileUrl && /\.(png|jpg|jpeg)$/i.test(qAttempt.answerFileUrl)
+                            return qAttempt.answerFileUrl ? (
+                              isImage ? (
+                                <div className='mt-6'>
+                                  <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
+                                  <img
+                                    src={qAttempt.answerFileUrl}
+                                    alt="Student answer"
+                                    className="max-w-full h-auto cursor-pointer rounded-md border"
+                                    onClick={() => setImageModal({ open: true, url: qAttempt.answerFileUrl })}
+                                  />
+                                </div>
+                              ) : (
+                                <div className='mt-6'>
+                                  <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
+                                  <Button variant='link' className='p-0 text-sm' asChild>
+                                    <a
+                                      href={qAttempt.answerFileUrl}
+                                      target='_blank'
+                                      rel='noopener noreferrer'
+                                    >
+                                      <p className='text-blue-500'>{t('modal.viewFile')}</p>{' '}
+                                      <ExternalLink className='ml-1 h-3 w-3' />
+                                    </a>
+                                  </Button>
+                                </div>
+                              )
+                            ) : (
+                              <span className='text-gray-400 italic'>{t('assignment.noAnswerProvided')}</span>
+                            )
+                          })()}
+                        </>
+                      )}
                     </div>
                   </div>
 
                   {/* Right Column: Rubric */}
                   <div className='flex flex-col p-6'>
                     <div className='mb-4 flex items-center justify-between'>
-                        <div className='text-xs font-bold uppercase text-slate-400'>{t('assignment.rubric')}</div>
-                        <div className='text-xs font-semibold text-slate-500'>{maxQuestionScore} {t('assignment.points')}</div>
+                      <div className='text-xs font-bold text-slate-400 uppercase'>{t('assignment.rubric')}</div>
+                      <div className='text-xs font-semibold text-slate-500'>
+                        {maxQuestionScore} {t('assignment.points')}
+                      </div>
                     </div>
-                    
+
                     <div className='flex-1 space-y-5'>
                       {qAttempt.rubricScore.map((criterion) => (
                         <div key={criterion.rubricCriterionId} className='space-y-1.5'>
                           <div className='flex items-center justify-between'>
-                             <span className='text-sm font-medium text-slate-700'>{criterion.criterionName}</span>
-                             <span className='text-xs text-slate-400 italic'>{t('assignment.maxPoints', { max: criterion.maxPoints })}</span>
+                            <span className='text-sm font-medium text-slate-700'>{criterion.criterionName}</span>
+                            <span className='text-xs text-slate-400 italic'>
+                              {t('assignment.maxPoints', { max: criterion.maxPoints })}
+                            </span>
                           </div>
-                          
+
                           <div className='relative'>
                             <Input
-                              type="number"
+                              type='number'
                               className='h-10 w-full rounded-md border-slate-200 bg-slate-50 pr-4 text-slate-900 focus:bg-white'
                               value={
                                 // prefer edited state, otherwise fallback to API fields
@@ -263,7 +309,9 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                                   ? String(scores[qAttempt.id][criterion.rubricCriterionId])
                                   : String((criterion as any).currentPoints ?? (criterion as any).points ?? '')
                               }
-                              onChange={(e) => handleScoreChange(qAttempt.id, criterion.rubricCriterionId, e.target.value)}
+                              onChange={(e) =>
+                                handleScoreChange(qAttempt.id, criterion.rubricCriterionId, e.target.value)
+                              }
                               placeholder={t('assignment.enterScore')}
                               min={0}
                               max={criterion.maxPoints}
@@ -274,10 +322,12 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                     </div>
 
                     <div className='mt-6 border-t pt-4'>
-                        <div className='flex items-center justify-between text-sm'>
-                             <span className='font-medium text-slate-600'>{t('assignment.totalScoreForQuestion')}</span>
-                             <span className='font-bold text-slate-900'>{currentTotalScore} / {maxQuestionScore}</span>
-                        </div>
+                      <div className='flex items-center justify-between text-sm'>
+                        <span className='font-medium text-slate-600'>{t('assignment.totalScoreForQuestion')}</span>
+                        <span className='font-bold text-slate-900'>
+                          {currentTotalScore} / {maxQuestionScore}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -288,14 +338,12 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
           {/* Feedback Section */}
           <div className='mt-8'>
             <h3 className='mb-2 text-lg font-bold text-slate-800'>{t('assignment.feedback')}</h3>
-            <p className='mb-3 text-sm text-slate-500'>
-              {t('assignment.feedbackDescription')}
-            </p>
-            <Textarea 
-                className='min-h-[120px] resize-y rounded-lg border-slate-200 p-4 text-slate-800 focus:ring-primary'
-                value={feedbackText} 
-                onChange={(e) => setFeedbackText(e.target.value)} 
-                placeholder={t('assignment.shareThoughts')}
+            <p className='mb-3 text-sm text-slate-500'>{t('assignment.feedbackDescription')}</p>
+            <Textarea
+              className='focus:ring-primary min-h-[120px] resize-y rounded-lg border-slate-200 p-4 text-slate-800'
+              value={feedbackText}
+              onChange={(e) => setFeedbackText(e.target.value)}
+              placeholder={t('assignment.shareThoughts')}
             />
           </div>
         </div>
@@ -304,14 +352,24 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
       {/* --- FOOTER --- */}
       <div className='flex-none border-t bg-white p-4 md:px-8'>
         <div className='mx-auto flex max-w-5xl justify-end gap-3'>
-          <Button variant='outline' onClick={onClose} disabled={isGrading} className="h-10 min-w-[80px]">
+          <Button variant='outline' onClick={onClose} disabled={isGrading} className='h-10 min-w-[80px]'>
             {t('assignment.cancel')}
           </Button>
-          <Button onClick={handleSubmit} disabled={isGrading} className="h-10 bg-blue-500 hover:bg-blue-600 text-white min-w-[120px]">
+          <Button
+            onClick={handleSubmit}
+            disabled={isGrading}
+            className='h-10 min-w-[120px] bg-blue-500 text-white hover:bg-blue-600'
+          >
             {isGrading ? t('assignment.submitting') : t('assignment.submitGrading')}
           </Button>
         </div>
       </div>
+
+      {imageModal.open && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" onClick={() => setImageModal({ open: false, url: '' })}>
+          <img src={imageModal.url} alt="Enlarged student answer" className="max-w-[90%] max-h-[90%] object-contain" onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
     </div>
   )
 }

@@ -34,7 +34,7 @@
     "detail": {
       "title": "Organization Details",
       "overview": "Subscription Overview",
-      "overViewDescription": "Manage your organization's subscription and users",
+      "overviewDescription": "Manage your organization's subscription and users",
       "currentPlan": "Current Plan",
       "StartDate": "Start Date",
       "ExpiredDate": "Expired Date",

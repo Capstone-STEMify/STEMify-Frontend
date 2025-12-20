@@ -91,6 +91,7 @@ export const quizPlayerSlice = createSlice({
       }
     },
     resetQuiz: (state) => {
+      state.selectedQuiz = undefined
       state.studentQuizId = undefined
       state.quizAttemptId = undefined
       state.questions = []

@@ -4,9 +4,13 @@ import { Clock, BookOpen, Target, TrendingUp } from 'lucide-react'
 import { Card } from '@/components/shadcn/card'
 import { Button } from '@/components/shadcn/button'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setCurrentQuestionIndex } from '@/features/resource/quiz/slice/quiz-player-slice'
+import { resetQuiz, setCurrentQuestionIndex } from '@/features/resource/quiz/slice/quiz-player-slice'
 import { Quiz } from '@/features/resource/quiz/types/quiz.type'
 import { useEffect, useState } from 'react'
+import { useUpdateQuizAttemptMutation } from '@/features/resource/quiz/api/quizApi'
+import { toast } from 'sonner'
+import { useParams, useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 type QuizSidebarProps = {
   quiz: Quiz
@@ -15,9 +19,37 @@ type QuizSidebarProps = {
 export default function QuizSidebar({ quiz }: QuizSidebarProps) {
   const dispatch = useAppDispatch()
   const questions = quiz.questions
-  const { currentQuestionIndex, userAnswers, timeRemaining, startedAt } = useAppSelector((state) => state.quizPlayer)
+  const { currentQuestionIndex, userAnswers, timeRemaining, startedAt, quizAttemptId, studentQuizId } = useAppSelector(
+    (state) => state.quizPlayer
+  )
   const totalTime = quiz.timeLimitMinutes * 60
   const [displayRemaining, setDisplayRemaining] = useState<number>(timeRemaining)
+  const [hasAutoSubmitted, setHasAutoSubmitted] = useState(false)
+  const router = useRouter()
+  const locale = useLocale()
+  const { lessonId } = useParams()
+
+  const [submitQuizAttempt, { isLoading: isSubmitting }] = useUpdateQuizAttemptMutation()
+
+  const handleSubmitQuiz = async () => {
+    if (isSubmitting) return
+
+    const questionAttempts = Object.entries(userAnswers).map(([questionId, answerIds]) => ({
+      questionId: Number(questionId),
+      answerIds: Array.isArray(answerIds) ? answerIds.map(Number) : [Number(answerIds)]
+    }))
+
+    const result = await submitQuizAttempt({
+      quizAttemptId: quizAttemptId!,
+      studentQuizId: studentQuizId!,
+      questionAttempts
+    }).unwrap()
+    if (result) {
+      dispatch(resetQuiz())
+      toast.success('Đã nộp!')
+      router.replace(`/${locale}/resource/lesson/${lessonId}`)
+    }
+  }
 
   useEffect(() => {
     // If we have a startedAt, derive remaining from wall clock; else fallback to store value
@@ -36,6 +68,15 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [startedAt, totalTime, timeRemaining])
+
+  useEffect(() => {
+    if (displayRemaining !== 0) return
+    if (hasAutoSubmitted) return
+    if (!quizAttemptId || !studentQuizId) return
+
+    setHasAutoSubmitted(true)
+    void handleSubmitQuiz()
+  }, [displayRemaining, hasAutoSubmitted, handleSubmitQuiz, quizAttemptId, studentQuizId])
 
   const formatTime = (s: number) =>
     `${Math.floor(s / 60)
@@ -65,9 +106,6 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
               <span className='font-semibold text-gray-700'>Thời gian còn lại</span>
             </div>
             <div className='text-3xl font-bold'> {formatTime(displayRemaining)}</div>
-            <div className='mt-3 h-2 w-full overflow-hidden rounded-full bg-sky-200'>
-              <div className='h-full' style={{ width: `${progressPercent}%` }} />
-            </div>
           </div>
         </Card>
       )}

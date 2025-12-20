@@ -10,7 +10,11 @@ import {
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setSelectedOrganizationId } from '@/features/subscription/slice/selectedOrganizationSlice'
+import {
+  setAccessCourseIds,
+  setAccessEmulatorIds,
+  setSelectedOrganizationId
+} from '@/features/subscription/slice/selectedOrganizationSlice'
 import { useGetOrganizationsWithAccessByUserIdQuery } from '@/features/organization/api/organizationApi'
 import { useSession } from 'next-auth/react'
 
@@ -35,6 +39,24 @@ export function OrganizationSwitcherHeader() {
       dispatch(setSelectedOrganizationId(first.id))
     }
   }, [status, organizations, selectedOrganizationId, dispatch])
+
+  React.useEffect(() => {
+    const selectedOrg = organizations.find((org) => org.id === selectedOrganizationId) ?? organizations[0]
+    if (!selectedOrg) return
+    const subscriptions = selectedOrg.subscriptions || []
+    // Trích courseIds và emulatorModelIds từ tất cả subscriptions
+    const allCourseIds = subscriptions.flatMap((sub) => sub.courseIds || [])
+    const allEmulatorIds = subscriptions.flatMap((sub) => sub.emulatorModelIds || [])
+
+    // Lọc unique (nếu cần)
+    const uniqueCourseIds = Array.from(new Set(allCourseIds))
+    const uniqueEmulatorIds = Array.from(new Set(allEmulatorIds))
+    console.log('Setting access IDs for organization:', uniqueEmulatorIds)
+
+    dispatch(setAccessCourseIds(uniqueCourseIds))
+    dispatch(setAccessEmulatorIds(uniqueEmulatorIds))
+  }, [organizations, selectedOrganizationId, dispatch])
+
   if (isLoading || !organizations.length) return null
 
   // ✅ Tìm org đang được chọn (hoặc lấy org đầu tiên nếu chưa có)
