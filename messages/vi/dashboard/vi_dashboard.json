@@ -65,7 +65,13 @@
           "identifiedIssues": "Vấn đề đã xác định",
           "recommendedAction": "Hành động được đề xuất",
           "close": "Đóng",
-          "assignSupportTask": "Giao nhiệm vụ hỗ trợ"
+          "assignSupportTask": "Giao nhiệm vụ hỗ trợ",
+          "course": "Khóa học:",
+          "lessonHeader": "Bài {index}",
+          "lessonDetailTitle": "Chi tiết tiến độ bài học",
+          "lessonDetailDesc": "Tiến độ các phần của {student} trong {lesson}",
+          "sectionItem": "Tiết {index}",
+          "status": "Trạng thái"
         }
       },
       "course": {

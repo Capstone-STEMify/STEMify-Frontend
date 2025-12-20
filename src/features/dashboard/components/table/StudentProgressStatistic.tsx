@@ -13,8 +13,12 @@ import {
   useGetClassroomStudentProgressQuery,
   useAnalyzeClassroomProgressMutation
 } from '@/features/classroom/api/classroomApi'
-import { StudentProgressItem, AiStudentAnalysisResult } from '@/features/classroom/types/classroom.type'
-import { useLocale, useTranslations } from 'next-intl'
+import {
+  StudentProgressItem,
+  AiStudentAnalysisResult,
+  LessonStructure
+} from '@/features/classroom/types/classroom.type'
+import { useTranslations, useLocale } from 'next-intl'
 import { useSession } from 'next-auth/react'
 import Loading from 'app/[locale]/loading'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
@@ -22,6 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import { Badge } from '@/components/shadcn/badge'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/shadcn/dialog'
 import { toast } from 'sonner'
+import { truncateLabel, useStatusTranslation } from '@/utils/index'
 
 interface CourseType {
   id: number
@@ -33,14 +38,20 @@ interface StudentProgressStatisticProps {
   courses: CourseType[]
 }
 
-const COLUMN_WIDTH = 'w-[70px] min-w-[70px]'
+const COLUMN_WIDTH = 'w-[100px] min-w-[100px]'
+
+type LessonDetailModalProps = {
+  studentName: string
+  lessonTitle: string
+  sectionIds: number[]
+  studentProgress: any
+}
 
 export function StudentProgressStatistic({ classroomId, courses }: StudentProgressStatisticProps) {
   const t = useTranslations('dashboard.classroom')
   const locale = useLocale()
 
   const [selectedCourseId, setSelectedCourseId] = React.useState<string>('')
-  const [currentLessonId, setCurrentLessonId] = React.useState<string>('')
 
   const [aiData, setAiData] = React.useState<{
     overviewText: string
@@ -50,6 +61,8 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
   const [filterAtRisk, setFilterAtRisk] = React.useState(false)
   const [selectedAnalysisStudent, setSelectedAnalysisStudent] = React.useState<AiStudentAnalysisResult | null>(null)
 
+  const [selectedLessonDetail, setSelectedLessonDetail] = React.useState<LessonDetailModalProps | null>(null)
+
   const { data: session } = useSession()
   const { data: classroomRes } = useGetClassroomByIdQuery(classroomId, {
     skip: !classroomId
@@ -57,59 +70,26 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
   const curriculum = classroomRes?.data?.course
   const organizationSubscriptionOrderId = classroomRes?.data?.organizationSubscriptionOrderId
 
+  const statusTranslate = useStatusTranslation()
+
   const teacherId = React.useMemo(() => {
     if (!session?.user?.organizations || !organizationSubscriptionOrderId) {
       return undefined
     }
-
-    const organizations = session.user.organizations.organizations
-    if (!organizations || organizations.length === 0) {
-      return undefined
-    }
-
+    const organizations = session.user.organizations.organizations || []
     for (const org of organizations) {
       if (org.roles && org.roles.length > 0) {
         const matchingRole = org.roles.find((role) => role.subscriptionId === organizationSubscriptionOrderId)
         if (matchingRole) {
           const orgUserId = (org as any).organizationUserId
-          if (orgUserId) {
-            if (Array.isArray(orgUserId)) {
-              return orgUserId[0] || undefined
-            }
-            return orgUserId
-          }
+          return Array.isArray(orgUserId) ? orgUserId[0] : orgUserId
         }
       }
     }
-
     return undefined
   }, [session?.user?.organizations, organizationSubscriptionOrderId])
 
   const [analyzeTrigger, { isLoading: isAnalyzing }] = useAnalyzeClassroomProgressMutation()
-
-
-  const getSessionId = (): string | undefined => {
-    if (typeof window === 'undefined' || !classroomId || !selectedCourseId) return undefined
-    const key = `ai_analysis_session_${classroomId}_${selectedCourseId}`
-    return sessionStorage.getItem(key) || undefined
-  }
-
-  const saveSessionId = (sessionId: string) => {
-    if (typeof window === 'undefined' || !classroomId || !selectedCourseId) return
-    const key = `ai_analysis_session_${classroomId}_${selectedCourseId}`
-    sessionStorage.setItem(key, sessionId)
-  }
-
-  React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const oldKey = sessionStorage.key(0)
-      Object.keys(sessionStorage).forEach((key) => {
-        if (key.startsWith('ai_analysis_session_') && !key.includes(`_${classroomId}_${selectedCourseId}`)) {
-        }
-      })
-    }
-    setAiData(null)
-  }, [classroomId, selectedCourseId])
 
   React.useEffect(() => {
     if (courses.length > 0 && !selectedCourseId) {
@@ -122,36 +102,20 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
     { skip: !classroomId || !selectedCourseId }
   )
 
-  const progressData = progressRes?.data
-  const lessons = progressData?.lessons || []
-  const students = progressData?.StudentProgress || []
+  // Data progress
+  const lessons = progressRes?.data?.lessons || []
+  const students = progressRes?.data?.StudentProgress || []
 
-  React.useEffect(() => {
-    if (lessons.length > 0) {
-      const exists = lessons.find((l) => String(l.lessonId) === currentLessonId)
-      if (!currentLessonId || !exists) {
-        setCurrentLessonId(String(lessons[0].lessonId))
-      }
-    }
-  }, [lessons, currentLessonId])
-
-  const currentLesson = lessons.find((l) => String(l.lessonId) === currentLessonId)
+  const currentCourseTitle = courses.find((c) => String(c.id) === selectedCourseId)?.title || ''
 
   const handleAnalyzeClassroom = async () => {
     try {
-      let currentSessionId = getSessionId()
-      if (!currentSessionId) {
-        currentSessionId = crypto.randomUUID()
-        saveSessionId(currentSessionId)
-      }
-
       const response = await analyzeTrigger({
         teacher_id: teacherId,
         classroom_id: classroomId,
         force_mock: false,
         analysis_period_days: 7,
-        lang: locale,
-        session_id: currentSessionId
+        lang: locale
       }).unwrap()
 
       const payload = response.data || response
@@ -167,7 +131,6 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
       })
 
       const atRiskCount = payload.students.filter((s: any) => s.currentStatus === 'AtRisk').length
-
       if (atRiskCount > 0) {
         toast.success(t('toast.hasAtRisk'))
       } else {
@@ -178,41 +141,47 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
     }
   }
 
-  const renderSectionStatus = (student: StudentProgressItem, lessonId: number, sectionId: number) => {
-    const lessonProg = student.lessonProgresses?.find((l) => l.lessonId === lessonId)
-    if (!lessonProg) return <Circle className='mx-auto h-4 w-4 text-slate-200' />
+  // --- Helpers render status ---
 
-    const sectionProg = lessonProg.sectionProgresses?.find((s) => s.sectionId === sectionId)
-    if (!sectionProg) return <Circle className='mx-auto h-4 w-4 text-slate-200' />
-
-    switch (sectionProg.status) {
+  const getStatusIcon = (status: string | undefined) => {
+    switch (status) {
       case 'Completed':
       case 'Passed':
-        return <CheckCircle2 className='mx-auto h-4 w-4 text-green-500' />
+        return <CheckCircle2 className='mx-auto h-5 w-5 text-green-500' />
       case 'InProgress':
-        return <Clock className='mx-auto h-4 w-4 text-blue-500' />
+        return <Clock className='mx-auto h-5 w-5 text-blue-500' />
       case 'Failed':
-        return <Circle className='mx-auto h-4 w-4 border-red-400 text-red-400' />
+        return <Circle className='mx-auto h-5 w-5 border-red-400 text-red-400' />
+      case 'Locked':
+        return <Circle className='mx-auto h-5 w-5 rounded-full bg-slate-100 text-slate-300' />
       default:
-        return <Circle className='mx-auto h-4 w-4 text-slate-300' />
+        return <Circle className='mx-auto h-5 w-5 text-slate-200' />
     }
   }
 
   const displayedStudents = React.useMemo(() => {
     if (!aiData || !filterAtRisk) return students
-
     const aiAtRiskIds = aiData.students.filter((s) => s.currentStatus === 'AtRisk').map((s) => s.studentId)
-
     return students.filter((s) => aiAtRiskIds.includes(s.studentId))
   }, [students, filterAtRisk, aiData])
 
   const visibleAtRiskCount = React.useMemo(() => {
     if (!aiData) return 0
-
     const aiAtRiskIds = aiData.students.filter((s) => s.currentStatus === 'AtRisk').map((s) => s.studentId)
-
     return students.filter((s) => aiAtRiskIds.includes(s.studentId)).length
   }, [aiData, students])
+
+  const handleLessonCellClick = (student: StudentProgressItem, lesson: LessonStructure) => {
+    // Tìm progress của lesson này
+    const lessonProgress = student.lessonProgresses?.find((l) => l.lessonId === lesson.lessonId)
+
+    setSelectedLessonDetail({
+      studentName: student.studentName,
+      lessonTitle: lesson.lessonTitle,
+      sectionIds: lesson.sectionIds,
+      studentProgress: lessonProgress
+    })
+  }
 
   return (
     <div className='mt-8 rounded-xl border bg-white p-4 shadow-sm md:p-8'>
@@ -232,7 +201,8 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
               </>
             ) : (
               <>
-                <Sparkles className='h-4 w-4' /> {aiData ? t('overview.progress.reAnalyzeAi') : t('overview.progress.askAiInsights')}
+                <Sparkles className='h-4 w-4' />{' '}
+                {aiData ? t('overview.progress.reAnalyzeAi') : t('overview.progress.askAiInsights')}
               </>
             )}
           </Button>
@@ -248,19 +218,10 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                 {curriculum && <SelectItem value={curriculum.code}>{curriculum.title}</SelectItem>}
               </SelectContent>
             </Select>
-
-            <Select value={selectedCourseId} onValueChange={setSelectedCourseId} disabled={courses.length === 0}>
-              <SelectTrigger className='w-[150px]'>
-                <SelectValue placeholder={t('overview.progress.selectCourse')} />
-              </SelectTrigger>
-              <SelectContent>
-                {courses.map((course) => (
-                  <SelectItem key={course.id} value={String(course.id)}>
-                    {course.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {/* <div className="font-medium text-slate-700 bg-slate-100 px-3 py-2 rounded-md border text-sm">
+                <span className="text-slate-500 mr-1">{t('overview.progress.course')}</span> 
+                {currentCourseTitle}
+            </div> */}
           </div>
           <Button variant='outline' size='icon'>
             <Download className='h-4 w-4' />
@@ -309,9 +270,10 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
         </Card>
       )}
 
-      {isFetching && !currentLesson ? (
+      {/* --- TABLE CONTENT --- */}
+      {isFetching && lessons.length === 0 ? (
         <Loading />
-      ) : !currentLesson ? (
+      ) : lessons.length === 0 ? (
         <div className='rounded-lg border py-10 text-center text-slate-500'>{t('overview.progress.noLesson')}</div>
       ) : (
         <div className='overflow-hidden rounded-lg border bg-white'>
@@ -319,10 +281,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
             <Table className='min-w-[900px]'>
               <TableHeader>
                 <TableRow>
-                  <TableHead
-                    rowSpan={2}
-                    className='bg-background sticky left-0 z-20 w-[250px] min-w-[250px] border-r align-top shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]'
-                  >
+                  <TableHead className='bg-background sticky left-0 z-20 w-[250px] min-w-[250px] border-r align-top shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]'>
                     <div className='flex flex-col gap-2 px-2 py-4'>
                       <label className='text-sm font-medium'>{t('overview.progress.sort')}</label>
                       <Select defaultValue='display-name'>
@@ -338,34 +297,23 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                     </div>
                   </TableHead>
 
-                  <TableHead
-                    colSpan={Math.max(currentLesson.sectionIds.length, 1)}
-                    className='h-[88px] bg-gradient-to-r from-blue-500 to-indigo-600 align-middle text-white hover:from-blue-600 hover:to-indigo-700'
-                  >
-                    <div className='flex h-full w-full items-center px-2'>
-                      <Select value={currentLessonId} onValueChange={setCurrentLessonId}>
-                        <SelectTrigger className='h-full w-full cursor-pointer justify-start gap-2 rounded-none border-none bg-transparent pl-4 text-lg font-semibold text-white shadow-none hover:text-white'>
-                          <SelectValue placeholder={t('overview.progress.selectLesson')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {lessons.map((lesson) => (
-                            <SelectItem key={lesson.lessonId} value={String(lesson.lessonId)}>
-                              {lesson.lessonTitle}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </TableHead>
-                </TableRow>
-
-                <TableRow>
-                  {currentLesson.sectionIds.map((sectionId) => (
+                  {lessons.map((lesson, index) => (
                     <TableHead
-                      key={sectionId}
-                      className={`border-r bg-slate-50 p-2 text-center text-xs font-normal text-slate-600 ${COLUMN_WIDTH}`}
+                      key={lesson.lessonId}
+                      className={`h-auto border-r bg-blue-500 text-center align-middle font-semibold text-white ${COLUMN_WIDTH}`}
                     >
-                      {t('overview.progress.section', { id: sectionId })}
+                      <div className='flex flex-col items-center justify-center px-1 py-1'>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className='mb-1 text-xs text-white uppercase'>
+                              {t('overview.progress.lessonHeader', { index: index + 1 })}
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{lesson.lessonTitle}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
                     </TableHead>
                   ))}
                 </TableRow>
@@ -383,6 +331,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                         key={student.studentId}
                         className={`group hover:bg-slate-50/50 ${atRiskInfo ? 'bg-red-50/30' : ''}`}
                       >
+                        {/* CỘT HỌC SINH (Sticky Left) */}
                         <TableCell
                           className={`bg-background sticky left-0 z-10 border-r group-hover:bg-slate-50 ${atRiskInfo ? 'bg-red-50/30' : ''}`}
                         >
@@ -400,7 +349,9 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                                   </div>
                                 </AccordionTrigger>
                                 <AccordionContent>
-                                  <div className='px-2 text-xs text-slate-500'>{t('overview.progress.detailsFor', { name: student.studentName })}</div>
+                                  <div className='px-2 text-xs text-slate-500'>
+                                    {t('overview.progress.detailsFor', { name: student.studentName })}
+                                  </div>
                                 </AccordionContent>
                               </AccordionItem>
                             </Accordion>
@@ -425,26 +376,26 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                           </div>
                         </TableCell>
 
-                        {currentLesson.sectionIds.map((sectionId) => (
-                          <TableCell
-                            key={`${student.studentId}-${sectionId}`}
-                            className={`h-[70px] border-r p-2 text-center ${COLUMN_WIDTH}`}
-                          >
-                            {renderSectionStatus(student, currentLesson.lessonId, sectionId)}
-                          </TableCell>
-                        ))}
+                        {/* CÁC CỘT LESSON (Clickable) */}
+                        {lessons.map((lesson) => {
+                          const lessonProgress = student.lessonProgresses?.find((l) => l.lessonId === lesson.lessonId)
+                          return (
+                            <TableCell
+                              key={`${student.studentId}-${lesson.lessonId}`}
+                              className={`h-[70px] cursor-pointer border-r p-2 text-center transition-colors hover:bg-slate-100 ${COLUMN_WIDTH}`}
+                              onClick={() => handleLessonCellClick(student, lesson)}
+                            >
+                              {getStatusIcon(lessonProgress?.status)}
+                            </TableCell>
+                          )
+                        })}
                       </TableRow>
                     )
                   })
                 ) : (
                   <TableRow>
-                    <TableCell
-                      colSpan={currentLesson.sectionIds.length + 1}
-                      className='h-24 text-center text-slate-500'
-                    >
-                      {filterAtRisk
-                        ? t('overview.progress.noStudentsRisk')
-                        : t('overview.progress.noStudentsEnrolled')}
+                    <TableCell colSpan={lessons.length + 1} className='h-24 text-center text-slate-500'>
+                      {filterAtRisk ? t('overview.progress.noStudentsRisk') : t('overview.progress.noStudentsEnrolled')}
                     </TableCell>
                   </TableRow>
                 )}
@@ -461,12 +412,6 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
               <AlertTriangle className='h-5 w-5' />
               {t('overview.progress.riskAnalysis')}
             </DialogTitle>
-            <DialogDescription>
-              {t('overview.progress.aiAssessmentForStudent')}{' '}
-              <span className='font-semibold text-slate-900'>
-                {selectedAnalysisStudent?.studentId.substring(0, 8)}...
-              </span>
-            </DialogDescription>
           </DialogHeader>
 
           {selectedAnalysisStudent && (
@@ -474,7 +419,10 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
               <div className='flex items-center justify-between rounded-lg border bg-slate-50 p-3'>
                 <span className='text-sm font-medium text-slate-500'>{t('overview.progress.riskSeverity')}</span>
                 <Badge variant='destructive' className='bg-orange-500 hover:bg-orange-600'>
-                  {selectedAnalysisStudent.currentStatus === 'AtRisk' ? t('overview.progress.high') : t('overview.progress.medium')} {t('overview.progress.priority')}
+                  {selectedAnalysisStudent.currentStatus === 'AtRisk'
+                    ? t('overview.progress.high')
+                    : t('overview.progress.medium')}{' '}
+                  {t('overview.progress.priority')}
                 </Badge>
               </div>
 
@@ -504,7 +452,52 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
             <Button variant='outline' onClick={() => setSelectedAnalysisStudent(null)}>
               {t('overview.progress.close')}
             </Button>
-            <Button className='bg-blue-600 hover:bg-blue-700'>{t('overview.progress.assignSupportTask')}</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!selectedLessonDetail} onOpenChange={(open) => !open && setSelectedLessonDetail(null)}>
+        <DialogContent className='sm:max-w-lg'>
+          <DialogHeader>
+            <DialogTitle>{t('overview.progress.lessonDetailTitle')}</DialogTitle>
+            <DialogDescription>
+              {selectedLessonDetail &&
+                t('overview.progress.lessonDetailDesc', {
+                  student: selectedLessonDetail.studentName,
+                  lesson: selectedLessonDetail.lessonTitle
+                })}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className='grid grid-cols-1 gap-4 py-4'>
+            <div className='max-h-[300px] space-y-3 overflow-y-auto pr-2'>
+              {selectedLessonDetail?.sectionIds.map((sectionId, index) => {
+                const sectionProg = selectedLessonDetail.studentProgress?.sectionProgresses?.find(
+                  (sp: any) => sp.sectionId === sectionId
+                )
+                const status = sectionProg?.status || 'NotStarted'
+
+                return (
+                  <div key={sectionId} className='flex items-center justify-between rounded-lg border bg-slate-50 p-3'>
+                    <span className='text-sm font-medium text-slate-700'>
+                      {t('overview.progress.sectionItem', { index: index + 1 })}
+                    </span>
+                    <div className='flex items-center gap-2'>
+                      {getStatusIcon(status)}
+                      <span className='w-20 text-right text-xs font-medium text-slate-500'>
+                        {statusTranslate(status)}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className='flex justify-end'>
+            <Button variant='outline' onClick={() => setSelectedLessonDetail(null)}>
+              {t('overview.progress.close')}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

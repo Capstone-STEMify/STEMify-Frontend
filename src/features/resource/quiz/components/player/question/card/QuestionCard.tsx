@@ -7,18 +7,12 @@ import TrueFalseQuestion from '@/features/resource/quiz/components/player/questi
 import SingleChoiceQuestion from '@/features/resource/quiz/components/player/question/types/SingleChoiceQuestion'
 import MultipleChoiceQuestion from '@/features/resource/quiz/components/player/question/types/MultipleChoiceQuestion'
 import { Question, QuestionType } from '@/features/resource/question/types/question.type'
-import { useAppSelector } from '@/hooks/redux-hooks'
-import { Award, CheckCircle2 } from 'lucide-react'
 
 type QuestionCardProps = {
   question: Question
 }
 
 export default function QuestionCard({ question }: QuestionCardProps) {
-  const { isSubmitted, userAnswers, currentQuestionIndex } = useAppSelector((state) => state.quizPlayer)
-
-  const isAnswered = userAnswers[question.id] !== undefined
-
   return (
     <div className='animate-in fade-in-0 slide-in-from-bottom-4 w-full max-w-4xl duration-500'>
       {/* Question Type Component */}
@@ -29,16 +23,6 @@ export default function QuestionCard({ question }: QuestionCardProps) {
           {question.questionType === QuestionType.MULTIPLE_CHOICE && <MultipleChoiceQuestion question={question} />}
         </div>
       </Card>
-
-      {/* Answer Explanation (if submitted) */}
-      {isSubmitted && question.answerExplanation && (
-        <Card className='mt-6 border-l-4 border-blue-500 bg-blue-50'>
-          <div className='p-6'>
-            <h3 className='mb-2 font-semibold text-blue-900'>💡 Giải thích</h3>
-            <p className='text-blue-800'>{question.answerExplanation}</p>
-          </div>
-        </Card>
-      )}
     </div>
   )
 }

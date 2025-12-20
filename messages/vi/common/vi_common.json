@@ -292,7 +292,8 @@
       "correct": "Đúng",
       "incorrect": "Sai",
       "unanswered": "Chưa Trả Lời",
-      "disabled": "Đã Vô Hiệu Hóa"
+      "disabled": "Đã Vô Hiệu Hóa",
+      "notenrolled": "Chưa Đăng Ký"
     },
     "status2": {
       "active": "Đang Hoạt Động",

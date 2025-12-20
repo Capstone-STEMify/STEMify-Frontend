@@ -287,7 +287,9 @@
       "correct": "Correct",
       "incorrect": "Incorrect",
       "unanswered": "Unanswered",
-      "disabled": "Disabled"
+      "disabled": "Disabled",
+      "notenrolled": "Not Enrolled",
+      "enrolled": "Enrolled"
     },
     "status2": {
       "active": "Active",

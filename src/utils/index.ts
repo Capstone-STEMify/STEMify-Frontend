@@ -276,3 +276,8 @@ export function getInitials(name?: string) {
     .map((word) => word[0].toUpperCase())
     .join('')
 }
+
+export const truncateLabel = (label: string, maxLength = 5) => {
+  if (!label) return ''
+  return label.length > maxLength ? label.substring(0, 4) + '...' : label
+}

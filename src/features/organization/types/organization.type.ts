@@ -1,3 +1,4 @@
+import { EmulatorWithThumbnail } from '@/features/emulator/types/emulator.type'
 import { LicenseAssignmentType } from '@/features/license-assignment/types/licenseAssignment'
 import { CourseLevel } from '@/features/resource/course/types/course.type'
 import { OrganizationSubscription } from '@/features/subscription/types/subscription.type'
@@ -68,6 +69,8 @@ export type OrganizationCurriculum = {
       endDate: string
     }[]
   }[]
+  kitIds: number[]
+  emulations: EmulatorWithThumbnail[]
 }
 
 export type OrganizationCurriculumCourse = {

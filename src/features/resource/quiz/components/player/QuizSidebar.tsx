@@ -15,9 +15,7 @@ type QuizSidebarProps = {
 export default function QuizSidebar({ quiz }: QuizSidebarProps) {
   const dispatch = useAppDispatch()
   const questions = quiz.questions
-  const { currentQuestionIndex, userAnswers, timeRemaining, startedAt, isSubmitted } = useAppSelector(
-    (state) => state.quizPlayer
-  )
+  const { currentQuestionIndex, userAnswers, timeRemaining, startedAt } = useAppSelector((state) => state.quizPlayer)
   const totalTime = quiz.timeLimitMinutes * 60
   const [displayRemaining, setDisplayRemaining] = useState<number>(timeRemaining)
 
@@ -35,10 +33,9 @@ export default function QuizSidebar({ quiz }: QuizSidebarProps) {
     }
 
     tick()
-    if (isSubmitted) return
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
-  }, [startedAt, totalTime, timeRemaining, isSubmitted])
+  }, [startedAt, totalTime, timeRemaining])
 
   const formatTime = (s: number) =>
     `${Math.floor(s / 60)
