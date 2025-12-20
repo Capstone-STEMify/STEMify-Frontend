@@ -17,7 +17,6 @@ type LessonOutlineProps = {
 export default function LessonOutline({ sectionData, sectionStatus }: LessonOutlineProps) {
   const dispatch = useAppDispatch()
   const { selectedSectionId } = useAppSelector((state) => state.lessonDetail)
-  console.log('Selected Section ID:', selectedSectionId)
   const role = useAppSelector((state) => state.selectedOrganization.currentRole)
 
   const t = useTranslations('LessonDetails')

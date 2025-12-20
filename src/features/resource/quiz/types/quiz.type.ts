@@ -31,6 +31,7 @@ export type QuizAttempt = {
   maxAttemptAllowed: number
   attemptCount: number
   attempts: Attempt[]
+  nextAttemptAvailableAt?: string
 }
 
 export type Attempt = {

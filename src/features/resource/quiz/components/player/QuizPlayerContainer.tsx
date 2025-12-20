@@ -7,6 +7,7 @@ import QuizMainContent from '@/features/resource/quiz/components/player/QuizMain
 import { initializeQuiz, setQuizAttemptId } from '@/features/resource/quiz/slice/quiz-player-slice'
 import SEmpty from '@/components/shared/empty/SEmpty'
 import { useParams } from 'next/navigation'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 export default function QuizPlayerContainer() {
   const dispatch = useAppDispatch()
@@ -36,7 +37,7 @@ export default function QuizPlayerContainer() {
   if (!selectedQuiz) {
     return (
       <div className='flex h-screen items-center justify-center'>
-        <SEmpty title='Không tìm thấy bài kiểm tra' />
+        <LoadingComponent />
       </div>
     )
   }
