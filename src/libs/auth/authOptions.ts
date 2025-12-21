@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, account, profile }) {
       // console.log('account in jwt callback', account)
-      // console.log('profile in jwt callback', profile)
+      console.log('profile in jwt callback', profile)
       if (account?.access_token) {
         token.accessToken = account.access_token
         token.idToken = account.id_token

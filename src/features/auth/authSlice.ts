@@ -1,14 +1,20 @@
 import { User } from '@/features/user/types/user.type'
+import { LicenseType } from '@/types/userRole'
 import { createSlice } from '@reduxjs/toolkit'
+import { set } from 'zod'
 
 export interface AuthState {
   token: string | null
   user: User | null
+  expiredRoles: LicenseType[]
+  expiredOrganizationUserIds: string[]
 }
 
 const initialState: AuthState = {
   token: null,
-  user: null
+  user: null,
+  expiredRoles: [],
+  expiredOrganizationUserIds: []
 }
 
 export const authSlice = createSlice({
@@ -21,6 +27,12 @@ export const authSlice = createSlice({
     setUser(state, action) {
       state.user = action.payload
     },
+    setExpiredRoles(state, action) {
+      state.expiredRoles = action.payload
+    },
+    setExpiredOrganizationUserIds(state, action) {
+      state.expiredOrganizationUserIds = action.payload
+    },
     logout: (state) => {
       state.token = null
       state.user = null
@@ -28,4 +40,4 @@ export const authSlice = createSlice({
   }
 })
 
-export const { setToken, logout, setUser } = authSlice.actions
+export const { setToken, logout, setUser, setExpiredRoles, setExpiredOrganizationUserIds } = authSlice.actions

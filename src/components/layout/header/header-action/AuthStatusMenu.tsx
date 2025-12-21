@@ -139,13 +139,17 @@ export default function AuthStatusMenu() {
                     {t('profile')}
                   </MenuItem>
 
-                  <MenuItem icon={<History size={16} />} href='/learning-history'>
-                    {t('learningHistory')}
-                  </MenuItem>
+                  {orgRole && orgRole == LicenseType.STUDENT && (
+                    <MenuItem icon={<History size={16} />} href='/learning-history'>
+                      {t('learningHistory')}
+                    </MenuItem>
+                  )}
 
                   {/* Theme with chevron like screenshot */}
                   {userRole === UserRole.ADMIN || orgRole === LicenseType.ORGANIZATION_ADMIN ? (
-                    <MenuItem icon={<Palette size={16} />}>{t('dashboard')}</MenuItem>
+                    <MenuItem href='/' icon={<Palette size={16} />}>
+                      {t('dashboard')}
+                    </MenuItem>
                   ) : null}
 
                   <div className='my-1 h-px w-full bg-gray-200 dark:bg-zinc-800' />

@@ -40,6 +40,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { UserRole } from '@/types/userRole'
 import { NavSecondary } from '@/components/layout/admin/sidebar/nav-secondary'
+import StemifyLogo from '@/components/shared/StemifyLogo'
 
 const data = {
   user: {
@@ -235,12 +236,7 @@ export function AdminAppSidebar({ user, ...props }: AppSidebarProps) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
-              <Link href='#'>
-                <IconInnerShadowTop className='!size-5' />
-                <span className='text-base font-semibold'>Stemify</span>
-              </Link>
-            </SidebarMenuButton>
+            <StemifyLogo className='mx-auto' href={`/${locale}/home`} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

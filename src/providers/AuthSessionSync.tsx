@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { setToken, setUser } from '@/features/auth/authSlice'
+import { setExpiredOrganizationUserIds, setExpiredRoles, setToken, setUser } from '@/features/auth/authSlice'
 import {
   setCurrentRole,
   setSelectedOrganizationId,
@@ -50,37 +50,57 @@ export default function AuthSessionSync() {
   useEffect(() => {
     if (!reduxUser) return
 
-    // Nếu là ADMIN hoặc STAFF thì không cần chọn subscription/org
+    /* =========================
+     * ADMIN / STAFF
+     * ========================= */
     if (
       (reduxUser.userRole === UserRole.ADMIN || reduxUser.userRole === UserRole.STAFF) &&
-      (!reduxCurrentRole || reduxCurrentRole !== reduxUser.userRole)
+      reduxCurrentRole !== reduxUser.userRole
     ) {
       dispatch(setCurrentRole(reduxUser.userRole))
       return
     }
 
-    // Nếu là MEMBER thì xử lý theo org/subscription
+    /* =========================
+     * MEMBER
+     * ========================= */
     if (
       reduxUser.userRole === UserRole.MEMBER &&
       reduxUser.organizations &&
-      reduxUser.organizations?.organizations?.length > 0 &&
-      reduxUser.organizations.organizations[0].roles?.length > 0 &&
-      (!reduxSelectedOrganizationId || !reduxCurrentRole)
+      reduxUser.organizations.organizations?.length > 0
     ) {
       const firstOrg = reduxUser.organizations.organizations[0]
-      console.log('First organization:', firstOrg)
-      const activeSub = firstOrg.roles[0]
-      console.log('Active subscription:', activeSub)
 
-      if (activeSub) {
+      const hasActiveRole = firstOrg.roles && firstOrg.roles.length > 0
+      const hasExpiredRole = firstOrg.expiredRoles && firstOrg.expiredRoles.length > 0
+
+      /* ===== ACTIVE ORG ===== */
+      if (hasActiveRole && (!reduxSelectedOrganizationId || !reduxCurrentRole)) {
+        const activeSub = firstOrg.roles[0]
+
         dispatch(setSelectedOrganizationId(firstOrg.id))
         dispatch(setSelectedSubscriptionOrderId(activeSub.subscriptionId))
-        dispatch(setSelectedOrgUserId(firstOrg.organizationUserId[0]))
-        dispatch(setCurrentRole(activeSub.type)) // Đây là LicenseType
-        console.log('currentRole set to:', activeSub.type)
+        dispatch(setSelectedOrgUserId(firstOrg.organizationUserId))
+        dispatch(setCurrentRole(activeSub.type)) // LicenseType
+
+        console.log('[ACTIVE]', {
+          orgId: firstOrg.id,
+          role: activeSub.type
+        })
+      }
+
+      /* ===== EXPIRED INFO ===== */
+      if (hasExpiredRole) {
+        dispatch(setExpiredRoles(firstOrg.expiredRoles))
+        dispatch(setExpiredOrganizationUserIds(firstOrg.expiredOrganizationUserIds))
+
+        console.log('[EXPIRED]', {
+          roles: firstOrg.expiredRoles,
+          orgUserIds: firstOrg.expiredOrganizationUserIds
+        })
       }
     }
-  }, [reduxUser, reduxSelectedOrganizationId, reduxSelectedSubscriptionOrderId, reduxCurrentRole, dispatch])
+  }, [reduxUser, reduxSelectedOrganizationId, reduxCurrentRole, dispatch])
 
   return null
 }

@@ -17,6 +17,7 @@ import { usePathname } from 'next/navigation'
 import { NavMain } from '@/components/layout/admin/sidebar/nav-main'
 import { NavUser } from '@/components/layout/admin/sidebar/nav-user'
 import { OrganizationSwitcher } from '@/components/layout/organization/sidebar/organization-switcher'
+import StemifyLogo from '@/components/shared/StemifyLogo'
 
 // thay /admin thành /organization
 const data = {
@@ -87,6 +88,9 @@ export function OrganizationSidebar({ user, ...props }: AppSidebarProps) {
     <Sidebar collapsible='offcanvas' {...props}>
       <SidebarHeader>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <StemifyLogo className='mx-auto' href={`/${locale}/home`} />
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
               <OrganizationSwitcher />
