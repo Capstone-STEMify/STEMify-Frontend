@@ -11,8 +11,9 @@ export default function StemifiLabLibrary() {
   const tc = useTranslations('common')
   const { token, user } = useAppSelector((state) => state.auth)
   const userId = user?.userId
-  const redirectUrl =
-    process.env.NEXT_PUBLIC_MICROBIT_URL ?? '/'
+  const userName = user?.name || 'Stemify User'
+  const userEmail = user?.email || ''
+  const redirectUrl = process.env.NEXT_PUBLIC_MICROBIT_URL ?? '/'
 
   return (
     <div className='mx-auto max-w-7xl'>
@@ -101,8 +102,7 @@ export default function StemifiLabLibrary() {
 
             // Delay để tab mới load xong script
             setTimeout(() => {
-              console.log('Sending SSO message:', token, userId)
-              win.postMessage({ source: 'stemify-sso', token, userId }, '*')
+              win.postMessage({ source: 'stemify-sso', token, userId, userName, userEmail }, '*')
             }, 150)
           }}
           footer={
