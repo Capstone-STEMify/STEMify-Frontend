@@ -15,8 +15,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { supabase } from '@/libs/supabase/client'
 import { toast } from 'sonner'
-import { useAnalyzeProjectMutation } from '@/features/microbit/api/aiApi'
-import { MicrobitEvaluateResponse } from '@/features/microbit/type/ai.type'
+import MarkdownPreview from '@uiw/react-markdown-preview'
+import '@uiw/react-markdown-preview/markdown.css'
+import { MicrobitEvaluateResponse } from '../type/ai.type'
+import { useAnalyzeProjectMutation } from '../api/aiApi'
 
 const BASE_APP_URL = process.env.NEXT_PUBLIC_BASE_APP_URL ?? '/'
 
@@ -194,9 +196,11 @@ export default function MicrobitReviewSubmission() {
                     <Info className='mt-0.5 h-3.5 w-3.5 shrink-0' />
                     <span className='font-semibold'>{t('comprehensiveTab')}</span>
                   </div>
-                  <div className='whitespace-pre-wrap leading-relaxed text-slate-700 text-[15px]'>
-                    {comprehensiveResult.analysis}
-                  </div>
+                  <MarkdownPreview 
+                    source={comprehensiveResult.analysis} 
+                    style={{ background: 'transparent', color: '#334155', fontSize: '15px', lineHeight: '1.625' }}
+                    className='leading-relaxed'
+                  />
                 </div>
               )}
 
@@ -231,9 +235,11 @@ export default function MicrobitReviewSubmission() {
                             <Info className='mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-500' />
                             <span>{t('experimental')}</span>
                           </div>
-                          <div className='whitespace-pre-wrap leading-relaxed text-slate-700 text-[15px]'>
-                            {criteria.result.analysis}
-                          </div>
+                          <MarkdownPreview 
+                            source={criteria.result.analysis} 
+                            style={{ background: 'transparent', color: '#334155', fontSize: '15px', lineHeight: '1.625' }}
+                            className='leading-relaxed'
+                          />
                           <div className='flex items-center justify-end gap-3 border-t border-slate-100 pt-3'>
                             <span className='text-xs font-medium text-slate-400'>{t('helpful')}</span>
                             <Button variant='ghost' size='icon' className='h-8 w-8 text-slate-400 hover:text-blue-600'><ThumbsUp className='h-4 w-4' /></Button>
