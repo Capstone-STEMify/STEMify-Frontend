@@ -13,6 +13,7 @@
       "classCreate": "Tạo Nhóm (Class)",
       "uploaded": "Đã tải lên: {images} ảnh",
       "newClass": "Nhập tên nhóm mới",
+      "balanceTip": "Lời khuyên: Nên chụp số lượng ảnh giống nhau cho mỗi class để model học tốt hơn. Ví dụ: Class 1 có 50 ảnh thì Class 2 cũng nên có khoảng 50 ảnh.",
       "model": {
         "title": "Huấn Luyện Mô Hình",
         "description": "Nhấn nút bên dưới để huấn luyện mô hình trực tiếp trên web",
