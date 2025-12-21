@@ -125,7 +125,7 @@ export default function LicenseAssignmentList() {
             data={rows}
             columns={columns}
             enableRowSelection
-            pagingData={licenses?.data}
+            pagingData={licenses}
             pagingParams={params}
             handlePageChange={handlePageChange}
           />

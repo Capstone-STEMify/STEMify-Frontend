@@ -41,7 +41,7 @@ export default function Creator3DHeader({ emulator }: Creator3DHeaderProps) {
     })
 
     downloadJsonFile(`assembly_${workspaceId}.json`, exportData)
-    toast.success('📦 Export JSON thành công!')
+    toast.success('Xuất mô hình thành công!')
   }, [workspaceId, exportAssemblyFn])
 
   return (

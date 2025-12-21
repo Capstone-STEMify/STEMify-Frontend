@@ -17,12 +17,12 @@ export function StepInfoPanel({ currentStep, strawTypeCount, connectorTypeCount 
     <div className='absolute top-4 left-4 z-10 w-100 rounded-xl border bg-white/90 px-4 py-3 text-sm shadow'>
       <div className='mb-2 text-lg font-semibold text-sky-600'>{currentStep?.title}</div>
       {currentStep?.description && <div className='mt-1 text-sm text-gray-600'>{currentStep.description}</div>}
-      {currentStep?.expectedResult && (
+      {/* {currentStep?.expectedResult && (
         <div className='mt-2'>
           <div className='mb-1 font-semibold text-gray-600'>{t3d('expected_result')}:</div>
           <div className='text-sm text-gray-700'>{currentStep.expectedResult}</div>
         </div>
-      )}
+      )} */}
       {hasItems(strawTypeCount) && (
         <div className='mt-4'>
           <div className='mb-1 font-semibold text-gray-600'>{t3d('straws')}:</div>
