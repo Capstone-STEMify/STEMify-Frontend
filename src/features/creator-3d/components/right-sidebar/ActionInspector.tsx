@@ -82,10 +82,10 @@ export default function ActionInspector({ selectedAction }: ActionInspectorProps
       </div>
 
       {/* Action Type */}
-      <div>
+      {/* <div>
         <label className='text-sm font-medium'>{t3d('action_properties.type')}</label>
         <p className='text-sm text-gray-700'>{selectedAction.type}</p>
-      </div>
+      </div> */}
 
       {/* Step section */}
       <div className='space-y-3 border-t pt-3'>
