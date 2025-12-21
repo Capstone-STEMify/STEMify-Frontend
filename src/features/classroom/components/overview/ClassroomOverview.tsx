@@ -62,7 +62,7 @@ export default function ClassroomOverview() {
 
   // --- Data Processing for Pie Charts ---
   const quizPassRate = statsRes?.data.quizStatistic.passRate || 0
-  const quizNotPassRate = statsRes?.data.quizStatistic.failedRate || 0
+  const quizNotPassRate = 100 - quizPassRate
   const quizSubmissions = statsRes?.data.quizStatistic.submissions || 0
 
   const asmPassRate = statsRes?.data.assignmentStatistic.passRate || 0
