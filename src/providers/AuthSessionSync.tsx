@@ -80,7 +80,7 @@ export default function AuthSessionSync() {
 
         dispatch(setSelectedOrganizationId(firstOrg.id))
         dispatch(setSelectedSubscriptionOrderId(activeSub.subscriptionId))
-        dispatch(setSelectedOrgUserId(firstOrg.organizationUserId))
+        dispatch(setSelectedOrgUserId(firstOrg.organizationUserId[0]))
         dispatch(setCurrentRole(activeSub.type)) // LicenseType
 
         console.log('[ACTIVE]', {
