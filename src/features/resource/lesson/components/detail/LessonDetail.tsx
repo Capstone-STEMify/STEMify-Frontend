@@ -4,7 +4,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import SBreadcrumb from '@/components/shared/SBreadcrumb'
 import BackButton from '@/components/shared/button/BackButton'
 import STabs from '@/components/shared/STabs'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useSearchSectionQuery } from '@/features/resource/section/api/sectionApi'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { useGetLessonByIdQuery } from '@/features/resource/lesson/api/lessonApi'
@@ -16,9 +16,8 @@ import { useTranslations } from 'next-intl'
 import PrintPreviewModal from '@/components/shared/modals/PrintPreviewModal'
 import LessonPrintableContent from './LessonPrintableContent'
 import { useSearchCourseEnrollmentQuery } from '@/features/enrollment/api/courseEnrollmentApi'
-import { clearLesson, setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
-import QuizPlayerContainer from '@/features/resource/quiz/components/player/QuizPlayerContainer'
-import { clearRefetchSectionProgress } from '@/features/student-progress/slice/studentProgressSlice'
+import { setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
+import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 
 export default function LessonDetail() {
   // translations
@@ -117,7 +116,10 @@ export default function LessonDetail() {
                   enrollmentId={enrollmentId}
                 />
               ) : (
-                <div className=''>{t('notFound.no_section')}</div>
+                // center loading when no section selected
+                <div className='flex h-full items-center justify-center'>
+                  <LoadingComponent />
+                </div>
               )}
             </ResizablePanel>
           </ResizablePanelGroup>
