@@ -22,7 +22,8 @@
       "addCourse": "Add Course",
       "price": "Price",
       "alrealyEnrolled": "Already Enrolled",
-      "addEmulator": "Add Emulator"
+      "addEmulator": "Add Emulator",
+      "noEmulatorInCurriculum": "No emulators in this curriculum."
     },
     "form": {
       "title": {

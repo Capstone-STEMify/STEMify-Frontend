@@ -22,7 +22,8 @@
       "addCourse": "Thêm Khóa Học",
       "price": "Giá",
       "alreadyEnrolled": "Đã Đăng Ký",
-      "addEmulator": "Thêm Mô Hình"
+      "addEmulator": "Thêm Mô Hình",
+      "noEmulatorInCurriculum": "Chưa có mô hình nào trong khung chương trình này."
     },
     "form": {
       "title": {
