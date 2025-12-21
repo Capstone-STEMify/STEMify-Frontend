@@ -34,6 +34,8 @@ export type UserOrganization = {
   id: number // Organization ID
   organizationUserId: string
   roles: OrganizationSubscription[]
+  expiredRoles: LicenseType[]
+  expiredOrganizationUserIds: string[]
 }
 
 export type UserFormData = Omit<User, 'id'> & {

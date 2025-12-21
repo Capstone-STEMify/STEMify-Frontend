@@ -45,6 +45,9 @@
           "analyzing": "Analyzing...",
           "askAiInsights": "Ask AI Insights",
           "reAnalyzeAi": "Re-Analyze AI",
+          "aiAnalysisTimeNote": "This analysis may take 1-2 minutes to complete.",
+          "overview": "Overview",
+          "aiInsights": "AI Insights",
           "curriculum": "Curriculum",
           "selectCourse": "Select course",
           "aiClassroomAssessment": "AI Classroom Assessment",
@@ -132,6 +135,9 @@
         "noHasAtRisk": "No learners are at risk of falling behind",
         "aiError": "Error analyzing learner progress with AI",
         "errorResponse": "Error response from server"
+      },
+      "modal": {
+        "viewFile": "View File"
       }
     },
     "organization": {

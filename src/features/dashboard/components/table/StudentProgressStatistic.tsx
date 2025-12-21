@@ -2,6 +2,8 @@
 
 import * as React from 'react'
 import { Download, CheckCircle2, Circle, Clock, Bot, AlertTriangle, Sparkles, BrainCircuit } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 import { Button } from '@/components/shadcn/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
@@ -55,6 +57,7 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
   const [aiData, setAiData] = React.useState<{
     overviewText: string
+    aiInsightsText?: string
     students: AiStudentAnalysisResult[]
   } | null>(null)
 
@@ -126,7 +129,8 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
       }
 
       setAiData({
-        overviewText: payload.overviewText || payload.aiInsightsText,
+        overviewText: payload.overviewText || payload.aiInsightsText || '',
+        aiInsightsText: payload.aiInsightsText,
         students: payload.students
       })
 
@@ -189,23 +193,30 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
         <div className='flex items-center gap-4'>
           <h2 className='text-2xl font-semibold'>{t('overview.progress.title')}</h2>
 
-          <Button
-            onClick={handleAnalyzeClassroom}
-            disabled={isAnalyzing}
-            className={`gap-2 transition-all ${aiData ? 'border border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-200' : 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:opacity-90'}`}
-            variant={aiData ? 'outline' : 'default'}
-          >
-            {isAnalyzing ? (
-              <>
-                <Clock className='h-4 w-4 animate-spin' /> {t('overview.progress.analyzing')}
-              </>
-            ) : (
-              <>
-                <Sparkles className='h-4 w-4' />{' '}
-                {aiData ? t('overview.progress.reAnalyzeAi') : t('overview.progress.askAiInsights')}
-              </>
-            )}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={handleAnalyzeClassroom}
+                disabled={isAnalyzing}
+                className={`gap-2 transition-all ${aiData ? 'border border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-200' : 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:opacity-90'}`}
+                variant={aiData ? 'outline' : 'default'}
+              >
+                {isAnalyzing ? (
+                  <>
+                    <Clock className='h-4 w-4 animate-spin' /> {t('overview.progress.analyzing')}
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className='h-4 w-4' />{' '}
+                    {aiData ? t('overview.progress.reAnalyzeAi') : t('overview.progress.askAiInsights')}
+                  </>
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('overview.progress.aiAnalysisTimeNote')}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         <div className='flex items-center gap-2'>
@@ -238,13 +249,35 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className='flex flex-col gap-6 md:flex-row'>
-              <div className='flex-1'>
-                <p className='border-l-4 border-purple-300 pl-3 text-sm leading-relaxed text-slate-700 italic'>
-                  &quot;{aiData.overviewText}&quot;
-                </p>
-              </div>
-              <div className='flex min-w-[200px] flex-col gap-2'>
+            <div className='flex flex-col gap-6'>
+              {/* Hiển thị overviewText nếu có */}
+              {aiData.overviewText && (
+                <div className='flex-1'>
+                  <h3 className='mb-2 text-sm font-semibold text-slate-700'>
+                    {t('overview.progress.overview') || 'Overview'}
+                  </h3>
+                  <div className='border-l-4 border-purple-300 pl-3 text-sm leading-relaxed text-slate-700 prose prose-sm max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-strong:text-slate-900 prose-ul:text-slate-700 prose-li:text-slate-700'>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {aiData.overviewText}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              )}
+              
+              {aiData.aiInsightsText && aiData.aiInsightsText !== aiData.overviewText && (
+                <div className='flex-1'>
+                  <h3 className='mb-2 text-sm font-semibold text-slate-700'>
+                    {t('overview.progress.aiInsights') || 'AI Insights'}
+                  </h3>
+                  <div className='border-l-4 border-blue-300 pl-3 text-sm leading-relaxed text-slate-700 prose prose-sm max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-strong:text-slate-900 prose-ul:text-slate-700 prose-li:text-slate-700'>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {aiData.aiInsightsText}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              )}
+              
+              <div className='flex min-w-[200px] flex-col gap-2 md:flex-row md:justify-end'>
                 <Button
                   variant={filterAtRisk ? 'destructive' : 'outline'}
                   className={`group justify-between border-red-200 ${!filterAtRisk && 'text-red-600 hover:bg-red-50'}`}
@@ -431,8 +464,10 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                   <div className='h-2 w-2 rounded-full bg-red-400' />
                   {t('overview.progress.identifiedIssues')}
                 </h4>
-                <div className='rounded-md border border-red-100 bg-red-50 p-3 text-sm text-slate-600'>
-                  {selectedAnalysisStudent.statusText}
+                <div className='rounded-md border border-red-100 bg-red-50 p-3 text-sm text-slate-600 prose prose-sm max-w-none prose-headings:text-slate-800 prose-p:text-slate-600 prose-strong:text-slate-900 prose-ul:text-slate-600 prose-li:text-slate-600'>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {selectedAnalysisStudent.statusText}
+                  </ReactMarkdown>
                 </div>
               </div>
 
@@ -441,8 +476,10 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                   <div className='h-2 w-2 rounded-full bg-green-400' />
                   {t('overview.progress.recommendedAction')}
                 </h4>
-                <div className='rounded-md border border-green-100 bg-green-50 p-3 text-sm text-slate-600'>
-                  {selectedAnalysisStudent.interventionText}
+                <div className='rounded-md border border-green-100 bg-green-50 p-3 text-sm text-slate-600 prose prose-sm max-w-none prose-headings:text-slate-800 prose-p:text-slate-600 prose-strong:text-slate-900 prose-ul:text-slate-600 prose-li:text-slate-600'>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {selectedAnalysisStudent.interventionText}
+                  </ReactMarkdown>
                 </div>
               </div>
             </div>

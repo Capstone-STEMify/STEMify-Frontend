@@ -45,6 +45,9 @@
           "analyzing": "Đang phân tích...",
           "askAiInsights": "Hỏi AI Insights",
           "reAnalyzeAi": "Phân tích lại AI",
+          "aiAnalysisTimeNote": "Phân tích này có thể mất 1-2 phút để hoàn thành.",
+          "overview": "Tổng quan",
+          "aiInsights": "Thông tin chi tiết AI",
           "curriculum": "Chương trình học",
           "selectCourse": "Chọn khóa học",
           "aiClassroomAssessment": "Đánh giá lớp học AI",
@@ -132,6 +135,9 @@
         "noHasAtRisk": "Không có học viên nào có tiến độ học tập chậm",
         "aiError": "Lỗi khi phân tích tiến độ học tập của học viên bằng AI",
         "errorResponse": "Lỗi phản hồi từ máy chủ"
+      },
+      "modal": {
+        "viewFile": "Xem File"
       }
     },
     "organization": {

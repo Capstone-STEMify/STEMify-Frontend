@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { useState } from 'react'
-import { Camera, Edit, Edit2, Trash2, Webcam } from 'lucide-react'
+import { Camera, Edit, Edit2, Trash2, Webcam, Info } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 interface ClassManagementProps {
@@ -54,6 +54,15 @@ export function ClassManagement({
         <CardTitle className='text-2xl'>{t('classCreate')}</CardTitle>
       </CardHeader>
       <CardContent>
+        {classes.length >= 2 && (
+          <div className='mb-5 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800'>
+            <div className='flex items-start gap-2'>
+              <Info size={18} className='mt-0.5 flex-shrink-0' />
+              <p>{t('balanceTip')}</p>
+            </div>
+          </div>
+        )}
+        
         <div className='mb-5 grid grid-cols-1 gap-5 md:grid-cols-2'>
           {classes.map((className) => (
             <Card key={className} className='border-2 border-gray-200 py-4'>
