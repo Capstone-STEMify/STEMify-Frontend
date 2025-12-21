@@ -19,6 +19,10 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
   const locale = useLocale()
   const [deleteClassroom] = useDeleteClassroomMutation()
 
+  const handleNavagateToClassroom = (classroomId: number) => {
+    router.push(`/${locale}/organization/classroom/${classroomId}`)
+  }
+
   return [
     // createSelectColumn<Classroom>(),
     {
@@ -60,7 +64,14 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
       accessorKey: 'name',
       header: () => <p className='text-center'>{tc('tableHeader.className')}</p>,
       cell: ({ row }) => {
-        return <span className='text-center'>{row.original.name}</span>
+        return (
+          <div
+            className='cursor-pointer text-center hover:underline'
+            onClick={() => handleNavagateToClassroom(row.original.id)}
+          >
+            {row.original.name}
+          </div>
+        )
       }
     },
     {

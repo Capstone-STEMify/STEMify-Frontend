@@ -144,9 +144,7 @@ export default function ClassroomTable() {
         pagingData={data?.data.items}
         pagingParams={queryParams}
         handlePageChange={() => {}}
-        onRowClick={(val) => {
-          router.push(`/${locale}/organization/classroom/${val.id}`)
-        }}
+        
       />
     </div>
   )
