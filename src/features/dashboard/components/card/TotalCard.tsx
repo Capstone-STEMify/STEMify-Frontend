@@ -24,14 +24,23 @@ interface TotalStudentsCardProps {
 const TOTAL_CAPSULES = 30
 
 export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
-  const { currentPeriod, change } = data
+  const { currentPeriod, previousPeriod, change } = data
   const { totalUsers, totalTeachers, totalStudents } = currentPeriod
 
   const teacherPercent = totalUsers > 0 ? (totalTeachers / totalUsers) * 100 : 0
   const studentPercent = totalUsers > 0 ? (totalStudents / totalUsers) * 100 : 0
+  const adminPercent = 100 - teacherPercent - studentPercent
 
   const t = useTranslations('dashboard.organization')
   const tc = useTranslations('common')
+  const previousAdmins = previousPeriod.totalUsers - previousPeriod.totalTeachers - previousPeriod.totalStudents
+  const currentAdmins = totalUsers - totalTeachers - totalStudents
+  const adminChange =
+    previousAdmins === 0
+      ? currentAdmins > 0
+        ? 100
+        : 0
+      : Math.round(((currentAdmins - previousAdmins) / previousAdmins) * 100)
 
   const rates = [
     {
@@ -47,6 +56,13 @@ export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
       people: totalStudents,
       change: change.totalStudents,
       color: 'bg-blue-500'
+    },
+    {
+      title: t('admin'),
+      count: adminPercent,
+      people: currentAdmins,
+      change: adminChange,
+      color: 'bg-gray-300'
     }
   ]
 
@@ -67,6 +83,7 @@ export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
   // Calculate percentage labels for the capsule bar
   const rate1Label = teacherPercent > 0 ? `${Math.round(teacherPercent)}%` : ''
   const rate2Label = studentPercent > 0 ? `${Math.round(studentPercent)}%` : ''
+  const rate3Label = adminPercent > 0 ? `${Math.round(adminPercent)}%` : ''
 
   return (
     <Card className='h-full rounded-xl border-none bg-white shadow-sm'>
@@ -102,6 +119,7 @@ export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
           >
             {rate2Label}
           </span>
+          <span className='absolute -top-5 right-0 text-sm font-semibold text-gray-700'>{rate3Label}</span>
 
           <div className='flex w-full justify-between'>
             {capsules.map((color, i) => (
