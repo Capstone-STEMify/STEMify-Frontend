@@ -13,6 +13,7 @@ import { ContentType } from '@/features/resource/content/types/content.type'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { resetSaveTrigger } from '@/features/resource/content/slice/editorSlice'
+import { useParams } from 'next/navigation'
 
 type UpsertContentProps = {
   lessonId?: number
@@ -26,6 +27,7 @@ export default function UpsertContent({ lessonId, sectionId, contentId }: Upsert
   const dispatch = useAppDispatch()
   const router = useRouter()
   const locale = useLocale()
+  const params = useParams()
 
   const [createContent] = useCreateContentMutation()
   const [updateContent] = useUpdateContentMutation()
@@ -65,11 +67,22 @@ export default function UpsertContent({ lessonId, sectionId, contentId }: Upsert
     }
   }, [saveTrigger])
 
+  // Prefer local draft on load; fallback to server content
   useEffect(() => {
+    try {
+      const key = `tiptap_draft_${lessonId ?? (params?.lessonId as any) ?? 'default'}`
+      const draft = typeof window !== 'undefined' ? localStorage.getItem(key) : null
+      if (draft !== null) {
+        setEditorValue(draft)
+        return
+      }
+    } catch (e) {
+      // ignore storage errors
+    }
     if (contentItem) {
       setEditorValue(contentItem.contentBody)
     }
-  }, [contentItem])
+  }, [contentItem, lessonId, params])
 
   if (isLoading) {
     return (

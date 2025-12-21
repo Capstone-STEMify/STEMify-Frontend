@@ -26,8 +26,9 @@ import {
   Save,
   Highlighter
 } from 'lucide-react'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { useParams } from 'next/navigation'
 
 type Props = {
   editor: Editor | null
@@ -37,6 +38,8 @@ export const Toolbar = ({ editor }: Props) => {
   const [showLinkInput, setShowLinkInput] = useState(false)
   const [url, setUrl] = useState('')
   const dispatch = useDispatch()
+  const { lessonId } = useParams()
+  const storageKey = `tiptap_draft_${lessonId ?? 'default'}`
 
   const setLink = useCallback(() => {
     if (!editor) return
@@ -48,6 +51,23 @@ export const Toolbar = ({ editor }: Props) => {
     setShowLinkInput(false)
     setUrl('')
   }, [editor, url])
+
+  // Ctrl/Cmd + S to save
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault()
+        try {
+          localStorage.removeItem(storageKey)
+        } catch (err) {
+          // ignore storage errors
+        }
+        dispatch(triggerSave())
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [dispatch, storageKey])
 
   // dùng hooks custom
   const isBold = useMarkActive(editor, 'bold')
@@ -169,7 +189,17 @@ export const Toolbar = ({ editor }: Props) => {
       </ToolbarButton>
 
       {/* Save */}
-      <Button variant='ghost' onClick={() => dispatch(triggerSave())}>
+      <Button
+        variant='ghost'
+        onClick={() => {
+          try {
+            localStorage.removeItem(storageKey)
+          } catch (e) {
+            // ignore storage errors
+          }
+          dispatch(triggerSave())
+        }}
+      >
         <Save className='h-4 w-4' />
       </Button>
     </div>

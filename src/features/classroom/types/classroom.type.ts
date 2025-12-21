@@ -127,6 +127,7 @@ export type Statistic = {
   averageScore: number
   submissions: number
   passRate: number
+  failedRate: number
 }
 
 export type UngradedAssignment = {
