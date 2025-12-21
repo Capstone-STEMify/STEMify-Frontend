@@ -26,10 +26,11 @@ import { useModal } from '@/providers/ModalProvider'
 import { cn } from '@/utils/shadcn/utils'
 import { LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
-import { resetParams, setParam } from '@/features/license-assignment/slice/licenseAssignmentSlice'
+import { resetParams, setPageIndex, setParam } from '@/features/license-assignment/slice/licenseAssignmentSlice'
 import { toast } from 'sonner'
 import { useLocale, useTranslations } from 'next-intl'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { SPagination } from '@/components/shared/SPagination'
 
 type OrganizationAdminsProps = {
   organizationSubscriptionOrderId?: number
@@ -68,6 +69,10 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
     dispatch(resetParams())
   }, [dispatch])
 
+  const handlePageChange = (page: number) => {
+    dispatch(setPageIndex(page))
+  }
+
   const handleRotate = async () => {
     setIsRotating(true)
     refetch()
@@ -75,7 +80,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
     setTimeout(() => setIsRotating(false), 700)
   }
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return (
       <Card className='border shadow-sm'>
         <CardHeader className='border-b bg-gray-50 pb-4'>
@@ -140,6 +145,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
               onClick={() => {
                 setStatusFilter(LicenseAssignmentStatus.ACTIVE)
                 dispatch(setParam({ key: 'status', value: LicenseAssignmentStatus.ACTIVE }))
+                dispatch(setPageIndex(1))
               }}
               className={cn(
                 'relative flex items-center gap-2 py-3 text-sm font-medium transition-colors',
@@ -159,6 +165,7 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
               onClick={() => {
                 setStatusFilter(LicenseAssignmentStatus.PENDING)
                 dispatch(setParam({ key: 'status', value: LicenseAssignmentStatus.PENDING }))
+                dispatch(setPageIndex(1))
               }}
               className={cn(
                 'relative flex items-center gap-2 py-3 text-sm font-medium transition-colors',
@@ -275,6 +282,16 @@ export default function OrganizationAdmins({ organizationSubscriptionOrderId }: 
                 })}
               </TableBody>
             </Table>
+            {data?.data?.totalPages > 1 && (
+              <div className='flex justify-end border-t px-4 py-3'>
+                <SPagination
+                  pageNumber={licenseParams.pageNumber}
+                  totalPages={data.data.totalPages}
+                  onPageChanged={handlePageChange}
+                  className='w-fit'
+                />
+              </div>
+            )}
           </div>
         )}
       </CardContent>

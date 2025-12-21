@@ -35,6 +35,7 @@ export default function UserOrganizationTable() {
   const { data } = useGetOrganizationUserQuery(
     {
       organizationId: Number(organizationId),
+      pageNumber: userParams.pageNumber,
       pageSize: 20,
       search: debouncedSearchQuery?.trim() ? debouncedSearchQuery : undefined,
       role: roleFilter === 'all' ? undefined : roleFilter,
@@ -113,7 +114,7 @@ export default function UserOrganizationTable() {
         columns={columns as any}
         enableRowSelection={false}
         pagingData={data}
-        pagingParams={userParams}
+        pagingParams={{ pageIndex: userParams.pageNumber, pageSize: 20 }}
         handlePageChange={handlePageChange}
       />
     </div>
