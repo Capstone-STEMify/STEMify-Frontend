@@ -22,14 +22,34 @@ interface TiptapEditorProps {
 export default function TiptapEditor({ content, onChange, children }: TiptapEditorProps) {
   const tc = useTranslations('toast')
   const { lessonId } = useParams()
-  const editor = useTiptapEditor({ content, onChange, isEditable: true })
+  const storageKey = `tiptap_draft_${lessonId ?? 'default'}`
+
+  // Prefer locally saved draft for initial content if available
+  const localDraft = typeof window !== 'undefined' ? localStorage.getItem(storageKey) : null
+  const initialContent = localDraft ?? content
+
+  const editor = useTiptapEditor({
+    content: initialContent,
+    onChange: (html: string) => {
+      try {
+        localStorage.setItem(storageKey, html)
+      } catch (e) {
+        // ignore storage errors
+      }
+      onChange(html)
+    },
+    isEditable: true
+  })
   const [uploadFiles, { isLoading }] = usePostLessonAssetsMutation()
 
   useEffect(() => {
-    if (editor && content !== undefined && content !== editor.getHTML()) {
+    if (!editor) return
+    // Only override with server content if there is no local draft
+    const hasLocal = typeof window !== 'undefined' ? localStorage.getItem(storageKey) : null
+    if (content !== undefined && !hasLocal && content !== editor.getHTML()) {
       editor.commands.setContent(content, { emitUpdate: false })
     }
-  }, [content, editor])
+  }, [content, editor, storageKey])
 
   useEffect(() => {
     return () => {
