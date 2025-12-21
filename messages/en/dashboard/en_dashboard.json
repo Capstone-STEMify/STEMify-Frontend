@@ -135,6 +135,9 @@
         "noHasAtRisk": "No learners are at risk of falling behind",
         "aiError": "Error analyzing learner progress with AI",
         "errorResponse": "Error response from server"
+      },
+      "modal": {
+        "viewFile": "View File"
       }
     },
     "organization": {

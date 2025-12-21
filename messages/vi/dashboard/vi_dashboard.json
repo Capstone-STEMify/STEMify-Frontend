@@ -135,6 +135,9 @@
         "noHasAtRisk": "Không có học viên nào có tiến độ học tập chậm",
         "aiError": "Lỗi khi phân tích tiến độ học tập của học viên bằng AI",
         "errorResponse": "Lỗi phản hồi từ máy chủ"
+      },
+      "modal": {
+        "viewFile": "Xem File"
       }
     },
     "organization": {
