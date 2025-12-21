@@ -7,7 +7,11 @@ import { MyLearningHero } from '@/features/resource/course/components/my-learnin
 import { MyLearningList } from '@/features/resource/course/components/my-learning/MyLearningList'
 
 export function MyLearning() {
-  const studentId = useAppSelector((state) => state.selectedOrganization.selectedOrgUserId)
+  let studentId = useAppSelector((state) => state.selectedOrganization.selectedOrgUserId)
+  const expiredStudentIds = useAppSelector((state) => state.auth.expiredOrganizationUserIds)
+  if (!studentId && expiredStudentIds.length > 0) {
+    studentId = expiredStudentIds[0]
+  }
 
   return (
     <motion.div
