@@ -133,7 +133,7 @@ export default function HeroSection({ onAnimationComplete, animationProgress }: 
     <section className='relative flex min-h-screen items-center justify-center overflow-hidden px-4 sm:px-6'>
       <div className='absolute inset-0 h-full w-full'>
         <Image
-          src='https://res.cloudinary.com/dgdi9wvpz/image/upload/strawbee_mh1shg.png'
+          src='https://res.cloudinary.com/dgdi9wvpz/image/upload/v1766296078/strawbee_mh1shg_fvjrml.png'
           alt='Hero Image'
           fill
           className='object-cover'
