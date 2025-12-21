@@ -9,6 +9,7 @@ import { Bot, MoreVertical } from 'lucide-react'
 
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
+import { Badge } from '@/components/shadcn/badge'
 import SEmpty from '@/components/shared/empty/SEmpty'
 
 import {
@@ -24,6 +25,8 @@ import { useModal } from '@/providers/ModalProvider'
 import { UserRole } from '@/types/userRole'
 import SearchBar from '@/components/shared/search/SearchBar'
 import SSelect from '@/components/shared/SSelect'
+import { labelDayButton } from 'react-day-picker'
+import { getStatusBadgeClass } from '@/utils/badgeColor'
 
 export default function SystemWorkspace3dLibrary() {
   const { openModal } = useModal()
@@ -34,7 +37,7 @@ export default function SystemWorkspace3dLibrary() {
   const t3d = useTranslations('workspace3D')
 
   const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState<EmulatorStatus>(EmulatorStatus.PUBLISHED)
+  const [statusFilter, setStatusFilter] = useState<string>('')
 
   const userRole = useAppSelector((state) => state.auth.user?.userRole)
   const userId = useAppSelector((state) => state.auth.user?.userId)
@@ -43,8 +46,8 @@ export default function SystemWorkspace3dLibrary() {
     const baseParams: any = {
       search,
       page: 1,
-      limit: 6,
-      status: statusFilter
+      limit: 10,
+      status: statusFilter === 'All' ? undefined : statusFilter
     }
 
     if (statusFilter === EmulatorStatus.DRAFT && userId) {
@@ -63,6 +66,7 @@ export default function SystemWorkspace3dLibrary() {
   const emulations = data?.data.items || []
 
   const emulationOptions = [
+    { label: t('status.all'), value: 'All' },
     { label: t('status.published'), value: EmulatorStatus.PUBLISHED },
     { label: t('status.draft'), value: EmulatorStatus.DRAFT },
     { label: t('status.archived'), value: EmulatorStatus.ARCHIVED }
@@ -183,6 +187,15 @@ export default function SystemWorkspace3dLibrary() {
                   className='object-cover transition-transform duration-300 group-hover:scale-105'
                   sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
                 />
+
+                {/* Status badge */}
+                <Badge className={`absolute top-2 left-2 shadow-sm ${getStatusBadgeClass(e.status)}`}>
+                  {e.status === EmulatorStatus.PUBLISHED
+                    ? t('status.published')
+                    : e.status === EmulatorStatus.DRAFT
+                      ? t('status.draft')
+                      : t('status.archived')}
+                </Badge>
 
                 {allowRoles.includes(userRole as UserRole) && (
                   <Popover>

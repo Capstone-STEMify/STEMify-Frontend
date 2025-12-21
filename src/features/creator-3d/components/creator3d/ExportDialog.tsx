@@ -176,7 +176,7 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
                   </div>
 
                   {/* Visibility */}
-                  <div>
+                  {/* <div>
                     <label className='mb-1.5 block text-sm font-medium text-gray-700'>
                       {t3d('upsert.visibilityLabel')}
                     </label>
@@ -189,7 +189,7 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
                       <option value='public'>{t3d('upsert.publicOption')}</option>
                       <option value='private'>{t3d('upsert.privateOption')}</option>
                     </select>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Right Column - Thumbnail */}

@@ -236,7 +236,7 @@ export function AdminAppSidebar({ user, ...props }: AppSidebarProps) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <StemifyLogo className='mx-auto' href={`/${locale}/home`} />
+            <StemifyLogo className='mx-auto w-32' href={`/${locale}/home`} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
