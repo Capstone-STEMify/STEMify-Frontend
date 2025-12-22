@@ -120,7 +120,7 @@ export default function KitListSection({ context, kitId, kitIds = [] }: KitListS
           {finalKits.map((kit) => (
             <Card
               key={kit.id}
-              onClick={() => router.push(`/${locale}/admin/kit/${kit.id}`)}
+              onClick={() => router.push(`/${locale}/resource/stem-kit/${kit.id}`)}
               className='group relative cursor-pointer overflow-hidden rounded-xl border p-2 shadow-lg transition hover:shadow-md'
             >
               <div className='aspect-square w-full overflow-hidden rounded-2xl bg-gray-100'>

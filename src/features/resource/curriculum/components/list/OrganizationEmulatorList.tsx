@@ -3,13 +3,16 @@ import React from 'react'
 import { Card, CardContent } from '@/components/shadcn/card'
 import Image from 'next/image'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 type OrganizationEmulatorListProps = {
   emulations?: EmulatorWithThumbnail[]
 }
 
 export default function OrganizationEmulatorList({ emulations }: OrganizationEmulatorListProps) {
   const t = useTranslations('curriculum')
+  const router = useRouter()
+  const locale = useLocale()
 
   return (
     <div>
@@ -29,6 +32,7 @@ export default function OrganizationEmulatorList({ emulations }: OrganizationEmu
           <Card
             key={emulator.emulationId}
             className='group cursor-pointer overflow-hidden border-0 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-blue-200'
+            onClick={() => router.push(`/${locale}/lab/straw-lib/${emulator.emulationId}`)}
           >
             <CardContent className='p-0'>
               {/* Thumbnail */}
