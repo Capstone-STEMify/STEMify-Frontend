@@ -1,5 +1,6 @@
 {
   "course": {
+    "completedAt": "Completed At: {date}",
     "list": {
       "title": "Courses List",
       "description": "Curriculum-aligned, thematic guides with following educational pedagogical approach. Courses have teacher and student perspectives.",

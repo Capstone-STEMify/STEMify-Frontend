@@ -6,13 +6,7 @@ import { CourseEnrollment, EnrollmentStatus } from '@/features/enrollment/types/
 import Image from 'next/image'
 import { Progress } from '@/components/shadcn/progress'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/shadcn/dropdown-menu'
+import { useLocale, useTranslations } from 'next-intl'
 import { formatDate } from '@/utils/index'
 
 interface CourseCardProps {
@@ -22,6 +16,7 @@ interface CourseCardProps {
 export const CourseCard = ({ course }: CourseCardProps) => {
   const locale = useLocale()
   const router = useRouter()
+  const t = useTranslations('course')
   return (
     <Card>
       <CardContent className='flex items-center justify-between'>
@@ -50,13 +45,13 @@ export const CourseCard = ({ course }: CourseCardProps) => {
             {course.status === EnrollmentStatus.COMPLETED && (
               <p className='mt-1 text-sm text-gray-600'>
                 {/* fix later */}
-                Grade Achieved: <span className='font-semibold'>95.01%</span> {' '}
-                <span>Completed At: {formatDate(course.completedAt)}</span>
+                {/* Grade Achieved: <span className='font-semibold'>95.01%</span> {' '} */}
+                <span>{t('completedAt', { date: formatDate(course.completedAt) })}</span>
               </p>
             )}
           </div>
         </div>
-        {course.status === EnrollmentStatus.COMPLETED ? (
+        {/* {course.status === EnrollmentStatus.COMPLETED ? (
           <Button
             className='ml-4 flex-shrink-0 bg-blue-500'
             onClick={() => router.push(`/${locale}/certificate/${course.certificateId}`)}
@@ -80,7 +75,7 @@ export const CourseCard = ({ course }: CourseCardProps) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )}
+        )} */}
       </CardContent>
     </Card>
   )
