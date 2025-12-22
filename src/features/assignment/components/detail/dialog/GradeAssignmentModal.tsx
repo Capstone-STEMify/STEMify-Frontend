@@ -20,7 +20,7 @@ import Loading from 'app/[locale]/loading'
 import { Clock, ExternalLink, HelpCircle, X } from 'lucide-react'
 import { format } from 'date-fns'
 import { useTranslations } from 'next-intl'
-import { isValidUrl } from '@/utils/index'
+import { isValidUrl, truncateUrl } from '@/utils/index'
 
 type Props = {
   studentAssignmentId: number | null
@@ -249,7 +249,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                               rel='noopener noreferrer'
                               className='text-blue-600 underline hover:text-blue-800'
                             >
-                              {qAttempt.answerText}
+                              {truncateUrl(qAttempt.answerText)}
                             </a>
                           ) : (
                             qAttempt.answerText

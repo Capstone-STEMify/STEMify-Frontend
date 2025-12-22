@@ -21,7 +21,7 @@ import { toast } from 'sonner'
 import { useModal } from '@/providers/ModalProvider'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useTranslations } from 'next-intl'
-import { isValidUrl } from '@/utils/index'
+import { isValidUrl, truncateUrl } from '@/utils/index'
 interface SubmissionReviewDialogProps {
   submission: Submission
   studentAssignmentId: number | null
@@ -255,7 +255,7 @@ export function SubmissionReviewDialog({
                                 rel='noopener noreferrer'
                                 className='text-blue-600 underline hover:text-blue-800'
                               >
-                                {question.answerText}
+                                {truncateUrl(question.answerText)}
                               </a>
                             ) : (
                               question.answerText
