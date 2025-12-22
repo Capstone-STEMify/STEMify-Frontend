@@ -53,11 +53,19 @@ export default function LessonContent({ token, lessonId, sectionStatus, enrollme
   const currentSectionProgress = sectionStatus?.data.items.find((item) => item.sectionId === sectionId)
 
   if (!sectionId) {
-    return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
+    return (
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+        <LoadingComponent size={18} textShow={false} />
+      </div>
+    )
   }
 
   if (!content || content.data.items.length === 0) {
-    return <div className='p-6 text-gray-500'>{t('notFound.no_section')}</div>
+    return (
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-100'>
+        <LoadingComponent size={18} textShow={false} />
+      </div>
+    )
   }
 
   const handleCompleteSection = async () => {

@@ -89,6 +89,8 @@
       "resultDetail": "Chi tiết kết quả",
       "complete": "Hoàn thành",
       "incomplete": "Chưa hoàn thành",
+      "dueDate": "Hạn nộp",
+      "assignedAt": "Ngày bắt đầu",
       "question": {
         "question": "Câu hỏi",
         "singlechoice": "Chọn một đáp án",

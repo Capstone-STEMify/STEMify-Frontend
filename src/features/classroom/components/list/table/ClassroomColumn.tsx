@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import UserAvatar from '@/components/shared/UserAvatar'
 import { useDeleteClassroomMutation } from '@/features/classroom/api/classroomApi'
 import { Classroom, ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
@@ -98,6 +99,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
       header: tc('tableHeader.numberOfStudents'),
       cell: ({ row }) => {
         const numberOfStudents = row.original.numberOfStudents
+        const student = row.original.students
 
         // Nếu không có học viên, hiển thị dấu gạch ngang
         if (numberOfStudents === 0) {
@@ -112,12 +114,7 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
           <div className='flex -space-x-2'>
             {/* Hiển thị tối đa 3 avatar mặc định */}
             {[...Array(Math.min(3, numberOfStudents))].map((_, index) => (
-              <Avatar key={index} className='h-8 w-8 border-2 border-white'>
-                <AvatarImage src='/placeholder.svg' alt='Student' />
-                <AvatarFallback className='bg-gradient-to-br from-sky-400 to-sky-600 text-xs text-white'>
-                  S{index + 1}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar key={index} fullName={student[index]?.name || `S${index + 1}`} size={32} />
             ))}
 
             {/* Hiển thị +số nếu có hơn 3 học viên */}

@@ -39,7 +39,6 @@ export default function Workspace3D({
 
   // check access
   const { accessEmulatorIds } = useAppSelector((state) => state.selectedOrganization)
-  console.log('accessEmulatorIds:', accessEmulatorIds)
   if (
     id &&
     typeof id === 'string' &&
@@ -69,19 +68,14 @@ export default function Workspace3D({
     previousStep
   } = useAssembly()
 
-  console.log('currentStep:', currentStep)
-
-  // Load assembly khi có data từ API
   useEffect(() => {
     if (emulatorResponse?.data?.definitionJson) {
       try {
-        // definitionJson có thể là string hoặc object
         const assemblyData =
           typeof emulatorResponse.data.definitionJson === 'string'
             ? JSON.parse(emulatorResponse.data.definitionJson)
             : emulatorResponse.data.definitionJson
 
-        // Load assembly với inline data
         loadAssembly('inline', assemblyData)
       } catch (err) {
         console.error('Failed to parse assembly data:', err)
