@@ -135,9 +135,6 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
       <div className='space-y-4'>
         <div className='space-y-2 text-center'>
           <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{quiz.quizTitle}</h1>
-          <p className='text-base text-gray-600'>
-            {tq('assignedAt')}: {formatDate(studentQuiz?.data.assignedAt, { locale })}
-          </p>
           {
             <p className='text-base text-gray-600'>
               {tq('dueDate')}: {formatDate(studentQuiz?.data.dueDate, { locale })}
