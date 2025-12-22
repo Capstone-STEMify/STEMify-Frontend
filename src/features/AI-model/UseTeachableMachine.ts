@@ -38,7 +38,7 @@ const CONFIG = {
 }
 
 
-const MOBILENET_CONFIG = { version: 2 as const, alpha: 1.0 as const }
+const MOBILENET_CONFIG = { version: 1 as const, alpha: 1.0 as const }
 
 export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Class 2']) {
   const t = useTranslations('agent.modelMaker.microbit.status')
@@ -186,7 +186,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
         type: 'graph' as const,
         version: 'v3'
       },
-      // MobileNet v1 URLs (fallback - confirmed working)
+      // MobileNet v1 URLs
       {
         url: 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json',
         type: 'layers' as const,
@@ -234,7 +234,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
           loadedModelInfo = { url: modelInfo.url, version: modelInfo.version, type: 'graph' }
           break
         } else {
-          // Load as LayersModel (MobileNet v1/v2)
+          // Load as LayersModel (MobileNet v1 - fallback)
           baseModel = await tf.loadLayersModel(modelInfo.url)
           
           if (!baseModel || !baseModel.layers) {
@@ -297,7 +297,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       testInput.dispose()
       testOutput.dispose()
     } else if (baseModel) {
-      // Handle LayersModel (MobileNet v1/v2)
+      // Handle LayersModel (MobileNet v1 - fallback)
       console.log('Processing LayersModel for feature extraction...')
       
       for (let i = baseModel.layers.length - 1; i >= 0; i--) {
@@ -638,7 +638,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
             baseModel: `@tensorflow-models/mobilenet v${MOBILENET_CONFIG.version} alpha ${MOBILENET_CONFIG.alpha}`,
             baseModelPackage: '@tensorflow-models/mobilenet',
             baseModelConfig: MOBILENET_CONFIG,
-            accuracy: '~71.8% on ImageNet (MobileNet v2 alpha 1.0)',
+            accuracy: '~70.6% on ImageNet (MobileNet v1 alpha 1.0)',
             trainingDate: new Date().toISOString(),
             description: 'Model được train bằng Teachable Machine',
             usage: {
