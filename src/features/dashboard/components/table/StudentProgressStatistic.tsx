@@ -38,6 +38,7 @@ interface CourseType {
 interface StudentProgressStatisticProps {
   classroomId: number
   courses: CourseType[]
+  courseId?: number
 }
 
 const COLUMN_WIDTH = 'w-[100px] min-w-[100px]'
@@ -49,11 +50,11 @@ type LessonDetailModalProps = {
   studentProgress: any
 }
 
-export function StudentProgressStatistic({ classroomId, courses }: StudentProgressStatisticProps) {
+export function StudentProgressStatistic({ classroomId, courses, courseId }: StudentProgressStatisticProps) {
   const t = useTranslations('dashboard.classroom')
   const locale = useLocale()
 
-  const [selectedCourseId, setSelectedCourseId] = React.useState<string>('')
+  // const [selectedCourseId, setSelectedCourseId] = React.useState<string>('')
 
   const [aiData, setAiData] = React.useState<{
     overviewText: string
@@ -94,22 +95,22 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
   const [analyzeTrigger, { isLoading: isAnalyzing }] = useAnalyzeClassroomProgressMutation()
 
-  React.useEffect(() => {
-    if (courses.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(String(courses[0].id))
-    }
-  }, [courses, selectedCourseId])
+  // React.useEffect(() => {
+  //   if (courses.length > 0 && !selectedCourseId) {
+  //     setSelectedCourseId(String(courses[0].id))
+  //   }
+  // }, [courses, selectedCourseId])
 
   const { data: progressRes, isFetching } = useGetClassroomStudentProgressQuery(
-    { classroomId, courseId: Number(selectedCourseId) },
-    { skip: !classroomId || !selectedCourseId }
+    { classroomId, courseId: Number(courseId) },
+    { skip: !classroomId || !courseId }
   )
 
   // Data progress
   const lessons = progressRes?.data?.lessons || []
   const students = progressRes?.data?.StudentProgress || []
 
-  const currentCourseTitle = courses.find((c) => String(c.id) === selectedCourseId)?.title || ''
+  // const currentCourseTitle = courses.find((c) => String(c.id) === selectedCourseId)?.title || ''
 
   const handleAnalyzeClassroom = async () => {
     try {
