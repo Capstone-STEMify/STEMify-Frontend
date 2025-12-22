@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { Progress } from '@/components/shadcn/progress'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { formatDate } from '@/utils/index'
+import { formatDate, useStatusTranslation } from '@/utils/index'
 
 interface CourseCardProps {
   course: CourseEnrollment
@@ -17,10 +17,11 @@ export const CourseCard = ({ course }: CourseCardProps) => {
   const locale = useLocale()
   const router = useRouter()
   const t = useTranslations('course')
+  const translateStatus = useStatusTranslation()
   return (
-    <Card>
-      <CardContent className='flex items-center justify-between'>
-        <div className='flex items-center gap-4 py-4'>
+    <Card className='w-fit'>
+      <CardContent>
+        <div className='flex w-fit items-center gap-4 py-4'>
           <div>
             <Image
               className='aspect-square rounded-sm border bg-white object-contain shadow-sm'
@@ -39,7 +40,7 @@ export const CourseCard = ({ course }: CourseCardProps) => {
             >
               {course.courseTitle}
             </h3>
-            <p className='mt-1 text-sm text-gray-600'>{course.status}</p>
+            <p className='mt-1 text-sm text-gray-600'>{translateStatus(course.status)}</p>
             <Progress value={course.progressPercentage} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
             <span className='text-sm font-medium text-gray-700'>{course.progressPercentage ?? 0}%</span>
             {course.status === EnrollmentStatus.COMPLETED && (
