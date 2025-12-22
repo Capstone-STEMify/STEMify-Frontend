@@ -24,7 +24,11 @@ export default function ClassroomDetailPage() {
   const [currentTab, setCurrentTab] = React.useState<ClassroomNavItems>('overview')
 
   const { data: classroomData, isLoading } = useGetClassroomByIdQuery(Number(classroomId))
-  const { data: courseEnrollment } = useSearchCourseEnrollmentQuery(
+  const {
+    data: courseEnrollment,
+    isLoading: isCourseEnrollmentLoading,
+    refetch
+  } = useSearchCourseEnrollmentQuery(
     {
       courseId: classroomData?.data.course.id,
       studentId: selectedOrgUserId!,
@@ -50,7 +54,11 @@ export default function ClassroomDetailPage() {
       <ClassroomSubHeader classroom={classroomData?.data} currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 'overview' && currentRole === LicenseType.TEACHER ? <ClassroomOverview /> : null}
       {currentTab === 'overview' && currentRole === LicenseType.STUDENT ? (
-        <StudentClassroomDetail courseEnrollment={courseEnrollment?.data.items[0]} />
+        <StudentClassroomDetail
+          courseEnrollment={courseEnrollment?.data.items[0]}
+          isCourseEnrollmentLoading={isCourseEnrollmentLoading}
+          refetch={refetch}
+        />
       ) : null}
       {currentTab === 'course' ? (
         <div>
