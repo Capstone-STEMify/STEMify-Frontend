@@ -49,7 +49,9 @@
         "duration": "Duration",
         "dur_description": "Self-paced learning",
         "ratings": "Ratings",
-        "rate_description": "Community feedback"
+        "rate_description": "Community feedback",
+        "level": "Level",
+        "level_description": "Difficulty Level"
       },
       "lesson": {
         "cardTitle": "Lesson",

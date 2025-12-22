@@ -2,7 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, Clock, Star, Users } from 'lucide-react'
 import { staggerContainer, staggerItem } from '@/utils/motion'
-import { formatDuration } from '@/utils/index'
+import { formatDuration, useLevelTranslation } from '@/utils/index'
 import { Course } from '@/features/resource/course/types/course.type'
 import { useTranslations } from 'next-intl'
 
@@ -12,6 +12,8 @@ interface StatsSectionProps {
 
 export default function StatsSection({ course }: StatsSectionProps) {
   const t = useTranslations('course')
+  const translateLevel = useLevelTranslation()
+
   const statsData = [
     {
       icon: BookOpen,
@@ -31,9 +33,9 @@ export default function StatsSection({ course }: StatsSectionProps) {
     },
     {
       icon: Star,
-      value: 0,
-      title: `${t('details.stats.ratings')}`,
-      subtitle: `${t('details.stats.rate_description')}`,
+      value: translateLevel(course.level),
+      title: `${t('details.stats.level')}`,
+      subtitle: `${t('details.stats.level_description')}`,
       iconColor: 'text-yellow-500',
       bgColor: 'bg-yellow-100'
     }
