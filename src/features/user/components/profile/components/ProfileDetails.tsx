@@ -9,10 +9,12 @@ import Image from 'next/image'
 import { Button } from '@/components/shadcn/button'
 import { useGetUserByIdQuery } from '@/features/user/api/userApi'
 import { useTranslations } from 'next-intl'
+import UserAvatar from '@/components/shared/UserAvatar'
+import { useRouter } from 'next/navigation'
 
 export default function ProfileDetails() {
   const { data: session, status } = useSession()
-
+  const router = useRouter()
   const t = useTranslations('profile')
   const tc = useTranslations('common')
 
@@ -72,13 +74,7 @@ export default function ProfileDetails() {
         <div className='relative px-6 pb-6'>
           {/* Avatar */}
           <div className='relative -mt-16 mb-4 sm:-mt-20'>
-            <Image
-              width={160}
-              height={160}
-              src={session?.user?.image || 'https://github.com/shadcn.png'}
-              alt='Profile'
-              className='h-32 w-32 rounded-full border-4 border-white bg-white object-cover shadow-lg sm:h-40 sm:w-40'
-            />
+            <UserAvatar fullName={session?.user?.name || ''} size={90} />
             <button
               onClick={() => openModal('image')}
               className='absolute -bottom-2 left-28 rounded-full bg-gray-800 p-2 text-white shadow-lg transition-colors hover:bg-gray-700'
@@ -93,6 +89,13 @@ export default function ProfileDetails() {
               <h1 className='text-2xl font-bold text-gray-900 sm:text-3xl'>{session?.user?.name}</h1>
               <p className='text-sm text-gray-600 sm:text-base'>{t('description')}s</p>
             </div>
+            <Button
+              onClick={() => router.push('/certificate')}
+              className='bg-sky-custom-600 flex items-center justify-center space-x-2 rounded-lg p-4 text-white transition-colors sm:w-auto'
+            >
+              <Edit className='h-4 w-4' />
+              <span>{tc('button.viewCertificate')}</span>
+            </Button>
           </div>
 
           {/* Form */}

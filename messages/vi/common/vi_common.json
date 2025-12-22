@@ -27,6 +27,7 @@
       "noOptions": "Không có tùy chọn nào."
     },
     "button": {
+      "viewCertificate": "Xem Chứng Chỉ",
       "accept": "Chấp Nhận",
       "create": "Tạo Mới",
       "detail": "Chi Tiết",
