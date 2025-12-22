@@ -18,7 +18,7 @@ import { useModal } from '@/providers/ModalProvider'
 import { useStatusTranslation } from '@/utils/index'
 import { cn } from '@/utils/shadcn/utils'
 import { or } from 'ajv/dist/compile/codegen'
-import { CheckCircle, UserPlus } from 'lucide-react'
+import { CheckCircle, RefreshCw, RotateCw, UserPlus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -41,7 +41,7 @@ export default function LicenseAssignmentList() {
     dispatch(setParam({ key: 'search', value: debouncedSearchQuery }))
   }, [dispatch, subscriptionId, currentTab, debouncedSearchQuery])
 
-  const { data: licenses, isLoading } = useSearchLicenseAssignmentQuery(params)
+  const { data: licenses, isLoading, refetch } = useSearchLicenseAssignmentQuery(params)
   const rows = React.useMemo(() => licenses?.data.items ?? [], [licenses])
   const columns = useGetLicenseAssignmentColumnTable()
 
@@ -71,9 +71,14 @@ export default function LicenseAssignmentList() {
       <Card className='py-4 shadow-lg'>
         <CardHeader>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-            <div>
-              <CardTitle className='text-xl'>{to('header')}</CardTitle>
-              <p className='text-muted-foreground mt-1 text-sm'>{to('description')}</p>
+            <div className='flex items-center gap-2'>
+              <div>
+                <CardTitle className='text-xl'>{to('header')}</CardTitle>
+                <p className='text-muted-foreground mt-1 text-sm'>{to('description')}</p>
+              </div>
+              <button onClick={() => refetch()}>
+                <RotateCw className='h-6 w-6 text-gray-600 hover:cursor-pointer hover:text-gray-800' />
+              </button>
             </div>
             <Button
               className='bg-sky-500'
