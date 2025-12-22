@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import * as tf from '@tensorflow/tfjs'
+import * as mobilenet from '@tensorflow-models/mobilenet'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import { useTranslations } from 'next-intl'
@@ -15,7 +16,7 @@ export interface TrainingStatus {
 }
 
 interface TeachableMachineModel {
-  featureExtractor: tf.LayersModel
+  featureExtractor: tf.LayersModel | tf.GraphModel
   classifier: tf.LayersModel
   predict: (input: tf.Tensor) => Promise<PredictionResult[]>
   getTopKClasses: (input: tf.Tensor, k?: number) => Promise<PredictionResult[]>
@@ -36,7 +37,8 @@ const CONFIG = {
   minDelta: 0.001 
 }
 
-const BASE_MODEL_URL = 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json'
+
+const MOBILENET_CONFIG = { version: 2 as const, alpha: 1.0 as const }
 
 export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Class 2']) {
   const t = useTranslations('agent.modelMaker.microbit.status')
@@ -53,6 +55,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
   const [trainingProgress, setTrainingProgress] = useState(0)
   const [trainingStatus, setTrainingStatus] = useState<TrainingStatus | null>(null)
   const [predictionResults, setPredictionResults] = useState<PredictionResult[] | null>(null)
+  const [loadedModelInfo, setLoadedModelInfo] = useState<{ version: string; url: string; type: string } | null>(null)
 
   // Add new class
   const addNewClass = useCallback(
@@ -169,74 +172,223 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
   // Create transfer learning model
   const createTransferLearningModel = useCallback(async (numClasses: number) => {
     console.log('Creating transfer learning model...')
+    console.log(`Loading MobileNet v${MOBILENET_CONFIG.version} alpha ${MOBILENET_CONFIG.alpha}...`)
 
-    const baseModel = await tf.loadLayersModel(BASE_MODEL_URL)
-    console.log('Base model loaded, layers:', baseModel.layers.length)
-
-    let featureExtractor: tf.LayersModel | undefined
-    for (let i = baseModel.layers.length - 1; i >= 0; i--) {
-      const layer = baseModel.layers[i]
-      console.log(`Layer ${i}: ${layer.name}, output shape:`, layer.outputShape)
-
-      if (
-        layer.name.includes('global_average_pooling') ||
-        layer.name.includes('avg_pool') ||
-        (layer.name.includes('dense') && i < baseModel.layers.length - 1)
-      ) {
-        featureExtractor = tf.model({
-          inputs: baseModel.inputs,
-          outputs: layer.output
-        })
-        console.log('Feature extractor created from layer:', layer.name)
-        break
+    let baseModel: tf.LayersModel | null = null
+    let graphModel: tf.GraphModel | null = null
+    let isGraphModel = false
+    let actualModelVersion = MOBILENET_CONFIG.version.toString()
+    let actualModelUrl = ''
+    
+    const modelConfigs = [
+      {
+        url: 'https://zlumjdsauobocldzvjoo.supabase.co/storage/v1/object/public/ai-models/MobileNetV3/model.json',
+        type: 'graph' as const,
+        version: 'v3'
+      },
+      // MobileNet v1 URLs (fallback - confirmed working)
+      {
+        url: 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json',
+        type: 'layers' as const,
+        version: 'v1'
+      },
+      {
+        url: 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.75_224/model.json',
+        type: 'layers' as const,
+        version: 'v1'
+      },
+      {
+        url: 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.5_224/model.json',
+        type: 'layers' as const,
+        version: 'v1'
+      },
+      {
+        url: 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json',
+        type: 'layers' as const,
+        version: 'v1'
+      }
+    ]
+    
+    let lastError: Error | null = null
+    let loadedModelInfo: { url: string; version: string; type: string } | null = null
+    
+    for (const modelInfo of modelConfigs) {
+      try {
+        console.log(`Trying to load MobileNet ${modelInfo.version} from: ${modelInfo.url}`)
+        
+        if (modelInfo.type === 'graph') {
+          // Load as GraphModel (MobileNet v3)
+          graphModel = await tf.loadGraphModel(modelInfo.url)
+          
+          if (!graphModel) {
+            throw new Error('GraphModel không được load thành công')
+          }
+          
+          console.log(`✓ MobileNet ${modelInfo.version} GraphModel loaded successfully`)
+          console.log('GraphModel inputs:', graphModel.inputs)
+          console.log('GraphModel outputs:', graphModel.outputs)
+          
+          isGraphModel = true
+          actualModelVersion = modelInfo.version
+          actualModelUrl = modelInfo.url
+          loadedModelInfo = { url: modelInfo.url, version: modelInfo.version, type: 'graph' }
+          break
+        } else {
+          // Load as LayersModel (MobileNet v1/v2)
+          baseModel = await tf.loadLayersModel(modelInfo.url)
+          
+          if (!baseModel || !baseModel.layers) {
+            throw new Error('Base model không có layers property')
+          }
+          
+          actualModelVersion = modelInfo.version
+          actualModelUrl = modelInfo.url
+          loadedModelInfo = { url: modelInfo.url, version: modelInfo.version, type: 'layers' }
+          console.log(`✓ MobileNet ${modelInfo.version} LayersModel loaded successfully`)
+          console.log('Base model layers:', baseModel.layers.length)
+          break
+        }
+      } catch (error) {
+        console.warn(`✗ Failed to load ${modelInfo.version} from ${modelInfo.url}:`, error)
+        lastError = error instanceof Error ? error : new Error(String(error))
+        continue
       }
     }
-
-    if (!featureExtractor) {
-      featureExtractor = tf.model({
-        inputs: baseModel.inputs,
-        outputs: baseModel.layers[baseModel.layers.length - 2].output
-      })
-      console.log('Using fallback feature extractor')
+    
+    if (!baseModel && !graphModel) {
+      throw new Error(
+        `Không thể tải MobileNet model từ bất kỳ URL nào. ` +
+        `Đã thử ${modelConfigs.length} URLs khác nhau. ` +
+        `Lỗi cuối cùng: ${lastError?.message || 'Unknown error'}. ` +
+        `Vui lòng kiểm tra kết nối internet.`
+      )
+    }
+    
+    if (loadedModelInfo) {
+      console.log(`✓ Successfully loaded MobileNet ${loadedModelInfo.version} (${loadedModelInfo.type} model)`)
+      // Store model info for later use in metadata
+      // Note: This is a workaround since we can't easily pass this through the callback
     }
 
+    let featureExtractor: tf.LayersModel | tf.GraphModel
+    let featureSize: number = 0
+    
+    if (isGraphModel && graphModel) {
+      // Handle GraphModel (MobileNet v3)
+      // GraphModel outputs classification directly [batch, 1001]
+      // For transfer learning, we'll use the full model as feature extractor
+      // and add our classifier on top
+      console.log('Using GraphModel as feature extractor (MobileNet v3)')
+      featureExtractor = graphModel
+      
+      // Test to get output shape
+      const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
+      const testOutput = featureExtractor.predict(testInput) as tf.Tensor
+      console.log('GraphModel output shape:', testOutput.shape)
+      
+      // MobileNet v3 outputs [batch, 1001] - we'll use this as features
+      // For transfer learning, we can use the logits (before softmax) or the full output
+      if (!testOutput.shape || testOutput.shape.length < 2) {
+        throw new Error('GraphModel output shape không hợp lệ')
+      }
+      featureSize = testOutput.shape[1] || 1001 // Default to 1001 if undefined
+      console.log('Feature size from GraphModel:', featureSize)
+      
+      testInput.dispose()
+      testOutput.dispose()
+    } else if (baseModel) {
+      // Handle LayersModel (MobileNet v1/v2)
+      console.log('Processing LayersModel for feature extraction...')
+      
+      for (let i = baseModel.layers.length - 1; i >= 0; i--) {
+        const layer = baseModel.layers[i]
+        console.log(`Layer ${i}: ${layer.name}, output shape:`, layer.outputShape)
 
-    featureExtractor.layers.forEach((layer) => {
-      layer.trainable = false
-    })
+        if (
+          layer.name.includes('global_average_pooling') ||
+          layer.name.includes('avg_pool') ||
+          (layer.name.includes('dense') && i < baseModel.layers.length - 1)
+        ) {
+          featureExtractor = tf.model({
+            inputs: baseModel.inputs,
+            outputs: layer.output
+          })
+          console.log('Feature extractor created from layer:', layer.name)
+          break
+        }
+      }
 
-    const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
-    const testOutput = featureExtractor.predict(testInput) as tf.Tensor
-    console.log('Feature extractor output shape:', testOutput.shape)
+      if (!featureExtractor!) {
+        featureExtractor = tf.model({
+          inputs: baseModel.inputs,
+          outputs: baseModel.layers[baseModel.layers.length - 2].output
+        })
+        console.log('Using fallback feature extractor')
+      }
 
-    const featureSize = testOutput.shape.slice(1).reduce((a, b) => a * b, 1)
-    console.log('Feature size:', featureSize)
+      // Freeze feature extractor layers
+      if ('layers' in featureExtractor) {
+        featureExtractor.layers.forEach((layer) => {
+          layer.trainable = false
+        })
+      }
 
-    testInput.dispose()
-    testOutput.dispose()
+      // Test the feature extractor to get output shape
+      const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
+      const testOutput = featureExtractor.predict(testInput) as tf.Tensor
+      console.log('Feature extractor output shape:', testOutput.shape)
 
-    const classifier = tf.sequential({
-      layers: [
+      featureSize = testOutput.shape.slice(1).reduce((a, b) => a * b, 1)
+      console.log('Feature size:', featureSize)
+
+      testInput.dispose()
+      testOutput.dispose()
+    } else {
+      throw new Error('Không có model nào được load thành công')
+    }
+
+    // Chỗ này xây layer
+    const classifierLayers: tf.layers.Layer[] = []
+    
+    if (isGraphModel && featureSize === 1001) {
+
+      //  BOTTLENECK LAYER để nén features xuống 256 features quan trọng nhất
+      // λ = 0.01 
+      classifierLayers.push(
         tf.layers.dense({
           inputShape: [featureSize],
-          units: 32,
+          units: 256,
           activation: 'relu',
-          name: 'dense1'
+          name: 'bottleneck',
+          kernelRegularizer: tf.regularizers.l2({ l2: 0.01 }) 
         }),
-        tf.layers.dropout({ rate: CONFIG.dropout1 }),
-        tf.layers.dense({
-          units: 16,
-          activation: 'relu',
-          name: 'dense2'
-        }),
-        tf.layers.dropout({ rate: CONFIG.dropout2 }),
-        tf.layers.dense({
-          units: numClasses,
-          activation: 'softmax',
-          name: 'predictions'
-        })
-      ]
-    })
+        tf.layers.dropout({ rate: 0.3 }) 
+      )
+    }
+    
+    // Lớp phân loại chính
+    classifierLayers.push(
+      tf.layers.dense({
+        inputShape: isGraphModel && featureSize === 1001 ? [256] : [featureSize],
+        units: 64, 
+        activation: 'relu',
+        name: 'dense1'
+      }),
+      tf.layers.dropout({ rate: CONFIG.dropout1 }), // Dropout 50%
+      tf.layers.dense({
+        units: 32, 
+        activation: 'relu',
+        name: 'dense2'
+      }),
+      tf.layers.dropout({ rate: CONFIG.dropout2 }), // Dropout 30%
+      tf.layers.dense({
+        units: numClasses,
+        activation: 'softmax', 
+        name: 'predictions'
+      })
+    )
+    
+    const classifier = tf.sequential({ layers: classifierLayers })
 
     classifier.compile({
       optimizer: tf.train.adam(CONFIG.learningRate),
@@ -245,7 +397,13 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     })
 
     console.log('Transfer learning model created with input shape:', [featureSize])
-    return { featureExtractor, classifier }
+    return { 
+      featureExtractor, 
+      classifier,
+      modelVersion: actualModelVersion,
+      modelUrl: actualModelUrl,
+      isGraphModel
+    }
   }, [])
 
   // Train model
@@ -470,17 +628,21 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
           }
 
           // Thêm metadata
+          const architectureName = `MobileNet_v${MOBILENET_CONFIG.version}_Alpha${MOBILENET_CONFIG.alpha}_224_Transfer_Learning`
           const modelInfo = {
             classes,
             modelType: 'image_classification',
-            architecture: 'MobileNet_v1_0.25_224_Transfer_Learning',
+            architecture: architectureName,
             inputShape: [CONFIG.imageSize, CONFIG.imageSize, 3],
             outputClasses: classes.length,
-            baseModel: BASE_MODEL_URL,
+            baseModel: `@tensorflow-models/mobilenet v${MOBILENET_CONFIG.version} alpha ${MOBILENET_CONFIG.alpha}`,
+            baseModelPackage: '@tensorflow-models/mobilenet',
+            baseModelConfig: MOBILENET_CONFIG,
+            accuracy: '~71.8% on ImageNet (MobileNet v2 alpha 1.0)',
             trainingDate: new Date().toISOString(),
             description: 'Model được train bằng Teachable Machine',
             usage: {
-              loadBaseModel: 'Load MobileNet từ URL trên',
+              loadBaseModel: `Load using: import * as mobilenet from '@tensorflow-models/mobilenet'; await mobilenet.load(${JSON.stringify(MOBILENET_CONFIG)})`,
               loadClassifier: 'Load trained-classifier từ file đã tải',
               preprocessing: 'Resize image to 224x224, normalize /255.0'
             }
