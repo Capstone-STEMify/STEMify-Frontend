@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import UserAvatar from '@/components/shared/UserAvatar'
 import { useDeleteClassroomMutation } from '@/features/classroom/api/classroomApi'
 import { Classroom, ClassroomStatus } from '@/features/classroom/types/classroom.type'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
@@ -56,8 +57,8 @@ export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[
       header: tc('tableHeader.numberOfStudents'),
       cell: ({ row }) => {
         const numberOfStudents = row.original.numberOfStudents
+        const students = row.original.students ?? []
 
-        // Nếu không có học viên, hiển thị dấu gạch ngang
         if (numberOfStudents === 0) {
           return (
             <div className='flex items-center justify-center gap-1 text-gray-500'>
@@ -68,17 +69,10 @@ export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[
 
         return (
           <div className='flex -space-x-2'>
-            {/* Hiển thị tối đa 3 avatar mặc định */}
-            {[...Array(Math.min(3, numberOfStudents))].map((_, index) => (
-              <Avatar key={index} className='h-8 w-8 border-2 border-white'>
-                <AvatarImage src='/placeholder.svg' alt='Student' />
-                <AvatarFallback className='bg-gradient-to-br from-sky-400 to-sky-600 text-xs text-white'>
-                  S{index + 1}
-                </AvatarFallback>
-              </Avatar>
+            {students.slice(0, 3).map((s) => (
+              <UserAvatar key={s.id} fullName={s.name} size={32} />
             ))}
 
-            {/* Hiển thị +số nếu có hơn 3 học viên */}
             {numberOfStudents > 3 && (
               <div className='flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gray-300 text-xs font-semibold text-gray-700'>
                 +{numberOfStudents - 3}
