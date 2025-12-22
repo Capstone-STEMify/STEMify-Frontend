@@ -25,6 +25,7 @@ import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { setSelectedSectionId } from '@/features/resource/lesson/slice/lessonDetailSlice'
 
 type CourseDetailContentProps = {
   courseId: number
@@ -73,6 +74,7 @@ export default function CourseDetailContent({ courseId, enrollmentId }: CourseDe
     }
 
     if (status) {
+      dispatch(setSelectedSectionId(undefined))
       dispatch(setSelectedLessonStatus(status))
       dispatch(setSelectedEnrollmentId(enrollmentId))
     }

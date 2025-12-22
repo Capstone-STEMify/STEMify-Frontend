@@ -273,7 +273,7 @@ export default function WorkspaceTree() {
                     }
                   }}
                 >
-                  <span className='flex w-full items-center justify-between'>
+                  <span className='flex w-full items-center justify-between text-left'>
                     <span className='flex items-center gap-2'>
                       {item.isFolder() &&
                         (item.isExpanded() ? <FolderOpenIcon className='size-4' /> : <FolderIcon className='size-4' />)}

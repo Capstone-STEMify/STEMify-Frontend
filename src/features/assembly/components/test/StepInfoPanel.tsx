@@ -1,6 +1,8 @@
 'use client'
 
+import { AssemblyInstance } from '@/features/assembly/hooks/useAssemblyOptimized'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 
 interface StepInfoPanelProps {
   stepIndex: number
@@ -10,6 +12,9 @@ interface StepInfoPanelProps {
 }
 export function StepInfoPanel({ currentStep, strawTypeCount, connectorTypeCount }: StepInfoPanelProps) {
   const t3d = useTranslations('creator3D.main_content')
+
+  console.log('strawTypeCount in StepInfoPanel:', strawTypeCount)
+  console.log('connectorTypeCount in StepInfoPanel:', connectorTypeCount)
 
   const hasItems = (obj?: Record<string, any>) => obj && Object.keys(obj).length > 0
 
@@ -32,10 +37,14 @@ export function StepInfoPanel({ currentStep, strawTypeCount, connectorTypeCount 
               const first = instances[0]
               const name = first?.data?.name ?? templateId
               const color = first?.data?.material?.properties?.color ?? '#4ade80'
+              const image = first?.data?.imagePreviewUrl
 
               return (
                 <li key={templateId} className='flex items-center gap-2'>
-                  <div className='h-4 w-4 rounded-full border' style={{ backgroundColor: color }} title={name} />
+                  <div className='h-12 w-12 overflow-hidden rounded-full bg-gray-200 p-1'>
+                    <Image src={image} alt={name} width={48} height={48} className='h-full w-full object-contain' />
+                  </div>
+
                   <span>
                     {name}: x{count}
                   </span>
@@ -55,10 +64,14 @@ export function StepInfoPanel({ currentStep, strawTypeCount, connectorTypeCount 
               const first = instances[0]
               const name = first?.data?.name ?? templateId
               const color = first?.data?.material?.properties?.color ?? '#9ca3af'
+              const image = first?.data?.imagePreviewUrl
 
               return (
                 <li key={templateId} className='flex items-center gap-2'>
-                  <div className='h-4 w-4 rounded-sm border bg-gray-400' title={name} />
+                  <div className='h-12 w-12 overflow-hidden rounded-full bg-gray-200 p-1'>
+                    <Image src={image} alt={name} width={48} height={48} className='h-full w-full object-contain' />
+                  </div>
+
                   <span>
                     {name}: x{count}
                   </span>

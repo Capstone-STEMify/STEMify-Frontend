@@ -9,7 +9,7 @@ import {
 import { useModal } from '@/providers/ModalProvider'
 import { fileToBase64 } from '@/utils/index'
 import { useEffect, useState } from 'react'
-import { X } from 'lucide-react'
+import { Loader2, X } from 'lucide-react'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { useTranslations } from 'next-intl'
 
@@ -263,8 +263,7 @@ export function UpsertEmulator({ emulationId }: UpsertEmulatorProps) {
                   >
                     {isSubmitting ? (
                       <span className='flex items-center justify-center gap-2'>
-                        <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent'></div>
-                        {isUpdate ? t3d('upsert.updateButton') : t3d('upsert.creatingButton')}
+                        {isUpdate ? t3d('upsert.updateButton') : <Loader2 className='h-4 w-4 animate-spin' />}
                       </span>
                     ) : isUpdate ? (
                       <div>{t3d('upsert.updateButton')}</div>

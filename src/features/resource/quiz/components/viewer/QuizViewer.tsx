@@ -29,6 +29,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { PaginatedResult } from '@/types/baseModel'
 import { StudentProgress } from '@/features/student-progress/types/studentProgress.type'
 import { useParams, useRouter } from 'next/navigation'
+import { formatDate } from '@/utils/index'
 
 type QuizViewerProps = {
   quiz: QuizContent
@@ -62,10 +63,8 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
 
     return true
   }
-  console.log('isAllowedAttempt:', isAllowedAttempt(studentQuiz?.data))
 
   const { data: quizData, isLoading } = useGetQuizByIdQuery(quiz.quizId, { skip: !quiz.quizId })
-  console.log('Quiz data in viewer:', quizData)
   const [selectedAttempt, setSelectedAttempt] = useState<Attempt | null>(null)
   const role = useAppSelector((state) => state.selectedOrganization.currentRole)
   if (role === LicenseType.TEACHER) {
@@ -136,7 +135,14 @@ export default function QuizViewer({ quiz, isShowQuestionAnswer, studentQuizId, 
       <div className='space-y-4'>
         <div className='space-y-2 text-center'>
           <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{quiz.quizTitle}</h1>
-          {quiz.quizDescription && <p className='text-base text-gray-600'>{quiz.quizDescription}</p>}
+          <p className='text-base text-gray-600'>
+            {tq('assignedAt')}: {formatDate(studentQuiz?.data.assignedAt, { locale })}
+          </p>
+          {
+            <p className='text-base text-gray-600'>
+              {tq('dueDate')}: {formatDate(studentQuiz?.data.dueDate, { locale })}
+            </p>
+          }
         </div>
 
         {/* Quiz Stats Card */}
