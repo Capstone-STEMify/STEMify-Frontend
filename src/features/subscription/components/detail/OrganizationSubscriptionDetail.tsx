@@ -140,6 +140,8 @@ export default function OrganizationSubscriptionDetail() {
                   <div className='rounded-xl bg-slate-50 p-4 shadow-sm backdrop-blur-sm'>
                     <p className='text-sm font-medium'>{to('detail.subscription.currentPlan.packageDetails')}</p>
                     <p className='mt-1 text-2xl font-bold'>{subscription?.data.planName}</p>
+                    <span className='text-xs text-gray-600'>Code: {subscription?.data.code}</span>
+
                     <p className='mt-1 text-sm'>
                       {subscription?.data.netAmount} đ/
                       {to(`detail.subscription.currentPlan.${subscription?.data.planBillingCycle.toLowerCase()}`)}

@@ -3,6 +3,7 @@ import { Badge } from '@/components/shadcn/badge'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
 import { useDeleteClassroomMutation } from '@/features/classroom/api/classroomApi'
 import { Classroom, ClassroomStatus } from '@/features/classroom/types/classroom.type'
+import { useModal } from '@/providers/ModalProvider'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDate, formatDateV2, useStatusTranslation } from '@/utils/index'
 import { ColumnDef } from '@tanstack/react-table'
@@ -14,6 +15,7 @@ import { toast } from 'sonner'
 export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[] {
   const tc = useTranslations('common')
   const translateStatus = useStatusTranslation()
+  const { openModal } = useModal()
 
   const router = useRouter()
   const locale = useLocale()
@@ -24,18 +26,20 @@ export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[
       accessorKey: 'className',
       header: tc('tableHeader.className'),
       cell: ({ row }) => {
-        return <span>{row.original.name}</span>
+        return (
+          <span
+            className='cursor-pointer hover:font-semibold hover:underline'
+            onClick={() => router.push(`/${locale}/organization/classroom/${row.original.id}`)}
+          >
+            {row.original.name}
+          </span>
+        )
       }
     },
     {
       accessorKey: 'id',
       header: '',
       cell: ({ row }) => {}
-    },
-
-    {
-      accessorKey: 'grade',
-      header: tc('tableHeader.grade')
     },
 
     {
@@ -126,8 +130,14 @@ export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[
       {
         label: tc('button.delete'),
         onClick: ({ original }) => {
-          deleteClassroom(original.id)
-          toast.success('Classroom deleted successfully')
+          openModal('confirm', {
+            title: 'Xác nhận xóa lớp học',
+            message: `Bạn có chắc chắn muốn xóa lớp học "${original.name}" không? Hành động này không thể hoàn tác.`,
+            onConfirm: async () => {
+              await deleteClassroom(original.id).unwrap()
+              toast.success('Xóa lớp học thành công')
+            }
+          })
         }
       }
     ])

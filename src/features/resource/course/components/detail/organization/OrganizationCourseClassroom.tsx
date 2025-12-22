@@ -100,10 +100,6 @@ export default function OrganizationCourseClassroom({ courseTitle }: Organizatio
         pagingData={data?.data.items}
         pagingParams={queryParams}
         handlePageChange={() => {}}
-        onRowClick={(val) => {
-          console.log(val)
-          router.push(`/${locale}/organization/classroom/${val.id}`)
-        }}
       />
     </div>
   )
