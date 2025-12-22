@@ -1,5 +1,6 @@
 {
   "course": {
+    "completedAt": "Ngày hoàn thành: {date}",
     "list": {
       "title": "Danh Sách Khóa Học",
       "description": "Hướng dẫn theo chủ đề, phù hợp với chương trình giảng dạy với phương pháp giáo dục sau. Các khóa học có quan điểm của giáo viên và học sinh.",
