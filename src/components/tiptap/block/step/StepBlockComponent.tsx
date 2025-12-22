@@ -207,7 +207,7 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
               </div>
 
               {/* Step content */}
-              <div className='space-y-2'>
+              {/* <div className='space-y-2'>
                 <Label htmlFor={`step-${active}-content`} className='text-base'>
                   Nội dung
                 </Label>
@@ -216,7 +216,7 @@ export default function StepBlockComponent({ node, updateAttributes, editor }: N
                   onChange={(e) => updateStep('content', e.target.value)}
                   placeholder='Nội dung...'
                 />
-              </div>
+              </div> */}
 
               <div className='mb-5 space-y-2'>
                 <Label htmlFor={`step-${active}-images`} className='text-left text-base'>
