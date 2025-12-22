@@ -12,6 +12,8 @@ import { CameraTest } from '@/features/AI-model/components/CameraTest'
 import * as tf from '@tensorflow/tfjs'
 import { ArrowDownCircle, ArrowRightCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
+import { Button } from '@/components/shadcn/button'
 
 export default function TeachableMachinePage() {
   const t = useTranslations('agent.modelMaker')
@@ -96,9 +98,7 @@ export default function TeachableMachinePage() {
     <div className='mx-auto min-h-screen max-w-6xl bg-slate-50 py-10'>
       <div className='mb-8'>
         <h1 className='mb-2 text-4xl font-bold text-blue-500'>{t('title')}</h1>
-        <p className='max-w-2xl text-xl font-semibold text-gray-700'>
-          {t('description')}
-        </p>
+        <p className='max-w-2xl text-xl font-semibold text-gray-700'>{t('description')}</p>
       </div>
 
       <div className='space-y-16'>
@@ -138,6 +138,16 @@ export default function TeachableMachinePage() {
             onDownload={downloadModel}
           />
         </section>
+
+        {/* STEP 4: link to microbit AI */}
+        <div className='mb-10 flex flex-col items-center justify-center gap-4'>
+          <Link href='/lab/microbit-ai'>
+            <Button size={'lg'}>
+              {t('goToMicrobitAI')}
+              <ArrowRightCircle />
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Camera Overlay */}

@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/s
 import { useModal } from '../../../../../providers/ModalProvider'
 import UpsertSection from '@/features/resource/section/components/upsert/UpsertSection'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Loader, Loader2, Sparkles } from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { useGenerateSectionMutation } from '@/features/chat/api/agentApi'
@@ -17,6 +17,7 @@ interface ConfirmModalProps {
 export default function UpsertSectionModal({ lessonId, sectionId, onConfirm }: ConfirmModalProps) {
   const t = useTranslations('section')
   const ta = useTranslations('agent')
+  const locale = useLocale()
   const { closeModal, openModal } = useModal()
 
   const [genrateSection, setGenerateSection] = useState({
@@ -35,7 +36,7 @@ export default function UpsertSectionModal({ lessonId, sectionId, onConfirm }: C
   }
 
   const handleGenerateSection = async () => {
-    const res = await generateSection({ lesson_id: String(lessonId), force_mock: false })
+    const res = await generateSection({ lesson_id: String(lessonId), force_mock: false, lang: locale })
     setGenerateSection({
       title: res.data?.section.title || '',
       durationMinutes: res.data?.section.durationMinutes || 0,
@@ -79,7 +80,12 @@ export default function UpsertSectionModal({ lessonId, sectionId, onConfirm }: C
         </DialogHeader>
         <hr />
         <div>
-          <UpsertSection lessonId={lessonId} sectionId={sectionId} onSuccess={handleSuccess} genrateSection={genrateSection} />
+          <UpsertSection
+            lessonId={lessonId}
+            sectionId={sectionId}
+            onSuccess={handleSuccess}
+            genrateSection={genrateSection}
+          />
         </div>
       </DialogContent>
     </Dialog>
