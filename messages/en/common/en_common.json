@@ -27,6 +27,7 @@
       "noOptions": "No options available."
     },
     "button": {
+      "viewCertificate": "View Certificate",
       "accept": "Accept",
       "create": "Create New",
       "detail": "Detail",
