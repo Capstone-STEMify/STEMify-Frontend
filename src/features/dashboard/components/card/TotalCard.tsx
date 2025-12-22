@@ -136,7 +136,7 @@ export function TotalStudentsCard({ data }: TotalStudentsCardProps) {
                 <span className='text-gray-600'>{rate.title}</span>
               </div>
               <div className='flex items-center gap-2'>
-                <span className='font-medium text-gray-500'>{rate.people} People</span>
+                <span className='font-medium text-gray-500'>{rate.people} Người dùng</span>
                 <span className={cn('flex items-center text-xs', rate.change >= 0 ? 'text-green-600' : 'text-red-600')}>
                   {rate.change >= 0 ? <ArrowUp className='h-3 w-3' /> : <ArrowDown className='h-3 w-3' />}
                   {rate.change}%
