@@ -235,9 +235,9 @@ export function StudentProgressStatistic({ classroomId, courses, courseId }: Stu
                 {currentCourseTitle}
             </div> */}
           </div>
-          <Button variant='outline' size='icon'>
+          {/* <Button variant='outline' size='icon'>
             <Download className='h-4 w-4' />
-          </Button>
+          </Button> */}
         </div>
       </header>
 
