@@ -66,7 +66,7 @@ export default function ClassroomOverview() {
   const quizSubmissions = statsRes?.data.quizStatistic.submissions || 0
 
   const asmPassRate = statsRes?.data.assignmentStatistic.passRate || 0
-  const asmNotPassRate = 100 - asmPassRate
+  const asmNotPassRate = statsRes?.data.assignmentStatistic.failedRate || 0
   const asmSubmissions = statsRes?.data.assignmentStatistic.submissions || 0
 
   const quizStatusData = [
