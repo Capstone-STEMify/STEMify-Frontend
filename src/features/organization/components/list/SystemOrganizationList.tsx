@@ -57,6 +57,8 @@ export default function SystemOrganizationList() {
     )
   }
 
+  
+
   return (
     <div className='my-5 px-10'>
       <div className='mx-auto max-w-7xl space-y-6'>
