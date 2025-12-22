@@ -49,7 +49,9 @@
         "duration": "Thời gian",
         "dur_description": "Học tập theo tiến độ cá nhân",
         "ratings": "Đánh giá",
-        "rate_description": "Cảm nhận từ cộng đồng"
+        "rate_description": "Cảm nhận từ cộng đồng",
+        "level": "Độ Khó",
+        "level_description": "Mức độ khó của khóa học"
       },
       "lesson": {
         "cardTitle": "Bài Học",
