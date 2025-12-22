@@ -13,6 +13,7 @@ type OrganizationCurriculumCourseListProps = {
 
 export default function OrganizationCourseList({ courses }: OrganizationCurriculumCourseListProps) {
   const t = useTranslations('curriculum')
+  const tc = useTranslations('common')
   const { curriculumId } = useParams()
 
   return (
@@ -34,12 +35,6 @@ export default function OrganizationCourseList({ courses }: OrganizationCurricul
               <CardLayout
                 className='rounded-2xl border-none shadow-lg'
                 imageSrc={course.imageUrl || '/images/fallback.png'}
-                footer={
-                  <div className='flex items-center gap-2'>
-                    <Badge className='bg-sky-custom-300'>{course.ageRangeLabel}</Badge>
-                    <Badge className={getLevelBadgeClass(course.level)}>{capitalizeFirst(course.level)}</Badge>
-                  </div>
-                }
               >
                 <div>
                   <p className='text-muted-foreground text-xs font-medium'>{course.code}</p>
