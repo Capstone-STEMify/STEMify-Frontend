@@ -3,6 +3,7 @@ import React from 'react'
 import { Card, CardContent } from '@/components/shadcn/card'
 import Image from 'next/image'
 import SEmpty from '@/components/shared/empty/SEmpty'
+import { useTranslations } from 'next-intl'
 type OrganizationEmulatorListProps = {
   emulations?: EmulatorWithThumbnail[]
 }
