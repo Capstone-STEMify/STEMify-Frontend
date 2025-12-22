@@ -26,6 +26,7 @@ export default function StudentClassList() {
     skip: !courseId
   })
 
+  console.log('courseId', courseId)
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -67,7 +68,7 @@ export default function StudentClassList() {
 
       <DataTable columns={columns} data={studentData} placeholder='Chưa có học sinh nào trong lớp này.' />
 
-      <StudentProgressStatistic classroomId={classroomId} courses={lessons} />
+      <StudentProgressStatistic classroomId={classroomId} courses={lessons} courseId={courseId} />
 
       {selectedStudentId && (
         <StudentDetailModal
