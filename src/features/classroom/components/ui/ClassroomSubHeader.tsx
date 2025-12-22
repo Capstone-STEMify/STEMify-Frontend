@@ -67,12 +67,6 @@ export default function ClassroomSubHeader({ classroom, currentTab, setCurrentTa
                 <Badge className={`border ${getStatusBadgeClass(classroom.status)}`}>
                   {statusTranslation(classroom.status)}
                 </Badge>
-                <Badge className='flex items-center gap-2 bg-sky-100 text-xs font-medium text-sky-700'>
-                  <GraduationCap className='h-3 w-3' />
-                  <span className='text-xs'>
-                    {tClassroom('grade')} {classroom.grade}
-                  </span>
-                </Badge>
               </div>
 
               <div className='mt-0.5 flex items-center gap-1.5'>
