@@ -72,15 +72,6 @@ export const useStudentClassColumns = ({
                 <DropdownMenuItem onClick={() => onViewDetail(student)} className='cursor-pointer'>
                   <User className='mr-2 h-4 w-4' /> Xem hồ sơ
                 </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem
-                  onClick={() => onRemoveStudent(student)}
-                  className='cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600'
-                >
-                  <Trash2 className='mr-2 h-4 w-4' /> Xóa khỏi lớp
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
