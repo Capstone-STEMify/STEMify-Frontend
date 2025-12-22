@@ -60,11 +60,11 @@ export default function ClassroomDetailPage() {
           refetch={refetch}
         />
       ) : null}
-      {currentTab === 'course' ? (
+      {/* {currentTab === 'course' ? (
         <div>
           <ClassroomSchedule classroomId={Number(classroomId)} />
         </div>
-      ) : null}
+      ) : null} */}
       {currentTab === 'quiz' ? (
         <div>
           <TeacherQuiz />
