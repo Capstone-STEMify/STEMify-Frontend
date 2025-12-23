@@ -3,23 +3,21 @@ import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Certificate, CertificateType } from '@/features/certificate/types/certificate.type'
 import { formatDate } from '@/utils/index'
-import { Award, FileText, Download, ExternalLink } from 'lucide-react'
-import { useLocale } from 'next-intl'
-import { useRouter } from 'next/navigation'
+import { Award, FileText, Download } from 'lucide-react'
 import { Badge } from '@/components/shadcn/badge'
+import { useTranslations } from 'next-intl'
 
 interface CertificateItemProps {
   certificate: Certificate
+  onViewDetail: (id: number) => void
 }
 
-export const CertificateItem = ({ certificate }: CertificateItemProps) => {
-  const locale = useLocale()
-  const router = useRouter()
-
+export const CertificateItem = ({ certificate, onViewDetail }: CertificateItemProps) => {
+  const t = useTranslations('certificate')
   const isCurriculum = certificate.certificateType === CertificateType.CURRICULUM
 
-  const handleViewDetail = () => {
-    router.push(`/${locale}/certificate/${certificate.id}`)
+  const handleViewDetailClick = () => {
+    onViewDetail(certificate.id)
   }
 
   const handleDownload = (e: React.MouseEvent) => {
@@ -46,7 +44,7 @@ export const CertificateItem = ({ certificate }: CertificateItemProps) => {
           <div className='space-y-1'>
             <div className='flex items-center gap-2'>
               <h3
-                onClick={handleViewDetail}
+                onClick={handleViewDetailClick}
                 className='cursor-pointer text-lg font-semibold text-gray-900 transition-colors hover:text-blue-600'
               >
                 {certificate.title}
@@ -60,22 +58,21 @@ export const CertificateItem = ({ certificate }: CertificateItemProps) => {
             </div>
 
             <div className='gap-y-2 text-xs text-gray-500'>
-              <p className='flex items-center gap-1'>Date: {formatDate(certificate.issueDate)}</p>
+              <p className='flex items-center gap-1'>{t('date')} {formatDate(certificate.issueDate)}</p>
               <p className='flex items-center gap-1'>
-                ID: <span className='font-mono text-gray-600'>{certificate.verificationCode}</span>
+                {t('id')} <span className='font-mono text-gray-600'>{certificate.verificationCode}</span>
               </p>
             </div>
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className='flex items-center gap-2 pt-2 sm:pt-0'>
           <Button variant='outline' size='sm' className='gap-2' onClick={handleDownload}>
             <Download className='h-4 w-4' />
-            <span className='sr-only sm:not-sr-only'>PDF</span>
+            <span className='sr-only sm:not-sr-only'>{t('pdf')}</span>
           </Button>
-          <Button className='bg-blue-600 hover:bg-blue-700' size='sm' onClick={handleViewDetail}>
-            View Detail
+          <Button className='bg-blue-600 hover:bg-blue-700' size='sm' onClick={handleViewDetailClick}>
+            {t('viewDetail')}
           </Button>
         </div>
       </CardContent>

@@ -46,7 +46,11 @@
           "passed": "Đạt",
           "failed": "Không đạt",
           "graded": "Đã chấm điểm"
-        }
+        },
+        "missingAssignmentData": "Thiếu dữ liệu bài tập.",
+        "gradingSubmitted": "Đã gửi đánh giá thành công.",
+        "failedToSubmitGrading": "Không thể gửi đánh giá.",
+        "error": "Lỗi"
       }
     },
     "student": {

@@ -1,22 +1,24 @@
 'use client'
 import { useSearchCertificateQuery } from '@/features/certificate/api/certificateApi'
-import { CertificateType } from '@/features/certificate/types/certificate.type'
 import { useAppSelector } from '@/hooks/redux-hooks'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import SEmpty from '@/components/shared/empty/SEmpty'
-import { Award, Filter } from 'lucide-react'
+import { Award } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
-import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import { CertificateItem } from '../item/CertificateItem'
+import { CertificateDetailModal } from '../item/CertificateDetailModal'
 
 export default function CertificateList() {
-  const t = useTranslations('MyLearning')
-  const { token, user } = useAppSelector((state) => state.auth)
-  const { selectedOrgUserId } = useAppSelector((state) => state.selectedOrganization)
+  const t = useTranslations('certificate')
+  const { user } = useAppSelector((state) => state.auth)
   const userId = user?.userId
 
   const [filterType, setFilterType] = useState<string>('ALL')
+
+  // -- STATE CHO MODAL --
+  const [selectedCertId, setSelectedCertId] = useState<number | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { data: certificateResponse, isLoading } = useSearchCertificateQuery(
     { userId: userId!, pageNumber: 1, pageSize: 100 },
@@ -25,13 +27,15 @@ export default function CertificateList() {
 
   const filteredCertificates = useMemo(() => {
     if (!certificateResponse?.data?.items) return []
-
     const items = certificateResponse.data.items
-
     if (filterType === 'ALL') return items
-
     return items.filter((item) => item.certificateType.toLowerCase() === filterType.toLowerCase())
   }, [certificateResponse, filterType])
+
+  const handleViewDetail = (id: number) => {
+    setSelectedCertId(id)
+    setIsModalOpen(true)
+  }
 
   if (isLoading) {
     return (
@@ -44,8 +48,8 @@ export default function CertificateList() {
   if (!certificateResponse?.data?.items || certificateResponse.data.items.length === 0) {
     return (
       <SEmpty
-        title='No Certificates Yet'
-        description='Complete courses or specializations to earn your first certificate.'
+        title={t('noCertificates')}
+        description={t('noCertificatesDesc')}
         icon={<Award className='h-12 w-12 text-gray-300' />}
       />
     )
@@ -54,32 +58,27 @@ export default function CertificateList() {
   return (
     <main className='min-h-screen p-4 sm:p-6 lg:p-8'>
       <div className='mx-auto max-w-5xl space-y-8'>
-        {/* Header Section */}
         <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
           <div>
-            <h1 className='text-2xl font-bold text-gray-900'>Chứng chỉ</h1>
-            <p className='text-gray-500'>Quản lý và xem các chứng chỉ bạn đã đạt được</p>
+            <h1 className='text-2xl font-bold text-gray-900'>{t('title')}</h1>
+            <p className='text-gray-500'>{t('subtitle')}</p>
           </div>
-
-          {/* <Tabs defaultValue='ALL' onValueChange={setFilterType} className='w-full sm:w-auto'>
-            <TabsList className='grid w-full grid-cols-3 sm:w-auto'>
-              <TabsTrigger value='ALL'>Tất cả</TabsTrigger>
-              <TabsTrigger value={CertificateType.COURSE}>Khóa học</TabsTrigger>
-              <TabsTrigger value={CertificateType.CURRICULUM}>Khung chương trình</TabsTrigger>
-            </TabsList>
-          </Tabs> */}
         </div>
 
         <div className='flex flex-col gap-4'>
           {filteredCertificates.length > 0 ? (
-            filteredCertificates.map((cert) => <CertificateItem key={cert.id} certificate={cert} />)
+            filteredCertificates.map((cert) => (
+              <CertificateItem key={cert.id} certificate={cert} onViewDetail={handleViewDetail} />
+            ))
           ) : (
             <div className='rounded-lg border border-dashed bg-gray-50 py-10 text-center text-gray-500'>
-              Không tìm thấy chứng chỉ cho danh mục này.
+              {t('noCertificatesForCategory')}
             </div>
           )}
         </div>
       </div>
+
+      <CertificateDetailModal certificateId={selectedCertId} open={isModalOpen} onOpenChange={setIsModalOpen} />
     </main>
   )
 }
