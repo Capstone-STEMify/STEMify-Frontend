@@ -14,6 +14,7 @@
       "uploaded": "Uploaded: {images} images",
       "newClass": "Enter new class name",
       "balanceTip": "Tip: Try to capture the same number of images for each class for better model training. For example: If Class 1 has 50 images, Class 2 should also have around 50 images.",
+      "goToMicrobitAI": "Go to Micro:bit AI",
       "model": {
         "title": "Train Model",
         "description": "Click the button below to train the model right on the web",

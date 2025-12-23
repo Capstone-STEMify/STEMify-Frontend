@@ -32,12 +32,18 @@ interface UpsertSectionProps {
   lessonId?: number
   sectionId?: number
   onSuccess?: () => void
+  genrateSection?: {
+    title: string
+    durationMinutes: number
+    description: string
+  }
 }
 
 export default function UpsertSection({
   lessonId: propLessonId,
   sectionId: propSectionId,
-  onSuccess
+  onSuccess,
+  genrateSection
 }: UpsertSectionProps) {
   const params = useParams()
   const token = useAppSelector((state) => state.auth.token)
@@ -127,7 +133,17 @@ export default function UpsertSection({
         lessonId: sectionData.data.lessonId || lessonId || 0
       })
     }
-  }, [sectionData, lessonId, form])
+
+    if (genrateSection) {
+      form.reset({
+        title: genrateSection.title || '',
+        description: genrateSection.description || '',
+        duration: genrateSection.durationMinutes || 0,
+        isVisibleToStudent: true,
+        lessonId: lessonId || 0
+      })
+    }
+  }, [sectionData, lessonId, form, genrateSection])
 
   if (isSectionLoading) {
     return (

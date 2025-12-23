@@ -80,10 +80,12 @@ export default function SystemOrganizationDetail() {
               <span>{formatDate(organization.data.createdDate, { locale: locale })}</span>
             </div>
 
-            <div className='flex items-center gap-2'>
-              <span className='font-medium'>{to('lastModifiedDate')}:</span>
-              <span>{formatDate(organization.data.lastModifiedDate, { locale: locale })}</span>
-            </div>
+            {organization.data.lastModifiedDate && (
+              <div className='flex items-center gap-2'>
+                <span className='font-medium'>{to('lastModifiedDate')}:</span>
+                <span>{formatDate(organization.data.lastModifiedDate, { locale: locale })}</span>
+              </div>
+            )}
           </div>
 
           <hr className='my-3 border-gray-300' />
