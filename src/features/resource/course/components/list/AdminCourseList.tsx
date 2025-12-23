@@ -99,11 +99,9 @@ export default function AdminCourseList() {
                         }
                         footer={
                           <div>
-                            {course.duration > 0 && (
-                              <Badge className={getLevelBadgeClass(course.level)}>
-                                {tc(`level.${course.level.toLowerCase()}`)}
-                              </Badge>
-                            )}
+                            <Badge className={getLevelBadgeClass(course.level)}>
+                              {tc(`level.${course.level.toLowerCase()}`)}
+                            </Badge>
                           </div>
                         }
                       >
