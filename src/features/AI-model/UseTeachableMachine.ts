@@ -318,7 +318,33 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       setTrainingProgress(30)
 
       console.log('Extracting features...')
-      const features = featureExtractor.predict(images) as tf.Tensor
+      const FEATURE_BATCH_SIZE = 32
+      const numSamples = images.shape[0]
+      let features: tf.Tensor
+
+      try {
+        const batchFeaturesArray: tf.Tensor[] = []
+
+        for (let i = 0; i < numSamples; i += FEATURE_BATCH_SIZE) {
+          const end = Math.min(i + FEATURE_BATCH_SIZE, numSamples)
+
+          const batchResult = tf.tidy(() => {
+            const batchImages = images.slice([i, 0, 0, 0], [end - i, -1, -1, -1])
+            return featureExtractor.predict(batchImages) as tf.Tensor
+          })
+
+          batchFeaturesArray.push(batchResult)
+
+          await tf.nextFrame()
+        }
+
+        features = tf.concat(batchFeaturesArray, 0)
+
+        batchFeaturesArray.forEach((t) => t.dispose())
+      } catch (err) {
+        throw new Error('Lỗi khi trích xuất đặc trưng (Feature Extraction): ' + err)
+      }
+
       console.log('Features shape:', features.shape)
 
       const batchSize = features.shape[0]
