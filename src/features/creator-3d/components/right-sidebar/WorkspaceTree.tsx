@@ -161,7 +161,7 @@ export default function WorkspaceTree() {
           // Prefer library-provided childIndex when available (drop line index among workspace children)
           const childIndex: number | undefined = (target as any)?.childIndex ?? (target as any)?.index
 
-          let finalIds = actionIds.filter((id) => id !== draggedId)
+          const finalIds = actionIds.filter((id) => id !== draggedId)
           let insertIndex: number | null = null
 
           if (typeof childIndex === 'number') {
