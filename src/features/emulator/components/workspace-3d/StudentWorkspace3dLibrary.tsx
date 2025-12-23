@@ -34,31 +34,21 @@ export default function StudentWorkspace3dLibrary() {
   const t3d = useTranslations('workspace3D')
 
   const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
 
   const userRole = useAppSelector((state) => state.auth.user?.userRole)
   const userId = useAppSelector((state) => state.auth.user?.userId)
 
   const allowRoles = [UserRole.STAFF, UserRole.ADMIN]
-  const statusQuery = statusFilter === 'all' ? undefined : statusFilter
 
   const { data, isLoading } = useSearchEmulationsQuery({
     page: 1,
     search,
-    status: statusQuery as EmulatorStatus | undefined,
     userId: userId
   })
   const [updateEmulation] = useUpdateEmulatorMutation()
   const [deleteEmulation] = useDeleteEmulatorMutation()
 
   const emulations = data?.data.items || []
-
-  const emulationOtptions = [
-    { label: t('status.all'), value: 'all' },
-    { label: t('status.published'), value: EmulatorStatus.PUBLISHED },
-    { label: t('status.draft'), value: EmulatorStatus.DRAFT },
-    { label: t('status.archived'), value: EmulatorStatus.ARCHIVED }
-  ]
 
   // === Handlers ===
   const handleNavigate = (id: string) => router.push(`/${locale}/lab/workspace-3d/${id}`)
@@ -112,15 +102,6 @@ export default function StudentWorkspace3dLibrary() {
         </div>
         <div className='my-4 flex gap-4'>
           <SearchBar onDebouncedSearch={(query) => setSearch(query)} className='w-96' />
-
-          {/* Placeholder for future filters */}
-          <SSelect
-            placeholder={t('select.placeholder')}
-            options={emulationOtptions}
-            value={statusFilter}
-            onChange={(value) => setStatusFilter(value)}
-            className='w-64'
-          />
         </div>
         <SEmpty
           title='Không tìm thấy mô hình nào'
@@ -146,15 +127,6 @@ export default function StudentWorkspace3dLibrary() {
       </div>
       <div className='my-4 flex gap-4'>
         <SearchBar onDebouncedSearch={(query) => setSearch(query)} className='w-96' />
-
-        {/* Placeholder for future filters */}
-        <SSelect
-          placeholder={t('select.placeholder')}
-          options={emulationOtptions}
-          value={statusFilter}
-          onChange={(value) => setStatusFilter(value)}
-          className='w-64 bg-transparent'
-        />
       </div>
 
       {/* Model list */}
@@ -175,51 +147,6 @@ export default function StudentWorkspace3dLibrary() {
                   className='object-cover transition-transform duration-300 group-hover:scale-105'
                   sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
                 />
-
-                {allowRoles.includes(userRole as UserRole) && (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant='ghost'
-                        className='absolute top-2 right-2 h-7 w-7 rounded-full bg-white/80 p-1 shadow-sm backdrop-blur-md hover:bg-white'
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <MoreVertical className='h-4 w-4 text-gray-700' />
-                      </Button>
-                    </PopoverTrigger>
-
-                    {/* Popover menu */}
-                    <PopoverContent
-                      className='w-32 p-2'
-                      align='end'
-                      sideOffset={4}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className='flex flex-col gap-1 text-sm'>
-                        <button
-                          className='rounded px-2 py-1 text-left hover:bg-gray-100'
-                          onClick={() => openModal('upsertEmulator', { emulationId: e.emulationId })}
-                        >
-                          {t('button.update')}
-                        </button>
-                        {e.status !== EmulatorStatus.PUBLISHED && userRole && allowRoles.includes(userRole) && (
-                          <button
-                            className='rounded px-2 py-1 text-left hover:bg-gray-100'
-                            onClick={() => handlePublishEmulation(e.emulationId)}
-                          >
-                            {t('button.publish')}
-                          </button>
-                        )}
-                        <button
-                          className='rounded px-2 py-1 text-left text-red-500 hover:bg-red-100'
-                          onClick={() => handleDeleteEmulation(e)}
-                        >
-                          {t('button.delete')}
-                        </button>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                )}
               </div>
 
               {/* Content */}

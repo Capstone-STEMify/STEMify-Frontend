@@ -1,3 +1,4 @@
+import { Skeleton } from '@/components/shadcn/skeleton'
 import { ComponentTemplate } from '@/features/assembly/types/assembly.types'
 import { setDraggingTemplate } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useAppDispatch } from '@/hooks/redux-hooks'
@@ -14,6 +15,20 @@ export function ComponentCard({ template, isDragging, onDragStart, onDoubleClick
   const dispatch = useAppDispatch()
   const handleDragEnd = () => {
     dispatch(setDraggingTemplate(null))
+  }
+
+  if (!template) {
+    return (
+      <div className='relative rounded-lg'>
+        <div className='flex flex-col items-center gap-2'>
+          {/* Icon skeleton */}
+          <Skeleton className='h-18 w-18 rounded-md' />
+
+          {/* Name skeleton */}
+          <Skeleton className='h-3 w-10 rounded' />
+        </div>
+      </div>
+    )
   }
 
   return (

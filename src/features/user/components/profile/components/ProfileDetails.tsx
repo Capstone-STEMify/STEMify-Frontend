@@ -89,13 +89,6 @@ export default function ProfileDetails() {
               <h1 className='text-2xl font-bold text-gray-900 sm:text-3xl'>{session?.user?.name}</h1>
               <p className='text-sm text-gray-600 sm:text-base'>{t('description')}s</p>
             </div>
-            <Button
-              onClick={() => router.push('/certificate')}
-              className='bg-sky-custom-600 flex items-center justify-center space-x-2 rounded-lg p-4 text-white transition-colors sm:w-auto'
-            >
-              <Edit className='h-4 w-4' />
-              <span>{tc('button.viewCertificate')}</span>
-            </Button>
           </div>
 
           {/* Form */}

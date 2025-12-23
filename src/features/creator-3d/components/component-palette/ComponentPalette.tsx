@@ -7,6 +7,8 @@ import { useGLTF } from '@react-three/drei'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { setDraggingTemplate } from '@/features/creator-3d/slice/creatorSceneSlice'
 import { useTranslations } from 'next-intl'
+import { Skeleton } from '@/components/shadcn/skeleton'
+import { template } from 'lodash-es'
 
 interface ComponentPaletteProps {
   onAddComponent: (template: ComponentTemplate) => void
@@ -219,6 +221,8 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
         <div>
           <p className='font-semibold text-gray-900'>{t3d('straw')}</p>
           <div className='grid grid-cols-2 gap-4'>
+            {templates.length === 0 && <div className='text-gray-600'>Đang tải...</div>}
+
             {templates
               .filter((template) => template.category === 'straw')
               .map((template) => (
@@ -236,6 +240,8 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
         <div className='mt-6'>
           <p className='font-semibold text-gray-900'>{t3d('connector')}</p>
           <div className='grid grid-cols-2 gap-4'>
+            {templates.length === 0 && <div className='text-gray-600'>Đang tải...</div>}
+
             {templates
               .filter((template) => template.category === 'connector')
               .map((template) => (
