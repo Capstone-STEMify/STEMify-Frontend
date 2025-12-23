@@ -378,7 +378,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
             })
           })
 
-          return results.sort((a, b) => b.probability - a.probability)
+          return results
         },
         getTopKClasses: async function (input: tf.Tensor, k = 3) {
           const results = await this.predict(input)
