@@ -7,16 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/shadcn/badge'
 import { Users, Building2, BookOpen, DollarSign, TrendingUp, TrendingDown, Book } from 'lucide-react'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title
-} from 'chart.js'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 import { useTranslations } from 'next-intl'
 import { useGetSystemDashboardQuery } from '../api/AdminDashboardApi'
@@ -29,7 +20,7 @@ export default function SystemDashboardPage() {
   const t = useTranslations('dashboard.admin')
   const [period, setPeriod] = useState<'Month' | 'Quarter' | 'Year'>('Month')
   const { data: response, isLoading } = useGetSystemDashboardQuery({ period })
-  
+
   const orgColumns = useTopOrgColumns()
   const courseColumns = useTopCourseColumns()
 
@@ -104,7 +95,7 @@ export default function SystemDashboardPage() {
       <div className='flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
         <div>
           <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{t('title')}</h1>
-          <p className='mt-1 text-muted-foreground'>{t('subtitle')}</p>
+          <p className='text-muted-foreground mt-1'>{t('subtitle')}</p>
         </div>
         <div className='w-[120px]'>
           <Select value={period} onValueChange={(val: any) => setPeriod(val)}>
@@ -122,20 +113,20 @@ export default function SystemDashboardPage() {
 
       {/* Stats Cards Row */}
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-        <Card className='shadow-sm transition-shadow hover:shadow-md py-4'>
+        <Card className='py-4 shadow-sm transition-shadow hover:shadow-md'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>{t('stats.revenue')}</CardTitle>
             <DollarSign className='h-4 w-4 text-green-600' />
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>{formatCurrency(subscriptions.totalRevenue)}</div>
-            <p className='mt-1 flex items-center text-xs text-muted-foreground'>
+            <p className='text-muted-foreground mt-1 flex items-center text-xs'>
               {t('stats.compare')}: <GrowthIndicator value={periodComparison.revenueGrowth} />
             </p>
           </CardContent>
         </Card>
 
-        <Card className='shadow-sm transition-shadow hover:shadow-md py-4'>
+        <Card className='py-4 shadow-sm transition-shadow hover:shadow-md'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>{t('stats.activeOrg')}</CardTitle>
             <Building2 className='h-4 w-4 text-blue-600' />
@@ -144,36 +135,36 @@ export default function SystemDashboardPage() {
             <div className='text-2xl font-bold'>
               {summary.activeOrganizations} / {summary.totalOrganizations}
             </div>
-            <p className='mt-1 flex items-center text-xs text-muted-foreground'>
+            <p className='text-muted-foreground mt-1 flex items-center text-xs'>
               {t('stats.growth')}: <GrowthIndicator value={periodComparison.organizationGrowth} />
             </p>
           </CardContent>
         </Card>
 
-        <Card className='shadow-sm transition-shadow hover:shadow-md py-4'>
+        <Card className='py-4 shadow-sm transition-shadow hover:shadow-md'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>{t('stats.totalStudent')}</CardTitle>
             <Users className='h-4 w-4 text-orange-600' />
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>{summary.totalStudents}</div>
-            <p className='mt-1 flex items-center text-xs text-muted-foreground'>
-               {t('stats.growth')}: <GrowthIndicator value={periodComparison.studentGrowth} />
+            <p className='text-muted-foreground mt-1 flex items-center text-xs'>
+              {t('stats.growth')}: <GrowthIndicator value={periodComparison.studentGrowth} />
             </p>
           </CardContent>
         </Card>
 
-        <Card className='shadow-sm transition-shadow hover:shadow-md py-4'>
+        <Card className='py-4 shadow-sm transition-shadow hover:shadow-md'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>{t('stats.enrollment')}</CardTitle>
             <BookOpen className='h-4 w-4 text-purple-600' />
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>{summary.totalEnrollments}</div>
-            <p className='mt-1 flex items-center text-xs text-muted-foreground'>
+            <p className='text-muted-foreground mt-1 flex items-center text-xs'>
               {t('stats.completionRate')}:{' '}
               <span className='ml-1 font-semibold text-gray-700'>
-                {response.data.enrollments.completionRate}%
+                {response.data.enrollments.completionRate.toFixed(2)}%
               </span>
             </p>
           </CardContent>
@@ -182,7 +173,7 @@ export default function SystemDashboardPage() {
 
       {/* Charts Row */}
       <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-6'>
-        <Card className='col-span-3 shadow-sm py-4'>
+        <Card className='col-span-3 py-4 shadow-sm'>
           <CardHeader>
             <CardTitle>{t('charts.revenueByPlan')}</CardTitle>
             <CardDescription>{t('charts.revenueDesc')}</CardDescription>
@@ -193,12 +184,12 @@ export default function SystemDashboardPage() {
                 <Doughnut data={revenueChartData} options={{ maintainAspectRatio: false }} />
               </div>
             ) : (
-              <div className='text-sm text-muted-foreground'>{t('charts.noData')}</div>
+              <div className='text-muted-foreground text-sm'>{t('charts.noData')}</div>
             )}
           </CardContent>
         </Card>
 
-        <Card className='col-span-3 shadow-sm py-4'>
+        <Card className='col-span-3 py-4 shadow-sm'>
           <CardHeader>
             <CardTitle>{t('charts.planDetail')}</CardTitle>
             <CardDescription className='mb-2'>{t('charts.planDetailDesc')}</CardDescription>
@@ -207,37 +198,26 @@ export default function SystemDashboardPage() {
             <div className='mb-6 grid grid-cols-3 gap-4'>
               <div className='rounded-lg border border-blue-100 bg-blue-50 p-4'>
                 <div className='text-sm font-medium text-blue-600'>{t('charts.totalPlan')}</div>
-                <div className='text-2xl font-bold text-blue-900'>
-                  {subscriptions.totalSubscriptions}
-                </div>
+                <div className='text-2xl font-bold text-blue-900'>{subscriptions.totalSubscriptions}</div>
               </div>
               <div className='rounded-lg border border-green-100 bg-green-50 p-4'>
                 <div className='text-sm font-medium text-green-600'>{t('charts.active')}</div>
-                <div className='text-2xl font-bold text-green-900'>
-                  {subscriptions.activeSubscriptions}
-                </div>
+                <div className='text-2xl font-bold text-green-900'>{subscriptions.activeSubscriptions}</div>
               </div>
               <div className='rounded-lg border border-red-100 bg-red-50 p-4'>
                 <div className='text-sm font-medium text-red-600'>{t('charts.expired')}</div>
-                <div className='text-2xl font-bold text-red-900'>
-                  {subscriptions.expiredSubscriptions}
-                </div>
+                <div className='text-2xl font-bold text-red-900'>{subscriptions.expiredSubscriptions}</div>
               </div>
             </div>
 
             <div className='space-y-4'>
               {subscriptions.byPlan.map((plan, index) => (
-                <div
-                  key={index}
-                  className='flex items-center justify-between rounded-md bg-gray-50 p-3'
-                >
+                <div key={index} className='flex items-center justify-between rounded-md bg-gray-50 p-3'>
                   <div className='flex items-center gap-3'>
-                    <div
-                      className={`h-8 w-2 rounded-full ${index === 0 ? 'bg-blue-500' : 'bg-purple-500'}`}
-                    ></div>
+                    <div className={`h-8 w-2 rounded-full ${index === 0 ? 'bg-blue-500' : 'bg-purple-500'}`}></div>
                     <div>
                       <div className='text-sm font-semibold'>{plan.planName}</div>
-                      <div className='text-xs text-muted-foreground'>
+                      <div className='text-muted-foreground text-xs'>
                         {t('charts.active')}: {plan.activeCount}
                       </div>
                     </div>
@@ -252,7 +232,7 @@ export default function SystemDashboardPage() {
 
       {/* Tables Row: Top Org & Top Courses */}
       <div className='grid gap-6 xl:grid-cols-2'>
-        <Card className='shadow-sm py-4'>
+        <Card className='py-4 shadow-sm'>
           <CardHeader className='flex flex-row items-center justify-between pb-2'>
             <div>
               <CardTitle>{t('tables.topOrg')}</CardTitle>
@@ -271,13 +251,13 @@ export default function SystemDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className='shadow-sm py-4'>
+        <Card className='py-4 shadow-sm'>
           <CardHeader className='flex flex-row items-center justify-between pb-2'>
             <div>
               <CardTitle>{t('tables.topCourse')}</CardTitle>
               <CardDescription>{t('tables.topCourseDesc')}</CardDescription>
             </div>
-            <Book className="h-4 w-4 text-muted-foreground" />
+            <Book className='text-muted-foreground h-4 w-4' />
           </CardHeader>
           <CardContent>
             <DataTable
