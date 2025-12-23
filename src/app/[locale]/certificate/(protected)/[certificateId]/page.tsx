@@ -1,8 +1,6 @@
-import SpecificCertificate from '@/features/certificate/components/detail/SpecificCertificate'
+import CertificateView from '@/features/certificate/components/item/CertificateView'
 import React from 'react'
 
 export default function CertificateDetailPage() {
-  return (
-    <SpecificCertificate/>
-  )
+  return <CertificateView />
 }

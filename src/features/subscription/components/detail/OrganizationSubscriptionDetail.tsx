@@ -5,7 +5,11 @@ import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Progress } from '@/components/shadcn/progress'
 import { Users, GraduationCap, BookOpen, Calendar, CreditCard } from 'lucide-react'
-import { useGetSubscriptionByIdQuery, useUpdateSubscriptionMutation } from '@/features/subscription/api/subscriptionApi'
+import {
+  useCancelSubscriptionMutation,
+  useGetSubscriptionByIdQuery,
+  useUpdateSubscriptionMutation
+} from '@/features/subscription/api/subscriptionApi'
 import { useParams } from 'next/navigation'
 import LoadingComponent from '@/components/shared/loading/LoadingComponent'
 import { formatDate, useStatusTranslation } from '@/utils/index'
@@ -30,6 +34,7 @@ export default function OrganizationSubscriptionDetail() {
 
   const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscriptionByIdQuery(Number(subscriptionId))
   const [updateSubscription] = useUpdateSubscriptionMutation()
+  const [cancelSubscription] = useCancelSubscriptionMutation()
 
   const getRemainingMonths = (endDate?: string) => {
     if (!endDate) return 0
@@ -72,9 +77,8 @@ export default function OrganizationSubscriptionDetail() {
       title: tt('confirmMessage.cancelledSubscriptions'),
       message: tt('confirmMessage.cancelledSubscriptions'),
       onConfirm: () =>
-        updateSubscription({
-          subscriptionId: Number(subscriptionId),
-          body: { status: SubscriptionStatus.CANCELLED }
+        cancelSubscription({
+          subscriptionId: Number(subscriptionId)
         })
     })
   }
@@ -95,7 +99,7 @@ export default function OrganizationSubscriptionDetail() {
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-6'>
       <div className='mx-auto max-w-7xl space-y-8'>
         {/* Header */}
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center justify-between gap-2'>
           <div>
             <div className='flex items-center gap-3'>
               <BackButton className='mt-2 bg-slate-200' />
@@ -103,12 +107,6 @@ export default function OrganizationSubscriptionDetail() {
             </div>
             <p className='text-muted-foreground mt-1'>{ts('overviewDescription')}</p>
           </div>
-          {/* Action Buttons */}
-          {/* <div className='flex gap-3 lg:items-end'>
-            <Button variant='outline' className='shadow-lg' onClick={handleCancelSubscription}>
-              {tc('button.cancelSubscription')}
-            </Button>
-          </div> */}
         </div>
 
         {/* Current Plan Card - Enhanced */}

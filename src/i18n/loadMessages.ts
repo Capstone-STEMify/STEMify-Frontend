@@ -36,6 +36,7 @@ export async function loadMessages(locale: string) {
   const quizMessages = (await import(`../../messages/${locale}/quiz/${locale}_quiz.json`)).default
   const agentMessages = (await import(`../../messages/${locale}/agent/${locale}_agent.json`)).default
   const microbitMessages = (await import(`../../messages/${locale}/microbit/${locale}_microbit.json`)).default
+  const certificateMessages = (await import(`../../messages/${locale}/certificate/${locale}_certificate.json`)).default
 
   return {
     ...commonMessages,
@@ -70,6 +71,7 @@ export async function loadMessages(locale: string) {
     ...assignmentMessages,
     ...quizMessages,
     ...agentMessages,
-    ...microbitMessages
+    ...microbitMessages,
+    ...certificateMessages
   }
 }

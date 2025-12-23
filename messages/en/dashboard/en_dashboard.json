@@ -137,7 +137,8 @@
         "errorResponse": "Error response from server"
       },
       "modal": {
-        "submitFile": "View File"
+        "submitFile": "View File",
+        "viewFile": "View Submitted File"
       }
     },
     "organization": {

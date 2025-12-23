@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 import * as tf from '@tensorflow/tfjs'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-import { useTranslations } from 'next-intl'
 
 export interface PredictionResult {
   className: string
@@ -15,7 +14,7 @@ export interface TrainingStatus {
 }
 
 interface TeachableMachineModel {
-  featureExtractor: tf.LayersModel | tf.GraphModel
+  featureExtractor: tf.LayersModel
   classifier: tf.LayersModel
   predict: (input: tf.Tensor) => Promise<PredictionResult[]>
   getTopKClasses: (input: tf.Tensor, k?: number) => Promise<PredictionResult[]>
@@ -25,22 +24,23 @@ interface TeachableMachineModel {
 const CONFIG = {
   imageSize: 224,
   minImagesPerClass: 5,
-  epochs: 10,
-  batchSizeMax: 16,
+  epochs: 50,
+  batchSizeMax: 2,
   validationSplit: 0.3,
   learningRate: 0.001,
   dropout1: 0.5,
   dropout2: 0.3,
-  debugLogs: true,
-  earlyStoppingPatience: 5, 
-  minDelta: 0.001 
+  debugLogs: true
 }
 
+const EARLY_STOP = {
+  epoch: 15,
+  valAccuracyThreshold: 0.99
+}
 
-const MOBILENET_CONFIG = { version: 1 as const, alpha: 1.0 as const }
+const BASE_MODEL_URL = 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json'
 
 export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Class 2']) {
-  const t = useTranslations('agent.modelMaker.microbit.status')
   const [classes, setClasses] = useState<string[]>(initialClasses)
   const [classImages, setClassImages] = useState<Record<string, string[]>>(() => {
     const initial: Record<string, string[]> = {}
@@ -54,7 +54,6 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
   const [trainingProgress, setTrainingProgress] = useState(0)
   const [trainingStatus, setTrainingStatus] = useState<TrainingStatus | null>(null)
   const [predictionResults, setPredictionResults] = useState<PredictionResult[] | null>(null)
-  const [loadedModelInfo, setLoadedModelInfo] = useState<{ version: string; url: string; type: string } | null>(null)
 
   // Add new class
   const addNewClass = useCallback(
@@ -171,223 +170,69 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
   // Create transfer learning model
   const createTransferLearningModel = useCallback(async (numClasses: number) => {
     console.log('Creating transfer learning model...')
-    console.log(`Loading MobileNet v${MOBILENET_CONFIG.version} alpha ${MOBILENET_CONFIG.alpha}...`)
 
-    let baseModel: tf.LayersModel | null = null
-    let graphModel: tf.GraphModel | null = null
-    let isGraphModel = false
-    let actualModelVersion = MOBILENET_CONFIG.version.toString()
-    let actualModelUrl = ''
-    
-    const modelConfigs = [
-      {
-        url: 'https://zlumjdsauobocldzvjoo.supabase.co/storage/v1/object/public/ai-models/MobileNetV3/model.json',
-        type: 'graph' as const,
-        version: 'v3'
-      },
-      // MobileNet v1 URLs
-      {
-        url: 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json',
-        type: 'layers' as const,
-        version: 'v1'
-      },
-      {
-        url: 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.75_224/model.json',
-        type: 'layers' as const,
-        version: 'v1'
-      },
-      {
-        url: 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.5_224/model.json',
-        type: 'layers' as const,
-        version: 'v1'
-      },
-      {
-        url: 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json',
-        type: 'layers' as const,
-        version: 'v1'
-      }
-    ]
-    
-    let lastError: Error | null = null
-    let loadedModelInfo: { url: string; version: string; type: string } | null = null
-    
-    for (const modelInfo of modelConfigs) {
-      try {
-        console.log(`Trying to load MobileNet ${modelInfo.version} from: ${modelInfo.url}`)
-        
-        if (modelInfo.type === 'graph') {
-          // Load as GraphModel (MobileNet v3)
-          graphModel = await tf.loadGraphModel(modelInfo.url)
-          
-          if (!graphModel) {
-            throw new Error('GraphModel không được load thành công')
-          }
-          
-          console.log(`✓ MobileNet ${modelInfo.version} GraphModel loaded successfully`)
-          console.log('GraphModel inputs:', graphModel.inputs)
-          console.log('GraphModel outputs:', graphModel.outputs)
-          
-          isGraphModel = true
-          actualModelVersion = modelInfo.version
-          actualModelUrl = modelInfo.url
-          loadedModelInfo = { url: modelInfo.url, version: modelInfo.version, type: 'graph' }
-          break
-        } else {
-          // Load as LayersModel (MobileNet v1 - fallback)
-          baseModel = await tf.loadLayersModel(modelInfo.url)
-          
-          if (!baseModel || !baseModel.layers) {
-            throw new Error('Base model không có layers property')
-          }
-          
-          actualModelVersion = modelInfo.version
-          actualModelUrl = modelInfo.url
-          loadedModelInfo = { url: modelInfo.url, version: modelInfo.version, type: 'layers' }
-          console.log(`✓ MobileNet ${modelInfo.version} LayersModel loaded successfully`)
-          console.log('Base model layers:', baseModel.layers.length)
-          break
-        }
-      } catch (error) {
-        console.warn(`✗ Failed to load ${modelInfo.version} from ${modelInfo.url}:`, error)
-        lastError = error instanceof Error ? error : new Error(String(error))
-        continue
-      }
-    }
-    
-    if (!baseModel && !graphModel) {
-      throw new Error(
-        `Không thể tải MobileNet model từ bất kỳ URL nào. ` +
-        `Đã thử ${modelConfigs.length} URLs khác nhau. ` +
-        `Lỗi cuối cùng: ${lastError?.message || 'Unknown error'}. ` +
-        `Vui lòng kiểm tra kết nối internet.`
-      )
-    }
-    
-    if (loadedModelInfo) {
-      console.log(`✓ Successfully loaded MobileNet ${loadedModelInfo.version} (${loadedModelInfo.type} model)`)
-      // Store model info for later use in metadata
-      // Note: This is a workaround since we can't easily pass this through the callback
-    }
+    const baseModel = await tf.loadLayersModel(BASE_MODEL_URL)
+    console.log('Base model loaded, layers:', baseModel.layers.length)
 
-    let featureExtractor: tf.LayersModel | tf.GraphModel
-    let featureSize: number = 0
-    
-    if (isGraphModel && graphModel) {
-      // Handle GraphModel (MobileNet v3)
-      // GraphModel outputs classification directly [batch, 1001]
-      // For transfer learning, we'll use the full model as feature extractor
-      // and add our classifier on top
-      console.log('Using GraphModel as feature extractor (MobileNet v3)')
-      featureExtractor = graphModel
-      
-      // Test to get output shape
-      const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
-      const testOutput = featureExtractor.predict(testInput) as tf.Tensor
-      console.log('GraphModel output shape:', testOutput.shape)
-      
-      // MobileNet v3 outputs [batch, 1001] - we'll use this as features
-      // For transfer learning, we can use the logits (before softmax) or the full output
-      if (!testOutput.shape || testOutput.shape.length < 2) {
-        throw new Error('GraphModel output shape không hợp lệ')
-      }
-      featureSize = testOutput.shape[1] || 1001 // Default to 1001 if undefined
-      console.log('Feature size from GraphModel:', featureSize)
-      
-      testInput.dispose()
-      testOutput.dispose()
-    } else if (baseModel) {
-      // Handle LayersModel (MobileNet v1 - fallback)
-      console.log('Processing LayersModel for feature extraction...')
-      
-      for (let i = baseModel.layers.length - 1; i >= 0; i--) {
-        const layer = baseModel.layers[i]
-        console.log(`Layer ${i}: ${layer.name}, output shape:`, layer.outputShape)
+    let featureExtractor: tf.LayersModel
+    for (let i = baseModel.layers.length - 1; i >= 0; i--) {
+      const layer = baseModel.layers[i]
+      console.log(`Layer ${i}: ${layer.name}, output shape:`, layer.outputShape)
 
-        if (
-          layer.name.includes('global_average_pooling') ||
-          layer.name.includes('avg_pool') ||
-          (layer.name.includes('dense') && i < baseModel.layers.length - 1)
-        ) {
-          featureExtractor = tf.model({
-            inputs: baseModel.inputs,
-            outputs: layer.output
-          })
-          console.log('Feature extractor created from layer:', layer.name)
-          break
-        }
-      }
-
-      if (!featureExtractor!) {
+      if (
+        layer.name.includes('global_average_pooling') ||
+        layer.name.includes('avg_pool') ||
+        (layer.name.includes('dense') && i < baseModel.layers.length - 1)
+      ) {
         featureExtractor = tf.model({
           inputs: baseModel.inputs,
-          outputs: baseModel.layers[baseModel.layers.length - 2].output
+          outputs: layer.output
         })
-        console.log('Using fallback feature extractor')
+        console.log('Feature extractor created from layer:', layer.name)
+        break
       }
-
-      // Freeze feature extractor layers
-      if ('layers' in featureExtractor) {
-        featureExtractor.layers.forEach((layer) => {
-          layer.trainable = false
-        })
-      }
-
-      // Test the feature extractor to get output shape
-      const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
-      const testOutput = featureExtractor.predict(testInput) as tf.Tensor
-      console.log('Feature extractor output shape:', testOutput.shape)
-
-      featureSize = testOutput.shape.slice(1).reduce((a, b) => a * b, 1)
-      console.log('Feature size:', featureSize)
-
-      testInput.dispose()
-      testOutput.dispose()
-    } else {
-      throw new Error('Không có model nào được load thành công')
     }
 
-    // Chỗ này xây layer
-    const classifierLayers: tf.layers.Layer[] = []
-    
-    if (isGraphModel && featureSize === 1001) {
+    if (!featureExtractor!) {
+      featureExtractor = tf.model({
+        inputs: baseModel.inputs,
+        outputs: baseModel.layers[baseModel.layers.length - 2].output
+      })
+      console.log('Using fallback feature extractor')
+    }
 
-      //  BOTTLENECK LAYER để nén features xuống 256 features quan trọng nhất
-      // λ = 0.01 
-      classifierLayers.push(
+    const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
+    const testOutput = featureExtractor.predict(testInput) as tf.Tensor
+    console.log('Feature extractor output shape:', testOutput.shape)
+
+    const featureSize = testOutput.shape.slice(1).reduce((a, b) => a * b, 1)
+    console.log('Feature size:', featureSize)
+
+    testInput.dispose()
+    testOutput.dispose()
+
+    const classifier = tf.sequential({
+      layers: [
         tf.layers.dense({
           inputShape: [featureSize],
-          units: 256,
+          units: 32,
           activation: 'relu',
-          name: 'bottleneck',
-          kernelRegularizer: tf.regularizers.l2({ l2: 0.01 }) 
+          name: 'dense1'
         }),
-        tf.layers.dropout({ rate: 0.3 }) 
-      )
-    }
-    
-    // Lớp phân loại chính
-    classifierLayers.push(
-      tf.layers.dense({
-        inputShape: isGraphModel && featureSize === 1001 ? [256] : [featureSize],
-        units: 64, 
-        activation: 'relu',
-        name: 'dense1'
-      }),
-      tf.layers.dropout({ rate: CONFIG.dropout1 }), // Dropout 50%
-      tf.layers.dense({
-        units: 32, 
-        activation: 'relu',
-        name: 'dense2'
-      }),
-      tf.layers.dropout({ rate: CONFIG.dropout2 }), // Dropout 30%
-      tf.layers.dense({
-        units: numClasses,
-        activation: 'softmax', 
-        name: 'predictions'
-      })
-    )
-    
-    const classifier = tf.sequential({ layers: classifierLayers })
+        tf.layers.dropout({ rate: CONFIG.dropout1 }),
+        tf.layers.dense({
+          units: 16,
+          activation: 'relu',
+          name: 'dense2'
+        }),
+        tf.layers.dropout({ rate: CONFIG.dropout2 }),
+        tf.layers.dense({
+          units: numClasses,
+          activation: 'softmax',
+          name: 'predictions'
+        })
+      ]
+    })
 
     classifier.compile({
       optimizer: tf.train.adam(CONFIG.learningRate),
@@ -396,13 +241,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     })
 
     console.log('Transfer learning model created with input shape:', [featureSize])
-    return { 
-      featureExtractor, 
-      classifier,
-      modelVersion: actualModelVersion,
-      modelUrl: actualModelUrl,
-      isGraphModel
-    }
+    return { featureExtractor, classifier }
   }, [])
 
   // Train model
@@ -414,7 +253,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
     if (totalImages < minImagesPerClass * classes.length) {
       alert(
-        t('minImagesPerClass', {minImagesPerClass: minImagesPerClass, totalImages: totalImages, missingImage: minImagesPerClass * classes.length})
+        `Cần ít nhất ${minImagesPerClass} ảnh cho mỗi class để train model tốt!\nHiện tại: ${totalImages} ảnh\nCần: ${minImagesPerClass * classes.length} ảnh`
       )
       return
     }
@@ -427,7 +266,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     })
 
     if (!balanced) {
-      alert(t('notBalance', {minImage: minImagesPerClass}))//
+      alert(`Dữ liệu không cân bằng! Cần ít nhất ${minImagesPerClass} ảnh cho mỗi class.`)
       return
     }
 
@@ -435,105 +274,72 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
     try {
       console.log('Bắt đầu train model thật...')
-      setTrainingStatus({ message: t('dataPreparation'), type: 'info' })
+      setTrainingStatus({ message: 'Đang chuẩn bị dữ liệu...', type: 'info' })
       setTrainingProgress(10)
 
       const { images, labels } = await prepareTrainingData()
       console.log('Training data prepared:', images.shape, labels.shape)
 
-      setTrainingStatus({ message: t('createModel'), type: 'info' })
+      setTrainingStatus({ message: 'Đang tạo model...', type: 'info' })
       setTrainingProgress(20)
 
       const { featureExtractor, classifier } = await createTransferLearningModel(classes.length)
       console.log('Model created:', classifier)
 
-      setTrainingStatus({ message: t('trainModel'), type: 'info' })
+      setTrainingStatus({ message: 'Đang train model...', type: 'info' })
       setTrainingProgress(30)
 
       console.log('Extracting features...')
       const features = featureExtractor.predict(images) as tf.Tensor
       console.log('Features shape:', features.shape)
 
-      const featureBatchSize = features.shape[0]
+      const batchSize = features.shape[0]
       const featureSize = features.shape.slice(1).reduce((a, b) => a * b, 1)
-      const processedFeatures = features.reshape([featureBatchSize, featureSize])
+      const processedFeatures = features.reshape([batchSize, featureSize])
       console.log('Reshaped features shape:', processedFeatures.shape)
 
       console.log('Training classification head...')
-      
-      let bestValLoss = Infinity
-      let patienceCounter = 0
-      let bestEpoch = 0
-      let bestWeights: tf.Tensor[] | null = null
-      let shouldStop = false
-      
+      let earlyStopped = false
+      await classifier.fit(processedFeatures, labels, {
+        epochs: CONFIG.epochs,
+        batchSize: Math.min(CONFIG.batchSizeMax, processedFeatures.shape[0]),
+        validationSplit: CONFIG.validationSplit,
+        shuffle: true,
+        callbacks: {
+          onEpochEnd: async (epoch, logs) => {
+            const loss = logs?.loss?.toFixed(4)
+            const acc = logs?.acc?.toFixed(4)
+            const valLoss = (logs as any)?.val_loss?.toFixed(4)
+            const valAcc = (logs as any)?.val_acc?.toFixed(4)
 
-      const trainingBatchSize = Math.min(CONFIG.batchSizeMax, processedFeatures.shape[0])
-      
-      for (let epoch = 0; epoch < CONFIG.epochs && !shouldStop; epoch++) {
+            console.log(
+              `Epoch ${epoch + 1}: loss=${loss}, acc=${acc}, val_loss=${valLoss}, val_acc=${valAcc}`
+            )
+            const progress = 30 + (epoch + 1) * (60 / CONFIG.epochs)
+            setTrainingProgress(progress)
+            setTrainingStatus({
+              message: `Epoch ${epoch + 1}/${CONFIG.epochs}: Acc ${(logs?.acc || 0).toFixed(
+                2
+              )}, ValAcc ${((logs as any)?.val_acc || 0).toFixed(2)}`,
+              type: 'info'
+            })
 
-        const history = await classifier.fit(processedFeatures, labels, {
-          epochs: 1,
-          batchSize: trainingBatchSize,
-          validationSplit: CONFIG.validationSplit,
-          shuffle: true,
-          verbose: 0
-        })
-        
-        const logs = history.history
-        const trainLossValue = Array.isArray(logs.loss) ? logs.loss[0] : 0
-        const trainAccValue = Array.isArray(logs.acc) ? logs.acc[0] : (Array.isArray(logs.accuracy) ? logs.accuracy[0] : 0)
-        const valLossValue = Array.isArray(logs.val_loss) ? logs.val_loss[0] : 0
-        const valAccValue = Array.isArray(logs.val_acc) ? logs.val_acc[0] : (Array.isArray(logs.val_accuracy) ? logs.val_accuracy[0] : 0)
-        
-        const trainLoss = typeof trainLossValue === 'number' ? trainLossValue : 0
-        const trainAcc = typeof trainAccValue === 'number' ? trainAccValue : 0
-        const valLoss = typeof valLossValue === 'number' ? valLossValue : 0
-        const valAcc = typeof valAccValue === 'number' ? valAccValue : 0
-        
-        console.log(
-          `Epoch ${epoch + 1}: train_loss = ${trainLoss.toFixed(4)}, train_acc = ${trainAcc.toFixed(4)}, ` +
-          `val_loss = ${valLoss.toFixed(4)}, val_acc = ${valAcc.toFixed(4)}`
-        )
-        
-        if (valLoss > 0) {
-          if (valLoss < bestValLoss - CONFIG.minDelta) {
-            bestValLoss = valLoss
-            patienceCounter = 0
-            bestEpoch = epoch + 1
-            
-            bestWeights = classifier.getWeights()
-            console.log(`Best val_loss: ${bestValLoss.toFixed(4)} at epoch ${bestEpoch}`)
-          } else {
-            patienceCounter++
-            if (patienceCounter >= CONFIG.earlyStoppingPatience) {
+            // Gentle early stop once we already have stable validation accuracy
+            const reachedEpoch = epoch + 1 >= EARLY_STOP.epoch
+            const reachedValAcc = ((logs as any)?.val_acc || 0) >= EARLY_STOP.valAccuracyThreshold
+            if (reachedEpoch && reachedValAcc) {
+              earlyStopped = true
               console.log(
-                `Early stopping No improvement for ${CONFIG.earlyStoppingPatience} epochs. ` +
-                `Best val_loss: ${bestValLoss.toFixed(4)} at epoch ${bestEpoch}. Restoring best weights...`
+                `Early stopping at epoch ${epoch + 1} — val_acc ${(logs as any)?.val_acc?.toFixed(
+                  4
+                )}`
               )
-              shouldStop = true
-              
-              if (bestWeights) {
-                classifier.setWeights(bestWeights)
-                console.log(`Restored best model weights from epoch ${bestEpoch}`)
-              }
+              classifier.stopTraining = true
             }
+            await tf.nextFrame()
           }
         }
-        
-        const progress = 30 + (epoch + 1) * (60 / CONFIG.epochs)
-        setTrainingProgress(progress)
-        setTrainingStatus({
-          message: `Epoch ${epoch + 1}/${CONFIG.epochs}: Train ${(trainAcc * 100).toFixed(1)}% | Val ${(valAcc * 100).toFixed(1)}%`,
-          type: 'info'
-        })
-        await tf.nextFrame()
-      }
-      
-      if (!shouldStop && bestWeights && bestEpoch < CONFIG.epochs) {
-        console.log(`Training completed. Using best model from epoch ${bestEpoch}`)
-        classifier.setWeights(bestWeights)
-      }
+      })
 
       const finalModel: TeachableMachineModel = {
         featureExtractor,
@@ -576,12 +382,18 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       images.dispose()
       labels.dispose()
 
-      setTrainingStatus({ message: t('trainSuccess'), type: 'success' })
+      setTrainingStatus({ message: 'Model đã được train thành công!', type: 'success' })
       setTrainingProgress(100)
+      if (earlyStopped) {
+        setTrainingStatus({
+          message: `Đã dừng sớm tại epoch ${EARLY_STOP.epoch} vì val_acc đạt ngưỡng ${(EARLY_STOP.valAccuracyThreshold * 100).toFixed(0)}%.`,
+          type: 'success'
+        })
+      }
     } catch (error) {
       console.error('Lỗi khi train model:', error)
       setTrainingStatus({
-        message: t('trainError', {error: error instanceof Error ? error.message : 'Unknown error'}),
+        message: `Lỗi khi train model: ${error instanceof Error ? error.message : 'Unknown error'}`,
         type: 'error'
       })
     } finally {
@@ -597,7 +409,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
     }
 
     try {
-      setTrainingStatus({ message: t('readyDownload'), type: 'info' })
+      setTrainingStatus({ message: 'Đang chuẩn bị tải xuống model...', type: 'info' })
 
       // --- Lưu model vào bộ nhớ (thay vì auto download) ---
       const artifacts = await model.classifier.save(
@@ -627,21 +439,17 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
           }
 
           // Thêm metadata
-          const architectureName = `MobileNet_v${MOBILENET_CONFIG.version}_Alpha${MOBILENET_CONFIG.alpha}_224_Transfer_Learning`
           const modelInfo = {
             classes,
             modelType: 'image_classification',
-            architecture: architectureName,
+            architecture: 'MobileNet_v1_0.25_224_Transfer_Learning',
             inputShape: [CONFIG.imageSize, CONFIG.imageSize, 3],
             outputClasses: classes.length,
-            baseModel: `@tensorflow-models/mobilenet v${MOBILENET_CONFIG.version} alpha ${MOBILENET_CONFIG.alpha}`,
-            baseModelPackage: '@tensorflow-models/mobilenet',
-            baseModelConfig: MOBILENET_CONFIG,
-            accuracy: '~70.6% on ImageNet (MobileNet v1 alpha 1.0)',
+            baseModel: BASE_MODEL_URL,
             trainingDate: new Date().toISOString(),
             description: 'Model được train bằng Teachable Machine',
             usage: {
-              loadBaseModel: `Load using: import * as mobilenet from '@tensorflow-models/mobilenet'; await mobilenet.load(${JSON.stringify(MOBILENET_CONFIG)})`,
+              loadBaseModel: 'Load MobileNet từ URL trên',
               loadClassifier: 'Load trained-classifier từ file đã tải',
               preprocessing: 'Resize image to 224x224, normalize /255.0'
             }
@@ -673,13 +481,13 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
       setTrainingStatus({
         message:
-          t('downloadSuccess'),
+          'Model đã được tải xuống thành công! Bao gồm: model.json, weights.bin, model-info.json, labels.json (ZIP).',
         type: 'success'
       })
     } catch (error) {
       console.error('Lỗi khi tải xuống model:', error)
       setTrainingStatus({
-        message: t('downloadError', {error: error instanceof Error ? error.message : 'Unknown error'}),
+        message: `❌ Lỗi khi tải xuống model: ${error instanceof Error ? error.message : 'Unknown error'}`,
         type: 'error'
       })
     }
@@ -707,7 +515,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       }
 
       console.log('Bắt đầu phân tích ảnh...')
-      setTrainingStatus({ message: t('imageAnalysing'), type: 'info' })
+      setTrainingStatus({ message: 'Đang phân tích ảnh...', type: 'info' })
 
       try {
         const img = new Image()
@@ -740,7 +548,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
         const topResult = results[0]
         setTrainingStatus({
-          message: t('predict') + `${topResult.className} (${(topResult.probability * 100).toFixed(1)}%)`,
+          message: `Dự đoán: ${topResult.className} (${(topResult.probability * 100).toFixed(1)}%)`,
           type: 'success'
         })
 
@@ -750,7 +558,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       } catch (error) {
         console.error('Error analyzing image:', error)
         setTrainingStatus({
-          message: t('imageAnalyseFail', {error: error instanceof Error ? error.message : 'Unknown error'}),
+          message: `Lỗi khi phân tích ảnh: ${error instanceof Error ? error.message : 'Unknown error'}`,
           type: 'error'
         })
       }

@@ -31,6 +31,14 @@ export const subscriptionApi = createCrudApi<OrganizationSubscription, Organizat
         body
       }),
       invalidatesTags: ['Subscription', 'Organization']
+    }),
+    cancelSubscription: builder.mutation<any, { subscriptionId: number }>({
+      query: ({ subscriptionId }) => ({
+        url: `/organization-subscription-orders/${subscriptionId}/cancel`,
+        method: 'POST',
+        body: {}
+      }),
+      invalidatesTags: ['Subscription', 'Organization']
     })
   })
 })
@@ -47,5 +55,7 @@ export const {
   // lazy
   useLazyGetByIdQuery: useLazyGetSubscriptionByIdQuery,
   useLazySearchQuery: useLazySearchSubscriptionQuery,
-  useLazyGetAllQuery: useLazyGetAllSubscriptionQuery
+  useLazyGetAllQuery: useLazyGetAllSubscriptionQuery,
+
+  useCancelSubscriptionMutation
 } = subscriptionApi

@@ -13,7 +13,7 @@ import { useTranslations } from 'next-intl'
 import { useSearchCurriculumEnrollmentQuery } from '@/features/enrollment/api/curriculumEnrollmentApi'
 
 export default function Accomplishment() {
-  const t = useTranslations('MyLearning')
+  const t = useTranslations('myLearning')
 
   const auth = useAppSelector((state) => state.auth)
   const studentId = auth.user?.userId

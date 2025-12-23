@@ -137,7 +137,8 @@
         "errorResponse": "Lỗi phản hồi từ máy chủ"
       },
       "modal": {
-        "submitFile": "Xem File"
+        "submitFile": "Xem File",
+        "viewFile": "Xem tệp đã nộp"
       }
     },
     "organization": {
