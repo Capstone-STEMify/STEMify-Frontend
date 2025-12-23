@@ -108,11 +108,21 @@ export default function UploadCSV({
   }
 
   const handleDownloadTemplate = () => {
-    const defaultCSV = `email,firstName,lastName,role,license_type,class_id,external_id
-myltse180@gmail.com,My,Lam Tieu,OrganizationAdmin,OrganizationLic,STEM03,S003
-tieumy lam@gmail.com,Rosie,Shine,Teacher,TeacherLic,STEM04,S004
-datkk1120@gmail.com,Leo,kk,Student,StudentLic,STEM05,S005
-dattse18@gmail.com,Dat,Tran,Student,StudentLic,STEM06,S006`
+    const defaultCSV = `email,firstName,lastName,role,license_type,groupName,groupCode,externalId,grade
+datkk112004@gmail.com,Dat,Tran,Teacher,TeacherLicense,,,,
+quangatfb@gmail.com,Quang,Tran,Teacher,TeacherLicense,,,,
+courtcallers@gmail.com,Tuan,Ly,Student,StudentLicense,5A,VIN2530,S119,5
+nhanltse183977@fpt.edu.vn,Thanh Nhan,Le,Student,StudentLicense,5A,VIN2530,S123,5
+minh.nguyen@gmail.com,Minh,Nguyen,Student,StudentLicense,5A,VIN2530,S201,5
+an.tran@gmail.com,An,Tran,Student,StudentLicense,5D,VIN2533,S202,5
+phuc.le@gmail.com,Phuc,Le,Student,StudentLicense,5D,VIN2533,S203,5
+ha.pham@gmail.com,Ha,Pham,Student,StudentLicense,5D,VIN2533,S204,5
+long.do@gmail.com,Long,Do,Student,StudentLicense,5B,VIN2533,S205,5
+khanh.vu@gmail.com,Khanh,Vu,Student,StudentLicense,5B,VIN2531,S206,5
+my.hoang@gmail.com,My,Hoang,Student,StudentLicense,5B,VIN2531,S207,5
+tuan.nguyen@gmail.com,Tuan,Nguyen,Student,StudentLicense,5C,VIN2532,S208,5
+nhi.le@gmail.com,Nhi,Le,Student,StudentLicense,5C,VIN2532,S209,5
+quan.tran@gmail.com,Quan,Tran,Student,StudentLicense,5C,VIN2532,S210,5`
 
     const csvContent = templateData || defaultCSV
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })

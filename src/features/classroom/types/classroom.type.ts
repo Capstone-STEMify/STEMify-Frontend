@@ -56,7 +56,10 @@ export enum Grade {
   GRADE_3 = 3,
   GRADE_4 = 4,
   GRADE_5 = 5,
-  GRADE_6 = 6
+  GRADE_6 = 6,
+  GRADE_7 = 7,
+  GRADE_8 = 8,
+  GRADE_9 = 9,
 }
 
 export type SectionProgress = {

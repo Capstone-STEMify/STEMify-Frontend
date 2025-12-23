@@ -1,8 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import { Badge } from '@/components/shadcn/badge'
 import { createActionsColumnFromItems, createSelectColumn } from '@/components/shared/data-table/columns-helpers'
+import UserAvatar from '@/components/shared/UserAvatar'
 import { useDeleteClassroomMutation } from '@/features/classroom/api/classroomApi'
 import { Classroom, ClassroomStatus } from '@/features/classroom/types/classroom.type'
+import { useModal } from '@/providers/ModalProvider'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { formatDate, formatDateV2, useStatusTranslation } from '@/utils/index'
 import { ColumnDef } from '@tanstack/react-table'
@@ -14,6 +16,7 @@ import { toast } from 'sonner'
 export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[] {
   const tc = useTranslations('common')
   const translateStatus = useStatusTranslation()
+  const { openModal } = useModal()
 
   const router = useRouter()
   const locale = useLocale()
@@ -24,18 +27,20 @@ export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[
       accessorKey: 'className',
       header: tc('tableHeader.className'),
       cell: ({ row }) => {
-        return <span>{row.original.name}</span>
+        return (
+          <span
+            className='cursor-pointer hover:font-semibold hover:underline'
+            onClick={() => router.push(`/${locale}/organization/classroom/${row.original.id}`)}
+          >
+            {row.original.name}
+          </span>
+        )
       }
     },
     {
       accessorKey: 'id',
       header: '',
       cell: ({ row }) => {}
-    },
-
-    {
-      accessorKey: 'grade',
-      header: tc('tableHeader.grade')
     },
 
     {
@@ -57,33 +62,9 @@ export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[
       cell: ({ row }) => {
         const numberOfStudents = row.original.numberOfStudents
 
-        // Nếu không có học viên, hiển thị dấu gạch ngang
-        if (numberOfStudents === 0) {
-          return (
-            <div className='flex items-center justify-center gap-1 text-gray-500'>
-              <Users width={16} height={16} /> <span className='text-gray-800'>0</span>
-            </div>
-          )
-        }
-
         return (
-          <div className='flex -space-x-2'>
-            {/* Hiển thị tối đa 3 avatar mặc định */}
-            {[...Array(Math.min(3, numberOfStudents))].map((_, index) => (
-              <Avatar key={index} className='h-8 w-8 border-2 border-white'>
-                <AvatarImage src='/placeholder.svg' alt='Student' />
-                <AvatarFallback className='bg-gradient-to-br from-sky-400 to-sky-600 text-xs text-white'>
-                  S{index + 1}
-                </AvatarFallback>
-              </Avatar>
-            ))}
-
-            {/* Hiển thị +số nếu có hơn 3 học viên */}
-            {numberOfStudents > 3 && (
-              <div className='flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gray-300 text-xs font-semibold text-gray-700'>
-                +{numberOfStudents - 3}
-              </div>
-            )}
+          <div className='flex items-center justify-center gap-1 text-gray-500'>
+            <Users width={16} height={16} /> <span className='text-gray-800'>{numberOfStudents}</span>
           </div>
         )
       }
@@ -126,8 +107,14 @@ export function useGetOrganizationCourseClassroomColumn(): ColumnDef<Classroom>[
       {
         label: tc('button.delete'),
         onClick: ({ original }) => {
-          deleteClassroom(original.id)
-          toast.success('Classroom deleted successfully')
+          openModal('confirm', {
+            title: 'Xác nhận xóa lớp học',
+            message: `Bạn có chắc chắn muốn xóa lớp học "${original.name}" không? Hành động này không thể hoàn tác.`,
+            onConfirm: async () => {
+              await deleteClassroom(original.id).unwrap()
+              toast.success('Xóa lớp học thành công')
+            }
+          })
         }
       }
     ])

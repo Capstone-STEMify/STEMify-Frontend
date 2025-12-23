@@ -21,6 +21,7 @@ import { toast } from 'sonner'
 import { useModal } from '@/providers/ModalProvider'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
 import { useTranslations } from 'next-intl'
+import { isValidUrl, truncateUrl } from '@/utils/index'
 interface SubmissionReviewDialogProps {
   submission: Submission
   studentAssignmentId: number | null
@@ -246,7 +247,20 @@ export function SubmissionReviewDialog({
                       </h4>
                       <div className='prose prose-sm max-w-none text-gray-700'>
                         {question.answerText ? (
-                          <p>{question.answerText}</p>
+                          <>
+                            {isValidUrl(question.answerText) ? (
+                              <a
+                                href={question.answerText}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='text-blue-600 underline hover:text-blue-800'
+                              >
+                                {truncateUrl(question.answerText)}
+                              </a>
+                            ) : (
+                              question.answerText
+                            )}
+                          </>
                         ) : (
                           <>
                             {(() => {

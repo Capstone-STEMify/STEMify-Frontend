@@ -95,7 +95,7 @@ export default function OrganizationSubscriptionDetail() {
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 p-6'>
       <div className='mx-auto max-w-7xl space-y-8'>
         {/* Header */}
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center gap-2'>
           <div>
             <div className='flex items-center gap-3'>
               <BackButton className='mt-2 bg-slate-200' />
@@ -104,12 +104,11 @@ export default function OrganizationSubscriptionDetail() {
             <p className='text-muted-foreground mt-1'>{ts('overviewDescription')}</p>
           </div>
           {/* Action Buttons */}
-          <div className='flex gap-3 lg:items-end'>
-            {/* <Button className='bg-sky-400 shadow-lg'>Change Plan</Button> */}
+          {/* <div className='flex gap-3 lg:items-end'>
             <Button variant='outline' className='shadow-lg' onClick={handleCancelSubscription}>
               {tc('button.cancelSubscription')}
             </Button>
-          </div>
+          </div> */}
         </div>
 
         {/* Current Plan Card - Enhanced */}
@@ -141,6 +140,8 @@ export default function OrganizationSubscriptionDetail() {
                   <div className='rounded-xl bg-slate-50 p-4 shadow-sm backdrop-blur-sm'>
                     <p className='text-sm font-medium'>{to('detail.subscription.currentPlan.packageDetails')}</p>
                     <p className='mt-1 text-2xl font-bold'>{subscription?.data.planName}</p>
+                    <span className='text-xs text-gray-600'>Code: {subscription?.data.code}</span>
+
                     <p className='mt-1 text-sm'>
                       {subscription?.data.netAmount} đ/
                       {to(`detail.subscription.currentPlan.${subscription?.data.planBillingCycle.toLowerCase()}`)}

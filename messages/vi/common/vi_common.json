@@ -27,6 +27,7 @@
       "noOptions": "Không có tùy chọn nào."
     },
     "button": {
+      "viewCertificate": "Xem Chứng Chỉ",
       "accept": "Chấp Nhận",
       "create": "Tạo Mới",
       "detail": "Chi Tiết",
@@ -85,7 +86,7 @@
       "exploreMicrobitWorkspace": "Khám Phá Workspace Micro:bit",
       "exploreModalMaker": "Khám Phá Trình Tạo Modal",
       "exploreRobotAi": "Khám Phá Robot AI",
-      "readBlogs": "Xem Blog",
+      "readBlogs": "Xem bộ công cụ",
       "addKit": "Thêm Bộ Kit",
       "publish": "Công khai",
       "print": "In",
@@ -160,7 +161,7 @@
       "curriculumUpdateError": "xảy ra lỗi khi cập nhật chương trình học. Vui lòng thử lại.",
       "curriculumDeleteError": "xảy ra lỗi khi xóa chương trình học. Vui lòng thử lại.",
       "printPreview": "BẢN XEM TRƯỚC",
-      "learnTitle": "Sau khi hoàn thành khóa học, bạn sẽ: "
+      "learnTitle": "Sau khi hoàn thành khóa học, học sinh sẽ: "
     },
     "tableHeader": {
       "id": "ID",

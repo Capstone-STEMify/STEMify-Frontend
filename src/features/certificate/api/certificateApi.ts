@@ -8,7 +8,7 @@ export const certificateApi = createApi({
   baseQuery: customFetchBaseQueryWithErrorHandling,
   tagTypes: ['Certificate'],
   endpoints: (builder) => ({
-    getById: builder.query<ApiSuccessResponse<Certificate>, number | string>({
+    getById: builder.query<ApiSuccessResponse<Certificate>, number>({
       query: (id) => `/certificates/${id}`,
       transformResponse: (response: any) => {
         return {
@@ -33,7 +33,7 @@ export const certificateApi = createApi({
 export const {
   useGetByIdQuery: useGetCertificateByIdQuery,
   useSearchQuery: useSearchCertificateQuery,
-  
+
   // lazy hooks
   useLazyGetByIdQuery: useLazyGetCertificateByIdQuery,
   useLazySearchQuery: useLazySearchCertificateQuery

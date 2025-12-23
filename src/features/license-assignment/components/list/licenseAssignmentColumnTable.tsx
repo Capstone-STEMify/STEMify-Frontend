@@ -5,9 +5,9 @@ import { useModal } from '@/providers/ModalProvider'
 import { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/shadcn/badge'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
-import { LicenseAssignment } from '@/features/license-assignment/types/licenseAssignment'
+import { LicenseAssignment, LicenseAssignmentStatus } from '@/features/license-assignment/types/licenseAssignment'
 import { formatDate, stringToHslColor, useStatusTranslation } from '@/utils/index'
-import { useDeleteLicenseAssignmentMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
+import { useUpdateLicenseAssignmentMutation } from '@/features/license-assignment/api/licenseAssignmentApi'
 import { toast } from 'sonner'
 import UserAvatar from '@/components/shared/UserAvatar'
 
@@ -17,10 +17,10 @@ export function useGetLicenseAssignmentColumnTable(): ColumnDef<LicenseAssignmen
   const tt = useTranslations('toast')
   const statusTranslations = useStatusTranslation()
 
-  const [revokeLicenseAssignment] = useDeleteLicenseAssignmentMutation()
+  const [revokeLicenseAssignment] = useUpdateLicenseAssignmentMutation()
 
   const handleRevoke = async (id: number) => {
-    await revokeLicenseAssignment(id).unwrap()
+    await revokeLicenseAssignment({ id, body: { status: LicenseAssignmentStatus.REVOKED } }).unwrap()
     toast.success(tt('successMessage.revoke'))
   }
 

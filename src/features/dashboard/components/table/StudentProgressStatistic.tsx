@@ -38,6 +38,7 @@ interface CourseType {
 interface StudentProgressStatisticProps {
   classroomId: number
   courses: CourseType[]
+  courseId?: number
 }
 
 const COLUMN_WIDTH = 'w-[100px] min-w-[100px]'
@@ -49,11 +50,11 @@ type LessonDetailModalProps = {
   studentProgress: any
 }
 
-export function StudentProgressStatistic({ classroomId, courses }: StudentProgressStatisticProps) {
+export function StudentProgressStatistic({ classroomId, courses, courseId }: StudentProgressStatisticProps) {
   const t = useTranslations('dashboard.classroom')
   const locale = useLocale()
 
-  const [selectedCourseId, setSelectedCourseId] = React.useState<string>('')
+  // const [selectedCourseId, setSelectedCourseId] = React.useState<string>('')
 
   const [aiData, setAiData] = React.useState<{
     overviewText: string
@@ -94,22 +95,22 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
 
   const [analyzeTrigger, { isLoading: isAnalyzing }] = useAnalyzeClassroomProgressMutation()
 
-  React.useEffect(() => {
-    if (courses.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(String(courses[0].id))
-    }
-  }, [courses, selectedCourseId])
+  // React.useEffect(() => {
+  //   if (courses.length > 0 && !selectedCourseId) {
+  //     setSelectedCourseId(String(courses[0].id))
+  //   }
+  // }, [courses, selectedCourseId])
 
   const { data: progressRes, isFetching } = useGetClassroomStudentProgressQuery(
-    { classroomId, courseId: Number(selectedCourseId) },
-    { skip: !classroomId || !selectedCourseId }
+    { classroomId, courseId: Number(courseId) },
+    { skip: !classroomId || !courseId }
   )
 
   // Data progress
   const lessons = progressRes?.data?.lessons || []
   const students = progressRes?.data?.StudentProgress || []
 
-  const currentCourseTitle = courses.find((c) => String(c.id) === selectedCourseId)?.title || ''
+  // const currentCourseTitle = courses.find((c) => String(c.id) === selectedCourseId)?.title || ''
 
   const handleAnalyzeClassroom = async () => {
     try {
@@ -234,9 +235,9 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                 {currentCourseTitle}
             </div> */}
           </div>
-          <Button variant='outline' size='icon'>
+          {/* <Button variant='outline' size='icon'>
             <Download className='h-4 w-4' />
-          </Button>
+          </Button> */}
         </div>
       </header>
 
@@ -256,28 +257,24 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                   <h3 className='mb-2 text-sm font-semibold text-slate-700'>
                     {t('overview.progress.overview') || 'Overview'}
                   </h3>
-                  <div className='border-l-4 border-purple-300 pl-3 text-sm leading-relaxed text-slate-700 prose prose-sm max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-strong:text-slate-900 prose-ul:text-slate-700 prose-li:text-slate-700'>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {aiData.overviewText}
-                    </ReactMarkdown>
+                  <div className='prose prose-sm prose-headings:text-slate-800 prose-p:text-slate-700 prose-strong:text-slate-900 prose-ul:text-slate-700 prose-li:text-slate-700 max-w-none border-l-4 border-purple-300 pl-3 text-sm leading-relaxed text-slate-700'>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiData.overviewText}</ReactMarkdown>
                   </div>
                 </div>
               )}
-              
+
               {aiData.aiInsightsText && aiData.aiInsightsText !== aiData.overviewText && (
                 <div className='flex-1'>
                   <h3 className='mb-2 text-sm font-semibold text-slate-700'>
                     {t('overview.progress.aiInsights') || 'AI Insights'}
                   </h3>
-                  <div className='border-l-4 border-blue-300 pl-3 text-sm leading-relaxed text-slate-700 prose prose-sm max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-strong:text-slate-900 prose-ul:text-slate-700 prose-li:text-slate-700'>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {aiData.aiInsightsText}
-                    </ReactMarkdown>
+                  <div className='prose prose-sm prose-headings:text-slate-800 prose-p:text-slate-700 prose-strong:text-slate-900 prose-ul:text-slate-700 prose-li:text-slate-700 max-w-none border-l-4 border-blue-300 pl-3 text-sm leading-relaxed text-slate-700'>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiData.aiInsightsText}</ReactMarkdown>
                   </div>
                 </div>
               )}
-              
-              <div className='flex min-w-[200px] flex-col gap-2 md:flex-row md:justify-end'>
+
+              <div className='item-center mb-5 flex min-w-[200px] flex-col gap-2 md:flex-row md:justify-end'>
                 <Button
                   variant={filterAtRisk ? 'destructive' : 'outline'}
                   className={`group justify-between border-red-200 ${!filterAtRisk && 'text-red-600 hover:bg-red-50'}`}
@@ -464,10 +461,8 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                   <div className='h-2 w-2 rounded-full bg-red-400' />
                   {t('overview.progress.identifiedIssues')}
                 </h4>
-                <div className='rounded-md border border-red-100 bg-red-50 p-3 text-sm text-slate-600 prose prose-sm max-w-none prose-headings:text-slate-800 prose-p:text-slate-600 prose-strong:text-slate-900 prose-ul:text-slate-600 prose-li:text-slate-600'>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {selectedAnalysisStudent.statusText}
-                  </ReactMarkdown>
+                <div className='prose prose-sm prose-headings:text-slate-800 prose-p:text-slate-600 prose-strong:text-slate-900 prose-ul:text-slate-600 prose-li:text-slate-600 max-w-none rounded-md border border-red-100 bg-red-50 p-3 text-sm text-slate-600'>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{selectedAnalysisStudent.statusText}</ReactMarkdown>
                 </div>
               </div>
 
@@ -476,10 +471,8 @@ export function StudentProgressStatistic({ classroomId, courses }: StudentProgre
                   <div className='h-2 w-2 rounded-full bg-green-400' />
                   {t('overview.progress.recommendedAction')}
                 </h4>
-                <div className='rounded-md border border-green-100 bg-green-50 p-3 text-sm text-slate-600 prose prose-sm max-w-none prose-headings:text-slate-800 prose-p:text-slate-600 prose-strong:text-slate-900 prose-ul:text-slate-600 prose-li:text-slate-600'>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {selectedAnalysisStudent.interventionText}
-                  </ReactMarkdown>
+                <div className='prose prose-sm prose-headings:text-slate-800 prose-p:text-slate-600 prose-strong:text-slate-900 prose-ul:text-slate-600 prose-li:text-slate-600 max-w-none rounded-md border border-green-100 bg-green-50 p-3 text-sm text-slate-600'>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{selectedAnalysisStudent.interventionText}</ReactMarkdown>
                 </div>
               </div>
             </div>

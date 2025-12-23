@@ -2,18 +2,21 @@ import { CourseEnrollment } from '@/features/enrollment/types/enrollment.type'
 import { SearchPaginatedRequestParams } from '@/types/baseModel'
 
 export type Certificate = {
+  certificateType: CertificateType
+  curriculumId?: number
+  courseId?: number
   id: number
   userId: string
   userName: string
   courseEnrollmentId?: number
   curriculumEnrollmentId?: number
-  certificateType: CertificateType
-  issueDate: string
-  verificationCode: string
+  issueDate?: string
   certificateUrl: string
+  verificationCode: string
   title: string
   completedAt?: string
-  courseEnrollments?: CourseEnrollment[] 
+  lessons?: string[]
+  courseEnrollments?: CourseEnrollment[]
   userImageUrl?: string
 }
 

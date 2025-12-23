@@ -1,5 +1,6 @@
 {
   "course": {
+    "completedAt": "Completed At: {date}",
     "list": {
       "title": "Courses List",
       "description": "Curriculum-aligned, thematic guides with following educational pedagogical approach. Courses have teacher and student perspectives.",
@@ -48,7 +49,9 @@
         "duration": "Duration",
         "dur_description": "Self-paced learning",
         "ratings": "Ratings",
-        "rate_description": "Community feedback"
+        "rate_description": "Community feedback",
+        "level": "Level",
+        "level_description": "Difficulty Level"
       },
       "lesson": {
         "cardTitle": "Lesson",

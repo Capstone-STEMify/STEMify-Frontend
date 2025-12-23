@@ -126,6 +126,20 @@ export const workspaceTreeSlice = createSlice({
         })
       }
     },
+    reorderActions: (state, action: PayloadAction<{ oldIndex: number; newIndex: number }>) => {
+      const { oldIndex, newIndex } = action.payload
+      if (
+        oldIndex < 0 ||
+        newIndex < 0 ||
+        oldIndex >= state.actions.length ||
+        newIndex >= state.actions.length ||
+        oldIndex === newIndex
+      )
+        return
+
+      const moved = state.actions.splice(oldIndex, 1)[0]
+      state.actions.splice(newIndex, 0, moved)
+    },
 
     removeAction: (state, action: PayloadAction<string>) => {
       state.actions = state.actions.filter((a) => a.id !== action.payload)
@@ -260,6 +274,7 @@ export const {
   removeTargetFromAllActions,
   updateActionName,
   updateTargetOrderInAction,
+  reorderActions,
   clearActivities,
   resetWorkspace
 } = workspaceTreeSlice.actions

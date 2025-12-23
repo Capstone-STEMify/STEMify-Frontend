@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import * as tf from '@tensorflow/tfjs'
-import * as mobilenet from '@tensorflow-models/mobilenet'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import { useTranslations } from 'next-intl'

@@ -1,5 +1,6 @@
 {
   "course": {
+    "completedAt": "Ngày hoàn thành: {date}",
     "list": {
       "title": "Danh Sách Khóa Học",
       "description": "Hướng dẫn theo chủ đề, phù hợp với chương trình giảng dạy với phương pháp giáo dục sau. Các khóa học có quan điểm của giáo viên và học sinh.",
@@ -48,7 +49,9 @@
         "duration": "Thời gian",
         "dur_description": "Học tập theo tiến độ cá nhân",
         "ratings": "Đánh giá",
-        "rate_description": "Cảm nhận từ cộng đồng"
+        "rate_description": "Cảm nhận từ cộng đồng",
+        "level": "Độ Khó",
+        "level_description": "Mức độ khó của khóa học"
       },
       "lesson": {
         "cardTitle": "Bài Học",

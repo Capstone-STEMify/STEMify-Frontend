@@ -6,14 +6,8 @@ import { CourseEnrollment, EnrollmentStatus } from '@/features/enrollment/types/
 import Image from 'next/image'
 import { Progress } from '@/components/shadcn/progress'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/shadcn/dropdown-menu'
-import { formatDate } from '@/utils/index'
+import { useLocale, useTranslations } from 'next-intl'
+import { formatDate, useStatusTranslation } from '@/utils/index'
 
 interface CourseCardProps {
   course: CourseEnrollment
@@ -22,10 +16,12 @@ interface CourseCardProps {
 export const CourseCard = ({ course }: CourseCardProps) => {
   const locale = useLocale()
   const router = useRouter()
+  const t = useTranslations('course')
+  const translateStatus = useStatusTranslation()
   return (
-    <Card>
-      <CardContent className='flex items-center justify-between'>
-        <div className='flex items-center gap-4 py-4'>
+    <Card className='w-fit'>
+      <CardContent>
+        <div className='flex w-fit items-center gap-4 py-4'>
           <div>
             <Image
               className='aspect-square rounded-sm border bg-white object-contain shadow-sm'
@@ -44,19 +40,19 @@ export const CourseCard = ({ course }: CourseCardProps) => {
             >
               {course.courseTitle}
             </h3>
-            <p className='mt-1 text-sm text-gray-600'>{course.status}</p>
+            <p className='mt-1 text-sm text-gray-600'>{translateStatus(course.status)}</p>
             <Progress value={course.progressPercentage} className='mt-1 h-2 w-150 [&>div]:bg-sky-500' />
             <span className='text-sm font-medium text-gray-700'>{course.progressPercentage ?? 0}%</span>
             {course.status === EnrollmentStatus.COMPLETED && (
               <p className='mt-1 text-sm text-gray-600'>
                 {/* fix later */}
-                Grade Achieved: <span className='font-semibold'>95.01%</span> {' '}
-                <span>Completed At: {formatDate(course.completedAt)}</span>
+                {/* Grade Achieved: <span className='font-semibold'>95.01%</span> {' '} */}
+                <span>{t('completedAt', { date: formatDate(course.completedAt) })}</span>
               </p>
             )}
           </div>
         </div>
-        {course.status === EnrollmentStatus.COMPLETED ? (
+        {/* {course.status === EnrollmentStatus.COMPLETED ? (
           <Button
             className='ml-4 flex-shrink-0 bg-blue-500'
             onClick={() => router.push(`/${locale}/certificate/${course.certificateId}`)}
@@ -80,7 +76,7 @@ export const CourseCard = ({ course }: CourseCardProps) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )}
+        )} */}
       </CardContent>
     </Card>
   )

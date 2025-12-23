@@ -137,7 +137,8 @@
         "errorResponse": "Lỗi phản hồi từ máy chủ"
       },
       "modal": {
-        "viewFile": "Xem File"
+        "submitFile": "Xem File",
+        "viewFile": "Xem tệp đã nộp"
       }
     },
     "organization": {
@@ -161,7 +162,7 @@
       "people": "Mọi người",
       "enrollment": "Thay đổi ghi danh",
       "feedback": "Phản hồi",
-      "feedbackDetail": "học viên đề xuất tăng cường giao tiếp và phản hồi thường xuyên từ ban quản lý",
+      "feedbackDetail": "Số lượt đăng ký khóa học tăng mạnh trong kỳ này, cho thấy mức độ quan tâm và tham gia của học viên đang cải thiện rõ rệt.",
       "detail": "Xem chi tiết",
       "change": "Thay đổi",
       "curriculumStat": {

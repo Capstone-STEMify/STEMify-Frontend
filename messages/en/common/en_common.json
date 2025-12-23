@@ -27,6 +27,7 @@
       "noOptions": "No options available."
     },
     "button": {
+      "viewCertificate": "View Certificate",
       "accept": "Accept",
       "create": "Create New",
       "detail": "Detail",
@@ -85,7 +86,7 @@
       "exploreMicrobitWorkspace": "Explore Micro:bit Workspace",
       "exploreModalMaker": "Explore Modal Maker",
       "exploreRobotAi": "Explore Robot AI",
-      "readBlogs": "Read Blogs",
+      "readBlogs": "View Kits",
       "addKit": "Add Kit",
       "print": "Print",
       "start": "Start",

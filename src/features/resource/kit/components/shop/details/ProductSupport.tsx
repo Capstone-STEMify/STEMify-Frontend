@@ -48,7 +48,7 @@ const SoftwareSupport: React.FC = () => {
             transition={{ delay: 0.3 }}
           >
             <motion.img
-              src='https://strawbees.com/hs-fs/hubfs/LP_project.jpg?width=1920&height=1080&name=LP_project.jpg'
+              src='https://strawbees.com/hubfs/STEAM-building_02.jpg?width=1920&name=STEAM-building_02.jpg'
               alt='Fun-filled Playing Interface'
               className='h-auto w-full object-cover'
               whileHover={{ scale: 1.05 }}

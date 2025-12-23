@@ -41,11 +41,11 @@ export default function ClassroomSubHeader({ classroom, currentTab, setCurrentTa
     { name: 'student', currentTab: 'student' }
   ]
   const studentSubNavItems: { name: string; currentTab: ClassroomNavItems }[] = [
-    { name: 'overview', currentTab: 'overview' },
-    {
-      name: 'course',
-      currentTab: 'course'
-    }
+    { name: 'overview', currentTab: 'overview' }
+    // {
+    //   name: 'course',
+    //   currentTab: 'course'
+    // }
   ]
   const finalSubNavItems = currentRole === 'Student' ? studentSubNavItems : subNavItems
 
@@ -63,15 +63,9 @@ export default function ClassroomSubHeader({ classroom, currentTab, setCurrentTa
             </div>
             <div>
               <div className='flex items-center gap-4'>
-                <h2 className='text-lg font-bold text-slate-900'>{classroom.name ?? 'Classroom'}</h2>
+                <h2 className='text-lg font-bold text-slate-900'>{classroom.name}</h2>
                 <Badge className={`border ${getStatusBadgeClass(classroom.status)}`}>
                   {statusTranslation(classroom.status)}
-                </Badge>
-                <Badge className='flex items-center gap-2 bg-sky-100 text-xs font-medium text-sky-700'>
-                  <GraduationCap className='h-3 w-3' />
-                  <span className='text-xs'>
-                    {tClassroom('grade')} {classroom.grade}
-                  </span>
                 </Badge>
               </div>
 

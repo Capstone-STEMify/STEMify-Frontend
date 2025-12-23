@@ -99,30 +99,10 @@ export function useGetClassroomColumn(): ColumnDef<Classroom>[] {
       header: tc('tableHeader.numberOfStudents'),
       cell: ({ row }) => {
         const numberOfStudents = row.original.numberOfStudents
-        const student = row.original.students
-
-        // Nếu không có học viên, hiển thị dấu gạch ngang
-        if (numberOfStudents === 0) {
-          return (
-            <div className='flex items-center justify-center gap-1 text-gray-500'>
-              <Users width={16} height={16} /> <span className='text-gray-800'>0</span>
-            </div>
-          )
-        }
 
         return (
-          <div className='flex -space-x-2'>
-            {/* Hiển thị tối đa 3 avatar mặc định */}
-            {[...Array(Math.min(3, numberOfStudents))].map((_, index) => (
-              <UserAvatar key={index} fullName={student[index]?.name || `S${index + 1}`} size={32} />
-            ))}
-
-            {/* Hiển thị +số nếu có hơn 3 học viên */}
-            {numberOfStudents > 3 && (
-              <div className='flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gray-300 text-xs font-semibold text-gray-700'>
-                +{numberOfStudents - 3}
-              </div>
-            )}
+          <div className='flex items-center justify-center gap-1 text-gray-500'>
+            <Users width={16} height={16} /> <span className='text-gray-800'>{numberOfStudents}</span>
           </div>
         )
       }

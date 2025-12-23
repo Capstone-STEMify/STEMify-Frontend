@@ -262,20 +262,20 @@ export default function UpsertLesson({ onSuccess }: UpsertLessonProps) {
 
   return (
     <form
-      className='space-y-4'
+      className='space-y-5'
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
       }}
     >
-      <form.AppField
-        name='imageUrl'
-        children={(field) => {
-          imageFieldRef.current = field
-          return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
-        }}
-      />
-      <div className='space-y-6 lg:col-span-2'>
+      <div className='space-y-6'>
+        <form.AppField
+          name='imageUrl'
+          children={(field) => {
+            imageFieldRef.current = field
+            return <field.ImageField previewUrlFromServer={form.state.values.imagePreviewUrl} />
+          }}
+        />
         <form.AppField
           name='title'
           children={(field) => (
@@ -321,7 +321,7 @@ export default function UpsertLesson({ onSuccess }: UpsertLessonProps) {
         />
       </div>
 
-      <div className='grid grid-cols-3 gap-6'>
+      <div className='grid grid-cols-1 items-start gap-6 lg:grid-cols-2'>
         <SCard
           className='gap-2'
           title={t('form.fields.skills.label')}
@@ -379,7 +379,8 @@ export default function UpsertLesson({ onSuccess }: UpsertLessonProps) {
           }
         />
       </div>
-      <div className='mb-3 flex justify-end gap-3'>
+      <hr />
+      <div className='flex justify-end gap-3'>
         <Button type='button' variant='outline' onClick={closeModal}>
           {tc('button.cancel')}
         </Button>

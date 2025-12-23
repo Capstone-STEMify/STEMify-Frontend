@@ -46,7 +46,11 @@
           "passed": "Passed",
           "failed": "Failed",
           "graded": "Graded"
-        }
+        },
+        "missingAssignmentData": "Missing assignment data.",
+        "gradingSubmitted": "Grading submitted successfully.",
+        "failedToSubmitGrading": "Failed to submit grading.",
+        "error": "Error"
       }
     },
     "student": {

@@ -281,3 +281,17 @@ export const truncateLabel = (label: string, maxLength = 5) => {
   if (!label) return ''
   return label.length > maxLength ? label.substring(0, 4) + '...' : label
 }
+
+export const truncateUrl = (label: string, maxLength = 40) => {
+  if (!label) return ''
+  return label.length > maxLength ? label.substring(0, 40) + '...' : label
+}
+
+export const isValidUrl = (text: string) => {
+  try {
+    const url = new URL(text)
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  } catch {
+    return false
+  }
+}

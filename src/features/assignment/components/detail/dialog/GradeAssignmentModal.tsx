@@ -20,6 +20,7 @@ import Loading from 'app/[locale]/loading'
 import { Clock, ExternalLink, HelpCircle, X } from 'lucide-react'
 import { format } from 'date-fns'
 import { useTranslations } from 'next-intl'
+import { isValidUrl, truncateUrl } from '@/utils/index'
 
 type Props = {
   studentAssignmentId: number | null
@@ -240,7 +241,20 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                     )}
                     <div className='whitespace-pre-wrap text-slate-800'>
                       {qAttempt.answerText ? (
-                        <p>{qAttempt.answerText}</p>
+                        <>
+                          {isValidUrl(qAttempt.answerText) ? (
+                            <a
+                              href={qAttempt.answerText}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='text-blue-600 underline hover:text-blue-800'
+                            >
+                              {truncateUrl(qAttempt.answerText)}
+                            </a>
+                          ) : (
+                            qAttempt.answerText
+                          )}
+                        </>
                       ) : (
                         <>
                           {(() => {
@@ -251,8 +265,8 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                                   <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
                                   <img
                                     src={qAttempt.answerFileUrl}
-                                    alt="Student answer"
-                                    className="max-w-full h-auto cursor-pointer rounded-md border"
+                                    alt='Student answer'
+                                    className='h-auto max-w-full cursor-pointer rounded-md border'
                                     onClick={() => setImageModal({ open: true, url: qAttempt.answerFileUrl })}
                                   />
                                 </div>
@@ -260,11 +274,7 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
                                 <div className='mt-6'>
                                   <h5 className='mb-2 text-sm font-medium text-gray-600'>{t('modal.submitFile')}</h5>
                                   <Button variant='link' className='p-0 text-sm' asChild>
-                                    <a
-                                      href={qAttempt.answerFileUrl}
-                                      target='_blank'
-                                      rel='noopener noreferrer'
-                                    >
+                                    <a href={qAttempt.answerFileUrl} target='_blank' rel='noopener noreferrer'>
                                       <p className='text-blue-500'>{t('modal.viewFile')}</p>{' '}
                                       <ExternalLink className='ml-1 h-3 w-3' />
                                     </a>
@@ -366,8 +376,16 @@ export default function GradeAssignmentModal({ studentAssignmentId, onClose, onS
       </div>
 
       {imageModal.open && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" onClick={() => setImageModal({ open: false, url: '' })}>
-          <img src={imageModal.url} alt="Enlarged student answer" className="max-w-[90%] max-h-[90%] object-contain" onClick={(e) => e.stopPropagation()} />
+        <div
+          className='bg-opacity-75 fixed inset-0 z-50 flex items-center justify-center bg-black'
+          onClick={() => setImageModal({ open: false, url: '' })}
+        >
+          <img
+            src={imageModal.url}
+            alt='Enlarged student answer'
+            className='max-h-[90%] max-w-[90%] object-contain'
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
     </div>

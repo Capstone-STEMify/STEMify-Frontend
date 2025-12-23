@@ -27,6 +27,7 @@ import {
   removeTargetFromAllActions,
   setSelectedAction,
   updateActionName,
+  reorderActions,
   WorkspaceAction
 } from '@/features/creator-3d/slice/workspaceTreeSlice'
 import { removeInstance, setSelectedId } from '@/features/creator-3d/slice/creatorSceneSlice'
@@ -150,6 +151,51 @@ export default function WorkspaceTree() {
       for (const dragged of draggedItems) {
         const draggedId = dragged.getId()
         const draggedData = items[draggedId]
+
+        // 1) Reorder actions by DnD with precise insert index
+        if (draggedData?.type === 'action' && (targetData?.type === 'action' || targetData?.type === 'workspace')) {
+          const actionIds = actions.map((a) => a.id)
+          const oldIndex = actionIds.indexOf(draggedId)
+          if (oldIndex === -1) continue
+
+          // Prefer library-provided childIndex when available (drop line index among workspace children)
+          const childIndex: number | undefined = (target as any)?.childIndex ?? (target as any)?.index
+
+          const finalIds = actionIds.filter((id) => id !== draggedId)
+          let insertIndex: number | null = null
+
+          if (typeof childIndex === 'number') {
+            // Adjust index after removal when dragging from above
+            insertIndex = childIndex
+            if (oldIndex < childIndex) insertIndex = Math.max(0, childIndex - 1)
+            insertIndex = Math.min(Math.max(insertIndex, 0), finalIds.length)
+            finalIds.splice(insertIndex, 0, draggedId)
+          } else if (targetData.type === 'action') {
+            // Fallback using before/after relative to the target action
+            const pos = (target as any)?.position ?? (target as any)?.dropPosition ?? 'before'
+            const targetIndexAfterRemoval = finalIds.indexOf(targetId)
+            insertIndex = targetIndexAfterRemoval
+            if (pos === 'after') insertIndex = targetIndexAfterRemoval + 1
+            finalIds.splice(insertIndex, 0, draggedId)
+          } else {
+            // Fallback: dropped on workspace without index info → move to end
+            finalIds.push(draggedId)
+          }
+
+          const newIndex = finalIds.indexOf(draggedId)
+          if (newIndex !== -1 && newIndex !== oldIndex) {
+            dispatch(reorderActions({ oldIndex, newIndex }))
+            requestAnimationFrame(() => {
+              setState((prev) => ({
+                ...prev,
+                expandedItems: Array.from(new Set(['workspace', ...(prev.expandedItems ?? [])])),
+                refreshKey: Math.random()
+              }))
+            })
+          }
+
+          continue
+        }
 
         if (draggedData?.type === 'component' && targetData?.type === 'action') {
           dispatch(moveTargetToAction(draggedId, targetId))

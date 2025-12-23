@@ -58,12 +58,6 @@ export function useGetGroupColumn(): ColumnDef<GroupDetailStudent>[] {
       header: tc('tableHeader.joinedAt'),
       cell: ({ row }) => <div className='text-sm text-gray-600'>{formatDate(row.original.joinedAt, { locale })}</div>
     },
-
-    {
-      accessorKey: 'subscriptionOrderId',
-      header: tc('tableHeader.subscription'),
-      cell: ({ row }) => <div className='font-mono text-sm'>#{row.original.subscriptionOrderId}</div>
-    },
     {
       accessorKey: 'isActive',
       header: tc('tableHeader.status'),

@@ -71,13 +71,14 @@ export const useOrganizationUserColumns = ({
       meta: { className: 'align-top py-3' },
       cell: ({ row }) => (
         <div className='flex flex-col gap-1'>
-          {row.original.subscriptions.map((sub) => (
-            <div key={sub.subscriptionOrderId} className={subRowClass}>
-              <Badge variant={getRoleBadgeVariant(sub.licenseType)} className='whitespace-nowrap'>
-                {tc(`accountType.${sub.licenseType.toLowerCase()}`)}
-              </Badge>
-            </div>
-          ))}
+          <div className={subRowClass}>
+            <Badge
+              variant={getRoleBadgeVariant(row.original.subscriptions[0].licenseType)}
+              className='whitespace-nowrap'
+            >
+              {tc(`accountType.${row.original.subscriptions[0].licenseType.toLowerCase()}`)}
+            </Badge>
+          </div>
         </div>
       )
     },

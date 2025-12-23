@@ -137,7 +137,8 @@
         "errorResponse": "Error response from server"
       },
       "modal": {
-        "viewFile": "View File"
+        "submitFile": "View File",
+        "viewFile": "View Submitted File"
       }
     },
     "organization": {
@@ -161,7 +162,7 @@
       "people": "People",
       "enrollment": "Enrollment Change",
       "feedback": "Feedback",
-      "feedbackDetail": "student suggested more frequent communication and feedback from management",
+      "feedbackDetail": "Course enrollments increased significantly during this period, indicating a clear improvement in learner interest and participation.",
       "change": "Change",
       "curriculumStat": {
         "title": "Curriculum Statistics"

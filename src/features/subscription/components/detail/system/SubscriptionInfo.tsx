@@ -14,6 +14,7 @@ type SubscriptionInfoProps = {
 export default function SubscriptionInfo({ subscription }: SubscriptionInfoProps) {
   const {
     planName,
+    code,
     planBillingCycle,
     status,
     startDate,
@@ -47,13 +48,15 @@ export default function SubscriptionInfo({ subscription }: SubscriptionInfoProps
         </div>
       </CardHeader>
       <CardContent>
-        <div className='mb-4 flex items-center gap-2'>
+        <div className='flex items-center gap-2'>
           <h3 className='text-xl font-semibold'>{planName}</h3>
           <Badge variant='secondary' className={getStatusBadgeClass(status)}>
             {translateStatus(status)}
           </Badge>
         </div>
-        <div className='grid gap-6 lg:grid-cols-2'>
+        <span className='text-xs text-gray-600'>Code: {code}</span>
+
+        <div className='mt-4 grid gap-6 lg:grid-cols-2'>
           <div className='space-y-4'>
             <div>
               <div className='space-y-2'>

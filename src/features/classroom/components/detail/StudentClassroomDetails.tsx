@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ca
 import { Badge } from '@/components/shadcn/badge'
 import { Button } from '@/components/shadcn/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
-import { Users, BookOpen, Copy, MoreVertical, Mail, Camera, Video } from 'lucide-react'
+import { Users, BookOpen, Copy, MoreVertical, Mail, Camera, Video, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
@@ -22,8 +22,14 @@ import { useCreateCourseEnrollmentMutation } from '@/features/enrollment/api/cou
 
 export type StudentClassroomDetailProps = {
   courseEnrollment?: CourseEnrollment
+  isCourseEnrollmentLoading?: boolean
+  refetch?: () => void
 }
-export default function StudentClassroomDetail({ courseEnrollment }: StudentClassroomDetailProps) {
+export default function StudentClassroomDetail({
+  courseEnrollment,
+  isCourseEnrollmentLoading,
+  refetch
+}: StudentClassroomDetailProps) {
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const tClassroom = useTranslations('classroom')
@@ -57,6 +63,7 @@ export default function StudentClassroomDetail({ courseEnrollment }: StudentClas
         status: EnrollmentStatus.IN_PROGRESS,
         classroomId: Number(classroomId)
       })
+      refetch?.()
       toast.success(tt('successMessage.enroll'), {
         description: `${tt('successMessage.enrollDes', { title: createEnrollmentResponse?.data.courseTitle || '' })}`
       })
@@ -131,7 +138,11 @@ export default function StudentClassroomDetail({ courseEnrollment }: StudentClas
                         </Badge>
                       </div>
                       <p className='mb-3 line-clamp-3 text-sm text-slate-600'>{classroom.course.description}</p>
-                      {courseEnrollment ? (
+                      {isCourseEnrollmentLoading ? (
+                        <Button className='mt-4' disabled>
+                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                        </Button>
+                      ) : courseEnrollment ? (
                         <Button
                           className='mt-4'
                           onClick={() => {

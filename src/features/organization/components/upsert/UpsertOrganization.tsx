@@ -7,6 +7,8 @@ import {
   useUpdateOrganizationMutation
 } from '@/features/organization/api/organizationApi'
 import { OrganizationFormData } from '@/features/organization/types/organization.type'
+import { setCurrentStep } from '@/features/subscription/slice/organizationSubscriptionFormSlice'
+import { useAppDispatch } from '@/hooks/redux-hooks'
 import { fileToBase64 } from '@/utils/index'
 import { useTranslations } from 'next-intl'
 import { useEffect, useRef } from 'react'
@@ -31,6 +33,8 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
   const tt = useTranslations('toast')
   const tc = useTranslations('common')
   const tOrganization = useTranslations('organization')
+
+  const dispatch = useAppDispatch()
 
   const imageFieldRef = useRef<any>(null)
 
@@ -84,6 +88,7 @@ export default function UpsertOrganization({ organizationId, onSuccess }: Upsert
         await createOrg(payload).unwrap()
         toast.success(tt('successMessage.createNoTitle'))
         onSuccess?.()
+        dispatch(setCurrentStep(1))
       }
       if (!isCreateError || !isUpdateError) {
       }

@@ -4,14 +4,30 @@ import { useSearchNotificationQuery, useUpdateNotificationMutation } from '@/fea
 import { useAppSelector } from '@/hooks/redux-hooks'
 import { formatDate } from '@/utils/index'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 export default function NotificationAll() {
   const router = useRouter()
   const userId = useAppSelector((state) => state.auth.user?.userId)
-  const { data, isLoading, isFetching } = useSearchNotificationQuery({ userId }, { skip: !userId })
+  const organizationUserId = useAppSelector((state) => state.selectedOrganization.selectedOrgUserId)
+  const { data: userNotiData, isLoading, isFetching } = useSearchNotificationQuery({ userId }, { skip: !userId })
+  const {
+    data: orgUserNotiData,
+    isLoading: isOrgUserNotiLoading,
+    isFetching: isOrgUserNotiFetching
+  } = useSearchNotificationQuery({ userId: organizationUserId! }, { skip: !organizationUserId })
+
+  const mergedNotifications = useMemo(() => {
+    const userNotis = userNotiData?.data.items ?? []
+    const orgNotis = orgUserNotiData?.data.items ?? []
+
+    return [...userNotis, ...orgNotis]
+      .filter((noti, index, self) => index === self.findIndex((n) => n.id === noti.id))
+      .sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime())
+  }, [userNotiData, orgUserNotiData])
+
   const [makeAsRead] = useUpdateNotificationMutation()
-  if (isLoading || isFetching) {
+  if (isLoading || isFetching || isOrgUserNotiLoading || isOrgUserNotiFetching) {
     return (
       <div className='space-y-3 p-4'>
         <Skeleton className='h-3 w-20' />
@@ -41,9 +57,9 @@ export default function NotificationAll() {
 
   return (
     <ScrollArea className='-mx-1 h-[320px]'>
-      {data && data.data.items.length > 0 ? (
+      {mergedNotifications && mergedNotifications.length > 0 ? (
         <div className='space-y-1'>
-          {data.data.items.map((noti) => (
+          {mergedNotifications.map((noti) => (
             <div
               key={noti.id}
               className='group relative cursor-pointer rounded-lg border border-transparent p-3 transition-all duration-200 hover:border-gray-100 hover:bg-gray-50 dark:hover:border-gray-800 dark:hover:bg-gray-900/50'
@@ -62,7 +78,7 @@ export default function NotificationAll() {
         </div>
       ) : (
         <div className='flex h-24 items-center justify-center text-sm text-gray-500 dark:text-gray-400'>
-          No new notifications
+          Không có thông báo
         </div>
       )}
     </ScrollArea>
