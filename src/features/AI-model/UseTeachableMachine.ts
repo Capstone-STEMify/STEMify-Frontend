@@ -318,9 +318,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
             const progress = 30 + (epoch + 1) * (60 / CONFIG.epochs)
             setTrainingProgress(progress)
             setTrainingStatus({
-              message: `Epoch ${epoch + 1}/${CONFIG.epochs}: Acc ${(logs?.acc || 0).toFixed(
-                2
-              )}, ValAcc ${((logs as any)?.val_acc || 0).toFixed(2)}`,
+              message: `Epoch ${epoch + 1}/${CONFIG.epochs}: loss=${loss}, acc=${acc}, val_loss=${valLoss}, val_acc=${valAcc}`,
               type: 'info'
             })
 
@@ -384,12 +382,6 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
       setTrainingStatus({ message: 'Model đã được train thành công!', type: 'success' })
       setTrainingProgress(100)
-      if (earlyStopped) {
-        setTrainingStatus({
-          message: `Đã dừng sớm tại epoch ${EARLY_STOP.epoch} vì val_acc đạt ngưỡng ${(EARLY_STOP.valAccuracyThreshold * 100).toFixed(0)}%.`,
-          type: 'success'
-        })
-      }
     } catch (error) {
       console.error('Lỗi khi train model:', error)
       setTrainingStatus({
