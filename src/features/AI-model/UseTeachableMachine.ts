@@ -451,14 +451,42 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       setTrainingStatus({ message: t('trainModel'), type: 'info' })
       setTrainingProgress(30)
 
-      console.log('Extracting features...')
-      const features = featureExtractor.predict(images) as tf.Tensor
-      console.log('Features shape:', features.shape)
 
-      const featureBatchSize = features.shape[0]
-      const featureSize = features.shape.slice(1).reduce((a, b) => a * b, 1)
-      const processedFeatures = features.reshape([featureBatchSize, featureSize])
-      console.log('Reshaped features shape:', processedFeatures.shape)
+      const batchSizeForFeatures = Math.min(CONFIG.batchSizeMax, images.shape[0])
+      const imageHeight = images.shape[1] ?? CONFIG.imageSize
+      const imageWidth = images.shape[2] ?? CONFIG.imageSize
+      const imageChannels = images.shape[3] ?? 3
+      const processedFeatures = tf.tidy(() => {
+        let result: tf.Tensor2D | null = null
+
+        for (let start = 0; start < images.shape[0]; start += batchSizeForFeatures) {
+          const end = Math.min(start + batchSizeForFeatures, images.shape[0])
+
+          const batchFeatures = tf.tidy(() => {
+            const batch = images.slice([start, 0, 0, 0], [end - start, imageHeight, imageWidth, imageChannels])
+            const raw = featureExtractor.predict(batch) as tf.Tensor
+            const flatSize = raw.shape.slice(1).reduce((a, b) => a * b, 1)
+            const flat = raw.reshape([raw.shape[0], flatSize])
+            return flat as tf.Tensor2D
+          })
+
+          if (result) {
+            const merged = tf.concat([result, batchFeatures], 0) as tf.Tensor2D
+            result.dispose()
+            batchFeatures.dispose()
+            result = merged
+          } else {
+            result = batchFeatures
+          }
+        }
+
+        if (!result) {
+          throw new Error('Không thể trích xuất features')
+        }
+
+        console.log('Features shape:', result.shape)
+        return result
+      })
 
       console.log('Training classification head...')
       
@@ -499,6 +527,11 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
         
         if (valLoss > 0) {
           if (valLoss < bestValLoss - CONFIG.minDelta) {
+            // Dispose previous snapshots to avoid memory leak on GPU
+            if (bestWeights) {
+              bestWeights.forEach((w) => w.dispose())
+            }
+
             bestValLoss = valLoss
             patienceCounter = 0
             bestEpoch = epoch + 1
@@ -534,6 +567,11 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       if (!shouldStop && bestWeights && bestEpoch < CONFIG.epochs) {
         console.log(`Training completed. Using best model from epoch ${bestEpoch}`)
         classifier.setWeights(bestWeights)
+      }
+
+      // Clean up snapshot weights to avoid GPU memory leak
+      if (bestWeights) {
+        bestWeights.forEach((w) => w.dispose())
       }
 
       const finalModel: TeachableMachineModel = {
@@ -572,7 +610,6 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
 
       setModel(finalModel)
 
-      features.dispose()
       processedFeatures.dispose()
       images.dispose()
       labels.dispose()
