@@ -46,7 +46,7 @@ const WhatsIncluded: React.FC<WhatsIncludedProps> = ({ components, name, addBtn,
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className='rounded-3xl bg-white p-10 shadow-xl'
+      className='container mx-auto rounded-3xl bg-white p-10 shadow-xl'
     >
       <div className='mb-8 flex cursor-pointer items-center justify-between'>
         <div className='flex items-center gap-4'>

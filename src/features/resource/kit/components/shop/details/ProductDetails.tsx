@@ -28,7 +28,6 @@ const ProductDetails: React.FC = () => {
     <div className='min-h-screen bg-sky-50/60'>
       <div className='px-4 py-12 sm:px-6 lg:px-8'>
         <BackButton className='m-4' />
-
         <div className='mx-auto mb-16 grid max-w-7xl gap-12 lg:grid-cols-2'>
           <ProductGallery
             kitImages={

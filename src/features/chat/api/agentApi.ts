@@ -36,7 +36,10 @@ export const agentApi = createApi({
     }),
 
     // Section AI Generator
-    generateSection: builder.mutation<LessonSectionAIResponse, { lesson_id: string; force_mock: boolean }>({
+    generateSection: builder.mutation<
+      LessonSectionAIResponse,
+      { lesson_id: string; force_mock: boolean; lang: string }
+    >({
       query: (body) => ({
         url: '/ai/content/lesson-section',
         method: 'POST',

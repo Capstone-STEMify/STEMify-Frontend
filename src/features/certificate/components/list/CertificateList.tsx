@@ -14,13 +14,13 @@ export default function CertificateList() {
   const t = useTranslations('MyLearning')
   const { token, user } = useAppSelector((state) => state.auth)
   const { selectedOrgUserId } = useAppSelector((state) => state.selectedOrganization)
-  console.log('Selected Org User ID:', selectedOrgUserId)
+  const userId = user?.userId
 
   const [filterType, setFilterType] = useState<string>('ALL')
 
   const { data: certificateResponse, isLoading } = useSearchCertificateQuery(
-    { userId: selectedOrgUserId!, pageNumber: 1, pageSize: 100 },
-    { skip: !selectedOrgUserId }
+    { userId: userId!, pageNumber: 1, pageSize: 100 },
+    { skip: !userId }
   )
 
   const filteredCertificates = useMemo(() => {
@@ -61,13 +61,13 @@ export default function CertificateList() {
             <p className='text-gray-500'>Quản lý và xem các chứng chỉ bạn đã đạt được</p>
           </div>
 
-          <Tabs defaultValue='ALL' onValueChange={setFilterType} className='w-full sm:w-auto'>
+          {/* <Tabs defaultValue='ALL' onValueChange={setFilterType} className='w-full sm:w-auto'>
             <TabsList className='grid w-full grid-cols-3 sm:w-auto'>
               <TabsTrigger value='ALL'>Tất cả</TabsTrigger>
               <TabsTrigger value={CertificateType.COURSE}>Khóa học</TabsTrigger>
               <TabsTrigger value={CertificateType.CURRICULUM}>Khung chương trình</TabsTrigger>
             </TabsList>
-          </Tabs>
+          </Tabs> */}
         </div>
 
         <div className='flex flex-col gap-4'>

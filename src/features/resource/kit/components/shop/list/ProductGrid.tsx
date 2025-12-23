@@ -8,12 +8,13 @@ import ProductCard from '@/features/resource/kit/components/shop/list/ProductCar
 import { setPageIndex } from '@/features/resource/kit/slice/kitProductSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux-hooks'
 import { motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 const ProductsGrid: React.FC<{ products: ProductData[] }> = ({ products }) => {
   const t = useTranslations('kits')
   const dispatch = useAppDispatch()
+  const locale = useLocale()
 
   const kitParams = useAppSelector((state) => state.kit)
 
@@ -51,7 +52,7 @@ const ProductsGrid: React.FC<{ products: ProductData[] }> = ({ products }) => {
       >
         <div className='grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3'>
           {kitData.data.items.map((product, index) => (
-            <Link href={`/shop/${product.id}`} key={product.id}>
+            <Link href={`/${locale}/resource/stem-kit/${product.id}`} key={product.id}>
               <ProductCard key={product.id} product={product} index={index} />
             </Link>
           ))}
