@@ -68,7 +68,7 @@ export default function PdfThumbnail({ url, width = 500, className }: PdfThumbna
 
   return (
     <div
-      className={`relative min-h-[300px] overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm ${className}`}
+      className={`relative min-h-[300px] overflow-hidden rounded-lg ${className}`}
     >
       {/* Loading Overlay */}
       {loading && (

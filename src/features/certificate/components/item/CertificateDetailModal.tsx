@@ -55,7 +55,7 @@ export function CertificateDetailModal({ certificateId, open, onOpenChange }: Ce
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='h-[70vh] w-full max-w-[1200px] gap-0 overflow-y-auto bg-[#f8f9fc] p-0'>
+      <DialogContent className='h-[80vh] w-full max-w-[1400px] gap-0 overflow-y-auto bg-[#f8f9fc] p-0'>
         <DialogHeader className='sr-only'>
           <DialogTitle>Certificate Detail</DialogTitle>
         </DialogHeader>
