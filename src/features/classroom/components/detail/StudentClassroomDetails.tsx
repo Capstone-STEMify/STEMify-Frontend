@@ -63,7 +63,7 @@ export default function StudentClassroomDetail({
         status: EnrollmentStatus.IN_PROGRESS,
         classroomId: Number(classroomId)
       })
-      refetch && refetch()
+      refetch?.()
       toast.success(tt('successMessage.enroll'), {
         description: `${tt('successMessage.enrollDes', { title: createEnrollmentResponse?.data.courseTitle || '' })}`
       })

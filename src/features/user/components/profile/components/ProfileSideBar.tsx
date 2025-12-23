@@ -1,21 +1,26 @@
+'use client'
 import React from 'react'
-import { User, Settings, Bell, Lock, HelpCircle, LogOut } from 'lucide-react'
+import { User, Edit } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/shadcn/button'
+import { useRouter } from 'next/navigation'
+import { FaCertificate } from 'react-icons/fa'
 
 // Sidebar Component
 export default function ProfileSideBar() {
   const t = useTranslations('profile')
+  const router = useRouter()
+  const tc = useTranslations('common')
   const sidebarItems = [
     { icon: User, label: `${t('settings.profile')}`, active: true }
     // { icon: Settings, label: `${t('settings.account')}`, active: false },
-    // { icon: Bell, label: `${t('settings.notifications')}`, active: false },
     // { icon: Lock, label: `${t('settings.privacy')}`, active: false },
     // { icon: HelpCircle, label: `${t('settings.help')}`, active: false },
     // { icon: LogOut, label: `${t('settings.signout')}`, active: false },
   ]
 
   return (
-    <div className='flex-shrink-0 lg:w-64'>
+    <div className='flex-shrink-0 space-y-5 lg:w-64'>
       <div className='rounded-lg border border-gray-200 bg-white p-4 shadow-sm'>
         <h3 className='mb-4 text-lg font-semibold text-gray-900'>{t('title')}</h3>
         <nav className='space-y-1'>
@@ -34,6 +39,13 @@ export default function ProfileSideBar() {
             )
           })}
         </nav>
+      </div>
+
+      <div className='flex justify-center'>
+        <Button onClick={() => router.push('/certificate')}>
+          <Edit className='h-4 w-4' />
+          <span>{tc('button.viewCertificate')}</span>
+        </Button>
       </div>
     </div>
   )
