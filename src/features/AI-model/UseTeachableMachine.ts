@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback } from 'react'
 import * as tf from '@tensorflow/tfjs'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
@@ -50,7 +50,6 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
   const [trainingProgress, setTrainingProgress] = useState(0)
   const [trainingStatus, setTrainingStatus] = useState<TrainingStatus | null>(null)
   const [predictionResults, setPredictionResults] = useState<PredictionResult[] | null>(null)
-  const previousResultsRef = useRef<PredictionResult[] | null>(null)
 
   // Add new class
   const addNewClass = useCallback(
@@ -328,13 +327,6 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       console.log('Reshaped features shape:', processedFeatures.shape)
 
       console.log('Training classification head...')
-
-      let bestValLoss = Infinity
-      let bestEpoch = 0
-      let patienceCounter = 0
-      const PATIENCE = 5
-      let bestWeights: tf.Tensor[] | null = null
-
       await classifier.fit(processedFeatures, labels, {
         epochs: CONFIG.epochs,
         batchSize: Math.min(CONFIG.batchSizeMax, processedFeatures.shape[0]),
@@ -347,18 +339,11 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
             const valLoss = (logs as any)?.val_loss ?? 0
             const valAcc = (logs as any)?.val_acc ?? (logs as any)?.val_accuracy ?? 0
 
-            const improved = valLoss < bestValLoss - 1e-4
-            if (improved) {
-              bestValLoss = valLoss
-              bestEpoch = epoch + 1
-              patienceCounter = 0
-              bestWeights = classifier.getWeights().map((w) => w.clone())
-              console.log(`Best so far -> epoch ${bestEpoch}, val_loss=${bestValLoss.toFixed(4)}, val_acc=${valAcc.toFixed(4)}`)
-            } else {
-              patienceCounter += 1
-              console.log(`No improvement (${patienceCounter}/${PATIENCE}). Current val_loss=${valLoss.toFixed(4)}`)
-            }
-
+            console.log(
+              `Epoch ${epoch + 1}: loss=${trainLoss.toFixed(4)}, acc=${trainAcc.toFixed(4)}, val_loss=${valLoss.toFixed(
+                4
+              )}, val_acc=${valAcc.toFixed(4)}`
+            )
             const progress = 30 + (epoch + 1) * (60 / CONFIG.epochs)
             setTrainingProgress(progress)
             setTrainingStatus({
@@ -367,23 +352,10 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
               )}%, Val acc ${(valAcc * 100).toFixed(1)}%, Loss ${trainLoss.toFixed(4)}, Val loss ${valLoss.toFixed(4)}`,
               type: 'info'
             })
-
-            if (patienceCounter >= PATIENCE) {
-              console.log(`Early stopping tại epoch ${epoch + 1}. Best epoch: ${bestEpoch}, best val_loss=${bestValLoss.toFixed(4)}`)
-              classifier.stopTraining = true
-            }
-
             await tf.nextFrame()
           }
         }
       })
-
-      const weightsToRestore: tf.Tensor[] | null = Array.isArray(bestWeights) ? (bestWeights as tf.Tensor[]) : null
-      if (weightsToRestore && weightsToRestore.length > 0) {
-        classifier.setWeights(weightsToRestore)
-        weightsToRestore.forEach((w: tf.Tensor) => w.dispose())
-        console.log(`Restored best weights from epoch ${bestEpoch}`)
-      }
 
       const finalModel: TeachableMachineModel = {
         featureExtractor,
@@ -582,29 +554,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
         const results = await model.predict(batched)
         console.log('Final results:', results)
 
-
-        if (previousResultsRef.current) {
-          const prev = previousResultsRef.current
-          const smoothed = results.map((r) => {
-            const prevMatch = prev.find((p) => p.className === r.className)
-            const prevProb = prevMatch ? prevMatch.probability : 0
-
-            return {
-              ...r,
-              probability: 0.6 * r.probability + 0.4 * prevProb
-            }
-          })
-      
-          const sum = smoothed.reduce((s, r) => s + r.probability, 0)
-          const normalized = sum > 0 ? smoothed.map((r) => ({ ...r, probability: r.probability / sum })) : smoothed
-          const sorted = normalized.sort((a, b) => b.probability - a.probability)
-          previousResultsRef.current = sorted
-          setPredictionResults(sorted)
-        } else {
-          const sorted = results.sort((a, b) => b.probability - a.probability)
-          previousResultsRef.current = sorted
-          setPredictionResults(sorted)
-        }
+        setPredictionResults(results)
 
         const topResult = results[0]
         setTrainingStatus({
