@@ -57,6 +57,14 @@ export default function UpsertContent({ lessonId, sectionId, contentId }: Upsert
       toast.success(tt('successMessage.createNoTitle'))
       router.push(`/${locale}/admin/lesson/${lessonId}/section/${sectionId}/content/${res.data?.data.id}`)
     }
+
+    // Clear the local storage for the section
+    try {
+      const key = `tiptap_draft_${lessonId ?? (params?.lessonId as any) ?? 'default'}`
+      localStorage.removeItem(key)
+    } catch (e) {
+      console.error('Failed to clear local storage:', e)
+    }
   }
 
   useEffect(() => {

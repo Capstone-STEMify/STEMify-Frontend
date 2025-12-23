@@ -14,6 +14,7 @@ import WhatsIncluded from '@/features/resource/kit/components/shop/details/Produ
 import { KitProductStatus } from '@/features/resource/kit/types/kit.type'
 import { useModal } from '@/providers/ModalProvider'
 import { getStatusBadgeClass } from '@/utils/badgeColor'
+import { useStatusTranslation } from '@/utils/index'
 import { Plus, SquarePen, Star, Trash2 } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
@@ -27,6 +28,7 @@ export default function KitDetail() {
   const tc = useTranslations('common')
   const router = useRouter()
   const locale = useLocale()
+  const statusTranslate = useStatusTranslation()
 
   const { openModal } = useModal()
   const { kitId } = useParams()
@@ -86,7 +88,9 @@ export default function KitDetail() {
             <div className='mb-2 flex items-center gap-2'>
               <h2 className='text-4xl font-bold tracking-tight'>{kitData.data.name}</h2>
               <span className='mx-2'>
-                <Badge className={getStatusBadgeClass(kitData.data.status)}>{kitData.data.status}</Badge>
+                <Badge className={getStatusBadgeClass(kitData.data.status)}>
+                  {statusTranslate(kitData.data.status)}
+                </Badge>
               </span>
               <span className='cursor-pointer text-blue-500'>
                 <SquarePen

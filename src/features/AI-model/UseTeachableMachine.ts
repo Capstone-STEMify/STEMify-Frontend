@@ -14,7 +14,7 @@ export interface TrainingStatus {
 }
 
 interface TeachableMachineModel {
-  featureExtractor: tf.LayersModel | tf.GraphModel
+  featureExtractor: tf.LayersModel
   classifier: tf.LayersModel
   predict: (input: tf.Tensor) => Promise<PredictionResult[]>
   getTopKClasses: (input: tf.Tensor, k?: number) => Promise<PredictionResult[]>
@@ -33,8 +33,12 @@ const CONFIG = {
   debugLogs: true
 }
 
-const BASE_MODEL_URL =
-  'https://zlumjdsauobocldzvjoo.supabase.co/storage/v1/object/public/ai-models/MobileNetV3/model.json'
+const EARLY_STOP = {
+  epoch: 15,
+  valAccuracyThreshold: 0.99
+}
+
+const BASE_MODEL_URL = 'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json'
 
 export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Class 2']) {
   const [classes, setClasses] = useState<string[]>(initialClasses)
@@ -167,77 +171,45 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
   const createTransferLearningModel = useCallback(async (numClasses: number) => {
     console.log('Creating transfer learning model...')
 
-    let baseModel: tf.LayersModel | null = null
-    let graphModel: tf.GraphModel | null = null
+    const baseModel = await tf.loadLayersModel(BASE_MODEL_URL)
+    console.log('Base model loaded, layers:', baseModel.layers.length)
 
-    // Try load as GraphModel first (MobileNet v3 from Supabase is a graph model)
-    try {
-      if (BASE_MODEL_URL.includes('supabase.co')) {
-        graphModel = await tf.loadGraphModel(BASE_MODEL_URL)
-        console.log('GraphModel loaded successfully')
-      } else {
-        baseModel = await tf.loadLayersModel(BASE_MODEL_URL)
-      }
-    } catch (err) {
-      console.warn('Failed to load as GraphModel, try LayersModel', err)
-      baseModel = await tf.loadLayersModel(BASE_MODEL_URL)
-    }
+    let featureExtractor: tf.LayersModel
+    for (let i = baseModel.layers.length - 1; i >= 0; i--) {
+      const layer = baseModel.layers[i]
+      console.log(`Layer ${i}: ${layer.name}, output shape:`, layer.outputShape)
 
-    if (!baseModel && !graphModel) {
-      throw new Error('Không thể load base model')
-    }
-
-    let featureExtractor: tf.LayersModel | tf.GraphModel
-    let featureSize: number
-
-    if (graphModel) {
-      featureExtractor = graphModel
-      const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
-      const testOutput = featureExtractor.predict(testInput) as tf.Tensor
-      console.log('GraphModel output shape:', testOutput.shape)
-      featureSize = testOutput.shape.slice(1).reduce((a, b) => a * b, 1)
-      console.log('Feature size:', featureSize)
-      testInput.dispose()
-      testOutput.dispose()
-    } else {
-      // LayersModel path
-      featureExtractor = baseModel!
-      for (let i = baseModel!.layers.length - 1; i >= 0; i--) {
-        const layer = baseModel!.layers[i]
-        console.log(`Layer ${i}: ${layer.name}, output shape:`, layer.outputShape)
-
-        if (
-          layer.name.includes('global_average_pooling') ||
-          layer.name.includes('avg_pool') ||
-          (layer.name.includes('dense') && i < baseModel!.layers.length - 1)
-        ) {
-          featureExtractor = tf.model({
-            inputs: baseModel!.inputs,
-            outputs: layer.output
-          })
-          console.log('Feature extractor created from layer:', layer.name)
-          break
-        }
-      }
-
-      if (featureExtractor === baseModel) {
+      if (
+        layer.name.includes('global_average_pooling') ||
+        layer.name.includes('avg_pool') ||
+        (layer.name.includes('dense') && i < baseModel.layers.length - 1)
+      ) {
         featureExtractor = tf.model({
-          inputs: baseModel!.inputs,
-          outputs: baseModel!.layers[baseModel!.layers.length - 2].output
+          inputs: baseModel.inputs,
+          outputs: layer.output
         })
-        console.log('Using fallback feature extractor')
+        console.log('Feature extractor created from layer:', layer.name)
+        break
       }
-
-      const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
-      const testOutput = featureExtractor.predict(testInput) as tf.Tensor
-      console.log('Feature extractor output shape:', testOutput.shape)
-
-      featureSize = testOutput.shape.slice(1).reduce((a, b) => a * b, 1)
-      console.log('Feature size:', featureSize)
-
-      testInput.dispose()
-      testOutput.dispose()
     }
+
+    if (!featureExtractor!) {
+      featureExtractor = tf.model({
+        inputs: baseModel.inputs,
+        outputs: baseModel.layers[baseModel.layers.length - 2].output
+      })
+      console.log('Using fallback feature extractor')
+    }
+
+    const testInput = tf.zeros([1, CONFIG.imageSize, CONFIG.imageSize, 3])
+    const testOutput = featureExtractor.predict(testInput) as tf.Tensor
+    console.log('Feature extractor output shape:', testOutput.shape)
+
+    const featureSize = testOutput.shape.slice(1).reduce((a, b) => a * b, 1)
+    console.log('Feature size:', featureSize)
+
+    testInput.dispose()
+    testOutput.dispose()
 
     const classifier = tf.sequential({
       layers: [
@@ -318,33 +290,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       setTrainingProgress(30)
 
       console.log('Extracting features...')
-      const FEATURE_BATCH_SIZE = 32
-      const numSamples = images.shape[0]
-      let features: tf.Tensor
-
-      try {
-        const batchFeaturesArray: tf.Tensor[] = []
-
-        for (let i = 0; i < numSamples; i += FEATURE_BATCH_SIZE) {
-          const end = Math.min(i + FEATURE_BATCH_SIZE, numSamples)
-
-          const batchResult = tf.tidy(() => {
-            const batchImages = images.slice([i, 0, 0, 0], [end - i, -1, -1, -1])
-            return featureExtractor.predict(batchImages) as tf.Tensor
-          })
-
-          batchFeaturesArray.push(batchResult)
-
-          await tf.nextFrame()
-        }
-
-        features = tf.concat(batchFeaturesArray, 0)
-
-        batchFeaturesArray.forEach((t) => t.dispose())
-      } catch (err) {
-        throw new Error('Lỗi khi trích xuất đặc trưng (Feature Extraction): ' + err)
-      }
-
+      const features = featureExtractor.predict(images) as tf.Tensor
       console.log('Features shape:', features.shape)
 
       const batchSize = features.shape[0]
@@ -353,6 +299,7 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
       console.log('Reshaped features shape:', processedFeatures.shape)
 
       console.log('Training classification head...')
+      let earlyStopped = false
       await classifier.fit(processedFeatures, labels, {
         epochs: CONFIG.epochs,
         batchSize: Math.min(CONFIG.batchSizeMax, processedFeatures.shape[0]),
@@ -360,24 +307,33 @@ export function useTeachableMachine(initialClasses: string[] = ['Class 1', 'Clas
         shuffle: true,
         callbacks: {
           onEpochEnd: async (epoch, logs) => {
-            const trainLoss = logs?.loss ?? 0
-            const trainAcc = (logs as any)?.acc ?? logs?.accuracy ?? 0
-            const valLoss = (logs as any)?.val_loss ?? 0
-            const valAcc = (logs as any)?.val_acc ?? (logs as any)?.val_accuracy ?? 0
+            const loss = logs?.loss?.toFixed(4)
+            const acc = logs?.acc?.toFixed(4)
+            const valLoss = (logs as any)?.val_loss?.toFixed(4)
+            const valAcc = (logs as any)?.val_acc?.toFixed(4)
 
             console.log(
-              `Epoch ${epoch + 1}: loss=${trainLoss.toFixed(4)}, acc=${trainAcc.toFixed(4)}, val_loss=${valLoss.toFixed(
-                4
-              )}, val_acc=${valAcc.toFixed(4)}`
+              `Epoch ${epoch + 1}: loss=${loss}, acc=${acc}, val_loss=${valLoss}, val_acc=${valAcc}`
             )
             const progress = 30 + (epoch + 1) * (60 / CONFIG.epochs)
             setTrainingProgress(progress)
             setTrainingStatus({
-              message: `Epoch ${epoch + 1}/${CONFIG.epochs}: Train acc ${(trainAcc * 100).toFixed(
-                1
-              )}%, Val acc ${(valAcc * 100).toFixed(1)}%, Loss ${trainLoss.toFixed(4)}, Val loss ${valLoss.toFixed(4)}`,
+              message: `Epoch ${epoch + 1}/${CONFIG.epochs}: loss=${loss}, acc=${acc}, val_loss=${valLoss}, val_acc=${valAcc}`,
               type: 'info'
             })
+
+            // Gentle early stop once we already have stable validation accuracy
+            const reachedEpoch = epoch + 1 >= EARLY_STOP.epoch
+            const reachedValAcc = ((logs as any)?.val_acc || 0) >= EARLY_STOP.valAccuracyThreshold
+            if (reachedEpoch && reachedValAcc) {
+              earlyStopped = true
+              console.log(
+                `Early stopping at epoch ${epoch + 1} — val_acc ${(logs as any)?.val_acc?.toFixed(
+                  4
+                )}`
+              )
+              classifier.stopTraining = true
+            }
             await tf.nextFrame()
           }
         }

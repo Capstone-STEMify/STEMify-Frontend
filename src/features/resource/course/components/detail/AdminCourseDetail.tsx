@@ -138,9 +138,6 @@ export default function AdminCourseDetail() {
         </div>
 
         <div className='mb-4 flex flex-wrap gap-2 text-sm'>
-          <p className='text-sm text-gray-700 italic'>
-            Tạo bởi <span className='font-semibold'>{course.data.createdByUserName || 'STEMify'}</span>
-          </p>
           <p>Ngày tạo: {createdAt}</p>
           <p>Chỉnh sửa gần nhất: {updatedAt}</p>
         </div>
