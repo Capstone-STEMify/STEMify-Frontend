@@ -33,7 +33,9 @@ export const CertificateItem = ({ certificate }: CertificateItemProps) => {
     <Card className='group overflow-hidden transition-all hover:border-blue-300 hover:shadow-md'>
       <CardContent className='flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between'>
         <div className='flex items-start gap-4'>
-          <div className={`flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border ${isCurriculum ? 'bg-orange-50 border-orange-100' : 'bg-blue-50 border-blue-100'}`}>
+          <div
+            className={`flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border ${isCurriculum ? 'border-orange-100 bg-orange-50' : 'border-blue-100 bg-blue-50'}`}
+          >
             {isCurriculum ? (
               <Award className='h-8 w-8 text-orange-500' />
             ) : (
@@ -41,31 +43,27 @@ export const CertificateItem = ({ certificate }: CertificateItemProps) => {
             )}
           </div>
 
-          {/* Thông tin chính từ API */}
           <div className='space-y-1'>
             <div className='flex items-center gap-2'>
-              <h3 
+              <h3
                 onClick={handleViewDetail}
                 className='cursor-pointer text-lg font-semibold text-gray-900 transition-colors hover:text-blue-600'
               >
                 {certificate.title}
               </h3>
-              <Badge variant='outline' className={`hidden sm:inline-flex ${isCurriculum ? 'text-orange-600 border-orange-200 bg-orange-50' : 'text-blue-600 border-blue-200 bg-blue-50'}`}>
+              <Badge
+                variant='outline'
+                className={`hidden sm:inline-flex ${isCurriculum ? 'border-orange-200 bg-orange-50 text-orange-600' : 'border-blue-200 bg-blue-50 text-blue-600'}`}
+              >
                 {certificate.certificateType}
               </Badge>
             </div>
-            
-            <p className='text-sm text-gray-500'>
-              Issued to <span className='font-medium text-gray-700'>{certificate.userName}</span>
-            </p>
-            
-            <div className='flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500'>
-              <span className='flex items-center gap-1'>
-                Date: {formatDate(certificate.issueDate)}
-              </span>
-              <span className='flex items-center gap-1'>
+
+            <div className='gap-y-2 text-xs text-gray-500'>
+              <p className='flex items-center gap-1'>Date: {formatDate(certificate.issueDate)}</p>
+              <p className='flex items-center gap-1'>
                 ID: <span className='font-mono text-gray-600'>{certificate.verificationCode}</span>
-              </span>
+              </p>
             </div>
           </div>
         </div>
