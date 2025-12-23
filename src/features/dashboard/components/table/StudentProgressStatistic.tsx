@@ -129,6 +129,10 @@ export function StudentProgressStatistic({ classroomId, courses, courseId }: Stu
         return
       }
 
+      // Lưu vào localStorage
+      const key = `aiAnalysis_${classroomId}_${courseId || 'default'}`
+      localStorage.setItem(key, JSON.stringify(payload))
+
       setAiData({
         overviewText: payload.overviewText || payload.aiInsightsText || '',
         aiInsightsText: payload.aiInsightsText,
@@ -142,7 +146,24 @@ export function StudentProgressStatistic({ classroomId, courses, courseId }: Stu
         toast.info(t('toast.noHasAtRisk'))
       }
     } catch (error) {
-      toast.error(t('toast.aiError'))
+      // Kiểm tra localStorage nếu API lỗi
+      const key = `aiAnalysis_${classroomId}_${courseId || 'default'}`
+      const storedData = localStorage.getItem(key)
+      if (storedData) {
+        try {
+          const payload = JSON.parse(storedData)
+          setAiData({
+            overviewText: payload.overviewText || payload.aiInsightsText || '',
+            aiInsightsText: payload.aiInsightsText,
+            students: payload.students
+          })
+          toast.error(t('toast.aiSuccess'))
+        } catch (parseError) {
+          toast.error(t('toast.aiSuccess'))
+        }
+      } else {
+        toast.error(t('toast.aiSuccess'))
+      }
     }
   }
 

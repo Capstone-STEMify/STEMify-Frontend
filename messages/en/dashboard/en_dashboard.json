@@ -134,6 +134,7 @@
         "hasAtRisk": "There are learners at risk of falling behind",
         "noHasAtRisk": "No learners are at risk of falling behind",
         "aiError": "Error analyzing learner progress with AI",
+        "aiSuccess": " AI analysis of learner progress completed successfully",
         "errorResponse": "Error response from server"
       },
       "modal": {

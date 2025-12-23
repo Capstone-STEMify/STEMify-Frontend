@@ -134,6 +134,7 @@
         "hasAtRisk": "Có học viên có tiến độ học tập chậm",
         "noHasAtRisk": "Không có học viên nào có tiến độ học tập chậm",
         "aiError": "Lỗi khi phân tích tiến độ học tập của học viên bằng AI",
+        "aiSuccess": "Phân tích tiến độ học tập của học viên bằng AI hoàn tất thành công",
         "errorResponse": "Lỗi phản hồi từ máy chủ"
       },
       "modal": {
