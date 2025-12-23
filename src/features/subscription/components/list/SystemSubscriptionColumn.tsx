@@ -9,6 +9,7 @@ import { useLocale } from 'next-intl'
 import SStatusDropdown from '@/components/shared/SStatusDropdown'
 import { formatDate, formatPrice, useStatusTranslation } from '@/utils/index'
 import {
+  useCancelSubscriptionMutation,
   useDeleteSubscriptionMutation,
   useUpdateSubscriptionMutation
 } from '@/features/subscription/api/subscriptionApi'
@@ -27,6 +28,7 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
   const tc = useTranslations('common')
   const tt = useTranslations('toast')
   const to = useTranslations('organization.subscription')
+  const [cancelSubscription] = useCancelSubscriptionMutation()
 
   const translateStatus = useStatusTranslation()
 
@@ -45,23 +47,23 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
     router.push(`/${locale}/admin/organization/${organizationId}/subscription/${id}`)
   }
 
-  const handleStatusChange = (subscription: any, newStatus: string) => {
-    updateSubscription({
-      subscriptionId: subscription.id,
-      body: {
-        status: newStatus as SubscriptionStatus,
-        // add curriculumIds to avoid removing them unintentionally (for grpc compatibility)
-        curriculumIds: subscription.curriculumIds || []
-      }
-    })
-  }
-
   const handleCancel = async (subscription: any) => {
     await updateSubscription({
       subscriptionId: subscription.id,
       body: { status: SubscriptionStatus.CANCELLED, curriculumIds: subscription.curriculumIds || [] }
     })
     toast.success(tt('successMessage.updateNoTitle'))
+  }
+
+  const handleCancelSubscription = ({ subscriptionId }: { subscriptionId: number }) => {
+    openModal('confirm', {
+      title: tt('confirmMessage.cancelledSubscriptions'),
+      message: tt('confirmMessage.cancelledSubscriptions'),
+      onConfirm: () =>
+        cancelSubscription({
+          subscriptionId
+        })
+    })
   }
 
   const handleDelete = async (id: number) => {
@@ -147,12 +149,7 @@ export function useSystemSubscriptionColumn(): ColumnDef<OrganizationSubscriptio
         label: tc('button.cancel'),
         danger: true,
         hidden: ({ original }) => original.status !== SubscriptionStatus.ACTIVE,
-        onClick: async ({ original }) => {
-          openModal('confirm', {
-            message: tt('confirmMessage.cancelledSubscriptions', { title: original.planName }),
-            onConfirm: () => handleCancel(original)
-          })
-        }
+        onClick: async ({ original }) => handleCancelSubscription({ subscriptionId: original.id })
       }
     ])
   ]

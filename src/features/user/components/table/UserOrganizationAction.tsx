@@ -74,7 +74,7 @@ export function useGetOrganizationUserAction(): ColumnDef<User>[] {
       accessorKey: 'status',
       header: t('status'),
       cell: ({ row }) => {
-        const status = row.original.isActive ? UserStatus.ACTIVE : 'Pending'
+        const status = row.original.isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE
         return <Badge className={getStatusBadgeClass(status)}>{translationStatus(status)}</Badge>
       }
     },
